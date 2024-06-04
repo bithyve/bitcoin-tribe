@@ -4,6 +4,7 @@ import {
 } from '@react-navigation/native';
 
 import { MD2LightTheme, MD2DarkTheme } from 'react-native-paper';
+import Colors from './Colors';
 
 const CombinedDefaultTheme = {
   ...MD2LightTheme,
@@ -11,6 +12,7 @@ const CombinedDefaultTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
+    primaryCTA: Colors.ChineseOrange,
   },
 };
 const CombinedDarkTheme = {
