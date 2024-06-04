@@ -7,14 +7,13 @@
 
 import React from 'react';
 import Navigator from './navigation/Navigator';
-import { PaperProvider } from 'react-native-paper';
-import { theme } from './theme';
+import Contexts from './contexts/Contexts';
 
 function App() {
   return (
-    <PaperProvider theme={theme}>
+    <Contexts>
       <Navigator />
-    </PaperProvider>
+    </Contexts>
   );
 }
 
