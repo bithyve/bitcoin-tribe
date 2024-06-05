@@ -2,7 +2,14 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
-const BaseTextField = props => {
+type BaseTextFieldProps = {
+  icon?: any;
+  placeholder?: string;
+  value: string;
+  keyboardType?: any;
+};
+
+const BaseTextField = (props: BaseTextFieldProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (

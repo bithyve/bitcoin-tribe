@@ -2,7 +2,13 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-const TextField = props => {
+type TextFieldProps = {
+  placeholder?: string;
+  value: string;
+  keyboardType?: any;
+};
+
+const TextField = (props: TextFieldProps) => {
   return (
     <TextInput
       underlineColor="transparent"

@@ -3,8 +3,12 @@ import { StyleSheet } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
 import Fonts from '../constants/Fonts';
+type PrimaryCTAProps = {
+  onPress: any;
+  title: string;
+};
 
-function PrimaryCTA(props) {
+function PrimaryCTA(props: PrimaryCTAProps) {
   const theme = useTheme();
   return (
     <Button
