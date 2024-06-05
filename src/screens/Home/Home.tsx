@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 import PrimaryCTA from '../../components/PrimaryCTA';
 import CardImageSurface from '../../components/CardImageSurface';
 import Toast from '../../components/Toast';
 import TextField from '../../components/TextField';
 import BaseTextField from '../../components/BaseTextField';
+import TransactionCTA from '../../components/TransactionCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 
 function HomeScreen() {
+  const theme = useTheme();
   const [visible, setVisible] = React.useState(false);
   const [input, setInput] = React.useState('');
 
@@ -56,6 +59,24 @@ function HomeScreen() {
         onChangeText={text => setInput(text)}
         placeholder="Enter Amount"
         keyboardType={'number-pad'}
+      />
+      <View style={{ margin: 5 }} />
+      <TransactionCTA
+        icon={<TextIcon />}
+        buttonColor={theme.colors.primaryCTA}
+        title={'Send'}
+      />
+      <View style={{ margin: 5 }} />
+      <TransactionCTA
+        icon={<TextIcon />}
+        buttonColor={theme.colors.recieveCTA}
+        title={'Recieve'}
+      />
+      <View style={{ margin: 5 }} />
+      <TransactionCTA
+        icon={<TextIcon />}
+        buttonColor={theme.colors.buyCTA}
+        title={'Buy'}
       />
       <Toast visible={visible} message={'Continue CTA pressed'} />
     </View>
