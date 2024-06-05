@@ -1,10 +1,63 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+
+import PrimaryCTA from '../../components/PrimaryCTA';
+import CardImageSurface from '../../components/CardImageSurface';
+import Toast from '../../components/Toast';
+import TextField from '../../components/TextField';
+import BaseTextField from '../../components/BaseTextField';
+import TextIcon from '../../assets/images/icon_bitcoin.svg';
 
 function HomeScreen() {
+  const [visible, setVisible] = React.useState(false);
+  const [input, setInput] = React.useState('');
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#434343',
+      }}>
+      <PrimaryCTA title="Save Changes" />
+      <View style={{ margin: 5 }} />
+      <PrimaryCTA title="Continue" onPress={() => setVisible(!visible)} />
+      <View style={{ margin: 5 }} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        }}>
+        <CardImageSurface
+          size={50}
+          imageSource={
+            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
+          }
+        />
+        <CardImageSurface
+          size={70}
+          imageSource={
+            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
+          }
+        />
+      </View>
+      <TextField
+        value={input}
+        onChangeText={text => setInput(text)}
+        placeholder="Enter Wallet Name"
+        keyboardType={'default'}
+      />
+
+      <BaseTextField
+        icon={<TextIcon />}
+        value={input}
+        onChangeText={text => setInput(text)}
+        placeholder="Enter Amount"
+        keyboardType={'number-pad'}
+      />
+      <Toast visible={visible} message={'Continue CTA pressed'} />
     </View>
   );
 }
