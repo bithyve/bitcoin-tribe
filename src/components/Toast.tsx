@@ -7,6 +7,7 @@ const Toast = props => {
   const styles = getStyles(theme);
   return (
     <Snackbar
+      testID="toast_Snackbar"
       visible={props.visible}
       onDismiss={props.onDismissSnackBar}
       elevation={5}
