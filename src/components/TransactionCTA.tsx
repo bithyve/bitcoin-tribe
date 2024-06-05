@@ -4,7 +4,14 @@ import { Button } from 'react-native-paper';
 
 import Fonts from '../constants/Fonts';
 
-function TransactionCTA(props) {
+type TransactionCTAProps = {
+  icon?: any;
+  buttonColor?: any;
+  onPress?: any;
+  title: string;
+};
+
+function TransactionCTA(props: TransactionCTAProps) {
   return (
     <Button
       testID="btn_TransactionCTA"

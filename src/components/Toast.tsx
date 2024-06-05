@@ -2,7 +2,13 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Snackbar, useTheme } from 'react-native-paper';
 
-const Toast = props => {
+type ToastProps = {
+  visible: boolean;
+  onDismissSnackBar?: any;
+  message?: string;
+};
+
+const Toast = (props: ToastProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
