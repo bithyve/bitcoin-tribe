@@ -13,6 +13,8 @@ const CombinedDefaultTheme = {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
     primaryCTA: Colors.ChineseOrange,
+    inputBackground: Colors.Jet,
+    borderColor: Colors.ChineseWhite,
   },
 };
 const CombinedDarkTheme = {
@@ -21,6 +23,9 @@ const CombinedDarkTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
+    primaryCTA: Colors.ChineseOrange,
+    inputBackground: Colors.Jet,
+    borderColor: Colors.ChineseWhite,
   },
 };
 
