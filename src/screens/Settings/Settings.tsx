@@ -18,7 +18,10 @@ function HomeScreen() {
 
   return (
     <ScreenContainer>
-      <PrimaryCTA title="Save Changes" onPress={() => console.log('press')} />
+      <PrimaryCTA
+        title="Save Changes"
+        onPress={() => Toast('Account already created', true)}
+      />
       <View style={{ margin: 5 }} />
       <PrimaryCTA title="Continue" onPress={() => setVisible(!visible)} />
       <View style={{ margin: 5 }} />
@@ -73,7 +76,6 @@ function HomeScreen() {
         buttonColor={theme.colors.buyCTA}
         title={'Buy'}
       />
-      <Toast visible={visible} message={'Continue CTA pressed'} />
     </ScreenContainer>
   );
 }
