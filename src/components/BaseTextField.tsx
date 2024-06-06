@@ -42,7 +42,7 @@ const getStyles = theme =>
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 10,
       fontSize: 14,
-      fontFamily: Fonts.PoppinsMedium,
+      fontFamily: Fonts.PoppinsBold,
     },
     iconWrapper: {
       width: '15%',

@@ -32,7 +32,7 @@ const getStyles = theme =>
       borderRadius: 6,
       margin: 10,
       fontSize: 14,
-      fontFamily: Fonts.PoppinsMedium,
+      fontFamily: Fonts.PoppinsBold,
       backgroundColor: theme.colors.inputBackground,
     },
   });
