@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, useTheme } from 'react-native-paper';
+import Fonts from '../constants/Fonts';
 
 type TextFieldProps = {
   placeholder?: string;
@@ -9,10 +10,13 @@ type TextFieldProps = {
 };
 
 const TextField = (props: TextFieldProps) => {
+  const theme = useTheme();
+  const styles = getStyles(theme);
   return (
     <TextInput
       underlineColor="transparent"
       placeholder={props.placeholder}
+      placeholderTextColor={theme.colors.placeholderColor}
       style={styles.container}
       value={props.value}
       onChangeText={text => props.onChangeText(text)}
@@ -20,13 +24,17 @@ const TextField = (props: TextFieldProps) => {
     />
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    height: 50,
-    width: '95%',
-    borderRadius: 6,
-    margin: 10,
-  },
-});
+const getStyles = theme =>
+  StyleSheet.create({
+    container: {
+      height: 50,
+      width: '95%',
+      borderRadius: 6,
+      margin: 10,
+      fontSize: 14,
+      fontFamily: Fonts.PoppinsMedium,
+      backgroundColor: theme.colors.inputBackground,
+    },
+  });
 
 export default TextField;
