@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     width: 300,
-    minHeight: 60,
-    borderRadius: 50,
+    minHeight: 50,
+    borderRadius: 60,
   },
   toastMessageStyle: {
     color: Colors.RaisinBlack,
