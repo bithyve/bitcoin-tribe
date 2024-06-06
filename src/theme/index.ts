@@ -16,7 +16,10 @@ const CombinedDefaultTheme = {
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,
     inputBackground: Colors.Jet,
-    borderColor: Colors.ChineseWhite,
+    headingColor: Colors.ChineseWhite,
+    bodyTextColor: Colors.DarkGray,
+    placeholderColor: Colors.SonicSilver,
+    toastMessage: Colors.RaisinBlack,
   },
 };
 const CombinedDarkTheme = {
@@ -29,7 +32,10 @@ const CombinedDarkTheme = {
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,
     inputBackground: Colors.Jet,
-    borderColor: Colors.ChineseWhite,
+    headingColor: Colors.ChineseWhite,
+    bodyTextColor: Colors.DarkGray,
+    placeholderColor: Colors.SonicSilver,
+    toastMessage: Colors.RaisinBlack,
   },
 };
 
