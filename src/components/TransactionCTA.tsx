@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
-
-import Fonts from '../constants/Fonts';
+import CommonStyles from '../common/styles/CommonStyles';
 
 type TransactionCTAProps = {
   icon?: any;
@@ -18,7 +17,7 @@ function TransactionCTA(props: TransactionCTAProps) {
       icon={() => props.icon}
       mode="contained"
       uppercase={false}
-      labelStyle={styles.ctaLabelStyle}
+      labelStyle={CommonStyles.transactionCTATitle}
       style={styles.ctaContainerStyle}
       buttonColor={props.buttonColor}
       onPress={props.onPress}>
@@ -29,10 +28,6 @@ function TransactionCTA(props: TransactionCTAProps) {
 const styles = StyleSheet.create({
   ctaContainerStyle: {
     borderRadius: 25,
-  },
-  ctaLabelStyle: {
-    fontSize: 13,
-    fontFamily: Fonts.PoppinsSemiBold,
   },
 });
 export default TransactionCTA;
