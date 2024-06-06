@@ -71,4 +71,12 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsSemiBold,
   },
+  subtitle2: {
+    fontSize: 14,
+    fontFamily: Fonts.PoppinsSemiBold,
+  },
+  smallCTATitle: {
+    fontSize: 12,
+    fontFamily: Fonts.PoppinsBold,
+  },
 });
