@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper';
 
 // import ScreenContainer from '../../components/ScreenContainer';
 import CommonStyles from '../../common/styles/CommonStyles';
+import TileSurface from '../../components/TileSurface';
+import AddNewTileSurface from '../../components/AddNewTileSurface';
 
 function Community() {
   const theme = useTheme();
@@ -86,6 +88,15 @@ function Community() {
         ]}>
         Secondary CTA - Skip
       </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <TileSurface />
+        <View style={{ margin: 5 }} />
+        <AddNewTileSurface />
+      </View>
     </View>
   );
 }
