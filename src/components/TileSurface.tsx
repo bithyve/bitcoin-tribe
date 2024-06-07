@@ -2,6 +2,8 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
+import { wp, hp } from '../constants/responsive';
+
 type TileSurfaceProps = {
   icon?: any;
   title?: string;
@@ -16,8 +18,8 @@ const TileSurface = (props: TileSurfaceProps) => {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      height: 205,
-      width: 160,
+      height: hp(205),
+      width: wp(160),
       borderRadius: 10,
       backgroundColor: theme.colors.textColor,
     },
