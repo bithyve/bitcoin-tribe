@@ -26,17 +26,17 @@ function Community() {
       <AppText variant="pageTitle" style={{ color: theme.colors.headingColor }}>
         Page Title 1
       </AppText>
-      <AppText variant="body5" style={{ color: theme.colors.bodyTextColor }}>
+      <AppText variant="body5" style={{ color: theme.colors.body }}>
         Body 5
       </AppText>
-      <AppText variant="body4" style={{ color: theme.colors.bodyTextColor }}>
+      <AppText variant="body4" style={{ color: theme.colors.body }}>
         Body 4
       </AppText>
-      <AppText variant="body2" style={{ color: theme.colors.bodyTextColor }}>
+      <AppText variant="body2" style={{ color: theme.colors.body }}>
         Body 2 - The blinded UTXO in this invoice will expire in 24 hours after
         its creation.
       </AppText>
-      <AppText variant="body1" style={{ color: theme.colors.bodyTextColor }}>
+      <AppText variant="body1" style={{ color: theme.colors.body }}>
         Body 1 : lk2j3429-85213-5134 50t-934285… 6 23…-
       </AppText>
       <AppText
@@ -54,7 +54,7 @@ function Community() {
       <AppText variant="subTitle" style={{ color: theme.colors.recieveCTA }}>
         Subtitle 1
       </AppText>
-      <AppText variant="body6" style={{ color: theme.colors.bodyTextColor }}>
+      <AppText variant="body6" style={{ color: theme.colors.body }}>
         Body 6
       </AppText>
       <AppText variant="body7" style={{ color: theme.colors.buyCTA }}>
