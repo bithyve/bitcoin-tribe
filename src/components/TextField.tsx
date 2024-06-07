@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import CommonStyles from '../common/styles/CommonStyles';
-import Fonts from '../constants/Fonts';
+import { hp } from '../constants/responsive';
 
 type TextFieldProps = {
   placeholder?: string;
@@ -31,7 +31,7 @@ const TextField = (props: TextFieldProps) => {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      height: 50,
+      height: hp(50),
       width: '95%',
       borderRadius: 6,
       margin: 10,

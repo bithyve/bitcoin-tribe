@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import CommonStyles from '../common/styles/CommonStyles';
 
-import Fonts from '../constants/Fonts';
 import { hp } from '../constants/responsive';
 
 type BaseTextFieldProps = {
