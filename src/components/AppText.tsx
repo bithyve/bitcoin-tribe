@@ -45,8 +45,8 @@ const AppText = ({ children, variant, style, ...props }: AppTextProps) => {
     case 'secondaryCTATitle':
       textStyle = CommonStyles.secondaryCTATitle;
       break;
-    case 'transactionCTATitle':
-      textStyle = CommonStyles.transactionCTATitle;
+    case 'RoundedCTATitle':
+      textStyle = CommonStyles.RoundedCTATitle;
       break;
     case 'textFieldLabel':
       textStyle = CommonStyles.textFieldLabel;

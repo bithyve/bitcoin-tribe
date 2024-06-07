@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 import CommonStyles from '../common/styles/CommonStyles';
 
-type TransactionCTAProps = {
+type RoundedCTAProps = {
   icon?: any;
   buttonColor?: any;
   onPress?: any;
@@ -12,15 +12,15 @@ type TransactionCTAProps = {
   width?: number;
 };
 
-function TransactionCTA(props: TransactionCTAProps) {
+function RoundedCTA(props: RoundedCTAProps) {
   const styles = getStyles(props);
   return (
     <Button
-      testID="btn_TransactionCTA"
+      testID="btn_RoundedCTATitle"
       icon={() => props.icon}
       mode="contained"
       uppercase={false}
-      labelStyle={CommonStyles.transactionCTATitle}
+      labelStyle={CommonStyles.RoundedCTATitle}
       style={styles.ctaContainerStyle}
       contentStyle={styles.contentStyle}
       buttonColor={props.buttonColor}
@@ -40,4 +40,4 @@ const getStyles = props =>
       width: props.width,
     },
   });
-export default TransactionCTA;
+export default RoundedCTA;
