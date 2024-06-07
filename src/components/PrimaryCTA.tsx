@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Button, useTheme } from 'react-native-paper';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import CommonStyles from '../common/styles/CommonStyles';
 import { hp, wp } from '../constants/responsive';
 
@@ -25,15 +25,6 @@ function PrimaryCTA(props: PrimaryCTAProps) {
         {props.title}
       </Text>
     </TouchableOpacity>
-    // <Button
-    //   mode="contained"
-    //   uppercase={false}
-    //   labelStyle={CommonStyles.primaryCTATitle}
-    //   style={styles.ctaContainerStyle}
-    //   buttonColor={theme.colors.primaryCTA}
-    //   onPress={props.onPress}>
-    //   {props.title}
-    // </Button>
   );
 }
 const getStyles = theme =>
