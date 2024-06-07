@@ -81,6 +81,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsSemiBold,
     lineHeight: 12 * 1.4,
     height: 15,
+    marginLeft: 10,
   },
   subtitle2: {
     fontSize: 14,

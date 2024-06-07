@@ -9,7 +9,7 @@ import TextField from '../../components/TextField';
 import RoundedCTA from '../../components/RoundedCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import ScreenContainer from '../../components/ScreenContainer';
-import { hp, wp } from '../../constants/responsive';
+import { wp } from '../../constants/responsive';
 
 function HomeScreen() {
   const theme = useTheme();
@@ -66,15 +66,12 @@ function HomeScreen() {
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Send'}
-        // height={hp(36)}
-        width={wp(80)}
       />
       <View style={{ margin: 5 }} />
       <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.recieveCTA}
         title={'Recieve'}
-        // height={hp(36)}
         width={wp(90)}
       />
       <View style={{ margin: 5 }} />
@@ -82,16 +79,12 @@ function HomeScreen() {
         icon={<TextIcon />}
         buttonColor={theme.colors.buyCTA}
         title={'Buy'}
-        // height={hp(36)}
-        width={wp(80)}
       />
       <View style={{ margin: 5 }} />
       <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Download'}
-        // height={hp(36)}
-        width={wp(120)}
       />
     </ScreenContainer>
   );
