@@ -3,12 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { hp, wp } from '../constants/responsive';
 
-type AddNewTileSurfaceProps = {
+type AddNewTileProps = {
   icon?: any;
   title?: string;
 };
 
-const AddNewTileSurface = (props: AddNewTileSurfaceProps) => {
+const AddNewTile = (props: AddNewTileProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return <View style={styles.container}></View>;
@@ -19,7 +19,7 @@ const getStyles = theme =>
       height: hp(150),
       width: wp(160),
       borderRadius: 10,
-      backgroundColor: theme.colors.textColor,
+      backgroundColor: theme.colors.cardBackground,
     },
   });
-export default AddNewTileSurface;
+export default AddNewTile;
