@@ -1,19 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ScreenContainer = props => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View style={{ ...styles.container, ...props.style }}>
+    <SafeAreaView style={{ ...styles.container, ...props.style }}>
+      <StatusBar barStyle={'light-content'} backgroundColor="transparent" />
       <ImageBackground
         source={require('../assets/images/image_background.png')}
         resizeMode="cover"
         style={styles.image}>
         {props.children}
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
