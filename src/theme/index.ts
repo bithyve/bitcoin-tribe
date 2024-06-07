@@ -13,6 +13,7 @@ const CombinedDefaultTheme = {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
     primaryBackgroundColor: Colors.Arsenic,
+    cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,
@@ -20,7 +21,7 @@ const CombinedDefaultTheme = {
     headingColor: Colors.ChineseWhite,
     bodyTextColor: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
-    textColor: Colors.RaisinBlack,
+    primaryText: Colors.RaisinBlack,
   },
 };
 const CombinedDarkTheme = {
@@ -30,6 +31,7 @@ const CombinedDarkTheme = {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
     primaryBackgroundColor: Colors.Arsenic,
+    cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,
@@ -37,7 +39,7 @@ const CombinedDarkTheme = {
     headingColor: Colors.ChineseWhite,
     bodyTextColor: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
-    textColor: Colors.RaisinBlack,
+    primaryText: Colors.RaisinBlack,
   },
 };
 
