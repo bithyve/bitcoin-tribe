@@ -4,8 +4,8 @@ import { useTheme } from 'react-native-paper';
 import { hp, wp } from '../constants/responsive';
 
 type AddNewTileProps = {
-  icon?: any;
-  title?: string;
+  icon: any;
+  title: string;
 };
 
 const AddNewTile = (props: AddNewTileProps) => {
