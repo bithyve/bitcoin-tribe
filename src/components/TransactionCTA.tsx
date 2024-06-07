@@ -56,6 +56,7 @@ const getStyles = (theme, props) =>
     },
     iconWrapper: {
       marginRight: wp(5),
+      marginTop: wp(2),
     },
   });
 export default TransactionCTA;

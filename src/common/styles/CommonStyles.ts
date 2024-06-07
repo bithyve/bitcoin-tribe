@@ -62,6 +62,8 @@ export default StyleSheet.create({
   primaryCTATitle: {
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
+    lineHeight: 13 * 1.4,
+    height: 18,
   },
   secondaryCTATitle: {
     fontSize: 13,
@@ -70,6 +72,8 @@ export default StyleSheet.create({
   transactionCTATitle: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsSemiBold,
+    lineHeight: 14 * 1.4,
+    height: 18,
   },
   subtitle2: {
     fontSize: 14,

@@ -41,7 +41,7 @@ const getStyles = theme =>
     ctaContainerStyle: {
       borderRadius: 8,
       height: hp(50),
-      minWidth: wp(120),
+      width: wp(120),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.primaryCTA,
