@@ -10,7 +10,7 @@ export default (message, icon = false, error = false) => {
   return Toast.show(
     <View style={styles.container}>
       {icon && <CheckIcon />}
-      <Text style={[CommonStyles.toastMessage, styles.toastMessageStyle]}>
+      <Text style={[CommonStyles.textColor, styles.textColorStyle]}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
           : message}
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
     borderRadius: 60,
   },
-  toastMessageStyle: {
+  textColorStyle: {
     color: Colors.RaisinBlack,
     paddingLeft: 10,
     flex: 1,
