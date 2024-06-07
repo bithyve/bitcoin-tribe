@@ -1,15 +1,10 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import CommonStyles from '../../common/styles/CommonStyles';
 import { wp, hp } from '../../constants/responsive';
+import AppText from '../../components/AppText';
 
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import AssetsActive from '../../assets/images/icon_addnew.svg';
@@ -78,13 +73,13 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             style={styles.tab}>
             <View>{TabBarIcon(isFocused, label)}</View>
             {isFocused && (
-              <Text
+              <AppText
                 style={[
                   CommonStyles.bottomNavigation,
                   { color: isFocused ? theme.colors.primaryCTA : 'gray' },
                 ]}>
                 &nbsp;{label}
-              </Text>
+              </AppText>
             )}
           </TouchableOpacity>
         );
