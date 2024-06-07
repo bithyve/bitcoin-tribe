@@ -9,6 +9,7 @@ import {
 import { useTheme } from 'react-native-paper';
 
 import CommonStyles from '../../common/styles/CommonStyles';
+import { wp, hp } from '../../constants/responsive';
 
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import AssetsActive from '../../assets/images/icon_addnew.svg';
@@ -100,10 +101,10 @@ const getStyles = theme =>
       backgroundColor: theme.colors.inputBackground,
       position: 'absolute',
       bottom: 0,
-      height: 62,
-      width: 295,
-      marginBottom: 15,
-      marginHorizontal: windowWidth * 0.12,
+      height: hp(62),
+      width: wp(295),
+      marginBottom: hp(15),
+      marginHorizontal: windowWidth * 0.1,
     },
     tab: {
       flex: 1,

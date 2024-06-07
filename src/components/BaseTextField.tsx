@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+
 import Fonts from '../constants/Fonts';
+import { hp, wp } from '../constants/responsive';
 
 type BaseTextFieldProps = {
   icon?: any;
@@ -37,7 +39,7 @@ const getStyles = theme =>
       backgroundColor: theme.colors.inputBackground,
     },
     inputContainer: {
-      height: 50,
+      height: hp(50),
       width: '80%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 10,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { hp, wp } from '../constants/responsive';
 
 type AddNewTileSurfaceProps = {
   icon?: any;
@@ -15,10 +16,10 @@ const AddNewTileSurface = (props: AddNewTileSurfaceProps) => {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      height: 150,
-      width: 160,
+      height: hp(150),
+      width: wp(160),
       borderRadius: 10,
-      backgroundColor: theme.colors.toastMessage,
+      backgroundColor: theme.colors.textColor,
     },
   });
 export default AddNewTileSurface;
