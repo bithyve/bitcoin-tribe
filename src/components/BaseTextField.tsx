@@ -21,7 +21,7 @@ const BaseTextField = (props: BaseTextFieldProps) => {
       <TextInput
         underlineColor="transparent"
         cursorColor={theme.colors.buyCTA}
-        textColor={theme.colors.headingColor}
+        textColor={theme.colors.heading}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
         style={styles.inputContainer}
@@ -50,7 +50,7 @@ const getStyles = theme =>
     iconWrapper: {
       width: '15%',
       borderRightWidth: 1,
-      borderRightColor: theme.colors.headingColor,
+      borderRightColor: theme.colors.heading,
       alignItems: 'center',
       justifyContent: 'center',
     },

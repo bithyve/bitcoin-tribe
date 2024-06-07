@@ -17,13 +17,13 @@ function Community() {
         justifyContent: 'center',
         backgroundColor: '#434343',
       }}>
-      <AppText variant="heading1" style={{ color: theme.colors.headingColor }}>
+      <AppText variant="heading1" style={{ color: theme.colors.heading }}>
         Popup Heading 1
       </AppText>
-      <AppText variant="heading2" style={{ color: theme.colors.headingColor }}>
+      <AppText variant="heading2" style={{ color: theme.colors.heading }}>
         Popup Heading 2
       </AppText>
-      <AppText variant="pageTitle" style={{ color: theme.colors.headingColor }}>
+      <AppText variant="pageTitle" style={{ color: theme.colors.heading }}>
         Page Title 1
       </AppText>
       <AppText variant="body5" style={{ color: theme.colors.body }}>
@@ -39,9 +39,7 @@ function Community() {
       <AppText variant="body1" style={{ color: theme.colors.body }}>
         Body 1 : lk2j3429-85213-5134 50t-934285… 6 23…-
       </AppText>
-      <AppText
-        variant="textFieldLabel"
-        style={{ color: theme.colors.headingColor }}>
+      <AppText variant="textFieldLabel" style={{ color: theme.colors.heading }}>
         Text Feild
       </AppText>
       <AppText

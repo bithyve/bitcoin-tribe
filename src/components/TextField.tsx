@@ -18,7 +18,7 @@ const TextField = (props: TextFieldProps) => {
       underlineColor="transparent"
       placeholder={props.placeholder}
       cursorColor={theme.colors.buyCTA}
-      textColor={theme.colors.headingColor}
+      textColor={theme.colors.heading}
       placeholderTextColor={theme.colors.placeholderColor}
       style={styles.container}
       contentStyle={CommonStyles.textFieldLabel}
