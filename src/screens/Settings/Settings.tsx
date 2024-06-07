@@ -6,7 +6,6 @@ import PrimaryCTA from '../../components/PrimaryCTA';
 import UserAvatar from '../../components/UserAvatar';
 import Toast from '../../components/Toast';
 import TextField from '../../components/TextField';
-import BaseTextField from '../../components/BaseTextField';
 import TransactionCTA from '../../components/TransactionCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import ScreenContainer from '../../components/ScreenContainer';
@@ -55,8 +54,8 @@ function HomeScreen() {
         placeholder="Enter Wallet Name"
         keyboardType={'default'}
       />
-
-      <BaseTextField
+      <View style={{ margin: 5 }} />
+      <TextField
         icon={<TextIcon />}
         value={input}
         onChangeText={text => setInput(text)}
