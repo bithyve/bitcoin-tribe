@@ -10,6 +10,7 @@ type TextFieldProps = {
   placeholder?: string;
   value: string;
   keyboardType?: any;
+  onChangeText: any;
 };
 
 const TextField = (props: TextFieldProps) => {
