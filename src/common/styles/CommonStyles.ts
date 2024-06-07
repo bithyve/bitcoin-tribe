@@ -77,10 +77,10 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsSemiBold,
   },
   transactionCTATitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 14 * 1.4,
-    height: 18,
+    lineHeight: 12 * 1.4,
+    height: 15,
   },
   subtitle2: {
     fontSize: 14,

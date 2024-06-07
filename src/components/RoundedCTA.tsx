@@ -1,0 +1,44 @@
+import * as React from 'react';
+import { StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
+import { wp } from '../constants/responsive';
+import CommonStyles from '../common/styles/CommonStyles';
+
+type TransactionCTAProps = {
+  icon?: any;
+  buttonColor?: any;
+  onPress?: any;
+  title: string;
+  height?: number;
+  width?: number;
+};
+
+function TransactionCTA(props: TransactionCTAProps) {
+  const styles = getStyles(props);
+  return (
+    <Button
+      testID="btn_TransactionCTA"
+      icon={() => props.icon}
+      mode="contained"
+      uppercase={false}
+      labelStyle={CommonStyles.transactionCTATitle}
+      style={styles.ctaContainerStyle}
+      contentStyle={styles.contentStyle}
+      buttonColor={props.buttonColor}
+      onPress={props.onPress}>
+      {props.title}
+    </Button>
+  );
+}
+const getStyles = props =>
+  StyleSheet.create({
+    ctaContainerStyle: {
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    contentStyle: {
+      width: props.width,
+    },
+  });
+export default TransactionCTA;

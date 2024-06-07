@@ -6,7 +6,7 @@ import PrimaryCTA from '../../components/PrimaryCTA';
 import UserAvatar from '../../components/UserAvatar';
 import Toast from '../../components/Toast';
 import TextField from '../../components/TextField';
-import TransactionCTA from '../../components/TransactionCTA';
+import RoundedCTA from '../../components/RoundedCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import ScreenContainer from '../../components/ScreenContainer';
 import { hp, wp } from '../../constants/responsive';
@@ -62,35 +62,35 @@ function HomeScreen() {
         keyboardType={'number-pad'}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Send'}
-        height={hp(36)}
-        width={wp(90)}
+        // height={hp(36)}
+        width={wp(80)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.recieveCTA}
         title={'Recieve'}
-        height={hp(36)}
+        // height={hp(36)}
         width={wp(90)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.buyCTA}
         title={'Buy'}
-        height={hp(36)}
-        width={wp(90)}
+        // height={hp(36)}
+        width={wp(80)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Download'}
-        height={hp(36)}
+        // height={hp(36)}
         width={wp(120)}
       />
     </ScreenContainer>
