@@ -2,10 +2,10 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
 
-type TagUserAddedProps = {
+type AssetChipProps = {
   tagText: string;
 };
-const TagUserAdded = (props: TagUserAddedProps) => (
+const AssetChip = (props: AssetChipProps) => (
   <Chip style={styles.container}>{props.tagText}</Chip>
 );
 const styles = StyleSheet.create({
@@ -13,4 +13,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
 });
-export default TagUserAdded;
+export default AssetChip;
