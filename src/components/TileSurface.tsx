@@ -19,7 +19,7 @@ const getStyles = theme =>
       height: 205,
       width: 160,
       borderRadius: 10,
-      backgroundColor: theme.colors.toastMessage,
+      backgroundColor: theme.colors.textColor,
     },
   });
 export default TileSurface;
