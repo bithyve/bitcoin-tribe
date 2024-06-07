@@ -11,6 +11,7 @@ import TransactionCTA from '../../components/TransactionCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import ScreenContainer from '../../components/ScreenContainer';
 import { hp, wp } from '../../constants/responsive';
+import PrimaryCTALong from '../../components/PrimaryCTALong';
 
 function HomeScreen() {
   const theme = useTheme();
@@ -24,7 +25,7 @@ function HomeScreen() {
         onPress={() => Toast('Account already created', true)}
       />
       <View style={{ margin: 5 }} />
-      <PrimaryCTA
+      <PrimaryCTALong
         title="Confirm & Proceed"
         onPress={() => setVisible(!visible)}
       />
