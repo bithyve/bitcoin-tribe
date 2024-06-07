@@ -19,7 +19,7 @@ const CombinedDefaultTheme = {
     headingColor: Colors.ChineseWhite,
     bodyTextColor: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
-    toastMessage: Colors.RaisinBlack,
+    textColor: Colors.RaisinBlack,
   },
 };
 const CombinedDarkTheme = {
@@ -35,7 +35,7 @@ const CombinedDarkTheme = {
     headingColor: Colors.ChineseWhite,
     bodyTextColor: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
-    toastMessage: Colors.RaisinBlack,
+    textColor: Colors.RaisinBlack,
   },
 };
 
