@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 
 import Colors from '../theme/Colors';
 import CheckIcon from '../assets/images/icon_check.svg';
-import CommonStyles from '../common/styles/CommonStyles';
 import { hp, wp } from '../constants/responsive';
+import AppText from './AppText';
+
 // Need to work
 export default (message, icon = false, error = false) => {
   return Toast.show(
     <View style={styles.container}>
       {icon && <CheckIcon />}
-      <Text style={[CommonStyles.textColor, styles.toastMessageStyle]}>
+      <AppText variant="toastMessage" style={{ color: Colors.RaisinBlack }}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
           : message}
-      </Text>
+      </AppText>
     </View>,
     {
       duration: Toast.durations.SHORT,
@@ -42,9 +43,5 @@ const styles = StyleSheet.create({
   },
   toastMessageStyle: {
     color: Colors.RaisinBlack,
-    paddingLeft: 10,
-    flex: 1,
-    flexWrap: 'wrap',
-    fontWeight: '600',
   },
 });
