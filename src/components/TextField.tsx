@@ -20,13 +20,13 @@ const TextField = (props: TextFieldProps) => {
     <View style={styles.container}>
       {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
       <TextInput
-        underlineStyle={{ backgroundColor: 'transparent' }}
         cursorColor={theme.colors.buyCTA}
         textColor={theme.colors.heading}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
         style={styles.inputContainer}
-        contentStyle={CommonStyles.textFieldLabel}
+        underlineStyle={styles.underlineStyle}
+        contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
         value={props.value}
         onChangeText={text => props.onChangeText(text)}
         keyboardType={props.keyboardType}
@@ -56,6 +56,12 @@ const getStyles = theme =>
       borderRightColor: theme.colors.heading,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    textStyles: {
+      color: theme.colors.headingColor,
+    },
+    underlineStyle: {
+      backgroundColor: 'transparent',
     },
   });
 
