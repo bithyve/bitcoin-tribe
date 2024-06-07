@@ -16,6 +16,7 @@ const TextField = (props: TextFieldProps) => {
     <TextInput
       underlineColor="transparent"
       placeholder={props.placeholder}
+      textColor={theme.colors.headingColor}
       placeholderTextColor={theme.colors.placeholderColor}
       style={styles.container}
       value={props.value}
@@ -32,6 +33,7 @@ const getStyles = theme =>
       borderRadius: 6,
       margin: 10,
       fontSize: 14,
+      fontWeight: '600',
       fontFamily: Fonts.PoppinsBold,
       backgroundColor: theme.colors.inputBackground,
     },

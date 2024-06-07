@@ -20,6 +20,7 @@ const BaseTextField = (props: BaseTextFieldProps) => {
       <View style={styles.iconWrapper}>{props.icon}</View>
       <TextInput
         underlineColor="transparent"
+        textColor={theme.colors.headingColor}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
         style={styles.inputContainer}
@@ -44,6 +45,7 @@ const getStyles = theme =>
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 10,
       fontSize: 14,
+      fontWeight: '600',
       fontFamily: Fonts.PoppinsBold,
     },
     iconWrapper: {
