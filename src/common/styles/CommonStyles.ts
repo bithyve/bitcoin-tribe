@@ -58,6 +58,8 @@ export default StyleSheet.create({
   bottomNavigation: {
     fontSize: 11,
     fontFamily: Fonts.PoppinsSemiBold,
+    lineHeight: 11 * 1.4,
+    height: 15,
   },
   primaryCTATitle: {
     fontSize: 13,
