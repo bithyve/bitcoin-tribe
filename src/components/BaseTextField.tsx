@@ -21,6 +21,7 @@ const BaseTextField = (props: BaseTextFieldProps) => {
       <View style={styles.iconWrapper}>{props.icon}</View>
       <TextInput
         underlineColor="transparent"
+        cursorColor={theme.colors.buyCTA}
         textColor={theme.colors.headingColor}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
