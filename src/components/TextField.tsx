@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+import CommonStyles from '../common/styles/CommonStyles';
 import Fonts from '../constants/Fonts';
 
 type TextFieldProps = {
@@ -19,6 +20,7 @@ const TextField = (props: TextFieldProps) => {
       textColor={theme.colors.headingColor}
       placeholderTextColor={theme.colors.placeholderColor}
       style={styles.container}
+      contentStyle={CommonStyles.textFieldLabel}
       value={props.value}
       onChangeText={text => props.onChangeText(text)}
       keyboardType={props.keyboardType}
@@ -32,9 +34,6 @@ const getStyles = theme =>
       width: '95%',
       borderRadius: 6,
       margin: 10,
-      fontSize: 14,
-      fontWeight: '600',
-      fontFamily: Fonts.PoppinsBold,
       backgroundColor: theme.colors.inputBackground,
     },
   });

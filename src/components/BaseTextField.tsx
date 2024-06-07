@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+import CommonStyles from '../common/styles/CommonStyles';
 
 import Fonts from '../constants/Fonts';
-import { hp, wp } from '../constants/responsive';
+import { hp } from '../constants/responsive';
 
 type BaseTextFieldProps = {
   icon?: any;
@@ -24,6 +25,7 @@ const BaseTextField = (props: BaseTextFieldProps) => {
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
         style={styles.inputContainer}
+        contentStyle={CommonStyles.textFieldLabel}
         value={props.value}
         onChangeText={text => props.onChangeText(text)}
         keyboardType={props.keyboardType}
@@ -44,9 +46,6 @@ const getStyles = theme =>
       width: '80%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 10,
-      fontSize: 14,
-      fontWeight: '600',
-      fontFamily: Fonts.PoppinsBold,
     },
     iconWrapper: {
       width: '15%',

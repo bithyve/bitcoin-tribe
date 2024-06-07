@@ -54,6 +54,7 @@ export default StyleSheet.create({
   textFieldLabel: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsMedium,
+    fontWeight: '600',
   },
   bottomNavigation: {
     fontSize: 11,
