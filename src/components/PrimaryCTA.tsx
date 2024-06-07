@@ -16,13 +16,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     <Button
       mode="contained"
       uppercase={false}
-      labelStyle={[
-        CommonStyles.primaryCTATitle,
-        {
-          minWidth: wp(120),
-          marginVertical: hp(14),
-        },
-      ]}
+      labelStyle={[CommonStyles.primaryCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
       buttonColor={theme.colors.primaryCTA}
       onPress={props.onPress}>
@@ -34,6 +28,10 @@ const getStyles = theme =>
   StyleSheet.create({
     ctaContainerStyle: {
       borderRadius: 10,
+    },
+    labelStyle: {
+      minWidth: wp(120),
+      marginVertical: hp(14),
     },
   });
 export default PrimaryCTA;

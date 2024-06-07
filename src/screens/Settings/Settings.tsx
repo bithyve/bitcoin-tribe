@@ -19,7 +19,7 @@ function HomeScreen() {
   return (
     <ScreenContainer>
       <PrimaryCTA
-        title="Save Changes"
+        title="Save"
         onPress={() => Toast('Account already created', true)}
       />
       <View style={{ margin: 5 }} />
