@@ -10,6 +10,7 @@ import BaseTextField from '../../components/BaseTextField';
 import TransactionCTA from '../../components/TransactionCTA';
 import TextIcon from '../../assets/images/icon_bitcoin.svg';
 import ScreenContainer from '../../components/ScreenContainer';
+import { hp, wp } from '../../constants/responsive';
 
 function HomeScreen() {
   const theme = useTheme();
@@ -19,11 +20,14 @@ function HomeScreen() {
   return (
     <ScreenContainer>
       <PrimaryCTA
-        title="Save Changes"
+        title="Save"
         onPress={() => Toast('Account already created', true)}
       />
       <View style={{ margin: 5 }} />
-      <PrimaryCTA title="Continue" onPress={() => setVisible(!visible)} />
+      <PrimaryCTA
+        title="Confirm & Proceed"
+        onPress={() => setVisible(!visible)}
+      />
       <View style={{ margin: 5 }} />
       <View
         style={{
@@ -63,18 +67,32 @@ function HomeScreen() {
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Send'}
+        height={hp(36)}
+        width={wp(90)}
       />
       <View style={{ margin: 5 }} />
       <TransactionCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.recieveCTA}
         title={'Recieve'}
+        height={hp(36)}
+        width={wp(90)}
       />
       <View style={{ margin: 5 }} />
       <TransactionCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.buyCTA}
         title={'Buy'}
+        height={hp(36)}
+        width={wp(90)}
+      />
+      <View style={{ margin: 5 }} />
+      <TransactionCTA
+        icon={<TextIcon />}
+        buttonColor={theme.colors.primaryCTA}
+        title={'Download'}
+        height={hp(36)}
+        width={wp(120)}
       />
     </ScreenContainer>
   );

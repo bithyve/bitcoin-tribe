@@ -66,7 +66,7 @@ function Community() {
           style={[
             CommonStyles.toastMessage,
             {
-              color: theme.colors.toastMessage,
+              color: theme.colors.textColor,
             },
           ]}>
           Toast - Address Copied Successfully!
