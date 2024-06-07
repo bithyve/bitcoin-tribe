@@ -1,7 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 const ScreenContainer = props => {
+  const theme = useTheme();
+  const styles = getStyles(theme);
   return (
     <View style={{ ...styles.container, ...props.style }}>
       <ImageBackground
@@ -14,15 +17,16 @@ const ScreenContainer = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#434343',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+const getStyles = theme =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.primaryBackgroundColor,
+    },
+    image: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
 export default ScreenContainer;

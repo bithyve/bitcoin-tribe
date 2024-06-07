@@ -12,6 +12,7 @@ const CombinedDefaultTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
+    primaryBackgroundColor: Colors.Arsenic,
     primaryCTA: Colors.ChineseOrange,
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,
@@ -28,6 +29,7 @@ const CombinedDarkTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
+    primaryBackgroundColor: Colors.Arsenic,
     primaryCTA: Colors.ChineseOrange,
     recieveCTA: Colors.Eucalyptus,
     buyCTA: Colors.SelectiveYellow,

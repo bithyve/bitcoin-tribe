@@ -7,5 +7,6 @@ const Colors = {
   DarkGray: 'rgba(170, 170, 170,1)',
   SonicSilver: 'rgba(116, 116, 116,1)',
   RaisinBlack: 'rgba(33, 33, 33, 1)',
+  Arsenic: 'rgba(67, 67, 67, 1)',
 };
 export default Colors;
