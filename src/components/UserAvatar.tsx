@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Avatar } from 'react-native-paper';
 
-type CardImageSurfaceProps = {
+type UserAvatarProps = {
   size: number;
   imageSource: any;
 };
-const CardImageSurface = (props: CardImageSurfaceProps) => (
+const UserAvatar = (props: UserAvatarProps) => (
   <Avatar.Image
     size={props.size}
     source={{
@@ -13,4 +13,4 @@ const CardImageSurface = (props: CardImageSurfaceProps) => (
     }}
   />
 );
-export default CardImageSurface;
+export default UserAvatar;

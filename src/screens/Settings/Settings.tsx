@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import PrimaryCTA from '../../components/PrimaryCTA';
-import CardImageSurface from '../../components/CardImageSurface';
+import UserAvatar from '../../components/UserAvatar';
 import Toast from '../../components/Toast';
 import TextField from '../../components/TextField';
 import BaseTextField from '../../components/BaseTextField';
@@ -36,13 +36,13 @@ function HomeScreen() {
           justifyContent: 'space-around',
           alignItems: 'center',
         }}>
-        <CardImageSurface
+        <UserAvatar
           size={50}
           imageSource={
             'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
           }
         />
-        <CardImageSurface
+        <UserAvatar
           size={70}
           imageSource={
             'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
