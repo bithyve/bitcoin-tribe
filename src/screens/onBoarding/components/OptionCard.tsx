@@ -56,10 +56,10 @@ const getStyles = theme =>
       marginTop: hp(10),
     },
     menuCardTitle: {
-      color: theme.colors.body,
+      color: theme.colors.bodyColor,
     },
     menuCardSubTitle: {
-      color: theme.colors.body,
+      color: theme.colors.bodyColor,
     },
     iconWrapper: {
       width: '10%',

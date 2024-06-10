@@ -65,10 +65,10 @@ const getStyles = theme =>
       marginTop: hp(10),
     },
     headerTitle: {
-      color: theme.colors.heading,
+      color: theme.colors.headingColor,
     },
     headerSubTitle: {
-      color: theme.colors.body,
+      color: theme.colors.bodyColor,
     },
   });
 export default AppHeader;

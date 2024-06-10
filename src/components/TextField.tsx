@@ -21,7 +21,7 @@ const TextField = (props: TextFieldProps) => {
       {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
       <TextInput
         cursorColor={theme.colors.accent1}
-        textColor={theme.colors.heading}
+        textColor={theme.colors.headingColor}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
         style={styles.inputContainer}
@@ -54,7 +54,7 @@ const getStyles = theme =>
     iconWrapper: {
       width: '15%',
       borderRightWidth: 1,
-      borderRightColor: theme.colors.heading,
+      borderRightColor: theme.colors.headingColor,
       alignItems: 'center',
       justifyContent: 'center',
     },

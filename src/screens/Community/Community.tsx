@@ -17,29 +17,31 @@ function Community() {
         justifyContent: 'center',
         backgroundColor: '#434343',
       }}>
-      <AppText variant="heading1" style={{ color: theme.colors.heading }}>
+      <AppText variant="heading1" style={{ color: theme.colors.headingColor }}>
         Popup Heading 1
       </AppText>
-      <AppText variant="heading2" style={{ color: theme.colors.heading }}>
+      <AppText variant="heading2" style={{ color: theme.colors.headingColor }}>
         Popup Heading 2
       </AppText>
-      <AppText variant="pageTitle" style={{ color: theme.colors.heading }}>
+      <AppText variant="pageTitle" style={{ color: theme.colors.headingColor }}>
         Page Title 1
       </AppText>
-      <AppText variant="body5" style={{ color: theme.colors.body }}>
+      <AppText variant="body5" style={{ color: theme.colors.bodyColor }}>
         Body 5
       </AppText>
-      <AppText variant="body4" style={{ color: theme.colors.body }}>
+      <AppText variant="body4" style={{ color: theme.colors.bodyColor }}>
         Body 4
       </AppText>
-      <AppText variant="body2" style={{ color: theme.colors.body }}>
+      <AppText variant="body2" style={{ color: theme.colors.bodyColor }}>
         Body 2 - The blinded UTXO in this invoice will expire in 24 hours after
         its creation.
       </AppText>
-      <AppText variant="body1" style={{ color: theme.colors.body }}>
+      <AppText variant="body1" style={{ color: theme.colors.bodyColor }}>
         Body 1 : lk2j3429-85213-5134 50t-934285… 6 23…-
       </AppText>
-      <AppText variant="textFieldLabel" style={{ color: theme.colors.heading }}>
+      <AppText
+        variant="textFieldLabel"
+        style={{ color: theme.colors.headingColor }}>
         Text Feild
       </AppText>
       <AppText
@@ -52,7 +54,7 @@ function Community() {
       <AppText variant="subTitle" style={{ color: theme.colors.accent2 }}>
         Subtitle 1
       </AppText>
-      <AppText variant="body6" style={{ color: theme.colors.body }}>
+      <AppText variant="body6" style={{ color: theme.colors.bodyColor }}>
         Body 6
       </AppText>
       <AppText variant="body7" style={{ color: theme.colors.accent1 }}>
