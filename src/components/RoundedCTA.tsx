@@ -13,22 +13,23 @@ type RoundedCTAProps = {
 };
 
 function RoundedCTA(props: RoundedCTAProps) {
-  const styles = getStyles(props);
+  const { icon, buttonColor, onPress, title, height, width } = props;
+  const styles = getStyles(width);
   return (
     <Button
-      icon={() => props.icon}
+      icon={() => icon}
       mode="contained"
       uppercase={false}
       labelStyle={CommonStyles.roundedCTATitle}
       style={styles.ctaContainerStyle}
       contentStyle={styles.contentStyle}
-      buttonColor={props.buttonColor}
-      onPress={props.onPress}>
-      {props.title}
+      buttonColor={buttonColor}
+      onPress={onPress}>
+      {title}
     </Button>
   );
 }
-const getStyles = props =>
+const getStyles = width =>
   StyleSheet.create({
     ctaContainerStyle: {
       borderRadius: 18,
@@ -36,7 +37,7 @@ const getStyles = props =>
       justifyContent: 'center',
     },
     contentStyle: {
-      width: props.width,
+      width: width,
     },
   });
 export default RoundedCTA;
