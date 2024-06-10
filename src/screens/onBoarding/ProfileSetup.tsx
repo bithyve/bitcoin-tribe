@@ -1,12 +1,48 @@
-import * as React from 'react';
-import { Text } from 'react-native';
-import ScreenContainer from '../../components/ScreenContainer';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-function ProfileSetup() {
+import ScreenContainer from '../../components/ScreenContainer';
+import AppHeader from '../../components/AppHeader';
+import TextField from '../../components/TextField';
+import PrimaryCTA from '../../components/PrimaryCTA';
+import Toast from '../../components/Toast';
+import { hp, wp } from '../../constants/responsive';
+import AddPicture from './components/AddPicture';
+
+function ProfileSetup({ navigation }) {
+  const [username, setUsername] = useState('');
   return (
     <ScreenContainer>
-      <Text>WalletSetupOption!</Text>
+      <AppHeader
+        title="Enter your details"
+        subTitle="Lorem ipsum dolor sit amet, c"
+        navigation={navigation}
+      />
+      <AddPicture
+        imageSource={null}
+        // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
+      />
+      <TextField
+        value={username}
+        onChangeText={text => setUsername(text)}
+        placeholder="Enter Name"
+        keyboardType={'default'}
+      />
+      <View style={styles.primaryCTAContainer}>
+        <PrimaryCTA
+          primaryTitle="Next"
+          secondaryTitle="Cancel"
+          primaryOnPress={() => Toast('Primary Pressed', true)}
+          secondaryOnPress={() => Toast('Secondary Pressed')}
+          width={wp(120)}
+        />
+      </View>
     </ScreenContainer>
   );
 }
+const styles = StyleSheet.create({
+  primaryCTAContainer: {
+    marginTop: hp(50),
+  },
+});
 export default ProfileSetup;
