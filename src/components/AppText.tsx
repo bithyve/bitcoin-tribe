@@ -54,6 +54,9 @@ const AppText = ({ children, variant, style, ...props }: AppTextProps) => {
     case 'toastMessage':
       textStyle = CommonStyles.toastMessage;
       break;
+    case 'subtitle2':
+      textStyle = CommonStyles.subtitle2;
+      break;
     default:
       textStyle = CommonStyles.body1;
       break;
