@@ -76,7 +76,7 @@ export default StyleSheet.create({
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
   },
-  RoundedCTATitle: {
+  roundedCTATitle: {
     fontSize: 12,
     fontFamily: Fonts.PoppinsSemiBold,
     lineHeight: 12 * 1.4,
