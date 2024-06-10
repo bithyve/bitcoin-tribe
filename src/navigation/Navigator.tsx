@@ -6,6 +6,7 @@ import Settings from '../screens/settings/Settings';
 import HomeTabs from './TabNavigation/HomeTabs';
 import Splash from '../screens/splash/Splash';
 import WalletSetupOption from '../screens/onBoarding/WalletSetupOption';
+import ProfileSetup from '../screens/onBoarding/ProfileSetup';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();
@@ -23,6 +24,13 @@ function Navigator() {
         <Stack.Screen
           name="WalletSetupOption"
           component={WalletSetupOption}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ProfileSetup"
+          component={ProfileSetup}
           options={{
             headerShown: false,
           }}
