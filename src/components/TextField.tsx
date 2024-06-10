@@ -23,7 +23,7 @@ const TextField = (props: TextFieldProps) => {
         cursorColor={theme.colors.accent1}
         textColor={theme.colors.headingColor}
         placeholder={props.placeholder}
-        placeholderTextColor={theme.colors.placeholderColor}
+        placeholderTextColor={theme.colors.placeholder}
         style={styles.inputContainer}
         underlineStyle={styles.underlineStyle}
         contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
