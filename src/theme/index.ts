@@ -15,13 +15,14 @@ const CombinedDefaultTheme = {
     primaryBackgroundColor: Colors.Arsenic,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    recieveCTA: Colors.Eucalyptus,
-    buyCTA: Colors.SelectiveYellow,
+    accent1: Colors.SelectiveYellow,
+    accent2: Colors.Eucalyptus,
     inputBackground: Colors.Jet,
     heading: Colors.ChineseWhite,
     body: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
+    profileBackground: Colors.Black,
   },
 };
 const CombinedDarkTheme = {
@@ -33,13 +34,14 @@ const CombinedDarkTheme = {
     primaryBackgroundColor: Colors.Arsenic,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    recieveCTA: Colors.Eucalyptus,
-    buyCTA: Colors.SelectiveYellow,
+    accent1: Colors.SelectiveYellow,
+    accent2: Colors.Eucalyptus,
     inputBackground: Colors.Jet,
     heading: Colors.ChineseWhite,
     body: Colors.DarkGray,
     placeholderColor: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
+    profileBackground: Colors.Black,
   },
 };
 

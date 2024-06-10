@@ -20,7 +20,7 @@ const TextField = (props: TextFieldProps) => {
     <View style={styles.container}>
       {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
       <TextInput
-        cursorColor={theme.colors.buyCTA}
+        cursorColor={theme.colors.accent1}
         textColor={theme.colors.heading}
         placeholder={props.placeholder}
         placeholderTextColor={theme.colors.placeholderColor}
@@ -40,15 +40,16 @@ const getStyles = theme =>
       flexDirection: 'row',
       alignItems: 'center',
       borderRadius: 10,
-      marginHorizontal: wp(10),
-      width: '90%',
+      width: '100%',
       backgroundColor: theme.colors.inputBackground,
     },
     inputContainer: {
       height: hp(50),
       width: '80%',
       backgroundColor: theme.colors.inputBackground,
-      borderRadius: 10,
+      borderRadius: 15,
+      borderTopLeftRadius: 20,
+      paddingLeft: 5,
     },
     iconWrapper: {
       width: '15%',

@@ -49,13 +49,13 @@ function Community() {
         ]}>
         Placeholder
       </AppText>
-      <AppText variant="subTitle" style={{ color: theme.colors.recieveCTA }}>
+      <AppText variant="subTitle" style={{ color: theme.colors.accent2 }}>
         Subtitle 1
       </AppText>
       <AppText variant="body6" style={{ color: theme.colors.body }}>
         Body 6
       </AppText>
-      <AppText variant="body7" style={{ color: theme.colors.buyCTA }}>
+      <AppText variant="body7" style={{ color: theme.colors.accent1 }}>
         Body 7
       </AppText>
       <AppText

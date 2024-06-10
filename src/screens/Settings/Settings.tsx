@@ -70,14 +70,14 @@ function HomeScreen() {
       <View style={{ margin: 5 }} />
       <RoundedCTA
         icon={<TextIcon />}
-        buttonColor={theme.colors.recieveCTA}
+        buttonColor={theme.colors.accent2}
         title={'Recieve'}
         width={wp(90)}
       />
       <View style={{ margin: 5 }} />
       <RoundedCTA
         icon={<TextIcon />}
-        buttonColor={theme.colors.buyCTA}
+        buttonColor={theme.colors.accent1}
         title={'Buy'}
       />
       <View style={{ margin: 5 }} />
