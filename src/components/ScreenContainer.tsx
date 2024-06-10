@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { hp } from '../constants/responsive';
 
 const ScreenContainer = props => {
   const theme = useTheme();
@@ -27,8 +28,7 @@ const getStyles = theme =>
     },
     image: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      padding: hp(15),
     },
   });
 export default ScreenContainer;
