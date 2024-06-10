@@ -6,6 +6,7 @@ import CommonStyles from '../../common/styles/CommonStyles';
 import AssetCard from '../../components/AssetCard';
 import AddNewTile from '../../components/AddNewTile';
 import AppText from '../../components/AppText';
+import AssetChip from '../../components/AssetChip';
 
 function Community() {
   const theme = useTheme();
@@ -57,19 +58,20 @@ function Community() {
       <AppText variant="body7" style={{ color: theme.colors.accent1 }}>
         Body 7
       </AppText>
-      <AppText
-        variant="secondaryCTATitle"
-        style={{ color: theme.colors.primaryCTA }}>
-        Secondary CTA - Skip
-      </AppText>
+      <AssetChip tagText="COLLECTIBLES" />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
+          marginTop: 10,
         }}>
-        <AssetCard />
+        <AssetCard
+          asset={'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4'}
+          title="The Demogorgan"
+          details="Humanoid creature… with head shaped like a flower"
+        />
         <View style={{ margin: 5 }} />
-        <AddNewTile />
+        <AddNewTile title="Add New" />
       </View>
     </View>
   );
