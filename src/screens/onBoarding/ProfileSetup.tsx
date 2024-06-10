@@ -32,7 +32,7 @@ function ProfileSetup({ navigation }) {
         <PrimaryCTA
           primaryTitle="Next"
           secondaryTitle="Cancel"
-          primaryOnPress={() => Toast('Primary Pressed', true)}
+          primaryOnPress={() => navigation.navigate('Home')}
           secondaryOnPress={() => Toast('Secondary Pressed')}
           width={wp(120)}
         />
