@@ -16,7 +16,6 @@ function RoundedCTA(props: RoundedCTAProps) {
   const styles = getStyles(props);
   return (
     <Button
-      testID="btn_RoundedCTATitle"
       icon={() => props.icon}
       mode="contained"
       uppercase={false}
