@@ -45,10 +45,7 @@ function Community() {
         Text Feild
       </AppText>
       <AppText
-        style={[
-          CommonStyles.placeholder,
-          { color: theme.colors.placeholderColor },
-        ]}>
+        style={[CommonStyles.placeholder, { color: theme.colors.placeholder }]}>
         Placeholder
       </AppText>
       <AppText variant="subTitle" style={{ color: theme.colors.accent2 }}>
