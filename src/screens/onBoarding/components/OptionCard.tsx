@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, TouchableRipple } from 'react-native-paper';
 
 import AppText from '../../../components/AppText';
 import IconArrow from '../../../assets/images/icon_arrowr2.svg';
@@ -11,25 +11,31 @@ type OptionCardProps = {
   title: string;
   subTitle: string;
   style?: any;
+  onPress?: any;
 };
 
 function OptionCard(props: OptionCardProps) {
-  const { icon, title, subTitle, style } = props;
+  const { icon, title, subTitle, style, onPress } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View style={[styles.container, style]}>
-      <View>{icon}</View>
-      <View style={styles.detailsWrapper}>
-        <View style={styles.contentWrapper}>
-          <AppText style={styles.menuCardTitle}>{title}</AppText>
-          <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
-        </View>
-        <View style={styles.iconWrapper}>
-          <IconArrow />
+    <TouchableRipple
+      rippleColor={'gray'}
+      style={[styles.container, style]}
+      onPress={() => onPress()}>
+      <View>
+        <View>{icon}</View>
+        <View style={styles.detailsWrapper}>
+          <View style={styles.contentWrapper}>
+            <AppText style={styles.menuCardTitle}>{title}</AppText>
+            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
+          </View>
+          <View style={styles.iconWrapper}>
+            <IconArrow />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableRipple>
   );
 }
 const getStyles = theme =>
