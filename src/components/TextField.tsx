@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import CommonStyles from '../common/styles/CommonStyles';
 
-import { hp, wp } from '../constants/responsive';
+import { hp } from '../constants/responsive';
 
 type TextFieldProps = {
   icon?: any;
@@ -14,22 +14,23 @@ type TextFieldProps = {
 };
 
 const TextField = (props: TextFieldProps) => {
+  const { icon, placeholder, value, keyboardType, onChangeText } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
-      {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
+      {icon && <View style={styles.iconWrapper}>{icon}</View>}
       <TextInput
         cursorColor={theme.colors.accent1}
         textColor={theme.colors.headingColor}
-        placeholder={props.placeholder}
+        placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholder}
         style={styles.inputContainer}
         underlineStyle={styles.underlineStyle}
         contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
-        value={props.value}
-        onChangeText={text => props.onChangeText(text)}
-        keyboardType={props.keyboardType}
+        value={value}
+        onChangeText={text => onChangeText(text)}
+        keyboardType={keyboardType}
       />
     </View>
   );
