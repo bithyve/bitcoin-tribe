@@ -28,7 +28,7 @@ const getStyles = theme =>
     },
     image: {
       flex: 1,
-      padding: hp(15),
+      padding: hp(20),
     },
   });
 export default ScreenContainer;
