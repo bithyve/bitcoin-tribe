@@ -1,32 +1,44 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, TouchableRipple } from 'react-native-paper';
 
-import AppText from '../../../components/AppText';
-import IconArrow from '../../../assets/images/icon_arrowr2.svg';
-import { hp } from '../../../constants/responsive';
+import AppText from '../components/AppText';
+import IconArrow from '../assets/images/icon_arrowr2.svg';
+import { hp } from '../constants/responsive';
+import SettingsIcon from '../assets/images/icon_settings.svg';
 
 type AppHeaderProps = {
-  icon?: any;
-  title: string;
-  subTitle: string;
+  title?: string;
+  subTitle?: string;
   style?: any;
+  settingIcon?: boolean;
+  navigation?: any;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { icon, title, subTitle, style } = props;
+  const { title, subTitle, style, settingIcon, navigation } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={[styles.container, style]}>
-      <View>{icon}</View>
+      <View style={styles.iconContainer}>
+        {navigation && (
+          <TouchableRipple onPress={() => navigation.goBack()}>
+            {<IconArrow />}
+          </TouchableRipple>
+        )}
+        {settingIcon && (
+          <TouchableRipple onPress={() => navigation.goBack()}>
+            <SettingsIcon />
+          </TouchableRipple>
+        )}
+      </View>
       <View style={styles.detailsWrapper}>
         <View style={styles.contentWrapper}>
-          <AppText style={styles.menuCardTitle}>{title}</AppText>
-          <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
-        </View>
-        <View style={styles.iconWrapper}>
-          <IconArrow />
+          <AppText variant="pageTitle" style={styles.headerTitle}>
+            {title}
+          </AppText>
+          <AppText style={styles.headerSubTitle}>{subTitle}</AppText>
         </View>
       </View>
     </View>
@@ -36,8 +48,13 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       width: '100%',
-      padding: hp(15),
       marginVertical: hp(10),
+    },
+    iconContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     detailsWrapper: {
       flexDirection: 'row',
@@ -47,15 +64,11 @@ const getStyles = theme =>
       width: '90%',
       marginTop: hp(10),
     },
-    menuCardTitle: {
-      color: theme.colors.body,
+    headerTitle: {
+      color: theme.colors.heading,
     },
-    menuCardSubTitle: {
+    headerSubTitle: {
       color: theme.colors.body,
-    },
-    iconWrapper: {
-      width: '10%',
-      justifyContent: 'center',
     },
   });
 export default AppHeader;
