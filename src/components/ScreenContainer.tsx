@@ -24,7 +24,7 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.primaryBackgroundColor,
+      backgroundColor: theme.colors.primaryBackground,
     },
     image: {
       flex: 1,

@@ -12,7 +12,7 @@ const CombinedDefaultTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
-    primaryBackgroundColor: Colors.Arsenic,
+    primaryBackground: Colors.Arsenic,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
@@ -31,7 +31,7 @@ const CombinedDarkTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primaryBackgroundColor: Colors.Arsenic,
+    primaryBackground: Colors.Arsenic,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
