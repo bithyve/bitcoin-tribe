@@ -8,7 +8,7 @@ const AssetsData = [
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 1,
     title: 'The Demogorgan',
-    details: 'Humanoid creature… with head shaped like a flower',
+    details: 'Humanoid creature… with head shaped',
     tag: 'COLLECTIBLES',
   },
   {
