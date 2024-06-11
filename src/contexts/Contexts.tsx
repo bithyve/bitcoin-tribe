@@ -1,6 +1,8 @@
 import React from 'react';
 import PreferencesContext from './PreferenceContext';
-import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme';
+import { LocalizationProvider } from './LocalizationContext';
+
+import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme/index';
 import { PaperProvider } from 'react-native-paper';
 
 function Contexts({ children }: any) {
@@ -20,7 +22,9 @@ function Contexts({ children }: any) {
   );
   return (
     <PreferencesContext.Provider value={preferences}>
-      <PaperProvider theme={theme}>{children}</PaperProvider>
+      <LocalizationProvider>
+        <PaperProvider theme={theme}>{children}</PaperProvider>
+      </LocalizationProvider>
     </PreferencesContext.Provider>
   );
 }
