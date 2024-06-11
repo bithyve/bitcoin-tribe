@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import UserAvatar from 'src/components/UserAvatar';
@@ -9,7 +9,7 @@ import { wp } from 'src/constants/responsive';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
-import AppTouchable from 'src/components/AppTouchable';
+import IconWrapper from 'src/components/IconWrapper';
 
 type HomeHeaderProps = {
   profile: any;
@@ -40,12 +40,12 @@ function HomeHeader(props: HomeHeaderProps) {
         </View>
       </View>
       <View style={styles.iconWrapper}>
-        <AppTouchable onPress={onPressScanner}>
+        <IconWrapper onPress={onPressScanner}>
           <IconScanner />
-        </AppTouchable>
-        <AppTouchable onPress={onPressNotification}>
+        </IconWrapper>
+        <IconWrapper onPress={onPressNotification}>
           <IconNotification />
-        </AppTouchable>
+        </IconWrapper>
       </View>
     </View>
   );

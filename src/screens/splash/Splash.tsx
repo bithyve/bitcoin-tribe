@@ -7,7 +7,7 @@ function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
-    }, 2000);
+    }, 500);
   });
   return (
     <ScreenContainer>
