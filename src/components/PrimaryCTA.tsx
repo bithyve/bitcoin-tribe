@@ -15,13 +15,13 @@ type PrimaryCTAProps = {
 
 function PrimaryCTA(props: PrimaryCTAProps) {
   const theme = useTheme();
-  const styles = getStyles(theme, width);
   const {
     onPress,
     title,
     width,
     buttonColor = theme.colors.primaryCTA,
   } = props;
+  const styles = getStyles(theme, width);
   return (
     <View style={styles.container}>
       <Button

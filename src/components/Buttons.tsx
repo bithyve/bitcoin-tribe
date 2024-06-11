@@ -5,6 +5,7 @@ import { Button, TouchableRipple, useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import AppText from './AppText';
+import PrimaryCTA from './PrimaryCTA';
 
 type PrimaryCTAProps = {
   primaryOnPress: any;
@@ -36,15 +37,7 @@ function Buttons(props: PrimaryCTAProps) {
           </AppText>
         </TouchableRipple>
       )}
-      <Button
-        mode="contained"
-        uppercase={false}
-        labelStyle={[CommonStyles.primaryCTATitle, styles.labelStyle]}
-        style={styles.ctaContainerStyle}
-        buttonColor={theme.colors.primaryCTA}
-        onPress={primaryOnPress}>
-        {primaryTitle}
-      </Button>
+      <PrimaryCTA title={primaryTitle} onPress={primaryOnPress} width={width} />
     </View>
   );
 }
@@ -58,15 +51,6 @@ const getStyles = (theme, width) =>
     seconadryTitleStyle: {
       color: theme.colors.primaryCTA,
       marginRight: wp(10),
-    },
-    ctaContainerStyle: {
-      borderRadius: 10,
-      marginVertical: hp(20),
-      width: width,
-    },
-    labelStyle: {
-      minWidth: wp(120),
-      marginVertical: hp(14),
     },
   });
 export default Buttons;
