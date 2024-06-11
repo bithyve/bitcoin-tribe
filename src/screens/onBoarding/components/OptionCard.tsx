@@ -5,6 +5,7 @@ import { useTheme, TouchableRipple } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import { hp } from 'src/constants/responsive';
+import AppTouchable from 'src/components/AppTouchable';
 
 type OptionCardProps = {
   icon?: any;
@@ -19,10 +20,7 @@ function OptionCard(props: OptionCardProps) {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <TouchableRipple
-      rippleColor={'gray'}
-      style={[styles.container, style]}
-      onPress={() => onPress()}>
+    <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
       <View>
         <View>{icon}</View>
         <View style={styles.detailsWrapper}>
@@ -35,7 +33,7 @@ function OptionCard(props: OptionCardProps) {
           </View>
         </View>
       </View>
-    </TouchableRipple>
+    </AppTouchable>
   );
 }
 const getStyles = theme =>

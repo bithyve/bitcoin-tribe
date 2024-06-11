@@ -9,6 +9,7 @@ import { wp } from 'src/constants/responsive';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
+import AppTouchable from 'src/components/AppTouchable';
 
 type HomeHeaderProps = {
   profile: any;
@@ -39,12 +40,12 @@ function HomeHeader(props: HomeHeaderProps) {
         </View>
       </View>
       <View style={styles.iconWrapper}>
-        <TouchableRipple onPress={onPressScanner}>
+        <AppTouchable onPress={onPressScanner}>
           <IconScanner />
-        </TouchableRipple>
-        <TouchableRipple onPress={onPressNotification}>
+        </AppTouchable>
+        <AppTouchable onPress={onPressNotification}>
           <IconNotification />
-        </TouchableRipple>
+        </AppTouchable>
       </View>
     </View>
   );

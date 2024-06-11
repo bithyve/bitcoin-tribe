@@ -5,6 +5,7 @@ import { useTheme, TouchableRipple } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import AppTouchable from './AppTouchable';
 
 type AppHeaderProps = {
   title?: string;
@@ -22,14 +23,14 @@ function AppHeader(props: AppHeaderProps) {
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
         {navigation && (
-          <TouchableRipple onPress={() => navigation.goBack()}>
+          <AppTouchable onPress={() => navigation.goBack()}>
             {<IconArrow />}
-          </TouchableRipple>
+          </AppTouchable>
         )}
         {rightIcon && (
-          <TouchableRipple onPress={() => navigation.goBack()}>
+          <AppTouchable onPress={() => navigation.goBack()}>
             {rightIcon}
-          </TouchableRipple>
+          </AppTouchable>
         )}
       </View>
       <View style={styles.detailsWrapper}>

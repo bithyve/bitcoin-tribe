@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TouchableRipple, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
-import CommonStyles from 'src/common/styles/CommonStyles';
+import { wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import PrimaryCTA from './PrimaryCTA';
+import AppTouchable from './AppTouchable';
 
 type PrimaryCTAProps = {
   primaryOnPress: any;
@@ -29,13 +29,13 @@ function Buttons(props: PrimaryCTAProps) {
   return (
     <View style={styles.container}>
       {secondaryTitle && (
-        <TouchableRipple onPress={secondaryOnPress}>
+        <AppTouchable onPress={secondaryOnPress}>
           <AppText
             variant="secondaryCTATitle"
             style={styles.seconadryTitleStyle}>
             {secondaryTitle}
           </AppText>
-        </TouchableRipple>
+        </AppTouchable>
       )}
       <PrimaryCTA title={primaryTitle} onPress={primaryOnPress} width={width} />
     </View>

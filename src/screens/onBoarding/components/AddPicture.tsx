@@ -6,6 +6,7 @@ import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import { hp, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
+import AppTouchable from 'src/components/AppTouchable';
 
 type addPictureProps = {
   imageSource: any;
@@ -15,7 +16,7 @@ function AddPicture(props: addPictureProps) {
   const styles = getStyles(theme);
   const { imageSource } = props;
   return (
-    <TouchableRipple onPress={() => console.log('pick image')}>
+    <AppTouchable onPress={() => console.log('pick image')}>
       {!imageSource ? (
         <View style={styles.container}>
           <View style={styles.iconImageWrapper}>
@@ -32,7 +33,7 @@ function AddPicture(props: addPictureProps) {
           <UserAvatar size={70} imageSource={imageSource} />
         </View>
       )}
-    </TouchableRipple>
+    </AppTouchable>
   );
 }
 const getStyles = theme =>

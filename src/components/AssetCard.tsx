@@ -4,6 +4,7 @@ import { useTheme, TouchableRipple } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
+import AppTouchable from './AppTouchable';
 import AssetChip from './AssetChip';
 
 type AssetCardProps = {
@@ -18,8 +19,7 @@ const AssetCard = (props: AssetCardProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <TouchableRipple
-      rippleColor={'gray'}
+    <AppTouchable
       onPress={() => console.log('asset card')}
       style={styles.container}>
       <View>
@@ -47,7 +47,7 @@ const AssetCard = (props: AssetCardProps) => {
           </AppText>
         </View>
       </View>
-    </TouchableRipple>
+    </AppTouchable>
   );
 };
 const getStyles = theme =>

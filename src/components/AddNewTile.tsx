@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
+import AppTouchable from './AppTouchable';
 
 type AddNewTileProps = {
   title: string;
@@ -15,8 +16,7 @@ const AddNewTile = (props: AddNewTileProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <TouchableRipple
-      rippleColor={'gray'}
+    <AppTouchable
       onPress={() => console.log('add new')}
       style={styles.container}>
       <View style={styles.wrapper}>
@@ -25,7 +25,7 @@ const AddNewTile = (props: AddNewTileProps) => {
           {title}
         </AppText>
       </View>
-    </TouchableRipple>
+    </AppTouchable>
   );
 };
 const getStyles = theme =>
