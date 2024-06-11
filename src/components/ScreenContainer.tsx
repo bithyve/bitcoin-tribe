@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, ImageBackground, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { hp } from 'src/constants/responsive';
 
 const ScreenContainer = props => {

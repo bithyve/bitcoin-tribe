@@ -2,8 +2,8 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
-import CommonStyles from 'src/common/styles/CommonStyles';
 import { hp } from 'src/constants/responsive';
+import CommonStyles from 'src/common/styles/CommonStyles';
 
 type TextFieldProps = {
   icon?: any;

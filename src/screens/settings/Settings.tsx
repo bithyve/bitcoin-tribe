@@ -2,8 +2,8 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import PrimaryCTA from 'src/components/PrimaryCTA';
 import UserAvatar from 'src/components/UserAvatar';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import RoundedCTA from 'src/components/RoundedCTA';

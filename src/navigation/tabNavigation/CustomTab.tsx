@@ -2,9 +2,9 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import CommonStyles from 'src/common/styles/CommonStyles';
 import { wp, hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
+import CommonStyles from 'src/common/styles/CommonStyles';
 
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 import AssetsActive from 'src/assets/images/icon_addnew.svg';

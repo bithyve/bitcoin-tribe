@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
+
 import CommonStyles from 'src/common/styles/CommonStyles';
 
 type RoundedCTAProps = {
