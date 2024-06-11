@@ -1,36 +1,36 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
+import { useNavigation } from '@react-navigation/native';
 
 type AppHeaderProps = {
   title?: string;
   subTitle?: string;
   style?: any;
-  navigation?: any;
+  enableBack?: boolean;
   rightIcon?: any;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { title, subTitle, style, navigation, rightIcon } = props;
+  const { title, subTitle, style, enableBack = true, rightIcon } = props;
   const theme = useTheme();
+  const navigation = useNavigation();
   const styles = getStyles(theme);
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        {navigation && (
-          <AppTouchable onPress={() => navigation.goBack()}>
-            {<IconArrow />}
+        {enableBack && (
+          <AppTouchable onPress={navigation.goBack} style={styles.back}>
+            {<GoBack />}
           </AppTouchable>
         )}
         {rightIcon && (
-          <AppTouchable onPress={() => navigation.goBack()}>
-            {rightIcon}
-          </AppTouchable>
+          <AppTouchable onPress={navigation.goBack}>{rightIcon}</AppTouchable>
         )}
       </View>
       <View style={styles.detailsWrapper}>
@@ -69,6 +69,9 @@ const getStyles = theme =>
     },
     headerSubTitle: {
       color: theme.colors.bodyColor,
+    },
+    back: {
+      borderRadius: 100,
     },
   });
 export default AppHeader;

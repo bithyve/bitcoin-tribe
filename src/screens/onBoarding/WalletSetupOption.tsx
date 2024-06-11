@@ -11,7 +11,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 function WalletSetupOption({ navigation }) {
   return (
     <ScreenContainer>
-      <AppHeader title="Welcome," />
+      <AppHeader title="Welcome," enableBack={false} />
       <OptionCard
         icon={<IconWallet />}
         title="Create New"
@@ -22,13 +22,13 @@ function WalletSetupOption({ navigation }) {
         icon={<IconWallet />}
         title="Recovery Phrase"
         subTitle="Lorem ipsum dolor si"
-        navigation={navigation}
+        onPress={() => console.log('Recovery Phrase')}
       />
       <OptionCard
         title="Advanced Options"
         subTitle="Lorem ipsum dolor sit amet, consec"
         style={styles.advanceOptionStyle}
-        navigation={navigation}
+        onPress={() => console.log('Advanced Options')}
       />
     </ScreenContainer>
   );

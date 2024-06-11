@@ -6,7 +6,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate(NavigationRoutes.WALLETSETUPOPTION);
+      navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
     }, 2000);
   });
   return (
