@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Settings from '../screens/settings/Settings';
-import HomeTabs from './TabNavigation/HomeTabs';
+import HomeTabs from './tabNavigation/HomeTabs';
 import Splash from '../screens/splash/Splash';
 import WalletSetupOption from '../screens/onBoarding/WalletSetupOption';
 import ProfileSetup from '../screens/onBoarding/ProfileSetup';
