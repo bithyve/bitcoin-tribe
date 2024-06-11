@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme, TouchableRipple } from 'react-native-paper';
-import { hp, wp } from '../constants/responsive';
+
+import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
-import AddNewIcon from '../assets/images/icon_addnew.svg';
+import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 
 type AddNewTileProps = {
   title: string;
