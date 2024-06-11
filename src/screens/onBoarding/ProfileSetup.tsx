@@ -4,10 +4,10 @@ import { StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import PrimaryCTA from 'src/components/PrimaryCTA';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
+import Buttons from 'src/components/Buttons';
 
 function ProfileSetup({ navigation }) {
   const [username, setUsername] = useState('');
@@ -29,7 +29,7 @@ function ProfileSetup({ navigation }) {
         keyboardType={'default'}
       />
       <View style={styles.primaryCTAContainer}>
-        <PrimaryCTA
+        <Buttons
           primaryTitle="Next"
           secondaryTitle="Cancel"
           primaryOnPress={() => navigation.navigate('Home')}
