@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, TouchableRipple } from 'react-native-paper';
 
 import { wp, hp } from '../constants/responsive';
 import AppText from './AppText';
@@ -16,26 +16,27 @@ const AssetCard = (props: AssetCardProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View style={styles.container}>
-      <Image
-        source={{
-          uri: asset,
-        }}
-        style={{
-          width: '100%',
-          height: '55%',
-          borderRadius: 10,
-        }}
-      />
-      <View style={styles.contentWrapper}>
-        <AppText variant="body1" style={styles.titleText}>
-          {title}
-        </AppText>
-        <AppText variant="body2" style={styles.detailsText}>
-          {details}
-        </AppText>
+    <TouchableRipple
+      rippleColor={'gray'}
+      onPress={() => console.log('asset card')}
+      style={styles.container}>
+      <View>
+        <Image
+          source={{
+            uri: asset,
+          }}
+          style={styles.imageStyle}
+        />
+        <View style={styles.contentWrapper}>
+          <AppText variant="body1" style={styles.titleText}>
+            {title}
+          </AppText>
+          <AppText variant="body2" style={styles.detailsText} numberOfLines={2}>
+            {details}
+          </AppText>
+        </View>
       </View>
-    </View>
+    </TouchableRipple>
   );
 };
 const getStyles = theme =>
@@ -44,7 +45,13 @@ const getStyles = theme =>
       height: hp(205),
       width: wp(160),
       borderRadius: 15,
+      margin: wp(5),
       backgroundColor: theme.colors.cardBackground,
+    },
+    imageStyle: {
+      width: '100%',
+      height: '60%',
+      borderRadius: 10,
     },
     contentWrapper: {
       padding: 10,

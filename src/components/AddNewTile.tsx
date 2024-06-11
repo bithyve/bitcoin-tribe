@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, TouchableRipple } from 'react-native-paper';
 import { hp, wp } from '../constants/responsive';
 import AppText from './AppText';
 import AddNewIcon from '../assets/images/icon_addnew.svg';
@@ -14,12 +14,17 @@ const AddNewTile = (props: AddNewTileProps) => {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View style={styles.container}>
-      <AddNewIcon />
-      <AppText variant="subtitle2" style={styles.titleStyle}>
-        {title}
-      </AppText>
-    </View>
+    <TouchableRipple
+      rippleColor={'gray'}
+      onPress={() => console.log('add new')}
+      style={styles.container}>
+      <View style={styles.wrapper}>
+        <AddNewIcon />
+        <AppText variant="subtitle2" style={styles.titleStyle}>
+          {title}
+        </AppText>
+      </View>
+    </TouchableRipple>
   );
 };
 const getStyles = theme =>
@@ -30,7 +35,11 @@ const getStyles = theme =>
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 10,
+      margin: wp(5),
       backgroundColor: theme.colors.cardBackground,
+    },
+    wrapper: {
+      alignItems: 'center',
     },
     titleStyle: {
       color: theme.colors.primaryCTA,
