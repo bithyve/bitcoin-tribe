@@ -10,12 +10,18 @@ type PrimaryCTAProps = {
   title: string;
   width?: any;
   style?: any;
+  buttonColor?: any;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
-  const { onPress, title, width } = props;
   const theme = useTheme();
   const styles = getStyles(theme, width);
+  const {
+    onPress,
+    title,
+    width,
+    buttonColor = theme.colors.primaryCTA,
+  } = props;
   return (
     <View style={styles.container}>
       <Button
@@ -23,7 +29,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
         uppercase={false}
         labelStyle={[CommonStyles.primaryCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}
-        buttonColor={theme.colors.primaryCTA}
+        buttonColor={buttonColor}
         onPress={onPress}>
         {title}
       </Button>
