@@ -58,7 +58,10 @@ function Community() {
       <AppText variant="body7" style={{ color: theme.colors.accent1 }}>
         Body 7
       </AppText>
-      <AssetChip tagText="COLLECTIBLES" />
+      <AssetChip
+        tagText="COLLECTIBLES"
+        backColor={theme.colors.cardBackground}
+      />
       <View
         style={{
           flexDirection: 'row',

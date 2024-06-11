@@ -5,24 +5,25 @@ import { hp } from 'src/constants/responsive';
 
 type AssetChipProps = {
   tagText: string;
+  backColor: any;
 };
 const AssetChip = (props: AssetChipProps) => {
-  const { tagText } = props;
+  const { tagText, backColor } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, backColor);
   return (
     <Chip style={styles.container} textStyle={styles.textStyle}>
       {tagText}
     </Chip>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme, backColor) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
       justifyContent: 'center',
       height: hp(20),
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: backColor,
     },
     textStyle: {
       color: theme.colors.accent1,
