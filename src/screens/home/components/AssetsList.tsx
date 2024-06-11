@@ -14,12 +14,13 @@ type ItemProps = {
   title: string;
   details?: string;
   asset?: any;
+  tag?: string;
 };
-const Item = ({ asset, title, details }: ItemProps) => {
+const Item = ({ asset, title, details, tag }: ItemProps) => {
   return (
     <View>
       {asset ? (
-        <AssetCard asset={asset} title={title} details={details} />
+        <AssetCard asset={asset} title={title} details={details} tag={tag} />
       ) : (
         <AddNewTile title={title} />
       )}
@@ -55,7 +56,12 @@ function AssetsList(props: AssetsListProps) {
         numColumns={2}
         data={AssetsData}
         renderItem={({ item }) => (
-          <Item title={item.title} asset={item.asset} details={item.details} />
+          <Item
+            title={item.title}
+            asset={item.asset}
+            details={item.details}
+            tag={item.tag}
+          />
         )}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}

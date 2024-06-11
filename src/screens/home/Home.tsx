@@ -9,18 +9,21 @@ const AssetsData = [
     id: 1,
     title: 'The Demogorgan',
     details: 'Humanoid creature… with head shaped like a flower',
+    tag: 'COLLECTIBLES',
   },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 2,
     title: 'Vecna',
     details: 'Mastermid human ',
+    tag: 'COLLECTIBLES',
   },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 3,
     title: 'USD',
     details: 'The USD (United States dollar) ',
+    tag: 'COIN',
   },
   // {
   //   asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
@@ -39,6 +42,7 @@ const AssetsData = [
     id: '6',
     title: 'Third Item',
     details: 'Humanoid creature… with head a flower',
+    tag: 'COIN',
   },
   {
     id: 7,

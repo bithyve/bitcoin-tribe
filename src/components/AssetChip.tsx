@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Chip, useTheme } from 'react-native-paper';
+import { Chip } from 'react-native-paper';
 import { hp } from 'src/constants/responsive';
 
 type AssetChipProps = {
   tagText: string;
-  backColor: any;
+  backColor: string;
+  tagColor: string;
 };
 const AssetChip = (props: AssetChipProps) => {
-  const { tagText, backColor } = props;
-  const theme = useTheme();
-  const styles = getStyles(theme, backColor);
+  const { tagText, backColor, tagColor } = props;
+  const styles = getStyles(backColor, tagColor);
   return (
     <Chip style={styles.container} textStyle={styles.textStyle}>
       {tagText}
     </Chip>
   );
 };
-const getStyles = (theme, backColor) =>
+const getStyles = (backColor, tagColor) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -26,7 +26,7 @@ const getStyles = (theme, backColor) =>
       backgroundColor: backColor,
     },
     textStyle: {
-      color: theme.colors.accent1,
+      color: tagColor,
       fontSize: 11,
       fontWeight: 'bold',
     },

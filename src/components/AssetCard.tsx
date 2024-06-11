@@ -4,15 +4,17 @@ import { useTheme, TouchableRipple } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
+import AssetChip from './AssetChip';
 
 type AssetCardProps = {
   asset?: any;
   title?: string;
   details?: string;
+  tag?: string;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { asset, title, details } = props;
+  const { asset, title, details, tag } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -21,6 +23,15 @@ const AssetCard = (props: AssetCardProps) => {
       onPress={() => console.log('asset card')}
       style={styles.container}>
       <View>
+        <View style={styles.assetChipWrapper}>
+          <AssetChip
+            tagText={tag}
+            backColor={theme.colors.cardBackground}
+            tagColor={
+              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+            }
+          />
+        </View>
         <Image
           source={{
             uri: asset,
@@ -47,6 +58,7 @@ const getStyles = theme =>
       borderRadius: 15,
       margin: wp(5),
       backgroundColor: theme.colors.cardBackground,
+      position: 'relative',
     },
     imageStyle: {
       width: '100%',
@@ -62,6 +74,12 @@ const getStyles = theme =>
     detailsText: {
       color: theme.colors.bodyColor,
       flexWrap: 'wrap',
+    },
+    assetChipWrapper: {
+      position: 'absolute',
+      zIndex: 999,
+      left: 5,
+      top: 10,
     },
   });
 export default AssetCard;
