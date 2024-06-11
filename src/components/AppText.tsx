@@ -10,6 +10,7 @@ export enum TextVariants {
   subTitle = 'subTitle',
   body1 = 'body1',
   body2 = 'body2',
+  secondaryCTATitle = 'secondaryCTATitle',
 }
 
 type VariantProp = keyof typeof TextVariants;
@@ -41,6 +42,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body1;
       case TextVariants.body2:
         return CommonStyles.body2;
+      case TextVariants.secondaryCTATitle:
+        return CommonStyles.secondaryCTATitle;
       default:
         return CommonStyles.body1;
     }
