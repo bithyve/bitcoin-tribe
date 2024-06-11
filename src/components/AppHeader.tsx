@@ -4,19 +4,18 @@ import { useTheme, TouchableRipple } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
-import SettingsIcon from 'src/assets/images/icon_settings.svg';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 
 type AppHeaderProps = {
   title?: string;
   subTitle?: string;
   style?: any;
-  settingIcon?: boolean;
   navigation?: any;
+  rightIcon?: any;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { title, subTitle, style, settingIcon, navigation } = props;
+  const { title, subTitle, style, navigation, rightIcon } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -27,9 +26,9 @@ function AppHeader(props: AppHeaderProps) {
             {<IconArrow />}
           </TouchableRipple>
         )}
-        {settingIcon && (
+        {rightIcon && (
           <TouchableRipple onPress={() => navigation.goBack()}>
-            <SettingsIcon />
+            {rightIcon}
           </TouchableRipple>
         )}
       </View>
