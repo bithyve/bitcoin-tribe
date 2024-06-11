@@ -9,5 +9,6 @@ const Colors = {
   RaisinBlack: 'rgba(33, 33, 33, 1)',
   Arsenic: 'rgba(67, 67, 67, 1)',
   Black: 'rgba(0, 0, 0, 1)',
+  SilverSand: 'rgba(196, 196, 196,1)',
 };
 export default Colors;
