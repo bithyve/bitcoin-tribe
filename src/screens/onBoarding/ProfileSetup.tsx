@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -12,6 +13,25 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function ProfileSetup({ navigation }) {
   const [username, setUsername] = useState('');
+  const [pickImage, setPickImage] = useState('');
+
+  const PickImage = () => {
+    console.log('pick');
+    launchImageLibrary(
+      {
+        title: 'Select a Image',
+        mediaType: 'photo',
+        takePhotoButtonTitle: null,
+        selectionLimit: 1,
+      },
+      response => {
+        console.log(response);
+        if (response.assets) {
+          setPickImage(response.assets[0].uri.replace('file://', ''));
+        }
+      },
+    );
+  };
   return (
     <ScreenContainer>
       <AppHeader
@@ -20,7 +40,8 @@ function ProfileSetup({ navigation }) {
         navigation={navigation}
       />
       <AddPicture
-        imageSource={null}
+        onPress={() => PickImage()}
+        imageSource={pickImage}
         // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
       />
       <TextField

@@ -5,12 +5,8 @@ type UserAvatarProps = {
   size: number;
   imageSource: any;
 };
-const UserAvatar = (props: UserAvatarProps) => (
-  <Avatar.Image
-    size={props.size}
-    source={{
-      uri: props.imageSource,
-    }}
-  />
-);
+const UserAvatar = (props: UserAvatarProps) => {
+  const { size, imageSource } = props;
+  return <Avatar.Image size={size} source={{ uri: 'file://' + imageSource }} />;
+};
 export default UserAvatar;

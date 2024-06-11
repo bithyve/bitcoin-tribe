@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
@@ -10,20 +10,25 @@ import AppTouchable from 'src/components/AppTouchable';
 
 type addPictureProps = {
   imageSource: any;
+  onPress: any;
 };
 function AddPicture(props: addPictureProps) {
   const theme = useTheme();
   const styles = getStyles(theme);
-  const { imageSource } = props;
+  const { imageSource, onPress } = props;
+  console.log('AddPicture imageSource', imageSource);
   return (
-    <AppTouchable onPress={() => console.log('pick image')}>
+    <AppTouchable onPress={onPress}>
       {!imageSource ? (
         <View style={styles.container}>
           <View style={styles.iconImageWrapper}>
             <IconImage />
           </View>
           <View>
-            <AppText variant="secondaryCTATitle" style={styles.addPictureText}>
+            <AppText
+              variant="secondaryCTATitle"
+              style={styles.addPictureText}
+              testID={'text_addPicture'}>
               ADD PICTURE
             </AppText>
           </View>
