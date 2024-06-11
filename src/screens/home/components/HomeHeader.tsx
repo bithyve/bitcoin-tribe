@@ -2,12 +2,13 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme, TouchableRipple } from 'react-native-paper';
 
-import AppText from '../../../components/AppText';
-import UserAvatar from '../../../components/UserAvatar';
-import IconBitcoin from '../../../assets/images/icon_bitcoin.svg';
-import IconScanner from '../../../assets/images/icon_scanner.svg';
-import IconNotification from '../../../assets/images/icon_notifications.svg';
-import { wp } from '../../../constants/responsive';
+import AppText from 'src/components/AppText';
+import UserAvatar from 'src/components/UserAvatar';
+import { wp } from 'src/constants/responsive';
+
+import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconScanner from 'src/assets/images/icon_scanner.svg';
+import IconNotification from 'src/assets/images/icon_notifications.svg';
 
 type HomeHeaderProps = {
   profile: any;

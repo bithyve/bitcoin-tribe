@@ -2,9 +2,9 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme, TouchableRipple } from 'react-native-paper';
 
-import AppText from '../../../components/AppText';
-import IconArrow from '../../../assets/images/icon_arrowr2.svg';
-import { hp } from '../../../constants/responsive';
+import AppText from 'src/components/AppText';
+import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import { hp } from 'src/constants/responsive';
 
 type OptionCardProps = {
   icon?: any;

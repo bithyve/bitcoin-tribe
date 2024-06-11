@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { useTheme, TouchableRipple } from 'react-native-paper';
 
-import { wp, hp } from '../constants/responsive';
+import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
 
 type AssetCardProps = {

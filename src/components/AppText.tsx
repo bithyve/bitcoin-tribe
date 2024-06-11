@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native-paper';
-import CommonStyles from '../common/styles/CommonStyles';
+import CommonStyles from 'src/common/styles/CommonStyles';
+
 type AppTextProps = {
   children: any;
   variant?: string;

@@ -2,10 +2,10 @@ import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp } from '../../../constants/responsive';
-import AssetCard from '../../../components/AssetCard';
-import AppText from '../../../components/AppText';
-import AddNewTile from '../../../components/AddNewTile';
+import { hp } from 'src/constants/responsive';
+import AssetCard from 'src/components/AssetCard';
+import AppText from 'src/components/AppText';
+import AddNewTile from 'src/components/AddNewTile';
 
 type AssetsListProps = {
   AssetsData: any;

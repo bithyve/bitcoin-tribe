@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
-import ScreenContainer from '../../components/ScreenContainer';
+import ScreenContainer from 'src/components/ScreenContainer';
 
 function Splash({ navigation }) {
   useEffect(() => {

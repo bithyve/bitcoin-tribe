@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import ScreenContainer from '../../components/ScreenContainer';
-import AppHeader from '../../components/AppHeader';
-import TextField from '../../components/TextField';
-import PrimaryCTA from '../../components/PrimaryCTA';
-import Toast from '../../components/Toast';
-import { hp, wp } from '../../constants/responsive';
+import ScreenContainer from 'src/components/ScreenContainer';
+import AppHeader from 'src/components/AppHeader';
+import TextField from 'src/components/TextField';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import Toast from 'src/components/Toast';
+import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
 
 function ProfileSetup({ navigation }) {

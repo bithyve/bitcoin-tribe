@@ -2,10 +2,10 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme, TouchableRipple } from 'react-native-paper';
 
-import AppText from '../../../components/AppText';
-import IconImage from '../../../assets/images/icon_image.svg';
-import { hp, wp } from '../../../constants/responsive';
-import UserAvatar from '../../../components/UserAvatar';
+import AppText from 'src/components/AppText';
+import IconImage from 'src/assets/images/icon_image.svg';
+import { hp, wp } from 'src/constants/responsive';
+import UserAvatar from 'src/components/UserAvatar';
 
 type addPictureProps = {
   imageSource: any;

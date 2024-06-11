@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ScreenContainer from '../../components/ScreenContainer';
+import ScreenContainer from 'src/components/ScreenContainer';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
 

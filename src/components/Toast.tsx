@@ -2,9 +2,9 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 
-import Colors from '../theme/Colors';
-import CheckIcon from '../assets/images/icon_check.svg';
-import { hp, wp } from '../constants/responsive';
+import Colors from 'src/theme/Colors';
+import CheckIcon from 'src/assets/images/icon_check.svg';
+import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 
 // Need to work

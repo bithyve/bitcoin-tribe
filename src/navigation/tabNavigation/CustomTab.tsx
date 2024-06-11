@@ -2,14 +2,14 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import CommonStyles from '../../common/styles/CommonStyles';
-import { wp, hp } from '../../constants/responsive';
-import AppText from '../../components/AppText';
+import CommonStyles from 'src/common/styles/CommonStyles';
+import { wp, hp } from 'src/constants/responsive';
+import AppText from 'src/components/AppText';
 
-import TextIcon from '../../assets/images/icon_bitcoin.svg';
-import AssetsActive from '../../assets/images/icon_addnew.svg';
-import CommunityActive from '../../assets/images/icon_community_active.svg';
-import SettingsActive from '../../assets/images/icon_settings_active.svg';
+import TextIcon from 'src/assets/images/icon_bitcoin.svg';
+import AssetsActive from 'src/assets/images/icon_addnew.svg';
+import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 
 const windowWidth = Dimensions.get('window').width;
 

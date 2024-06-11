@@ -2,8 +2,8 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TouchableRipple, useTheme } from 'react-native-paper';
 
-import CommonStyles from '../common/styles/CommonStyles';
-import { hp, wp } from '../constants/responsive';
+import CommonStyles from 'src/common/styles/CommonStyles';
+import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 
 type PrimaryCTAProps = {

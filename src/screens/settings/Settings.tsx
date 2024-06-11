@@ -2,14 +2,14 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import PrimaryCTA from '../../components/PrimaryCTA';
-import UserAvatar from '../../components/UserAvatar';
-import Toast from '../../components/Toast';
-import TextField from '../../components/TextField';
-import RoundedCTA from '../../components/RoundedCTA';
-import TextIcon from '../../assets/images/icon_bitcoin.svg';
-import ScreenContainer from '../../components/ScreenContainer';
-import { wp } from '../../constants/responsive';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import UserAvatar from 'src/components/UserAvatar';
+import Toast from 'src/components/Toast';
+import TextField from 'src/components/TextField';
+import RoundedCTA from 'src/components/RoundedCTA';
+import TextIcon from 'src/assets/images/icon_bitcoin.svg';
+import ScreenContainer from 'src/components/ScreenContainer';
+import { wp } from 'src/constants/responsive';
 
 function HomeScreen() {
   const theme = useTheme();

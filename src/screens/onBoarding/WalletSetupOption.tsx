@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import ScreenContainer from '../../components/ScreenContainer';
+import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
-import IconWallet from '../../assets/images/icon_wallet1.svg';
-import AppHeader from '../../components/AppHeader';
-import { hp } from '../../constants/responsive';
+import IconWallet from 'src/assets/images/icon_wallet1.svg';
+import AppHeader from 'src/components/AppHeader';
+import { hp } from 'src/constants/responsive';
 
 function WalletSetupOption({ navigation }) {
   return (

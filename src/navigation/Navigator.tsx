@@ -2,11 +2,11 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Settings from '../screens/settings/Settings';
 import HomeTabs from './tabNavigation/HomeTabs';
-import Splash from '../screens/splash/Splash';
-import WalletSetupOption from '../screens/onBoarding/WalletSetupOption';
-import ProfileSetup from '../screens/onBoarding/ProfileSetup';
+import Splash from 'src/screens/splash/Splash';
+import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
+import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
+import Settings from 'src/screens/settings/Settings';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();

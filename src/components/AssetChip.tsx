@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Chip, useTheme } from 'react-native-paper';
-import { hp } from '../constants/responsive';
+import { hp } from 'src/constants/responsive';
 
 type AssetChipProps = {
   tagText: string;
