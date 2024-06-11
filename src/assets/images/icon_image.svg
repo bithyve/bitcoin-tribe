@@ -1,0 +1,8 @@
+<svg id="icon_image" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+  <g id="Group_47524" data-name="Group 47524" transform="translate(-173.5 -228.5)">
+    <path id="Path_118174" data-name="Path 118174" d="M5.5,2.25A4.25,4.25,0,0,0,1.25,6.5v11A4.25,4.25,0,0,0,5.5,21.75h13a4.25,4.25,0,0,0,4.25-4.25V6.5A4.25,4.25,0,0,0,18.5,2.25Z" transform="translate(176.25 231.25)" fill="none" stroke="#fff" stroke-width="1"/>
+    <path id="Path_118175" data-name="Path 118175" d="M22.75,14.689,18.591,10.53a2.25,2.25,0,0,0-3.182,0L10.5,15.439,8.591,13.53a2.25,2.25,0,0,0-3.182,0L1.254,17.685A4.25,4.25,0,0,0,5.5,21.75h13a4.245,4.245,0,0,0,4.25-4.25Z" transform="translate(176.25 231.25)" fill="#fff"/>
+    <path id="Path_118176" data-name="Path 118176" d="M6,8.5a2,2,0,1,1,2,2A2,2,0,0,1,6,8.5Z" transform="translate(176.25 231.25)" fill="#fff"/>
+  </g>
+</svg>

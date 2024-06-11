@@ -1,6 +1,6 @@
 import React from 'react';
 import PreferencesContext from './PreferenceContext';
-import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme';
+import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme/index';
 import { PaperProvider } from 'react-native-paper';
 
 function Contexts({ children }: any) {
