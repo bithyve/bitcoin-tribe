@@ -11,7 +11,7 @@ import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { wp } from 'src/constants/responsive';
 
-function HomeScreen() {
+function SettingsScreen() {
   const theme = useTheme();
   const [visible, setVisible] = React.useState(false);
   const [input, setInput] = React.useState('');
@@ -90,4 +90,4 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default SettingsScreen;
