@@ -40,6 +40,7 @@ const getStyles = theme =>
     },
     wrapper: {
       alignItems: 'center',
+      backgroundColor: theme.colors.cardBackground,
     },
     titleStyle: {
       color: theme.colors.primaryCTA,
