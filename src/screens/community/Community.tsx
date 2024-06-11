@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-// import ScreenContainer from '../../components/ScreenContainer';
-import CommonStyles from '../../common/styles/CommonStyles';
-import TileSurface from '../../components/TileSurface';
-import AddNewTileSurface from '../../components/AddNewTileSurface';
+import AssetCard from 'src/components/AssetCard';
+import AddNewTile from 'src/components/AddNewTile';
+import AppText from 'src/components/AppText';
+import AssetChip from 'src/components/AssetChip';
+import CommonStyles from 'src/common/styles/CommonStyles';
 
 function Community() {
   const theme = useTheme();
@@ -17,85 +18,60 @@ function Community() {
         justifyContent: 'center',
         backgroundColor: '#434343',
       }}>
-      <Text
-        style={[CommonStyles.heading1, { color: theme.colors.headingColor }]}>
+      <AppText variant="heading1" style={{ color: theme.colors.headingColor }}>
         Popup Heading 1
-      </Text>
-      <Text
-        style={[CommonStyles.heading2, { color: theme.colors.headingColor }]}>
+      </AppText>
+      <AppText variant="heading2" style={{ color: theme.colors.headingColor }}>
         Popup Heading 2
-      </Text>
-      <Text
-        style={[CommonStyles.pageTitle, { color: theme.colors.headingColor }]}>
+      </AppText>
+      <AppText variant="pageTitle" style={{ color: theme.colors.headingColor }}>
         Page Title 1
-      </Text>
-      <Text style={[CommonStyles.body5, { color: theme.colors.bodyTextColor }]}>
+      </AppText>
+      <AppText variant="body5" style={{ color: theme.colors.bodyColor }}>
         Body 5
-      </Text>
-      <Text style={[CommonStyles.body4, { color: theme.colors.bodyTextColor }]}>
+      </AppText>
+      <AppText variant="body4" style={{ color: theme.colors.bodyColor }}>
         Body 4
-      </Text>
-      <Text style={[CommonStyles.body2, { color: theme.colors.bodyTextColor }]}>
+      </AppText>
+      <AppText variant="body2" style={{ color: theme.colors.bodyColor }}>
         Body 2 - The blinded UTXO in this invoice will expire in 24 hours after
         its creation.
-      </Text>
-      <Text style={[CommonStyles.body1, { color: theme.colors.bodyTextColor }]}>
+      </AppText>
+      <AppText variant="body1" style={{ color: theme.colors.bodyColor }}>
         Body 1 : lk2j3429-85213-5134 50t-934285… 6 23…-
-      </Text>
-      <Text
-        style={[
-          CommonStyles.textFieldLabel,
-          { color: theme.colors.headingColor },
-        ]}>
+      </AppText>
+      <AppText
+        variant="textFieldLabel"
+        style={{ color: theme.colors.headingColor }}>
         Text Feild
-      </Text>
-      <Text
-        style={[
-          CommonStyles.placeholder,
-          { color: theme.colors.placeholderColor },
-        ]}>
+      </AppText>
+      <AppText
+        style={[CommonStyles.placeholder, { color: theme.colors.placeholder }]}>
         Placeholder
-      </Text>
-      <View
-        style={{
-          backgroundColor: theme.colors.primaryCTA,
-          padding: 5,
-          borderRadius: 10,
-        }}>
-        <Text
-          style={[
-            CommonStyles.toastMessage,
-            {
-              color: theme.colors.textColor,
-            },
-          ]}>
-          Toast - Address Copied Successfully!
-        </Text>
-      </View>
-      <Text style={[CommonStyles.subTitle, { color: theme.colors.recieveCTA }]}>
+      </AppText>
+      <AppText variant="subTitle" style={{ color: theme.colors.accent2 }}>
         Subtitle 1
-      </Text>
-      <Text style={[CommonStyles.body6, { color: theme.colors.bodyTextColor }]}>
+      </AppText>
+      <AppText variant="body6" style={{ color: theme.colors.bodyColor }}>
         Body 6
-      </Text>
-      <Text style={[CommonStyles.body7, { color: theme.colors.buyCTA }]}>
+      </AppText>
+      <AppText variant="body7" style={{ color: theme.colors.accent1 }}>
         Body 7
-      </Text>
-      <Text
-        style={[
-          CommonStyles.secondaryCTATitle,
-          { color: theme.colors.primaryCTA },
-        ]}>
-        Secondary CTA - Skip
-      </Text>
+      </AppText>
+      <AssetChip tagText="COLLECTIBLES" />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
+          marginTop: 10,
         }}>
-        <TileSurface />
+        <AssetCard
+          asset={'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4'}
+          title="The Demogorgan"
+          details="Humanoid creature… with head shaped like a flower"
+        />
         <View style={{ margin: 5 }} />
-        <AddNewTileSurface />
+        <AddNewTile title="Add New" />
       </View>
     </View>
   );

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import Fonts from '../../constants/Fonts';
+import Fonts from 'src/constants/Fonts';
 
 export default StyleSheet.create({
   heading1: {
@@ -50,6 +50,10 @@ export default StyleSheet.create({
   toastMessage: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsSemiBold,
+    paddingLeft: 10,
+    flex: 1,
+    flexWrap: 'wrap',
+    fontWeight: '600',
   },
   textFieldLabel: {
     fontSize: 14,
@@ -72,11 +76,12 @@ export default StyleSheet.create({
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
   },
-  transactionCTATitle: {
-    fontSize: 14,
+  roundedCTATitle: {
+    fontSize: 12,
     fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 14 * 1.4,
-    height: 18,
+    lineHeight: 12 * 1.4,
+    height: 15,
+    marginLeft: 10,
   },
   subtitle2: {
     fontSize: 14,

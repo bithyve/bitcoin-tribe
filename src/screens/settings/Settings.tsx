@@ -2,16 +2,14 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import PrimaryCTA from '../../components/PrimaryCTA';
-import CardImageSurface from '../../components/CardImageSurface';
-import Toast from '../../components/Toast';
-import TextField from '../../components/TextField';
-import BaseTextField from '../../components/BaseTextField';
-import TransactionCTA from '../../components/TransactionCTA';
-import TextIcon from '../../assets/images/icon_bitcoin.svg';
-import ScreenContainer from '../../components/ScreenContainer';
-import { hp, wp } from '../../constants/responsive';
-import PrimaryCTALong from '../../components/PrimaryCTALong';
+import UserAvatar from 'src/components/UserAvatar';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import Toast from 'src/components/Toast';
+import TextField from 'src/components/TextField';
+import RoundedCTA from 'src/components/RoundedCTA';
+import TextIcon from 'src/assets/images/icon_bitcoin.svg';
+import ScreenContainer from 'src/components/ScreenContainer';
+import { wp } from 'src/constants/responsive';
 
 function HomeScreen() {
   const theme = useTheme();
@@ -21,11 +19,11 @@ function HomeScreen() {
   return (
     <ScreenContainer>
       <PrimaryCTA
-        title="Save Changes"
+        title="Save"
         onPress={() => Toast('Account already created', true)}
       />
       <View style={{ margin: 5 }} />
-      <PrimaryCTALong
+      <PrimaryCTA
         title="Confirm & Proceed"
         onPress={() => setVisible(!visible)}
       />
@@ -36,13 +34,13 @@ function HomeScreen() {
           justifyContent: 'space-around',
           alignItems: 'center',
         }}>
-        <CardImageSurface
+        <UserAvatar
           size={50}
           imageSource={
             'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
           }
         />
-        <CardImageSurface
+        <UserAvatar
           size={70}
           imageSource={
             'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
@@ -55,8 +53,8 @@ function HomeScreen() {
         placeholder="Enter Wallet Name"
         keyboardType={'default'}
       />
-
-      <BaseTextField
+      <View style={{ margin: 5 }} />
+      <TextField
         icon={<TextIcon />}
         value={input}
         onChangeText={text => setInput(text)}
@@ -64,36 +62,29 @@ function HomeScreen() {
         keyboardType={'number-pad'}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Send'}
-        height={hp(36)}
-        width={wp(90)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
-        buttonColor={theme.colors.recieveCTA}
+        buttonColor={theme.colors.accent2}
         title={'Recieve'}
-        height={hp(36)}
         width={wp(90)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
-        buttonColor={theme.colors.buyCTA}
+        buttonColor={theme.colors.accent1}
         title={'Buy'}
-        height={hp(36)}
-        width={wp(90)}
       />
       <View style={{ margin: 5 }} />
-      <TransactionCTA
+      <RoundedCTA
         icon={<TextIcon />}
         buttonColor={theme.colors.primaryCTA}
         title={'Download'}
-        height={hp(36)}
-        width={wp(120)}
       />
     </ScreenContainer>
   );
