@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Community from 'src/screens/community/Community';
 import HomeScreen from 'src/screens/home/Home';
 import Settings from 'src/screens/settings/Settings';
+import { NavigationRoutes } from '../NavigationRoutes';
 import CustomTab from './CustomTab';
 
 const Tab = createBottomTabNavigator();
@@ -11,21 +12,21 @@ function HomeTabs() {
   return (
     <Tab.Navigator tabBar={props => <CustomTab {...props} />}>
       <Tab.Screen
-        name="Assets"
+        name={NavigationRoutes.ASSETS}
         component={HomeScreen}
         options={{
           headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Community"
+        name={NavigationRoutes.COMMUNITY}
         component={Community}
         options={{
           headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name={NavigationRoutes.SETTINGS}
         component={Settings}
         options={{
           headerShown: false,

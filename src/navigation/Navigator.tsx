@@ -7,43 +7,44 @@ import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
+import { NavigationRoutes } from './NavigationRoutes';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName={NavigationRoutes.SPLASH}>
         <Stack.Screen
-          name="Splash"
+          name={NavigationRoutes.SPLASH}
           component={Splash}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="WalletSetupOption"
+          name={NavigationRoutes.WALLETSETUPOPTION}
           component={WalletSetupOption}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="ProfileSetup"
+          name={NavigationRoutes.PROFILESETUP}
           component={ProfileSetup}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="Home"
+          name={NavigationRoutes.HOME}
           component={HomeTabs}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="Settings"
+          name={NavigationRoutes.SETTINGS}
           component={Settings}
           options={{
             headerShown: false,

@@ -8,6 +8,7 @@ import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
 import Buttons from 'src/components/Buttons';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function ProfileSetup({ navigation }) {
   const [username, setUsername] = useState('');
@@ -32,7 +33,7 @@ function ProfileSetup({ navigation }) {
         <Buttons
           primaryTitle="Next"
           secondaryTitle="Cancel"
-          primaryOnPress={() => navigation.navigate('Home')}
+          primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
           secondaryOnPress={() => Toast('Secondary Pressed')}
           width={wp(120)}
         />

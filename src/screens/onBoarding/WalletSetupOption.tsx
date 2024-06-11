@@ -6,6 +6,7 @@ import OptionCard from './components/OptionCard';
 import IconWallet from 'src/assets/images/icon_wallet1.svg';
 import AppHeader from 'src/components/AppHeader';
 import { hp } from 'src/constants/responsive';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function WalletSetupOption({ navigation }) {
   return (
@@ -15,7 +16,7 @@ function WalletSetupOption({ navigation }) {
         icon={<IconWallet />}
         title="Create New"
         subTitle="Lorem ipsum dolor sit amet"
-        onPress={() => navigation.navigate('ProfileSetup')}
+        onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
       />
       <OptionCard
         icon={<IconWallet />}

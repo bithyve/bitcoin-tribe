@@ -10,6 +10,7 @@ import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 import AssetsActive from 'src/assets/images/icon_addnew.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import { NavigationRoutes } from '../NavigationRoutes';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -19,11 +20,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
-      case 'Assets':
+      case NavigationRoutes.ASSETS:
         return isFocused ? <AssetsActive /> : <TextIcon />;
-      case 'Community':
+      case NavigationRoutes.COMMUNITY:
         return isFocused ? <CommunityActive /> : <TextIcon />;
-      case 'Settings':
+      case NavigationRoutes.SETTINGS:
         return isFocused ? <SettingsActive /> : <TextIcon />;
       default:
         return <TextIcon />;
