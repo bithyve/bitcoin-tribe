@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrow from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
 
 type AppHeaderProps = {
@@ -23,22 +23,31 @@ function AppHeader(props: AppHeaderProps) {
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
         {navigation && (
-          <AppTouchable onPress={() => navigation.goBack()}>
-            {<IconArrow />}
+          <AppTouchable
+            onPress={() => navigation.goBack()}
+            style={styles.leftIconWrapper}>
+            <IconArrow />
           </AppTouchable>
         )}
         {rightIcon && (
-          <AppTouchable onPress={() => navigation.goBack()}>
+          <AppTouchable
+            onPress={() => navigation.goBack()}
+            style={styles.rightIconWrapper}>
             {rightIcon}
           </AppTouchable>
         )}
       </View>
       <View style={styles.detailsWrapper}>
         <View style={styles.contentWrapper}>
-          <AppText variant="pageTitle" style={styles.headerTitle}>
+          <AppText
+            variant="pageTitle"
+            style={styles.headerTitle}
+            testID="text_appHeader">
             {title}
           </AppText>
-          <AppText style={styles.headerSubTitle}>{subTitle}</AppText>
+          <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
+            {subTitle}
+          </AppText>
         </View>
       </View>
     </View>
@@ -55,6 +64,15 @@ const getStyles = theme =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    leftIconWrapper: {
+      width: '50%',
+      alignItems: 'flex-start',
+      left: -23,
+    },
+    rightIconWrapper: {
+      width: '50%',
+      alignItems: 'flex-end',
     },
     detailsWrapper: {
       flexDirection: 'row',
