@@ -1,71 +1,56 @@
-import React from 'react';
+import React, { useMemo, ComponentProps } from 'react';
+import { StyleProp, TextStyle } from 'react-native';
 import { Text } from 'react-native-paper';
 import CommonStyles from 'src/common/styles/CommonStyles';
 
-type AppTextProps = {
-  children: any;
-  variant?: string;
-  style?: any;
-};
-const AppText = ({ children, variant, style, ...props }: AppTextProps) => {
-  let textStyle;
-  switch (variant) {
-    case 'heading1':
-      textStyle = CommonStyles.heading1;
-      break;
-    case 'heading2':
-      textStyle = CommonStyles.heading2;
-      break;
-    case 'pageTitle':
-      textStyle = CommonStyles.pageTitle;
-      break;
-    case 'subTitle':
-      textStyle = CommonStyles.subTitle;
-      break;
-    case 'body1':
-      textStyle = CommonStyles.body1;
-      break;
-    case 'body2':
-      textStyle = CommonStyles.body2;
-      break;
-    case 'body4':
-      textStyle = CommonStyles.body4;
-      break;
-    case 'body5':
-      textStyle = CommonStyles.body5;
-      break;
-    case 'body6':
-      textStyle = CommonStyles.body6;
-      break;
-    case 'body7':
-      textStyle = CommonStyles.body7;
-      break;
-    case 'primaryCTATitle':
-      textStyle = CommonStyles.primaryCTATitle;
-      break;
-    case 'secondaryCTATitle':
-      textStyle = CommonStyles.secondaryCTATitle;
-      break;
-    case 'RoundedCTATitle':
-      textStyle = CommonStyles.roundedCTATitle;
-      break;
-    case 'textFieldLabel':
-      textStyle = CommonStyles.textFieldLabel;
-      break;
-    case 'toastMessage':
-      textStyle = CommonStyles.toastMessage;
-      break;
-    case 'subtitle2':
-      textStyle = CommonStyles.subtitle2;
-      break;
-    default:
-      textStyle = CommonStyles.body1;
-      break;
-  }
+export enum TextVariants {
+  heading1 = 'heading1',
+  heading2 = 'heading2',
+  pageTitle = 'pageTitle',
+  subTitle = 'subTitle',
+  body1 = 'body1',
+  body2 = 'body2',
+}
+
+type VariantProp = keyof typeof TextVariants;
+
+interface Props extends ComponentProps<typeof Text> {
+  children: React.ReactNode;
+  variant?: VariantProp;
+  style?: StyleProp<TextStyle>;
+  testID: string;
+}
+
+const AppText: React.FC<Props> = ({
+  children,
+  variant = TextVariants.body1,
+  style,
+  testID,
+}) => {
+  const textStyle = useMemo(() => {
+    switch (variant) {
+      case TextVariants.heading1:
+        return CommonStyles.heading1;
+      case TextVariants.heading2:
+        return CommonStyles.heading2;
+      case TextVariants.pageTitle:
+        return CommonStyles.pageTitle;
+      case TextVariants.subTitle:
+        return CommonStyles.subTitle;
+      case TextVariants.body1:
+        return CommonStyles.body1;
+      case TextVariants.body2:
+        return CommonStyles.body2;
+      default:
+        return CommonStyles.body1;
+    }
+  }, [variant]);
+
   return (
-    <Text style={[textStyle, style]} {...props}>
+    <Text style={[textStyle, style]} testID={testID}>
       {children}
     </Text>
   );
 };
+
 export default AppText;
