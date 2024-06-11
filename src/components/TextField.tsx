@@ -16,7 +16,7 @@ type TextFieldProps = {
 const TextField = (props: TextFieldProps) => {
   const { icon, placeholder, value, keyboardType, onChangeText } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
       {icon && <View style={styles.iconWrapper}>{icon}</View>}

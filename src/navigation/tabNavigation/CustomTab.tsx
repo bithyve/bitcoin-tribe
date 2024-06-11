@@ -16,7 +16,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {

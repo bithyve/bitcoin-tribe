@@ -20,7 +20,7 @@ function AppHeader(props: AppHeaderProps) {
   const { title, subTitle, style, enableBack = true, rightIcon } = props;
   const theme = useTheme();
   const navigation = useNavigation();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>

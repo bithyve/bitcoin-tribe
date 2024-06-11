@@ -7,7 +7,7 @@ import { hp } from 'src/constants/responsive';
 
 const ScreenContainer = props => {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <SafeAreaView style={{ ...styles.container, ...props.style }}>
       <StatusBar

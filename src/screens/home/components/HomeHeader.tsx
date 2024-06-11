@@ -22,7 +22,7 @@ function HomeHeader(props: HomeHeaderProps) {
   const { profile, username, balance, onPressScanner, onPressNotification } =
     props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>

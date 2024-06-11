@@ -13,7 +13,7 @@ type addPictureProps = {
 };
 function AddPicture(props: addPictureProps) {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource } = props;
   return (
     <AppTouchable onPress={() => console.log('pick image')}>

@@ -18,7 +18,7 @@ type OptionCardProps = {
 function OptionCard(props: OptionCardProps) {
   const { icon, title, subTitle, style, onPress } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
       <View>

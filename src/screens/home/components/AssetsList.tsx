@@ -30,7 +30,7 @@ const Item = ({ asset, title, details, tag }: ItemProps) => {
 
 const ListHeaderComponent = () => {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppText variant="pageTitle" style={styles.listHeaderText}>
       My Assets
@@ -45,7 +45,7 @@ const ListFooterComponent = () => {
 function AssetsList(props: AssetsListProps) {
   const { AssetsData } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View>
       <ListHeaderComponent />
