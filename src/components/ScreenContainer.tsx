@@ -9,7 +9,10 @@ const ScreenContainer = props => {
   const styles = getStyles(theme);
   return (
     <SafeAreaView style={{ ...styles.container, ...props.style }}>
-      <StatusBar barStyle={'light-content'} backgroundColor="transparent" />
+      <StatusBar
+        barStyle={'light-content'}
+        backgroundColor={theme.colors.primaryBackground}
+      />
       <ImageBackground
         source={require('../assets/images/image_background.png')}
         resizeMode="cover"
