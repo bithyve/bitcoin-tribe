@@ -7,9 +7,12 @@ import AppText from 'src/components/AppText';
 import CommonStyles from 'src/common/styles/CommonStyles';
 
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
-import AssetsActive from 'src/assets/images/icon_addnew.svg';
+import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 
 const windowWidth = Dimensions.get('window').width;
@@ -21,11 +24,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <TextIcon />;
+        return isFocused ? <AssetsActive /> : <AssetsInActive />;
       case NavigationRoutes.COMMUNITY:
-        return isFocused ? <CommunityActive /> : <TextIcon />;
+        return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <TextIcon />;
+        return isFocused ? <SettingsActive /> : <SettingsInActive />;
       default:
         return <TextIcon />;
     }
