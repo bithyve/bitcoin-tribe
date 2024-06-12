@@ -13,16 +13,16 @@ import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 
 type HomeHeaderProps = {
-  profile: any;
+  profile: string;
   username: string;
-  balance: any;
+  balance: string;
   onPressProfile: () => void;
   onPressScanner: () => void;
   onPressNotification: () => void;
 };
 function HomeHeader(props: HomeHeaderProps) {
   const {
-    profile,
+    profile = '',
     username,
     balance,
     onPressScanner,
@@ -35,7 +35,7 @@ function HomeHeader(props: HomeHeaderProps) {
     <View style={styles.container}>
       <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
         <View style={styles.contentWrapper}>
-          <UserAvatar size={50} imageSource={profile} />
+          <UserAvatar size={50} imageSource={''} />
           <View style={styles.userDetailsWrapper}>
             <AppText
               variant="body1"
@@ -71,10 +71,11 @@ const getStyles = theme =>
     container: {
       flexDirection: 'row',
       width: '100%',
+      alignItems: 'center',
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '80%',
+      width: '77%',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),
@@ -90,7 +91,7 @@ const getStyles = theme =>
       color: theme.colors.bodyColor,
     },
     iconWrapper: {
-      width: '20%',
+      width: '23%',
       flexDirection: 'row',
       justifyContent: 'space-between',
     },

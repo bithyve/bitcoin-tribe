@@ -62,7 +62,7 @@ const getStyles = theme =>
     },
     imageStyle: {
       width: '100%',
-      height: '60%',
+      height: '70%',
       borderRadius: 10,
     },
     contentWrapper: {

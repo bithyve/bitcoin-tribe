@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -11,9 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 type AppHeaderProps = {
   title?: string;
   subTitle?: string;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   enableBack?: boolean;
-  rightIcon?: any;
+  rightIcon?: React.ReactNode;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -61,7 +61,7 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginVertical: hp(10),
+      marginVertical: hp(15),
       alignItems: 'center',
     },
     iconContainer: {
@@ -83,7 +83,7 @@ const getStyles = theme =>
     },
     contentWrapper: {
       width: '90%',
-      marginTop: hp(10),
+      marginTop: hp(4),
     },
     headerTitle: {
       color: theme.colors.headingColor,
