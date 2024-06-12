@@ -55,10 +55,12 @@ function HomeHeader(props: HomeHeaderProps) {
         </View>
       </AppTouchable>
       <View style={styles.iconWrapper}>
-        <AppTouchable onPress={onPressScanner}>
+        <AppTouchable onPress={onPressScanner} style={styles.iconTouchableArea}>
           <IconScanner />
         </AppTouchable>
-        <AppTouchable onPress={onPressNotification}>
+        <AppTouchable
+          onPress={onPressNotification}
+          style={styles.iconTouchableArea}>
           <IconNotification />
         </AppTouchable>
       </View>
@@ -92,6 +94,9 @@ const getStyles = theme =>
       width: '20%',
       flexDirection: 'row',
       justifyContent: 'space-between',
+    },
+    iconTouchableArea: {
+      height: '60%',
     },
   });
 export default HomeHeader;
