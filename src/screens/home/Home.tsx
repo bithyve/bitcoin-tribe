@@ -2,6 +2,7 @@ import * as React from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const AssetsData = [
   {
@@ -50,7 +51,16 @@ const AssetsData = [
   },
 ];
 
-function HomeScreen() {
+interface HomeScreenProps {
+  navigation:any;
+}
+
+function HomeScreen({navigation}:HomeScreenProps) {
+
+  const handleScreenNavigation = (screenPath: string) => {
+    navigation.navigate(screenPath);
+  }
+
   return (
     <ScreenContainer>
       <HomeHeader
@@ -59,7 +69,7 @@ function HomeScreen() {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => console.log('scanner')}
+        onPressScanner={() => handleScreenNavigation(NavigationRoutes.SENDSCREEN)}
         onPressNotification={() => console.log('notification')}
       />
       <AssetsList AssetsData={AssetsData} />

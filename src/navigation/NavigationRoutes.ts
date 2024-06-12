@@ -6,5 +6,6 @@ export const NavigationRoutes = {
   SETTINGS: 'Settings',
   COMMUNITY: 'Community',
   ASSETS: 'Assets',
+  SENDSCREEN:'SendScreen'
   // Add other routes as needed
 };
