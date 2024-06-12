@@ -68,9 +68,6 @@ const getStyles = theme =>
       alignItems: 'center',
     },
     leftIconWrapper: {
-      width: '50%',
-      alignItems: 'flex-start',
-      left: -23,
       borderRadius: 100,
     },
     rightIconWrapper: {
