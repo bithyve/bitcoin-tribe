@@ -27,11 +27,17 @@ const ModalContainer = (props: ModalContainerProps) => {
         <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
           <IconClose />
         </AppTouchable>
-        <View>
-          <AppText variant="heading1" testID="text_modalTitle">
+        <View style={styles.headingWrapper}>
+          <AppText
+            variant="heading1"
+            testID="text_modalTitle"
+            style={styles.titleText}>
             {title}
           </AppText>
-          <AppText variant="body1" testID="text_modalSubTitle">
+          <AppText
+            variant="body1"
+            testID="text_modalSubTitle"
+            style={styles.subTitleText}>
             {subTitle}
           </AppText>
         </View>
@@ -52,6 +58,15 @@ const getStyles = theme =>
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',
+    },
+    headingWrapper: {
+      marginVertical: 10,
+    },
+    titleText: {
+      color: theme.colors.headingColor,
+    },
+    subTitleText: {
+      color: theme.colors.bodyColor,
     },
   });
 export default ModalContainer;
