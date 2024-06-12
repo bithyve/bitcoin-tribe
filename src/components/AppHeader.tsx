@@ -25,20 +25,31 @@ function AppHeader(props: AppHeaderProps) {
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
         {enableBack && (
-          <AppTouchable onPress={navigation.goBack} style={styles.back}>
+          <AppTouchable
+            onPress={navigation.goBack}
+            style={styles.leftIconWrapper}>
             {<GoBack />}
           </AppTouchable>
         )}
         {rightIcon && (
-          <AppTouchable onPress={navigation.goBack}>{rightIcon}</AppTouchable>
+          <AppTouchable
+            onPress={navigation.goBack}
+            style={styles.rightIconWrapper}>
+            {rightIcon}
+          </AppTouchable>
         )}
       </View>
       <View style={styles.detailsWrapper}>
         <View style={styles.contentWrapper}>
-          <AppText variant="pageTitle" style={styles.headerTitle}>
+          <AppText
+            variant="pageTitle"
+            style={styles.headerTitle}
+            testID="text_appHeader">
             {title}
           </AppText>
-          <AppText style={styles.headerSubTitle}>{subTitle}</AppText>
+          <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
+            {subTitle}
+          </AppText>
         </View>
       </View>
     </View>
@@ -56,6 +67,16 @@ const getStyles = theme =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    leftIconWrapper: {
+      width: '50%',
+      alignItems: 'flex-start',
+      left: -23,
+      borderRadius: 100,
+    },
+    rightIconWrapper: {
+      width: '50%',
+      alignItems: 'flex-end',
+    },
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',
@@ -69,9 +90,6 @@ const getStyles = theme =>
     },
     headerSubTitle: {
       color: theme.colors.bodyColor,
-    },
-    back: {
-      borderRadius: 100,
     },
   });
 export default AppHeader;
