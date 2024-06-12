@@ -56,7 +56,7 @@ const getStyles = theme =>
       height: hp(205),
       width: wp(160),
       borderRadius: 15,
-      margin: wp(5),
+      margin: hp(5),
       backgroundColor: theme.colors.cardBackground,
       position: 'relative',
     },
