@@ -9,19 +9,21 @@ import AppTouchable from './AppTouchable';
 
 type AddNewTileProps = {
   title: string;
+  onPress?: () => void;
 };
 
 const AddNewTile = (props: AddNewTileProps) => {
-  const { title } = props;
+  const { title, onPress } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <AppTouchable
-      onPress={() => console.log('add new')}
-      style={styles.container}>
+    <AppTouchable onPress={onPress} style={styles.container}>
       <View style={styles.wrapper}>
         <AddNewIcon />
-        <AppText variant="subtitle2" style={styles.titleStyle}>
+        <AppText
+          variant="subtitle2"
+          style={styles.titleStyle}
+          testID="text_addnewTileTitle">
           {title}
         </AppText>
       </View>

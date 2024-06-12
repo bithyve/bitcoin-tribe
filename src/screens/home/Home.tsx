@@ -1,5 +1,7 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
+import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
 
@@ -51,6 +53,7 @@ const AssetsData = [
 ];
 
 function HomeScreen() {
+  const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
       <HomeHeader
@@ -62,7 +65,14 @@ function HomeScreen() {
         onPressScanner={() => console.log('scanner')}
         onPressNotification={() => console.log('notification')}
       />
-      <AssetsList AssetsData={AssetsData} />
+      <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
+      <ModalContainer
+        title="Add Assets"
+        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <AddAssetModal />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
