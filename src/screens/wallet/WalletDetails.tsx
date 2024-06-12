@@ -10,9 +10,6 @@ import { View, StyleSheet } from 'react-native';
 function WalletDetails({ navigation }) {
   return (
     <ScreenContainer style={styles.container}>
-      <View style={styles.appHeaderWrapper}>
-        <AppHeader rightIcon={<IconSetting />} navigation={navigation} />
-      </View>
       <View style={styles.walletHeaderWrapper}>
         <WalletDetailsHeader
           profile={
@@ -33,11 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
   },
-  appHeaderWrapper: {
-    height: '5%',
-  },
   walletHeaderWrapper: {
-    height: '28%',
+    height: '35%',
     alignItems: 'center',
     justifyContent: 'center',
   },
