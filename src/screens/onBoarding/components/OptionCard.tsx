@@ -55,7 +55,7 @@ const getStyles = theme =>
       marginTop: hp(10),
     },
     menuCardTitle: {
-      color: theme.colors.headingColor,
+      color: theme.colors.accent3,
     },
     menuCardSubTitle: {
       color: theme.colors.bodyColor,
