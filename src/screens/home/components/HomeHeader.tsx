@@ -15,30 +15,45 @@ type HomeHeaderProps = {
   profile: any;
   username: string;
   balance: any;
-  onPressScanner: any;
-  onPressNotification: any;
+  onPressProfile: () => void;
+  onPressScanner: () => void;
+  onPressNotification: () => void;
 };
 function HomeHeader(props: HomeHeaderProps) {
-  const { profile, username, balance, onPressScanner, onPressNotification } =
-    props;
+  const {
+    profile,
+    username,
+    balance,
+    onPressScanner,
+    onPressNotification,
+    onPressProfile,
+  } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
-        <UserAvatar size={50} imageSource={profile} />
-        <View style={styles.userDetailsWrapper}>
-          <AppText variant="body1" style={styles.usernameText}>
-            {username}
-          </AppText>
-          <View style={styles.balanceWrapper}>
-            <IconBitcoin />
-            <AppText variant="body5" style={styles.balanceText}>
-              &nbsp;&nbsp;{balance}
+      <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
+        <View style={styles.contentWrapper}>
+          <UserAvatar size={50} imageSource={profile} />
+          <View style={styles.userDetailsWrapper}>
+            <AppText
+              variant="body1"
+              style={styles.usernameText}
+              testID="text_username">
+              {username}
             </AppText>
+            <View style={styles.balanceWrapper}>
+              <IconBitcoin />
+              <AppText
+                variant="body5"
+                style={styles.balanceText}
+                testID="text_balance">
+                &nbsp;&nbsp;{balance}
+              </AppText>
+            </View>
           </View>
         </View>
-      </View>
+      </AppTouchable>
       <View style={styles.iconWrapper}>
         <AppTouchable onPress={onPressScanner}>
           <IconScanner />
