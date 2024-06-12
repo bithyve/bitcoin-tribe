@@ -13,11 +13,10 @@ type OptionCardProps = {
   subTitle: string;
   style?: any;
   onPress?: any;
-  isShowNavigateArrow?: boolean;
 };
 
 function OptionCard(props: OptionCardProps) {
-  const { icon, title, subTitle, style, onPress, isShowNavigateArrow = true } = props;
+  const { icon, title, subTitle, style, onPress } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -25,13 +24,13 @@ function OptionCard(props: OptionCardProps) {
       <View>
         <View>{icon}</View>
         <View style={styles.detailsWrapper}>
-          <View style={[styles.contentWrapper, !isShowNavigateArrow && { width: '100%' } ]}>
+          <View style={styles.contentWrapper}>
             <AppText style={styles.menuCardTitle}>{title}</AppText>
             <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
           </View>
-          {isShowNavigateArrow && <View style={styles.iconWrapper}>
+          <View style={styles.iconWrapper}>
             <IconArrow />
-          </View>}
+          </View>
         </View>
       </View>
     </AppTouchable>
