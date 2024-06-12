@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
-import CommonStyles from 'src/common/styles/CommonStyles';
 import Fonts from 'src/constants/Fonts';
 
 type PrimaryCTAProps = {
