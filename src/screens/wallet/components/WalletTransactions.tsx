@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
+import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
-import { hp } from 'src/constants/responsive';
+import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -38,12 +39,15 @@ function WalletTransactions(props: WalletTransactionsProps) {
         </View>
       </View>
       <View style={styles.amountWrapper}>
-        <AppText
-          variant="body1"
-          testID="text_transAmount"
-          style={styles.amountText}>
-          {transAmount}
-        </AppText>
+        <View style={styles.amtIconWrapper}>
+          <IconBitcoin />
+          <AppText
+            variant="body1"
+            testID="text_transAmount"
+            style={styles.amountText}>
+            &nbsp;{transAmount}
+          </AppText>
+        </View>
         <IconArrow />
       </View>
     </View>
@@ -59,7 +63,7 @@ const getStyles = theme =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '70%',
+      width: '65%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -73,9 +77,13 @@ const getStyles = theme =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '30%',
+      width: '35%',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    amtIconWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     amountText: {
       color: theme.colors.bodyColor,
