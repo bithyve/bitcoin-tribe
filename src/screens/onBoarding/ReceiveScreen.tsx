@@ -6,19 +6,19 @@ import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
 import Toast from 'src/components/Toast';
-import { Text, useTheme } from 'react-native-paper';
+import { Text, TouchableRipple, useTheme } from 'react-native-paper';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import CommonCardBox from 'src/components/CommonCardBox';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import FooterNoteCard from 'src/components/FooterNoteCard';
-// import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 function ReceiveScreen({ navigation }) {
   const theme = useTheme();
   const styles = getStyles(theme);
 
   const handleCopyText = (text: string) => {
-    // Clipboard.setString(text);
+    Clipboard.setString(text);
     Toast('Address Copied Successfully!', true);
   };
 
@@ -49,13 +49,14 @@ function ReceiveScreen({ navigation }) {
                   iklhj-safas-435fs453df-897897dfs-87875656
                 </Text>
               </View>
-              <View style={styles.iconWrapper}>
-                <IconCopy
+              <TouchableRipple 
+                  rippleColor={"gray"}
                   onPress={() =>
                     handleCopyText('iklhj-safas-435fs453df-897897dfs-87875656')
-                  }
-                />
-              </View>
+                  } 
+                  style={styles.iconWrapper}>
+                <IconCopy/>
+              </TouchableRipple>
             </View>
           </View>
         </CommonCardBox>
@@ -117,7 +118,9 @@ const getStyles = theme =>
       width: '95%',
     },
     iconWrapper: {
-      width: '10%',
+      width: wp(28),
+      height:wp(22),
+      alignItems:'center',
       justifyContent: 'center',
     },
   });
