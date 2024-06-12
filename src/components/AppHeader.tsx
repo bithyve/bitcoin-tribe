@@ -37,19 +37,21 @@ function AppHeader(props: AppHeaderProps) {
           </AppTouchable>
         )}
       </View>
-      <View style={styles.detailsWrapper}>
-        <View style={styles.contentWrapper}>
-          <AppText
-            variant="pageTitle"
-            style={styles.headerTitle}
-            testID="text_appHeader">
-            {title}
-          </AppText>
-          <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
-            {subTitle}
-          </AppText>
+      {title || subTitle ? (
+        <View style={styles.detailsWrapper}>
+          <View style={styles.contentWrapper}>
+            <AppText
+              variant="pageTitle"
+              style={styles.headerTitle}
+              testID="text_appHeader">
+              {title}
+            </AppText>
+            <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
+              {subTitle}
+            </AppText>
+          </View>
         </View>
-      </View>
+      ) : null}
     </View>
   );
 }
