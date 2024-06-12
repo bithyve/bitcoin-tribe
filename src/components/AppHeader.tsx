@@ -58,6 +58,7 @@ const getStyles = theme =>
     container: {
       width: '100%',
       marginVertical: hp(10),
+      alignItems: 'center',
     },
     iconContainer: {
       width: '100%',
