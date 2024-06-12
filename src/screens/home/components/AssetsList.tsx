@@ -9,20 +9,22 @@ import AddNewTile from 'src/components/AddNewTile';
 
 type AssetsListProps = {
   AssetsData: any;
+  onPress?: () => void;
 };
 type ItemProps = {
   title: string;
   details?: string;
   asset?: any;
   tag?: string;
+  onPress?: () => void;
 };
-const Item = ({ asset, title, details, tag }: ItemProps) => {
+const Item = ({ asset, title, details, tag, onPress }: ItemProps) => {
   return (
     <View>
       {asset ? (
         <AssetCard asset={asset} title={title} details={details} tag={tag} />
       ) : (
-        <AddNewTile title={title} />
+        <AddNewTile title={title} onPress={onPress} />
       )}
     </View>
   );
@@ -43,7 +45,7 @@ const ListFooterComponent = () => {
 };
 
 function AssetsList(props: AssetsListProps) {
-  const { AssetsData } = props;
+  const { AssetsData, onPress } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -61,6 +63,7 @@ function AssetsList(props: AssetsListProps) {
             asset={item.asset}
             details={item.details}
             tag={item.tag}
+            onPress={onPress}
           />
         )}
         keyExtractor={item => item.id}
