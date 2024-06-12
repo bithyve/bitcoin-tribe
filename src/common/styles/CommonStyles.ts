@@ -70,22 +70,9 @@ export default StyleSheet.create({
     lineHeight: 11 * 1.4,
     height: 15,
   },
-  primaryCTATitle: {
+  secondary: {
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 13 * 1.4,
-    height: 18,
-  },
-  secondaryCTATitle: {
-    fontSize: 13,
-    fontFamily: Fonts.PoppinsSemiBold,
-  },
-  roundedCTATitle: {
-    fontSize: 12,
-    fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 12 * 1.4,
-    height: 15,
-    marginLeft: 10,
   },
   subtitle2: {
     fontSize: 14,

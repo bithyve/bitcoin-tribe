@@ -17,7 +17,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
   return (
     <AppTouchable onPress={onPress}>
       <AppText
-        variant="secondaryCTATitle"
+        variant="secondary"
         style={styles.seconadryTitleStyle}
         testID={'text_secondaryBtnTitle'}>
         {title}
