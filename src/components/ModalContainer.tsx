@@ -25,7 +25,8 @@ const ModalContainer = (props: ModalContainerProps) => {
       <Modal
         visible={visible}
         onDismiss={onDismiss}
-        contentContainerStyle={styles.containerStyle}>
+        contentContainerStyle={styles.containerStyle}
+        style={styles.modalContainer}>
         <View>
           <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
             <IconClose />
@@ -55,15 +56,17 @@ const getStyles = theme =>
   StyleSheet.create({
     containerStyle: {
       backgroundColor: theme.colors.cardBackground,
-      padding: 25,
+      padding: 20,
       borderRadius: 10,
-      top: hp(200),
+      top: hp(220),
+      bottom: 0,
     },
+    modalContainer: {},
     closeIconWrapper: {
       alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginVertical: 10,
+      marginVertical: 20,
     },
     titleText: {
       color: theme.colors.headingColor,
