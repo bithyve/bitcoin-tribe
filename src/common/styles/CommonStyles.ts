@@ -11,6 +11,10 @@ export default StyleSheet.create({
     fontSize: 16,
     fontFamily: Fonts.PoppinsMedium,
   },
+  heading3: {
+    fontSize: 14,
+    fontFamily: Fonts.PoppinsMedium,
+  },
   pageTitle: {
     fontSize: 24,
     fontFamily: Fonts.PoppinsMedium,
@@ -90,5 +94,9 @@ export default StyleSheet.create({
   smallCTATitle: {
     fontSize: 12,
     fontFamily: Fonts.PoppinsBold,
+  },
+  walletBalance: {
+    fontSize: 39,
+    fontFamily: Fonts.PoppinsSemiBold,
   },
 });
