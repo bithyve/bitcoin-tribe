@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
@@ -52,7 +53,7 @@ const AssetsData = [
   },
 ];
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
@@ -64,6 +65,9 @@ function HomeScreen() {
         balance="0.0134"
         onPressScanner={() => console.log('scanner')}
         onPressNotification={() => console.log('notification')}
+        onPressProfile={() =>
+          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+        }
       />
       <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
       <ModalContainer
