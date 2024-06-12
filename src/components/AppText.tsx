@@ -10,6 +10,7 @@ export enum TextVariants {
   subTitle = 'subTitle',
   body1 = 'body1',
   body2 = 'body2',
+  body5 = 'body5',
   secondaryCTATitle = 'secondaryCTATitle',
   subtitle2 = 'subtitle2',
 }
@@ -47,6 +48,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.secondaryCTATitle;
       case TextVariants.subtitle2:
         return CommonStyles.subtitle2;
+      case TextVariants.body5:
+        return CommonStyles.body5;
       default:
         return CommonStyles.body1;
     }
