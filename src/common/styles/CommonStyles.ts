@@ -64,12 +64,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsMedium,
     fontWeight: '600',
   },
-  bottomNavigation: {
-    fontSize: 11,
-    fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 11 * 1.4,
-    height: 15,
-  },
   secondary: {
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
