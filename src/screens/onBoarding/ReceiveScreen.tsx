@@ -13,9 +13,9 @@ import IconCopy from 'src/assets/images/icon_copy.svg';
 import FooterNoteCard from 'src/components/FooterNoteCard';
 import Clipboard from '@react-native-clipboard/clipboard';
 
-function ReceiveScreen({ navigation }) {
+function ReceiveScreen() {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const handleCopyText = (text: string) => {
     Clipboard.setString(text);
@@ -27,7 +27,7 @@ function ReceiveScreen({ navigation }) {
       <AppHeader
         title="Receive"
         subTitle="Scan QR Lorem ipsum dolor sit amet,"
-        navigation={navigation}
+        enableBack={true}
       />
       <View style={styles.qrViewWrapper}>
         <View style={styles.qrImageWrapper}>

@@ -13,7 +13,7 @@ type FooterNoteCardProps = {
 function FooterNoteCard(props: FooterNoteCardProps) {
   const { title, subTitle, customStyle } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={[styles.container, customStyle]}>
       <View>

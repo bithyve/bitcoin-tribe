@@ -8,13 +8,13 @@ import OptionCard from './components/OptionCard';
 
 // import QRCodeScanner from 'react-native-qrcode-scanner';÷
 
-function SendScreen({ navigation }) {
+function SendScreen() {
   return (
     <ScreenContainer>
       <AppHeader
         title="Send"
         subTitle="Lorem ipsum dolor sit amet, consec tetur"
-        navigation={navigation}
+        enableBack={true}
       />
       <View style={styles.qrCodeContainer}>
         {/* This work is inprogress */}

@@ -1,8 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const AssetsData = [
   {
@@ -56,11 +58,12 @@ interface HomeScreenProps {
 }
 
 function HomeScreen({navigation}:HomeScreenProps) {
+  const [visible, setVisible] = useState(false);
 
   const handleScreenNavigation = (screenPath: string) => {
     navigation.navigate(screenPath);
   }
-
+  
   return (
     <ScreenContainer>
       <HomeHeader
@@ -71,8 +74,18 @@ function HomeScreen({navigation}:HomeScreenProps) {
         balance="0.0134"
         onPressScanner={() => handleScreenNavigation(NavigationRoutes.SENDSCREEN)}
         onPressNotification={() => console.log('notification')}
+        onPressProfile={() =>
+          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+        }
       />
-      <AssetsList AssetsData={AssetsData} />
+      <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
+      <ModalContainer
+        title="Add Assets"
+        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <AddAssetModal />
+      </ModalContainer>
     </ScreenContainer>
   );
 }

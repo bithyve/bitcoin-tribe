@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import { hp, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
-import AppTouchable from 'src/components/AppTouchable';
 
 type addPictureProps = {
   imageSource: any;
@@ -14,11 +13,10 @@ type addPictureProps = {
 };
 function AddPicture(props: addPictureProps) {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource, onPress } = props;
-  console.log('AddPicture imageSource', imageSource);
   return (
-    <AppTouchable onPress={onPress}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       {!imageSource ? (
         <View style={styles.container}>
           <View style={styles.iconImageWrapper}>
@@ -26,7 +24,7 @@ function AddPicture(props: addPictureProps) {
           </View>
           <View>
             <AppText
-              variant="secondaryCTATitle"
+              variant="secondary"
               style={styles.addPictureText}
               testID={'text_addPicture'}>
               ADD PICTURE
@@ -38,7 +36,7 @@ function AddPicture(props: addPictureProps) {
           <UserAvatar size={70} imageSource={imageSource} />
         </View>
       )}
-    </AppTouchable>
+    </TouchableOpacity>
   );
 }
 const getStyles = theme =>

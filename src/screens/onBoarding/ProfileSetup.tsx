@@ -37,7 +37,6 @@ function ProfileSetup({ navigation }) {
       <AppHeader
         title="Enter your details"
         subTitle="Lorem ipsum dolor sit amet, c"
-        navigation={navigation}
       />
       <AddPicture
         onPress={() => PickImage()}

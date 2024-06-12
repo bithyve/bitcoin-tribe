@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import UserAvatar from 'src/components/UserAvatar';
@@ -9,43 +9,59 @@ import { wp } from 'src/constants/responsive';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
+import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 
 type HomeHeaderProps = {
   profile: any;
   username: string;
   balance: any;
-  onPressScanner: any;
-  onPressNotification: any;
+  onPressProfile: () => void;
+  onPressScanner: () => void;
+  onPressNotification: () => void;
 };
 function HomeHeader(props: HomeHeaderProps) {
-  const { profile, username, balance, onPressScanner, onPressNotification } =
-    props;
+  const {
+    profile,
+    username,
+    balance,
+    onPressScanner,
+    onPressNotification,
+    onPressProfile,
+  } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
-        <UserAvatar size={50} imageSource={profile} />
-        <View style={styles.userDetailsWrapper}>
-          <AppText variant="body1" style={styles.usernameText}>
-            {username}
-          </AppText>
-          <View style={styles.balanceWrapper}>
-            <IconBitcoin />
-            <AppText variant="body5" style={styles.balanceText}>
-              &nbsp;&nbsp;{balance}
+      <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
+        <View style={styles.contentWrapper}>
+          <UserAvatar size={50} imageSource={profile} />
+          <View style={styles.userDetailsWrapper}>
+            <AppText
+              variant="body1"
+              style={styles.usernameText}
+              testID="text_username">
+              {username}
             </AppText>
+            <View style={styles.balanceWrapper}>
+              <IconBitcoin />
+              <AppText
+                variant="body5"
+                style={styles.balanceText}
+                testID="text_balance">
+                &nbsp;&nbsp;{balance}
+              </AppText>
+            </View>
           </View>
         </View>
-      </View>
+      </AppTouchable>
       <View style={styles.iconWrapper}>
-        <AppTouchable onPress={onPressScanner}>
+        <IconWrapper onPress={onPressScanner}>
           <IconScanner />
-        </AppTouchable>
-        <AppTouchable onPress={onPressNotification}>
+        </IconWrapper>
+        <IconWrapper onPress={onPressNotification}>
           <IconNotification />
-        </AppTouchable>
+        </IconWrapper>
       </View>
     </View>
   );
@@ -77,6 +93,9 @@ const getStyles = theme =>
       width: '20%',
       flexDirection: 'row',
       justifyContent: 'space-between',
+    },
+    iconTouchableArea: {
+      height: '60%',
     },
   });
 export default HomeHeader;

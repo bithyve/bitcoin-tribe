@@ -12,7 +12,7 @@ type CommonCardProps = {
 function CommonCardBox(props: CommonCardProps) {
   const { style, children } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return <View style={[styles.container, style]}>{children}</View>;
 }
 const getStyles = theme =>

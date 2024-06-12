@@ -1,16 +1,20 @@
-import React, { ReactNode, CSSProperties } from 'react';
+import React, { ReactNode } from 'react';
 import { TouchableRipple } from 'react-native-paper';
-import { GestureResponderEvent } from 'react-native/types';
+import {
+  GestureResponderEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native/types';
 
 type AppTouchableProps = {
   children: ReactNode;
-  style?: CSSProperties;
+  style?: StyleProp<ViewStyle>;
   onPress: (event: GestureResponderEvent) => void;
 };
 const AppTouchable = (props: AppTouchableProps) => {
   const { children, style, onPress } = props;
   return (
-    <TouchableRipple rippleColor={'gray'} style={style} onPress={onPress}>
+    <TouchableRipple style={style} onPress={onPress} borderless>
       {children}
     </TouchableRipple>
   );

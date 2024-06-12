@@ -6,6 +6,7 @@ import { wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import PrimaryCTA from './PrimaryCTA';
 import AppTouchable from './AppTouchable';
+import SecondaryCTA from './SecondaryCTA';
 
 type PrimaryCTAProps = {
   primaryOnPress: any;
@@ -29,13 +30,7 @@ function Buttons(props: PrimaryCTAProps) {
   return (
     <View style={styles.container}>
       {secondaryTitle && (
-        <AppTouchable onPress={secondaryOnPress}>
-          <AppText
-            variant="secondaryCTATitle"
-            style={styles.seconadryTitleStyle}>
-            {secondaryTitle}
-          </AppText>
-        </AppTouchable>
+        <SecondaryCTA onPress={secondaryOnPress} title={secondaryTitle} />
       )}
       <PrimaryCTA title={primaryTitle} onPress={primaryOnPress} width={width} />
     </View>

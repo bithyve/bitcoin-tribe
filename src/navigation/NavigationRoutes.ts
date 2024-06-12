@@ -7,6 +7,7 @@ export const NavigationRoutes = {
   COMMUNITY: 'Community',
   ASSETS: 'Assets',
   SENDSCREEN:'SendScreen',
-  RECEIVESCREEN:'ReceiveScreen'
+  RECEIVESCREEN:'ReceiveScreen',
+  WALLETDETAILS: 'WalletDetails',
   // Add other routes as needed
 };

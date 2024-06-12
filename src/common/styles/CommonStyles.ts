@@ -11,6 +11,10 @@ export default StyleSheet.create({
     fontSize: 16,
     fontFamily: Fonts.PoppinsMedium,
   },
+  heading3: {
+    fontSize: 14,
+    fontFamily: Fonts.PoppinsMedium,
+  },
   pageTitle: {
     fontSize: 24,
     fontFamily: Fonts.PoppinsMedium,
@@ -60,35 +64,20 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsMedium,
     fontWeight: '600',
   },
-  bottomNavigation: {
-    fontSize: 11,
-    fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 11 * 1.4,
-    height: 15,
-  },
-  primaryCTATitle: {
+  secondary: {
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 13 * 1.4,
-    height: 18,
-  },
-  secondaryCTATitle: {
-    fontSize: 13,
-    fontFamily: Fonts.PoppinsSemiBold,
-  },
-  roundedCTATitle: {
-    fontSize: 12,
-    fontFamily: Fonts.PoppinsSemiBold,
-    lineHeight: 12 * 1.4,
-    height: 15,
-    marginLeft: 10,
   },
   subtitle2: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsSemiBold,
   },
-  smallCTATitle: {
+  smallCTA: {
     fontSize: 12,
     fontFamily: Fonts.PoppinsBold,
+  },
+  walletBalance: {
+    fontSize: 39,
+    fontFamily: Fonts.PoppinsSemiBold,
   },
 });

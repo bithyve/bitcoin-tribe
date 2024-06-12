@@ -4,34 +4,36 @@ import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_back.svg';
+import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
+import { useNavigation } from '@react-navigation/native';
 
 type AppHeaderProps = {
   title?: string;
   subTitle?: string;
   style?: any;
-  navigation?: any;
+  enableBack?: boolean;
   rightIcon?: any;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { title, subTitle, style, navigation, rightIcon } = props;
+  const { title, subTitle, style, enableBack = true, rightIcon } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const navigation = useNavigation();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        {navigation && (
+        {enableBack && (
           <AppTouchable
-            onPress={() => navigation.goBack()}
+            onPress={navigation.goBack}
             style={styles.leftIconWrapper}>
-            <IconArrow />
+            {<GoBack />}
           </AppTouchable>
         )}
         {rightIcon && (
           <AppTouchable
-            onPress={() => navigation.goBack()}
+            onPress={navigation.goBack}
             style={styles.rightIconWrapper}>
             {rightIcon}
           </AppTouchable>
@@ -58,6 +60,7 @@ const getStyles = theme =>
     container: {
       width: '100%',
       marginVertical: hp(10),
+      alignItems: 'center',
     },
     iconContainer: {
       width: '100%',
@@ -66,9 +69,7 @@ const getStyles = theme =>
       alignItems: 'center',
     },
     leftIconWrapper: {
-      width: '50%',
-      alignItems: 'flex-start',
-      left: -23,
+      borderRadius: 100,
     },
     rightIconWrapper: {
       width: '50%',
