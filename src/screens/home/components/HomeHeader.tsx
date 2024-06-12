@@ -10,6 +10,7 @@ import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
+import AppTouchable from 'src/components/AppTouchable';
 
 type HomeHeaderProps = {
   profile: any;
@@ -92,6 +93,9 @@ const getStyles = theme =>
       width: '20%',
       flexDirection: 'row',
       justifyContent: 'space-between',
+    },
+    iconTouchableArea: {
+      height: '60%',
     },
   });
 export default HomeHeader;

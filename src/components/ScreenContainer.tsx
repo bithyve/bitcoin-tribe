@@ -31,7 +31,8 @@ const getStyles = theme =>
       backgroundColor: theme.colors.primaryBackground,
     },
     image: {
-      flex: 1,
+      height: '100%',
+      width: '100%',
       padding: hp(20),
     },
   });

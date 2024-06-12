@@ -10,7 +10,7 @@ import { hp, wp } from 'src/constants/responsive';
 type IconWrapperProps = {
   onPress: () => void;
   children: React.ReactNode;
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 const IconWrapper = ({ children, onPress, style = {} }: IconWrapperProps) => {
   return (

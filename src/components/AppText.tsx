@@ -6,13 +6,16 @@ import CommonStyles from 'src/common/styles/CommonStyles';
 export enum TextVariants {
   heading1 = 'heading1',
   heading2 = 'heading2',
+  heading3 = 'heading3',
   pageTitle = 'pageTitle',
   subTitle = 'subTitle',
   body1 = 'body1',
   body2 = 'body2',
   body5 = 'body5',
-  secondaryCTATitle = 'secondaryCTATitle',
+  secondary = 'secondary',
+  smallCTA = 'smallCTA',
   subtitle2 = 'subtitle2',
+  walletBalance = 'walletBalance',
 }
 
 type VariantProp = keyof typeof TextVariants;
@@ -36,6 +39,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.heading1;
       case TextVariants.heading2:
         return CommonStyles.heading2;
+      case TextVariants.heading3:
+        return CommonStyles.heading2;
       case TextVariants.pageTitle:
         return CommonStyles.pageTitle;
       case TextVariants.subTitle:
@@ -44,12 +49,16 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body1;
       case TextVariants.body2:
         return CommonStyles.body2;
-      case TextVariants.secondaryCTATitle:
-        return CommonStyles.secondaryCTATitle;
+      case TextVariants.secondary:
+        return CommonStyles.secondary;
       case TextVariants.subtitle2:
         return CommonStyles.subtitle2;
       case TextVariants.body5:
         return CommonStyles.body5;
+      case TextVariants.walletBalance:
+        return CommonStyles.walletBalance;
+      case TextVariants.smallCTA:
+        return CommonStyles.smallCTA;
       default:
         return CommonStyles.body1;
     }

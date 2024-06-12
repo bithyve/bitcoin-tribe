@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 
-import CommonStyles from 'src/common/styles/CommonStyles';
+import Fonts from 'src/constants/Fonts';
 
 type RoundedCTAProps = {
   icon?: any;
@@ -21,7 +21,7 @@ function RoundedCTA(props: RoundedCTAProps) {
       icon={() => icon}
       mode="contained"
       uppercase={false}
-      labelStyle={CommonStyles.roundedCTATitle}
+      labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
       contentStyle={styles.contentStyle}
       buttonColor={buttonColor}
@@ -39,6 +39,16 @@ const getStyles = width =>
     },
     contentStyle: {
       width: width,
+    },
+    labelStyle: {
+      marginLeft: 1,
+    },
+    roundedCTATitle: {
+      fontSize: 12,
+      fontFamily: Fonts.PoppinsSemiBold,
+      lineHeight: 12 * 1.4,
+      height: 15,
+      marginLeft: 10,
     },
   });
 export default RoundedCTA;

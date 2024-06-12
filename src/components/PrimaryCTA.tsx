@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
-import CommonStyles from 'src/common/styles/CommonStyles';
+import Fonts from 'src/constants/Fonts';
 
 type PrimaryCTAProps = {
   onPress: any;
@@ -27,7 +27,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       <Button
         mode="contained"
         uppercase={false}
-        labelStyle={[CommonStyles.primaryCTATitle, styles.labelStyle]}
+        labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}
         buttonColor={buttonColor}
         onPress={onPress}>
@@ -50,6 +50,12 @@ const getStyles = (theme, width) =>
     labelStyle: {
       minWidth: wp(120),
       marginVertical: hp(14),
+    },
+    primaryCTATitle: {
+      fontSize: 13,
+      fontFamily: Fonts.PoppinsSemiBold,
+      lineHeight: 13 * 1.4,
+      height: 18,
     },
   });
 export default PrimaryCTA;
