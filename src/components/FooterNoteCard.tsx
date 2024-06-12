@@ -1,40 +1,30 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
-
+import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import { hp } from 'src/constants/responsive';
-import AppTouchable from 'src/components/AppTouchable';
 
-type OptionCardProps = {
-  icon?: any;
+type FooterNoteCardProps = {
   title: string;
   subTitle: string;
-  style?: any;
-  onPress?: any;
-  isShowNavigateArrow?: boolean;
+  customStyle?: any;
 };
 
-function OptionCard(props: OptionCardProps) {
-  const { icon, title, subTitle, style, onPress, isShowNavigateArrow = true } = props;
+function FooterNoteCard(props: FooterNoteCardProps) {
+  const { title, subTitle, customStyle } = props;
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
+    <View style={[styles.container, customStyle]}>
       <View>
-        <View>{icon}</View>
         <View style={styles.detailsWrapper}>
-          <View style={[styles.contentWrapper, !isShowNavigateArrow && { width: '100%' } ]}>
-            <AppText style={styles.menuCardTitle}>{title}</AppText>
-            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
+          <View style={styles.contentWrapper}>
+            <AppText testID={'footerNodeCardTitle'} style={styles.menuCardTitle}>{title}</AppText>
+            <AppText testID={'footerNodeCardSubTitle'} style={styles.menuCardSubTitle}>{subTitle}</AppText>
           </View>
-          {isShowNavigateArrow && <View style={styles.iconWrapper}>
-            <IconArrow />
-          </View>}
         </View>
       </View>
-    </AppTouchable>
+    </View>
   );
 }
 const getStyles = theme =>
@@ -65,4 +55,4 @@ const getStyles = theme =>
       justifyContent: 'center',
     },
   });
-export default OptionCard;
+export default FooterNoteCard;

@@ -9,6 +9,7 @@ import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
 import SendScreen from 'src/screens/onBoarding/SendScreen';
 import { NavigationRoutes } from './NavigationRoutes';
+import ReceiveScreen from 'src/screens/onBoarding/ReceiveScreen';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();
@@ -58,6 +59,14 @@ function Navigator() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVESCREEN}
+          component={ReceiveScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
