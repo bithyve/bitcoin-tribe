@@ -31,8 +31,7 @@ function WalletTransactionsContainer() {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      marginTop: hp(40),
-      height: '50%',
+      marginTop: hp(30),
     },
     contentWrapper: {
       flexDirection: 'row',

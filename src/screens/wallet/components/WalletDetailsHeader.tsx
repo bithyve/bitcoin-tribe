@@ -19,22 +19,20 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   return (
     <View style={styles.contentWrapper}>
       <UserAvatar size={70} imageSource={profile} />
-      <View>
+      <AppText
+        variant="body1"
+        style={styles.usernameText}
+        testID="text_username">
+        {username}
+      </AppText>
+      <View style={styles.balanceWrapper}>
+        <IconBitcoin />
         <AppText
-          variant="body1"
-          style={styles.usernameText}
-          testID="text_username">
-          {username}
+          variant="walletBalance"
+          style={styles.balanceText}
+          testID="text_balance">
+          &nbsp;{balance}
         </AppText>
-        <View style={styles.balanceWrapper}>
-          <IconBitcoin />
-          <AppText
-            variant="walletBalance"
-            style={styles.balanceText}
-            testID="text_balance">
-            &nbsp;{balance}
-          </AppText>
-        </View>
       </View>
       <TransactionButtons
         onPressSend={() => console.log('send')}
@@ -49,11 +47,13 @@ const getStyles = theme =>
     contentWrapper: {
       alignItems: 'center',
       width: '100%',
-      position: 'absolute',
-      top: 10,
+      // position: 'absolute',
+      // top: 30,
+      // left: 20,
       paddingBottom: 20,
       borderBottomWidth: 0.5,
       borderBottomColor: 'gray',
+      marginBottom: 10,
     },
     usernameText: {
       color: theme.colors.accent3,

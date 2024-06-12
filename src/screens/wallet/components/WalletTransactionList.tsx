@@ -40,35 +40,45 @@ const TransactionData = [
     transAmount: '0.129483',
     transType: 'send',
   },
+  {
+    id: 6,
+    transID: 'f4184fc5964…1e9e16',
+    transDate: '22 April 2024. 2:00 pm',
+    transAmount: '0.129483',
+    transType: 'send',
+  },
+  {
+    id: 7,
+    transID: 'f4184fc5964…1e9e16',
+    transDate: '22 April 2024. 2:00 pm',
+    transAmount: '0.129483',
+    transType: 'send',
+  },
 ];
 function WalletTransactionList() {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View>
-      <FlatList
-        style={styles.container}
-        data={TransactionData}
-        renderItem={({ item }) => (
-          <WalletTransactions
-            transId={item.transID}
-            transDate={item.transDate}
-            transAmount={item.transAmount}
-            transType={item.transType}
-          />
-        )}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlatList
+      style={styles.container}
+      data={TransactionData}
+      renderItem={({ item }) => (
+        <WalletTransactions
+          transId={item.transID}
+          transDate={item.transDate}
+          transAmount={item.transAmount}
+          transType={item.transType}
+        />
+      )}
+      keyExtractor={item => item.id}
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 const getStyles = theme =>
   StyleSheet.create({
     container: {
       marginVertical: hp(5),
-      maxHeight: '100%',
-      flexGrow: 0,
     },
   });
 export default WalletTransactionList;
