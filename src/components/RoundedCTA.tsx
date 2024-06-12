@@ -21,7 +21,7 @@ function RoundedCTA(props: RoundedCTAProps) {
       icon={() => icon}
       mode="contained"
       uppercase={false}
-      labelStyle={CommonStyles.roundedCTATitle}
+      labelStyle={[CommonStyles.roundedCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
       contentStyle={styles.contentStyle}
       buttonColor={buttonColor}
@@ -39,6 +39,9 @@ const getStyles = width =>
     },
     contentStyle: {
       width: width,
+    },
+    labelStyle: {
+      marginLeft: 1,
     },
   });
 export default RoundedCTA;
