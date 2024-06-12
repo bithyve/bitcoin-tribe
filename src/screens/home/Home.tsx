@@ -69,7 +69,7 @@ function HomeScreen({navigation}:HomeScreenProps) {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => handleScreenNavigation(NavigationRoutes.RECEIVESCREEN)}
+        onPressScanner={() => handleScreenNavigation(NavigationRoutes.SENDSCREEN)}
         onPressNotification={() => console.log('notification')}
       />
       <AssetsList AssetsData={AssetsData} />

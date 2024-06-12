@@ -29,12 +29,11 @@ function ReceiveScreen({ navigation }) {
         subTitle="Scan QR Lorem ipsum dolor sit amet,"
         navigation={navigation}
       />
-
       <View style={styles.qrViewWrapper}>
         <View style={styles.qrImageWrapper}>
           <Image
            source={require('../../assets/images/icon_qr_code.png')}
-           style={{width: 200, height: 180,}} />
+           style={styles.qrImageContainer} />
         </View>
         <Text style={styles.qrFooterText}>Invoice Address</Text>
       </View>
@@ -95,6 +94,7 @@ const getStyles = theme =>
       borderBottomRightRadius: 10,
       width: 200,
     },
+    qrImageContainer:{width: 200, height: 180},
     qrImageWrapper: {
       width: 200,
       height: 180,

@@ -16,20 +16,13 @@ function SendScreen({ navigation }) {
         subTitle="Lorem ipsum dolor sit amet, consec tetur"
         navigation={navigation}
       />
-
-      <View
-        style={{
-          width: '90%',
-          height: hp(340),
-          marginTop: wp(80),
-          marginHorizontal: wp(15),
-        }}>
+      <View style={styles.qrCodeContainer}>
+        {/* This work is inprogress */}
         {/* <QRCodeScanner
           onRead={event => console.log('scan click', event)}
           cameraStyle={{ width: '100%', height: '15%', alignSelf: 'center' }}
         /> */}
       </View>
-
       <OptionCard
         title="or Enter details manually"
         subTitle="Lorem ipsum dolor sit amet, consec"
@@ -46,5 +39,11 @@ const styles = StyleSheet.create({
     bottom: 10,
     margin: hp(20),
   },
+  qrCodeContainer:{
+    width: '90%',
+    height: hp(340),
+    marginTop: wp(80),
+    marginHorizontal: wp(15),
+  }
 });
 export default SendScreen;
