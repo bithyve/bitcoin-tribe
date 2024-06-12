@@ -8,6 +8,7 @@ import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
 import { NavigationRoutes } from './NavigationRoutes';
+import WalletDetails from 'src/screens/wallet/WalletDetails';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();
@@ -46,6 +47,13 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.SETTINGS}
           component={Settings}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETDETAILS}
+          component={WalletDetails}
           options={{
             headerShown: false,
           }}
