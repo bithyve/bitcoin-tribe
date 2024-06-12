@@ -72,7 +72,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsSemiBold,
   },
-  smallCTATitle: {
+  smallCTA: {
     fontSize: 12,
     fontFamily: Fonts.PoppinsBold,
   },

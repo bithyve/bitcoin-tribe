@@ -13,7 +13,7 @@ export enum TextVariants {
   body2 = 'body2',
   body5 = 'body5',
   secondary = 'secondary',
-  smallCTATitle = 'smallCTATitle',
+  smallCTA = 'smallCTA',
   subtitle2 = 'subtitle2',
   walletBalance = 'walletBalance',
 }
@@ -57,8 +57,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body5;
       case TextVariants.walletBalance:
         return CommonStyles.walletBalance;
-      case TextVariants.smallCTATitle:
-        return CommonStyles.smallCTATitle;
+      case TextVariants.smallCTA:
+        return CommonStyles.smallCTA;
       default:
         return CommonStyles.body1;
     }

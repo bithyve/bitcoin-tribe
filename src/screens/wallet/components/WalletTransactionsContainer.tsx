@@ -18,7 +18,7 @@ function WalletTransactionsContainer() {
           Recent Transactions
         </AppText>
         <AppText
-          variant="smallCTATitle"
+          variant="smallCTA"
           testID="text_viewAll"
           style={styles.viewAllText}>
           VIEW ALL
