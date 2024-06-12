@@ -1,44 +1,55 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
+import { useNavigation } from '@react-navigation/native';
 
 type AppHeaderProps = {
   title?: string;
   subTitle?: string;
   style?: any;
-  navigation?: any;
+  enableBack?: boolean;
   rightIcon?: any;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { title, subTitle, style, navigation, rightIcon } = props;
+  const { title, subTitle, style, enableBack = true, rightIcon } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const navigation = useNavigation();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        {navigation && (
-          <AppTouchable onPress={() => navigation.goBack()}>
-            {<IconArrow />}
+        {enableBack && (
+          <AppTouchable
+            onPress={navigation.goBack}
+            style={styles.leftIconWrapper}>
+            {<GoBack />}
           </AppTouchable>
         )}
         {rightIcon && (
-          <AppTouchable onPress={() => navigation.goBack()}>
+          <AppTouchable
+            onPress={navigation.goBack}
+            style={styles.rightIconWrapper}>
             {rightIcon}
           </AppTouchable>
         )}
       </View>
       <View style={styles.detailsWrapper}>
         <View style={styles.contentWrapper}>
-          <AppText variant="pageTitle" style={styles.headerTitle}>
+          <AppText
+            variant="pageTitle"
+            style={styles.headerTitle}
+            testID="text_appHeader">
             {title}
           </AppText>
-          <AppText style={styles.headerSubTitle}>{subTitle}</AppText>
+          <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
+            {subTitle}
+          </AppText>
         </View>
       </View>
     </View>
@@ -49,12 +60,20 @@ const getStyles = theme =>
     container: {
       width: '100%',
       marginVertical: hp(10),
+      alignItems: 'center',
     },
     iconContainer: {
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    leftIconWrapper: {
+      borderRadius: 100,
+    },
+    rightIconWrapper: {
+      width: '50%',
+      alignItems: 'flex-end',
     },
     detailsWrapper: {
       flexDirection: 'row',

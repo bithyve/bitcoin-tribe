@@ -1,0 +1,7 @@
+<svg id="icon_close" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="plus-circle" transform="translate(0.75 0.75)">
+    <path id="Path_118417" data-name="Path 118417" d="M14.654,1.25a13.4,13.4,0,1,0,13.4,13.4A13.4,13.4,0,0,0,14.654,1.25Z" transform="translate(0 0)" fill="#ffba00"/>
+    <path id="Path_118418" data-name="Path 118418" d="M12.237,18.16a.935.935,0,1,0,1.87,0V14.108H18.16a.935.935,0,1,0,0-1.87H14.108V8.185a.935.935,0,0,0-1.87,0v4.052H8.185a.935.935,0,0,0,0,1.87h4.052Z" transform="translate(14.654 -3.975) rotate(45)" fill="#212121" stroke="#212121" stroke-width="1"/>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>

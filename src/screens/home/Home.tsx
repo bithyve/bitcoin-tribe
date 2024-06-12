@@ -1,5 +1,8 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
 
@@ -8,7 +11,7 @@ const AssetsData = [
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 1,
     title: 'The Demogorgan',
-    details: 'Humanoid creature… with head shaped like a flower',
+    details: 'Humanoid creature… with head shaped',
     tag: 'COLLECTIBLES',
   },
   {
@@ -50,7 +53,8 @@ const AssetsData = [
   },
 ];
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
+  const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
       <HomeHeader
@@ -61,8 +65,18 @@ function HomeScreen() {
         balance="0.0134"
         onPressScanner={() => console.log('scanner')}
         onPressNotification={() => console.log('notification')}
+        onPressProfile={() =>
+          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+        }
       />
-      <AssetsList AssetsData={AssetsData} />
+      <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
+      <ModalContainer
+        title="Add Assets"
+        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <AddAssetModal />
+      </ModalContainer>
     </ScreenContainer>
   );
 }

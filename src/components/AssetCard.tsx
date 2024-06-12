@@ -17,7 +17,7 @@ type AssetCardProps = {
 const AssetCard = (props: AssetCardProps) => {
   const { asset, title, details, tag } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable
       onPress={() => console.log('asset card')}

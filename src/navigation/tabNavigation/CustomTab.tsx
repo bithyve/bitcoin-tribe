@@ -4,28 +4,31 @@ import { useTheme } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
-import CommonStyles from 'src/common/styles/CommonStyles';
-
+import Fonts from 'src/constants/Fonts';
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
-import AssetsActive from 'src/assets/images/icon_addnew.svg';
+
+import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <TextIcon />;
+        return isFocused ? <AssetsActive /> : <AssetsInActive />;
       case NavigationRoutes.COMMUNITY:
-        return isFocused ? <CommunityActive /> : <TextIcon />;
+        return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <TextIcon />;
+        return isFocused ? <SettingsActive /> : <SettingsInActive />;
       default:
         return <TextIcon />;
     }
@@ -75,7 +78,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             {isFocused && (
               <AppText
                 style={[
-                  CommonStyles.bottomNavigation,
+                  styles.bottomNavigation,
                   { color: isFocused ? theme.colors.primaryCTA : 'gray' },
                 ]}>
                 &nbsp;{label}
@@ -106,6 +109,12 @@ const getStyles = theme =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    bottomNavigation: {
+      fontSize: 11,
+      fontFamily: Fonts.PoppinsSemiBold,
+      lineHeight: 11 * 1.4,
+      height: 15,
     },
   });
 

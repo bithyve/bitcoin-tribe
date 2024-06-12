@@ -1,0 +1,9 @@
+<svg id="icon_assets_active" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_47498" data-name="Group 47498" transform="translate(-72.499 -447)">
+    <path id="Path_117871" data-name="Path 117871" d="M19.447,1.849a2.046,2.046,0,0,0-2.894,0l-2.7,2.7a2.046,2.046,0,0,0,0,2.894l2.7,2.7a2.046,2.046,0,0,0,2.894,0l2.7-2.7a2.046,2.046,0,0,0,0-2.894Z" transform="translate(75.25 450.75)" fill="#f97643"/>
+    <path id="Path_117872" data-name="Path 117872" d="M7.728,14.318a1.932,1.932,0,0,0-3.457,0L1.455,19.953a1.933,1.933,0,0,0,1.728,2.8H8.816a1.933,1.933,0,0,0,1.728-2.8Z" transform="translate(75.25 450.75)" fill="#f97643"/>
+    <path id="Path_117873" data-name="Path 117873" d="M4.286,1.25A3.036,3.036,0,0,0,1.25,4.286V7.714A3.036,3.036,0,0,0,4.286,10.75H7.714A3.036,3.036,0,0,0,10.75,7.714V4.286A3.036,3.036,0,0,0,7.714,1.25Z" transform="translate(75.25 450.75)" fill="#f97643"/>
+    <path id="Path_117874" data-name="Path 117874" d="M18,13.25A4.75,4.75,0,1,0,22.75,18,4.75,4.75,0,0,0,18,13.25Z" transform="translate(75.25 450.75)" fill="#f97643"/>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>

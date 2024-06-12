@@ -3,6 +3,7 @@ import PreferencesContext from './PreferenceContext';
 import { LocalizationProvider } from './LocalizationContext';
 import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme/index';
 import { PaperProvider } from 'react-native-paper';
+import AppQueryClient from 'src/services/query/AppQueryClient';
 
 function Contexts({ children }: any) {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
@@ -22,7 +23,9 @@ function Contexts({ children }: any) {
   return (
     <PreferencesContext.Provider value={preferences}>
       <LocalizationProvider>
-        <PaperProvider theme={theme}>{children}</PaperProvider>
+        <PaperProvider theme={theme}>
+          <AppQueryClient>{children}</AppQueryClient>
+        </PaperProvider>
       </LocalizationProvider>
     </PreferencesContext.Provider>
   );

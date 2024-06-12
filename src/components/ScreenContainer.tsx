@@ -7,7 +7,7 @@ import { hp } from 'src/constants/responsive';
 
 const ScreenContainer = props => {
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <SafeAreaView style={{ ...styles.container, ...props.style }}>
       <StatusBar
@@ -31,7 +31,8 @@ const getStyles = theme =>
       backgroundColor: theme.colors.primaryBackground,
     },
     image: {
-      flex: 1,
+      height: '100%',
+      width: '100%',
       padding: hp(20),
     },
   });

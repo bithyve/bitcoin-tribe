@@ -6,5 +6,6 @@ export const NavigationRoutes = {
   SETTINGS: 'Settings',
   COMMUNITY: 'Community',
   ASSETS: 'Assets',
+  WALLETDETAILS: 'WalletDetails',
   // Add other routes as needed
 };
