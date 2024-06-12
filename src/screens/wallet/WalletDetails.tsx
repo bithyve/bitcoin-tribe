@@ -34,15 +34,15 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   appHeaderWrapper: {
-    height: '10%',
+    height: '5%',
   },
   walletHeaderWrapper: {
-    height: '30%',
+    height: '28%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   walletTransWrapper: {
-    height: '60%',
+    height: '64%',
   },
 });
 export default WalletDetails;
