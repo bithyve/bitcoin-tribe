@@ -12,7 +12,7 @@ import IconBackup from 'src/assets/images/icon_backup.svg';
 import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 
 function SettingsScreen() {
   const theme = useTheme();
@@ -41,7 +41,9 @@ function SettingsScreen() {
           toggleValue={biometrics}
         />
       </View>
-      <ScrollView>
+      <ScrollView
+        style={styles.scrollingWrapper}
+        showsVerticalScrollIndicator={false}>
         <SelectOption
           title="Language and Currency"
           subTitle="Lorem ipsum dolor sit amet, consec "
@@ -73,7 +75,10 @@ function SettingsScreen() {
 const getStyles = theme =>
   StyleSheet.create({
     wrapper: {
-      marginBottom: hp(30),
+      marginBottom: windowHeight > 600 ? hp(30) : hp(15),
+    },
+    scrollingWrapper: {
+      flex: 1,
     },
   });
 export default SettingsScreen;
