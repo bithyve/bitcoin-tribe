@@ -72,7 +72,7 @@ function HomeScreen({ navigation }) {
       <AssetsList
         AssetsData={AssetsData}
         onPressAddNew={() => setVisible(true)}
-        onPressAsset={() => navigation.navigate(NavigationRoutes.WALLETDETAILS)}
+        onPressAsset={() => navigation.navigate(NavigationRoutes.ASSETDETAILS)}
       />
       <ModalContainer
         title="Add Assets"

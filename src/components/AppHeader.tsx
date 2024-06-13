@@ -48,7 +48,10 @@ function AppHeader(props: AppHeaderProps) {
               testID="text_appHeader">
               {title}
             </AppText>
-            <AppText style={styles.headerSubTitle} testID="text_appSubHeader">
+            <AppText
+              variant="body1"
+              style={styles.headerSubTitle}
+              testID="text_appSubHeader">
               {subTitle}
             </AppText>
           </View>

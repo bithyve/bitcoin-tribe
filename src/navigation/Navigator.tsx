@@ -7,6 +7,7 @@ import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
+import AssetDetails from 'src/screens/home/AssetDetails';
 
 import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
@@ -55,6 +56,13 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.WALLETDETAILS}
           component={WalletDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ASSETDETAILS}
+          component={AssetDetails}
           options={{
             headerShown: false,
           }}

@@ -7,5 +7,6 @@ export const NavigationRoutes = {
   COMMUNITY: 'Community',
   ASSETS: 'Assets',
   WALLETDETAILS: 'WalletDetails',
+  ASSETDETAILS: 'AssetDetails',
   // Add other routes as needed
 };
