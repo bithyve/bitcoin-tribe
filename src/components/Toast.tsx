@@ -12,7 +12,7 @@ export default (message, icon = false, error = false) => {
   return Toast.show(
     <View style={styles.container}>
       {icon && <CheckIcon />}
-      <AppText variant="toastMessage" style={{ color: Colors.RaisinBlack }}>
+      <AppText variant="toastMessage" style={{ marginLeft:wp(8), color: Colors.RaisinBlack }}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
           : message}

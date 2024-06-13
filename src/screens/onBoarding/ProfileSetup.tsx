@@ -8,6 +8,7 @@ import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
+import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
@@ -37,6 +38,7 @@ function ProfileSetup({ navigation }) {
       <AppHeader
         title="Enter your details"
         subTitle="Lorem ipsum dolor sit amet, c"
+        rightIcon={<SettingIcon/>}
       />
       <AddPicture
         onPress={() => PickImage()}

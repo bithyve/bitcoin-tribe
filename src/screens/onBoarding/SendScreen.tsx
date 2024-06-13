@@ -5,8 +5,13 @@ import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
 import QRScanner from 'src/components/QRScanner';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function SendScreen() {
+interface SendScreenProps {
+  navigation: any;
+}
+
+function SendScreen({navigation}: SendScreenProps) {
   return (
     <ScreenContainer>
       <AppHeader
@@ -19,7 +24,7 @@ function SendScreen() {
         title="or Enter details manually"
         subTitle="Lorem ipsum dolor sit amet, consec"
         style={styles.advanceOptionStyle}
-        onPress={() => {}}
+        onPress={() => navigation.navigate(NavigationRoutes.RECEIVESCREEN)}
       />
     </ScreenContainer>
   );

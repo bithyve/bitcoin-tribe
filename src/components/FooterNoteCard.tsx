@@ -32,7 +32,7 @@ const getStyles = theme =>
     container: {
       width: '100%',
       padding: hp(15),
-      marginVertical: hp(10),
+      // marginVertical: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
     },

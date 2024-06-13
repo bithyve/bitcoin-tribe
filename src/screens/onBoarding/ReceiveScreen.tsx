@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View,Image } from 'react-native';
+import { StyleSheet, View,Image,ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
@@ -12,7 +12,7 @@ import CommonCardBox from 'src/components/CommonCardBox';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import FooterNoteCard from 'src/components/FooterNoteCard';
 import Clipboard from '@react-native-clipboard/clipboard';
-import QRCode from 'react-native-qrcode-svg';
+import ShowQRCode from 'src/components/ShowQRCode';
 
 function ReceiveScreen() {
   const theme = useTheme();
@@ -25,56 +25,53 @@ function ReceiveScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader
-        title="Receive"
-        subTitle="Scan QR Lorem ipsum dolor sit amet,"
-        enableBack={true}
-      />
-      <View style={styles.qrViewWrapper}>
-        <View style={styles.qrImageWrapper}>
-          <QRCode
-            value={"https://www.google.com/"}
-            size={wp(180)}
-          />
-        </View>
-        <Text style={styles.qrFooterText}>Invoice Address</Text>
-      </View>
-      <View style={{marginTop:wp(8)}}>
-        <CommonCardBox>
-          <View>
-            <View style={styles.detailsWrapper}>
-              <View style={styles.contentWrapper}>
-                <Text
-                  style={[styles.menuCardTitle, CommonStyles.body1]}
-                  numberOfLines={1}>
-                  iklhj-safas-435fs453df-897897dfs-87875656
-                </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <AppHeader
+          title="Receive"
+          subTitle="Scan QR Lorem ipsum dolor sit amet,"
+          enableBack={true}
+        />
+        <ShowQRCode 
+          value={"https://www.google.com/"}
+          title={"Invoice Address"}
+        />
+        <View style={{marginTop:wp(8)}}>
+          <CommonCardBox>
+            <View>
+              <View style={styles.detailsWrapper}>
+                <View style={styles.contentWrapper}>
+                  <Text
+                    style={[styles.menuCardTitle, CommonStyles.body1]}
+                    numberOfLines={1}>
+                    iklhj-safas-435fs453df-897897dfs-87875656
+                  </Text>
+                </View>
+                <TouchableRipple 
+                    rippleColor={"gray"}
+                    onPress={() =>
+                      handleCopyText('iklhj-safas-435fs453df-897897dfs-87875656')
+                    } 
+                    style={styles.iconWrapper}>
+                  <IconCopy/>
+                </TouchableRipple>
               </View>
-              <TouchableRipple 
-                  rippleColor={"gray"}
-                  onPress={() =>
-                    handleCopyText('iklhj-safas-435fs453df-897897dfs-87875656')
-                  } 
-                  style={styles.iconWrapper}>
-                <IconCopy/>
-              </TouchableRipple>
             </View>
-          </View>
-        </CommonCardBox>
-      </View>
-          
-      <OptionCard
-        style={{marginTop:wp(15)}}
-        title="Add amount"
-        subTitle="Lorem ipsum dolor sit amet, consec"
-        onPress={() => {}}
-      />
+          </CommonCardBox>
+        </View>
+            
+        <OptionCard
+          style={{marginTop:wp(20)}}
+          title="Add amount"
+          subTitle="Lorem ipsum dolor sit amet, consec"
+          onPress={() => {}}
+        />
 
-      <FooterNoteCard
-        title="Note"
-        subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
-        customStyle={styles.advanceOptionStyle}
-      />
+        <FooterNoteCard
+          title="Note"
+          subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
+          customStyle={styles.advanceOptionStyle}
+        />
+      </ScrollView>
     </ScreenContainer>
   );
 }
@@ -82,33 +79,8 @@ const getStyles = theme =>
   StyleSheet.create({
     advanceOptionStyle: {
       flex: 1,
-      position: 'absolute',
-      bottom: 10,
-      margin: hp(20),
+      marginHorizontal: hp(2),
       backgroundColor: 'none',
-    },
-    qrViewWrapper: {
-      backgroundColor: theme.colors.cardBackground,
-      alignItems: 'center',
-      marginHorizontal: '25%',
-      marginTop:wp(45),
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-      width: 200,
-    },
-    qrImageContainer:{width: 200, height: 180},
-    qrImageWrapper: {
-      width: wp(180),
-      height: wp(180),
-      alignItems:'center',
-      justifyContent:'center',
-      backgroundColor: '#fff',
-    },
-    qrFooterText: {
-      textAlign: 'center',
-      color: '#FFBA00',
-      fontSize: CommonStyles.body2.fontSize,
-      paddingVertical: 4,
     },
     detailsWrapper: {
       flexDirection: 'row',

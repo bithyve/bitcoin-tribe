@@ -45,7 +45,7 @@ const getStyles = theme =>
       backgroundColor: theme.colors.inputBackground,
     },
     inputContainer: {
-      height: hp(50),
+      height: hp(55),
       width: '80%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
