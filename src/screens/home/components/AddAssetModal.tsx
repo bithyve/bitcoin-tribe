@@ -4,25 +4,35 @@ import { useTheme } from 'react-native-paper';
 
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
-import ModalOption from 'src/components/ModalOption';
+import SelectOption from 'src/components/SelectOption';
 
 function AddAssetModal() {
   const theme = useTheme();
   const styles = getStyles(theme);
   return (
     <View>
-      <ModalOption
+      <SelectOption
         title="Issue new"
         icon={<AddNewIcon />}
+        backColor={theme.colors.inputBackground}
+        style={styles.optionStyle}
         onPress={() => console.log('press')}
       />
-      <ModalOption
+      <SelectOption
         title="Receive"
         icon={<ReceiveIcon />}
+        backColor={theme.colors.inputBackground}
+        style={styles.optionStyle}
         onPress={() => console.log('press')}
       />
     </View>
   );
 }
-const getStyles = theme => StyleSheet.create({});
+const getStyles = theme =>
+  StyleSheet.create({
+    optionStyle: {
+      marginVertical: 10,
+      paddingHorizontal: 15,
+    },
+  });
 export default AddAssetModal;

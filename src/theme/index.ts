@@ -24,6 +24,7 @@ const CombinedDefaultTheme = {
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
+    toggleBackground: Colors.Quartz,
   },
 };
 const CombinedDarkTheme = {
@@ -44,6 +45,7 @@ const CombinedDarkTheme = {
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
+    toggleBackground: Colors.Quartz,
   },
 };
 
