@@ -29,12 +29,6 @@ function WalletSetupOption({ navigation }) {
         subTitle="Lorem ipsum dolor si"
         onPress={() => console.log('Recovery Phrase')}
       />
-      <OptionCard
-        title="Advanced Options"
-        subTitle="Lorem ipsum dolor sit amet, consec"
-        style={styles.advanceOptionStyle}
-        onPress={() => console.log('Advanced Options')}
-      />
     </ScreenContainer>
   );
 }
@@ -48,6 +42,7 @@ const getStyles = theme =>
     },
     title: {
       color: theme.colors.headingColor,
+      marginVertical: hp(20),
     },
   });
 export default WalletSetupOption;

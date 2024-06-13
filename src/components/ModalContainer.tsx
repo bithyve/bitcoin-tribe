@@ -54,16 +54,18 @@ const ModalContainer = (props: ModalContainerProps) => {
 const getStyles = theme =>
   StyleSheet.create({
     containerStyle: {
+      position: 'absolute',
       backgroundColor: theme.colors.cardBackground,
-      padding: 25,
+      padding: 20,
       borderRadius: 10,
-      top: hp(200),
+      bottom: 2,
+      alignSelf: 'flex-end',
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginVertical: 10,
+      marginVertical: 20,
     },
     titleText: {
       color: theme.colors.headingColor,

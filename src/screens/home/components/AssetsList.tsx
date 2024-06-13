@@ -9,29 +9,45 @@ import AddNewTile from 'src/components/AddNewTile';
 
 type AssetsListProps = {
   AssetsData: any;
-  onPress?: () => void;
+  onPressAsset?: () => void;
+  onPressAddNew?: () => void;
 };
 type ItemProps = {
   title: string;
   details?: string;
   asset?: any;
   tag?: string;
-  onPress?: () => void;
+  onPressAddNew?: () => void;
+  onPressAsset?: () => void;
   index?: number;
 };
 const ASSET_HEIGHT = hp(205);
 const ASSET_MARGIN = hp(6) * 2;
 const ASSET_ALTERNATE_SPACE = hp(50);
-const Item = ({ asset, title, details, tag, onPress, index }: ItemProps) => {
+const Item = ({
+  asset,
+  title,
+  details,
+  tag,
+  onPressAddNew,
+  onPressAsset,
+  index,
+}: ItemProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
     <View style={styles.alternateSpace}>
       {asset ? (
-        <AssetCard asset={asset} title={title} details={details} tag={tag} />
+        <AssetCard
+          asset={asset}
+          title={title}
+          details={details}
+          tag={tag}
+          onPress={onPressAsset}
+        />
       ) : (
-        <AddNewTile title={title} onPress={onPress} />
+        <AddNewTile title={title} onPress={onPressAddNew} />
       )}
     </View>
   );
@@ -48,7 +64,7 @@ const ListHeaderComponent = () => {
 };
 
 function AssetsList(props: AssetsListProps) {
-  const { AssetsData, onPress } = props;
+  const { AssetsData, onPressAsset, onPressAddNew } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -68,7 +84,8 @@ function AssetsList(props: AssetsListProps) {
                 asset={item.asset}
                 details={item.details}
                 tag={item.tag}
-                onPress={onPress}
+                onPressAsset={onPressAsset}
+                onPressAddNew={onPressAddNew}
                 index={index}
               />
             );

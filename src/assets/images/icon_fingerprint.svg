@@ -1,0 +1,16 @@
+<svg id="icon_fingerprint" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_46781" data-name="Group 46781" transform="translate(-36 -290)">
+    <g id="Group_46780" data-name="Group 46780">
+      <path id="Path_118088" data-name="Path 118088" d="M16,1a1,1,0,0,0,0,2h3a2,2,0,0,1,2,2V8a1,1,0,0,0,2,0V5a4,4,0,0,0-4-4Z" transform="translate(39 293)" fill="#6c6c67"/>
+      <path id="Path_118089" data-name="Path 118089" d="M8,23a1,1,0,0,0,0-2H5a2,2,0,0,1-2-2V16a1,1,0,0,0-2,0v3a4,4,0,0,0,4,4Z" transform="translate(39 293)" fill="#6c6c67"/>
+      <path id="Path_118090" data-name="Path 118090" d="M9,2A1,1,0,0,0,8,1H5A4,4,0,0,0,1,5V8A1,1,0,0,0,3,8V5A2,2,0,0,1,5,3H8A1,1,0,0,0,9,2Z" transform="translate(39 293)" fill="#6c6c67"/>
+      <path id="Path_118091" data-name="Path 118091" d="M16,23a1,1,0,0,1,0-2h3a2,2,0,0,0,2-2V16a1,1,0,0,1,2,0v3a4,4,0,0,1-4,4Z" transform="translate(39 293)" fill="#6c6c67"/>
+    </g>
+    <g id="Group_46779" data-name="Group 46779">
+      <path id="Path_118092" data-name="Path 118092" d="M12,5.5A6.047,6.047,0,0,0,7.764,7.225,5.866,5.866,0,0,0,6,11.41v2.981a1,1,0,0,0,2,0V11.41A3.866,3.866,0,0,1,9.165,8.652a4.068,4.068,0,0,1,5.342-.288,1,1,0,1,0,1.236-1.572A6.058,6.058,0,0,0,12,5.5Z" transform="translate(39 293)" fill="#e0e0e0"/>
+      <path id="Path_118093" data-name="Path 118093" d="M17.808,9.928a1,1,0,0,0-1.934.509A3.823,3.823,0,0,1,16,11.41V16a1,1,0,0,0,2,0V11.41A5.825,5.825,0,0,0,17.808,9.928Z" transform="translate(39 293)" fill="#e0e0e0"/>
+      <path id="Path_118094" data-name="Path 118094" d="M12,8.5a3.075,3.075,0,0,0-2.1.816A2.806,2.806,0,0,0,9,11.367V14.5a1,1,0,0,0,2,0V11.367a.807.807,0,0,1,.268-.589,1.1,1.1,0,0,1,1.464,0,.807.807,0,0,1,.268.589V15a.807.807,0,0,1-.268.589,1.075,1.075,0,0,1-.732.278,1,1,0,1,0,0,2,3.075,3.075,0,0,0,2.1-.816A2.806,2.806,0,0,0,15,15V11.367a2.806,2.806,0,0,0-.9-2.051A3.074,3.074,0,0,0,12,8.5Z" transform="translate(39 293)" fill="#e0e0e0"/>
+    </g>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>

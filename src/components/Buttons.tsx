@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp } from 'src/constants/responsive';
@@ -9,11 +9,11 @@ import AppTouchable from './AppTouchable';
 import SecondaryCTA from './SecondaryCTA';
 
 type PrimaryCTAProps = {
-  primaryOnPress: any;
-  secondaryOnPress?: any;
+  primaryOnPress: () => void;
+  secondaryOnPress?: () => void;
   primaryTitle: string;
   width?: any;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   secondaryTitle?: string;
 };
 
