@@ -1,9 +1,9 @@
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
-import { View, StyleSheet } from 'react-native';
 
 function WalletDetails({ navigation }) {
   return (
