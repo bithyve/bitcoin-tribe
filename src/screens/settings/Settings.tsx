@@ -73,7 +73,7 @@ function SettingsScreen() {
 const getStyles = theme =>
   StyleSheet.create({
     wrapper: {
-      marginBottom: hp(20),
+      marginBottom: hp(30),
     },
   });
 export default SettingsScreen;
