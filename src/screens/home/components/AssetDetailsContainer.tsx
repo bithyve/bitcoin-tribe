@@ -13,7 +13,7 @@ type assetDetailsProps = {
 };
 
 function AssetDetailsContainer(props: assetDetailsProps) {
-  const { tag = 'COLLECTIBLES' } = props;
+  const { tag } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (

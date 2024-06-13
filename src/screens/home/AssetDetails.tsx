@@ -8,7 +8,7 @@ function AssetDetails() {
   return (
     <ScreenContainer>
       <AppHeader enableBack={true} />
-      <AssetDetailsContainer />
+      <AssetDetailsContainer tag="COLLECTIBLES" />
     </ScreenContainer>
   );
 }
