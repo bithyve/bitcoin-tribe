@@ -6,6 +6,7 @@ import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import AssetChip from './AssetChip';
+import { AppTheme } from 'src/theme';
 
 type AssetCardProps = {
   asset?: string;
@@ -17,7 +18,7 @@ type AssetCardProps = {
 
 const AssetCard = (props: AssetCardProps) => {
   const { asset, title, details, tag, onPress } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable onPress={onPress} style={styles.container}>
@@ -38,17 +39,10 @@ const AssetCard = (props: AssetCardProps) => {
           style={styles.imageStyle}
         />
         <View style={styles.contentWrapper}>
-          <AppText
-            variant="body1"
-            style={styles.titleText}
-            testID={`text_${title}`}>
+          <AppText variant="body1" style={styles.titleText}>
             {title}
           </AppText>
-          <AppText
-            variant="body2"
-            style={styles.detailsText}
-            numberOfLines={1}
-            testID={`text_assetsDetails`}>
+          <AppText variant="body2" style={styles.detailsText} numberOfLines={1}>
             {details}
           </AppText>
         </View>
@@ -56,7 +50,7 @@ const AssetCard = (props: AssetCardProps) => {
     </AppTouchable>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       height: hp(205),

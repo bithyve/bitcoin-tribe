@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
+import { AppTheme } from 'src/theme';
 const TransactionData = [
   {
     id: 1,
@@ -56,7 +57,7 @@ const TransactionData = [
   },
 ];
 function WalletTransactionList() {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <FlatList
@@ -75,7 +76,7 @@ function WalletTransactionList() {
     />
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginVertical: hp(5),

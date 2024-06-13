@@ -13,9 +13,10 @@ import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import { hp, windowHeight } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 function SettingsScreen() {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
   const [darkTheme, setDarkTheme] = useState(false);
@@ -31,6 +32,7 @@ function SettingsScreen() {
           enableSwitch={true}
           onValueChange={() => setDarkTheme(!darkTheme)}
           toggleValue={darkTheme}
+          testID="dark_mode"
         />
         <SelectOption
           title="Biometric Unlock"
@@ -39,6 +41,7 @@ function SettingsScreen() {
           enableSwitch={true}
           onValueChange={() => setBiometrics(!biometrics)}
           toggleValue={biometrics}
+          testID="biometric_unlock"
         />
       </View>
       <ScrollView
@@ -49,30 +52,34 @@ function SettingsScreen() {
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconLangCurrency />}
           onPress={() => console.log('press')}
+          testID="language_and_currency"
         />
         <SelectOption
           title="App Backup"
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconBackup />}
           onPress={() => console.log('press')}
+          testID="app_backup"
         />
         <SelectOption
           title="Connection Settings"
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconNodes />}
           onPress={() => console.log('press')}
+          testID="connection_settings"
         />
         <SelectOption
           title="App Info , Settings and Help"
           subTitle="App version and details"
           icon={<IconAppInfo />}
           onPress={() => console.log('press')}
+          testID="app_info"
         />
       </ScrollView>
     </ScreenContainer>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
       marginBottom: windowHeight > 600 ? hp(30) : hp(15),

@@ -4,9 +4,10 @@ import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { hp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 const ScreenContainer = props => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <SafeAreaView style={{ ...styles.container, ...props.style }}>
@@ -24,7 +25,7 @@ const ScreenContainer = props => {
   );
 };
 
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,

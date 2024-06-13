@@ -6,6 +6,7 @@ import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
+import { AppTheme } from 'src/theme';
 
 type OptionCardProps = {
   icon?: React.ReactNode;
@@ -17,7 +18,7 @@ type OptionCardProps = {
 
 function OptionCard(props: OptionCardProps) {
   const { icon, title, subTitle, style, onPress } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
@@ -40,7 +41,7 @@ function OptionCard(props: OptionCardProps) {
     </AppTouchable>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',

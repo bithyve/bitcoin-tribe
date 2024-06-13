@@ -5,9 +5,10 @@ import { useTheme } from 'react-native-paper';
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import SelectOption from 'src/components/SelectOption';
+import { AppTheme } from 'src/theme';
 
 function AddAssetModal() {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View>
@@ -17,6 +18,7 @@ function AddAssetModal() {
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => console.log('press')}
+        testID="issue_new"
       />
       <SelectOption
         title="Receive"
@@ -24,11 +26,12 @@ function AddAssetModal() {
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => console.log('press')}
+        testID="receive"
       />
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     optionStyle: {
       marginVertical: 10,

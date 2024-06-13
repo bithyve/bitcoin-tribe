@@ -8,6 +8,7 @@ import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import { AppTheme } from 'src/theme';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -17,23 +18,17 @@ type WalletTransactionsProps = {
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType = 'send' } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
       <View style={styles.transDetailsWrapper}>
         {transType === 'send' ? <SendTXNIcon /> : <RecieveTXNIcon />}
         <View style={styles.contentWrapper}>
-          <AppText
-            variant="body1"
-            testID="text_transId"
-            style={styles.transIdText}>
+          <AppText variant="body1" style={styles.transIdText}>
             {transId}
           </AppText>
-          <AppText
-            variant="body2"
-            testID="text_transDate"
-            style={styles.transDateText}>
+          <AppText variant="body2" style={styles.transDateText}>
             {transDate}
           </AppText>
         </View>
@@ -41,10 +36,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       <View style={styles.amountWrapper}>
         <View style={styles.amtIconWrapper}>
           <IconBitcoin />
-          <AppText
-            variant="body1"
-            testID="text_transAmount"
-            style={styles.amountText}>
+          <AppText variant="body1" style={styles.amountText}>
             &nbsp;{transAmount}
           </AppText>
         </View>
@@ -53,7 +45,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -7,6 +7,7 @@ import { wp, hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import RoundedCTA from 'src/components/RoundedCTA';
 import DownloadIcon from 'src/assets/images/icon_buy.svg';
+import { AppTheme } from 'src/theme';
 
 type assetDetailsProps = {
   tag: string;
@@ -14,7 +15,7 @@ type assetDetailsProps = {
 
 function AssetDetailsContainer(props: assetDetailsProps) {
   const { tag } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
@@ -121,7 +122,7 @@ function AssetDetailsContainer(props: assetDetailsProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       height: '100%',

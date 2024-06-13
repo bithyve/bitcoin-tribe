@@ -24,14 +24,12 @@ interface Props extends ComponentProps<typeof Text> {
   children: React.ReactNode;
   variant?: VariantProp;
   style?: StyleProp<TextStyle>;
-  testID: string;
 }
 
 const AppText: React.FC<Props> = ({
   children,
   variant = TextVariants.body1,
   style,
-  testID,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -64,8 +62,21 @@ const AppText: React.FC<Props> = ({
     }
   }, [variant]);
 
+  const generatedTestID = useMemo(() => {
+    // Ensure children is a string or can be converted to a string
+    const childrenText =
+      typeof children === 'string' ? children : JSON.stringify(children);
+
+    // Replace spaces and other characters to make it a valid testID
+    const sanitizedChildrenText = childrenText
+      ?.replace(/\s+/g, '-')
+      ?.replace(/[^a-zA-Z0-9-_]/g, '');
+
+    return `app-text-${sanitizedChildrenText}`;
+  }, [children]);
+
   return (
-    <Text style={[textStyle, style]} testID={testID}>
+    <Text style={[textStyle, style]} testID={generatedTestID}>
       {children}
     </Text>
   );
