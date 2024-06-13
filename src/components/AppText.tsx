@@ -69,8 +69,8 @@ const AppText: React.FC<Props> = ({
 
     // Replace spaces and other characters to make it a valid testID
     const sanitizedChildrenText = childrenText
-      .replace(/\s+/g, '-')
-      .replace(/[^a-zA-Z0-9-_]/g, '');
+      ?.replace(/\s+/g, '-')
+      ?.replace(/[^a-zA-Z0-9-_]/g, '');
 
     return `app-text-${sanitizedChildrenText}`;
   }, [children]);
