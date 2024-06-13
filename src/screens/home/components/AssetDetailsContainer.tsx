@@ -131,6 +131,8 @@ const getStyles = theme =>
       height: '35%',
       position: 'relative',
       marginBottom: hp(20),
+      borderBottomColor: 'gray',
+      borderBottomWidth: 0.8,
     },
     assetStyle: {
       height: '100%',
