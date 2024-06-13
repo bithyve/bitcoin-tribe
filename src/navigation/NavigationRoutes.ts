@@ -9,5 +9,6 @@ export const NavigationRoutes = {
   SENDSCREEN:'SendScreen',
   RECEIVESCREEN:'ReceiveScreen',
   WALLETDETAILS: 'WalletDetails',
+  ASSETDETAILS: 'AssetDetails',
   // Add other routes as needed
 };

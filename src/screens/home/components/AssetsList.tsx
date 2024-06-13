@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
@@ -9,22 +9,45 @@ import AddNewTile from 'src/components/AddNewTile';
 
 type AssetsListProps = {
   AssetsData: any;
-  onPress?: () => void;
+  onPressAsset?: () => void;
+  onPressAddNew?: () => void;
 };
 type ItemProps = {
   title: string;
   details?: string;
   asset?: any;
   tag?: string;
-  onPress?: () => void;
+  onPressAddNew?: () => void;
+  onPressAsset?: () => void;
+  index?: number;
 };
-const Item = ({ asset, title, details, tag, onPress }: ItemProps) => {
+const ASSET_HEIGHT = hp(205);
+const ASSET_MARGIN = hp(6) * 2;
+const ASSET_ALTERNATE_SPACE = hp(50);
+const Item = ({
+  asset,
+  title,
+  details,
+  tag,
+  onPressAddNew,
+  onPressAsset,
+  index,
+}: ItemProps) => {
+  const theme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
+
   return (
-    <View>
+    <View style={styles.alternateSpace}>
       {asset ? (
-        <AssetCard asset={asset} title={title} details={details} tag={tag} />
+        <AssetCard
+          asset={asset}
+          title={title}
+          details={details}
+          tag={tag}
+          onPress={onPressAsset}
+        />
       ) : (
-        <AddNewTile title={title} onPress={onPress} />
+        <AddNewTile title={title} onPress={onPressAddNew} />
       )}
     </View>
   );
@@ -40,50 +63,53 @@ const ListHeaderComponent = () => {
   );
 };
 
-const ListFooterComponent = () => {
-  return <AddNewTile title="Add New" />;
-};
-
 function AssetsList(props: AssetsListProps) {
-  const { AssetsData, onPress } = props;
+  const { AssetsData, onPressAsset, onPressAddNew } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View>
       <ListHeaderComponent />
-      <FlatList
-        //   ListHeaderComponent={ListHeaderComponent}
-        //   ListFooterComponent={ListFooterComponent}
-        style={styles.container}
-        numColumns={2}
-        data={AssetsData}
-        renderItem={({ item }) => (
-          <Item
-            title={item.title}
-            asset={item.asset}
-            details={item.details}
-            tag={item.tag}
-            onPress={onPress}
-          />
-        )}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-        //   ItemSeparatorComponent={() => <View style={{ margin: 5 }} />}
-        //   stickyHeaderIndices={[0, 6, 13]}
-      />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        directionalLockEnabled={true}
+        alwaysBounceVertical={false}>
+        <View style={styles.assetWrapper}>
+          {AssetsData.map((item, index) => {
+            return (
+              <Item
+                key={index}
+                title={item.title}
+                asset={item.asset}
+                details={item.details}
+                tag={item.tag}
+                onPressAsset={onPressAsset}
+                onPressAddNew={onPressAddNew}
+                index={index}
+              />
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme, index = null) =>
   StyleSheet.create({
     container: {
-      marginVertical: hp(5),
-      maxHeight: '82%',
-      flexGrow: 0,
+      marginVertical: hp(10),
     },
     listHeaderText: {
       color: theme.colors.headingColor,
       marginTop: hp(25),
+    },
+    assetWrapper: {
+      height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
+      flexWrap: 'wrap',
+    },
+    alternateSpace: {
+      marginTop: index % 3 === 2 ? hp(50) : 0,
     },
   });
 export default AssetsList;

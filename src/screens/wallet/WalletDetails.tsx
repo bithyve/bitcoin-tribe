@@ -1,23 +1,16 @@
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import AppHeader from 'src/components/AppHeader';
-import IconSetting from 'src/assets/images/icon_settings.svg';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
-import { View, StyleSheet } from 'react-native';
 
 function WalletDetails({ navigation }) {
   return (
     <ScreenContainer style={styles.container}>
-      <View style={styles.appHeaderWrapper}>
-        <AppHeader rightIcon={<IconSetting />} navigation={navigation} />
-      </View>
       <View style={styles.walletHeaderWrapper}>
         <WalletDetailsHeader
-          profile={
-            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-          }
+          profile={''}
           username="Dustin Henderson"
           balance="0.0134"
         />
@@ -33,11 +26,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
   },
-  appHeaderWrapper: {
-    height: '5%',
-  },
   walletHeaderWrapper: {
-    height: '28%',
+    height: '35%',
     alignItems: 'center',
     justifyContent: 'center',
   },

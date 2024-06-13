@@ -24,7 +24,7 @@ function AddPicture(props: addPictureProps) {
           </View>
           <View>
             <AppText
-              variant="secondary"
+              variant="smallCTA"
               style={styles.addPictureText}
               testID={'text_addPicture'}>
               ADD PICTURE

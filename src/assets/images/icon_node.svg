@@ -1,0 +1,9 @@
+<svg id="icon_node" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="code-branch" transform="translate(3 3)">
+    <path id="Path_117930" data-name="Path 117930" d="M6.5,7a1,1,0,0,0-2,0V17a1,1,0,0,0,2,0V16A2.5,2.5,0,0,1,9,13.5h6A4.5,4.5,0,0,0,19.5,9V7a1,1,0,0,0-2,0V9A2.5,2.5,0,0,1,15,11.5H9a4.479,4.479,0,0,0-2.5.758Z" fill="#6c6c67"/>
+    <path id="Path_117931" data-name="Path 117931" d="M20.975,6.975a3.5,3.5,0,1,1,0-4.95A3.5,3.5,0,0,1,20.975,6.975ZM17.439,3.439a1.5,1.5,0,1,0,2.121,0A1.5,1.5,0,0,0,17.439,3.439Z" fill="#e0e0e0" fill-rule="evenodd"/>
+    <path id="Path_117932" data-name="Path 117932" d="M3.025,6.975a3.5,3.5,0,1,0,0-4.95A3.5,3.5,0,0,0,3.025,6.975ZM4.439,5.561a1.5,1.5,0,1,1,2.121,0A1.5,1.5,0,0,1,4.439,5.561Z" fill="#e0e0e0" fill-rule="evenodd"/>
+    <path id="Path_117933" data-name="Path 117933" d="M3.025,21.975a3.5,3.5,0,1,0,0-4.95A3.5,3.5,0,0,0,3.025,21.975Zm1.414-1.414a1.5,1.5,0,1,1,2.121,0A1.5,1.5,0,0,1,4.439,20.561Z" fill="#e0e0e0" fill-rule="evenodd"/>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>

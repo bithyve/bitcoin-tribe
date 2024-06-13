@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import UserAvatar from 'src/components/UserAvatar';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import TransactionButtons from './TransactionButtons';
+import WalletSectionHeader from './WalletSectionHeader';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -13,12 +14,13 @@ type walletDetailsHeaderProps = {
   balance: string;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
+  const navigation = useNavigation();
   const theme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, balance } = props;
   return (
-    <View style={styles.contentWrapper}>
-      <UserAvatar size={70} imageSource={profile} />
+    <View style={styles.container}>
+      <WalletSectionHeader profile={profile} />
       <AppText
         variant="body1"
         style={styles.usernameText}
@@ -44,16 +46,12 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
 }
 const getStyles = theme =>
   StyleSheet.create({
-    contentWrapper: {
+    container: {
       alignItems: 'center',
       width: '100%',
-      // position: 'absolute',
-      // top: 30,
-      // left: 20,
       paddingBottom: 20,
       borderBottomWidth: 0.5,
       borderBottomColor: 'gray',
-      marginBottom: 10,
     },
     usernameText: {
       color: theme.colors.accent3,
