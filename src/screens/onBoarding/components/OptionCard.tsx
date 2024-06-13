@@ -8,11 +8,11 @@ import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 
 type OptionCardProps = {
-  icon?: any;
+  icon?: React.ReactNode;
   title: string;
   subTitle: string;
   style?: StyleProp<ViewStyle>;
-  onPress?: any;
+  onPress?: () => void;
 };
 
 function OptionCard(props: OptionCardProps) {
