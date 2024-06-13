@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -6,12 +6,15 @@ import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import { hp, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type addPictureProps = {
   imageSource: any;
   onPress: any;
 };
 function AddPicture(props: addPictureProps) {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding } = translations;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource, onPress } = props;
@@ -27,7 +30,7 @@ function AddPicture(props: addPictureProps) {
               variant="smallCTA"
               style={styles.addPictureText}
               testID={'text_addPicture'}>
-              ADD PICTURE
+              {onBoarding.addPicture}
             </AppText>
           </View>
         </View>
