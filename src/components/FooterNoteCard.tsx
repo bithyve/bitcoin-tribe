@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -7,7 +7,7 @@ import { hp } from 'src/constants/responsive';
 type FooterNoteCardProps = {
   title: string;
   subTitle: string;
-  customStyle?: any;
+  customStyle?: StyleProp<ViewStyle>;
 };
 
 function FooterNoteCard(props: FooterNoteCardProps) {

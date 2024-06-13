@@ -12,6 +12,7 @@ import CommonCardBox from 'src/components/CommonCardBox';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import FooterNoteCard from 'src/components/FooterNoteCard';
 import Clipboard from '@react-native-clipboard/clipboard';
+import QRCode from 'react-native-qrcode-svg';
 
 function ReceiveScreen() {
   const theme = useTheme();
@@ -31,9 +32,10 @@ function ReceiveScreen() {
       />
       <View style={styles.qrViewWrapper}>
         <View style={styles.qrImageWrapper}>
-          <Image
-           source={require('../../assets/images/icon_qr_code.png')}
-           style={styles.qrImageContainer} />
+          <QRCode
+            value={"https://www.google.com/"}
+            size={wp(180)}
+          />
         </View>
         <Text style={styles.qrFooterText}>Invoice Address</Text>
       </View>
@@ -62,7 +64,7 @@ function ReceiveScreen() {
       </View>
           
       <OptionCard
-        style={{marginTop:wp(30)}}
+        style={{marginTop:wp(15)}}
         title="Add amount"
         subTitle="Lorem ipsum dolor sit amet, consec"
         onPress={() => {}}
@@ -89,15 +91,17 @@ const getStyles = theme =>
       backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
       marginHorizontal: '25%',
-      marginTop:wp(55),
+      marginTop:wp(45),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
       width: 200,
     },
     qrImageContainer:{width: 200, height: 180},
     qrImageWrapper: {
-      width: 200,
-      height: 180,
+      width: wp(180),
+      height: wp(180),
+      alignItems:'center',
+      justifyContent:'center',
       backgroundColor: '#fff',
     },
     qrFooterText: {
