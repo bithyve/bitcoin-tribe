@@ -33,7 +33,7 @@ function AddPicture(props: addPictureProps) {
         </View>
       ) : (
         <View style={styles.container}>
-          <UserAvatar size={70} imageSource={imageSource} />
+          <UserAvatar size={wp(70)} imageSource={imageSource} />
         </View>
       )}
     </TouchableOpacity>
@@ -47,9 +47,9 @@ const getStyles = theme =>
       marginVertical: hp(25),
     },
     iconImageWrapper: {
-      height: hp(70),
+      height: wp(70),
       width: wp(70),
-      borderRadius: 35,
+      borderRadius: wp(50),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.profileBackground,

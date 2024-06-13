@@ -5,10 +5,16 @@ import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 // import QRCodeScanner from 'react-native-qrcode-scanner';÷
 
-function SendScreen() {
+
+interface SendScreenProps {
+  navigation: any;
+}
+
+function SendScreen({navigation}: SendScreenProps) {
   return (
     <ScreenContainer>
       <AppHeader
@@ -27,7 +33,7 @@ function SendScreen() {
         title="or Enter details manually"
         subTitle="Lorem ipsum dolor sit amet, consec"
         style={styles.advanceOptionStyle}
-        onPress={() => {}}
+        onPress={() => navigation.navigate(NavigationRoutes.RECEIVESCREEN)}
       />
     </ScreenContainer>
   );

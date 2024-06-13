@@ -64,7 +64,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsMedium,
     fontWeight: '600',
   },
-  secondary: {
+  secondaryCta: {
     fontSize: 13,
     fontFamily: Fonts.PoppinsSemiBold,
   },
