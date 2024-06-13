@@ -4,6 +4,7 @@ import { TextInput, useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 import CommonStyles from 'src/common/styles/CommonStyles';
+import { AppTheme } from 'src/theme';
 
 type TextFieldProps = {
   icon?: any;
@@ -15,7 +16,7 @@ type TextFieldProps = {
 
 const TextField = (props: TextFieldProps) => {
   const { icon, placeholder, value, keyboardType, onChangeText } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
@@ -35,7 +36,7 @@ const TextField = (props: TextFieldProps) => {
     </View>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -4,9 +4,10 @@ import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import WalletTransactionList from './WalletTransactionList';
+import { AppTheme } from 'src/theme';
 
 function WalletTransactionsContainer() {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
@@ -28,7 +29,7 @@ function WalletTransactionsContainer() {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(30),

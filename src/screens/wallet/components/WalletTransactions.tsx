@@ -8,6 +8,7 @@ import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import { AppTheme } from 'src/theme';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -17,7 +18,7 @@ type WalletTransactionsProps = {
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType = 'send' } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
@@ -53,7 +54,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -13,9 +13,10 @@ import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import { hp, windowHeight } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 function SettingsScreen() {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
   const [darkTheme, setDarkTheme] = useState(false);
@@ -72,7 +73,7 @@ function SettingsScreen() {
     </ScreenContainer>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
       marginBottom: windowHeight > 600 ? hp(30) : hp(15),

@@ -8,9 +8,10 @@ import { hp } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import { useTheme } from 'react-native-paper';
+import { AppTheme } from 'src/theme';
 
 function WalletSetupOption({ navigation }) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <ScreenContainer>
@@ -32,7 +33,7 @@ function WalletSetupOption({ navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     advanceOptionStyle: {
       flex: 1,

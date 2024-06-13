@@ -7,6 +7,7 @@ import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
+import { AppTheme } from 'src/theme';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -15,7 +16,7 @@ type walletDetailsHeaderProps = {
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, balance } = props;
   return (
@@ -44,7 +45,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',

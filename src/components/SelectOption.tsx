@@ -6,6 +6,7 @@ import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import Switch from './Switch';
+import { AppTheme } from 'src/theme';
 
 type SelectOptionProps = {
   icon: React.ReactNode;
@@ -19,7 +20,7 @@ type SelectOptionProps = {
   style?: StyleProp<ViewStyle>;
 };
 const SelectOption = (props: SelectOptionProps) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const {
     icon,
     title,
@@ -70,7 +71,7 @@ const SelectOption = (props: SelectOptionProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme, backColor) =>
+const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     container: {
       width: '100%',

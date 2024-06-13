@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { windowHeight, wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 type Props = {
   value: boolean;
@@ -12,7 +13,7 @@ type Props = {
 };
 
 function Switch({ value, onValueChange, loading, testID }: Props) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, value), [theme]);
 
   return (
@@ -32,7 +33,7 @@ function Switch({ value, onValueChange, loading, testID }: Props) {
     </TouchableOpacity>
   );
 }
-const getStyles = (theme, value) =>
+const getStyles = (theme: AppTheme, value) =>
   StyleSheet.create({
     container: {
       borderRadius: wp(15),

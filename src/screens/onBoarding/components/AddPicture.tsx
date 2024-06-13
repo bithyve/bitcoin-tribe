@@ -6,13 +6,14 @@ import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import { hp, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
+import { AppTheme } from 'src/theme';
 
 type addPictureProps = {
   imageSource: any;
   onPress: any;
 };
 function AddPicture(props: addPictureProps) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource, onPress } = props;
   return (
@@ -39,7 +40,7 @@ function AddPicture(props: addPictureProps) {
     </TouchableOpacity>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

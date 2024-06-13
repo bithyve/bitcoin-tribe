@@ -7,6 +7,7 @@ import { hp } from 'src/constants/responsive';
 import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
 import { useNavigation } from '@react-navigation/native';
+import { AppTheme } from 'src/theme';
 
 type AppHeaderProps = {
   title?: string;
@@ -18,7 +19,7 @@ type AppHeaderProps = {
 
 function AppHeader(props: AppHeaderProps) {
   const { title, subTitle, style, enableBack = true, rightIcon } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -60,7 +61,7 @@ function AppHeader(props: AppHeaderProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',

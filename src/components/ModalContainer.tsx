@@ -3,9 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import { Modal, Portal, Provider, useTheme } from 'react-native-paper';
 
 import IconClose from 'src/assets/images/icon_close.svg';
-import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
+import { AppTheme } from 'src/theme';
 
 type ModalContainerProps = {
   title: string;
@@ -16,7 +16,7 @@ type ModalContainerProps = {
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const { visible, onDismiss, children, title, subTitle } = props;
   const styles = getStyles(theme);
   return (
@@ -51,7 +51,7 @@ const ModalContainer = (props: ModalContainerProps) => {
     // </Provider>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     containerStyle: {
       position: 'absolute',
