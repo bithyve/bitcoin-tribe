@@ -47,9 +47,9 @@ const getStyles = theme =>
       marginVertical: hp(25),
     },
     iconImageWrapper: {
-      height: hp(70),
-      width: wp(70),
-      borderRadius: 35,
+      height: 70,
+      width: 70,
+      borderRadius: 70,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.profileBackground,
