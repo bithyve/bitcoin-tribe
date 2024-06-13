@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 
 type CommonCardProps = {
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   children: any;
 };
 
