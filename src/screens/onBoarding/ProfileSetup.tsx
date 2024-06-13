@@ -22,7 +22,6 @@ function ProfileSetup({ navigation }) {
   const [pickImage, setPickImage] = useState('');
 
   const PickImage = () => {
-    console.log('pick');
     launchImageLibrary(
       {
         title: 'Select a Image',

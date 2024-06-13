@@ -14,7 +14,7 @@ type Props = {
 function Switch({ value, onValueChange, loading, testID }: Props) {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, value), [theme]);
-  console.log('value', value);
+
   return (
     <TouchableOpacity
       testID={testID}

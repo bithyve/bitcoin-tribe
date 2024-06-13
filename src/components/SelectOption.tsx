@@ -32,7 +32,7 @@ const SelectOption = (props: SelectOptionProps) => {
     toggleValue,
   } = props;
   const styles = getStyles(theme, backColor);
-  console.log('select opt toggleValue', toggleValue);
+
   return (
     <AppTouchable onPress={onPress} style={[styles.touchableWrapper, style]}>
       <View style={styles.container}>
