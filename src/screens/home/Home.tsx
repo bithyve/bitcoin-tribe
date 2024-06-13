@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
@@ -54,6 +56,8 @@ const AssetsData = [
 ];
 
 function HomeScreen({ navigation }) {
+  const { translations } = useContext(LocalizationContext);
+  const { home } = translations;
   const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
@@ -75,8 +79,8 @@ function HomeScreen({ navigation }) {
         onPressAsset={() => navigation.navigate(NavigationRoutes.ASSETDETAILS)}
       />
       <ModalContainer
-        title="Add Assets"
-        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        title={home.addAssets}
+        subTitle={home.addAssetSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <AddAssetModal />

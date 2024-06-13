@@ -1,7 +1,8 @@
 {
   "common": {
     "next": "Next",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "receive": "Receive"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -12,9 +13,15 @@
     "createNew": "Create New",
     "createNewSubTitle": "Lorem ipsum dolor sit amet",
     "recoveryPhrase": "Recovery Phrase",
-    "recoveryPhraseSubTitle": "Lorem ipsum dolor si"
+    "recoveryPhraseSubTitle": "Lorem ipsum dolor si",
+    "addPicture": "ADD PICTURE"
   },
-  "home": {},
+  "home": {
+    "addAssets": "Add Assets",
+    "addAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "issueNew": "Issue new",
+    "myAssets": "My Assets"
+  },
   "settings": {},
   "wallet": {}
 }
