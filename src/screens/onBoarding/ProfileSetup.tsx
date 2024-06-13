@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,8 +16,11 @@ import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function ProfileSetup({ navigation }) {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding, common } = translations;
   const [username, setUsername] = useState('');
   const [pickImage, setPickImage] = useState('');
 
@@ -40,8 +43,8 @@ function ProfileSetup({ navigation }) {
   return (
     <ScreenContainer>
       <AppHeader
-        title="Enter your details"
-        subTitle="Lorem ipsum dolor sit amet, c"
+        title={onBoarding.profileSetupTitle}
+        subTitle={onBoarding.profileSetupSubTitle}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -57,13 +60,13 @@ function ProfileSetup({ navigation }) {
           <TextField
             value={username}
             onChangeText={text => setUsername(text)}
-            placeholder="Enter Name"
+            placeholder={onBoarding.enterUsername}
             keyboardType={'default'}
           />
           <View style={styles.primaryCTAContainer}>
             <Buttons
-              primaryTitle="Next"
-              secondaryTitle="Cancel"
+              primaryTitle={common.next}
+              secondaryTitle={common.cancel}
               primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
               secondaryOnPress={() => Toast('Secondary Pressed')}
               width={wp(120)}

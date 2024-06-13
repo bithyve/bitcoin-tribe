@@ -1,5 +1,20 @@
 {
+  "common": {
+    "next": "Next",
+    "cancel": "Cancel"
+  },
   "onBoarding": {
-    "welcome": "Bienvenido"
-  }
+    "welcome": "Bienvenido",
+    "profileSetupTitle": "Enter your details",
+    "profileSetupSubTitle": "Lorem ipsum dolor sit amet, c",
+    "enterUsername": "Enter Name",
+    "walletSetupTitle": "Welcome,",
+    "createNew": "Create New",
+    "createNewSubTitle": "Lorem ipsum dolor sit amet",
+    "recoveryPhrase": "Recovery Phrase",
+    "recoveryPhraseSubTitle": "Lorem ipsum dolor si"
+  },
+  "home": {},
+  "settings": {},
+  "wallet": {}
 }
