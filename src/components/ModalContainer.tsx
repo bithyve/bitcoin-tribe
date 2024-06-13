@@ -25,8 +25,7 @@ const ModalContainer = (props: ModalContainerProps) => {
       <Modal
         visible={visible}
         onDismiss={onDismiss}
-        contentContainerStyle={styles.containerStyle}
-        style={styles.modalContainer}>
+        contentContainerStyle={styles.containerStyle}>
         <View>
           <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
             <IconClose />
@@ -61,7 +60,6 @@ const getStyles = theme =>
       top: hp(220),
       bottom: 0,
     },
-    modalContainer: {},
     closeIconWrapper: {
       alignSelf: 'flex-end',
     },
