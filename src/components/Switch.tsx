@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
+import AppTouchable from './AppTouchable';
 
 type Props = {
   value: boolean;
@@ -21,10 +22,11 @@ function Switch({ value, onValueChange, loading, testID }: Props) {
   }, [testID, value]);
 
   return (
-    <TouchableOpacity
+    <AppTouchable
       testID={generatedTestId}
       onPress={onValueChange}
-      disabled={loading}>
+      disabled={loading}
+      activeOpacity={1}>
       <View style={styles.container}>
         <View style={styles.toggleWrapper}>
           {value ? (
@@ -34,7 +36,7 @@ function Switch({ value, onValueChange, loading, testID }: Props) {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </AppTouchable>
   );
 }
 const getStyles = (theme: AppTheme, value) =>
