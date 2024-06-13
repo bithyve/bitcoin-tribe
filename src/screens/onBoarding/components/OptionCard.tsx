@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
