@@ -3,10 +3,9 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp } from 'src/constants/responsive';
-import AppText from './AppText';
 import PrimaryCTA from './PrimaryCTA';
-import AppTouchable from './AppTouchable';
 import SecondaryCTA from './SecondaryCTA';
+import { AppTheme } from 'src/theme';
 
 type PrimaryCTAProps = {
   primaryOnPress: () => void;
@@ -25,7 +24,7 @@ function Buttons(props: PrimaryCTAProps) {
     secondaryTitle,
     secondaryOnPress,
   } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme, width);
   return (
     <View style={styles.container}>
@@ -36,7 +35,7 @@ function Buttons(props: PrimaryCTAProps) {
     </View>
   );
 }
-const getStyles = (theme, width) =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

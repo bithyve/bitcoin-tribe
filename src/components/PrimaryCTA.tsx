@@ -4,6 +4,7 @@ import { Button, useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
+import { AppTheme } from 'src/theme';
 
 type PrimaryCTAProps = {
   onPress: () => void;
@@ -14,7 +15,7 @@ type PrimaryCTAProps = {
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const {
     onPress,
     title,
@@ -36,7 +37,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     </View>
   );
 }
-const getStyles = (theme, width) =>
+const getStyles = (theme: AppTheme, width) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -8,9 +8,10 @@ import AppText from 'src/components/AppText';
 import AssetChip from 'src/components/AssetChip';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import ScreenContainer from '../../components/ScreenContainer';
+import { AppTheme } from 'src/theme';
 
 function Community() {
-  const theme = useTheme();
-  return <ScreenContainer></ScreenContainer>;
+  const theme: AppTheme = useTheme();
+  return <ScreenContainer />;
 }
 export default Community;

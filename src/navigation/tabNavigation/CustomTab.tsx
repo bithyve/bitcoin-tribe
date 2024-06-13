@@ -14,11 +14,12 @@ import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
+import { AppTheme } from 'src/theme';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const TabBarIcon = (isFocused, label) => {
@@ -91,7 +92,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   );
 };
 
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     tabBar: {
       flexDirection: 'row',

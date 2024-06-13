@@ -6,6 +6,7 @@ import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import Switch from './Switch';
+import { AppTheme } from 'src/theme';
 
 type SelectOptionProps = {
   icon: React.ReactNode;
@@ -17,9 +18,10 @@ type SelectOptionProps = {
   enableSwitch?: boolean;
   toggleValue?: boolean;
   style?: StyleProp<ViewStyle>;
+  testID: string;
 };
 const SelectOption = (props: SelectOptionProps) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const {
     icon,
     title,
@@ -30,6 +32,7 @@ const SelectOption = (props: SelectOptionProps) => {
     onValueChange,
     enableSwitch = false,
     toggleValue,
+    testID,
   } = props;
   const styles = getStyles(theme, backColor);
 
@@ -39,17 +42,11 @@ const SelectOption = (props: SelectOptionProps) => {
         <View style={styles.iconWrapper}>
           {icon}
           <View style={styles.contentWrapper}>
-            <AppText
-              variant="body1"
-              testID="text_SelectOptionTitle"
-              style={styles.titleStyle}>
+            <AppText variant="body1" style={styles.titleStyle}>
               {title}
             </AppText>
             {subTitle && (
-              <AppText
-                variant="body2"
-                testID="text_SelectOptionSubTitle"
-                style={styles.subTitleStyle}>
+              <AppText variant="body2" style={styles.subTitleStyle}>
                 {subTitle}
               </AppText>
             )}
@@ -60,7 +57,7 @@ const SelectOption = (props: SelectOptionProps) => {
             <Switch
               onValueChange={onValueChange}
               value={toggleValue}
-              testID="switch_selectOptn"
+              testID={testID}
             />
           ) : (
             <IconArrow />
@@ -70,7 +67,7 @@ const SelectOption = (props: SelectOptionProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme, backColor) =>
+const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     container: {
       width: '100%',

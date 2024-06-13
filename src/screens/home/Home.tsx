@@ -54,16 +54,16 @@ const AssetsData = [
 ];
 
 interface HomeScreenProps {
-  navigation:any;
+  navigation: any;
 }
 
-function HomeScreen({navigation}:HomeScreenProps) {
+function HomeScreen({ navigation }: HomeScreenProps) {
   const [visible, setVisible] = useState(false);
 
   const handleScreenNavigation = (screenPath: string) => {
     navigation.navigate(screenPath);
-  }
-  
+  };
+
   return (
     <ScreenContainer>
       <HomeHeader
@@ -72,7 +72,9 @@ function HomeScreen({navigation}:HomeScreenProps) {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => handleScreenNavigation(NavigationRoutes.SENDSCREEN)}
+        onPressScanner={() =>
+          handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+        }
         onPressNotification={() => console.log('notification')}
         onPressProfile={() =>
           navigation.navigate(NavigationRoutes.WALLETDETAILS)
