@@ -76,6 +76,7 @@ const getStyles = theme =>
     contentWrapper: {
       flexDirection: 'row',
       width: '77%',
+      alignItems: 'center',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),
