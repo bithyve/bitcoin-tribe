@@ -32,6 +32,7 @@ function SettingsScreen() {
           enableSwitch={true}
           onValueChange={() => setDarkTheme(!darkTheme)}
           toggleValue={darkTheme}
+          testID="dark_mode"
         />
         <SelectOption
           title="Biometric Unlock"
@@ -40,6 +41,7 @@ function SettingsScreen() {
           enableSwitch={true}
           onValueChange={() => setBiometrics(!biometrics)}
           toggleValue={biometrics}
+          testID="biometric_unlock"
         />
       </View>
       <ScrollView
@@ -50,24 +52,28 @@ function SettingsScreen() {
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconLangCurrency />}
           onPress={() => console.log('press')}
+          testID="language_and_currency"
         />
         <SelectOption
           title="App Backup"
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconBackup />}
           onPress={() => console.log('press')}
+          testID="app_backup"
         />
         <SelectOption
           title="Connection Settings"
           subTitle="Lorem ipsum dolor sit amet, consec "
           icon={<IconNodes />}
           onPress={() => console.log('press')}
+          testID="connection_settings"
         />
         <SelectOption
           title="App Info , Settings and Help"
           subTitle="App version and details"
           icon={<IconAppInfo />}
           onPress={() => console.log('press')}
+          testID="app_info"
         />
       </ScrollView>
     </ScreenContainer>

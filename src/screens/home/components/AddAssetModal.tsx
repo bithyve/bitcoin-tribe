@@ -18,6 +18,7 @@ function AddAssetModal() {
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => console.log('press')}
+        testID="issue_new"
       />
       <SelectOption
         title="Receive"
@@ -25,6 +26,7 @@ function AddAssetModal() {
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => console.log('press')}
+        testID="receive"
       />
     </View>
   );

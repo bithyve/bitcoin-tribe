@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -9,16 +9,20 @@ type Props = {
   value: boolean;
   onValueChange: () => void;
   loading?: boolean;
-  testID?: string;
+  testID: string;
 };
 
 function Switch({ value, onValueChange, loading, testID }: Props) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, value), [theme]);
 
+  const generatedTestId = useMemo(() => {
+    return `switch_${testID}` + (value ? '_on' : '_off');
+  }, [testID, value]);
+
   return (
     <TouchableOpacity
-      testID={testID}
+      testID={generatedTestId}
       onPress={onValueChange}
       disabled={loading}>
       <View style={styles.container}>
