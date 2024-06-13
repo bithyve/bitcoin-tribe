@@ -7,13 +7,14 @@ import UserAvatar from 'src/components/UserAvatar';
 import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
+import { AppTheme } from 'src/theme';
 
 type WalletSectionHeaderProps = {
   profile: string;
 };
 function WalletSectionHeader(props: WalletSectionHeaderProps) {
   const navigation = useNavigation();
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile } = props;
   return (
@@ -32,7 +33,7 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     headerWrapper: {
       alignItems: 'center',

@@ -7,6 +7,7 @@ import AssetCard from 'src/components/AssetCard';
 import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { AppTheme } from 'src/theme';
 
 type AssetsListProps = {
   AssetsData: any;
@@ -34,7 +35,7 @@ const Item = ({
   onPressAsset,
   index,
 }: ItemProps) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
@@ -57,7 +58,7 @@ const Item = ({
 const ListHeaderComponent = () => {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppText
@@ -71,7 +72,7 @@ const ListHeaderComponent = () => {
 
 function AssetsList(props: AssetsListProps) {
   const { AssetsData, onPressAsset, onPressAddNew } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View>
@@ -101,7 +102,7 @@ function AssetsList(props: AssetsListProps) {
     </View>
   );
 }
-const getStyles = (theme, index = null) =>
+const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       marginVertical: hp(10),

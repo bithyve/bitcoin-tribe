@@ -7,6 +7,7 @@ import IconImage from 'src/assets/images/icon_image.svg';
 import { hp, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { AppTheme } from 'src/theme';
 
 type addPictureProps = {
   imageSource: any;
@@ -15,9 +16,10 @@ type addPictureProps = {
 function AddPicture(props: addPictureProps) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding } = translations;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource, onPress } = props;
+
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       {!imageSource ? (
@@ -42,7 +44,7 @@ function AddPicture(props: addPictureProps) {
     </TouchableOpacity>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

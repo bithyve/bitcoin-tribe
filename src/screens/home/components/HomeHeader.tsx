@@ -11,6 +11,7 @@ import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
+import { AppTheme } from 'src/theme';
 
 type HomeHeaderProps = {
   profile: string;
@@ -29,7 +30,7 @@ function HomeHeader(props: HomeHeaderProps) {
     onPressNotification,
     onPressProfile,
   } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
@@ -37,18 +38,12 @@ function HomeHeader(props: HomeHeaderProps) {
         <View style={styles.contentWrapper}>
           <UserAvatar size={50} imageSource={''} />
           <View style={styles.userDetailsWrapper}>
-            <AppText
-              variant="body1"
-              style={styles.usernameText}
-              testID="text_username">
+            <AppText variant="body1" style={styles.usernameText}>
               {username}
             </AppText>
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
-              <AppText
-                variant="body5"
-                style={styles.balanceText}
-                testID="text_balance">
+              <AppText variant="body5" style={styles.balanceText}>
                 &nbsp;&nbsp;{balance}
               </AppText>
             </View>
@@ -66,7 +61,7 @@ function HomeHeader(props: HomeHeaderProps) {
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
