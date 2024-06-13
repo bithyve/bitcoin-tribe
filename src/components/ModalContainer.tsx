@@ -54,11 +54,12 @@ const ModalContainer = (props: ModalContainerProps) => {
 const getStyles = theme =>
   StyleSheet.create({
     containerStyle: {
+      position: 'absolute',
       backgroundColor: theme.colors.cardBackground,
       padding: 20,
       borderRadius: 10,
-      top: hp(220),
-      bottom: 0,
+      bottom: 2,
+      alignSelf: 'flex-end',
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',
