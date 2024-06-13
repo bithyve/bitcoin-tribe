@@ -24,10 +24,7 @@ function AddPicture(props: addPictureProps) {
             <IconImage />
           </View>
           <View>
-            <AppText
-              variant="smallCTA"
-              style={styles.addPictureText}
-              testID={'text_addPicture'}>
+            <AppText variant="smallCTA" style={styles.addPictureText}>
               ADD PICTURE
             </AppText>
           </View>

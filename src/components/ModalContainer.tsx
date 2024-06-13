@@ -31,16 +31,10 @@ const ModalContainer = (props: ModalContainerProps) => {
             <IconClose />
           </AppTouchable>
           <View style={styles.headingWrapper}>
-            <AppText
-              variant="heading1"
-              testID="text_modalTitle"
-              style={styles.titleText}>
+            <AppText variant="heading1" style={styles.titleText}>
               {title}
             </AppText>
-            <AppText
-              variant="body1"
-              testID="text_modalSubTitle"
-              style={styles.subTitleText}>
+            <AppText variant="body1" style={styles.subTitleText}>
               {subTitle}
             </AppText>
           </View>

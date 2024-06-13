@@ -12,16 +12,10 @@ function WalletTransactionsContainer() {
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
-        <AppText
-          variant="heading3"
-          testID="text_recentTrans"
-          style={styles.recentTransText}>
+        <AppText variant="heading3" style={styles.recentTransText}>
           Recent Transactions
         </AppText>
-        <AppText
-          variant="smallCTA"
-          testID="text_viewAll"
-          style={styles.viewAllText}>
+        <AppText variant="smallCTA" style={styles.viewAllText}>
           VIEW ALL
         </AppText>
       </View>

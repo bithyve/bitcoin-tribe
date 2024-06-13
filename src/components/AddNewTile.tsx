@@ -21,10 +21,7 @@ const AddNewTile = (props: AddNewTileProps) => {
     <AppTouchable onPress={onPress} style={styles.container}>
       <View style={styles.wrapper}>
         <AddNewIcon />
-        <AppText
-          variant="subtitle2"
-          style={styles.titleStyle}
-          testID="text_addnewTileTitle">
+        <AppText variant="subtitle2" style={styles.titleStyle}>
           {title}
         </AppText>
       </View>

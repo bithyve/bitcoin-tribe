@@ -39,17 +39,10 @@ const AssetCard = (props: AssetCardProps) => {
           style={styles.imageStyle}
         />
         <View style={styles.contentWrapper}>
-          <AppText
-            variant="body1"
-            style={styles.titleText}
-            testID={`text_${title}`}>
+          <AppText variant="body1" style={styles.titleText}>
             {title}
           </AppText>
-          <AppText
-            variant="body2"
-            style={styles.detailsText}
-            numberOfLines={1}
-            testID={'text_assetsDetails'}>
+          <AppText variant="body2" style={styles.detailsText} numberOfLines={1}>
             {details}
           </AppText>
         </View>

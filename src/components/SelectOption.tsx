@@ -40,17 +40,11 @@ const SelectOption = (props: SelectOptionProps) => {
         <View style={styles.iconWrapper}>
           {icon}
           <View style={styles.contentWrapper}>
-            <AppText
-              variant="body1"
-              testID="text_SelectOptionTitle"
-              style={styles.titleStyle}>
+            <AppText variant="body1" style={styles.titleStyle}>
               {title}
             </AppText>
             {subTitle && (
-              <AppText
-                variant="body2"
-                testID="text_SelectOptionSubTitle"
-                style={styles.subTitleStyle}>
+              <AppText variant="body2" style={styles.subTitleStyle}>
                 {subTitle}
               </AppText>
             )}

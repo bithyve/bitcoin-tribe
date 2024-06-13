@@ -38,18 +38,12 @@ function HomeHeader(props: HomeHeaderProps) {
         <View style={styles.contentWrapper}>
           <UserAvatar size={50} imageSource={''} />
           <View style={styles.userDetailsWrapper}>
-            <AppText
-              variant="body1"
-              style={styles.usernameText}
-              testID="text_username">
+            <AppText variant="body1" style={styles.usernameText}>
               {username}
             </AppText>
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
-              <AppText
-                variant="body5"
-                style={styles.balanceText}
-                testID="text_balance">
+              <AppText variant="body5" style={styles.balanceText}>
                 &nbsp;&nbsp;{balance}
               </AppText>
             </View>

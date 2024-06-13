@@ -25,16 +25,10 @@ function WalletTransactions(props: WalletTransactionsProps) {
       <View style={styles.transDetailsWrapper}>
         {transType === 'send' ? <SendTXNIcon /> : <RecieveTXNIcon />}
         <View style={styles.contentWrapper}>
-          <AppText
-            variant="body1"
-            testID="text_transId"
-            style={styles.transIdText}>
+          <AppText variant="body1" style={styles.transIdText}>
             {transId}
           </AppText>
-          <AppText
-            variant="body2"
-            testID="text_transDate"
-            style={styles.transDateText}>
+          <AppText variant="body2" style={styles.transDateText}>
             {transDate}
           </AppText>
         </View>
@@ -42,10 +36,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       <View style={styles.amountWrapper}>
         <View style={styles.amtIconWrapper}>
           <IconBitcoin />
-          <AppText
-            variant="body1"
-            testID="text_transAmount"
-            style={styles.amountText}>
+          <AppText variant="body1" style={styles.amountText}>
             &nbsp;{transAmount}
           </AppText>
         </View>

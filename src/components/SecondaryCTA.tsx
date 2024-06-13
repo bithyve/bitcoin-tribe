@@ -17,10 +17,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
   const styles = getStyles(theme);
   return (
     <AppTouchable onPress={onPress}>
-      <AppText
-        variant="secondaryCta"
-        style={styles.seconadryTitleStyle}
-        testID={'text_secondaryBtnTitle'}>
+      <AppText variant="secondaryCta" style={styles.seconadryTitleStyle}>
         {title}
       </AppText>
     </AppTouchable>
