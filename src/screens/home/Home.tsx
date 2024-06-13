@@ -69,7 +69,11 @@ function HomeScreen({ navigation }) {
           navigation.navigate(NavigationRoutes.WALLETDETAILS)
         }
       />
-      <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
+      <AssetsList
+        AssetsData={AssetsData}
+        onPressAddNew={() => setVisible(true)}
+        onPressAsset={() => navigation.navigate(NavigationRoutes.WALLETDETAILS)}
+      />
       <ModalContainer
         title="Add Assets"
         subTitle="Lorem ipsum dolor sit amet, consec tetur"
