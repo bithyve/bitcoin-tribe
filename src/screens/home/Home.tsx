@@ -5,6 +5,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 const AssetsData = [
   {
@@ -53,17 +54,14 @@ const AssetsData = [
   },
 ];
 
-interface HomeScreenProps {
-  navigation:any;
-}
-
-function HomeScreen({navigation}:HomeScreenProps) {
+function HomeScreen() {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
 
   const handleScreenNavigation = (screenPath: string) => {
-    navigation.navigate(screenPath);
-  }
-  
+    navigation.dispatch(CommonActions.navigate(screenPath));
+  };
+
   return (
     <ScreenContainer>
       <HomeHeader
@@ -72,10 +70,12 @@ function HomeScreen({navigation}:HomeScreenProps) {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => handleScreenNavigation(NavigationRoutes.SENDSCREEN)}
+        onPressScanner={() =>
+          handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+        }
         onPressNotification={() => console.log('notification')}
         onPressProfile={() =>
-          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+          handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
         }
       />
       <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />

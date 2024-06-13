@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import { hp } from 'src/constants/responsive';
 
-type CommonCardProps = {
+type CardProps = {
   style?: StyleProp<ViewStyle>;
-  children: any;
+  children: React.ReactNode;
 };
 
-function CommonCardBox(props: CommonCardProps) {
+function CardBox(props: CardProps) {
   const { style, children } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return <View style={[styles.container, style]}>{children}</View>;
 }
+
 const getStyles = theme =>
   StyleSheet.create({
     container: {
@@ -25,4 +25,5 @@ const getStyles = theme =>
       backgroundColor: theme.colors.cardBackground,
     },
   });
-export default CommonCardBox;
+
+export default CardBox;

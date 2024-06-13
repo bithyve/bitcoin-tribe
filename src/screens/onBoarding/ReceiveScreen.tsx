@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { StyleSheet, View,Image } from 'react-native';
-
+import { StyleSheet, View, Image, Text } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
 import Toast from 'src/components/Toast';
-import { Text, TouchableRipple, useTheme } from 'react-native-paper';
+import { TouchableRipple, useTheme } from 'react-native-paper';
 import CommonStyles from 'src/common/styles/CommonStyles';
-import CommonCardBox from 'src/components/CommonCardBox';
+import CardBox from 'src/components/CardBox';
 import IconCopy from 'src/assets/images/icon_copy.svg';
-import FooterNoteCard from 'src/components/FooterNoteCard';
+import FooterNote from 'src/components/FooterNote';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 function ReceiveScreen() {
@@ -32,13 +31,14 @@ function ReceiveScreen() {
       <View style={styles.qrViewWrapper}>
         <View style={styles.qrImageWrapper}>
           <Image
-           source={require('../../assets/images/icon_qr_code.png')}
-           style={styles.qrImageContainer} />
+            source={require('../../assets/images/icon_qr_code.png')}
+            style={styles.qrImageContainer}
+          />
         </View>
         <Text style={styles.qrFooterText}>Invoice Address</Text>
       </View>
-      <View style={{marginTop:wp(8)}}>
-        <CommonCardBox>
+      <View style={styles.cardWrapper}>
+        <CardBox>
           <View>
             <View style={styles.detailsWrapper}>
               <View style={styles.contentWrapper}>
@@ -48,27 +48,25 @@ function ReceiveScreen() {
                   iklhj-safas-435fs453df-897897dfs-87875656
                 </Text>
               </View>
-              <TouchableRipple 
-                  rippleColor={"gray"}
-                  onPress={() =>
-                    handleCopyText('iklhj-safas-435fs453df-897897dfs-87875656')
-                  } 
-                  style={styles.iconWrapper}>
-                <IconCopy/>
+              <TouchableRipple
+                onPress={() =>
+                  handleCopyText('iklhj-safas-435fs453df-897897dfs-87875656')
+                }
+                style={styles.iconWrapper}>
+                <IconCopy />
               </TouchableRipple>
             </View>
           </View>
-        </CommonCardBox>
+        </CardBox>
       </View>
-          
+
       <OptionCard
-        style={{marginTop:wp(30)}}
+        style={styles.optionCardWrapper}
         title="Add amount"
         subTitle="Lorem ipsum dolor sit amet, consec"
         onPress={() => {}}
       />
-
-      <FooterNoteCard
+      <FooterNote
         title="Note"
         subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
         customStyle={styles.advanceOptionStyle}
@@ -89,12 +87,12 @@ const getStyles = theme =>
       backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
       marginHorizontal: '25%',
-      marginTop:wp(55),
+      marginTop: wp(55),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
       width: 200,
     },
-    qrImageContainer:{width: 200, height: 180},
+    qrImageContainer: { width: 200, height: 180 },
     qrImageWrapper: {
       width: 200,
       height: 180,
@@ -119,9 +117,15 @@ const getStyles = theme =>
     },
     iconWrapper: {
       width: wp(28),
-      height:wp(22),
-      alignItems:'center',
+      height: wp(22),
+      alignItems: 'center',
       justifyContent: 'center',
+    },
+    cardWrapper: {
+      marginTop: wp(8),
+    },
+    optionCardWrapper: {
+      marginTop: wp(30),
     },
   });
 export default ReceiveScreen;
