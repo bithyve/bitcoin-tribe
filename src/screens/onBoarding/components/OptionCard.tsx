@@ -25,8 +25,12 @@ function OptionCard(props: OptionCardProps) {
         <View>{icon}</View>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText style={styles.menuCardTitle}>{title}</AppText>
-            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
+            <AppText variant="body1" style={styles.menuCardTitle}>
+              {title}
+            </AppText>
+            <AppText variant="body2" style={styles.menuCardSubTitle}>
+              {subTitle}
+            </AppText>
           </View>
           <View style={styles.iconWrapper}>
             <IconArrow />

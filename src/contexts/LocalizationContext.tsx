@@ -1,3 +1,4 @@
+import * as RNLocalize from 'react-native-localize';
 import { createContext, useState } from 'react';
 import LocalizedContent from 'react-localization';
 import { MMKV } from 'react-native-mmkv';

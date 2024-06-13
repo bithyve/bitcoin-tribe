@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { useTheme, TouchableRipple } from 'react-native-paper';
+import { StyleSheet, View, Image, GestureResponderEvent } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
@@ -8,20 +8,19 @@ import AppTouchable from './AppTouchable';
 import AssetChip from './AssetChip';
 
 type AssetCardProps = {
-  asset?: any;
+  asset?: string;
   title?: string;
   details?: string;
   tag?: string;
+  onPress?: (event: GestureResponderEvent) => void;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { asset, title, details, tag } = props;
+  const { asset, title, details, tag, onPress } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable
-      onPress={() => console.log('asset card')}
-      style={styles.container}>
+    <AppTouchable onPress={onPress} style={styles.container}>
       <View>
         <View style={styles.assetChipWrapper}>
           <AssetChip
@@ -39,10 +38,17 @@ const AssetCard = (props: AssetCardProps) => {
           style={styles.imageStyle}
         />
         <View style={styles.contentWrapper}>
-          <AppText variant="body1" style={styles.titleText}>
+          <AppText
+            variant="body1"
+            style={styles.titleText}
+            testID={`text_${title}`}>
             {title}
           </AppText>
-          <AppText variant="body2" style={styles.detailsText} numberOfLines={2}>
+          <AppText
+            variant="body2"
+            style={styles.detailsText}
+            numberOfLines={1}
+            testID={`text_assetsDetails`}>
             {details}
           </AppText>
         </View>
@@ -56,13 +62,13 @@ const getStyles = theme =>
       height: hp(205),
       width: wp(160),
       borderRadius: 15,
-      margin: wp(5),
+      margin: hp(5),
       backgroundColor: theme.colors.cardBackground,
       position: 'relative',
     },
     imageStyle: {
       width: '100%',
-      height: '60%',
+      height: '70%',
       borderRadius: 10,
     },
     contentWrapper: {

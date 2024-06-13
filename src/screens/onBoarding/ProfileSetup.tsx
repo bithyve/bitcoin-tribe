@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -16,7 +22,6 @@ function ProfileSetup({ navigation }) {
   const [pickImage, setPickImage] = useState('');
 
   const PickImage = () => {
-    console.log('pick');
     launchImageLibrary(
       {
         title: 'Select a Image',
@@ -38,32 +43,43 @@ function ProfileSetup({ navigation }) {
         title="Enter your details"
         subTitle="Lorem ipsum dolor sit amet, c"
       />
-      <AddPicture
-        onPress={() => PickImage()}
-        imageSource={pickImage}
-        // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-      />
-      <TextField
-        value={username}
-        onChangeText={text => setUsername(text)}
-        placeholder="Enter Name"
-        keyboardType={'default'}
-      />
-      <View style={styles.primaryCTAContainer}>
-        <Buttons
-          primaryTitle="Next"
-          secondaryTitle="Cancel"
-          primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
-          secondaryOnPress={() => Toast('Secondary Pressed')}
-          width={wp(120)}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        enabled
+        keyboardVerticalOffset={Platform.select({ ios: 8, android: 500 })}
+        style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <AddPicture
+            onPress={() => PickImage()}
+            imageSource={pickImage}
+            // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
+          />
+          <TextField
+            value={username}
+            onChangeText={text => setUsername(text)}
+            placeholder="Enter Name"
+            keyboardType={'default'}
+          />
+          <View style={styles.primaryCTAContainer}>
+            <Buttons
+              primaryTitle="Next"
+              secondaryTitle="Cancel"
+              primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
+              secondaryOnPress={() => Toast('Secondary Pressed')}
+              width={wp(120)}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   );
 }
 const styles = StyleSheet.create({
   primaryCTAContainer: {
     marginTop: hp(50),
+  },
+  container: {
+    flex: 1,
   },
 });
 export default ProfileSetup;
