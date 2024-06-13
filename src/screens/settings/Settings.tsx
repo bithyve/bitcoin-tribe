@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -13,8 +13,11 @@ import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import { hp, windowHeight } from 'src/constants/responsive';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function SettingsScreen() {
+  const { translations } = useContext(LocalizationContext);
+  const { settings } = translations;
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -22,19 +25,19 @@ function SettingsScreen() {
   const [biometrics, setBiometrics] = useState(false);
   return (
     <ScreenContainer>
-      <AppHeader title="Settings" enableBack={false} />
+      <AppHeader title={settings.setting} enableBack={false} />
       <View style={styles.wrapper}>
         <SelectOption
-          title="Dark Mode"
-          subTitle="Switch between modes"
+          title={settings.darkMode}
+          subTitle={settings.darkModeSubTitle}
           icon={<IconDarkMode />}
           enableSwitch={true}
           onValueChange={() => setDarkTheme(!darkTheme)}
           toggleValue={darkTheme}
         />
         <SelectOption
-          title="Biometric Unlock"
-          subTitle="Use biometrics to unlock app"
+          title={settings.biometricUnlock}
+          subTitle={settings.biometricSubTitle}
           icon={<IconBiometric />}
           enableSwitch={true}
           onValueChange={() => setBiometrics(!biometrics)}
@@ -45,26 +48,26 @@ function SettingsScreen() {
         style={styles.scrollingWrapper}
         showsVerticalScrollIndicator={false}>
         <SelectOption
-          title="Language and Currency"
-          subTitle="Lorem ipsum dolor sit amet, consec "
+          title={settings.langAndCurrency}
+          subTitle={settings.langAndCurrencySubTitle}
           icon={<IconLangCurrency />}
           onPress={() => console.log('press')}
         />
         <SelectOption
-          title="App Backup"
-          subTitle="Lorem ipsum dolor sit amet, consec "
+          title={settings.appBackup}
+          subTitle={settings.appBackupSubTitle}
           icon={<IconBackup />}
           onPress={() => console.log('press')}
         />
         <SelectOption
-          title="Connection Settings"
-          subTitle="Lorem ipsum dolor sit amet, consec "
+          title={settings.connectionSettings}
+          subTitle={settings.connectionSettingSubTitle}
           icon={<IconNodes />}
           onPress={() => console.log('press')}
         />
         <SelectOption
-          title="App Info , Settings and Help"
-          subTitle="App version and details"
+          title={settings.appInfo}
+          subTitle={settings.appInfoSubTitle}
           icon={<IconAppInfo />}
           onPress={() => console.log('press')}
         />

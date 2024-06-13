@@ -22,6 +22,20 @@
     "issueNew": "Issue new",
     "myAssets": "My Assets"
   },
-  "settings": {},
+  "settings": {
+    "setting": "Settings",
+    "darkMode": "Dark Mode",
+    "darkModeSubTitle": "Switch between modes",
+    "biometricUnlock": "Biometric Unlock",
+    "biometricSubTitle": "Use biometrics to unlock app",
+    "langAndCurrency": "Language and Currency",
+    "langAndCurrencySubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "appBackup": "App Backup",
+    "appBackupSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "connectionSettings": "Connection Settings",
+    "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "appInfo": "App Info , Settings and Help",
+    "appInfoSubTitle": "App version and details"
+  },
   "wallet": {}
 }
