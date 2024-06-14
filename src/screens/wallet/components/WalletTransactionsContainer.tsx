@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -8,22 +8,25 @@ import WalletTransactionList from './WalletTransactionList';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function WalletTransactionsContainer({ navigation }) {
+  const { translations } = useContext(LocalizationContext);
+  const { wallet } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <AppText variant="heading3" style={styles.recentTransText}>
-          Recent Transactions
+          {wallet.recentTransaction}
         </AppText>
         <AppTouchable
           onPress={() =>
             navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION)
           }>
           <AppText variant="smallCTA" style={styles.viewAllText}>
-            VIEW ALL
+            {wallet.viewAll}
           </AppText>
         </AppTouchable>
       </View>

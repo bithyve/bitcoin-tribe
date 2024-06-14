@@ -3,7 +3,10 @@
     "next": "Next",
     "cancel": "Cancel",
     "receive": "Receive",
-    "proceed": "Proceed"
+    "proceed": "Proceed",
+    "send": "Send",
+    "recieve": "Recieve",
+    "buy": "Buy"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -45,6 +48,8 @@
     "allTransactionsTitle": "Transaction Details",
     "allTransactionSubTitle": "lorem ipsum dolor amet",
     "transactionDetailTitle": "Transaction Details",
-    "transactionDetailSubTitle": "lorem ipsum dolor amet"
+    "transactionDetailSubTitle": "lorem ipsum dolor amet",
+    "recentTransaction": "Recent Transactions",
+    "viewAll": "VIEW ALL"
   }
 }
