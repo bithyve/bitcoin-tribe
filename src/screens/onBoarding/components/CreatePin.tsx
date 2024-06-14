@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
@@ -9,10 +9,14 @@ import { hp, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function CreatePin() {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
   const [passcode, setPasscode] = useState('');
   const [confirmPasscode, setConfirmPasscode] = useState('');
   const [passcodeFlag, setPasscodeFlag] = useState(true);
@@ -96,21 +100,21 @@ function CreatePin() {
   return (
     <View style={styles.container}>
       <AppText variant="body1" style={styles.labelText}>
-        Enter a Pin
+        {onBoarding.enterPin}
       </AppText>
       <PinInputsView passCode={passcode} />
       {passcode.length === 4 ? (
         <View>
           <AppText variant="body1" style={styles.labelText}>
-            Confirm your pin
+            {onBoarding.confirmPin}
           </AppText>
           <PinInputsView passCode={confirmPasscode} />
         </View>
       ) : null}
       <Buttons
-        primaryTitle="Proceed"
+        primaryTitle={common.proceed}
         primaryOnPress={() => console.log('primary')}
-        secondaryTitle="Cancel"
+        secondaryTitle={common.cancel}
         secondaryOnPress={() => console.log('secondary')}
         width={wp(120)}
       />

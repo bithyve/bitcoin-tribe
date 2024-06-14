@@ -81,7 +81,7 @@ function ProfileSetup({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
       <ModalContainer
-        title="Advanced Lorem"
+        title={onBoarding.advanceSettingTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />

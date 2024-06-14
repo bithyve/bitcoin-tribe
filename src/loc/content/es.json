@@ -2,7 +2,8 @@
   "common": {
     "next": "Next",
     "cancel": "Cancel",
-    "receive": "Receive"
+    "receive": "Receive",
+    "proceed": "Proceed"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -14,7 +15,10 @@
     "createNewSubTitle": "Lorem ipsum dolor sit amet",
     "recoveryPhrase": "Recovery Phrase",
     "recoveryPhraseSubTitle": "Lorem ipsum dolor si",
-    "addPicture": "ADD PICTURE"
+    "addPicture": "ADD PICTURE",
+    "enterPin": "Enter a Pin",
+    "confirmPin": "Confirm your pin",
+    "advanceSettingTitle": "Advanced Lorem"
   },
   "home": {
     "addAssets": "Add Assets",
