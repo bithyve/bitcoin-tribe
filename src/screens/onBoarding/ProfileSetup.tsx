@@ -42,8 +42,8 @@ function ProfileSetup({ navigation }) {
     <ScreenContainer>
       <AppHeader
         title="Enter your details"
-        subTitle="Lorem ipsum dolor sit amet, c"
-        rightIcon={<SettingIcon/>}
+        subTitle="Lorem ipsum dolor sit amet"
+        rightIcon={<SettingIcon />}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}

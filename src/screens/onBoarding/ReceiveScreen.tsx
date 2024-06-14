@@ -35,7 +35,7 @@ function ReceiveScreen() {
           value={'https://www.google.com/'}
           title={'Invoice Address'}
         />
-        <View style={{ marginTop: wp(8) }}>
+        <View style={styles.cardWrapper}>
           <CardBox>
             <View>
               <View style={styles.detailsWrapper}>
@@ -60,7 +60,7 @@ function ReceiveScreen() {
         </View>
 
         <OptionCard
-          style={{ marginTop: wp(20) }}
+          style={styles.optionCardWrapper}
           title="Add amount"
           subTitle="Lorem ipsum dolor sit amet, consec"
           onPress={() => {}}
