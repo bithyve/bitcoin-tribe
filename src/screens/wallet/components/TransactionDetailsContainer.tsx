@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
@@ -9,6 +9,7 @@ import { hp } from 'src/constants/responsive';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -19,6 +20,8 @@ type WalletTransactionsProps = {
 
 function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType } = props;
+  const { translations } = useContext(LocalizationContext);
+  const { wallet } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -46,7 +49,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </View>
       <View style={styles.transDetailsWrapper2}>
         <AppText variant="body1" style={styles.labelStyle}>
-          To Address
+          {wallet.toAddress}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
           1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71
@@ -54,7 +57,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </View>
       <View style={styles.transDetailsWrapper2}>
         <AppText variant="body1" style={styles.labelStyle}>
-          From Address
+          {wallet.fromAddress}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
           1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71
@@ -62,7 +65,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </View>
       <View style={styles.transDetailsWrapper2}>
         <AppText variant="body1" style={styles.labelStyle}>
-          Fees
+          {wallet.fees}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
           0.0001
@@ -70,7 +73,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </View>
       <View style={styles.transDetailsWrapper2}>
         <AppText variant="body1" style={styles.labelStyle}>
-          Confirmations
+          {wallet.confirmations}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
           6+

@@ -50,6 +50,10 @@
     "transactionDetailTitle": "Transaction Details",
     "transactionDetailSubTitle": "lorem ipsum dolor amet",
     "recentTransaction": "Recent Transactions",
-    "viewAll": "VIEW ALL"
+    "viewAll": "VIEW ALL",
+    "toAddress": "To Address",
+    "fromAddress": "From Address",
+    "fees": "Fees",
+    "confirmations": "Confirmations"
   }
 }
