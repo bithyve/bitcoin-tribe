@@ -16,7 +16,7 @@ function WalletDetails({ navigation }) {
         />
       </View>
       <View style={styles.walletTransWrapper}>
-        <WalletTransactionsContainer />
+        <WalletTransactionsContainer navigation={navigation} />
       </View>
     </ScreenContainer>
   );

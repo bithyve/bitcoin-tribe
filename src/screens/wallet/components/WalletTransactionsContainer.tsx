@@ -1,12 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import WalletTransactionList from './WalletTransactionList';
 import { AppTheme } from 'src/theme';
+import AppTouchable from 'src/components/AppTouchable';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function WalletTransactionsContainer() {
+function WalletTransactionsContainer({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -15,9 +18,14 @@ function WalletTransactionsContainer() {
         <AppText variant="heading3" style={styles.recentTransText}>
           Recent Transactions
         </AppText>
-        <AppText variant="smallCTA" style={styles.viewAllText}>
-          VIEW ALL
-        </AppText>
+        <AppTouchable
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION)
+          }>
+          <AppText variant="smallCTA" style={styles.viewAllText}>
+            VIEW ALL
+          </AppText>
+        </AppTouchable>
       </View>
       <WalletTransactionList />
     </View>
