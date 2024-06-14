@@ -15,10 +15,18 @@ type AppHeaderProps = {
   style?: StyleProp<ViewStyle>;
   enableBack?: boolean;
   rightIcon?: React.ReactNode;
+  onSettingsPress?: () => void;
 };
 
 function AppHeader(props: AppHeaderProps) {
-  const { title, subTitle, style, enableBack = true, rightIcon } = props;
+  const {
+    title,
+    subTitle,
+    style,
+    enableBack = true,
+    rightIcon,
+    onSettingsPress,
+  } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -34,7 +42,7 @@ function AppHeader(props: AppHeaderProps) {
         )}
         {rightIcon && (
           <AppTouchable
-            onPress={navigation.goBack}
+            onPress={onSettingsPress}
             style={styles.rightIconWrapper}>
             {rightIcon}
           </AppTouchable>
