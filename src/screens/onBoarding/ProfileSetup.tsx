@@ -16,10 +16,14 @@ import { hp, wp } from 'src/constants/responsive';
 import AddPicture from './components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import SettingIcon from 'src/assets/images/icon_settings.svg';
+import ModalContainer from 'src/components/ModalContainer';
+import CreatePin from './components/CreatePin';
 
 function ProfileSetup({ navigation }) {
   const [username, setUsername] = useState('');
   const [pickImage, setPickImage] = useState('');
+  const [visible, setVisible] = useState(false);
 
   const PickImage = () => {
     launchImageLibrary(
@@ -42,6 +46,8 @@ function ProfileSetup({ navigation }) {
       <AppHeader
         title="Enter your details"
         subTitle="Lorem ipsum dolor sit amet, c"
+        rightIcon={<SettingIcon />}
+        onSettingsPress={() => setVisible(true)}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -71,6 +77,12 @@ function ProfileSetup({ navigation }) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <ModalContainer
+        title="Advanced Lorem"
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <CreatePin />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
