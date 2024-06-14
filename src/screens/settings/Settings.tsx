@@ -24,7 +24,7 @@ function SettingsScreen() {
 
   const [darkTheme, setDarkTheme] = useState(false);
   const [biometrics, setBiometrics] = useState(false);
-  console.log('windowHeight', windowHeight);
+
   return (
     <ScreenContainer>
       <AppHeader title={settings.setting} enableBack={false} />
