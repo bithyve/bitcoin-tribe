@@ -3,10 +3,33 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 
-import { MD2LightTheme, MD2DarkTheme } from 'react-native-paper';
+import { MD2LightTheme, MD2DarkTheme, MD2Theme } from 'react-native-paper';
+
 import Colors from './Colors';
 
-const CombinedDefaultTheme = {
+type CustomColors = {
+  primaryBackground: string;
+  cardBackground: string;
+  primaryCTA: string;
+  accent1: string;
+  accent2: string;
+  accent3: string;
+  inputBackground: string;
+  headingColor: string;
+  bodyColor: string;
+  placeholder: string;
+  primaryText: string;
+  profileBackground: string;
+  toggleBackground: string;
+};
+
+type PaperColors = MD2Theme['colors'];
+type Colors = PaperColors & CustomColors;
+export interface AppTheme extends MD2Theme {
+  colors: Colors;
+}
+
+const CombinedDefaultTheme: AppTheme = {
   ...MD2LightTheme,
   ...NavigationDefaultTheme,
   colors: {
@@ -24,9 +47,10 @@ const CombinedDefaultTheme = {
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
+    toggleBackground: Colors.Quartz,
   },
 };
-const CombinedDarkTheme = {
+const CombinedDarkTheme: AppTheme = {
   ...MD2DarkTheme,
   ...NavigationDarkTheme,
   colors: {
@@ -44,6 +68,7 @@ const CombinedDarkTheme = {
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
+    toggleBackground: Colors.Quartz,
   },
 };
 

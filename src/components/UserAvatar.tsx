@@ -7,6 +7,15 @@ type UserAvatarProps = {
 };
 const UserAvatar = (props: UserAvatarProps) => {
   const { size, imageSource } = props;
-  return <Avatar.Image size={size} source={{ uri: 'file://' + imageSource }} />;
+  return (
+    <Avatar.Image
+      size={size}
+      source={{
+        uri: imageSource
+          ? 'file://' + imageSource
+          : 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x',
+      }}
+    />
+  );
 };
 export default UserAvatar;

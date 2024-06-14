@@ -5,13 +5,14 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 const AssetsData = [
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 1,
     title: 'The Demogorgan',
-    details: 'Humanoid creature… with head shaped',
+    details: 'Humanoid creature…',
     tag: 'COLLECTIBLES',
   },
   {
@@ -25,7 +26,7 @@ const AssetsData = [
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 3,
     title: 'USD',
-    details: 'The USD (United States dollar) ',
+    details: 'The USD ',
     tag: 'COIN',
   },
   // {
@@ -44,7 +45,7 @@ const AssetsData = [
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
     id: '6',
     title: 'Third Item',
-    details: 'Humanoid creature… with head a flower',
+    details: 'Humanoid creature…',
     tag: 'COIN',
   },
   {
@@ -53,17 +54,14 @@ const AssetsData = [
   },
 ];
 
-interface HomeScreenProps {
-  navigation:any;
-}
-
-function HomeScreen({navigation}:HomeScreenProps) {
+function HomeScreen() {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
 
   const handleScreenNavigation = (screenPath: string) => {
-    navigation.navigate(screenPath);
-  }
-  
+    navigation.dispatch(CommonActions.navigate(screenPath));
+  };
+
   return (
     <ScreenContainer>
       <HomeHeader
@@ -72,13 +70,21 @@ function HomeScreen({navigation}:HomeScreenProps) {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => handleScreenNavigation(NavigationRoutes.RECEIVESCREEN)}
+        onPressScanner={() =>
+          handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+        }
         onPressNotification={() => console.log('notification')}
         onPressProfile={() =>
-          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+          handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
         }
       />
-      <AssetsList AssetsData={AssetsData} onPress={() => setVisible(true)} />
+      <AssetsList
+        AssetsData={AssetsData}
+        onPressAddNew={() => setVisible(true)}
+        onPressAsset={() =>
+          handleScreenNavigation(NavigationRoutes.ASSETDETAILS)
+        }
+      />
       <ModalContainer
         title="Add Assets"
         subTitle="Lorem ipsum dolor sit amet, consec tetur"

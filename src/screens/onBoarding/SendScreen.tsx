@@ -1,17 +1,12 @@
 import * as React from 'react';
-import { StyleSheet,View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { RNCamera } from 'react-native-camera';
 
-interface SendScreenProps {
-  navigation: any;
-}
-
-function SendScreen({ navigation }: SendScreenProps) {
+function SendScreen() {
   return (
     <ScreenContainer>
       <AppHeader
@@ -28,14 +23,13 @@ function SendScreen({ navigation }: SendScreenProps) {
             console.log('QR Code Data', data);
           }}
           useNativeZoom
-          // notAuthorizedView={<CameraUnauthorized />}
         />
       </View>
       <OptionCard
         title="or Enter details manually"
         subTitle="Lorem ipsum dolor sit amet, consec"
         style={styles.advanceOptionStyle}
-        onPress={() => navigation.navigate(NavigationRoutes.RECEIVESCREEN)}
+        onPress={() => {}}
       />
     </ScreenContainer>
   );

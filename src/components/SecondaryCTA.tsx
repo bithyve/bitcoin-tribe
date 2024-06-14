@@ -5,6 +5,7 @@ import { wp } from 'src/constants/responsive';
 
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
+import { AppTheme } from 'src/theme';
 
 type secondaryCTAProps = {
   title: string;
@@ -12,20 +13,17 @@ type secondaryCTAProps = {
 };
 function SecondaryCTA(props: secondaryCTAProps) {
   const { title, onPress } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <AppTouchable onPress={onPress}>
-      <AppText
-        variant="secondaryCta"
-        style={styles.seconadryTitleStyle}
-        testID={'text_secondaryBtnTitle'}>
+      <AppText variant="secondaryCta" style={styles.seconadryTitleStyle}>
         {title}
       </AppText>
     </AppTouchable>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     seconadryTitleStyle: {
       color: theme.colors.primaryCTA,

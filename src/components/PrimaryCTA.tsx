@@ -1,20 +1,21 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
+import { AppTheme } from 'src/theme';
 
 type PrimaryCTAProps = {
-  onPress: any;
+  onPress: () => void;
   title: string;
   width?: any;
-  style?: any;
-  buttonColor?: any;
+  style?: StyleProp<ViewStyle>;
+  buttonColor?: string;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const {
     onPress,
     title,
@@ -36,7 +37,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     </View>
   );
 }
-const getStyles = (theme, width) =>
+const getStyles = (theme: AppTheme, width) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -1,13 +1,13 @@
-export const NavigationRoutes = {
-  SPLASH: 'Splash',
-  WALLETSETUPOPTION: 'WalletSetupOption',
-  HOME: 'Home',
-  PROFILESETUP: 'ProfileSetup',
-  SETTINGS: 'Settings',
-  COMMUNITY: 'Community',
-  ASSETS: 'Assets',
-  SENDSCREEN:'SendScreen',
-  RECEIVESCREEN:'ReceiveScreen',
-  WALLETDETAILS: 'WalletDetails',
-  // Add other routes as needed
-};
+export enum NavigationRoutes {
+  ASSETDETAILS = 'ASSETDETAILS',
+  ASSETS = 'ASSETS',
+  COMMUNITY = 'COMMUNITY',
+  HOME = 'HOME',
+  PROFILESETUP = 'PROFILESETUP',
+  SETTINGS = 'SETTINGS',
+  SPLASH = 'SPLASH',
+  WALLETDETAILS = 'WALLETDETAILS',
+  WALLETSETUPOPTION = 'WALLETSETUPOPTION',
+  SENDSCREEN = 'SENDSCREEN',
+  RECEIVESCREEN = 'RECEIVESCREEN',
+}

@@ -5,9 +5,9 @@ import { Button } from 'react-native-paper';
 import Fonts from 'src/constants/Fonts';
 
 type RoundedCTAProps = {
-  icon?: any;
-  buttonColor?: any;
-  onPress?: any;
+  icon?: React.ReactNode;
+  buttonColor?: string;
+  onPress?: () => void;
   title: string;
   height?: number;
   width?: number;

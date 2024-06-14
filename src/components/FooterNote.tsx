@@ -4,13 +4,13 @@ import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 
-type FooterNoteCardProps = {
+type FooterNoteProps = {
   title: string;
   subTitle: string;
   customStyle?: StyleProp<ViewStyle>;
 };
 
-function FooterNoteCard(props: FooterNoteCardProps) {
+function FooterNote(props: FooterNoteProps) {
   const { title, subTitle, customStyle } = props;
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -55,4 +55,4 @@ const getStyles = theme =>
       justifyContent: 'center',
     },
   });
-export default FooterNoteCard;
+export default FooterNote;

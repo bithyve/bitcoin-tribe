@@ -8,9 +8,10 @@ import { hp } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import { useTheme } from 'react-native-paper';
+import { AppTheme } from 'src/theme';
 
 function WalletSetupOption({ navigation }) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <ScreenContainer>
@@ -29,16 +30,10 @@ function WalletSetupOption({ navigation }) {
         subTitle="Lorem ipsum dolor si"
         onPress={() => console.log('Recovery Phrase')}
       />
-      <OptionCard
-        title="Advanced Options"
-        subTitle="Lorem ipsum dolor sit amet, consec"
-        style={styles.advanceOptionStyle}
-        onPress={() => console.log('Advanced Options')}
-      />
     </ScreenContainer>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     advanceOptionStyle: {
       flex: 1,
@@ -48,6 +43,7 @@ const getStyles = theme =>
     },
     title: {
       color: theme.colors.headingColor,
+      marginVertical: hp(20),
     },
   });
 export default WalletSetupOption;
