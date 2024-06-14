@@ -41,5 +41,10 @@
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details"
   },
-  "wallet": {}
+  "wallet": {
+    "allTransactionsTitle": "Transaction Details",
+    "allTransactionSubTitle": "lorem ipsum dolor amet",
+    "transactionDetailTitle": "Transaction Details",
+    "transactionDetailSubTitle": "lorem ipsum dolor amet"
+  }
 }
