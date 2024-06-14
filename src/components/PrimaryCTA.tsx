@@ -23,18 +23,23 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     buttonColor = theme.colors.primaryCTA,
   } = props;
   const styles = getStyles(theme, width);
+
+  const generatedTestId = React.useMemo(() => {
+    return `primary_cta_${title}`;
+  }, [title]);
+
   return (
-    <View style={styles.container}>
-      <Button
-        mode="contained"
-        uppercase={false}
-        labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
-        style={styles.ctaContainerStyle}
-        buttonColor={buttonColor}
-        onPress={onPress}>
-        {title}
-      </Button>
-    </View>
+    <Button
+      testID={generatedTestId}
+      contentStyle={styles.container}
+      mode="contained"
+      uppercase={false}
+      labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
+      style={styles.ctaContainerStyle}
+      buttonColor={buttonColor}
+      onPress={onPress}>
+      {title}
+    </Button>
   );
 }
 const getStyles = (theme: AppTheme, width) =>
