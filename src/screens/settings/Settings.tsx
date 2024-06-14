@@ -24,7 +24,7 @@ function SettingsScreen() {
 
   const [darkTheme, setDarkTheme] = useState(false);
   const [biometrics, setBiometrics] = useState(false);
-
+  console.log('windowHeight', windowHeight);
   return (
     <ScreenContainer>
       <AppHeader title={settings.setting} enableBack={false} />
@@ -86,7 +86,7 @@ function SettingsScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
-      marginBottom: windowHeight > 600 ? hp(30) : hp(15),
+      marginBottom: windowHeight > 650 ? hp(30) : hp(20),
     },
     scrollingWrapper: {
       flex: 1,
