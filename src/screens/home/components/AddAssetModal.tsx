@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper';
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import SelectOption from 'src/components/SelectOption';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
@@ -15,7 +16,7 @@ function AddAssetModal() {
   const styles = getStyles(theme);
 
   return (
-    <View>
+    <View style={styles.container}>
       <SelectOption
         title={home.issueNew}
         icon={<AddNewIcon />}
@@ -37,6 +38,9 @@ function AddAssetModal() {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    container: {
+      paddingBottom: hp(25),
+    },
     optionStyle: {
       marginVertical: 10,
       paddingHorizontal: 15,
