@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import PinInputsView from 'src/components/PinInputsView';
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
@@ -127,6 +127,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
+      marginVertical: hp(10),
     },
     labelText: {
       color: theme.colors.accent3,
