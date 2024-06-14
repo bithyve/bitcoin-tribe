@@ -1,11 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  ImageSourcePropType,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import { wp } from 'src/constants/responsive';
 
 type ShowQRCodeProps = {
-  icon: any;
+  icon: ImageSourcePropType;
   title: string;
 };
 
