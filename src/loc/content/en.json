@@ -1,5 +1,41 @@
 {
+  "common": {
+    "next": "Next",
+    "cancel": "Cancel",
+    "receive": "Receive"
+  },
   "onBoarding": {
-    "welcome": "Welcome"
-  }
+    "welcome": "Welcome",
+    "profileSetupTitle": "Enter your details",
+    "profileSetupSubTitle": "Lorem ipsum dolor sit amet, c",
+    "enterUsername": "Enter Name",
+    "walletSetupTitle": "Welcome,",
+    "createNew": "Create New",
+    "createNewSubTitle": "Lorem ipsum dolor sit amet",
+    "recoveryPhrase": "Recovery Phrase",
+    "recoveryPhraseSubTitle": "Lorem ipsum dolor si",
+    "addPicture": "ADD PICTURE"
+  },
+  "home": {
+    "addAssets": "Add Assets",
+    "addAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "issueNew": "Issue new",
+    "myAssets": "My Assets"
+  },
+  "settings": {
+    "setting": "Settings",
+    "darkMode": "Dark Mode",
+    "darkModeSubTitle": "Switch between modes",
+    "biometricUnlock": "Biometric Unlock",
+    "biometricSubTitle": "Use biometrics to unlock app",
+    "langAndCurrency": "Language and Currency",
+    "langAndCurrencySubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "appBackup": "App Backup",
+    "appBackupSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "connectionSettings": "Connection Settings",
+    "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "appInfo": "App Info , Settings and Help",
+    "appInfoSubTitle": "App version and details"
+  },
+  "wallet": {}
 }

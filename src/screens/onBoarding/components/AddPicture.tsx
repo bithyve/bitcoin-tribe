@@ -1,11 +1,12 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import UserAvatar from 'src/components/UserAvatar';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 
@@ -14,9 +15,12 @@ type addPictureProps = {
   onPress: any;
 };
 function AddPicture(props: addPictureProps) {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { imageSource, onPress } = props;
+
   return (
     <AppTouchable onPress={onPress}>
       {!imageSource ? (
@@ -25,14 +29,17 @@ function AddPicture(props: addPictureProps) {
             <IconImage />
           </View>
           <View>
-            <AppText variant="smallCTA" style={styles.addPictureText}>
-              ADD PICTURE
+            <AppText
+              variant="smallCTA"
+              style={styles.addPictureText}
+              testID={'text_addPicture'}>
+              {onBoarding.addPicture}
             </AppText>
           </View>
         </View>
       ) : (
         <View style={styles.container}>
-          <UserAvatar size={70} imageSource={imageSource} />
+          <UserAvatar size={wp(70)} imageSource={imageSource} />
         </View>
       )}
     </AppTouchable>
@@ -46,8 +53,8 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(25),
     },
     iconImageWrapper: {
-      height: hp(70),
-      width: wp(70),
+      height: windowHeight > 650 ? hp(70) : 70,
+      width: windowHeight > 650 ? wp(70) : 70,
       borderRadius: 35,
       alignItems: 'center',
       justifyContent: 'center',
