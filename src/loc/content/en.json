@@ -2,7 +2,9 @@
   "common": {
     "next": "Next",
     "cancel": "Cancel",
-    "receive": "Receive"
+    "receive": "Receive",
+    "save": "Save",
+    "keyboardTypeNumeric": "numeric"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -37,5 +39,10 @@
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details"
   },
-  "wallet": {}
+  "wallet": {},
+  "receciveScreen": {
+    "addAmountTitle": "Add Amount",
+    "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "placeHolderText": "Enter Amount"
+  }
 }

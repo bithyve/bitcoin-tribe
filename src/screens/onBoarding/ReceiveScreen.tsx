@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
@@ -13,8 +13,16 @@ import IconCopy from 'src/assets/images/icon_copy.svg';
 import FooterNote from 'src/components/FooterNote';
 import Clipboard from '@react-native-clipboard/clipboard';
 import ShowQRCode from 'src/components/ShowQRCode';
+import ModalContainer from 'src/components/ModalContainer';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import AddAmountModal from './components/AddAmountModal';
 
 function ReceiveScreen() {
+  const { translations } = useContext(LocalizationContext);
+  const { receciveScreen } = translations;
+
+  const [visible, setVisible] = useState(false);
+
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
@@ -63,7 +71,9 @@ function ReceiveScreen() {
           style={styles.optionCardWrapper}
           title="Add amount"
           subTitle="Lorem ipsum dolor sit amet, consec"
-          onPress={() => {}}
+          onPress={() => {
+            setVisible(true);
+          }}
         />
 
         <FooterNote
@@ -71,6 +81,15 @@ function ReceiveScreen() {
           subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
           customStyle={styles.advanceOptionStyle}
         />
+
+        <ModalContainer
+          conatinerModalStyle={styles.addAmountModalContainerStyle}
+          title={receciveScreen.addAmountTitle}
+          subTitle={receciveScreen.addAmountSubTitle}
+          visible={visible}
+          onDismiss={() => setVisible(false)}>
+          <AddAmountModal />
+        </ModalContainer>
       </ScrollView>
     </ScreenContainer>
   );
@@ -104,6 +123,10 @@ const getStyles = theme =>
     },
     optionCardWrapper: {
       marginTop: wp(30),
+    },
+    addAmountModalContainerStyle: {
+      width: '96%',
+      alignSelf: 'center',
     },
   });
 export default ReceiveScreen;

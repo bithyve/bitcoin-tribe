@@ -12,10 +12,12 @@ type TextFieldProps = {
   value: string;
   keyboardType?: any;
   onChangeText: any;
+  maxLength?: number;
 };
 
 const TextField = (props: TextFieldProps) => {
-  const { icon, placeholder, value, keyboardType, onChangeText } = props;
+  const { icon, placeholder, value, keyboardType, onChangeText, maxLength } =
+    props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -32,6 +34,7 @@ const TextField = (props: TextFieldProps) => {
         value={value}
         onChangeText={text => onChangeText(text)}
         keyboardType={keyboardType}
+        maxLength={maxLength}
       />
     </View>
   );
