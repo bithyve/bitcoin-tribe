@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import SelectOption from 'src/components/SelectOption';
+import { hp } from 'src/constants/responsive';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
 function AddAssetModal() {
+  const { translations } = useContext(LocalizationContext);
+  const { home, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
   return (
-    <View>
+    <View style={styles.container}>
       <SelectOption
-        title="Issue new"
+        title={home.issueNew}
         icon={<AddNewIcon />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
@@ -21,7 +26,7 @@ function AddAssetModal() {
         testID="issue_new"
       />
       <SelectOption
-        title="Receive"
+        title={common.receive}
         icon={<ReceiveIcon />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
@@ -33,6 +38,9 @@ function AddAssetModal() {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    container: {
+      paddingBottom: hp(25),
+    },
     optionStyle: {
       marginVertical: 10,
       paddingHorizontal: 15,

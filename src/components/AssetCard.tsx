@@ -66,7 +66,10 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
     },
     contentWrapper: {
-      padding: 10,
+      justifyContent: 'center',
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      height: '30%',
     },
     titleText: {
       color: theme.colors.headingColor,
