@@ -7,6 +7,7 @@ import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import Switch from './Switch';
 import { AppTheme } from 'src/theme';
+import { windowHeight } from 'src/constants/responsive';
 
 type SelectOptionProps = {
   icon: React.ReactNode;
@@ -74,7 +75,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 15,
+      paddingVertical: windowHeight > 650 ? 15 : 10,
       backgroundColor: backColor,
     },
     touchableWrapper: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -19,8 +19,11 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import ModalContainer from 'src/components/ModalContainer';
 import CreatePin from './components/CreatePin';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function ProfileSetup({ navigation }) {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding, common } = translations;
   const [username, setUsername] = useState('');
   const [pickImage, setPickImage] = useState('');
   const [visible, setVisible] = useState(false);
@@ -44,8 +47,8 @@ function ProfileSetup({ navigation }) {
   return (
     <ScreenContainer>
       <AppHeader
-        title="Enter your details"
-        subTitle="Lorem ipsum dolor sit amet, c"
+        title={onBoarding.profileSetupTitle}
+        subTitle={onBoarding.profileSetupSubTitle}
         rightIcon={<SettingIcon />}
         onSettingsPress={() => setVisible(true)}
       />
@@ -63,13 +66,13 @@ function ProfileSetup({ navigation }) {
           <TextField
             value={username}
             onChangeText={text => setUsername(text)}
-            placeholder="Enter Name"
+            placeholder={onBoarding.enterUsername}
             keyboardType={'default'}
           />
           <View style={styles.primaryCTAContainer}>
             <Buttons
-              primaryTitle="Next"
-              secondaryTitle="Cancel"
+              primaryTitle={common.next}
+              secondaryTitle={common.cancel}
               primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
               secondaryOnPress={() => Toast('Secondary Pressed')}
               width={wp(120)}
