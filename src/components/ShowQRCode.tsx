@@ -35,20 +35,16 @@ const getStyles = theme =>
       borderBottomRightRadius: 10,
       width: 200,
     },
-    qrImageContainer: {
-      width: wp(200),
-      height: wp(200),
-    },
     qrImageWrapper: {
       width: Platform.OS === 'ios' ? wp(190) : wp(180),
       height: wp(180),
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#fff',
+      backgroundColor: theme.colors.headingColor,
     },
     qrFooterText: {
       textAlign: 'center',
-      color: '#FFBA00',
+      color: theme.colors.accent1,
       fontSize: CommonStyles.body2.fontSize,
       paddingVertical: 4,
     },

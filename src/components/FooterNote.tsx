@@ -3,6 +3,7 @@ import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 type FooterNoteProps = {
   title: string;
@@ -12,27 +13,26 @@ type FooterNoteProps = {
 
 function FooterNote(props: FooterNoteProps) {
   const { title, subTitle, customStyle } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={[styles.container, customStyle]}>
       <View>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText testID={'footerNodeCardTitle'} style={styles.menuCardTitle}>{title}</AppText>
-            <AppText testID={'footerNodeCardSubTitle'} style={styles.menuCardSubTitle}>{subTitle}</AppText>
+            <AppText style={styles.menuCardTitle}>{title}</AppText>
+            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
           </View>
         </View>
       </View>
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
       padding: hp(15),
-      // marginVertical: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
     },
