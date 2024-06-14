@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { wp } from 'src/constants/responsive';
+import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
 import AppTouchable from 'src/components/AppTouchable';
+import CardBox from 'src/components/CardBox';
+import { wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 
 interface ReceiveQrClipBoardProps {
   qrCodeValue: string;
@@ -13,7 +15,7 @@ interface ReceiveQrClipBoardProps {
 }
 
 const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const handleCopyText = (text: string) => {
@@ -22,28 +24,30 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
   };
 
   return (
-    <View>
-      <View style={styles.detailsWrapper}>
-        <View style={styles.contentWrapper}>
-          <Text
-            style={[styles.menuCardTitle, CommonStyles.body1]}
-            numberOfLines={1}>
-            {qrCodeValue}
-          </Text>
+    <CardBox>
+      <View>
+        <View style={styles.detailsWrapper}>
+          <View style={styles.contentWrapper}>
+            <Text
+              style={[styles.menuCardTitle, CommonStyles.body1]}
+              numberOfLines={1}>
+              {qrCodeValue}
+            </Text>
+          </View>
+          <AppTouchable
+            onPress={() => handleCopyText(qrCodeValue)}
+            style={styles.iconWrapper}>
+            {icon}
+          </AppTouchable>
         </View>
-        <AppTouchable
-          onPress={() => handleCopyText(qrCodeValue)}
-          style={styles.iconWrapper}>
-          {icon}
-        </AppTouchable>
       </View>
-    </View>
+    </CardBox>
   );
 };
 
 export default ReceiveQrClipBoard;
 
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     detailsWrapper: {
       flexDirection: 'row',

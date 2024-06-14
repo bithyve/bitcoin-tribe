@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import CardBox from 'src/components/CardBox';
 import ShowQRCode from 'src/components/ShowQRCode';
 import OptionCard from './OptionCard';
 import { wp } from 'src/constants/responsive';
@@ -17,12 +16,10 @@ const ReceiveQrDetails = () => {
       />
 
       <View style={styles.cardWrapper}>
-        <CardBox>
-          <ReceiveQrClipBoard
-            qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
-            icon={<IconCopy />}
-          />
-        </CardBox>
+        <ReceiveQrClipBoard
+          qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
+          icon={<IconCopy />}
+        />
       </View>
 
       <OptionCard
