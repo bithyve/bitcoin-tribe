@@ -20,10 +20,7 @@ function WalletSetupOption({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText
-        variant="pageTitle"
-        style={styles.title}
-        testID="text_walletSetupTitle">
+      <AppText variant="pageTitle" style={styles.title}>
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
