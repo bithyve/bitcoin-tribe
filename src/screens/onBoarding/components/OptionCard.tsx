@@ -56,10 +56,11 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       width: '90%',
-      marginTop: hp(10),
+      marginVertical: hp(5),
     },
     menuCardTitle: {
       color: theme.colors.accent3,
+      lineHeight: 26,
     },
     menuCardSubTitle: {
       color: theme.colors.bodyColor,

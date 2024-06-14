@@ -35,7 +35,6 @@ const getStyles = theme =>
       alignSelf: 'center',
       backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
-      marginTop: wp(55),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
       width: 200,

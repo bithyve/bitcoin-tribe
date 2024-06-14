@@ -9,35 +9,29 @@ import ReceiveQrClipBoard from './ReceiveQrClipBoard';
 
 const ReceiveQrDetails = () => {
   return (
-    <>
+    <View style={styles.container}>
       <ShowQRCode
         icon={require('../../../assets/images/icon_qr_code.png')}
         title={'Invoice Address'}
       />
-
-      <View style={styles.cardWrapper}>
-        <ReceiveQrClipBoard
-          qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
-          icon={<IconCopy />}
-        />
-      </View>
-
+      <ReceiveQrClipBoard
+        qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
+        icon={<IconCopy />}
+      />
       <OptionCard
-        style={styles.optionCardWrapper}
         title="Add amount"
         subTitle="Lorem ipsum dolor sit amet, consec"
         onPress={() => {}}
       />
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  cardWrapper: {
-    marginTop: wp(8),
-  },
-  optionCardWrapper: {
-    marginTop: wp(30),
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingVertical: wp(20),
   },
 });
 
