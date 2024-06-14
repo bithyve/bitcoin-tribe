@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import CommonStyles from 'src/common/styles/CommonStyles';
@@ -17,7 +17,7 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   return (
     <View style={styles.qrViewWrapper}>
       <View style={styles.qrImageWrapper}>
-        <QRCode value={value} size={wp(170)} />
+        <QRCode value={value} size={wp(180)} />
       </View>
       <Text style={styles.qrFooterText}>{title}</Text>
     </View>
@@ -40,8 +40,8 @@ const getStyles = theme =>
       height: wp(200),
     },
     qrImageWrapper: {
-      width: wp(170),
-      height: wp(170),
+      width: Platform.OS === 'ios' ? wp(190) : wp(180),
+      height: wp(180),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#fff',
