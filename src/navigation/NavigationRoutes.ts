@@ -8,4 +8,6 @@ export enum NavigationRoutes {
   SPLASH = 'SPLASH',
   WALLETDETAILS = 'WALLETDETAILS',
   WALLETSETUPOPTION = 'WALLETSETUPOPTION',
+  WALLETALLTRANSACTION = 'WalletAllTransactions',
+  TRANSACTIONDETAILS = 'TransactionDetails',
 }

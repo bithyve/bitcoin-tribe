@@ -8,10 +8,12 @@ import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
 import AssetDetails from 'src/screens/home/AssetDetails';
+import WalletAllTransactions from 'src/screens/wallet/WalletAllTransactions';
 
 import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
+import TransactionDetails from 'src/screens/wallet/TransactionDetails';
 
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -64,6 +66,20 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.ASSETDETAILS}
           component={AssetDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETALLTRANSACTION}
+          component={WalletAllTransactions}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSACTIONDETAILS}
+          component={TransactionDetails}
           options={{
             headerShown: false,
           }}
