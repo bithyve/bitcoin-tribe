@@ -4,35 +4,36 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import UserAvatar from 'src/components/UserAvatar';
-import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
+import { AppTheme } from 'src/theme';
+import IconWrapper from 'src/components/IconWrapper';
 
 type WalletSectionHeaderProps = {
   profile: string;
 };
 function WalletSectionHeader(props: WalletSectionHeaderProps) {
   const navigation = useNavigation();
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile } = props;
   return (
     <View style={styles.headerWrapper}>
-      <AppTouchable onPress={navigation.goBack} style={styles.leftIconWrapper}>
+      <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
         {<GoBack />}
-      </AppTouchable>
+      </IconWrapper>
       <View style={styles.profileWrapper}>
         <UserAvatar size={70} imageSource={profile} />
       </View>
-      <AppTouchable
+      <IconWrapper
         onPress={() => console.log('wallet setting press')}
         style={styles.rightIconWrapper}>
         {<SettingIcon />}
-      </AppTouchable>
+      </IconWrapper>
     </View>
   );
 }
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     headerWrapper: {
       alignItems: 'center',

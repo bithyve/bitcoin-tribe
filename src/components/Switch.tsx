@@ -1,25 +1,32 @@
-import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { windowHeight, wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
+import AppTouchable from './AppTouchable';
 
 type Props = {
   value: boolean;
   onValueChange: () => void;
   loading?: boolean;
-  testID?: string;
+  testID: string;
 };
 
 function Switch({ value, onValueChange, loading, testID }: Props) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, value), [theme]);
 
+  const generatedTestId = useMemo(() => {
+    return `switch_${testID}` + (value ? '_on' : '_off');
+  }, [testID, value]);
+
   return (
-    <TouchableOpacity
-      testID={testID}
+    <AppTouchable
+      testID={generatedTestId}
       onPress={onValueChange}
-      disabled={loading}>
+      disabled={loading}
+      activeOpacity={1}>
       <View style={styles.container}>
         <View style={styles.toggleWrapper}>
           {value ? (
@@ -29,10 +36,10 @@ function Switch({ value, onValueChange, loading, testID }: Props) {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </AppTouchable>
   );
 }
-const getStyles = (theme, value) =>
+const getStyles = (theme: AppTheme, value) =>
   StyleSheet.create({
     container: {
       borderRadius: wp(15),

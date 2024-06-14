@@ -4,6 +4,7 @@ import { Button, useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
+import { AppTheme } from 'src/theme';
 
 type PrimaryCTAProps = {
   onPress: () => void;
@@ -14,7 +15,7 @@ type PrimaryCTAProps = {
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const {
     onPress,
     title,
@@ -22,21 +23,26 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     buttonColor = theme.colors.primaryCTA,
   } = props;
   const styles = getStyles(theme, width);
+
+  const generatedTestId = React.useMemo(() => {
+    return `primary_cta_${title}`;
+  }, [title]);
+
   return (
-    <View style={styles.container}>
-      <Button
-        mode="contained"
-        uppercase={false}
-        labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
-        style={styles.ctaContainerStyle}
-        buttonColor={buttonColor}
-        onPress={onPress}>
-        {title}
-      </Button>
-    </View>
+    <Button
+      testID={generatedTestId}
+      contentStyle={styles.container}
+      mode="contained"
+      uppercase={false}
+      labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
+      style={styles.ctaContainerStyle}
+      buttonColor={buttonColor}
+      onPress={onPress}>
+      {title}
+    </Button>
   );
 }
-const getStyles = (theme, width) =>
+const getStyles = (theme: AppTheme, width) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

@@ -7,6 +7,7 @@ import IconSend from 'src/assets/images/icon_send.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
 import { wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
 type transButtonProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
@@ -14,7 +15,7 @@ type transButtonProps = {
 };
 const TransactionButtons = (props: transButtonProps) => {
   const { onPressSend, onPressRecieve, onPressBuy } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
@@ -48,7 +49,7 @@ const TransactionButtons = (props: transButtonProps) => {
     </View>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

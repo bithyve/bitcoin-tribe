@@ -1,22 +1,16 @@
-import React, { ReactNode } from 'react';
-import { TouchableRipple } from 'react-native-paper';
-import {
-  GestureResponderEvent,
-  StyleProp,
-  ViewStyle,
-} from 'react-native/types';
+import React from 'react';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-type AppTouchableProps = {
-  children: ReactNode;
-  style?: StyleProp<ViewStyle>;
-  onPress: (event: GestureResponderEvent) => void;
-};
-const AppTouchable = (props: AppTouchableProps) => {
-  const { children, style, onPress } = props;
+const AppTouchable = (props: TouchableOpacityProps) => {
+  const { children, style, onPress, testID } = props;
   return (
-    <TouchableRipple style={style} onPress={onPress} borderless>
+    <TouchableOpacity
+      style={style}
+      onPress={onPress}
+      activeOpacity={0.7}
+      testID={testID}>
       {children}
-    </TouchableRipple>
+    </TouchableOpacity>
   );
 };
 export default AppTouchable;

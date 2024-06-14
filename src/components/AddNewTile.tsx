@@ -6,6 +6,7 @@ import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import AppTouchable from './AppTouchable';
+import { AppTheme } from 'src/theme';
 
 type AddNewTileProps = {
   title: string;
@@ -14,23 +15,20 @@ type AddNewTileProps = {
 
 const AddNewTile = (props: AddNewTileProps) => {
   const { title, onPress } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable onPress={onPress} style={styles.container}>
       <View style={styles.wrapper}>
         <AddNewIcon />
-        <AppText
-          variant="subtitle2"
-          style={styles.titleStyle}
-          testID="text_addnewTileTitle">
+        <AppText variant="subtitle2" style={styles.titleStyle}>
           {title}
         </AppText>
       </View>
     </AppTouchable>
   );
 };
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       height: hp(150),
