@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet,View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
-import QRScanner from 'src/components/QRScanner';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { RNCamera } from 'react-native-camera';
 
 interface SendScreenProps {
   navigation: any;
 }
 
-function SendScreen({navigation}: SendScreenProps) {
+function SendScreen({ navigation }: SendScreenProps) {
   return (
     <ScreenContainer>
       <AppHeader
@@ -19,7 +19,18 @@ function SendScreen({navigation}: SendScreenProps) {
         subTitle="Lorem ipsum dolor sit amet, consec tetur"
         enableBack={true}
       />
-      <QRScanner/>
+      <View style={styles.qrCodeContainer}>
+        <RNCamera
+          autoFocus="on"
+          style={styles.cameraView}
+          captureAudio={false}
+          onBarCodeRead={data => {
+            console.log('QR Code Data', data);
+          }}
+          useNativeZoom
+          // notAuthorizedView={<CameraUnauthorized />}
+        />
+      </View>
       <OptionCard
         title="or Enter details manually"
         subTitle="Lorem ipsum dolor sit amet, consec"
@@ -36,28 +47,17 @@ const styles = StyleSheet.create({
     bottom: 10,
     margin: hp(20),
   },
-  qrCodeContainer:{
+  qrCodeContainer: {
     width: '90%',
     height: hp(340),
     marginTop: wp(80),
     marginHorizontal: wp(15),
   },
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777'
+  cameraView: {
+    alignSelf: 'center',
+    height: wp(250),
+    width: wp(250),
+    borderRadius: wp(50),
   },
-  textBold: {
-    fontWeight: '500',
-    color: '#000'
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)'
-  },
-  buttonTouchable: {
-    padding: 16
-  }
 });
 export default SendScreen;
