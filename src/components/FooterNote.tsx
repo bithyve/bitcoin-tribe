@@ -19,8 +19,8 @@ function FooterNote(props: FooterNoteProps) {
       <View>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText testID={'footerNodeCardTitle'} style={styles.menuCardTitle}>{title}</AppText>
-            <AppText testID={'footerNodeCardSubTitle'} style={styles.menuCardSubTitle}>{subTitle}</AppText>
+            <AppText style={styles.menuCardTitle}>{title}</AppText>
+            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
           </View>
         </View>
       </View>
