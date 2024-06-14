@@ -69,7 +69,6 @@ function Navigator() {
             headerShown: false,
           }}
         />
-
         <Stack.Screen
           name={NavigationRoutes.WALLETDETAILS}
           component={WalletDetails}
