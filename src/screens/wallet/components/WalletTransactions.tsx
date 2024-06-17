@@ -18,15 +18,25 @@ type WalletTransactionsProps = {
   transDate: string;
   transAmount: string;
   transType: string;
+  backColor?: string;
+  disabled?: boolean;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
-  const { transId, transDate, transAmount, transType = 'send' } = props;
+  const {
+    transId,
+    transDate,
+    transAmount,
+    transType = 'send',
+    backColor,
+    disabled,
+  } = props;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
+  const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
 
   return (
     <AppTouchable
+      disabled={disabled}
       onPress={() => navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS)}>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
@@ -47,19 +57,22 @@ function WalletTransactions(props: WalletTransactionsProps) {
               &nbsp;{transAmount}
             </AppText>
           </View>
-          <IconArrow />
+          {!disabled ? <IconArrow /> : null}
         </View>
       </View>
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
       marginVertical: hp(10),
+      backgroundColor: backColor,
+      padding: backColor ? 15 : 0,
+      borderRadius: backColor ? 10 : 0,
     },
     transDetailsWrapper: {
       flexDirection: 'row',

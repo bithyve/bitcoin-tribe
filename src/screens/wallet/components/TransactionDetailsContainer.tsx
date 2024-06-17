@@ -6,10 +6,8 @@ import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
-import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
-import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import WalletTransactions from './WalletTransactions';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -26,27 +24,14 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const styles = getStyles(theme);
   return (
     <View>
-      <View style={styles.transContainer}>
-        <View style={styles.transDetailsWrapper}>
-          {transType === 'send' ? <SendTXNIcon /> : <RecieveTXNIcon />}
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.transIdText}>
-              {transId}
-            </AppText>
-            <AppText variant="body2" style={styles.transDateText}>
-              {transDate}
-            </AppText>
-          </View>
-        </View>
-        <View style={styles.amountWrapper}>
-          <View style={styles.amtIconWrapper}>
-            <IconBitcoin />
-            <AppText variant="body1" style={styles.amountText}>
-              &nbsp;{transAmount}
-            </AppText>
-          </View>
-        </View>
-      </View>
+      <WalletTransactions
+        transId={transId}
+        transDate={transDate}
+        transAmount={transAmount}
+        transType={transType}
+        backColor={theme.colors.cardBackground}
+        disabled={true}
+      />
       <View style={styles.transDetailsWrapper2}>
         <AppText variant="body1" style={styles.labelStyle}>
           {wallet.toAddress}
