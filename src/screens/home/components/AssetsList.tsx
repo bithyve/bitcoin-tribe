@@ -106,7 +106,7 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     listHeaderText: {
       color: theme.colors.headingColor,
-      marginTop: hp(25),
+      marginVertical: hp(20),
     },
     assetWrapper: {
       height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
