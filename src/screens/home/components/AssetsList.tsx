@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
@@ -107,10 +107,12 @@ const getStyles = (theme: AppTheme, index = null) =>
     listHeaderText: {
       color: theme.colors.headingColor,
       marginVertical: hp(20),
+      marginLeft: wp(20),
     },
     assetWrapper: {
       height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
       flexWrap: 'wrap',
+      marginLeft: wp(15),
     },
     alternateSpace: {
       marginTop: index % 3 === 2 ? hp(50) : 0,
