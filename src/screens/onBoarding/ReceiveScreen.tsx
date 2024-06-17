@@ -11,21 +11,21 @@ import ReceiveQrDetails from './components/ReceiveQrDetails';
 
 function ReceiveScreen() {
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen } = translations;
+  const { receciveScreen, common } = translations;
 
   const [visible, setVisible] = useState(false);
 
   return (
     <ScreenContainer>
       <AppHeader
-        title="Receive"
-        subTitle="Scan QR Lorem ipsum dolor sit amet,"
+        title={receciveScreen.headerTitle}
+        subTitle={receciveScreen.headerSubTitle}
         enableBack={true}
       />
       <ReceiveQrDetails addMountModalVisible={() => setVisible(true)} />
       <FooterNote
-        title="Note"
-        subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
+        title={common.note}
+        subTitle={receciveScreen.noteSubTitle}
         customStyle={styles.advanceOptionStyle}
       />
 

@@ -5,24 +5,23 @@ import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
 import QRScanner from 'src/components/QRScanner';
-import { BarCodeReadEvent } from 'react-native-camera';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function SendScreen() {
+  const { translations } = React.useContext(LocalizationContext);
+  const { sendScreen } = translations;
+
   return (
     <ScreenContainer>
       <AppHeader
-        title="Send"
-        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        title={sendScreen.headerTitle}
+        subTitle={sendScreen.headerSubTitle}
         enableBack={true}
       />
-      <QRScanner
-        onBarCodeRead={(event: BarCodeReadEvent) => {
-          console.log(event);
-        }}
-      />
+      <QRScanner />
       <OptionCard
-        title="or Enter details manually"
-        subTitle="Lorem ipsum dolor sit amet, consec"
+        title={sendScreen.optionCardTitle}
+        subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
         onPress={() => {}}
       />

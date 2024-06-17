@@ -8,6 +8,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import CardBox from 'src/components/CardBox';
 import { wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 interface ReceiveQrClipBoardProps {
   qrCodeValue: string;
@@ -15,12 +16,15 @@ interface ReceiveQrClipBoardProps {
 }
 
 const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
+  const { translations } = React.useContext(LocalizationContext);
+  const { common } = translations;
+
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const handleCopyText = (text: string) => {
     Clipboard.setString(text);
-    Toast('Address Copied Successfully!', true);
+    Toast(common.addressCopiedSuccessfully, true);
   };
 
   return (

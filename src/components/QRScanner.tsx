@@ -1,43 +1,80 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { BarCodeReadEvent, RNCamera } from 'react-native-camera';
+import React, { useLayoutEffect, useState } from 'react';
+import { View, StyleSheet, PermissionsAndroid, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
+import {
+  Camera,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import { AppTheme } from 'src/theme';
 
-type QRScannerProps = {
-  onBarCodeRead: (event: BarCodeReadEvent) => void;
-};
+const QRScanner = () => {
+  const device = useCameraDevice('front');
+  const [cameraPermission, setCameraPermission] = useState(false);
 
-const QRScanner = (props: QRScannerProps) => {
-  const { onBarCodeRead } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+
+  useLayoutEffect(() => {
+    requestCameraPermission();
+  }, []);
+
+  const requestCameraPermission = async () => {
+    if (Platform.OS == 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          setCameraPermission(true);
+        } else {
+          setCameraPermission(false);
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  };
+
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13'],
+    onCodeScanned: codes => {
+      let value = codes[0]?.value;
+      console.log('values', value);
+    },
+  });
+
   return (
     <View style={styles.qrCodeContainer}>
-      <RNCamera
-        autoFocus="on"
-        useNativeZoom
-        style={styles.camera}
-        captureAudio={false}
-        onBarCodeRead={onBarCodeRead}
-        ratio={'16:9'}>
-        <View style={styles.scannerInnerBorderWrapper}>
-          <View style={styles.qrScannerRowStyle}>
-            <QRBorderCard style={styles.borderLeftTopWidth} />
-            <QRBorderCard style={styles.borderRightTopWidth} />
+      {cameraPermission && device && (
+        <>
+          <Camera
+            device={device}
+            isActive={true}
+            style={styles.visionCameraContainer}
+            codeScanner={codeScanner}
+          />
+          <View style={[styles.visionCameraContainer, styles.outSideBorder]}>
+            <View style={styles.scannerInnerBorderWrapper}>
+              <View style={styles.qrScannerRowStyle}>
+                <QRBorderCard style={styles.borderLeftTopWidth} />
+                <QRBorderCard style={styles.borderRightTopWidth} />
+              </View>
+              <View style={styles.qrScannerRowStyle}>
+                <QRBorderCard style={styles.borderLeftBottomWidth} />
+                <QRBorderCard style={styles.borderRightBottomWidth} />
+              </View>
+            </View>
           </View>
-          <View style={styles.qrScannerRowStyle}>
-            <QRBorderCard style={styles.borderLeftBottomWidth} />
-            <QRBorderCard style={styles.borderRightBottomWidth} />
-          </View>
-        </View>
-      </RNCamera>
+        </>
+      )}
     </View>
   );
 };
 
-const getStyles = theme =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     qrCodeContainer: {
       height: wp(340),
@@ -52,10 +89,11 @@ const getStyles = theme =>
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
-    camera: {
+    visionCameraContainer: {
       height: wp(340),
       width: wp(330),
     },
+    outSideBorder: { position: 'absolute' },
     scannerInnerBorderWrapper: {
       height: wp(310),
       width: wp(310),
