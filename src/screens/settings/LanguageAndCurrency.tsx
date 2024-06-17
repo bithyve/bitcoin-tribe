@@ -6,7 +6,8 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LangCurrencyOption from './components/LangCurrencyOption';
-import IconLangCurrency from 'src/assets/images/icon_globe.svg';
+import IconLanguage from 'src/assets/images/icon_globe.svg';
+import IconCurrency from 'src/assets/images/icon_coins.svg';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
@@ -21,14 +22,14 @@ function LanguageAndCurrency() {
       <LangCurrencyOption
         title={settings.language}
         subTitle={settings.languageSubTitle}
-        icon={<IconLangCurrency />}
+        icon={<IconLanguage />}
         langCurrency={'English'}
         langCurrencyVariant={'English UK'}
       />
       <LangCurrencyOption
         title={settings.currency}
         subTitle={settings.currencySubTitle}
-        icon={<IconLangCurrency />}
+        icon={<IconCurrency />}
         langCurrency={'INR-₹'}
         langCurrencyVariant={'Indian Rupee'}
       />
