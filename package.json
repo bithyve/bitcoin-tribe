@@ -11,6 +11,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",

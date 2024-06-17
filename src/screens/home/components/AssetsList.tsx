@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -6,6 +6,7 @@ import { hp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
 type AssetsListProps = {
@@ -55,11 +56,13 @@ const Item = ({
 };
 
 const ListHeaderComponent = () => {
+  const { translations } = useContext(LocalizationContext);
+  const { home } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppText variant="pageTitle" style={styles.listHeaderText}>
-      My Assets
+      {home.myAssets}
     </AppText>
   );
 };

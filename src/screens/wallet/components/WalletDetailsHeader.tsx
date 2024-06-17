@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 
 type walletDetailsHeaderProps = {
@@ -32,9 +33,17 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         </AppText>
       </View>
       <TransactionButtons
-        onPressSend={() => console.log('send')}
+        onPressSend={() =>
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.SENDSCREEN),
+          )
+        }
         onPressBuy={() => console.log('buy')}
-        onPressRecieve={() => console.log('recieve')}
+        onPressRecieve={() =>
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
+          )
+        }
       />
     </View>
   );
