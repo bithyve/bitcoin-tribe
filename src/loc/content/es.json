@@ -42,7 +42,11 @@
     "connectionSettings": "Connection Settings",
     "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
     "appInfo": "App Info , Settings and Help",
-    "appInfoSubTitle": "App version and details"
+    "appInfoSubTitle": "App version and details",
+    "language": "Language",
+    "languageSubTitle": "Lorem ipsum dolor sit amet, con",
+    "currency": "Currency",
+    "currencySubTitle": "Lorem ipsum dolor sit amet, c"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

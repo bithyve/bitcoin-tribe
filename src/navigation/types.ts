@@ -14,6 +14,7 @@ export type AppStackParams = {
   [NavigationRoutes.TRANSACTIONDETAILS]: undefined;
   [NavigationRoutes.SENDSCREEN]: undefined;
   [NavigationRoutes.RECEIVESCREEN]: undefined;
+  [NavigationRoutes.LANGUAGEANDCURRENCY]: undefined;
   // Add other routes as needed
 };
 
