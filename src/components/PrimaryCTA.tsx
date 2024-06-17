@@ -37,7 +37,8 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
       buttonColor={buttonColor}
-      onPress={onPress}>
+      onPress={onPress}
+      maxFontSizeMultiplier={1}>
       {title}
     </Button>
   );

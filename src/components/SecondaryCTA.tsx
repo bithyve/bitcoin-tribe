@@ -28,7 +28,8 @@ function SecondaryCTA(props: secondaryCTAProps) {
       textColor={theme.colors.primaryCTA}
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
-      onPress={onPress}>
+      onPress={onPress}
+      maxFontSizeMultiplier={1}>
       {title}
     </Button>
   );
