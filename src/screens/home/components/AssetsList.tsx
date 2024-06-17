@@ -115,7 +115,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       paddingLeft: wp(15),
     },
     alternateSpace: {
-      marginTop: index % 3 === 2 ? hp(50) : 0,
+      marginTop: index % 4 === 2 ? hp(50) : 0,
     },
   });
 export default AssetsList;

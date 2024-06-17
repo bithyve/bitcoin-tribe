@@ -35,20 +35,20 @@ const AssetsData = [
     details: 'The USD ',
     tag: 'COIN',
   },
-  // {
-  //   asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-  //   id: 4,
-  //   title: 'Third Item',
-  //   details: 'Humanoid creature… with head a flower',
-  //   tag: 'COLLECTIBLES',
-  // },
-  // {
-  //   asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-  //   id: 5,
-  //   title: 'Third Item',
-  //   details: 'Humanoid creature… with head a flower',
-  //   tag: 'COIN',
-  // },
+  {
+    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
+    id: 4,
+    title: 'Third Item',
+    details: 'Humanoid creature… with head a flower',
+    tag: 'COLLECTIBLES',
+  },
+  {
+    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
+    id: 5,
+    title: 'Third Item',
+    details: 'Humanoid creature… with head a flower',
+    tag: 'COIN',
+  },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
     id: 6,
@@ -57,7 +57,21 @@ const AssetsData = [
     tag: 'COIN',
   },
   {
+    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
     id: 7,
+    title: 'Third Item',
+    details: 'Humanoid creature…',
+    tag: 'COIN',
+  },
+  {
+    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
+    id: 8,
+    title: 'Third Item',
+    details: 'Humanoid creature…',
+    tag: 'COIN',
+  },
+  {
+    id: 9,
     title: 'Add New',
   },
 ];
