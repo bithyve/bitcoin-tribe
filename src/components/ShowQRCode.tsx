@@ -33,7 +33,7 @@ const getStyles = theme =>
       marginTop: wp(45),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
-      width: 200,
+      width: Platform.OS === 'ios' ? wp(190) : wp(180),
     },
     qrImageWrapper: {
       width: Platform.OS === 'ios' ? wp(190) : wp(180),

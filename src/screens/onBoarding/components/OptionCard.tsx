@@ -26,16 +26,10 @@ function OptionCard(props: OptionCardProps) {
         <View>{icon}</View>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText
-              variant="body1"
-              style={styles.menuCardTitle}
-              testID="text_optionTitle">
+            <AppText variant="body1" style={styles.menuCardTitle}>
               {title}
             </AppText>
-            <AppText
-              variant="body2"
-              style={styles.menuCardSubTitle}
-              testID="text_optionSubTitle">
+            <AppText variant="body2" style={styles.menuCardSubTitle}>
               {subTitle}
             </AppText>
           </View>
@@ -62,10 +56,11 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       width: '90%',
-      marginTop: hp(10),
+      marginVertical: hp(5),
     },
     menuCardTitle: {
       color: theme.colors.accent3,
+      lineHeight: 26,
     },
     menuCardSubTitle: {
       color: theme.colors.bodyColor,
