@@ -6,6 +6,7 @@ import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import { hp } from 'src/constants/responsive';
+import AppTouchable from 'src/components/AppTouchable';
 
 type LangCurrencyOptionProps = {
   icon: ReactNode;
@@ -35,7 +36,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
           </AppText>
         </View>
       </View>
-      <View style={styles.inputWrapper}>
+      <AppTouchable style={styles.inputWrapper} onPress={onPress}>
         <AppText variant="body1" style={styles.langCurrencyStyle}>
           {langCurrency}
         </AppText>
@@ -45,7 +46,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
         <View style={styles.iconArrowWrapper}>
           <IconArrowDown />
         </View>
-      </View>
+      </AppTouchable>
     </View>
   );
 }
@@ -56,6 +57,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentContainer: {
       flexDirection: 'row',
+      alignItems: 'center',
     },
     contentWrapper: {
       marginLeft: 10,
