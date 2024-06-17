@@ -78,8 +78,7 @@ function AssetsList(props: AssetsListProps) {
         horizontal
         showsHorizontalScrollIndicator={false}
         directionalLockEnabled={true}
-        alwaysBounceVertical={false}
-        style={styles.scollingViewWrapper}>
+        alwaysBounceVertical={false}>
         <View style={styles.assetWrapper}>
           {AssetsData.map((item, index) => {
             return (
@@ -113,12 +112,10 @@ const getStyles = (theme: AppTheme, index = null) =>
     assetWrapper: {
       height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
       flexWrap: 'wrap',
+      paddingLeft: wp(15),
     },
     alternateSpace: {
       marginTop: index % 3 === 2 ? hp(50) : 0,
-    },
-    scollingViewWrapper: {
-      marginLeft: wp(15),
     },
   });
 export default AssetsList;
