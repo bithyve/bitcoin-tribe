@@ -72,8 +72,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 100,
     },
     rightIconWrapper: {
-      width: '50%',
-      alignItems: 'flex-end',
+      alignSelf: 'flex-end',
     },
     detailsWrapper: {
       flexDirection: 'row',
