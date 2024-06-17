@@ -12,6 +12,8 @@ export type AppStackParams = {
   [NavigationRoutes.WALLETSETUPOPTION]: undefined;
   [NavigationRoutes.WALLETALLTRANSACTION]: undefined;
   [NavigationRoutes.TRANSACTIONDETAILS]: undefined;
+  [NavigationRoutes.SENDSCREEN]: undefined;
+  [NavigationRoutes.RECEIVESCREEN]: undefined;
   // Add other routes as needed
 };
 

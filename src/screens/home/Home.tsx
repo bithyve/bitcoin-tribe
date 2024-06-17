@@ -7,6 +7,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 const AssetsData = [
   {
@@ -55,10 +56,16 @@ const AssetsData = [
   },
 ];
 
-function HomeScreen({ navigation }) {
+function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
+
+  const handleScreenNavigation = (screenPath: string) => {
+    navigation.dispatch(CommonActions.navigate(screenPath));
+  };
+
   return (
     <ScreenContainer>
       <HomeHeader
@@ -67,16 +74,20 @@ function HomeScreen({ navigation }) {
         }
         username="Dustin Henderson"
         balance="0.0134"
-        onPressScanner={() => console.log('scanner')}
+        onPressScanner={() =>
+          handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+        }
         onPressNotification={() => console.log('notification')}
         onPressProfile={() =>
-          navigation.navigate(NavigationRoutes.WALLETDETAILS)
+          handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
         }
       />
       <AssetsList
         AssetsData={AssetsData}
         onPressAddNew={() => setVisible(true)}
-        onPressAsset={() => navigation.navigate(NavigationRoutes.ASSETDETAILS)}
+        onPressAsset={() =>
+          handleScreenNavigation(NavigationRoutes.ASSETDETAILS)
+        }
       />
       <ModalContainer
         title={home.addAssets}

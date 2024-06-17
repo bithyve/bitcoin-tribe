@@ -13,13 +13,14 @@ import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
-import AddPicture from './components/AddPicture';
+import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
 import ModalContainer from 'src/components/ModalContainer';
-import CreatePin from './components/CreatePin';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+
+import AddPicture from './components/AddPicture';
+import CreatePin from './components/CreatePin';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);

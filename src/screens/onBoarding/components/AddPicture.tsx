@@ -29,17 +29,14 @@ function AddPicture(props: addPictureProps) {
             <IconImage />
           </View>
           <View>
-            <AppText
-              variant="smallCTA"
-              style={styles.addPictureText}
-              testID={'text_addPicture'}>
+            <AppText variant="smallCTA" style={styles.addPictureText}>
               {onBoarding.addPicture}
             </AppText>
           </View>
         </View>
       ) : (
         <View style={styles.container}>
-          <UserAvatar size={70} imageSource={imageSource} />
+          <UserAvatar size={wp(70)} imageSource={imageSource} />
         </View>
       )}
     </AppTouchable>

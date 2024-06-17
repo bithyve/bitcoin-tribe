@@ -6,6 +6,8 @@ import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
+import SendScreen from 'src/screens/onBoarding/SendScreen';
+import ReceiveScreen from 'src/screens/onBoarding/ReceiveScreen';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
 import AssetDetails from 'src/screens/home/AssetDetails';
 import WalletAllTransactions from 'src/screens/wallet/WalletAllTransactions';
@@ -52,6 +54,20 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.SETTINGS}
           component={Settings}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.SENDSCREEN}
+          component={SendScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVESCREEN}
+          component={ReceiveScreen}
           options={{
             headerShown: false,
           }}
