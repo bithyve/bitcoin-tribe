@@ -8,6 +8,7 @@ import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
+import { windowHeight } from 'src/constants/responsive';
 
 type WalletSectionHeaderProps = {
   profile: string;
@@ -42,7 +43,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     leftIconWrapper: {},
-    profileWrapper: {},
+    profileWrapper: {
+      marginTop: windowHeight > 650 ? 0 : 10,
+    },
     rightIconWrapper: {},
   });
 export default WalletSectionHeader;

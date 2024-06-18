@@ -18,7 +18,7 @@ const ScreenContainer = props => {
       <ImageBackground
         source={require('src/assets/images/image_background.png')}
         resizeMode="cover"
-        style={styles.image}>
+        style={{ ...styles.image, ...props.style }}>
         {props.children}
       </ImageBackground>
     </SafeAreaView>
