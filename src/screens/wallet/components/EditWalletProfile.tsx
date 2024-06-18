@@ -52,7 +52,7 @@ function EditWalletProfile({ navigation }) {
         <TextField
           value={username}
           onChangeText={text => setUsername(text)}
-          placeholder={onBoarding.enterUsername}
+          placeholder={onBoarding.enterName}
           keyboardType={'default'}
         />
         <View style={styles.primaryCTAContainer}>

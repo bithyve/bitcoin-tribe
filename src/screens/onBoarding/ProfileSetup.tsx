@@ -17,7 +17,7 @@ import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [pickImage, setPickImage] = useState('');
 
   const PickImage = () => {
@@ -51,9 +51,9 @@ function ProfileSetup({ navigation }) {
           // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
         />
         <TextField
-          value={username}
-          onChangeText={text => setUsername(text)}
-          placeholder={onBoarding.enterUsername}
+          value={name}
+          onChangeText={text => setName(text)}
+          placeholder={onBoarding.enterName}
           keyboardType={'default'}
         />
         <View style={styles.primaryCTAContainer}>
