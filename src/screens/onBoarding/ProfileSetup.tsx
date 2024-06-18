@@ -1,11 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -13,7 +7,7 @@ import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
-import AddPicture from './components/AddPicture';
+import AddPicture from '../../components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
