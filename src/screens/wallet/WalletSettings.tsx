@@ -1,9 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 import IconXpub from 'src/assets/images/icon_xpub.svg';
 
@@ -20,7 +21,7 @@ function WalletSettings({ navigation }) {
         title={wallet.nameAndPic}
         subTitle={wallet.nameAndPicSubTitle}
         icon={<IconXpub />}
-        onPress={() => console.log('press')}
+        onPress={() => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE)}
         showArrow={false}
       />
       <SelectOption

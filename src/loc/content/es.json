@@ -43,6 +43,9 @@
     "nameAndPic": "Name and Picture",
     "nameAndPicSubTitle": "lorem ipsum dolor amet",
     "showXPub": "Show xPub",
-    "showXPubSubTitle": "Show details for xPub"
+    "showXPubSubTitle": "Show details for xPub",
+    "editPicture": "EDIT PICTURE",
+    "walletNamePic": "Wallet Name and Picture",
+    "walletNamePicSubTitle": "Lorem ipsum dolor amet"
   }
 }

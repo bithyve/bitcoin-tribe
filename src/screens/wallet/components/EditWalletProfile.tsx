@@ -5,7 +5,6 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
@@ -14,9 +13,9 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
-function ProfileSetup({ navigation }) {
+function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding, common } = translations;
+  const { onBoarding, wallet, common } = translations;
   const [username, setUsername] = useState('');
   const [pickImage, setPickImage] = useState('');
 
@@ -39,13 +38,13 @@ function ProfileSetup({ navigation }) {
   return (
     <ScreenContainer>
       <AppHeader
-        title={onBoarding.profileSetupTitle}
-        subTitle={onBoarding.profileSetupSubTitle}
+        title={wallet.walletNamePic}
+        subTitle={wallet.walletNamePicSubTitle}
         rightIcon={<SettingIcon />}
       />
       <KeyboardAvoidView>
         <AddPicture
-          title={onBoarding.addPicture}
+          title={wallet.editPicture}
           onPress={() => PickImage()}
           imageSource={pickImage}
           // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
@@ -61,7 +60,7 @@ function ProfileSetup({ navigation }) {
             primaryTitle={common.next}
             secondaryTitle={common.cancel}
             primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
-            secondaryOnPress={() => Toast('Secondary Pressed')}
+            secondaryOnPress={() => navigation.goBack()}
             width={wp(120)}
           />
         </View>
@@ -77,4 +76,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default ProfileSetup;
+export default EditWalletProfile;

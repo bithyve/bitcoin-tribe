@@ -13,6 +13,7 @@ export type AppStackParams = {
   [NavigationRoutes.SENDSCREEN]: undefined;
   [NavigationRoutes.RECEIVESCREEN]: undefined;
   [NavigationRoutes.WALLETSETTINGS]: undefined;
+  [NavigationRoutes.EDITWALLETPROFILE]: undefined;
   // Add other routes as needed
 };
 
