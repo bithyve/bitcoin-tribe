@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { AppTheme } from 'src/theme';
@@ -13,7 +18,9 @@ const KeyboardAvoidView = props => {
       enabled
       keyboardVerticalOffset={Platform.select({ ios: 8, android: 500 })}
       style={{ ...styles.container, ...props.style }}>
-      {props.children}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {props.children}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
