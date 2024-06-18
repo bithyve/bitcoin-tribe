@@ -37,5 +37,12 @@
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details"
   },
-  "wallet": {}
+  "wallet": {
+    "walletSettings": "Wallet Settings",
+    "walletSettingSubTitle": "lorem ipsum dolor amet",
+    "nameAndPic": "Name and Picture",
+    "nameAndPicSubTitle": "lorem ipsum dolor amet",
+    "showXPub": "Show xPub",
+    "showXPubSubTitle": "Show details for xPub"
+  }
 }

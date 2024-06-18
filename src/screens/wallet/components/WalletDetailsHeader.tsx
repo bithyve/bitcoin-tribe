@@ -14,15 +14,16 @@ type walletDetailsHeaderProps = {
   profile: string;
   username: string;
   balance: string;
+  onPressSetting: () => void;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile, username, balance } = props;
+  const { profile, username, balance, onPressSetting } = props;
   return (
     <View style={styles.container}>
-      <WalletSectionHeader profile={profile} />
+      <WalletSectionHeader profile={profile} onPress={onPressSetting} />
       <AppText variant="body1" style={styles.usernameText}>
         {username}
       </AppText>

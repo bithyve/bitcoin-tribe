@@ -19,7 +19,8 @@ type SelectOptionProps = {
   enableSwitch?: boolean;
   toggleValue?: boolean;
   style?: StyleProp<ViewStyle>;
-  testID: string;
+  testID?: string;
+  showArrow?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -34,6 +35,7 @@ const SelectOption = (props: SelectOptionProps) => {
     enableSwitch = false,
     toggleValue,
     testID,
+    showArrow = true,
   } = props;
   const styles = getStyles(theme, backColor);
 
@@ -53,17 +55,19 @@ const SelectOption = (props: SelectOptionProps) => {
             )}
           </View>
         </View>
-        <View>
-          {enableSwitch ? (
-            <Switch
-              onValueChange={onValueChange}
-              value={toggleValue}
-              testID={testID}
-            />
-          ) : (
-            <IconArrow />
-          )}
-        </View>
+        {showArrow ? (
+          <View>
+            {enableSwitch ? (
+              <Switch
+                onValueChange={onValueChange}
+                value={toggleValue}
+                testID={testID}
+              />
+            ) : (
+              <IconArrow />
+            )}
+          </View>
+        ) : null}
       </View>
     </AppTouchable>
   );
