@@ -41,13 +41,13 @@ const getStyles = width =>
       width: width,
     },
     labelStyle: {
-      marginLeft: 1,
+      marginLeft: 0,
     },
     roundedCTATitle: {
-      fontSize: 12,
+      fontSize: 13,
       fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 12 * 1.4,
-      height: 15,
+      lineHeight: 13 * 1.5,
+      height: 18,
       marginLeft: 10,
     },
   });
