@@ -59,7 +59,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginVertical: hp(15),
       alignItems: 'center',
     },
     iconContainer: {
