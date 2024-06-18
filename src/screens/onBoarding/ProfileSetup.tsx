@@ -18,6 +18,7 @@ import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -48,11 +49,7 @@ function ProfileSetup({ navigation }) {
         subTitle={onBoarding.profileSetupSubTitle}
         rightIcon={<SettingIcon />}
       />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        enabled
-        keyboardVerticalOffset={Platform.select({ ios: 8, android: 500 })}
-        style={styles.container}>
+      <KeyboardAvoidView>
         <ScrollView showsVerticalScrollIndicator={false}>
           <AddPicture
             onPress={() => PickImage()}
@@ -75,7 +72,7 @@ function ProfileSetup({ navigation }) {
             />
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidView>
     </ScreenContainer>
   );
 }
