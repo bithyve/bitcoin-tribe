@@ -18,7 +18,7 @@ function ReceiveScreen() {
   return (
     <ScreenContainer>
       <AppHeader
-        title={receciveScreen.headerTitle}
+        title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
         enableBack={true}
       />

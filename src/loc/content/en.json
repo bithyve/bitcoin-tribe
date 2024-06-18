@@ -6,7 +6,8 @@
     "save": "Save",
     "keyboardTypeNumeric": "numeric",
     "addressCopiedSuccessfully": "Address Copied Successfully!",
-    "note": "Note"
+    "note": "Note",
+    "send": "Send"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -43,7 +44,6 @@
   },
   "wallet": {},
   "receciveScreen": {
-    "headerTitle": "Receive",
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
     "addAmountTitle": "Add Amount",
     "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
@@ -52,7 +52,6 @@
     "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
   },
   "sendScreen": {
-    "headerTitle": "Send",
     "headerSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
     "optionCardTitle": "or Enter details manually",
     "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec"

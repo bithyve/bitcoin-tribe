@@ -11,7 +11,7 @@ import {
 import { AppTheme } from 'src/theme';
 
 const QRScanner = () => {
-  const device = useCameraDevice('front');
+  const device = useCameraDevice('back');
   const [cameraPermission, setCameraPermission] = useState(false);
 
   const theme: AppTheme = useTheme();

@@ -9,12 +9,12 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function SendScreen() {
   const { translations } = React.useContext(LocalizationContext);
-  const { sendScreen } = translations;
+  const { common, sendScreen } = translations;
 
   return (
     <ScreenContainer>
       <AppHeader
-        title={sendScreen.headerTitle}
+        title={common.send}
         subTitle={sendScreen.headerSubTitle}
         enableBack={true}
       />
