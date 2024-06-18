@@ -16,7 +16,7 @@ import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet, common } = translations;
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [pickImage, setPickImage] = useState('');
 
   const PickImage = () => {
@@ -50,8 +50,8 @@ function EditWalletProfile({ navigation }) {
           // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
         />
         <TextField
-          value={username}
-          onChangeText={text => setUsername(text)}
+          value={name}
+          onChangeText={text => setName(text)}
           placeholder={onBoarding.enterName}
           keyboardType={'default'}
         />
