@@ -12,7 +12,10 @@ const AssetChip = (props: AssetChipProps) => {
   const { tagText, backColor, tagColor } = props;
   const styles = getStyles(backColor, tagColor);
   return (
-    <Chip style={styles.container} textStyle={styles.textStyle}>
+    <Chip
+      style={styles.container}
+      textStyle={styles.textStyle}
+      maxFontSizeMultiplier={1}>
       {tagText}
     </Chip>
   );

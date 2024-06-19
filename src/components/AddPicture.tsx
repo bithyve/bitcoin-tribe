@@ -50,8 +50,8 @@ const getStyles = (theme: AppTheme) =>
     },
     iconImageWrapper: {
       height: windowHeight > 650 ? hp(70) : 70,
-      width: windowHeight > 650 ? wp(70) : 70,
-      borderRadius: 35,
+      width: windowHeight > 650 ? hp(70) : 70,
+      borderRadius: hp(70),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.profileBackground,

@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
@@ -61,7 +60,7 @@ function ProfileSetup({ navigation }) {
             primaryTitle={common.next}
             secondaryTitle={common.cancel}
             primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
-            secondaryOnPress={() => Toast('Secondary Pressed')}
+            secondaryOnPress={() => navigation.goBack()}
             width={wp(120)}
           />
         </View>

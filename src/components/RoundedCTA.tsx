@@ -25,7 +25,8 @@ function RoundedCTA(props: RoundedCTAProps) {
       style={styles.ctaContainerStyle}
       contentStyle={styles.contentStyle}
       buttonColor={buttonColor}
-      onPress={onPress}>
+      onPress={onPress}
+      maxFontSizeMultiplier={1}>
       {title}
     </Button>
   );

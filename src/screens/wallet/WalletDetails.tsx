@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { wp } from 'src/constants/responsive';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 
@@ -29,14 +30,19 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     height: '100%',
+    padding: 0,
   },
   walletHeaderWrapper: {
-    height: '35%',
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: wp(20),
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: '64%',
+    height: '58%',
+    marginHorizontal: wp(20),
   },
 });
 export default WalletDetails;

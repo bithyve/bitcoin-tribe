@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import UserAvatar from 'src/components/UserAvatar';
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
@@ -85,6 +85,7 @@ const getStyles = (theme: AppTheme) =>
     },
     balanceText: {
       color: theme.colors.bodyColor,
+      marginTop: hp(2),
     },
     iconWrapper: {
       width: '23%',
