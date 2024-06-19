@@ -15,7 +15,6 @@
 		2F72F54194834847BB73F809 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A10CA73681AB40E3B3BD44AE /* Poppins-Regular.ttf */; };
 		35E339462C22A3AB007E532A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		35E339472C22A3AB007E532A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		35E339492C22A3AB007E532A /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-tribe.a */; };
 		35E3394B2C22A3AB007E532A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		35E3394C2C22A3AB007E532A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		35E3394D2C22A3AB007E532A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
@@ -30,6 +29,7 @@
 		95CDAC6D2E4A4937AD91F046 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 664836951D024BE78000A6DD /* Poppins-Italic.ttf */; };
 		AB3E4B89BA0C45939BB275BD /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15E774876C204DC68E061ABA /* Poppins-Bold.ttf */; };
 		BC1B92D31D2349A8A8A323BE /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F5962712C6B431AB006FF67 /* Poppins-SemiBold.ttf */; };
+		D0FDF119593BE7C0A4814CDB /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-tribe.a */; };
 		F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -59,14 +59,14 @@
 		2F5962712C6B431AB006FF67 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		35E339592C22A3AB007E532A /* tribe-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tribe-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E3395A2C22A3AC007E532A /* tribe-dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tribe-dev-Info.plist"; path = "/Users/c58/Workspace/tribe/ios/tribe-dev-Info.plist"; sourceTree = "<absolute>"; };
-		3B4392A12AC88292D35C810B /* Pods-tribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.debug.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.debug.xcconfig"; sourceTree = "<group>"; };
 		4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-tribe-tribeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-tribe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		62E65DFC224772FF9808BAF6 /* Pods-tribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.debug.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.debug.xcconfig"; sourceTree = "<group>"; };
 		664836951D024BE78000A6DD /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tribe/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-tribe-tribeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.release.xcconfig"; sourceTree = "<group>"; };
+		9F43E3694C9631A3556C1F48 /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
 		A10CA73681AB40E3B3BD44AE /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		AEFD2651F84F4F24BDABA477 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -86,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-tribe.a in Frameworks */,
+				D0FDF119593BE7C0A4814CDB /* libPods-tribe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +94,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35E339492C22A3AB007E532A /* libPods-tribe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,10 +191,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-tribe.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-tribe.release.xcconfig */,
 				5B7EB9410499542E8C5724F5 /* Pods-tribe-tribeTests.debug.xcconfig */,
 				89C6BE57DB24E9ADA2F236DE /* Pods-tribe-tribeTests.release.xcconfig */,
+				62E65DFC224772FF9808BAF6 /* Pods-tribe.debug.xcconfig */,
+				9F43E3694C9631A3556C1F48 /* Pods-tribe.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -248,13 +248,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 35E339562C22A3AB007E532A /* Build configuration list for PBXNativeTarget "tribe-dev" */;
 			buildPhases = (
-				35E339442C22A3AB007E532A /* [CP] Check Pods Manifest.lock */,
 				35E339452C22A3AB007E532A /* Sources */,
 				35E339482C22A3AB007E532A /* Frameworks */,
 				35E3394A2C22A3AB007E532A /* Resources */,
 				35E339532C22A3AB007E532A /* Bundle React Native code and images */,
-				35E339542C22A3AB007E532A /* [CP] Embed Pods Frameworks */,
-				35E339552C22A3AB007E532A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -376,28 +373,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		35E339442C22A3AB007E532A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tribe-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		35E339532C22A3AB007E532A /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -413,40 +388,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
-		};
-		35E339542C22A3AB007E532A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		35E339552C22A3AB007E532A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -636,7 +577,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-tribe.debug.xcconfig */;
+			baseConfigurationReference = 62E65DFC224772FF9808BAF6 /* Pods-tribe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -672,7 +613,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-tribe.release.xcconfig */;
+			baseConfigurationReference = 9F43E3694C9631A3556C1F48 /* Pods-tribe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -706,7 +647,6 @@
 		};
 		35E339572C22A3AB007E532A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-tribe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -742,7 +682,6 @@
 		};
 		35E339582C22A3AB007E532A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-tribe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
