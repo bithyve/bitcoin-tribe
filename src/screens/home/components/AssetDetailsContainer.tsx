@@ -142,14 +142,14 @@ const getStyles = (theme: AppTheme) =>
     assetChipWrapper: {
       position: 'absolute',
       zIndex: 999,
-      left: 5,
+      left: 30,
       top: 10,
     },
     downloadWrapper: {
       position: 'absolute',
       zIndex: 999,
-      right: 5,
-      bottom: 10,
+      right: 25,
+      bottom: 15,
     },
     assetDetailsText: {
       color: theme.colors.bodyColor,
@@ -169,6 +169,7 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
+      marginHorizontal: wp(20),
     },
   });
 export default AssetDetailsContainer;

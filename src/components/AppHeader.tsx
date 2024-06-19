@@ -67,7 +67,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginVertical: hp(15),
+      marginBottom: hp(15),
       alignItems: 'center',
     },
     iconContainer: {
@@ -80,8 +80,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 100,
     },
     rightIconWrapper: {
-      width: '50%',
-      alignItems: 'flex-end',
+      alignSelf: 'flex-end',
     },
     detailsWrapper: {
       flexDirection: 'row',

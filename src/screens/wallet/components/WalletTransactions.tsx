@@ -100,6 +100,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountText: {
       color: theme.colors.bodyColor,
+      marginTop: hp(2),
     },
   });
 export default WalletTransactions;
