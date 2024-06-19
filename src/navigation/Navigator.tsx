@@ -14,7 +14,7 @@ import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
 import WalletSettings from 'src/screens/wallet/WalletSettings';
-import EditWalletProfile from 'src/screens/wallet/components/EditWalletProfile';
+import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
