@@ -3,12 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "prepare": "husky install && chmod +x setup.sh && sh ./setup.sh",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "androidDevDebug": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
+    "androidDevRelease": "ENVFILE=.env react-native run-android --mode=devRelease --appIdSuffix=dev",
+    "androidProductionDebug": "ENVFILE=.env react-native run-android --mode=productionDebug",
+    "androidProductionRelease": "ENVFILE=.env react-native run-android --mode=productionRelease"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.14.1",
@@ -18,6 +23,7 @@
     "react": "18.2.0",
     "react-localization": "1.0.19",
     "react-native": "0.74.1",
+    "react-native-config": "^1.5.2",
     "react-native-image-picker": "^7.1.2",
     "react-native-localize": "3.2.0",
     "react-native-mmkv": "2.12.2",
