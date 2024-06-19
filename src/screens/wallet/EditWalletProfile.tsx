@@ -27,10 +27,11 @@ function EditWalletProfile({ navigation }) {
       inputValue={name}
       primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
       secondaryOnPress={() => navigation.goBack()}
-      addPicTitle={onBoarding.addPicture}
+      addPicTitle={wallet.editPicture}
       profileImage={profileImage}
       handlePickImage={() => handlePickImage()}
       inputPlaceholder={onBoarding.enterName}
+      edit={true}
     />
   );
 }
