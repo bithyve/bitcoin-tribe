@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "androidDevDebug": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
+    "androidDevRelease": "ENVFILE=.env react-native run-android --mode=devRelease --appIdSuffix=dev",
+    "androidProductionDebug": "ENVFILE=.env react-native run-android --mode=productionDebug",
+    "androidProductionRelease": "ENVFILE=.env react-native run-android --mode=productionRelease"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.14.1",
