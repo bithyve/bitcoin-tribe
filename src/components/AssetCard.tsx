@@ -81,7 +81,7 @@ const getStyles = (theme: AppTheme) =>
     assetChipWrapper: {
       position: 'absolute',
       zIndex: 999,
-      left: 5,
+      left: 10,
       top: 10,
     },
   });
