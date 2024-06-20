@@ -44,6 +44,7 @@ const getStyles = (theme: AppTheme) =>
     optionStyle: {
       marginVertical: 10,
       paddingHorizontal: 15,
+      paddingVertical: 15,
     },
   });
 export default AddAssetModal;
