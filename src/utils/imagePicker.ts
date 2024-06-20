@@ -8,13 +8,7 @@ const pickImage = async () => {
       cropping: true,
       multiple: false,
       mediaType: 'photo',
-      smartAlbums: [
-        'PhotoStream',
-        'UserLibrary',
-        'Panoramas',
-        'Videos',
-        'Bursts',
-      ],
+      smartAlbums: ['PhotoStream', 'UserLibrary', 'Panoramas'],
     });
     return image.path;
   } catch (error) {
