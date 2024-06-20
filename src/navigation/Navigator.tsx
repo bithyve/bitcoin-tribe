@@ -7,7 +7,7 @@ import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
 import SendScreen from 'src/screens/onBoarding/SendScreen';
-import ReceiveScreen from 'src/screens/onBoarding/ReceiveScreen';
+import ReceiveScreen from 'src/screens/receive/ReceiveScreen';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
 import AssetDetails from 'src/screens/home/AssetDetails';
 import HomeTabs from './tabNavigation/HomeTabs';
