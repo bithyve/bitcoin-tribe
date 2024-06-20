@@ -1,4 +1,4 @@
-package com.tribe
+package com.bithyve.tribe
 
 import android.app.Application
 import com.facebook.react.PackageList

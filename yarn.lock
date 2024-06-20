@@ -8690,9 +8690,15 @@ __metadata:
 "react-native-image-crop-picker@npm:^0.41.2":
   version: 0.41.2
   resolution: "react-native-image-crop-picker@npm:0.41.2"
+"react-native-config@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "react-native-config@npm:1.5.2"
   peerDependencies:
-    react-native: ">=0.40.0"
-  checksum: c1333b3b761e948bd0bc856773f68dcc859c7ce39dda3e14d2c32c17d55927735bfc5cbbb7ac5e8bac21feda87c93399f2a596aca7d5b0611cc1e8203d97ad2e
+    react-native-windows: ">=0.61"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: fc777546557704629f7aabdd2cf24decdea666ba90975602523103ed0a26a358f2f23241cae2aed646b82784e657cc01ecf7b6df2d5524d6b0ea3edfa9054d7f
   languageName: node
   linkType: hard
 
@@ -10054,6 +10060,7 @@ __metadata:
     react-localization: 1.0.19
     react-native: 0.74.1
     react-native-image-crop-picker: ^0.41.2
+    react-native-config: ^1.5.2
     react-native-localize: 3.2.0
     react-native-mmkv: 2.12.2
     react-native-paper: ^5.12.3
