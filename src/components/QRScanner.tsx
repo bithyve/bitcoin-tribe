@@ -9,6 +9,7 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { AppTheme } from 'src/theme';
+import Toast from './Toast';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
@@ -30,6 +31,7 @@ const QRScanner = () => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           setCameraPermission(true);
         } else {
+          Toast('Please allow camera permission');
           setCameraPermission(false);
         }
       } catch (err) {

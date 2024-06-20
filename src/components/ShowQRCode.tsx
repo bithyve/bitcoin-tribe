@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import CommonStyles from 'src/common/styles/CommonStyles';
-import { wp } from 'src/constants/responsive';
+import { windowWidth, wp } from 'src/constants/responsive';
 
 type ShowQRCodeProps = {
   value: string;
@@ -14,10 +14,11 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { value, title } = props;
+  const qrSize = wp((windowWidth * 40) / 100);
   return (
     <View style={styles.qrViewWrapper}>
       <View style={styles.qrImageWrapper}>
-        <QRCode value={value} size={wp(180)} />
+        <QRCode value={value} size={qrSize} />
       </View>
       <Text style={styles.qrFooterText}>{title}</Text>
     </View>
