@@ -68,7 +68,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={common.cancel}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            width={wp(120)}
           />
         </View>
       </KeyboardAvoidView>
