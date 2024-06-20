@@ -15,6 +15,10 @@ const pickImage = async () => {
         'Regular',
         'LivePhotos',
         'SelfPortraits',
+        'UserLibrary',
+        'Panoramas',
+        'Videos',
+        'Bursts',
       ],
     });
     return image.path;
