@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp } from 'src/constants/responsive';
+import { windowHeight, wp } from 'src/constants/responsive';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   walletHeaderWrapper: {
-    height: '40%',
+    height: windowHeight < 650 ? '40%' : '33%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(20),
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: '58%',
+    height: windowHeight < 650 ? '60%' : '67%',
     marginHorizontal: wp(20),
   },
 });
