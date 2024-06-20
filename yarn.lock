@@ -9055,6 +9055,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-config@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "react-native-config@npm:1.5.2"
+  peerDependencies:
+    react-native-windows: ">=0.61"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: fc777546557704629f7aabdd2cf24decdea666ba90975602523103ed0a26a358f2f23241cae2aed646b82784e657cc01ecf7b6df2d5524d6b0ea3edfa9054d7f
+  languageName: node
+  linkType: hard
+
 "react-native-image-picker@npm:^7.1.2":
   version: 7.1.2
   resolution: "react-native-image-picker@npm:7.1.2"
@@ -10422,6 +10434,7 @@ __metadata:
     react: 18.2.0
     react-localization: 1.0.19
     react-native: 0.74.1
+    react-native-config: ^1.5.2
     react-native-image-picker: ^7.1.2
     react-native-localize: 3.2.0
     react-native-mmkv: 2.12.2

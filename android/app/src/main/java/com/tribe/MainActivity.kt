@@ -1,4 +1,4 @@
-package com.tribe
+package com.bithyve.tribe
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity
