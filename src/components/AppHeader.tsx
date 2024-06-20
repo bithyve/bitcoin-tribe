@@ -68,6 +68,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginBottom: hp(15),
+      marginTop: hp(10),
       alignItems: 'center',
     },
     iconContainer: {
@@ -75,9 +76,18 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      marginBottom: hp(15),
     },
     leftIconWrapper: {
       borderRadius: 100,
+      shadowColor: theme.colors.shodowColor,
+      shadowRadius: 10,
+      shadowOpacity: 0.8,
+      elevation: 8,
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
     },
     rightIconWrapper: {
       alignSelf: 'flex-end',
