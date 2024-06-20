@@ -17,7 +17,7 @@ const TransactionData = [
     id: 2,
     transID: 'f4184fc5964…1e9e16',
     transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129488',
+    transAmount: '0.1294770000',
     transType: 'recieve',
   },
   {

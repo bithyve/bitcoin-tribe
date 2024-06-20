@@ -8,7 +8,7 @@ import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import IconArrow from 'src/assets/images/icon_arrowr1.svg';
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconBitcoin from 'src/assets/images/icon_btc.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -76,7 +76,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '65%',
+      width: '60%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -90,13 +90,15 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '35%',
+      width: '40%',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
     amtIconWrapper: {
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'flex-end',
     },
     amountText: {
       color: theme.colors.bodyColor,
