@@ -9,12 +9,7 @@ const pickImage = async () => {
       multiple: false,
       mediaType: 'photo',
       smartAlbums: [
-        'Generic',
         'PhotoStream',
-        'RecentlyAdded',
-        'Regular',
-        'LivePhotos',
-        'SelfPortraits',
         'UserLibrary',
         'Panoramas',
         'Videos',
