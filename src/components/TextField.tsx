@@ -35,6 +35,7 @@ const TextField = (props: TextFieldProps) => {
         onChangeText={text => onChangeText(text)}
         keyboardType={keyboardType}
         maxLength={maxLength}
+        maxFontSizeMultiplier={1}
       />
     </View>
   );

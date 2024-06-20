@@ -76,7 +76,10 @@ const AppText: React.FC<Props> = ({
   }, [children]);
 
   return (
-    <Text style={[textStyle, style]} testID={generatedTestID}>
+    <Text
+      style={[textStyle, style]}
+      testID={generatedTestID}
+      maxFontSizeMultiplier={1}>
       {children}
     </Text>
   );

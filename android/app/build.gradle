@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -73,17 +74,25 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-
-    namespace "com.tribe"
+    flavorDimensions "default"
+    namespace "com.bithyve.tribe"
     defaultConfig {
-        applicationId "com.tribe"
+        applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -98,10 +107,26 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+    productFlavors {
+        production {
+            applicationId "com.bithyve.tribe"
+            resValue "string", "build_config_package", "com.bithyve.tribe"
+        }
+        dev {
+            applicationId "com.bithyve.tribe.dev"
+            resValue "string", "build_config_package", "com.bithyve.tribe.dev"
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.register("installDebug") {
+        dependsOn 'installDevDebug'
     }
 }
 

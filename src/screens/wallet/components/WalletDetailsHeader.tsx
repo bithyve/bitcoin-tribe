@@ -54,8 +54,6 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       width: '100%',
       paddingBottom: 20,
-      borderBottomWidth: 0.5,
-      borderBottomColor: 'gray',
     },
     usernameText: {
       color: theme.colors.accent3,

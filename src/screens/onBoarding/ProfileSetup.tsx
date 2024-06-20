@@ -70,7 +70,7 @@ function ProfileSetup({ navigation }) {
               primaryTitle={common.next}
               secondaryTitle={common.cancel}
               primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
-              secondaryOnPress={() => Toast('Secondary Pressed')}
+              secondaryOnPress={() => navigation.goBack()}
               width={wp(120)}
             />
           </View>

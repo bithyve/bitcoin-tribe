@@ -37,7 +37,8 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={styles.ctaContainerStyle}
       buttonColor={buttonColor}
-      onPress={onPress}>
+      onPress={onPress}
+      maxFontSizeMultiplier={1}>
       {title}
     </Button>
   );
@@ -54,7 +55,7 @@ const getStyles = (theme: AppTheme, width) =>
       width: width,
     },
     labelStyle: {
-      minWidth: wp(120),
+      minWidth: width,
       marginVertical: hp(14),
     },
     primaryCTATitle: {
