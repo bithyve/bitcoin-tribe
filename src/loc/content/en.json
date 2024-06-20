@@ -37,5 +37,10 @@
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details"
   },
-  "wallet": {}
+  "wallet": {},
+  "sendScreen": {
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address"
+  }
 }
