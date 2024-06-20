@@ -59,5 +59,10 @@
     "fromAddress": "From Address",
     "fees": "Fees",
     "confirmations": "Confirmations"
+  },
+  "sendScreen": {
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address"
   }
 }

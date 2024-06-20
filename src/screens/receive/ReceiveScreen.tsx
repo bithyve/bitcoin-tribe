@@ -5,7 +5,7 @@ import AppHeader from 'src/components/AppHeader';
 import { hp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
-import ReceiveQrDetails from './components/ReceiveQrDetails';
+import ReceiveQrDetails from '../onBoarding/components/ReceiveQrDetails';
 
 function ReceiveScreen() {
   return (

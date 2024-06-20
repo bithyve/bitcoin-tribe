@@ -11,7 +11,6 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
