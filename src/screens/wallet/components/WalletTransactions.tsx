@@ -7,7 +7,7 @@ import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrow from 'src/assets/images/icon_arrowr1.svg';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
