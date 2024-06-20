@@ -7,6 +7,7 @@ const pickImage = async () => {
       height: 300,
       cropping: true,
       multiple: false,
+      compressImageQuality: 0.8,
       mediaType: 'photo',
       smartAlbums: ['PhotoStream', 'UserLibrary', 'Panoramas'],
     });
