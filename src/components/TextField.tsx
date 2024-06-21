@@ -47,6 +47,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.inputBackground,
     },
     inputContainer: {
+      justifyContent: 'center',
       height: hp(55),
       width: '80%',
       backgroundColor: theme.colors.inputBackground,

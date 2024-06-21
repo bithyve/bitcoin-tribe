@@ -11,15 +11,14 @@ import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 
 type addPictureProps = {
+  title: string;
   imageSource: any;
   onPress: any;
 };
 function AddPicture(props: addPictureProps) {
-  const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { imageSource, onPress } = props;
+  const { imageSource, onPress, title } = props;
 
   return (
     <AppTouchable onPress={onPress}>
@@ -30,7 +29,7 @@ function AddPicture(props: addPictureProps) {
           </View>
           <View>
             <AppText variant="smallCTA" style={styles.addPictureText}>
-              {onBoarding.addPicture}
+              {title}
             </AppText>
           </View>
         </View>

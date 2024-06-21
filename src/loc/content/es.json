@@ -12,7 +12,7 @@
     "welcome": "Bienvenido",
     "profileSetupTitle": "Enter your details",
     "profileSetupSubTitle": "Lorem ipsum dolor sit amet, c",
-    "enterUsername": "Enter Name",
+    "enterName": "Enter name",
     "walletSetupTitle": "Welcome,",
     "createNew": "Create New",
     "createNewSubTitle": "Lorem ipsum dolor sit amet",
@@ -58,7 +58,16 @@
     "toAddress": "To Address",
     "fromAddress": "From Address",
     "fees": "Fees",
-    "confirmations": "Confirmations"
+    "confirmations": "Confirmations",
+    "walletSettings": "Wallet Settings",
+    "walletSettingSubTitle": "lorem ipsum dolor amet",
+    "nameAndPic": "Name and Picture",
+    "nameAndPicSubTitle": "lorem ipsum dolor amet",
+    "showXPub": "Show xPub",
+    "showXPubSubTitle": "Show details for xPub",
+    "editPicture": "EDIT PICTURE",
+    "walletNamePic": "Wallet Name and Picture",
+    "walletNamePicSubTitle": "Lorem ipsum dolor amet"
   },
   "sendScreen": {
     "enterSendAddress": "Enter Send Address",

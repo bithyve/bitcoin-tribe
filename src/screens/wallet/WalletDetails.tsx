@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { wp, windowHeight } from 'src/constants/responsive';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 
@@ -14,6 +15,9 @@ function WalletDetails({ navigation }) {
           profile={''}
           username="Dustin Henderson"
           balance="0.0134"
+          onPressSetting={() =>
+            navigation.navigate(NavigationRoutes.WALLETSETTINGS)
+          }
         />
       </View>
       <View style={styles.walletTransWrapper}>
