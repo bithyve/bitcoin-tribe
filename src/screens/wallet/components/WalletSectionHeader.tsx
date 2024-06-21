@@ -62,6 +62,7 @@ const getStyles = (theme: AppTheme) =>
     },
     rightIconWrapper: {
       width: '20%',
+      alignItems: 'flex-end',
     },
   });
 export default WalletSectionHeader;

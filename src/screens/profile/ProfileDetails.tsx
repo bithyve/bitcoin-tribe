@@ -50,6 +50,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
         subTitle={subTitle}
         rightIcon={<SettingIcon />}
         onSettingsPress={onSettingsPress}
+        style={styles.wrapper}
       />
       <KeyboardAvoidView>
         <AddPicture
@@ -84,6 +85,9 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     padding: 0,
+  },
+  wrapper: {
+    marginTop: 0,
   },
 });
 export default ProfileDetails;
