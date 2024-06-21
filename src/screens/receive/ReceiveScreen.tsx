@@ -6,8 +6,8 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
 import ModalContainer from 'src/components/ModalContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import AddAmountModal from './components/AddAmountModal';
-import ReceiveQrDetails from './components/ReceiveQrDetails';
+import AddAmountModal from '../onBoarding/components/AddAmountModal';
+import ReceiveQrDetails from '../onBoarding/components/ReceiveQrDetails';
 
 function ReceiveScreen() {
   const { translations } = useContext(LocalizationContext);

@@ -50,6 +50,7 @@ const ModalContainer = (props: ModalContainerProps) => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     containerStyle: {
+      width: '100%',
       position: 'absolute',
       backgroundColor: theme.colors.cardBackground,
       padding: 20,

@@ -54,6 +54,9 @@
   "sendScreen": {
     "headerSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
     "optionCardTitle": "or Enter details manually",
-    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec"
+    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address"
   }
 }
