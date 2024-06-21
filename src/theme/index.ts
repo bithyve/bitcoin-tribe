@@ -37,7 +37,7 @@ const CombinedDefaultTheme: AppTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
-    primaryBackground: Colors.Arsenic,
+    primaryBackground: Colors.RaisinBlack,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
@@ -60,7 +60,7 @@ const CombinedDarkTheme: AppTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primaryBackground: Colors.Arsenic,
+    primaryBackground: Colors.RaisinBlack,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
