@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -22,7 +22,9 @@ function ReceiveScreen() {
         subTitle={receciveScreen.headerSubTitle}
         enableBack={true}
       />
-      <ReceiveQrDetails addMountModalVisible={() => setVisible(true)} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ReceiveQrDetails />
+      </ScrollView>
       <FooterNote
         title={common.note}
         subTitle={receciveScreen.noteSubTitle}

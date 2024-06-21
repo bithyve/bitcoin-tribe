@@ -33,6 +33,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       paddingHorizontal: hp(15),
+      marginTop: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
     },

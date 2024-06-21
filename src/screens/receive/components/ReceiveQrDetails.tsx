@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 import ShowQRCode from 'src/components/ShowQRCode';
-import OptionCard from './OptionCard';
+import OptionCard from '../../onBoarding/components/OptionCard';
 import { wp } from 'src/constants/responsive';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import ReceiveQrClipBoard from './ReceiveQrClipBoard';
