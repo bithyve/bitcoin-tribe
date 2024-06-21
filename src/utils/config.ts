@@ -1,4 +1,6 @@
 import config from 'react-native-config';
+import * as bitcoinJS from 'bitcoinjs-lib';
+import { NetworkType, WalletType } from 'src/services/wallets/enums';
 
 export enum APP_STAGE {
   DEVELOPMENT = 'DEVELOPMENT',
@@ -12,9 +14,26 @@ export enum BITCOIN_NETWORK {
 
 class Configuration {
   public ENVIRONMENT: string;
+  public NETWORK_TYPE: NetworkType;
+  public NETWORK: bitcoinJS.Network;
+  public WALLET_INSTANCE_SERIES = {
+    [WalletType.DEFAULT]: {
+      series: 0,
+      upperBound: 100,
+    },
+  };
+  public GAP_LIMIT: number = 5;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
+    this.NETWORK_TYPE =
+      this.ENVIRONMENT === APP_STAGE.PRODUCTION
+        ? NetworkType.MAINNET
+        : NetworkType.TESTNET;
+    this.NETWORK =
+      this.NETWORK_TYPE === NetworkType.MAINNET
+        ? bitcoinJS.networks.bitcoin
+        : bitcoinJS.networks.testnet;
   }
 }
 
