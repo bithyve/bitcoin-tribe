@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import Fonts from 'src/constants/Fonts';
+import { wp } from 'src/constants/responsive';
 
 type RoundedCTAProps = {
   icon?: React.ReactNode;
