@@ -24,12 +24,14 @@ interface Props extends ComponentProps<typeof Text> {
   children: React.ReactNode;
   variant?: VariantProp;
   style?: StyleProp<TextStyle>;
+  numberOfLines?: number;
 }
 
 const AppText: React.FC<Props> = ({
   children,
   variant = TextVariants.body1,
   style,
+  numberOfLines,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -79,6 +81,7 @@ const AppText: React.FC<Props> = ({
     <Text
       style={[textStyle, style]}
       testID={generatedTestID}
+      numberOfLines={numberOfLines}
       maxFontSizeMultiplier={1}>
       {children}
     </Text>
