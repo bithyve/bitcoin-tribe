@@ -23,7 +23,7 @@ function ReceiveScreen() {
         enableBack={true}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ReceiveQrDetails />
+        <ReceiveQrDetails addMountModalVisible={() => setVisible(true)} />
       </ScrollView>
       <FooterNote
         title={common.note}
