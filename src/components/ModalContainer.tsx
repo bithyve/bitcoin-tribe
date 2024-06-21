@@ -9,7 +9,7 @@ import { AppTheme } from 'src/theme';
 
 type ModalContainerProps = {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   visible: boolean;
   onDismiss?: () => void;
   children: React.ReactNode;
@@ -34,9 +34,11 @@ const ModalContainer = (props: ModalContainerProps) => {
             <AppText variant="heading1" style={styles.titleText}>
               {title}
             </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {subTitle}
-            </AppText>
+            {subTitle && (
+              <AppText variant="body1" style={styles.subTitleText}>
+                {subTitle}
+              </AppText>
+            )}
           </View>
           {children}
         </View>
