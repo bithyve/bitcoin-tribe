@@ -42,13 +42,14 @@ function ProfileDetails(props: ProfileDetailsProps) {
   const { common } = translations;
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       <AppHeader
         title={title}
         subTitle={subTitle}
         rightIcon={<SettingIcon />}
+        style={styles.wrapper}
       />
-      <KeyboardAvoidView>
+      <KeyboardAvoidView style={styles.wrapper}>
         <AddPicture
           title={addPicTitle}
           onPress={handlePickImage}
@@ -79,7 +80,11 @@ const styles = StyleSheet.create({
     marginTop: hp(50),
   },
   container: {
-    flex: 1,
+    // flex: 1,
+    padding: 0,
+  },
+  wrapper: {
+    paddingHorizontal: hp(20),
   },
 });
 export default ProfileDetails;
