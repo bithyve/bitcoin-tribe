@@ -67,7 +67,8 @@
     "showXPubSubTitle": "Show details for xPub",
     "editPicture": "EDIT PICTURE",
     "walletNamePic": "Wallet Name and Picture",
-    "walletNamePicSubTitle": "Lorem ipsum dolor amet"
+    "walletNamePicSubTitle": "Lorem ipsum dolor amet",
+    "transactionID": "Transaction ID"
   },
   "sendScreen": {
     "enterSendAddress": "Enter Send Address",

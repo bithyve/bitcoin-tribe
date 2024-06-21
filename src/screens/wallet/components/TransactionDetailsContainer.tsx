@@ -38,6 +38,10 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         label={wallet.fromAddress}
         content={'1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71'}
       />
+      <LabeledContent
+        label={wallet.transactionID}
+        content={'1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71'}
+      />
       <LabeledContent label={wallet.fees} content={'0.0001'} />
       <LabeledContent label={wallet.confirmations} content={' 6+'} />
     </View>
