@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from './components/OptionCard';
 import IconWallet from 'src/assets/images/icon_wallet1.svg';
+import IconRecovery from 'src/assets/images/icon_recoveryphrase.svg';
 import { hp } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
@@ -30,7 +31,7 @@ function WalletSetupOption({ navigation }) {
         onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
       />
       <OptionCard
-        icon={<IconWallet />}
+        icon={<IconRecovery />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
         onPress={() => console.log('Recovery Phrase')}

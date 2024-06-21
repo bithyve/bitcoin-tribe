@@ -13,6 +13,8 @@ import AssetDetails from 'src/screens/home/AssetDetails';
 import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
+import WalletSettings from 'src/screens/wallet/WalletSettings';
+import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -79,6 +81,20 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.ASSETDETAILS}
           component={AssetDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETSETTINGS}
+          component={WalletSettings}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.EDITWALLETPROFILE}
+          component={EditWalletProfile}
           options={{
             headerShown: false,
           }}

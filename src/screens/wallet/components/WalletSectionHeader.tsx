@@ -12,12 +12,13 @@ import { windowHeight } from 'src/constants/responsive';
 
 type WalletSectionHeaderProps = {
   profile: string;
+  onPress: () => void;
 };
 function WalletSectionHeader(props: WalletSectionHeaderProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile } = props;
+  const { profile, onPress } = props;
   return (
     <View style={styles.headerWrapper}>
       <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
@@ -26,9 +27,7 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
       <View style={styles.profileWrapper}>
         <UserAvatar size={70} imageSource={profile} />
       </View>
-      <IconWrapper
-        onPress={() => console.log('wallet setting press')}
-        style={styles.rightIconWrapper}>
+      <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         {<SettingIcon />}
       </IconWrapper>
     </View>
