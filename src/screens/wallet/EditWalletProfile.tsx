@@ -31,6 +31,7 @@ function EditWalletProfile({ navigation }) {
       profileImage={profileImage}
       handlePickImage={() => handlePickImage()}
       inputPlaceholder={onBoarding.enterName}
+      edit={true}
     />
   );
 }
