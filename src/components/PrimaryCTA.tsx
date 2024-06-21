@@ -19,7 +19,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
   const {
     onPress,
     title,
-    width,
+    width = wp(120),
     buttonColor = theme.colors.primaryCTA,
   } = props;
   const styles = getStyles(theme, width);

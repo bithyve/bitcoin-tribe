@@ -22,6 +22,7 @@ type ProfileDetailsProps = {
   profileImage: string;
   handlePickImage: () => void;
   inputPlaceholder: string;
+  edit?: boolean;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -35,6 +36,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     profileImage,
     handlePickImage,
     inputPlaceholder,
+    edit,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -51,6 +53,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
           title={addPicTitle}
           onPress={handlePickImage}
           imageSource={profileImage}
+          edit={edit}
           // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
         />
         <TextField
@@ -65,7 +68,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={common.cancel}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            width={wp(120)}
           />
         </View>
       </KeyboardAvoidView>
