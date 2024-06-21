@@ -23,6 +23,7 @@ type ProfileDetailsProps = {
   handlePickImage: () => void;
   inputPlaceholder: string;
   edit?: boolean;
+  onSettingsPress?: () => void;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -37,19 +38,20 @@ function ProfileDetails(props: ProfileDetailsProps) {
     handlePickImage,
     inputPlaceholder,
     edit,
+    onSettingsPress,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
   return (
-    <ScreenContainer style={styles.container}>
+    <>
       <AppHeader
         title={title}
         subTitle={subTitle}
         rightIcon={<SettingIcon />}
-        style={styles.wrapper}
+        onSettingsPress={onSettingsPress}
       />
-      <KeyboardAvoidView style={styles.wrapper}>
+      <KeyboardAvoidView>
         <AddPicture
           title={addPicTitle}
           onPress={handlePickImage}
@@ -72,7 +74,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
           />
         </View>
       </KeyboardAvoidView>
-    </ScreenContainer>
+    </>
   );
 }
 const styles = StyleSheet.create({
@@ -82,9 +84,6 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     padding: 0,
-  },
-  wrapper: {
-    paddingHorizontal: hp(20),
   },
 });
 export default ProfileDetails;
