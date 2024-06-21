@@ -2,7 +2,8 @@ import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrow from 'src/assets/images/icon_arrowr1.svg';
+import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import Switch from './Switch';
@@ -19,7 +20,8 @@ type SelectOptionProps = {
   enableSwitch?: boolean;
   toggleValue?: boolean;
   style?: StyleProp<ViewStyle>;
-  testID: string;
+  testID?: string;
+  showArrow?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -34,6 +36,7 @@ const SelectOption = (props: SelectOptionProps) => {
     enableSwitch = false,
     toggleValue,
     testID,
+    showArrow = true,
   } = props;
   const styles = getStyles(theme, backColor);
 
@@ -60,8 +63,10 @@ const SelectOption = (props: SelectOptionProps) => {
               value={toggleValue}
               testID={testID}
             />
-          ) : (
+          ) : backColor ? (
             <IconArrow />
+          ) : (
+            <IconSettingArrow />
           )}
         </View>
       </View>

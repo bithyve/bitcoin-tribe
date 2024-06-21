@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp } from 'src/constants/responsive';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { wp, windowHeight } from 'src/constants/responsive';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 
@@ -14,10 +15,13 @@ function WalletDetails({ navigation }) {
           profile={''}
           username="Dustin Henderson"
           balance="0.0134"
+          onPressSetting={() =>
+            navigation.navigate(NavigationRoutes.WALLETSETTINGS)
+          }
         />
       </View>
       <View style={styles.walletTransWrapper}>
-        <WalletTransactionsContainer />
+        <WalletTransactionsContainer navigation={navigation} />
       </View>
     </ScreenContainer>
   );
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   walletHeaderWrapper: {
-    height: '40%',
+    height: windowHeight < 650 ? '40%' : '33%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(20),
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: '58%',
+    height: windowHeight < 650 ? '60%' : '67%',
     marginHorizontal: wp(20),
   },
 });

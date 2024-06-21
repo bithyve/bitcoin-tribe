@@ -10,8 +10,13 @@ export type AppStackParams = {
   [NavigationRoutes.SPLASH]: undefined;
   [NavigationRoutes.WALLETDETAILS]: undefined;
   [NavigationRoutes.WALLETSETUPOPTION]: undefined;
+  [NavigationRoutes.WALLETALLTRANSACTION]: undefined;
+  [NavigationRoutes.TRANSACTIONDETAILS]: undefined;
   [NavigationRoutes.SENDSCREEN]: undefined;
   [NavigationRoutes.RECEIVESCREEN]: undefined;
+  [NavigationRoutes.LANGUAGEANDCURRENCY]: undefined;
+  [NavigationRoutes.WALLETSETTINGS]: undefined;
+  [NavigationRoutes.EDITWALLETPROFILE]: undefined;
   // Add other routes as needed
 };
 

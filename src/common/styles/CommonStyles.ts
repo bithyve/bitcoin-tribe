@@ -16,7 +16,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsMedium,
   },
   pageTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: Fonts.PoppinsMedium,
   },
   subTitle: {

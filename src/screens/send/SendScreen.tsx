@@ -1,16 +1,18 @@
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
-import OptionCard from './components/OptionCard';
-import QRScanner from 'src/components/QRScanner';
+import OptionCard from '../onBoarding/components/OptionCard';
+import ModalContainer from 'src/components/ModalContainer';
+import SendEnterAddress from './components/SendEnterAddress';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import QRScanner from 'src/components/QRScanner';
 
 function SendScreen() {
-  const { translations } = React.useContext(LocalizationContext);
+  const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
-
+  const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
       <AppHeader
@@ -23,8 +25,15 @@ function SendScreen() {
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
-        onPress={() => {}}
+        onPress={() => setVisible(true)}
       />
+      <ModalContainer
+        title={sendScreen.enterSendAddress}
+        subTitle={sendScreen.enterSendAdrsSubTitle}
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <SendEnterAddress />
+      </ModalContainer>
     </ScreenContainer>
   );
 }

@@ -6,13 +6,19 @@ import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
 import Settings from 'src/screens/settings/Settings';
-import SendScreen from 'src/screens/onBoarding/SendScreen';
-import ReceiveScreen from 'src/screens/onBoarding/ReceiveScreen';
+import SendScreen from 'src/screens/send/SendScreen';
+import ReceiveScreen from 'src/screens/receive/ReceiveScreen';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
 import AssetDetails from 'src/screens/home/AssetDetails';
+import WalletAllTransactions from 'src/screens/wallet/WalletAllTransactions';
+import TransactionDetails from 'src/screens/wallet/TransactionDetails';
+import LanguageAndCurrency from 'src/screens/settings/LanguageAndCurrency';
+
 import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
+import WalletSettings from 'src/screens/wallet/WalletSettings';
+import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -79,6 +85,41 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.ASSETDETAILS}
           component={AssetDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETALLTRANSACTION}
+          component={WalletAllTransactions}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETSETTINGS}
+          component={WalletSettings}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSACTIONDETAILS}
+          component={TransactionDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.LANGUAGEANDCURRENCY}
+          component={LanguageAndCurrency}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.EDITWALLETPROFILE}
+          component={EditWalletProfile}
           options={{
             headerShown: false,
           }}

@@ -21,6 +21,8 @@ type CustomColors = {
   primaryText: string;
   profileBackground: string;
   toggleBackground: string;
+  borderColor: string;
+  shodowColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -35,7 +37,7 @@ const CombinedDefaultTheme: AppTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
-    primaryBackground: Colors.Arsenic,
+    primaryBackground: Colors.RaisinBlack,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
@@ -48,6 +50,8 @@ const CombinedDefaultTheme: AppTheme = {
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
+    borderColor: Colors.BorderChineseWhite,
+    shodowColor: Colors.ChineseWhite,
   },
 };
 const CombinedDarkTheme: AppTheme = {
@@ -56,7 +60,7 @@ const CombinedDarkTheme: AppTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primaryBackground: Colors.Arsenic,
+    primaryBackground: Colors.RaisinBlack,
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent1: Colors.SelectiveYellow,
@@ -69,6 +73,8 @@ const CombinedDarkTheme: AppTheme = {
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
+    borderColor: Colors.BorderChineseWhite,
+    shodowColor: Colors.ChineseWhite,
   },
 };
 
