@@ -5,9 +5,9 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 
-function ProfileSetup({ navigation }) {
+function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
+  const { onBoarding, wallet } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
 
@@ -21,18 +21,18 @@ function ProfileSetup({ navigation }) {
   };
   return (
     <ProfileDetails
-      title={onBoarding.profileSetupTitle}
-      subTitle={onBoarding.profileSetupSubTitle}
+      title={wallet.walletNamePic}
+      subTitle={wallet.walletNamePicSubTitle}
       onChangeText={text => setName(text)}
       inputValue={name}
       primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
       secondaryOnPress={() => navigation.goBack()}
-      addPicTitle={onBoarding.addPicture}
+      addPicTitle={wallet.editPicture}
       profileImage={profileImage}
       handlePickImage={() => handlePickImage()}
       inputPlaceholder={onBoarding.enterName}
+      edit={true}
     />
   );
 }
-
-export default ProfileSetup;
+export default EditWalletProfile;

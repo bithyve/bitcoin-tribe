@@ -2,19 +2,26 @@
   "common": {
     "next": "Next",
     "cancel": "Cancel",
-    "receive": "Receive"
+    "receive": "Receive",
+    "proceed": "Proceed",
+    "send": "Send",
+    "recieve": "Recieve",
+    "buy": "Buy"
   },
   "onBoarding": {
     "welcome": "Welcome",
     "profileSetupTitle": "Enter your details",
     "profileSetupSubTitle": "Lorem ipsum dolor sit amet, c",
-    "enterUsername": "Enter Name",
+    "enterName": "Enter name",
     "walletSetupTitle": "Welcome,",
     "createNew": "Create New",
     "createNewSubTitle": "Lorem ipsum dolor sit amet",
     "recoveryPhrase": "Recovery Phrase",
     "recoveryPhraseSubTitle": "Lorem ipsum dolor si",
-    "addPicture": "ADD PICTURE"
+    "addPicture": "ADD PICTURE",
+    "enterPin": "Enter a Pin",
+    "confirmPin": "Confirm your pin",
+    "advanceSettingTitle": "Advanced Lorem"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -35,7 +42,36 @@
     "connectionSettings": "Connection Settings",
     "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
     "appInfo": "App Info , Settings and Help",
-    "appInfoSubTitle": "App version and details"
+    "appInfoSubTitle": "App version and details",
+    "language": "Language",
+    "languageSubTitle": "Lorem ipsum dolor sit amet, con",
+    "currency": "Currency",
+    "currencySubTitle": "Lorem ipsum dolor sit amet, c"
   },
-  "wallet": {}
+  "wallet": {
+    "allTransactionsTitle": "Transaction Details",
+    "allTransactionSubTitle": "lorem ipsum dolor amet",
+    "transactionDetailTitle": "Transaction Details",
+    "transactionDetailSubTitle": "lorem ipsum dolor amet",
+    "recentTransaction": "Recent Transactions",
+    "viewAll": "VIEW ALL",
+    "toAddress": "To Address",
+    "fromAddress": "From Address",
+    "fees": "Fees",
+    "confirmations": "Confirmations",
+    "walletSettings": "Wallet Settings",
+    "walletSettingSubTitle": "lorem ipsum dolor amet",
+    "nameAndPic": "Name and Picture",
+    "nameAndPicSubTitle": "lorem ipsum dolor amet",
+    "showXPub": "Show xPub",
+    "showXPubSubTitle": "Show details for xPub",
+    "editPicture": "EDIT PICTURE",
+    "walletNamePic": "Wallet Name and Picture",
+    "walletNamePicSubTitle": "Lorem ipsum dolor amet"
+  },
+  "sendScreen": {
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address"
+  }
 }

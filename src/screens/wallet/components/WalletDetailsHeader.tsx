@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconBitcoin from 'src/assets/images/icon_btc1.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -14,22 +14,23 @@ type walletDetailsHeaderProps = {
   profile: string;
   username: string;
   balance: string;
+  onPressSetting: () => void;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile, username, balance } = props;
+  const { profile, username, balance, onPressSetting } = props;
   return (
     <View style={styles.container}>
-      <WalletSectionHeader profile={profile} />
+      <WalletSectionHeader profile={profile} onPress={onPressSetting} />
       <AppText variant="body1" style={styles.usernameText}>
         {username}
       </AppText>
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
-          &nbsp;{balance}
+          {balance}
         </AppText>
       </View>
       <TransactionButtons
@@ -53,7 +54,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 20,
+      paddingBottom: 10,
     },
     usernameText: {
       color: theme.colors.accent3,

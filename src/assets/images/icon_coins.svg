@@ -1,0 +1,8 @@
+<svg id="icon_coins" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+  <g id="Coin-1" transform="translate(2.994 0.074)">
+    <path id="Path_121735" data-name="Path 121735" d="M12.1,11.4c4.9,0,8.439-.911,9.893-1.844V6.7a26.306,26.306,0,0,1-9.893,1.6,26.06,26.06,0,0,1-10.1-1.681v2.8C3.305,10.392,6.947,11.4,12.1,11.4Z" transform="translate(0 5)" fill="#6c6c67"/>
+    <path id="Path_121736" data-name="Path 121736" d="M12.1,6.3c4.606,0,8.008-.806,9.609-1.677-1.263-2.1-6.468-2.7-9.711-2.7-3.2,0-8.311.586-9.654,2.627C3.875,5.445,7.343,6.3,12.1,6.3Z" transform="translate(0 5)" fill="#e0e0e0"/>
+    <path id="Path_121737" data-name="Path 121737" d="M12.1,18.5a26.06,26.06,0,0,1-10.1-1.681V18.3c0,2.93,6.282,3.711,9.994,3.711s9.994-.782,9.994-3.711V16.9A26.324,26.324,0,0,1,12.1,18.5Z" fill="#6c6c67"/>
+  </g>
+</svg>

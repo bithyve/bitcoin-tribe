@@ -21,6 +21,8 @@ type CustomColors = {
   primaryText: string;
   profileBackground: string;
   toggleBackground: string;
+  borderColor: string;
+  shodowColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -48,6 +50,8 @@ const CombinedDefaultTheme: AppTheme = {
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
+    borderColor: Colors.BorderChineseWhite,
+    shodowColor: Colors.ChineseWhite,
   },
 };
 const CombinedDarkTheme: AppTheme = {
@@ -69,6 +73,8 @@ const CombinedDarkTheme: AppTheme = {
     primaryText: Colors.RaisinBlack,
     profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
+    borderColor: Colors.BorderChineseWhite,
+    shodowColor: Colors.ChineseWhite,
   },
 };
 
