@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -14,7 +14,9 @@ function ReceiveScreen() {
         subTitle="Scan QR Lorem ipsum dolor sit amet,"
         enableBack={true}
       />
-      <ReceiveQrDetails />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ReceiveQrDetails />
+      </ScrollView>
       <FooterNote
         title="Note"
         subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
