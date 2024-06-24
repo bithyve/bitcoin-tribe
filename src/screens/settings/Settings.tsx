@@ -65,7 +65,7 @@ function SettingsScreen({ navigation }) {
           title={settings.appBackup}
           subTitle={settings.appBackupSubTitle}
           icon={<IconBackup />}
-          onPress={() => console.log('press')}
+          onPress={() => navigation.navigate(NavigationRoutes.APPBACKUP)}
           testID="app_backup"
         />
         <SelectOption

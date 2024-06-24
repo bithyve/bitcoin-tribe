@@ -10,7 +10,8 @@
     "send": "Send",
     "proceed": "Proceed",
     "recieve": "Recieve",
-    "buy": "Buy"
+    "buy": "Buy",
+    "exit": "Exit"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -50,7 +51,8 @@
     "language": "Language",
     "languageSubTitle": "Lorem ipsum dolor sit amet, con",
     "currency": "Currency",
-    "currencySubTitle": "Lorem ipsum dolor sit amet, c"
+    "currencySubTitle": "Lorem ipsum dolor sit amet, c",
+    "appBackupScreenSubTitle": "Write down this Backup Phrase"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
