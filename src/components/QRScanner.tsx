@@ -29,15 +29,13 @@ const QRScanner = () => {
       } else {
         openSettings();
       }
-      console.log(result);
     });
   }, []);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
-    onCodeScanned: codes => {
-      let value = codes[0]?.value;
-      console.log('values', value);
+    onCodeScanned: () => {
+      // handle the scanned QR value.
     },
   });
 
