@@ -48,11 +48,11 @@ const SelectOption = (props: SelectOptionProps) => {
           <AppText variant="body1" style={styles.titleStyle}>
             {title}
           </AppText>
-          {subTitle && (
+          {subTitle ? (
             <AppText variant="body2" style={styles.subTitleStyle}>
               {subTitle}
             </AppText>
-          )}
+          ) : null}
         </View>
       </View>
       {showArrow ? (
