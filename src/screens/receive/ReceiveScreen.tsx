@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
-import { hp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
-import ReceiveQrDetails from '../onBoarding/components/ReceiveQrDetails';
+import ReceiveQrDetails from './components/ReceiveQrDetails';
 
 function ReceiveScreen() {
   return (
@@ -15,7 +14,9 @@ function ReceiveScreen() {
         subTitle="Scan QR Lorem ipsum dolor sit amet,"
         enableBack={true}
       />
-      <ReceiveQrDetails />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ReceiveQrDetails />
+      </ScrollView>
       <FooterNote
         title="Note"
         subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
