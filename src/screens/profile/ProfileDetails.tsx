@@ -22,6 +22,8 @@ type ProfileDetailsProps = {
   profileImage: string;
   handlePickImage: () => void;
   inputPlaceholder: string;
+  edit?: boolean;
+  onSettingsPress?: () => void;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -35,22 +37,27 @@ function ProfileDetails(props: ProfileDetailsProps) {
     profileImage,
     handlePickImage,
     inputPlaceholder,
+    edit,
+    onSettingsPress,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
   return (
-    <ScreenContainer>
+    <>
       <AppHeader
         title={title}
         subTitle={subTitle}
         rightIcon={<SettingIcon />}
+        onSettingsPress={onSettingsPress}
+        style={styles.wrapper}
       />
       <KeyboardAvoidView>
         <AddPicture
           title={addPicTitle}
           onPress={handlePickImage}
           imageSource={profileImage}
+          edit={edit}
           // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
         />
         <TextField
@@ -65,11 +72,10 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={common.cancel}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            width={wp(120)}
           />
         </View>
       </KeyboardAvoidView>
-    </ScreenContainer>
+    </>
   );
 }
 const styles = StyleSheet.create({
@@ -77,7 +83,11 @@ const styles = StyleSheet.create({
     marginTop: hp(50),
   },
   container: {
-    flex: 1,
+    // flex: 1,
+    padding: 0,
+  },
+  wrapper: {
+    marginTop: 0,
   },
 });
 export default ProfileDetails;

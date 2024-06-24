@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -8,6 +8,7 @@ import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
 import { wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type transButtonProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
@@ -15,6 +16,8 @@ type transButtonProps = {
 };
 const TransactionButtons = (props: transButtonProps) => {
   const { onPressSend, onPressRecieve, onPressBuy } = props;
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -23,8 +26,8 @@ const TransactionButtons = (props: transButtonProps) => {
         <RoundedCTA
           icon={<IconSend />}
           buttonColor={theme.colors.primaryCTA}
-          title={'Send'}
-          width={wp(80)}
+          title={common.send}
+          width={wp(85)}
           onPress={onPressSend}
         />
       </View>
@@ -32,8 +35,8 @@ const TransactionButtons = (props: transButtonProps) => {
         <RoundedCTA
           icon={<IconReceive />}
           buttonColor={theme.colors.accent2}
-          title={'Recieve'}
-          width={wp(90)}
+          title={common.recieve}
+          width={wp(100)}
           onPress={onPressRecieve}
         />
       </View>
@@ -41,8 +44,8 @@ const TransactionButtons = (props: transButtonProps) => {
         <RoundedCTA
           icon={<IconBuy />}
           buttonColor={theme.colors.accent1}
-          title={'Buy'}
-          width={wp(60)}
+          title={common.buy}
+          width={wp(70)}
           onPress={onPressBuy}
         />
       </View>

@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconBitcoin from 'src/assets/images/icon_btc1.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -30,7 +30,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
-          &nbsp;{balance}
+          {balance}
         </AppText>
       </View>
       <TransactionButtons
@@ -54,7 +54,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 20,
+      paddingBottom: 10,
     },
     usernameText: {
       color: theme.colors.accent3,

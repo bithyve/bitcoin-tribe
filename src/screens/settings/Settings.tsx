@@ -15,8 +15,9 @@ import IconBackup from 'src/assets/images/icon_backup.svg';
 import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function SettingsScreen() {
+function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
@@ -55,7 +56,9 @@ function SettingsScreen() {
           title={settings.langAndCurrency}
           subTitle={settings.langAndCurrencySubTitle}
           icon={<IconLangCurrency />}
-          onPress={() => console.log('press')}
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY)
+          }
           testID="language_and_currency"
         />
         <SelectOption

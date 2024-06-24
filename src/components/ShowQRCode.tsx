@@ -1,28 +1,24 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  ImageSourcePropType,
-} from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import QRCode from 'react-native-qrcode-svg';
 import CommonStyles from 'src/common/styles/CommonStyles';
-import { wp } from 'src/constants/responsive';
+import { windowWidth, wp } from 'src/constants/responsive';
 
 type ShowQRCodeProps = {
-  icon: ImageSourcePropType;
+  value: string;
   title: string;
 };
 
 const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { icon, title } = props;
+  const { value, title } = props;
+  const qrSize = wp((windowWidth * 40) / 100);
   return (
     <View style={styles.qrViewWrapper}>
       <View style={styles.qrImageWrapper}>
-        <Image source={icon} style={styles.qrImageContainer} />
+        <QRCode value={value} size={qrSize} />
       </View>
       <Text style={styles.qrFooterText}>{title}</Text>
     </View>
@@ -35,17 +31,16 @@ const getStyles = theme =>
       alignSelf: 'center',
       backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
+      marginTop: wp(35),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
-      width: 200,
-    },
-    qrImageContainer: {
-      width: 200,
-      height: 180,
+      width: Platform.OS === 'ios' ? wp(190) : wp(180),
     },
     qrImageWrapper: {
-      width: 200,
-      height: 180,
+      width: Platform.OS === 'ios' ? wp(190) : wp(180),
+      height: wp(180),
+      alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: theme.colors.headingColor,
     },
     qrFooterText: {

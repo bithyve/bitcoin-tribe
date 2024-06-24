@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Modal, Portal, Provider, useTheme } from 'react-native-paper';
 
 import IconClose from 'src/assets/images/icon_close.svg';
@@ -9,15 +9,17 @@ import { AppTheme } from 'src/theme';
 
 type ModalContainerProps = {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   visible: boolean;
   onDismiss?: () => void;
   children: React.ReactNode;
+  conatinerModalStyle?: StyleProp<ViewStyle>;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
   const theme: AppTheme = useTheme();
-  const { visible, onDismiss, children, title, subTitle } = props;
+  const { visible, onDismiss, children, title, subTitle, conatinerModalStyle } =
+    props;
   const styles = getStyles(theme);
   return (
     // <Provider>
@@ -25,7 +27,7 @@ const ModalContainer = (props: ModalContainerProps) => {
       <Modal
         visible={visible}
         onDismiss={onDismiss}
-        contentContainerStyle={styles.containerStyle}>
+        contentContainerStyle={[styles.containerStyle, conatinerModalStyle]}>
         <View>
           <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
             <IconClose />
@@ -34,9 +36,11 @@ const ModalContainer = (props: ModalContainerProps) => {
             <AppText variant="heading1" style={styles.titleText}>
               {title}
             </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {subTitle}
-            </AppText>
+            {subTitle && (
+              <AppText variant="body1" style={styles.subTitleText}>
+                {subTitle}
+              </AppText>
+            )}
           </View>
           {children}
         </View>
