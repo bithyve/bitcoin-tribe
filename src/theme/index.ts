@@ -53,6 +53,7 @@ const CombinedDefaultTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
   },
+  fonts: {},
 };
 const CombinedDarkTheme: AppTheme = {
   ...MD2DarkTheme,
@@ -76,6 +77,7 @@ const CombinedDarkTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
   },
+  fonts: {},
 };
 
 export { CombinedDefaultTheme, CombinedDarkTheme };
