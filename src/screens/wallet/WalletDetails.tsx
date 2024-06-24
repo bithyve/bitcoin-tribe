@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 650 ? '60%' : '67%',
+    height: windowHeight < 650 ? '58%' : '67%',
     marginHorizontal: wp(20),
   },
 });
