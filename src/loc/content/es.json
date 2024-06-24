@@ -88,6 +88,8 @@
     "editPicture": "EDIT PICTURE",
     "walletNamePic": "Wallet Name and Picture",
     "walletNamePicSubTitle": "Lorem ipsum dolor amet",
-    "transactionID": "Transaction ID"
+    "transactionID": "Transaction ID",
+    "receiveTestSats": "Receive Test Sats",
+    "receiveTestSatSubtitle": "Lorem ipsum dolor amet "
   }
 }

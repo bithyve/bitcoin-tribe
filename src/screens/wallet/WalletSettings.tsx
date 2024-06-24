@@ -31,6 +31,13 @@ function WalletSettings({ navigation }) {
         onPress={() => console.log('press')}
         showArrow={false}
       />
+      <SelectOption
+        title={wallet.receiveTestSats}
+        subTitle={wallet.receiveTestSatSubtitle}
+        icon={<IconXpub />}
+        onPress={() => console.log('press')}
+        showArrow={false}
+      />
     </ScreenContainer>
   );
 }
