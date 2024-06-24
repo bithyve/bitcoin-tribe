@@ -42,7 +42,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: '96%',
       marginTop: hp(10),
     },
     menuCardTitle: {

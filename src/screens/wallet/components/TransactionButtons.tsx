@@ -27,7 +27,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconSend />}
           buttonColor={theme.colors.primaryCTA}
           title={common.send}
-          width={wp(80)}
+          width={wp(85)}
           onPress={onPressSend}
         />
       </View>
@@ -36,7 +36,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconReceive />}
           buttonColor={theme.colors.accent2}
           title={common.recieve}
-          width={wp(90)}
+          width={wp(100)}
           onPress={onPressRecieve}
         />
       </View>
@@ -45,7 +45,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconBuy />}
           buttonColor={theme.colors.accent1}
           title={common.buy}
-          width={wp(60)}
+          width={wp(70)}
           onPress={onPressBuy}
         />
       </View>
