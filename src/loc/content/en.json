@@ -92,6 +92,9 @@
     "receiveTestSats": "Receive Test Sats",
     "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
     "accountXPub": "Account xPub",
-    "accountXPubSubTitle": "xPub details for your wallet"
+    "accountXPubSubTitle": "xPub details for your wallet",
+    "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "buyWithRamp": "Buy with Ramp",
+    "buyWithRampSubTitle": "Low fee for those big buys"
   }
 }

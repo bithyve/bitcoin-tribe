@@ -16,6 +16,7 @@ type walletDetailsHeaderProps = {
   username: string;
   balance: string;
   onPressSetting: () => void;
+  onPressBuy: () => void;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const { receciveScreen, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile, username, balance, onPressSetting } = props;
+  const { profile, username, balance, onPressSetting, onPressBuy } = props;
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
@@ -42,7 +43,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             CommonActions.navigate(NavigationRoutes.SENDSCREEN),
           )
         }
-        onPressBuy={() => console.log('buy')}
+        onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
