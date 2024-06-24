@@ -54,9 +54,9 @@
     "react-native-svg": "^15.3.0",
     "react-native-svg-transformer": "^1.4.0",
     "react-native-tcp-socket": "5.6.2",
+    "react-native-vision-camera": "^4.3.2",
     "react-query": "^3.39.3",
-    "rn-nodeify": "github:tradle/rn-nodeify",
-    "react-native-vision-camera": "^4.3.2"
+    "rn-nodeify": "github:tradle/rn-nodeify"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

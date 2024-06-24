@@ -11,10 +11,6 @@ function AddAmountModal() {
   const { translations } = useContext(LocalizationContext);
   const { common, receciveScreen } = translations;
 
-  useEffect(() => {
-    setAmount('');
-  }, []);
-
   return (
     <View style={styles.saveButtonMargin}>
       <TextField

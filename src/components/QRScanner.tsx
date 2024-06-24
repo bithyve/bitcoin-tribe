@@ -1,5 +1,6 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { View, StyleSheet, PermissionsAndroid, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
@@ -9,36 +10,28 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { AppTheme } from 'src/theme';
-import Toast from './Toast';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
-  const [cameraPermission, setCameraPermission] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState(null);
 
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
-  useLayoutEffect(() => {
-    requestCameraPermission();
-  }, []);
-
-  const requestCameraPermission = async () => {
-    if (Platform.OS == 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          setCameraPermission(true);
-        } else {
-          Toast('Please allow camera permission');
-          setCameraPermission(false);
-        }
-      } catch (err) {
-        console.warn(err);
+  useEffect(() => {
+    request(
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.CAMERA
+        : PERMISSIONS.ANDROID.CAMERA,
+    ).then(result => {
+      if (result == 'granted') {
+        setCameraPermission(result);
+      } else {
+        openSettings();
       }
-    }
-  };
+      console.log(result);
+    });
+  }, []);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
@@ -50,7 +43,7 @@ const QRScanner = () => {
 
   return (
     <View style={styles.qrCodeContainer}>
-      {cameraPermission && device && (
+      {cameraPermission != null && device && (
         <>
           <Camera
             device={device}
