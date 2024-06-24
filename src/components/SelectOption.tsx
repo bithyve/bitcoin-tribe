@@ -56,19 +56,21 @@ const SelectOption = (props: SelectOptionProps) => {
             )}
           </View>
         </View>
-        <View>
-          {enableSwitch ? (
-            <Switch
-              onValueChange={onValueChange}
-              value={toggleValue}
-              testID={testID}
-            />
-          ) : backColor ? (
-            <IconArrow />
-          ) : (
-            <IconSettingArrow />
-          )}
-        </View>
+        {showArrow ? (
+          <View>
+            {enableSwitch ? (
+              <Switch
+                onValueChange={onValueChange}
+                value={toggleValue}
+                testID={testID}
+              />
+            ) : backColor ? (
+              <IconArrow />
+            ) : (
+              <IconSettingArrow />
+            )}
+          </View>
+        ) : null}
       </View>
     </AppTouchable>
   );
