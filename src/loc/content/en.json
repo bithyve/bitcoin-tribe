@@ -92,6 +92,6 @@
     "receiveTestSats": "Receive Test Sats",
     "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
     "accountXPub": "Account xPub",
-    "accountXPubSubTitle": "Account xPub"
+    "accountXPubSubTitle": "xPub details for your wallet"
   }
 }
