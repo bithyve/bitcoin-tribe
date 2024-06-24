@@ -41,37 +41,35 @@ const SelectOption = (props: SelectOptionProps) => {
   const styles = getStyles(theme, backColor);
 
   return (
-    <AppTouchable onPress={onPress} style={[styles.touchableWrapper, style]}>
-      <View style={styles.container}>
-        <View style={styles.iconWrapper}>
-          {icon}
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleStyle}>
-              {title}
+    <AppTouchable onPress={onPress} style={[styles.container, style]}>
+      <View style={styles.iconWrapper}>
+        {icon}
+        <View style={styles.contentWrapper}>
+          <AppText variant="body1" style={styles.titleStyle}>
+            {title}
+          </AppText>
+          {subTitle && (
+            <AppText variant="body2" style={styles.subTitleStyle}>
+              {subTitle}
             </AppText>
-            {subTitle && (
-              <AppText variant="body2" style={styles.subTitleStyle}>
-                {subTitle}
-              </AppText>
-            )}
-          </View>
+          )}
         </View>
-        {showArrow ? (
-          <View>
-            {enableSwitch ? (
-              <Switch
-                onValueChange={onValueChange}
-                value={toggleValue}
-                testID={testID}
-              />
-            ) : backColor ? (
-              <IconArrow />
-            ) : (
-              <IconSettingArrow />
-            )}
-          </View>
-        ) : null}
       </View>
+      {showArrow ? (
+        <View>
+          {enableSwitch ? (
+            <Switch
+              onValueChange={onValueChange}
+              value={toggleValue}
+              testID={testID}
+            />
+          ) : backColor ? (
+            <IconArrow />
+          ) : (
+            <IconSettingArrow />
+          )}
+        </View>
+      ) : null}
     </AppTouchable>
   );
 };
@@ -82,13 +80,9 @@ const getStyles = (theme: AppTheme, backColor) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: windowHeight > 650 ? 15 : 10,
+      paddingVertical: windowHeight > 650 ? 25 : 20,
       backgroundColor: backColor,
-    },
-    touchableWrapper: {
       borderRadius: 10,
-      width: '100%',
-      backgroundColor: backColor,
     },
     iconWrapper: {
       flexDirection: 'row',

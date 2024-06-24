@@ -35,7 +35,6 @@ const getStyles = (theme: AppTheme) =>
     optionStyle: {
       marginVertical: 10,
       paddingHorizontal: 20,
-      paddingVertical: 15,
     },
   });
 export default BuyModal;
