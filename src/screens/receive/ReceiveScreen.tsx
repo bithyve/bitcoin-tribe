@@ -9,7 +9,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 
-function ReceiveScreen() {
+function ReceiveScreen({ route }) {
+  const { receiveData, title, subTitle } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
 
@@ -17,13 +18,12 @@ function ReceiveScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader
-        title={common.receive}
-        subTitle={receciveScreen.headerSubTitle}
-        enableBack={true}
-      />
+      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ReceiveQrDetails addMountModalVisible={() => setVisible(true)} />
+        <ReceiveQrDetails
+          addMountModalVisible={() => setVisible(true)}
+          receiveData={receiveData}
+        />
       </ScrollView>
       <FooterNote
         title={common.note}

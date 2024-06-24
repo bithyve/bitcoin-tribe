@@ -10,9 +10,13 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type ReceiveQrDetailsProps = {
   addMountModalVisible: () => void;
+  receiveData?: string;
 };
 
-const ReceiveQrDetails = ({ addMountModalVisible }: ReceiveQrDetailsProps) => {
+const ReceiveQrDetails = ({
+  addMountModalVisible,
+  receiveData,
+}: ReceiveQrDetailsProps) => {
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen } = translations;
 
@@ -27,12 +31,13 @@ const ReceiveQrDetails = ({ addMountModalVisible }: ReceiveQrDetailsProps) => {
         qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
         icon={<IconCopy />}
       />
-
-      <OptionCard
-        title={receciveScreen.addAmountTitle}
-        subTitle={receciveScreen.addAmountSubTitle}
-        onPress={addMountModalVisible}
-      />
+      {receiveData === '' ? (
+        <OptionCard
+          title={receciveScreen.addAmountTitle}
+          subTitle={receciveScreen.addAmountSubTitle}
+          onPress={addMountModalVisible}
+        />
+      ) : null}
     </View>
   );
 };

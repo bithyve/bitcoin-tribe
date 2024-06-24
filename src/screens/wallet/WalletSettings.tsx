@@ -7,6 +7,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 import IconXpub from 'src/assets/images/icon_xpub.svg';
+import { CommonActions } from '@react-navigation/native';
 
 function WalletSettings({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -28,7 +29,15 @@ function WalletSettings({ navigation }) {
         title={wallet.showXPub}
         subTitle={wallet.showXPubSubTitle}
         icon={<IconXpub />}
-        onPress={() => console.log('press')}
+        onPress={() =>
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
+              receiveData: 'xPub',
+              title: wallet.accountXPub,
+              subTitle: wallet.accountXPubSubTitle,
+            }),
+          )
+        }
         showArrow={false}
       />
       <SelectOption

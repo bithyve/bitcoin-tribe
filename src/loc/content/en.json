@@ -90,6 +90,8 @@
     "walletNamePicSubTitle": "Lorem ipsum dolor amet",
     "transactionID": "Transaction ID",
     "receiveTestSats": "Receive Test Sats",
-    "receiveTestSatSubtitle": "Lorem ipsum dolor amet "
+    "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
+    "accountXPub": "Account xPub",
+    "accountXPubSubTitle": "Account xPub"
   }
 }
