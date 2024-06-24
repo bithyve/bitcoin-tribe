@@ -1,0 +1,122 @@
+import React from 'react';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { useTheme } from 'react-native-paper';
+
+import { wp, hp } from 'src/constants/responsive';
+import AppText from 'src/components/AppText';
+import Fonts from 'src/constants/Fonts';
+import TextIcon from 'src/assets/images/icon_bitcoin.svg';
+
+import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
+import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
+import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
+import { NavigationRoutes } from '../NavigationRoutes';
+import { AppTheme } from 'src/theme';
+
+const windowWidth = Dimensions.get('window').width;
+
+const CustomTab = ({ state, descriptors, navigation }) => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+
+  const TabBarIcon = (isFocused, label) => {
+    switch (label) {
+      case NavigationRoutes.ASSETS:
+        return isFocused ? <AssetsActive /> : <AssetsInActive />;
+      case NavigationRoutes.COMMUNITY:
+        return isFocused ? <CommunityActive /> : <CommunityInActive />;
+      case NavigationRoutes.SETTINGS:
+        return isFocused ? <SettingsActive /> : <SettingsInActive />;
+      default:
+        return <TextIcon />;
+    }
+  };
+
+  return (
+    <View style={styles.tabBar}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+
+        return (
+          <TouchableOpacity
+            key={index}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={styles.tab}>
+            <View>{TabBarIcon(isFocused, label)}</View>
+            {isFocused && (
+              <AppText
+                style={[
+                  styles.bottomNavigation,
+                  { color: isFocused ? theme.colors.primaryCTA : 'gray' },
+                ]}>
+                &nbsp;{label}
+              </AppText>
+            )}
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
+
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    tabBar: {
+      flexDirection: 'row',
+      borderRadius: 20,
+      backgroundColor: theme.colors.inputBackground,
+      position: 'absolute',
+      bottom: 0,
+      height: hp(62),
+      width: wp(295),
+      marginBottom: hp(15),
+      marginHorizontal: windowWidth * 0.1,
+    },
+    tab: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    bottomNavigation: {
+      fontSize: 11,
+      fontFamily: Fonts.PoppinsSemiBold,
+      lineHeight: 11 * 1.4,
+      height: 15,
+    },
+  });
+
+export default CustomTab;

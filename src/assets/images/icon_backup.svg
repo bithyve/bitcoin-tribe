@@ -1,0 +1,7 @@
+<svg id="icon_backup" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_47522" data-name="Group 47522" transform="translate(-28.5 -421)">
+    <path id="shield" d="M12.816,1.513a2.25,2.25,0,0,0-1.632,0l-7.5,2.918a2.25,2.25,0,0,0-1.434,2.1v7.378a6.25,6.25,0,0,0,3.016,5.348l5.311,3.212a2.75,2.75,0,0,0,2.846,0l5.311-3.212a6.249,6.249,0,0,0,3.016-5.348V6.525a2.247,2.247,0,0,0-1.434-2.094Z" transform="translate(31.25 423.641)" fill="#e0e0e0"/>
+    <circle id="Ellipse_2112" data-name="Ellipse 2112" cx="6.75" cy="6.75" r="6.75" transform="translate(36.5 429)" fill="#6c6c67"/>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>

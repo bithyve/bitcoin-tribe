@@ -1,0 +1,7 @@
+<svg id="icon_scanner" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_47430" data-name="Group 47430" transform="translate(-2429 -327)">
+    <path id="full-screen" d="M5,2A2.015,2.015,0,0,0,3,4V7A1,1,0,1,0,5,7V4H8A1,1,0,1,0,8,2ZM16,2a1,1,0,1,0,0,2h3V7a1,1,0,1,0,2,0V4a2.015,2.015,0,0,0-2-2ZM3.984,15.986A1,1,0,0,0,3,17v3a2.015,2.015,0,0,0,2,2H8a1,1,0,1,0,0-2H5V17a1,1,0,0,0-1.016-1.014Zm16,0A1,1,0,0,0,19,17v3H16a1,1,0,1,0,0,2h3a2.015,2.015,0,0,0,2-2V17a1,1,0,0,0-1.016-1.014Z" transform="translate(2432 330)" fill="#e0e0e0"/>
+    <rect id="Rectangle_8440" data-name="Rectangle 8440" width="23" height="2" rx="1" transform="translate(2433 341)" fill="#e0e0e0"/>
+  </g>
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+</svg>
