@@ -45,7 +45,9 @@ function AssetDetailsContainer(props: assetDetailsProps) {
           />
         </View>
       </View>
-      <ScrollView style={styles.scrollingContainer}>
+      <ScrollView
+        style={styles.scrollingContainer}
+        showsVerticalScrollIndicator={false}>
         <AppText variant="body1" style={styles.assetDetailsText}>
           The Demogorgan
         </AppText>
@@ -125,7 +127,7 @@ function AssetDetailsContainer(props: assetDetailsProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: '100%',
+      flex: 1,
       flexDirection: 'column',
     },
     assetContainer: {
