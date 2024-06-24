@@ -26,7 +26,9 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
   return (
     <CardBox>
       <View>
-        <View style={styles.detailsWrapper}>
+        <AppTouchable
+          onPress={() => handleCopyText(qrCodeValue)}
+          style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
             <Text
               style={[styles.menuCardTitle, CommonStyles.body1]}
@@ -34,12 +36,8 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
               {qrCodeValue}
             </Text>
           </View>
-          <AppTouchable
-            onPress={() => handleCopyText(qrCodeValue)}
-            style={styles.iconWrapper}>
-            {icon}
-          </AppTouchable>
-        </View>
+          <View style={styles.iconWrapper}>{icon}</View>
+        </AppTouchable>
       </View>
     </CardBox>
   );

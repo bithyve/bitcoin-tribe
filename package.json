@@ -55,6 +55,11 @@
     "react-query": "^3.39.3",
     "rn-nodeify": "github:tradle/rn-nodeify"
   },
+  "reactNativePermissionsIOS": [
+    "Camera",
+    "MediaLibrary",
+    "PhotoLibrary"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
