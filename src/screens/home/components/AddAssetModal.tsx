@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper';
 import AddNewIcon from 'src/assets/images/icon_addnew.svg';
 import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import SelectOption from 'src/components/SelectOption';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
@@ -44,6 +44,7 @@ const getStyles = (theme: AppTheme) =>
     optionStyle: {
       marginVertical: 10,
       paddingHorizontal: 20,
+      paddingVertical: windowHeight > 650 ? 25 : 20,
     },
   });
 export default AddAssetModal;
