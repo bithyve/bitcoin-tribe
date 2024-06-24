@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import OptionCard from './components/OptionCard';
+import OptionCard from '../../components/OptionCard';
 import IconWallet from 'src/assets/images/icon_wallet1.svg';
 import IconRecovery from 'src/assets/images/icon_recoveryphrase.svg';
 import { hp } from 'src/constants/responsive';

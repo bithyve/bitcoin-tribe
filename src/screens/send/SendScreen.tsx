@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
-import OptionCard from '../onBoarding/components/OptionCard';
+import OptionCard from '../../components/OptionCard';
 import ModalContainer from 'src/components/ModalContainer';
 import SendEnterAddress from './components/SendEnterAddress';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
