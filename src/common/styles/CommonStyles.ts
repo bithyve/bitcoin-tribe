@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import Fonts from 'src/constants/Fonts';
+import { hp } from 'src/constants/responsive';
 
 export default StyleSheet.create({
   heading1: {

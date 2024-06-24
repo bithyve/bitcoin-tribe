@@ -68,7 +68,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginBottom: hp(15),
-      marginTop: hp(10),
+      // marginTop: hp(10),
       alignItems: 'center',
     },
     iconContainer: {
