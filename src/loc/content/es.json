@@ -3,8 +3,12 @@
     "next": "Next",
     "cancel": "Cancel",
     "receive": "Receive",
-    "proceed": "Proceed",
+    "save": "Save",
+    "keyboardTypeNumeric": "numeric",
+    "addressCopiedSuccessfully": "Address Copied Successfully!",
+    "note": "Note",
     "send": "Send",
+    "proceed": "Proceed",
     "recieve": "Recieve",
     "buy": "Buy"
   },
@@ -48,6 +52,22 @@
     "currency": "Currency",
     "currencySubTitle": "Lorem ipsum dolor sit amet, c"
   },
+  "receciveScreen": {
+    "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
+    "addAmountTitle": "Add Amount",
+    "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "placeHolderText": "Enter Amount",
+    "invoiceAddress": "Invoice Address",
+    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
+  },
+  "sendScreen": {
+    "headerSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "optionCardTitle": "or Enter details manually",
+    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address"
+  },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
     "allTransactionSubTitle": "lorem ipsum dolor amet",
@@ -71,10 +91,5 @@
     "transactionID": "Transaction ID",
     "receiveTestSats": "Receive Test Sats",
     "receiveTestSatSubtitle": "Lorem ipsum dolor amet "
-  },
-  "sendScreen": {
-    "enterSendAddress": "Enter Send Address",
-    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
-    "enterAddress": "Enter address"
   }
 }

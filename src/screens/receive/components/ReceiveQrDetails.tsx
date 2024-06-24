@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 import ShowQRCode from 'src/components/ShowQRCode';
@@ -6,22 +6,32 @@ import OptionCard from '../../onBoarding/components/OptionCard';
 import { wp } from 'src/constants/responsive';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import ReceiveQrClipBoard from './ReceiveQrClipBoard';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-const ReceiveQrDetails = () => {
+type ReceiveQrDetailsProps = {
+  addMountModalVisible: () => void;
+};
+
+const ReceiveQrDetails = ({ addMountModalVisible }: ReceiveQrDetailsProps) => {
+  const { translations } = useContext(LocalizationContext);
+  const { receciveScreen } = translations;
+
   return (
     <View style={styles.container}>
       <ShowQRCode
-        icon={require('../../../assets/images/icon_qr_code.png')}
-        title={'Invoice Address'}
+        value={'https://google.com'}
+        title={receciveScreen.invoiceAddress}
       />
+
       <ReceiveQrClipBoard
         qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
         icon={<IconCopy />}
       />
+
       <OptionCard
-        title="Add amount"
-        subTitle="Lorem ipsum dolor sit amet, consec"
-        onPress={() => {}}
+        title={receciveScreen.addAmountTitle}
+        subTitle={receciveScreen.addAmountSubTitle}
+        onPress={addMountModalVisible}
       />
     </View>
   );

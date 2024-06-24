@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from '../onBoarding/components/OptionCard';
 import ModalContainer from 'src/components/ModalContainer';
 import SendEnterAddress from './components/SendEnterAddress';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import QRScanner from 'src/components/QRScanner';
 
 function SendScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -15,13 +16,14 @@ function SendScreen() {
   return (
     <ScreenContainer>
       <AppHeader
-        title="Send"
-        subTitle="Lorem ipsum dolor sit amet, consec tetur"
+        title={common.send}
+        subTitle={sendScreen.headerSubTitle}
         enableBack={true}
       />
+      <QRScanner />
       <OptionCard
-        title="or Enter details manually"
-        subTitle="Lorem ipsum dolor sit amet, consec"
+        title={sendScreen.optionCardTitle}
+        subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
         onPress={() => setVisible(true)}
       />
@@ -41,6 +43,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     margin: hp(20),
+  },
+  qrCodeContainer: {
+    height: wp(340),
+    width: wp(340),
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: wp(35),
+    borderRadius: wp(8),
+    overflow: 'hidden',
+  },
+  camera: {
+    height: wp(340),
+    width: wp(340),
   },
 });
 export default SendScreen;
