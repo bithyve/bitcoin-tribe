@@ -1,27 +1,44 @@
-import * as React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
+import ModalContainer from 'src/components/ModalContainer';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 
 function ReceiveScreen() {
+  const { translations } = useContext(LocalizationContext);
+  const { receciveScreen, common } = translations;
+
+  const [visible, setVisible] = useState(false);
+
   return (
     <ScreenContainer>
       <AppHeader
-        title="Receive"
-        subTitle="Scan QR Lorem ipsum dolor sit amet,"
+        title={common.receive}
+        subTitle={receciveScreen.headerSubTitle}
         enableBack={true}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ReceiveQrDetails />
+        <ReceiveQrDetails addMountModalVisible={() => setVisible(true)} />
       </ScrollView>
       <FooterNote
-        title="Note"
-        subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
+        title={common.note}
+        subTitle={receciveScreen.noteSubTitle}
         customStyle={styles.advanceOptionStyle}
       />
+
+      <ModalContainer
+        conatinerModalStyle={styles.addAmountModalContainerStyle}
+        title={receciveScreen.addAmountTitle}
+        subTitle={receciveScreen.addAmountSubTitle}
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <AddAmountModal />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
@@ -29,6 +46,10 @@ function ReceiveScreen() {
 const styles = StyleSheet.create({
   advanceOptionStyle: {
     backgroundColor: 'transparent',
+  },
+  addAmountModalContainerStyle: {
+    width: '96%',
+    alignSelf: 'center',
   },
 });
 
