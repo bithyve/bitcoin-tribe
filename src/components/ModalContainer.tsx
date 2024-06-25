@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { Modal, Portal, Provider, useTheme } from 'react-native-paper';
+import { Modal, Portal, useTheme } from 'react-native-paper';
 
 import IconClose from 'src/assets/images/icon_close.svg';
 import AppText from './AppText';
@@ -23,7 +23,6 @@ const ModalContainer = (props: ModalContainerProps) => {
     props;
   const styles = getStyles(theme);
   return (
-    // <Provider>
     <Portal>
       <Modal
         visible={visible}
@@ -47,7 +46,6 @@ const ModalContainer = (props: ModalContainerProps) => {
         </View>
       </Modal>
     </Portal>
-    // </Provider>
   );
 };
 const getStyles = (theme: AppTheme) =>
