@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { FlatList, StyleSheet } from 'react-native';
 
@@ -10,6 +10,8 @@ import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
+import ModalContainer from 'src/components/ModalContainer';
+import ConfirmAppBackup from './components/ConfirmAppBackup';
 const words = [
   'ketchup',
   'unique',
@@ -30,6 +32,9 @@ function AppBackup({ navigation }) {
   const { common, settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
+  const [visible, setVisible] = useState(false);
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -47,11 +52,21 @@ function AppBackup({ navigation }) {
       />
       <Buttons
         primaryTitle={common.next}
-        primaryOnPress={() => console.log('primary')}
+        primaryOnPress={() => setVisible(true)}
         secondaryTitle={common.exit}
         secondaryOnPress={() => navigation.goBack()}
         width={wp(120)}
       />
+      <ModalContainer
+        title={settings.confirmBackupPhrase}
+        subTitle={settings.confirmBackupPhraseSubtitle}
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <ConfirmAppBackup
+          primaryOnPress={() => console.log('')}
+          secondaryOnPress={() => console.log('')}
+        />
+      </ModalContainer>
     </ScreenContainer>
   );
 }

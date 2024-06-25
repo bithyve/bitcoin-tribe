@@ -52,7 +52,11 @@
     "languageSubTitle": "Lorem ipsum dolor sit amet, con",
     "currency": "Currency",
     "currencySubTitle": "Lorem ipsum dolor sit amet, c",
-    "appBackupScreenSubTitle": "Write down this Backup Phrase"
+    "appBackupScreenSubTitle": "Write down this Backup Phrase",
+    "confirmBackupPhrase": "Confirm backup phrase",
+    "confirmBackupPhraseSubtitle": "Key in the word exactly like it was displayed",
+    "enterSeedWord": "Enter Seed Word",
+    "enterSeedWordLabel": "Enter the first (01) word"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
