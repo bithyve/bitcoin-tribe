@@ -6,6 +6,7 @@ import IconClose from 'src/assets/images/icon_close.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
+import { hp } from 'src/constants/responsive';
 
 type ModalContainerProps = {
   title: string;
@@ -35,11 +36,11 @@ const ModalContainer = (props: ModalContainerProps) => {
             <AppText variant="heading1" style={styles.titleText}>
               {title}
             </AppText>
-            {subTitle && (
+            {subTitle ? (
               <AppText variant="body1" style={styles.subTitleText}>
                 {subTitle}
               </AppText>
-            )}
+            ) : null}
           </View>
           {children}
         </View>
@@ -53,7 +54,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       position: 'absolute',
       backgroundColor: theme.colors.cardBackground,
-      padding: 20,
+      padding: hp(25),
       borderRadius: 10,
       bottom: 2,
       alignSelf: 'flex-end',
@@ -62,7 +63,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginVertical: 20,
+      marginTop: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,

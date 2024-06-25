@@ -23,10 +23,11 @@ function AssetDetails() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: 0,
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
     headerWrapper: {
-      marginHorizontal: hp(20),
+      marginHorizontal: hp(25),
       marginTop: hp(15),
     },
   });

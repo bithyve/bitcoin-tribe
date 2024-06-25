@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
 import { hp, windowHeight } from 'src/constants/responsive';
@@ -16,6 +15,7 @@ import IconLangCurrency from 'src/assets/images/icon_globe.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AppText from 'src/components/AppText';
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -28,7 +28,9 @@ function SettingsScreen({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppHeader title={settings.setting} enableBack={false} />
+      <AppText variant="pageTitle2" style={styles.title}>
+        {settings.setting}
+      </AppText>
       <View style={styles.wrapper}>
         <SelectOption
           title={settings.darkMode}
@@ -93,6 +95,11 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingWrapper: {
       flex: 1,
+    },
+    title: {
+      color: theme.colors.headingColor,
+      marginTop: hp(40),
+      marginBottom: hp(20),
     },
   });
 export default SettingsScreen;

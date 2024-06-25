@@ -61,7 +61,7 @@ const ListHeaderComponent = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppText variant="pageTitle" style={styles.listHeaderText}>
+    <AppText variant="pageTitle2" style={styles.listHeaderText}>
       {home.myAssets}
     </AppText>
   );
