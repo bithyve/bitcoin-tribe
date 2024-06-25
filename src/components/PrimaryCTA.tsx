@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
-
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
 import { AppTheme } from 'src/theme';
@@ -12,6 +11,7 @@ type PrimaryCTAProps = {
   width?: any;
   style?: StyleProp<ViewStyle>;
   buttonColor?: string;
+  loading?: boolean;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
@@ -21,6 +21,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     title,
     width = wp(120),
     buttonColor = theme.colors.primaryCTA,
+    loading,
   } = props;
   const styles = getStyles(theme, width);
 
@@ -38,7 +39,8 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       style={styles.ctaContainerStyle}
       buttonColor={buttonColor}
       onPress={onPress}
-      maxFontSizeMultiplier={1}>
+      maxFontSizeMultiplier={1}
+      loading={loading}>
       {title}
     </Button>
   );
@@ -55,8 +57,8 @@ const getStyles = (theme: AppTheme, width) =>
       width: width,
     },
     labelStyle: {
-      minWidth: width,
-      marginVertical: hp(16),
+      // minWidth: width,
+      marginVertical: hp(14),
     },
     primaryCTATitle: {
       fontSize: 13,
