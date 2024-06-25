@@ -65,7 +65,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginTop: hp(20),
+      marginTop: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,
