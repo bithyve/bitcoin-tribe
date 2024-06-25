@@ -131,7 +131,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginVertical: hp(10),
     },
     labelText: {
       color: theme.colors.accent3,

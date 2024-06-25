@@ -39,7 +39,8 @@ function AddAssetModal() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingBottom: hp(25),
+      paddingTop: hp(25),
+      paddingBottom: hp(40),
     },
     optionStyle: {
       marginVertical: 10,
