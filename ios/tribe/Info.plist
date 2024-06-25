@@ -32,11 +32,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) Camera to scan QR codes</string>
+	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) Photo Library use</string>
+	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Bold.ttf</string>
