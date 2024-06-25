@@ -50,7 +50,7 @@ const getStyles = (theme: AppTheme) =>
     title: {
       color: theme.colors.headingColor,
       marginTop: hp(20),
-      marginBottom: hp(35),
+      marginBottom: hp(30),
     },
   });
 export default WalletSetupOption;
