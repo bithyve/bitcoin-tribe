@@ -42,7 +42,7 @@ function ProfileSetup({ navigation }) {
 
   useEffect(() => {
     if (query.status === 'success') {
-      navigation.navigate(NavigationRoutes.HOME);
+      navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [navigation, query.status]);
 
