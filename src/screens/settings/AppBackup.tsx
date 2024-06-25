@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,7 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
-import { hp, wp } from 'src/constants/responsive';
+import { wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
 const words = [
   'ketchup',
@@ -25,7 +25,7 @@ const words = [
   'october',
 ];
 
-function AppBackup() {
+function AppBackup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { common, settings } = translations;
   const theme: AppTheme = useTheme();
@@ -49,7 +49,7 @@ function AppBackup() {
         primaryTitle={common.next}
         primaryOnPress={() => console.log('primary')}
         secondaryTitle={common.exit}
-        secondaryOnPress={() => console.log('secondary')}
+        secondaryOnPress={() => navigation.goBack()}
         width={wp(120)}
       />
     </ScreenContainer>
