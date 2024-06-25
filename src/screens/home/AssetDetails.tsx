@@ -16,7 +16,7 @@ function AssetDetails() {
       <View style={styles.headerWrapper}>
         <AppHeader enableBack={true} />
       </View>
-      <AssetDetailsContainer tag="COLLECTIBLES" />
+      <AssetDetailsContainer tag="COLLECTIBLE" />
     </ScreenContainer>
   );
 }

@@ -40,7 +40,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
         <AppText variant="body1" style={styles.langCurrencyStyle}>
           {langCurrency}
         </AppText>
-        <AppText variant="body2" style={styles.langCurrencyVariantStyle}>
+        <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
           {langCurrencyVariant}
         </AppText>
         <View style={styles.iconArrowWrapper}>
