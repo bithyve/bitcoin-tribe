@@ -50,6 +50,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
+      // need to work
       shadowColor: theme.colors.cardShadowColor,
       shadowRadius: 10,
       shadowOpacity: 1,
