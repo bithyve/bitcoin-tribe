@@ -8,7 +8,6 @@ if (typeof __dirname === 'undefined') {
 if (typeof __filename === 'undefined') {
   global.__filename = '';
 }
-console.log(typeof process);
 if (typeof process === 'undefined') {
   global.process = require('process');
 } else {
@@ -36,4 +35,4 @@ if (typeof localStorage !== 'undefined') {
 // global.net = require('react-native-tcp');
 // If using the crypto shim, uncomment the following line to ensure
 // crypto is loaded first, so it can populate global.crypto
-// require('crypto');
+require('crypto');
