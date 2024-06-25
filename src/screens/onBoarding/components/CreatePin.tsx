@@ -99,9 +99,9 @@ function CreatePin() {
 
   return (
     <View style={styles.container}>
-      <AppText variant="body1" style={styles.labelText}>
+      {/* <AppText variant="body1" style={styles.labelText}>
         {onBoarding.enterPin}
-      </AppText>
+      </AppText> */}
       <PinInputsView passCode={passcode} />
       {passcode.length === 4 ? (
         <View>
@@ -131,9 +131,11 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
+      marginTop: hp(15),
     },
     labelText: {
       color: theme.colors.accent3,
+      marginTop: hp(15),
     },
   });
 export default CreatePin;

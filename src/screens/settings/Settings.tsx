@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
 import { hp, windowHeight } from 'src/constants/responsive';
