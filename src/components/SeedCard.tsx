@@ -42,11 +42,12 @@ const getStyles = (theme: AppTheme, showWordIndex, index) =>
   StyleSheet.create({
     container: {
       height: 70,
-      width: '50%',
+      width: '48%',
       flexDirection: 'row',
-      paddingLeft: hp(15),
+      paddingLeft: hp(10),
       alignItems: 'center',
-      margin: hp(10),
+      marginVertical: hp(8),
+      marginRight: index % 2 ? 0 : hp(15),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
       opacity: showWordIndex === index ? 1 : 0.6,
