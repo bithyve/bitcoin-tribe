@@ -45,7 +45,7 @@
     "appBackup": "App Backup",
     "appBackupSubTitle": "Lorem ipsum dolor sit amet, consec ",
     "connectionSettings": "Connection Settings",
-    "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "connectionSettingSubTitle": "Configure Tor and Nodes",
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
@@ -56,7 +56,12 @@
     "confirmBackupPhrase": "Confirm backup phrase",
     "confirmBackupPhraseSubtitle": "Key in the word exactly like it was displayed",
     "enterSeedWord": "Enter Seed Word",
-    "enterSeedWordLabel": "Enter the first (01) word"
+    "enterSeedWordLabel": "Enter the first (01) word",
+    "conSettingScreenSubTitle": "Enter lightning details",
+    "tor": "Tor",
+    "torSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "NodeSettings": "Node Settings",
+    "NodeSettingSubTitle": "Connect available own nodes"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",

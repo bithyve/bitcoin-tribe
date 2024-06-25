@@ -20,6 +20,7 @@ import { AppStackParams } from './types';
 import WalletSettings from 'src/screens/wallet/WalletSettings';
 import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 import AppBackup from 'src/screens/settings/AppBackup';
+import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
 
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -128,6 +129,13 @@ function Navigator() {
         <Stack.Screen
           name={NavigationRoutes.APPBACKUP}
           component={AppBackup}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CONNECTIONSETTINGS}
+          component={ConnectionSettings}
           options={{
             headerShown: false,
           }}

@@ -75,7 +75,9 @@ function SettingsScreen({ navigation }) {
           title={settings.connectionSettings}
           subTitle={settings.connectionSettingSubTitle}
           icon={<IconNodes />}
-          onPress={() => console.log('press')}
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.CONNECTIONSETTINGS)
+          }
           testID="connection_settings"
         />
         <SelectOption
