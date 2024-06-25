@@ -76,6 +76,7 @@ const getStyles = (theme: AppTheme) =>
     },
     textStyles: {
       color: theme.colors.headingColor,
+      marginTop: hp(3),
     },
     underlineStyle: {
       backgroundColor: 'transparent',
