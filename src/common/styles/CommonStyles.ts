@@ -55,14 +55,6 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsBold,
   },
-  toastMessage: {
-    fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
-    paddingLeft: 10,
-    flex: 1,
-    flexWrap: 'wrap',
-    fontWeight: '600',
-  },
   textFieldLabel: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsMedium,
