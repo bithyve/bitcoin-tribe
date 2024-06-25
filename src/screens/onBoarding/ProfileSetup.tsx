@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { View } from 'react-native';
 
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -31,7 +30,7 @@ function ProfileSetup({ navigation }) {
         subTitle={onBoarding.profileSetupSubTitle}
         onChangeText={text => setName(text)}
         inputValue={name}
-        primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
+        primaryOnPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
         secondaryOnPress={() => console.log('press')}
         addPicTitle={onBoarding.addPicture}
         profileImage={profileImage}
@@ -41,6 +40,7 @@ function ProfileSetup({ navigation }) {
       />
       <ModalContainer
         title={onBoarding.advanceSettingTitle}
+        subTitle={onBoarding.enterPin}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />
