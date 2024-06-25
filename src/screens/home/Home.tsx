@@ -129,7 +129,7 @@ const getStyles = (theme: AppTheme) =>
       padding: 0,
     },
     headerWrapper: {
-      margin: hp(20),
+      margin: hp(25),
     },
   });
 export default HomeScreen;

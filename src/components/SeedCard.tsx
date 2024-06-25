@@ -3,9 +3,9 @@ import { useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
 import { AppTheme } from 'src/theme';
-import AppText from './AppText';
 import { hp, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
+import AppText from './AppText';
 
 type seedCardProps = {
   item: string;

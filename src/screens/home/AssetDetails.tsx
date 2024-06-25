@@ -26,7 +26,7 @@ const getStyles = (theme: AppTheme) =>
       padding: 0,
     },
     headerWrapper: {
-      marginHorizontal: hp(20),
+      marginHorizontal: hp(25),
       marginTop: hp(15),
     },
   });
