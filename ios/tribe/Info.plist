@@ -32,11 +32,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Please allow camera access for QR scanner</string>
+	<string>$(PRODUCT_NAME) Camera to scan QR codes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Please allow photo library access to campture screenshots and send app feedback</string>
+	<string>$(PRODUCT_NAME) Photo Library use</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Bold.ttf</string>
