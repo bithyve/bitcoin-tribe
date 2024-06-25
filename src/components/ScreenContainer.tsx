@@ -34,7 +34,8 @@ const getStyles = (theme: AppTheme) =>
     image: {
       height: '100%',
       width: '100%',
-      padding: hp(25),
+      paddingHorizontal: hp(25),
+      paddingTop: hp(15),
     },
   });
 export default ScreenContainer;

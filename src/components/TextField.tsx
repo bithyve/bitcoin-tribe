@@ -7,23 +7,32 @@ import CommonStyles from 'src/common/styles/CommonStyles';
 import { AppTheme } from 'src/theme';
 
 type TextFieldProps = {
-  icon?: any;
+  icon?: React.ReactNode;
   placeholder?: string;
   value: string;
-  keyboardType?: any;
-  onChangeText: any;
+  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
+  onChangeText: (text: string) => void;
   maxLength?: number;
+  disabled?: boolean;
 };
 
 const TextField = (props: TextFieldProps) => {
-  const { icon, placeholder, value, keyboardType, onChangeText, maxLength } =
-    props;
+  const {
+    icon,
+    placeholder,
+    value,
+    keyboardType,
+    onChangeText,
+    maxLength,
+    disabled = false,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.container}>
       {icon && <View style={styles.iconWrapper}>{icon}</View>}
       <TextInput
+        disabled={disabled}
         cursorColor={theme.colors.accent1}
         textColor={theme.colors.headingColor}
         placeholder={placeholder}
@@ -67,6 +76,7 @@ const getStyles = (theme: AppTheme) =>
     },
     textStyles: {
       color: theme.colors.headingColor,
+      marginTop: hp(3),
     },
     underlineStyle: {
       backgroundColor: 'transparent',

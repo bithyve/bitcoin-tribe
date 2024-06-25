@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
@@ -17,8 +17,18 @@ function PinInputsView(props: pinInputViewProps) {
   const { passCode, height = hp(50), width = wp(50), length = 4 } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, height, width);
+  const [hide, setHide] = useState(false);
+  useEffect(() => {
+    if (passCode.length === 4) {
+      setTimeout(() => {
+        setHide(true);
+      }, 2000);
+    } else {
+      setHide(false);
+    }
+  }, [passCode]);
   const getPin = (num: number) => {
-    if (passCode.length === num) {
+    if (passCode.length === num && !hide) {
       return (
         <AppText variant="heading3" style={styles.passcodeText}>
           {passCode[num - 1]}

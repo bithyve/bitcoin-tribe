@@ -21,7 +21,7 @@ function WalletSetupOption({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle1" style={styles.title}>
+      <AppText variant="pageTitle2" style={styles.title}>
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
@@ -49,7 +49,8 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginVertical: hp(20),
+      marginTop: hp(20),
+      marginBottom: hp(30),
     },
   });
 export default WalletSetupOption;

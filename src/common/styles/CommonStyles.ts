@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 import Fonts from 'src/constants/Fonts';
-import { hp } from 'src/constants/responsive';
 
 export default StyleSheet.create({
   heading1: {
@@ -16,11 +15,11 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsMedium,
   },
-  pageTitle: {
+  pageTitle1: {
     fontSize: 20,
     fontFamily: Fonts.PoppinsMedium,
   },
-  pageTitle1: {
+  pageTitle2: {
     fontSize: 24,
     fontFamily: Fonts.PoppinsMedium,
   },
@@ -55,14 +54,6 @@ export default StyleSheet.create({
   placeholder: {
     fontSize: 14,
     fontFamily: Fonts.PoppinsBold,
-  },
-  toastMessage: {
-    fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
-    paddingLeft: 10,
-    flex: 1,
-    flexWrap: 'wrap',
-    fontWeight: '600',
   },
   textFieldLabel: {
     fontSize: 14,

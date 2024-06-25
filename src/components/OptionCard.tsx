@@ -23,7 +23,7 @@ function OptionCard(props: OptionCardProps) {
   return (
     <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
       <View>
-        <View>{icon}</View>
+        {icon && <View style={styles.iconContainer}>{icon}</View>}
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
             <AppText variant="body1" style={styles.menuCardTitle}>
@@ -45,10 +45,20 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      padding: hp(20),
+      paddingHorizontal: hp(20),
+      paddingVertical: hp(10),
       marginVertical: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
+      // need to work
+      // shadowColor: theme.colors.cardShadowColor,
+      // shadowRadius: 10,
+      // shadowOpacity: 1,
+      // elevation: 2,
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 4,
+      // },
     },
     detailsWrapper: {
       flexDirection: 'row',
@@ -68,6 +78,9 @@ const getStyles = (theme: AppTheme) =>
     iconWrapper: {
       width: '10%',
       justifyContent: 'center',
+    },
+    iconContainer: {
+      marginVertical: hp(10),
     },
   });
 export default OptionCard;

@@ -51,7 +51,7 @@ function AppHeader(props: AppHeaderProps) {
       {title || subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="pageTitle" style={styles.headerTitle}>
+            <AppText variant="pageTitle1" style={styles.headerTitle}>
               {title}
             </AppText>
             <AppText variant="body1" style={styles.headerSubTitle}>
@@ -76,17 +76,18 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginVertical: hp(15),
+      marginTop: hp(15),
+      marginBottom: hp(20),
     },
     leftIconWrapper: {
       borderRadius: 100,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 10,
-      shadowOpacity: 0.8,
+      shadowOpacity: 0.4,
       elevation: 8,
       shadowOffset: {
         width: 0,
-        height: 4,
+        height: 2,
       },
     },
     rightIconWrapper: {
@@ -94,7 +95,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 100,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 10,
-      shadowOpacity: 0.8,
+      shadowOpacity: 0.6,
       elevation: 8,
       shadowOffset: {
         width: 0,

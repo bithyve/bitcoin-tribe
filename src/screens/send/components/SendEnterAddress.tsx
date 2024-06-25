@@ -24,7 +24,7 @@ function SendEnterAddress() {
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
-          primaryTitle={common.next}
+          primaryTitle={common.save}
           secondaryTitle={common.cancel}
           primaryOnPress={() => console.log('press')}
           secondaryOnPress={() => console.log('press')}
@@ -37,10 +37,11 @@ function SendEnterAddress() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     primaryCTAContainer: {
-      marginTop: hp(50),
+      marginTop: hp(65),
     },
     container: {
       width: '100%',
+      marginTop: hp(45),
     },
   });
 export default SendEnterAddress;

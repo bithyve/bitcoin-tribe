@@ -24,6 +24,7 @@ type CustomColors = {
   borderColor: string;
   shodowColor: string;
   inActiveDotColor: string;
+  cardShadowColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -54,7 +55,9 @@ const CombinedDefaultTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
+    cardShadowColor: Colors.White,
   },
+  fonts: {},
 };
 const CombinedDarkTheme: AppTheme = {
   ...MD2DarkTheme,
@@ -78,7 +81,9 @@ const CombinedDarkTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
+    cardShadowColor: Colors.White,
   },
+  fonts: {},
 };
 
 export { CombinedDefaultTheme, CombinedDarkTheme };

@@ -44,19 +44,20 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     height: '100%',
-    padding: 0,
+    paddingHorizontal: 0,
+    paddingTop: 0,
   },
   walletHeaderWrapper: {
     height: windowHeight < 650 ? '40%' : '33%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: wp(20),
+    padding: wp(25),
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
     height: windowHeight < 650 ? '58%' : '67%',
-    marginHorizontal: wp(20),
+    marginHorizontal: wp(25),
   },
 });
 export default WalletDetails;

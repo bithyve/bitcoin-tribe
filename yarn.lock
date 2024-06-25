@@ -3789,9 +3789,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.796:
-  version "1.4.810"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.810.tgz#7dee01b090b9e048e6db752f7b30921790230654"
-  integrity sha512-Kaxhu4T7SJGpRQx99tq216gCq2nMxJo+uuT6uzz9l8TVN2stL7M06MIIXAtr9jsrLs2Glflgf2vMQRepxawOdQ==
+  version "1.4.811"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.811.tgz#031c8b101e7d0a7cde1dfdb0623dbdb5e19655cd"
+  integrity sha512-CDyzcJ5XW78SHzsIOdn27z8J4ist8eaFLhdto2hSMSJQgsiwvbv2fbizcKUICryw1Wii1TI/FEkvzvJsR3awrA==
 
 elliptic@^6.5.2, elliptic@^6.5.3, elliptic@^6.5.5:
   version "6.5.5"
@@ -4408,9 +4408,9 @@ flow-enums-runtime@^0.0.6:
   integrity sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==
 
 flow-parser@0.*:
-  version "0.238.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.238.0.tgz#b465753c2630a38f459413a745c69ec11a0b5291"
-  integrity sha512-VE7XSv1epljsIN2YeBnxCmGJihpNIAnLLu/pPOdA+Gkso7qDltJwUi6vfHjgxdBbjSdAuPGnhuOHJUQG+yYwIg==
+  version "0.238.2"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.238.2.tgz#0faddaa65eaac8a893168dba810780b072599d62"
+  integrity sha512-fs7FSnzzKF6oSzjk14JlBHt82DPchYHVsXtPi4Fkn+qrunVjWaBZY7nSO/mC9X4l9+wRah/R69DRd5NGDOrWqw==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -6864,9 +6864,9 @@ range-parser@~1.2.1:
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
 react-devtools-core@^5.0.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-5.2.0.tgz#072ecd2d84d3653817cc11e4b16f60a3c2b705f9"
-  integrity sha512-vZK+/gvxxsieAoAyYaiRIVFxlajb7KXhgBDV7OsoMzaAE+IqGpoxusBjIgq5ibqA2IloKu0p9n7tE68z1xs18A==
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-5.3.0.tgz#8062c25a4707c3216333270210bfe06871f7eed4"
+  integrity sha512-IG3T+azv48Oc5VLdHR4XdBNKNZIUOKRtx0sJMRvb++Zom/uqtx73j6u37JCsIBNIaq6vA7RPH5Bbcf/Wj53KXA==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"

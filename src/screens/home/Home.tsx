@@ -19,14 +19,14 @@ const AssetsData = [
     id: 1,
     title: 'The Demogorgan',
     details: 'Humanoid creature…',
-    tag: 'COLLECTIBLES',
+    tag: 'COLLECTIBLE',
   },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
     id: 2,
     title: 'Vecna',
     details: 'Mastermid human ',
-    tag: 'COLLECTIBLES',
+    tag: 'COLLECTIBLE',
   },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
@@ -40,7 +40,7 @@ const AssetsData = [
     id: 4,
     title: 'Third Item',
     details: 'Humanoid creature',
-    tag: 'COLLECTIBLES',
+    tag: 'COLLECTIBLE',
   },
   {
     asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
@@ -126,7 +126,8 @@ function HomeScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: 0,
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
     headerWrapper: {
       margin: hp(25),

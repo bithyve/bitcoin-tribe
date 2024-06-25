@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
 import { hp, windowHeight } from 'src/constants/responsive';
@@ -29,7 +28,7 @@ function SettingsScreen({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle1" style={styles.title}>
+      <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
       <View style={styles.wrapper}>
@@ -101,7 +100,8 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginVertical: hp(20),
+      marginTop: hp(40),
+      marginBottom: hp(20),
     },
   });
 export default SettingsScreen;

@@ -66,6 +66,11 @@
     "stream-browserify": "^1.0.0",
     "uuid": "^10.0.0"
   },
+  "reactNativePermissionsIOS": [
+    "Camera",
+    "MediaLibrary",
+    "PhotoLibrary"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
