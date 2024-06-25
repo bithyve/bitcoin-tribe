@@ -15,8 +15,8 @@ type seedCardProps = {
 function SeedCard(props: seedCardProps) {
   const { item, index } = props;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
   const [showWordIndex, setShowWordIndex] = useState<string | number>('');
+  const styles = getStyles(theme, showWordIndex, index);
   return (
     <AppTouchable
       style={styles.container}
@@ -38,7 +38,7 @@ function SeedCard(props: seedCardProps) {
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, showWordIndex, index) =>
   StyleSheet.create({
     container: {
       height: 70,
@@ -49,7 +49,7 @@ const getStyles = (theme: AppTheme) =>
       margin: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
-      opacity: 0.6,
+      opacity: showWordIndex === index ? 1 : 0.6,
     },
     indexStyle: {
       color: theme.colors.accent1,
@@ -57,6 +57,8 @@ const getStyles = (theme: AppTheme) =>
     },
     seedWordStyle: {
       color: theme.colors.bodyColor,
+      paddingTop: showWordIndex === index ? 0 : hp(10),
+      paddingBottom: showWordIndex === index ? hp(5) : 0,
     },
   });
 export default SeedCard;
