@@ -6,6 +6,7 @@ import Colors from 'src/theme/Colors';
 import CheckIcon from 'src/assets/images/icon_check.svg';
 import { hp, wp } from 'src/constants/responsive';
 import AppText from './AppText';
+import Fonts from 'src/constants/Fonts';
 
 // Need to work
 export default (message, icon = false, error = false) => {
@@ -38,11 +39,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: wp(300),
     minHeight: hp(50),
-    borderRadius: 60,
+    borderRadius: 65,
     padding: 10,
   },
   toastMessageStyle: {
     color: Colors.RaisinBlack,
     marginLeft: wp(8),
+    fontSize: 14,
+    fontFamily: Fonts.PoppinsSemiBold,
+    flex: 1,
+    flexWrap: 'wrap',
+    fontWeight: '600',
   },
 });
