@@ -3,18 +3,17 @@ import { StyleSheet, View } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import ScreenContainer from 'src/components/ScreenContainer';
 
 type ProfileDetailsProps = {
   title: string;
   subTitle: string;
-  onChangeText: () => void;
+  onChangeText: (text: string) => void;
   inputValue: string;
   primaryOnPress: () => void;
   secondaryOnPress: () => void;
@@ -24,6 +23,7 @@ type ProfileDetailsProps = {
   inputPlaceholder: string;
   edit?: boolean;
   onSettingsPress?: () => void;
+  primaryStatus?: string;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -39,6 +39,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     inputPlaceholder,
     edit,
     onSettingsPress,
+    primaryStatus,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -58,7 +59,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
           onPress={handlePickImage}
           imageSource={profileImage}
           edit={edit}
-          // 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
         />
         <TextField
           value={inputValue}
@@ -72,6 +72,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={common.cancel}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
+            primaryLoading={primaryStatus === 'loading'}
           />
         </View>
       </KeyboardAvoidView>
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
     marginTop: hp(50),
   },
   container: {
-    // flex: 1,
     padding: 0,
   },
   wrapper: {
