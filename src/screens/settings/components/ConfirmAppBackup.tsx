@@ -8,6 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import AppText from 'src/components/AppText';
+import ActivePageIndicator from 'src/components/ActivePageIndicator';
 
 type confirmAppBackupProps = {
   primaryOnPress: () => void;
@@ -31,13 +32,16 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
         placeholder={settings.enterSeedWord}
         keyboardType={'default'}
       />
-      <Buttons
-        primaryTitle={common.next}
-        primaryOnPress={primaryOnPress}
-        secondaryTitle={common.cancel}
-        secondaryOnPress={secondaryOnPress}
-        width={wp(120)}
-      />
+      <View style={styles.buttonWrapper}>
+        <ActivePageIndicator totalPages={3} currentPage={0} />
+        <Buttons
+          primaryTitle={common.next}
+          primaryOnPress={primaryOnPress}
+          secondaryTitle={common.cancel}
+          secondaryOnPress={secondaryOnPress}
+          width={wp(120)}
+        />
+      </View>
     </View>
   );
 }
@@ -46,6 +50,13 @@ const getStyles = (theme: AppTheme) =>
     labelStyle: {
       margin: hp(15),
       color: theme.colors.bodyColor,
+      marginTop: hp(50),
+    },
+    buttonWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
+      marginTop: hp(20),
     },
   });
 export default ConfirmAppBackup;

@@ -64,7 +64,7 @@ function AppBackup({ navigation }) {
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
           primaryOnPress={() => console.log('')}
-          secondaryOnPress={() => console.log('')}
+          secondaryOnPress={() => setVisible(false)}
         />
       </ModalContainer>
     </ScreenContainer>
