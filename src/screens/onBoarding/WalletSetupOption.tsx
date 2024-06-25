@@ -49,8 +49,8 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(40),
-      marginBottom: hp(25),
+      marginTop: hp(20),
+      marginBottom: hp(30),
     },
   });
 export default WalletSetupOption;

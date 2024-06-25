@@ -35,7 +35,7 @@ function AddPicture(props: addPictureProps) {
         </View>
       ) : (
         <View style={styles.container}>
-          <UserAvatar size={wp(70)} imageSource={imageSource} />
+          <UserAvatar size={wp(75)} imageSource={imageSource} />
           {edit ? (
             <View style={styles.iconImageWrapper2}>
               <IconImage />
@@ -51,12 +51,13 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(25),
+      marginTop: hp(30),
+      marginBottom: hp(40),
       position: 'relative',
     },
     iconImageWrapper: {
-      height: windowHeight > 650 ? hp(70) : 70,
-      width: windowHeight > 650 ? hp(70) : 70,
+      height: windowHeight > 650 ? hp(75) : 75,
+      width: windowHeight > 650 ? hp(75) : 75,
       borderRadius: hp(70),
       alignItems: 'center',
       justifyContent: 'center',

@@ -55,6 +55,7 @@ const CombinedDefaultTheme: AppTheme = {
     shodowColor: Colors.ChineseWhite,
     cardShadowColor: Colors.White,
   },
+  fonts: {},
 };
 const CombinedDarkTheme: AppTheme = {
   ...MD2DarkTheme,
@@ -79,6 +80,7 @@ const CombinedDarkTheme: AppTheme = {
     shodowColor: Colors.ChineseWhite,
     cardShadowColor: Colors.White,
   },
+  fonts: {},
 };
 
 export { CombinedDefaultTheme, CombinedDarkTheme };

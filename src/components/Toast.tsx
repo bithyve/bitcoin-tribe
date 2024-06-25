@@ -4,7 +4,7 @@ import Toast from 'react-native-root-toast';
 
 import Colors from 'src/theme/Colors';
 import CheckIcon from 'src/assets/images/icon_check.svg';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 
@@ -29,6 +29,7 @@ export default (message, icon = false, error = false) => {
       opacity: 1,
       backgroundColor: Colors.ChineseOrange,
       textColor: Colors.RaisinBlack,
+      containerStyle: { marginBottom: (windowWidth * 22) / 100 },
     },
   );
 };
