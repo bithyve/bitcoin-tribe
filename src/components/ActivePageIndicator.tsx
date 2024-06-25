@@ -38,14 +38,14 @@ const getStyles = (theme: AppTheme) =>
     },
     dot: {
       width: hp(6),
-      height: hp(4),
+      height: hp(5),
       borderRadius: 5,
       marginHorizontal: hp(3),
     },
     activeDot: {
       backgroundColor: theme.colors.accent1,
       width: hp(30),
-      height: hp(4),
+      height: hp(5),
     },
     inactiveDot: {
       backgroundColor: theme.colors.inActiveDotColor,
