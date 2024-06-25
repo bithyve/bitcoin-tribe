@@ -22,15 +22,14 @@
 		35E339502C22A3AB007E532A /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEFD2651F84F4F24BDABA477 /* Poppins-Medium.ttf */; };
 		35E339512C22A3AB007E532A /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A10CA73681AB40E3B3BD44AE /* Poppins-Regular.ttf */; };
 		35E339522C22A3AB007E532A /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F5962712C6B431AB006FF67 /* Poppins-SemiBold.ttf */; };
+		59597E3F425356EC2F5666CE /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 787BD3BF81B12D2797A0D123 /* libPods-tribe-tribe-dev.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		81BF7E4BD56D77AAFEB27B3B /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F27012217B9943FB6527C421 /* libPods-tribe-tribe-dev.a */; };
 		8F162E0EAF5083262B34876A /* libPods-tribe-tribeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B9905C2B960894F38F3B52B /* libPods-tribe-tribeTests.a */; };
 		91DE4F8258114FAB98DE5963 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEFD2651F84F4F24BDABA477 /* Poppins-Medium.ttf */; };
 		95CDAC6D2E4A4937AD91F046 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 664836951D024BE78000A6DD /* Poppins-Italic.ttf */; };
 		9C9889765ABE2022934854C8 /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B4DF459982423B99D696BE10 /* libPods-tribe.a */; };
 		AB3E4B89BA0C45939BB275BD /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15E774876C204DC68E061ABA /* Poppins-Bold.ttf */; };
 		BC1B92D31D2349A8A8A323BE /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F5962712C6B431AB006FF67 /* Poppins-SemiBold.ttf */; };
-		E71EA5E64E2C18EB8B316888 /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2925935D6C072539A765B77B /* libPods-tribe-tribe-dev.a */; };
 		F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -56,26 +55,23 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tribe/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		15E774876C204DC68E061ABA /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
-		2925935D6C072539A765B77B /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F5962712C6B431AB006FF67 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		35E339592C22A3AB007E532A /* tribe-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tribe-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E3395A2C22A3AC007E532A /* tribe-dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tribe-dev-Info.plist"; path = "/Users/c58/Workspace/tribe/ios/tribe-dev-Info.plist"; sourceTree = "<absolute>"; };
-		3C0F16D852DFA5FD10F57386 /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
+		43CB30116BB845E974712136 /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
 		4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		543B9DB64B973D13439DDBD4 /* Pods-tribe-tribeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		664836951D024BE78000A6DD /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		6BC549E4A2994FB9323428AE /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
+		787BD3BF81B12D2797A0D123 /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tribe/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8B0A432E2296E7E1613EADD4 /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
 		9B9905C2B960894F38F3B52B /* libPods-tribe-tribeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10CA73681AB40E3B3BD44AE /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		AEFD2651F84F4F24BDABA477 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
-		B41243466B5DBF2008D78A0E /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
 		B4DF459982423B99D696BE10 /* libPods-tribe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C886E54FFE5445704D8EB05C /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
+		C4A9E6C4BCD008BCDA280074 /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
 		E5C82098A18C182599397807 /* Pods-tribe-tribeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F27012217B9943FB6527C421 /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F37C3BABAD9DCA7A83D2D65E /* Pods-tribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.debug.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E71EA5E64E2C18EB8B316888 /* libPods-tribe-tribe-dev.a in Frameworks */,
+				59597E3F425356EC2F5666CE /* libPods-tribe-tribe-dev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +153,7 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				B4DF459982423B99D696BE10 /* libPods-tribe.a */,
 				9B9905C2B960894F38F3B52B /* libPods-tribe-tribeTests.a */,
-				2925935D6C072539A765B77B /* libPods-tribe-tribe-dev.a */,
+				787BD3BF81B12D2797A0D123 /* libPods-tribe-tribe-dev.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -204,8 +200,8 @@
 				6BC549E4A2994FB9323428AE /* Pods-tribe.release.xcconfig */,
 				543B9DB64B973D13439DDBD4 /* Pods-tribe-tribeTests.debug.xcconfig */,
 				E5C82098A18C182599397807 /* Pods-tribe-tribeTests.release.xcconfig */,
-				8B0A432E2296E7E1613EADD4 /* Pods-tribe-tribe-dev.debug.xcconfig */,
-				3C0F16D852DFA5FD10F57386 /* Pods-tribe-tribe-dev.release.xcconfig */,
+				43CB30116BB845E974712136 /* Pods-tribe-tribe-dev.debug.xcconfig */,
+				C4A9E6C4BCD008BCDA280074 /* Pods-tribe-tribe-dev.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -259,13 +255,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 35E339562C22A3AB007E532A /* Build configuration list for PBXNativeTarget "tribe-dev" */;
 			buildPhases = (
-				BE7B865E360FFF4B8CD24763 /* [CP] Check Pods Manifest.lock */,
+				7CF4EA387F6EA687522E3E0E /* [CP] Check Pods Manifest.lock */,
 				35E339452C22A3AB007E532A /* Sources */,
 				35E339482C22A3AB007E532A /* Frameworks */,
 				35E3394A2C22A3AB007E532A /* Resources */,
 				35E339532C22A3AB007E532A /* Bundle React Native code and images */,
-				71DE5473BE25910A2070EF5D /* [CP] Embed Pods Frameworks */,
-				0965F7DD3B3BF756E7168BCD /* [CP] Copy Pods Resources */,
+				0309DE05E93F8B8536EF92CA /* [CP] Embed Pods Frameworks */,
+				6FDD2D1C962859971C14D130 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -370,21 +366,21 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0965F7DD3B3BF756E7168BCD /* [CP] Copy Pods Resources */ = {
+		0309DE05E93F8B8536EF92CA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		170E7574FA71D2438DFAEC53 /* [CP] Check Pods Manifest.lock */ = {
@@ -425,21 +421,21 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		71DE5473BE25910A2070EF5D /* [CP] Embed Pods Frameworks */ = {
+		6FDD2D1C962859971C14D130 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7C9045CB1CC2BF69D76FFB9D /* [CP] Check Pods Manifest.lock */ = {
@@ -458,6 +454,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-tribe-tribeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7CF4EA387F6EA687522E3E0E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tribe-tribe-dev-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -496,28 +514,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BE7B865E360FFF4B8CD24763 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tribe-tribe-dev-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F4FF6E936F333180CA72A2B5 /* [CP] Embed Pods Frameworks */ = {
@@ -711,7 +707,7 @@
 		};
 		35E339572C22A3AB007E532A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B0A432E2296E7E1613EADD4 /* Pods-tribe-tribe-dev.debug.xcconfig */;
+			baseConfigurationReference = 43CB30116BB845E974712136 /* Pods-tribe-tribe-dev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -747,7 +743,7 @@
 		};
 		35E339582C22A3AB007E532A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C0F16D852DFA5FD10F57386 /* Pods-tribe-tribe-dev.release.xcconfig */;
+			baseConfigurationReference = C4A9E6C4BCD008BCDA280074 /* Pods-tribe-tribe-dev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
