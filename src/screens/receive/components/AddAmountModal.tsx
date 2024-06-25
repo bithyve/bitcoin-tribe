@@ -1,19 +1,41 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
+
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
+import KeyPadView from 'src/components/KeyPadView';
+import { AppTheme } from 'src/theme';
+import DeleteIcon from 'src/assets/images/delete.svg';
 
 function AddAmountModal() {
+  const theme: AppTheme = useTheme();
+
   const [amount, setAmount] = useState('');
   const { translations } = useContext(LocalizationContext);
   const { common, receciveScreen } = translations;
 
+  function onPressNumber(text) {
+    let tmpPasscode = amount;
+    if (text !== 'x') {
+      tmpPasscode += text;
+      setAmount(tmpPasscode);
+    } else {
+      setAmount(amount);
+    }
+  }
+
+  const onDeletePressed = text => {
+    setAmount(amount.slice(0, -1));
+  };
+
   return (
     <View style={styles.saveButtonMargin}>
       <TextField
+        disabled={true}
         value={amount}
         onChangeText={(value: string) => {
           setAmount(value);
@@ -32,6 +54,12 @@ function AddAmountModal() {
           width={wp(120)}
         />
       </View>
+      <KeyPadView
+        onPressNumber={onPressNumber}
+        onDeletePressed={onDeletePressed}
+        keyColor={theme.colors.primaryCTA}
+        ClearIcon={<DeleteIcon />}
+      />
     </View>
   );
 }
