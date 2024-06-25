@@ -29,7 +29,7 @@ function SettingsScreen({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle1" style={styles.title}>
+      <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
       <View style={styles.wrapper}>

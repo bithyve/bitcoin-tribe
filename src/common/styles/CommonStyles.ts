@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 import Fonts from 'src/constants/Fonts';
-import { hp } from 'src/constants/responsive';
 
 export default StyleSheet.create({
   heading1: {
@@ -16,11 +15,11 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsMedium,
   },
-  pageTitle: {
+  pageTitle1: {
     fontSize: 20,
     fontFamily: Fonts.PoppinsMedium,
   },
-  pageTitle1: {
+  pageTitle2: {
     fontSize: 24,
     fontFamily: Fonts.PoppinsMedium,
   },

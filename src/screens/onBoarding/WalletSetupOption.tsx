@@ -21,7 +21,7 @@ function WalletSetupOption({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle1" style={styles.title}>
+      <AppText variant="pageTitle2" style={styles.title}>
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
