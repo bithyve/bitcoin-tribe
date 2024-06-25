@@ -42,7 +42,7 @@ function AddAmountModal() {
         }}
         icon={<IconBitcoin />}
         placeholder={receciveScreen.placeHolderText}
-        keyboardType={common.keyboardTypeNumeric}
+        keyboardType={'numeric'}
         maxLength={10}
       />
       <View style={styles.primaryCTAContainer}>
