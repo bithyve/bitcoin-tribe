@@ -56,7 +56,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     labelStyle: {
       minWidth: width,
-      marginVertical: hp(16),
+      marginVertical: hp(18),
     },
     primaryCTATitle: {
       fontSize: 13,

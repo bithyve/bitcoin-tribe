@@ -76,7 +76,8 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginVertical: hp(15),
+      marginTop: hp(15),
+      marginBottom: hp(20),
     },
     leftIconWrapper: {
       borderRadius: 100,
