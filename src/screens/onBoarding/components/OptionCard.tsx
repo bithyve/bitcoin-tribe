@@ -51,14 +51,14 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
       // need to work
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 10,
-      shadowOpacity: 1,
-      elevation: 1,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
+      // shadowColor: theme.colors.cardShadowColor,
+      // shadowRadius: 10,
+      // shadowOpacity: 1,
+      // elevation: 2,
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 4,
+      // },
     },
     detailsWrapper: {
       flexDirection: 'row',
