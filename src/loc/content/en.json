@@ -59,8 +59,9 @@
     "conSettingScreenSubTitle": "Enter lightning details",
     "tor": "Tor",
     "torSubTitle": "Lorem ipsum dolor sit amet, consec",
-    "NodeSettings": "Node Settings",
-    "NodeSettingSubTitle": "Connect available own nodes"
+    "nodeSettings": "Node Settings",
+    "nodeSettingSubTitle": "Connect available own nodes",
+    "nodeSettingScreenSubTitle": "Node settings used so far"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",

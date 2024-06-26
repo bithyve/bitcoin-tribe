@@ -24,8 +24,8 @@ function ConnectionSettings() {
         onPress={() => {}}
       />
       <SelectOption
-        title={settings.NodeSettings}
-        subTitle={settings.NodeSettingSubTitle}
+        title={settings.nodeSettings}
+        subTitle={settings.nodeSettingSubTitle}
         icon={<IconNodes />}
         onPress={() => console.log('press')}
       />
