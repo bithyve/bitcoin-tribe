@@ -22,6 +22,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "assert": "^1.1.1",
+    "@realm/react": "^0.8.0",
     "bip21": "2.0.3",
     "bip32": "^4.0.0",
     "bip32-path": "0.4.2",
@@ -46,6 +47,7 @@
     "react-native-config": "^1.5.2",
     "react-native-crypto": "^2.1.0",
     "react-native-image-crop-picker": "^0.41.2",
+    "react-native-keychain": "8.2.0",
     "react-native-localize": "3.2.0",
     "react-native-mmkv": "2.12.2",
     "react-native-paper": "^5.12.3",
@@ -64,7 +66,9 @@
     "react-query": "^3.39.3",
     "readable-stream": "1.0.33",
     "stream-browserify": "^1.0.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "realm": "12.11.0",
+    "rn-nodeify": "github:tradle/rn-nodeify"
   },
   "reactNativePermissionsIOS": [
     "Camera",

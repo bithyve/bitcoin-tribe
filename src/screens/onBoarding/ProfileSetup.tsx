@@ -9,6 +9,7 @@ import CreatePin from './components/CreatePin';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import PinMethod from 'src/models/enums/PinMethod';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -26,14 +27,11 @@ function ProfileSetup({ navigation }) {
       console.error(error);
     }
   };
+
   const query = useQuery(
-    'create_wallet',
+    'setup_app',
     async () => {
-      return await ApiHandler.createNewWallet({
-        instanceNum: 0,
-        walletName: name,
-        walletDescription: '',
-      });
+      return await ApiHandler.setupNewApp(name, PinMethod.DEFAULT);
     },
     {
       enabled: !!initiateQuery,

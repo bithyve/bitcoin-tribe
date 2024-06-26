@@ -63,3 +63,14 @@ export const cryptoRandom = () => {
   const randomNumber = bytes.readUInt32LE() / 0xffffffff; // Convert to a number between 0 and 1
   return randomNumber;
 };
+
+export const stringToArrayBuffer = (byteString: string): Uint8Array => {
+  if (byteString) {
+    const byteArray = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      byteArray[i] = byteString.codePointAt(i);
+    }
+    return byteArray;
+  }
+  return null;
+};

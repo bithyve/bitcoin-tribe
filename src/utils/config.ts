@@ -16,6 +16,9 @@ class Configuration {
   public ENVIRONMENT: string;
   public NETWORK_TYPE: NetworkType;
   public NETWORK: bitcoinJS.Network;
+  public ENC_KEY_STORAGE_IDENTIFIER = 'TRIBE-KEY';
+  public BIP85_IMAGE_ENCRYPTIONKEY_DERIVATION_PATH =
+    "m/83696968'/39'/0'/12'/83696968'";
   public WALLET_INSTANCE_SERIES = {
     [WalletType.DEFAULT]: {
       series: 0,
