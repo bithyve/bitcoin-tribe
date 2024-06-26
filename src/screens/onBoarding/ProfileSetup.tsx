@@ -42,7 +42,7 @@ function ProfileSetup({ navigation }) {
 
   useEffect(() => {
     if (query.status === 'success') {
-      navigation.navigate(NavigationRoutes.HOME);
+      navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [navigation, query.status]);
 
@@ -71,6 +71,7 @@ function ProfileSetup({ navigation }) {
       />
       <ModalContainer
         title={onBoarding.advanceSettingTitle}
+        subTitle={onBoarding.enterPin}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />
