@@ -41,7 +41,7 @@ const AppText: React.FC<Props> = ({
       case TextVariants.heading2:
         return CommonStyles.heading2;
       case TextVariants.heading3:
-        return CommonStyles.heading2;
+        return CommonStyles.heading3;
       case TextVariants.pageTitle1:
         return CommonStyles.pageTitle1;
       case TextVariants.pageTitle2:

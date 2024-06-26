@@ -37,6 +37,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
   return (
     <AppTouchable
       disabled={disabled}
+      style={styles.containerWrapper}
       onPress={() => navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS)}>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
@@ -65,11 +66,13 @@ function WalletTransactions(props: WalletTransactionsProps) {
 }
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
+    containerWrapper: {
+      marginVertical: hp(15),
+    },
     container: {
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
-      marginVertical: hp(10),
       backgroundColor: backColor,
       padding: backColor ? 15 : 0,
       borderRadius: backColor ? 10 : 0,

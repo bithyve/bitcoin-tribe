@@ -4,15 +4,16 @@ import Toast from 'react-native-root-toast';
 
 import Colors from 'src/theme/Colors';
 import CheckIcon from 'src/assets/images/icon_check.svg';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
+import Fonts from 'src/constants/Fonts';
 
 // Need to work
 export default (message, icon = false, error = false) => {
   return Toast.show(
     <View style={styles.container}>
       {icon && <CheckIcon />}
-      <AppText variant="toastMessage" style={styles.toastMessageStyle}>
+      <AppText style={styles.toastMessageStyle}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
           : message}
@@ -28,6 +29,7 @@ export default (message, icon = false, error = false) => {
       opacity: 1,
       backgroundColor: Colors.ChineseOrange,
       textColor: Colors.RaisinBlack,
+      containerStyle: { marginBottom: (windowWidth * 22) / 100 },
     },
   );
 };
@@ -38,11 +40,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: wp(300),
     minHeight: hp(50),
-    borderRadius: 60,
+    borderRadius: 65,
     padding: 10,
   },
   toastMessageStyle: {
     color: Colors.RaisinBlack,
     marginLeft: wp(8),
+    fontSize: 14,
+    fontFamily: Fonts.PoppinsSemiBold,
+    flex: 1,
+    flexWrap: 'wrap',
+    fontWeight: '600',
   },
 });

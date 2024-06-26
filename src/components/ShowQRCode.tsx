@@ -14,7 +14,7 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { value, title } = props;
-  const qrSize = wp((windowWidth * 40) / 100);
+  const qrSize = (windowWidth * 50) / 100;
   return (
     <View style={styles.qrViewWrapper}>
       <View style={styles.qrImageWrapper}>
@@ -34,20 +34,20 @@ const getStyles = theme =>
       marginTop: wp(35),
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
-      width: Platform.OS === 'ios' ? wp(190) : wp(180),
+      width: (windowWidth * 50) / 100,
     },
     qrImageWrapper: {
-      width: Platform.OS === 'ios' ? wp(190) : wp(180),
-      height: wp(180),
+      width: (windowWidth * 50) / 100,
+      height: (windowWidth * 50) / 100,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.colors.headingColor,
     },
     qrFooterText: {
       textAlign: 'center',
       color: theme.colors.accent1,
       fontSize: CommonStyles.body2.fontSize,
-      paddingVertical: 4,
+      paddingVertical: wp(5),
+      fontFamily: '',
     },
   });
 
