@@ -18,7 +18,9 @@ const KeyboardAvoidView = props => {
       enabled
       keyboardVerticalOffset={Platform.select({ ios: 8, android: 500 })}
       style={{ ...styles.container, ...props.style }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled">
         {props.children}
       </ScrollView>
     </KeyboardAvoidingView>
