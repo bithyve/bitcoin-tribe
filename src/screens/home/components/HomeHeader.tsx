@@ -23,7 +23,7 @@ type HomeHeaderProps = {
 };
 function HomeHeader(props: HomeHeaderProps) {
   const {
-    profile = '',
+    profile,
     username,
     balance,
     onPressScanner,
@@ -36,7 +36,7 @@ function HomeHeader(props: HomeHeaderProps) {
     <View style={styles.container}>
       <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
         <View style={styles.contentWrapper}>
-          <UserAvatar size={50} imageSource={''} />
+          <UserAvatar size={50} imageSource={profile} />
           <View style={styles.userDetailsWrapper}>
             <AppText variant="body1" style={styles.usernameText}>
               {username}

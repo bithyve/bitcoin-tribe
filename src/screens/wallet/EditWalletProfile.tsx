@@ -6,25 +6,26 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
+import realm from 'src/storage/realm/realm';
+import { RealmSchema } from 'src/storage/enum';
 // import { RealmSchema } from 'src/storage/enum';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet } = translations;
   // const walletData = useQuery(RealmSchema.TribeApp);
+  const walletData = realm.get(RealmSchema.TribeApp);
 
   const [name, setName] = useState('');
-  const [image, setImage] = useState(null);
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
 
-  // useEffect(() => {
-  //   console.log('wallet', walletData);
-  //   if (walletData && walletData.walletImage && walletData.appName) {
-  //     const base64Image = walletData.walletImage;
-  //     setImage(`data:image/jpeg;base64,${base64Image}`);
-  //     setName(walletData.appName);
-  //   }
-  // }, [wallet]);
+  useEffect(() => {
+    if (walletData && walletData[0].walletImage && walletData[0].appName) {
+      const base64Image = walletData[0].walletImage;
+      setProfileImage(base64Image);
+      setName(walletData[0].appName);
+    }
+  }, []);
 
   const handlePickImage = async () => {
     try {

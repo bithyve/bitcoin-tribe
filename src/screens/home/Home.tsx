@@ -13,7 +13,8 @@ import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
-// import { RealmSchema } from 'src/storage/enum';
+import { RealmSchema } from 'src/storage/enum';
+import realm from 'src/storage/realm/realm';
 
 const AssetsData = [
   {
@@ -84,20 +85,20 @@ function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   // const wallet = useQuery(RealmSchema.TribeApp);
+  const wallet = realm.get(RealmSchema.TribeApp);
 
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   console.log('wallet', wallet);
-  //   if (wallet && wallet.walletImage && wallet.appName) {
-  //     const base64Image = wallet.walletImage;
-  //     setImage(`data:image/jpeg;base64,${base64Image}`);
-  //     setWalletName(wallet.appName);
-  //   }
-  // }, [wallet]);
+  useEffect(() => {
+    if (wallet && wallet[0].walletImage && wallet[0].appName) {
+      const base64Image = wallet[0].walletImage;
+      setImage(base64Image);
+      setWalletName(wallet[0].appName);
+    }
+  }, []);
 
   const handleScreenNavigation = (screenPath: string) => {
     navigation.dispatch(CommonActions.navigate(screenPath));
@@ -107,10 +108,8 @@ function HomeScreen() {
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader
-          profile={
-            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-          }
-          username="Dustin Henderson"
+          profile={image}
+          username={walletName}
           balance="0.0134"
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN)
