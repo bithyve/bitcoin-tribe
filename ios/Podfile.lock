@@ -1209,6 +1209,8 @@ PODS:
     - React
   - RNCClipboard (1.14.1):
     - React-Core
+  - RNDeviceInfo (10.0.2):
+    - React-Core
   - RNImageCropPicker (0.41.2):
     - React-Core
     - React-RCTImage
@@ -1344,6 +1346,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RealmJS (from `../node_modules/realm`)
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
@@ -1488,6 +1491,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/realm"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
   RNKeychain:
@@ -1573,6 +1578,7 @@ SPEC CHECKSUMS:
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
   RealmJS: 5f96d3e02420b5f579296c465a437f6e20026da9
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
+  RNDeviceInfo: 0a7c1d2532aa7691f9b9925a27e43af006db4dae
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
   RNLocalize: b77875884750cb6a58cd6865863fe2ba2729b72b
@@ -1583,7 +1589,7 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   VisionCamera: 2c4cb89c573c5d54d1191e433bd224998d3b14b7
-  Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
+  Yoga: b9a182ab00cf25926e7f79657d08c5d23c2d03b0
 
 PODFILE CHECKSUM: f515eafccde3d51eadcffa2262a7395a31e3982e
 
