@@ -1,6 +1,6 @@
 import { RealmSchema } from '../enum';
 import realm from './realm';
-
+import Realm from 'realm';
 /**
  * intializes realm
  * @param  {ArrayBuffer|ArrayBufferView|Int8Array} key
