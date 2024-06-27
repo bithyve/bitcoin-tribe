@@ -7,7 +7,6 @@ type UserAvatarProps = {
 };
 const UserAvatar = (props: UserAvatarProps) => {
   const { size, imageSource } = props;
-  console.log('imageSource', imageSource);
   return (
     <Avatar.Image
       size={size}
