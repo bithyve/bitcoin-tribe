@@ -20,110 +20,79 @@ import { AppStackParams } from './types';
 import WalletSettings from 'src/screens/wallet/WalletSettings';
 import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 
+function LoginStack() {
+  const Stack = createNativeStackNavigator<AppStackParams>();
+  return (
+    <Stack.Navigator
+      initialRouteName={NavigationRoutes.SPLASH}
+      screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={NavigationRoutes.SPLASH} component={Splash} />
+      <Stack.Screen
+        name={NavigationRoutes.WALLETSETUPOPTION}
+        component={WalletSetupOption}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.PROFILESETUP}
+        component={ProfileSetup}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function AppStack() {
+  const Stack = createNativeStackNavigator<AppStackParams>();
+  return (
+    <Stack.Navigator
+      initialRouteName={NavigationRoutes.HOME}
+      screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={NavigationRoutes.HOME} component={HomeTabs} />
+      <Stack.Screen name={NavigationRoutes.SETTINGS} component={Settings} />
+      <Stack.Screen name={NavigationRoutes.SENDSCREEN} component={SendScreen} />
+      <Stack.Screen
+        name={NavigationRoutes.RECEIVESCREEN}
+        component={ReceiveScreen}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.WALLETDETAILS}
+        component={WalletDetails}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ASSETDETAILS}
+        component={AssetDetails}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.WALLETALLTRANSACTION}
+        component={WalletAllTransactions}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.WALLETSETTINGS}
+        component={WalletSettings}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.TRANSACTIONDETAILS}
+        component={TransactionDetails}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.LANGUAGEANDCURRENCY}
+        component={LanguageAndCurrency}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.EDITWALLETPROFILE}
+        component={EditWalletProfile}
+      />
+    </Stack.Navigator>
+  );
+}
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
-
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={NavigationRoutes.SPLASH}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
-          name={NavigationRoutes.SPLASH}
-          component={Splash}
-          options={{
-            headerShown: false,
-          }}
+          name={NavigationRoutes.LOGINSTACK}
+          component={LoginStack}
         />
-        <Stack.Screen
-          name={NavigationRoutes.WALLETSETUPOPTION}
-          component={WalletSetupOption}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.PROFILESETUP}
-          component={ProfileSetup}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.HOME}
-          component={HomeTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.SETTINGS}
-          component={Settings}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.SENDSCREEN}
-          component={SendScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.RECEIVESCREEN}
-          component={ReceiveScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.WALLETDETAILS}
-          component={WalletDetails}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.ASSETDETAILS}
-          component={AssetDetails}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.WALLETALLTRANSACTION}
-          component={WalletAllTransactions}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.WALLETSETTINGS}
-          component={WalletSettings}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.TRANSACTIONDETAILS}
-          component={TransactionDetails}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.LANGUAGEANDCURRENCY}
-          component={LanguageAndCurrency}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.EDITWALLETPROFILE}
-          component={EditWalletProfile}
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name={NavigationRoutes.APPSTACK} component={AppStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
