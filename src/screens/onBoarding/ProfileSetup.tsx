@@ -56,7 +56,7 @@ function ProfileSetup({ navigation }) {
   };
 
   // handle the query data here or from realm/react after persisting
-  console.log(query.data);
+  // console.log(query.data);
 
   return (
     <ScreenContainer>
