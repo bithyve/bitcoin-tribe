@@ -31,7 +31,12 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
-      return await ApiHandler.setupNewApp(name, PinMethod.DEFAULT);
+      return await ApiHandler.setupNewApp(
+        name,
+        PinMethod.DEFAULT,
+        '',
+        profileImage,
+      );
     },
     {
       enabled: !!initiateQuery,
@@ -45,6 +50,7 @@ function ProfileSetup({ navigation }) {
   }, [navigation, query.status]);
 
   const initiateWalletCreation = () => {
+    // saveImageToRealm(profileImage);
     setInitiateQuery(true);
   };
 

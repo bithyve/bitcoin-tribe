@@ -70,6 +70,7 @@ export class ApiHandler {
     appName: string,
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
+    walletImage: string,
   ) {
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
@@ -95,6 +96,7 @@ export class ApiHandler {
       id: appID,
       publicId,
       appName,
+      walletImage,
       primaryMnemonic,
       primarySeed: primarySeed.toString('hex'),
       imageEncryptionKey,

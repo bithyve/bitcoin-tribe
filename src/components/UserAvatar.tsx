@@ -12,7 +12,7 @@ const UserAvatar = (props: UserAvatarProps) => {
       size={size}
       source={{
         uri: imageSource
-          ? 'file://' + imageSource
+          ? `data:image/jpeg;base64,${imageSource}`
           : 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x',
       }}
     />
