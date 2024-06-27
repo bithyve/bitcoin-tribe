@@ -10,7 +10,11 @@
     "proceed": "Proceed",
     "recieve": "Recieve",
     "buy": "Buy",
-    "exit": "Exit"
+    "exit": "Exit",
+    "addNew": "ADD NEW",
+    "disconnect": "DISCONNECT",
+    "connect": "CONNECT",
+    "delete": "DELETE"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -61,7 +65,10 @@
     "torSubTitle": "Lorem ipsum dolor sit amet, consec",
     "nodeSettings": "Node Settings",
     "nodeSettingSubTitle": "Connect available own nodes",
-    "nodeSettingScreenSubTitle": "Node settings used so far"
+    "nodeSettingScreenSubTitle": "Node settings used so far",
+    "currentlyConnect": "Currently connected to",
+    "ipAddress": "IP address",
+    "portNumber": "Port Number"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
