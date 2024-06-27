@@ -9,23 +9,22 @@ import SendEnterAddress from './components/SendEnterAddress';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import QRScanner from 'src/components/QRScanner';
 
-function SendScreen() {
+function SendScreen({ route }) {
+  const { receiveData, title, subTitle } = route.params;
   const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
+  const { sendScreen } = translations;
   const [visible, setVisible] = useState(false);
   return (
     <ScreenContainer>
-      <AppHeader
-        title={common.send}
-        subTitle={sendScreen.headerSubTitle}
-        enableBack={true}
-      />
+      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <QRScanner />
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
-        onPress={() => setVisible(true)}
+        onPress={() => {
+          receiveData === 'send' && setVisible(true);
+        }}
       />
       <ModalContainer
         title={sendScreen.enterSendAddress}

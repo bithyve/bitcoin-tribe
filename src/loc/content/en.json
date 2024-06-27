@@ -68,7 +68,9 @@
     "nodeSettingScreenSubTitle": "Node settings used so far",
     "currentlyConnect": "Currently connected to",
     "ipAddress": "IP address",
-    "portNumber": "Port Number"
+    "portNumber": "Port Number",
+    "connectYourNode": "Connect your node",
+    "connectYourNodeSubTitle": "Set up Lightning Account"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",

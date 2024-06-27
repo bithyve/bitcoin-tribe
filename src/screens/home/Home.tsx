@@ -80,12 +80,12 @@ function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, common, sendScreen } = translations;
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
 
-  const handleScreenNavigation = (screenPath: string) => {
-    navigation.dispatch(CommonActions.navigate(screenPath));
+  const handleScreenNavigation = (screenPath: string, params?) => {
+    navigation.dispatch(CommonActions.navigate(screenPath, params));
   };
 
   return (
@@ -98,7 +98,11 @@ function HomeScreen() {
           username="Dustin Henderson"
           balance="0.0134"
           onPressScanner={() =>
-            handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+            handleScreenNavigation(NavigationRoutes.SENDSCREEN, {
+              receiveData: 'send',
+              title: common.send,
+              subTitle: sendScreen.headerSubTitle,
+            })
           }
           onPressNotification={() => console.log('notification')}
           onPressProfile={() =>

@@ -9,6 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
 import NodeDetailsCard from './components/NodeDetailsCard';
 import { hp } from 'src/constants/responsive';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const nodes = [
   {
@@ -37,7 +38,7 @@ const nodes = [
   // },
 ];
 
-function NodeSettings() {
+function NodeSettings({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -47,6 +48,14 @@ function NodeSettings() {
       <AppHeader
         title={settings.nodeSettings}
         subTitle={settings.nodeSettingScreenSubTitle}
+        actionText={true}
+        onActionTextPress={() =>
+          navigation.navigate(NavigationRoutes.SENDSCREEN, {
+            receiveData: 'node',
+            title: settings.connectYourNode,
+            subTitle: settings.connectYourNodeSubTitle,
+          })
+        }
       />
       <View>
         <AppText variant="body1" style={styles.titleText}>
@@ -63,7 +72,7 @@ function NodeSettings() {
             status={item.status}
           />
         )}
-        keyExtractor={item => item}
+        keyExtractor={item => item.id}
       />
     </ScreenContainer>
   );
