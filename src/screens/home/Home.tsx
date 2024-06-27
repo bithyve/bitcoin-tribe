@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+// import { useQuery } from '@realm/react';
 
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,7 +13,6 @@ import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
-// import realm from 'src/storage/realm/realm';
 // import { RealmSchema } from 'src/storage/enum';
 
 const AssetsData = [
@@ -83,20 +83,21 @@ function HomeScreen() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
+  // const wallet = useQuery(RealmSchema.TribeApp);
+
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
 
   // useEffect(() => {
-  //   const wallet = realm.get(RealmSchema.TribeApp);
   //   console.log('wallet', wallet);
   //   if (wallet && wallet.walletImage && wallet.appName) {
   //     const base64Image = wallet.walletImage;
   //     setImage(`data:image/jpeg;base64,${base64Image}`);
   //     setWalletName(wallet.appName);
   //   }
-  // }, []);
+  // }, [wallet]);
 
   const handleScreenNavigation = (screenPath: string) => {
     navigation.dispatch(CommonActions.navigate(screenPath));

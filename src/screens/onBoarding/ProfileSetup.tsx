@@ -22,6 +22,7 @@ function ProfileSetup({ navigation }) {
   const handlePickImage = async () => {
     try {
       const result = await pickImage();
+      console.log('result', result);
       setProfileImage(result);
     } catch (error) {
       console.error(error);

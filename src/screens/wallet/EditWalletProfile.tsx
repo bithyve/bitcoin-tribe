@@ -1,16 +1,30 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+// import { useQuery } from '@realm/react';
 
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
+// import { RealmSchema } from 'src/storage/enum';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet } = translations;
+  // const walletData = useQuery(RealmSchema.TribeApp);
+
   const [name, setName] = useState('');
+  const [image, setImage] = useState(null);
   const [profileImage, setProfileImage] = useState('');
+
+  // useEffect(() => {
+  //   console.log('wallet', walletData);
+  //   if (walletData && walletData.walletImage && walletData.appName) {
+  //     const base64Image = walletData.walletImage;
+  //     setImage(`data:image/jpeg;base64,${base64Image}`);
+  //     setName(walletData.appName);
+  //   }
+  // }, [wallet]);
 
   const handlePickImage = async () => {
     try {
