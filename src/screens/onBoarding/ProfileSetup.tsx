@@ -72,6 +72,7 @@ function ProfileSetup({ navigation }) {
         inputPlaceholder={onBoarding.enterName}
         onSettingsPress={() => setVisible(true)}
         primaryStatus={query.status}
+        disabled={name === '' || profileImage === ''}
       />
       <ModalContainer
         title={onBoarding.advanceSettingTitle}
