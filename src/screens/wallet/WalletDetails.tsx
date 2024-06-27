@@ -10,15 +10,15 @@ import realm from 'src/storage/realm/realm';
 import { RealmSchema } from 'src/storage/enum';
 
 function WalletDetails({ navigation }) {
-  const wallet = realm.get(RealmSchema.TribeApp);
+  const wallet = realm.get(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
   useEffect(() => {
-    if (wallet && wallet[0].walletImage && wallet[0].appName) {
-      const base64Image = wallet[0].walletImage;
+    if (wallet && wallet.walletImage && wallet.appName) {
+      const base64Image = wallet.walletImage;
       setProfileImage(base64Image);
-      setWalletName(wallet[0].appName);
+      setWalletName(wallet.appName);
     }
   }, []);
 

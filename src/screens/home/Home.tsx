@@ -85,7 +85,7 @@ function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   // const wallet = useQuery(RealmSchema.TribeApp);
-  const wallet = realm.get(RealmSchema.TribeApp);
+  const wallet = realm.get(RealmSchema.TribeApp)[0];
 
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
@@ -93,10 +93,10 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (wallet && wallet[0].walletImage && wallet[0].appName) {
-      const base64Image = wallet[0].walletImage;
+    if (wallet && wallet.walletImage && wallet.appName) {
+      const base64Image = wallet.walletImage;
       setImage(base64Image);
-      setWalletName(wallet[0].appName);
+      setWalletName(wallet.appName);
     }
   }, []);
 

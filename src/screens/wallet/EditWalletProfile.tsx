@@ -14,16 +14,16 @@ function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet } = translations;
   // const walletData = useQuery(RealmSchema.TribeApp);
-  const walletData = realm.get(RealmSchema.TribeApp);
+  const walletData = realm.get(RealmSchema.TribeApp)[0];
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
-    if (walletData && walletData[0].walletImage && walletData[0].appName) {
-      const base64Image = walletData[0].walletImage;
+    if (walletData && walletData.walletImage && walletData.appName) {
+      const base64Image = walletData.walletImage;
       setProfileImage(base64Image);
-      setName(walletData[0].appName);
+      setName(walletData.appName);
     }
   }, []);
 
