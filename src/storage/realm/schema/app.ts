@@ -7,6 +7,7 @@ export const TribeAppSchema: ObjectSchema = {
     id: 'string',
     publicId: 'string',
     appName: 'string?',
+    walletImage: 'string?',
     primaryMnemonic: 'string',
     primarySeed: 'string',
     networkType: 'string',

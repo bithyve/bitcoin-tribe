@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+// import { useQuery } from '@realm/react';
 
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,6 +13,8 @@ import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
+import { RealmSchema } from 'src/storage/enum';
+import realm from 'src/storage/realm/realm';
 
 const AssetsData = [
   {
@@ -81,8 +84,21 @@ function HomeScreen() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
+  // const wallet = useQuery(RealmSchema.TribeApp);
+  const wallet = realm.get(RealmSchema.TribeApp)[0];
+
   const [visible, setVisible] = useState(false);
+  const [image, setImage] = useState(null);
+  const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (wallet && wallet.walletImage && wallet.appName) {
+      const base64Image = wallet.walletImage;
+      setImage(base64Image);
+      setWalletName(wallet.appName);
+    }
+  }, []);
 
   const handleScreenNavigation = (screenPath: string) => {
     navigation.dispatch(CommonActions.navigate(screenPath));
@@ -92,10 +108,8 @@ function HomeScreen() {
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader
-          profile={
-            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-          }
-          username="Dustin Henderson"
+          profile={image}
+          username={walletName}
           balance="0.0134"
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN)
