@@ -65,14 +65,14 @@ function ProfileSetup({ navigation }) {
         onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => console.log('press')}
+        secondaryOnPress={() => navigation.goBack()}
         addPicTitle={onBoarding.addPicture}
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         onSettingsPress={() => setVisible(true)}
         primaryStatus={query.status}
-        disabled={name === '' || profileImage === ''}
+        disabled={name === ''}
       />
       <ModalContainer
         title={onBoarding.advanceSettingTitle}
