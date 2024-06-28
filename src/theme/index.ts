@@ -24,6 +24,7 @@ type CustomColors = {
   borderColor: string;
   shodowColor: string;
   cardShadowColor: string;
+  disabledCTAColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -54,6 +55,7 @@ const CombinedDefaultTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     cardShadowColor: Colors.White,
+    disabledCTAColor: Colors.DarkSalmon,
   },
   fonts: {},
 };
@@ -79,6 +81,7 @@ const CombinedDarkTheme: AppTheme = {
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     cardShadowColor: Colors.White,
+    disabledCTAColor: Colors.DarkSalmon,
   },
   fonts: {},
 };

@@ -13,5 +13,6 @@ const Colors = {
   SilverSand: 'rgba(196, 196, 196,1)',
   Quartz: 'rgba(75, 75, 75, 1)',
   White: 'rgba(255, 255, 255,1)',
+  DarkSalmon: 'rgba(242, 152, 116, 1)',
 };
 export default Colors;
