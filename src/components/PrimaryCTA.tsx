@@ -61,9 +61,9 @@ const getStyles = (theme: AppTheme, width) =>
       marginVertical: hp(18),
     },
     primaryCTATitle: {
-      fontSize: 13,
+      fontSize: 14,
       fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 13 * 1.4,
+      lineHeight: 14 * 1.4,
       height: 18,
     },
   });
