@@ -10,6 +10,7 @@ import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -72,6 +73,7 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginVertical: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,
