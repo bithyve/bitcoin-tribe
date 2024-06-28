@@ -27,8 +27,8 @@ function ConnectionSettings({ navigation }) {
       onPress: () => console.log('tor pressed'),
     },
     {
-      title: settings.NodeSettings,
-      subtitle: settings.NodeSettingSubTitle,
+      title: settings.nodeSettings,
+      subtitle: settings.nodeSettingSubTitle,
       icon: <IconNodes />,
       onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     },
