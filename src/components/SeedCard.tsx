@@ -11,7 +11,7 @@ type seedCardProps = {
   item: string;
   index: number;
 };
-
+// need to work - visible only one seed
 function SeedCard(props: seedCardProps) {
   const { item, index } = props;
   const theme: AppTheme = useTheme();
@@ -54,12 +54,12 @@ const getStyles = (theme: AppTheme, showWordIndex, index) =>
     },
     indexStyle: {
       color: theme.colors.accent1,
-      marginRight: wp(5),
+      marginRight: wp(10),
     },
     seedWordStyle: {
       color: theme.colors.bodyColor,
       paddingTop: showWordIndex === index ? 0 : hp(10),
-      paddingBottom: showWordIndex === index ? hp(5) : 0,
+      paddingBottom: showWordIndex === index ? 0 : hp(5),
     },
   });
 export default SeedCard;
