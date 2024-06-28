@@ -22,8 +22,8 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
-  const handleCopyText = (text: string) => {
-    Clipboard.setString(text);
+  const handleCopyText = async (text: string) => {
+    await Clipboard.setString(text);
     Toast(common.addressCopiedSuccessfully, true);
   };
 

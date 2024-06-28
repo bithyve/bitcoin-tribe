@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '45%' : '33%',
+    height: windowHeight < 650 ? '42%' : '35%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 650 ? '53%' : '67%',
+    height: windowHeight < 650 ? '53%' : '65%',
     marginHorizontal: wp(25),
   },
 });
