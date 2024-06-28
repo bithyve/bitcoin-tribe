@@ -14,4 +14,5 @@ export enum RealmSchema {
   DefaultNodeConnect = 'DefaultNodeConnect',
   NodeConnect = 'NodeConnect',
   AddressCache = 'AddressCache',
+  VersionHistory = 'VersionHistory',
 }

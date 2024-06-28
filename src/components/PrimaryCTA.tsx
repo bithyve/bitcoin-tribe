@@ -12,6 +12,7 @@ type PrimaryCTAProps = {
   style?: StyleProp<ViewStyle>;
   buttonColor?: string;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
@@ -22,6 +23,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     width = wp(120),
     buttonColor = theme.colors.primaryCTA,
     loading,
+    disabled = false,
   } = props;
   const styles = getStyles(theme, width);
 
@@ -36,11 +38,12 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       mode="contained"
       uppercase={false}
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
-      style={styles.ctaContainerStyle}
+      style={disabled ? styles.disableButton : styles.ctaContainerStyle}
       buttonColor={buttonColor}
       onPress={onPress}
       maxFontSizeMultiplier={1}
-      loading={loading}>
+      loading={loading}
+      disabled={disabled}>
       {title}
     </Button>
   );
@@ -61,10 +64,16 @@ const getStyles = (theme: AppTheme, width) =>
       marginVertical: hp(18),
     },
     primaryCTATitle: {
-      fontSize: 13,
+      fontSize: 14,
       fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 13 * 1.4,
+      lineHeight: 14 * 1.4,
       height: 18,
+    },
+    disableButton: {
+      borderRadius: 10,
+      marginVertical: hp(20),
+      width: width,
+      backgroundColor: theme.colors.disabledCTAColor,
     },
   });
 export default PrimaryCTA;

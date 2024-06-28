@@ -8,7 +8,7 @@ export class RealmDatabase {
 
   public static file = 'tribe.realm';
 
-  public static schemaVersion = 1;
+  public static schemaVersion = 2;
 
   /**
    * initializes/opens realm w/ appropriate configuration
@@ -26,7 +26,7 @@ export class RealmDatabase {
         path: RealmDatabase.file,
         schema,
         schemaVersion: RealmDatabase.schemaVersion,
-        encryptionKey: key,
+        // encryptionKey: key,
         onMigration: (oldRealm, newRealm) => {
           runRealmMigrations({ oldRealm, newRealm });
         },
@@ -34,6 +34,7 @@ export class RealmDatabase {
       this.realm = await Realm.open(realmConfig);
       return true;
     } catch (err) {
+      console.log('err', err);
       return false;
     }
   };

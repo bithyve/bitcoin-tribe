@@ -1,6 +1,8 @@
 import { NavigationRoutes } from './NavigationRoutes';
 
 export type AppStackParams = {
+  [NavigationRoutes.LOGINSTACK]: undefined;
+  [NavigationRoutes.APPSTACK]: undefined;
   [NavigationRoutes.ASSETDETAILS]: undefined;
   [NavigationRoutes.ASSETS]: undefined;
   [NavigationRoutes.COMMUNITY]: undefined;
@@ -17,6 +19,8 @@ export type AppStackParams = {
   [NavigationRoutes.LANGUAGEANDCURRENCY]: undefined;
   [NavigationRoutes.WALLETSETTINGS]: undefined;
   [NavigationRoutes.EDITWALLETPROFILE]: undefined;
+  [NavigationRoutes.APPBACKUP]: undefined;
+  [NavigationRoutes.CONNECTIONSETTINGS]: undefined;
   // Add other routes as needed
 };
 

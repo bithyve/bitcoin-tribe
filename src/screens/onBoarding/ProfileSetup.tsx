@@ -31,7 +31,12 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
-      return await ApiHandler.setupNewApp(name, PinMethod.DEFAULT);
+      return await ApiHandler.setupNewApp(
+        name,
+        PinMethod.DEFAULT,
+        '',
+        profileImage,
+      );
     },
     {
       enabled: !!initiateQuery,
@@ -40,16 +45,17 @@ function ProfileSetup({ navigation }) {
 
   useEffect(() => {
     if (query.status === 'success') {
-      navigation.navigate(NavigationRoutes.HOME);
+      navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [navigation, query.status]);
 
   const initiateWalletCreation = () => {
+    // saveImageToRealm(profileImage);
     setInitiateQuery(true);
   };
 
   // handle the query data here or from realm/react after persisting
-  console.log(query.data);
+  // console.log(query.data);
 
   return (
     <ScreenContainer>
@@ -59,16 +65,18 @@ function ProfileSetup({ navigation }) {
         onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => console.log('press')}
+        secondaryOnPress={() => navigation.goBack()}
         addPicTitle={onBoarding.addPicture}
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         onSettingsPress={() => setVisible(true)}
         primaryStatus={query.status}
+        disabled={name === ''}
       />
       <ModalContainer
         title={onBoarding.advanceSettingTitle}
+        subTitle={onBoarding.enterPin}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />

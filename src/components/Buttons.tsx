@@ -15,6 +15,7 @@ type PrimaryCTAProps = {
   style?: StyleProp<ViewStyle>;
   secondaryTitle?: string;
   primaryLoading?: boolean;
+  disabled?: boolean;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -25,6 +26,7 @@ function Buttons(props: PrimaryCTAProps) {
     secondaryTitle,
     secondaryOnPress,
     primaryLoading,
+    disabled,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -38,6 +40,7 @@ function Buttons(props: PrimaryCTAProps) {
         onPress={primaryOnPress}
         width={width}
         loading={primaryLoading}
+        disabled={disabled}
       />
     </View>
   );
