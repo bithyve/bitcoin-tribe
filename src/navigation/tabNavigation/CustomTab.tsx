@@ -21,16 +21,13 @@ import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-
-  function Capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  }
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
