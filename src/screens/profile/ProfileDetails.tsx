@@ -24,6 +24,7 @@ type ProfileDetailsProps = {
   edit?: boolean;
   onSettingsPress?: () => void;
   primaryStatus?: string;
+  disabled?: boolean;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -40,6 +41,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     edit,
     onSettingsPress,
     primaryStatus,
+    disabled,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -73,6 +75,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
             primaryLoading={primaryStatus === 'loading'}
+            disabled={disabled}
           />
         </View>
       </KeyboardAvoidView>

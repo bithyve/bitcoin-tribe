@@ -70,6 +70,7 @@ export class ApiHandler {
     appName: string,
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
+    walletImage: string,
   ) {
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
@@ -80,32 +81,39 @@ export class ApiHandler {
     const encryptedKey = encrypt(hash, AES_KEY);
     SecureStore.store(hash, encryptedKey);
     const uint8array = stringToArrayBuffer(AES_KEY);
-    dbManager.initializeRealm(uint8array);
-
-    const primaryMnemonic = bip39.generateMnemonic();
-    const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
-    const appID = crypto.createHash('sha256').update(primarySeed).digest('hex');
-    const publicId = WalletUtilities.getFingerprintFromSeed(primarySeed);
-    const entropy = BIP85.bip39MnemonicToEntropy(
-      config.BIP85_IMAGE_ENCRYPTIONKEY_DERIVATION_PATH,
-      primaryMnemonic,
-    );
-    const imageEncryptionKey = generateEncryptionKey(entropy.toString('hex'));
-    const newAPP: TribeApp = {
-      id: appID,
-      publicId,
-      appName,
-      primaryMnemonic,
-      primarySeed: primarySeed.toString('hex'),
-      imageEncryptionKey,
-      version: '',
-      networkType: config.NETWORK_TYPE,
-      enableAnalytics: true,
-    };
-    const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
-    if (created) {
-      const wallet = await ApiHandler.createNewWallet({});
-      dbManager.createObject(RealmSchema.Wallet, wallet);
+    const isRealmInit = await dbManager.initializeRealm(uint8array);
+    if (isRealmInit) {
+      const primaryMnemonic = bip39.generateMnemonic();
+      const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
+      const appID = crypto
+        .createHash('sha256')
+        .update(primarySeed)
+        .digest('hex');
+      const publicId = WalletUtilities.getFingerprintFromSeed(primarySeed);
+      const entropy = BIP85.bip39MnemonicToEntropy(
+        config.BIP85_IMAGE_ENCRYPTIONKEY_DERIVATION_PATH,
+        primaryMnemonic,
+      );
+      const imageEncryptionKey = generateEncryptionKey(entropy.toString('hex'));
+      const newAPP: TribeApp = {
+        id: appID,
+        publicId,
+        appName,
+        walletImage,
+        primaryMnemonic,
+        primarySeed: primarySeed.toString('hex'),
+        imageEncryptionKey,
+        version: '',
+        networkType: config.NETWORK_TYPE,
+        enableAnalytics: true,
+      };
+      const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
+      if (created) {
+        const wallet = await ApiHandler.createNewWallet({});
+        dbManager.createObject(RealmSchema.Wallet, wallet);
+      }
+    } else {
+      throw new Error('Realm initialisation failed');
     }
   }
 }

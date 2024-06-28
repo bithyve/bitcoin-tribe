@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
@@ -96,14 +102,15 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     tabBar: {
       flexDirection: 'row',
-      borderRadius: 20,
+      borderRadius: 40,
       backgroundColor: theme.colors.inputBackground,
       position: 'absolute',
-      bottom: 0,
+      bottom: Platform.OS === 'ios' ? hp(15) : 0,
       height: hp(62),
       width: wp(295),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
+      paddingHorizontal: wp(30),
     },
     tab: {
       flex: 1,

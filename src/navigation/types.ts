@@ -1,6 +1,8 @@
 import { NavigationRoutes } from './NavigationRoutes';
 
 export type AppStackParams = {
+  [NavigationRoutes.LOGINSTACK]: undefined;
+  [NavigationRoutes.APPSTACK]: undefined;
   [NavigationRoutes.ASSETDETAILS]: undefined;
   [NavigationRoutes.ASSETS]: undefined;
   [NavigationRoutes.COMMUNITY]: undefined;
