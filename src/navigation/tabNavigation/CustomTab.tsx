@@ -21,6 +21,7 @@ import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -88,7 +89,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
                   styles.bottomNavigation,
                   { color: isFocused ? theme.colors.primaryCTA : 'gray' },
                 ]}>
-                &nbsp;{label}
+                &nbsp;{Capitalize(label)}
               </AppText>
             )}
           </TouchableOpacity>

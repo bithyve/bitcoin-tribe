@@ -2,36 +2,27 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import AddNewIcon from 'src/assets/images/icon_addnew.svg';
-import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
+import IconRamp from 'src/assets/images/icon_ramp.svg';
 import SelectOption from 'src/components/SelectOption';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
-function AddAssetModal() {
+function BuyModal() {
   const { translations } = useContext(LocalizationContext);
-  const { home, common } = translations;
+  const { wallet } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
   return (
     <View style={styles.container}>
       <SelectOption
-        title={home.issueNew}
-        icon={<AddNewIcon />}
+        title={wallet.buyWithRamp}
+        subTitle={wallet.buyWithRampSubTitle}
+        icon={<IconRamp />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => console.log('press')}
-        testID="issue_new"
-      />
-      <SelectOption
-        title={common.receive}
-        icon={<ReceiveIcon />}
-        backColor={theme.colors.inputBackground}
-        style={styles.optionStyle}
-        onPress={() => console.log('press')}
-        testID="receive"
       />
     </View>
   );
@@ -39,8 +30,7 @@ function AddAssetModal() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: hp(25),
-      paddingBottom: hp(40),
+      paddingBottom: hp(25),
     },
     optionStyle: {
       marginVertical: 10,
@@ -48,4 +38,4 @@ const getStyles = (theme: AppTheme) =>
       paddingVertical: windowHeight > 650 ? 25 : 20,
     },
   });
-export default AddAssetModal;
+export default BuyModal;

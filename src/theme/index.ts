@@ -23,6 +23,7 @@ type CustomColors = {
   toggleBackground: string;
   borderColor: string;
   shodowColor: string;
+  inActiveDotColor: string;
   cardShadowColor: string;
   disabledCTAColor: string;
 };
@@ -54,6 +55,7 @@ const CombinedDefaultTheme: AppTheme = {
     toggleBackground: Colors.Quartz,
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
+    inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
   },
@@ -80,6 +82,7 @@ const CombinedDarkTheme: AppTheme = {
     toggleBackground: Colors.Quartz,
     borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
+    inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
   },

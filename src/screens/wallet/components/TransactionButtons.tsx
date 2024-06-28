@@ -6,7 +6,7 @@ import RoundedCTA from 'src/components/RoundedCTA';
 import IconSend from 'src/assets/images/icon_send.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
-import { wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type transButtonProps = {
@@ -60,6 +60,7 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       marginHorizontal: wp(5),
+      paddingBottom: windowHeight < 650 ? hp(15) : 0,
     },
   });
 export default TransactionButtons;
