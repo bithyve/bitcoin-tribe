@@ -11,22 +11,26 @@ import { RealmSchema } from 'src/storage/enum';
 import ModalContainer from 'src/components/ModalContainer';
 import BuyModal from './components/BuyModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function WalletDetails({ navigation }) {
-  const wallet = realm.get(RealmSchema.TribeApp)[0];
+  const app: TribeApp = realm.get(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+  const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
-    if (wallet && wallet.walletImage && wallet.appName) {
-      const base64Image = wallet.walletImage;
+    if (app && app.walletImage && app.appName) {
+      const base64Image = app.walletImage;
       setProfileImage(base64Image);
-      setWalletName(wallet.appName);
+      setWalletName(app.appName);
     }
-  }, [wallet]);
+  }, [app]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -34,7 +38,7 @@ function WalletDetails({ navigation }) {
         <WalletDetailsHeader
           profile={profileImage}
           username={walletName}
-          balance="0.0134"
+          wallet={wallet}
           onPressSetting={() =>
             navigation.navigate(NavigationRoutes.WALLETSETTINGS)
           }
@@ -46,7 +50,7 @@ function WalletDetails({ navigation }) {
       </View>
       <ModalContainer
         title={common.buy}
-        subTitle={wallet.buySubtitle}
+        subTitle={app.buySubtitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <BuyModal />
