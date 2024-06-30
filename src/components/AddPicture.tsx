@@ -70,7 +70,7 @@ const getStyles = (theme: AppTheme) =>
     iconImageWrapper2: {
       position: 'absolute',
       alignSelf: 'center',
-      left: 20,
+      left: 25,
       opacity: 1,
     },
   });

@@ -19,6 +19,8 @@ export type AppStackParams = {
   [NavigationRoutes.LANGUAGEANDCURRENCY]: undefined;
   [NavigationRoutes.WALLETSETTINGS]: undefined;
   [NavigationRoutes.EDITWALLETPROFILE]: undefined;
+  [NavigationRoutes.APPBACKUP]: undefined;
+  [NavigationRoutes.CONNECTIONSETTINGS]: undefined;
   // Add other routes as needed
 };
 

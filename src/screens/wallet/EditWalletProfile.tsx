@@ -20,7 +20,7 @@ function EditWalletProfile({ navigation }) {
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
-    if (walletData && walletData.walletImage && walletData.appName) {
+    if ((walletData && walletData.walletImage) || walletData.appName) {
       const base64Image = walletData.walletImage;
       setProfileImage(base64Image);
       setName(walletData.appName);

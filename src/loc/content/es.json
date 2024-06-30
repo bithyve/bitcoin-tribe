@@ -9,7 +9,8 @@
     "send": "Send",
     "proceed": "Proceed",
     "recieve": "Recieve",
-    "buy": "Buy"
+    "buy": "Buy",
+    "exit": "Exit"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -43,13 +44,23 @@
     "appBackup": "App Backup",
     "appBackupSubTitle": "Lorem ipsum dolor sit amet, consec ",
     "connectionSettings": "Connection Settings",
-    "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "connectionSettingSubTitle": "Configure Tor and Nodes",
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Lorem ipsum dolor sit amet, con",
     "currency": "Currency",
-    "currencySubTitle": "Lorem ipsum dolor sit amet, c"
+    "currencySubTitle": "Lorem ipsum dolor sit amet, c",
+    "appBackupScreenSubTitle": "Write down this Backup Phrase",
+    "confirmBackupPhrase": "Confirm backup phrase",
+    "confirmBackupPhraseSubtitle": "Key in the word exactly like it was displayed",
+    "enterSeedWord": "Enter Seed Word",
+    "enterSeedWordLabel": "Enter the first (01) word",
+    "conSettingScreenSubTitle": "Enter lightning details",
+    "tor": "Tor",
+    "torSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "NodeSettings": "Node Settings",
+    "NodeSettingSubTitle": "Connect available own nodes"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
@@ -89,6 +100,11 @@
     "walletNamePicSubTitle": "Lorem ipsum dolor amet",
     "transactionID": "Transaction ID",
     "receiveTestSats": "Receive Test Sats",
-    "receiveTestSatSubtitle": "Lorem ipsum dolor amet "
+    "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
+    "accountXPub": "Account xPub",
+    "accountXPubSubTitle": "xPub details for your wallet",
+    "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "buyWithRamp": "Buy with Ramp",
+    "buyWithRampSubTitle": "Low fee for those big buys"
   }
 }

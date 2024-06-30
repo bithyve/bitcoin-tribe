@@ -93,7 +93,7 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (wallet && wallet.walletImage && wallet.appName) {
+    if ((wallet && wallet.walletImage) || wallet.appName) {
       const base64Image = wallet.walletImage;
       setImage(base64Image);
       setWalletName(wallet.appName);

@@ -73,7 +73,7 @@ const getStyles = (theme: AppTheme, width) =>
       borderRadius: 10,
       marginVertical: hp(20),
       width: width,
-      backgroundColor: theme.colors.cardShadowColor,
+      backgroundColor: theme.colors.disabledCTAColor,
     },
   });
 export default PrimaryCTA;
