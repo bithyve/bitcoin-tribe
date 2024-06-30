@@ -15,6 +15,8 @@ import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import realm from 'src/storage/realm/realm';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 const AssetsData = [
   {
@@ -84,19 +86,26 @@ function HomeScreen() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
-  // const wallet = useQuery(RealmSchema.TribeApp);
-  const wallet = realm.get(RealmSchema.TribeApp)[0];
+  // const app = useQuery(RealmSchema.TribeApp);
+  const app = realm.get(RealmSchema.TribeApp)[0];
 
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
 
+  const wallet: Wallet = useWallets({}).wallets[0];
+  const {
+    specs: { balances: { confirmed, unconfirmed } } = {
+      balances: { confirmed: 0, unconfirmed: 0 },
+    },
+  } = wallet;
+
   useEffect(() => {
-    if ((wallet && wallet.walletImage) || wallet.appName) {
-      const base64Image = wallet.walletImage;
+    if ((app && app.walletImage) || app.appName) {
+      const base64Image = app.walletImage;
       setImage(base64Image);
-      setWalletName(wallet.appName);
+      setWalletName(app.appName);
     }
   }, []);
 
@@ -110,7 +119,7 @@ function HomeScreen() {
         <HomeHeader
           profile={image}
           username={walletName}
-          balance="0.0134"
+          balance={`${confirmed + unconfirmed}`}
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN)
           }
