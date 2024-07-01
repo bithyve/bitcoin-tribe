@@ -12,17 +12,22 @@ function Splash({ navigation }) {
 
   useEffect(() => {
     setTimeout(async () => {
-      const appId = Storage.get(Keys.APPID);
-      if (appId) {
-        setKey('');
-        const uint8array = stringToArrayBuffer('');
-        await dbManager.initializeRealm(uint8array);
-        navigation.replace(NavigationRoutes.APPSTACK);
-      } else {
-        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
-      }
+      init();
     }, 500);
-  });
+  }, []);
+
+  const init = async () => {
+    const appId = Storage.get(Keys.APPID);
+    if (appId) {
+      setKey('key');
+      const uint8array = stringToArrayBuffer('');
+      const isInit = await dbManager.initializeRealm(uint8array);
+      console.log('isInit', isInit);
+      navigation.replace(NavigationRoutes.APPSTACK);
+    } else {
+      navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+    }
+  };
 
   return (
     <ScreenContainer>

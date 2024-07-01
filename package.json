@@ -23,7 +23,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "axios": "1.6.8",
     "assert": "^1.1.1",
-    "@realm/react": "^0.8.0",
+    "@realm/react": "0.5.2",
     "buffer-reverse": "1.0.1",
     "bip21": "2.0.3",
     "bip32": "^4.0.0",

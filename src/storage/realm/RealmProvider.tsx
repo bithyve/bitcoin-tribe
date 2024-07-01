@@ -19,11 +19,10 @@ const AppWithNetwork = ({ children }) => {
 
 export function RealmProvider({ children }) {
   const { key } = useContext(AppContext);
-  // const encKey = stringToArrayBuffer(key);
-  // console.log('encKey', encKey);
-  // if (!encKey) {
-  //   return null;
-  // }
+  const encKey = stringToArrayBuffer(key);
+  if (!encKey) {
+    return null;
+  }
   return (
     <Provider
       path={RealmDatabase.file}
