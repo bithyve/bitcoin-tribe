@@ -3,6 +3,7 @@ import {
   DerivationPurpose,
   EntityKind,
   NetworkType,
+  TxPriority,
   WalletType,
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
@@ -33,7 +34,7 @@ import {
   predefinedMainnetNodes,
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
-import { NodeDetail } from '../wallets/interfaces';
+import { AverageTxFeesByNetwork, NodeDetail } from '../wallets/interfaces';
 import { Keys, Storage } from 'src/storage';
 
 export class ApiHandler {
@@ -152,6 +153,15 @@ export class ApiHandler {
     ) as any;
     ElectrumClient.setActivePeer(defaultNodes, privateNodes);
     const { connected, connectedTo, error } = await ElectrumClient.connect();
+    if (connected) {
+      WalletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
+        Storage.set(
+          Keys.AVERAGE_TX_FEE_BY_NETWORK,
+          JSON.stringify(averageTxFeeByNetwork),
+        );
+      });
+    }
+
     return { connected, connectedTo, error };
   }
 
@@ -185,6 +195,51 @@ export class ApiHandler {
       return {
         synchedWallets,
       };
+    } catch (err) {
+      console.log({ err });
+    }
+  }
+
+  static async sendTransaction({
+    sender,
+    recipient,
+  }: {
+    sender: Wallet;
+    recipient: { address: string; amount: number };
+  }) {
+    try {
+      const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+      if (!averageTxFeeJSON) {
+        throw new Error('Transaction fee not found');
+      }
+      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+        JSON.parse(averageTxFeeJSON);
+      const averageTxFee = averageTxFeeByNetwork[sender.networkType];
+
+      const recipients = [recipient];
+      const { txPrerequisites } = await WalletOperations.transferST1(
+        sender,
+        recipients,
+        averageTxFee,
+      );
+
+      if (txPrerequisites) {
+        const { txid } = await WalletOperations.transferST2(
+          sender,
+          txPrerequisites,
+          TxPriority.LOW,
+          recipients,
+        );
+        if (txid) {
+          dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
+            specs: sender.specs,
+          });
+        } else {
+          throw new Error('Failed to execute the transaction');
+        }
+      } else {
+        throw new Error('Failed to generate txPrerequisites');
+      }
     } catch (err) {
       console.log({ err });
     }
