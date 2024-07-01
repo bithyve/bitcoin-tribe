@@ -14,15 +14,43 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 
 function WalletDetails({ navigation }) {
   const app: TribeApp = realm.get(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
+
+  const refreshWalletQuery = useQuery(
+    'refresh_wallet',
+    async () => {
+      return await ApiHandler.refreshWallets({
+        wallets: [wallet],
+      });
+    },
+    {
+      enabled: refreshWallet,
+    },
+  );
+
+  useEffect(() => {
+    setRefreshWallet(true); // refreshing wallet as soon as the user lands on the page
+  }, []);
+
+  useEffect(() => {
+    if (refreshWalletQuery.status === 'success') {
+      Toast('Wallet refreshed successfully');
+    } else if (refreshWalletQuery.status === 'error') {
+      Toast('Failed to refresh wallet');
+    }
+  }, [refreshWalletQuery.status]);
 
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
