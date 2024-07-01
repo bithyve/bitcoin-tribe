@@ -51,7 +51,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SENDSCREEN),
+            CommonActions.navigate(NavigationRoutes.SENDSCREEN, { wallet }),
           )
         }
         onPressBuy={onPressBuy}

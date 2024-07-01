@@ -40,17 +40,13 @@ function WalletDetails({ navigation }) {
     },
   );
 
+  if (refreshWalletQuery.status === 'error') {
+    Toast('Failed to refresh wallet');
+  }
+
   useEffect(() => {
     setRefreshWallet(true); // refreshing wallet as soon as the user lands on the page
   }, []);
-
-  useEffect(() => {
-    if (refreshWalletQuery.status === 'success') {
-      Toast('Wallet refreshed successfully');
-    } else if (refreshWalletQuery.status === 'error') {
-      Toast('Failed to refresh wallet');
-    }
-  }, [refreshWalletQuery.status]);
 
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
