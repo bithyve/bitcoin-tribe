@@ -9,8 +9,9 @@ import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import SendAddressModal from './components/SendAddressModal';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function SendScreen({ route }) {
+function SendScreen({ route, navigation }) {
   const { receiveData, title, subTitle } = route.params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
@@ -26,7 +27,9 @@ function SendScreen({ route }) {
         subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
         onPress={() => {
-          receiveData === 'send' && setVisible(true);
+          receiveData === 'send'
+            ? setVisible(true)
+            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
         }}
       />
       <SendAddressModal

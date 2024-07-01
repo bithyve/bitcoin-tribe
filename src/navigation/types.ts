@@ -22,6 +22,7 @@ export type AppStackParams = {
   [NavigationRoutes.APPBACKUP]: undefined;
   [NavigationRoutes.CONNECTIONSETTINGS]: undefined;
   [NavigationRoutes.NODESETTINGS]: undefined;
+  [NavigationRoutes.CONNECTNODEMANUALLY]: undefined;
   // Add other routes as needed
 };
 
