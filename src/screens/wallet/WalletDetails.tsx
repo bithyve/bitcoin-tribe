@@ -28,23 +28,6 @@ function WalletDetails({ navigation }) {
   const { common } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
 
-  // const [sendTransaction, setSendTransaction] = useState(false);
-  // const sendTransactionQuery = useQuery(
-  //   'send_transaction',
-  //   async () => {
-  //     return await ApiHandler.sendTransaction({
-  //       sender: wallet,
-  //       recipient: {
-  //         address: 'tb1q7vyr4d4qvamlecy6zssxtc6q8afdznd67pgqnl',
-  //         amount: 1000,
-  //       },
-  //     });
-  //   },
-  //   {
-  //     enabled: sendTransaction,
-  //   },
-  // );
-
   const refreshWalletQuery = useQuery(
     'refresh_wallet',
     async () => {
@@ -57,18 +40,13 @@ function WalletDetails({ navigation }) {
     },
   );
 
+  if (refreshWalletQuery.status === 'error') {
+    Toast('Failed to refresh wallet');
+  }
+
   useEffect(() => {
     setRefreshWallet(true); // refreshing wallet as soon as the user lands on the page
   }, []);
-
-  useEffect(() => {
-    if (refreshWalletQuery.status === 'success') {
-      Toast('Wallet refreshed successfully');
-      // setSendTransaction(true);
-    } else if (refreshWalletQuery.status === 'error') {
-      Toast('Failed to refresh wallet');
-    }
-  }, [refreshWalletQuery.status]);
 
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
