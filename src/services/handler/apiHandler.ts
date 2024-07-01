@@ -34,6 +34,7 @@ import {
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
 import { NodeDetail } from '../wallets/interfaces';
+import { Keys, Storage } from 'src/storage';
 
 export class ApiHandler {
   static performSomeAsyncOperation() {
@@ -50,6 +51,7 @@ export class ApiHandler {
     passcode = '',
     walletImage: string,
   ) {
+    Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
       pinMethod !== PinMethod.DEFAULT
@@ -88,6 +90,7 @@ export class ApiHandler {
       const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
       if (created) {
         await ApiHandler.createNewWallet({});
+        Storage.set(Keys.APPID, appID);
       }
     } else {
       throw new Error('Realm initialisation failed');
