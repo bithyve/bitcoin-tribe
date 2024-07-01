@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -11,7 +11,7 @@ import KeyPadView from 'src/components/KeyPadView';
 import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
 
-function AddAmountModal() {
+function AddAmountModal(props) {
   const theme: AppTheme = useTheme();
 
   const [amount, setAmount] = useState('');
@@ -31,6 +31,10 @@ function AddAmountModal() {
   const onDeletePressed = text => {
     setAmount(amount.slice(0, -1));
   };
+
+  useEffect(() => {
+    props.callback(amount);
+  }, [amount]);
 
   return (
     <View style={styles.saveButtonMargin}>

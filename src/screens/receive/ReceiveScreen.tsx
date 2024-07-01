@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
@@ -8,13 +8,31 @@ import ModalContainer from 'src/components/ModalContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
+import WalletUtilities from 'src/services/wallets/operations/utils';
 
 function ReceiveScreen({ route }) {
-  const { receiveData, title, subTitle } = route.params;
+  const { receivingAddress, title, subTitle } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
 
   const [visible, setVisible] = useState(false);
+
+  const [amount, setAmount] = useState(0);
+  const [paymentURI, setPaymentURI] = useState(null);
+
+  useEffect(() => {
+    if (amount) {
+      const newPaymentURI = WalletUtilities.generatePaymentURI(
+        receivingAddress,
+        {
+          amount: parseInt(amount) / 1e8,
+        },
+      ).paymentURI;
+      setPaymentURI(newPaymentURI);
+    } else if (paymentURI) {
+      setPaymentURI(null);
+    }
+  }, [amount, receivingAddress]);
 
   return (
     <ScreenContainer>
@@ -22,7 +40,7 @@ function ReceiveScreen({ route }) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ReceiveQrDetails
           addMountModalVisible={() => setVisible(true)}
-          receiveData={receiveData}
+          receivingAddress={paymentURI || receivingAddress || ''}
         />
       </ScrollView>
       <FooterNote
@@ -37,7 +55,7 @@ function ReceiveScreen({ route }) {
         subTitle={receciveScreen.addAmountSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
-        <AddAmountModal />
+        <AddAmountModal callback={setAmount} />
       </ModalContainer>
     </ScreenContainer>
   );

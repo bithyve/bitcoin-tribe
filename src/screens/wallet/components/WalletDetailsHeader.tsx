@@ -11,11 +11,13 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import WalletOperations from 'src/services/wallets/operations';
 
 type walletDetailsHeaderProps = {
   profile: string;
   username: string;
-  balance: string;
+  wallet: Wallet;
   onPressSetting: () => void;
   onPressBuy: () => void;
 };
@@ -25,7 +27,15 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const { receciveScreen, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile, username, balance, onPressSetting, onPressBuy } = props;
+  const { profile, username, wallet, onPressSetting, onPressBuy } = props;
+
+  const {
+    specs: { balances: { confirmed, unconfirmed } } = {
+      balances: { confirmed: 0, unconfirmed: 0 },
+    },
+  } = wallet;
+  const receivingAddress = WalletOperations.getNextFreeAddress(wallet);
+
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
@@ -35,7 +45,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
-          {balance}
+          {confirmed + unconfirmed}
         </AppText>
       </View>
       <TransactionButtons
@@ -48,7 +58,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         onPressRecieve={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
-              receiveData: '',
+              receivingAddress,
               title: common.receive,
               subTitle: receciveScreen.headerSubTitle,
             }),

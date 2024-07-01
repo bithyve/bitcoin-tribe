@@ -6,13 +6,10 @@ import coinselect from 'coinselect';
 import coinselectSplit from 'coinselect/split';
 import config from 'src/utils/config';
 import { parseInt } from 'lodash';
-let ElectrumClient: any = {};
-// import ElectrumClient from 'src/services/electrum/client';
+import ElectrumClient from 'src/services/electrum/client';
 // import { isSignerAMF } from 'src/hardware';
 import idx from 'idx';
-let RestClient: any = {};
-let TorStatus: any = '';
-// import RestClient, { TorStatus } from 'src/services/rest/RestClient';
+import RestClient, { TorStatus } from 'src/services/rest/RestClient';
 import ecc from './taproot-utils/noble_ecc';
 import {
   AverageTxFees,

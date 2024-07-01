@@ -10,7 +10,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-function WalletTransactionsContainer({ navigation }) {
+function WalletTransactionsContainer({ navigation, transactions }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
   const theme: AppTheme = useTheme();
@@ -30,7 +30,7 @@ function WalletTransactionsContainer({ navigation }) {
           </AppText>
         </AppTouchable>
       </View>
-      <WalletTransactionList />
+      <WalletTransactionList transactions={transactions} />
     </View>
   );
 }

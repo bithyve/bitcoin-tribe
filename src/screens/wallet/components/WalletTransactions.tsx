@@ -12,6 +12,8 @@ import IconBitcoin from 'src/assets/images/icon_btc.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { TransactionType } from 'src/services/wallets/enums';
+import { Transaction } from 'src/services/wallets/interfaces';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -20,17 +22,12 @@ type WalletTransactionsProps = {
   transType: string;
   backColor?: string;
   disabled?: boolean;
+  transaction: Transaction;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
-  const {
-    transId,
-    transDate,
-    transAmount,
-    transType = 'send',
-    backColor,
-    disabled,
-  } = props;
+  const { transId, transDate, transAmount, transType, backColor, disabled } =
+    props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
 
@@ -38,10 +35,18 @@ function WalletTransactions(props: WalletTransactionsProps) {
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
-      onPress={() => navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS)}>
+      onPress={() =>
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+          transaction: props.transaction,
+        })
+      }>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
-          {transType === 'send' ? <SendTXNIcon /> : <RecieveTXNIcon />}
+          {transType === TransactionType.SENT ? (
+            <SendTXNIcon />
+          ) : (
+            <RecieveTXNIcon />
+          )}
           <View style={styles.contentWrapper}>
             <AppText variant="body1" style={styles.transIdText}>
               {transId}

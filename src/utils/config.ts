@@ -26,6 +26,7 @@ class Configuration {
     },
   };
   public GAP_LIMIT: number = 5;
+  public HEXA_ID: string = config.HEXA_ID.trim();
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();

@@ -10,12 +10,12 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type ReceiveQrDetailsProps = {
   addMountModalVisible: () => void;
-  receiveData?: string;
+  receivingAddress?: string;
 };
 
 const ReceiveQrDetails = ({
   addMountModalVisible,
-  receiveData,
+  receivingAddress,
 }: ReceiveQrDetailsProps) => {
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen } = translations;
@@ -23,21 +23,16 @@ const ReceiveQrDetails = ({
   return (
     <View style={styles.container}>
       <ShowQRCode
-        value={'https://google.com'}
+        value={receivingAddress}
         title={receciveScreen.invoiceAddress}
       />
 
-      <ReceiveQrClipBoard
-        qrCodeValue={'iklhj-safas-435fs453df-897897dfs-87875656'}
-        icon={<IconCopy />}
+      <ReceiveQrClipBoard qrCodeValue={receivingAddress} icon={<IconCopy />} />
+      <OptionCard
+        title={receciveScreen.addAmountTitle}
+        subTitle={receciveScreen.addAmountSubTitle}
+        onPress={addMountModalVisible}
       />
-      {receiveData === '' ? (
-        <OptionCard
-          title={receciveScreen.addAmountTitle}
-          subTitle={receciveScreen.addAmountSubTitle}
-          onPress={addMountModalVisible}
-        />
-      ) : null}
     </View>
   );
 };
