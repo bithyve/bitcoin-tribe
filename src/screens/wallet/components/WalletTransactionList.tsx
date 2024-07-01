@@ -24,6 +24,7 @@ function WalletTransactionList({
           transDate={item.date}
           transAmount={`${item.amount}`}
           transType={item.transactionType}
+          transaction={item}
         />
       )}
       keyExtractor={item => item.txid}

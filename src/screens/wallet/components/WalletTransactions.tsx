@@ -13,6 +13,7 @@ import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
+import { Transaction } from 'src/services/wallets/interfaces';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -21,6 +22,7 @@ type WalletTransactionsProps = {
   transType: string;
   backColor?: string;
   disabled?: boolean;
+  transaction: Transaction;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
@@ -33,7 +35,11 @@ function WalletTransactions(props: WalletTransactionsProps) {
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
-      onPress={() => navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS)}>
+      onPress={() =>
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+          transaction: props.transaction,
+        })
+      }>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           {transType === TransactionType.SENT ? (
