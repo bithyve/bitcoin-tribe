@@ -74,7 +74,10 @@ function WalletDetails({ navigation }) {
         />
       </View>
       <View style={styles.walletTransWrapper}>
-        <WalletTransactionsContainer navigation={navigation} />
+        <WalletTransactionsContainer
+          navigation={navigation}
+          transactions={wallet.specs.transactions}
+        />
       </View>
       <ModalContainer
         title={common.buy}
