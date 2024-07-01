@@ -70,7 +70,11 @@
     "ipAddress": "IP address",
     "portNumber": "Port Number",
     "connectYourNode": "Connect your node",
-    "connectYourNodeSubTitle": "Set up Lightning Account"
+    "connectYourNodeSubTitle": "Set up Lightning Account",
+    "connectNodeManuallySubTitle": "Enter lightning details",
+    "enterNodeName": "Enter Node name",
+    "enterCredentials": "Enter credentials",
+    "enterAddress": "Enter address"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
