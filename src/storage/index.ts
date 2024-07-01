@@ -5,6 +5,7 @@ const MMKVStorage = new MMKV();
 export enum Keys {
   APPID = 'APPID',
   PIN_METHOD = 'PIN_METHOD',
+  AVERAGE_TX_FEE_BY_NETWORK = 'AVERAGE_TX_FEE_BY_NETWORK',
 }
 
 export class Storage {
