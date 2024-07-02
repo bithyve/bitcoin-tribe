@@ -21,7 +21,7 @@ function SendScreen({ route }) {
   const { common, sendScreen } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
-  const { wallet } = route.params;
+  // const { wallet } = route.params;
 
   // const [sendTransaction, setSendTransaction] = useState(false);
   // const sendTransactionQuery = useQuery(
