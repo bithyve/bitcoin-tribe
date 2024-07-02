@@ -71,6 +71,15 @@ const getStyles = (theme: AppTheme, status) =>
       borderRadius: 20,
       marginTop: hp(10),
       marginBottom: status ? hp(35) : hp(5),
+      // need to work
+      shadowColor: theme.colors.cardShadowColor,
+      shadowRadius: 10,
+      shadowOpacity: 1,
+      elevation: 0.5,
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
     },
     labelStyle: {
       color: theme.colors.bodyColor,
