@@ -86,13 +86,14 @@ function HomeScreen() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
+
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const wallet: Wallet = useQuery(RealmSchema.Wallet)[0];
+
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
-
-  const wallet: Wallet = useQuery(RealmSchema.Wallet)[0];
 
   useEffect(() => {
     if ((app && app.walletImage) || app.appName) {
