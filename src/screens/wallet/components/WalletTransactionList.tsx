@@ -36,23 +36,25 @@ function WalletTransactionList({
       enabled: isWalletRefreshing, // Enable query only when refreshing
       onSettled: () => {
         // This callback is called on either success or error
+
+        if (refreshWalletQuery.status === 'success') {
+          Toast('Wallet refreshed successfully');
+        } else if (refreshWalletQuery.status === 'error') {
+          Toast('Failed to refresh wallet');
+        }
         setIsWalletRefreshing(false);
       },
     },
   );
 
-  useEffect(() => {
-    if (refreshWalletQuery.status === 'success') {
-      Toast('Wallet refreshed successfully');
-    } else if (refreshWalletQuery.status === 'error') {
-      Toast('Failed to refresh wallet');
-    }
-  }, [refreshWalletQuery.status]);
-
   const pullDownToRefresh = () => {
     setIsWalletRefreshing(true);
     queryClient.invalidateQueries('refresh_wallet'); // Invalidate the query to force a refresh
   };
+
+  useEffect(() => {
+    pullDownToRefresh(); // auto-refresh the wallet on mount
+  }, []);
 
   return (
     <FlatList
