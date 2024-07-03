@@ -12,40 +12,17 @@ import BuyModal from './components/BuyModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from 'react-query';
 import { useQuery as realmUseQuery } from '@realm/react';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import Toast from 'src/components/Toast';
+import useWallets from 'src/hooks/useWallets';
 
 function WalletDetails({ navigation }) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
-  const wallet: Wallet = realmUseQuery(RealmSchema.Wallet)[0];
-
-  const refreshWalletQuery = useQuery(
-    'refresh_wallet',
-    async () => {
-      return await ApiHandler.refreshWallets({
-        wallets: [wallet],
-      });
-    },
-    {
-      enabled: refreshWallet,
-    },
-  );
-
-  if (refreshWalletQuery.status === 'error') {
-    Toast('Failed to refresh wallet');
-  }
-
-  useEffect(() => {
-    setRefreshWallet(true); // refreshing wallet as soon as the user lands on the page
-  }, []);
+  const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
@@ -72,6 +49,7 @@ function WalletDetails({ navigation }) {
         <WalletTransactionsContainer
           navigation={navigation}
           transactions={wallet.specs.transactions}
+          wallet={wallet}
         />
       </View>
       <ModalContainer
