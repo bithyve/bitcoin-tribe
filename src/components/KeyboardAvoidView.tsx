@@ -30,7 +30,8 @@ const KeyboardAvoidView = props => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: 'auto',
+      height: Platform.OS == 'ios' ? 'auto' : 0,
+      flex: Platform.OS == 'ios' ? 0 : 1,
     },
   });
 export default KeyboardAvoidView;
