@@ -43,10 +43,8 @@ function AppBackup({ navigation }) {
       wallet.derivationDetails &&
       wallet.derivationDetails.mnemonic.split(' '),
   );
-  console.log('wallet', words);
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
-  useEffect(() => {}, []);
 
   return (
     <ScreenContainer>
