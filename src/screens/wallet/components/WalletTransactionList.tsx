@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
+import EmptyStateView from 'src/components/EmptyStateView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 const TransactionData = [
   {
     id: 1,
@@ -59,10 +61,15 @@ const TransactionData = [
 function WalletTransactionList() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { wallet } = translations;
+  const [refresh, setRefresh] = useState(false);
   return (
     <FlatList
       style={styles.container}
-      data={TransactionData}
+      data={[]}
+      refreshing={refresh}
+      onRefresh={() => setRefresh(false)}
       renderItem={({ item }) => (
         <WalletTransactions
           transId={item.transID}
@@ -73,6 +80,12 @@ function WalletTransactionList() {
       )}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
+      ListEmptyComponent={
+        <EmptyStateView
+          title={wallet.noUTXOYet}
+          subTitle={wallet.noUTXOYetSubTitle}
+        />
+      }
     />
   );
 }

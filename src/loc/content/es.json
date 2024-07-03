@@ -119,6 +119,8 @@
     "accountXPubSubTitle": "xPub details for your wallet",
     "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
     "buyWithRamp": "Buy with Ramp",
-    "buyWithRampSubTitle": "Low fee for those big buys"
+    "buyWithRampSubTitle": "Low fee for those big buys",
+    "noUTXOYet": "No transactions yet",
+    "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,"
   }
 }
