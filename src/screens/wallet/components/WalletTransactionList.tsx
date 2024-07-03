@@ -67,7 +67,7 @@ function WalletTransactionList() {
   return (
     <FlatList
       style={styles.container}
-      data={[]}
+      data={TransactionData}
       refreshing={refresh}
       onRefresh={() => setRefresh(false)}
       renderItem={({ item }) => (
