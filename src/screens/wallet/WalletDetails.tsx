@@ -16,6 +16,7 @@ import { useQuery } from 'react-query';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import useWallets from 'src/hooks/useWallets';
 
 function WalletDetails({ navigation }) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
@@ -25,7 +26,7 @@ function WalletDetails({ navigation }) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
-  const wallet: Wallet = realmUseQuery(RealmSchema.Wallet)[0];
+  const wallet: Wallet = useWallets({}).wallets[0];
 
   const refreshWalletQuery = useQuery(
     'refresh_wallet',

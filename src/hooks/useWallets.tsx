@@ -9,21 +9,22 @@ type useWalletsInterface = ({ walletIds }?: { walletIds?: string[] }) => {
 
 const useWallets: useWalletsInterface = ({ walletIds = [] } = {}) => {
   const wallets: Wallet[] = useQuery(RealmSchema.Wallet) as unknown as Wallet[];
-  //   if (walletIds && walletIds.length) {
-  //     const requestedWallets = [];
-  //     for (let index = 0; index < walletIds.length; index += 1) {
-  //       const id = walletIds[index];
-  //       const wallet: Wallet = useObject(RealmSchema.Wallet, id);
-  //       if (wallet) {
-  //         requestedWallets.push(wallet);
-  //       }
-  //     }
-  //     return {
-  //       wallets: requestedWallets.map(
-  //         getJSONFromRealmObject,
-  //       ) as unknown as Wallet[],
-  //     };
-  //   }
+
+  if (walletIds && walletIds.length) {
+    const requestedWallets = [];
+    for (let index = 0; index < walletIds.length; index += 1) {
+      const id = walletIds[index];
+      const wallet: Wallet = useObject(RealmSchema.Wallet, id);
+      if (wallet) {
+        requestedWallets.push(wallet);
+      }
+    }
+    return {
+      wallets: requestedWallets.map(
+        getJSONFromRealmObject,
+      ) as unknown as Wallet[],
+    };
+  }
 
   return {
     wallets: wallets.map(getJSONFromRealmObject) as unknown as Wallet[],
