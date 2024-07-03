@@ -10,35 +10,30 @@ import AppText from './AppText';
 type seedCardProps = {
   item: string;
   index: number;
+  visible: boolean;
+  callback: (index, item) => void;
 };
-// need to work - visible only one seed
+
 function SeedCard(props: seedCardProps) {
-  const { item, index } = props;
+  const { item, index, visible, callback } = props;
   const theme: AppTheme = useTheme();
-  const [showWordIndex, setShowWordIndex] = useState<string | number>('');
-  const styles = getStyles(theme, showWordIndex, index);
+
+  const styles = getStyles(theme, visible, index);
   return (
     <AppTouchable
       style={styles.container}
-      onPress={() =>
-        setShowWordIndex(prev => {
-          if (prev === index) {
-            return '';
-          }
-          return index;
-        })
-      }>
+      onPress={() => callback(index, item)}>
       <AppText variant="body7" style={styles.indexStyle}>
         {index < 9 ? '0' : null}
         {index + 1}
       </AppText>
       <AppText variant="body6" style={styles.seedWordStyle}>
-        {showWordIndex === index ? item : '******'}
+        {visible ? item : '******'}
       </AppText>
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme, showWordIndex, index) =>
+const getStyles = (theme: AppTheme, visible, index) =>
   StyleSheet.create({
     container: {
       height: 70,
@@ -50,7 +45,7 @@ const getStyles = (theme: AppTheme, showWordIndex, index) =>
       marginRight: index % 2 ? 0 : hp(15),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
-      opacity: showWordIndex === index ? 1 : 0.6,
+      opacity: visible ? 1 : 0.6,
     },
     indexStyle: {
       color: theme.colors.accent1,
@@ -58,8 +53,8 @@ const getStyles = (theme: AppTheme, showWordIndex, index) =>
     },
     seedWordStyle: {
       color: theme.colors.bodyColor,
-      paddingTop: showWordIndex === index ? 0 : hp(10),
-      paddingBottom: showWordIndex === index ? 0 : hp(5),
+      paddingTop: visible ? 0 : hp(10),
+      paddingBottom: visible ? 0 : hp(5),
     },
   });
 export default SeedCard;
