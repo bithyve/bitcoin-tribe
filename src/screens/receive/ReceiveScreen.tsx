@@ -40,7 +40,7 @@ function ReceiveScreen({ route }) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ReceiveQrDetails
           addMountModalVisible={() => setVisible(true)}
-          receivingAddress={paymentURI || receivingAddress || ''}
+          receivingAddress={paymentURI || receivingAddress || 'address'}
         />
       </ScrollView>
       <FooterNote

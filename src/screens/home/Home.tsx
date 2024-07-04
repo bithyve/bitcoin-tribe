@@ -112,7 +112,7 @@ function HomeScreen() {
     }
   }, [app]);
 
-  const handleScreenNavigation = (screenPath: string, params) => {
+  const handleScreenNavigation = (screenPath: string, params?) => {
     navigation.dispatch(CommonActions.navigate(screenPath, params));
   };
 
