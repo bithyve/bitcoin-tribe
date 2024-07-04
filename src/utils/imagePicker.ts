@@ -8,10 +8,11 @@ const pickImage = async () => {
       cropping: true,
       multiple: false,
       compressImageQuality: 0.8,
+      includeBase64: true,
       mediaType: 'photo',
       smartAlbums: ['PhotoStream', 'UserLibrary', 'Panoramas'],
     });
-    return image.path;
+    return image.data;
   } catch (error) {
     console.error('Error picking image:', error);
     throw error;

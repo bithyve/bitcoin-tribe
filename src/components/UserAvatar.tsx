@@ -14,12 +14,7 @@ const UserAvatar = (props: UserAvatarProps) => {
   return (
     <Avatar.Image
       size={size}
-      source={{
-        uri: imageSource
-          ? 'file://' + imageSource
-          : 'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x',
-      }}
-      style={styles.wrapper}
+      source={{ uri: `data:image/jpeg;base64,${imageSource}` }}
     />
   );
 };

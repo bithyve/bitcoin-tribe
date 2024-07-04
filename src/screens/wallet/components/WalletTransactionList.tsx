@@ -1,89 +1,86 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
+import { Transaction } from 'src/services/wallets/interfaces';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useQuery, useQueryClient } from 'react-query';
+import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-const TransactionData = [
-  {
-    id: 1,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:11 pm',
-    transAmount: '0.129477',
-    transType: 'send',
-  },
-  {
-    id: 2,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.1294770000',
-    transType: 'recieve',
-  },
-  {
-    id: 3,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129483',
-    transType: 'send',
-  },
-  {
-    id: 4,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129483',
-    transType: 'recieve',
-  },
-  {
-    id: 5,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129483',
-    transType: 'send',
-  },
-  {
-    id: 6,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129483',
-    transType: 'send',
-  },
-  {
-    id: 7,
-    transID: 'f4184fc5964…1e9e16',
-    transDate: '22 April 2024. 2:00 pm',
-    transAmount: '0.129483',
-    transType: 'send',
-  },
-];
-function WalletTransactionList() {
+
+function WalletTransactionList({
+  transactions,
+  wallet,
+}: {
+  transactions: Transaction[];
+  wallet: Wallet;
+}) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
-  const [refresh, setRefresh] = useState(false);
+  const walletStrings = translations.wallet;
+
+  const [isWalletRefreshing, setIsWalletRefreshing] = useState(false);
+  const queryClient = useQueryClient();
+
+  const refreshWalletQuery = useQuery(
+    'refresh_wallet',
+    async () => {
+      // auto runs for the first time
+      return await ApiHandler.refreshWallets({
+        wallets: [wallet],
+      });
+    },
+    {
+      enabled: isWalletRefreshing, // Enable query only when refreshing
+      onSettled: () => {
+        // This callback is called on either success or error
+
+        if (refreshWalletQuery.status === 'success') {
+          Toast('Wallet refreshed successfully');
+        } else if (refreshWalletQuery.status === 'error') {
+          Toast('Failed to refresh wallet');
+        }
+        setIsWalletRefreshing(false);
+      },
+    },
+  );
+
+  const pullDownToRefresh = () => {
+    setIsWalletRefreshing(true);
+    queryClient.invalidateQueries('refresh_wallet'); // Invalidate the query to force a refresh
+  };
+
+  useEffect(() => {
+    pullDownToRefresh(); // auto-refresh the wallet on mount
+  }, []);
+
   return (
     <FlatList
       style={styles.container}
-      data={TransactionData}
-      refreshing={refresh}
-      onRefresh={() => setRefresh(false)}
+      data={transactions}
+      refreshing={isWalletRefreshing}
+      onRefresh={pullDownToRefresh}
       renderItem={({ item }) => (
         <WalletTransactions
-          transId={item.transID}
-          transDate={item.transDate}
-          transAmount={item.transAmount}
-          transType={item.transType}
+          transId={item.txid}
+          transDate={item.date}
+          transAmount={`${item.amount}`}
+          transType={item.transactionType}
+          transaction={item}
         />
       )}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item.txid}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={
         <EmptyStateView
-          title={wallet.noUTXOYet}
-          subTitle={wallet.noUTXOYetSubTitle}
+          title={walletStrings.noUTXOYet}
+          subTitle={walletStrings.noUTXOYetSubTitle}
         />
       }
     />

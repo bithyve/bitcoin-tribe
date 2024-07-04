@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+// import { useQuery } from '@realm/react';
 
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,6 +13,11 @@ import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
+import { RealmSchema } from 'src/storage/enum';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import useWallets from 'src/hooks/useWallets';
 
 const AssetsData = [
   {
@@ -89,10 +95,24 @@ function HomeScreen() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home, common, sendScreen } = translations;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+
   const [visible, setVisible] = useState(false);
+  const [image, setImage] = useState(null);
+  const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
 
-  const handleScreenNavigation = (screenPath: string, params?) => {
+  const wallet: Wallet = useWallets({}).wallets[0];
+
+  useEffect(() => {
+    if ((app && app.walletImage) || app.appName) {
+      const base64Image = app.walletImage;
+      setImage(base64Image);
+      setWalletName(app.appName);
+    }
+  }, [app]);
+
+  const handleScreenNavigation = (screenPath: string, params) => {
     navigation.dispatch(CommonActions.navigate(screenPath, params));
   };
 
@@ -100,11 +120,11 @@ function HomeScreen() {
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader
-          profile={
-            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-          }
-          username="Dustin Henderson"
-          balance="0.0134"
+          profile={image}
+          username={walletName}
+          balance={`${
+            wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+          }`}
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN, {
               receiveData: 'send',
