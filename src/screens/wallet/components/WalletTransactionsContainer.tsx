@@ -23,7 +23,10 @@ function WalletTransactionsContainer({ navigation, transactions, wallet }) {
         </AppText>
         <AppTouchable
           onPress={() =>
-            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION)
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
+              transactions,
+              wallet,
+            })
           }>
           <AppText variant="smallCTA" style={styles.viewAllText}>
             {walletTranslations.viewAll}
