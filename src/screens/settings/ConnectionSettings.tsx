@@ -3,6 +3,8 @@ import React, { ReactNode, useContext } from 'react';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+
 import IconTor from 'src/assets/images/icon_tor.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -13,7 +15,7 @@ type ConnectionSettingMenuProps = {
   icon: ReactNode;
   onPress: () => void;
 };
-function ConnectionSettings() {
+function ConnectionSettings({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
 
@@ -25,10 +27,10 @@ function ConnectionSettings() {
       onPress: () => console.log('tor pressed'),
     },
     {
-      title: settings.NodeSettings,
-      subtitle: settings.NodeSettingSubTitle,
+      title: settings.nodeSettings,
+      subtitle: settings.nodeSettingSubTitle,
       icon: <IconNodes />,
-      onPress: () => console.log('node setting pressed'),
+      onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     },
     // Add more menu items as needed
   ];

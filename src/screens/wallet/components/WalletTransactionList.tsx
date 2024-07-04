@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -10,6 +10,8 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useQuery, useQueryClient } from 'react-query';
 import Toast from 'src/components/Toast';
+import EmptyStateView from 'src/components/EmptyStateView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function WalletTransactionList({
   transactions,
@@ -20,6 +22,8 @@ function WalletTransactionList({
 }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const walletStrings = translations.wallet;
 
   const [isWalletRefreshing, setIsWalletRefreshing] = useState(false);
   const queryClient = useQueryClient();
@@ -73,6 +77,12 @@ function WalletTransactionList({
       )}
       keyExtractor={item => item.txid}
       showsVerticalScrollIndicator={false}
+      ListEmptyComponent={
+        <EmptyStateView
+          title={walletStrings.noUTXOYet}
+          subTitle={walletStrings.noUTXOYetSubTitle}
+        />
+      }
     />
   );
 }

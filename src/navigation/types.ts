@@ -21,6 +21,8 @@ export type AppStackParams = {
   [NavigationRoutes.EDITWALLETPROFILE]: undefined;
   [NavigationRoutes.APPBACKUP]: undefined;
   [NavigationRoutes.CONNECTIONSETTINGS]: undefined;
+  [NavigationRoutes.NODESETTINGS]: undefined;
+  [NavigationRoutes.CONNECTNODEMANUALLY]: undefined;
   // Add other routes as needed
 };
 

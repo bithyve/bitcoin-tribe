@@ -32,8 +32,9 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     image: {
-      height: '100%',
-      width: '100%',
+      flex: 1,
+      // height: '100%',
+      // width: '100%',
       paddingHorizontal: hp(25),
       paddingTop: hp(15),
     },
