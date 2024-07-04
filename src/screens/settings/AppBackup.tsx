@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { FlatList, StyleSheet } from 'react-native';
 import { useQuery } from '@realm/react';
@@ -13,23 +13,8 @@ import { wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
 import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { RealmSchema } from 'src/storage/enum';
-
-// const words = [
-//   'ketchup',
-//   'unique',
-//   'canvas',
-//   'benefit',
-//   'vacuum',
-//   'oyster',
-//   'omit',
-//   'hospital',
-//   'shiver',
-//   'hollow',
-//   'ridge',
-//   'october',
-// ];
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function AppBackup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -37,12 +22,9 @@ function AppBackup({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
-  const wallet: Wallet = useQuery(RealmSchema.Wallet)[0];
-  const [words, setWords] = useState(
-    wallet &&
-      wallet.derivationDetails &&
-      wallet.derivationDetails.mnemonic.split(' '),
-  );
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+
+  const [words, setWords] = useState(app && app.primaryMnemonic.split(' '));
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
 
