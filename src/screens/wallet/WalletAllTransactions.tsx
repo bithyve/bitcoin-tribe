@@ -7,17 +7,19 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import WalletTransactionList from './components/WalletTransactionList';
 
-function WalletAllTransactions() {
+function WalletAllTransactions({ route }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet: walletTranslations } = translations;
   const theme: AppTheme = useTheme();
+  const { transactions, wallet } = route.params;
+
   return (
     <ScreenContainer>
       <AppHeader
-        title={wallet.allTransactionsTitle}
-        subTitle={wallet.allTransactionSubTitle}
+        title={walletTranslations.allTransactionsTitle}
+        subTitle={walletTranslations.allTransactionSubTitle}
       />
-      <WalletTransactionList />
+      <WalletTransactionList transactions={transactions} wallet={wallet} />
     </ScreenContainer>
   );
 }

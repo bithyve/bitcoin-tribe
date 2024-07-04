@@ -17,6 +17,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
+import useWallets from 'src/hooks/useWallets';
 
 const AssetsData = [
   {
@@ -88,12 +89,14 @@ function HomeScreen() {
   const { home } = translations;
 
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const wallet: Wallet = useQuery(RealmSchema.Wallet)[0];
+  // const wallet: Wallet = useQuery(RealmSchema.Wallet)[0];
 
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
+
+  const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
     if ((app && app.walletImage) || app.appName) {
