@@ -1,36 +1,61 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
-import ModalContainer from 'src/components/ModalContainer';
-import SendEnterAddress from './components/SendEnterAddress';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import SendAddressModal from './components/SendAddressModal';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+// import { ApiHandler } from 'src/services/handler/apiHandler';
+// import { useQuery } from 'react-query';
+// import Toast from 'src/components/Toast';
 
-function SendScreen() {
+function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
+  const { sendScreen } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
+  const { receiveData, title, subTitle, wallet } = route.params;
+
+  // const [sendTransaction, setSendTransaction] = useState(false);
+  // const sendTransactionQuery = useQuery(
+  //   'send_transaction',
+  //   async () => {
+  //     return await ApiHandler.sendTransaction({
+  //       sender: wallet,
+  //       recipient: {
+  //         address: 'tb1q7vyr4d4qvamlecy6zssxtc6q8afdznd67pgqnl',
+  //         amount: 1000,
+  //       },
+  //     });
+  //   },
+  //   {
+  //     enabled: sendTransaction,
+  //   },
+  // );
+
+  // useEffect(() => {
+  //   setSendTransaction(true);
+  // }, []);
+
   return (
     <ScreenContainer>
-      <AppHeader
-        title={common.send}
-        subTitle={sendScreen.headerSubTitle}
-        enableBack={true}
-      />
+      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <QRScanner />
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         style={styles.advanceOptionStyle}
-        onPress={() => setVisible(true)}
+        onPress={() => {
+          receiveData === 'send'
+            ? setVisible(true)
+            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
+        }}
       />
       <SendAddressModal
         visible={visible}

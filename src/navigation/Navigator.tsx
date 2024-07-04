@@ -21,6 +21,9 @@ import WalletSettings from 'src/screens/wallet/WalletSettings';
 import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 import AppBackup from 'src/screens/settings/AppBackup';
 import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
+import NodeSettings from 'src/screens/settings/NodeSettings';
+import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
+import { RealmProvider } from 'src/storage/realm/RealmProvider';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -44,50 +47,63 @@ function LoginStack() {
 function AppStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
-    <Stack.Navigator
-      initialRouteName={NavigationRoutes.HOME}
-      screenOptions={{ headerShown: false }}>
-      <Stack.Screen name={NavigationRoutes.HOME} component={HomeTabs} />
-      <Stack.Screen name={NavigationRoutes.SETTINGS} component={Settings} />
-      <Stack.Screen name={NavigationRoutes.SENDSCREEN} component={SendScreen} />
+    <RealmProvider>
+      <Stack.Navigator
+        initialRouteName={NavigationRoutes.HOME}
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={NavigationRoutes.HOME} component={HomeTabs} />
+        <Stack.Screen name={NavigationRoutes.SETTINGS} component={Settings} />
+        <Stack.Screen
+          name={NavigationRoutes.SENDSCREEN}
+          component={SendScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVESCREEN}
+          component={ReceiveScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETDETAILS}
+          component={WalletDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ASSETDETAILS}
+          component={AssetDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETALLTRANSACTION}
+          component={WalletAllTransactions}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WALLETSETTINGS}
+          component={WalletSettings}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSACTIONDETAILS}
+          component={TransactionDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.LANGUAGEANDCURRENCY}
+          component={LanguageAndCurrency}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.EDITWALLETPROFILE}
+          component={EditWalletProfile}
+        />
+        <Stack.Screen name={NavigationRoutes.APPBACKUP} component={AppBackup} />
+        <Stack.Screen
+          name={NavigationRoutes.CONNECTIONSETTINGS}
+          component={ConnectionSettings}
+        />
+      </Stack.Navigator>
       <Stack.Screen
-        name={NavigationRoutes.RECEIVESCREEN}
-        component={ReceiveScreen}
+        name={NavigationRoutes.NODESETTINGS}
+        component={NodeSettings}
       />
       <Stack.Screen
-        name={NavigationRoutes.WALLETDETAILS}
-        component={WalletDetails}
+        name={NavigationRoutes.CONNECTNODEMANUALLY}
+        component={ConnectNodeManually}
       />
-      <Stack.Screen
-        name={NavigationRoutes.ASSETDETAILS}
-        component={AssetDetails}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.WALLETALLTRANSACTION}
-        component={WalletAllTransactions}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.WALLETSETTINGS}
-        component={WalletSettings}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.TRANSACTIONDETAILS}
-        component={TransactionDetails}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.LANGUAGEANDCURRENCY}
-        component={LanguageAndCurrency}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.EDITWALLETPROFILE}
-        component={EditWalletProfile}
-      />
-      <Stack.Screen name={NavigationRoutes.APPBACKUP} component={AppBackup} />
-      <Stack.Screen
-        name={NavigationRoutes.CONNECTIONSETTINGS}
-        component={ConnectionSettings}
-      />
-    </Stack.Navigator>
+    </RealmProvider>
   );
 }
 function Navigator() {

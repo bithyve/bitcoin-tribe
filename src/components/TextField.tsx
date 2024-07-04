@@ -27,13 +27,14 @@ const TextField = (props: TextFieldProps) => {
     disabled = false,
   } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
   return (
     <View style={styles.container}>
-      {icon && <View style={styles.iconWrapper}>{icon}</View>}
+      {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
         disabled={disabled}
         cursorColor={theme.colors.accent1}
+        selectionColor={theme.colors.accent1}
         textColor={theme.colors.headingColor}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholder}
@@ -49,7 +50,7 @@ const TextField = (props: TextFieldProps) => {
     </View>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, icon) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -60,11 +61,12 @@ const getStyles = (theme: AppTheme) =>
     },
     inputContainer: {
       justifyContent: 'center',
-      height: hp(55),
-      width: '80%',
+      height: hp(50),
+      width: icon ? '80%' : '100%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
       borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
       paddingLeft: 5,
     },
     iconWrapper: {

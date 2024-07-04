@@ -14,5 +14,6 @@ const Colors = {
   Quartz: 'rgba(75, 75, 75, 1)',
   QuickSilver: 'rgba(162, 162, 162, 1)',
   White: 'rgba(255, 255, 255,1)',
+  DarkSalmon: 'rgba(252, 142, 98, 1)',
 };
 export default Colors;

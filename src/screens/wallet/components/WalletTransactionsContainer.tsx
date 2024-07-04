@@ -10,27 +10,30 @@ import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-function WalletTransactionsContainer({ navigation }) {
+function WalletTransactionsContainer({ navigation, transactions, wallet }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet: walletTranslations } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <AppText variant="heading3" style={styles.recentTransText}>
-          {wallet.recentTransaction}
+          {walletTranslations.recentTransaction}
         </AppText>
         <AppTouchable
           onPress={() =>
-            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION)
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
+              transactions,
+              wallet,
+            })
           }>
           <AppText variant="smallCTA" style={styles.viewAllText}>
-            {wallet.viewAll}
+            {walletTranslations.viewAll}
           </AppText>
         </AppTouchable>
       </View>
-      <WalletTransactionList />
+      <WalletTransactionList transactions={transactions} wallet={wallet} />
     </View>
   );
 }
