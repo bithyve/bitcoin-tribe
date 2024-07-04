@@ -11,6 +11,9 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
+import { AppContext } from 'src/contexts/AppContext';
+import { stringToArrayBuffer } from 'src/utils/encryption';
+import dbManager from 'src/storage/realm/dbManager';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -19,6 +22,7 @@ function ProfileSetup({ navigation }) {
   const [profileImage, setProfileImage] = useState('');
   const [visible, setVisible] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
+  const { setKey } = useContext(AppContext);
 
   const handlePickImage = async () => {
     try {
@@ -46,17 +50,22 @@ function ProfileSetup({ navigation }) {
 
   useEffect(() => {
     if (query.status === 'success') {
-      navigation.replace(NavigationRoutes.APPSTACK);
+      onSuccess();
     }
   }, [navigation, query.status]);
 
-  const initiateWalletCreation = () => {
-    // saveImageToRealm(profileImage);
-    setInitiateQuery(true);
+  const onSuccess = async () => {
+    setKey('key');
+    const uint8array = stringToArrayBuffer('');
+    const isInit = await dbManager.initializeRealm(uint8array);
+    if (isInit) {
+      navigation.replace(NavigationRoutes.APPSTACK);
+    }
   };
 
-  // handle the query data here or from realm/react after persisting
-  // console.log(query.data);
+  const initiateWalletCreation = () => {
+    setInitiateQuery(true);
+  };
 
   return (
     <ScreenContainer>
