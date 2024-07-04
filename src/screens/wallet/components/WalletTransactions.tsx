@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
@@ -48,11 +49,16 @@ function WalletTransactions(props: WalletTransactionsProps) {
             <RecieveTXNIcon />
           )}
           <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.transIdText}>
+            <AppText
+              variant="body1"
+              numberOfLines={1}
+              ellipsizeMode="middle"
+              style={styles.transIdText}>
               {transId}
             </AppText>
             <AppText variant="body2" style={styles.transDateText}>
-              {transDate}
+              {/* {transDate} */}
+              {moment(transDate).format('DD MMM YY  •  HH:mm A')}
             </AppText>
           </View>
         </View>

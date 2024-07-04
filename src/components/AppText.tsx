@@ -28,6 +28,7 @@ interface Props extends ComponentProps<typeof Text> {
   variant?: VariantProp;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
+  ellipsizeMode?: string;
 }
 
 const AppText: React.FC<Props> = ({
@@ -35,6 +36,7 @@ const AppText: React.FC<Props> = ({
   variant = TextVariants.body1,
   style,
   numberOfLines,
+  ellipsizeMode,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -91,6 +93,7 @@ const AppText: React.FC<Props> = ({
       style={[textStyle, style]}
       testID={generatedTestID}
       numberOfLines={numberOfLines}
+      ellipsizeMode={ellipsizeMode}
       maxFontSizeMultiplier={1}>
       {children}
     </Text>
