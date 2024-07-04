@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Keyboard } from 'react-native';
 
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -70,7 +71,10 @@ function ProfileSetup({ navigation }) {
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
-        onSettingsPress={() => setVisible(true)}
+        onSettingsPress={() => {
+          Keyboard.dismiss();
+          setVisible(true);
+        }}
         primaryStatus={query.status}
         disabled={name === ''}
       />

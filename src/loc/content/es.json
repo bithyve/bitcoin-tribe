@@ -10,7 +10,11 @@
     "proceed": "Proceed",
     "recieve": "Recieve",
     "buy": "Buy",
-    "exit": "Exit"
+    "exit": "Exit",
+    "addNew": "ADD NEW",
+    "disconnect": "DISCONNECT",
+    "connect": "CONNECT",
+    "delete": "DELETE"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -59,8 +63,18 @@
     "conSettingScreenSubTitle": "Enter lightning details",
     "tor": "Tor",
     "torSubTitle": "Lorem ipsum dolor sit amet, consec",
-    "NodeSettings": "Node Settings",
-    "NodeSettingSubTitle": "Connect available own nodes"
+    "nodeSettings": "Node Settings",
+    "nodeSettingSubTitle": "Connect available own nodes",
+    "nodeSettingScreenSubTitle": "Node settings used so far",
+    "currentlyConnect": "Currently connected to",
+    "ipAddress": "IP address",
+    "portNumber": "Port Number",
+    "connectYourNode": "Connect your node",
+    "connectYourNodeSubTitle": "Set up Lightning Account",
+    "connectNodeManuallySubTitle": "Enter lightning details",
+    "enterNodeName": "Enter Node name",
+    "enterCredentials": "Enter credentials",
+    "enterAddress": "Enter address"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
@@ -105,6 +119,8 @@
     "accountXPubSubTitle": "xPub details for your wallet",
     "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
     "buyWithRamp": "Buy with Ramp",
-    "buyWithRampSubTitle": "Low fee for those big buys"
+    "buyWithRampSubTitle": "Low fee for those big buys",
+    "noUTXOYet": "No transactions yet",
+    "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,"
   }
 }

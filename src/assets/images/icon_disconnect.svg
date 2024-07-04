@@ -1,0 +1,12 @@
+<svg id="icon_disconnect" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+  <g id="Group_47552" data-name="Group 47552" transform="translate(-211 -286)">
+    <g id="link" transform="translate(219 293)">
+      <g id="Group_46681" data-name="Group 46681" transform="translate(0 0)">
+        <path id="Path_118234" data-name="Path 118234" d="M14.153,2.753a2.4,2.4,0,1,0-3.4,3.4l1.294,1.294a.524.524,0,0,1-.742.742L10.011,6.894a3.453,3.453,0,0,1,4.883-4.883l1.294,1.294a.524.524,0,1,1-.742.742Z" transform="translate(-9 -1)" fill="#f97643" stroke="#f97643" stroke-width="1"/>
+        <path id="Path_118235" data-name="Path 118235" d="M3.189,14.589a2.4,2.4,0,0,0,3.4-3.4L5.295,9.9a.524.524,0,1,1,.742-.742l1.294,1.294a3.453,3.453,0,1,1-4.883,4.883L1.154,14.036a.524.524,0,0,1,.742-.742Z" transform="translate(6.019 -1.981)" fill="#f97643" stroke="#f97643" stroke-width="1"/>
+      </g>
+    </g>
+    <path id="Path" d="M8.349,9.888.319,1.858A1.089,1.089,0,1,1,1.858.319l8.03,8.03A1.089,1.089,0,0,1,8.349,9.888Z" transform="matrix(0.017, 1, -1, 0.017, 231.194, 294.988)" fill="#e0e0e0"/>
+  </g>
+</svg>

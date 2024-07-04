@@ -24,7 +24,7 @@ type walletDetailsHeaderProps = {
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common } = translations;
+  const { receciveScreen, common, sendScreen } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
@@ -51,7 +51,12 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SENDSCREEN, { wallet }),
+            CommonActions.navigate(NavigationRoutes.SENDSCREEN, {
+              receiveData: 'send',
+              title: common.send,
+              subTitle: sendScreen.headerSubTitle,
+              wallet: wallet,
+            }),
           )
         }
         onPressBuy={onPressBuy}

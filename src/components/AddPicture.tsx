@@ -36,11 +36,6 @@ function AddPicture(props: addPictureProps) {
       ) : (
         <View style={styles.container}>
           <UserAvatar size={wp(75)} imageSource={imageSource} />
-          {edit ? (
-            <View style={styles.iconImageWrapper2}>
-              <IconImage />
-            </View>
-          ) : null}
         </View>
       )}
     </AppTouchable>
@@ -53,7 +48,6 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       marginTop: hp(30),
       marginBottom: hp(40),
-      position: 'relative',
     },
     iconImageWrapper: {
       height: windowHeight > 650 ? hp(75) : 75,
@@ -66,12 +60,6 @@ const getStyles = (theme: AppTheme) =>
     addPictureText: {
       color: theme.colors.accent1,
       marginLeft: wp(10),
-    },
-    iconImageWrapper2: {
-      position: 'absolute',
-      alignSelf: 'center',
-      left: 25,
-      opacity: 1,
     },
   });
 export default AddPicture;

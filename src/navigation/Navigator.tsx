@@ -21,6 +21,8 @@ import WalletSettings from 'src/screens/wallet/WalletSettings';
 import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 import AppBackup from 'src/screens/settings/AppBackup';
 import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
+import NodeSettings from 'src/screens/settings/NodeSettings';
+import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 
 function LoginStack() {
@@ -93,6 +95,14 @@ function AppStack() {
           component={ConnectionSettings}
         />
       </Stack.Navigator>
+      <Stack.Screen
+        name={NavigationRoutes.NODESETTINGS}
+        component={NodeSettings}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.CONNECTNODEMANUALLY}
+        component={ConnectNodeManually}
+      />
     </RealmProvider>
   );
 }
