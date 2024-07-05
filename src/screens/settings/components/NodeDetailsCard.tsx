@@ -68,17 +68,17 @@ const getStyles = (theme: AppTheme, status) =>
       backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
       padding: hp(15),
-      borderRadius: 20,
+      borderRadius: 10,
       marginTop: hp(10),
       marginBottom: status ? hp(35) : hp(5),
       // need to work
       shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 10,
-      shadowOpacity: 1,
+      shadowRadius: 1,
+      shadowOpacity: 0.20,
       elevation: 0.5,
       shadowOffset: {
         width: 0,
-        height: 4,
+        height: 1,
       },
     },
     labelStyle: {
