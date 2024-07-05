@@ -6,7 +6,7 @@ import AppText from 'src/components/AppText';
 import UserAvatar from 'src/components/UserAvatar';
 import { hp, wp } from 'src/constants/responsive';
 
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
@@ -44,7 +44,7 @@ function HomeHeader(props: HomeHeaderProps) {
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
               <AppText variant="body5" style={styles.balanceText}>
-                &nbsp;&nbsp;{balance}
+                &nbsp;{balance}
               </AppText>
             </View>
           </View>
