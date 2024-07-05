@@ -94,15 +94,15 @@ function AppStack() {
           name={NavigationRoutes.CONNECTIONSETTINGS}
           component={ConnectionSettings}
         />
+        <Stack.Screen
+          name={NavigationRoutes.NODESETTINGS}
+          component={NodeSettings}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CONNECTNODEMANUALLY}
+          component={ConnectNodeManually}
+        />
       </Stack.Navigator>
-      <Stack.Screen
-        name={NavigationRoutes.NODESETTINGS}
-        component={NodeSettings}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.CONNECTNODEMANUALLY}
-        component={ConnectNodeManually}
-      />
     </RealmProvider>
   );
 }
