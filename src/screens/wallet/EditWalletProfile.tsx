@@ -5,13 +5,14 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
-import realm from 'src/storage/realm/realm';
 import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet } = translations;
-  const walletData = realm.get(RealmSchema.TribeApp)[0];
+  const walletData: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const [name, setName] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
