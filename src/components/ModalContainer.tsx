@@ -22,9 +22,9 @@ type ModalContainerProps = {
 
 const ModalContainer = (props: ModalContainerProps) => {
   const theme: AppTheme = useTheme();
-  const { visible, onDismiss, children, title, subTitle, conatinerModalStyle, height='auto' } =
+  const { visible, onDismiss, children, title, subTitle, conatinerModalStyle, height } =
     props;
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(true);
 
   const styles = getStyles(theme, height, isKeyboardVisible);
   useEffect(() => {
