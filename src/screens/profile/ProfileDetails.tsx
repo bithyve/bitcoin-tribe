@@ -68,7 +68,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
           placeholder={inputPlaceholder}
           keyboardType={'default'}
           returnKeyType={'done'}
-          onKeyPress={primaryOnPress}
+          onSubmitEditing={primaryOnPress}
         />
         <View style={styles.primaryCTAContainer}>
           <Buttons
