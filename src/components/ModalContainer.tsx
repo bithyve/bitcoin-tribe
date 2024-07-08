@@ -105,6 +105,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       padding: hp(25),
       borderRadius: 10,
       marginHorizontal: 10,
+      marginBottom: isKeyboardVisible && 0,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 3,
       shadowOpacity: 0.2,
