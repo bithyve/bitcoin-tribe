@@ -16,6 +16,7 @@ type TextFieldProps = {
   disabled?: boolean;
   returnKeyType?: 'done';
   onSubmitEditing?: () => void;
+  autoFocus?: boolean;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -28,7 +29,8 @@ const TextField = (props: TextFieldProps) => {
     maxLength,
     disabled = false,
     returnKeyType='done',
-    onSubmitEditing
+    onSubmitEditing,
+    autoFocus=false
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
@@ -52,6 +54,7 @@ const TextField = (props: TextFieldProps) => {
         maxFontSizeMultiplier={1}
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
+        autoFocus={autoFocus}
       />
     </View>
   );

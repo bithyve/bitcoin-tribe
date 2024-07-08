@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -62,6 +62,7 @@ function SendScreen({ route, navigation }) {
         title={sendScreen.enterSendAddress}
         subTitle={sendScreen.enterSendAdrsSubTitle}
         visible={visible}
+        height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
         <SendEnterAddress />
       </ModalContainer>

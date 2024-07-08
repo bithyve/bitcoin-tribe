@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle, Modal } from 'react-native';
+import React,{useState, useEffect} from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import Modal from 'react-native-modal'
 
 import IconClose from 'src/assets/images/icon_close.svg';
+import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
-import { hp } from 'src/constants/responsive';
+import KeyboardAvoidView from './KeyboardAvoidView';
 
 type ModalContainerProps = {
   title: string;
@@ -15,21 +17,45 @@ type ModalContainerProps = {
   onDismiss?: () => void;
   children: React.ReactNode;
   conatinerModalStyle?: StyleProp<ViewStyle>;
+  height?: string;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
   const theme: AppTheme = useTheme();
-  const { visible, onDismiss, children, title, subTitle, conatinerModalStyle } =
+  const { visible, onDismiss, children, title, subTitle, conatinerModalStyle, height='auto' } =
     props;
-  const styles = getStyles(theme);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  const styles = getStyles(theme, height, isKeyboardVisible);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
   return (
     <Modal
-      visible={visible}
-      animationType="slide"
-      transparent={true}
-      onDismiss={onDismiss}
-      onRequestClose={onDismiss}>
-      <View style={[styles.containerStyle, conatinerModalStyle]}>
+      isVisible={visible}
+      onBackdropPress={onDismiss}
+      animationIn={"slideInUp"}
+      animationOut={"slideOutDown"}
+      backdropColor={theme.colors.cardBackground}
+      backdropOpacity={0.8}
+      style={[styles.containerStyle, conatinerModalStyle]}>
+        <KeyboardAvoidView style={styles.container}>
         <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
           <IconClose />
         </AppTouchable>
@@ -44,22 +70,32 @@ const ModalContainer = (props: ModalContainerProps) => {
           ) : null}
         </View>
         {children}
-      </View>
+        </KeyboardAvoidView>
     </Modal>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
   StyleSheet.create({
+    container:{
+      flex: 1
+    },
     containerStyle: {
-      height: 'auto',
-      width: '100%',
+      height: isKeyboardVisible ? height : 'auto',
+      width: '95%',
       position: 'absolute',
+      bottom: 0,
       backgroundColor: theme.colors.cardBackground,
       padding: hp(25),
       borderRadius: 10,
-      bottom: 0,
-      alignSelf: 'flex-end',
-      backfaceVisibility: 'visible',
+      marginHorizontal: 10,
+      shadowColor: theme.colors.shodowColor,
+      shadowRadius: 3,
+      shadowOpacity: 0.2,
+      elevation: 5,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',

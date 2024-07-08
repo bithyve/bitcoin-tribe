@@ -31,6 +31,7 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
         onChangeText={text => setAddress(text)}
         placeholder={settings.enterSeedWord}
         keyboardType={'default'}
+        autoFocus={true}
       />
       <View style={styles.buttonWrapper}>
         <ActivePageIndicator totalPages={3} currentPage={0} />

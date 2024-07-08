@@ -21,6 +21,7 @@ function SendEnterAddress() {
         onChangeText={text => setAddress(text)}
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
+        autoFocus={true}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
