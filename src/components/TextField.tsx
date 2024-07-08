@@ -14,6 +14,8 @@ type TextFieldProps = {
   onChangeText: (text: string) => void;
   maxLength?: number;
   disabled?: boolean;
+  returnKeyType?: 'done';
+  onKeyPress?: () => void;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -25,6 +27,8 @@ const TextField = (props: TextFieldProps) => {
     onChangeText,
     maxLength,
     disabled = false,
+    returnKeyType='done',
+    onKeyPress
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
@@ -46,6 +50,8 @@ const TextField = (props: TextFieldProps) => {
         keyboardType={keyboardType}
         maxLength={maxLength}
         maxFontSizeMultiplier={1}
+        returnKeyType={returnKeyType}
+        onKeyPress={onKeyPress}
       />
     </View>
   );
