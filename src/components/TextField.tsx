@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
@@ -17,6 +17,7 @@ type TextFieldProps = {
   returnKeyType?: 'done';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
+  inputRef?: TextFieldProps;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -31,16 +32,10 @@ const TextField = (props: TextFieldProps) => {
     returnKeyType = 'done',
     onSubmitEditing,
     autoFocus = false,
+    inputRef,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (inputRef.current && Platform.OS === 'android') {
-      inputRef.current.focus();
-    }
-  }, []);
 
   return (
     <View style={styles.container}>
