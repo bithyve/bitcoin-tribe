@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
@@ -17,7 +17,6 @@ type TextFieldProps = {
   returnKeyType?: 'done';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
-  inputRef?: TextFieldProps;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -32,7 +31,6 @@ const TextField = (props: TextFieldProps) => {
     returnKeyType = 'done',
     onSubmitEditing,
     autoFocus = false,
-    inputRef,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
@@ -41,7 +39,6 @@ const TextField = (props: TextFieldProps) => {
     <View style={styles.container}>
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
-        ref={inputRef}
         disabled={disabled}
         cursorColor={theme.colors.accent1}
         selectionColor={theme.colors.accent1}
@@ -88,6 +85,7 @@ const getStyles = (theme: AppTheme, icon) =>
       borderRightColor: theme.colors.headingColor,
       alignItems: 'center',
       justifyContent: 'center',
+      opacity: 0.6,
     },
     textStyles: {
       color: theme.colors.headingColor,
