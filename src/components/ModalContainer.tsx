@@ -94,7 +94,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
   StyleSheet.create({
     container: {
       flex: Platform.OS === 'ios' ? 1 : 0,
-      height: Platform.OS === 'ios' ? 0 : height,
+      height: height,
     },
     containerStyle: {
       height: isKeyboardVisible ? height : 'auto',
