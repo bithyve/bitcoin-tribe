@@ -17,7 +17,10 @@ const KeyboardAvoidView = props => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       enabled
-      keyboardVerticalOffset={Platform.select({ ios: windowHeight>670? 40 : 5 , android: 500 })}
+      keyboardVerticalOffset={Platform.select({
+        ios: windowHeight > 670 ? 40 : 5,
+        android: 500,
+      })}
       style={{ ...styles.container, ...props.style }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -31,8 +34,8 @@ const KeyboardAvoidView = props => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-     height: Platform.OS == 'ios' ? 'auto' : 0,
-     flex: Platform.OS == 'ios' ? 0 : 1,
+      height: Platform.OS == 'ios' ? 'auto' : 0,
+      flex: Platform.OS == 'ios' ? 0 : 1,
     },
   });
 export default KeyboardAvoidView;
