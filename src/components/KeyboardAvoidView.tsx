@@ -11,7 +11,6 @@ import { windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 
 const KeyboardAvoidView = props => {
-  console.log('windowHeight', windowHeight)
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -32,7 +31,8 @@ const KeyboardAvoidView = props => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      flex: 1,
+     height: Platform.OS == 'ios' ? 'auto' : 0,
+     flex: Platform.OS == 'ios' ? 0 : 1,
     },
   });
 export default KeyboardAvoidView;
