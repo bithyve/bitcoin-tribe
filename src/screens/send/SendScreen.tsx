@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
@@ -8,8 +8,9 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import SendAddressModal from './components/SendAddressModal';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ModalContainer from 'src/components/ModalContainer';
+import SendEnterAddress from './components/SendEnterAddress';
 // import { ApiHandler } from 'src/services/handler/apiHandler';
 // import { useQuery } from 'react-query';
 // import Toast from 'src/components/Toast';
@@ -57,12 +58,13 @@ function SendScreen({ route, navigation }) {
             : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
         }}
       />
-      <SendAddressModal
+      <ModalContainer
+        title={sendScreen.enterSendAddress}
+        subTitle={sendScreen.enterSendAdrsSubTitle}
         visible={visible}
-        onDismiss={() => {
-          setVisible(false);
-        }}
-      />
+        onDismiss={() => setVisible(false)}>
+        <SendEnterAddress />
+      </ModalContainer>
     </ScreenContainer>
   );
 }

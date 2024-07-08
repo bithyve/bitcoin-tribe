@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { Modal, Portal, useTheme } from 'react-native-paper';
+import { StyleProp, StyleSheet, View, ViewStyle, Modal } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 import IconClose from 'src/assets/images/icon_close.svg';
 import AppText from './AppText';
@@ -23,41 +23,43 @@ const ModalContainer = (props: ModalContainerProps) => {
     props;
   const styles = getStyles(theme);
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={[styles.containerStyle, conatinerModalStyle]}>
-        <View>
-          <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-            <IconClose />
-          </AppTouchable>
-          <View style={styles.headingWrapper}>
-            <AppText variant="heading1" style={styles.titleText}>
-              {title}
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+      onDismiss={onDismiss}
+      onRequestClose={onDismiss}>
+      <View style={[styles.containerStyle, conatinerModalStyle]}>
+        <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
+          <IconClose />
+        </AppTouchable>
+        <View style={styles.headingWrapper}>
+          <AppText variant="heading1" style={styles.titleText}>
+            {title}
+          </AppText>
+          {subTitle ? (
+            <AppText variant="body1" style={styles.subTitleText}>
+              {subTitle}
             </AppText>
-            {subTitle ? (
-              <AppText variant="body1" style={styles.subTitleText}>
-                {subTitle}
-              </AppText>
-            ) : null}
-          </View>
-          {children}
+          ) : null}
         </View>
-      </Modal>
-    </Portal>
+        {children}
+      </View>
+    </Modal>
   );
 };
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     containerStyle: {
+      height: 'auto',
       width: '100%',
       position: 'absolute',
       backgroundColor: theme.colors.cardBackground,
       padding: hp(25),
       borderRadius: 10,
-      bottom: 2,
+      bottom: 0,
       alignSelf: 'flex-end',
+      backfaceVisibility: 'visible',
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',
