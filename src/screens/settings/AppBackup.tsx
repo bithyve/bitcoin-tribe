@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet, Keyboard, Platform } from 'react-native';
+import { FlatList, StyleSheet, Platform } from 'react-native';
 import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
@@ -27,13 +27,7 @@ function AppBackup({ navigation }) {
   const [words, setWords] = useState(app && app.primaryMnemonic.split(' '));
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
-  const [activeKeyboard, setActiveKeyboard] = useState(true)
 
-useEffect(()=>{
-  const status = Keyboard.isVisible()
-  console.log(status,'key')
-  setActiveKeyboard(status)
-},[Keyboard.isVisible()])
   return (
     <ScreenContainer>
       <AppHeader
