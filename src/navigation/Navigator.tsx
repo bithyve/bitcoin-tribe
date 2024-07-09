@@ -24,6 +24,10 @@ import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
 import NodeSettings from 'src/screens/settings/NodeSettings';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
+import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
+import ReceiveAsset from 'src/screens/collectiblesCoins/ReceiveAsset';
+import SendToScreen from 'src/screens/send/SendToScreen';
+import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -102,6 +106,20 @@ function AppStack() {
           name={NavigationRoutes.CONNECTNODEMANUALLY}
           component={ConnectNodeManually}
         />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUESCREEN}
+          component={IssueScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVEASSET}
+          component={ReceiveAsset}
+        />
+        <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
+        <Stack.Screen
+          name={NavigationRoutes.BROADCASTTRANSACTION}
+          component={BroadcastTransaction}
+        />
+        
       </Stack.Navigator>
     </RealmProvider>
   );

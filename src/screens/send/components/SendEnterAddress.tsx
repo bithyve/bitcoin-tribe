@@ -1,14 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 import { AppTheme } from 'src/theme';
 
-function SendEnterAddress() {
+function SendEnterAddress({onDismiss}) {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -21,12 +24,17 @@ function SendEnterAddress() {
         onChangeText={text => setAddress(text)}
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
+        autoFocus={true}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
           primaryTitle={common.save}
           secondaryTitle={common.cancel}
-          primaryOnPress={() => console.log('press')}
+          primaryOnPress={() => {
+            Keyboard.dismiss()
+            onDismiss()
+            navigation.navigate(NavigationRoutes.SENDTO)
+          }}
           secondaryOnPress={() => console.log('press')}
           width={wp(120)}
         />

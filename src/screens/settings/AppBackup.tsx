@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Platform } from 'react-native';
 import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
@@ -63,6 +63,7 @@ function AppBackup({ navigation }) {
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
         visible={visible}
+        height={Platform.OS == 'ios' && '82%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
           primaryOnPress={() => console.log('')}

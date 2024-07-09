@@ -6,6 +6,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { windowHeight } from 'src/constants/responsive';
 
 import { AppTheme } from 'src/theme';
 
@@ -16,7 +17,10 @@ const KeyboardAvoidView = props => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       enabled
-      keyboardVerticalOffset={Platform.select({ ios: 40, android: 500 })}
+      keyboardVerticalOffset={Platform.select({
+        ios: windowHeight > 670 ? 40 : 5,
+        android: 500,
+      })}
       style={{ ...styles.container, ...props.style }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
