@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
@@ -10,7 +10,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 import { AppTheme } from 'src/theme';
 
-function SendEnterAddress() {
+function SendEnterAddress({onDismiss}) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -30,7 +30,11 @@ function SendEnterAddress() {
         <Buttons
           primaryTitle={common.save}
           secondaryTitle={common.cancel}
-          primaryOnPress={() => navigation.navigate(NavigationRoutes.SENDTO)}
+          primaryOnPress={() => {
+            Keyboard.dismiss()
+            onDismiss()
+            navigation.navigate(NavigationRoutes.SENDTO)
+          }}
           secondaryOnPress={() => console.log('press')}
           width={wp(120)}
         />
