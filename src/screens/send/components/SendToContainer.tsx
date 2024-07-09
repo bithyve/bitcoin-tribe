@@ -65,7 +65,7 @@ function SendToContainer() {
         />
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
-            <RadioButton
+            <RadioButton.Android
               uncheckedColor={theme.colors.bodyColor}
               value="Low"
               status={checked === 'Low' ? 'checked' : 'unchecked'}
@@ -76,7 +76,7 @@ function SendToContainer() {
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
-            <RadioButton
+            <RadioButton.Android
               uncheckedColor={theme.colors.bodyColor}
               value="Medium"
               status={checked === 'Medium' ? 'checked' : 'unchecked'}
@@ -87,7 +87,7 @@ function SendToContainer() {
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
-            <RadioButton
+            <RadioButton.Android
               uncheckedColor={theme.colors.bodyColor}
               value="High"
               status={checked === 'High' ? 'checked' : 'unchecked'}
@@ -143,7 +143,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     txnLeftWrapper: {
-      width: '15%',
+      width: '20%',
     },
     leftText: {
       backgroundColor: theme.colors.primaryCTA,
@@ -154,7 +154,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(50),
     },
     txnRightWrapper: {
-      width: '85%',
+      width: '80%',
     },
     sendToAddress: {
       color: theme.colors.primaryCTA,
