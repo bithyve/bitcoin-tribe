@@ -150,7 +150,7 @@ function HomeScreen() {
         subTitle={home.addAssetSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
-        <AddAssetModal />
+        <AddAssetModal onDismiss={() => setVisible(false)} />
       </ModalContainer>
     </ScreenContainer>
   );

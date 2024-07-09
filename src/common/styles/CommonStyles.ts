@@ -56,7 +56,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.PoppinsBold,
   },
   textFieldLabel: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: Fonts.PoppinsMedium,
     fontWeight: '600',
   },
