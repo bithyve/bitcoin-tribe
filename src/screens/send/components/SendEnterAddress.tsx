@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -5,10 +6,12 @@ import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 import { AppTheme } from 'src/theme';
 
 function SendEnterAddress() {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -27,7 +30,7 @@ function SendEnterAddress() {
         <Buttons
           primaryTitle={common.save}
           secondaryTitle={common.cancel}
-          primaryOnPress={() => console.log('press')}
+          primaryOnPress={() => navigation.navigate(NavigationRoutes.SENDTO)}
           secondaryOnPress={() => console.log('press')}
           width={wp(120)}
         />

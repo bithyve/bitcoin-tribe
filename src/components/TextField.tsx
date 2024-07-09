@@ -5,6 +5,8 @@ import { TextInput, useTheme } from 'react-native-paper';
 import { hp } from 'src/constants/responsive';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import { AppTheme } from 'src/theme';
+import AppText from './AppText';
+import AppTouchable from './AppTouchable';
 
 type TextFieldProps = {
   icon?: React.ReactNode;
@@ -17,6 +19,8 @@ type TextFieldProps = {
   returnKeyType?: 'done';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
+  rightText?: string;
+  onRightTextPress?: () => void;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -31,9 +35,14 @@ const TextField = (props: TextFieldProps) => {
     returnKeyType = 'done',
     onSubmitEditing,
     autoFocus = false,
+    rightText,
+    onRightTextPress,
   } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme, icon), [theme, icon]);
+  const styles = React.useMemo(
+    () => getStyles(theme, icon, rightText),
+    [theme, icon, rightText],
+  );
 
   return (
     <View style={styles.container}>
@@ -57,10 +66,19 @@ const TextField = (props: TextFieldProps) => {
         onSubmitEditing={onSubmitEditing}
         autoFocus={autoFocus}
       />
+      {rightText && (
+        <AppTouchable
+          style={styles.rightTextWrapper}
+          onPress={onRightTextPress}>
+          <AppText variant="smallCTA" style={styles.rightTextStyle}>
+            {rightText}
+          </AppText>
+        </AppTouchable>
+      )}
     </View>
   );
 };
-const getStyles = (theme: AppTheme, icon) =>
+const getStyles = (theme: AppTheme, icon, rightText) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -72,7 +90,7 @@ const getStyles = (theme: AppTheme, icon) =>
     inputContainer: {
       justifyContent: 'center',
       height: hp(50),
-      width: icon ? '80%' : '100%',
+      width: icon ? (rightText ? '60%' : '80%') : '100%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
       borderTopLeftRadius: 20,
@@ -93,6 +111,14 @@ const getStyles = (theme: AppTheme, icon) =>
     },
     underlineStyle: {
       backgroundColor: 'transparent',
+    },
+    rightTextStyle: {
+      color: theme.colors.accent1,
+    },
+    rightTextWrapper: {
+      width: '20%',
+      alignItems: 'center',
+      marginTop: hp(5),
     },
   });
 

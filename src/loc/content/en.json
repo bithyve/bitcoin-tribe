@@ -14,7 +14,9 @@
     "addNew": "ADD NEW",
     "disconnect": "DISCONNECT",
     "connect": "CONNECT",
-    "delete": "DELETE"
+    "delete": "DELETE",
+    "confirmAndProceed": "Confirm & Proceed",
+    "sendMax": "SEND MAX"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -98,7 +100,9 @@
     "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
-    "enterAddress": "Enter address"
+    "enterAddress": "Enter address",
+    "sendToTitle": "Send To",
+    "enterAmount": "Enter Amount"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
