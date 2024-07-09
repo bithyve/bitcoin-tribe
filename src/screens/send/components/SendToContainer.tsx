@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,6 +12,7 @@ import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import KeyPadView from 'src/components/KeyPadView';
 import AppText from 'src/components/AppText';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function SendToContainer() {
   const navigation = useNavigation();
@@ -20,7 +21,6 @@ function SendToContainer() {
   const { common, sendScreen } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [amount, setAmount] = useState('');
-  const [checked, setChecked] = React.useState('Low');
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -63,52 +63,16 @@ function SendToContainer() {
           rightText={common.sendMax}
           onRightTextPress={() => {}}
         />
-        <AppText variant="heading1" style={styles.feeTitleText}>Total Fee: 2034 t-sats</AppText>
-        <View style={styles.feeWrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              uncheckedColor={theme.colors.bodyColor}
-              value="Low"
-              status={checked === 'Low' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Low')}
-            />
-            <AppText variant="body2" style={styles.feeText}>
-              L (1202 sats)
-            </AppText>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              uncheckedColor={theme.colors.bodyColor}
-              value="Medium"
-              status={checked === 'Medium' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Medium')}
-            />
-            <AppText variant="body2" style={styles.feeText}>
-              M (1200 sats)
-            </AppText>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              uncheckedColor={theme.colors.bodyColor}
-              value="High"
-              status={checked === 'High' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('High')}
-            />
-            <AppText variant="body2" style={styles.feeText}>
-              H (1200 sats)
-            </AppText>
-          </View>
-        </View>
-        <View style={styles.primaryCTAContainer}>
+      </View>
+      <View style={styles.primaryCTAContainer}>
           <Buttons
-            primaryTitle={common.broadcast}
+            primaryTitle={common.proceed}
             secondaryTitle={common.cancel}
-            primaryOnPress={() => console.log('')}
+            primaryOnPress={() => navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION)}
             secondaryOnPress={() => console.log('press')}
             width={wp(120)}
           />
         </View>
-      </View>
       <View style={styles.keyPadWrapper}>
         <KeyPadView
           onPressNumber={onPressNumber}
@@ -164,21 +128,5 @@ const getStyles = (theme: AppTheme) =>
     txnID: {
       color: theme.colors.bodyColor,
     },
-    feeWrapper: {
-      flexDirection: 'row',
-      width: '100%',
-      justifyContent: 'space-between',
-    },
-    radioBtnWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    feeText: {
-      color: theme.colors.bodyColor,
-    },
-    feeTitleText:{
-      marginTop: hp(20),
-      color: theme.colors.bodyColor,
-    }
   });
 export default SendToContainer;
