@@ -36,7 +36,10 @@ function AddAssetModal({ onDismiss }) {
         icon={<ReceiveIcon />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
-        onPress={() => console.log('press')}
+        onPress={() => {
+          onDismiss();
+          navigation.navigate(NavigationRoutes.RECEIVEASSET);
+        }}
         testID="receive"
       />
     </View>

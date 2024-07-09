@@ -42,7 +42,8 @@
     "assetTicker": "Asset ticker",
     "assetDescription": "Asset Description",
     "totalSupplyAmount": "Total Supply Amount",
-    "attachFile": "Attach file"
+    "attachFile": "Attach file",
+    "receiveAssetNote": "Lorem ipsum dolor sit amet"
   },
   "settings": {
     "setting": "Settings",

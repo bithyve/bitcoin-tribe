@@ -25,6 +25,7 @@ import NodeSettings from 'src/screens/settings/NodeSettings';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
+import ReceiveAsset from 'src/screens/collectiblesCoins/ReceiveAsset';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -106,6 +107,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUESCREEN}
           component={IssueScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVEASSET}
+          component={ReceiveAsset}
         />
       </Stack.Navigator>
     </RealmProvider>
