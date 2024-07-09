@@ -101,11 +101,11 @@ function SendToContainer() {
         </View>
         <View style={styles.primaryCTAContainer}>
           <Buttons
-            primaryTitle={common.confirmAndProceed}
+            primaryTitle={common.broadcast}
             secondaryTitle={common.cancel}
             primaryOnPress={() => console.log('')}
             secondaryOnPress={() => console.log('press')}
-            width={wp(200)}
+            width={wp(120)}
           />
         </View>
       </View>
