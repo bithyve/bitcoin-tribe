@@ -98,7 +98,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
     },
     containerStyle: {
       height: isKeyboardVisible ? height : 'auto',
-      width: '95%',
+      width: '94%',
       position: 'absolute',
       bottom: 0,
       backgroundColor: theme.colors.cardBackground,

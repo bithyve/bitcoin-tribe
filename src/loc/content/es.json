@@ -35,7 +35,14 @@
     "addAssets": "Add Assets",
     "addAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
     "issueNew": "Issue new",
-    "myAssets": "My Assets"
+    "myAssets": "My Assets",
+    "issue": "Issue",
+    "issueSubTitle": "Lorem ipsum dolor sit amet",
+    "assetName": "Asset Name",
+    "assetTicker": "Asset ticker",
+    "assetDescription": "Asset Description",
+    "totalSupplyAmount": "Total Supply Amount",
+    "attachFile": "Attach file"
   },
   "settings": {
     "setting": "Settings",
