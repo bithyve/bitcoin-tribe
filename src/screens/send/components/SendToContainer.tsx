@@ -135,6 +135,7 @@ const getStyles = (theme: AppTheme) =>
     keyPadWrapper: {
       marginTop: hp(15),
       flex: 1,
+      justifyContent: 'flex-end'
     },
     txnDetailsContainer: {
       flexDirection: 'row',
