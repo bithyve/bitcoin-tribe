@@ -63,6 +63,7 @@ function SendToContainer() {
           rightText={common.sendMax}
           onRightTextPress={() => {}}
         />
+        <AppText variant="heading1" style={styles.feeTitleText}>Fee</AppText>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -164,7 +165,6 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.bodyColor,
     },
     feeWrapper: {
-      marginTop: hp(20),
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
@@ -176,5 +176,9 @@ const getStyles = (theme: AppTheme) =>
     feeText: {
       color: theme.colors.bodyColor,
     },
+    feeTitleText:{
+      marginTop: hp(20),
+      color: theme.colors.bodyColor,
+    }
   });
 export default SendToContainer;
