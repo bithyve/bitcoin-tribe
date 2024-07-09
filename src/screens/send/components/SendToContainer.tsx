@@ -63,7 +63,7 @@ function SendToContainer() {
           rightText={common.sendMax}
           onRightTextPress={() => {}}
         />
-        <AppText variant="heading1" style={styles.feeTitleText}>Fee</AppText>
+        <AppText variant="heading1" style={styles.feeTitleText}>Total Fee: 2034 t-sats</AppText>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -72,8 +72,8 @@ function SendToContainer() {
               status={checked === 'Low' ? 'checked' : 'unchecked'}
               onPress={() => setChecked('Low')}
             />
-            <AppText variant="body1" style={styles.feeText}>
-              Low
+            <AppText variant="body2" style={styles.feeText}>
+              L (1202 sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
@@ -83,8 +83,8 @@ function SendToContainer() {
               status={checked === 'Medium' ? 'checked' : 'unchecked'}
               onPress={() => setChecked('Medium')}
             />
-            <AppText variant="body1" style={styles.feeText}>
-              Medium
+            <AppText variant="body2" style={styles.feeText}>
+              M (1200 sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
@@ -94,8 +94,8 @@ function SendToContainer() {
               status={checked === 'High' ? 'checked' : 'unchecked'}
               onPress={() => setChecked('High')}
             />
-            <AppText variant="body1" style={styles.feeText}>
-              High
+            <AppText variant="body2" style={styles.feeText}>
+              H (1200 sats)
             </AppText>
           </View>
         </View>
