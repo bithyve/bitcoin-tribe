@@ -65,14 +65,16 @@ function SendToContainer() {
         />
       </View>
       <View style={styles.primaryCTAContainer}>
-          <Buttons
-            primaryTitle={common.proceed}
-            secondaryTitle={common.cancel}
-            primaryOnPress={() => navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION)}
-            secondaryOnPress={() => console.log('press')}
-            width={wp(120)}
-          />
-        </View>
+        <Buttons
+          primaryTitle={common.proceed}
+          secondaryTitle={common.cancel}
+          primaryOnPress={() =>
+            navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION)
+          }
+          secondaryOnPress={() => console.log('press')}
+          width={wp(120)}
+        />
+      </View>
       <View style={styles.keyPadWrapper}>
         <KeyPadView
           onPressNumber={onPressNumber}
@@ -98,9 +100,10 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
     },
     keyPadWrapper: {
-      marginTop: hp(15),
+      marginTop: hp(10),
       flex: 1,
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      marginBottom: hp(10),
     },
     txnDetailsContainer: {
       flexDirection: 'row',
