@@ -45,7 +45,7 @@ const getStyles = theme =>
     qrFooterText: {
       textAlign: 'center',
       color: theme.colors.accent1,
-      fontSize: CommonStyles.body2.fontSize,
+      fontSize: CommonStyles.body1.fontSize,
       paddingVertical: wp(5),
       fontFamily: '',
     },
