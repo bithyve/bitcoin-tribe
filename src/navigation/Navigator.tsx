@@ -28,6 +28,7 @@ import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
 import ReceiveAsset from 'src/screens/collectiblesCoins/ReceiveAsset';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
+import ShowXPub from 'src/screens/wallet/ShowXPub';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -119,7 +120,7 @@ function AppStack() {
           name={NavigationRoutes.BROADCASTTRANSACTION}
           component={BroadcastTransaction}
         />
-        
+        <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
       </Stack.Navigator>
     </RealmProvider>
   );

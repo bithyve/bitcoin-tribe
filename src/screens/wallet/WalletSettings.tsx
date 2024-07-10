@@ -30,13 +30,7 @@ function WalletSettings({ navigation }) {
         subTitle={wallet.showXPubSubTitle}
         icon={<IconXpub />}
         onPress={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
-              receiveData: 'xPub',
-              title: wallet.accountXPub,
-              subTitle: wallet.accountXPubSubTitle,
-            }),
-          )
+          navigation.dispatch(CommonActions.navigate(NavigationRoutes.SHOWXPUB))
         }
         showArrow={false}
       />
