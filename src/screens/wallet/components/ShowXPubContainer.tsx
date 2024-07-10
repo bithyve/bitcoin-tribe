@@ -7,12 +7,11 @@ import IconCopy from 'src/assets/images/icon_copy.svg';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from 'src/screens/receive/components/ReceiveQrClipBoard';
-import { hp } from 'src/constants/responsive';
 
-function ShowXPubContainer() {
+function ShowXPubContainer({ xpub }) {
   const receivingAddress = 'address';
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common } = translations;
+  const { receciveScreen, common, wallet } = translations;
 
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
@@ -34,20 +33,14 @@ function ShowXPubContainer() {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ShowQRCode
-          value={receivingAddress}
-          title={receciveScreen.invoiceAddress}
-        />
-        <ReceiveQrClipBoard
-          qrCodeValue={receivingAddress}
-          icon={<IconCopy />}
-        />
+        <ShowQRCode value={xpub} title={wallet.xPubDetails} />
+        <ReceiveQrClipBoard qrCodeValue={xpub} icon={<IconCopy />} />
       </ScrollView>
-      <FooterNote
+      {/* <FooterNote
         title={common.note}
-        subTitle={receciveScreen.noteSubTitle}
+        subTitle={wallet.xPubNoteSubTitle}
         customStyle={styles.advanceOptionStyle}
-      />
+      /> */}
     </View>
   );
 }
