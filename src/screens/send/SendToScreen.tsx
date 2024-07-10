@@ -7,14 +7,20 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SendToContainer from './components/SendToContainer';
 
-function SendToScreen() {
+function SendToScreen({ route }) {
+  const { wallet, address, paymentURIAmount } = route.params;
+
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   return (
     <ScreenContainer>
       <AppHeader title={sendScreen.sendToTitle} />
-      <SendToContainer />
+      <SendToContainer
+        wallet={wallet}
+        address={address}
+        paymentURIAmount={paymentURIAmount}
+      />
     </ScreenContainer>
   );
 }

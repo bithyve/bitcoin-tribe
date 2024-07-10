@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -13,14 +13,51 @@ import DeleteIcon from 'src/assets/images/delete.svg';
 import KeyPadView from 'src/components/KeyPadView';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import idx from 'idx';
+import Toast from 'src/components/Toast';
 
-function SendToContainer() {
+function SendToContainer({
+  wallet,
+  address,
+  paymentURIAmount,
+}: {
+  wallet: Wallet;
+  address: string;
+  paymentURIAmount: Number;
+}) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(
+    paymentURIAmount ? `${paymentURIAmount}` : '',
+  );
+  const [insufficientBalance, setInsufficientBalance] = useState(false);
+
+  useEffect(() => {
+    const balance = idx(wallet, _ => _.specs.balances);
+    const availableToSpend = balance.confirmed;
+    if (availableToSpend < Number(amount)) {
+      setInsufficientBalance(true);
+    } else {
+      setInsufficientBalance(false);
+    }
+  }, [amount, wallet]);
+
+  const onProceed = () => {
+    if (insufficientBalance) {
+      Toast('Amount entered is more than available to spend');
+      return;
+    }
+
+    navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
+      wallet,
+      address,
+      amount,
+    });
+  };
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -50,7 +87,7 @@ function SendToContainer() {
               SENDING TO ADDRESS
             </AppText>
             <AppText variant="body1" style={styles.txnID}>
-              lk2j3429-85213-5134 50t-934285…
+              {address}
             </AppText>
           </View>
         </View>
@@ -60,19 +97,20 @@ function SendToContainer() {
           placeholder={sendScreen.enterAmount}
           keyboardType={'default'}
           icon={<IconBitcoin />}
-          rightText={common.sendMax}
-          onRightTextPress={() => {}}
+          // rightText={common.sendMax}
+          // onRightTextPress={() => {}}
         />
       </View>
       <View style={styles.primaryCTAContainer}>
-          <Buttons
-            primaryTitle={common.proceed}
-            secondaryTitle={common.cancel}
-            primaryOnPress={() => navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION)}
-            secondaryOnPress={() => console.log('press')}
-            width={wp(120)}
-          />
-        </View>
+        <Buttons
+          disabled={!amount}
+          primaryTitle={common.proceed}
+          secondaryTitle={common.cancel}
+          primaryOnPress={onProceed}
+          secondaryOnPress={navigation.goBack}
+          width={wp(120)}
+        />
+      </View>
       <View style={styles.keyPadWrapper}>
         <KeyPadView
           onPressNumber={onPressNumber}
@@ -100,7 +138,7 @@ const getStyles = (theme: AppTheme) =>
     keyPadWrapper: {
       marginTop: hp(15),
       flex: 1,
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
     },
     txnDetailsContainer: {
       flexDirection: 'row',
