@@ -27,6 +27,7 @@ export type AppStackParams = {
   [NavigationRoutes.RECEIVEASSET]: undefined;
   [NavigationRoutes.SENDTO]: undefined;
   [NavigationRoutes.BROADCASTTRANSACTION]: undefined;
+  [NavigationRoutes.SHOWXPUB]: undefined;
   // Add other routes as needed
 };
 
