@@ -9,7 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import AppText from 'src/components/AppText';
 
-function BroadcastTxnContainer() {
+function BroadcastTxnContainer({ wallet, address, amount }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -30,17 +30,19 @@ function BroadcastTxnContainer() {
               SENDING TO ADDRESS
             </AppText>
             <AppText variant="body1" style={styles.txnID}>
-              lk2j3429-85213-5134 50t-934285…
+              {address}
             </AppText>
             <View style={styles.amountWrapper}>
-            <IconBitcoin />
-            <AppText variant="heading1" style={styles.amountText}>
-              0.00003210 sats
-            </AppText>
+              <IconBitcoin />
+              <AppText variant="heading1" style={styles.amountText}>
+                {amount} sats
+              </AppText>
             </View>
           </View>
         </View>
-        <AppText variant="heading1" style={styles.feeTitleText}>Total Fee: 2034 t-sats</AppText>
+        <AppText variant="heading1" style={styles.feeTitleText}>
+          Total Fee: 2034 t-sats
+        </AppText>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -63,7 +65,7 @@ function BroadcastTxnContainer() {
               onPress={() => setChecked('Medium')}
             />
             <AppText variant="body2" style={styles.feeText}>
-              Medium -  (1200 sats)
+              Medium - (1200 sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
@@ -75,7 +77,7 @@ function BroadcastTxnContainer() {
               onPress={() => setChecked('High')}
             />
             <AppText variant="body2" style={styles.feeText}>
-              High -  (1200 sats)
+              High - (1200 sats)
             </AppText>
           </View>
         </View>
@@ -100,12 +102,12 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(5),
     },
     primaryCTAContainer: {
-        flex: 1,
-        justifyContent: 'flex-end'
+      flex: 1,
+      justifyContent: 'flex-end',
     },
-    amountWrapper:{
-        flexDirection: 'row',
-        alignItems: 'center'
+    amountWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     wrapper: {
       flex: 1,
@@ -136,25 +138,25 @@ const getStyles = (theme: AppTheme) =>
     txnID: {
       color: theme.colors.bodyColor,
     },
-    amountText:{
+    amountText: {
       marginLeft: hp(5),
       color: theme.colors.bodyColor,
     },
     feeWrapper: {
       width: '100%',
-      marginVertical: hp(10)
+      marginVertical: hp(10),
     },
     radioBtnWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10)
+      marginVertical: hp(10),
     },
     feeText: {
       color: theme.colors.bodyColor,
     },
-    feeTitleText:{
+    feeTitleText: {
       marginTop: hp(20),
       color: theme.colors.bodyColor,
-    }
+    },
   });
 export default BroadcastTxnContainer;

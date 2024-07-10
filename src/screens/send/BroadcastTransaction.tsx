@@ -7,14 +7,19 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import BroadcastTxnContainer from './components/BroadcastTxnContainer';
 
-function BroadcastTransaction() {
+function BroadcastTransaction({ route }) {
+  const { wallet, address, amount } = route.params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   return (
     <ScreenContainer>
       <AppHeader title={sendScreen.sendToTitle} />
-      <BroadcastTxnContainer />
+      <BroadcastTxnContainer
+        wallet={wallet}
+        address={address}
+        amount={amount}
+      />
     </ScreenContainer>
   );
 }
