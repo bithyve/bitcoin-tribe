@@ -50,7 +50,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
             ) : (
               <RecieveTXNIcon />
             )}
-            {props.transaction.confirmations < 6 ? (
+            {props.transaction.confirmations === 0 ? (
               <View style={styles.transPendingWrapper}>
                 <TransPendingIcon />
               </View>
