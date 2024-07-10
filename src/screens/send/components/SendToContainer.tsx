@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,6 +12,7 @@ import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import KeyPadView from 'src/components/KeyPadView';
 import AppText from 'src/components/AppText';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function SendToContainer() {
   const navigation = useNavigation();
@@ -20,7 +21,6 @@ function SendToContainer() {
   const { common, sendScreen } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [amount, setAmount] = useState('');
-  const [checked, setChecked] = React.useState('Low');
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -63,51 +63,16 @@ function SendToContainer() {
           rightText={common.sendMax}
           onRightTextPress={() => {}}
         />
-        <View style={styles.feeWrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton
-              uncheckedColor={theme.colors.bodyColor}
-              value="Low"
-              status={checked === 'Low' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Low')}
-            />
-            <AppText variant="body1" style={styles.feeText}>
-              Low
-            </AppText>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton
-              uncheckedColor={theme.colors.bodyColor}
-              value="Medium"
-              status={checked === 'Medium' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Medium')}
-            />
-            <AppText variant="body1" style={styles.feeText}>
-              Medium
-            </AppText>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton
-              uncheckedColor={theme.colors.bodyColor}
-              value="High"
-              status={checked === 'High' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('High')}
-            />
-            <AppText variant="body1" style={styles.feeText}>
-              High
-            </AppText>
-          </View>
-        </View>
-        <View style={styles.primaryCTAContainer}>
+      </View>
+      <View style={styles.primaryCTAContainer}>
           <Buttons
-            primaryTitle={common.confirmAndProceed}
+            primaryTitle={common.proceed}
             secondaryTitle={common.cancel}
-            primaryOnPress={() => console.log('')}
+            primaryOnPress={() => navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION)}
             secondaryOnPress={() => console.log('press')}
-            width={wp(200)}
+            width={wp(120)}
           />
         </View>
-      </View>
       <View style={styles.keyPadWrapper}>
         <KeyPadView
           onPressNumber={onPressNumber}
@@ -135,6 +100,7 @@ const getStyles = (theme: AppTheme) =>
     keyPadWrapper: {
       marginTop: hp(15),
       flex: 1,
+      justifyContent: 'flex-end'
     },
     txnDetailsContainer: {
       flexDirection: 'row',
@@ -143,7 +109,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     txnLeftWrapper: {
-      width: '15%',
+      width: '20%',
     },
     leftText: {
       backgroundColor: theme.colors.primaryCTA,
@@ -154,25 +120,12 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(50),
     },
     txnRightWrapper: {
-      width: '85%',
+      width: '80%',
     },
     sendToAddress: {
       color: theme.colors.primaryCTA,
     },
     txnID: {
-      color: theme.colors.bodyColor,
-    },
-    feeWrapper: {
-      marginTop: hp(20),
-      flexDirection: 'row',
-      width: '100%',
-      justifyContent: 'space-between',
-    },
-    radioBtnWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    feeText: {
       color: theme.colors.bodyColor,
     },
   });

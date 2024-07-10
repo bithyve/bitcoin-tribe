@@ -16,7 +16,8 @@
     "connect": "CONNECT",
     "delete": "DELETE",
     "confirmAndProceed": "Confirm & Proceed",
-    "sendMax": "SEND MAX"
+    "sendMax": "SEND MAX",
+    "broadcast": "Broadcast"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
