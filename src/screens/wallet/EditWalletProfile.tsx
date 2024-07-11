@@ -52,6 +52,7 @@ function EditWalletProfile({ navigation }) {
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         edit={true}
+        disabled={name === ''}
       />
     </ScreenContainer>
   );
