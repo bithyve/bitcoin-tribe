@@ -15,6 +15,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuContainer from './components/SettingMenuContainer';
 import SettingMenuItem from './components/SettingMenuItem';
+import PreferencesContext from 'src/contexts/PreferenceContext';
 
 type SettingMenuProps = {
   title: string;
@@ -28,6 +29,8 @@ function SettingsScreen({ navigation }) {
   const { settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
+  const { toggleTheme, isThemeDark } = useContext(PreferencesContext);
 
   const SettingsMenu: SettingMenuProps[] = [
     {
@@ -62,7 +65,10 @@ function SettingsScreen({ navigation }) {
       <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
-      <SettingMenuContainer />
+      <SettingMenuContainer
+        toggleTheme={toggleTheme}
+        isThemeDark={isThemeDark}
+      />
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );
