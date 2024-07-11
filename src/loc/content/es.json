@@ -142,6 +142,9 @@
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
-    "insufficientSats": "Insufficient sats in the main Wallet, failed to create new UTXOs"
+    "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
+    "insufficientSats": "Insufficient sats, failed to create new UTXOs",
+    "receiveAssetTitle": "Receive Assset",
+    "receiveAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit,"
   }
 }

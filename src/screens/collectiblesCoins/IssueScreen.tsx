@@ -57,7 +57,7 @@ function IssueScreen() {
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast(assets.insufficientSats);
+      Toast(assets.insufficientSatsMainWallet);
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
       issueCoin();
