@@ -37,7 +37,10 @@ function SendEnterAddress({
       amount,
     } = WalletUtilities.addressDiff(paymentInfo, network);
 
-    // amount = satsEnabled ? Math.trunc(amount * 1e8) : amount;
+    if (amount) {
+      amount = Math.trunc(amount * 1e8);
+    } // convert from bitcoins to sats
+
     switch (paymentInfoKind) {
       case PaymentInfoKind.ADDRESS:
         navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
