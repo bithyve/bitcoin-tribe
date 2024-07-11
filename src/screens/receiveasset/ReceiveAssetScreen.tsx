@@ -11,17 +11,14 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import Colors from 'src/theme/Colors';
-import ModalContainer from 'src/components/ModalContainer';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation } from '@react-navigation/native';
-import Buttons from 'src/components/Buttons';
-import { wp } from 'src/constants/responsive';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
 
 function ReceiveAssetScreen({}) {
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common } = translations;
+  const { receciveScreen, common, assets } = translations;
   const navigation = useNavigation();
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -42,7 +39,7 @@ function ReceiveAssetScreen({}) {
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast('Insufficient sats, failed to create new UTXOs');
+      Toast(assets.insufficientSats);
       navigation.goBack();
     } else if (createUtxos.isSuccess) {
       setTimeout(() => {
@@ -54,8 +51,8 @@ function ReceiveAssetScreen({}) {
   return (
     <ScreenContainer>
       <AppHeader
-        title={'Receive Assset'}
-        subTitle={'Lorem ipsum dolor sit amet, consec tetur adi piscing elit,'}
+        title={assets.receiveAssetTitle}
+        subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
       />
 
@@ -105,7 +102,6 @@ const styles = StyleSheet.create({
     width: '96%',
     alignSelf: 'center',
   },
-  buttonWrapper: {},
 });
 
 export default ReceiveAssetScreen;

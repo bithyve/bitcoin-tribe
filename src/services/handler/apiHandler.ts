@@ -428,4 +428,18 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
+
+  // Update profile
+  static async updateProfile(appID, appName, walletImage) {
+    try {
+      dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+        appName: appName,
+        walletImage: walletImage,
+      });
+      return true;
+    } catch (error) {
+      console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
 }
