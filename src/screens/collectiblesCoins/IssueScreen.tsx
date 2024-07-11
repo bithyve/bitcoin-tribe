@@ -26,7 +26,7 @@ function IssueScreen() {
   const styles = getStyles(theme);
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { home, common } = translations;
+  const { home, common, assets } = translations;
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
@@ -44,7 +44,7 @@ function IssueScreen() {
     });
     setLoading(false);
     if (response?.assetId) {
-      Toast('Asset created successfully');
+      Toast(assets.assetCreateMsg);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
@@ -57,7 +57,7 @@ function IssueScreen() {
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast('Insufficient sats in the main Wallet, failed to create new UTXOs');
+      Toast(assets.insufficientSats);
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
       issueCoin();

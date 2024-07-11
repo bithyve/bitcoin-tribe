@@ -139,5 +139,9 @@
     "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor",
     "profileUpdateMsg": "Profile update successfully!",
     "profileUpdateErrMsg": "Failed to update!"
+  },
+  "assets": {
+    "assetCreateMsg": "Asset created successfully",
+    "insufficientSats": "Insufficient sats in the main Wallet, failed to create new UTXOs"
   }
 }
