@@ -15,6 +15,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function BroadcastTxnContainer({
   wallet,
@@ -56,6 +57,7 @@ function BroadcastTxnContainer({
       onSettled: () => {
         if (sendPhaseTwoQuery.status === 'success') {
           Toast(`Send successful, txid: ${sendPhaseTwoQuery.data}`);
+          navigation.navigate(NavigationRoutes.WALLETDETAILS);
         } else if (sendPhaseTwoQuery.status === 'error') {
           Toast(`Error while sending: ${sendPhaseTwoQuery.error}`);
         }
