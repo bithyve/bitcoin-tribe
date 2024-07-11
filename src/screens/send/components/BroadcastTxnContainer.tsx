@@ -8,13 +8,28 @@ import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import AppText from 'src/components/AppText';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { TransactionPrerequisite } from 'src/services/wallets/interfaces';
+import { TxPriority } from 'src/services/wallets/enums';
 
-function BroadcastTxnContainer({ wallet, address, amount }) {
+function BroadcastTxnContainer({
+  wallet,
+  address,
+  amount,
+  txPrerequisites,
+}: {
+  wallet: Wallet;
+  address: string;
+  amount: string;
+  txPrerequisites: TransactionPrerequisite;
+}) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const [checked, setChecked] = React.useState('Low');
+  const [selectedPriority, setSelectedPriority] = React.useState(
+    TxPriority.LOW,
+  );
 
   return (
     <View style={styles.container}>
@@ -41,43 +56,49 @@ function BroadcastTxnContainer({ wallet, address, amount }) {
           </View>
         </View>
         <AppText variant="heading1" style={styles.feeTitleText}>
-          Total Fee: 2034 t-sats
+          Total Fee: {txPrerequisites[selectedPriority].fee} t-sats
         </AppText>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="Low"
-              status={checked === 'Low' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Low')}
+              value={TxPriority.LOW}
+              status={
+                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.LOW)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              Low - (1202 sats)
+              Low - ({txPrerequisites[TxPriority.LOW].fee} sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="Medium"
-              status={checked === 'Medium' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Medium')}
+              value={TxPriority.MEDIUM}
+              status={
+                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              Medium - (1200 sats)
+              Medium - ({txPrerequisites[TxPriority.MEDIUM].fee} sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="High"
-              status={checked === 'High' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('High')}
+              value={TxPriority.HIGH}
+              status={
+                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.HIGH)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              High - (1200 sats)
+              High - ({txPrerequisites[TxPriority.HIGH].fee} sats)
             </AppText>
           </View>
         </View>

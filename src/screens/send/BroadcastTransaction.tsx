@@ -8,7 +8,7 @@ import { AppTheme } from 'src/theme';
 import BroadcastTxnContainer from './components/BroadcastTxnContainer';
 
 function BroadcastTransaction({ route }) {
-  const { wallet, address, amount } = route.params;
+  const { wallet, address, amount, txPrerequisites } = route.params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
@@ -19,6 +19,7 @@ function BroadcastTransaction({ route }) {
         wallet={wallet}
         address={address}
         amount={amount}
+        txPrerequisites={txPrerequisites}
       />
     </ScreenContainer>
   );
