@@ -16,6 +16,8 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import idx from 'idx';
 import Toast from 'src/components/Toast';
+import { useQuery, useQueryClient } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 function SendToContainer({
   wallet,
@@ -35,6 +37,38 @@ function SendToContainer({
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
+  const [executeSendPhaseOne, setExecuteSendPhaseOne] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const sendPhaseOneQuery = useQuery(
+    'send_phase_one',
+    async () => {
+      return await ApiHandler.sendPhaseOne({
+        sender: wallet,
+        recipient: {
+          address,
+          amount: Number(amount),
+        },
+      });
+    },
+    {
+      enabled: executeSendPhaseOne,
+      onSettled: () => {
+        if (sendPhaseOneQuery.status === 'success') {
+          navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
+            wallet,
+            address,
+            amount,
+            txPrerequisites: sendPhaseOneQuery.data,
+          });
+        } else if (sendPhaseOneQuery.status === 'error') {
+          Toast(`Error while sending: ${sendPhaseOneQuery.error}`);
+        }
+        setExecuteSendPhaseOne(false);
+      },
+    },
+  );
 
   useEffect(() => {
     const balance = idx(wallet, _ => _.specs.balances);
@@ -46,17 +80,13 @@ function SendToContainer({
     }
   }, [amount, wallet]);
 
-  const onProceed = () => {
+  const initiateSendPhaseOne = () => {
     if (insufficientBalance) {
       Toast('Amount entered is more than available to spend');
       return;
     }
-
-    navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
-      wallet,
-      address,
-      amount,
-    });
+    queryClient.invalidateQueries('send_phase_one');
+    setExecuteSendPhaseOne(true);
   };
 
   function onPressNumber(text) {
@@ -106,7 +136,7 @@ function SendToContainer({
           disabled={!amount}
           primaryTitle={common.proceed}
           secondaryTitle={common.cancel}
-          primaryOnPress={onProceed}
+          primaryOnPress={initiateSendPhaseOne}
           secondaryOnPress={navigation.goBack}
           width={wp(120)}
         />
