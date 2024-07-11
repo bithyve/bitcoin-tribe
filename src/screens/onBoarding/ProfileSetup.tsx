@@ -56,11 +56,7 @@ function ProfileSetup({ navigation }) {
 
   const onSuccess = async () => {
     setKey('key');
-    const uint8array = stringToArrayBuffer('');
-    const isInit = await dbManager.initializeRealm(uint8array);
-    if (isInit) {
-      navigation.replace(NavigationRoutes.APPSTACK);
-    }
+    navigation.replace(NavigationRoutes.APPSTACK);
   };
 
   const initiateWalletCreation = () => {

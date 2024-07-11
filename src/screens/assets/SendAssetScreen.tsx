@@ -1,50 +1,59 @@
+import { Keyboard, StyleSheet, View } from 'react-native';
 import React, {
+  useCallback,
   useContext,
+  useEffect,
   useState,
   useMemo,
-  useEffect,
-  useCallback,
 } from 'react';
-import { useTheme } from 'react-native-paper';
-import AppHeader from 'src/components/AppHeader';
-import { Keyboard, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
+import AppHeader from 'src/components/AppHeader';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
-import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
+import TextField from 'src/components/TextField';
+import Buttons from 'src/components/Buttons';
 
-function IssueScreen() {
+const SendAssetScreen = () => {
+  const { assetId } = useRoute().params;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
   const navigation = useNavigation();
+  const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { home, common } = translations;
-  const [assetName, setAssetName] = useState('');
-  const [assetTicker, setAssetTicker] = useState('');
-  const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [invoice, setInvoice] = useState('');
+  const [amount, setAmount] = useState('');
   const createUtxos = useMutation(ApiHandler.createUtxos);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const issueCoin = useCallback(async () => {
+  const isButtonDisabled = useMemo(() => {
+    return !invoice || !amount;
+  }, [invoice, amount]);
+
+  const sendAsset = useCallback(async () => {
     Keyboard.dismiss();
+
+    const utxo = invoice.match(/~\/~\/([^?]+)\?/)[1];
+    const endpoint = invoice.match(/endpoints=([^&]+)/)[1];
     setLoading(true);
-    const response = await ApiHandler.issueNewCoin({
-      name: assetName.trim(),
-      ticker: assetTicker,
-      supply: totalSupplyAmt,
+    const response = await ApiHandler.sendAsset({
+      assetId,
+      blindedUTXO: utxo,
+      amount,
+      consignmentEndpoints: endpoint,
     });
+    console.log('response', response);
     setLoading(false);
-    if (response?.assetId) {
-      Toast('Asset created successfully');
+    if (response?.txid) {
+      Toast('Sent successfully');
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
@@ -53,33 +62,29 @@ function IssueScreen() {
     } else if (response?.error) {
       Toast(`Failed: ${response?.error}`);
     }
-  }, [assetName, assetTicker, navigation, totalSupplyAmt]);
+  }, [invoice, amount, navigation]);
 
   useEffect(() => {
     if (createUtxos.error) {
       Toast('Insufficient sats in the main Wallet, failed to create new UTXOs');
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
-      issueCoin();
+      sendAsset();
     }
-  }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, issueCoin]);
-
-  const isButtonDisabled = useMemo(() => {
-    return !assetName || !assetTicker || !totalSupplyAmt;
-  }, [assetName, assetTicker, totalSupplyAmt]);
+  }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, sendAsset]);
 
   const handleAmtChangeText = text => {
     const positiveNumberRegex = /^\d*[1-9]\d*$/;
     if (positiveNumberRegex.test(text)) {
-      setTotalSupplyAmt(text);
+      setAmount(text);
     } else {
-      setTotalSupplyAmt('');
+      setAmount('');
     }
   };
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.issue} subTitle={home.issueSubTitle} />
+      <AppHeader title={'Send Asset'} subTitle={''} />
       <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
@@ -89,27 +94,16 @@ function IssueScreen() {
         }}
       />
       <TextField
-        value={assetName}
-        onChangeText={text => setAssetName(text)}
-        placeholder={home.assetName}
-        maxLength={32}
+        value={invoice}
+        onChangeText={text => setInvoice(text)}
+        placeholder={'Invoice'}
         style={styles.input}
-        autoCapitalize="words"
       />
 
       <TextField
-        value={assetTicker}
-        onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-        placeholder={home.assetTicker}
-        maxLength={8}
-        style={styles.input}
-        autoCapitalize="characters"
-      />
-
-      <TextField
-        value={totalSupplyAmt}
+        value={amount}
         onChangeText={handleAmtChangeText}
-        placeholder={home.totalSupplyAmount}
+        placeholder={'Amount'}
         keyboardType="numeric"
         style={styles.input}
       />
@@ -117,7 +111,7 @@ function IssueScreen() {
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={issueCoin}
+          primaryOnPress={sendAsset}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled}
@@ -126,7 +120,7 @@ function IssueScreen() {
       </View>
     </ScreenContainer>
   );
-}
+};
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -137,4 +131,5 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(20),
     },
   });
-export default IssueScreen;
+
+export default SendAssetScreen;

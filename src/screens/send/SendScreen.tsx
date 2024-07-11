@@ -64,7 +64,7 @@ function SendScreen({ route, navigation }) {
         visible={visible}
         height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
-        <SendEnterAddress onDismiss={() => setVisible(false)}/>
+        <SendEnterAddress onDismiss={() => setVisible(false)} />
       </ModalContainer>
     </ScreenContainer>
   );
