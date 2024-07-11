@@ -11,6 +11,10 @@ import AppText from 'src/components/AppText';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TransactionPrerequisite } from 'src/services/wallets/interfaces';
 import { TxPriority } from 'src/services/wallets/enums';
+import { useQuery, useQueryClient } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
+import { useNavigation } from '@react-navigation/native';
 
 function BroadcastTxnContainer({
   wallet,
@@ -26,10 +30,44 @@ function BroadcastTxnContainer({
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+  const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
+  const [executeSendPhaseTwo, setExecuteSendPhaseTwo] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const sendPhaseTwoQuery = useQuery(
+    'send_phase_two',
+    async () => {
+      return await ApiHandler.sendPhaseTwo({
+        sender: wallet,
+        recipient: {
+          address,
+          amount: Number(amount),
+        },
+        txPrerequisites,
+        txPriority: selectedPriority,
+      });
+    },
+    {
+      enabled: executeSendPhaseTwo,
+      onSettled: () => {
+        if (sendPhaseTwoQuery.status === 'success') {
+          Toast(`Send successful, txid: ${sendPhaseTwoQuery.data}`);
+        } else if (sendPhaseTwoQuery.status === 'error') {
+          Toast(`Error while sending: ${sendPhaseTwoQuery.error}`);
+        }
+        setExecuteSendPhaseTwo(false);
+      },
+    },
+  );
+
+  const initiateSendPhaseTwo = () => {
+    queryClient.invalidateQueries('send_phase_two');
+    setExecuteSendPhaseTwo(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -106,8 +144,8 @@ function BroadcastTxnContainer({
           <Buttons
             primaryTitle={common.broadcast}
             secondaryTitle={common.cancel}
-            primaryOnPress={() => console.log('')}
-            secondaryOnPress={() => console.log('press')}
+            primaryOnPress={initiateSendPhaseTwo}
+            secondaryOnPress={navigation.goBack}
             width={wp(120)}
           />
         </View>

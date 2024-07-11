@@ -233,15 +233,17 @@ export class ApiHandler {
     sender,
     recipient,
     txPrerequisites,
+    txPriority,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
     txPrerequisites: TransactionPrerequisite;
+    txPriority: TxPriority;
   }): Promise<{ txid: string }> {
     const { txid } = await WalletOperations.transferST2(
       sender,
       txPrerequisites,
-      TxPriority.LOW,
+      txPriority,
       [recipient],
     );
     if (txid) {
@@ -275,6 +277,7 @@ export class ApiHandler {
         sender,
         recipient,
         txPrerequisites,
+        txPriority: TxPriority.LOW,
       });
     } catch (err) {
       console.log({ err });
