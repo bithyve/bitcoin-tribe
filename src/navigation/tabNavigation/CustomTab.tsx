@@ -106,7 +106,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 40,
       backgroundColor: theme.colors.inputBackground,
       position: 'absolute',
-      bottom: Platform.OS === 'ios' ? hp(15) : 0,
+      bottom: hp(15),
       height: hp(62),
       width: wp(295),
       marginBottom: hp(15),

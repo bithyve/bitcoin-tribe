@@ -130,10 +130,12 @@
     "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
     "accountXPub": "Account xPub",
     "accountXPubSubTitle": "xPub details for your wallet",
+    "xPubDetails": "xPub",
     "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
     "buyWithRamp": "Buy with Ramp",
     "buyWithRampSubTitle": "Low fee for those big buys",
     "noUTXOYet": "No transactions yet",
-    "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,"
+    "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,",
+    "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor"
   }
 }

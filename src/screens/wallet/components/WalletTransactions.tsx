@@ -15,6 +15,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
+import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -43,11 +44,18 @@ function WalletTransactions(props: WalletTransactionsProps) {
       }>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
-          {transType === TransactionType.SENT ? (
-            <SendTXNIcon />
-          ) : (
-            <RecieveTXNIcon />
-          )}
+          <View>
+            {transType === TransactionType.SENT ? (
+              <SendTXNIcon />
+            ) : (
+              <RecieveTXNIcon />
+            )}
+            {props.transaction.confirmations === 0 ? (
+              <View style={styles.transPendingWrapper}>
+                <TransPendingIcon />
+              </View>
+            ) : null}
+          </View>
           <View style={styles.contentWrapper}>
             <AppText
               variant="body1"
@@ -57,8 +65,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               {transId}
             </AppText>
             <AppText variant="body2" style={styles.transDateText}>
-              {/* {transDate} */}
-              {moment(transDate).format('DD MMM YY  •  HH:mm A')}
+              {moment(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
         </View>
@@ -117,6 +124,11 @@ const getStyles = (theme: AppTheme, backColor) =>
     amountText: {
       color: theme.colors.bodyColor,
       marginTop: hp(2),
+    },
+    transPendingWrapper: {
+      top: -8,
+      left: 0,
+      position: 'absolute',
     },
   });
 export default WalletTransactions;

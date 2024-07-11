@@ -69,7 +69,7 @@ const ModalContainer = (props: ModalContainerProps) => {
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       backdropColor={theme.colors.cardBackground}
-      backdropOpacity={0.8}
+      backdropOpacity={0.9}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
         <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
@@ -105,7 +105,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       padding: hp(25),
       borderRadius: 10,
       marginHorizontal: 10,
-      marginBottom: isKeyboardVisible && 0,
+      marginBottom: isKeyboardVisible ? 0 : 5,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 3,
       shadowOpacity: 0.2,
