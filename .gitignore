@@ -75,3 +75,5 @@ yarn-error.log
 
 .env*
 env*
+
+ios/rgb/rgb_libFFI.xcframework
