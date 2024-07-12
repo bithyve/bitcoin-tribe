@@ -7,7 +7,6 @@ import {
   WalletType,
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
-import { v4 as uuidv4 } from 'uuid';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
   DerivationConfig,
@@ -105,18 +104,18 @@ export class ApiHandler {
   static async createNewWallet({
     instanceNum = 0,
     walletName = 'Default Wallet',
-    walletDescription = 'Default BIP85 Tribe Wallet',
-    transferPolicy = 5000,
+    walletDescription = 'Default Tribe Wallet',
   }) {
     try {
       const { primaryMnemonic } = dbManager.getObjectByIndex(
         RealmSchema.TribeApp,
       ) as any;
       const purpose = DerivationPurpose.BIP84;
+      const accountNumber = 0;
       const path = WalletUtilities.getDerivationPath(
         EntityKind.WALLET,
         config.NETWORK_TYPE,
-        0,
+        accountNumber,
         purpose,
       );
       const derivationConfig: DerivationConfig = {
@@ -125,16 +124,12 @@ export class ApiHandler {
       };
       const wallet: Wallet = await generateWallet({
         type: WalletType.DEFAULT,
-        instanceNum: instanceNum,
-        walletName: walletName || 'Default Wallet',
-        walletDescription: walletDescription || '',
+        instanceNum,
+        walletName,
+        walletDescription,
         derivationConfig,
-        primaryMnemonic: primaryMnemonic,
+        primaryMnemonic,
         networkType: config.NETWORK_TYPE,
-        transferPolicy: {
-          id: uuidv4(),
-          threshold: transferPolicy,
-        },
       });
       if (wallet) {
         dbManager.createObject(RealmSchema.Wallet, wallet);
