@@ -44,7 +44,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       {transType === TransactionType.RECEIVED && (
         <LabeledContent
           label={wallet.fromAddress}
-          content={transaction.recipientAddresses[0]}
+          content={transaction.senderAddresses[0]}
         />
       )}
       <LabeledContent label={wallet.transactionID} content={transaction.txid} />
