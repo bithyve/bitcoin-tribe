@@ -72,7 +72,7 @@ function SendToContainer({
 
   useEffect(() => {
     const balance = idx(wallet, _ => _.specs.balances);
-    const availableToSpend = balance.confirmed;
+    const availableToSpend = balance.confirmed + balance.unconfirmed;
     if (availableToSpend < Number(amount)) {
       setInsufficientBalance(true);
     } else {
