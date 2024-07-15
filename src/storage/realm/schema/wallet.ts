@@ -156,7 +156,7 @@ export const WalletSchema: ObjectSchema = {
     presentationData: RealmSchema.WalletPresentationData,
     specs: RealmSchema.WalletSpecs,
     scriptType: 'string',
-    depositWalletId: 'string?',
+    receivingAddress: 'string?',
   },
   primaryKey: 'id',
 };
