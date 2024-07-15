@@ -34,6 +34,7 @@ import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 import SendAsset from 'src/screens/assets/SendAssetScreen';
 import CoinsMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 import AppInfo from 'src/screens/settings/AppInfo';
+import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -136,6 +137,10 @@ function AppStack() {
         />
         <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
         <Stack.Screen name={NavigationRoutes.APPINFO} component={AppInfo} />
+        <Stack.Screen
+          name={NavigationRoutes.APPVERSIONHISTORY}
+          component={AppVersionHistory}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );

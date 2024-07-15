@@ -23,7 +23,7 @@ function AppInfoCard(props: AppInfoCardProps) {
   return (
     <AppTouchable
       style={styles.container}
-      onPress={() => console.log('press')}
+      onPress={navigation}
       disabled={!navigation}>
       <View>
         <AppText variant="subTitle" style={styles.titleText}>

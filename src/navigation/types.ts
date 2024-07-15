@@ -32,6 +32,7 @@ export type AppStackParams = {
   [NavigationRoutes.SENDASSET]: undefined;
   [NavigationRoutes.COINMETADATA]: undefined;
   [NavigationRoutes.COINDETAILS]: undefined;
+  [NavigationRoutes.APPVERSIONHISTORY]: undefined;
   // Add other routes as needed
 };
 

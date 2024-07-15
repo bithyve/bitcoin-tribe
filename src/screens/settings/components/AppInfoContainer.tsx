@@ -8,6 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconCalendar from 'src/assets/images/icon_calender.svg';
 import IconInfo from 'src/assets/images/icon_info1.svg';
 import { hp } from 'src/constants/responsive';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function AppInfoContainer({ navigation, walletId, version }) {
   const { translations } = useContext(LocalizationContext);
@@ -27,7 +28,9 @@ function AppInfoContainer({ navigation, walletId, version }) {
         subTitle={settings.versionHistorySubTitle}
         value={'Tribe App ' + version}
         icon={<IconCalendar />}
-        navigation={navigation}
+        navigation={() =>
+          navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
+        }
       />
     </View>
   );
