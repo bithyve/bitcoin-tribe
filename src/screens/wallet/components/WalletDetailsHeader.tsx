@@ -13,6 +13,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -45,7 +46,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
-          {confirmed + unconfirmed}
+          {numberWithCommas(confirmed + unconfirmed)}
         </AppText>
       </View>
       <TransactionButtons

@@ -12,6 +12,7 @@ import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type HomeHeaderProps = {
   profile: string;
@@ -44,7 +45,7 @@ function HomeHeader(props: HomeHeaderProps) {
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
               <AppText variant="body5" style={styles.balanceText}>
-                &nbsp;{balance}
+                &nbsp;{numberWithCommas(balance)}
               </AppText>
             </View>
           </View>

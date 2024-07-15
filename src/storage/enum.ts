@@ -15,4 +15,10 @@ export enum RealmSchema {
   NodeConnect = 'NodeConnect',
   AddressCache = 'AddressCache',
   VersionHistory = 'VersionHistory',
+  RgbWallet = 'RgbWallet',
+  ReceiveData = 'ReceiveData',
+  Coin = 'Coin',
+  Balance = 'Balance',
+  AssetTransaction = 'AssetTransaction',
+  MetaData = 'MetaData',
 }

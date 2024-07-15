@@ -39,6 +39,9 @@ import {
   TransactionPrerequisite,
 } from '../wallets/interfaces';
 import { Keys, Storage } from 'src/storage';
+import Relay from '../relay';
+import RGBServices, { SATS_FOR_RGB } from '../rgb/RGBServices';
+import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 
 export class ApiHandler {
   static performSomeAsyncOperation() {
@@ -94,6 +97,12 @@ export class ApiHandler {
       const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
       if (created) {
         await ApiHandler.createNewWallet({});
+        const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
+          primaryMnemonic,
+        );
+        console.log('rgbWallet', rgbWallet);
+        dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
+        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.xpub);
         Storage.set(Keys.APPID, appID);
       }
     } else {
@@ -276,6 +285,193 @@ export class ApiHandler {
       });
     } catch (err) {
       console.log({ err });
+    }
+  }
+
+  static async receiveTestSats() {
+    try {
+      const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
+      const { funded } = await Relay.getTestcoins(
+        wallet.specs.receivingAddress,
+        wallet.networkType,
+      );
+      if (!funded) {
+        throw new Error('Failed to get test coins');
+      }
+      ApiHandler.refreshWallets({ wallets: [wallet.toJSON()] });
+    } catch (error) {
+      console.log({ error });
+      throw new Error('Failed to get test coins');
+    }
+  }
+
+  static async createUtxos() {
+    try {
+      const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
+      const address = await RGBServices.getAddress();
+      const txid = await ApiHandler.sendTransaction({
+        sender: wallet.toJSON(),
+        recipient: {
+          address,
+          amount: SATS_FOR_RGB,
+        },
+      });
+      if (txid) {
+        const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+        const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+          JSON.parse(averageTxFeeJSON);
+        const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
+        const utxos = await RGBServices.createUtxos(
+          averageTxFee.high.feePerByte,
+        );
+        return utxos.created;
+      } else {
+        throw new Error('Insufficient sats for RGB');
+      }
+    } catch (error) {
+      console.log({ error });
+      throw new Error('Insufficient sats for RGB');
+    }
+  }
+
+  static async receiveAsset() {
+    try {
+      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      let response = await RGBServices.receiveAsset();
+      if (response.error) {
+        throw new Error(response.error);
+      } else {
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            receiveData: response,
+          },
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  static async refreshRgbWallet() {
+    try {
+      const assets = await RGBServices.syncRgbAssets();
+      if (assets.nia) {
+        dbManager.createObjectBulk(RealmSchema.Coin, assets.nia);
+      }
+    } catch (error) {
+      console.log('refreshRgbWallet', error);
+    }
+  }
+
+  static async issueNewCoin({
+    name,
+    ticker,
+    supply,
+  }: {
+    name: string;
+    ticker: string;
+    supply: string;
+  }) {
+    try {
+      const response = await RGBServices.issueRgb20Asset(
+        ticker,
+        name,
+        `${supply}`,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      console.log('refreshRgbWallet', error);
+      throw new Error(error);
+    }
+  }
+
+  static async getAssetTransactions({ assetId }: { assetId: string }) {
+    try {
+      const response = await RGBServices.getRgbAssetTransactions(assetId);
+      console.log('response', response);
+      if (response.length > 0) {
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.Coin,
+          'assetId',
+          assetId,
+          {
+            transactions: response,
+          },
+        );
+      }
+      return response;
+    } catch (error) {
+      console.log('refreshRgbWallet', error);
+      throw new Error(error);
+    }
+  }
+
+  static async sendAsset({
+    assetId,
+    blindedUTXO,
+    amount,
+    consignmentEndpoints,
+  }: {
+    assetId: string;
+    blindedUTXO: string;
+    amount: string;
+    consignmentEndpoints: string;
+  }) {
+    try {
+      const response = await RGBServices.sendAsset(
+        assetId,
+        blindedUTXO,
+        amount,
+        consignmentEndpoints,
+      );
+      return response;
+    } catch (error) {
+      console.log('sendAsset', error);
+      throw new Error(error);
+    }
+  }
+
+  static async getAssetMetaData({ assetId }: { assetId: string }) {
+    try {
+      const response = await RGBServices.getRgbAssetMetaData(assetId);
+      if (response) {
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.Coin,
+          'assetId',
+          assetId,
+          {
+            metaData: response,
+          },
+        );
+      }
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log('refreshRgbWallet', error);
+      throw new Error(error);
+    }
+  }
+
+  // Update profile
+  static async updateProfile(appID, appName, walletImage) {
+    try {
+      dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+        appName: appName,
+        walletImage: walletImage,
+      });
+      return true;
+    } catch (error) {
+      console.log('Update Profile', error);
+      throw new Error(error);
     }
   }
 }

@@ -16,6 +16,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -73,7 +74,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
           <View style={styles.amtIconWrapper}>
             <IconBitcoin />
             <AppText variant="body1" style={styles.amountText}>
-              &nbsp;{transAmount}
+              &nbsp;{numberWithCommas(transAmount)}
             </AppText>
           </View>
           {!disabled ? <IconArrow /> : null}

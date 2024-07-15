@@ -80,7 +80,7 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
+        versionCode 10
         versionName "0.0.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
@@ -133,7 +133,20 @@ afterEvaluate {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'org.rgbtools:rgb-lib-android:0.3.0-alpha.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation "com.google.android.gms:play-services-drive:17.0.0"
+      
+    implementation('com.google.api-client:google-api-client-android:2.2.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude module: 'guava-jdk5'
+    }
 
+  implementation('com.google.apis:google-api-services-drive:v3-rev20230822-2.0.0') {
+    exclude group: 'org.apache.httpcomponents'
+    exclude module: 'guava-jdk5'
+  }
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

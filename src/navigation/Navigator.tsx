@@ -25,10 +25,14 @@ import NodeSettings from 'src/screens/settings/NodeSettings';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
-import ReceiveAsset from 'src/screens/collectiblesCoins/ReceiveAsset';
+import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
+import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
+import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
+import SendAsset from 'src/screens/assets/SendAssetScreen';
+import CoinsMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -121,6 +125,15 @@ function AppStack() {
           component={BroadcastTransaction}
         />
         <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
+        <Stack.Screen
+          name={NavigationRoutes.COINDETAILS}
+          component={CoinDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COINMETADATA}
+          component={CoinMetaData}
+        />
+        <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
       </Stack.Navigator>
     </RealmProvider>
   );

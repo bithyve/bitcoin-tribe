@@ -9,15 +9,16 @@ import AssetChip from './AssetChip';
 import { AppTheme } from 'src/theme';
 
 type AssetCardProps = {
-  asset?: string;
-  title?: string;
+  image?: string;
+  name?: string;
+  ticker?: string;
   details?: string;
   tag?: string;
   onPress?: (event: GestureResponderEvent) => void;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { asset, title, details, tag, onPress } = props;
+  const { image, name, details, tag, onPress } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -32,15 +33,22 @@ const AssetCard = (props: AssetCardProps) => {
             }
           />
         </View>
-        <Image
-          source={{
-            uri: asset,
-          }}
-          style={styles.imageStyle}
-        />
+        {image ? (
+          <Image
+            source={{
+              uri: image,
+            }}
+            style={styles.imageStyle}
+          />
+        ) : (
+          <AppText variant="heading1" style={styles.textTicker}>
+            {props.ticker}
+          </AppText>
+        )}
+
         <View style={styles.contentWrapper}>
           <AppText variant="body1" style={styles.titleText}>
-            {title}
+            {name}
           </AppText>
           <AppText variant="body2" style={styles.detailsText} numberOfLines={1}>
             {details}
@@ -73,6 +81,14 @@ const getStyles = (theme: AppTheme) =>
     },
     titleText: {
       color: theme.colors.headingColor,
+    },
+    textTicker: {
+      color: theme.colors.accent1,
+      width: '100%',
+      height: '35%',
+      textAlign: 'center',
+      marginTop: '40%',
+      fontSize: 35,
     },
     detailsText: {
       color: theme.colors.bodyColor,
