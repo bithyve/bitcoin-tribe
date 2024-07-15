@@ -9,7 +9,8 @@ const versionHistoryData = [
   {
     version: 'Upgraded from 1.1.18 to 1.1.20',
     date: '2min ago',
-    releaseNotes: 'Initial release with basic features.',
+    releaseNotes:
+      'Major update with redesigned UI and performance improvements.',
   },
   {
     version: 'Upgraded from 1.1.16 to 1.1.18',
@@ -19,8 +20,7 @@ const versionHistoryData = [
   {
     version: 'Upgraded from 1.1.15 to 1.1.16',
     date: 'A month ago',
-    releaseNotes:
-      'Major update with redesigned UI and performance improvements.',
+    releaseNotes: 'Initial release with basic features.',
   },
 ];
 
