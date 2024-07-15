@@ -8,6 +8,7 @@ import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { TransactionType } from 'src/services/wallets/enums';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -43,11 +44,14 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       {transType === TransactionType.RECEIVED && (
         <LabeledContent
           label={wallet.fromAddress}
-          content={transaction.recipientAddresses[0]}
+          content={transaction.senderAddresses[0]}
         />
       )}
       <LabeledContent label={wallet.transactionID} content={transaction.txid} />
-      <LabeledContent label={wallet.fees} content={`${transaction.fee}`} />
+      <LabeledContent
+        label={wallet.fees}
+        content={numberWithCommas(`${transaction.fee}`)}
+      />
       <LabeledContent
         label={wallet.confirmations}
         content={`${

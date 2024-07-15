@@ -7,7 +7,6 @@ import {
   WalletType,
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
-import { v4 as uuidv4 } from 'uuid';
 import DeviceInfo from 'react-native-device-info';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
@@ -35,7 +34,11 @@ import {
   predefinedMainnetNodes,
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
-import { AverageTxFeesByNetwork, NodeDetail } from '../wallets/interfaces';
+import {
+  AverageTxFeesByNetwork,
+  NodeDetail,
+  TransactionPrerequisite,
+} from '../wallets/interfaces';
 import { Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices, { SATS_FOR_RGB } from '../rgb/RGBServices';
@@ -117,18 +120,18 @@ export class ApiHandler {
   static async createNewWallet({
     instanceNum = 0,
     walletName = 'Default Wallet',
-    walletDescription = 'Default BIP85 Tribe Wallet',
-    transferPolicy = 5000,
+    walletDescription = 'Default Tribe Wallet',
   }) {
     try {
       const { primaryMnemonic } = dbManager.getObjectByIndex(
         RealmSchema.TribeApp,
       ) as any;
       const purpose = DerivationPurpose.BIP84;
+      const accountNumber = 0;
       const path = WalletUtilities.getDerivationPath(
         EntityKind.WALLET,
         config.NETWORK_TYPE,
-        0,
+        accountNumber,
         purpose,
       );
       const derivationConfig: DerivationConfig = {
@@ -137,16 +140,12 @@ export class ApiHandler {
       };
       const wallet: Wallet = await generateWallet({
         type: WalletType.DEFAULT,
-        instanceNum: instanceNum,
-        walletName: walletName || 'Default Wallet',
-        walletDescription: walletDescription || '',
+        instanceNum,
+        walletName,
+        walletDescription,
         derivationConfig,
-        primaryMnemonic: primaryMnemonic,
+        primaryMnemonic,
         networkType: config.NETWORK_TYPE,
-        transferPolicy: {
-          id: uuidv4(),
-          threshold: transferPolicy,
-        },
       });
       if (wallet) {
         dbManager.createObject(RealmSchema.Wallet, wallet);
@@ -216,48 +215,81 @@ export class ApiHandler {
     }
   }
 
+  static async sendPhaseOne({
+    sender,
+    recipient,
+  }: {
+    sender: Wallet;
+    recipient: { address: string; amount: number };
+  }): Promise<TransactionPrerequisite> {
+    const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+    if (!averageTxFeeJSON) {
+      throw new Error('Transaction fee not found');
+    }
+    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+      JSON.parse(averageTxFeeJSON);
+    const averageTxFee = averageTxFeeByNetwork[sender.networkType];
+
+    const recipients = [recipient];
+    const { txPrerequisites } = await WalletOperations.transferST1(
+      sender,
+      recipients,
+      averageTxFee,
+    );
+
+    return txPrerequisites;
+  }
+
+  static async sendPhaseTwo({
+    sender,
+    recipient,
+    txPrerequisites,
+    txPriority,
+  }: {
+    sender: Wallet;
+    recipient: { address: string; amount: number };
+    txPrerequisites: TransactionPrerequisite;
+    txPriority: TxPriority;
+  }): Promise<{ txid: string }> {
+    const { txid } = await WalletOperations.transferST2(
+      sender,
+      txPrerequisites,
+      txPriority,
+      [recipient],
+    );
+    if (txid) {
+      dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
+        specs: sender.specs,
+      });
+      return txid;
+    } else {
+      throw new Error('Failed to execute the transaction');
+    }
+  }
+
   static async sendTransaction({
     sender,
     recipient,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
-  }) {
+  }): Promise<{ txid: string }> {
     try {
-      await ApiHandler.refreshWallets({ wallets: [sender] });
-      const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-      if (!averageTxFeeJSON) {
-        throw new Error('Transaction fee not found');
-      }
-      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-        JSON.parse(averageTxFeeJSON);
-      const averageTxFee = averageTxFeeByNetwork[sender.networkType];
-
-      const recipients = [recipient];
-      const { txPrerequisites } = await WalletOperations.transferST1(
+      const txPrerequisites = await ApiHandler.sendPhaseOne({
         sender,
-        recipients,
-        averageTxFee,
-      );
+        recipient,
+      });
 
-      if (txPrerequisites) {
-        const { txid } = await WalletOperations.transferST2(
-          sender,
-          txPrerequisites,
-          TxPriority.LOW,
-          recipients,
-        );
-        if (txid) {
-          dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
-            specs: sender.specs,
-          });
-          return txid;
-        } else {
-          throw new Error('Failed to execute the transaction');
-        }
-      } else {
+      if (!txPrerequisites) {
         throw new Error('Failed to generate txPrerequisites');
       }
+
+      return await ApiHandler.sendPhaseTwo({
+        sender,
+        recipient,
+        txPrerequisites,
+        txPriority: TxPriority.LOW,
+      });
     } catch (err) {
       console.log({ err });
     }

@@ -10,6 +10,7 @@ import Buttons from 'src/components/Buttons';
 import KeyPadView from 'src/components/KeyPadView';
 import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 function AddAmountModal(props) {
   const theme: AppTheme = useTheme();
@@ -40,7 +41,7 @@ function AddAmountModal(props) {
     <View style={styles.saveButtonMargin}>
       <TextField
         disabled={true}
-        value={amount}
+        value={numberWithCommas(amount)}
         onChangeText={(value: string) => {
           setAmount(value);
         }}
