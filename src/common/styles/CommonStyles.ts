@@ -35,6 +35,10 @@ export default StyleSheet.create({
     fontSize: 12,
     fontFamily: Fonts.PoppinsRegular,
   },
+  body3: {
+    fontSize: 16,
+    fontFamily: Fonts.PoppinsRegular,
+  },
   body4: {
     fontSize: 16,
     fontFamily: Fonts.PoppinsLight,

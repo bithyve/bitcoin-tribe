@@ -8,6 +8,7 @@ import {
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
 import { v4 as uuidv4 } from 'uuid';
+import DeviceInfo from 'react-native-device-info';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
   DerivationConfig,
@@ -101,6 +102,12 @@ export class ApiHandler {
         dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
         await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.xpub);
         Storage.set(Keys.APPID, appID);
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
       }
     } else {
       throw new Error('Realm initialisation failed');

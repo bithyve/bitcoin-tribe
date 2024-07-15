@@ -13,7 +13,7 @@ import {
   AddressCacheSchema,
 } from './wallet';
 import { TribeAppSchema } from './app';
-import { VersionHistorySchema } from '../versionHistory';
+import { VersionHistorySchema } from './versionHistory';
 import { NodeConnectSchema, DefaultNodeConnectSchema } from './nodeConnect';
 import { RgbWalletSchema, ReceiveDataSchema } from './rgbwallet';
 import {

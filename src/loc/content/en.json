@@ -17,7 +17,9 @@
     "delete": "DELETE",
     "confirmAndProceed": "Confirm & Proceed",
     "sendMax": "SEND MAX",
-    "broadcast": "Broadcast"
+    "broadcast": "Broadcast",
+    "walletID": "Wallet ID",
+    "versionHistory": "Version History"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -85,7 +87,11 @@
     "connectNodeManuallySubTitle": "Enter lightning details",
     "enterNodeName": "Enter Node name",
     "enterCredentials": "Enter credentials",
-    "enterAddress": "Enter address"
+    "enterAddress": "Enter address",
+    "walletIDSubTitle": "This ID is unique to your Bitcoin Tribe App",
+    "versionHistorySubTitle": "View app’s current version & its history",
+    "appInfoTitle": "App Info",
+    "appInfoScreenSubTitle": "Bitcoin Tribe app version number & details"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",

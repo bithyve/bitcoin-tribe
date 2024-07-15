@@ -28,6 +28,10 @@ export type AppStackParams = {
   [NavigationRoutes.SENDTO]: undefined;
   [NavigationRoutes.BROADCASTTRANSACTION]: undefined;
   [NavigationRoutes.SHOWXPUB]: undefined;
+  [NavigationRoutes.APPINFO]: undefined;
+  [NavigationRoutes.SENDASSET]: undefined;
+  [NavigationRoutes.COINMETADATA]: undefined;
+  [NavigationRoutes.COINDETAILS]: undefined;
   // Add other routes as needed
 };
 
