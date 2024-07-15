@@ -9,15 +9,15 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function AppInfo({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const appVersion: TribeApp = useQuery(RealmSchema.VersionHistory)[0];
+  const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const { id } = app;
-  const { version } = appVersion;
 
   return (
     <ScreenContainer>
