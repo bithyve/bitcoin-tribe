@@ -8,6 +8,7 @@ import AppText from 'src/components/AppText';
 import RoundedCTA from 'src/components/RoundedCTA';
 import DownloadIcon from 'src/assets/images/icon_download.svg';
 import { AppTheme } from 'src/theme';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type assetDetailsProps = {
   tag: string;
@@ -81,7 +82,7 @@ function AssetDetailsContainer(props: assetDetailsProps) {
           <AppText
             variant="body1"
             style={[styles.assetDetailsText, styles.assetDetailsText2]}>
-            20,000,000
+            {numberWithCommas(20000000)}
           </AppText>
         </View>
         <View style={styles.contentWrapper}>
