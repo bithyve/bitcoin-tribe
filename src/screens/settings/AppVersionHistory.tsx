@@ -5,6 +5,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import VersionHistoryList from './components/VersionHistoryList';
 
 function AppVersionHistory() {
   const { translations } = useContext(LocalizationContext);
@@ -17,6 +18,7 @@ function AppVersionHistory() {
         title={common.versionHistory}
         subTitle={settings.versionHistorySubTitle}
       />
+      <VersionHistoryList />
     </ScreenContainer>
   );
 }
