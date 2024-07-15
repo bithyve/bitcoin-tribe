@@ -89,6 +89,7 @@ function WalletTransactionList({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
+      height: '100%',
       marginVertical: hp(5),
     },
   });
