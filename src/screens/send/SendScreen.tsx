@@ -11,9 +11,6 @@ import { useTheme } from 'react-native-paper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ModalContainer from 'src/components/ModalContainer';
 import SendEnterAddress from './components/SendEnterAddress';
-// import { ApiHandler } from 'src/services/handler/apiHandler';
-// import { useQuery } from 'react-query';
-// import Toast from 'src/components/Toast';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -22,27 +19,6 @@ function SendScreen({ route, navigation }) {
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
-
-  // const [sendTransaction, setSendTransaction] = useState(false);
-  // const sendTransactionQuery = useQuery(
-  //   'send_transaction',
-  //   async () => {
-  //     return await ApiHandler.sendTransaction({
-  //       sender: wallet,
-  //       recipient: {
-  //         address: 'tb1q7vyr4d4qvamlecy6zssxtc6q8afdznd67pgqnl',
-  //         amount: 1000,
-  //       },
-  //     });
-  //   },
-  //   {
-  //     enabled: sendTransaction,
-  //   },
-  // );
-
-  // useEffect(() => {
-  //   setSendTransaction(true);
-  // }, []);
 
   return (
     <ScreenContainer>
@@ -64,7 +40,7 @@ function SendScreen({ route, navigation }) {
         visible={visible}
         height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
-        <SendEnterAddress onDismiss={() => setVisible(false)} />
+        <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />
       </ModalContainer>
     </ScreenContainer>
   );
