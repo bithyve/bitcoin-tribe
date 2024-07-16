@@ -23,7 +23,7 @@ function WalletDetails({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
-  console.log('app', app);
+
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
       const base64Image = app.walletImage;
