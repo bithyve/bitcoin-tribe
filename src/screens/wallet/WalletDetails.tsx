@@ -21,9 +21,9 @@ function WalletDetails({ navigation }) {
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
-
+  console.log('app', app);
   useEffect(() => {
     if (app && app.walletImage && app.appName) {
       const base64Image = app.walletImage;
@@ -54,7 +54,7 @@ function WalletDetails({ navigation }) {
       </View>
       <ModalContainer
         title={common.buy}
-        subTitle={app.buySubtitle}
+        subTitle={walletTranslations.buySubtitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <BuyModal />
