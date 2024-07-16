@@ -47,31 +47,45 @@ const CoinsMetaDataScreen = () => {
   }, []);
 
   return (
-    <ScreenContainer>
-      <View style={styles.headerWrapper}>
-        <AppHeader title="Meta Data" enableBack={true} />
-      </View>
+    <ScreenContainer style={styles.container}>
+      <AppHeader title="Meta Data" enableBack={true} />
       {isLoading ? (
         <ActivityIndicator color={Colors.ChineseOrange} size="large" />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          <Item title="Name" value={coin.name} />
-          <Item title="Ticker" value={coin.metaData.ticker} />
+          <Item title="Name" value={coin && coin.name} />
+          <Item
+            title="Ticker"
+            value={coin && coin.metaData && coin.metaData.ticker}
+          />
           <Item
             title="Schema"
-            value={coin.metaData.assetSchema.toUpperCase()}
+            value={
+              coin && coin.metaData && coin.metaData.assetSchema.toUpperCase()
+            }
           />
-          <Item title="Iface" value={coin.metaData.assetIface.toUpperCase()} />
-          <Item title="Issued Supply" value={coin.metaData.issuedSupply} />
+          <Item
+            title="Iface"
+            value={
+              coin && coin.metaData && coin.metaData.assetIface.toUpperCase()
+            }
+          />
+          <Item
+            title="Issued Supply"
+            value={coin && coin.metaData && coin.metaData.issuedSupply}
+          />
           <Item
             title="Issued On"
-            value={moment(coin.metaData.timestamp).format(
-              'DD MMM YY • hh:mm A',
-            )}
+            value={moment(
+              coin && coin.metaData && coin.metaData.timestamp,
+            ).format('DD MMM YY • hh:mm A')}
           />
-          <Item title="Precision" value={coin.metaData.precision} />
+          <Item
+            title="Precision"
+            value={coin && coin.metaData && coin.metaData.precision}
+          />
         </ScrollView>
       )}
     </ScreenContainer>
@@ -125,11 +139,7 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      marginHorizontal: wp(20),
-    },
-    headerWrapper: {
-      marginHorizontal: hp(25),
-      marginTop: hp(15),
+      // marginHorizontal: wp(20),
     },
   });
 
