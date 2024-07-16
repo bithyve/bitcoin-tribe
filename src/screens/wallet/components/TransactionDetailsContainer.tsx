@@ -63,7 +63,10 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         />
       )}
       {transaction.status && (
-        <LabeledContent label={wallet.status} content={transaction.status} />
+        <LabeledContent
+          label={wallet.status}
+          content={transaction.status.toUpperCase()}
+        />
       )}
       {transAmount && (
         <LabeledContent
