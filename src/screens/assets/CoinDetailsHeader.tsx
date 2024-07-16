@@ -15,6 +15,7 @@ import TransactionButtons from '../wallet/components/TransactionButtons';
 import WalletSectionHeader from '../wallet/components/WalletSectionHeader';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type CoinDetailsHeaderProps = {
   coin: Coin;
@@ -37,7 +38,7 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
       </AppText>
       <View style={styles.balanceWrapper}>
         <AppText variant="walletBalance" style={styles.balanceText}>
-          {coin.balance.spendable}
+          {numberWithCommas(coin.balance.spendable)}
         </AppText>
       </View>
       <TransactionButtons
