@@ -60,7 +60,7 @@ const getStyles = (theme: AppTheme) =>
       width: '70%',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingLeft: wp(26),
+      paddingLeft: wp(32),
       marginTop: windowHeight > 650 ? 0 : 10,
     },
     rightIconWrapper: {

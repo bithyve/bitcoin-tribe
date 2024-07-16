@@ -26,7 +26,7 @@ const CoinDetailsScreen = () => {
   }, []);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       <View style={styles.walletHeaderWrapper}>
         <CoinDetailsHeader
           coin={coin}
@@ -36,11 +36,13 @@ const CoinDetailsScreen = () => {
           onPressBuy={() => {}}
         />
       </View>
-      <TransactionsList
-        transactions={coin.transactions}
-        isLoading={isLoading}
-        refresh={() => mutate({ assetId })}
-      />
+      <View style={styles.TransactionWrapper}>
+        <TransactionsList
+          transactions={coin.transactions}
+          isLoading={isLoading}
+          refresh={() => mutate({ assetId })}
+        />
+      </View>
     </ScreenContainer>
   );
 };
@@ -55,14 +57,14 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 650 ? '42%' : '30%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
   },
-  walletTransWrapper: {
+  TransactionWrapper: {
     height: windowHeight < 650 ? '53%' : '65%',
     marginHorizontal: wp(25),
   },

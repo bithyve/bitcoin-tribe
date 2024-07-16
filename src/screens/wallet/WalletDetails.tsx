@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 650 ? '42%' : '31%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
