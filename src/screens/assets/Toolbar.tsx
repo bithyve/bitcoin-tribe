@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-import UserAvatar from 'src/components/UserAvatar';
 import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';

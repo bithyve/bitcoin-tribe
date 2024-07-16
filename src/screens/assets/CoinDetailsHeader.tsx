@@ -1,18 +1,14 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_btc1.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import WalletOperations from 'src/services/wallets/operations';
 import TransactionButtons from '../wallet/components/TransactionButtons';
-import WalletSectionHeader from '../wallet/components/WalletSectionHeader';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
