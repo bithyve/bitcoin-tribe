@@ -12,12 +12,15 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const { assetId } = useRoute().params;
+  const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
@@ -41,6 +44,9 @@ const CoinDetailsScreen = () => {
           transactions={coin.transactions}
           isLoading={isLoading}
           refresh={() => mutate({ assetId })}
+          navigation={navigation}
+          wallet={wallet}
+          coin={coin.ticker}
         />
       </View>
     </ScreenContainer>

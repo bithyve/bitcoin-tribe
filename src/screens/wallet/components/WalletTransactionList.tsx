@@ -68,7 +68,7 @@ function WalletTransactionList({
       onRefresh={pullDownToRefresh}
       renderItem={({ item }) => (
         <WalletTransactions
-          transId={item.txid}
+          transId={item.txid ? item.txid : item.status}
           transDate={item.date}
           transAmount={`${item.amount}`}
           transType={item.transactionType}

@@ -26,19 +26,32 @@ type AssetTransactionProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
+  coin: string;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const navigation = useNavigation();
-  const { transId, transDate, transAmount, transType, backColor, disabled } =
-    props;
+  const {
+    transId,
+    transDate,
+    transAmount,
+    transType,
+    backColor,
+    disabled,
+    transaction,
+    coin,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
-
   return (
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
-      onPress={() => {}}>
+      onPress={() => {
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+          transaction: transaction,
+          coin: coin,
+        });
+      }}>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
