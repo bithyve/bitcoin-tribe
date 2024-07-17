@@ -21,7 +21,6 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
-import dbManager from 'src/storage/realm/dbManager';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -44,12 +43,10 @@ function HomeScreen() {
     if (
       version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
     ) {
-      dbManager.createObject(RealmSchema.VersionHistory, {
-        version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-        releaseNote: '',
-        date: new Date().toString(),
-        title: `Upgraded from ${version} to ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-      });
+      ApiHandler.checkVersion(
+        version,
+        `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+      );
     }
   }, []);
 

@@ -493,4 +493,19 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
+  // Check Updated app version
+  static async checkVersion(previousVersion, currentVerion) {
+    try {
+      dbManager.createObject(RealmSchema.VersionHistory, {
+        version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+        releaseNote: '',
+        date: new Date().toString(),
+        title: `Upgraded from ${previousVersion} to ${currentVerion}`,
+      });
+      return true;
+    } catch (error) {
+      console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
 }

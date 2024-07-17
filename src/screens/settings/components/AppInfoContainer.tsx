@@ -26,7 +26,7 @@ function AppInfoContainer({ navigation, walletId, version }) {
       <AppInfoCard
         title={common.versionHistory}
         subTitle={settings.versionHistorySubTitle}
-        value={'Tribe App ' + version}
+        value={version}
         icon={<IconCalendar />}
         navigation={() =>
           navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
