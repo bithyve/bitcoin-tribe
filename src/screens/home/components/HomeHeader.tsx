@@ -45,7 +45,7 @@ function HomeHeader(props: HomeHeaderProps) {
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
               <AppText variant="body5" style={styles.balanceText}>
-                &nbsp;{numberWithCommas(balance)}
+                &nbsp;{numberWithCommas(balance)} sats
               </AppText>
             </View>
           </View>
