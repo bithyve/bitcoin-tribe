@@ -16,7 +16,6 @@ type ConnectionSettingMenuProps = {
   onPress: () => void;
 };
 function ConnectionSettings({ navigation }) {
-  console.log('navigation', navigation);
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
 

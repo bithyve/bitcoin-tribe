@@ -7,6 +7,7 @@ import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import AssetChip from './AssetChip';
 import { AppTheme } from 'src/theme';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type AssetCardProps = {
   image?: string;
@@ -51,7 +52,7 @@ const AssetCard = (props: AssetCardProps) => {
             {name}
           </AppText>
           <AppText variant="body2" style={styles.detailsText} numberOfLines={1}>
-            {details}
+            {numberWithCommas(details)}
           </AppText>
         </View>
       </View>

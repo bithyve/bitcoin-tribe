@@ -10,15 +10,22 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Transaction } from 'src/models/interfaces/RGBWallet';
 import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function TransactionsList({
   transactions,
   isLoading,
   refresh,
+  navigation,
+  wallet,
+  coin,
 }: {
   transactions: Transaction[];
   isLoading: boolean;
   refresh: () => void;
+  navigation;
+  wallet;
+  coin: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -31,7 +38,13 @@ function TransactionsList({
         <AppText variant="heading3" style={styles.recentTransText}>
           {walletTranslations.recentTransaction}
         </AppText>
-        <AppTouchable onPress={() => {}}>
+        <AppTouchable
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
+              transactions,
+              wallet,
+            });
+          }}>
           <AppText variant="smallCTA" style={styles.viewAllText}>
             {walletTranslations.viewAll}
           </AppText>
@@ -50,6 +63,7 @@ function TransactionsList({
             transAmount={`${item.amount}`}
             transType={item.kind}
             transaction={item}
+            coin={coin}
           />
         )}
         keyExtractor={item => item.txid}
@@ -64,6 +78,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(30),
+      height: '100%',
     },
     contentWrapper: {
       flexDirection: 'row',

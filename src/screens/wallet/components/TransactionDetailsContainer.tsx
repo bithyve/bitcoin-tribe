@@ -8,6 +8,8 @@ import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { TransactionType } from 'src/services/wallets/enums';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
+import moment from 'moment';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -25,15 +27,17 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
 
   return (
     <View>
-      <WalletTransactions
-        transId={transId}
-        transDate={transDate}
-        transAmount={transAmount}
-        transType={transType}
-        backColor={theme.colors.cardBackground}
-        disabled={true}
-        transaction={transaction}
-      />
+      {transId && (
+        <WalletTransactions
+          transId={transId}
+          transDate={transDate}
+          transAmount={transAmount}
+          transType={transType}
+          backColor={theme.colors.cardBackground}
+          disabled={true}
+          transaction={transaction}
+        />
+      )}
       {transType === TransactionType.SENT && (
         <LabeledContent
           label={wallet.toAddress}
@@ -43,17 +47,49 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       {transType === TransactionType.RECEIVED && (
         <LabeledContent
           label={wallet.fromAddress}
-          content={transaction.recipientAddresses[0]}
+          content={transaction.senderAddresses[0]}
         />
       )}
-      <LabeledContent label={wallet.transactionID} content={transaction.txid} />
-      <LabeledContent label={wallet.fees} content={`${transaction.fee}`} />
-      <LabeledContent
-        label={wallet.confirmations}
-        content={`${
-          transaction.confirmations > 6 ? '6+' : transaction.confirmations
-        }`}
-      />
+      {transaction.txid && (
+        <LabeledContent
+          label={wallet.transactionID}
+          content={transaction.txid}
+        />
+      )}
+      {transaction.fee && (
+        <LabeledContent
+          label={wallet.fees}
+          content={numberWithCommas(`${transaction.fee}`)}
+        />
+      )}
+      {transaction.status && (
+        <LabeledContent
+          label={wallet.status}
+          content={transaction.status.toUpperCase()}
+        />
+      )}
+      {transAmount && (
+        <LabeledContent
+          label={wallet.amount}
+          content={numberWithCommas(`${transAmount}`)}
+        />
+      )}
+      {transaction.updatedAt && (
+        <LabeledContent
+          label={wallet.date}
+          content={moment(transaction.updatedAt).format(
+            'DD MMM YY  •  hh:mm a',
+          )}
+        />
+      )}
+      {transaction.confirmations && (
+        <LabeledContent
+          label={wallet.confirmations}
+          content={`${
+            transaction.confirmations > 6 ? '6+' : transaction.confirmations
+          }`}
+        />
+      )}
     </View>
   );
 }

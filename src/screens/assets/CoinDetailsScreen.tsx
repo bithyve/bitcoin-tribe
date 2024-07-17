@@ -12,12 +12,15 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const { assetId } = useRoute().params;
+  const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
@@ -26,7 +29,7 @@ const CoinDetailsScreen = () => {
   }, []);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       <View style={styles.walletHeaderWrapper}>
         <CoinDetailsHeader
           coin={coin}
@@ -36,11 +39,16 @@ const CoinDetailsScreen = () => {
           onPressBuy={() => {}}
         />
       </View>
-      <TransactionsList
-        transactions={coin.transactions}
-        isLoading={isLoading}
-        refresh={() => mutate({ assetId })}
-      />
+      <View style={styles.TransactionWrapper}>
+        <TransactionsList
+          transactions={coin.transactions}
+          isLoading={isLoading}
+          refresh={() => mutate({ assetId })}
+          navigation={navigation}
+          wallet={wallet}
+          coin={coin.ticker}
+        />
+      </View>
     </ScreenContainer>
   );
 };
@@ -55,14 +63,14 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 650 ? '42%' : '30%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
   },
-  walletTransWrapper: {
+  TransactionWrapper: {
     height: windowHeight < 650 ? '53%' : '65%',
     marginHorizontal: wp(25),
   },

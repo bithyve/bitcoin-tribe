@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -8,7 +8,7 @@ import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -25,50 +25,35 @@ function WalletTransactionList({
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
 
-  const [isWalletRefreshing, setIsWalletRefreshing] = useState(false);
-  const queryClient = useQueryClient();
-
-  const refreshWalletQuery = useQuery(
-    'refresh_wallet',
-    async () => {
-      // auto runs for the first time
-      return await ApiHandler.refreshWallets({
-        wallets: [wallet],
-      });
-    },
-    {
-      enabled: isWalletRefreshing, // Enable query only when refreshing
-      onSettled: () => {
-        // This callback is called on either success or error
-
-        if (refreshWalletQuery.status === 'success') {
-          Toast('Wallet refreshed successfully');
-        } else if (refreshWalletQuery.status === 'error') {
-          Toast('Failed to refresh wallet');
-        }
-        setIsWalletRefreshing(false);
-      },
-    },
-  );
+  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
-    setIsWalletRefreshing(true);
-    queryClient.invalidateQueries('refresh_wallet'); // Invalidate the query to force a refresh
+    walletRefreshMutation.mutate({
+      wallets: [wallet],
+    });
   };
 
   useEffect(() => {
     pullDownToRefresh(); // auto-refresh the wallet on mount
   }, []);
 
+  useEffect(() => {
+    if (walletRefreshMutation.status === 'success') {
+      Toast('Wallet refreshed successfully');
+    } else if (walletRefreshMutation.status === 'error') {
+      Toast('Failed to refresh wallet');
+    }
+  }, [walletRefreshMutation]);
+
   return (
     <FlatList
       style={styles.container}
       data={transactions}
-      refreshing={isWalletRefreshing}
+      refreshing={walletRefreshMutation.isLoading}
       onRefresh={pullDownToRefresh}
       renderItem={({ item }) => (
         <WalletTransactions
-          transId={item.txid}
+          transId={item.txid ? item.txid : item.status}
           transDate={item.date}
           transAmount={`${item.amount}`}
           transType={item.transactionType}
@@ -89,6 +74,7 @@ function WalletTransactionList({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
+      height: '100%',
       marginVertical: hp(5),
     },
   });

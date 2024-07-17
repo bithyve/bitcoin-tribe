@@ -6,7 +6,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import AssetDetailsContainer from './components/AssetDetailsContainer';
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 
 function AssetDetails() {
   const theme: AppTheme = useTheme();

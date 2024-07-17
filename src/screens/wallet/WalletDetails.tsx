@@ -21,7 +21,7 @@ function WalletDetails({ navigation }) {
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function WalletDetails({ navigation }) {
       </View>
       <ModalContainer
         title={common.buy}
-        subTitle={app.buySubtitle}
+        subTitle={walletTranslations.buySubtitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <BuyModal />
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 650 ? '42%' : '31%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),

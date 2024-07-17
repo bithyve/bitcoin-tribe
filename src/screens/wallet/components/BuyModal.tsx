@@ -30,6 +30,7 @@ function BuyModal() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
+      marginTop: hp(25),
       paddingBottom: hp(25),
     },
     optionStyle: {

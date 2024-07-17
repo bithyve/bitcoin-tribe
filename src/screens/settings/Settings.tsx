@@ -52,7 +52,7 @@ function SettingsScreen({ navigation }) {
       title: settings.appInfo,
       subtitle: settings.appInfoSubTitle,
       icon: <IconAppInfo />,
-      onPress: () => console.log('App info pressed'),
+      onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
     // Add more menu items as needed
   ];

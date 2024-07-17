@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
@@ -8,13 +8,57 @@ import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import AppText from 'src/components/AppText';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { TransactionPrerequisite } from 'src/services/wallets/interfaces';
+import { TxPriority } from 'src/services/wallets/enums';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function BroadcastTxnContainer() {
+function BroadcastTxnContainer({
+  wallet,
+  address,
+  amount,
+  txPrerequisites,
+}: {
+  wallet: Wallet;
+  address: string;
+  amount: string;
+  txPrerequisites: TransactionPrerequisite;
+}) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+  const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const [checked, setChecked] = React.useState('Low');
+  const [selectedPriority, setSelectedPriority] = React.useState(
+    TxPriority.LOW,
+  );
+
+  const sendPhaseTwoMutation = useMutation(ApiHandler.sendPhaseTwo);
+
+  useEffect(() => {
+    if (sendPhaseTwoMutation.status === 'success') {
+      Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`);
+      navigation.navigate(NavigationRoutes.WALLETDETAILS);
+    } else if (sendPhaseTwoMutation.status === 'error') {
+      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`);
+    }
+  }, [sendPhaseTwoMutation]);
+
+  const initiateSendPhaseTwo = () => {
+    sendPhaseTwoMutation.mutate({
+      sender: wallet,
+      recipient: {
+        address,
+        amount: Number(amount),
+      },
+      txPrerequisites,
+      txPriority: selectedPriority,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -30,52 +74,60 @@ function BroadcastTxnContainer() {
               SENDING TO ADDRESS
             </AppText>
             <AppText variant="body1" style={styles.txnID}>
-              lk2j3429-85213-5134 50t-934285…
+              {address}
             </AppText>
             <View style={styles.amountWrapper}>
-            <IconBitcoin />
-            <AppText variant="heading1" style={styles.amountText}>
-              0.00003210 sats
-            </AppText>
+              <IconBitcoin />
+              <AppText variant="heading1" style={styles.amountText}>
+                {amount} sats
+              </AppText>
             </View>
           </View>
         </View>
-        <AppText variant="heading1" style={styles.feeTitleText}>Total Fee: 2034 t-sats</AppText>
+        <AppText variant="heading1" style={styles.feeTitleText}>
+          Total Fee: {txPrerequisites[selectedPriority].fee} t-sats
+        </AppText>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="Low"
-              status={checked === 'Low' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Low')}
+              value={TxPriority.LOW}
+              status={
+                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.LOW)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              Low - (1202 sats)
+              Low - ({txPrerequisites[TxPriority.LOW].fee} sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="Medium"
-              status={checked === 'Medium' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('Medium')}
+              value={TxPriority.MEDIUM}
+              status={
+                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              Medium -  (1200 sats)
+              Medium - ({txPrerequisites[TxPriority.MEDIUM].fee} sats)
             </AppText>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
               uncheckedColor={theme.colors.bodyColor}
-              value="High"
-              status={checked === 'High' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('High')}
+              value={TxPriority.HIGH}
+              status={
+                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.HIGH)}
             />
             <AppText variant="body2" style={styles.feeText}>
-              High -  (1200 sats)
+              High - ({txPrerequisites[TxPriority.HIGH].fee} sats)
             </AppText>
           </View>
         </View>
@@ -83,8 +135,8 @@ function BroadcastTxnContainer() {
           <Buttons
             primaryTitle={common.broadcast}
             secondaryTitle={common.cancel}
-            primaryOnPress={() => console.log('')}
-            secondaryOnPress={() => console.log('press')}
+            primaryOnPress={initiateSendPhaseTwo}
+            secondaryOnPress={navigation.goBack}
             width={wp(120)}
           />
         </View>
@@ -100,12 +152,12 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(5),
     },
     primaryCTAContainer: {
-        flex: 1,
-        justifyContent: 'flex-end'
+      flex: 1,
+      justifyContent: 'flex-end',
     },
-    amountWrapper:{
-        flexDirection: 'row',
-        alignItems: 'center'
+    amountWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     wrapper: {
       flex: 1,
@@ -136,25 +188,25 @@ const getStyles = (theme: AppTheme) =>
     txnID: {
       color: theme.colors.bodyColor,
     },
-    amountText:{
+    amountText: {
       marginLeft: hp(5),
       color: theme.colors.bodyColor,
     },
     feeWrapper: {
       width: '100%',
-      marginVertical: hp(10)
+      marginVertical: hp(10),
     },
     radioBtnWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10)
+      marginVertical: hp(10),
     },
     feeText: {
       color: theme.colors.bodyColor,
     },
-    feeTitleText:{
+    feeTitleText: {
       marginTop: hp(20),
       color: theme.colors.bodyColor,
-    }
+    },
   });
 export default BroadcastTxnContainer;
