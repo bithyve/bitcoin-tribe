@@ -16,7 +16,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 type CoinDetailsHeaderProps = {
   coin: Coin;
   onPressSetting: () => void;
-  onPressBuy: () => void;
+  onPressBuy?: () => void;
 };
 function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
   const navigation = useNavigation();
@@ -43,7 +43,7 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
             assetId: coin.assetId,
           })
         }
-        onPressBuy={onPressBuy}
+        // onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.navigate(NavigationRoutes.RECEIVEASSET)
         }
