@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -7,7 +8,7 @@ import { hp } from 'src/constants/responsive';
 
 import { AppTheme } from 'src/theme';
 
-function VersionHistoryItem({ version, releaseNotes, date }) {
+function VersionHistoryItem({ title, releaseNotes, date }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
@@ -23,13 +24,13 @@ function VersionHistoryItem({ version, releaseNotes, date }) {
       <View style={styles.wrapper}>
         <AppTouchable onPress={toggleCollapse} style={styles.header}>
           <AppText variant="body1" style={styles.version}>
-            {version}
+            {title}
           </AppText>
           <AppText variant="body2" style={styles.version}>
-            {date}
+            {moment(date).format('DD MMM YY • hh:mm A')}
           </AppText>
         </AppTouchable>
-        {!isCollapsed && (
+        {!isCollapsed && releaseNotes && (
           <View style={styles.content}>
             <AppText variant="body2" style={styles.releaseNotes}>
               {releaseNotes}
@@ -49,7 +50,7 @@ const getStyles = (theme: AppTheme) =>
       paddingTop: hp(15),
     },
     header: {
-      marginLeft: hp(15),
+      marginLeft: hp(20),
     },
     wrapper: {
       borderLeftColor: theme.colors.primaryCTA,
