@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -12,93 +11,62 @@ import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
-
-const AssetsData = [
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-    id: 1,
-    title: 'The Demogorgan',
-    details: 'Humanoid creature…',
-    tag: 'COLLECTIBLES',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-    id: 2,
-    title: 'Vecna',
-    details: 'Mastermid human ',
-    tag: 'COLLECTIBLES',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-    id: 3,
-    title: 'USD',
-    details: 'The USD ',
-    tag: 'COIN',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-    id: 4,
-    title: 'Third Item',
-    details: 'Humanoid creature',
-    tag: 'COLLECTIBLES',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
-    id: 5,
-    title: 'Third Item',
-    details: 'Humanoid creature…',
-    tag: 'COIN',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
-    id: 6,
-    title: 'Third Item',
-    details: 'Humanoid creature',
-    tag: 'COIN',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
-    id: 7,
-    title: 'Third Item',
-    details: 'Humanoid creature…',
-    tag: 'COIN',
-  },
-  {
-    asset: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=78',
-    id: 8,
-    title: 'Third Item',
-    details: 'Humanoid creature…',
-    tag: 'COIN',
-  },
-  {
-    id: 9,
-    title: 'Add New',
-  },
-];
+import { RealmSchema } from 'src/storage/enum';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import useWallets from 'src/hooks/useWallets';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { Coin } from 'src/models/interfaces/RGBWallet';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
-  const [visible, setVisible] = useState(false);
-  const navigation = useNavigation();
+  const { home, common, sendScreen } = translations;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
-  const handleScreenNavigation = (screenPath: string) => {
-    navigation.dispatch(CommonActions.navigate(screenPath));
+  const [visible, setVisible] = useState(false);
+  const [image, setImage] = useState(null);
+  const [walletName, setWalletName] = useState(null);
+  const navigation = useNavigation();
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+
+  const wallet: Wallet = useWallets({}).wallets[0];
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+
+  useEffect(() => {
+    refreshRgbWallet.mutate();
+  }, []);
+
+  useEffect(() => {
+    if ((app && app.walletImage) || app.appName) {
+      const base64Image = app.walletImage;
+      setImage(base64Image);
+      setWalletName(app.appName);
+    }
+  }, [app]);
+
+  const handleScreenNavigation = (screenPath: string, params?) => {
+    navigation.dispatch(CommonActions.navigate(screenPath, params));
   };
 
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader
-          profile={
-            'https://gravatar.com/avatar/a7ef0d47358b93336c4451de121be367?s=400&d=robohash&r=x'
-          }
-          username="Dustin Henderson"
-          balance="0.0134"
+          profile={image}
+          username={walletName}
+          balance={`${
+            wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+          }`}
           onPressScanner={() =>
-            handleScreenNavigation(NavigationRoutes.SENDSCREEN)
+            handleScreenNavigation(NavigationRoutes.SENDSCREEN, {
+              receiveData: 'send',
+              title: common.send,
+              subTitle: sendScreen.headerSubTitle,
+            })
           }
           onPressNotification={() => console.log('notification')}
           onPressProfile={() =>
@@ -107,10 +75,12 @@ function HomeScreen() {
         />
       </View>
       <AssetsList
-        AssetsData={AssetsData}
+        listData={coins}
         onPressAddNew={() => setVisible(true)}
-        onPressAsset={() =>
-          handleScreenNavigation(NavigationRoutes.ASSETDETAILS)
+        onPressAsset={(asset: Coin) =>
+          handleScreenNavigation(NavigationRoutes.COINDETAILS, {
+            assetId: asset.assetId,
+          })
         }
       />
       <ModalContainer
@@ -118,7 +88,7 @@ function HomeScreen() {
         subTitle={home.addAssetSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
-        <AddAssetModal />
+        <AddAssetModal onDismiss={() => setVisible(false)} />
       </ModalContainer>
     </ScreenContainer>
   );
@@ -126,10 +96,11 @@ function HomeScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: 0,
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
     headerWrapper: {
-      margin: hp(20),
+      margin: hp(25),
     },
   });
 export default HomeScreen;

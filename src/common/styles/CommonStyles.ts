@@ -15,8 +15,12 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsMedium,
   },
-  pageTitle: {
+  pageTitle1: {
     fontSize: 20,
+    fontFamily: Fonts.PoppinsMedium,
+  },
+  pageTitle2: {
+    fontSize: 24,
     fontFamily: Fonts.PoppinsMedium,
   },
   subTitle: {
@@ -51,16 +55,8 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.PoppinsBold,
   },
-  toastMessage: {
-    fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
-    paddingLeft: 10,
-    flex: 1,
-    flexWrap: 'wrap',
-    fontWeight: '600',
-  },
   textFieldLabel: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: Fonts.PoppinsMedium,
     fontWeight: '600',
   },

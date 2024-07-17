@@ -6,13 +6,10 @@ import coinselect from 'coinselect';
 import coinselectSplit from 'coinselect/split';
 import config from 'src/utils/config';
 import { parseInt } from 'lodash';
-let ElectrumClient: any = {};
-// import ElectrumClient from 'src/services/electrum/client';
+import ElectrumClient from 'src/services/electrum/client';
 // import { isSignerAMF } from 'src/hardware';
 import idx from 'idx';
-let RestClient: any = {};
-let TorStatus: any = '';
-// import RestClient, { TorStatus } from 'src/services/rest/RestClient';
+import RestClient, { TorStatus } from 'src/services/rest/RestClient';
 import ecc from './taproot-utils/noble_ecc';
 import {
   AverageTxFees,
@@ -493,16 +490,22 @@ export default class WalletOperations {
       consumedUTXOs[input.txId] = input;
     });
 
-    // update primary utxo set and balance
-    const updatedUTXOSet = [];
-
+    // update the utxo set and balance
+    const updatedConfirmedUTXOSet = [];
     wallet.specs.confirmedUTXOs.forEach(confirmedUTXO => {
       if (!consumedUTXOs[confirmedUTXO.txId]) {
-        updatedUTXOSet.push(confirmedUTXO);
+        updatedConfirmedUTXOSet.push(confirmedUTXO);
       }
     });
+    wallet.specs.confirmedUTXOs = updatedConfirmedUTXOSet;
 
-    wallet.specs.confirmedUTXOs = updatedUTXOSet;
+    const updatedUnconfirmedUTXOSet = [];
+    wallet.specs.unconfirmedUTXOs.forEach(unconfirmedUTXO => {
+      if (!consumedUTXOs[unconfirmedUTXO.txId]) {
+        updatedUnconfirmedUTXOSet.push(unconfirmedUTXO);
+      }
+    });
+    wallet.specs.unconfirmedUTXOs = updatedUnconfirmedUTXOSet;
   };
 
   static mockFeeRates = () => {
@@ -675,7 +678,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     let confirmedBalance = 0;
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
@@ -727,7 +730,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     let confirmedBalance = 0;
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
@@ -829,7 +832,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     const { inputs, outputs, fee } = coinselect(
       inputUTXOs,
       outputUTXOs,

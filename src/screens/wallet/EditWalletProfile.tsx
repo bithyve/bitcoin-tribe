@@ -5,12 +5,19 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet } = translations;
-  const [name, setName] = useState('');
-  const [profileImage, setProfileImage] = useState('');
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+
+  const [name, setName] = useState(app.appName);
+  const [profileImage, setProfileImage] = useState(app.walletImage);
 
   const handlePickImage = async () => {
     try {
@@ -20,6 +27,17 @@ function EditWalletProfile({ navigation }) {
       console.error(error);
     }
   };
+
+  const updateWalletProfile = async () => {
+    const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
+    if (updated) {
+      Toast(wallet.profileUpdateMsg, true);
+      navigation.navigate(NavigationRoutes.WALLETDETAILS);
+    } else {
+      Toast(wallet.profileUpdateErrMsg);
+    }
+  };
+
   return (
     <ScreenContainer>
       <ProfileDetails
@@ -27,13 +45,14 @@ function EditWalletProfile({ navigation }) {
         subTitle={wallet.walletNamePicSubTitle}
         onChangeText={text => setName(text)}
         inputValue={name}
-        primaryOnPress={() => navigation.navigate(NavigationRoutes.HOME)}
+        primaryOnPress={() => updateWalletProfile()}
         secondaryOnPress={() => navigation.goBack()}
         addPicTitle={wallet.editPicture}
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         edit={true}
+        disabled={name === ''}
       />
     </ScreenContainer>
   );

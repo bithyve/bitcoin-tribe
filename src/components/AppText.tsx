@@ -7,11 +7,14 @@ export enum TextVariants {
   heading1 = 'heading1',
   heading2 = 'heading2',
   heading3 = 'heading3',
-  pageTitle = 'pageTitle',
+  pageTitle1 = 'pageTitle1',
+  pageTitle2 = 'pageTitle2',
   subTitle = 'subTitle',
   body1 = 'body1',
   body2 = 'body2',
   body5 = 'body5',
+  body6 = 'body6',
+  body7 = 'body7',
   secondaryCta = 'secondaryCta',
   smallCTA = 'smallCTA',
   subtitle2 = 'subtitle2',
@@ -25,6 +28,7 @@ interface Props extends ComponentProps<typeof Text> {
   variant?: VariantProp;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
+  ellipsizeMode?: string;
 }
 
 const AppText: React.FC<Props> = ({
@@ -32,6 +36,7 @@ const AppText: React.FC<Props> = ({
   variant = TextVariants.body1,
   style,
   numberOfLines,
+  ellipsizeMode,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -40,9 +45,11 @@ const AppText: React.FC<Props> = ({
       case TextVariants.heading2:
         return CommonStyles.heading2;
       case TextVariants.heading3:
-        return CommonStyles.heading2;
-      case TextVariants.pageTitle:
-        return CommonStyles.pageTitle;
+        return CommonStyles.heading3;
+      case TextVariants.pageTitle1:
+        return CommonStyles.pageTitle1;
+      case TextVariants.pageTitle2:
+        return CommonStyles.pageTitle2;
       case TextVariants.subTitle:
         return CommonStyles.subTitle;
       case TextVariants.body1:
@@ -55,6 +62,10 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.subtitle2;
       case TextVariants.body5:
         return CommonStyles.body5;
+      case TextVariants.body6:
+        return CommonStyles.body6;
+      case TextVariants.body7:
+        return CommonStyles.body7;
       case TextVariants.walletBalance:
         return CommonStyles.walletBalance;
       case TextVariants.smallCTA:
@@ -82,6 +93,7 @@ const AppText: React.FC<Props> = ({
       style={[textStyle, style]}
       testID={generatedTestID}
       numberOfLines={numberOfLines}
+      ellipsizeMode={ellipsizeMode}
       maxFontSizeMultiplier={1}>
       {children}
     </Text>

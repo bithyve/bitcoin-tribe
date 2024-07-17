@@ -1,43 +1,97 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import {
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import { AppTheme } from 'src/theme';
+import AppText from './AppText';
+import AppTouchable from './AppTouchable';
 
 type TextFieldProps = {
-  icon?: any;
+  icon?: React.ReactNode;
   placeholder?: string;
   value: string;
-  keyboardType?: any;
-  onChangeText: any;
+  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
+  onChangeText: (text: string) => void;
+  maxLength?: number;
+  disabled?: boolean;
+  returnKeyType?: 'done';
+  onSubmitEditing?: () => void;
+  autoFocus?: boolean;
+  rightText?: string;
+  onRightTextPress?: () => void;
+  inputStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
 };
 
 const TextField = (props: TextFieldProps) => {
-  const { icon, placeholder, value, keyboardType, onChangeText } = props;
+  const {
+    icon,
+    placeholder,
+    value,
+    keyboardType,
+    onChangeText,
+    maxLength,
+    disabled = false,
+    returnKeyType = 'done',
+    onSubmitEditing,
+    autoFocus = false,
+    rightText,
+    onRightTextPress,
+    inputStyle,
+    style,
+    autoCapitalize = undefined,
+  } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, icon, rightText),
+    [theme, icon, rightText],
+  );
+
   return (
-    <View style={styles.container}>
-      {icon && <View style={styles.iconWrapper}>{icon}</View>}
+    <View style={[styles.container, style]}>
+      {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
+        disabled={disabled}
         cursorColor={theme.colors.accent1}
+        selectionColor={theme.colors.accent1}
         textColor={theme.colors.headingColor}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholder}
-        style={styles.inputContainer}
+        style={[styles.inputContainer, inputStyle]}
         underlineStyle={styles.underlineStyle}
         contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
         value={value}
         onChangeText={text => onChangeText(text)}
         keyboardType={keyboardType}
+        maxLength={maxLength}
         maxFontSizeMultiplier={1}
+        returnKeyType={returnKeyType}
+        onSubmitEditing={onSubmitEditing}
+        autoFocus={autoFocus}
+        autoCapitalize={autoCapitalize}
       />
+      {rightText && (
+        <AppTouchable
+          style={styles.rightTextWrapper}
+          onPress={onRightTextPress}>
+          <AppText variant="smallCTA" style={styles.rightTextStyle}>
+            {rightText}
+          </AppText>
+        </AppTouchable>
+      )}
     </View>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, icon, rightText) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -48,11 +102,12 @@ const getStyles = (theme: AppTheme) =>
     },
     inputContainer: {
       justifyContent: 'center',
-      height: hp(55),
-      width: '80%',
+      height: hp(50),
+      width: icon ? (rightText ? '60%' : '80%') : '100%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
       borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
       paddingLeft: 5,
     },
     iconWrapper: {
@@ -61,12 +116,22 @@ const getStyles = (theme: AppTheme) =>
       borderRightColor: theme.colors.headingColor,
       alignItems: 'center',
       justifyContent: 'center',
+      opacity: 0.6,
     },
     textStyles: {
       color: theme.colors.headingColor,
+      marginTop: hp(3),
     },
     underlineStyle: {
       backgroundColor: 'transparent',
+    },
+    rightTextStyle: {
+      color: theme.colors.accent1,
+    },
+    rightTextWrapper: {
+      width: '20%',
+      alignItems: 'center',
+      marginTop: hp(5),
     },
   });
 

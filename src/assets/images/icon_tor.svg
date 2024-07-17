@@ -1,0 +1,8 @@
+<svg id="icon_tor" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+  <g id="tor-browser-svgrepo-com" transform="translate(-18 -18)">
+    <path id="Path_121731" data-name="Path 121731" d="M33,44A11,11,0,1,0,22,33,11,11,0,0,0,33,44Z" fill="none" stroke="#e0e0e0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_121732" data-name="Path 121732" d="M96,46a7.432,7.432,0,1,1,0,14.865" transform="translate(-63 -20.432)" fill="none" stroke="#6c6c67" stroke-linecap="round" stroke-width="2"/>
+    <path id="Path_121733" data-name="Path 121733" d="M96,70a3.865,3.865,0,1,1,0,7.73" transform="translate(-63 -40.865)" fill="none" stroke="#6c6c67" stroke-linecap="round" stroke-width="2"/>
+  </g>
+</svg>

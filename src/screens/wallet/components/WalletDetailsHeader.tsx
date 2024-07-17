@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -9,18 +9,34 @@ import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import WalletOperations from 'src/services/wallets/operations';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type walletDetailsHeaderProps = {
   profile: string;
   username: string;
-  balance: string;
+  wallet: Wallet;
   onPressSetting: () => void;
+  onPressBuy: () => void;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
+  const { translations } = useContext(LocalizationContext);
+  const { receciveScreen, common, sendScreen } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { profile, username, balance, onPressSetting } = props;
+  const { profile, username, wallet, onPressSetting, onPressBuy } = props;
+
+  const {
+    specs: { balances: { confirmed, unconfirmed } } = {
+      balances: { confirmed: 0, unconfirmed: 0 },
+    },
+  } = wallet;
+  const receivingAddress = WalletOperations.getNextFreeAddress(wallet);
+
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
@@ -30,19 +46,28 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
-          {balance}
+          {numberWithCommas(confirmed + unconfirmed)}
         </AppText>
       </View>
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SENDSCREEN),
+            CommonActions.navigate(NavigationRoutes.SENDSCREEN, {
+              receiveData: 'send',
+              title: common.send,
+              subTitle: sendScreen.headerSubTitle,
+              wallet: wallet,
+            }),
           )
         }
-        onPressBuy={() => console.log('buy')}
+        onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
+            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
+              receivingAddress,
+              title: common.receive,
+              subTitle: receciveScreen.headerSubTitle,
+            }),
           )
         }
       />
@@ -64,6 +89,7 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginVertical: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,

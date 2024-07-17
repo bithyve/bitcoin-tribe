@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp } from 'src/constants/responsive';
@@ -15,6 +21,7 @@ import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -82,7 +89,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
                   styles.bottomNavigation,
                   { color: isFocused ? theme.colors.primaryCTA : 'gray' },
                 ]}>
-                &nbsp;{label}
+                &nbsp;{Capitalize(label)}
               </AppText>
             )}
           </TouchableOpacity>
@@ -96,14 +103,15 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     tabBar: {
       flexDirection: 'row',
-      borderRadius: 20,
+      borderRadius: 40,
       backgroundColor: theme.colors.inputBackground,
       position: 'absolute',
-      bottom: 0,
+      bottom: hp(15),
       height: hp(62),
       width: wp(295),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
+      paddingHorizontal: wp(30),
     },
     tab: {
       flex: 1,

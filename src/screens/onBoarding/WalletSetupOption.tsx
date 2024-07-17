@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import OptionCard from './components/OptionCard';
+import OptionCard from 'src/components/OptionCard';
 import IconWallet from 'src/assets/images/icon_wallet1.svg';
 import IconRecovery from 'src/assets/images/icon_recoveryphrase.svg';
 import { hp } from 'src/constants/responsive';
@@ -21,7 +21,7 @@ function WalletSetupOption({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle" style={styles.title}>
+      <AppText variant="pageTitle2" style={styles.title}>
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
@@ -49,7 +49,8 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginVertical: hp(20),
+      marginTop: hp(20),
+      marginBottom: hp(30),
     },
   });
 export default WalletSetupOption;

@@ -19,111 +19,135 @@ import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
 import WalletSettings from 'src/screens/wallet/WalletSettings';
 import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
+import AppBackup from 'src/screens/settings/AppBackup';
+import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
+import NodeSettings from 'src/screens/settings/NodeSettings';
+import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
+import { RealmProvider } from 'src/storage/realm/RealmProvider';
+import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
+import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
+import SendToScreen from 'src/screens/send/SendToScreen';
+import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
+import ShowXPub from 'src/screens/wallet/ShowXPub';
+import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
+import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
+import SendAsset from 'src/screens/assets/SendAssetScreen';
+import CoinsMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 
-function Navigator() {
+function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={NavigationRoutes.SPLASH}>
-        <Stack.Screen
-          name={NavigationRoutes.SPLASH}
-          component={Splash}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.WALLETSETUPOPTION}
-          component={WalletSetupOption}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.PROFILESETUP}
-          component={ProfileSetup}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.HOME}
-          component={HomeTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.SETTINGS}
-          component={Settings}
-          options={{
-            headerShown: false,
-          }}
-        />
+    <Stack.Navigator
+      initialRouteName={NavigationRoutes.SPLASH}
+      screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={NavigationRoutes.SPLASH} component={Splash} />
+      <Stack.Screen
+        name={NavigationRoutes.WALLETSETUPOPTION}
+        component={WalletSetupOption}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.PROFILESETUP}
+        component={ProfileSetup}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function AppStack() {
+  const Stack = createNativeStackNavigator<AppStackParams>();
+  return (
+    <RealmProvider>
+      <Stack.Navigator
+        initialRouteName={NavigationRoutes.HOME}
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={NavigationRoutes.HOME} component={HomeTabs} />
+        <Stack.Screen name={NavigationRoutes.SETTINGS} component={Settings} />
         <Stack.Screen
           name={NavigationRoutes.SENDSCREEN}
           component={SendScreen}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVESCREEN}
           component={ReceiveScreen}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.WALLETDETAILS}
           component={WalletDetails}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.ASSETDETAILS}
           component={AssetDetails}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.WALLETALLTRANSACTION}
           component={WalletAllTransactions}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.WALLETSETTINGS}
           component={WalletSettings}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.TRANSACTIONDETAILS}
           component={TransactionDetails}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.LANGUAGEANDCURRENCY}
           component={LanguageAndCurrency}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name={NavigationRoutes.EDITWALLETPROFILE}
           component={EditWalletProfile}
-          options={{
-            headerShown: false,
-          }}
         />
+        <Stack.Screen name={NavigationRoutes.APPBACKUP} component={AppBackup} />
+        <Stack.Screen
+          name={NavigationRoutes.CONNECTIONSETTINGS}
+          component={ConnectionSettings}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.NODESETTINGS}
+          component={NodeSettings}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CONNECTNODEMANUALLY}
+          component={ConnectNodeManually}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUESCREEN}
+          component={IssueScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVEASSET}
+          component={ReceiveAsset}
+        />
+        <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
+        <Stack.Screen
+          name={NavigationRoutes.BROADCASTTRANSACTION}
+          component={BroadcastTransaction}
+        />
+        <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
+        <Stack.Screen
+          name={NavigationRoutes.COINDETAILS}
+          component={CoinDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COINMETADATA}
+          component={CoinMetaData}
+        />
+        <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
+      </Stack.Navigator>
+    </RealmProvider>
+  );
+}
+function Navigator() {
+  const Stack = createNativeStackNavigator<AppStackParams>();
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name={NavigationRoutes.LOGINSTACK}
+          component={LoginStack}
+        />
+        <Stack.Screen name={NavigationRoutes.APPSTACK} component={AppStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -33,7 +33,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       paddingHorizontal: hp(15),
-      marginTop: hp(10),
+      marginVertical: hp(10),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
     },
@@ -42,7 +42,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: '96%',
       marginTop: hp(10),
     },
     menuCardTitle: {

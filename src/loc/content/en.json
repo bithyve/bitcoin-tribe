@@ -3,10 +3,21 @@
     "next": "Next",
     "cancel": "Cancel",
     "receive": "Receive",
-    "proceed": "Proceed",
+    "save": "Save",
+    "addressCopiedSuccessfully": "Address Copied Successfully!",
+    "note": "Note",
     "send": "Send",
+    "proceed": "Proceed",
     "recieve": "Recieve",
-    "buy": "Buy"
+    "buy": "Buy",
+    "exit": "Exit",
+    "addNew": "ADD NEW",
+    "disconnect": "DISCONNECT",
+    "connect": "CONNECT",
+    "delete": "DELETE",
+    "confirmAndProceed": "Confirm & Proceed",
+    "sendMax": "SEND MAX",
+    "broadcast": "Broadcast"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -27,7 +38,15 @@
     "addAssets": "Add Assets",
     "addAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
     "issueNew": "Issue new",
-    "myAssets": "My Assets"
+    "myAssets": "My Assets",
+    "issue": "Issue",
+    "issueSubTitle": "Lorem ipsum dolor sit amet",
+    "assetName": "Asset Name",
+    "assetTicker": "Asset ticker",
+    "assetDescription": "Asset Description",
+    "totalSupplyAmount": "Total Supply Amount",
+    "attachFile": "Attach file",
+    "receiveAssetNote": "Lorem ipsum dolor sit amet"
   },
   "settings": {
     "setting": "Settings",
@@ -40,13 +59,51 @@
     "appBackup": "App Backup",
     "appBackupSubTitle": "Lorem ipsum dolor sit amet, consec ",
     "connectionSettings": "Connection Settings",
-    "connectionSettingSubTitle": "Lorem ipsum dolor sit amet, consec ",
+    "connectionSettingSubTitle": "Configure Tor and Nodes",
     "appInfo": "App Info , Settings and Help",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Lorem ipsum dolor sit amet, con",
     "currency": "Currency",
-    "currencySubTitle": "Lorem ipsum dolor sit amet, c"
+    "currencySubTitle": "Lorem ipsum dolor sit amet, c",
+    "appBackupScreenSubTitle": "Write down this Backup Phrase",
+    "confirmBackupPhrase": "Confirm backup phrase",
+    "confirmBackupPhraseSubtitle": "Key in the word exactly like it was displayed",
+    "enterSeedWord": "Enter Seed Word",
+    "enterSeedWordLabel": "Enter the first (01) word",
+    "conSettingScreenSubTitle": "Enter lightning details",
+    "tor": "Tor",
+    "torSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "nodeSettings": "Node Settings",
+    "nodeSettingSubTitle": "Connect available own nodes",
+    "nodeSettingScreenSubTitle": "Node settings used so far",
+    "currentlyConnect": "Currently connected to",
+    "ipAddress": "IP address",
+    "portNumber": "Port Number",
+    "connectYourNode": "Connect your node",
+    "connectYourNodeSubTitle": "Set up Lightning Account",
+    "connectNodeManuallySubTitle": "Enter lightning details",
+    "enterNodeName": "Enter Node name",
+    "enterCredentials": "Enter credentials",
+    "enterAddress": "Enter address"
+  },
+  "receciveScreen": {
+    "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
+    "addAmountTitle": "Add Amount",
+    "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "placeHolderText": "Enter Amount",
+    "invoiceAddress": "Invoice Address",
+    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
+  },
+  "sendScreen": {
+    "headerSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "optionCardTitle": "or Enter details manually",
+    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterSendAddress": "Enter Send Address",
+    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "enterAddress": "Enter address",
+    "sendToTitle": "Send To",
+    "enterAmount": "Enter Amount"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -70,11 +127,24 @@
     "walletNamePicSubTitle": "Lorem ipsum dolor amet",
     "transactionID": "Transaction ID",
     "receiveTestSats": "Receive Test Sats",
-    "receiveTestSatSubtitle": "Lorem ipsum dolor amet "
+    "receiveTestSatSubtitle": "Lorem ipsum dolor amet ",
+    "accountXPub": "Account xPub",
+    "accountXPubSubTitle": "xPub details for your wallet",
+    "xPubDetails": "xPub",
+    "buySubtitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "buyWithRamp": "Buy with Ramp",
+    "buyWithRampSubTitle": "Low fee for those big buys",
+    "noUTXOYet": "No transactions yet",
+    "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,",
+    "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor",
+    "profileUpdateMsg": "Profile update successfully!",
+    "profileUpdateErrMsg": "Failed to update!"
   },
-  "sendScreen": {
-    "enterSendAddress": "Enter Send Address",
-    "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
-    "enterAddress": "Enter address"
+  "assets": {
+    "assetCreateMsg": "Asset created successfully",
+    "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
+    "insufficientSats": "Insufficient sats, failed to create new UTXOs",
+    "receiveAssetTitle": "Receive Assset",
+    "receiveAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit,"
   }
 }

@@ -6,7 +6,7 @@ import RoundedCTA from 'src/components/RoundedCTA';
 import IconSend from 'src/assets/images/icon_send.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
-import { wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type transButtonProps = {
@@ -27,7 +27,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconSend />}
           buttonColor={theme.colors.primaryCTA}
           title={common.send}
-          width={wp(80)}
+          width={wp(85)}
           onPress={onPressSend}
         />
       </View>
@@ -36,7 +36,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconReceive />}
           buttonColor={theme.colors.accent2}
           title={common.recieve}
-          width={wp(90)}
+          width={wp(100)}
           onPress={onPressRecieve}
         />
       </View>
@@ -45,7 +45,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={<IconBuy />}
           buttonColor={theme.colors.accent1}
           title={common.buy}
-          width={wp(60)}
+          width={wp(70)}
           onPress={onPressBuy}
         />
       </View>
@@ -60,6 +60,7 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       marginHorizontal: wp(5),
+      paddingBottom: windowHeight < 650 ? hp(15) : 0,
     },
   });
 export default TransactionButtons;

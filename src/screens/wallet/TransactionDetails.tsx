@@ -6,8 +6,10 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TransactionDetailsContainer from './components/TransactionDetailsContainer';
+import { Transaction } from 'src/services/wallets/interfaces';
 
-function TransactionDetails() {
+function TransactionDetails({ route }) {
+  const transaction: Transaction = route.params?.transaction;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
   const theme: AppTheme = useTheme();
@@ -18,10 +20,11 @@ function TransactionDetails() {
         subTitle={wallet.transactionDetailSubTitle}
       />
       <TransactionDetailsContainer
-        transId={'f4184fc5964…1e9e16'}
-        transDate="22 April 2024. 2:11 pm"
-        transAmount="0.129483"
-        transType="send"
+        transId={transaction.txid}
+        transDate={transaction.date}
+        transAmount={`${transaction.amount}`}
+        transType={transaction.transactionType}
+        transaction={transaction}
       />
     </ScreenContainer>
   );

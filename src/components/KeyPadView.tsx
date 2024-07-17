@@ -93,18 +93,18 @@ const KeyPadView: React.FC<Props> = ({
 const styles = StyleSheet.create({
   keyPadElementTouchable: {
     flex: 1,
-    height: hp(50),
+    height: hp(60),
     fontSize: 22,
     justifyContent: 'center',
     alignItems: 'center',
   },
   keyWrapperView: {
     flexDirection: 'row',
-    height: hp(50),
+    height: hp(60),
   },
   emptyBtnView: {
     flex: 1,
-    height: hp(50),
+    height: hp(60),
     fontSize: 22,
     justifyContent: 'center',
     alignItems: 'center',

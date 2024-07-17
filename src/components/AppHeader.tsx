@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -8,6 +8,7 @@ import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
 import { useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type AppHeaderProps = {
   title?: string;
@@ -16,6 +17,8 @@ type AppHeaderProps = {
   enableBack?: boolean;
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
+  actionText?: boolean;
+  onActionTextPress?: () => void;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -26,10 +29,17 @@ function AppHeader(props: AppHeaderProps) {
     enableBack = true,
     rightIcon,
     onSettingsPress,
+    actionText = false,
+    onActionTextPress,
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, actionText),
+    [theme, actionText],
+  );
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
@@ -51,24 +61,33 @@ function AppHeader(props: AppHeaderProps) {
       {title || subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="pageTitle" style={styles.headerTitle}>
+            <AppText variant="pageTitle1" style={styles.headerTitle}>
               {title}
             </AppText>
             <AppText variant="body1" style={styles.headerSubTitle}>
               {subTitle}
             </AppText>
           </View>
+          {actionText ? (
+            <AppTouchable
+              style={styles.addNewWrapper}
+              onPress={onActionTextPress}>
+              <AppText variant="smallCTA" style={styles.addNewText}>
+                {common.addNew}
+              </AppText>
+            </AppTouchable>
+          ) : null}
         </View>
       ) : null}
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, actionText) =>
   StyleSheet.create({
     container: {
       width: '100%',
       marginBottom: hp(15),
-      marginTop: hp(10),
+      // marginTop: hp(10),
       alignItems: 'center',
     },
     iconContainer: {
@@ -76,17 +95,18 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginVertical: hp(15),
+      marginTop: hp(15),
+      marginBottom: hp(20),
     },
     leftIconWrapper: {
       borderRadius: 100,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 10,
-      shadowOpacity: 0.8,
+      shadowOpacity: 0.4,
       elevation: 8,
       shadowOffset: {
         width: 0,
-        height: 4,
+        height: 2,
       },
     },
     rightIconWrapper: {
@@ -94,7 +114,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 100,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 10,
-      shadowOpacity: 0.8,
+      shadowOpacity: 0.6,
       elevation: 8,
       shadowOffset: {
         width: 0,
@@ -106,7 +126,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: actionText ? '80%' : '100%',
       marginTop: hp(4),
     },
     headerTitle: {
@@ -114,6 +134,14 @@ const getStyles = (theme: AppTheme) =>
     },
     headerSubTitle: {
       color: theme.colors.bodyColor,
+    },
+    addNewWrapper: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    addNewText: {
+      color: theme.colors.accent1,
     },
   });
 export default AppHeader;

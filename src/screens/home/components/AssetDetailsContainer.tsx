@@ -3,11 +3,12 @@ import { View, Image, StyleSheet, ScrollView } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AssetChip from 'src/components/AssetChip';
-import { wp, hp } from 'src/constants/responsive';
+import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import RoundedCTA from 'src/components/RoundedCTA';
-import DownloadIcon from 'src/assets/images/icon_buy.svg';
+import DownloadIcon from 'src/assets/images/icon_download.svg';
 import { AppTheme } from 'src/theme';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type assetDetailsProps = {
   tag: string;
@@ -41,11 +42,13 @@ function AssetDetailsContainer(props: assetDetailsProps) {
             icon={<DownloadIcon />}
             buttonColor={theme.colors.primaryCTA}
             title={'Download'}
-            width={wp(110)}
+            width={wp(120)}
           />
         </View>
       </View>
-      <ScrollView style={styles.scrollingContainer}>
+      <ScrollView
+        style={styles.scrollingContainer}
+        showsVerticalScrollIndicator={false}>
         <AppText variant="body1" style={styles.assetDetailsText}>
           The Demogorgan
         </AppText>
@@ -79,7 +82,7 @@ function AssetDetailsContainer(props: assetDetailsProps) {
           <AppText
             variant="body1"
             style={[styles.assetDetailsText, styles.assetDetailsText2]}>
-            20,000,000
+            {numberWithCommas(20000000)}
           </AppText>
         </View>
         <View style={styles.contentWrapper}>
@@ -125,11 +128,11 @@ function AssetDetailsContainer(props: assetDetailsProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: '100%',
+      flex: 1,
       flexDirection: 'column',
     },
     assetContainer: {
-      height: '35%',
+      height: windowHeight > 650 ? '35%' : '30%',
       position: 'relative',
       marginBottom: hp(20),
       borderBottomColor: 'gray',

@@ -6,12 +6,13 @@ import AppText from 'src/components/AppText';
 import UserAvatar from 'src/components/UserAvatar';
 import { hp, wp } from 'src/constants/responsive';
 
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type HomeHeaderProps = {
   profile: string;
@@ -23,7 +24,7 @@ type HomeHeaderProps = {
 };
 function HomeHeader(props: HomeHeaderProps) {
   const {
-    profile = '',
+    profile,
     username,
     balance,
     onPressScanner,
@@ -36,7 +37,7 @@ function HomeHeader(props: HomeHeaderProps) {
     <View style={styles.container}>
       <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
         <View style={styles.contentWrapper}>
-          <UserAvatar size={50} imageSource={''} />
+          <UserAvatar size={50} imageSource={profile} />
           <View style={styles.userDetailsWrapper}>
             <AppText variant="body1" style={styles.usernameText}>
               {username}
@@ -44,7 +45,7 @@ function HomeHeader(props: HomeHeaderProps) {
             <View style={styles.balanceWrapper}>
               <IconBitcoin />
               <AppText variant="body5" style={styles.balanceText}>
-                &nbsp;&nbsp;{balance}
+                &nbsp;{numberWithCommas(balance)}
               </AppText>
             </View>
           </View>

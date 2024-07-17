@@ -1,27 +1,62 @@
-import * as React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
+import ModalContainer from 'src/components/ModalContainer';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
+import WalletUtilities from 'src/services/wallets/operations/utils';
 
-function ReceiveScreen() {
+function ReceiveScreen({ route }) {
+  const { receivingAddress, title, subTitle } = route.params;
+  const { translations } = useContext(LocalizationContext);
+  const { receciveScreen, common } = translations;
+
+  const [visible, setVisible] = useState(false);
+
+  const [amount, setAmount] = useState(0);
+  const [paymentURI, setPaymentURI] = useState(null);
+
+  useEffect(() => {
+    if (amount) {
+      const newPaymentURI = WalletUtilities.generatePaymentURI(
+        receivingAddress,
+        {
+          amount: parseInt(amount) / 1e8,
+        },
+      ).paymentURI;
+      setPaymentURI(newPaymentURI);
+    } else if (paymentURI) {
+      setPaymentURI(null);
+    }
+  }, [amount, receivingAddress]);
+
   return (
     <ScreenContainer>
-      <AppHeader
-        title="Receive"
-        subTitle="Scan QR Lorem ipsum dolor sit amet,"
-        enableBack={true}
-      />
+      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ReceiveQrDetails />
+        <ReceiveQrDetails
+          addMountModalVisible={() => setVisible(true)}
+          receivingAddress={paymentURI || receivingAddress || 'address'}
+        />
       </ScrollView>
       <FooterNote
-        title="Note"
-        subTitle="The blinded UTXO in this invoice will expire in 24 hours after its creation."
+        title={common.note}
+        subTitle={receciveScreen.noteSubTitle}
         customStyle={styles.advanceOptionStyle}
       />
+
+      <ModalContainer
+        conatinerModalStyle={styles.addAmountModalContainerStyle}
+        title={receciveScreen.addAmountTitle}
+        subTitle={receciveScreen.addAmountSubTitle}
+        visible={visible}
+        onDismiss={() => setVisible(false)}>
+        <AddAmountModal callback={setAmount} />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
@@ -29,6 +64,10 @@ function ReceiveScreen() {
 const styles = StyleSheet.create({
   advanceOptionStyle: {
     backgroundColor: 'transparent',
+  },
+  addAmountModalContainerStyle: {
+    width: '96%',
+    alignSelf: 'center',
   },
 });
 

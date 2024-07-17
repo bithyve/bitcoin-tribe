@@ -35,12 +35,7 @@ function AddPicture(props: addPictureProps) {
         </View>
       ) : (
         <View style={styles.container}>
-          <UserAvatar size={wp(70)} imageSource={imageSource} />
-          {edit ? (
-            <View style={styles.iconImageWrapper2}>
-              <IconImage />
-            </View>
-          ) : null}
+          <UserAvatar size={wp(75)} imageSource={imageSource} />
         </View>
       )}
     </AppTouchable>
@@ -51,12 +46,12 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(25),
-      position: 'relative',
+      marginTop: hp(30),
+      marginBottom: hp(40),
     },
     iconImageWrapper: {
-      height: windowHeight > 650 ? hp(70) : 70,
-      width: windowHeight > 650 ? hp(70) : 70,
+      height: windowHeight > 650 ? hp(75) : 75,
+      width: windowHeight > 650 ? hp(75) : 75,
       borderRadius: hp(70),
       alignItems: 'center',
       justifyContent: 'center',
@@ -65,12 +60,6 @@ const getStyles = (theme: AppTheme) =>
     addPictureText: {
       color: theme.colors.accent1,
       marginLeft: wp(10),
-    },
-    iconImageWrapper2: {
-      position: 'absolute',
-      alignSelf: 'center',
-      left: 20,
-      opacity: 1,
     },
   });
 export default AddPicture;

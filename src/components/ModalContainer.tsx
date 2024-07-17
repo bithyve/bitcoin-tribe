@@ -1,11 +1,22 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Modal, Portal, Provider, useTheme } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { useTheme } from 'react-native-paper';
+import Modal from 'react-native-modal';
 
 import IconClose from 'src/assets/images/icon_close.svg';
+import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
+import KeyboardAvoidView from './KeyboardAvoidView';
 
 type ModalContainerProps = {
   title: string;
@@ -13,56 +24,102 @@ type ModalContainerProps = {
   visible: boolean;
   onDismiss?: () => void;
   children: React.ReactNode;
+  conatinerModalStyle?: StyleProp<ViewStyle>;
+  height?: string;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
   const theme: AppTheme = useTheme();
-  const { visible, onDismiss, children, title, subTitle } = props;
-  const styles = getStyles(theme);
+  const {
+    visible,
+    onDismiss,
+    children,
+    title,
+    subTitle,
+    conatinerModalStyle,
+    height,
+  } = props;
+
+  const [isKeyboardVisible, setKeyboardVisible] = useState(true);
+  const styles = getStyles(theme, height, isKeyboardVisible);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
   return (
-    // <Provider>
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={styles.containerStyle}>
-        <View>
-          <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-            <IconClose />
-          </AppTouchable>
-          <View style={styles.headingWrapper}>
-            <AppText variant="heading1" style={styles.titleText}>
-              {title}
+    <Modal
+      isVisible={visible}
+      onBackdropPress={onDismiss}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
+      backdropColor={theme.colors.cardBackground}
+      backdropOpacity={0.9}
+      style={[styles.containerStyle, conatinerModalStyle]}>
+      <KeyboardAvoidView style={styles.container}>
+        <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
+          <IconClose />
+        </AppTouchable>
+        <View style={styles.headingWrapper}>
+          <AppText variant="heading1" style={styles.titleText}>
+            {title}
+          </AppText>
+          {subTitle ? (
+            <AppText variant="body1" style={styles.subTitleText}>
+              {subTitle}
             </AppText>
-            {subTitle && (
-              <AppText variant="body1" style={styles.subTitleText}>
-                {subTitle}
-              </AppText>
-            )}
-          </View>
-          {children}
+          ) : null}
         </View>
-      </Modal>
-    </Portal>
-    // </Provider>
+        {children}
+      </KeyboardAvoidView>
+    </Modal>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
   StyleSheet.create({
+    container: {
+      flex: Platform.OS === 'ios' ? 1 : 0,
+      height: height,
+    },
     containerStyle: {
-      width: '100%',
+      height: isKeyboardVisible ? height : 'auto',
+      width: '94%',
       position: 'absolute',
+      bottom: 0,
       backgroundColor: theme.colors.cardBackground,
-      padding: 20,
+      padding: hp(25),
       borderRadius: 10,
-      bottom: 2,
-      alignSelf: 'flex-end',
+      marginHorizontal: 10,
+      marginBottom: isKeyboardVisible ? 0 : 5,
+      shadowColor: theme.colors.shodowColor,
+      shadowRadius: 3,
+      shadowOpacity: 0.2,
+      elevation: 5,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
     },
     closeIconWrapper: {
       alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginVertical: 20,
+      marginTop: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,

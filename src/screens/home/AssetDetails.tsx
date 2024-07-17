@@ -16,17 +16,18 @@ function AssetDetails() {
       <View style={styles.headerWrapper}>
         <AppHeader enableBack={true} />
       </View>
-      <AssetDetailsContainer tag="COLLECTIBLES" />
+      <AssetDetailsContainer tag="COLLECTIBLE" />
     </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: 0,
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
     headerWrapper: {
-      marginHorizontal: hp(20),
+      marginHorizontal: hp(25),
       marginTop: hp(15),
     },
   });

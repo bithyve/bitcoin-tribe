@@ -6,17 +6,21 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
+import { Transaction } from 'src/services/wallets/interfaces';
+import { TransactionType } from 'src/services/wallets/enums';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type WalletTransactionsProps = {
   transId: string;
   transDate: string;
   transAmount: string;
   transType: string;
+  transaction: Transaction;
 };
 
 function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
-  const { transId, transDate, transAmount, transType } = props;
+  const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
 
@@ -29,21 +33,31 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         transType={transType}
         backColor={theme.colors.cardBackground}
         disabled={true}
+        transaction={transaction}
+      />
+      {transType === TransactionType.SENT && (
+        <LabeledContent
+          label={wallet.toAddress}
+          content={transaction.recipientAddresses[0]}
+        />
+      )}
+      {transType === TransactionType.RECEIVED && (
+        <LabeledContent
+          label={wallet.fromAddress}
+          content={transaction.senderAddresses[0]}
+        />
+      )}
+      <LabeledContent label={wallet.transactionID} content={transaction.txid} />
+      <LabeledContent
+        label={wallet.fees}
+        content={numberWithCommas(`${transaction.fee}`)}
       />
       <LabeledContent
-        label={wallet.toAddress}
-        content={'1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71'}
+        label={wallet.confirmations}
+        content={`${
+          transaction.confirmations > 6 ? '6+' : transaction.confirmations
+        }`}
       />
-      <LabeledContent
-        label={wallet.fromAddress}
-        content={'1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71'}
-      />
-      <LabeledContent
-        label={wallet.transactionID}
-        content={'1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71'}
-      />
-      <LabeledContent label={wallet.fees} content={'0.0001'} />
-      <LabeledContent label={wallet.confirmations} content={' 6+'} />
     </View>
   );
 }
