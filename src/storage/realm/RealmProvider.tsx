@@ -28,8 +28,7 @@ export function RealmProvider({ children }) {
       path={RealmDatabase.file}
       schema={schema}
       schemaVersion={RealmDatabase.schemaVersion}
-      // encryptionKey={encKey}
-    >
+      encryptionKey={encKey}>
       <AppWithNetwork>{children}</AppWithNetwork>
     </Provider>
   );

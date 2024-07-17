@@ -13,6 +13,7 @@ import {
   Wallet,
 } from 'src/services/wallets/interfaces/wallet';
 import {
+  decrypt,
   encrypt,
   generateEncryptionKey,
   hash512,
@@ -100,14 +101,25 @@ export class ApiHandler {
         const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
           primaryMnemonic,
         );
-        console.log('rgbWallet', rgbWallet);
         dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.xpub);
+        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
         Storage.set(Keys.APPID, appID);
       }
     } else {
       throw new Error('Realm initialisation failed');
     }
+  }
+
+  static async login() {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    const uint8array = stringToArrayBuffer(key);
+    await dbManager.initializeRealm(uint8array);
+    const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+      RealmSchema.RgbWallet,
+    );
+    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+    return key;
   }
 
   static async createNewWallet({

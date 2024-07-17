@@ -26,7 +26,7 @@ export class RealmDatabase {
         path: RealmDatabase.file,
         schema,
         schemaVersion: RealmDatabase.schemaVersion,
-        // encryptionKey: key,
+        encryptionKey: key,
         onMigration: (oldRealm, newRealm) => {
           runRealmMigrations({ oldRealm, newRealm });
         },
