@@ -10,14 +10,19 @@ import { Transaction } from 'src/services/wallets/interfaces';
 
 function TransactionDetails({ route }) {
   const transaction: Transaction = route.params?.transaction;
+  const coin = route.params?.coin;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
   const theme: AppTheme = useTheme();
   return (
     <ScreenContainer>
       <AppHeader
-        title={wallet.transactionDetailTitle}
-        subTitle={wallet.transactionDetailSubTitle}
+        title={
+          transaction.txid
+            ? wallet.transactionDetailTitle
+            : wallet.transferDetails
+        }
+        subTitle={coin ? coin : wallet.transactionDetailSubTitle}
       />
       <TransactionDetailsContainer
         transId={transaction.txid}

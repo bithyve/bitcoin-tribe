@@ -69,6 +69,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
           keyboardType={'default'}
           returnKeyType={'done'}
           onSubmitEditing={primaryOnPress}
+          autoFocus={true}
         />
         <View style={styles.primaryCTAContainer}>
           <Buttons

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
-
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
@@ -12,8 +11,9 @@ import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
 import { AppContext } from 'src/contexts/AppContext';
-import { stringToArrayBuffer } from 'src/utils/encryption';
-import dbManager from 'src/storage/realm/dbManager';
+import { decrypt, hash512 } from 'src/utils/encryption';
+import * as SecureStore from 'src/storage/secure-store';
+import config from 'src/utils/config';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -25,6 +25,7 @@ function ProfileSetup({ navigation }) {
   const { setKey } = useContext(AppContext);
 
   const handlePickImage = async () => {
+    Keyboard.dismiss()
     try {
       const result = await pickImage();
       setProfileImage(result);
@@ -55,7 +56,9 @@ function ProfileSetup({ navigation }) {
   }, [navigation, query.status]);
 
   const onSuccess = async () => {
-    setKey('key');
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    setKey(key);
     navigation.replace(NavigationRoutes.APPSTACK);
   };
 

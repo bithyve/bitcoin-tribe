@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -19,6 +20,7 @@ import useWallets from 'src/hooks/useWallets';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Coin } from 'src/models/interfaces/RGBWallet';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -26,7 +28,7 @@ function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { home, common, sendScreen } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-
+  const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
@@ -38,6 +40,14 @@ function HomeScreen() {
 
   useEffect(() => {
     refreshRgbWallet.mutate();
+    if (
+      version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
+    ) {
+      ApiHandler.checkVersion(
+        version,
+        `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+      );
+    }
   }, []);
 
   useEffect(() => {

@@ -114,7 +114,8 @@ function SendToContainer({
           value={amount}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
-          keyboardType={'default'}
+          // keyboardType={'default'}
+          disabled={true}
           icon={<IconBitcoin />}
           // rightText={common.sendMax}
           // onRightTextPress={() => {}}

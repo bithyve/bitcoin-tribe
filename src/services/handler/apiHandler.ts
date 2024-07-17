@@ -7,12 +7,14 @@ import {
   WalletType,
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
+import DeviceInfo from 'react-native-device-info';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
   DerivationConfig,
   Wallet,
 } from 'src/services/wallets/interfaces/wallet';
 import {
+  decrypt,
   encrypt,
   generateEncryptionKey,
   hash512,
@@ -100,14 +102,31 @@ export class ApiHandler {
         const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
           primaryMnemonic,
         );
-        console.log('rgbWallet', rgbWallet);
         dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.xpub);
+        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
         Storage.set(Keys.APPID, appID);
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
       }
     } else {
       throw new Error('Realm initialisation failed');
     }
+  }
+
+  static async login() {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    const uint8array = stringToArrayBuffer(key);
+    await dbManager.initializeRealm(uint8array);
+    const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+      RealmSchema.RgbWallet,
+    );
+    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+    return key;
   }
 
   static async createNewWallet({
@@ -467,6 +486,21 @@ export class ApiHandler {
       dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
         appName: appName,
         walletImage: walletImage,
+      });
+      return true;
+    } catch (error) {
+      console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
+  // Check Updated app version
+  static async checkVersion(previousVersion, currentVerion) {
+    try {
+      dbManager.createObject(RealmSchema.VersionHistory, {
+        version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+        releaseNote: '',
+        date: new Date().toString(),
+        title: `Upgraded from ${previousVersion} to ${currentVerion}`,
       });
       return true;
     } catch (error) {

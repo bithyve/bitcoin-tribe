@@ -41,6 +41,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       onPress={() =>
         navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
           transaction: props.transaction,
+          coin: '',
         })
       }>
       <View style={styles.container}>
