@@ -30,16 +30,13 @@ import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 function VersionHistoryList() {
   const theme: AppTheme = useTheme();
-  // const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory).map(
-  //   getJSONFromRealmObject,
-  // );
   const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
     getJSONFromRealmObject,
   );
-  console.log('version_', VersionHistoryData);
+
   return (
     <FlatList
-      data={VersionHistoryData}
+      data={VersionHistoryData.reverse()}
       renderItem={({ item }) => (
         <VersionHistoryItem
           title={item.title}

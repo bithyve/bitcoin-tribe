@@ -27,7 +27,7 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
             {title}
           </AppText>
           <AppText variant="body2" style={styles.version}>
-            {moment(date).format('DD MMM YY • hh:mm A')}
+            {moment(date).fromNow()}
           </AppText>
         </AppTouchable>
         {!isCollapsed && releaseNotes && (
