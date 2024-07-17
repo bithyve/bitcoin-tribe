@@ -24,6 +24,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
+  console.log('transaction', transaction.confirmations !== 0);
 
   return (
     <View>
@@ -50,19 +51,19 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           content={transaction.senderAddresses[0]}
         />
       )}
-      {transaction.txid && (
+      {transaction && transaction.txid && (
         <LabeledContent
           label={wallet.transactionID}
           content={transaction.txid}
         />
       )}
-      {transaction.fee && (
+      {transaction && transaction.fee && (
         <LabeledContent
           label={wallet.fees}
           content={numberWithCommas(`${transaction.fee}`)}
         />
       )}
-      {transaction.status && (
+      {transaction && transaction.status && (
         <LabeledContent
           label={wallet.status}
           content={transaction.status.toUpperCase()}
@@ -82,14 +83,14 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           )}
         />
       )}
-      {transaction.confirmations && (
+      {transaction.confirmations && transaction.confirmations !== 0 ? (
         <LabeledContent
           label={wallet.confirmations}
           content={`${
             transaction.confirmations > 6 ? '6+' : transaction.confirmations
           }`}
         />
-      )}
+      ) : null}
     </View>
   );
 }
