@@ -24,7 +24,7 @@ const ReceiveQrDetails = ({
     <View style={styles.container}>
       <ShowQRCode
         value={receivingAddress}
-        title={receciveScreen.invoiceAddress}
+        title={receciveScreen.bitcoinAddress}
       />
 
       <ReceiveQrClipBoard qrCodeValue={receivingAddress} icon={<IconCopy />} />
