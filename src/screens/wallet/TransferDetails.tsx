@@ -5,28 +5,23 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import TransactionDetailsContainer from './components/TransactionDetailsContainer';
 import { Transaction } from 'src/services/wallets/interfaces';
+import TransferDetailsContainer from './components/TransferDetailsContainer';
 
-function TransactionDetails({ route }) {
+function TransferDetails({ route }) {
   const transaction: Transaction = route.params?.transaction;
+  const coin = route.params?.coin;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
   const theme: AppTheme = useTheme();
   return (
     <ScreenContainer>
-      <AppHeader
-        title={wallet.transactionDetailTitle}
-        subTitle={wallet.transactionDetailSubTitle}
-      />
-      <TransactionDetailsContainer
-        transId={transaction.txid}
-        transDate={transaction.date}
+      <AppHeader title={wallet.transferDetails} subTitle={coin} />
+      <TransferDetailsContainer
         transAmount={`${transaction.amount}`}
-        transType={transaction.transactionType}
         transaction={transaction}
       />
     </ScreenContainer>
   );
 }
-export default TransactionDetails;
+export default TransferDetails;

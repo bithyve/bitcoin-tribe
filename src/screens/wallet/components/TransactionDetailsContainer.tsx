@@ -9,7 +9,6 @@ import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { TransactionType } from 'src/services/wallets/enums';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import moment from 'moment';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -24,21 +23,18 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
-  console.log('transaction', transaction.confirmations !== 0);
 
   return (
     <View>
-      {transId && (
-        <WalletTransactions
-          transId={transId}
-          transDate={transDate}
-          transAmount={transAmount}
-          transType={transType}
-          backColor={theme.colors.cardBackground}
-          disabled={true}
-          transaction={transaction}
-        />
-      )}
+      <WalletTransactions
+        transId={transId}
+        transDate={transDate}
+        transAmount={transAmount}
+        transType={transType}
+        backColor={theme.colors.cardBackground}
+        disabled={true}
+        transaction={transaction}
+      />
       {transType === TransactionType.SENT && (
         <LabeledContent
           label={wallet.toAddress}
@@ -51,38 +47,15 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           content={transaction.senderAddresses[0]}
         />
       )}
-      {transaction && transaction.txid && (
-        <LabeledContent
-          label={wallet.transactionID}
-          content={transaction.txid}
-        />
-      )}
-      {transaction && transaction.fee && (
-        <LabeledContent
-          label={wallet.fees}
-          content={numberWithCommas(`${transaction.fee}`)}
-        />
-      )}
-      {transaction && transaction.status && (
-        <LabeledContent
-          label={wallet.status}
-          content={transaction.status.toUpperCase()}
-        />
-      )}
-      {transAmount && (
-        <LabeledContent
-          label={wallet.amount}
-          content={numberWithCommas(`${transAmount}`)}
-        />
-      )}
-      {transaction.updatedAt && (
-        <LabeledContent
-          label={wallet.date}
-          content={moment(transaction.updatedAt).format(
-            'DD MMM YY  •  hh:mm a',
-          )}
-        />
-      )}
+      <LabeledContent label={wallet.transactionID} content={transaction.txid} />
+      <LabeledContent
+        label={wallet.fees}
+        content={numberWithCommas(`${transaction.fee}`)}
+      />
+      <LabeledContent
+        label={wallet.amount}
+        content={numberWithCommas(`${transAmount}`)}
+      />
       {transaction.confirmations && transaction.confirmations !== 0 ? (
         <LabeledContent
           label={wallet.confirmations}

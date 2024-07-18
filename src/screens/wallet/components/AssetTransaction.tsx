@@ -17,6 +17,7 @@ import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 type AssetTransactionProps = {
   transId: string;
@@ -47,7 +48,7 @@ function AssetTransaction(props: AssetTransactionProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() => {
-        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+        navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
           transaction: transaction,
           coin: coin,
         });
@@ -72,7 +73,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {Capitalize(transId)}
             </AppText>
             <AppText variant="body2" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm a')}

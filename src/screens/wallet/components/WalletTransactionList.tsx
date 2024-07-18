@@ -16,9 +16,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 function WalletTransactionList({
   transactions,
   wallet,
+  coin,
 }: {
   transactions: Transaction[];
   wallet: Wallet;
+  coin?: string;
 }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -53,11 +55,13 @@ function WalletTransactionList({
       onRefresh={pullDownToRefresh}
       renderItem={({ item }) => (
         <WalletTransactions
-          transId={item.txid ? item.txid : item.status}
+          transId={item.txid}
+          tranStatus={item.status}
           transDate={item.date}
           transAmount={`${item.amount}`}
           transType={item.transactionType}
           transaction={item}
+          coin={coin}
         />
       )}
       keyExtractor={item => item.txid}

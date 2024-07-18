@@ -43,6 +43,7 @@ function TransactionsList({
             navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
               transactions,
               wallet,
+              coin,
             });
           }}>
           <AppText variant="smallCTA" style={styles.viewAllText}>
