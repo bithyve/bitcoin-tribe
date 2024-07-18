@@ -97,7 +97,9 @@ const SendAssetScreen = () => {
         value={invoice}
         onChangeText={text => setInvoice(text)}
         placeholder={'Invoice'}
-        style={styles.input}
+        style={[styles.input, invoice && styles.invoiceInputStyle]}
+        multiline={true}
+        numberOfLines={5}
       />
 
       <TextField
@@ -126,6 +128,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(10),
+    },
+    invoiceInputStyle: {
+      height: hp(80),
     },
     buttonWrapper: {
       marginTop: hp(20),
