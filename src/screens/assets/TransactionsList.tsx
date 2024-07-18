@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -55,8 +55,13 @@ function TransactionsList({
       <FlatList
         style={styles.container}
         data={transactions}
-        refreshing={isLoading}
-        onRefresh={() => refresh()}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => refresh()}
+            tintColor={theme.colors.primaryCTA}
+          />
+        }
         renderItem={({ item }) => (
           <AssetTransaction
             transId={item.status.toUpperCase()}

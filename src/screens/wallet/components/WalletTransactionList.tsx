@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
@@ -51,8 +51,13 @@ function WalletTransactionList({
     <FlatList
       style={styles.container}
       data={transactions}
-      refreshing={walletRefreshMutation.isLoading}
-      onRefresh={pullDownToRefresh}
+      refreshControl={
+        <RefreshControl
+          refreshing={walletRefreshMutation.isLoading}
+          onRefresh={pullDownToRefresh}
+          tintColor={theme.colors.primaryCTA}
+        />
+      }
       renderItem={({ item }) => (
         <WalletTransactions
           transId={item.txid}
