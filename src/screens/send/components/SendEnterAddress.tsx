@@ -4,6 +4,7 @@ import { View, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
+import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -53,8 +54,8 @@ function SendEnterAddress({
         });
         break;
       default:
-        // Toast('Invalid Bitcoin address'); // toast not working
-        Alert.alert('Invalid Bitcoin address');
+        Toast('Invalid Bitcoin address'); // toast not working
+      // Alert.alert('Invalid Bitcoin address');
     }
   };
 
