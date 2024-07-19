@@ -114,6 +114,56 @@ export default class WalletOperations {
     };
   };
 
+  public static getNextFreeChangeAddress = (
+    wallet: Wallet | Vault,
+  ): { changeAddress: string } => {
+    let changeAddress;
+    const { entityKind, specs, networkType } = wallet;
+    const network = WalletUtilities.getNetworkByType(networkType);
+
+    const cached = idx(
+      specs,
+      _ => _.addresses.internal[specs.nextFreeChangeAddressIndex],
+    ); // address cache hit
+    if (cached) {
+      return { changeAddress: cached };
+    }
+
+    if ((wallet as Vault).isMultiSig) {
+      // case: multi-sig vault
+      changeAddress = WalletUtilities.createMultiSig(
+        wallet as Vault,
+        specs.nextFreeChangeAddressIndex,
+        true,
+      ).address;
+    } else {
+      // case: single-sig vault/wallet
+      const xpub =
+        entityKind === EntityKind.VAULT
+          ? (specs as VaultSpecs).xpubs[0]
+          : (specs as WalletSpecs).xpub;
+      const derivationPath = (wallet as Wallet)?.derivationDetails
+        ?.xDerivationPath;
+
+      const purpose =
+        entityKind === EntityKind.VAULT
+          ? undefined
+          : WalletUtilities.getPurpose(derivationPath);
+
+      changeAddress = WalletUtilities.getAddressByIndex(
+        xpub,
+        true,
+        specs.nextFreeChangeAddressIndex,
+        network,
+        purpose,
+      );
+    }
+
+    return {
+      changeAddress,
+    };
+  };
+
   static getNextFreeAddress = (wallet: Wallet | Vault) => {
     if (wallet.specs.receivingAddress) {
       return wallet.specs.receivingAddress;
