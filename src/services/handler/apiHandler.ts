@@ -416,7 +416,6 @@ export class ApiHandler {
   static async getAssetTransactions({ assetId }: { assetId: string }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
-      console.log('response', response);
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(
           RealmSchema.Coin,

@@ -84,7 +84,7 @@ export default class RGBServices {
     return JSON.parse(data);
   };
 
-  static getRgbAssetTransactions = async (assetId: string): Promise<{}> => {
+  static getRgbAssetTransactions = async (assetId: string): Promise<{}[]> => {
     const data = await RGB.getRgbAssetTransactions(assetId);
     return JSON.parse(data);
   };
