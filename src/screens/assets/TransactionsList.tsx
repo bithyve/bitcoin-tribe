@@ -19,6 +19,7 @@ function TransactionsList({
   navigation,
   wallet,
   coin,
+  assetId = '',
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -26,6 +27,7 @@ function TransactionsList({
   navigation;
   wallet;
   coin: string;
+  assetId: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -40,10 +42,9 @@ function TransactionsList({
         </AppText>
         <AppTouchable
           onPress={() => {
-            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
-              transactions,
-              wallet,
-              coin,
+            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+              assetId: assetId,
+              transactions: transactions,
             });
           }}>
           <AppText variant="smallCTA" style={styles.viewAllText}>

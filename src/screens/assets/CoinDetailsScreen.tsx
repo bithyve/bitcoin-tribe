@@ -47,6 +47,7 @@ const CoinDetailsScreen = () => {
           navigation={navigation}
           wallet={wallet}
           coin={coin.ticker}
+          assetId={assetId}
         />
       </View>
     </ScreenContainer>
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 670 ? '42%' : '35%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   TransactionWrapper: {
-    height: windowHeight < 650 ? '53%' : '60%',
+    height: windowHeight < 670 ? '53%' : '60%',
     marginHorizontal: wp(25),
   },
 });
