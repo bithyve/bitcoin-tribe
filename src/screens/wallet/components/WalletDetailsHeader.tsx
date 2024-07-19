@@ -35,7 +35,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
   } = wallet;
-  const receivingAddress = WalletOperations.getNextFreeAddress(wallet);
+  const { changeAddress: receivingAddress } =
+    WalletOperations.getNextFreeChangeAddress(wallet);
 
   return (
     <View style={styles.container}>
