@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
@@ -16,9 +16,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 function WalletTransactionList({
   transactions,
   wallet,
+  coin,
 }: {
   transactions: Transaction[];
   wallet: Wallet;
+  coin?: string;
 }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -49,15 +51,22 @@ function WalletTransactionList({
     <FlatList
       style={styles.container}
       data={transactions}
-      refreshing={walletRefreshMutation.isLoading}
-      onRefresh={pullDownToRefresh}
+      refreshControl={
+        <RefreshControl
+          refreshing={walletRefreshMutation.isLoading}
+          onRefresh={pullDownToRefresh}
+          tintColor={theme.colors.primaryCTA}
+        />
+      }
       renderItem={({ item }) => (
         <WalletTransactions
-          transId={item.txid ? item.txid : item.status}
+          transId={item.txid}
+          tranStatus={item.status}
           transDate={item.date}
           transAmount={`${item.amount}`}
           transType={item.transactionType}
           transaction={item}
+          coin={coin}
         />
       )}
       keyExtractor={item => item.txid}

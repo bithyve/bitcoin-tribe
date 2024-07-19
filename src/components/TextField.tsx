@@ -30,6 +30,8 @@ type TextFieldProps = {
   inputStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -49,6 +51,8 @@ const TextField = (props: TextFieldProps) => {
     inputStyle,
     style,
     autoCapitalize = undefined,
+    multiline = false,
+    numberOfLines,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
@@ -78,6 +82,8 @@ const TextField = (props: TextFieldProps) => {
         onSubmitEditing={onSubmitEditing}
         autoFocus={autoFocus}
         autoCapitalize={autoCapitalize}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
       />
       {rightText && (
         <AppTouchable
