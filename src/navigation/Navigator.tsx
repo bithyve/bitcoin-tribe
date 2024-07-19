@@ -36,6 +36,7 @@ import CoinsMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 import AppInfo from 'src/screens/settings/AppInfo';
 import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 import TransferDetails from 'src/screens/wallet/TransferDetails';
+import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -145,6 +146,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.TRANSFERDETAILS}
           component={TransferDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COINALLTRANSACTION}
+          component={CoinAllTransaction}
         />
       </Stack.Navigator>
     </RealmProvider>
