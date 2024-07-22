@@ -54,3 +54,23 @@ export interface Coin {
   transactions: Transaction[];
   metaData: MetaData;
 }
+
+interface RgbAllocation {
+  amount: number;
+  assetId: string;
+  settled: boolean;
+}
+interface Outpoint {
+  txid: string;
+  vout: number;
+}
+interface Utxo {
+  btcAmount: number;
+  colorable: boolean;
+  exists: boolean;
+  outpoint: Outpoint;
+}
+export interface RgbUnspent {
+  rgbAllocations: RgbAllocation[];
+  utxo: Utxo;
+}

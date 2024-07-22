@@ -310,8 +310,10 @@ export class ApiHandler {
   static async receiveTestSats() {
     try {
       const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
+      const { changeAddress: receivingAddress } =
+        WalletOperations.getNextFreeChangeAddress(wallet);
       const { funded } = await Relay.getTestcoins(
-        wallet.specs.receivingAddress,
+        receivingAddress,
         wallet.networkType,
       );
       if (!funded) {
@@ -327,26 +329,12 @@ export class ApiHandler {
   static async createUtxos() {
     try {
       const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-      const address = await RGBServices.getAddress();
-      const txid = await ApiHandler.sendTransaction({
-        sender: wallet.toJSON(),
-        recipient: {
-          address,
-          amount: SATS_FOR_RGB,
-        },
-      });
-      if (txid) {
-        const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-        const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-          JSON.parse(averageTxFeeJSON);
-        const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
-        const utxos = await RGBServices.createUtxos(
-          averageTxFee.high.feePerByte,
-        );
-        return utxos.created;
-      } else {
-        throw new Error('Insufficient sats for RGB');
-      }
+      const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+        JSON.parse(averageTxFeeJSON);
+      const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
+      const utxos = await RGBServices.createUtxos(averageTxFee.high.feePerByte);
+      return utxos.created;
     } catch (error) {
       console.log({ error });
       throw new Error('Insufficient sats for RGB');
@@ -416,7 +404,6 @@ export class ApiHandler {
   static async getAssetTransactions({ assetId }: { assetId: string }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
-      console.log('response', response);
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(
           RealmSchema.Coin,
@@ -446,11 +433,17 @@ export class ApiHandler {
     consignmentEndpoints: string;
   }) {
     try {
+      const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
+      const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+        JSON.parse(averageTxFeeJSON);
+      const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
       const response = await RGBServices.sendAsset(
         assetId,
         blindedUTXO,
         amount,
         consignmentEndpoints,
+        50.0,
       );
       return response;
     } catch (error) {
@@ -480,7 +473,6 @@ export class ApiHandler {
     }
   }
 
-  // Update profile
   static async updateProfile(appID, appName, walletImage) {
     try {
       dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
@@ -493,7 +485,7 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
-  // Check Updated app version
+
   static async checkVersion(previousVersion, currentVerion) {
     try {
       dbManager.createObject(RealmSchema.VersionHistory, {
@@ -503,6 +495,16 @@ export class ApiHandler {
         title: `Upgraded from ${previousVersion} to ${currentVerion}`,
       });
       return true;
+    } catch (error) {
+      console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
+
+  static async viewUtxos() {
+    try {
+      const response = await RGBServices.getUnspents();
+      return response;
     } catch (error) {
       console.log('Update Profile', error);
       throw new Error(error);

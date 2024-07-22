@@ -37,6 +37,7 @@ import AppInfo from 'src/screens/settings/AppInfo';
 import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 import TransferDetails from 'src/screens/wallet/TransferDetails';
 import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
+import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -150,6 +151,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.COINALLTRANSACTION}
           component={CoinAllTransaction}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.VIEWUNSPENT}
+          component={ViewUnspent}
         />
       </Stack.Navigator>
     </RealmProvider>
