@@ -55,8 +55,7 @@ function SendEnterAddress({
         });
         break;
       default:
-        Toast('Invalid Bitcoin address'); // toast not working
-      // Alert.alert('Invalid Bitcoin address');
+        Toast('Invalid Bitcoin address');
     }
   };
   return (
