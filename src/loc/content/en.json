@@ -149,7 +149,8 @@
     "status": "Status",
     "amount": "Amount",
     "date": "Date",
-    "transferDetails": "Transfer Details"
+    "transferDetails": "Transfer Details",
+    "viewUnspent": "View Unspent UTXOs"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
