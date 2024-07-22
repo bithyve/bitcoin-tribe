@@ -27,10 +27,11 @@ function SendEnterAddress({
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
-
   const onProceed = (paymentInfo: string) => {
     paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(wallet.networkType);
+    const network = WalletUtilities.getNetworkByType(
+      wallet && wallet.networkType,
+    );
 
     let {
       type: paymentInfoKind,
@@ -58,7 +59,6 @@ function SendEnterAddress({
       // Alert.alert('Invalid Bitcoin address');
     }
   };
-
   return (
     <View style={styles.container}>
       <TextField

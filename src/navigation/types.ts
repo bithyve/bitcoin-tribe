@@ -34,6 +34,7 @@ export type AppStackParams = {
   [NavigationRoutes.COINDETAILS]: undefined;
   [NavigationRoutes.APPVERSIONHISTORY]: undefined;
   [NavigationRoutes.TRANSFERDETAILS]: undefined;
+  [NavigationRoutes.COINALLTRANSACTION]: undefined;
   // Add other routes as needed
 };
 
