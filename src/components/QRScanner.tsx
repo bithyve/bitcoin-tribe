@@ -1,49 +1,32 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Platform,
-  Alert,
-  Linking,
-  AlertButton,
-} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
 import {
   Camera,
+  Code,
   useCameraDevice,
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { AppTheme } from 'src/theme';
-
-const showCodeAlert = (value: string, onDismissed: () => void): void => {
-  const buttons: AlertButton[] = [
-    {
-      text: 'Close',
-      style: 'cancel',
-      onPress: onDismissed,
-    },
-  ];
-  if (value.startsWith('http')) {
-    buttons.push({
-      text: 'Open URL',
-      onPress: () => {
-        Linking.openURL(value);
-        onDismissed();
-      },
-    });
-  }
-  Alert.alert('Scanned Code', value, buttons);
-};
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { PaymentInfoKind } from 'src/services/wallets/enums';
+import WalletUtilities from 'src/services/wallets/operations/utils';
+import { useNavigation } from '@react-navigation/native';
+import config from 'src/utils/config';
+import Toast from './Toast';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import useWallets from 'src/hooks/useWallets';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
   const [cameraPermission, setCameraPermission] = useState(null);
-
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
     request(
@@ -51,7 +34,7 @@ const QRScanner = () => {
         ? PERMISSIONS.IOS.CAMERA
         : PERMISSIONS.ANDROID.CAMERA,
     ).then(result => {
-      if (result == 'granted') {
+      if (result === 'granted') {
         setCameraPermission(result);
       } else {
         openSettings();
@@ -59,16 +42,34 @@ const QRScanner = () => {
     });
   }, []);
 
-  const isShowingAlert = useRef(false);
   const onCodeScanned = useCallback((codes: Code[]) => {
-    console.log(`Scanned ${codes.length} codes:`, codes);
     const value = codes[0]?.value;
-    if (value == null) return;
-    if (isShowingAlert.current) return;
-    showCodeAlert(value, () => {
-      isShowingAlert.current = false;
-    });
-    isShowingAlert.current = true;
+    if (value == null) {
+      return;
+    }
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let {
+      type: paymentInfoKind,
+      address,
+      amount,
+    } = WalletUtilities.addressDiff(value, network);
+    if (amount) {
+      amount = Math.trunc(amount * 1e8);
+    } // convert from bitcoins to sats
+    switch (paymentInfoKind) {
+      case PaymentInfoKind.ADDRESS:
+        navigation.replace(NavigationRoutes.SENDTO, { wallet, address });
+        break;
+      case PaymentInfoKind.PAYMENT_URI:
+        navigation.replace(NavigationRoutes.SENDTO, {
+          wallet,
+          address,
+          paymentURIAmount: amount,
+        });
+        break;
+      default:
+        Toast('Invalid Bitcoin address');
+    }
   }, []);
 
   const codeScanner = useCodeScanner({
