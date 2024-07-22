@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Alert,
+  Linking,
+  AlertButton,
+} from 'react-native';
 import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
@@ -10,6 +17,26 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { AppTheme } from 'src/theme';
+
+const showCodeAlert = (value: string, onDismissed: () => void): void => {
+  const buttons: AlertButton[] = [
+    {
+      text: 'Close',
+      style: 'cancel',
+      onPress: onDismissed,
+    },
+  ];
+  if (value.startsWith('http')) {
+    buttons.push({
+      text: 'Open URL',
+      onPress: () => {
+        Linking.openURL(value);
+        onDismissed();
+      },
+    });
+  }
+  Alert.alert('Scanned Code', value, buttons);
+};
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
@@ -32,11 +59,21 @@ const QRScanner = () => {
     });
   }, []);
 
+  const isShowingAlert = useRef(false);
+  const onCodeScanned = useCallback((codes: Code[]) => {
+    console.log(`Scanned ${codes.length} codes:`, codes);
+    const value = codes[0]?.value;
+    if (value == null) return;
+    if (isShowingAlert.current) return;
+    showCodeAlert(value, () => {
+      isShowingAlert.current = false;
+    });
+    isShowingAlert.current = true;
+  }, []);
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
-    onCodeScanned: () => {
-      // handle the scanned QR value.
-    },
+    onCodeScanned: onCodeScanned,
   });
 
   return (
