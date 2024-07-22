@@ -6,14 +6,15 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useMutation } from 'react-query';
 import IconXpub from 'src/assets/images/icon_xpub.svg';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 
-function WalletSettings({ navigation }) {
+function WalletSettings() {
   const { translations } = useContext(LocalizationContext);
   const strings = translations.wallet;
+  const navigation = useNavigation();
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     ApiHandler.receiveTestSats,
   );
@@ -54,6 +55,13 @@ function WalletSettings({ navigation }) {
         subTitle={strings.receiveTestSatSubtitle}
         icon={<IconXpub />}
         onPress={() => mutate()}
+        showArrow={false}
+      />
+      <SelectOption
+        title={strings.viewUnspent}
+        subTitle={strings.viewUnspent}
+        icon={<IconXpub />}
+        onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
         showArrow={false}
       />
     </ScreenContainer>

@@ -60,6 +60,7 @@ const CoinsMetaDataScreen = () => {
             title="Ticker"
             value={coin && coin.metaData && coin.metaData.ticker}
           />
+          <Item title="Asset ID" value={assetId} />
           <Item
             title="Schema"
             value={

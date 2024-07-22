@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -19,6 +19,7 @@ function TransactionsList({
   navigation,
   wallet,
   coin,
+  assetId = '',
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -26,6 +27,7 @@ function TransactionsList({
   navigation;
   wallet;
   coin: string;
+  assetId: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -40,9 +42,9 @@ function TransactionsList({
         </AppText>
         <AppTouchable
           onPress={() => {
-            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
-              transactions,
-              wallet,
+            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+              assetId: assetId,
+              transactions: transactions,
             });
           }}>
           <AppText variant="smallCTA" style={styles.viewAllText}>
@@ -54,8 +56,13 @@ function TransactionsList({
       <FlatList
         style={styles.container}
         data={transactions}
-        refreshing={isLoading}
-        onRefresh={() => refresh()}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => refresh()}
+            tintColor={theme.colors.primaryCTA}
+          />
+        }
         renderItem={({ item }) => (
           <AssetTransaction
             transId={item.status.toUpperCase()}

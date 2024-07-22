@@ -11,7 +11,7 @@ function WalletAllTransactions({ route }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
   const theme: AppTheme = useTheme();
-  const { transactions, wallet } = route.params;
+  const { transactions, wallet, coin } = route.params;
 
   return (
     <ScreenContainer>
@@ -19,7 +19,11 @@ function WalletAllTransactions({ route }) {
         title={walletTranslations.allTransactionsTitle}
         subTitle={walletTranslations.allTransactionSubTitle}
       />
-      <WalletTransactionList transactions={transactions} wallet={wallet} />
+      <WalletTransactionList
+        transactions={transactions}
+        wallet={wallet}
+        coin={coin}
+      />
     </ScreenContainer>
   );
 }

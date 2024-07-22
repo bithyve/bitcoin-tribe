@@ -4,6 +4,7 @@ import { View, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
+import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -26,10 +27,11 @@ function SendEnterAddress({
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
-
   const onProceed = (paymentInfo: string) => {
     paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(wallet.networkType);
+    const network = WalletUtilities.getNetworkByType(
+      wallet && wallet.networkType,
+    );
 
     let {
       type: paymentInfoKind,
@@ -53,11 +55,9 @@ function SendEnterAddress({
         });
         break;
       default:
-        // Toast('Invalid Bitcoin address'); // toast not working
-        Alert.alert('Invalid Bitcoin address');
+        Toast('Invalid Bitcoin address');
     }
   };
-
   return (
     <View style={styles.container}>
       <TextField

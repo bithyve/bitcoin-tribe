@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -20,20 +20,21 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
+import content from 'src/loc';
 
 const SendAssetScreen = () => {
   const { assetId } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { home, common } = translations;
   const [invoice, setInvoice] = useState('');
   const [amount, setAmount] = useState('');
+  const [inputHeight, setInputHeight] = React.useState(100);
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
     return !invoice || !amount;
   }, [invoice, amount]);
@@ -97,7 +98,13 @@ const SendAssetScreen = () => {
         value={invoice}
         onChangeText={text => setInvoice(text)}
         placeholder={'Invoice'}
-        style={styles.input}
+        style={[styles.input, invoice && styles.invoiceInputStyle]}
+        onContentSizeChange={event => {
+          setInputHeight(event.nativeEvent.contentSize.height);
+        }}
+        multiline={true}
+        numberOfLines={5}
+        contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
       />
 
       <TextField
@@ -122,10 +129,23 @@ const SendAssetScreen = () => {
   );
 };
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(10),
+    },
+    invoiceInputStyle: {
+      borderRadius: hp(20),
+      height: Math.max(100, inputHeight),
+    },
+    contentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(80, inputHeight),
+    },
+    contentStyle1: {
+      height: hp(50),
     },
     buttonWrapper: {
       marginTop: hp(20),
