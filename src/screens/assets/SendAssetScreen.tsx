@@ -1,4 +1,4 @@
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -20,7 +20,6 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
-import content from 'src/loc';
 
 const SendAssetScreen = () => {
   const { assetId } = useRoute().params;
@@ -143,6 +142,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginVertical: hp(25),
       marginBottom: 0,
       height: Math.max(80, inputHeight),
+      marginTop: 0,
     },
     contentStyle1: {
       height: hp(50),

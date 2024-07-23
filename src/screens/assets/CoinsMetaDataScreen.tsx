@@ -15,7 +15,7 @@ import { RealmSchema } from 'src/storage/enum';
 import Colors from 'src/theme/Colors';
 import moment from 'moment';
 
-const Item = ({ title, value }) => {
+export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -43,7 +43,7 @@ const CoinsMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
 
   useEffect(() => {
-    mutate({ assetId });
+    mutate({ assetId, schema: RealmSchema.Coin });
   }, []);
 
   return (
