@@ -22,6 +22,7 @@ import {
   AssetTransactionSchema,
   MetaData,
 } from './coin';
+import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 
 export default [
   TribeAppSchema,
@@ -46,4 +47,6 @@ export default [
   BalanceSchema,
   AssetTransactionSchema,
   MetaData,
+  CollectibleMediaSchema,
+  CollectibleSchema,
 ];

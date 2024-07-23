@@ -8,9 +8,10 @@ import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
+import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 
 type AssetsListProps = {
-  listData: any;
+  listData: Asset[];
   onPressAsset?: () => void;
   onPressAddNew?: () => void;
 };
@@ -79,18 +80,34 @@ function AssetsList(props: AssetsListProps) {
         alwaysBounceVertical={false}>
         <View style={styles.assetWrapper}>
           {listData.map((item, index) => {
-            return (
-              <Item
-                key={index}
-                name={item.name}
-                details={item.balance.spendable}
-                tag="COIN"
-                onPressAsset={() => onPressAsset(item)}
-                onPressAddNew={onPressAddNew}
-                index={index}
-                ticker={item.ticker}
-              />
-            );
+            if (item.assetIface === AssetFace.RGB20) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COIN"
+                  onPressAsset={() => onPressAsset(item)}
+                  onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                />
+              );
+            } else if (item.assetIface === AssetFace.RGB25) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COLLECTIBLE"
+                  onPressAsset={() => onPressAsset(item)}
+                  onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                  image={`file://${item.media.filePath}`}
+                />
+              );
+            }
           })}
           <AddNewTile title={'Add New'} onPress={onPressAddNew} />
         </View>

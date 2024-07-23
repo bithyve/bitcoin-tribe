@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useTheme } from 'react-native-paper';
+import { Avatar, SegmentedButtons, useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -20,6 +20,10 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
+import { AssetType } from 'src/models/interfaces/RGBWallet';
+import pickImage from 'src/utils/imagePicker';
+import AppTouchable from 'src/components/AppTouchable';
+import IconImage from 'src/assets/images/icon_image.svg';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -29,10 +33,13 @@ function IssueScreen() {
   const { home, common, assets } = translations;
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
+  const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const [loading, setLoading] = useState(false);
+  const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
+  const [image, setImage] = useState('');
 
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
@@ -55,18 +62,51 @@ function IssueScreen() {
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
+  const issueCollectible = useCallback(async () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    const response = await ApiHandler.issueNewCollectible({
+      name: assetName.trim(),
+      description: description,
+      supply: totalSupplyAmt,
+      filePath: image.path.replace('file://', ''),
+    });
+    console.log(response);
+    setLoading(false);
+    if (response?.assetId) {
+      Toast(assets.assetCreateMsg);
+      navigation.goBack();
+    } else if (response?.error === 'Insufficient sats for RGB') {
+      setTimeout(() => {
+        setShowErrorModal(true);
+      }, 500);
+    } else if (response?.error) {
+      Toast(`Failed: ${response?.error}`);
+    }
+  }, [
+    assetName,
+    assets.assetCreateMsg,
+    description,
+    image.path,
+    navigation,
+    totalSupplyAmt,
+  ]);
+
   useEffect(() => {
     if (createUtxos.error) {
       Toast(assets.insufficientSatsMainWallet);
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
-      issueCoin();
+      onPressIssue();
     }
   }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, issueCoin]);
 
   const isButtonDisabled = useMemo(() => {
-    return !assetName || !assetTicker || !totalSupplyAmt;
-  }, [assetName, assetTicker, totalSupplyAmt]);
+    if (assetType === AssetType.Coin) {
+      return !assetName || !assetTicker || !totalSupplyAmt;
+    }
+    return !assetName || !description || !totalSupplyAmt || !image;
+  }, [assetName, assetTicker, totalSupplyAmt, image, description, assetType]);
 
   const handleAmtChangeText = text => {
     const positiveNumberRegex = /^\d*[1-9]\d*$/;
@@ -74,6 +114,24 @@ function IssueScreen() {
       setTotalSupplyAmt(text);
     } else {
       setTotalSupplyAmt('');
+    }
+  };
+
+  const handlePickImage = async () => {
+    Keyboard.dismiss();
+    try {
+      const result = await pickImage(1000, 1000, false);
+      setImage(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onPressIssue = () => {
+    if (assetType === AssetType.Coin) {
+      issueCoin();
+    } else {
+      issueCollectible();
     }
   };
 
@@ -88,36 +146,96 @@ function IssueScreen() {
           createUtxos.mutate();
         }}
       />
-      <TextField
-        value={assetName}
-        onChangeText={text => setAssetName(text)}
-        placeholder={home.assetName}
-        maxLength={32}
-        style={styles.input}
-        autoCapitalize="words"
+      <SegmentedButtons
+        value={assetType}
+        onValueChange={value => setAssetType(value)}
+        buttons={[
+          {
+            value: AssetType.Coin,
+            label: 'Coin',
+          },
+          {
+            value: AssetType.Collectible,
+            label: 'Collectible',
+          },
+        ]}
       />
+      {assetType === AssetType.Coin ? (
+        <View>
+          <TextField
+            value={assetName}
+            onChangeText={text => setAssetName(text)}
+            placeholder={home.assetName}
+            maxLength={32}
+            style={styles.input}
+            autoCapitalize="words"
+          />
 
-      <TextField
-        value={assetTicker}
-        onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-        placeholder={home.assetTicker}
-        maxLength={8}
-        style={styles.input}
-        autoCapitalize="characters"
-      />
+          <TextField
+            value={assetTicker}
+            onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+            placeholder={home.assetTicker}
+            maxLength={8}
+            style={styles.input}
+            autoCapitalize="characters"
+          />
 
-      <TextField
-        value={totalSupplyAmt}
-        onChangeText={handleAmtChangeText}
-        placeholder={home.totalSupplyAmount}
-        keyboardType="numeric"
-        style={styles.input}
-      />
+          <TextField
+            value={totalSupplyAmt}
+            onChangeText={handleAmtChangeText}
+            placeholder={home.totalSupplyAmount}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+        </View>
+      ) : (
+        <View>
+          <AppTouchable
+            style={{ marginVertical: 20 }}
+            onPress={handlePickImage}>
+            {image === '' ? (
+              <View
+                style={{
+                  height: 150,
+                  width: 150,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <IconImage />
+              </View>
+            ) : (
+              <Avatar.Image size={150} source={{ uri: image.path }} />
+            )}
+          </AppTouchable>
+          <TextField
+            value={assetName}
+            onChangeText={text => setAssetName(text)}
+            placeholder={home.assetName}
+            maxLength={32}
+            style={styles.input}
+            autoCapitalize="words"
+          />
+          <TextField
+            value={description}
+            onChangeText={text => setDescription(text)}
+            placeholder={home.assetDescription}
+            maxLength={32}
+            style={styles.input}
+          />
+          <TextField
+            value={totalSupplyAmt}
+            onChangeText={handleAmtChangeText}
+            placeholder={home.totalSupplyAmount}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+        </View>
+      )}
 
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={issueCoin}
+          primaryOnPress={onPressIssue}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled}
