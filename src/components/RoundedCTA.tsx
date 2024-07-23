@@ -47,7 +47,7 @@ const getStyles = width =>
     },
     roundedCTATitle: {
       fontSize: 13,
-      fontFamily: Fonts.PoppinsSemiBold,
+      fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 13 * 1.5,
       height: 18,
       marginLeft: 10,

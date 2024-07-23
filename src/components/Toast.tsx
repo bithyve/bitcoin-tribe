@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     color: Colors.RaisinBlack,
     marginLeft: wp(8),
     fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
     flex: 1,
     flexWrap: 'wrap',
     fontWeight: '600',

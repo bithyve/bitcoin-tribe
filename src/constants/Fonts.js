@@ -1,7 +1,7 @@
 export default {
-  PoppinsLight: 'Poppins-Light',
-  PoppinsSemiBold: 'Poppins-SemiBold',
-  PoppinsRegular: 'Poppins-Regular',
-  PoppinsMedium: 'Poppins-Medium',
-  PoppinsBold: 'Poppins-Bold',
+  LufgaBold: 'LufgaBold',
+  LufgaSemiBold: 'LufgaSemiBold',
+  LufgaRegular: 'LufgaRegular',
+  LufgaMedium: 'LufgaMedium',
+  LufgaBold: 'LufgaBold',
 };

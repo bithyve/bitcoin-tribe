@@ -121,7 +121,7 @@ const getStyles = (theme: AppTheme) =>
     },
     bottomNavigation: {
       fontSize: 11,
-      fontFamily: Fonts.PoppinsSemiBold,
+      fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 11 * 1.4,
       height: 15,
     },

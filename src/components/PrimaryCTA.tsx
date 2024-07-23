@@ -65,7 +65,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     primaryCTATitle: {
       fontSize: 14,
-      fontFamily: Fonts.PoppinsSemiBold,
+      fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 14 * 1.4,
       height: 18,
     },

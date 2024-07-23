@@ -26,7 +26,7 @@ function WalletSetupOption({ navigation }) {
       </AppText>
       <OptionCard
         icon={<IconWallet />}
-        title={onBoarding.createNew}
+        title={onBoarding.createNew + 'g'}
         subTitle={onBoarding.createNewSubTitle}
         onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
       />

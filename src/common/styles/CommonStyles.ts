@@ -5,79 +5,79 @@ import Fonts from 'src/constants/Fonts';
 export default StyleSheet.create({
   heading1: {
     fontSize: 18,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
   },
   heading2: {
     fontSize: 16,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
   },
   heading3: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
   },
   pageTitle1: {
     fontSize: 20,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
   },
   pageTitle2: {
     fontSize: 24,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
   },
   subTitle: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsRegular,
+    fontFamily: Fonts.LufgaRegular,
   },
   body1: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsRegular,
+    fontFamily: Fonts.LufgaRegular,
   },
   body2: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsRegular,
+    fontFamily: Fonts.LufgaRegular,
   },
   body3: {
     fontSize: 16,
-    fontFamily: Fonts.PoppinsRegular,
+    fontFamily: Fonts.LufgaRegular,
   },
   body4: {
     fontSize: 16,
-    fontFamily: Fonts.PoppinsLight,
+    fontFamily: Fonts.LufgaLight,
   },
   body5: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   body6: {
     fontSize: 18,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   body7: {
     fontSize: 22,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   placeholder: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   textFieldLabel: {
     fontSize: 15,
-    fontFamily: Fonts.PoppinsMedium,
+    fontFamily: Fonts.LufgaMedium,
     fontWeight: '600',
   },
   secondaryCta: {
     fontSize: 13,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   subtitle2: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   smallCTA: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   walletBalance: {
     fontSize: 39,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
 });
