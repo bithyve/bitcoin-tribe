@@ -37,11 +37,10 @@
 	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Poppins-Bold.ttf</string>
-		<string>Poppins-Italic.ttf</string>
-		<string>Poppins-Medium.ttf</string>
-		<string>Poppins-Regular.ttf</string>
-		<string>Poppins-SemiBold.ttf</string>
+		<string>LufgaBold.ttf</string>
+		<string>LufgaMedium.ttf</string>
+		<string>LufgaRegular.ttf</string>
+		<string>LufgaSemiBold.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
