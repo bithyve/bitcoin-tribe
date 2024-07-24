@@ -371,6 +371,9 @@ export class ApiHandler {
       if (assets.nia) {
         dbManager.createObjectBulk(RealmSchema.Coin, assets.nia);
       }
+      if (assets.cfa) {
+        dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
+      }
     } catch (error) {
       console.log('refreshRgbWallet', error);
     }
@@ -401,18 +404,47 @@ export class ApiHandler {
     }
   }
 
-  static async getAssetTransactions({ assetId }: { assetId: string }) {
+  static async issueNewCollectible({
+    name,
+    description,
+    supply,
+    filePath,
+  }: {
+    name: string;
+    description: string;
+    supply: string;
+    filePath: string;
+  }) {
+    try {
+      const response = await RGBServices.issueRgb25Asset(
+        name,
+        description,
+        `${supply}`,
+        filePath,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      console.log('refreshRgbWallet', error);
+      throw new Error(error);
+    }
+  }
+
+  static async getAssetTransactions({
+    assetId,
+    schema,
+  }: {
+    assetId: string;
+    schema: RealmSchema;
+  }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
       if (response.length > 0) {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.Coin,
-          'assetId',
-          assetId,
-          {
-            transactions: response,
-          },
-        );
+        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          transactions: response,
+        });
       }
       return response;
     } catch (error) {
@@ -452,18 +484,19 @@ export class ApiHandler {
     }
   }
 
-  static async getAssetMetaData({ assetId }: { assetId: string }) {
+  static async getAssetMetaData({
+    assetId,
+    schema,
+  }: {
+    assetId: string;
+    schema: RealmSchema;
+  }) {
     try {
       const response = await RGBServices.getRgbAssetMetaData(assetId);
       if (response) {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.Coin,
-          'assetId',
-          assetId,
-          {
-            metaData: response,
-          },
-        );
+        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          metaData: response,
+        });
       }
       console.log(response);
       return response;
