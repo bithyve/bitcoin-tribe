@@ -4,37 +4,52 @@ import Fonts from 'src/constants/Fonts';
 
 export default StyleSheet.create({
   heading1: {
-    fontSize: 18,
+    fontSize: 25,
+    fontWeight: '700',
     fontFamily: Fonts.LufgaMedium,
   },
   heading2: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: '600',
     fontFamily: Fonts.LufgaMedium,
   },
   heading3: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: '600',
     fontFamily: Fonts.LufgaMedium,
   },
+  //page title should be removed
   pageTitle1: {
-    fontSize: 20,
+    fontSize: 48,
+    fontWeight: '500',
+    lineHeight: 60,
     fontFamily: Fonts.LufgaMedium,
   },
   pageTitle2: {
     fontSize: 24,
     fontFamily: Fonts.LufgaMedium,
   },
+  //end
   subTitle: {
     fontSize: 14,
     fontFamily: Fonts.LufgaRegular,
   },
   body1: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '300',
     fontFamily: Fonts.LufgaRegular,
   },
   body2: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: '700',
     fontFamily: Fonts.LufgaRegular,
   },
+  caption: {
+    fontSize: 12,
+    fontWeight: '600',
+    fontFamily: Fonts.LufgaRegular,
+  },
+  // Should be removed - body 3, 4, 5, 6 and 7
   body3: {
     fontSize: 16,
     fontFamily: Fonts.LufgaRegular,
@@ -55,6 +70,7 @@ export default StyleSheet.create({
     fontSize: 22,
     fontFamily: Fonts.LufgaBold,
   },
+  // end
   placeholder: {
     fontSize: 14,
     fontFamily: Fonts.LufgaBold,
