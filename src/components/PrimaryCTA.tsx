@@ -55,7 +55,7 @@ const getStyles = (theme: AppTheme, width) =>
       alignItems: 'center',
     },
     ctaContainerStyle: {
-      borderRadius: 10,
+      borderRadius: 18,
       marginVertical: hp(20),
       width: width,
     },
@@ -70,10 +70,10 @@ const getStyles = (theme: AppTheme, width) =>
       height: 18,
     },
     disableButton: {
-      borderRadius: 10,
+      borderRadius: 18,
       marginVertical: hp(20),
       width: width,
-      backgroundColor: theme.colors.disabledCTAColor,
+      backgroundColor: theme.colors.disableCtaBackColor,
     },
   });
 export default PrimaryCTA;

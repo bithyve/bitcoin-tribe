@@ -16,6 +16,7 @@ type PrimaryCTAProps = {
   secondaryTitle?: string;
   primaryLoading?: boolean;
   disabled?: boolean;
+  buttonColor?: string;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -27,6 +28,7 @@ function Buttons(props: PrimaryCTAProps) {
     secondaryOnPress,
     primaryLoading,
     disabled,
+    buttonColor,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -41,6 +43,7 @@ function Buttons(props: PrimaryCTAProps) {
         width={width}
         loading={primaryLoading}
         disabled={disabled}
+        buttonColor={buttonColor}
       />
     </View>
   );
@@ -51,10 +54,6 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       alignSelf: 'flex-end',
       alignItems: 'center',
-    },
-    seconadryTitleStyle: {
-      color: theme.colors.primaryCTA,
-      marginRight: wp(10),
     },
   });
 export default Buttons;
