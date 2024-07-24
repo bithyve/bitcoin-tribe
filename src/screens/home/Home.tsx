@@ -86,7 +86,9 @@ function HomeScreen() {
           }
           onPressNotification={() => console.log('notification')}
           onPressProfile={() =>
-            handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
+            handleScreenNavigation(NavigationRoutes.WALLETDETAILS, {
+              autoRefresh: true,
+            })
           }
         />
       </View>
