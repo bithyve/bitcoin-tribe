@@ -32,7 +32,9 @@ function EditWalletProfile({ navigation }) {
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
       Toast(wallet.profileUpdateMsg, true);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS);
+      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+        autoRefresh: true,
+      });
     } else {
       Toast(wallet.profileUpdateErrMsg);
     }
