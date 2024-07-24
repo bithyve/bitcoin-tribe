@@ -52,7 +52,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      padding: hp(20),
+      padding: hp(16),
       marginVertical: hp(5),
       borderRadius: 30,
       borderColor: theme.colors.borderColor,
