@@ -61,7 +61,7 @@ function AppHeader(props: AppHeaderProps) {
       {title || subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="pageTitle1" style={styles.headerTitle}>
+            <AppText variant="pageTitle2" style={styles.headerTitle}>
               {title}
             </AppText>
             <AppText variant="body1" style={styles.headerSubTitle}>

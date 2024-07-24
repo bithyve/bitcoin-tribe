@@ -28,7 +28,7 @@ function AddPicture(props: addPictureProps) {
             <IconImage />
           </View>
           <View>
-            <AppText variant="smallCTA" style={styles.addPictureText}>
+            <AppText variant="heading3" style={styles.addPictureText}>
               {title}
             </AppText>
           </View>
@@ -50,15 +50,16 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(40),
     },
     iconImageWrapper: {
-      height: windowHeight > 650 ? hp(75) : 75,
-      width: windowHeight > 650 ? hp(75) : 75,
+      height: windowHeight > 670 ? hp(75) : 75,
+      width: windowHeight > 670 ? hp(75) : 75,
       borderRadius: hp(70),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.profileBackground,
+      marginHorizontal: windowHeight < 670 ? hp(10) : hp(3),
     },
     addPictureText: {
-      color: theme.colors.accent1,
+      color: theme.colors.headingColor,
       marginLeft: wp(10),
     },
   });
