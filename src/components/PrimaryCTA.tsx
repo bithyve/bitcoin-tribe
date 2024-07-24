@@ -21,7 +21,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     onPress,
     title,
     width = wp(120),
-    buttonColor = theme.colors.primaryCTA,
+    buttonColor = theme.colors.ctaBackColor,
     loading,
     disabled = false,
   } = props;

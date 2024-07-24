@@ -98,7 +98,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryOnPress={secondaryOnPress}
             primaryLoading={primaryStatus === 'loading'}
             disabled={disabled}
-            buttonColor={theme.colors.ctaBackColor}
           />
         </ScrollView>
       </KeyboardAvoidingView>
