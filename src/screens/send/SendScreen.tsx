@@ -50,21 +50,7 @@ const getStyles = (theme: AppTheme) =>
     advanceOptionStyle: {
       flex: 1,
       position: 'absolute',
-      bottom: 10,
-      margin: hp(20),
-    },
-    qrCodeContainer: {
-      height: wp(340),
-      width: wp(340),
-      alignSelf: 'center',
-      justifyContent: 'center',
-      marginTop: wp(35),
-      borderRadius: wp(8),
-      overflow: 'hidden',
-    },
-    camera: {
-      height: wp(340),
-      width: wp(340),
+      bottom: 0,
     },
   });
 export default SendScreen;

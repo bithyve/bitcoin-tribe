@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
     height: windowHeight < 670 ? '42%' : '35%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: wp(25),
+    padding: wp(16),
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '53%' : '60%',
-    marginHorizontal: wp(25),
+    height: windowHeight < 670 ? '50%' : '65%',
+    marginHorizontal: wp(16),
   },
 });
 export default WalletDetails;

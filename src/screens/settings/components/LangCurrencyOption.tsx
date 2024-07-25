@@ -31,7 +31,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
           <AppText variant="body1" style={styles.titleText}>
             {title}
           </AppText>
-          <AppText variant="body2" style={styles.subTitleText}>
+          <AppText variant="heading3" style={styles.subTitleText}>
             {subTitle}
           </AppText>
         </View>
@@ -75,7 +75,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.accent3,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     langCurrencyStyle: {
       color: theme.colors.accent2,

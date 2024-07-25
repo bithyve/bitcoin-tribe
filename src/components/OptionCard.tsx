@@ -22,7 +22,7 @@ function OptionCard(props: OptionCardProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable onPress={() => onPress()}>
+    <AppTouchable onPress={onPress}>
       <GradientView
         style={[styles.container, style]}
         colors={[
