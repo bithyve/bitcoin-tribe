@@ -140,7 +140,7 @@ const getStyles = (theme: AppTheme, icon, rightText) =>
     },
     textStyles: {
       color: theme.colors.headingColor,
-      marginTop: hp(5),
+      // marginTop: hp(5),
     },
     underlineStyle: {
       backgroundColor: 'transparent',
