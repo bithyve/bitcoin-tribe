@@ -64,10 +64,10 @@ const getStyles = (theme: AppTheme, width) =>
       marginVertical: hp(20),
     },
     primaryCTATitle: {
-      fontSize: 14,
+      fontSize: 16,
       fontFamily: Fonts.LufgaSemiBold,
-      lineHeight: 14 * 1.4,
-      height: 18,
+      lineHeight: 16 * 1.4,
+      fontWeight: '500',
     },
   });
 

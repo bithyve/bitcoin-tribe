@@ -40,6 +40,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={disabled ? styles.disableButton : styles.ctaContainerStyle}
       buttonColor={buttonColor}
+      textColor={theme.colors.primaryCTAText}
       onPress={onPress}
       maxFontSizeMultiplier={1}
       loading={loading}
@@ -64,10 +65,11 @@ const getStyles = (theme: AppTheme, width) =>
       marginVertical: hp(20),
     },
     primaryCTATitle: {
-      fontSize: 14,
+      fontSize: 16,
       fontFamily: Fonts.LufgaSemiBold,
-      lineHeight: 14 * 1.4,
-      height: 18,
+      lineHeight: 16 * 1.4,
+      height: 20,
+      fontWeight: '500',
     },
     disableButton: {
       borderRadius: 18,
