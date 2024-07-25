@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 
 import { AppTheme } from 'src/theme';
 
@@ -25,7 +25,9 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.primaryBackground,
-      padding: hp(15),
+      paddingHorizontal: hp(16),
+      paddingBottom: hp(16),
+      paddingTop: windowHeight < 675 ? hp(16) : hp(10),
     },
   });
 export default ScreenContainer;

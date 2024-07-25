@@ -56,7 +56,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.profileBackground,
-      marginHorizontal: windowHeight < 670 ? hp(10) : hp(3),
+      marginHorizontal: hp(3),
     },
     addPictureText: {
       color: theme.colors.headingColor,

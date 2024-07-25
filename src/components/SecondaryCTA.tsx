@@ -12,7 +12,7 @@ type secondaryCTAProps = {
   width?: number;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
-  const { title, onPress, width = undefined } = props;
+  const { title, onPress, width = wp(120) } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, width);
 
@@ -47,8 +47,8 @@ function SecondaryCTA(props: secondaryCTAProps) {
 const getStyles = (theme: AppTheme, width) =>
   StyleSheet.create({
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      // flexDirection: 'row',
+      // alignItems: 'center',
       borderRadius: 18,
       marginHorizontal: 10,
     },
@@ -60,8 +60,8 @@ const getStyles = (theme: AppTheme, width) =>
       borderWidth: 1,
     },
     labelStyle: {
-      minWidth: width,
-      marginVertical: hp(18),
+      // minWidth: width,
+      marginVertical: hp(20),
     },
     primaryCTATitle: {
       fontSize: 14,

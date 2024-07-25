@@ -61,10 +61,10 @@ function AppHeader(props: AppHeaderProps) {
       {title || subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="pageTitle2" style={styles.headerTitle}>
+            <AppText variant="heading1" style={styles.headerTitle}>
               {title}
             </AppText>
-            <AppText variant="body1" style={styles.headerSubTitle}>
+            <AppText variant="heading3" style={styles.headerSubTitle}>
               {subTitle}
             </AppText>
           </View>
@@ -98,28 +98,9 @@ const getStyles = (theme: AppTheme, actionText) =>
       marginTop: hp(15),
       marginBottom: hp(20),
     },
-    leftIconWrapper: {
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.4,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-    },
+    leftIconWrapper: {},
     rightIconWrapper: {
       alignSelf: 'flex-end',
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.6,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
     },
     detailsWrapper: {
       flexDirection: 'row',

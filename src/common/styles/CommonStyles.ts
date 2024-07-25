@@ -5,7 +5,7 @@ import Fonts from 'src/constants/Fonts';
 export default StyleSheet.create({
   heading1: {
     fontSize: 25,
-    fontWeight: '700',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
   heading2: {
@@ -15,18 +15,19 @@ export default StyleSheet.create({
   },
   heading3: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
-  //page title should be removed
   pageTitle1: {
     fontSize: 48,
     fontWeight: '500',
     lineHeight: 60,
     fontFamily: Fonts.LufgaMedium,
   },
+  //page title should be removed
   pageTitle2: {
-    fontSize: 24,
+    fontSize: 25,
+    fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
   //end

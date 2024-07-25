@@ -9,7 +9,7 @@ import {
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { windowHeight } from 'src/constants/responsive';
+import { windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
@@ -64,11 +64,11 @@ function ProfileDetails(props: ProfileDetailsProps) {
       />
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        behavior={'padding'}
         enabled
         keyboardVerticalOffset={Platform.select({
           ios: windowHeight > 670 ? 0 : 5,
-          android: 500,
+          android: 0,
         })}>
         <ScrollView
           contentContainerStyle={styles.scrollView}
@@ -106,7 +106,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 0,
     flex: 1,
   },
   wrapper: {

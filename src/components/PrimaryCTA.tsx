@@ -56,12 +56,12 @@ const getStyles = (theme: AppTheme, width) =>
     },
     ctaContainerStyle: {
       borderRadius: 18,
-      marginVertical: hp(20),
+      // marginVertical: hp(20),
       width: width,
     },
     labelStyle: {
       // minWidth: width,
-      marginVertical: hp(18),
+      marginVertical: hp(20),
     },
     primaryCTATitle: {
       fontSize: 14,
@@ -71,7 +71,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     disableButton: {
       borderRadius: 18,
-      marginVertical: hp(20),
+      // marginVertical: hp(20),
       width: width,
       backgroundColor: theme.colors.disableCtaBackColor,
     },
