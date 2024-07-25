@@ -21,5 +21,7 @@ const Colors = {
   White: 'rgba(255, 255, 255,1)',
   Quartz: 'rgba(75, 75, 75, 1)',
   CharlestonGreen: 'rgba(36, 38, 43, 1)',
+  Golden: 'rgba(255, 214, 0, 1)',
+  ScreaminGreen: 'rgba(116, 255, 81, 1)',
 };
 export default Colors;

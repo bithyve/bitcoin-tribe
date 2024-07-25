@@ -27,7 +27,7 @@ export default (message, icon = false, error = false) => {
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: Colors.ChineseOrange,
+      backgroundColor: Colors.ScreaminGreen,
       textColor: Colors.RaisinBlack,
       containerStyle: { marginBottom: (windowWidth * 22) / 100 },
     },

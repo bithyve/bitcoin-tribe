@@ -62,7 +62,7 @@ const CombinedDefaultTheme: AppTheme = {
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.SelectiveYellow,
+    accent1: Colors.Golden,
     accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
 
@@ -98,7 +98,7 @@ const CombinedDarkTheme: AppTheme = {
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.SelectiveYellow,
+    accent1: Colors.Golden,
     accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
