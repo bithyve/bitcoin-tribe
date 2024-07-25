@@ -53,7 +53,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       padding: hp(16),
-      marginVertical: hp(5),
+      marginVertical: hp(10),
       borderRadius: 30,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
