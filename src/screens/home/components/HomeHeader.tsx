@@ -71,7 +71,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '77%',
+      width: '70%',
       alignItems: 'center',
     },
     userDetailsWrapper: {
@@ -89,7 +89,7 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(2),
     },
     iconWrapper: {
-      width: '23%',
+      width: '30%',
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
