@@ -25,10 +25,20 @@ import NodeSettings from 'src/screens/settings/NodeSettings';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
-import ReceiveAsset from 'src/screens/collectiblesCoins/ReceiveAsset';
+import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
+import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
+import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
+import SendAsset from 'src/screens/assets/SendAssetScreen';
+import CollectibleMetaData from 'src/screens/assets/CollectibleMetaDataScreen';
+import AppInfo from 'src/screens/settings/AppInfo';
+import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
+import TransferDetails from 'src/screens/wallet/TransferDetails';
+import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
+import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
+import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -121,6 +131,40 @@ function AppStack() {
           component={BroadcastTransaction}
         />
         <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
+        <Stack.Screen
+          name={NavigationRoutes.COINDETAILS}
+          component={CoinDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COLLECTIBLEDETAILS}
+          component={CollectibleDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COINMETADATA}
+          component={CoinMetaData}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COLLECTIBLEMETADATA}
+          component={CollectibleMetaData}
+        />
+        <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
+        <Stack.Screen name={NavigationRoutes.APPINFO} component={AppInfo} />
+        <Stack.Screen
+          name={NavigationRoutes.APPVERSIONHISTORY}
+          component={AppVersionHistory}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSFERDETAILS}
+          component={TransferDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COINALLTRANSACTION}
+          component={CoinAllTransaction}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.VIEWUNSPENT}
+          component={ViewUnspent}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );

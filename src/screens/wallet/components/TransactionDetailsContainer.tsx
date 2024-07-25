@@ -53,11 +53,17 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         content={numberWithCommas(`${transaction.fee}`)}
       />
       <LabeledContent
-        label={wallet.confirmations}
-        content={`${
-          transaction.confirmations > 6 ? '6+' : transaction.confirmations
-        }`}
+        label={wallet.amount}
+        content={numberWithCommas(`${transAmount}`)}
       />
+      {transaction.confirmations && transaction.confirmations !== 0 ? (
+        <LabeledContent
+          label={wallet.confirmations}
+          content={`${
+            transaction.confirmations > 6 ? '6+' : transaction.confirmations
+          }`}
+        />
+      ) : null}
     </View>
   );
 }

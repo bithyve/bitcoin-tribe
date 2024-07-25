@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
@@ -11,7 +11,7 @@ import AppText from 'src/components/AppText';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TransactionPrerequisite } from 'src/services/wallets/interfaces';
 import { TxPriority } from 'src/services/wallets/enums';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { useNavigation } from '@react-navigation/native';
@@ -36,39 +36,30 @@ function BroadcastTxnContainer({
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  const [executeSendPhaseTwo, setExecuteSendPhaseTwo] = React.useState(false);
-  const queryClient = useQueryClient();
 
-  const sendPhaseTwoQuery = useQuery(
-    'send_phase_two',
-    async () => {
-      return await ApiHandler.sendPhaseTwo({
-        sender: wallet,
-        recipient: {
-          address,
-          amount: Number(amount),
-        },
-        txPrerequisites,
-        txPriority: selectedPriority,
+  const sendPhaseTwoMutation = useMutation(ApiHandler.sendPhaseTwo);
+
+  useEffect(() => {
+    if (sendPhaseTwoMutation.status === 'success') {
+      Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`);
+      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+        autoRefresh: true,
       });
-    },
-    {
-      enabled: executeSendPhaseTwo,
-      onSettled: () => {
-        if (sendPhaseTwoQuery.status === 'success') {
-          Toast(`Send successful, txid: ${sendPhaseTwoQuery.data}`);
-          navigation.navigate(NavigationRoutes.WALLETDETAILS);
-        } else if (sendPhaseTwoQuery.status === 'error') {
-          Toast(`Error while sending: ${sendPhaseTwoQuery.error}`);
-        }
-        setExecuteSendPhaseTwo(false);
-      },
-    },
-  );
+    } else if (sendPhaseTwoMutation.status === 'error') {
+      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`);
+    }
+  }, [sendPhaseTwoMutation]);
 
   const initiateSendPhaseTwo = () => {
-    queryClient.invalidateQueries('send_phase_two');
-    setExecuteSendPhaseTwo(true);
+    sendPhaseTwoMutation.mutate({
+      sender: wallet,
+      recipient: {
+        address,
+        amount: Number(amount),
+      },
+      txPrerequisites,
+      txPriority: selectedPriority,
+    });
   };
 
   return (

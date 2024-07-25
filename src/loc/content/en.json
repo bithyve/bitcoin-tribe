@@ -17,7 +17,9 @@
     "delete": "DELETE",
     "confirmAndProceed": "Confirm & Proceed",
     "sendMax": "SEND MAX",
-    "broadcast": "Broadcast"
+    "broadcast": "Broadcast",
+    "walletID": "Wallet ID",
+    "versionHistory": "Version History"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -44,7 +46,7 @@
     "assetName": "Asset Name",
     "assetTicker": "Asset ticker",
     "assetDescription": "Asset Description",
-    "totalSupplyAmount": "Total Supply Amount",
+    "totalSupplyAmount": "Total Supply",
     "attachFile": "Attach file",
     "receiveAssetNote": "Lorem ipsum dolor sit amet"
   },
@@ -85,14 +87,19 @@
     "connectNodeManuallySubTitle": "Enter lightning details",
     "enterNodeName": "Enter Node name",
     "enterCredentials": "Enter credentials",
-    "enterAddress": "Enter address"
+    "enterAddress": "Enter address",
+    "walletIDSubTitle": "This ID is unique to your Bitcoin Tribe App",
+    "versionHistorySubTitle": "View app’s current version & its history",
+    "appInfoTitle": "App Info",
+    "appInfoScreenSubTitle": "Bitcoin Tribe app version number & details"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
     "addAmountTitle": "Add Amount",
     "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
     "placeHolderText": "Enter Amount",
-    "invoiceAddress": "Invoice Address",
+    "invoiceAddress": "RGB Invoice",
+    "bitcoinAddress": "Bitcoin Address",
     "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
   },
   "sendScreen": {
@@ -136,6 +143,20 @@
     "buyWithRampSubTitle": "Low fee for those big buys",
     "noUTXOYet": "No transactions yet",
     "noUTXOYetSubTitle": "Lorem ipsum dolor sit amet,",
-    "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor"
+    "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor",
+    "profileUpdateMsg": "Profile update successfully!",
+    "profileUpdateErrMsg": "Failed to update!",
+    "status": "Status",
+    "amount": "Amount",
+    "date": "Date",
+    "transferDetails": "Transfer Details",
+    "viewUnspent": "View Unspent UTXOs"
+  },
+  "assets": {
+    "assetCreateMsg": "Asset created successfully",
+    "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
+    "insufficientSats": "Insufficient sats, failed to create new UTXOs",
+    "receiveAssetTitle": "Receive Assset",
+    "receiveAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit,"
   }
 }

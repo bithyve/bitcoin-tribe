@@ -15,13 +15,14 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery as realmUseQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
 
-function WalletDetails({ navigation }) {
+function WalletDetails({ navigation, route }) {
+  const { autoRefresh = false } = route.params || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [visible, setVisible] = useState(false);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
 
   useEffect(() => {
@@ -50,11 +51,12 @@ function WalletDetails({ navigation }) {
           navigation={navigation}
           transactions={wallet.specs.transactions}
           wallet={wallet}
+          autoRefresh={autoRefresh}
         />
       </View>
       <ModalContainer
         title={common.buy}
-        subTitle={app.buySubtitle}
+        subTitle={walletTranslations.buySubtitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <BuyModal />
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 650 ? '42%' : '35%',
+    height: windowHeight < 670 ? '42%' : '35%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(25),
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 650 ? '53%' : '65%',
+    height: windowHeight < 670 ? '53%' : '60%',
     marginHorizontal: wp(25),
   },
 });

@@ -127,25 +127,6 @@ class RestClient {
     };
   }
 
-  async initWhirlpoolTor() {
-    try {
-      const port = await tor.startIfNotStarted();
-      if (port) {
-        console.log('Whirlpool tor started on PORT: ', port);
-        RestClient.whirlpoolTorPort = port;
-      } else {
-        console.log('failed to init whrlp tor');
-      }
-    } catch (error) {
-      console.log('tor whrlp connect error', error);
-      await tor.stopIfRunning();
-    }
-  }
-
-  stopWhirlpoolTor() {
-    tor.stopIfRunning();
-  }
-
   async post(
     path: string,
     body: object,

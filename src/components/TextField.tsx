@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 
 import { hp } from 'src/constants/responsive';
@@ -21,6 +27,13 @@ type TextFieldProps = {
   autoFocus?: boolean;
   rightText?: string;
   onRightTextPress?: () => void;
+  inputStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
+  multiline?: boolean;
+  numberOfLines?: number;
+  onContentSizeChange?: (event) => void;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -37,6 +50,13 @@ const TextField = (props: TextFieldProps) => {
     autoFocus = false,
     rightText,
     onRightTextPress,
+    inputStyle,
+    style,
+    autoCapitalize = undefined,
+    multiline = false,
+    numberOfLines,
+    onContentSizeChange,
+    contentStyle,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
@@ -45,7 +65,7 @@ const TextField = (props: TextFieldProps) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
         disabled={disabled}
@@ -54,7 +74,7 @@ const TextField = (props: TextFieldProps) => {
         textColor={theme.colors.headingColor}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholder}
-        style={styles.inputContainer}
+        style={[styles.inputContainer, inputStyle]}
         underlineStyle={styles.underlineStyle}
         contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
         value={value}
@@ -65,6 +85,11 @@ const TextField = (props: TextFieldProps) => {
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
         autoFocus={autoFocus}
+        autoCapitalize={autoCapitalize}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        onContentSizeChange={onContentSizeChange}
+        contentStyle={contentStyle}
       />
       {rightText && (
         <AppTouchable

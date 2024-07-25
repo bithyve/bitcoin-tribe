@@ -114,6 +114,56 @@ export default class WalletOperations {
     };
   };
 
+  public static getNextFreeChangeAddress = (
+    wallet: Wallet | Vault,
+  ): { changeAddress: string } => {
+    let changeAddress;
+    const { entityKind, specs, networkType } = wallet;
+    const network = WalletUtilities.getNetworkByType(networkType);
+
+    const cached = idx(
+      specs,
+      _ => _.addresses.internal[specs.nextFreeChangeAddressIndex],
+    ); // address cache hit
+    if (cached) {
+      return { changeAddress: cached };
+    }
+
+    if ((wallet as Vault).isMultiSig) {
+      // case: multi-sig vault
+      changeAddress = WalletUtilities.createMultiSig(
+        wallet as Vault,
+        specs.nextFreeChangeAddressIndex,
+        true,
+      ).address;
+    } else {
+      // case: single-sig vault/wallet
+      const xpub =
+        entityKind === EntityKind.VAULT
+          ? (specs as VaultSpecs).xpubs[0]
+          : (specs as WalletSpecs).xpub;
+      const derivationPath = (wallet as Wallet)?.derivationDetails
+        ?.xDerivationPath;
+
+      const purpose =
+        entityKind === EntityKind.VAULT
+          ? undefined
+          : WalletUtilities.getPurpose(derivationPath);
+
+      changeAddress = WalletUtilities.getAddressByIndex(
+        xpub,
+        true,
+        specs.nextFreeChangeAddressIndex,
+        network,
+        purpose,
+      );
+    }
+
+    return {
+      changeAddress,
+    };
+  };
+
   static getNextFreeAddress = (wallet: Wallet | Vault) => {
     if (wallet.specs.receivingAddress) {
       return wallet.specs.receivingAddress;
@@ -490,16 +540,22 @@ export default class WalletOperations {
       consumedUTXOs[input.txId] = input;
     });
 
-    // update primary utxo set and balance
-    const updatedUTXOSet = [];
-
+    // update the utxo set and balance
+    const updatedConfirmedUTXOSet = [];
     wallet.specs.confirmedUTXOs.forEach(confirmedUTXO => {
       if (!consumedUTXOs[confirmedUTXO.txId]) {
-        updatedUTXOSet.push(confirmedUTXO);
+        updatedConfirmedUTXOSet.push(confirmedUTXO);
       }
     });
+    wallet.specs.confirmedUTXOs = updatedConfirmedUTXOSet;
 
-    wallet.specs.confirmedUTXOs = updatedUTXOSet;
+    const updatedUnconfirmedUTXOSet = [];
+    wallet.specs.unconfirmedUTXOs.forEach(unconfirmedUTXO => {
+      if (!consumedUTXOs[unconfirmedUTXO.txId]) {
+        updatedUnconfirmedUTXOSet.push(unconfirmedUTXO);
+      }
+    });
+    wallet.specs.unconfirmedUTXOs = updatedUnconfirmedUTXOSet;
   };
 
   static mockFeeRates = () => {
@@ -672,7 +728,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     let confirmedBalance = 0;
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
@@ -724,7 +780,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     let confirmedBalance = 0;
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
@@ -826,7 +882,7 @@ export default class WalletOperations {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
-        : wallet.specs.confirmedUTXOs;
+        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
     const { inputs, outputs, fee } = coinselect(
       inputUTXOs,
       outputUTXOs,

@@ -8,49 +8,48 @@ import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
+import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 
 type AssetsListProps = {
-  AssetsData: any;
+  listData: Asset[];
   onPressAsset?: () => void;
   onPressAddNew?: () => void;
 };
 type ItemProps = {
-  title: string;
+  name: string;
   details?: string;
-  asset?: any;
+  image?: string;
   tag?: string;
   onPressAddNew?: () => void;
-  onPressAsset?: () => void;
+  onPressAsset?: (item: any) => void;
   index?: number;
+  ticker?: string;
 };
 const ASSET_HEIGHT = hp(205);
 const ASSET_MARGIN = hp(6) * 2;
 const ASSET_ALTERNATE_SPACE = hp(50);
 const Item = ({
-  asset,
-  title,
+  name,
+  image,
   details,
   tag,
-  onPressAddNew,
   onPressAsset,
   index,
+  ticker,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
     <View style={styles.alternateSpace}>
-      {asset ? (
-        <AssetCard
-          asset={asset}
-          title={title}
-          details={details}
-          tag={tag}
-          onPress={onPressAsset}
-        />
-      ) : (
-        <AddNewTile title={title} onPress={onPressAddNew} />
-      )}
+      <AssetCard
+        image={image}
+        name={name}
+        details={details}
+        tag={tag}
+        onPress={onPressAsset}
+        ticker={ticker}
+      />
     </View>
   );
 };
@@ -68,7 +67,7 @@ const ListHeaderComponent = () => {
 };
 
 function AssetsList(props: AssetsListProps) {
-  const { AssetsData, onPressAsset, onPressAddNew } = props;
+  const { listData, onPressAsset, onPressAddNew } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -80,20 +79,37 @@ function AssetsList(props: AssetsListProps) {
         directionalLockEnabled={true}
         alwaysBounceVertical={false}>
         <View style={styles.assetWrapper}>
-          {AssetsData.map((item, index) => {
-            return (
-              <Item
-                key={index}
-                title={item.title}
-                asset={item.asset}
-                details={item.details}
-                tag={item.tag}
-                onPressAsset={onPressAsset}
-                onPressAddNew={onPressAddNew}
-                index={index}
-              />
-            );
+          {listData.map((item, index) => {
+            if (item.assetIface === AssetFace.RGB20) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COIN"
+                  onPressAsset={() => onPressAsset(item)}
+                  onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                />
+              );
+            } else if (item.assetIface === AssetFace.RGB25) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COLLECTIBLE"
+                  onPressAsset={() => onPressAsset(item)}
+                  onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                  image={`file://${item.media.filePath}`}
+                />
+              );
+            }
           })}
+          <AddNewTile title={'Add New'} onPress={onPressAddNew} />
         </View>
       </ScrollView>
     </View>

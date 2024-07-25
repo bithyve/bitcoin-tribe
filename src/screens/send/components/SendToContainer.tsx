@@ -16,7 +16,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import idx from 'idx';
 import Toast from 'src/components/Toast';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 
 function SendToContainer({
@@ -37,57 +37,46 @@ function SendToContainer({
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
-  const [executeSendPhaseOne, setExecuteSendPhaseOne] = useState(false);
 
-  const queryClient = useQueryClient();
-
-  const sendPhaseOneQuery = useQuery(
-    'send_phase_one',
-    async () => {
-      return await ApiHandler.sendPhaseOne({
-        sender: wallet,
-        recipient: {
-          address,
-          amount: Number(amount),
-        },
-      });
-    },
-    {
-      enabled: executeSendPhaseOne,
-      onSettled: () => {
-        if (sendPhaseOneQuery.status === 'success') {
-          navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
-            wallet,
-            address,
-            amount,
-            txPrerequisites: sendPhaseOneQuery.data,
-          });
-        } else if (sendPhaseOneQuery.status === 'error') {
-          Toast(`Error while sending: ${sendPhaseOneQuery.error}`);
-        }
-        setExecuteSendPhaseOne(false);
-      },
-    },
-  );
+  const sendPhaseOneMutation = useMutation(ApiHandler.sendPhaseOne);
 
   useEffect(() => {
-    const balance = idx(wallet, _ => _.specs.balances);
-    const availableToSpend = balance.confirmed;
-    if (availableToSpend < Number(amount)) {
-      setInsufficientBalance(true);
-    } else {
-      setInsufficientBalance(false);
+    if (sendPhaseOneMutation.status === 'success') {
+      navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
+        wallet,
+        address,
+        amount,
+        txPrerequisites: sendPhaseOneMutation.data,
+      });
+    } else if (sendPhaseOneMutation.status === 'error') {
+      Toast(`Error while sending: ${sendPhaseOneMutation.error}`);
     }
-  }, [amount, wallet]);
+  }, [sendPhaseOneMutation]);
 
   const initiateSendPhaseOne = () => {
     if (insufficientBalance) {
       Toast('Amount entered is more than available to spend');
       return;
     }
-    queryClient.invalidateQueries('send_phase_one');
-    setExecuteSendPhaseOne(true);
+
+    sendPhaseOneMutation.mutate({
+      sender: wallet,
+      recipient: {
+        address,
+        amount: Number(amount),
+      },
+    });
   };
+
+  useEffect(() => {
+    const balance = idx(wallet, _ => _.specs.balances);
+    const availableToSpend = balance.confirmed + balance.unconfirmed;
+    if (availableToSpend < Number(amount)) {
+      setInsufficientBalance(true);
+    } else {
+      setInsufficientBalance(false);
+    }
+  }, [amount, wallet]);
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -125,7 +114,8 @@ function SendToContainer({
           value={amount}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
-          keyboardType={'default'}
+          // keyboardType={'default'}
+          disabled={true}
           icon={<IconBitcoin />}
           // rightText={common.sendMax}
           // onRightTextPress={() => {}}

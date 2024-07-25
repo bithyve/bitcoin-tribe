@@ -17,6 +17,7 @@ import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -26,11 +27,21 @@ type WalletTransactionsProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
+  tranStatus?: string;
+  coin?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
-  const { transId, transDate, transAmount, transType, backColor, disabled } =
-    props;
+  const {
+    transId,
+    transDate,
+    transAmount,
+    transType,
+    backColor,
+    disabled,
+    tranStatus,
+    coin,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
 
@@ -39,9 +50,14 @@ function WalletTransactions(props: WalletTransactionsProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
-          transaction: props.transaction,
-        })
+        tranStatus
+          ? navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+              transaction: props.transaction,
+              coin: coin,
+            })
+          : navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+              transaction: props.transaction,
+            })
       }>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
@@ -63,7 +79,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {tranStatus ? Capitalize(tranStatus) : transId}
             </AppText>
             <AppText variant="body2" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm a')}
