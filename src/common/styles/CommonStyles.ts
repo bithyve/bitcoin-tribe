@@ -77,9 +77,9 @@ export default StyleSheet.create({
     fontFamily: Fonts.LufgaBold,
   },
   textFieldLabel: {
-    fontSize: 15,
-    fontFamily: Fonts.LufgaMedium,
-    fontWeight: '600',
+    fontSize: 16,
+    fontFamily: Fonts.LufgaRegular,
+    fontWeight: '400',
   },
   secondaryCta: {
     fontSize: 13,
