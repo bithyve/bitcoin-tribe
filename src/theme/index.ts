@@ -33,6 +33,8 @@ type CustomColors = {
   secondaryCtaTitleColor: string;
   ctaBackColor: string;
   disableCtaBackColor: string;
+  secondaryHeadingColor: string;
+  primaryCTAText: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -54,16 +56,19 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient3: Colors.ChineseBlack,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
-    bodyColor: Colors.Quartz,
+    secondaryHeadingColor: Colors.Quartz,
+    bodyColor: Colors.White,
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
-    profileBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.Black,
+    accent1: Colors.Golden,
+    primaryCTAText: Colors.Black,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.Golden,
+
     accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
 
@@ -90,16 +95,18 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient3: Colors.ChineseBlack,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
+    secondaryHeadingColor: Colors.Quartz,
     bodyColor: Colors.Quartz,
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
-    profileBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.Black,
+    accent1: Colors.Golden,
+    primaryCTAText: Colors.Black,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.Golden,
     accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,

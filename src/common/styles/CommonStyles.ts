@@ -37,7 +37,7 @@ export default StyleSheet.create({
   },
   body1: {
     fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
   },
   body2: {

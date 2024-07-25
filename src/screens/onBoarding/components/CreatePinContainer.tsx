@@ -100,11 +100,14 @@ function CreatePinContainer() {
   return (
     <>
       <View style={styles.contentContainer}>
-        <PinInputsView passCode={passcode} />
+        <PinInputsView passCode={passcode} showCursor={true} />
         <AppText variant="heading3" style={styles.labelText}>
           {onBoarding.confirmPin}
         </AppText>
-        <PinInputsView passCode={confirmPasscode} />
+        <PinInputsView
+          passCode={confirmPasscode}
+          showCursor={passcode.length === 4}
+        />
       </View>
       <Buttons
         primaryTitle={common.proceed}
@@ -132,7 +135,7 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(15),
     },
     labelText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
       marginTop: hp(15),
     },
   });

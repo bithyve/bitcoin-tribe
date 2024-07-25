@@ -82,7 +82,7 @@ function ProfileSetup({ navigation }) {
         onSettingsPress={() => {
           Keyboard.dismiss();
           // setVisible(true);
-          // navigation.navigate(NavigationRoutes.CREATEPIN);
+          navigation.navigate(NavigationRoutes.CREATEPIN);
         }}
         primaryStatus={query.status}
         disabled={name === ''}

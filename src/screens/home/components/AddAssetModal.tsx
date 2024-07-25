@@ -22,7 +22,7 @@ function AddAssetModal({ onDismiss }) {
     <View style={styles.container}>
       <SelectOption
         title={home.issueNew}
-        icon={<AddNewIcon />}
+        // icon={<AddNewIcon />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => {
@@ -33,7 +33,7 @@ function AddAssetModal({ onDismiss }) {
       />
       <SelectOption
         title={common.receive}
-        icon={<ReceiveIcon />}
+        // icon={<ReceiveIcon />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
         onPress={() => {

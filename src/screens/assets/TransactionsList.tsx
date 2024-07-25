@@ -47,7 +47,7 @@ function TransactionsList({
               transactions: transactions,
             });
           }}>
-          <AppText variant="smallCTA" style={styles.viewAllText}>
+          <AppText variant="body1" style={styles.viewAllText}>
             {walletTranslations.viewAll}
           </AppText>
         </AppTouchable>

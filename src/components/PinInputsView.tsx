@@ -11,10 +11,17 @@ type pinInputViewProps = {
   height?: number;
   width?: number;
   length?: number;
+  showCursor?: boolean;
 };
 
 function PinInputsView(props: pinInputViewProps) {
-  const { passCode, height = hp(50), width = wp(50), length = 4 } = props;
+  const {
+    passCode,
+    height = hp(50),
+    width = wp(50),
+    length = 4,
+    showCursor,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, height, width);
   const [hide, setHide] = useState(false);
@@ -38,7 +45,7 @@ function PinInputsView(props: pinInputViewProps) {
     if (passCode.length >= num) {
       return <View style={styles.dotView} />;
     }
-    if (passCode.length === num - 1) {
+    if (passCode.length === num - 1 && showCursor) {
       return <AppText style={styles.cursorStyle}>|</AppText>;
     }
     return '';

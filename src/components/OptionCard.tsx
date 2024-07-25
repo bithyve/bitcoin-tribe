@@ -71,7 +71,7 @@ const getStyles = (theme: AppTheme) =>
       lineHeight: 26,
     },
     menuCardSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     iconWrapper: {
       width: '15%',

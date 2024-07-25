@@ -114,7 +114,7 @@ const getStyles = (theme: AppTheme, actionText) =>
       color: theme.colors.headingColor,
     },
     headerSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     addNewWrapper: {
       width: '20%',

@@ -18,7 +18,7 @@ function WalletTransactionsContainer({ navigation, transactions, wallet }) {
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
-        <AppText variant="heading3" style={styles.recentTransText}>
+        <AppText variant="body1" style={styles.recentTransText}>
           {walletTranslations.recentTransaction}
         </AppText>
         <AppTouchable
@@ -28,7 +28,7 @@ function WalletTransactionsContainer({ navigation, transactions, wallet }) {
               wallet,
             })
           }>
-          <AppText variant="smallCTA" style={styles.viewAllText}>
+          <AppText variant="body1" style={styles.viewAllText}>
             {walletTranslations.viewAll}
           </AppText>
         </AppTouchable>
@@ -49,7 +49,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     recentTransText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     viewAllText: {
       color: theme.colors.accent1,

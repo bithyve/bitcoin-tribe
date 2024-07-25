@@ -68,7 +68,6 @@ const getStyles = (theme: AppTheme, width) =>
       fontSize: 16,
       fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
-      height: 20,
       fontWeight: '500',
     },
     disableButton: {
