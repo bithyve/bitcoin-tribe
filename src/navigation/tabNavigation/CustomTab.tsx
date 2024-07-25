@@ -22,6 +22,7 @@ import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
+import GradientView from 'src/components/GradientView';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -43,7 +44,13 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   };
 
   return (
-    <View style={styles.tabBar}>
+    <GradientView
+      style={styles.tabBar}
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -97,7 +104,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
           </TouchableOpacity>
         );
       })}
-    </View>
+    </GradientView>
   );
 };
 
@@ -106,7 +113,9 @@ const getStyles = (theme: AppTheme) =>
     tabBar: {
       flexDirection: 'row',
       borderRadius: 40,
-      backgroundColor: theme.colors.inputBackground,
+      // backgroundColor: theme.colors.inputBackground,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
       position: 'absolute',
       bottom: hp(15),
       height: hp(68),
