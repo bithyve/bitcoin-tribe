@@ -38,6 +38,7 @@ import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 import TransferDetails from 'src/screens/wallet/TransferDetails';
 import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
 import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
+import CreatePin from 'src/screens/onBoarding/CreatePin';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -54,6 +55,7 @@ function LoginStack() {
         name={NavigationRoutes.PROFILESETUP}
         component={ProfileSetup}
       />
+      <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
     </Stack.Navigator>
   );
 }

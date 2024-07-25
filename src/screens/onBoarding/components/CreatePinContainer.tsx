@@ -11,7 +11,7 @@ import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-function CreatePin() {
+function CreatePinContainer() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -98,19 +98,14 @@ function CreatePin() {
   }, [passcode, confirmPasscode]);
 
   return (
-    <View style={styles.container}>
-      {/* <AppText variant="body1" style={styles.labelText}>
-        {onBoarding.enterPin}
-      </AppText> */}
-      <PinInputsView passCode={passcode} />
-      {passcode.length === 4 ? (
-        <View>
-          <AppText variant="body1" style={styles.labelText}>
-            {onBoarding.confirmPin}
-          </AppText>
-          <PinInputsView passCode={confirmPasscode} />
-        </View>
-      ) : null}
+    <>
+      <View style={styles.contentContainer}>
+        <PinInputsView passCode={passcode} />
+        <AppText variant="heading3" style={styles.labelText}>
+          {onBoarding.confirmPin}
+        </AppText>
+        <PinInputsView passCode={confirmPasscode} />
+      </View>
       <Buttons
         primaryTitle={common.proceed}
         primaryOnPress={() => console.log('primary')}
@@ -124,18 +119,21 @@ function CreatePin() {
         keyColor={theme.colors.primaryCTA}
         ClearIcon={<DeleteIcon />}
       />
-    </View>
+    </>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    contentContainer: {
+      flex: 1,
+    },
     container: {
       width: '100%',
       marginTop: hp(15),
     },
     labelText: {
-      color: theme.colors.accent3,
+      color: theme.colors.bodyColor,
       marginTop: hp(15),
     },
   });
-export default CreatePin;
+export default CreatePinContainer;
