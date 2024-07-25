@@ -59,6 +59,7 @@ const CombinedDefaultTheme: AppTheme = {
     ctaBackColor: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.CharlestonGreen,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
@@ -68,7 +69,6 @@ const CombinedDefaultTheme: AppTheme = {
 
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
@@ -95,6 +95,7 @@ const CombinedDarkTheme: AppTheme = {
     ctaBackColor: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.CharlestonGreen,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
@@ -103,7 +104,6 @@ const CombinedDarkTheme: AppTheme = {
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
