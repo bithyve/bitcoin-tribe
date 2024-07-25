@@ -1,4 +1,13 @@
-<svg id="icon_senttxn" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <path id="Path_117619" data-name="Path 117619" d="M15,0A15,15,0,1,0,30,15,15,15,0,0,0,15,0Z" transform="translate(30 30) rotate(180)" fill="#fc4f4f"/>
-  <path id="Path_117620" data-name="Path 117620" d="M1.588.273A.93.93,0,0,0,.273,1.588L6.127,7.443H2.171a.93.93,0,0,0,0,1.861h6.2a.931.931,0,0,0,.93-.93v-6.2a.93.93,0,0,0-1.861,0V6.127Z" transform="translate(19.652 19.651) rotate(180)" fill="#212121"/>
+<svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="33.6274" height="33.6274" rx="7.5" fill="url(#paint0_linear_315_2010)"/>
+<rect x="0.5" y="0.5" width="33.6274" height="33.6274" rx="7.5" stroke="#FFD600"/>
+<path d="M20.8378 13.5311L13.7667 20.6022" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.146 13.5429L20.8377 13.5307L20.8259 19.2229" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_315_2010" x1="0.639275" y1="1.03882" x2="39.209" y2="8.54443" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1A1A1A"/>
+<stop offset="0.5" stop-color="#0B0B0B"/>
+<stop offset="1" stop-color="#121212"/>
+</linearGradient>
+</defs>
 </svg>
