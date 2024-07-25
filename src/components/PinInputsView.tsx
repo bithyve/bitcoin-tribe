@@ -17,8 +17,8 @@ type pinInputViewProps = {
 function PinInputsView(props: pinInputViewProps) {
   const {
     passCode,
-    height = hp(50),
-    width = wp(50),
+    height = hp(60),
+    width = wp(60),
     length = 4,
     showCursor,
   } = props;
@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme, height, width) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: theme.colors.inputBackground,
-      marginHorizontal: 4,
+      marginHorizontal: hp(5),
     },
     passcodeText: {
       color: theme.colors.headingColor,

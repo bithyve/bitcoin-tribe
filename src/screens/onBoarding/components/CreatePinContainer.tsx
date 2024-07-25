@@ -109,17 +109,19 @@ function CreatePinContainer() {
           showCursor={passcode.length === 4}
         />
       </View>
-      <Buttons
-        primaryTitle={common.proceed}
-        primaryOnPress={() => console.log('primary')}
-        secondaryTitle={common.cancel}
-        secondaryOnPress={() => console.log('secondary')}
-        width={wp(120)}
-      />
+      <View style={styles.ctaWrapper}>
+        <Buttons
+          primaryTitle={common.proceed}
+          primaryOnPress={() => console.log('primary')}
+          secondaryTitle={common.cancel}
+          secondaryOnPress={() => console.log('secondary')}
+          width={wp(120)}
+        />
+      </View>
       <KeyPadView
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
-        keyColor={theme.colors.primaryCTA}
+        keyColor={theme.colors.accent1}
         ClearIcon={<DeleteIcon />}
       />
     </>
@@ -130,9 +132,8 @@ const getStyles = (theme: AppTheme) =>
     contentContainer: {
       flex: 1,
     },
-    container: {
-      width: '100%',
-      marginTop: hp(15),
+    ctaWrapper: {
+      marginVertical: hp(10),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,
