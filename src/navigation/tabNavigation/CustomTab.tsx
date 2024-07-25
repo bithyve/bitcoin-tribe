@@ -32,11 +32,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <AssetsInActive />;
+        return isFocused && <AssetsActive />;
       case NavigationRoutes.COMMUNITY:
         return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <SettingsInActive />;
+        return isFocused && <SettingsActive />;
       default:
         return <TextIcon />;
     }
@@ -81,17 +81,19 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.tab}>
+            style={isFocused ? styles.activeTab : styles.inActiveTab}>
             <View>{TabBarIcon(isFocused, label)}</View>
-            {isFocused && (
-              <AppText
-                style={[
-                  styles.bottomNavigation,
-                  { color: isFocused ? theme.colors.primaryCTA : 'gray' },
-                ]}>
-                &nbsp;{Capitalize(label)}
-              </AppText>
-            )}
+            <AppText
+              style={[
+                styles.bottomNavigation,
+                {
+                  color: isFocused
+                    ? theme.colors.primaryCTAText
+                    : theme.colors.disablePrimaryCTAText,
+                },
+              ]}>
+              &nbsp;{Capitalize(label)}
+            </AppText>
           </TouchableOpacity>
         );
       })}
@@ -107,23 +109,32 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.inputBackground,
       position: 'absolute',
       bottom: hp(15),
-      height: hp(62),
+      height: hp(68),
       width: wp(295),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
-      paddingHorizontal: wp(30),
+      // paddingHorizontal: wp(30),
     },
-    tab: {
+    activeTab: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: '#FFF',
+      borderRadius: 20,
+      margin: 10,
+    },
+    inActiveTab: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     bottomNavigation: {
-      fontSize: 11,
+      fontSize: 14,
       fontFamily: Fonts.LufgaSemiBold,
-      lineHeight: 11 * 1.4,
-      height: 15,
+      lineHeight: 14 * 1.4,
+      fontWeight: '400',
+      // height: 15,
     },
   });
 
