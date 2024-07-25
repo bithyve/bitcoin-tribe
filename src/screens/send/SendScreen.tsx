@@ -27,8 +27,8 @@ function SendScreen({ route, navigation }) {
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
-        style={styles.advanceOptionStyle}
         onPress={() => {
+          console.log('send');
           receiveData === 'send'
             ? setVisible(true)
             : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
@@ -45,12 +45,5 @@ function SendScreen({ route, navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    advanceOptionStyle: {
-      flex: 1,
-      position: 'absolute',
-      bottom: 0,
-    },
-  });
+const getStyles = (theme: AppTheme) => StyleSheet.create({});
 export default SendScreen;
