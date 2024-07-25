@@ -14,11 +14,11 @@ import Fonts from 'src/constants/Fonts';
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
-import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
+// import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
-import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
+// import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
@@ -92,7 +92,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
                     : theme.colors.disablePrimaryCTAText,
                 },
               ]}>
-              &nbsp;{Capitalize(label)}
+              &nbsp;&nbsp;{Capitalize(label)}
             </AppText>
           </TouchableOpacity>
         );
