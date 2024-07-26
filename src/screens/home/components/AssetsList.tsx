@@ -69,7 +69,6 @@ function AssetsList(props: AssetsListProps) {
         alwaysBounceVertical={false}>
         <View style={styles.assetWrapper}>
           {listData.map((item, index) => {
-            console.log(' ===', item);
             if (item.assetIface.toUpperCase() === AssetFace.RGB20) {
               return (
                 <Item
