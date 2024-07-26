@@ -42,7 +42,9 @@ function BroadcastTxnContainer({
   useEffect(() => {
     if (sendPhaseTwoMutation.status === 'success') {
       Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS);
+      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+        autoRefresh: true,
+      });
     } else if (sendPhaseTwoMutation.status === 'error') {
       Toast(`Error while sending: ${sendPhaseTwoMutation.error}`);
     }

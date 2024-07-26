@@ -1,49 +1,28 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import AppText from 'src/components/AppText';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import { useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import Colors from 'src/theme/Colors';
-import moment from 'moment';
-
-export const Item = ({ title, value }) => {
-  const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
-  return (
-    <View style={styles.contentWrapper}>
-      <AppText
-        variant="body2"
-        style={[styles.assetDetailsText, styles.assetDetailsText2]}>
-        {title}
-      </AppText>
-      <AppText
-        variant="body1"
-        selectable
-        style={[styles.assetDetailsText, styles.assetDetailsText2]}>
-        {value}
-      </AppText>
-    </View>
-  );
-};
+import { Item } from './CoinsMetaDataScreen';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { assetId } = useRoute().params;
-  const coin = useObject<Coin>(RealmSchema.Coin, assetId);
+  const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
 
   useEffect(() => {
-    mutate({ assetId, schema: RealmSchema.Coin });
+    mutate({ assetId, schema: RealmSchema.Collectible });
   }, []);
 
   return (
@@ -55,37 +34,23 @@ const CoinsMetaDataScreen = () => {
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          <Item title="Name" value={coin && coin.name} />
-          <Item
-            title="Ticker"
-            value={coin && coin.metaData && coin.metaData.ticker}
+          <Image
+            source={{
+              uri: `file://${collectible.media.filePath}`,
+            }}
+            style={styles.imageStyle}
           />
+          <Item title="Name" value={collectible && collectible.name} />
+          <Item title="Details" value={collectible && collectible.details} />
+
           <Item title="Asset ID" value={assetId} />
           <Item
-            title="Schema"
-            value={
-              coin && coin.metaData && coin.metaData.assetSchema.toUpperCase()
-            }
-          />
-          <Item
-            title="Iface"
-            value={
-              coin && coin.metaData && coin.metaData.assetIface.toUpperCase()
-            }
-          />
-          <Item
             title="Issued Supply"
-            value={coin && coin.metaData && coin.metaData.issuedSupply}
-          />
-          <Item
-            title="Issued On"
-            value={moment(
-              coin && coin.metaData && coin.metaData.timestamp,
-            ).format('DD MMM YY • hh:mm A')}
-          />
-          <Item
-            title="Precision"
-            value={coin && coin.metaData && coin.metaData.precision}
+            value={
+              collectible &&
+              collectible.metaData &&
+              collectible.metaData.issuedSupply
+            }
           />
         </ScrollView>
       )}
@@ -141,6 +106,13 @@ const getStyles = (theme: AppTheme) =>
     scrollingContainer: {
       height: '60%',
       // marginHorizontal: wp(20),
+    },
+    imageStyle: {
+      width: 200,
+      height: 200,
+      borderRadius: 10,
+      alignSelf: 'center',
+      marginBottom: 20,
     },
   });
 

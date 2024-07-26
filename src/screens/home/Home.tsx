@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -19,7 +19,7 @@ import { useQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function HomeScreen() {
@@ -37,6 +37,12 @@ function HomeScreen() {
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+
+  const assets: Asset[] = useMemo(() => {
+    const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
+    return combiled.sort((a, b) => a.timestamp - b.timestamp);
+  }, [coins, collectibles]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
@@ -80,18 +86,27 @@ function HomeScreen() {
           }
           onPressNotification={() => console.log('notification')}
           onPressProfile={() =>
-            handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
+            handleScreenNavigation(NavigationRoutes.WALLETDETAILS, {
+              autoRefresh: true,
+            })
           }
         />
       </View>
+
       <AssetsList
-        listData={coins}
+        listData={assets}
         onPressAddNew={() => setVisible(true)}
-        onPressAsset={(asset: Coin) =>
-          handleScreenNavigation(NavigationRoutes.COINDETAILS, {
-            assetId: asset.assetId,
-          })
-        }
+        onPressAsset={(asset: Asset) => {
+          if (asset.assetIface === AssetFace.RGB20) {
+            handleScreenNavigation(NavigationRoutes.COINDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else {
+            handleScreenNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: asset.assetId,
+            });
+          }
+        }}
       />
       <ModalContainer
         title={home.addAssets}

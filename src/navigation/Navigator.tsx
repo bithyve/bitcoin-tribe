@@ -32,13 +32,14 @@ import ShowXPub from 'src/screens/wallet/ShowXPub';
 import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
 import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
 import SendAsset from 'src/screens/assets/SendAssetScreen';
-import CoinsMetaData from 'src/screens/assets/CoinsMetaDataScreen';
+import CollectibleMetaData from 'src/screens/assets/CollectibleMetaDataScreen';
 import AppInfo from 'src/screens/settings/AppInfo';
 import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 import TransferDetails from 'src/screens/wallet/TransferDetails';
 import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
 import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
 import CreatePin from 'src/screens/onBoarding/CreatePin';
+import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -137,8 +138,16 @@ function AppStack() {
           component={CoinDetails}
         />
         <Stack.Screen
+          name={NavigationRoutes.COLLECTIBLEDETAILS}
+          component={CollectibleDetails}
+        />
+        <Stack.Screen
           name={NavigationRoutes.COINMETADATA}
           component={CoinMetaData}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.COLLECTIBLEMETADATA}
+          component={CollectibleMetaData}
         />
         <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
         <Stack.Screen name={NavigationRoutes.APPINFO} component={AppInfo} />

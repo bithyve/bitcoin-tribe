@@ -21,4 +21,6 @@ export enum RealmSchema {
   Balance = 'Balance',
   AssetTransaction = 'AssetTransaction',
   MetaData = 'MetaData',
+  Collectible = 'Collectible',
+  CollectibleMedia = 'CollectibleMedia',
 }

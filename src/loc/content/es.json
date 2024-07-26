@@ -46,7 +46,7 @@
     "assetName": "Asset Name",
     "assetTicker": "Asset ticker",
     "assetDescription": "Asset Description",
-    "totalSupplyAmount": "Total Supply Amount",
+    "totalSupplyAmount": "Total Supply",
     "attachFile": "Attach file",
     "receiveAssetNote": "Lorem ipsum dolor sit amet",
     "totalBalance": "Total Balance"

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -17,11 +18,14 @@ function WalletTransactionList({
   transactions,
   wallet,
   coin,
+  autoRefresh,
 }: {
   transactions: Transaction[];
   wallet: Wallet;
   coin?: string;
+  autoRefresh?: boolean;
 }) {
+  const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -36,8 +40,14 @@ function WalletTransactionList({
   };
 
   useEffect(() => {
-    pullDownToRefresh(); // auto-refresh the wallet on mount
-  }, []);
+    if (autoRefresh && isFocused) {
+      pullDownToRefresh();
+    }
+  }, [autoRefresh && isFocused]);
+
+  // useEffect(() => {
+  //   pullDownToRefresh(); // auto-refresh the wallet on mount
+  // }, []);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {

@@ -7,9 +7,12 @@ import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
+import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useNavigation } from '@react-navigation/native';
 
 type AssetsListProps = {
-  listData: any;
+  listData: Asset[];
   onPressAsset?: () => void;
   onPressAddNew?: () => void;
 };
@@ -54,6 +57,7 @@ const Item = ({
 
 function AssetsList(props: AssetsListProps) {
   const { listData, onPressAsset, onPressAddNew } = props;
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -65,20 +69,44 @@ function AssetsList(props: AssetsListProps) {
         alwaysBounceVertical={false}>
         <View style={styles.assetWrapper}>
           {listData.map((item, index) => {
-            return (
-              <Item
-                key={index}
-                name={item.name}
-                details={item.balance.spendable}
-                tag="COIN"
-                onPressAsset={() => onPressAsset(item)}
-                onPressAddNew={onPressAddNew}
-                index={index}
-                ticker={item.ticker}
-              />
-            );
+            console.log(' ===', item);
+            if (item.assetIface.toUpperCase() === AssetFace.RGB20) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COIN"
+                  onPressAsset={() =>
+                    navigation.navigate(NavigationRoutes.COINDETAILS, {
+                      assetId: item.assetId,
+                    })
+                  }
+                  // onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                />
+              );
+            } else if (item.assetIface.toUpperCase() === AssetFace.RGB25) {
+              return (
+                <Item
+                  key={index}
+                  name={item.name}
+                  details={item.balance.spendable}
+                  tag="COLLECTIBLE"
+                  onPressAsset={() =>
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
+                      assetId: item.assetId,
+                    })
+                  }
+                  // onPressAddNew={onPressAddNew}
+                  index={index}
+                  ticker={item.ticker}
+                  image={`file://${item.media?.filePath}`}
+                />
+              );
+            }
           })}
-          {/* <AddNewTile title={'Add New'} onPress={onPressAddNew} /> */}
         </View>
       </ScrollView>
       <AppTouchable style={styles.addNewIconWrapper} onPress={onPressAddNew}>
@@ -99,7 +127,7 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 50,
+      bottom: 40,
       right: 30,
     },
   });
