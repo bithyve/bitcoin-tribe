@@ -36,6 +36,7 @@ type CustomColors = {
   secondaryHeadingColor: string;
   primaryCTAText: string;
   disablePrimaryCTAText: string;
+  activeTabColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -67,13 +68,12 @@ const CombinedDefaultTheme: AppTheme = {
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
+    accent2: Colors.TurquoiseBlue,
+    activeTabColor: Colors.White,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-
-    accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
-
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
     toggleBackground: Colors.Quartz,
@@ -107,10 +107,11 @@ const CombinedDarkTheme: AppTheme = {
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
+    accent2: Colors.TurquoiseBlue,
+    activeTabColor: Colors.White,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,

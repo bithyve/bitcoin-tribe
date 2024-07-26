@@ -23,5 +23,6 @@ const Colors = {
   CharlestonGreen: 'rgba(36, 38, 43, 1)',
   Golden: 'rgba(255, 214, 0, 1)',
   ScreaminGreen: 'rgba(116, 255, 81, 1)',
+  TurquoiseBlue: 'rgba(1, 255, 227, 1)',
 };
 export default Colors;
