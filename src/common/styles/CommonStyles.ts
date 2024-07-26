@@ -42,7 +42,7 @@ export default StyleSheet.create({
   },
   body2: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '500',
     fontFamily: Fonts.LufgaRegular,
   },
   caption: {

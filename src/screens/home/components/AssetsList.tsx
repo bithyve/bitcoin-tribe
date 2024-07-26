@@ -2,10 +2,11 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
-import AddNewTile from 'src/components/AddNewTile';
+import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
+import AppTouchable from 'src/components/AppTouchable';
 
 type AssetsListProps = {
   listData: any;
@@ -38,7 +39,7 @@ const Item = ({
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
-    <View style={styles.alternateSpace}>
+    <View>
       <AssetCard
         image={image}
         name={name}
@@ -56,7 +57,7 @@ function AssetsList(props: AssetsListProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <View>
+    <View style={styles.container}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -77,21 +78,29 @@ function AssetsList(props: AssetsListProps) {
               />
             );
           })}
-          <AddNewTile title={'Add New'} onPress={onPressAddNew} />
+          {/* <AddNewTile title={'Add New'} onPress={onPressAddNew} /> */}
         </View>
       </ScrollView>
+      <AppTouchable style={styles.addNewIconWrapper} onPress={onPressAddNew}>
+        <AddNewAsset />
+      </AppTouchable>
     </View>
   );
 }
 const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
+    container: {
+      position: 'relative',
+    },
     assetWrapper: {
       height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
       flexWrap: 'wrap',
       paddingLeft: wp(15),
     },
-    alternateSpace: {
-      marginTop: index % 4 === 2 ? hp(50) : 0,
+    addNewIconWrapper: {
+      position: 'absolute',
+      bottom: 50,
+      right: 30,
     },
   });
 export default AssetsList;
