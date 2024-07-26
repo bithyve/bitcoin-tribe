@@ -26,8 +26,8 @@ export default StyleSheet.create({
   },
   //page title should be removed
   pageTitle2: {
-    fontSize: 25,
-    fontWeight: '400',
+    fontSize: 36,
+    fontWeight: '500',
     fontFamily: Fonts.LufgaMedium,
   },
   //end

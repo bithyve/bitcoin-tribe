@@ -48,7 +48,8 @@
     "assetDescription": "Asset Description",
     "totalSupplyAmount": "Total Supply Amount",
     "attachFile": "Attach file",
-    "receiveAssetNote": "Lorem ipsum dolor sit amet"
+    "receiveAssetNote": "Lorem ipsum dolor sit amet",
+    "totalBalance": "Total Balance"
   },
   "settings": {
     "setting": "Settings",

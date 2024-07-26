@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
-import AppText from 'src/components/AppText';
 import AddNewTile from 'src/components/AddNewTile';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
 type AssetsListProps = {
@@ -53,25 +51,12 @@ const Item = ({
   );
 };
 
-const ListHeaderComponent = () => {
-  const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
-  const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
-  return (
-    <AppText variant="pageTitle2" style={styles.listHeaderText}>
-      {home.myAssets}
-    </AppText>
-  );
-};
-
 function AssetsList(props: AssetsListProps) {
   const { listData, onPressAsset, onPressAddNew } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View>
-      <ListHeaderComponent />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -100,14 +85,6 @@ function AssetsList(props: AssetsListProps) {
 }
 const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
-    container: {
-      marginVertical: hp(10),
-    },
-    listHeaderText: {
-      color: theme.colors.headingColor,
-      marginVertical: windowHeight < 650 ? hp(10) : hp(20),
-      marginLeft: wp(20),
-    },
     assetWrapper: {
       height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
       flexWrap: 'wrap',
