@@ -110,7 +110,8 @@ const getStyles = (theme: AppTheme) =>
     },
     balanceContainer: {
       alignItems: 'center',
-      marginVertical: hp(20),
+      marginTop: hp(30),
+      marginBottom: hp(5),
     },
     totalBalText: {
       color: theme.colors.secondaryHeadingColor,
