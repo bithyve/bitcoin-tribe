@@ -28,7 +28,7 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
-          uri: `file://${collectible.media.filePath}`,
+          uri: `file://${collectible.media?.filePath}`,
         }}
         style={styles.imageStyle}
       />

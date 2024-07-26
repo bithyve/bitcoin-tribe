@@ -33,15 +33,6 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient2,
           theme.colors.cardGradient3,
         ]}>
-        {/* <View style={styles.assetChipWrapper}>
-          <AssetChip
-            tagText={tag}
-            backColor={theme.colors.cardBackground}
-            tagColor={
-              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
-            }
-          />
-        </View> */}
         <View style={styles.assetImageWrapper}>
           {image ? (
             <Image
