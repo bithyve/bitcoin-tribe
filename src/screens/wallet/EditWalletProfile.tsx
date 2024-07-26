@@ -21,7 +21,7 @@ function EditWalletProfile({ navigation }) {
 
   const handlePickImage = async () => {
     try {
-      const result = await pickImage();
+      const result = await pickImage(300, 300, true);
       setProfileImage(result);
     } catch (error) {
       console.error(error);

@@ -22,7 +22,7 @@ const UserAvatar = (props: UserAvatarProps) => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
-      backgroundColor: theme.colors.profileBackground,
+      backgroundColor: theme.colors.inputBackground,
     },
   });
 export default UserAvatar;
