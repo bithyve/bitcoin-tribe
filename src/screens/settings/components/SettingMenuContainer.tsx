@@ -8,10 +8,10 @@ import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowHeight } from 'src/constants/responsive';
-import { Keys, Storage } from 'src/storage';
+import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
-function SettingMenuContainer() {
+function SettingMenuContainer({}) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
