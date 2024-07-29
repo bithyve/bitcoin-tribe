@@ -86,7 +86,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               &nbsp;{numberWithCommas(transAmount)}
             </AppText>
           </View>
-          {!disabled ? <IconArrow /> : null}
+          {/* {!disabled ? <IconArrow /> : null} */}
         </View>
       </View>
     </AppTouchable>
@@ -95,7 +95,9 @@ function AssetTransaction(props: AssetTransactionProps) {
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     containerWrapper: {
-      marginVertical: hp(15),
+      paddingVertical: hp(15),
+      borderBottomColor: theme.colors.borderColor,
+      borderBottomWidth: 1,
     },
     container: {
       flexDirection: 'row',
