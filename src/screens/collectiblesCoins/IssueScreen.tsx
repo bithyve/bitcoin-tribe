@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Avatar, SegmentedButtons, useTheme } from 'react-native-paper';
+import { Avatar, useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -24,6 +24,8 @@ import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import AppTouchable from 'src/components/AppTouchable';
 import IconImage from 'src/assets/images/icon_image.svg';
+import SegmentedButtons from 'src/components/SegmentedButtons';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -137,7 +139,7 @@ function IssueScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.issue} subTitle={home.issueSubTitle} />
+      <AppHeader />
       <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
@@ -152,86 +154,88 @@ function IssueScreen() {
         buttons={[
           {
             value: AssetType.Coin,
-            label: 'Coin',
+            label: 'Coins',
           },
           {
             value: AssetType.Collectible,
-            label: 'Collectible',
+            label: 'Collectibles',
           },
         ]}
+        // style={styles.segmentedButtonsStyle}
       />
-      {assetType === AssetType.Coin ? (
-        <View>
-          <TextField
-            value={assetName}
-            onChangeText={text => setAssetName(text)}
-            placeholder={home.assetName}
-            maxLength={32}
-            style={styles.input}
-            autoCapitalize="words"
-          />
+      <KeyboardAvoidView style={styles.contentWrapper}>
+        {assetType === AssetType.Coin ? (
+          <View>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
 
-          <TextField
-            value={assetTicker}
-            onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-            placeholder={home.assetTicker}
-            maxLength={8}
-            style={styles.input}
-            autoCapitalize="characters"
-          />
+            <TextField
+              value={assetTicker}
+              onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+              placeholder={home.assetTicker}
+              maxLength={8}
+              style={styles.input}
+              autoCapitalize="characters"
+            />
 
-          <TextField
-            value={totalSupplyAmt}
-            onChangeText={handleAmtChangeText}
-            placeholder={home.totalSupplyAmount}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-        </View>
-      ) : (
-        <View>
-          <AppTouchable
-            style={{ marginVertical: 20 }}
-            onPress={handlePickImage}>
-            {image === '' ? (
-              <View
-                style={{
-                  height: 150,
-                  width: 150,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <IconImage />
-              </View>
-            ) : (
-              <Avatar.Image size={150} source={{ uri: image.path }} />
-            )}
-          </AppTouchable>
-          <TextField
-            value={assetName}
-            onChangeText={text => setAssetName(text)}
-            placeholder={home.assetName}
-            maxLength={32}
-            style={styles.input}
-            autoCapitalize="words"
-          />
-          <TextField
-            value={description}
-            onChangeText={text => setDescription(text)}
-            placeholder={home.assetDescription}
-            maxLength={32}
-            style={styles.input}
-          />
-          <TextField
-            value={totalSupplyAmt}
-            onChangeText={handleAmtChangeText}
-            placeholder={home.totalSupplyAmount}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-        </View>
-      )}
-
+            <TextField
+              value={totalSupplyAmt}
+              onChangeText={handleAmtChangeText}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
+        ) : (
+          <View>
+            <AppTouchable
+              style={{ marginVertical: 20 }}
+              onPress={handlePickImage}>
+              {image === '' ? (
+                <View
+                  style={{
+                    height: 150,
+                    width: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconImage />
+                </View>
+              ) : (
+                <Avatar.Image size={150} source={{ uri: image.path }} />
+              )}
+            </AppTouchable>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+            <TextField
+              value={description}
+              onChangeText={text => setDescription(text)}
+              placeholder={home.assetDescription}
+              maxLength={32}
+              style={styles.input}
+            />
+            <TextField
+              value={totalSupplyAmt}
+              onChangeText={handleAmtChangeText}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
+        )}
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -249,10 +253,18 @@ function IssueScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     input: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(20),
+    },
+    contentWrapper: {
+      flex: 1,
+    },
+    segmentedButtonsStyle: {
+      backgroundColor: theme.colors.primaryBackground,
+      borderBottomColor: 'white',
+      borderBottomWidth: 1,
     },
   });
 export default IssueScreen;
