@@ -9,7 +9,7 @@ import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowHeight } from 'src/constants/responsive';
 
-function SettingMenuContainer() {
+function SettingMenuContainer({ toggleTheme, isThemeDark }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -25,8 +25,8 @@ function SettingMenuContainer() {
         subTitle={settings.darkModeSubTitle}
         icon={<IconDarkMode />}
         enableSwitch={true}
-        onValueChange={() => setDarkTheme(!darkTheme)}
-        toggleValue={darkTheme}
+        onValueChange={() => toggleTheme()}
+        toggleValue={isThemeDark}
         testID="dark_mode"
       />
       <SelectOption
