@@ -62,10 +62,7 @@ function SettingsScreen({ navigation }) {
       <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
-      <SettingMenuContainer
-        toggleTheme={toggleTheme}
-        isThemeDark={isThemeDark}
-      />
+      <SettingMenuContainer />
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );
