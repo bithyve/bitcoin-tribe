@@ -204,6 +204,7 @@ function IssueScreen() {
                   title={home.select}
                   icon={<IconImagePlaceholder />}
                   borderColor={theme.colors.accent1}
+                  // imagePath={image && image.path.replace('file://', '')}
                 />
               </View>
             </View>
@@ -253,6 +254,7 @@ function IssueScreen() {
               onPress={handlePickImage}
               title={home.uploadFile}
               icon={<UploadFile />}
+              imagePath={image && image.path.replace('file://', '')}
             />
           </View>
         )}
