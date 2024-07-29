@@ -185,7 +185,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.primaryCTA,
     },
     txnID: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default SendToContainer;

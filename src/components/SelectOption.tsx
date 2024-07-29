@@ -104,7 +104,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     titleStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     subTitleStyle: {
       color: theme.colors.secondaryHeadingColor,

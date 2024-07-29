@@ -58,13 +58,13 @@ const getStyles = (theme: AppTheme) =>
       //   borderStyle: 'dashed',
     },
     version: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     content: {
       backgroundColor: theme.colors.cardBackground,
       padding: 15,
       marginHorizontal: 15,
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       borderRadius: 10,
       shadowColor: theme.colors.shodowColor,
       shadowRadius: 0,
@@ -92,7 +92,7 @@ const getStyles = (theme: AppTheme) =>
       right: -6,
     },
     releaseNotes: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default VersionHistoryItem;

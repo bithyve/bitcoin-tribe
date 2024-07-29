@@ -116,7 +116,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     transIdText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     transDateText: {
       color: theme.colors.secondaryHeadingColor,
@@ -134,7 +134,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       justifyContent: 'flex-end',
     },
     amountText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     transPendingWrapper: {

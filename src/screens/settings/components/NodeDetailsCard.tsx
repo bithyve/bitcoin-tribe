@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme, status) =>
       // need to work
       shadowColor: theme.colors.cardShadowColor,
       shadowRadius: 1,
-      shadowOpacity: 0.20,
+      shadowOpacity: 0.2,
       elevation: 0.5,
       shadowOffset: {
         width: 0,
@@ -82,7 +82,7 @@ const getStyles = (theme: AppTheme, status) =>
       },
     },
     labelStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     wrapper1: {
       width: '45%',

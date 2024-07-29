@@ -141,7 +141,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       justifyContent: 'flex-end',
     },
     amountText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     transPendingWrapper: {

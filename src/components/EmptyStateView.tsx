@@ -34,10 +34,10 @@ const getStyles = (theme: AppTheme) =>
       marginTop: '40%',
     },
     titleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default EmptyStateView;
