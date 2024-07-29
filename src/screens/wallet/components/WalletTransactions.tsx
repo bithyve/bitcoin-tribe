@@ -81,7 +81,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               style={styles.transIdText}>
               {tranStatus ? Capitalize(tranStatus) : transId}
             </AppText>
-            <AppText variant="body2" style={styles.transDateText}>
+            <AppText variant="caption" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
@@ -121,10 +121,10 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     transIdText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     transDateText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountWrapper: {
       flexDirection: 'row',

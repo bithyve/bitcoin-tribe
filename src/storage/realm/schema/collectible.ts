@@ -18,7 +18,7 @@ export const CollectibleSchema: ObjectSchema = {
     assetId: 'string',
     assetIface: 'string',
     balance: RealmSchema.Balance,
-    details: 'string',
+    details: 'string?',
     issuedSupply: 'int',
     media: RealmSchema.CollectibleMedia,
     name: 'string',

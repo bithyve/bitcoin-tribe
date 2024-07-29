@@ -1,7 +1,9 @@
+import { Platform } from 'react-native';
+
 export default {
-  PoppinsLight: 'Poppins-Light',
-  PoppinsSemiBold: 'Poppins-SemiBold',
-  PoppinsRegular: 'Poppins-Regular',
-  PoppinsMedium: 'Poppins-Medium',
-  PoppinsBold: 'Poppins-Bold',
+  LufgaBold: Platform.OS === 'android' ? 'LufgaBold' : 'Lufga-Bold',
+  LufgaSemiBold: Platform.OS === 'android' ? 'LufgaSemiBold' : 'Lufga-SemiBold',
+  LufgaRegular: Platform.OS === 'android' ? 'LufgaRegular' : 'Lufga-Regular',
+  LufgaMedium: Platform.OS === 'android' ? 'LufgaMedium' : 'Lufga-Medium',
+  LufgaBold: Platform.OS === 'android' ? 'LufgaBold' : 'Lufga-Bold',
 };

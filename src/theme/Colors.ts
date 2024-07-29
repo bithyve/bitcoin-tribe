@@ -9,11 +9,20 @@ const Colors = {
   SonicSilver: 'rgba(116, 116, 116,1)',
   RaisinBlack: 'rgba(33, 33, 33, 1)',
   Arsenic: 'rgba(67, 67, 67, 1)',
-  Black: 'rgba(0, 0, 0, 1)',
   SilverSand: 'rgba(196, 196, 196,1)',
-  Quartz: 'rgba(75, 75, 75, 1)',
   QuickSilver: 'rgba(162, 162, 162, 1)',
-  White: 'rgba(255, 255, 255,1)',
   DarkSalmon: 'rgba(252, 142, 98, 1)',
+  // New UX
+  Black: 'rgba(0, 0, 0, 1)',
+  EerieBlack: 'rgba(26, 26, 26, 1)',
+  VampireBlack: 'rgba(11, 11, 11, 1)',
+  ChineseBlack: 'rgba(18, 18, 18, 1)',
+  DarkCharcoal: 'rgba(47, 47, 47, 1)',
+  White: 'rgba(255, 255, 255,1)',
+  Quartz: 'rgba(75, 75, 75, 1)',
+  CharlestonGreen: 'rgba(36, 38, 43, 1)',
+  Golden: 'rgba(255, 214, 0, 1)',
+  ScreaminGreen: 'rgba(116, 255, 81, 1)',
+  TurquoiseBlue: 'rgba(1, 255, 227, 1)',
 };
 export default Colors;

@@ -26,6 +26,17 @@ type CustomColors = {
   inActiveDotColor: string;
   cardShadowColor: string;
   disabledCTAColor: string;
+  //New UX
+  cardGradient1: string;
+  cardGradient2: string;
+  cardGradient3: string;
+  secondaryCtaTitleColor: string;
+  ctaBackColor: string;
+  disableCtaBackColor: string;
+  secondaryHeadingColor: string;
+  primaryCTAText: string;
+  disablePrimaryCTAText: string;
+  activeTabColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -40,20 +51,32 @@ const CombinedDefaultTheme: AppTheme = {
   colors: {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
-    primaryBackground: Colors.RaisinBlack,
+    // New UX
+    primaryBackground: Colors.Black,
+    cardGradient1: Colors.EerieBlack,
+    cardGradient2: Colors.VampireBlack,
+    cardGradient3: Colors.ChineseBlack,
+    borderColor: Colors.DarkCharcoal,
+    headingColor: Colors.White,
+    secondaryHeadingColor: Colors.Quartz,
+    bodyColor: Colors.White,
+    secondaryCtaTitleColor: Colors.White,
+    ctaBackColor: Colors.White,
+    disableCtaBackColor: Colors.ChineseWhite,
+    inputBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.Black,
+    accent1: Colors.Golden,
+    primaryCTAText: Colors.Black,
+    disablePrimaryCTAText: Colors.SonicSilver,
+    accent2: Colors.TurquoiseBlue,
+    activeTabColor: Colors.White,
+    //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.SelectiveYellow,
-    accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
-    inputBackground: Colors.Jet,
-    headingColor: Colors.ChineseWhite,
-    bodyColor: Colors.DarkGray,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
-    borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
@@ -67,20 +90,32 @@ const CombinedDarkTheme: AppTheme = {
   colors: {
     ...MD2DarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primaryBackground: Colors.RaisinBlack,
+    // New UX
+    primaryBackground: Colors.Black,
+    cardGradient1: Colors.EerieBlack,
+    cardGradient2: Colors.VampireBlack,
+    cardGradient3: Colors.ChineseBlack,
+    borderColor: Colors.DarkCharcoal,
+    headingColor: Colors.White,
+    secondaryHeadingColor: Colors.Quartz,
+    bodyColor: Colors.Quartz,
+    secondaryCtaTitleColor: Colors.White,
+    ctaBackColor: Colors.White,
+    disableCtaBackColor: Colors.ChineseWhite,
+    inputBackground: Colors.CharlestonGreen,
+    profileBackground: Colors.Black,
+    accent1: Colors.Golden,
+    primaryCTAText: Colors.Black,
+    disablePrimaryCTAText: Colors.SonicSilver,
+    accent2: Colors.TurquoiseBlue,
+    activeTabColor: Colors.White,
+    //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
-    accent1: Colors.SelectiveYellow,
-    accent2: Colors.Eucalyptus,
     accent3: Colors.SilverSand,
-    inputBackground: Colors.Jet,
-    headingColor: Colors.ChineseWhite,
-    bodyColor: Colors.DarkGray,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    profileBackground: Colors.Black,
     toggleBackground: Colors.Quartz,
-    borderColor: Colors.BorderChineseWhite,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,

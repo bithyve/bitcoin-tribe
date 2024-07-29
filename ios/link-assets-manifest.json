@@ -2,24 +2,20 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/Poppins-Bold.ttf",
-      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+      "path": "src/assets/fonts/LufgaBold.ttf",
+      "sha1": "a82d5592d14fd116c6e9d5f51dc66740e735c727"
     },
     {
-      "path": "src/assets/fonts/Poppins-Italic.ttf",
-      "sha1": "e2bfcd56016c3c915221ef1c5fc1a17b0776eb91"
+      "path": "src/assets/fonts/LufgaMedium.ttf",
+      "sha1": "b0bcb8b4847b97b53456e51657592a90ce0fe24c"
     },
     {
-      "path": "src/assets/fonts/Poppins-Medium.ttf",
-      "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
+      "path": "src/assets/fonts/LufgaRegular.ttf",
+      "sha1": "e800469ea070f9647688d0a8c2c87edc119666c7"
     },
     {
-      "path": "src/assets/fonts/Poppins-Regular.ttf",
-      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
-    },
-    {
-      "path": "src/assets/fonts/Poppins-SemiBold.ttf",
-      "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
+      "path": "src/assets/fonts/LufgaSemiBold.ttf",
+      "sha1": "b690ecdc1d62a1cee53157f316d6de2d0f09b194"
     }
   ]
 }

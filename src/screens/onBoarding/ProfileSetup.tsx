@@ -5,7 +5,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ModalContainer from 'src/components/ModalContainer';
-import CreatePin from './components/CreatePin';
+import CreatePin from './components/CreatePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -20,7 +20,7 @@ function ProfileSetup({ navigation }) {
   const { onBoarding } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
   const { setKey } = useContext(AppContext);
 
@@ -81,18 +81,19 @@ function ProfileSetup({ navigation }) {
         inputPlaceholder={onBoarding.enterName}
         onSettingsPress={() => {
           Keyboard.dismiss();
-          setVisible(true);
+          // setVisible(true);
+          navigation.navigate(NavigationRoutes.CREATEPIN);
         }}
         primaryStatus={query.status}
         disabled={name === ''}
       />
-      <ModalContainer
+      {/* <ModalContainer
         title={onBoarding.advanceSettingTitle}
         subTitle={onBoarding.enterPin}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />
-      </ModalContainer>
+      </ModalContainer> */}
     </ScreenContainer>
   );
 }

@@ -75,7 +75,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               style={styles.transIdText}>
               {Capitalize(transId)}
             </AppText>
-            <AppText variant="body2" style={styles.transDateText}>
+            <AppText variant="caption" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
@@ -117,7 +117,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       color: theme.colors.bodyColor,
     },
     transDateText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountWrapper: {
       flexDirection: 'row',

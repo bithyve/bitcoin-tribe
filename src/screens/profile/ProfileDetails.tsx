@@ -1,14 +1,21 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp } from 'src/constants/responsive';
+import { windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
 
 type ProfileDetailsProps = {
   title: string;
@@ -45,7 +52,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
-
+  const theme: AppTheme = useTheme();
   return (
     <>
       <AppHeader
@@ -55,23 +62,35 @@ function ProfileDetails(props: ProfileDetailsProps) {
         onSettingsPress={onSettingsPress}
         style={styles.wrapper}
       />
-      <KeyboardAvoidView>
-        <AddPicture
-          title={addPicTitle}
-          onPress={handlePickImage}
-          imageSource={profileImage}
-          edit={edit}
-        />
-        <TextField
-          value={inputValue}
-          onChangeText={onChangeText}
-          placeholder={inputPlaceholder}
-          keyboardType={'default'}
-          returnKeyType={'done'}
-          onSubmitEditing={primaryOnPress}
-          autoFocus={true}
-        />
-        <View style={styles.primaryCTAContainer}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={'padding'}
+        enabled
+        keyboardVerticalOffset={Platform.select({
+          ios: windowHeight > 670 ? 0 : 5,
+          android: 0,
+        })}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            <AddPicture
+              title={addPicTitle}
+              onPress={handlePickImage}
+              imageSource={profileImage}
+              edit={edit}
+            />
+            <TextField
+              value={inputValue}
+              onChangeText={onChangeText}
+              placeholder={inputPlaceholder}
+              keyboardType={'default'}
+              returnKeyType={'done'}
+              onSubmitEditing={primaryOnPress}
+              autoFocus={true}
+            />
+          </View>
           <Buttons
             primaryTitle={common.next}
             secondaryTitle={common.cancel}
@@ -80,20 +99,24 @@ function ProfileDetails(props: ProfileDetailsProps) {
             primaryLoading={primaryStatus === 'loading'}
             disabled={disabled}
           />
-        </View>
-      </KeyboardAvoidView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
 const styles = StyleSheet.create({
-  primaryCTAContainer: {
-    marginTop: hp(50),
-  },
   container: {
-    padding: 0,
+    flex: 1,
   },
   wrapper: {
     marginTop: 0,
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  content: {
+    flex: 1,
   },
 });
 export default ProfileDetails;

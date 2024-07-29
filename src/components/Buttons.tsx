@@ -52,9 +52,5 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'flex-end',
       alignItems: 'center',
     },
-    seconadryTitleStyle: {
-      color: theme.colors.primaryCTA,
-      marginRight: wp(10),
-    },
   });
 export default Buttons;

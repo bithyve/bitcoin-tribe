@@ -43,15 +43,6 @@ const getStyles = (theme: AppTheme) =>
     },
     leftIconWrapper: {
       width: '10%',
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.8,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
     },
     profileWrapper: {
       width: '70%',
@@ -66,14 +57,6 @@ const getStyles = (theme: AppTheme) =>
     },
     rightIconWrapper1: {
       borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.8,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
     },
   });
 export default WalletSectionHeader;

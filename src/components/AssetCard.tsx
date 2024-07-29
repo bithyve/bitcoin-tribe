@@ -8,6 +8,8 @@ import AppTouchable from './AppTouchable';
 import AssetChip from './AssetChip';
 import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import GradientView from './GradientView';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 type AssetCardProps = {
   image?: string;
@@ -23,39 +25,55 @@ const AssetCard = (props: AssetCardProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable onPress={onPress} style={styles.container}>
-      <View>
-        <View style={styles.assetChipWrapper}>
-          <AssetChip
-            tagText={tag}
-            backColor={theme.colors.cardBackground}
-            tagColor={
-              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
-            }
-          />
+    <AppTouchable onPress={onPress}>
+      <GradientView
+        style={styles.container}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        <View style={styles.assetImageWrapper}>
+          {image ? (
+            <Image
+              source={{
+                uri: image,
+              }}
+              style={styles.imageStyle}
+            />
+          ) : (
+            <AppText variant="heading1" style={styles.textTicker}>
+              {props.ticker}
+            </AppText>
+          )}
         </View>
-        {image ? (
-          <Image
-            source={{
-              uri: image,
-            }}
-            style={styles.imageStyle}
-          />
-        ) : (
-          <AppText variant="heading1" style={styles.textTicker}>
-            {props.ticker}
-          </AppText>
-        )}
-
         <View style={styles.contentWrapper}>
-          <AppText variant="body1" style={styles.titleText}>
+          <View style={styles.contentWrapper2}>
+            <AppText
+              variant="body2"
+              style={[
+                styles.tagTextStyle,
+                {
+                  color:
+                    tag === 'COIN'
+                      ? theme.colors.accent2
+                      : theme.colors.accent1,
+                },
+              ]}>
+              {Capitalize(tag)}
+            </AppText>
+            <AppText
+              variant="caption"
+              style={styles.detailsText}
+              numberOfLines={1}>
+              {numberWithCommas(details)}&nbsp;sats
+            </AppText>
+          </View>
+          <AppText variant="caption" style={styles.titleText}>
             {name}
           </AppText>
-          <AppText variant="body2" style={styles.detailsText} numberOfLines={1}>
-            {numberWithCommas(details)}
-          </AppText>
         </View>
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 };
@@ -66,8 +84,8 @@ const getStyles = (theme: AppTheme) =>
       width: wp(160),
       borderRadius: 15,
       margin: hp(5),
-      backgroundColor: theme.colors.cardBackground,
-      position: 'relative',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     imageStyle: {
       width: '100%',
@@ -75,13 +93,20 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
     },
     contentWrapper: {
-      justifyContent: 'center',
       paddingHorizontal: 10,
       paddingVertical: 5,
       height: '30%',
+      justifyContent: 'center',
+    },
+    contentWrapper2: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     titleText: {
-      color: theme.colors.headingColor,
+      lineHeight: hp(15),
+      fontWeight: '300',
+      color: theme.colors.secondaryHeadingColor,
     },
     textTicker: {
       color: theme.colors.accent1,
@@ -92,14 +117,16 @@ const getStyles = (theme: AppTheme) =>
       fontSize: 35,
     },
     detailsText: {
-      color: theme.colors.bodyColor,
+      fontWeight: '300',
+      color: theme.colors.headingColor,
       flexWrap: 'wrap',
     },
-    assetChipWrapper: {
-      position: 'absolute',
-      zIndex: 999,
-      left: 10,
-      top: 10,
+    tagTextStyle: {
+      lineHeight: hp(20),
+    },
+    assetImageWrapper: {
+      borderBottomColor: theme.colors.borderColor,
+      borderBottomWidth: 0.8,
     },
   });
 export default AssetCard;

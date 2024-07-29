@@ -31,10 +31,10 @@
     "createNewSubTitle": "Lorem ipsum dolor sit amet",
     "recoveryPhrase": "Recovery Phrase",
     "recoveryPhraseSubTitle": "Lorem ipsum dolor si",
-    "addPicture": "ADD PICTURE",
+    "addPicture": "Add Picture +",
     "enterPin": "Enter a Pin",
     "confirmPin": "Confirm your pin",
-    "advanceSettingTitle": "Advanced Lorem"
+    "advanceSettingTitle": "Advanced Setting"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -48,7 +48,8 @@
     "assetDescription": "Asset Description",
     "totalSupplyAmount": "Total Supply",
     "attachFile": "Attach file",
-    "receiveAssetNote": "Lorem ipsum dolor sit amet"
+    "receiveAssetNote": "Lorem ipsum dolor sit amet",
+    "totalBalance": "Total Balance"
   },
   "settings": {
     "setting": "Settings",
@@ -118,7 +119,7 @@
     "transactionDetailTitle": "Transaction Details",
     "transactionDetailSubTitle": "lorem ipsum dolor amet",
     "recentTransaction": "Recent Transactions",
-    "viewAll": "VIEW ALL",
+    "viewAll": "View All",
     "toAddress": "To Address",
     "fromAddress": "From Address",
     "fees": "Fees",

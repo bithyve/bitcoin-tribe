@@ -14,14 +14,15 @@ import Fonts from 'src/constants/Fonts';
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
-import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
+// import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
-import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
+// import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
+import GradientView from 'src/components/GradientView';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -32,18 +33,24 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <AssetsInActive />;
+        return isFocused && <AssetsActive />;
       case NavigationRoutes.COMMUNITY:
         return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <SettingsInActive />;
+        return isFocused && <SettingsActive />;
       default:
         return <TextIcon />;
     }
   };
 
   return (
-    <View style={styles.tabBar}>
+    <GradientView
+      style={styles.tabBar}
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -81,21 +88,23 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.tab}>
+            style={isFocused ? styles.activeTab : styles.inActiveTab}>
             <View>{TabBarIcon(isFocused, label)}</View>
-            {isFocused && (
-              <AppText
-                style={[
-                  styles.bottomNavigation,
-                  { color: isFocused ? theme.colors.primaryCTA : 'gray' },
-                ]}>
-                &nbsp;{Capitalize(label)}
-              </AppText>
-            )}
+            <AppText
+              style={[
+                styles.bottomNavigation,
+                {
+                  color: isFocused
+                    ? theme.colors.primaryCTAText
+                    : theme.colors.disablePrimaryCTAText,
+                },
+              ]}>
+              &nbsp;&nbsp;{Capitalize(label)}
+            </AppText>
           </TouchableOpacity>
         );
       })}
-    </View>
+    </GradientView>
   );
 };
 
@@ -104,26 +113,37 @@ const getStyles = (theme: AppTheme) =>
     tabBar: {
       flexDirection: 'row',
       borderRadius: 40,
-      backgroundColor: theme.colors.inputBackground,
+      // backgroundColor: theme.colors.inputBackground,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
       position: 'absolute',
       bottom: hp(15),
-      height: hp(62),
-      width: wp(295),
+      height: hp(68),
+      width: wp(297),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
-      paddingHorizontal: wp(30),
+      // paddingHorizontal: wp(30),
     },
-    tab: {
+    activeTab: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: theme.colors.activeTabColor,
+      borderRadius: 100,
+      margin: 10,
+    },
+    inActiveTab: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     bottomNavigation: {
-      fontSize: 11,
-      fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 11 * 1.4,
-      height: 15,
+      fontSize: 14,
+      fontFamily: Fonts.LufgaSemiBold,
+      lineHeight: 14 * 1.4,
+      fontWeight: '400',
+      // height: 15,
     },
   });
 

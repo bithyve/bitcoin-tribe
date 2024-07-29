@@ -43,11 +43,7 @@ function ReceiveScreen({ route }) {
           receivingAddress={paymentURI || receivingAddress || 'address'}
         />
       </ScrollView>
-      <FooterNote
-        title={common.note}
-        subTitle={receciveScreen.noteSubTitle}
-        customStyle={styles.advanceOptionStyle}
-      />
+      <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} />
 
       <ModalContainer
         conatinerModalStyle={styles.addAmountModalContainerStyle}
@@ -62,9 +58,6 @@ function ReceiveScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  advanceOptionStyle: {
-    backgroundColor: 'transparent',
-  },
   addAmountModalContainerStyle: {
     width: '96%',
     alignSelf: 'center',

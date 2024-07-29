@@ -1,4 +1,13 @@
-<svg id="icon_recievedtxn" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <path id="Path_117619" data-name="Path 117619" d="M16.25,1.25a15,15,0,1,0,15,15A15,15,0,0,0,16.25,1.25Z" transform="translate(-1.25 -1.25)" fill="#3bcca0"/>
-  <path id="Path_117620" data-name="Path 117620" d="M9.838,8.523A.93.93,0,0,0,8.523,9.838l5.855,5.855H10.421a.93.93,0,0,0,0,1.861h6.2a.931.931,0,0,0,.93-.93v-6.2a.93.93,0,0,0-1.861,0v3.956Z" transform="translate(2.098 2.099)" fill="#212121"/>
+<svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="34.1274" y="34.1274" width="33.6274" height="33.6274" rx="7.5" transform="rotate(180 34.1274 34.1274)" fill="url(#paint0_linear_315_2011)"/>
+<rect x="34.1274" y="34.1274" width="33.6274" height="33.6274" rx="7.5" transform="rotate(180 34.1274 34.1274)" stroke="#01FFE3"/>
+<path d="M13.7896 21.0963L20.8607 14.0253" stroke="#01FFE3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.4815 21.0845L13.7897 21.0968L13.8015 15.4045" stroke="#01FFE3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_315_2011" x1="35.2667" y1="35.6663" x2="73.8364" y2="43.1719" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1A1A1A"/>
+<stop offset="0.5" stop-color="#0B0B0B"/>
+<stop offset="1" stop-color="#121212"/>
+</linearGradient>
+</defs>
 </svg>

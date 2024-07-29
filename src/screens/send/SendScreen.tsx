@@ -27,8 +27,8 @@ function SendScreen({ route, navigation }) {
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
-        style={styles.advanceOptionStyle}
         onPress={() => {
+          console.log('send');
           receiveData === 'send'
             ? setVisible(true)
             : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
@@ -45,26 +45,5 @@ function SendScreen({ route, navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    advanceOptionStyle: {
-      flex: 1,
-      position: 'absolute',
-      bottom: 10,
-      margin: hp(20),
-    },
-    qrCodeContainer: {
-      height: wp(340),
-      width: wp(340),
-      alignSelf: 'center',
-      justifyContent: 'center',
-      marginTop: wp(35),
-      borderRadius: wp(8),
-      overflow: 'hidden',
-    },
-    camera: {
-      height: wp(340),
-      width: wp(340),
-    },
-  });
+const getStyles = (theme: AppTheme) => StyleSheet.create({});
 export default SendScreen;

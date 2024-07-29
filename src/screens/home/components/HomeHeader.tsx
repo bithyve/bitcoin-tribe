@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import UserAvatar from 'src/components/UserAvatar';
 import { hp, wp } from 'src/constants/responsive';
 
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
@@ -13,6 +12,8 @@ import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import HomeUserAvatar from './HomeUserAvatar';
 
 type HomeHeaderProps = {
   profile: string;
@@ -33,31 +34,42 @@ function HomeHeader(props: HomeHeaderProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = React.useContext(LocalizationContext);
+  const { home } = translations;
   return (
-    <View style={styles.container}>
-      <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
-        <View style={styles.contentWrapper}>
-          <UserAvatar size={50} imageSource={profile} />
-          <View style={styles.userDetailsWrapper}>
-            <AppText variant="body1" style={styles.usernameText}>
-              {username}
-            </AppText>
-            <View style={styles.balanceWrapper}>
-              <IconBitcoin />
-              <AppText variant="body5" style={styles.balanceText}>
-                &nbsp;{numberWithCommas(balance)} sats
+    <View>
+      <View style={styles.container}>
+        <AppTouchable onPress={onPressProfile} style={styles.contentWrapper}>
+          <View style={styles.contentWrapper}>
+            <HomeUserAvatar imageSource={profile} />
+            <View style={styles.userDetailsWrapper}>
+              <AppText variant="heading1" style={styles.usernameText}>
+                {username}
               </AppText>
             </View>
           </View>
+        </AppTouchable>
+        <View style={styles.iconWrapper}>
+          <IconWrapper onPress={onPressScanner}>
+            <IconScanner />
+          </IconWrapper>
+          <IconWrapper onPress={onPressNotification}>
+            <IconNotification />
+          </IconWrapper>
         </View>
-      </AppTouchable>
-      <View style={styles.iconWrapper}>
-        <IconWrapper onPress={onPressScanner}>
-          <IconScanner />
-        </IconWrapper>
-        <IconWrapper onPress={onPressNotification}>
-          <IconNotification />
-        </IconWrapper>
+      </View>
+      <View style={styles.balanceContainer}>
+        <View>
+          <AppText variant="body2" style={styles.totalBalText}>
+            {home.totalBalance}
+          </AppText>
+        </View>
+        <View style={styles.balanceWrapper}>
+          <IconBitcoin />
+          <AppText variant="pageTitle2" style={styles.balanceText}>
+            &nbsp;{numberWithCommas(balance)} sats
+          </AppText>
+        </View>
       </View>
     </View>
   );
@@ -71,14 +83,14 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '77%',
+      width: '68%',
       alignItems: 'center',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),
     },
     usernameText: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
     },
     balanceWrapper: {
       flexDirection: 'row',
@@ -89,12 +101,21 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(2),
     },
     iconWrapper: {
-      width: '23%',
+      width: '32%',
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
     iconTouchableArea: {
       height: '60%',
+    },
+    balanceContainer: {
+      alignItems: 'center',
+      marginTop: hp(30),
+      marginBottom: hp(5),
+    },
+    totalBalText: {
+      color: theme.colors.secondaryHeadingColor,
+      fontWeight: '400',
     },
   });
 export default HomeHeader;

@@ -11,7 +11,7 @@ import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-function CreatePin() {
+function CreatePinContainer() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -98,44 +98,46 @@ function CreatePin() {
   }, [passcode, confirmPasscode]);
 
   return (
-    <View style={styles.container}>
-      {/* <AppText variant="body1" style={styles.labelText}>
-        {onBoarding.enterPin}
-      </AppText> */}
-      <PinInputsView passCode={passcode} />
-      {passcode.length === 4 ? (
-        <View>
-          <AppText variant="body1" style={styles.labelText}>
-            {onBoarding.confirmPin}
-          </AppText>
-          <PinInputsView passCode={confirmPasscode} />
-        </View>
-      ) : null}
-      <Buttons
-        primaryTitle={common.proceed}
-        primaryOnPress={() => console.log('primary')}
-        secondaryTitle={common.cancel}
-        secondaryOnPress={() => console.log('secondary')}
-        width={wp(120)}
-      />
+    <>
+      <View style={styles.contentContainer}>
+        <PinInputsView passCode={passcode} showCursor={true} />
+        <AppText variant="heading3" style={styles.labelText}>
+          {onBoarding.confirmPin}
+        </AppText>
+        <PinInputsView
+          passCode={confirmPasscode}
+          showCursor={passcode.length === 4}
+        />
+      </View>
+      <View style={styles.ctaWrapper}>
+        <Buttons
+          primaryTitle={common.proceed}
+          primaryOnPress={() => console.log('primary')}
+          secondaryTitle={common.cancel}
+          secondaryOnPress={() => console.log('secondary')}
+          width={wp(120)}
+        />
+      </View>
       <KeyPadView
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
-        keyColor={theme.colors.primaryCTA}
+        keyColor={theme.colors.accent1}
         ClearIcon={<DeleteIcon />}
       />
-    </View>
+    </>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {
-      width: '100%',
-      marginTop: hp(15),
+    contentContainer: {
+      flex: 1,
+    },
+    ctaWrapper: {
+      marginVertical: hp(10),
     },
     labelText: {
-      color: theme.colors.accent3,
+      color: theme.colors.secondaryHeadingColor,
       marginTop: hp(15),
     },
   });
-export default CreatePin;
+export default CreatePinContainer;

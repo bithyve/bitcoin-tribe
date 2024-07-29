@@ -9,12 +9,9 @@ export interface Props {
   onPressNumber;
   keyColor: string;
 }
-const KeyPadButton: React.FC<Props> = ({
-  title,
-  onPressNumber,
-  keyColor,
-}: Props) => {
+const KeyPadButton: React.FC<Props> = (props: Props) => {
   const theme: AppTheme = useTheme();
+  const { title, onPressNumber, keyColor = theme.colors.accent1 } = props;
   const styles = getStyles(theme, keyColor);
   return (
     <TouchableOpacity

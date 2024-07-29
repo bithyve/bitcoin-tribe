@@ -68,6 +68,10 @@ const TextField = (props: TextFieldProps) => {
     <View style={[styles.container, style]}>
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
+        mode="outlined"
+        outlineColor={theme.colors.inputBackground}
+        activeOutlineColor={theme.colors.accent1}
+        outlineStyle={styles.outlineStyle}
         disabled={disabled}
         cursorColor={theme.colors.accent1}
         selectionColor={theme.colors.accent1}
@@ -76,7 +80,11 @@ const TextField = (props: TextFieldProps) => {
         placeholderTextColor={theme.colors.placeholder}
         style={[styles.inputContainer, inputStyle]}
         underlineStyle={styles.underlineStyle}
-        contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
+        contentStyle={[
+          CommonStyles.textFieldLabel,
+          styles.textStyles,
+          contentStyle,
+        ]}
         value={value}
         onChangeText={text => onChangeText(text)}
         keyboardType={keyboardType}
@@ -89,7 +97,7 @@ const TextField = (props: TextFieldProps) => {
         multiline={multiline}
         numberOfLines={numberOfLines}
         onContentSizeChange={onContentSizeChange}
-        contentStyle={contentStyle}
+        // contentStyle={contentStyle}
       />
       {rightText && (
         <AppTouchable
@@ -114,7 +122,7 @@ const getStyles = (theme: AppTheme, icon, rightText) =>
     },
     inputContainer: {
       justifyContent: 'center',
-      height: hp(50),
+      height: hp(60),
       width: icon ? (rightText ? '60%' : '80%') : '100%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
@@ -132,7 +140,7 @@ const getStyles = (theme: AppTheme, icon, rightText) =>
     },
     textStyles: {
       color: theme.colors.headingColor,
-      marginTop: hp(3),
+      // marginTop: hp(5),
     },
     underlineStyle: {
       backgroundColor: 'transparent',
@@ -144,6 +152,9 @@ const getStyles = (theme: AppTheme, icon, rightText) =>
       width: '20%',
       alignItems: 'center',
       marginTop: hp(5),
+    },
+    outlineStyle: {
+      borderRadius: 15,
     },
   });
 
