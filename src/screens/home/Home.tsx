@@ -6,7 +6,7 @@ import ModalContainer from 'src/components/ModalContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AddAssetModal from './components/AddAssetModal';
+import AddAssetModal from './components/AddAsset';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -95,7 +95,7 @@ function HomeScreen() {
 
       <AssetsList
         listData={assets}
-        onPressAddNew={() => setVisible(true)}
+        onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={(asset: Asset) => {
           if (asset.assetIface === AssetFace.RGB20) {
             handleScreenNavigation(NavigationRoutes.COINDETAILS, {
@@ -108,13 +108,13 @@ function HomeScreen() {
           }
         }}
       />
-      <ModalContainer
+      {/* <ModalContainer
         title={home.addAssets}
         subTitle={home.addAssetSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <AddAssetModal onDismiss={() => setVisible(false)} />
-      </ModalContainer>
+      </ModalContainer> */}
     </ScreenContainer>
   );
 }

@@ -39,6 +39,7 @@ export type AppStackParams = {
   [NavigationRoutes.CREATEPIN]: undefined;
   [NavigationRoutes.COLLECTIBLEDETAILS]: undefined;
   [NavigationRoutes.COLLECTIBLEMETADATA]: undefined;
+  [NavigationRoutes.ADDASSET]: undefined;
   // Add other routes as needed
 };
 
