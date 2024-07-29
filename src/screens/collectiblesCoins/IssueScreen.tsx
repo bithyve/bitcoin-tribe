@@ -23,9 +23,12 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import AppTouchable from 'src/components/AppTouchable';
-import IconImage from 'src/assets/images/icon_image.svg';
+import IconImagePlaceholder from 'src/assets/images/imagePlaceholder.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import UploadAssetFileButton from './components/UploadAssetFileButton';
+import UploadFile from 'src/assets/images/uploadFile.svg';
+import AppText from 'src/components/AppText';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -191,10 +194,23 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
+            <View style={styles.uploadCoinAssetWrapper}>
+              <AppText variant="body1" style={styles.selectAvatarStyle}>
+                {home.yourCoinAvatar}
+              </AppText>
+              <View style={styles.uploadBtnWrapper}>
+                <UploadAssetFileButton
+                  onPress={() => {}}
+                  title={home.select}
+                  icon={<IconImagePlaceholder />}
+                  borderColor={theme.colors.accent1}
+                />
+              </View>
+            </View>
           </View>
         ) : (
           <View>
-            <AppTouchable
+            {/* <AppTouchable
               style={{ marginVertical: 20 }}
               onPress={handlePickImage}>
               {image === '' ? (
@@ -210,7 +226,7 @@ function IssueScreen() {
               ) : (
                 <Avatar.Image size={150} source={{ uri: image.path }} />
               )}
-            </AppTouchable>
+            </AppTouchable> */}
             <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
@@ -232,6 +248,11 @@ function IssueScreen() {
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
+            />
+            <UploadAssetFileButton
+              onPress={handlePickImage}
+              title={home.uploadFile}
+              icon={<UploadFile />}
             />
           </View>
         )}
@@ -265,6 +286,20 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
       borderBottomColor: 'white',
       borderBottomWidth: 1,
+    },
+    uploadCoinAssetWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+    },
+    selectAvatarStyle: {
+      color: theme.colors.headingColor,
+      width: '60%',
+      paddingLeft: hp(20),
+    },
+    uploadBtnWrapper: {
+      width: '40%',
+      // paddingRight: hp(5),
     },
   });
 export default IssueScreen;
