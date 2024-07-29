@@ -49,7 +49,10 @@
     "totalSupplyAmount": "Total Supply",
     "attachFile": "Attach file",
     "receiveAssetNote": "Lorem ipsum dolor sit amet",
-    "totalBalance": "Total Balance"
+    "totalBalance": "Total Balance",
+    "uploadFile": "Upload your file here",
+    "yourCoinAvatar": "Your Coin Avatar",
+    "select": "Select"
   },
   "settings": {
     "setting": "Settings",

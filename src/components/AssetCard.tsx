@@ -66,7 +66,7 @@ const AssetCard = (props: AssetCardProps) => {
               variant="caption"
               style={styles.detailsText}
               numberOfLines={1}>
-              {numberWithCommas(details)}&nbsp;sats
+              {numberWithCommas(details)}&nbsp;
             </AppText>
           </View>
           <AppText variant="caption" style={styles.titleText}>

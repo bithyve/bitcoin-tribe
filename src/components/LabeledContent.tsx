@@ -34,7 +34,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.accent3,
     },
     textStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default LabeledContent;

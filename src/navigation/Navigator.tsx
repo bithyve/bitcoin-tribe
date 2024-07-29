@@ -40,6 +40,7 @@ import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
 import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
 import CreatePin from 'src/screens/onBoarding/CreatePin';
 import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
+import AddAsset from 'src/screens/home/components/AddAsset';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -167,6 +168,7 @@ function AppStack() {
           name={NavigationRoutes.VIEWUNSPENT}
           component={ViewUnspent}
         />
+        <Stack.Screen name={NavigationRoutes.ADDASSET} component={AddAsset} />
       </Stack.Navigator>
     </RealmProvider>
   );

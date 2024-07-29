@@ -50,7 +50,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     labelStyle: {
       margin: hp(15),
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(50),
     },
     buttonWrapper: {

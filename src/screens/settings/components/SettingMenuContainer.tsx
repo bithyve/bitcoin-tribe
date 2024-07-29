@@ -24,7 +24,7 @@ function SettingMenuContainer({}) {
     <View style={styles.wrapper}>
       <SelectOption
         title={settings.darkMode}
-        subTitle={settings.darkModeSubTitle}
+        // subTitle={settings.darkModeSubTitle}
         icon={<IconDarkMode />}
         enableSwitch={true}
         onValueChange={() => {
@@ -35,7 +35,7 @@ function SettingMenuContainer({}) {
       />
       <SelectOption
         title={settings.biometricUnlock}
-        subTitle={settings.biometricSubTitle}
+        // subTitle={settings.biometricSubTitle}
         icon={<IconBiometric />}
         enableSwitch={true}
         onValueChange={() => setBiometrics(!biometrics)}

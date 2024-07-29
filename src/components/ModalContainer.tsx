@@ -125,7 +125,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default ModalContainer;

@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Avatar, SegmentedButtons, useTheme } from 'react-native-paper';
+import { Avatar, useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -23,7 +23,12 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import AppTouchable from 'src/components/AppTouchable';
-import IconImage from 'src/assets/images/icon_image.svg';
+import IconImagePlaceholder from 'src/assets/images/imagePlaceholder.svg';
+import SegmentedButtons from 'src/components/SegmentedButtons';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import UploadAssetFileButton from './components/UploadAssetFileButton';
+import UploadFile from 'src/assets/images/uploadFile.svg';
+import AppText from 'src/components/AppText';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -137,7 +142,7 @@ function IssueScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.issue} subTitle={home.issueSubTitle} />
+      <AppHeader />
       <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
@@ -152,86 +157,108 @@ function IssueScreen() {
         buttons={[
           {
             value: AssetType.Coin,
-            label: 'Coin',
+            label: 'Coins',
           },
           {
             value: AssetType.Collectible,
-            label: 'Collectible',
+            label: 'Collectibles',
           },
         ]}
+        // style={styles.segmentedButtonsStyle}
       />
-      {assetType === AssetType.Coin ? (
-        <View>
-          <TextField
-            value={assetName}
-            onChangeText={text => setAssetName(text)}
-            placeholder={home.assetName}
-            maxLength={32}
-            style={styles.input}
-            autoCapitalize="words"
-          />
+      <KeyboardAvoidView style={styles.contentWrapper}>
+        {assetType === AssetType.Coin ? (
+          <View>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
 
-          <TextField
-            value={assetTicker}
-            onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-            placeholder={home.assetTicker}
-            maxLength={8}
-            style={styles.input}
-            autoCapitalize="characters"
-          />
+            <TextField
+              value={assetTicker}
+              onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+              placeholder={home.assetTicker}
+              maxLength={8}
+              style={styles.input}
+              autoCapitalize="characters"
+            />
 
-          <TextField
-            value={totalSupplyAmt}
-            onChangeText={handleAmtChangeText}
-            placeholder={home.totalSupplyAmount}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-        </View>
-      ) : (
-        <View>
-          <AppTouchable
-            style={{ marginVertical: 20 }}
-            onPress={handlePickImage}>
-            {image === '' ? (
-              <View
-                style={{
-                  height: 150,
-                  width: 150,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <IconImage />
+            <TextField
+              value={totalSupplyAmt}
+              onChangeText={handleAmtChangeText}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <View style={styles.uploadCoinAssetWrapper}>
+              <AppText variant="body1" style={styles.selectAvatarStyle}>
+                {home.yourCoinAvatar}
+              </AppText>
+              <View style={styles.uploadBtnWrapper}>
+                <UploadAssetFileButton
+                  onPress={() => {}}
+                  title={home.select}
+                  icon={<IconImagePlaceholder />}
+                  borderColor={theme.colors.accent1}
+                  // imagePath={image && image.path.replace('file://', '')}
+                />
               </View>
-            ) : (
-              <Avatar.Image size={150} source={{ uri: image.path }} />
-            )}
-          </AppTouchable>
-          <TextField
-            value={assetName}
-            onChangeText={text => setAssetName(text)}
-            placeholder={home.assetName}
-            maxLength={32}
-            style={styles.input}
-            autoCapitalize="words"
-          />
-          <TextField
-            value={description}
-            onChangeText={text => setDescription(text)}
-            placeholder={home.assetDescription}
-            maxLength={32}
-            style={styles.input}
-          />
-          <TextField
-            value={totalSupplyAmt}
-            onChangeText={handleAmtChangeText}
-            placeholder={home.totalSupplyAmount}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-        </View>
-      )}
-
+            </View>
+          </View>
+        ) : (
+          <View>
+            {/* <AppTouchable
+              style={{ marginVertical: 20 }}
+              onPress={handlePickImage}>
+              {image === '' ? (
+                <View
+                  style={{
+                    height: 150,
+                    width: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconImage />
+                </View>
+              ) : (
+                <Avatar.Image size={150} source={{ uri: image.path }} />
+              )}
+            </AppTouchable> */}
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+            <TextField
+              value={description}
+              onChangeText={text => setDescription(text)}
+              placeholder={home.assetDescription}
+              maxLength={32}
+              style={styles.input}
+            />
+            <TextField
+              value={totalSupplyAmt}
+              onChangeText={handleAmtChangeText}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <UploadAssetFileButton
+              onPress={handlePickImage}
+              title={home.uploadFile}
+              icon={<UploadFile />}
+              imagePath={image && image.path.replace('file://', '')}
+            />
+          </View>
+        )}
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -249,10 +276,32 @@ function IssueScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     input: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(20),
+    },
+    contentWrapper: {
+      flex: 1,
+    },
+    segmentedButtonsStyle: {
+      backgroundColor: theme.colors.primaryBackground,
+      borderBottomColor: 'white',
+      borderBottomWidth: 1,
+    },
+    uploadCoinAssetWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+    },
+    selectAvatarStyle: {
+      color: theme.colors.headingColor,
+      width: '60%',
+      paddingLeft: hp(20),
+    },
+    uploadBtnWrapper: {
+      width: '40%',
+      // paddingRight: hp(5),
     },
   });
 export default IssueScreen;

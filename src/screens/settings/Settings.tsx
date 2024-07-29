@@ -18,7 +18,7 @@ import SettingMenuItem from './components/SettingMenuItem';
 
 type SettingMenuProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   icon: ReactNode;
   onPress: () => void;
 };
@@ -32,25 +32,25 @@ function SettingsScreen({ navigation }) {
   const SettingsMenu: SettingMenuProps[] = [
     {
       title: settings.langAndCurrency,
-      subtitle: settings.langAndCurrencySubTitle,
+      // subtitle: settings.langAndCurrencySubTitle,
       icon: <IconLangCurrency />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
     {
       title: settings.appBackup,
-      subtitle: settings.appBackupSubTitle,
+      // subtitle: settings.appBackupSubTitle,
       icon: <IconBackup />,
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUP),
     },
     {
       title: settings.connectionSettings,
-      subtitle: settings.connectionSettingSubTitle,
+      // subtitle: settings.connectionSettingSubTitle,
       icon: <IconNodes />,
       onPress: () => navigation.navigate(NavigationRoutes.CONNECTIONSETTINGS),
     },
     {
       title: settings.appInfo,
-      subtitle: settings.appInfoSubTitle,
+      // subtitle: settings.appInfoSubTitle,
       icon: <IconAppInfo />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },

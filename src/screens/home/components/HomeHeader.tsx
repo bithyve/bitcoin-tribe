@@ -97,7 +97,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     balanceText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     iconWrapper: {

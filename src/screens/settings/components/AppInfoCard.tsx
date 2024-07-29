@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.accent2,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     contentWrapper: {
       flexDirection: 'row',
