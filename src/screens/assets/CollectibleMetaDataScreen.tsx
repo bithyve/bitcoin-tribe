@@ -36,7 +36,7 @@ const CoinsMetaDataScreen = () => {
           showsVerticalScrollIndicator={false}>
           <Image
             source={{
-              uri: `file://${collectible.media.filePath}`,
+              uri: `file://${collectible.media?.filePath}`,
             }}
             style={styles.imageStyle}
           />
