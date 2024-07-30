@@ -8,7 +8,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import AppText from 'src/components/AppText';
-import ActivePageIndicator from 'src/components/ActivePageIndicator';
 
 type confirmAppBackupProps = {
   primaryOnPress: () => void;
@@ -34,7 +33,6 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
         autoFocus={true}
       />
       <View style={styles.buttonWrapper}>
-        <ActivePageIndicator totalPages={3} currentPage={0} />
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={primaryOnPress}
@@ -54,7 +52,6 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(50),
     },
     buttonWrapper: {
-      flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
       marginTop: hp(20),
