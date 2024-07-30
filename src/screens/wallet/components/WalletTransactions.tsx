@@ -18,6 +18,7 @@ import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
+import GradientView from 'src/components/GradientView';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -59,7 +60,17 @@ function WalletTransactions(props: WalletTransactionsProps) {
               transaction: props.transaction,
             })
       }>
-      <View style={styles.container}>
+      <GradientView
+        style={styles.container}
+        colors={
+          backColor
+            ? [
+                theme.colors.cardGradient1,
+                theme.colors.cardGradient2,
+                theme.colors.cardGradient3,
+              ]
+            : ['transparent', 'transparent', 'transparent']
+        }>
         <View style={styles.transDetailsWrapper}>
           <View>
             {transType === TransactionType.SENT ? (
@@ -95,7 +106,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
           </View>
           {/* {!disabled ? <IconArrow /> : null} */}
         </View>
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 }
@@ -103,16 +114,19 @@ const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     containerWrapper: {
       paddingVertical: hp(15),
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 1,
+      borderBottomColor: backColor ? '' : theme.colors.borderColor,
+      borderBottomWidth: backColor ? 0 : 1,
     },
     container: {
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
       backgroundColor: backColor,
-      padding: backColor ? 15 : 0,
+      paddingVertical: backColor ? hp(20) : 0,
+      paddingHorizontal: backColor ? hp(15) : 0,
       borderRadius: backColor ? 10 : 0,
+      borderColor: backColor ? theme.colors.borderColor : '',
+      borderWidth: backColor ? 1 : 0,
     },
     transDetailsWrapper: {
       flexDirection: 'row',
@@ -123,6 +137,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     transIdText: {
+      lineHeight: 25,
       color: theme.colors.headingColor,
     },
     transDateText: {
