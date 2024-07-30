@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,
@@ -83,10 +83,12 @@ const getStyles = (theme: AppTheme) =>
       width: 80,
       height: 80,
       borderRadius: 10,
+      backgroundColor: theme.colors.inputBackground,
     },
     totalBalText: {
       color: theme.colors.secondaryHeadingColor,
       fontWeight: '400',
+      marginTop: hp(10),
     },
   });
 export default CollectibleDetailsHeader;
