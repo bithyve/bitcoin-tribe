@@ -85,7 +85,7 @@ const ModalContainer = (props: ModalContainerProps) => {
               </AppText>
             ) : null}
           </View>
-          <AppTouchable onPress={onDismiss}>
+          <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
             <IconClose />
           </AppTouchable>
         </View>
@@ -104,7 +104,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       height: isKeyboardVisible ? height : 'auto',
       width: '100%',
       position: 'absolute',
-      bottom: 0,
+      bottom: Platform.OS === 'ios' ? 10 : 0,
       left: 0,
       backgroundColor: theme.colors.modalBackColor,
       padding: hp(25),
@@ -120,7 +120,11 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       marginBottom: hp(50),
     },
     contentWrapper: {
-      width: '85%',
+      width: '80%',
+    },
+    closeIconWrapper: {
+      width: '20%',
+      alignItems: 'center',
     },
     titleText: {
       color: theme.colors.headingColor,
