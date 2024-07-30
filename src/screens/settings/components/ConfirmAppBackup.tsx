@@ -7,7 +7,6 @@ import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
-import AppText from 'src/components/AppText';
 
 type confirmAppBackupProps = {
   primaryOnPress: () => void;
@@ -21,10 +20,7 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
   const { common, settings } = translations;
   const [address, setAddress] = useState('');
   return (
-    <View style={styles.inputWrapper}>
-      {/* <AppText variant="body1" style={styles.labelStyle}>
-        {settings.enterSeedWordLabel}
-      </AppText> */}
+    <View>
       <TextField
         value={address}
         onChangeText={text => setAddress(text)}
@@ -46,14 +42,6 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    // labelStyle: {
-    //   margin: hp(15),
-    //   color: theme.colors.headingColor,
-    //   marginTop: hp(50),
-    // },
-    inputWrapper: {
-      marginTop: hp(50),
-    },
     buttonWrapper: {
       width: '100%',
       justifyContent: 'space-between',

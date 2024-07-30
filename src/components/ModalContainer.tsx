@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   StyleProp,
   StyleSheet,
@@ -118,6 +117,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       flexDirection: 'row',
       width: '100%',
       // alignItems: 'center',
+      marginBottom: hp(50),
     },
     contentWrapper: {
       width: '85%',
