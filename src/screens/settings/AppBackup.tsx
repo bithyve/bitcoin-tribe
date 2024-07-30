@@ -34,7 +34,6 @@ function AppBackup({ navigation }) {
         title={settings.appBackup}
         subTitle={settings.appBackupScreenSubTitle}
         enableBack={true}
-        rightIcon={<SettingIcon />}
       />
       <FlatList
         data={words}
