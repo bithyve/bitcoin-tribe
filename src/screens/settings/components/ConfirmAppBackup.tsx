@@ -21,14 +21,14 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
   const { common, settings } = translations;
   const [address, setAddress] = useState('');
   return (
-    <View>
-      <AppText variant="body1" style={styles.labelStyle}>
+    <View style={styles.inputWrapper}>
+      {/* <AppText variant="body1" style={styles.labelStyle}>
         {settings.enterSeedWordLabel}
-      </AppText>
+      </AppText> */}
       <TextField
         value={address}
         onChangeText={text => setAddress(text)}
-        placeholder={settings.enterSeedWord}
+        placeholder={settings.enterSeedWordLabel}
         keyboardType={'default'}
         autoFocus={true}
       />
@@ -46,9 +46,12 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    labelStyle: {
-      margin: hp(15),
-      color: theme.colors.headingColor,
+    // labelStyle: {
+    //   margin: hp(15),
+    //   color: theme.colors.headingColor,
+    //   marginTop: hp(50),
+    // },
+    inputWrapper: {
       marginTop: hp(50),
     },
     buttonWrapper: {

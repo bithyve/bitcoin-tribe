@@ -68,22 +68,27 @@ const ModalContainer = (props: ModalContainerProps) => {
       onBackdropPress={onDismiss}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
-      backdropColor={theme.colors.cardBackground}
-      backdropOpacity={0.9}
+      backdropColor={theme.colors.primaryBackground}
+      backdropOpacity={0.8}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
-        <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-          <IconClose />
-        </AppTouchable>
+        <View style={styles.dashViewWrapper}>
+          <View style={styles.dashView} />
+        </View>
         <View style={styles.headingWrapper}>
-          <AppText variant="heading1" style={styles.titleText}>
-            {title}
-          </AppText>
-          {subTitle ? (
-            <AppText variant="body1" style={styles.subTitleText}>
-              {subTitle}
+          <View style={styles.contentWrapper}>
+            <AppText variant="heading1" style={styles.titleText}>
+              {title}
             </AppText>
-          ) : null}
+            {subTitle ? (
+              <AppText variant="body1" style={styles.subTitleText}>
+                {subTitle}
+              </AppText>
+            ) : null}
+          </View>
+          <AppTouchable onPress={onDismiss}>
+            <IconClose />
+          </AppTouchable>
         </View>
         {children}
       </KeyboardAvoidView>
@@ -98,34 +103,39 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
     },
     containerStyle: {
       height: isKeyboardVisible ? height : 'auto',
-      width: '94%',
+      width: '100%',
       position: 'absolute',
       bottom: 0,
-      backgroundColor: theme.colors.cardBackground,
+      left: 0,
+      backgroundColor: theme.colors.modalBackColor,
       padding: hp(25),
-      borderRadius: 10,
-      marginHorizontal: 10,
+      borderTopLeftRadius: hp(30),
+      borderTopRightRadius: hp(30),
+      marginHorizontal: 0,
       marginBottom: isKeyboardVisible ? 0 : 5,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 3,
-      shadowOpacity: 0.2,
-      elevation: 5,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-    },
-    closeIconWrapper: {
-      alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginTop: hp(10),
+      flexDirection: 'row',
+      width: '100%',
+      // alignItems: 'center',
+    },
+    contentWrapper: {
+      width: '85%',
     },
     titleText: {
       color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
+    },
+    dashViewWrapper: {
+      alignItems: 'center',
+    },
+    dashView: {
+      height: hp(3),
+      width: hp(60),
+      marginBottom: hp(30),
+      backgroundColor: theme.colors.headingColor,
     },
   });
 export default ModalContainer;
