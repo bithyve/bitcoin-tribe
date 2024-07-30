@@ -25,7 +25,7 @@ type walletDetailsHeaderProps = {
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common, sendScreen } = translations;
+  const { receciveScreen, common, sendScreen, home } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
@@ -44,6 +44,11 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <AppText variant="body1" style={styles.usernameText}>
         {username}
       </AppText>
+      <View>
+        <AppText variant="body2" style={styles.totalBalText}>
+          {home.totalBalance}
+        </AppText>
+      </View>
       <View style={styles.balanceWrapper}>
         <IconBitcoin />
         <AppText variant="walletBalance" style={styles.balanceText}>
@@ -61,7 +66,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             }),
           )
         }
-        onPressBuy={onPressBuy}
+        // onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
@@ -90,10 +95,14 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,
+    },
+    totalBalText: {
+      color: theme.colors.secondaryHeadingColor,
+      fontWeight: '400',
     },
   });
 export default WalletDetailsHeader;
