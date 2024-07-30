@@ -2,6 +2,8 @@ import * as React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { hp } from 'src/constants/responsive';
+import GradientView from './GradientView';
+import { AppTheme } from 'src/theme';
 
 type CardProps = {
   style?: StyleProp<ViewStyle>;
@@ -10,9 +12,19 @@ type CardProps = {
 
 function CardBox(props: CardProps) {
   const { style, children } = props;
-  const theme = useTheme();
+  const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  return <View style={[styles.container, style]}>{children}</View>;
+  return (
+    <GradientView
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}
+      style={[styles.container, style]}>
+      {children}
+    </GradientView>
+  );
 }
 
 const getStyles = theme =>
@@ -22,7 +34,8 @@ const getStyles = theme =>
       padding: hp(15),
       marginVertical: hp(10),
       borderRadius: 10,
-      backgroundColor: theme.colors.cardBackground,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
   });
 
