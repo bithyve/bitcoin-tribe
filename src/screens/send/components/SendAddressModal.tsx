@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default SendAddressModal;

@@ -93,7 +93,7 @@ function BroadcastTxnContainer({
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.LOW}
               status={
                 selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
@@ -107,7 +107,7 @@ function BroadcastTxnContainer({
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.MEDIUM}
               status={
                 selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
@@ -121,7 +121,7 @@ function BroadcastTxnContainer({
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
               color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.HIGH}
               status={
                 selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
@@ -188,11 +188,11 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.primaryCTA,
     },
     txnID: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     amountText: {
       marginLeft: hp(5),
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     feeWrapper: {
       width: '100%',
@@ -204,11 +204,11 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     feeText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     feeTitleText: {
       marginTop: hp(20),
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
   });
 export default BroadcastTxnContainer;

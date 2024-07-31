@@ -8,30 +8,34 @@ import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowHeight } from 'src/constants/responsive';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
-function SettingMenuContainer() {
+function SettingMenuContainer({}) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
 
-  const [darkTheme, setDarkTheme] = useState(false);
+  const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
 
   return (
     <View style={styles.wrapper}>
       <SelectOption
         title={settings.darkMode}
-        subTitle={settings.darkModeSubTitle}
+        // subTitle={settings.darkModeSubTitle}
         icon={<IconDarkMode />}
         enableSwitch={true}
-        onValueChange={() => setDarkTheme(!darkTheme)}
-        toggleValue={darkTheme}
+        onValueChange={() => {
+          setDarkTheme(!darkTheme);
+        }}
+        toggleValue={!darkTheme}
         testID="dark_mode"
       />
       <SelectOption
         title={settings.biometricUnlock}
-        subTitle={settings.biometricSubTitle}
+        // subTitle={settings.biometricSubTitle}
         icon={<IconBiometric />}
         enableSwitch={true}
         onValueChange={() => setBiometrics(!biometrics)}

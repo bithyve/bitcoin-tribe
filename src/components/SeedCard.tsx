@@ -52,7 +52,7 @@ const getStyles = (theme: AppTheme, visible, index) =>
       marginRight: wp(10),
     },
     seedWordStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       paddingTop: visible ? 0 : hp(10),
       paddingBottom: visible ? 0 : hp(5),
     },

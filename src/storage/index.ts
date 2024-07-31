@@ -6,6 +6,7 @@ export enum Keys {
   APPID = 'APPID',
   PIN_METHOD = 'PIN_METHOD',
   AVERAGE_TX_FEE_BY_NETWORK = 'AVERAGE_TX_FEE_BY_NETWORK',
+  THEME_MODE = 'THEME_MODE',
 }
 
 export class Storage {

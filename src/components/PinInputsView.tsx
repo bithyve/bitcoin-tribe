@@ -86,7 +86,7 @@ const getStyles = (theme: AppTheme, height, width) =>
       height: 10,
       width: 10,
       borderRadius: 10,
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       backgroundColor: theme.colors.headingColor,
     },
   });

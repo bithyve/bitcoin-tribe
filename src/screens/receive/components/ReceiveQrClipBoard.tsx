@@ -59,7 +59,7 @@ const getStyles = (theme: AppTheme) =>
       width: '90%',
     },
     menuCardTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       width: '95%',
     },
     iconWrapper: {

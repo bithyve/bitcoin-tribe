@@ -14,7 +14,7 @@ import { useTheme } from 'react-native-paper';
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     titleStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     containerItem: {
       marginTop: hp(10),

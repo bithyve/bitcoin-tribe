@@ -88,7 +88,7 @@ const getStyles = (theme: AppTheme) =>
       bottom: 15,
     },
     assetDetailsText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     assetDetailsText2: {
       width: '50%',

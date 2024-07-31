@@ -49,7 +49,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.accent3,
     },
     menuCardSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     iconWrapper: {
       width: '10%',

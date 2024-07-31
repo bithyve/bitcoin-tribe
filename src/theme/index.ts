@@ -2,10 +2,9 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
-
 import { MD2LightTheme, MD2DarkTheme, MD2Theme } from 'react-native-paper';
-
 import Colors from './Colors';
+import Fonts from 'src/constants/Fonts';
 
 type CustomColors = {
   primaryBackground: string;
@@ -82,7 +81,20 @@ const CombinedDefaultTheme: AppTheme = {
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
   },
-  fonts: {},
+  fonts: {
+    regular: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+    medium: {
+      fontFamily: Fonts.LufgaMedium,
+    },
+    light: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+    thin: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+  },
 };
 const CombinedDarkTheme: AppTheme = {
   ...MD2DarkTheme,
@@ -121,7 +133,20 @@ const CombinedDarkTheme: AppTheme = {
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
   },
-  fonts: {},
+  fonts: {
+    regular: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+    medium: {
+      fontFamily: Fonts.LufgaMedium,
+    },
+    light: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+    thin: {
+      fontFamily: Fonts.LufgaRegular,
+    },
+  },
 };
 
 export { CombinedDefaultTheme, CombinedDarkTheme };
