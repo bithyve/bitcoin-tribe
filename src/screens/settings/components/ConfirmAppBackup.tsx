@@ -30,7 +30,7 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
       />
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.next}
+          primaryTitle={common.confirm}
           primaryOnPress={primaryOnPress}
           secondaryTitle={common.cancel}
           secondaryOnPress={secondaryOnPress}

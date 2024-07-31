@@ -7,7 +7,6 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
@@ -31,7 +30,7 @@ function AppBackup({ navigation }) {
   return (
     <ScreenContainer>
       <AppHeader
-        title={settings.appBackup}
+        title={settings.walletBackup}
         subTitle={settings.appBackupScreenSubTitle}
         enableBack={true}
       />

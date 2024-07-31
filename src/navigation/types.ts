@@ -40,6 +40,8 @@ export type AppStackParams = {
   [NavigationRoutes.COLLECTIBLEDETAILS]: undefined;
   [NavigationRoutes.COLLECTIBLEMETADATA]: undefined;
   [NavigationRoutes.ADDASSET]: undefined;
+  [NavigationRoutes.APPBACKUPMENU]: undefined;
+
   // Add other routes as needed
 };
 
