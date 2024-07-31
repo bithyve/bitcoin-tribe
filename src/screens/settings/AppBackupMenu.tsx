@@ -9,6 +9,8 @@ import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingMenuItem from './components/SettingMenuItem';
 import { hp } from 'src/constants/responsive';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AppBackupMenuProps = {
   title: string;
@@ -17,13 +19,18 @@ type AppBackupMenuProps = {
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { common, settings } = translations;
+  const { settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+
   const AppBackupMenu: AppBackupMenuProps[] = [
     {
       title: settings.walletBackup,
-      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUP),
+      onPress: () =>
+        backup
+          ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
+          : navigation.navigate(NavigationRoutes.APPBACKUP),
     },
     {
       title: settings.rgbAssetsbackup,

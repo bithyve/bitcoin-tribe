@@ -14,6 +14,10 @@ import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { BackupType, Keys } from 'src/storage';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 function AppBackup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -26,6 +30,7 @@ function AppBackup({ navigation }) {
   const [words, setWords] = useState(app && app.primaryMnemonic.split(' '));
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [backup, setBackup] = useMMKVBoolean(Keys.WALLET_BACKUP);
 
   return (
     <ScreenContainer>
@@ -64,8 +69,24 @@ function AppBackup({ navigation }) {
         height={Platform.OS == 'ios' && '80%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
-          primaryOnPress={() => console.log('')}
-          secondaryOnPress={() => setVisible(false)}
+          primaryOnPress={async () => {
+            if (BackupType.SEED) {
+              setVisible(false);
+              const response = await ApiHandler.createBackup(true);
+              if (response) {
+                setBackup(true);
+                navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
+              }
+            }
+          }}
+          secondaryOnPress={async () => {
+            setVisible(false);
+            const response = await ApiHandler.createBackup(false);
+            if (response) {
+              navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
+            }
+          }}
+          words={words}
         />
       </ModalContainer>
     </ScreenContainer>
