@@ -34,7 +34,6 @@ function AppBackup({ navigation }) {
         title={settings.appBackup}
         subTitle={settings.appBackupScreenSubTitle}
         enableBack={true}
-        rightIcon={<SettingIcon />}
       />
       <FlatList
         data={words}
@@ -63,7 +62,7 @@ function AppBackup({ navigation }) {
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
         visible={visible}
-        height={Platform.OS == 'ios' && '82%'}
+        height={Platform.OS == 'ios' && '80%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
           primaryOnPress={() => console.log('')}

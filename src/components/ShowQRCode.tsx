@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
-import CommonStyles from 'src/common/styles/CommonStyles';
 import { windowWidth, wp } from 'src/constants/responsive';
+import AppText from './AppText';
+import Fonts from 'src/constants/Fonts';
 
 type ShowQRCodeProps = {
   value: string;
@@ -16,12 +17,16 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   const { value, title } = props;
   const qrSize = (windowWidth * 50) / 100;
   return (
-    <View style={styles.qrViewWrapper}>
-      <View style={styles.qrImageWrapper}>
-        <QRCode value={value} size={qrSize} />
+    <>
+      <View style={styles.qrViewWrapper}>
+        <View style={styles.qrImageWrapper}>
+          <QRCode value={value} size={qrSize} />
+        </View>
       </View>
-      <Text style={styles.qrFooterText}>{title}</Text>
-    </View>
+      <AppText variant="heading3" style={styles.qrFooterText}>
+        {title}
+      </AppText>
+    </>
   );
 };
 
@@ -29,12 +34,16 @@ const getStyles = theme =>
   StyleSheet.create({
     qrViewWrapper: {
       alignSelf: 'center',
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: theme.colors.cardGradient3,
       alignItems: 'center',
+      justifyContent: 'center',
       marginTop: wp(35),
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-      width: (windowWidth * 50) / 100,
+      padding: 10,
+      borderRadius: 15,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      height: (windowWidth * 70) / 100,
+      width: (windowWidth * 70) / 100,
     },
     qrImageWrapper: {
       width: (windowWidth * 50) / 100,
@@ -45,9 +54,8 @@ const getStyles = theme =>
     qrFooterText: {
       textAlign: 'center',
       color: theme.colors.accent1,
-      fontSize: CommonStyles.body1.fontSize,
-      paddingVertical: wp(5),
-      fontFamily: '',
+      paddingVertical: wp(10),
+      fontFamily: Fonts.LufgaRegular,
     },
   });
 

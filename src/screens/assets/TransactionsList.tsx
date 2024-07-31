@@ -94,7 +94,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     recentTransText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     viewAllText: {
       color: theme.colors.accent1,

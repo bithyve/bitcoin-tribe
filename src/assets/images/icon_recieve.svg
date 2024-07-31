@@ -1,4 +1,4 @@
-<svg id="icon_recieve" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
-  <path id="Path_121739" data-name="Path 121739" d="M1.588.273A.93.93,0,0,0,.273,1.588L6.127,7.443H2.171a.93.93,0,0,0,0,1.861h6.2a.931.931,0,0,0,.93-.93v-6.2a.93.93,0,0,0-1.861,0V6.127Z" transform="translate(10 11)" fill="#212121"/>
+<svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.78963 15.0963L14.8607 8.02525" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.4815 15.0845L7.78973 15.0968L7.80151 9.40454" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

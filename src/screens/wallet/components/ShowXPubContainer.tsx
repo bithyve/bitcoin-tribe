@@ -6,10 +6,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from 'src/screens/receive/components/ReceiveQrClipBoard';
+import FooterNote from 'src/components/FooterNote';
 
 function ShowXPubContainer({ xpub }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet, common } = translations;
 
   return (
     <View style={styles.container}>
@@ -17,11 +18,11 @@ function ShowXPubContainer({ xpub }) {
         <ShowQRCode value={xpub} title={wallet.xPubDetails} />
         <ReceiveQrClipBoard qrCodeValue={xpub} icon={<IconCopy />} />
       </ScrollView>
-      {/* <FooterNote
+      <FooterNote
         title={common.note}
         subTitle={wallet.xPubNoteSubTitle}
         customStyle={styles.advanceOptionStyle}
-      /> */}
+      />
     </View>
   );
 }

@@ -1,7 +1,4 @@
-<svg id="icon_arrowr2" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
-  <g id="arrow-right-circle" transform="translate(2.75 2.75)">
-    <path id="Path_117651" data-name="Path 117651" d="M12.25,1.25a11,11,0,1,0,11,11A11,11,0,0,0,12.25,1.25Z" fill="#4b4b4b"/>
-    <path id="Path_117652" data-name="Path 117652" d="M13.262,14.97a.728.728,0,0,0,0,1.061.807.807,0,0,0,1.107,0l3.652-3.5a.728.728,0,0,0,0-1.061l-3.652-3.5a.807.807,0,0,0-1.107,0,.728.728,0,0,0,0,1.061l2.316,2.22H7.033a.751.751,0,1,0,0,1.5h8.545Z" transform="translate(0 0.25)" fill="#e0e0e0"/>
-  </g>
+<svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.9585 9.77157H4.4585" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.917 4.75116L16.9587 9.77116L11.917 14.792" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
