@@ -8,7 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
 import IconBackup from 'src/assets/images/icon_backup.svg';
-import IconLangCurrency from 'src/assets/images/icon_globe.svg';
+import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';

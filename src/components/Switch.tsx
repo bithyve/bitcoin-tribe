@@ -43,7 +43,9 @@ const getStyles = (theme: AppTheme, value) =>
   StyleSheet.create({
     container: {
       borderRadius: wp(15),
-      backgroundColor: value ? theme.colors.toggleBackground : 'gray',
+      backgroundColor: value
+        ? theme.colors.toggleBackground
+        : theme.colors.toggleInActiveBackColor,
       padding: 2,
     },
     toggleWrapper: {
@@ -57,7 +59,7 @@ const getStyles = (theme: AppTheme, value) =>
       height: windowHeight > 650 ? 28 : 18,
       width: windowHeight > 650 ? 28 : 18,
       borderRadius: 30,
-      backgroundColor: theme.colors.primaryCTA,
+      backgroundColor: theme.colors.toggleButtonColor,
       alignSelf: 'flex-end',
       marginHorizontal: 1,
     },
@@ -65,7 +67,7 @@ const getStyles = (theme: AppTheme, value) =>
       height: windowHeight > 650 ? 28 : 18,
       width: windowHeight > 650 ? 28 : 18,
       borderRadius: 30,
-      backgroundColor: theme.colors.profileBackground,
+      backgroundColor: theme.colors.toggleInActiveBtnColor,
       alignSelf: 'flex-start',
       marginHorizontal: 1,
     },

@@ -21,7 +21,7 @@ type CoinDetailsHeaderProps = {
 function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common, sendScreen } = translations;
+  const { home } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { coin, onPressSetting, onPressBuy } = props;
@@ -32,6 +32,11 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
       <AppText variant="body1" style={styles.usernameText}>
         {coin.name}
       </AppText>
+      <View>
+        <AppText variant="body2" style={styles.totalBalText}>
+          {home.totalBalance}
+        </AppText>
+      </View>
       <View style={styles.balanceWrapper}>
         <AppText variant="walletBalance" style={styles.balanceText}>
           {numberWithCommas(coin.balance.spendable)}
@@ -66,10 +71,14 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,
+    },
+    totalBalText: {
+      color: theme.colors.secondaryHeadingColor,
+      fontWeight: '400',
     },
   });
 export default CoinDetailsHeader;

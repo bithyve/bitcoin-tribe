@@ -8,7 +8,7 @@ const Colors = {
   DarkGray: 'rgba(170, 170, 170,1)',
   SonicSilver: 'rgba(116, 116, 116,1)',
   RaisinBlack: 'rgba(33, 33, 33, 1)',
-  Arsenic: 'rgba(67, 67, 67, 1)',
+  Arsenic: 'rgba(57, 60, 67, 1)',
   SilverSand: 'rgba(196, 196, 196,1)',
   QuickSilver: 'rgba(162, 162, 162, 1)',
   DarkSalmon: 'rgba(252, 142, 98, 1)',
@@ -24,5 +24,6 @@ const Colors = {
   Golden: 'rgba(255, 214, 0, 1)',
   ScreaminGreen: 'rgba(116, 255, 81, 1)',
   TurquoiseBlue: 'rgba(1, 255, 227, 1)',
+  DimGray: 'rgba(103, 108, 117,1)',
 };
 export default Colors;

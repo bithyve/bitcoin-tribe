@@ -7,8 +7,6 @@ import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
-import AppText from 'src/components/AppText';
-import ActivePageIndicator from 'src/components/ActivePageIndicator';
 
 type confirmAppBackupProps = {
   primaryOnPress: () => void;
@@ -23,18 +21,14 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
   const [address, setAddress] = useState('');
   return (
     <View>
-      <AppText variant="body1" style={styles.labelStyle}>
-        {settings.enterSeedWordLabel}
-      </AppText>
       <TextField
         value={address}
         onChangeText={text => setAddress(text)}
-        placeholder={settings.enterSeedWord}
+        placeholder={settings.enterSeedWordLabel}
         keyboardType={'default'}
         autoFocus={true}
       />
       <View style={styles.buttonWrapper}>
-        <ActivePageIndicator totalPages={3} currentPage={0} />
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={primaryOnPress}
@@ -48,13 +42,7 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    labelStyle: {
-      margin: hp(15),
-      color: theme.colors.headingColor,
-      marginTop: hp(50),
-    },
     buttonWrapper: {
-      flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
       marginTop: hp(20),

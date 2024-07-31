@@ -36,6 +36,10 @@ type CustomColors = {
   primaryCTAText: string;
   disablePrimaryCTAText: string;
   activeTabColor: string;
+  toggleButtonColor: string;
+  toggleInActiveBtnColor: string;
+  toggleInActiveBackColor: string;
+  modalBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -69,13 +73,17 @@ const CombinedDefaultTheme: AppTheme = {
     disablePrimaryCTAText: Colors.SonicSilver,
     accent2: Colors.TurquoiseBlue,
     activeTabColor: Colors.White,
+    toggleBackground: Colors.Golden,
+    toggleButtonColor: Colors.White,
+    toggleInActiveBtnColor: Colors.DimGray,
+    toggleInActiveBackColor: Colors.Arsenic,
+    modalBackColor: Colors.EerieBlack,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    toggleBackground: Colors.Quartz,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
@@ -121,13 +129,17 @@ const CombinedDarkTheme: AppTheme = {
     disablePrimaryCTAText: Colors.SonicSilver,
     accent2: Colors.TurquoiseBlue,
     activeTabColor: Colors.White,
+    toggleBackground: Colors.Golden,
+    toggleButtonColor: Colors.White,
+    toggleInActiveBtnColor: Colors.DimGray,
+    toggleInActiveBackColor: Colors.Arsenic,
+    modalBackColor: Colors.EerieBlack,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
     primaryText: Colors.RaisinBlack,
-    toggleBackground: Colors.Quartz,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,

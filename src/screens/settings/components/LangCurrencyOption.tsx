@@ -7,6 +7,7 @@ import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
+import GradientView from 'src/components/GradientView';
 
 type LangCurrencyOptionProps = {
   icon: ReactNode;
@@ -28,24 +29,34 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
       <View style={styles.contentContainer}>
         {icon}
         <View style={styles.contentWrapper}>
-          <AppText variant="body1" style={styles.titleText}>
+          <AppText variant="heading3" style={styles.titleText}>
             {title}
           </AppText>
-          <AppText variant="heading3" style={styles.subTitleText}>
+          <AppText variant="body1" style={styles.subTitleText}>
             {subTitle}
           </AppText>
         </View>
       </View>
-      <AppTouchable style={styles.inputWrapper} onPress={onPress}>
-        <AppText variant="body1" style={styles.langCurrencyStyle}>
-          {langCurrency}
-        </AppText>
-        <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
-          {langCurrencyVariant}
-        </AppText>
-        <View style={styles.iconArrowWrapper}>
-          <IconArrowDown />
-        </View>
+      <AppTouchable onPress={onPress}>
+        <GradientView
+          style={styles.inputWrapper}
+          colors={[
+            theme.colors.cardGradient1,
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient3,
+          ]}>
+          <View style={styles.langCurrencyWrapper}>
+            <AppText variant="body1" style={styles.langCurrencyStyle}>
+              {langCurrency}
+            </AppText>
+          </View>
+          <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
+            {langCurrencyVariant}
+          </AppText>
+          <View style={styles.iconArrowWrapper}>
+            <IconArrowDown />
+          </View>
+        </GradientView>
       </AppTouchable>
     </View>
   );
@@ -53,7 +64,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      marginVertical: hp(15),
+      marginVertical: hp(20),
     },
     contentContainer: {
       flexDirection: 'row',
@@ -66,24 +77,27 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       alignItems: 'center',
       width: '100%',
-      backgroundColor: theme.colors.inputBackground,
       padding: 15,
       borderRadius: 10,
       marginTop: hp(15),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     titleText: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
     },
-    langCurrencyStyle: {
-      color: theme.colors.accent2,
+    langCurrencyWrapper: {
       width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRightColor: theme.colors.borderColor,
       borderRightWidth: 2,
+      borderRightColor: theme.colors.secondaryHeadingColor,
+    },
+    langCurrencyStyle: {
+      color: theme.colors.accent2,
     },
     langCurrencyVariantStyle: {
       color: theme.colors.headingColor,

@@ -41,6 +41,7 @@ const CollectibleDetailsScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const { assetId } = useRoute().params;
+  const styles = getStyles();
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -76,5 +77,25 @@ const CollectibleDetailsScreen = () => {
     </ScreenContainer>
   );
 };
-
+const getStyles = () =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'column',
+      height: '100%',
+      paddingHorizontal: 0,
+      paddingTop: 0,
+    },
+    walletHeaderWrapper: {
+      height: windowHeight < 670 ? '45%' : '40%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: wp(16),
+      borderBottomWidth: 0.5,
+      borderBottomColor: 'gray',
+    },
+    TransactionWrapper: {
+      height: windowHeight < 670 ? '50%' : '60%',
+      marginHorizontal: wp(16),
+    },
+  });
 export default CollectibleDetailsScreen;
