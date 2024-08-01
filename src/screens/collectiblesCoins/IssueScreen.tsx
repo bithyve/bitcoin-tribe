@@ -74,7 +74,7 @@ function IssueScreen() {
       name: assetName.trim(),
       description: description,
       supply: totalSupplyAmt,
-      filePath: image.path.replace('file://', ''),
+      filePath: image?.path?.replace('file://', ''),
     });
     console.log(response);
     setLoading(false);
@@ -92,7 +92,7 @@ function IssueScreen() {
     assetName,
     assets.assetCreateMsg,
     description,
-    image.path,
+    image?.path,
     navigation,
     totalSupplyAmt,
   ]);
