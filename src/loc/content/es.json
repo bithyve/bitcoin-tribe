@@ -19,7 +19,9 @@
     "sendMax": "SEND MAX",
     "broadcast": "Broadcast",
     "walletID": "Wallet ID",
-    "versionHistory": "Version History"
+    "versionHistory": "Version History",
+    "confirm": "Confirm",
+    "skip": "Skip"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -95,7 +97,12 @@
     "walletIDSubTitle": "This ID is unique to your Bitcoin Tribe App",
     "versionHistorySubTitle": "View app’s current version & its history",
     "appInfoTitle": "App Info",
-    "appInfoScreenSubTitle": "Bitcoin Tribe app version number & details"
+    "appInfoScreenSubTitle": "Bitcoin Tribe app version number & details",
+    "walletBackup": "Wallet backup",
+    "rgbAssetsbackup": "RGB Assets backup",
+    "appBackupMenuSubTitle": "Your wallet is backed up with Tribe RGB",
+    "walletBackupHistory": "Wallet backup history",
+    "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future."
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",

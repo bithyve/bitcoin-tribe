@@ -40,7 +40,7 @@ function SettingsScreen({ navigation }) {
       title: settings.appBackup,
       // subtitle: settings.appBackupSubTitle,
       icon: <IconBackup />,
-      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUP),
+      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
     },
     {
       title: settings.connectionSettings,

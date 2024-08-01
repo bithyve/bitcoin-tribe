@@ -64,6 +64,12 @@ export const cryptoRandom = () => {
   return randomNumber;
 };
 
+// random number
+export const generateRandomNumber = max => {
+  const number = Math.floor(Math.random() * max) + 1;
+  return number;
+};
+
 export const stringToArrayBuffer = (byteString: string): Uint8Array => {
   if (byteString) {
     const byteArray = new Uint8Array(byteString.length);

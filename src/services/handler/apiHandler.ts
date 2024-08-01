@@ -40,10 +40,11 @@ import {
   NodeDetail,
   TransactionPrerequisite,
 } from '../wallets/interfaces';
-import { Keys, Storage } from 'src/storage';
+import { BackupAction, Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices, { SATS_FOR_RGB } from '../rgb/RGBServices';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import moment from 'moment';
 
 export class ApiHandler {
   static performSomeAsyncOperation() {
@@ -540,6 +541,23 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
+  // backup
+  static async createBackup(confirmed) {
+    try {
+      dbManager.createObject(RealmSchema.BackupHistory, {
+        title: confirmed
+          ? BackupAction.SEED_BACKUP_CONFIRMED
+          : BackupAction.SEED_BACKUP_CONFIRMATION_SKIPPED,
+        date: new Date().toString(),
+        confirmed,
+        subtitle: '',
+      });
+      return true;
+    } catch (error) {
+      console.log('backup', error);
       throw new Error(error);
     }
   }
