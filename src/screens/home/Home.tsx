@@ -2,22 +2,21 @@ import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import ModalContainer from 'src/components/ModalContainer';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AddAssetModal from './components/AddAsset';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
@@ -26,10 +25,9 @@ function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home, common, sendScreen } = translations;
+  const { common, sendScreen } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
-  const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
@@ -92,7 +90,6 @@ function HomeScreen() {
           }
         />
       </View>
-
       <AssetsList
         listData={assets}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
@@ -108,13 +105,6 @@ function HomeScreen() {
           }
         }}
       />
-      {/* <ModalContainer
-        title={home.addAssets}
-        subTitle={home.addAssetSubTitle}
-        visible={visible}
-        onDismiss={() => setVisible(false)}>
-        <AddAssetModal onDismiss={() => setVisible(false)} />
-      </ModalContainer> */}
     </ScreenContainer>
   );
 }

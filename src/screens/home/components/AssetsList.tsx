@@ -1,5 +1,11 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
@@ -60,54 +66,63 @@ function AssetsList(props: AssetsListProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+
+  const FooterComponent = () => {
+    return <View style={styles.footer} />;
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        directionalLockEnabled={true}
-        alwaysBounceVertical={false}>
-        <View style={styles.assetWrapper}>
-          {listData.map((item, index) => {
-            if (item.assetIface.toUpperCase() === AssetFace.RGB20) {
-              return (
-                <Item
-                  key={index}
-                  name={item.name}
-                  details={item.balance.spendable}
-                  tag="COIN"
-                  onPressAsset={() =>
-                    navigation.navigate(NavigationRoutes.COINDETAILS, {
-                      assetId: item.assetId,
-                    })
-                  }
-                  // onPressAddNew={onPressAddNew}
-                  index={index}
-                  ticker={item.ticker}
-                />
-              );
-            } else if (item.assetIface.toUpperCase() === AssetFace.RGB25) {
-              return (
-                <Item
-                  key={index}
-                  name={item.name}
-                  details={item.balance.spendable}
-                  tag="COLLECTIBLE"
-                  onPressAsset={() =>
-                    navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
-                      assetId: item.assetId,
-                    })
-                  }
-                  // onPressAddNew={onPressAddNew}
-                  index={index}
-                  ticker={item.ticker}
-                  image={`file://${item.media?.filePath}`}
-                />
-              );
-            }
-          })}
-        </View>
-      </ScrollView>
+      <FlatList
+        numColumns={2}
+        // style={styles.container}
+        data={listData}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {}}
+            tintColor={theme.colors.primaryCTA}
+          />
+        }
+        ListFooterComponent={FooterComponent}
+        renderItem={({ item, index }) => (
+          <View style={styles.assetWrapper}>
+            {item.assetIface.toUpperCase() === AssetFace.RGB20 && (
+              <Item
+                key={index}
+                name={item.name}
+                details={item.balance.spendable}
+                tag="COIN"
+                onPressAsset={() =>
+                  navigation.navigate(NavigationRoutes.COINDETAILS, {
+                    assetId: item.assetId,
+                  })
+                }
+                // onPressAddNew={onPressAddNew}
+                index={index}
+                ticker={item.ticker}
+              />
+            )}
+            {item.assetIface.toUpperCase() === AssetFace.RGB25 && (
+              <Item
+                key={index}
+                name={item.name}
+                details={item.balance.spendable}
+                tag="COLLECTIBLE"
+                onPressAsset={() =>
+                  navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
+                    assetId: item.assetId,
+                  })
+                }
+                // onPressAddNew={onPressAddNew}
+                index={index}
+                ticker={item.ticker}
+                image={`file://${item.media?.filePath}`}
+              />
+            )}
+          </View>
+        )}
+      />
       <AppTouchable style={styles.addNewIconWrapper} onPress={onPressAddNew}>
         <AddNewAsset />
       </AppTouchable>
@@ -118,16 +133,21 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
+      height: '76%',
     },
     assetWrapper: {
-      height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
+      // height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
+      // height: '80%',
       flexWrap: 'wrap',
       paddingLeft: wp(15),
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 40,
+      bottom: 100,
       right: 30,
+    },
+    footer: {
+      height: 100, // Adjust the height as needed
     },
   });
 export default AssetsList;
