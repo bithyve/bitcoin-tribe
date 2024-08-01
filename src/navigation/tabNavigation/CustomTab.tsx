@@ -34,7 +34,6 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         return <TextIcon />;
     }
   };
-  console.log('windowWidth', windowHeight);
   return (
     <GradientView
       style={styles.tabBar}
