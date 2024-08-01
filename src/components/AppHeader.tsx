@@ -6,7 +6,7 @@ import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
-import { useNavigation } from '@react-navigation/native';
+import { Route, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
@@ -17,6 +17,7 @@ type AppHeaderProps = {
   enableBack?: boolean;
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
+  onBackNavigation?;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -25,6 +26,7 @@ function AppHeader(props: AppHeaderProps) {
     subTitle,
     style,
     enableBack = true,
+    onBackNavigation,
     rightIcon,
     onSettingsPress,
   } = props;
@@ -38,7 +40,7 @@ function AppHeader(props: AppHeaderProps) {
       <View style={styles.iconContainer}>
         {enableBack && (
           <AppTouchable
-            onPress={navigation.goBack}
+            onPress={onBackNavigation ? onBackNavigation : navigation.goBack}
             style={styles.leftIconWrapper}>
             {<GoBack />}
           </AppTouchable>
