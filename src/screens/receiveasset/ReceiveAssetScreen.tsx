@@ -39,7 +39,7 @@ function ReceiveAssetScreen({}) {
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast(assets.insufficientSats);
+      Toast(assets.insufficientSats, false, true);
       navigation.goBack();
     } else if (createUtxos.isSuccess) {
       setTimeout(() => {

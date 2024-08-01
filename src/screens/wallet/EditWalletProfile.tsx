@@ -36,7 +36,7 @@ function EditWalletProfile({ navigation }) {
         autoRefresh: true,
       });
     } else {
-      Toast(wallet.profileUpdateErrMsg);
+      Toast(wallet.profileUpdateErrMsg, false, true);
     }
   };
 

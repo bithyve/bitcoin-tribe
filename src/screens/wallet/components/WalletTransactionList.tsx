@@ -51,9 +51,9 @@ function WalletTransactionList({
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
-      Toast('Wallet refreshed successfully');
+      Toast('Wallet refreshed successfully', true);
     } else if (walletRefreshMutation.status === 'error') {
-      Toast('Failed to refresh wallet');
+      Toast('Failed to refresh wallet', false, true);
     }
   }, [walletRefreshMutation]);
 

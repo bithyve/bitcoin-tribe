@@ -53,20 +53,24 @@ const SendAssetScreen = () => {
     console.log('response', response);
     setLoading(false);
     if (response?.txid) {
-      Toast('Sent successfully');
+      Toast('Sent successfully', true);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`);
+      Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [invoice, amount, navigation]);
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast('Insufficient sats in the main Wallet, failed to create new UTXOs');
+      Toast(
+        'Insufficient sats in the main Wallet, failed to create new UTXOs',
+        false,
+        true,
+      );
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
       sendAsset();

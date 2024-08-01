@@ -13,7 +13,11 @@ export default (message, icon = false, error = false) => {
   return Toast.show(
     <View style={styles.container}>
       {icon && <CheckIcon />}
-      <AppText style={styles.toastMessageStyle}>
+      <AppText
+        style={[
+          styles.toastMessageStyle,
+          { color: error ? Colors.ImperialRed : Colors.RaisinBlack },
+        ]}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
           : message}
@@ -27,8 +31,10 @@ export default (message, icon = false, error = false) => {
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: Colors.ScreaminGreen,
-      textColor: Colors.RaisinBlack,
+      backgroundColor: error ? Colors.BulgarianRose : Colors.ScreaminGreen,
+      textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
+      borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
+      borderWidth: 1,
       containerStyle: { marginBottom: (windowWidth * 22) / 100 },
     },
   );
@@ -44,7 +50,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   toastMessageStyle: {
-    color: Colors.RaisinBlack,
     marginLeft: wp(8),
     fontSize: 14,
     fontFamily: Fonts.LufgaSemiBold,
