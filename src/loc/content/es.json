@@ -1,12 +1,12 @@
 {
   "common": {
-    "next": "Next",
-    "cancel": "Cancel",
-    "receive": "Receive",
-    "save": "Save",
-    "addressCopiedSuccessfully": "Address Copied Successfully!",
-    "note": "Note",
-    "send": "Send",
+    "next": "_Next",
+    "cancel": "_Cancel",
+    "receive": "_Receive",
+    "save": "_Save",
+    "addressCopiedSuccessfully": "_Address Copied Successfully!",
+    "note": "_Note",
+    "send": "_Send",
     "proceed": "Proceed",
     "recieve": "Recieve",
     "buy": "Buy",
@@ -102,7 +102,10 @@
     "rgbAssetsbackup": "RGB Assets backup",
     "appBackupMenuSubTitle": "Your wallet is backed up with Tribe RGB",
     "walletBackupHistory": "Wallet backup history",
-    "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future."
+    "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
+    "SEED_BACKUP_CREATED": "Seed backup is created",
+    "SEED_BACKUP_CONFIRMED": "Seed backup is confirmed",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
