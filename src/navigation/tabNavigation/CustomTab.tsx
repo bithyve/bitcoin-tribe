@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -15,12 +15,15 @@ import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
@@ -31,7 +34,19 @@ const CustomTab = ({ state, descriptors, navigation }) => {
       case NavigationRoutes.SETTINGS:
         return isFocused && <SettingsActive />;
       default:
-        return <TextIcon />;
+        return '';
+    }
+  };
+  const TabBarTitle = label => {
+    switch (label) {
+      case NavigationRoutes.ASSETS:
+        return `${common.assets}`;
+      case NavigationRoutes.COMMUNITY:
+        return '';
+      case NavigationRoutes.SETTINGS:
+        return `${common.settings}`;
+      default:
+        return '';
     }
   };
   return (
@@ -90,7 +105,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
                     : theme.colors.disablePrimaryCTAText,
                 },
               ]}>
-              &nbsp;&nbsp;{Capitalize(label)}
+              &nbsp;&nbsp;{Capitalize(TabBarTitle(label))}
             </AppText>
           </TouchableOpacity>
         );
