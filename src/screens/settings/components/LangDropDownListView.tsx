@@ -41,7 +41,7 @@ function LangDropDownListView(props: DropdownProps) {
                 uncheckedColor={theme.colors.headingColor}
                 value={item.iso}
                 status={selectedLanguage == item.iso ? 'checked' : 'unchecked'}
-                onPress={() => callback(item.iso)}
+                onPress={() => callback(item)}
               />
             </View>
           </GradientView>
