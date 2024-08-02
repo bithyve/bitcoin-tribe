@@ -30,12 +30,12 @@ export function LocalizationProvider({ children }) {
   const [appLanguage, setAppLanguage] = useMMKVString(Keys.APP_LANGUAGE);
 
   useEffect(() => {
-    initializeAppLanguage;
+    initializeAppLanguage();
   }, [appLanguage]);
 
   const formatString = (...param) => translations.formatString(...param);
 
-  const initializeAppLanguage = async () => {
+  const initializeAppLanguage = () => {
     if (appLanguage) {
       translations.setLanguage(appLanguage);
       setAppLanguage(appLanguage);
