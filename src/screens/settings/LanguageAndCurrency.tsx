@@ -9,7 +9,7 @@ import LangCurrencyOption from './components/LangCurrencyOption';
 import IconLanguage from 'src/assets/images/icon_globe.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
 import LangDropDownListView from './components/LangDropDownListView';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { hp } from 'src/constants/responsive';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
@@ -74,7 +74,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: '50%',
+      top: Platform.OS === 'ios' ? '50%' : '41%',
       borderRadius: 10,
       marginHorizontal: hp(15),
     },
