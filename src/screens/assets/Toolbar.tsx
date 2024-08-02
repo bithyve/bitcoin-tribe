@@ -44,13 +44,12 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     leftIconWrapper: {
-      width: '10%',
+      width: '20%',
     },
     profileWrapper: {
-      width: '70%',
+      width: '60%',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingLeft: wp(32),
       marginTop: windowHeight > 650 ? 0 : 10,
     },
     rightIconWrapper: {

@@ -41,7 +41,7 @@ const getStyles = (theme: AppTheme, visible, index) =>
       flexDirection: 'row',
       paddingLeft: hp(10),
       alignItems: 'center',
-      marginVertical: hp(8),
+      marginVertical: hp(7),
       marginRight: index % 2 ? 0 : hp(15),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,

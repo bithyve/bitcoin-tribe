@@ -56,14 +56,14 @@ function IssueScreen() {
     });
     setLoading(false);
     if (response?.assetId) {
-      Toast(assets.assetCreateMsg);
+      Toast(assets.assetCreateMsg, true);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`);
+      Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
@@ -74,32 +74,32 @@ function IssueScreen() {
       name: assetName.trim(),
       description: description,
       supply: totalSupplyAmt,
-      filePath: image.path.replace('file://', ''),
+      filePath: image?.path?.replace('file://', ''),
     });
     console.log(response);
     setLoading(false);
     if (response?.assetId) {
-      Toast(assets.assetCreateMsg);
+      Toast(assets.assetCreateMsg, true);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`);
+      Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [
     assetName,
     assets.assetCreateMsg,
     description,
-    image.path,
+    image?.path,
     navigation,
     totalSupplyAmt,
   ]);
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast(assets.insufficientSatsMainWallet);
+      Toast(assets.insufficientSatsMainWallet, false, true);
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
       onPressIssue();

@@ -1,24 +1,16 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp } from 'src/constants/responsive';
+import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
 import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
-// import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
-// import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
@@ -42,7 +34,6 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         return <TextIcon />;
     }
   };
-
   return (
     <GradientView
       style={styles.tabBar}
@@ -113,16 +104,14 @@ const getStyles = (theme: AppTheme) =>
     tabBar: {
       flexDirection: 'row',
       borderRadius: 40,
-      // backgroundColor: theme.colors.inputBackground,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       position: 'absolute',
-      bottom: hp(15),
+      bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
       width: wp(297),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
-      // paddingHorizontal: wp(30),
     },
     activeTab: {
       flex: 1,
@@ -143,7 +132,6 @@ const getStyles = (theme: AppTheme) =>
       fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 14 * 1.4,
       fontWeight: '400',
-      // height: 15,
     },
   });
 

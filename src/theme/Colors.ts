@@ -25,5 +25,7 @@ const Colors = {
   ScreaminGreen: 'rgba(116, 255, 81, 1)',
   TurquoiseBlue: 'rgba(1, 255, 227, 1)',
   DimGray: 'rgba(103, 108, 117,1)',
+  BulgarianRose: 'rgba(72, 10, 15, 1)',
+  ImperialRed: 'rgba(236, 34, 64,1)',
 };
 export default Colors;

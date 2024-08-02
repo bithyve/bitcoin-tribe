@@ -49,13 +49,13 @@ function SendToContainer({
         txPrerequisites: sendPhaseOneMutation.data,
       });
     } else if (sendPhaseOneMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseOneMutation.error}`);
+      Toast(`Error while sending: ${sendPhaseOneMutation.error}`, false, true);
     }
   }, [sendPhaseOneMutation]);
 
   const initiateSendPhaseOne = () => {
     if (insufficientBalance) {
-      Toast('Amount entered is more than available to spend');
+      Toast('Amount entered is more than available to spend', false, true);
       return;
     }
 

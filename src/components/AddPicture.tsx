@@ -46,8 +46,8 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: hp(30),
-      marginBottom: hp(40),
+      marginTop: windowHeight > 670 ? hp(30) : hp(20),
+      marginBottom: windowHeight > 670 ? hp(40) : hp(20),
     },
     iconImageWrapper: {
       height: windowHeight > 670 ? hp(75) : 75,

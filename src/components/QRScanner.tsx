@@ -68,7 +68,7 @@ const QRScanner = () => {
         });
         break;
       default:
-        Toast('Invalid Bitcoin address');
+        Toast('Invalid Bitcoin address', false, true);
     }
   }, []);
 
