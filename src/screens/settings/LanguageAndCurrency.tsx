@@ -74,8 +74,8 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '50%' : '41%',
-      borderRadius: 10,
+      top: Platform.OS === 'ios' ? '50%' : '42%',
+      borderRadius: 20,
       marginHorizontal: hp(15),
     },
   });
