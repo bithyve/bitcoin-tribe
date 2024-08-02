@@ -26,6 +26,7 @@ function LanguageAndCurrency() {
   const selectedLanguage = availableLanguages.find(
     lang => lang.iso === language,
   );
+
   useEffect(() => {
     initializeAppLanguage();
   }, [language]);
@@ -41,8 +42,10 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={<IconLanguage />}
-          langCurrency={selectedLanguage.iso}
-          langCurrencyVariant={selectedLanguage.displayTitle}
+          langCurrency={selectedLanguage && selectedLanguage.iso}
+          langCurrencyVariant={
+            selectedLanguage && selectedLanguage.displayTitle
+          }
           onPress={() => setLangDropdown(!langDropdown)}
         />
       </View>
@@ -61,7 +64,7 @@ function LanguageAndCurrency() {
             setLangDropdown(false);
             setLanguage(item.iso);
           }}
-          selectedLanguage={selectedLanguage.iso}
+          selectedLanguage={selectedLanguage && selectedLanguage.iso}
         />
       )}
     </ScreenContainer>

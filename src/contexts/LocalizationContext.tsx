@@ -29,11 +29,9 @@ export const LocalizationContext = createContext({
 export function LocalizationProvider({ children }) {
   const [appLanguage, setAppLanguage] = useMMKVString(Keys.APP_LANGUAGE);
 
-  // const setLanguage = language => {
-  //   translations.setLanguage(language);
-  // setAppLanguage(language);
-  // Storage.set(APP_LANGUAGE, language);
-  // };
+  useEffect(() => {
+    initializeAppLanguage;
+  }, [appLanguage]);
 
   const formatString = (...param) => translations.formatString(...param);
 
@@ -44,14 +42,10 @@ export function LocalizationProvider({ children }) {
       moment.locale(appLanguage);
     } else {
       translations.setLanguage(DEFAULT_LANGUAGE);
+      setAppLanguage(DEFAULT_LANGUAGE);
       moment.locale(DEFAULT_LANGUAGE);
     }
   };
-
-  useEffect(() => {
-    console.log('appLanguage', appLanguage);
-    initializeAppLanguage;
-  }, [appLanguage]);
 
   return (
     <LocalizationContext.Provider
