@@ -164,7 +164,8 @@
     "amount": "Amount",
     "date": "Date",
     "transferDetails": "Transfer Details",
-    "viewUnspent": "View Unspent UTXOs"
+    "viewUnspent": "View Unspent UTXOs",
+    "walletRefreshMsg": "Wallet refreshed successfully"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
