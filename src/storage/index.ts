@@ -8,6 +8,7 @@ export enum Keys {
   AVERAGE_TX_FEE_BY_NETWORK = 'AVERAGE_TX_FEE_BY_NETWORK',
   THEME_MODE = 'THEME_MODE',
   WALLET_BACKUP = 'WALLET_BACKUP',
+  APP_LANGUAGE = 'APP_LANGUAGE',
 }
 
 export const enum BackupType {

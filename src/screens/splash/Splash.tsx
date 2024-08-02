@@ -7,13 +7,16 @@ import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function Splash({ navigation }) {
   const { setKey } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
+  const { initializeAppLanguage } = useContext(LocalizationContext);
 
   useEffect(() => {
     init();
+    initializeAppLanguage();
   }, []);
 
   useEffect(() => {
