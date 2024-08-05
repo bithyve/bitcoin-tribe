@@ -138,6 +138,51 @@ import CloudKit
     }
   }
   
+  @objc func getUnspents(callback: @escaping ((String) -> Void)){
+    do{
+      let unspents = try self.rgbManager.rgbWallet?.listUnspents(online: self.rgbManager.online, settledOnly: false)
+      var jsonString = "["
+      for (index, unspent) in unspents!.enumerated() {
+              jsonString += "{"
+              let utxo = unspent.utxo
+              jsonString += "\"utxo\":{"
+              jsonString += "\"outpoint\":{"
+              jsonString += "\"txid\":\"\(utxo.outpoint.txid)\","
+              jsonString += "\"vout\":\(utxo.outpoint.vout)"
+              jsonString += "},"
+              jsonString += "\"btcAmount\":\(utxo.btcAmount),"
+              jsonString += "\"colorable\":\(utxo.colorable),"
+              jsonString += "\"exists\":\(utxo.exists)"
+              jsonString += "},"
+                            jsonString += "\"rgbAllocations\":["
+              for (allocIndex, allocation) in unspent.rgbAllocations.enumerated() {
+                  jsonString += "{"
+                  if let assetId = allocation.assetId {
+                      jsonString += "\"assetId\":\"\(assetId)\","
+                  } else {
+                      jsonString += "\"assetId\":null,"
+                  }
+                  jsonString += "\"amount\":\(allocation.amount),"
+                  jsonString += "\"settled\":\(allocation.settled)"
+                  jsonString += "}"
+                  if allocIndex < unspent.rgbAllocations.count - 1 {
+                      jsonString += ","
+                  }
+              }
+              jsonString += "]"
+              jsonString += "}"
+        if index < unspents!.count - 1 {
+                  jsonString += ","
+              }
+          }
+          jsonString += "]"
+      callback(jsonString)
+    }catch {
+      print(error)
+      callback("[]")
+    }
+  }
+  
   func getRgbAssets()->String{
     do{
       let refresh = try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: nil, filter: [])
@@ -168,7 +213,6 @@ import CloudKit
         jsonObject["issuedSupply"] = asset.issuedSupply
         jsonObject["timestamp"] = asset.timestamp
         jsonObject["addedAt"] = asset.addedAt
-        jsonObject["dataPaths"] = asset.media
         jsonObject["assetIface"] = "\(asset.assetIface)"
         jsonArray.append(jsonObject)
       }
@@ -186,18 +230,12 @@ import CloudKit
         jsonRgb121Object["issuedSupply"] = asset.issuedSupply
         jsonRgb121Object["timestamp"] = asset.timestamp
         jsonRgb121Object["addedAt"] = asset.addedAt
-        jsonRgb121Object["dataPaths"] = asset.media
+        jsonRgb121Object["media"] = [
+          "filePath": asset.media?.filePath,
+          "mime": asset.media?.mime,
+        ]
         jsonRgb121Object["assetIface"] = "\(asset.assetIface)"
-        
         var jsonDataPaths: [[String: Any]] = []
-        
-//        asset.dataPaths.forEach { Media in
-//          let jsonDatapath: [String: Any] = [
-//            "mime": Media.mime,
-//            "filePath": Media.filePath
-//          ]
-//          jsonDataPaths.append(jsonDatapath)
-//        }
         jsonRgb121Object["dataPaths"] = jsonDataPaths
         jsonRgb121Array.append(jsonRgb121Object)
       }
@@ -385,13 +423,6 @@ import CloudKit
       return try handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(online: self.rgbManager.online!, name: name, details: description, precision: 0, amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
         var dataPaths: [[String: Any]] = []
-//        asset!.dataPaths.forEach { Media in
-//          let jsonDatapath: [String: Any] = [
-//            "mime": Media.mime,
-//            "filePath": Media.filePath
-//          ]
-//          dataPaths.append(jsonDatapath)
-//        }
         let data: [String: Any] = [
           "assetId": asset?.assetId,
           "name": asset?.name,
@@ -415,13 +446,13 @@ import CloudKit
     }
   }
   
-  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, fee: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do{
       var recipientMap: [String: [Recipient]] = [:]
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount)!, transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(Constants.defaultFeeRate), minConfirmations: 0)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0)
       }
       print(response)
       let data: [String: Any] = [
