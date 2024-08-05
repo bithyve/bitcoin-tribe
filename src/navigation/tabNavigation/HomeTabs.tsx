@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Community from 'src/screens/community/Community';
+// import Community from 'src/screens/community/Community';
 import HomeScreen from 'src/screens/home/Home';
 import Settings from 'src/screens/settings/Settings';
 import { NavigationRoutes } from '../NavigationRoutes';

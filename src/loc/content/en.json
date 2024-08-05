@@ -21,7 +21,9 @@
     "walletID": "Wallet ID",
     "versionHistory": "Version History",
     "confirm": "Confirm",
-    "skip": "Skip"
+    "skip": "Skip",
+    "assets": "Assets",
+    "settings": "Settings"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -164,7 +166,8 @@
     "amount": "Amount",
     "date": "Date",
     "transferDetails": "Transfer Details",
-    "viewUnspent": "View Unspent UTXOs"
+    "viewUnspent": "View Unspent UTXOs",
+    "walletRefreshMsg": "Wallet successfully updated"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
