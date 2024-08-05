@@ -44,7 +44,6 @@ import { BackupAction, Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices, { SATS_FOR_RGB } from '../rgb/RGBServices';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
-import moment from 'moment';
 
 export class ApiHandler {
   static performSomeAsyncOperation() {
@@ -560,5 +559,13 @@ export class ApiHandler {
       console.log('backup', error);
       throw new Error(error);
     }
+  }
+  // get fee and exchange rate
+  static async getFeeAndExchangeRates() {
+    const { exchangeRates, averageTxFees } =
+      await Relay.fetchFeeAndExchangeRates();
+    console.log('exchangeRates', exchangeRates);
+    // console.log('averageTxFees', averageTxFees);
+    Storage.set(Keys.EXCHANGE_RATES, JSON.stringify(exchangeRates));
   }
 }
