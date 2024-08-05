@@ -34,7 +34,7 @@ function LangDropDownListView(props: DropdownProps) {
             ]}>
             <View style={styles.radioBtnWrapper}>
               <AppText variant="body2" style={styles.languageText}>
-                {item.language}
+                {item.language + ' ' + item.iso.toUpperCase()}
               </AppText>
               <RadioButton.Android
                 color={theme.colors.accent1}

@@ -42,9 +42,12 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={<IconLanguage />}
-          langCurrency={selectedLanguage && selectedLanguage.iso}
+          langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
-            selectedLanguage && selectedLanguage.displayTitle
+            selectedLanguage &&
+            selectedLanguage.displayTitle +
+              ' ' +
+              selectedLanguage.iso.toUpperCase()
           }
           onPress={() => setLangDropdown(!langDropdown)}
         />
