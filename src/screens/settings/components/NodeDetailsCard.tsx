@@ -97,11 +97,11 @@ const getStyles = (theme: AppTheme, status) =>
       color: theme.colors.accent1,
     },
     buttonWrapper1: {
-      width: '45%',
+      width: '42%',
       alignItems: 'center',
     },
     buttonWrapper2: {
-      width: '48%',
+      width: '52%',
       alignItems: 'center',
       justifyContent: 'flex-end',
       paddingLeft: hp(10),
