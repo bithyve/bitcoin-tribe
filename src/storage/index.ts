@@ -9,6 +9,8 @@ export enum Keys {
   THEME_MODE = 'THEME_MODE',
   WALLET_BACKUP = 'WALLET_BACKUP',
   APP_LANGUAGE = 'APP_LANGUAGE',
+  EXCHANGE_RATES = 'EXCHANGE_RATES',
+  APP_CURRENCY = 'APP_CURRENCY',
 }
 
 export const enum BackupType {
