@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import AppText from 'src/components/AppText';
@@ -31,7 +31,12 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
-          uri: `file://${collectible.media?.filePath}`,
+          uri: Platform.select({
+            android: `file://${collectible.media?.filePath}`,
+            ios: `${collectible.media?.filePath}.${
+              collectible.media?.mime.split('/')[1]
+            }`,
+          }),
         }}
         style={styles.imageStyle}
       />

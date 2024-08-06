@@ -113,12 +113,14 @@ export default class RGBServices {
     blindedUTXO: string,
     amount: string,
     consignmentEndpoints: string,
+    feePerByte,
   ): Promise<{}> => {
     const data = await RGB.sendAsset(
       assetId,
       blindedUTXO,
       amount,
       consignmentEndpoints,
+      feePerByte,
     );
     return JSON.parse(data);
   };
