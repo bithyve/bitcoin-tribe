@@ -25,7 +25,7 @@ function LanguageAndCurrency() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
-  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY) || 'USD';
+  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const [langDropdown, setLangDropdown] = React.useState(false);
   const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
 
@@ -33,7 +33,10 @@ function LanguageAndCurrency() {
     lang => lang.iso === language,
   );
 
-  const selectedCurrency = availableCurrency.find(cur => cur.code === currency);
+  const initialCurrency = currency || 'USD';
+  const selectedCurrency = availableCurrency.find(
+    cur => cur.code === initialCurrency,
+  );
 
   useEffect(() => {
     initializeAppLanguage();
