@@ -56,7 +56,9 @@
     "totalBalance": "Total Balance",
     "uploadFile": "Upload your file here",
     "yourCoinAvatar": "Your Coin Avatar",
-    "select": "Select"
+    "select": "Select",
+    "noAssetTitle": "No assets Yet.",
+    "noAssetSubTitle": "Add your first Bitcoin to see your portfolio here!"
   },
   "settings": {
     "setting": "Settings",

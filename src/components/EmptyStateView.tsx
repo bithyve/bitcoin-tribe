@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
+import { hp } from 'src/constants/responsive';
 
 type emptyStateViewProps = {
   title: string;
@@ -16,7 +17,8 @@ function EmptyStateView(props: emptyStateViewProps) {
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
-      <AppText variant="body1" style={styles.titleText}>
+      <View style={styles.illustrationWrapper}>{IllustartionImage}</View>
+      <AppText variant="heading2" style={styles.titleText}>
         {title}
       </AppText>
       <AppText variant="body2" style={styles.subTitleText}>
@@ -31,13 +33,16 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: '40%',
+      marginTop: '30%',
     },
     titleText: {
       color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
+    },
+    illustrationWrapper: {
+      marginBottom: hp(10),
     },
   });
 export default EmptyStateView;

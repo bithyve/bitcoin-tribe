@@ -1,11 +1,5 @@
-import React from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import React, { useContext } from 'react';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp, wp } from 'src/constants/responsive';
@@ -16,6 +10,9 @@ import AppTouchable from 'src/components/AppTouchable';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import EmptyStateView from 'src/components/EmptyStateView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -66,6 +63,8 @@ function AssetsList(props: AssetsListProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { home } = translations;
 
   const FooterComponent = () => {
     return <View style={styles.footer} />;
@@ -85,6 +84,13 @@ function AssetsList(props: AssetsListProps) {
           />
         }
         ListFooterComponent={FooterComponent}
+        ListEmptyComponent={
+          <EmptyStateView
+            title={home.noAssetTitle}
+            subTitle={home.noAssetSubTitle}
+            IllustartionImage={<NoAssetsIllustration />}
+          />
+        }
         renderItem={({ item, index }) => (
           <View style={styles.assetWrapper}>
             {item.assetIface.toUpperCase() === AssetFace.RGB20 && (
