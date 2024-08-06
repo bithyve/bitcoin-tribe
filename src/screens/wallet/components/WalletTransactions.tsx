@@ -8,7 +8,6 @@ import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import IconArrow from 'src/assets/images/icon_arrowr1.svg';
 import IconBitcoin from 'src/assets/images/icon_btc.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
@@ -19,6 +18,7 @@ import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
+import useBalance from 'src/hooks/useBalance';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -45,7 +45,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
-
+  const { getBalance } = useBalance();
   return (
     <AppTouchable
       disabled={disabled}
@@ -101,7 +101,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
           <View style={styles.amtIconWrapper}>
             <IconBitcoin />
             <AppText variant="body1" style={styles.amountText}>
-              &nbsp;{numberWithCommas(transAmount)}
+              &nbsp;{getBalance(transAmount)}
             </AppText>
           </View>
           {/* {!disabled ? <IconArrow /> : null} */}

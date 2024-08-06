@@ -9,6 +9,7 @@ import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { TransactionType } from 'src/services/wallets/enums';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import useBalance from 'src/hooks/useBalance';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -23,6 +24,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
+  const { getBalance } = useBalance();
 
   return (
     <View>
@@ -54,7 +56,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       />
       <LabeledContent
         label={wallet.amount}
-        content={numberWithCommas(`${transAmount}`)}
+        content={getBalance(`${transAmount}`)}
       />
       {transaction.confirmations && transaction.confirmations !== 0 ? (
         <LabeledContent

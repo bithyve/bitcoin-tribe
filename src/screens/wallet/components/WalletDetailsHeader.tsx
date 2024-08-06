@@ -14,6 +14,7 @@ import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import useBalance from 'src/hooks/useBalance';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -29,6 +30,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
+  const { getBalance, getCurrencyIcon } = useBalance();
 
   const {
     specs: { balances: { confirmed, unconfirmed } } = {
@@ -50,9 +52,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         </AppText>
       </View>
       <View style={styles.balanceWrapper}>
-        <IconBitcoin />
+        {getCurrencyIcon(IconBitcoin, 'dark')}
         <AppText variant="walletBalance" style={styles.balanceText}>
-          {numberWithCommas(confirmed + unconfirmed)}
+          &nbsp;{getBalance(confirmed + unconfirmed)}
         </AppText>
       </View>
       <TransactionButtons
