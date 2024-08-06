@@ -7,7 +7,7 @@ import Text from 'src/components/AppText';
 import React from 'react';
 import Colors from 'src/theme/Colors';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import FiatCurrencies from './FiatCurrencies';
+import FiatCurrencies from 'src/loc/availableCurrency';
 
 export const SATOSHIS_IN_BTC = 1e8;
 
@@ -50,6 +50,7 @@ export const getAmt = (
   currentCurrency,
   satsEnabled = false,
 ) => {
+  // console.log('filter exchangeRates item', exchangeRates[currencyCode]);
   if (currentCurrency === CurrencyKind.BITCOIN) {
     return getAmount(amountInSats, satsEnabled);
   }
