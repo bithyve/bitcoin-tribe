@@ -38,7 +38,7 @@ function CoinAllTransaction() {
           <RefreshControl
             refreshing={isLoading}
             onRefresh={() => mutate({ assetId })}
-            tintColor={theme.colors.primaryCTA}
+            tintColor={theme.colors.accent1}
           />
         }
         renderItem={({ item }) => (
