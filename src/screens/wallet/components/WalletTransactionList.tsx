@@ -13,6 +13,7 @@ import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 
 function WalletTransactionList({
   transactions,
@@ -83,6 +84,8 @@ function WalletTransactionList({
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={
         <EmptyStateView
+          style={styles.emptyStateContainer}
+          IllustartionImage={<NoTransactionIllustration />}
           title={walletStrings.noUTXOYet}
           subTitle={walletStrings.noUTXOYetSubTitle}
         />
@@ -95,6 +98,9 @@ const getStyles = (theme: AppTheme) =>
     container: {
       height: '100%',
       marginVertical: hp(5),
+    },
+    emptyStateContainer: {
+      marginTop: '50%',
     },
   });
 export default WalletTransactionList;
