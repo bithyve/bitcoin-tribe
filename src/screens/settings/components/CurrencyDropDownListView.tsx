@@ -54,6 +54,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
+      height: '45%',
     },
     wrapper: {
       padding: hp(15),
