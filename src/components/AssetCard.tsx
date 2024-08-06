@@ -10,6 +10,7 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
+import Identicon from 'react-native-identicon';
 
 type AssetCardProps = {
   image?: string;
@@ -42,9 +43,16 @@ const AssetCard = (props: AssetCardProps) => {
               style={styles.imageStyle}
             />
           ) : (
-            <AppText variant="heading1" style={styles.textTicker}>
-              {props.ticker}
-            </AppText>
+            // <AppText variant="heading1" style={styles.textTicker}>
+            //   {props.ticker}
+            // </AppText>
+            <View style={styles.identiconWrapper}>
+              <Identicon
+                value={props.ticker}
+                style={styles.identiconView}
+                // size={250}
+              />
+            </View>
           )}
         </View>
         <View style={styles.contentWrapper}>
@@ -92,6 +100,14 @@ const getStyles = (theme: AppTheme) =>
       height: '70%',
       borderRadius: 10,
     },
+    identiconWrapper: {
+      width: '100%',
+      height: '70%',
+    },
+    identiconView: {
+      width: '100%',
+      height: '100%',
+    },
     contentWrapper: {
       paddingHorizontal: 10,
       paddingVertical: 5,
@@ -109,12 +125,12 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     textTicker: {
-      color: theme.colors.accent1,
+      // color: theme.colors.accent1,
       width: '100%',
-      height: '35%',
-      textAlign: 'center',
-      marginTop: '40%',
-      fontSize: 35,
+      height: '100%',
+      // textAlign: 'center',
+      // marginTop: '40%',
+      // fontSize: 35,
     },
     detailsText: {
       fontWeight: '300',
