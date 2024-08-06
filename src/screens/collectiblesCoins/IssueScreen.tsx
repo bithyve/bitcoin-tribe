@@ -5,9 +5,9 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Avatar, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -22,13 +22,15 @@ import Toast from 'src/components/Toast';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
-import AppTouchable from 'src/components/AppTouchable';
+import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconImagePlaceholder from 'src/assets/images/imagePlaceholder.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import AppText from 'src/components/AppText';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
+import AppTouchable from 'src/components/AppTouchable';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -211,23 +213,6 @@ function IssueScreen() {
           </View>
         ) : (
           <View>
-            {/* <AppTouchable
-              style={{ marginVertical: 20 }}
-              onPress={handlePickImage}>
-              {image === '' ? (
-                <View
-                  style={{
-                    height: 150,
-                    width: 150,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <IconImage />
-                </View>
-              ) : (
-                <Avatar.Image size={150} source={{ uri: image.path }} />
-              )}
-            </AppTouchable> */}
             <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
@@ -254,8 +239,20 @@ function IssueScreen() {
               onPress={handlePickImage}
               title={home.uploadFile}
               icon={<UploadFile />}
-              imagePath={image && image.path.replace('file://', '')}
             />
+            {image && (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{ uri: image.path.replace('file://', '') }}
+                  style={styles.imageStyle}
+                />
+                <AppTouchable
+                  style={styles.closeIconWrapper}
+                  onPress={() => setImage('')}>
+                  <IconClose />
+                </AppTouchable>
+              </View>
+            )}
           </View>
         )}
       </KeyboardAvoidView>
@@ -302,6 +299,21 @@ const getStyles = (theme: AppTheme) =>
     uploadBtnWrapper: {
       width: '40%',
       // paddingRight: hp(5),
+    },
+    imageStyle: {
+      height: hp(110),
+      width: hp(110),
+      borderRadius: hp(15),
+      marginVertical: hp(10),
+    },
+    imageWrapper: {
+      flex: 1,
+      position: 'relative',
+    },
+    closeIconWrapper: {
+      position: 'absolute',
+      bottom: 0,
+      left: 100,
     },
   });
 export default IssueScreen;

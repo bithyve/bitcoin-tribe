@@ -56,16 +56,13 @@ function AssetTransaction(props: AssetTransactionProps) {
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {transType === TransactionType.SENT ? (
+            {props.transaction.confirmations === 0 ? (
+              <TransPendingIcon />
+            ) : transType === TransactionType.SENT ? (
               <SendTXNIcon />
             ) : (
               <RecieveTXNIcon />
             )}
-            {props.transaction.confirmations === 0 ? (
-              <View style={styles.transPendingWrapper}>
-                <TransPendingIcon />
-              </View>
-            ) : null}
           </View>
           <View style={styles.contentWrapper}>
             <AppText
@@ -136,11 +133,6 @@ const getStyles = (theme: AppTheme, backColor) =>
     amountText: {
       color: theme.colors.headingColor,
       marginTop: hp(2),
-    },
-    transPendingWrapper: {
-      top: -8,
-      left: 0,
-      position: 'absolute',
     },
   });
 export default AssetTransaction;

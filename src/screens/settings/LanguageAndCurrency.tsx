@@ -14,6 +14,9 @@ import { hp } from 'src/constants/responsive';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import CurrencyDropDownListView from './components/CurrencyDropDownListView';
+import availableCurrency from 'src/loc/availableCurrency';
 
 function LanguageAndCurrency() {
   const { translations, initializeAppLanguage } =
@@ -22,14 +25,26 @@ function LanguageAndCurrency() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
+  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const [langDropdown, setLangDropdown] = React.useState(false);
+  const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
+
   const selectedLanguage = availableLanguages.find(
     lang => lang.iso === language,
+  );
+
+  const initialCurrency = currency || 'USD';
+  const selectedCurrency = availableCurrency.find(
+    cur => cur.code === initialCurrency,
   );
 
   useEffect(() => {
     initializeAppLanguage();
   }, [language]);
+
+  useEffect(() => {
+    ApiHandler.getFeeAndExchangeRates();
+  }, []);
 
   return (
     <ScreenContainer>
@@ -56,8 +71,9 @@ function LanguageAndCurrency() {
         title={settings.currency}
         subTitle={settings.currencySubTitle}
         icon={<IconCurrency />}
-        langCurrency={'INR-₹'}
-        langCurrencyVariant={'Indian Rupee'}
+        langCurrency={selectedCurrency && selectedCurrency.currency}
+        langCurrencyVariant={selectedCurrency && selectedCurrency.displayTitle}
+        onPress={() => setCurrencyDropDown(!currencyDropDown)}
       />
       {langDropdown && (
         <LangDropDownListView
@@ -70,6 +86,17 @@ function LanguageAndCurrency() {
           selectedLanguage={selectedLanguage && selectedLanguage.iso}
         />
       )}
+      {currencyDropDown && (
+        <CurrencyDropDownListView
+          currencies={availableCurrency}
+          callback={item => {
+            setCurrencyDropDown(false);
+            setCurrency(item.code);
+          }}
+          selectedCurrency={selectedCurrency && selectedCurrency.code}
+          style={styles.currencyDropdownContainer}
+        />
+      )}
     </ScreenContainer>
   );
 }
@@ -78,6 +105,12 @@ const getStyles = (theme: AppTheme) =>
     languageDropdownContainer: {
       position: 'absolute',
       top: Platform.OS === 'ios' ? '50%' : '42%',
+      borderRadius: 20,
+      marginHorizontal: hp(15),
+    },
+    currencyDropdownContainer: {
+      position: 'absolute',
+      top: Platform.OS === 'ios' ? '72%' : '62%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },
