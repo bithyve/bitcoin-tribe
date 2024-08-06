@@ -18,6 +18,9 @@ import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
+import { useMMKVString } from 'react-native-mmkv';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -44,7 +47,9 @@ function WalletTransactions(props: WalletTransactionsProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
-  const { getBalance } = useBalance();
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   return (
     <AppTouchable
       disabled={disabled}
@@ -95,10 +100,16 @@ function WalletTransactions(props: WalletTransactionsProps) {
         </View>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
-            <IconBitcoin />
+            {initialCurrencyMode !== CurrencyKind.SATS &&
+              getCurrencyIcon(IconBitcoin, 'dark')}
             <AppText variant="body1" style={styles.amountText}>
               &nbsp;{getBalance(transAmount)}
             </AppText>
+            {initialCurrencyMode === CurrencyKind.SATS && (
+              <AppText variant="caption" style={styles.satsText}>
+                sats
+              </AppText>
+            )}
           </View>
           {/* {!disabled ? <IconArrow /> : null} */}
         </View>
@@ -154,6 +165,10 @@ const getStyles = (theme: AppTheme, backColor) =>
     amountText: {
       color: theme.colors.headingColor,
       marginTop: hp(2),
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
     },
   });
 export default WalletTransactions;

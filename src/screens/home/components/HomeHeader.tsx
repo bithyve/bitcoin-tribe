@@ -15,6 +15,9 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import HomeUserAvatar from './HomeUserAvatar';
 import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
+import { useMMKVString } from 'react-native-mmkv';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type HomeHeaderProps = {
   profile: string;
@@ -39,7 +42,9 @@ function HomeHeader(props: HomeHeaderProps) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = React.useContext(LocalizationContext);
   const { home } = translations;
-  const { getBalance, getCurrencyIcon, getSatUnit } = useBalance();
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   return (
     <View>
       <View style={styles.container}>
@@ -69,12 +74,16 @@ function HomeHeader(props: HomeHeaderProps) {
           </AppText>
         </View>
         <AppTouchable style={styles.balanceWrapper} onPress={onPressTotalAmt}>
-          {/* <IconBitcoin /> */}
-          {getCurrencyIcon(IconBitcoin, 'dark')}
+          {initialCurrencyMode !== CurrencyKind.SATS &&
+            getCurrencyIcon(IconBitcoin, 'dark')}
           <AppText variant="pageTitle2" style={styles.balanceText}>
             &nbsp;{getBalance(balance)}
-            {getSatUnit()}
           </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.satsText}>
+              sats
+            </AppText>
+          )}
         </AppTouchable>
       </View>
     </View>
@@ -105,6 +114,11 @@ const getStyles = (theme: AppTheme) =>
     balanceText: {
       color: theme.colors.headingColor,
       marginTop: hp(2),
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(10),
+      marginLeft: hp(5),
     },
     iconWrapper: {
       width: '32%',
