@@ -42,8 +42,11 @@ import {
 } from '../wallets/interfaces';
 import { BackupAction, Keys, Storage } from 'src/storage';
 import Relay from '../relay';
-import RGBServices, { SATS_FOR_RGB } from '../rgb/RGBServices';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import RGBServices from '../rgb/RGBServices';
+import { Collectible, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { Platform } from 'react-native';
+
+var RNFS = require('react-native-fs');
 
 export class ApiHandler {
   static performSomeAsyncOperation() {
@@ -373,6 +376,20 @@ export class ApiHandler {
       }
       if (assets.cfa) {
         dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
+        if (Platform.OS === 'ios') {
+          for (let i = 0; i < assets.cfa.length; i++) {
+            const element: Collectible = assets.cfa[i];
+            const ext = element.media.mime.split('/')[1];
+            const destination = `${element.media.filePath}.${ext}`;
+            const exists = await RNFS.exists(destination);
+            if (!exists) {
+              await RNFS.copyFile(
+                element.media.filePath,
+                `${element.media.filePath}.${ext}`,
+              );
+            }
+          }
+        }
       }
     } catch (error) {
       console.log('refreshRgbWallet', error);
@@ -475,7 +492,7 @@ export class ApiHandler {
         blindedUTXO,
         amount,
         consignmentEndpoints,
-        50.0,
+        averageTxFee.low.feePerByte,
       );
       return response;
     } catch (error) {

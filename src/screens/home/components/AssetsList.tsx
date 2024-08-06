@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FlatList,
+  Platform,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -117,7 +118,12 @@ function AssetsList(props: AssetsListProps) {
                 // onPressAddNew={onPressAddNew}
                 index={index}
                 ticker={item.ticker}
-                image={`file://${item.media?.filePath}`}
+                image={Platform.select({
+                  android: `file://${item.media?.filePath}`,
+                  ios: `${item.media?.filePath}.${
+                    item.media?.mime.split('/')[1]
+                  }`,
+                })}
               />
             )}
           </View>
