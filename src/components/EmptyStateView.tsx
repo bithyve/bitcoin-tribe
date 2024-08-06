@@ -40,6 +40,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     subTitleText: {
+      marginTop: hp(3),
+      width: '70%',
+      textAlign: 'center',
       color: theme.colors.secondaryHeadingColor,
     },
     illustrationWrapper: {
