@@ -16,13 +16,11 @@ const useBalance = () => {
     Keys.CURRENCY_MODE,
   );
   const satsEnabled = currentCurrencyMode === CurrencyKind.SATS;
-  // console.log('exchangeRates', exchangeRates);
-  // console.log('currencyCode', currencyCode);
-  // console.log('currentCurrencyMode', currentCurrencyMode);
+
   const getBalance = (balance: number) =>
     getAmt(
       balance,
-      exchangeRates,
+      JSON.parse(exchangeRates),
       currencyCode,
       currentCurrencyMode,
       satsEnabled,
