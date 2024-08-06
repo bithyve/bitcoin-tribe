@@ -1,3 +1,4 @@
+import { useMMKVString } from 'react-native-mmkv';
 import {
   getAmt,
   getConvertedAmt,
@@ -6,16 +7,18 @@ import {
   getUnit,
 } from 'src/constants/Bitcoin';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Keys, Storage } from 'src/storage';
+import { Keys } from 'src/storage';
 
 const useBalance = () => {
-  const exchangeRates = Storage.get(Keys.EXCHANGE_RATES);
-  const currencyCode = Storage.get(Keys.APP_CURRENCY);
-  const currentCurrencyMode = Storage.get(Keys.CURRENCY_MODE);
+  const [exchangeRates, setExchangeRates] = useMMKVString(Keys.EXCHANGE_RATES);
+  const [currencyCode, setCurrencyCode] = useMMKVString(Keys.APP_CURRENCY);
+  const [currentCurrencyMode, setCurrentCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
   const satsEnabled = currentCurrencyMode === CurrencyKind.SATS;
-  console.log('exchangeRates', exchangeRates);
-  console.log('currencyCode', currencyCode);
-  console.log('currentCurrencyMode', currentCurrencyMode);
+  // console.log('exchangeRates', exchangeRates);
+  // console.log('currencyCode', currencyCode);
+  // console.log('currentCurrencyMode', currentCurrencyMode);
   const getBalance = (balance: number) =>
     getAmt(
       balance,

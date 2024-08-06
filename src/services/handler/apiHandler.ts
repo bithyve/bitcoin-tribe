@@ -564,8 +564,11 @@ export class ApiHandler {
   static async getFeeAndExchangeRates() {
     const { exchangeRates, averageTxFees } =
       await Relay.fetchFeeAndExchangeRates();
-    // console.log('exchangeRates', exchangeRates);
+    console.log('exchangeRates', exchangeRates.exchangeRates);
     // console.log('averageTxFees', averageTxFees);
-    Storage.set(Keys.EXCHANGE_RATES, JSON.stringify(exchangeRates));
+    Storage.set(
+      Keys.EXCHANGE_RATES,
+      JSON.stringify(exchangeRates.exchangeRates),
+    );
   }
 }
