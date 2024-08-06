@@ -137,7 +137,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '60%',
+      width: '58%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -152,7 +152,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '40%',
+      width: '42%',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
