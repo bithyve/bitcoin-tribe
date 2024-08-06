@@ -138,7 +138,7 @@ export class ApiHandler {
       const { primaryMnemonic } = dbManager.getObjectByIndex(
         RealmSchema.TribeApp,
       ) as any;
-      const purpose = DerivationPurpose.BIP84;
+      const purpose = DerivationPurpose.BIP86; // Default: TAPROOT
       const accountNumber = 0;
       const path = WalletUtilities.getDerivationPath(
         EntityKind.WALLET,
