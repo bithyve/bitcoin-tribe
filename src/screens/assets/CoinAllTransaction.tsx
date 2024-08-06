@@ -12,6 +12,7 @@ import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import EmptyStateView from 'src/components/EmptyStateView';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { hp } from 'src/constants/responsive';
@@ -52,7 +53,13 @@ function CoinAllTransaction() {
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<EmptyStateView title={''} subTitle={''} />}
+        ListEmptyComponent={
+          <EmptyStateView
+            IllustartionImage={<NoTransactionIllustration />}
+            title={walletTranslations.noUTXOYet}
+            subTitle={walletTranslations.noUTXOYetSubTitle}
+          />
+        }
       />
     </ScreenContainer>
   );
