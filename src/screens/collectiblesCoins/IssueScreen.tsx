@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Image, Keyboard, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -243,7 +243,12 @@ function IssueScreen() {
             {image && (
               <View style={styles.imageWrapper}>
                 <Image
-                  source={{ uri: image.path.replace('file://', '') }}
+                  source={{
+                    uri:
+                      Platform.OS === 'ios'
+                        ? image.path.replace('file://', '')
+                        : image.path,
+                  }}
                   style={styles.imageStyle}
                 />
                 <AppTouchable
@@ -313,7 +318,7 @@ const getStyles = (theme: AppTheme) =>
     closeIconWrapper: {
       position: 'absolute',
       bottom: 0,
-      left: 100,
+      left: Platform.OS === 'ios' ? 100 : 112,
     },
   });
 export default IssueScreen;
