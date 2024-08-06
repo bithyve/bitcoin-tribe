@@ -20,6 +20,10 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { Keys, Storage } from 'src/storage';
+import useBalance from 'src/hooks/useBalance';
+import { useMMKVString } from 'react-native-mmkv';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -30,18 +34,18 @@ function HomeScreen() {
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
+  const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
-
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
-
+  console.log('currencyMode', currencyMode);
   useEffect(() => {
     refreshRgbWallet.mutate();
     if (
@@ -66,6 +70,16 @@ function HomeScreen() {
     navigation.dispatch(CommonActions.navigate(screenPath, params));
   };
 
+  const toggleDisplayMode = () => {
+    if (!currencyMode || currencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else if (currencyMode === CurrencyKind.BITCOIN) {
+      setCurrencyMode(CurrencyKind.FIAT);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
+  };
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
@@ -88,6 +102,9 @@ function HomeScreen() {
               autoRefresh: true,
             })
           }
+          onPressTotalAmt={() => {
+            toggleDisplayMode();
+          }}
         />
       </View>
       <AssetsList

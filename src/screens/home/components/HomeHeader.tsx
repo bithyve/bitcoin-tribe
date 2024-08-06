@@ -14,6 +14,7 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import HomeUserAvatar from './HomeUserAvatar';
+import useBalance from 'src/hooks/useBalance';
 
 type HomeHeaderProps = {
   profile: string;
@@ -22,6 +23,7 @@ type HomeHeaderProps = {
   onPressProfile: () => void;
   onPressScanner: () => void;
   onPressNotification: () => void;
+  onPressTotalAmt: () => void;
 };
 function HomeHeader(props: HomeHeaderProps) {
   const {
@@ -31,11 +33,13 @@ function HomeHeader(props: HomeHeaderProps) {
     onPressScanner,
     onPressNotification,
     onPressProfile,
+    onPressTotalAmt,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = React.useContext(LocalizationContext);
   const { home } = translations;
+  const { getBalance, getCurrencyIcon, getSatUnit } = useBalance();
   return (
     <View>
       <View style={styles.container}>
@@ -64,12 +68,14 @@ function HomeHeader(props: HomeHeaderProps) {
             {home.totalBalance}
           </AppText>
         </View>
-        <View style={styles.balanceWrapper}>
-          <IconBitcoin />
+        <AppTouchable style={styles.balanceWrapper} onPress={onPressTotalAmt}>
+          {/* <IconBitcoin /> */}
+          {getCurrencyIcon(IconBitcoin, 'dark')}
           <AppText variant="pageTitle2" style={styles.balanceText}>
-            &nbsp;{numberWithCommas(balance)} sats
+            &nbsp;{getBalance(balance)}
+            {getSatUnit()}
           </AppText>
-        </View>
+        </AppTouchable>
       </View>
     </View>
   );
