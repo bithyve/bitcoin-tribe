@@ -80,7 +80,7 @@ function AssetsList(props: AssetsListProps) {
           <RefreshControl
             refreshing={false}
             onRefresh={() => {}}
-            tintColor={theme.colors.primaryCTA}
+            tintColor={theme.colors.accent1}
           />
         }
         ListFooterComponent={FooterComponent}

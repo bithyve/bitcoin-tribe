@@ -66,7 +66,7 @@ function WalletTransactionList({
         <RefreshControl
           refreshing={walletRefreshMutation.isLoading}
           onRefresh={pullDownToRefresh}
-          tintColor={theme.colors.primaryCTA}
+          tintColor={theme.colors.accent1}
         />
       }
       renderItem={({ item }) => (
