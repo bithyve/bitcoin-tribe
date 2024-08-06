@@ -7,8 +7,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
-import { TransactionType } from 'src/services/wallets/enums';
+import { NetworkType, TransactionType } from 'src/services/wallets/enums';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import openLink from 'src/utils/OpenLink';
+import AppTouchable from 'src/components/AppTouchable';
+import config from 'src/utils/config';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -24,6 +27,13 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
 
+  const redirectToBlockExplorer = () => {
+    openLink(
+      `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${transaction.txid}`,
+    );
+  };
   return (
     <View>
       <WalletTransactions
@@ -47,7 +57,12 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           content={transaction.senderAddresses[0]}
         />
       )}
-      <LabeledContent label={wallet.transactionID} content={transaction.txid} />
+      <AppTouchable onPress={() => redirectToBlockExplorer()}>
+        <LabeledContent
+          label={wallet.transactionID}
+          content={transaction.txid}
+        />
+      </AppTouchable>
       <LabeledContent
         label={wallet.fees}
         content={numberWithCommas(`${transaction.fee}`)}
