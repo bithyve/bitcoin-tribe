@@ -15,7 +15,6 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
@@ -73,16 +72,13 @@ function WalletTransactions(props: WalletTransactionsProps) {
         }>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {transType === TransactionType.SENT ? (
+            {props.transaction.confirmations === 0 ? (
+              <TransPendingIcon />
+            ) : transType === TransactionType.SENT ? (
               <SendTXNIcon />
             ) : (
               <RecieveTXNIcon />
             )}
-            {props.transaction.confirmations === 0 ? (
-              <View style={styles.transPendingWrapper}>
-                <TransPendingIcon />
-              </View>
-            ) : null}
           </View>
           <View style={styles.contentWrapper}>
             <AppText
@@ -158,11 +154,6 @@ const getStyles = (theme: AppTheme, backColor) =>
     amountText: {
       color: theme.colors.headingColor,
       marginTop: hp(2),
-    },
-    transPendingWrapper: {
-      top: -8,
-      left: 0,
-      position: 'absolute',
     },
   });
 export default WalletTransactions;
