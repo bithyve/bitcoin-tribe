@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useTheme } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
@@ -10,13 +10,14 @@ type emptyStateViewProps = {
   title: string;
   subTitle: string;
   IllustartionImage?: ReactNode;
+  style?: StyleProp<ViewStyle>;
 };
 function EmptyStateView(props: emptyStateViewProps) {
-  const { title, subTitle, IllustartionImage } = props;
+  const { title, subTitle, IllustartionImage, style } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.illustrationWrapper}>{IllustartionImage}</View>
       <AppText variant="heading2" style={styles.titleText}>
         {title}
