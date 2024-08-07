@@ -69,7 +69,7 @@ const TextField = (props: TextFieldProps) => {
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
         mode="outlined"
-        outlineColor={theme.colors.inputBackground}
+        outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
         activeOutlineColor={theme.colors.accent1}
         outlineStyle={styles.outlineStyle}
         disabled={disabled}

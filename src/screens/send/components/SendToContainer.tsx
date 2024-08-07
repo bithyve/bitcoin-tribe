@@ -18,6 +18,7 @@ import idx from 'idx';
 import Toast from 'src/components/Toast';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import SendAddressIcon from 'src/assets/images/sendAddress.svg';
 
 function SendToContainer({
   wallet,
@@ -97,15 +98,17 @@ function SendToContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <View style={styles.leftText}>
-              <AppText variant="body1">@</AppText>
-            </View>
+            <SendAddressIcon />
           </View>
           <View style={styles.txnRightWrapper}>
-            <AppText variant="smallCTA" style={styles.sendToAddress}>
-              SENDING TO ADDRESS
+            <AppText variant="body1" style={styles.sendToAddress}>
+              Sending to address
             </AppText>
-            <AppText variant="body1" style={styles.txnID}>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.txnID}>
               {address}
             </AppText>
           </View>
@@ -135,7 +138,7 @@ function SendToContainer({
         <KeyPadView
           onPressNumber={onPressNumber}
           onDeletePressed={onDeletePressed}
-          keyColor={theme.colors.primaryCTA}
+          keyColor={theme.colors.accent1}
           ClearIcon={<DeleteIcon />}
         />
       </View>
@@ -170,22 +173,14 @@ const getStyles = (theme: AppTheme) =>
     txnLeftWrapper: {
       width: '20%',
     },
-    leftText: {
-      backgroundColor: theme.colors.primaryCTA,
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: hp(50),
-      width: hp(50),
-      borderRadius: hp(50),
-    },
     txnRightWrapper: {
       width: '80%',
     },
     sendToAddress: {
-      color: theme.colors.primaryCTA,
+      color: theme.colors.headingColor,
     },
     txnID: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default SendToContainer;

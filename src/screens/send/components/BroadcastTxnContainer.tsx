@@ -16,6 +16,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import SendAddressIcon from 'src/assets/images/sendAddress.svg';
 
 function BroadcastTxnContainer({
   wallet,
@@ -67,15 +68,17 @@ function BroadcastTxnContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <View style={styles.leftText}>
-              <AppText variant="body1">@</AppText>
-            </View>
+            <SendAddressIcon />
           </View>
           <View style={styles.txnRightWrapper}>
-            <AppText variant="smallCTA" style={styles.sendToAddress}>
-              SENDING TO ADDRESS
+            <AppText variant="body1" style={styles.sendToAddress}>
+              Sending to address
             </AppText>
-            <AppText variant="body1" style={styles.txnID}>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.txnID}>
               {address}
             </AppText>
             <View style={styles.amountWrapper}>
@@ -92,7 +95,7 @@ function BroadcastTxnContainer({
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
+              color={theme.colors.accent1}
               uncheckedColor={theme.colors.headingColor}
               value={TxPriority.LOW}
               status={
@@ -106,7 +109,7 @@ function BroadcastTxnContainer({
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
+              color={theme.colors.accent1}
               uncheckedColor={theme.colors.headingColor}
               value={TxPriority.MEDIUM}
               status={
@@ -120,7 +123,7 @@ function BroadcastTxnContainer({
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
+              color={theme.colors.accent1}
               uncheckedColor={theme.colors.headingColor}
               value={TxPriority.HIGH}
               status={
@@ -185,10 +188,10 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     sendToAddress: {
-      color: theme.colors.primaryCTA,
+      color: theme.colors.headingColor,
     },
     txnID: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountText: {
       marginLeft: hp(5),
