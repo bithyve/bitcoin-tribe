@@ -73,14 +73,16 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         label={wallet.amount}
         content={getBalance(`${transAmount}`)}
       />
-      {transaction.confirmations && transaction.confirmations !== 0 ? (
-        <LabeledContent
-          label={wallet.confirmations}
-          content={`${
-            transaction.confirmations > 6 ? '6+' : transaction.confirmations
-          }`}
-        />
-      ) : null}
+      <LabeledContent
+        label={wallet.confirmations}
+        content={`${
+          transaction.confirmations === 0
+            ? '0'
+            : transaction.confirmations > 6
+            ? '6+'
+            : transaction.confirmations
+        }`}
+      />
     </View>
   );
 }
