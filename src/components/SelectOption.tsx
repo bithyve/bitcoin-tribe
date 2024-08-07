@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, Switch } from 'react-native-paper';
 
 import IconArrow from 'src/assets/images/icon_right_arrow.svg';
 import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
-import Switch from './Switch';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight } from 'src/constants/responsive';
 import GradientView from './GradientView';
@@ -40,7 +39,6 @@ const SelectOption = (props: SelectOptionProps) => {
     showArrow = true,
   } = props;
   const styles = getStyles(theme, backColor);
-
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -67,9 +65,9 @@ const SelectOption = (props: SelectOptionProps) => {
           <View>
             {enableSwitch ? (
               <Switch
-                onValueChange={onValueChange}
                 value={toggleValue}
-                testID={testID}
+                onValueChange={onValueChange}
+                color={theme.colors.accent1}
               />
             ) : backColor ? (
               <IconArrow />
