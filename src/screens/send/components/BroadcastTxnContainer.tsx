@@ -103,9 +103,22 @@ function BroadcastTxnContainer({
             </View>
           </View>
         </View>
-        <AppText variant="heading1" style={styles.feeTitleText}>
-          Total Fee: {txPrerequisites[selectedPriority].fee} t-sats
-        </AppText>
+        <View style={styles.totalFeeWrapper}>
+          <AppText variant="heading1" style={styles.feeTitleText}>
+            Total Fee:
+          </AppText>
+          {initialCurrencyMode !== CurrencyKind.SATS
+            ? getCurrencyIcon(IconBitcoin, 'dark')
+            : null}
+          <AppText variant="heading1" style={styles.amountText}>
+            &nbsp;{getBalance(txPrerequisites[selectedPriority].fee)}
+          </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.satsText}>
+              sats
+            </AppText>
+          )}
+        </View>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -117,9 +130,22 @@ function BroadcastTxnContainer({
               }
               onPress={() => setSelectedPriority(TxPriority.LOW)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              Low - ({txPrerequisites[TxPriority.LOW].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Low -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.LOW].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -131,9 +157,22 @@ function BroadcastTxnContainer({
               }
               onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              Medium - ({txPrerequisites[TxPriority.MEDIUM].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Medium -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.MEDIUM].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
@@ -145,9 +184,22 @@ function BroadcastTxnContainer({
               }
               onPress={() => setSelectedPriority(TxPriority.HIGH)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              High - ({txPrerequisites[TxPriority.HIGH].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                High -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.HIGH].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
         </View>
         <View style={styles.primaryCTAContainer}>
@@ -220,17 +272,34 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       marginVertical: hp(10),
     },
+    feeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    feePriorityText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
     feeText: {
       color: theme.colors.headingColor,
     },
     feeTitleText: {
-      marginTop: hp(20),
       color: theme.colors.headingColor,
+      marginRight: hp(10),
     },
     satsText: {
       color: theme.colors.headingColor,
       marginTop: hp(5),
       marginLeft: hp(5),
+    },
+    feeSatsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    totalFeeWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: hp(20),
     },
   });
 export default BroadcastTxnContainer;
