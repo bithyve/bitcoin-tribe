@@ -122,6 +122,7 @@ function SendToContainer({
           icon={<IconBitcoin />}
           // rightText={common.sendMax}
           // onRightTextPress={() => {}}
+          // rightCTATextColor={theme.colors.accent1}
         />
       </View>
       <View style={styles.primaryCTAContainer}>

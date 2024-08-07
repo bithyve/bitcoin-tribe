@@ -1,3 +1,4 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard, Alert } from 'react-native';
@@ -58,6 +59,11 @@ function SendEnterAddress({
         Toast('Invalid Bitcoin address', false, true);
     }
   };
+  const handlePasteAddress = async () => {
+    const address = await Clipboard.getString();
+    setAddress(address);
+  };
+
   return (
     <View style={styles.container}>
       <TextField
@@ -66,6 +72,11 @@ function SendEnterAddress({
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         autoFocus={true}
+        inputStyle={styles.inputStyle}
+        rightText="Paste"
+        onRightTextPress={() => handlePasteAddress()}
+        rightCTAStyle={styles.rightCTAStyle}
+        rightCTATextColor={theme.colors.primaryCTAText}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -91,6 +102,18 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginTop: hp(45),
+    },
+    inputStyle: {
+      width: '80%',
+    },
+    rightCTAStyle: {
+      backgroundColor: theme.colors.ctaBackColor,
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+      marginHorizontal: hp(5),
     },
   });
 export default SendEnterAddress;

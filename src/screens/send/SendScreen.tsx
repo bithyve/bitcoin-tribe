@@ -28,7 +28,6 @@ function SendScreen({ route, navigation }) {
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         onPress={() => {
-          console.log('send');
           receiveData === 'send'
             ? setVisible(true)
             : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
