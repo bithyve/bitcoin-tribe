@@ -17,6 +17,10 @@ import Toast from 'src/components/Toast';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SendAddressIcon from 'src/assets/images/sendAddress.svg';
+import useBalance from 'src/hooks/useBalance';
+import { useMMKVString } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 function BroadcastTxnContainer({
   wallet,
@@ -31,7 +35,7 @@ function BroadcastTxnContainer({
 }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, sendScreen } = translations;
   const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [selectedPriority, setSelectedPriority] = React.useState(
@@ -39,6 +43,9 @@ function BroadcastTxnContainer({
   );
 
   const sendPhaseTwoMutation = useMutation(ApiHandler.sendPhaseTwo);
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
 
   useEffect(() => {
     if (sendPhaseTwoMutation.status === 'success') {
@@ -72,7 +79,7 @@ function BroadcastTxnContainer({
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>
-              Sending to address
+              {sendScreen.sendingToAddress}
             </AppText>
             <AppText
               variant="body2"
@@ -82,10 +89,17 @@ function BroadcastTxnContainer({
               {address}
             </AppText>
             <View style={styles.amountWrapper}>
-              <IconBitcoin />
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
               <AppText variant="heading1" style={styles.amountText}>
-                {amount} sats
+                &nbsp;{getBalance(amount)}
               </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.satsText}>
+                  sats
+                </AppText>
+              )}
             </View>
           </View>
         </View>
@@ -194,7 +208,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     amountText: {
-      marginLeft: hp(5),
+      // marginLeft: hp(5),
       color: theme.colors.headingColor,
     },
     feeWrapper: {
@@ -212,6 +226,11 @@ const getStyles = (theme: AppTheme) =>
     feeTitleText: {
       marginTop: hp(20),
       color: theme.colors.headingColor,
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(5),
+      marginLeft: hp(5),
     },
   });
 export default BroadcastTxnContainer;
