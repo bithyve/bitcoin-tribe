@@ -128,7 +128,8 @@
     "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
-    "enterAmount": "Enter Amount"
+    "enterAmount": "Enter Amount",
+    "sendingToAddress": "Sending to address"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

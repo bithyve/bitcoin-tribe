@@ -102,7 +102,7 @@ function SendToContainer({
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>
-              Sending to address
+              {sendScreen.sendingToAddress}
             </AppText>
             <AppText
               variant="body2"
