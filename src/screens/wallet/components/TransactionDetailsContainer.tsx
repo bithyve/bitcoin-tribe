@@ -8,7 +8,6 @@ import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { NetworkType, TransactionType } from 'src/services/wallets/enums';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import openLink from 'src/utils/OpenLink';
 import AppTouchable from 'src/components/AppTouchable';
 import config from 'src/utils/config';
