@@ -46,7 +46,7 @@ const AssetCard = (props: AssetCardProps) => {
             <View style={styles.identiconWrapper}>
               <View style={styles.identiconWrapper2}>
                 <Identicon
-                  value={assetId && assetId}
+                  value={assetId}
                   style={styles.identiconView}
                   size={110}
                 />
