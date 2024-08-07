@@ -27,5 +27,6 @@ const Colors = {
   DimGray: 'rgba(103, 108, 117,1)',
   BulgarianRose: 'rgba(72, 10, 15, 1)',
   ImperialRed: 'rgba(236, 34, 64,1)',
+  Celadon: 'rgba(167, 224, 178,1)',
 };
 export default Colors;
