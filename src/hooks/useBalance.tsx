@@ -10,19 +10,16 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 
 const useBalance = () => {
-  const [exchangeRates, setExchangeRates] = useMMKVString(Keys.EXCHANGE_RATES);
-  const [currencyCode, setCurrencyCode] = useMMKVString(Keys.APP_CURRENCY);
-  const [currentCurrencyMode, setCurrentCurrencyMode] = useMMKVString(
-    Keys.CURRENCY_MODE,
-  );
+  const [exchangeRates] = useMMKVString(Keys.EXCHANGE_RATES);
+  const [currencyCode] = useMMKVString(Keys.APP_CURRENCY);
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialExchangeRates = exchangeRates || null;
   const satsEnabled = currentCurrencyMode === CurrencyKind.SATS;
-  // console.log('exchangeRates', exchangeRates);
-  // console.log('currencyCode', currencyCode);
-  // console.log('currentCurrencyMode', currentCurrencyMode);
+
   const getBalance = (balance: number) =>
     getAmt(
       balance,
-      exchangeRates,
+      JSON.parse(initialExchangeRates),
       currencyCode,
       currentCurrencyMode,
       satsEnabled,

@@ -15,6 +15,9 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import useBalance from 'src/hooks/useBalance';
+import { useMMKVString } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -31,7 +34,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
-
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const {
     specs: { balances: { confirmed, unconfirmed } } = {
       balances: { confirmed: 0, unconfirmed: 0 },
@@ -52,10 +56,16 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         </AppText>
       </View>
       <View style={styles.balanceWrapper}>
-        {getCurrencyIcon(IconBitcoin, 'dark')}
+        {initialCurrencyMode !== CurrencyKind.SATS &&
+          getCurrencyIcon(IconBitcoin, 'dark')}
         <AppText variant="walletBalance" style={styles.balanceText}>
           &nbsp;{getBalance(confirmed + unconfirmed)}
         </AppText>
+        {initialCurrencyMode === CurrencyKind.SATS && (
+          <AppText variant="caption" style={styles.satsText}>
+            sats
+          </AppText>
+        )}
       </View>
       <TransactionButtons
         onPressSend={() =>
@@ -101,6 +111,11 @@ const getStyles = (theme: AppTheme) =>
     },
     balanceText: {
       color: theme.colors.headingColor,
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(10),
+      marginLeft: hp(5),
     },
     totalBalText: {
       color: theme.colors.secondaryHeadingColor,

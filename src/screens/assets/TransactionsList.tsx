@@ -60,7 +60,7 @@ function TransactionsList({
           <RefreshControl
             refreshing={isLoading}
             onRefresh={() => refresh()}
-            tintColor={theme.colors.primaryCTA}
+            tintColor={theme.colors.accent1}
           />
         }
         renderItem={({ item }) => (

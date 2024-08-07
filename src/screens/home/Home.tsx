@@ -45,7 +45,7 @@ function HomeScreen() {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
-  console.log('currencyMode', currencyMode);
+
   useEffect(() => {
     refreshRgbWallet.mutate();
     if (

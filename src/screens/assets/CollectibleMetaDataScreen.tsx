@@ -119,7 +119,7 @@ const getStyles = (theme: AppTheme) =>
       // marginHorizontal: wp(20),
     },
     imageStyle: {
-      width: 200,
+      width: '100%',
       height: 200,
       borderRadius: 10,
       alignSelf: 'center',

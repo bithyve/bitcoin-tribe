@@ -89,8 +89,10 @@ const getStyles = (theme: AppTheme) =>
     },
     imageStyle: {
       width: '100%',
-      height: '70%',
-      borderRadius: 10,
+      height: '100%',
+      // borderRadius: 10,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
     },
     contentWrapper: {
       paddingHorizontal: 10,
@@ -125,6 +127,8 @@ const getStyles = (theme: AppTheme) =>
       lineHeight: hp(20),
     },
     assetImageWrapper: {
+      width: '100%',
+      height: '70%',
       borderBottomColor: theme.colors.borderColor,
       borderBottomWidth: 0.8,
     },
