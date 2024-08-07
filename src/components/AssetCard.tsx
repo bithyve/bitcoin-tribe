@@ -5,11 +5,11 @@ import { useTheme } from 'react-native-paper';
 import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
-import AssetChip from './AssetChip';
 import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
+import Identicon from 'react-native-identicon';
 
 type AssetCardProps = {
   image?: string;
@@ -17,11 +17,12 @@ type AssetCardProps = {
   ticker?: string;
   details?: string;
   tag?: string;
+  assetId?: string;
   onPress?: (event: GestureResponderEvent) => void;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, details, tag, onPress } = props;
+  const { image, name, details, tag, onPress, assetId } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -42,9 +43,15 @@ const AssetCard = (props: AssetCardProps) => {
               style={styles.imageStyle}
             />
           ) : (
-            <AppText variant="heading1" style={styles.textTicker}>
-              {props.ticker}
-            </AppText>
+            <View style={styles.identiconWrapper}>
+              <View style={styles.identiconWrapper2}>
+                <Identicon
+                  value={assetId}
+                  style={styles.identiconView}
+                  size={110}
+                />
+              </View>
+            </View>
           )}
         </View>
         <View style={styles.contentWrapper}>
@@ -94,6 +101,23 @@ const getStyles = (theme: AppTheme) =>
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
     },
+    identiconWrapper: {
+      width: '100%',
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    identiconWrapper2: {
+      borderColor: theme.colors.coinsBorderColor,
+      borderWidth: 2,
+      padding: 5,
+      borderRadius: 110,
+    },
+    identiconView: {
+      height: 110,
+      width: 110,
+      borderRadius: 110,
+    },
     contentWrapper: {
       paddingHorizontal: 10,
       paddingVertical: 5,
@@ -111,12 +135,12 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     textTicker: {
-      color: theme.colors.accent1,
+      // color: theme.colors.accent1,
       width: '100%',
-      height: '35%',
-      textAlign: 'center',
-      marginTop: '40%',
-      fontSize: 35,
+      height: '100%',
+      // textAlign: 'center',
+      // marginTop: '40%',
+      // fontSize: 35,
     },
     detailsText: {
       fontWeight: '300',

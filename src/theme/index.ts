@@ -40,6 +40,7 @@ type CustomColors = {
   toggleInActiveBtnColor: string;
   toggleInActiveBackColor: string;
   modalBackColor: string;
+  coinsBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -78,6 +79,7 @@ const CombinedDefaultTheme: AppTheme = {
     toggleInActiveBtnColor: Colors.DimGray,
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.EerieBlack,
+    coinsBorderColor: Colors.Celadon,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
@@ -134,6 +136,7 @@ const CombinedDarkTheme: AppTheme = {
     toggleInActiveBtnColor: Colors.DimGray,
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.EerieBlack,
+    coinsBorderColor: Colors.Celadon,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
