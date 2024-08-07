@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 
 import AppHeader from 'src/components/AppHeader';
@@ -14,13 +14,11 @@ import { hp } from 'src/constants/responsive';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
 import availableCurrency from 'src/loc/availableCurrency';
 
 function LanguageAndCurrency() {
-  const { translations, initializeAppLanguage } =
-    useContext(LocalizationContext);
+  const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -37,14 +35,6 @@ function LanguageAndCurrency() {
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
-
-  useEffect(() => {
-    initializeAppLanguage();
-  }, [language]);
-
-  useEffect(() => {
-    ApiHandler.getFeeAndExchangeRates();
-  }, []);
 
   return (
     <ScreenContainer>

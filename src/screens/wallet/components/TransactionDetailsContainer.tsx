@@ -8,7 +8,6 @@ import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { NetworkType, TransactionType } from 'src/services/wallets/enums';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import openLink from 'src/utils/OpenLink';
 import AppTouchable from 'src/components/AppTouchable';
 import config from 'src/utils/config';
@@ -67,20 +66,22 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </AppTouchable>
       <LabeledContent
         label={wallet.fees}
-        content={numberWithCommas(`${transaction.fee}`)}
+        content={getBalance(`${transaction.fee}`)}
       />
       <LabeledContent
         label={wallet.amount}
         content={getBalance(`${transAmount}`)}
       />
-      {transaction.confirmations && transaction.confirmations !== 0 ? (
-        <LabeledContent
-          label={wallet.confirmations}
-          content={`${
-            transaction.confirmations > 6 ? '6+' : transaction.confirmations
-          }`}
-        />
-      ) : null}
+      <LabeledContent
+        label={wallet.confirmations}
+        content={`${
+          transaction.confirmations === 0
+            ? '0'
+            : transaction.confirmations > 6
+            ? '6+'
+            : transaction.confirmations
+        }`}
+      />
     </View>
   );
 }

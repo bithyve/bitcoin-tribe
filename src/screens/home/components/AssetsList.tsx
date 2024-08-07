@@ -145,10 +145,10 @@ const getStyles = (theme: AppTheme, index = null) =>
     container: {
       position: 'relative',
       height: '76%',
+      marginHorizontal: wp(16),
     },
     assetWrapper: {
       flexWrap: 'wrap',
-      paddingLeft: wp(15),
     },
     addNewIconWrapper: {
       position: 'absolute',

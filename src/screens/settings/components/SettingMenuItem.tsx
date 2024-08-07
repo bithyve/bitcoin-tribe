@@ -14,13 +14,17 @@ function SettingMenuItem({ SettingsMenu }) {
       style={styles.scrollingWrapper}
       showsVerticalScrollIndicator={false}
       data={SettingsMenu}
-      keyExtractor={item => item.title}
+      keyExtractor={item => item.id}
       renderItem={({ item }) => (
         <SelectOption
           title={item.title}
           subTitle={item.subtitle}
           icon={item.icon}
           onPress={item.onPress}
+          enableSwitch={item.enableSwitch}
+          onValueChange={item.onValueChange}
+          toggleValue={item.toggleValue}
+          testID={item.testID}
         />
       )}
     />

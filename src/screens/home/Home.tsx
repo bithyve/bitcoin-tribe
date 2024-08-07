@@ -56,6 +56,7 @@ function HomeScreen() {
         `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
       );
     }
+    ApiHandler.getFeeAndExchangeRates();
   }, []);
 
   useEffect(() => {

@@ -11,7 +11,6 @@ import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import HomeUserAvatar from './HomeUserAvatar';
 import useBalance from 'src/hooks/useBalance';

@@ -27,6 +27,8 @@ type TextFieldProps = {
   autoFocus?: boolean;
   rightText?: string;
   onRightTextPress?: () => void;
+  rightCTAStyle?: StyleProp<TextStyle>;
+  rightCTATextColor?: string;
   inputStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
   contentStyle?: StyleProp<ViewStyle>;
@@ -50,6 +52,8 @@ const TextField = (props: TextFieldProps) => {
     autoFocus = false,
     rightText,
     onRightTextPress,
+    rightCTAStyle,
+    rightCTATextColor,
     inputStyle,
     style,
     autoCapitalize = undefined,
@@ -60,8 +64,8 @@ const TextField = (props: TextFieldProps) => {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
-    () => getStyles(theme, icon, rightText),
-    [theme, icon, rightText],
+    () => getStyles(theme, icon, rightText, rightCTATextColor),
+    [theme, icon, rightText, rightCTATextColor],
   );
 
   return (
@@ -69,7 +73,7 @@ const TextField = (props: TextFieldProps) => {
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
         mode="outlined"
-        outlineColor={theme.colors.inputBackground}
+        outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
         activeOutlineColor={theme.colors.accent1}
         outlineStyle={styles.outlineStyle}
         disabled={disabled}
@@ -101,7 +105,7 @@ const TextField = (props: TextFieldProps) => {
       />
       {rightText && (
         <AppTouchable
-          style={styles.rightTextWrapper}
+          style={[styles.rightTextWrapper, rightCTAStyle]}
           onPress={onRightTextPress}>
           <AppText variant="smallCTA" style={styles.rightTextStyle}>
             {rightText}
@@ -111,7 +115,12 @@ const TextField = (props: TextFieldProps) => {
     </View>
   );
 };
-const getStyles = (theme: AppTheme, icon, rightText) =>
+const getStyles = (
+  theme: AppTheme,
+  icon,
+  rightText,
+  rightCTATextColor = theme.colors.accent1,
+) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -146,12 +155,12 @@ const getStyles = (theme: AppTheme, icon, rightText) =>
       backgroundColor: 'transparent',
     },
     rightTextStyle: {
-      color: theme.colors.accent1,
+      color: rightCTATextColor,
     },
     rightTextWrapper: {
       width: '20%',
       alignItems: 'center',
-      marginTop: hp(5),
+      // marginTop: hp(5),
     },
     outlineStyle: {
       borderRadius: 15,
