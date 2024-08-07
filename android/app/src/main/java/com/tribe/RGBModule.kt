@@ -6,12 +6,12 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import org.rgbtools.BitcoinNetwork
 import android.os.Handler
 import android.os.HandlerThread
 import com.bithyve.tribe.AppConstants
 import com.bithyve.tribe.RGBHelper
 import com.bithyve.tribe.RGBWalletRepository
+import org.rgbtools.BitcoinNetwork
 
 
 class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -158,12 +158,12 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun sendAsset( assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, promise: Promise){
+    fun sendAsset( assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, feeRate: Float, promise: Promise){
         backgroundHandler.post {
             try {
                 val endpoints = listOf(consignmentEndpoints)
-                Log.d(TAG, "sendAsset: blindedUTXO=$blindedUTXO")
-                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints))
+                Log.d(TAG, "sendAsset: blindedUTXO=$blindedUTXO, amount=$amount, endpoints=$endpoints, feeRate=$feeRate")
+                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
@@ -176,11 +176,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     @ReactMethod
     fun getUnspents(promise: Promise){
         val rgbUtxo = RGBHelper.getUnspents()
-        //val bitcoinUtxo = BdkHelper.getUnspents()
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("rgb", Gson().toJson(rgbUtxo))
-        //jsonObject.addProperty("bitcoin", Gson().toJson(bitcoinUtxo))
-        promise.resolve(jsonObject.toString())
+        promise.resolve(Gson().toJson(rgbUtxo))
     }
 
     @ReactMethod

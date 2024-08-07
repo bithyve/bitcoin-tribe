@@ -1,8 +1,14 @@
 import React, { useContext } from 'react';
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
+import { wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
@@ -30,9 +36,6 @@ type ItemProps = {
   ticker?: string;
   assetId?: string;
 };
-const ASSET_HEIGHT = hp(205);
-const ASSET_MARGIN = hp(6) * 2;
-const ASSET_ALTERNATE_SPACE = hp(50);
 const Item = ({
   name,
   image,
@@ -77,7 +80,6 @@ function AssetsList(props: AssetsListProps) {
     <View style={styles.container}>
       <FlatList
         numColumns={2}
-        // style={styles.container}
         data={listData}
         refreshControl={
           <RefreshControl
@@ -108,7 +110,6 @@ function AssetsList(props: AssetsListProps) {
                     assetId: item.assetId,
                   })
                 }
-                // onPressAddNew={onPressAddNew}
                 index={index}
                 ticker={item.ticker}
               />
@@ -124,10 +125,14 @@ function AssetsList(props: AssetsListProps) {
                     assetId: item.assetId,
                   })
                 }
-                // onPressAddNew={onPressAddNew}
                 index={index}
                 ticker={item.ticker}
-                image={`file://${item.media?.filePath}`}
+                image={Platform.select({
+                  android: `file://${item.media?.filePath}`,
+                  ios: `${item.media?.filePath}.${
+                    item.media?.mime.split('/')[1]
+                  }`,
+                })}
               />
             )}
           </View>
@@ -146,8 +151,6 @@ const getStyles = (theme: AppTheme, index = null) =>
       height: '76%',
     },
     assetWrapper: {
-      // height: (ASSET_HEIGHT + ASSET_MARGIN) * 2 + ASSET_ALTERNATE_SPACE,
-      // height: '80%',
       flexWrap: 'wrap',
       paddingLeft: wp(15),
     },

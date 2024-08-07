@@ -50,11 +50,10 @@ export const getAmt = (
   currentCurrency,
   satsEnabled = false,
 ) => {
-  // console.log('filter exchangeRates item', exchangeRates[currencyCode]);
   if (currentCurrency === CurrencyKind.BITCOIN) {
     return getAmount(amountInSats, satsEnabled);
   }
-  if (exchangeRates && exchangeRates[currencyCode]) {
+  if (exchangeRates && exchangeRates[currencyCode] && !satsEnabled) {
     return (
       (exchangeRates[currencyCode].last / SATOSHIS_IN_BTC) *
       amountInSats

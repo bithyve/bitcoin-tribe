@@ -1,4 +1,10 @@
-import { ActivityIndicator, Image, ScrollView, StyleSheet } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import React, { useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, windowHeight } from 'src/constants/responsive';
@@ -36,7 +42,12 @@ const CoinsMetaDataScreen = () => {
           showsVerticalScrollIndicator={false}>
           <Image
             source={{
-              uri: `file://${collectible.media?.filePath}`,
+              uri: Platform.select({
+                android: `file://${collectible.media?.filePath}`,
+                ios: `${collectible.media?.filePath}.${
+                  collectible.media?.mime.split('/')[1]
+                }`,
+              }),
             }}
             style={styles.imageStyle}
           />
@@ -108,7 +119,7 @@ const getStyles = (theme: AppTheme) =>
       // marginHorizontal: wp(20),
     },
     imageStyle: {
-      width: 200,
+      width: '100%',
       height: 200,
       borderRadius: 10,
       alignSelf: 'center',

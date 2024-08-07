@@ -96,8 +96,10 @@ const getStyles = (theme: AppTheme) =>
     },
     imageStyle: {
       width: '100%',
-      height: '70%',
-      borderRadius: 10,
+      height: '100%',
+      // borderRadius: 10,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
     },
     identiconWrapper: {
       width: '100%',
