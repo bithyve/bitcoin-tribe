@@ -28,6 +28,7 @@ type ItemProps = {
   onPressAsset?: (item: any) => void;
   index?: number;
   ticker?: string;
+  assetId?: string;
 };
 const ASSET_HEIGHT = hp(205);
 const ASSET_MARGIN = hp(6) * 2;
@@ -40,6 +41,7 @@ const Item = ({
   onPressAsset,
   index,
   ticker,
+  assetId,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
@@ -53,6 +55,7 @@ const Item = ({
         tag={tag}
         onPress={onPressAsset}
         ticker={ticker}
+        assetId={assetId}
       />
     </View>
   );
@@ -99,6 +102,7 @@ function AssetsList(props: AssetsListProps) {
                 name={item.name}
                 details={item.balance.spendable}
                 tag="COIN"
+                assetId={item.assetId}
                 onPressAsset={() =>
                   navigation.navigate(NavigationRoutes.COINDETAILS, {
                     assetId: item.assetId,
