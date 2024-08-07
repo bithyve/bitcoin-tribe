@@ -49,6 +49,7 @@ const CoinsMetaDataScreen = () => {
                 }`,
               }),
             }}
+            resizeMode="contain"
             style={styles.imageStyle}
           />
           <Item title="Name" value={collectible && collectible.name} />
