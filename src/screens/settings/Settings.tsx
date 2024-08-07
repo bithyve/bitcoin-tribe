@@ -56,7 +56,7 @@ function SettingsScreen({ navigation }) {
       title: settings.biometricUnlock,
       icon: <IconBiometric />,
       onValueChange: () => setBiometrics(!biometrics),
-      toggleValue: !biometrics,
+      toggleValue: biometrics,
       enableSwitch: true,
       testID: 'biometric_unlock',
     },
