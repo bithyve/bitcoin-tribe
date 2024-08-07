@@ -108,12 +108,11 @@ const QRScanner = () => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     qrCodeContainer: {
-      flex: 1,
-      // height: wp(340),
-      // width: wp(330),
+      height: wp(340),
+      width: wp(330),
       alignSelf: 'center',
       justifyContent: 'center',
-      marginTop: wp(60),
+      marginTop: wp(50),
       borderRadius: wp(8),
       overflow: 'hidden',
     },

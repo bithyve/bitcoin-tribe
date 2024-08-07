@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -23,7 +23,9 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      <QRScanner />
+      <View style={styles.scannerWrapper}>
+        <QRScanner />
+      </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
@@ -44,5 +46,10 @@ function SendScreen({ route, navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) => StyleSheet.create({});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    scannerWrapper: {
+      flex: 1,
+    },
+  });
 export default SendScreen;
