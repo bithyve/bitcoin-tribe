@@ -19,6 +19,7 @@ import Toast from 'src/components/Toast';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import SendAddressIcon from 'src/assets/images/sendAddress.svg';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 function SendToContainer({
   wallet,
@@ -114,7 +115,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           // keyboardType={'default'}
