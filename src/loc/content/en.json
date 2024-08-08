@@ -23,7 +23,8 @@
     "confirm": "Confirm",
     "skip": "Skip",
     "assets": "Assets",
-    "settings": "Settings"
+    "settings": "Settings",
+    "viewWallets": "View Wallets"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -129,7 +130,9 @@
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
     "enterAmount": "Enter Amount",
-    "sendingToAddress": "Sending to address"
+    "sendingToAddress": "Sending to address",
+    "sendSuccessTitle": "Send Successful",
+    "sendSuccessSubTitle": "The transaction has been successfully."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
