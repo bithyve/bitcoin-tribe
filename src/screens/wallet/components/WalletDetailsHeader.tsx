@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_btc1.svg';
+import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -13,7 +13,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import useBalance from 'src/hooks/useBalance';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
