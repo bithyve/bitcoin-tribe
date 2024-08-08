@@ -14,6 +14,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 
 import { AppTheme } from 'src/theme';
+import config from 'src/utils/config';
 
 function SendEnterAddress({
   onDismiss,
@@ -28,6 +29,7 @@ function SendEnterAddress({
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
+
   const onProceed = (paymentInfo: string) => {
     paymentInfo = paymentInfo.trim();
     const network = WalletUtilities.getNetworkByType(
@@ -60,8 +62,20 @@ function SendEnterAddress({
     }
   };
   const handlePasteAddress = async () => {
-    const address = await Clipboard.getString();
-    setAddress(address);
+    const getClipboardValue = await Clipboard.getString();
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
+      getClipboardValue,
+      network,
+    );
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      setAddress(address);
+    } else {
+      Keyboard.dismiss();
+      onDismiss();
+      Toast('Invalid Bitcoin address', false, true);
+    }
   };
 
   return (
