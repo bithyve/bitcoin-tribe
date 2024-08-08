@@ -55,37 +55,30 @@ const CoinsMetaDataScreen = () => {
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          <Item title="Name" value={coin && coin.name} />
-          <Item
-            title="Ticker"
-            value={coin && coin.metaData && coin.metaData.ticker}
-          />
+          <Item title="Name" value={coin.name} />
+          <Item title="Ticker" value={coin.metaData && coin.metaData.ticker} />
           <Item title="Asset ID" value={assetId} />
           <Item
             title="Schema"
-            value={
-              coin && coin.metaData && coin.metaData.assetSchema.toUpperCase()
-            }
+            value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
           />
           <Item
             title="Iface"
-            value={
-              coin && coin.metaData && coin.metaData.assetIface.toUpperCase()
-            }
+            value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
           />
           <Item
             title="Issued Supply"
-            value={coin && coin.metaData && coin.metaData.issuedSupply}
+            value={coin.metaData && coin.metaData.issuedSupply}
           />
           <Item
             title="Issued On"
-            value={moment(
-              coin && coin.metaData && coin.metaData.timestamp,
-            ).format('DD MMM YY • hh:mm A')}
+            value={moment
+              .unix(coin.metaData && coin.metaData.timestamp)
+              .format('DD MMM YY • hh:mm a')}
           />
           <Item
             title="Precision"
-            value={coin && coin.metaData && coin.metaData.precision}
+            value={coin.metaData && coin.metaData.precision}
           />
         </ScrollView>
       )}

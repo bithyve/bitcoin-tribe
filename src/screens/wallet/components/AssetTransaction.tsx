@@ -43,6 +43,7 @@ function AssetTransaction(props: AssetTransactionProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
+
   return (
     <AppTouchable
       disabled={disabled}
@@ -73,7 +74,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               {Capitalize(transId)}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
-              {moment(transDate).format('DD MMM YY  •  hh:mm a')}
+              {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
         </View>
