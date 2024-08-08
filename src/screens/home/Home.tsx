@@ -21,8 +21,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Keys, Storage } from 'src/storage';
-import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 
 function HomeScreen() {
@@ -35,6 +34,9 @@ function HomeScreen() {
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
+  const initialCurrency = currency || 'USD';
+  const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
 
@@ -57,6 +59,8 @@ function HomeScreen() {
       );
     }
     ApiHandler.getFeeAndExchangeRates();
+    setCurrency(initialCurrency);
+    setCurrencyMode(initialCurrencyMode);
   }, []);
 
   useEffect(() => {
