@@ -32,6 +32,7 @@ type ProfileDetailsProps = {
   onSettingsPress?: () => void;
   primaryStatus?: string;
   disabled?: boolean;
+  primaryCTATitle: string;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -49,6 +50,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     onSettingsPress,
     primaryStatus,
     disabled,
+    primaryCTATitle,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -89,10 +91,11 @@ function ProfileDetails(props: ProfileDetailsProps) {
               returnKeyType={'done'}
               onSubmitEditing={primaryOnPress}
               autoFocus={true}
+              maxLength={15}
             />
           </View>
           <Buttons
-            primaryTitle={common.next}
+            primaryTitle={primaryCTATitle}
             secondaryTitle={common.cancel}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}

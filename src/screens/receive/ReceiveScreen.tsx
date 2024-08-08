@@ -43,7 +43,7 @@ function ReceiveScreen({ route }) {
           receivingAddress={paymentURI || receivingAddress || 'address'}
         />
       </ScrollView>
-      <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} />
+      {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
 
       <ModalContainer
         conatinerModalStyle={styles.addAmountModalContainerStyle}

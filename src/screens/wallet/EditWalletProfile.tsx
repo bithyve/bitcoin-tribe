@@ -13,7 +13,7 @@ import Toast from 'src/components/Toast';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding, wallet } = translations;
+  const { onBoarding, wallet, common } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const [name, setName] = useState(app.appName);
@@ -55,6 +55,7 @@ function EditWalletProfile({ navigation }) {
         inputPlaceholder={onBoarding.enterName}
         edit={true}
         disabled={name === ''}
+        primaryCTATitle={common.save}
       />
     </ScreenContainer>
   );

@@ -51,7 +51,10 @@ function HomeHeader(props: HomeHeaderProps) {
           <View style={styles.contentWrapper}>
             <HomeUserAvatar imageSource={profile} />
             <View style={styles.userDetailsWrapper}>
-              <AppText variant="heading1" style={styles.usernameText}>
+              <AppText
+                numberOfLines={1}
+                variant="heading1"
+                style={styles.usernameText}>
                 {username}
               </AppText>
             </View>

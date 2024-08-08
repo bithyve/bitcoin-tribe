@@ -51,11 +51,7 @@ function NodeSettings({ navigation }) {
         subTitle={settings.nodeSettingScreenSubTitle}
         rightIcon={<AddNewIcon />}
         onSettingsPress={() =>
-          navigation.navigate(NavigationRoutes.SENDSCREEN, {
-            receiveData: 'node',
-            title: settings.connectYourNode,
-            subTitle: settings.connectYourNodeSubTitle,
-          })
+          navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY)
         }
       />
       <View>
