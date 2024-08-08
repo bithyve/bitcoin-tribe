@@ -135,7 +135,7 @@ function IssueScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader />
+      <AppHeader title={home.issueNew} />
       <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
@@ -187,7 +187,7 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
-            <View style={styles.uploadCoinAssetWrapper}>
+            {/* <View style={styles.uploadCoinAssetWrapper}>
               <AppText variant="body1" style={styles.selectAvatarStyle}>
                 {home.yourCoinAvatar}
               </AppText>
@@ -200,7 +200,7 @@ function IssueScreen() {
                   // imagePath={image && image.path.replace('file://', '')}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
         ) : (
           <View>
