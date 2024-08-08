@@ -29,7 +29,7 @@ import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import AppText from 'src/components/AppText';
-import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
+import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 
 function IssueScreen() {
@@ -114,15 +114,6 @@ function IssueScreen() {
     }
     return !assetName || !description || !totalSupplyAmt || !image;
   }, [assetName, assetTicker, totalSupplyAmt, image, description, assetType]);
-
-  // const handleAmtChangeText = text => {
-  // const positiveNumberRegex = /^\d*[1-9]\d*$/;
-  // if (positiveNumberRegex.test(text)) {
-  // setTotalSupplyAmt(text);
-  // } else {
-  //   setTotalSupplyAmt('');
-  // }
-  // };
 
   const handlePickImage = async () => {
     Keyboard.dismiss();
