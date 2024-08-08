@@ -17,7 +17,7 @@ import config from 'src/utils/config';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
+  const { onBoarding, common } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
   // const [visible, setVisible] = useState(false);
@@ -86,6 +86,7 @@ function ProfileSetup({ navigation }) {
         }}
         primaryStatus={query.status}
         disabled={name === ''}
+        primaryCTATitle={common.next}
       />
       {/* <ModalContainer
         title={onBoarding.advanceSettingTitle}

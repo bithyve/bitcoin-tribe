@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_btc1.svg';
+import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -13,11 +13,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import useBalance from 'src/hooks/useBalance';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import AppTouchable from 'src/components/AppTouchable';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -34,7 +34,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
-  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const {
     specs: { balances: { confirmed, unconfirmed } } = {
@@ -43,6 +45,16 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   } = wallet;
   const { changeAddress: receivingAddress } =
     WalletOperations.getNextFreeChangeAddress(wallet);
+
+  const toggleDisplayMode = () => {
+    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else if (initialCurrencyMode === CurrencyKind.BITCOIN) {
+      setCurrencyMode(CurrencyKind.FIAT);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -55,7 +67,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
           {home.totalBalance}
         </AppText>
       </View>
-      <View style={styles.balanceWrapper}>
+      <AppTouchable
+        style={styles.balanceWrapper}
+        onPress={() => toggleDisplayMode()}>
         {initialCurrencyMode !== CurrencyKind.SATS &&
           getCurrencyIcon(IconBitcoin, 'dark')}
         <AppText variant="walletBalance" style={styles.balanceText}>
@@ -66,7 +80,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             sats
           </AppText>
         )}
-      </View>
+      </AppTouchable>
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(

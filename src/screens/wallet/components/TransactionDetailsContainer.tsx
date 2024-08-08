@@ -66,11 +66,13 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       </AppTouchable>
       <LabeledContent
         label={wallet.fees}
-        content={getBalance(`${transaction.fee}`)}
+        enableCurrency={true}
+        content={`${transaction.fee}`}
       />
       <LabeledContent
         label={wallet.amount}
-        content={getBalance(`${transAmount}`)}
+        enableCurrency={true}
+        content={`${transAmount}`}
       />
       <LabeledContent
         label={wallet.confirmations}

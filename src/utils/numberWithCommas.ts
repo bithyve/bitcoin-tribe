@@ -7,3 +7,8 @@
 export const numberWithCommas = (x: number | string): string => {
   return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0';
 };
+
+export const formatNumber = text => {
+  const numberValue = text.replace(/,/g, ''); // Remove existing commas
+  return new Intl.NumberFormat('en-IN').format(numberValue);
+};

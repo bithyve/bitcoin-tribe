@@ -54,6 +54,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
+      backgroundColor: theme.colors.cardBackground,
     },
     wrapper: {
       padding: hp(15),

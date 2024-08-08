@@ -173,7 +173,7 @@ export const getCurrencyImageByRegion = (
       styles.color = Colors.Golden;
       break;
     case 'dark':
-      styles.color = Colors.Golden;
+      styles.color = Colors.White;
       break;
     case 'grey':
       styles.color = Colors.White;
@@ -209,7 +209,7 @@ export const getFiatIcon = (
       styles.color = Colors.Golden;
       break;
     case 'dark':
-      styles.color = Colors.Golden;
+      styles.color = Colors.White;
       break;
     case 'grey':
       styles.color = Colors.White;

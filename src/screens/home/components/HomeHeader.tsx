@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 
-import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
@@ -51,7 +51,10 @@ function HomeHeader(props: HomeHeaderProps) {
           <View style={styles.contentWrapper}>
             <HomeUserAvatar imageSource={profile} />
             <View style={styles.userDetailsWrapper}>
-              <AppText variant="heading1" style={styles.usernameText}>
+              <AppText
+                numberOfLines={1}
+                variant="heading1"
+                style={styles.usernameText}>
                 {username}
               </AppText>
             </View>

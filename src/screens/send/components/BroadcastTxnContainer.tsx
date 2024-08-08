@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
@@ -21,6 +21,8 @@ import useBalance from 'src/hooks/useBalance';
 import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessContainer from './SendSuccessContainer';
 
 function BroadcastTxnContainer({
   wallet,
@@ -46,18 +48,22 @@ function BroadcastTxnContainer({
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (sendPhaseTwoMutation.status === 'success') {
-      Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`, true);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-        autoRefresh: true,
-      });
+      setVisible(true);
+      // Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`, true);
     } else if (sendPhaseTwoMutation.status === 'error') {
       Toast(`Error while sending: ${sendPhaseTwoMutation.error}`, false, true);
     }
   }, [sendPhaseTwoMutation]);
-
+  const successTransaction = () => {
+    setVisible(false);
+    navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+      autoRefresh: true,
+    });
+  };
   const initiateSendPhaseTwo = () => {
     sendPhaseTwoMutation.mutate({
       sender: wallet,
@@ -202,15 +208,33 @@ function BroadcastTxnContainer({
             </View>
           </View>
         </View>
-        <View style={styles.primaryCTAContainer}>
-          <Buttons
-            primaryTitle={common.broadcast}
-            secondaryTitle={common.cancel}
-            primaryOnPress={initiateSendPhaseTwo}
-            secondaryOnPress={navigation.goBack}
-            width={wp(120)}
+        <ResponsePopupContainer
+          visible={visible}
+          title={sendScreen.sendSuccessTitle}
+          subTitle={sendScreen.sendSuccessSubTitle}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={styles.containerModalStyle}>
+          <SendSuccessContainer
+            transID={address}
+            amount={amount}
+            transFee={txPrerequisites[selectedPriority].fee}
+            total={
+              Number(amount) + Number(txPrerequisites[selectedPriority].fee)
+            }
+            onPress={() => successTransaction()}
           />
-        </View>
+        </ResponsePopupContainer>
+      </View>
+      <View style={styles.primaryCTAContainer}>
+        <Buttons
+          primaryTitle={common.broadcast}
+          secondaryTitle={common.cancel}
+          primaryOnPress={initiateSendPhaseTwo}
+          secondaryOnPress={navigation.goBack}
+          width={wp(120)}
+        />
       </View>
     </View>
   );
@@ -300,6 +324,10 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: hp(20),
+    },
+    containerModalStyle: {
+      margin: 0,
+      padding: 10,
     },
   });
 export default BroadcastTxnContainer;
