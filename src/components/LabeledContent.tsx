@@ -19,7 +19,7 @@ function LabeledContent(props: labelContentProps) {
       <AppText variant="body1" style={styles.labelStyle}>
         {label}
       </AppText>
-      <AppText variant="body2" style={styles.textStyle}>
+      <AppText selectable variant="body2" style={styles.textStyle}>
         {content}
       </AppText>
     </View>
