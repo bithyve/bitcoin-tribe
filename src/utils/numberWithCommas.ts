@@ -10,5 +10,5 @@ export const numberWithCommas = (x: number | string): string => {
 
 export const formatNumber = text => {
   const numberValue = text.replace(/,/g, ''); // Remove existing commas
-  return new Intl.NumberFormat('en-IN').format(numberValue);
+  return text ? new Intl.NumberFormat('en-IN').format(numberValue) : '';
 };
