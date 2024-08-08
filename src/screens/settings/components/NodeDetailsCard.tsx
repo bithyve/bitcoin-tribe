@@ -57,7 +57,7 @@ function NodeDetailsCard(props: nodeDetailsCardProps) {
           {status ? <ConnectIcon /> : <DisConnectIcon />}
         </View>
         <View style={styles.buttonWrapper2}>
-          {status ? <ConnectDeleteIcon /> : <DisConnectDeleteIcon />}
+          {!status && <DisConnectDeleteIcon />}
         </View>
       </View>
     </AppTouchable>
@@ -68,11 +68,13 @@ const getStyles = (theme: AppTheme, status) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      // padding: hp(10),
       justifyContent: 'space-around',
       borderRadius: 10,
-      marginTop: hp(10),
+      marginTop: status ? hp(10) : 0,
       marginBottom: status ? hp(35) : hp(5),
+      paddingBottom: status ? hp(35) : 0,
+      borderBottomColor: status ? theme.colors.borderColor : 'transparent',
+      borderBottomWidth: status ? 1 : 0,
     },
     labelStyle: {
       color: theme.colors.secondaryHeadingColor,
@@ -82,14 +84,14 @@ const getStyles = (theme: AppTheme, status) =>
     },
     wrapper1: {
       flexDirection: 'row',
-      width: '60%',
+      width: status ? '78%' : '60%',
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       padding: hp(15),
       borderRadius: 15,
     },
     wrapper2: {
-      width: '40%',
+      width: status ? '20%' : '40%',
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
@@ -98,7 +100,6 @@ const getStyles = (theme: AppTheme, status) =>
     },
     buttonWrapper1: {
       width: '42%',
-      alignItems: 'center',
     },
     buttonWrapper2: {
       width: '52%',
