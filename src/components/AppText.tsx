@@ -31,6 +31,7 @@ interface Props extends ComponentProps<typeof Text> {
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
   ellipsizeMode?: string;
+  selectable?: boolean;
 }
 
 const AppText: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const AppText: React.FC<Props> = ({
   style,
   numberOfLines,
   ellipsizeMode,
+  selectable = false,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -102,6 +104,7 @@ const AppText: React.FC<Props> = ({
       testID={generatedTestID}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}
+      selectable={selectable}
       maxFontSizeMultiplier={1}>
       {children}
     </Text>
