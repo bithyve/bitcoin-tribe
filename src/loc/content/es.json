@@ -133,7 +133,9 @@
     "enterAmount": "Introduce la cantidad",
     "sendingToAddress": "Enviando a la dirección",
     "sendSuccessTitle": "Enviar exitosa",
-    "sendSuccessSubTitle": "La transacción ha sido exitosa."
+    "sendSuccessSubTitle": "La transacción ha sido exitosa.",
+    "sendAssetTitle": "Enviar",
+    "sendAssetSubtitle": "Proporcione la factura de su activo rgb con precisión."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

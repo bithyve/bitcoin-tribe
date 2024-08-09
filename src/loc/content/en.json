@@ -133,7 +133,9 @@
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send Successful",
-    "sendSuccessSubTitle": "The transaction has been successfully."
+    "sendSuccessSubTitle": "The transaction has been successfully.",
+    "sendAssetTitle": "Send",
+    "sendAssetSubtitle": "Provide your rgb asset's invoice accurately."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
