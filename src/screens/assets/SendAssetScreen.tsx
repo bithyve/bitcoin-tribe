@@ -145,11 +145,11 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderRadius: 0,
       marginVertical: hp(25),
       marginBottom: 0,
-      height: Math.max(80, inputHeight),
+      height: Math.max(95, inputHeight),
       marginTop: 0,
     },
     contentStyle1: {
-      height: hp(50),
+      height: hp(55),
     },
     buttonWrapper: {
       marginTop: hp(20),

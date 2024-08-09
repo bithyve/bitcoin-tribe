@@ -44,7 +44,7 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
       </View>
       <TransactionButtons
         onPressSend={() =>
-          navigation.navigate(NavigationRoutes.SENDASSET, {
+          navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
           })
         }
