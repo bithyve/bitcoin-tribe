@@ -39,7 +39,8 @@
     "addPicture": "Add Picture +",
     "enterPin": "Enter a Pin",
     "confirmPin": "Confirm your pin",
-    "advanceSettingTitle": "Advanced Setting"
+    "advanceSettingTitle": "Advanced Setting",
+    "splashText": "Bitcoin is better with friends"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -173,7 +174,10 @@
     "date": "Date",
     "transferDetails": "Transfer Details",
     "viewUnspent": "View Unspent UTXOs",
-    "walletRefreshMsg": "Wallet successfully updated"
+    "walletRefreshMsg": "Wallet successfully updated",
+    "unspentTitle": "List of RGB UTXOs",
+    "satsAmount": "Sats Amount",
+    "rgbAssetID": "RGB Asset ID"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
