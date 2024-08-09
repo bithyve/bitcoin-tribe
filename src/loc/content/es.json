@@ -39,7 +39,8 @@
     "addPicture": "Agregar imagen +",
     "enterPin": "Introduce un PIN",
     "confirmPin": "Confirma tu PIN",
-    "advanceSettingTitle": "Configuración avanzada"
+    "advanceSettingTitle": "Configuración avanzada",
+    "splashText": "Bitcoin es mejor con amigos"
   },
   "home": {
     "addAssets": "Agregar activos",
