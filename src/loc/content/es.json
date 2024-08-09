@@ -173,7 +173,10 @@
     "date": "Fecha",
     "transferDetails": "Detalles de la transferencia",
     "viewUnspent": "Ver UTXOs no gastados",
-    "walletRefreshMsg": "Billetera actualizada con éxito"
+    "walletRefreshMsg": "Billetera actualizada con éxito",
+    "unspentTitle": "Lista de UTXO RGB",
+    "satsAmount": "Cantidad de sats",
+    "rgbAssetID": "ID de activo RGB"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
