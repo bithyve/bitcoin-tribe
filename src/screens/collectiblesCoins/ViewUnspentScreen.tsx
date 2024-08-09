@@ -11,6 +11,10 @@ import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import openLink from 'src/utils/OpenLink';
+import config from 'src/utils/config';
+import { NetworkType } from 'src/services/wallets/enums';
+import AppTouchable from 'src/components/AppTouchable';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -81,6 +85,14 @@ const ViewUnspentScreen = () => {
     console.log('data', JSON.stringify(data));
   }, [data]);
 
+  const redirectToBlockExplorer = txid => {
+    openLink(
+      `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${txid}`,
+    );
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={wallet.unspentTitle} subTitle={''} enableBack={true} />
@@ -96,7 +108,11 @@ const ViewUnspentScreen = () => {
           ListHeaderComponent={<UnspentHeaderView />}
           renderItem={({ item }) => (
             <View style={styles.unspentListContainer}>
-              <View style={styles.transIDWrapper}>
+              <AppTouchable
+                style={styles.transIDWrapper}
+                onPress={() =>
+                  redirectToBlockExplorer(item.utxo.outpoint.txid)
+                }>
                 <AppText
                   selectable
                   style={styles.titleStyle}
@@ -105,7 +121,7 @@ const ViewUnspentScreen = () => {
                   variant="subTitle">
                   {`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
                 </AppText>
-              </View>
+              </AppTouchable>
               <View style={styles.amountWrapper}>
                 <AppText
                   selectable
