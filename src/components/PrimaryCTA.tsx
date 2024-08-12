@@ -64,7 +64,7 @@ const getStyles = (theme: AppTheme, width, disabled) =>
       // minWidth: width,
       marginVertical: hp(20),
       color: disabled
-        ? theme.colors.secondaryHeadingColor
+        ? theme.colors.disableCTATitle
         : theme.colors.primaryCTAText,
     },
     primaryCTATitle: {

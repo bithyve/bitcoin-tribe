@@ -26,7 +26,7 @@ const SendAssetScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { home, common } = translations;
+  const { sendScreen, common, assets } = translations;
   const [invoice, setInvoice] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
@@ -53,7 +53,7 @@ const SendAssetScreen = () => {
     console.log('response', response);
     setLoading(false);
     if (response?.txid) {
-      Toast('Sent successfully', true);
+      Toast(sendScreen.sentSuccessfully, true);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
@@ -66,11 +66,7 @@ const SendAssetScreen = () => {
 
   useEffect(() => {
     if (createUtxos.error) {
-      Toast(
-        'Insufficient sats in the main Wallet, failed to create new UTXOs',
-        false,
-        true,
-      );
+      Toast(assets.insufficientSatsMainWallet, false, true);
     } else if (createUtxos.isSuccess) {
       setShowErrorModal(false);
       sendAsset();

@@ -129,7 +129,7 @@ function SettingsScreen({ navigation }) {
       id: 5,
       title: settings.connectionSettings,
       icon: <IconNodes />,
-      onPress: () => navigation.navigate(NavigationRoutes.CONNECTIONSETTINGS),
+      onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     },
     {
       id: 6,
@@ -145,7 +145,6 @@ function SettingsScreen({ navigation }) {
       <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
-      {/* <SettingMenuContainer /> */}
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );

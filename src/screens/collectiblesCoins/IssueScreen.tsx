@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
@@ -23,16 +23,15 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
-import IconImagePlaceholder from 'src/assets/images/imagePlaceholder.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
-import AppText from 'src/components/AppText';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 
 function IssueScreen() {
+  const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
@@ -54,12 +53,12 @@ function IssueScreen() {
     const response = await ApiHandler.issueNewCoin({
       name: assetName.trim(),
       ticker: assetTicker,
-      supply: totalSupplyAmt,
+      supply: totalSupplyAmt.replace(/,/g, ''),
     });
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.goBack();
+      navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
@@ -75,14 +74,14 @@ function IssueScreen() {
     const response = await ApiHandler.issueNewCollectible({
       name: assetName.trim(),
       description: description,
-      supply: totalSupplyAmt,
+      supply: totalSupplyAmt.replace(/,/g, ''),
       filePath: image?.path?.replace('file://', ''),
     });
     console.log(response);
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.goBack();
+      navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);

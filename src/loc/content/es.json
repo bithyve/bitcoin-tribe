@@ -133,7 +133,10 @@
     "enterAmount": "Introduce la cantidad",
     "sendingToAddress": "Enviando a la dirección",
     "sendSuccessTitle": "Enviar exitosa",
-    "sendSuccessSubTitle": "La transacción ha sido exitosa."
+    "sendSuccessSubTitle": "La transacción ha sido exitosa.",
+    "invalidBtcAddress": "Dirección Bitcoin no válida",
+    "sentSuccessfully": "Enviado exitosamente",
+    "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -177,7 +180,10 @@
     "walletRefreshMsg": "Billetera actualizada con éxito",
     "unspentTitle": "Lista de UTXO RGB",
     "satsAmount": "Cantidad de sats",
-    "rgbAssetID": "ID de activo RGB"
+    "rgbAssetID": "ID de activo RGB",
+    "testSatsRecived": "Pruebas recibidas",
+    "failedTestSatsRecived": "No se pudieron recibir los exámenes",
+    "failRefreshWallet": "No se pudo actualizar la billetera"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

@@ -133,7 +133,10 @@
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send Successful",
-    "sendSuccessSubTitle": "The transaction has been successfully."
+    "sendSuccessSubTitle": "The transaction has been successfully.",
+    "invalidBtcAddress": "Invalid Bitcoin address",
+    "sentSuccessfully": "Sent successfully",
+    "amountMoreThanSpend": "Amount entered is more than available to spend"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -177,7 +180,10 @@
     "walletRefreshMsg": "Wallet successfully updated",
     "unspentTitle": "List of RGB UTXOs",
     "satsAmount": "Sats Amount",
-    "rgbAssetID": "RGB Asset ID"
+    "rgbAssetID": "RGB Asset ID",
+    "testSatsRecived": "Test-sats received",
+    "failedTestSatsRecived": "Failed to receive test-sats",
+    "failRefreshWallet": "Failed to refresh wallet"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
