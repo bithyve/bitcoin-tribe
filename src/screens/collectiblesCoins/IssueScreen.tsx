@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
@@ -23,17 +23,15 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
-import IconImagePlaceholder from 'src/assets/images/imagePlaceholder.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
-import AppText from 'src/components/AppText';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function IssueScreen() {
+  const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
@@ -60,7 +58,7 @@ function IssueScreen() {
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.navigate(NavigationRoutes.HOME);
+      navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
@@ -83,7 +81,7 @@ function IssueScreen() {
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.navigate(NavigationRoutes.HOME);
+      navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
