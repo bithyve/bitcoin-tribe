@@ -54,7 +54,7 @@ function IssueScreen() {
     const response = await ApiHandler.issueNewCoin({
       name: assetName.trim(),
       ticker: assetTicker,
-      supply: totalSupplyAmt,
+      supply: totalSupplyAmt.replace(/,/g, ''),
     });
     setLoading(false);
     if (response?.assetId) {
@@ -75,7 +75,7 @@ function IssueScreen() {
     const response = await ApiHandler.issueNewCollectible({
       name: assetName.trim(),
       description: description,
-      supply: totalSupplyAmt,
+      supply: totalSupplyAmt.replace(/,/g, ''),
       filePath: image?.path?.replace('file://', ''),
     });
     console.log(response);
