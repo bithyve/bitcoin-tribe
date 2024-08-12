@@ -43,6 +43,7 @@ import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
 import AddAsset from 'src/screens/home/components/AddAsset';
 import AppBackupMenu from 'src/screens/settings/AppBackupMenu';
 import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
+import Login from 'src/screens/onBoarding/Login';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -60,6 +61,7 @@ function LoginStack() {
         component={ProfileSetup}
       />
       <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+      <Stack.Screen name={NavigationRoutes.LOGIN} component={Login} />
     </Stack.Navigator>
   );
 }
@@ -179,6 +181,7 @@ function AppStack() {
           name={NavigationRoutes.WALLETBACKUPHISTORY}
           component={WalletBackupHistory}
         />
+        <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
       </Stack.Navigator>
     </RealmProvider>
   );

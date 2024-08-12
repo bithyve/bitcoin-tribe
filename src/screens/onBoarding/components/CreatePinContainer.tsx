@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
@@ -10,17 +10,39 @@ import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useNavigation } from '@react-navigation/native';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 
 function CreatePinContainer() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-
+  const navigation = useNavigation();
   const [passcode, setPasscode] = useState('');
   const [confirmPasscode, setConfirmPasscode] = useState('');
   const [passcodeFlag, setPasscodeFlag] = useState(true);
   const [confirmPasscodeFlag, setConfirmPasscodeFlag] = useState(0);
+  const createPin = useMutation(ApiHandler.createPin);
+
+  useEffect(() => {
+    if (createPin.error) {
+      Toast('Error setting pin', false, true);
+    } else if (createPin.isSuccess) {
+      Toast('New PIN created', false, false);
+      navigation.goBack();
+    }
+  }, [createPin.error, createPin.isSuccess, createPin.data]);
+
+  const disbleProceed = useMemo(() => {
+    if (passcode === '' || confirmPasscode === '') {
+      return true;
+    } else {
+      return passcode !== confirmPasscode;
+    }
+  }, [passcode, confirmPasscode]);
 
   function onPressNumber(text) {
     let tmpPasscode = passcode;
@@ -112,9 +134,10 @@ function CreatePinContainer() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => console.log('primary')}
+          primaryOnPress={() => createPin.mutate(passcode)}
           secondaryTitle={common.cancel}
-          secondaryOnPress={() => console.log('secondary')}
+          secondaryOnPress={() => navigation.goBack()}
+          disabled={disbleProceed}
           width={wp(120)}
         />
       </View>

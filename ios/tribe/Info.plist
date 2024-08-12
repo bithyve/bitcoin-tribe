@@ -35,6 +35,8 @@
 	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Allow Tribe requires FaceID access to allows you quick and secure access.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LufgaBold.ttf</string>
