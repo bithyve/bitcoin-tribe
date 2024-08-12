@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
@@ -31,6 +31,7 @@ import UploadFile from 'src/assets/images/uploadFile.svg';
 import AppText from 'src/components/AppText';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function IssueScreen() {
   const theme: AppTheme = useTheme();
@@ -59,7 +60,7 @@ function IssueScreen() {
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.goBack();
+      navigation.navigate(NavigationRoutes.HOME);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
@@ -82,7 +83,7 @@ function IssueScreen() {
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
-      navigation.goBack();
+      navigation.navigate(NavigationRoutes.HOME);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
