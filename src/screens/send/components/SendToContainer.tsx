@@ -57,7 +57,7 @@ function SendToContainer({
 
   const initiateSendPhaseOne = () => {
     if (insufficientBalance) {
-      Toast('Amount entered is more than available to spend', false, true);
+      Toast(sendScreen.amountMoreThanSpend, false, true);
       return;
     }
 

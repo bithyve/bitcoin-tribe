@@ -58,7 +58,7 @@ function SendEnterAddress({
         });
         break;
       default:
-        Toast('Invalid Bitcoin address', false, true);
+        Toast(sendScreen.invalidBtcAddress, false, true);
     }
   };
   const handlePasteAddress = async () => {
@@ -74,7 +74,7 @@ function SendEnterAddress({
     } else {
       Keyboard.dismiss();
       onDismiss();
-      Toast('Invalid Bitcoin address', false, true);
+      Toast(sendScreen.invalidBtcAddress, false, true);
     }
   };
 
