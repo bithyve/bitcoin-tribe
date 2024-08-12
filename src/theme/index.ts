@@ -43,6 +43,7 @@ type CustomColors = {
   coinsBorderColor: string;
   successPopupBackColor: string;
   successPopupBorderColor: string;
+  disableCTATitle: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -84,6 +85,7 @@ const CombinedDefaultTheme: AppTheme = {
     coinsBorderColor: Colors.Celadon,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
+    disableCTATitle: Colors.Gray,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
@@ -143,6 +145,7 @@ const CombinedDarkTheme: AppTheme = {
     coinsBorderColor: Colors.Celadon,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
+    disableCTATitle: Colors.Gray,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,

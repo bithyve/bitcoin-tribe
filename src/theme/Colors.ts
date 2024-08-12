@@ -30,5 +30,6 @@ const Colors = {
   Celadon: 'rgba(167, 224, 178,1)',
   UFOGreen: 'rgba(76, 217, 100, 0.2)',
   UFOGreen1: 'rgba(76, 217, 100, 1)',
+  Gray: 'rgba(128, 128, 128, 1)',
 };
 export default Colors;
