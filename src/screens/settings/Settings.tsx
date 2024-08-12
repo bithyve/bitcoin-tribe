@@ -15,7 +15,6 @@ import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
-import SettingMenuContainer from './components/SettingMenuContainer';
 import SettingMenuItem from './components/SettingMenuItem';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
@@ -92,7 +91,6 @@ function SettingsScreen({ navigation }) {
       <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
-      {/* <SettingMenuContainer /> */}
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );
