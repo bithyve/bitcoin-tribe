@@ -44,7 +44,7 @@ import { BackupAction, Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import { Collectible, RGBWallet } from 'src/models/interfaces/RGBWallet';
-import { Platform } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 var RNFS = require('react-native-fs');
 
@@ -117,6 +117,57 @@ export class ApiHandler {
       }
     } else {
       throw new Error('Realm initialisation failed');
+    }
+  }
+
+  static async biometricLogin(signature: string) {
+    const appId = await Storage.get(Keys.APPID);
+    const res = await SecureStore.verifyBiometricAuth(signature, appId);
+    if (!res.success) {
+      throw new Error('Biometric Auth Failed');
+    }
+    const hash = res.hash;
+    const encryptedKey = res.encryptedKey;
+    const key = decrypt(hash, encryptedKey);
+    const uint8array = stringToArrayBuffer(key);
+    await dbManager.initializeRealm(uint8array);
+    const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+      RealmSchema.RgbWallet,
+    );
+    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+    return key;
+  }
+
+  static async createPin(pin: string) {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    const newHash = hash512(pin);
+    const encryptedKey = encrypt(newHash, key);
+    SecureStore.store(newHash, encryptedKey);
+    await SecureStore.remove(hash);
+    Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
+  }
+
+  static async resetPinMethod(key: string) {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const encryptedKey = encrypt(hash, key);
+    SecureStore.store(hash, encryptedKey);
+    Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+  }
+
+  static async loginWithPin(pin: string) {
+    try {
+      const hash = hash512(pin);
+      const key = decrypt(hash, await SecureStore.fetch(hash));
+      const uint8array = stringToArrayBuffer(key);
+      await dbManager.initializeRealm(uint8array);
+      const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+      return key;
+    } catch (error) {
+      throw new Error('Invalid PIN');
     }
   }
 
@@ -560,7 +611,6 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
-  // backup
   static async createBackup(confirmed) {
     try {
       dbManager.createObject(RealmSchema.BackupHistory, {
@@ -577,7 +627,6 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
-  // get fee and exchange rate
   static async getFeeAndExchangeRates() {
     const { exchangeRates, averageTxFees } =
       await Relay.fetchFeeAndExchangeRates();

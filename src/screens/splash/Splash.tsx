@@ -12,6 +12,7 @@ import { useTheme } from 'react-native-paper';
 import TribeText from 'src/assets/images/Tribe.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -20,9 +21,12 @@ function Splash({ navigation }) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { setKey } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
+  const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
   useEffect(() => {
-    init();
+    setTimeout(() => {
+      init();
+    }, 1000);
   }, []);
 
   useEffect(() => {
@@ -38,9 +42,10 @@ function Splash({ navigation }) {
   const init = async () => {
     const appId = Storage.get(Keys.APPID);
     if (appId) {
-      const pinMethod = Storage.get(Keys.PIN_METHOD);
       if (pinMethod === PinMethod.DEFAULT) {
         mutate();
+      } else {
+        navigation.replace(NavigationRoutes.LOGIN);
       }
     } else {
       navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
