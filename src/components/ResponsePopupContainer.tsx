@@ -89,7 +89,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       width: '95%',
       padding: 20,
       backgroundColor: backColor,
-      borderRadius: 10,
+      borderRadius: 30,
       alignItems: 'center',
       borderColor: borderColor,
       borderWidth: 1,
