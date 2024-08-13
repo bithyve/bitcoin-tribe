@@ -106,7 +106,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         <PrimaryCTA
           title={common.viewWallets}
           onPress={onPress}
-          width={hp(200)}
+          width={hp(152)}
         />
       </View>
     </View>
