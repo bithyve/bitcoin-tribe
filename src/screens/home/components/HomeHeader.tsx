@@ -77,7 +77,7 @@ function HomeHeader(props: HomeHeaderProps) {
         </View>
         <AppTouchable style={styles.balanceWrapper} onPress={onPressTotalAmt}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
-            getCurrencyIcon(IconBitcoin, 'dark')}
+            getCurrencyIcon(IconBitcoin, 'dark', 30)}
           <AppText variant="pageTitle2" style={styles.balanceText}>
             &nbsp;{getBalance(balance)}
           </AppText>
