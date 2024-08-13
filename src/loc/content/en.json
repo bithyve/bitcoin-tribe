@@ -44,7 +44,7 @@
   },
   "home": {
     "addAssets": "Add Assets",
-    "addAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
+    "addAssetSubTitle": "Issue New Asset or Receive Asset",
     "issueNew": "Issue new",
     "myAssets": "My Assets",
     "issue": "Issue",
@@ -157,7 +157,7 @@
     "showXPubSubTitle": "Show details for xPub",
     "editPicture": "EDIT PICTURE",
     "walletNamePic": "Wallet Name and Picture",
-    "walletNamePicSubTitle": "Lorem ipsum dolor amet",
+    "walletNamePicSubTitle": "Enter , Edit Name and Picture",
     "transactionID": "Transaction ID",
     "transactionFee": "Transaction Fee",
     "receiveTestSats": "Receive Test Sats",
@@ -170,7 +170,7 @@
     "buyWithRampSubTitle": "Low fee for those big buys",
     "noUTXOYet": "No transactions yet",
     "noUTXOYetSubTitle": "Start trading to see your activity here!",
-    "xPubNoteSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit, sed do eiusmod tempor",
+    "xPubNoteSubTitle": "Scan or Copy paste the Xpub Address",
     "profileUpdateMsg": "Profile update successfully!",
     "profileUpdateErrMsg": "Failed to update!",
     "status": "Status",
@@ -191,6 +191,6 @@
     "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
     "insufficientSats": "Insufficient sats, failed to create new UTXOs",
     "receiveAssetTitle": "Receive Assset",
-    "receiveAssetSubTitle": "Lorem ipsum dolor sit amet, consec tetur adi piscing elit,"
+    "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice"
   }
 }

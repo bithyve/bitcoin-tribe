@@ -29,7 +29,7 @@ function CoinAllTransaction() {
     <ScreenContainer>
       <AppHeader
         title={walletTranslations.transferDetails}
-        subTitle={walletTranslations.transactionDetailSubTitle}
+        // subTitle={walletTranslations.transactionDetailSubTitle}
       />
       <FlatList
         style={styles.container}

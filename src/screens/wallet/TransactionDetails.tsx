@@ -17,7 +17,7 @@ function TransactionDetails({ route }) {
     <ScreenContainer>
       <AppHeader
         title={wallet.transactionDetailTitle}
-        subTitle={wallet.transactionDetailSubTitle}
+        // subTitle={wallet.transactionDetailSubTitle}
       />
       <TransactionDetailsContainer
         transId={transaction.txid}

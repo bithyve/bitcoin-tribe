@@ -17,7 +17,7 @@ function WalletAllTransactions({ route }) {
     <ScreenContainer>
       <AppHeader
         title={walletTranslations.allTransactionsTitle}
-        subTitle={walletTranslations.allTransactionSubTitle}
+        // subTitle={walletTranslations.allTransactionSubTitle}
       />
       <WalletTransactionList
         transactions={transactions}
