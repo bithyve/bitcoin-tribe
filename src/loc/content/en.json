@@ -116,7 +116,7 @@
   "receciveScreen": {
     "headerSubTitle": "Scan QR Lorem ipsum dolor sit amet,",
     "addAmountTitle": "Add Amount",
-    "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "addAmountSubTitle": "Enter Amount you want to Receive",
     "placeHolderText": "Enter Amount",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
@@ -125,7 +125,7 @@
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
     "optionCardTitle": "or Enter details manually",
-    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "optionCardSubTitle": "Enter a Bitcoin Address or RGB invoice",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
     "enterAddress": "Enter address",

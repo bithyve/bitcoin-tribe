@@ -116,7 +116,7 @@
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
     "addAmountTitle": "Agregar cantidad",
-    "addAmountSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "addAmountSubTitle": "Ingrese el monto que desea recibir",
     "placeHolderText": "Introduce la cantidad",
     "invoiceAddress": "Factura RGB",
     "bitcoinAddress": "Dirección de Bitcoin",
@@ -125,7 +125,7 @@
   "sendScreen": {
     "headerSubTitle": "Lorem ipsum dolor sit amet, consec tetur",
     "optionCardTitle": "o introduce los detalles manualmente",
-    "optionCardSubTitle": "Lorem ipsum dolor sit amet, consec",
+    "optionCardSubTitle": "Ingrese una dirección Bitcoin o una factura RGB",
     "enterSendAddress": "Introduce la dirección de envío",
     "enterSendAdrsSubTitle": "Lorem ipsum dolor sit amet, consec",
     "enterAddress": "Introduce la dirección",
