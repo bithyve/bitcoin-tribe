@@ -47,14 +47,17 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={<IconLanguage />}
-          langCurrency={selectedLanguage && selectedLanguage.language}
-          langCurrencyVariant={
-            selectedLanguage &&
-            selectedLanguage.displayTitle +
-              ' ' +
-              selectedLanguage.iso.toUpperCase()
-          }
-          onPress={() => setLangDropdown(!langDropdown)}
+          langCurrency={'English'}
+          langCurrencyVariant={'English UK'}
+          //We disabled for now because app crash (Blocker)
+          // langCurrency={selectedLanguage && selectedLanguage.language}
+          // langCurrencyVariant={
+          //   selectedLanguage &&
+          //   selectedLanguage.displayTitle +
+          //     ' ' +
+          //     selectedLanguage.iso.toUpperCase()
+          // }
+          // onPress={() => setLangDropdown(!langDropdown)}
         />
       </View>
       <LangCurrencyOption
