@@ -15,10 +15,7 @@ function TransactionDetails({ route }) {
   const theme: AppTheme = useTheme();
   return (
     <ScreenContainer>
-      <AppHeader
-        title={wallet.transactionDetailTitle}
-        // subTitle={wallet.transactionDetailSubTitle}
-      />
+      <AppHeader title={wallet.transactionDetailTitle} />
       <TransactionDetailsContainer
         transId={transaction.txid}
         transDate={transaction.date}

@@ -15,10 +15,7 @@ function WalletAllTransactions({ route }) {
 
   return (
     <ScreenContainer>
-      <AppHeader
-        title={walletTranslations.allTransactionsTitle}
-        // subTitle={walletTranslations.allTransactionSubTitle}
-      />
+      <AppHeader title={walletTranslations.allTransactionsTitle} />
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}
