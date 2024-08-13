@@ -28,21 +28,27 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, wallet: walletTranslations } = translations;
 
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>Transaction ID</AppText>
+          <AppText style={styles.labelText}>
+            {walletTranslations.transactionID}
+          </AppText>
         </View>
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText}>{transID}</AppText>
+          <AppText style={styles.labelText} numberOfLines={1}>
+            {transID}
+          </AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>Amount</AppText>
+          <AppText style={styles.labelText}>
+            {walletTranslations.amount}
+          </AppText>
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
@@ -60,7 +66,9 @@ function SendSuccessContainer(props: sendSuccessProps) {
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>Transaction Fee</AppText>
+          <AppText style={styles.labelText}>
+            {walletTranslations.transactionFee}
+          </AppText>
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS

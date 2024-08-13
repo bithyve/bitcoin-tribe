@@ -86,7 +86,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     modalContainer: {
-      width: '100%',
+      width: '95%',
       padding: 20,
       backgroundColor: backColor,
       borderRadius: 10,
