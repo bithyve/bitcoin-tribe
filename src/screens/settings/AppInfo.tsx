@@ -23,7 +23,7 @@ function AppInfo({ navigation }) {
     <ScreenContainer>
       <AppHeader
         title={settings.appInfoTitle}
-        subTitle={settings.appBackupScreenSubTitle}
+        subTitle={settings.appInfoScreenSubTitle}
       />
       <AppInfoContainer
         navigation={navigation}
