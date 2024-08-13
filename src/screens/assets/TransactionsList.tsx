@@ -54,7 +54,7 @@ function TransactionsList({
       </View>
 
       <FlatList
-        style={styles.container}
+        style={styles.container2}
         data={transactions}
         refreshControl={
           <RefreshControl
@@ -85,6 +85,10 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(30),
+      height: '100%',
+    },
+    container2: {
+      // marginTop: hp(30),
       height: '100%',
     },
     contentWrapper: {
