@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
@@ -15,8 +16,11 @@ import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-function ReceiveAssetScreen({}) {
+function ReceiveAssetScreen() {
+  const refresh = useRoute().params;
+  console.log(refresh);
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common, assets } = translations;
   const navigation = useNavigation();
@@ -27,7 +31,7 @@ function ReceiveAssetScreen({}) {
 
   useEffect(() => {
     mutate();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (error) {
@@ -60,7 +64,8 @@ function ReceiveAssetScreen({}) {
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          createUtxos.mutate();
+          // createUtxos.mutate();
+          navigation.navigate(NavigationRoutes.RGBCREATEUTXO);
         }}
       />
 
@@ -82,7 +87,6 @@ function ReceiveAssetScreen({}) {
             qrCodeValue={rgbWallet?.receiveData?.invoice}
             icon={<IconCopy />}
           />
-
           <FooterNote
             title={common.note}
             subTitle={receciveScreen.noteSubTitle}

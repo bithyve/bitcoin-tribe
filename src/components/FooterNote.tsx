@@ -47,7 +47,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       width: '96%',
-      marginTop: hp(10),
+      marginVertical: hp(10),
     },
     menuCardTitle: {
       fontWeight: '400',

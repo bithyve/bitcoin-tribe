@@ -40,7 +40,9 @@ function AddAsset() {
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
-            navigation.navigate(NavigationRoutes.RECEIVEASSET);
+            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+              refresh: true,
+            });
           }}
           testID="receive"
         />

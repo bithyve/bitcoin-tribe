@@ -44,6 +44,7 @@ import AddAsset from 'src/screens/home/components/AddAsset';
 import AppBackupMenu from 'src/screens/settings/AppBackupMenu';
 import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
 import Login from 'src/screens/onBoarding/Login';
+import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -182,6 +183,10 @@ function AppStack() {
           component={WalletBackupHistory}
         />
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+        <Stack.Screen
+          name={NavigationRoutes.RGBCREATEUTXO}
+          component={RGBCreateUtxo}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );
