@@ -83,7 +83,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: theme.colors.primaryBackground,
+      // backgroundColor: theme.colors.primaryBackground,
     },
     modalContainer: {
       width: '95%',
