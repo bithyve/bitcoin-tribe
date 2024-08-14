@@ -42,7 +42,7 @@ function RGBCreateUtxoContainer(props: utxoProps) {
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
-        <GradientView
+        {/* <GradientView
           style={styles.statusWrapper}
           colors={[
             theme.colors.cardGradient1,
@@ -55,7 +55,7 @@ function RGBCreateUtxoContainer(props: utxoProps) {
           <AppText variant="body1" style={styles.statusValue}>
             Processing
           </AppText>
-        </GradientView>
+        </GradientView> */}
         <View style={styles.infoContainer}>
           <View style={styles.infoWrapper}>
             <View style={styles.labelWrapper}>
