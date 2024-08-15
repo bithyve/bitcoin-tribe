@@ -143,15 +143,14 @@ export const isTestnet = () => {
   }
   return false;
 };
-export function CurrencyIcon({ symbol, styles = {} }) {
+export function CurrencyIcon({ symbol, styles = {}, size = 14 }) {
   return (
     <Text
       style={{
         ...styles,
-        fontSize: 14,
+        fontSize: size,
         letterSpacing: 0.5,
         fontWeight: '900',
-        lineHeight: 18,
       }}>
       {symbol}
     </Text>
@@ -163,6 +162,7 @@ export const getCurrencyImageByRegion = (
   type: 'light' | 'yellow' | 'dark' | 'grey' | 'dimGray',
   currentCurrency: CurrencyKind,
   BTCIcon: any,
+  size?: number,
 ) => {
   const styles = {} as any;
   switch (type) {
@@ -188,7 +188,9 @@ export const getCurrencyImageByRegion = (
   if (currentCurrency !== CurrencyKind.BITCOIN) {
     const currency = FiatCurrencies.find(c => c.code === currencyCode);
     if (currency) {
-      return <CurrencyIcon styles={styles} symbol={currency.symbol} />;
+      return (
+        <CurrencyIcon styles={styles} symbol={currency.symbol} size={size} />
+      );
     }
     return null;
   }

@@ -127,7 +127,7 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 5,
-      title: settings.connectionSettings,
+      title: settings.nodeSettings,
       icon: <IconNodes />,
       onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     },

@@ -12,15 +12,17 @@ import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 
 import { AppTheme } from 'src/theme';
+
 type sendSuccessProps = {
-  transID: string;
-  amount: string;
+  transID?: string;
+  numOfUtxo: number;
+  amountPerUTXO: number;
   transFee: number;
   total: number;
   onPress: () => void;
 };
-function SendSuccessContainer(props: sendSuccessProps) {
-  const { transID, amount, transFee, total, onPress } = props;
+function UTXOConfirmationModalContainer(props: sendSuccessProps) {
+  const { numOfUtxo, transFee, total, onPress, amountPerUTXO } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -35,27 +37,26 @@ function SendSuccessContainer(props: sendSuccessProps) {
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>
-            {walletTranslations.transactionID}
+            {walletTranslations.numOfUtxo}
           </AppText>
         </View>
+
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText} numberOfLines={1}>
-            {transID}
+          <AppText variant="body1" style={styles.valueText}>
+            {numOfUtxo}
           </AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>
-            {walletTranslations.amount}
-          </AppText>
+          <AppText style={styles.labelText}>Amount per UTXO</AppText>
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="body1" style={styles.valueText}>
-            &nbsp;{getBalance(amount)}
+            &nbsp;{getBalance(amountPerUTXO)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
@@ -102,12 +103,16 @@ function SendSuccessContainer(props: sendSuccessProps) {
           )}
         </View>
       </View>
+      <View style={styles.unlockTransWrapper}>
+        <AppText variant="body1" style={styles.rgbTransUnlickTitle}>
+          {walletTranslations.rgbTransUnlockTitle}
+        </AppText>
+        <AppText variant="body2" style={styles.rgbTransUnlickSubTitle}>
+          {walletTranslations.rgbTransUnlockSubTitle}
+        </AppText>
+      </View>
       <View style={styles.primaryCtaStyle}>
-        <PrimaryCTA
-          title={common.viewWallets}
-          onPress={onPress}
-          width={hp(152)}
-        />
+        <PrimaryCTA title={common.proceed} onPress={onPress} width={hp(130)} />
       </View>
     </View>
   );
@@ -121,12 +126,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     labelWrapper: {
-      width: '40%',
+      width: '50%',
     },
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '60%',
+      width: '50%',
     },
     labelText: {
       color: theme.colors.headingColor,
@@ -143,5 +148,22 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(5),
       marginLeft: hp(5),
     },
+    unlockTransWrapper: {
+      alignItems: 'center',
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(15),
+      borderRadius: 15,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 2,
+      backgroundColor: theme.colors.primaryBackground,
+      marginTop: hp(20),
+    },
+    rgbTransUnlickTitle: {
+      color: theme.colors.headingColor,
+    },
+    rgbTransUnlickSubTitle: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'center',
+    },
   });
-export default SendSuccessContainer;
+export default UTXOConfirmationModalContainer;

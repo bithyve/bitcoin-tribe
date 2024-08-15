@@ -28,8 +28,9 @@ const Colors = {
   BulgarianRose: 'rgba(72, 10, 15, 1)',
   ImperialRed: 'rgba(236, 34, 64,1)',
   Celadon: 'rgba(167, 224, 178,1)',
-  UFOGreen: 'rgba(76, 217, 100, 0.2)',
+  UFOGreen: 'rgba(12, 33, 17, 1)',
   UFOGreen1: 'rgba(76, 217, 100, 1)',
   Gray: 'rgba(128, 128, 128, 1)',
+  Green: 'rgba(116, 255, 81, 1)',
 };
 export default Colors;

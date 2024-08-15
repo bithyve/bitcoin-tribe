@@ -271,7 +271,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(20),
+      // marginTop: hp(20),
     },
     contentWrapper: {
       flex: 1,

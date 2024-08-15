@@ -50,7 +50,9 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         }
         // onPressBuy={onPressBuy}
         onPressRecieve={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET)
+          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+            refresh: true,
+          })
         }
       />
     </View>

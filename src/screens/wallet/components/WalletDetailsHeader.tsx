@@ -71,7 +71,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         style={styles.balanceWrapper}
         onPress={() => toggleDisplayMode()}>
         {initialCurrencyMode !== CurrencyKind.SATS &&
-          getCurrencyIcon(IconBitcoin, 'dark')}
+          getCurrencyIcon(IconBitcoin, 'dark', 30)}
         <AppText variant="walletBalance" style={styles.balanceText}>
           &nbsp;{getBalance(confirmed + unconfirmed)}
         </AppText>

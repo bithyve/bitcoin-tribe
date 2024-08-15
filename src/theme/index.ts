@@ -44,6 +44,7 @@ type CustomColors = {
   successPopupBackColor: string;
   successPopupBorderColor: string;
   disableCTATitle: string;
+  greenText: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -86,6 +87,7 @@ const CombinedDefaultTheme: AppTheme = {
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
+    greenText: Colors.Green,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,
@@ -146,6 +148,7 @@ const CombinedDarkTheme: AppTheme = {
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
+    greenText: Colors.Green,
     //
     cardBackground: Colors.RaisinBlack,
     primaryCTA: Colors.ChineseOrange,

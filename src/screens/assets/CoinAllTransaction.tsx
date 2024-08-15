@@ -27,10 +27,7 @@ function CoinAllTransaction() {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   return (
     <ScreenContainer>
-      <AppHeader
-        title={walletTranslations.transferDetails}
-        subTitle={walletTranslations.transactionDetailSubTitle}
-      />
+      <AppHeader title={walletTranslations.transferDetails} />
       <FlatList
         style={styles.container}
         data={transactions}
