@@ -388,7 +388,11 @@ export class ApiHandler {
         JSON.parse(averageTxFeeJSON);
       const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
       const utxos = await RGBServices.createUtxos(averageTxFee.high.feePerByte);
-      return utxos.created;
+      if (utxos.created) {
+        return utxos.created;
+      } else {
+        return false;
+      }
     } catch (error) {
       console.log({ error });
       throw new Error('Insufficient sats for RGB');
