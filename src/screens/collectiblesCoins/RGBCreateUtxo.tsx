@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -17,11 +16,14 @@ import { RealmSchema } from 'src/storage/enum';
 import { AverageTxFeesByNetwork } from 'src/services/wallets/interfaces';
 import { Keys } from 'src/storage';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import Colors from 'src/theme/Colors';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-function RGBCreateUtxo({ navigation }) {
+function RGBCreateUtxo() {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
+  const route = useRoute();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslation, sendScreen } = translations;
@@ -32,16 +34,14 @@ function RGBCreateUtxo({ navigation }) {
     JSON.parse(averageTxFeeJSON);
   const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
   const createUtxos = useMutation(ApiHandler.createUtxos);
-  console.log(
-    'averageTxFee.high.averageTxFee',
-    averageTxFee.high.averageTxFee,
-    averageTxFee.high.feePerByte,
-  );
+
   useEffect(() => {
-    if (createUtxos.isSuccess) {
+    if (createUtxos.data) {
       setVisible(true);
+    } else if (createUtxos.data === false) {
+      Toast('Failed to create UTXOs. Insufficiant sats', false, true);
     }
-  }, [createUtxos.isSuccess]);
+  }, [createUtxos.data]);
 
   return (
     <ScreenContainer>
@@ -50,19 +50,12 @@ function RGBCreateUtxo({ navigation }) {
         subTitle={''}
         enableBack={true}
       />
-      {createUtxos.isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={{ height: '70%' }}
-          color={Colors.ChineseOrange}
-        />
-      ) : (
-        <RGBCreateUtxoContainer
-          primaryOnPress={() => {
-            createUtxos.mutate();
-          }}
-        />
-      )}
+      <ModalLoading visible={createUtxos.isLoading} />
+      <RGBCreateUtxoContainer
+        primaryOnPress={() => {
+          createUtxos.mutate();
+        }}
+      />
       <ResponsePopupContainer
         visible={visible}
         title={sendScreen.sendSuccessTitle}
@@ -78,9 +71,8 @@ function RGBCreateUtxo({ navigation }) {
           total={5000 + averageTxFee.high.averageTxFee}
           onPress={() => {
             setVisible(false);
-            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-              refresh: true,
-            });
+            route.params?.refresh();
+            navigation.goBack();
           }}
         />
       </ResponsePopupContainer>

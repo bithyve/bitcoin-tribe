@@ -34,8 +34,7 @@ function AppBackupMenu({ navigation }) {
     },
     {
       title: settings.rgbAssetsbackup,
-      //   onPress: () => navigation.navigate(NavigationRoutes.APPBACKUP),
-      onPress: () => {},
+      onPress: () => navigation.navigate(NavigationRoutes.CLOUDBACKUP),
     },
     // Add more menu items as needed
   ];

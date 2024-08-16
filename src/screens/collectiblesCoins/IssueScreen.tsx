@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useMemo,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useContext, useState, useMemo, useCallback } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -14,8 +8,11 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { StackActions, useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
@@ -29,8 +26,10 @@ import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function IssueScreen() {
+  const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -42,7 +41,6 @@ function IssueScreen() {
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const createUtxos = useMutation(ApiHandler.createUtxos);
   const [loading, setLoading] = useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
@@ -77,7 +75,6 @@ function IssueScreen() {
       supply: totalSupplyAmt.replace(/,/g, ''),
       filePath: image?.path?.replace('file://', ''),
     });
-    console.log(response);
     setLoading(false);
     if (response?.assetId) {
       Toast(assets.assetCreateMsg, true);
@@ -97,15 +94,6 @@ function IssueScreen() {
     navigation,
     totalSupplyAmt,
   ]);
-
-  useEffect(() => {
-    if (createUtxos.error) {
-      Toast(assets.insufficientSatsMainWallet, false, true);
-    } else if (createUtxos.isSuccess) {
-      setShowErrorModal(false);
-      onPressIssue();
-    }
-  }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, issueCoin]);
 
   const isButtonDisabled = useMemo(() => {
     if (assetType === AssetType.Coin) {
@@ -135,12 +123,14 @@ function IssueScreen() {
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <ModalLoading visible={loading} />
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          createUtxos.mutate();
+          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+            refresh: () => onPressIssue(),
+          });
         }}
       />
       <SegmentedButtons
@@ -186,20 +176,6 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
-            {/* <View style={styles.uploadCoinAssetWrapper}>
-              <AppText variant="body1" style={styles.selectAvatarStyle}>
-                {home.yourCoinAvatar}
-              </AppText>
-              <View style={styles.uploadBtnWrapper}>
-                <UploadAssetFileButton
-                  onPress={() => {}}
-                  title={home.select}
-                  icon={<IconImagePlaceholder />}
-                  borderColor={theme.colors.accent1}
-                  // imagePath={image && image.path.replace('file://', '')}
-                />
-              </View>
-            </View> */}
           </View>
         ) : (
           <View>

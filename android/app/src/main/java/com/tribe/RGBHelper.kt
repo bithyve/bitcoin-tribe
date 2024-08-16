@@ -292,15 +292,13 @@ object RGBHelper {
             val backupFile = getBackupFile(password, context)
             backupFile.delete()
             RGBWalletRepository.wallet.backup(backupFile.absolutePath, password)
-            Log.d(TAG, "Backup done name='${backupFile.name}")
 
             val gFile = com.google.api.services.drive.model.File()
             gFile.name = backupFile.name
-            Log.d(TAG, "gFile='${gFile.name}")
             val newBackupID =
                 driveClient.files().create(gFile, FileContent(ZIP_MIME_TYPE, backupFile)).execute().id
             Log.d(TAG, "Backup uploaded. Backup file ID: $newBackupID")
-            val oldBackups = driveClient.files().list().setQ("name='${backupFile.name}'").execute()
+            val oldBackups = driveClient.files().list().setQ("name='${gFile.name}'").execute()
             Log.d(TAG, "oldBackups='$oldBackups")
 //            if (oldBackups != null) {
 //                for (file in oldBackups.files) {

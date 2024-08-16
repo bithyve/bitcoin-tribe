@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
@@ -10,7 +9,6 @@ import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
-import Toast from 'src/components/Toast';
 import Colors from 'src/theme/Colors';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
@@ -19,8 +17,6 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function ReceiveAssetScreen() {
-  const refresh = useRoute().params;
-  console.log(refresh);
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common, assets } = translations;
   const navigation = useNavigation();
@@ -31,7 +27,7 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     mutate();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -40,17 +36,6 @@ function ReceiveAssetScreen() {
       }, 500);
     }
   }, [error]);
-
-  useEffect(() => {
-    if (createUtxos.error) {
-      Toast(assets.insufficientSats, false, true);
-      navigation.goBack();
-    } else if (createUtxos.isSuccess) {
-      setTimeout(() => {
-        mutate();
-      }, 100);
-    }
-  }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, mutate]);
 
   return (
     <ScreenContainer>
@@ -64,8 +49,9 @@ function ReceiveAssetScreen() {
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          // createUtxos.mutate();
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO);
+          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+            refresh: () => mutate(),
+          });
         }}
       />
 
