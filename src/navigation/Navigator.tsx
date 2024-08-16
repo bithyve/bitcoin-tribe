@@ -22,6 +22,7 @@ import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 import AppBackup from 'src/screens/settings/AppBackup';
 import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
 import NodeSettings from 'src/screens/settings/NodeSettings';
+import CloudBackup from 'src/screens/settings/CloudBackup';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
@@ -183,6 +184,10 @@ function AppStack() {
           component={WalletBackupHistory}
         />
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+        <Stack.Screen
+          name={NavigationRoutes.CLOUDBACKUP}
+          component={CloudBackup} />
+
         <Stack.Screen
           name={NavigationRoutes.RGBCREATEUTXO}
           component={RGBCreateUtxo}

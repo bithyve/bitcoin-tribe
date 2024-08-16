@@ -14,16 +14,6 @@ export enum Keys {
   CURRENCY_MODE = 'CURRENCY_MODE',
 }
 
-export const enum BackupType {
-  SEED = 'SEED',
-}
-
-export const enum BackupAction {
-  SEED_BACKUP_CREATED = 'SEED_BACKUP_CREATED',
-  SEED_BACKUP_CONFIRMED = 'SEED_BACKUP_CONFIRMED',
-  SEED_BACKUP_CONFIRMATION_SKIPPED = 'SEED_BACKUP_CONFIRMATION_SKIPPED',
-}
-
 export class Storage {
   static set = (key: Keys, value: string | number | boolean): void =>
     MMKVStorage.set(key, value);
