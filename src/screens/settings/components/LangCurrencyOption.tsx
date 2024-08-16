@@ -90,8 +90,8 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     langCurrencyWrapper: {
-      width: '20%',
-      alignItems: 'center',
+      width: '25%',
+      // alignItems: 'center',
       justifyContent: 'center',
       borderRightWidth: 2,
       borderRightColor: theme.colors.secondaryHeadingColor,
@@ -101,7 +101,7 @@ const getStyles = (theme: AppTheme) =>
     },
     langCurrencyVariantStyle: {
       color: theme.colors.headingColor,
-      width: '70%',
+      width: '65%',
       marginLeft: 10,
     },
     iconArrowWrapper: {
