@@ -108,7 +108,12 @@
     "walletBackupHistorySubTitle": "Asegura tu pasado, protege tu futuro.",
     "SEED_BACKUP_CREATED": "Respaldo de semilla creado",
     "SEED_BACKUP_CONFIRMED": "Respaldo de semilla confirmado",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Confirmación de respaldo de semilla omitida"
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Confirmación de respaldo de semilla omitida",
+    "healthCheck": "Control de salud",
+    "backupPhraseSettingTitle": "Configuración de frase de respaldo",
+    "backupPhraseSettingSubTitle": "Ver frase de respaldo",
+    "viewBackupPhrase": "Ver frase de respaldo",
+    "viewBackupPhraseSubTitle": "Ver palabras iniciales para su clave"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",

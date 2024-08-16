@@ -108,7 +108,12 @@
     "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
     "SEED_BACKUP_CREATED": "Seed backup is created",
     "SEED_BACKUP_CONFIRMED": "Seed backup is confirmed",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped"
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped",
+    "healthCheck": "Health Check",
+    "backupPhraseSettingTitle": "Backup Phrase Settings",
+    "backupPhraseSettingSubTitle": "View Backup Phrase",
+    "viewBackupPhrase": "View Backup Phrase",
+    "viewBackupPhraseSubTitle": "View seed words for your key"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
