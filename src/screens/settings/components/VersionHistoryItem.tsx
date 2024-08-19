@@ -27,7 +27,7 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
             <AppText variant="body1" style={styles.version}>
               {title}
             </AppText>
-            <AppText variant="body2" style={styles.version}>
+            <AppText variant="body2" style={styles.versionSubTitle}>
               {moment(date).fromNow()}
             </AppText>
           </AppTouchable>
@@ -59,6 +59,9 @@ const getStyles = (theme: AppTheme) =>
     },
     version: {
       color: theme.colors.headingColor,
+    },
+    versionSubTitle: {
+      color: theme.colors.secondaryHeadingColor,
     },
     content: {
       backgroundColor: theme.colors.cardBackground,
