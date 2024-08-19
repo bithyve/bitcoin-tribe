@@ -63,6 +63,7 @@ function ProfileSetup({ navigation }) {
   };
 
   const initiateWalletCreation = () => {
+    Keyboard.dismiss();
     setInitiateQuery(true);
   };
 
