@@ -103,6 +103,7 @@ function SettingsScreen({ navigation }) {
       toggleValue: !darkTheme,
       enableSwitch: true,
       testID: 'dark_mode',
+      onPress: () => setDarkTheme(!darkTheme),
     },
     {
       id: 2,
@@ -112,6 +113,7 @@ function SettingsScreen({ navigation }) {
       toggleValue: biometrics,
       enableSwitch: true,
       testID: 'biometric_unlock',
+      onPress: toggleBiometrics,
     },
     {
       id: 3,
