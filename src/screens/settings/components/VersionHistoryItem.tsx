@@ -21,22 +21,24 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
   return (
     <View style={styles.container}>
       <View style={styles.dotView} />
-      <View style={styles.wrapper}>
-        <AppTouchable onPress={toggleCollapse} style={styles.header}>
-          <AppText variant="body1" style={styles.version}>
-            {title}
-          </AppText>
-          <AppText variant="body2" style={styles.version}>
-            {moment(date).fromNow()}
-          </AppText>
-        </AppTouchable>
-        {!isCollapsed && releaseNotes && (
-          <View style={styles.content}>
-            <AppText variant="body2" style={styles.releaseNotes}>
-              {releaseNotes}
+      <View>
+        <View style={styles.wrapper}>
+          <AppTouchable onPress={toggleCollapse} style={styles.header}>
+            <AppText variant="body1" style={styles.version}>
+              {title}
             </AppText>
-          </View>
-        )}
+            <AppText variant="body2" style={styles.version}>
+              {moment(date).fromNow()}
+            </AppText>
+          </AppTouchable>
+          {!isCollapsed && releaseNotes && (
+            <View style={styles.content}>
+              <AppText variant="body2" style={styles.releaseNotes}>
+                {releaseNotes}
+              </AppText>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -45,9 +47,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      marginBottom: 10,
-      marginVertical: hp(10),
-      paddingTop: hp(15),
     },
     header: {
       marginLeft: hp(20),
@@ -55,6 +54,7 @@ const getStyles = (theme: AppTheme) =>
     wrapper: {
       borderLeftColor: theme.colors.accent2,
       borderLeftWidth: 1,
+      paddingBottom: hp(25),
       //   borderStyle: 'dashed',
     },
     version: {
@@ -69,11 +69,11 @@ const getStyles = (theme: AppTheme) =>
     },
     dotView: {
       backgroundColor: theme.colors.accent2,
-      height: 12,
-      width: 12,
+      height: 11,
+      width: 11,
       borderRadius: 40,
       top: 0,
-      right: -6,
+      left: 6,
     },
     releaseNotes: {
       color: theme.colors.headingColor,
