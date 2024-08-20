@@ -46,6 +46,7 @@ import AppBackupMenu from 'src/screens/settings/AppBackupMenu';
 import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
 import Login from 'src/screens/onBoarding/Login';
 import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
+import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -191,6 +192,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.RGBCREATEUTXO}
           component={RGBCreateUtxo}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.BACKUPPHRASESETTING}
+          component={BackupPhraseSetting}
         />
       </Stack.Navigator>
     </RealmProvider>

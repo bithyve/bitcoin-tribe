@@ -8,9 +8,9 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { generateRandomNumber } from 'src/utils/encryption';
-import { BackupType } from 'src/storage';
 import AppText from 'src/components/AppText';
 import Colors from 'src/theme/Colors';
+import { BackupType } from 'src/models/enums/Backup';
 
 type confirmAppBackupProps = {
   primaryOnPress: () => void;

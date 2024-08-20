@@ -71,7 +71,7 @@
     "appBackup": "App Backup",
     "connectionSettings": "Connection Settings",
     "connectionSettingSubTitle": "Configure Tor and Nodes",
-    "appInfo": "App Info , Settings and Help",
+    "appInfo": "App Info and Help",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Choose your Language",
@@ -108,7 +108,16 @@
     "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
     "SEED_BACKUP_CREATED": "Seed backup is created",
     "SEED_BACKUP_CONFIRMED": "Seed backup is confirmed",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped"
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped",
+    "CLOUD_BACKUP_CREATED": "Cloud backup is created",
+    "CLOUD_BACKUP_FAILED": "Cloud backup is failed",
+    "CLOUD_BACKUP_HEALTH": "Cloud backup health",
+    "CLOUD_BACKUP_HEALTH_FAILED": "Cloud backup health failed",
+    "healthCheck": "Health Check",
+    "backupPhraseSettingTitle": "Backup Phrase Settings",
+    "backupPhraseSettingSubTitle": "View Backup Phrase",
+    "viewBackupPhrase": "View Backup Phrase",
+    "viewBackupPhraseSubTitle": "View seed words for your key"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

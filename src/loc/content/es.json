@@ -71,7 +71,7 @@
     "appBackup": "Respaldo de la aplicación",
     "connectionSettings": "Configuración de conexión",
     "connectionSettingSubTitle": "Configurar Tor y nodos",
-    "appInfo": "Información de la aplicación, configuraciones y ayuda",
+    "appInfo": "Información y ayuda de la aplicación",
     "appInfoSubTitle": "Versión y detalles de la aplicación",
     "language": "Idioma",
     "languageSubTitle": "Elige tu idioma",
@@ -108,7 +108,16 @@
     "walletBackupHistorySubTitle": "Asegura tu pasado, protege tu futuro.",
     "SEED_BACKUP_CREATED": "Respaldo de semilla creado",
     "SEED_BACKUP_CONFIRMED": "Respaldo de semilla confirmado",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Confirmación de respaldo de semilla omitida"
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Confirmación de respaldo de semilla omitida",
+    "CLOUD_BACKUP_CREATED": "Se crea la copia de seguridad en la nube",
+    "CLOUD_BACKUP_FAILED": "La copia de seguridad en la nube falló",
+    "CLOUD_BACKUP_HEALTH": "salud de la copia de seguridad en la nube",
+    "CLOUD_BACKUP_HEALTH_FAILED": "Falló el estado de la copia de seguridad en la nube",
+    "healthCheck": "Control de salud",
+    "backupPhraseSettingTitle": "Configuración de frase de respaldo",
+    "backupPhraseSettingSubTitle": "Ver frase de respaldo",
+    "viewBackupPhrase": "Ver frase de respaldo",
+    "viewBackupPhraseSubTitle": "Ver palabras iniciales para su clave"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",

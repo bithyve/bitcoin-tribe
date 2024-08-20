@@ -64,9 +64,9 @@ function HomeHeader(props: HomeHeaderProps) {
           <IconWrapper onPress={onPressScanner}>
             <IconScanner />
           </IconWrapper>
-          <IconWrapper onPress={onPressNotification}>
+          {/* <IconWrapper onPress={onPressNotification}>
             <IconNotification />
-          </IconWrapper>
+          </IconWrapper> */}
         </View>
       </View>
       <View style={styles.balanceContainer}>
@@ -123,9 +123,11 @@ const getStyles = (theme: AppTheme) =>
       marginLeft: hp(5),
     },
     iconWrapper: {
-      width: '32%',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      // width: '32%',
+      // flexDirection: 'row',
+      // justifyContent: 'space-between',
+      width: '33%',
+      alignItems: 'flex-end',
     },
     iconTouchableArea: {
       height: '60%',
