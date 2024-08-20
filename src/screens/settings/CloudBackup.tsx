@@ -43,7 +43,7 @@ const CloudBackup = ({ navigation }) => {
         ListEmptyComponent={() => <AppText>No backup history</AppText>}
         renderItem={({ item }) => (
           <VersionHistoryItem
-            title={item?.title}
+            title={settings[item?.title]}
             date={item.date}
             releaseNotes={item.releaseNotes}
           />
