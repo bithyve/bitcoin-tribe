@@ -39,7 +39,7 @@ function RGBCreateUtxo() {
     if (createUtxos.data) {
       setVisible(true);
     } else if (createUtxos.data === false) {
-      Toast('Failed to create UTXOs. Insufficiant sats', false, true);
+      Toast(walletTranslation.failedToCreateUTXO, false, true);
     }
   }, [createUtxos.data]);
 

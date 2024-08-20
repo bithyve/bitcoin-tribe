@@ -41,7 +41,7 @@ function EnterPinContainer() {
 
   useEffect(() => {
     if (biometricLogin.error) {
-      Toast('Failed to verify', false, true);
+      Toast(onBoarding.failToVerify, false, true);
       setPasscode('');
     } else if (biometricLogin.data) {
       setKey(biometricLogin.data);
@@ -51,7 +51,7 @@ function EnterPinContainer() {
 
   useEffect(() => {
     if (login.error) {
-      Toast('Invalid PIN', false, true);
+      Toast(onBoarding.invalidPin, false, true);
       setPasscode('');
     } else if (login.data) {
       setKey(login.data);

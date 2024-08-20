@@ -39,7 +39,7 @@ type SettingMenuProps = {
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
+  const { settings, onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
@@ -85,7 +85,7 @@ function SettingsScreen({ navigation }) {
 
   const toggleBiometrics = () => {
     if (pinMethod === PinMethod.DEFAULT) {
-      Toast('Create a PIN first', false, true);
+      Toast(onBoarding.createPinFirst, false, true);
       navigation.navigate(NavigationRoutes.CREATEPIN);
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();

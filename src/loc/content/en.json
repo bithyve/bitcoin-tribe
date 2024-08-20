@@ -45,7 +45,12 @@
     "advanceSettingTitle": "Advanced Setting",
     "splashText": "Bitcoin is better with friends",
     "recoverAppTitle": "Recover an existing app",
-    "recoverAppSubTitle": "Enter existing 12-word recovery phrase below "
+    "recoverAppSubTitle": "Enter existing 12-word recovery phrase below",
+    "errorSettingPin": "Error setting pin",
+    "newPinCreated": "New PIN created",
+    "failToVerify": "Failed to verify",
+    "createPinFirst": "Create a PIN first",
+    "invalidPin": "Invalid PIN"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -198,7 +203,8 @@
     "rgbAssetID": "RGB Asset ID",
     "testSatsRecived": "Test-sats received",
     "failedTestSatsRecived": "Failed to receive test-sats",
-    "failRefreshWallet": "Failed to refresh wallet"
+    "failRefreshWallet": "Failed to refresh wallet",
+    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

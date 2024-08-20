@@ -29,9 +29,9 @@ function CreatePinContainer() {
 
   useEffect(() => {
     if (createPin.error) {
-      Toast('Error setting pin', false, true);
+      Toast(onBoarding.errorSettingPin, false, true);
     } else if (createPin.isSuccess) {
-      Toast('New PIN created', false, false);
+      Toast(onBoarding.newPinCreated, false, false);
       navigation.goBack();
     }
   }, [createPin.error, createPin.isSuccess, createPin.data]);

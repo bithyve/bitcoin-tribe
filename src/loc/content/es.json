@@ -45,7 +45,12 @@
     "advanceSettingTitle": "Configuración avanzada",
     "splashText": "Bitcoin es mejor con amigos",
     "recoverAppTitle": "Recuperar una aplicación existente",
-    "recoverAppSubTitle": "Ingrese la frase de recuperación existente de 12 palabras a continuación"
+    "recoverAppSubTitle": "Ingrese la frase de recuperación existente de 12 palabras a continuación",
+    "errorSettingPin": "Error al configurar el pin",
+    "newPinCreated": "Nuevo PIN creado",
+    "failToVerify": "No se pudo verificar",
+    "createPinFirst": "Primero crea un PIN",
+    "invalidPin": "PIN no válido"
   },
   "home": {
     "addAssets": "Agregar activos",
@@ -198,7 +203,8 @@
     "rgbAssetID": "ID de activo RGB",
     "testSatsRecived": "Pruebas recibidas",
     "failedTestSatsRecived": "No se pudieron recibir los exámenes",
-    "failRefreshWallet": "No se pudo actualizar la billetera"
+    "failRefreshWallet": "No se pudo actualizar la billetera",
+    "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
