@@ -24,7 +24,10 @@
     "skip": "Skip",
     "assets": "Assets",
     "settings": "Settings",
-    "viewWallets": "View Wallets"
+    "viewWallets": "View Wallets",
+    "needHelp": "Need Help?",
+    "yes": "Yes",
+    "no": "No"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -40,7 +43,9 @@
     "enterPin": "Enter a Pin",
     "confirmPin": "Confirm your pin",
     "advanceSettingTitle": "Advanced Setting",
-    "splashText": "Bitcoin is better with friends"
+    "splashText": "Bitcoin is better with friends",
+    "recoverAppTitle": "Recover an existing app",
+    "recoverAppSubTitle": "Enter existing 12-word recovery phrase below "
   },
   "home": {
     "addAssets": "Add Assets",
