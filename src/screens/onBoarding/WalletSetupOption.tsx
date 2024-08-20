@@ -34,7 +34,7 @@ function WalletSetupOption({ navigation }) {
         icon={<IconRecovery />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
-        onPress={() => console.log('Recovery Phrase')}
+        onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
       />
     </ScreenContainer>
   );
