@@ -44,6 +44,8 @@ export type AppStackParams = {
   [NavigationRoutes.WALLETBACKUPHISTORY]: undefined;
   [NavigationRoutes.RGBCREATEUTXO]: undefined;
   [NavigationRoutes.BACKUPPHRASESETTING]: undefined;
+  [NavigationRoutes.ENTERSEEDSCREEN]: undefined;
+  [NavigationRoutes.LOGIN]: undefined;
   // Add other routes as needed
 };
 

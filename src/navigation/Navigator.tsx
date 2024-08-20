@@ -47,6 +47,7 @@ import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
 import Login from 'src/screens/onBoarding/Login';
 import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
+import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -65,6 +66,10 @@ function LoginStack() {
       />
       <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
       <Stack.Screen name={NavigationRoutes.LOGIN} component={Login} />
+      <Stack.Screen
+        name={NavigationRoutes.ENTERSEEDSCREEN}
+        component={EnterSeedScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -187,7 +192,8 @@ function AppStack() {
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
         <Stack.Screen
           name={NavigationRoutes.CLOUDBACKUP}
-          component={CloudBackup} />
+          component={CloudBackup}
+        />
 
         <Stack.Screen
           name={NavigationRoutes.RGBCREATEUTXO}
