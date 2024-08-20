@@ -88,8 +88,8 @@ const CombinedDefaultTheme: AppTheme = {
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
-    //
     cardBackground: Colors.RaisinBlack,
+    //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,
@@ -149,8 +149,8 @@ const CombinedDarkTheme: AppTheme = {
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
-    //
     cardBackground: Colors.RaisinBlack,
+    //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
     placeholder: Colors.SonicSilver,

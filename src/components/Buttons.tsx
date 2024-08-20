@@ -16,6 +16,7 @@ type PrimaryCTAProps = {
   secondaryTitle?: string;
   primaryLoading?: boolean;
   disabled?: boolean;
+  secondaryCTAWidth?: number;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -23,6 +24,7 @@ function Buttons(props: PrimaryCTAProps) {
     primaryOnPress,
     primaryTitle,
     width,
+    secondaryCTAWidth,
     secondaryTitle,
     secondaryOnPress,
     primaryLoading,
@@ -33,7 +35,11 @@ function Buttons(props: PrimaryCTAProps) {
   return (
     <View style={styles.container}>
       {secondaryTitle && (
-        <SecondaryCTA onPress={secondaryOnPress} title={secondaryTitle} />
+        <SecondaryCTA
+          onPress={secondaryOnPress}
+          title={secondaryTitle}
+          width={secondaryCTAWidth}
+        />
       )}
       <PrimaryCTA
         title={primaryTitle}
