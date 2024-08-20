@@ -23,7 +23,11 @@ function BackupPhraseSetting() {
       <OptionCard
         title={settings.viewBackupPhrase}
         subTitle={settings.viewBackupPhraseSubTitle}
-        onPress={() => navigation.navigate(NavigationRoutes.APPBACKUP)}
+        onPress={() =>
+          navigation.navigate(NavigationRoutes.APPBACKUP, {
+            viewOnly: true,
+          })
+        }
       />
     </ScreenContainer>
   );

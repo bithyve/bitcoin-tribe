@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { FlatList, StyleSheet, Platform } from 'react-native';
 import { useQuery } from '@realm/react';
+import { useRoute } from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -21,6 +22,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { BackupType } from 'src/models/enums/Backup';
 
 function AppBackup({ navigation }) {
+  const { viewOnly } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { common, settings } = translations;
   const theme: AppTheme = useTheme();
@@ -56,13 +58,15 @@ function AppBackup({ navigation }) {
         )}
         keyExtractor={item => item}
       />
-      <Buttons
-        primaryTitle={common.next}
-        primaryOnPress={() => setVisible(true)}
-        secondaryTitle={common.exit}
-        secondaryOnPress={() => navigation.goBack()}
-        width={wp(120)}
-      />
+      {!viewOnly && (
+        <Buttons
+          primaryTitle={common.next}
+          primaryOnPress={() => setVisible(true)}
+          secondaryTitle={common.exit}
+          secondaryOnPress={() => navigation.goBack()}
+          width={wp(120)}
+        />
+      )}
       <ModalContainer
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
