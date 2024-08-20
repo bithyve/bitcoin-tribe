@@ -211,6 +211,8 @@
     "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
     "insufficientSats": "Insufficient sats, failed to create new UTXOs",
     "receiveAssetTitle": "Receive Assset",
-    "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice"
+    "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice",
+    "insufficientSatsRGB": "Insufficient sats for RGB",
+    "insufficientSatsRGBSubTitle": "Your RGB wallet’s Bitcoin balance is low to create new UTXOs.\nYou need to transfer 9000 sats + transaction fee from the main Wallet."
   }
 }

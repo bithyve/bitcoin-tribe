@@ -211,6 +211,8 @@
     "insufficientSatsMainWallet": "Satoshis insuficientes en la billetera principal, fallo al crear nuevos UTXOs",
     "insufficientSats": "Satoshis insuficientes, fallo al crear nuevos UTXOs",
     "receiveAssetTitle": "Recibir activo",
-    "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB"
+    "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB",
+    "insufficientSatsRGB": "Sats insuficientes para RGB",
+    "insufficientSatsRGBSubTitle": "El saldo de Bitcoin de su billetera RGB es bajo para crear nuevos UTXO.\nNecesita transferir 9000 sats + tarifa de transacción desde la billetera principal."
   }
 }
