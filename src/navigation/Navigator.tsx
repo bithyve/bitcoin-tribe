@@ -22,6 +22,7 @@ import EditWalletProfile from 'src/screens/wallet/EditWalletProfile';
 import AppBackup from 'src/screens/settings/AppBackup';
 import ConnectionSettings from 'src/screens/settings/ConnectionSettings';
 import NodeSettings from 'src/screens/settings/NodeSettings';
+import CloudBackup from 'src/screens/settings/CloudBackup';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
@@ -44,6 +45,10 @@ import AddAsset from 'src/screens/home/components/AddAsset';
 import AppBackupMenu from 'src/screens/settings/AppBackupMenu';
 import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
 import ScanAssetScreen from 'src/screens/assets/ScanAssetScreen';
+import Login from 'src/screens/onBoarding/Login';
+import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
+import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
+import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -61,6 +66,11 @@ function LoginStack() {
         component={ProfileSetup}
       />
       <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+      <Stack.Screen name={NavigationRoutes.LOGIN} component={Login} />
+      <Stack.Screen
+        name={NavigationRoutes.ENTERSEEDSCREEN}
+        component={EnterSeedScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -183,6 +193,20 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.WALLETBACKUPHISTORY}
           component={WalletBackupHistory}
+        />
+        <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+        <Stack.Screen
+          name={NavigationRoutes.CLOUDBACKUP}
+          component={CloudBackup}
+        />
+
+        <Stack.Screen
+          name={NavigationRoutes.RGBCREATEUTXO}
+          component={RGBCreateUtxo}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.BACKUPPHRASESETTING}
+          component={BackupPhraseSetting}
         />
       </Stack.Navigator>
     </RealmProvider>

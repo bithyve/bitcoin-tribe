@@ -20,9 +20,9 @@ function WalletSettings() {
 
   useEffect(() => {
     if (isSuccess) {
-      Toast('Test-sats received', true);
+      Toast(strings.testSatsRecived, true);
     } else if (isError) {
-      Toast('Failed to receive test-sats', false, true);
+      Toast(strings.failedTestSatsRecived, false, true);
     }
   }, [isError, isSuccess]);
 

@@ -14,10 +14,11 @@ import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { BackupType, Keys } from 'src/storage';
+import { Keys } from 'src/storage';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { BackupType } from 'src/models/enums/Backup';
 
 function AppBackup({ navigation }) {
   const { translations } = useContext(LocalizationContext);

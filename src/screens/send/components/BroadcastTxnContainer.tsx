@@ -233,7 +233,7 @@ function BroadcastTxnContainer({
           secondaryTitle={common.cancel}
           primaryOnPress={initiateSendPhaseTwo}
           secondaryOnPress={navigation.goBack}
-          width={wp(120)}
+          width={wp(160)}
         />
       </View>
     </View>

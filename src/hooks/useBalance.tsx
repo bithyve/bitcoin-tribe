@@ -39,12 +39,14 @@ const useBalance = () => {
   const getCurrencyIcon = (
     Icon: any,
     variation: 'light' | 'green' | 'dark' | 'grey' | 'slateGreen',
+    size?: number,
   ) =>
     getCurrencyImageByRegion(
       currencyCode,
       variation,
       currentCurrencyMode,
       Icon,
+      size,
     );
 
   const getFiatCurrencyIcon = (

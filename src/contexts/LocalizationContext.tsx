@@ -36,14 +36,25 @@ export function LocalizationProvider({ children }) {
   const formatString = (...param) => translations.formatString(...param);
 
   const initializeAppLanguage = () => {
+    let localeCode = DEFAULT_LANGUAGE;
     if (appLanguage) {
       translations.setLanguage(appLanguage);
       setAppLanguage(appLanguage);
-      moment.locale(appLanguage);
+      // moment.locale(appLanguage);
     } else {
       translations.setLanguage(DEFAULT_LANGUAGE);
       setAppLanguage(DEFAULT_LANGUAGE);
-      moment.locale(DEFAULT_LANGUAGE);
+      const supportedLocaleCodes = translations.getAvailableLanguages();
+      const phoneLocaleCodes = RNLocalize.getLocales().map(
+        locale => locale.languageCode,
+      );
+      phoneLocaleCodes.some(code => {
+        if (supportedLocaleCodes.includes(code)) {
+          localeCode = code;
+          return true;
+        }
+      });
+      // moment.locale(DEFAULT_LANGUAGE);
     }
   };
 

@@ -497,66 +497,57 @@ import CloudKit
           }
       }
   }
-
   
-  private func uploadBackupOnCloud(recordID: String, filePath: URL, completion: @escaping (_ error: String?, _ isError: Bool) -> Void) {
-    let container = CKContainer.default()
-    let privateDatabase = container.privateCloudDatabase
-    let recordID = CKRecord.ID(recordName:  recordID)
-    
-    privateDatabase.fetch(withRecordID: recordID) { (existingRecord, error) in
-      if let existingRecord = existingRecord {
-        print("Record already exists, removing it...")
-        privateDatabase.delete(withRecordID: existingRecord.recordID) { (deletedRecordID, deleteError) in
-          if let deleteError = deleteError {
-            print("Error deleting existing record: \(deleteError.localizedDescription)")
-            completion(deleteError.localizedDescription, true)
-          } else {
-            print("Deleted existing record...")
-            let record = CKRecord(recordType: "rgb_backup", recordID: recordID)
-            let fileURL = filePath
-            
-            let asset = CKAsset(fileURL: fileURL)
-            privateDatabase.save(record) { (record, error) in
-                if let error = error {
-                  completion(error.localizedDescription, true)
-                    print("Error uploading file to iCloud: \(error.localizedDescription)")
-                } else {
-                    completion("File uploaded successfully to iCloud", false)
-                    print("File uploaded successfully to iCloud")
-                  print("record: \(record)")
-
-                }
-            }
-          }
-        }
-      } else {
-        let record = CKRecord(recordType: "rgb_backup", recordID: recordID)
-        let fileURL = filePath
-        let asset = CKAsset(fileURL: fileURL)
-        privateDatabase.save(record) { (record, error) in
-            if let error = error {
-                print("Error uploading file to iCloud: \(error.localizedDescription)")
-              completion(error.localizedDescription, true)
-            } else {
-                print("File uploaded successfully to iCloud")
-              completion("File uploaded successfully to iCloud", false)
-            }
-        }
+  func getICloudFolder() -> URL? {
+    let fileManager = FileManager.default
+      guard let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents") else {
+          print("iCloud is not available.")
+          return nil
       }
+    return iCloudURL
+  }
+  
+  func uploadToIcloud(url: URL,  completion: @escaping (_ error: String?, _ isError: Bool) -> Void) {
+    print("uploading to iCloud...")
+    let fileManager = FileManager.default
+    let iCloudFolderURL = getICloudFolder()
+    do{
+      if iCloudFolderURL != nil {
+        let fileName = url.lastPathComponent
+        var destinationURL = iCloudFolderURL!.appendingPathComponent(fileName)
+        if(fileManager.fileExists(atPath: destinationURL.path)) {
+          try fileManager.removeItem(atPath: destinationURL.path)
+        }
+        try fileManager.copyItem(at: url, to: destinationURL)
+        
+        let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)
+        if filesURLs.isEmpty {
+                    print("No files found in folder: \(filesURLs)")
+                } else {
+                    print("Files in folder \(filesURLs):")
+                }
+        completion("File uploaded successfully to iCloud", false)
+      } else {
+        completion("iCloud is currently inaccessible. Please check authentication with your iCloud and try again.", false)
+      }
+    } catch {
+      print("Error uploading file to iCloud: \(error.localizedDescription)")
+      completion("Error uploading file to iCloud: \(error.localizedDescription)", false)
     }
   }
   
   @objc func backup(path: String, password: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: password)
+
       let filePath = Utility.getBackupPath(fileName: keys.accountXpubFingerprint)
-      let fileName = String(format: Constants.backupName, password)
+      print("filePath \(String(describing: filePath))")
+
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
-      //      print("backup \(TAG) \(String(describing: response))")
+            print("backup \(TAG) \(String(describing: response))")
       
       var data: [String: Any] = [:]
-      uploadBackupOnCloud(recordID: keys.accountXpubFingerprint, filePath: filePath!, completion: {
+      uploadToIcloud(url: filePath!, completion: {
         (error, isError) in
         if isError {
           print("Error: \(error ?? "Unknown error")")
@@ -601,19 +592,17 @@ import CloudKit
   @objc func restore(mnemonic: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: mnemonic)
-      fetchRecordFromICloud(recordID: keys.accountXpubFingerprint, completion: {
-        (error, isError, url) in
-        if isError {
-          callback(error!)
+      let fileManager = FileManager.default
+      let iCloudFolderURL = getICloudFolder()
+      let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)
+      if filesURLs.isEmpty {
+          print("No files found in folder: \(filesURLs)")
+          callback("false")
         } else {
-          do{
-           try restoreBackup(backupPath: url!, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+          print("Files in folder \(filesURLs):")
+          try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
             callback("true")
-          } catch {
-            callback("Error: \(error.localizedDescription)")
         }
-        }
-      })
     }
     catch let error{
       let data: [String: Any] = [

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { useTheme } from 'react-native-paper';
@@ -19,6 +19,7 @@ import config from 'src/utils/config';
 import Toast from './Toast';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
@@ -27,6 +28,8 @@ const QRScanner = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const wallet: Wallet = useWallets({}).wallets[0];
+  const { translations } = useContext(LocalizationContext);
+  const { sendScreen } = translations;
 
   useEffect(() => {
     request(
@@ -75,7 +78,7 @@ const QRScanner = () => {
         });
         break;
       default:
-        Toast('Invalid Bitcoin address', false, true);
+        Toast(sendScreen.invalidBtcAddress, false, true);
     }
   }, []);
 

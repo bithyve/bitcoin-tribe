@@ -47,6 +47,9 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={<IconLanguage />}
+          // langCurrency={'English'}
+          // langCurrencyVariant={'English UK'}
+          //We disabled for now because app crash (Blocker)
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&

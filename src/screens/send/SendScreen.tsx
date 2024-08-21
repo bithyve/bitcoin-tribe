@@ -22,9 +22,7 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      <View style={styles.scannerWrapper}>
-        <QRScanner />
-      </View>
+      <View style={styles.scannerWrapper}>{!visible && <QRScanner />}</View>
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}

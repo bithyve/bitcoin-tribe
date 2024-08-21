@@ -35,6 +35,8 @@
 	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Allow Tribe requires FaceID access to allows you quick and secure access.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LufgaBold.ttf</string>
@@ -60,5 +62,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.bithyve.tribe.dev</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>TribeDev</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>One</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

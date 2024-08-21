@@ -24,6 +24,7 @@ import {
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { BackupHistorySchema } from './backupHistory';
+import { CloudBackupHistorySchema } from './cloudBackupHistory';
 
 export default [
   TribeAppSchema,
@@ -51,4 +52,5 @@ export default [
   CollectibleMediaSchema,
   CollectibleSchema,
   BackupHistorySchema,
+  CloudBackupHistorySchema,
 ];

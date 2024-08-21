@@ -37,12 +37,12 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
-      return await ApiHandler.setupNewApp(
-        name,
-        PinMethod.DEFAULT,
-        '',
-        profileImage,
-      );
+      return await ApiHandler.setupNewApp({
+        appName: name,
+        pinMethod: PinMethod.DEFAULT,
+        passcode: '',
+        walletImage: profileImage,
+      });
     },
     {
       enabled: !!initiateQuery,
@@ -63,6 +63,7 @@ function ProfileSetup({ navigation }) {
   };
 
   const initiateWalletCreation = () => {
+    Keyboard.dismiss();
     setInitiateQuery(true);
   };
 

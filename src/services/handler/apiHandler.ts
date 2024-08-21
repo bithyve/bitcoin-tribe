@@ -40,11 +40,12 @@ import {
   NodeDetail,
   TransactionPrerequisite,
 } from '../wallets/interfaces';
-import { BackupAction, Keys, Storage } from 'src/storage';
+import { Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import { Collectible, RGBWallet } from 'src/models/interfaces/RGBWallet';
-import { Platform } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
+import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 
 var RNFS = require('react-native-fs');
 
@@ -57,12 +58,13 @@ export class ApiHandler {
     });
   }
 
-  static async setupNewApp(
-    appName: string,
+  static async setupNewApp({
+    appName = '',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage: string,
-  ) {
+    walletImage = '',
+    mnemonic = null,
+  }) {
     Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
@@ -75,7 +77,7 @@ export class ApiHandler {
     const uint8array = stringToArrayBuffer(AES_KEY);
     const isRealmInit = await dbManager.initializeRealm(uint8array);
     if (isRealmInit) {
-      const primaryMnemonic = bip39.generateMnemonic();
+      const primaryMnemonic = mnemonic ? mnemonic : bip39.generateMnemonic();
       const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
       const appID = crypto
         .createHash('sha256')
@@ -117,6 +119,57 @@ export class ApiHandler {
       }
     } else {
       throw new Error('Realm initialisation failed');
+    }
+  }
+
+  static async biometricLogin(signature: string) {
+    const appId = await Storage.get(Keys.APPID);
+    const res = await SecureStore.verifyBiometricAuth(signature, appId);
+    if (!res.success) {
+      throw new Error('Biometric Auth Failed');
+    }
+    const hash = res.hash;
+    const encryptedKey = res.encryptedKey;
+    const key = decrypt(hash, encryptedKey);
+    const uint8array = stringToArrayBuffer(key);
+    await dbManager.initializeRealm(uint8array);
+    const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+      RealmSchema.RgbWallet,
+    );
+    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+    return key;
+  }
+
+  static async createPin(pin: string) {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    const newHash = hash512(pin);
+    const encryptedKey = encrypt(newHash, key);
+    SecureStore.store(newHash, encryptedKey);
+    await SecureStore.remove(hash);
+    Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
+  }
+
+  static async resetPinMethod(key: string) {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const encryptedKey = encrypt(hash, key);
+    SecureStore.store(hash, encryptedKey);
+    Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+  }
+
+  static async loginWithPin(pin: string) {
+    try {
+      const hash = hash512(pin);
+      const key = decrypt(hash, await SecureStore.fetch(hash));
+      const uint8array = stringToArrayBuffer(key);
+      await dbManager.initializeRealm(uint8array);
+      const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+      return key;
+    } catch (error) {
+      throw new Error('Invalid PIN');
     }
   }
 
@@ -193,6 +246,15 @@ export class ApiHandler {
     }
 
     return { connected, connectedTo, error };
+  }
+
+  static async getTxRates() {
+    WalletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
+      Storage.set(
+        Keys.AVERAGE_TX_FEE_BY_NETWORK,
+        JSON.stringify(averageTxFeeByNetwork),
+      );
+    });
   }
 
   static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
@@ -337,7 +399,11 @@ export class ApiHandler {
         JSON.parse(averageTxFeeJSON);
       const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
       const utxos = await RGBServices.createUtxos(averageTxFee.high.feePerByte);
-      return utxos.created;
+      if (utxos.created) {
+        return utxos.created;
+      } else {
+        return false;
+      }
     } catch (error) {
       console.log({ error });
       throw new Error('Insufficient sats for RGB');
@@ -560,7 +626,89 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
-  // backup
+
+  static async restoreRgbFromCloud() {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      if (Platform.OS === 'android') {
+        await NativeModules.CloudBackup.setup();
+        const login = JSON.parse(await NativeModules.CloudBackup.login());
+        if (login.status) {
+          const restore = await RGBServices.restore(app.primaryMnemonic);
+          if (restore) {
+            await ApiHandler.refreshRgbWallet();
+          }
+        } else {
+          const restore = await RGBServices.restore(app.primaryMnemonic);
+          if (restore) {
+            await ApiHandler.refreshRgbWallet();
+          }
+          console.log(restore);
+        }
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  static async backupRgbOnCloud() {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      const isBackupRequired = true;
+      if (isBackupRequired) {
+        if (Platform.OS === 'android') {
+          await NativeModules.CloudBackup.setup();
+          const login = JSON.parse(await NativeModules.CloudBackup.login());
+          if (login.status) {
+            const backup = await RGBServices.backup('', app.primaryMnemonic);
+            if (backup.error) {
+              dbManager.createObject(RealmSchema.CloudBackupHistory, {
+                title: CloudBackupAction.CLOUD_BACKUP_FAILED,
+                date: new Date().toString(),
+                confirmed: true,
+                subtitle: backup.error,
+              });
+            } else {
+              dbManager.createObject(RealmSchema.CloudBackupHistory, {
+                title: CloudBackupAction.CLOUD_BACKUP_CREATED,
+                date: new Date().toString(),
+                confirmed: true,
+                subtitle: backup.file,
+              });
+            }
+          } else {
+            dbManager.createObject(RealmSchema.CloudBackupHistory, {
+              title: CloudBackupAction.CLOUD_BACKUP_FAILED,
+              date: new Date().toString(),
+              confirmed: true,
+              subtitle: login.error,
+            });
+          }
+        } else {
+          const backup = await RGBServices.backup('', app.primaryMnemonic);
+          if (backup.error) {
+            dbManager.createObject(RealmSchema.CloudBackupHistory, {
+              title: CloudBackupAction.CLOUD_BACKUP_FAILED,
+              date: new Date().toString(),
+              confirmed: true,
+              subtitle: backup.error,
+            });
+          } else {
+            dbManager.createObject(RealmSchema.CloudBackupHistory, {
+              title: CloudBackupAction.CLOUD_BACKUP_CREATED,
+              date: new Date().toString(),
+              confirmed: true,
+              subtitle: backup.file,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   static async createBackup(confirmed) {
     try {
       dbManager.createObject(RealmSchema.BackupHistory, {
@@ -577,7 +725,6 @@ export class ApiHandler {
       throw new Error(error);
     }
   }
-  // get fee and exchange rate
   static async getFeeAndExchangeRates() {
     const { exchangeRates, averageTxFees } =
       await Relay.fetchFeeAndExchangeRates();
@@ -585,5 +732,6 @@ export class ApiHandler {
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
     );
+    await ApiHandler.getTxRates();
   }
 }

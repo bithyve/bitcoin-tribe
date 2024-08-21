@@ -64,9 +64,9 @@ function HomeHeader(props: HomeHeaderProps) {
           <IconWrapper onPress={onPressScanner}>
             <IconScanner />
           </IconWrapper>
-          <IconWrapper onPress={onPressNotification}>
+          {/* <IconWrapper onPress={onPressNotification}>
             <IconNotification />
-          </IconWrapper>
+          </IconWrapper> */}
         </View>
       </View>
       <View style={styles.balanceContainer}>
@@ -77,7 +77,7 @@ function HomeHeader(props: HomeHeaderProps) {
         </View>
         <AppTouchable style={styles.balanceWrapper} onPress={onPressTotalAmt}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
-            getCurrencyIcon(IconBitcoin, 'dark')}
+            getCurrencyIcon(IconBitcoin, 'dark', 30)}
           <AppText variant="pageTitle2" style={styles.balanceText}>
             &nbsp;{getBalance(balance)}
           </AppText>
@@ -123,9 +123,11 @@ const getStyles = (theme: AppTheme) =>
       marginLeft: hp(5),
     },
     iconWrapper: {
-      width: '32%',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      // width: '32%',
+      // flexDirection: 'row',
+      // justifyContent: 'space-between',
+      width: '33%',
+      alignItems: 'flex-end',
     },
     iconTouchableArea: {
       height: '60%',
