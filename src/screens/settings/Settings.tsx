@@ -95,16 +95,17 @@ function SettingsScreen({ navigation }) {
   };
 
   const SettingsMenu: SettingMenuProps[] = [
-    {
-      id: 1,
-      title: settings.darkMode,
-      icon: <IconDarkMode />,
-      onValueChange: () => setDarkTheme(!darkTheme),
-      toggleValue: !darkTheme,
-      enableSwitch: true,
-      testID: 'dark_mode',
-      onPress: () => setDarkTheme(!darkTheme),
-    },
+    // TO DO - will implement theme functionality.  This commented temporarily
+    // {
+    //   id: 1,
+    //   title: settings.darkMode,
+    //   icon: <IconDarkMode />,
+    //   onValueChange: () => setDarkTheme(!darkTheme),
+    //   toggleValue: !darkTheme,
+    //   enableSwitch: true,
+    //   testID: 'dark_mode',
+    //   onPress: () => setDarkTheme(!darkTheme),
+    // },
     {
       id: 2,
       title: settings.biometricUnlock,
@@ -127,12 +128,13 @@ function SettingsScreen({ navigation }) {
       icon: <IconBackup />,
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
     },
-    {
-      id: 5,
-      title: settings.nodeSettings,
-      icon: <IconNodes />,
-      onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
-    },
+    // TO DO - will implement node setting functionality. This commented temporarily
+    // {
+    //   id: 5,
+    //   title: settings.nodeSettings,
+    //   icon: <IconNodes />,
+    //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
+    // },
     {
       id: 6,
       title: settings.appInfo,
