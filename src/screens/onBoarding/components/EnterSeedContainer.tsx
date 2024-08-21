@@ -9,8 +9,6 @@ import { FlatList, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import * as bip39 from 'bip39';
 import { TextInput as RNTextInput } from 'react-native';
-
-import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -21,30 +19,55 @@ import Buttons from 'src/components/Buttons';
 import Toast from 'src/components/Toast';
 import RecoverRGBStatModal from './RecoverRGBStatModal';
 import CommonStyles from 'src/common/styles/CommonStyles';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import PinMethod from 'src/models/enums/PinMethod';
+import ModalLoading from 'src/components/ModalLoading';
+import { decrypt, hash512 } from 'src/utils/encryption';
+import config from 'src/utils/config';
+import * as SecureStore from 'src/storage/secure-store';
+import { AppContext } from 'src/contexts/AppContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useNavigation } from '@react-navigation/native';
 
 type seedWordItem = {
   id: number;
   name: string;
   invalid: boolean;
 };
-const SEED_WORDS_12 = '12 Seed Words';
-const SEED_WORDS_18 = '18 Seed Words';
-const SEED_WORDS_24 = '24 Seed Words';
 
 function EnterSeedContainer() {
+  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding, common } = translations;
+  const { common } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const ref = useRef<FlatList>(null);
+  const { setKey } = useContext(AppContext);
   const inputRef = useRef<RNTextInput[]>([]);
   const [seedData, setSeedData] = useState<seedWordItem[]>();
   const [suggestedWords, setSuggestedWords] = useState([]);
   const [visible, setVisible] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
-  const [selectedNumberOfWords, setSelectedNumberOfWords] =
-    useState(SEED_WORDS_12);
   const [activePage, setActivePage] = useState(0);
+  const { isLoading, mutate, status } = useMutation(ApiHandler.setupNewApp);
+  const restoreFromCloudMutation = useMutation(ApiHandler.restoreRgbFromCloud);
+
+  useEffect(() => {
+    if (restoreFromCloudMutation.isSuccess) {
+      setTimeout(() => {
+        onSuccess();
+      }, 400);
+    }
+  }, [restoreFromCloudMutation.isSuccess]);
+
+  useEffect(() => {
+    if (status === 'success') {
+      setTimeout(() => {
+        setVisible(true);
+      }, 400);
+    }
+  }, [status]);
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
@@ -101,9 +124,9 @@ function EnterSeedContainer() {
         : activePage === 1
         ? index >= 6 && index < 12
         : index < 6
-    )
+    ) {
       return (
-        <View style={styles.inputListWrapper}>
+        <View removeClippedSubviews style={styles.inputListWrapper}>
           <TextInput
             ref={ref => {
               if (ref) {
@@ -113,6 +136,7 @@ function EnterSeedContainer() {
             mode="outlined"
             outlineColor={theme.colors.inputBackground}
             activeOutlineColor={theme.colors.accent1}
+            contextMenuHidden
             outlineStyle={styles.outlineStyle}
             style={styles.input}
             underlineStyle={styles.underlineStyle}
@@ -156,23 +180,53 @@ function EnterSeedContainer() {
           />
         </View>
       );
-    else return null;
+    } else {
+      return null;
+    }
   };
   const onPressHandleNext = async () => {
     if (activePage === 0) {
-      if (isSeedFilled(6)) setActivePage(1);
-      else Toast('error', false, true);
+      if (isSeedFilled(6)) {
+        setActivePage(1);
+      } else {
+        Toast('error', false, true);
+      }
     }
     if (activePage === 1) {
       if (isSeedFilled(12)) {
-        //setActivePage(2);
-        setVisible(true);
-      } else Toast('error', false, true);
+        //setVisible(true);
+        let seedWord = '';
+        for (let i = 0; i < seedData.length; i++) {
+          seedWord += `${seedData[i].name} `;
+        }
+        const mnemonic = seedWord.trim();
+        if (bip39.validateMnemonic(mnemonic)) {
+          mutate({
+            appName: '',
+            walletImage: '',
+            passcode: '',
+            pinMethod: PinMethod.DEFAULT,
+            mnemonic,
+          });
+        } else {
+          Toast('Invalid Mnemonic', false, true);
+        }
+      } else {
+        Toast('error', false, true);
+      }
     }
+  };
+
+  const onSuccess = async () => {
+    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+    const key = decrypt(hash, await SecureStore.fetch(hash));
+    setKey(key);
+    navigation.replace(NavigationRoutes.APPSTACK);
   };
 
   return (
     <View>
+      <ModalLoading visible={isLoading || restoreFromCloudMutation.isLoading} />
       <FlatList
         ref={ref}
         keyExtractor={item => item.id}
@@ -209,8 +263,9 @@ function EnterSeedContainer() {
                   data[onChangeIndex].name = word.trim();
                   setSeedData(data);
                   setSuggestedWords([]);
-                  if (onChangeIndex < (activePage + 1) * 6 - 1)
+                  if (onChangeIndex < (activePage + 1) * 6 - 1) {
                     inputRef.current[onChangeIndex + 1].focus();
+                  }
                 }}>
                 <AppText variant="body2">{word}</AppText>
               </AppTouchable>
@@ -229,8 +284,8 @@ function EnterSeedContainer() {
       />
       <RecoverRGBStatModal
         visible={visible}
-        primaryOnPress={() => setVisible(false)}
-        secondaryOnPress={() => setVisible(false)}
+        primaryOnPress={() => restoreFromCloudMutation.mutate()}
+        secondaryOnPress={onSuccess}
       />
     </View>
   );
