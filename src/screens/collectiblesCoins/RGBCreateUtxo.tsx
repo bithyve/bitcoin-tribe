@@ -37,7 +37,9 @@ function RGBCreateUtxo() {
 
   useEffect(() => {
     if (createUtxos.data) {
-      setVisible(true);
+      setTimeout(() => {
+        setVisible(true);
+      }, 400);
     } else if (createUtxos.data === false) {
       Toast(walletTranslation.failedToCreateUTXO, false, true);
     }
