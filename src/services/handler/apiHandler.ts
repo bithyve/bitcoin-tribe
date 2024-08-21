@@ -58,12 +58,13 @@ export class ApiHandler {
     });
   }
 
-  static async setupNewApp(
-    appName: string,
+  static async setupNewApp({
+    appName = '',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage: string,
-  ) {
+    walletImage = '',
+    mnemonic = null,
+  }) {
     Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
@@ -76,7 +77,7 @@ export class ApiHandler {
     const uint8array = stringToArrayBuffer(AES_KEY);
     const isRealmInit = await dbManager.initializeRealm(uint8array);
     if (isRealmInit) {
-      const primaryMnemonic = bip39.generateMnemonic();
+      const primaryMnemonic = mnemonic ? mnemonic : bip39.generateMnemonic();
       const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
       const appID = crypto
         .createHash('sha256')
@@ -622,6 +623,30 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('Update Profile', error);
+      throw new Error(error);
+    }
+  }
+
+  static async restoreRgbFromCloud() {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      if (Platform.OS === 'android') {
+        await NativeModules.CloudBackup.setup();
+        const login = JSON.parse(await NativeModules.CloudBackup.login());
+        if (login.status) {
+          const restore = await RGBServices.restore(app.primaryMnemonic);
+          if (restore) {
+            await ApiHandler.refreshRgbWallet();
+          }
+        } else {
+          const restore = await RGBServices.restore(app.primaryMnemonic);
+          if (restore) {
+            await ApiHandler.refreshRgbWallet();
+          }
+          console.log(restore);
+        }
+      }
+    } catch (error) {
       throw new Error(error);
     }
   }
