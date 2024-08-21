@@ -45,7 +45,12 @@
     "advanceSettingTitle": "Advanced Setting",
     "splashText": "Bitcoin is better with friends",
     "recoverAppTitle": "Recover an existing app",
-    "recoverAppSubTitle": "Enter existing 12-word recovery phrase below "
+    "recoverAppSubTitle": "Enter existing 12-word recovery phrase below",
+    "errorSettingPin": "Error setting pin",
+    "newPinCreated": "New PIN created",
+    "failToVerify": "Failed to verify",
+    "createPinFirst": "Create a PIN first",
+    "invalidPin": "Invalid PIN"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -76,7 +81,7 @@
     "appBackup": "App Backup",
     "connectionSettings": "Connection Settings",
     "connectionSettingSubTitle": "Configure Tor and Nodes",
-    "appInfo": "App Info and Help",
+    "appInfo": "App info and History",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Choose your Language",
@@ -198,13 +203,16 @@
     "rgbAssetID": "RGB Asset ID",
     "testSatsRecived": "Test-sats received",
     "failedTestSatsRecived": "Failed to receive test-sats",
-    "failRefreshWallet": "Failed to refresh wallet"
+    "failRefreshWallet": "Failed to refresh wallet",
+    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
     "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
     "insufficientSats": "Insufficient sats, failed to create new UTXOs",
     "receiveAssetTitle": "Receive Assset",
-    "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice"
+    "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice",
+    "insufficientSatsRGB": "Insufficient sats for RGB",
+    "insufficientSatsRGBSubTitle": "Your RGB wallet’s Bitcoin balance is low to create new UTXOs.\nYou need to transfer 9000 sats + transaction fee from the main Wallet."
   }
 }

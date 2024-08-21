@@ -295,10 +295,11 @@ const getStyles = (theme: AppTheme) =>
     input: {
       borderRadius: 15,
       fontSize: 13,
+      lineHeight: 25,
       letterSpacing: 0.39,
       height: hp(60),
       width: wp(165),
-      zIndex: 1,
+      // zIndex: 1,
       backgroundColor: theme.colors.inputBackground,
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,

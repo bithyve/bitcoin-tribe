@@ -25,7 +25,8 @@ const RecoverRGBStatModal: React.FC<Props> = ({
     <ModalContainer
       title={'Would you like to recover your RGB stats from the cloud?'}
       visible={visible}
-      onDismiss={() => navigation.goBack()}>
+      enableCloseIcon={false}
+      onDismiss={() => {}}>
       <View>
         <View>
           <Buttons
