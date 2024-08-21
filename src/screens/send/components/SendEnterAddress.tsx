@@ -57,6 +57,12 @@ function SendEnterAddress({
           paymentURIAmount: amount,
         });
         break;
+      case PaymentInfoKind.RGB_INVOICE:
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          wallet,
+          rgbInvoice: address,
+        });
+        break;
       default:
         Toast('Invalid Bitcoin address', false, true);
     }
@@ -99,7 +105,9 @@ function SendEnterAddress({
           primaryOnPress={() => {
             Keyboard.dismiss();
             onDismiss();
-            onProceed(address);
+            setTimeout(() => {
+              onProceed(address);
+            }, 400);
           }}
           secondaryOnPress={navigation.goBack}
           width={wp(120)}

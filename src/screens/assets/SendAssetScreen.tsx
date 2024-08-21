@@ -22,12 +22,12 @@ import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
 
 const SendAssetScreen = () => {
-  const { assetId } = useRoute().params;
+  const { assetId, rgbInvoice } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { home, common } = translations;
-  const [invoice, setInvoice] = useState('');
+  const { sendScreen, common, assets } = translations;
+  const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -149,7 +149,8 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginTop: 0,
     },
     contentStyle1: {
-      height: hp(55),
+      height: hp(50),
+      marginTop: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(20),
