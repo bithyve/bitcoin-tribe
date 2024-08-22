@@ -99,6 +99,7 @@ function HomeScreen() {
               receiveData: 'send',
               title: common.send,
               subTitle: sendScreen.headerSubTitle,
+              wallet: wallet,
             })
           }
           onPressNotification={() => console.log('notification')}
