@@ -16,7 +16,7 @@ function BackupHistoryList() {
   const BackupHistoryData = useQuery(RealmSchema.BackupHistory).map(
     getJSONFromRealmObject,
   );
-
+  const lastIndex = BackupHistoryData.length - 1;
   return (
     <FlatList
       data={BackupHistoryData.reverse()}
@@ -25,6 +25,7 @@ function BackupHistoryList() {
           title={settings[item?.title]}
           date={item.date}
           releaseNotes={item.releaseNotes}
+          lastIndex={lastIndex}
         />
       )}
     />
