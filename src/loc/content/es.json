@@ -223,6 +223,7 @@
     "iFace": "Iface",
     "issuedSupply": "Suministro emitido",
     "issuedOn": "Emitido el",
-    "precision": "Precisión"
+    "precision": "Precisión",
+    "details": "Detalles"
   }
 }
