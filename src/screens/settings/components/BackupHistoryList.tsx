@@ -20,12 +20,12 @@ function BackupHistoryList() {
   return (
     <FlatList
       data={BackupHistoryData.reverse()}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <VersionHistoryItem
           title={settings[item?.title]}
           date={item.date}
           releaseNotes={item.releaseNotes}
-          lastIndex={lastIndex}
+          lastIndex={lastIndex === index}
         />
       )}
     />
