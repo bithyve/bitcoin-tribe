@@ -38,10 +38,6 @@ type ItemProps = {
   amount?: string;
 };
 
-const ASSET_HEIGHT = hp(205);
-const ASSET_MARGIN = hp(6) * 2;
-const ASSET_ALTERNATE_SPACE = hp(50);
-
 const Item = ({
   name,
   image,

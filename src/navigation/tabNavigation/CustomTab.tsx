@@ -146,9 +146,9 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(20),
     },
     bottomNavigation: {
-      fontSize: 14,
+      fontSize: 13,
       fontFamily: Fonts.LufgaSemiBold,
-      lineHeight: 14 * 1.4,
+      lineHeight: 13 * 1.4,
       fontWeight: '400',
     },
   });
