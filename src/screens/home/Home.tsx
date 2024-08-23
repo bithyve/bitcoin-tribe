@@ -23,12 +23,13 @@ import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
+import AppText from 'src/components/AppText';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
+  const { common, sendScreen, home } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [image, setImage] = useState(null);
@@ -113,6 +114,9 @@ function HomeScreen() {
           }}
         />
       </View>
+      <AppText variant="pageTitle2" style={styles.assetsTitleStyle}>
+        {home.myAssets}
+      </AppText>
       <AssetsList
         listData={assets}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
@@ -138,7 +142,13 @@ const getStyles = (theme: AppTheme) =>
       paddingTop: 0,
     },
     headerWrapper: {
-      margin: hp(25),
+      margin: hp(16),
+    },
+    assetsTitleStyle: {
+      fontSize: 30,
+      color: theme.colors.headingColor,
+      marginHorizontal: hp(16),
+      marginVertical: hp(15),
     },
   });
 export default HomeScreen;

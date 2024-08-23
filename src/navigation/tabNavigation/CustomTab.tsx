@@ -5,12 +5,13 @@ import { useTheme } from 'react-native-paper';
 import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
-import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
@@ -28,23 +29,23 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused && <AssetsActive />;
+        return isFocused ? <AssetsActive /> : <AssetsInActive />;
       case NavigationRoutes.COMMUNITY:
         return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused && <SettingsActive />;
+        return isFocused ? <SettingsActive /> : <SettingsInActive />;
       default:
         return '';
     }
   };
-  const TabBarTitle = label => {
+  const TabBarTitle = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return `${common.assets}`;
+        return isFocused ? `${common.assets}` : '';
       case NavigationRoutes.COMMUNITY:
-        return '';
+        return isFocused ? `${common.community}` : '';
       case NavigationRoutes.SETTINGS:
-        return `${common.settings}`;
+        return isFocused ? `${common.settings}` : '';
       default:
         return '';
     }
@@ -105,7 +106,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
                     : theme.colors.disablePrimaryCTAText,
                 },
               ]}>
-              &nbsp;&nbsp;{Capitalize(TabBarTitle(label))}
+              &nbsp;&nbsp;{Capitalize(TabBarTitle(isFocused, label))}
             </AppText>
           </TouchableOpacity>
         );
@@ -124,7 +125,7 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
-      width: wp(297),
+      width: wp(300),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
     },
@@ -136,11 +137,13 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.activeTabColor,
       borderRadius: 100,
       margin: 10,
+      paddingHorizontal: hp(15),
     },
     inActiveTab: {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      marginTop: hp(20),
     },
     bottomNavigation: {
       fontSize: 14,
