@@ -8,9 +8,12 @@ import { hp } from 'src/constants/responsive';
 
 import { AppTheme } from 'src/theme';
 
-function VersionHistoryItem({ title, releaseNotes, date }) {
+function VersionHistoryItem({ title, releaseNotes, date, lastIndex }) {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, lastIndex),
+    [theme, lastIndex],
+  );
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -22,6 +25,7 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
     <View style={styles.container}>
       <View style={styles.dotView} />
       <View>
+        <View style={styles.borderLeft} />
         <View style={styles.wrapper}>
           <AppTouchable onPress={toggleCollapse} style={styles.header}>
             <AppText variant="body1" style={styles.version}>
@@ -43,7 +47,7 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, lastIndex) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -52,9 +56,9 @@ const getStyles = (theme: AppTheme) =>
       marginLeft: hp(20),
     },
     wrapper: {
-      borderLeftColor: theme.colors.accent2,
-      borderLeftWidth: 1,
-      paddingBottom: hp(25),
+      // borderLeftColor: !lastIndex && theme.colors.accent2,
+      // borderLeftWidth: !lastIndex && 1,
+      paddingBottom: hp(30),
       //   borderStyle: 'dashed',
     },
     version: {
@@ -77,9 +81,18 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 40,
       top: 0,
       left: 6,
+      marginTop: 5,
     },
     releaseNotes: {
       color: theme.colors.headingColor,
+    },
+    borderLeft: {
+      position: 'absolute',
+      left: 0,
+      top: 5,
+      bottom: -10,
+      width: !lastIndex && 2,
+      backgroundColor: !lastIndex && theme.colors.accent2,
     },
   });
 export default VersionHistoryItem;

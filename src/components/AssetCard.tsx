@@ -10,6 +10,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'react-native-identicon';
+import AssetChip from './AssetChip';
 
 type AssetCardProps = {
   image?: string;
@@ -18,11 +19,12 @@ type AssetCardProps = {
   details?: string;
   tag?: string;
   assetId?: string;
+  amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, details, tag, onPress, assetId } = props;
+  const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -53,31 +55,30 @@ const AssetCard = (props: AssetCardProps) => {
               {/* </View> */}
             </View>
           )}
+          <View style={styles.tagWrapper}>
+            <AssetChip
+              tagText={Capitalize(tag)}
+              backColor={
+                tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+              }
+              tagColor={theme.colors.primaryCTAText}
+            />
+          </View>
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.contentWrapper2}>
-            <AppText
-              variant="body2"
-              style={[
-                styles.tagTextStyle,
-                {
-                  color:
-                    tag === 'COIN'
-                      ? theme.colors.accent2
-                      : theme.colors.accent1,
-                },
-              ]}>
-              {Capitalize(tag)}
+            <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
+              {name}
             </AppText>
             <AppText
               variant="caption"
-              style={styles.detailsText}
+              style={styles.amountText}
               numberOfLines={1}>
-              {numberWithCommas(details)}&nbsp;
+              {numberWithCommas(amount)}&nbsp;
             </AppText>
           </View>
           <AppText variant="caption" style={styles.titleText}>
-            {name}
+            {ticker}
           </AppText>
         </View>
       </GradientView>
@@ -90,7 +91,7 @@ const getStyles = (theme: AppTheme) =>
       height: hp(205),
       width: wp(160),
       borderRadius: 15,
-      margin: hp(5),
+      margin: hp(6),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
     },
@@ -130,8 +131,8 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     titleText: {
-      lineHeight: hp(15),
-      fontWeight: '300',
+      lineHeight: hp(18),
+      fontWeight: '400',
       color: theme.colors.secondaryHeadingColor,
     },
     textTicker: {
@@ -141,6 +142,17 @@ const getStyles = (theme: AppTheme) =>
       // textAlign: 'center',
       // marginTop: '40%',
       // fontSize: 35,
+    },
+    nameText: {
+      fontWeight: '300',
+      color: theme.colors.headingColor,
+      flexWrap: 'wrap',
+      width: '60%',
+    },
+    amountText: {
+      fontWeight: '300',
+      color: theme.colors.headingColor,
+      flexWrap: 'wrap',
     },
     detailsText: {
       fontWeight: '300',
@@ -155,6 +167,11 @@ const getStyles = (theme: AppTheme) =>
       height: '70%',
       borderBottomColor: theme.colors.borderColor,
       borderBottomWidth: 0.8,
+    },
+    tagWrapper: {
+      position: 'absolute',
+      left: 15,
+      bottom: 10,
     },
   });
 export default AssetCard;

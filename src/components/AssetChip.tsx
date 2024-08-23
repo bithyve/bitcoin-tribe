@@ -31,23 +31,16 @@ const getStyles = (backColor, tagColor, theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: hp(10),
-      paddingVertical: hp(2.5),
+      paddingVertical: hp(4),
       paddingHorizontal: hp(10),
       backgroundColor: backColor,
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.4,
-      elevation: 10,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
     },
     textStyle: {
       color: tagColor,
       fontSize: 11,
       fontWeight: 'bold',
       textAlignVertical: 'center',
+      letterSpacing: 0.4,
     },
   });
 export default AssetChip;

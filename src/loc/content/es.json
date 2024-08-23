@@ -24,10 +24,13 @@
     "skip": "Omitir",
     "assets": "Activos",
     "settings": "Ajustes",
+    "community": "Comunidad",
     "viewWallets": "Ver carteras",
     "needHelp": "¿Necesitar ayuda?",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "commingSoon": "¡Muy pronto! 🎉",
+    "commingSoonSubTitle": "Nos complace presentar pronto nuestras funciones \"Amigos y familiares\" y \"Regalos\". ¡Estén atentos a las actualizaciones y sean de los primeros en experimentar estas nuevas incorporaciones! Mientras tanto, siéntete libre de explorar otras partes de la aplicación."
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -213,6 +216,17 @@
     "receiveAssetTitle": "Recibir activo",
     "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB",
     "insufficientSatsRGB": "Sats insuficientes para RGB",
-    "insufficientSatsRGBSubTitle": "El saldo de Bitcoin de su billetera RGB es bajo para crear nuevos UTXO.\nNecesita transferir 9000 sats + tarifa de transacción desde la billetera principal."
+    "insufficientSatsRGBSubTitle": "El saldo de Bitcoin de su billetera RGB es bajo para crear nuevos UTXO.\nNecesita transferir 9000 sats + tarifa de transacción desde la billetera principal.",
+    "coinMetaTitle": "Metadatos",
+    "coinMetaSubTitle": "Descubra el poder de la información basada en datos y transforme.",
+    "name": "Nombre",
+    "ticker": "Corazón",
+    "assetId": "ID de activo",
+    "schema": "Esquema",
+    "iFace": "Iface",
+    "issuedSupply": "Suministro emitido",
+    "issuedOn": "Emitido el",
+    "precision": "Precisión",
+    "details": "Detalles"
   }
 }

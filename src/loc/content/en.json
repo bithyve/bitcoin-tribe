@@ -24,10 +24,13 @@
     "skip": "Skip",
     "assets": "Assets",
     "settings": "Settings",
+    "community": "Community",
     "viewWallets": "View Wallets",
     "needHelp": "Need Help?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "commingSoon": "Coming Soon! 🎉",
+    "commingSoonSubTitle": "We're excited to introduce our \"Friends and Family\" and \"Gift\" features soon. Stay tuned for updates and be among the first to experience these new additions! In the meantime, feel free to explore other parts of the app."
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -213,6 +216,17 @@
     "receiveAssetTitle": "Receive Assset",
     "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice",
     "insufficientSatsRGB": "Insufficient sats for RGB",
-    "insufficientSatsRGBSubTitle": "Your RGB wallet’s Bitcoin balance is low to create new UTXOs.\nYou need to transfer 9000 sats + transaction fee from the main Wallet."
+    "insufficientSatsRGBSubTitle": "Your RGB wallet’s Bitcoin balance is low to create new UTXOs.\nYou need to transfer 9000 sats + transaction fee from the main Wallet.",
+    "coinMetaTitle": "Meta Data",
+    "coinMetaSubTitle": "Discover the power of data-driven insights and transform.",
+    "name": "Name",
+    "ticker": "Ticker",
+    "assetId": "Asset ID",
+    "schema": "Schema",
+    "iFace": "Iface",
+    "issuedSupply": "Issued Supply",
+    "issuedOn": "Issued On",
+    "precision": "Precision",
+    "details": "Details"
   }
 }
