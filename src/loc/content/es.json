@@ -28,7 +28,9 @@
     "viewWallets": "Ver carteras",
     "needHelp": "¿Necesitar ayuda?",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "commingSoon": "¡Muy pronto! 🎉",
+    "commingSoonSubTitle": "Nos complace presentar pronto nuestras funciones \"Amigos y familiares\" y \"Regalos\". ¡Estén atentos a las actualizaciones y sean de los primeros en experimentar estas nuevas incorporaciones! Mientras tanto, siéntete libre de explorar otras partes de la aplicación."
   },
   "onBoarding": {
     "welcome": "Bienvenido",
