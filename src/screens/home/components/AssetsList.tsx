@@ -166,7 +166,7 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 100,
+      bottom: 80,
       right: 30,
     },
     footer: {
