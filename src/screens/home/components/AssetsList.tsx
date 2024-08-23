@@ -57,7 +57,7 @@ const Item = ({
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
-    <View>
+    <View style={styles.alternateSpace}>
       <AssetCard
         image={image}
         name={name}
@@ -173,7 +173,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       height: 100, // Adjust the height as needed
     },
     alternateSpace: {
-      marginTop: index % 2 === 0 ? 0 : hp(50),
+      // top: index % 2 === 0 ? 0 : hp(50),
     },
   });
 export default AssetsList;
