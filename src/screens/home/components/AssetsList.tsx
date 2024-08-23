@@ -158,7 +158,7 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '76%',
+      height: '80%',
       marginHorizontal: wp(10),
     },
     assetWrapper: {
@@ -166,7 +166,7 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 80,
+      bottom: 90,
       right: 30,
     },
     footer: {
