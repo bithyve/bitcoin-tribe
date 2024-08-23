@@ -173,7 +173,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       height: 100, // Adjust the height as needed
     },
     alternateSpace: {
-      // top: index % 2 === 0 ? 0 : hp(50),
+      top: index % 2 === 0 ? 0 : hp(50),
     },
   });
 export default AssetsList;
