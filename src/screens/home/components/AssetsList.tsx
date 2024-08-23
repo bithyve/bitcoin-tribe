@@ -79,7 +79,6 @@ function AssetsList(props: AssetsListProps) {
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
-
   return (
     <View style={styles.container}>
       <FlatList

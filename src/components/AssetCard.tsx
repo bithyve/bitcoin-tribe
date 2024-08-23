@@ -24,7 +24,7 @@ type AssetCardProps = {
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, details, tag, onPress, assetId, amount } = props;
+  const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -78,7 +78,7 @@ const AssetCard = (props: AssetCardProps) => {
             </AppText>
           </View>
           <AppText variant="caption" style={styles.titleText}>
-            {details}
+            {ticker}
           </AppText>
         </View>
       </GradientView>
@@ -131,8 +131,8 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     titleText: {
-      lineHeight: hp(15),
-      fontWeight: '300',
+      lineHeight: hp(18),
+      fontWeight: '400',
       color: theme.colors.secondaryHeadingColor,
     },
     textTicker: {
