@@ -53,7 +53,8 @@
     "newPinCreated": "Nuevo PIN creado",
     "failToVerify": "No se pudo verificar",
     "createPinFirst": "Primero crea un PIN",
-    "invalidPin": "PIN no válido"
+    "invalidPin": "PIN no válido",
+    "enterYourPin": "Introduce tu PIN"
   },
   "home": {
     "addAssets": "Agregar activos",

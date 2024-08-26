@@ -53,7 +53,8 @@
     "newPinCreated": "New PIN created",
     "failToVerify": "Failed to verify",
     "createPinFirst": "Create a PIN first",
-    "invalidPin": "Invalid PIN"
+    "invalidPin": "Invalid PIN",
+    "enterYourPin": "Enter your PIN"
   },
   "home": {
     "addAssets": "Add Assets",
