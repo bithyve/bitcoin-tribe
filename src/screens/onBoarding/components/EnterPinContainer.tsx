@@ -34,7 +34,7 @@ function EnterPinContainer() {
   const { setKey } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
-
+  console.log('isLoading', login, login.isLoading);
   useEffect(() => {
     biometricAuth();
   }, []);
@@ -113,6 +113,7 @@ function EnterPinContainer() {
           secondaryOnPress={() => navigation.goBack()}
           disabled={passcode === '' || passcode.length !== 4}
           width={wp(120)}
+          primaryLoading={login.isLoading}
         />
       </View>
       <KeyPadView
