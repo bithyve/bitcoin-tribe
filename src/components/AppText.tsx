@@ -20,6 +20,7 @@ export enum TextVariants {
   smallCTA = 'smallCTA',
   subtitle2 = 'subtitle2',
   walletBalance = 'walletBalance',
+  caption = 'caption',
 }
 
 type VariantProp = keyof typeof TextVariants;
@@ -30,6 +31,7 @@ interface Props extends ComponentProps<typeof Text> {
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
   ellipsizeMode?: string;
+  selectable?: boolean;
 }
 
 const AppText: React.FC<Props> = ({
@@ -38,6 +40,7 @@ const AppText: React.FC<Props> = ({
   style,
   numberOfLines,
   ellipsizeMode,
+  selectable = false,
 }) => {
   const textStyle = useMemo(() => {
     switch (variant) {
@@ -57,6 +60,9 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body1;
       case TextVariants.body2:
         return CommonStyles.body2;
+      case TextVariants.caption:
+        return CommonStyles.caption;
+      // Should be removed - body 3, 4, 5, 6 and 7
       case TextVariants.body3:
         return CommonStyles.body3;
       case TextVariants.secondaryCta:
@@ -69,6 +75,7 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body6;
       case TextVariants.body7:
         return CommonStyles.body7;
+      // end
       case TextVariants.walletBalance:
         return CommonStyles.walletBalance;
       case TextVariants.smallCTA:
@@ -97,6 +104,7 @@ const AppText: React.FC<Props> = ({
       testID={generatedTestID}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}
+      selectable={selectable}
       maxFontSizeMultiplier={1}>
       {children}
     </Text>

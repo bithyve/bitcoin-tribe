@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -12,16 +13,20 @@ import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 
 function WalletTransactionList({
   transactions,
   wallet,
   coin,
+  autoRefresh,
 }: {
   transactions: Transaction[];
   wallet: Wallet;
   coin?: string;
+  autoRefresh?: boolean;
 }) {
+  const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -36,14 +41,20 @@ function WalletTransactionList({
   };
 
   useEffect(() => {
-    pullDownToRefresh(); // auto-refresh the wallet on mount
-  }, []);
+    if (autoRefresh && isFocused) {
+      pullDownToRefresh();
+    }
+  }, [autoRefresh && isFocused]);
+
+  // useEffect(() => {
+  //   pullDownToRefresh(); // auto-refresh the wallet on mount
+  // }, []);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
-      Toast('Wallet refreshed successfully');
+      // Toast(walletStrings.walletRefreshMsg, true);
     } else if (walletRefreshMutation.status === 'error') {
-      Toast('Failed to refresh wallet');
+      Toast(walletStrings.failRefreshWallet, false, true);
     }
   }, [walletRefreshMutation]);
 
@@ -55,7 +66,7 @@ function WalletTransactionList({
         <RefreshControl
           refreshing={walletRefreshMutation.isLoading}
           onRefresh={pullDownToRefresh}
-          tintColor={theme.colors.primaryCTA}
+          tintColor={theme.colors.accent1}
         />
       }
       renderItem={({ item }) => (
@@ -73,6 +84,8 @@ function WalletTransactionList({
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={
         <EmptyStateView
+          style={styles.emptyStateContainer}
+          IllustartionImage={<NoTransactionIllustration />}
           title={walletStrings.noUTXOYet}
           subTitle={walletStrings.noUTXOYetSubTitle}
         />
@@ -85,6 +98,9 @@ const getStyles = (theme: AppTheme) =>
     container: {
       height: '100%',
       marginVertical: hp(5),
+    },
+    emptyStateContainer: {
+      marginTop: '50%',
     },
   });
 export default WalletTransactionList;

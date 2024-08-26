@@ -1,27 +1,52 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import { useMMKVString } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
+import useBalance from 'src/hooks/useBalance';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { Keys } from 'src/storage';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 
 type labelContentProps = {
   label: string;
   content: string;
+  enableCurrency?: boolean;
 };
 function LabeledContent(props: labelContentProps) {
-  const { label, content } = props;
+  const { label, content, enableCurrency } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+
   return (
     <View style={styles.wrapper}>
       <AppText variant="body1" style={styles.labelStyle}>
         {label}
       </AppText>
-      <AppText variant="body2" style={styles.textStyle}>
-        {content}
-      </AppText>
+      {!enableCurrency ? (
+        <AppText variant="body2" style={styles.textStyle}>
+          {content}
+        </AppText>
+      ) : (
+        <View style={styles.balanceWrapper}>
+          {initialCurrencyMode !== CurrencyKind.SATS &&
+            getCurrencyIcon(IconBitcoin, 'dark')}
+          <AppText variant="body2" style={styles.textStyle}>
+            &nbsp;{getBalance(content)}
+          </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.satsText}>
+              sats
+            </AppText>
+          )}
+        </View>
+      )}
     </View>
   );
 }
@@ -34,7 +59,15 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.accent3,
     },
     textStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
     },
   });
 export default LabeledContent;

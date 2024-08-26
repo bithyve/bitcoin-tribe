@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import AppText from 'src/components/AppText';
@@ -10,6 +10,7 @@ import TransactionButtons from '../wallet/components/TransactionButtons';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type CollectibleDetailsHeaderProps = {
   collectible: Collectible;
@@ -21,6 +22,8 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { home } = translations;
   const { collectible, onPressSetting } = props;
 
   return (
@@ -28,10 +31,20 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
-          uri: `file://${collectible.media.filePath}`,
+          uri: Platform.select({
+            android: `file://${collectible.media?.filePath}`,
+            ios: `${collectible.media?.filePath}.${
+              collectible.media?.mime.split('/')[1]
+            }`,
+          }),
         }}
         style={styles.imageStyle}
       />
+      <View>
+        <AppText variant="body2" style={styles.totalBalText}>
+          {home.totalBalance}
+        </AppText>
+      </View>
       <View style={styles.balanceWrapper}>
         <AppText variant="walletBalance" style={styles.balanceText}>
           {numberWithCommas(collectible.balance.spendable)}
@@ -39,13 +52,15 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       </View>
       <TransactionButtons
         onPressSend={() =>
-          navigation.navigate(NavigationRoutes.SENDASSET, {
+          navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: collectible.assetId,
           })
         }
         // onPressBuy={onPressBuy}
         onPressRecieve={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET)
+          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+            refresh: true,
+          })
         }
       />
     </View>
@@ -66,15 +81,21 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     balanceText: {
       color: theme.colors.headingColor,
     },
     imageStyle: {
-      width: 90,
-      height: 90,
+      width: 80,
+      height: 80,
       borderRadius: 10,
+      backgroundColor: theme.colors.inputBackground,
+    },
+    totalBalText: {
+      color: theme.colors.secondaryHeadingColor,
+      fontWeight: '400',
+      marginTop: hp(10),
     },
   });
 export default CollectibleDetailsHeader;

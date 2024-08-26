@@ -20,8 +20,12 @@ function FooterNote(props: FooterNoteProps) {
       <View>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText style={styles.menuCardTitle}>{title}</AppText>
-            <AppText style={styles.menuCardSubTitle}>{subTitle}</AppText>
+            <AppText variant="heading2" style={styles.menuCardTitle}>
+              {title}
+            </AppText>
+            <AppText variant="body1" style={styles.menuCardSubTitle}>
+              {subTitle}
+            </AppText>
           </View>
         </View>
       </View>
@@ -43,13 +47,14 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       width: '96%',
-      marginTop: hp(10),
+      marginVertical: hp(10),
     },
     menuCardTitle: {
-      color: theme.colors.accent3,
+      fontWeight: '400',
+      color: theme.colors.headingColor,
     },
     menuCardSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     iconWrapper: {
       width: '10%',

@@ -5,8 +5,9 @@ import { View, StyleSheet } from 'react-native';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrow from 'src/assets/images/icon_right_arrow.svg';
 import AppTouchable from 'src/components/AppTouchable';
+import GradientView from 'src/components/GradientView';
 
 type AppInfoCardProps = {
   title: string;
@@ -21,35 +22,40 @@ function AppInfoCard(props: AppInfoCardProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable
-      style={styles.container}
-      onPress={navigation}
-      disabled={!navigation}>
-      <View>
-        <AppText variant="subTitle" style={styles.titleText}>
-          {title}
-        </AppText>
-        <AppText variant="body2" style={styles.subTitleText}>
-          {subTitle}
-        </AppText>
-      </View>
-      <View style={styles.contentWrapper}>
-        <View style={styles.contentWrapper2}>
-          {icon}
-          <AppText
-            variant="body3"
-            style={styles.valueText}
-            numberOfLines={1}
-            ellipsizeMode="middle">
-            {value}
+    <AppTouchable onPress={navigation} disabled={!navigation}>
+      <GradientView
+        style={styles.container}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        <View>
+          <AppText variant="body1" style={styles.titleText}>
+            {title}
+          </AppText>
+          <AppText variant="body2" style={styles.subTitleText}>
+            {subTitle}
           </AppText>
         </View>
-        {navigation && (
-          <View>
-            <IconArrow />
+        <View style={styles.contentWrapper}>
+          <View style={styles.contentWrapper2}>
+            {icon}
+            <AppText
+              variant="body3"
+              style={styles.valueText}
+              numberOfLines={1}
+              ellipsizeMode="middle">
+              {value}
+            </AppText>
           </View>
-        )}
-      </View>
+          {navigation && (
+            <View>
+              <IconArrow />
+            </View>
+          )}
+        </View>
+      </GradientView>
     </AppTouchable>
   );
 }
@@ -58,23 +64,18 @@ const getStyles = (theme: AppTheme) =>
     container: {
       backgroundColor: theme.colors.cardBackground,
       width: '100%',
-      borderRadius: hp(10),
-      padding: hp(15),
+      borderRadius: hp(20),
+      padding: hp(20),
       marginVertical: hp(10),
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 1,
-      shadowOpacity: 0.2,
-      elevation: 0.5,
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
     },
     titleText: {
       color: theme.colors.accent2,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      lineHeight: 20,
+      fontWeight: '400',
+      width: '70%',
+      color: theme.colors.secondaryHeadingColor,
     },
     contentWrapper: {
       flexDirection: 'row',
@@ -84,7 +85,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper2: {
       flexDirection: 'row',
-      width: '90%',
+      width: '85%',
       alignItems: 'center',
     },
     valueText: {

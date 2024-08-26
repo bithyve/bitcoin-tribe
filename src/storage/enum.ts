@@ -23,4 +23,6 @@ export enum RealmSchema {
   MetaData = 'MetaData',
   Collectible = 'Collectible',
   CollectibleMedia = 'CollectibleMedia',
+  BackupHistory = 'BackupHistory',
+  CloudBackupHistory = 'CloudBackupHistory',
 }

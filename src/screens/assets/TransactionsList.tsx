@@ -47,20 +47,20 @@ function TransactionsList({
               transactions: transactions,
             });
           }}>
-          <AppText variant="smallCTA" style={styles.viewAllText}>
+          <AppText variant="body1" style={styles.viewAllText}>
             {walletTranslations.viewAll}
           </AppText>
         </AppTouchable>
       </View>
 
       <FlatList
-        style={styles.container}
+        style={styles.container2}
         data={transactions}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
             onRefresh={() => refresh()}
-            tintColor={theme.colors.primaryCTA}
+            tintColor={theme.colors.accent1}
           />
         }
         renderItem={({ item }) => (
@@ -87,6 +87,10 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(30),
       height: '100%',
     },
+    container2: {
+      // marginTop: hp(30),
+      height: '100%',
+    },
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',
@@ -94,7 +98,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     recentTransText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     viewAllText: {
       color: theme.colors.accent1,

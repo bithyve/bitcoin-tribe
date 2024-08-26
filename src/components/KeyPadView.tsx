@@ -16,10 +16,10 @@ const KeyPadView: React.FC<Props> = ({
   onPressNumber,
   onDeletePressed,
   disabled = false,
-  keyColor = '#F97643',
+  keyColor,
   ClearIcon = <DeleteIcon />,
 }: Props) => (
-  <View pointerEvents={disabled ? 'none' : 'auto'} mt="auto">
+  <View pointerEvents={disabled ? 'none' : 'auto'}>
     <View style={styles.keyWrapperView}>
       <KeyPadButton
         title="1"

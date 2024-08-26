@@ -5,7 +5,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
 import ModalContainer from 'src/components/ModalContainer';
-import CreatePin from './components/CreatePin';
+import CreatePin from './components/CreatePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -17,10 +17,10 @@ import config from 'src/utils/config';
 
 function ProfileSetup({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
+  const { onBoarding, common } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
   const { setKey } = useContext(AppContext);
 
@@ -37,12 +37,12 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
-      return await ApiHandler.setupNewApp(
-        name,
-        PinMethod.DEFAULT,
-        '',
-        profileImage,
-      );
+      return await ApiHandler.setupNewApp({
+        appName: name,
+        pinMethod: PinMethod.DEFAULT,
+        passcode: '',
+        walletImage: profileImage,
+      });
     },
     {
       enabled: !!initiateQuery,
@@ -63,6 +63,7 @@ function ProfileSetup({ navigation }) {
   };
 
   const initiateWalletCreation = () => {
+    Keyboard.dismiss();
     setInitiateQuery(true);
   };
 
@@ -81,18 +82,20 @@ function ProfileSetup({ navigation }) {
         inputPlaceholder={onBoarding.enterName}
         onSettingsPress={() => {
           Keyboard.dismiss();
-          setVisible(true);
+          // setVisible(true);
+          navigation.navigate(NavigationRoutes.CREATEPIN);
         }}
         primaryStatus={query.status}
         disabled={name === ''}
+        primaryCTATitle={common.next}
       />
-      <ModalContainer
+      {/* <ModalContainer
         title={onBoarding.advanceSettingTitle}
         subTitle={onBoarding.enterPin}
         visible={visible}
         onDismiss={() => setVisible(false)}>
         <CreatePin />
-      </ModalContainer>
+      </ModalContainer> */}
     </ScreenContainer>
   );
 }

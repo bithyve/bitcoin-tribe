@@ -18,6 +18,8 @@ import idx from 'idx';
 import Toast from 'src/components/Toast';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import SendAddressIcon from 'src/assets/images/sendAddress.svg';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 function SendToContainer({
   wallet,
@@ -49,13 +51,13 @@ function SendToContainer({
         txPrerequisites: sendPhaseOneMutation.data,
       });
     } else if (sendPhaseOneMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseOneMutation.error}`);
+      Toast(`Error while sending: ${sendPhaseOneMutation.error}`, false, true);
     }
   }, [sendPhaseOneMutation]);
 
   const initiateSendPhaseOne = () => {
     if (insufficientBalance) {
-      Toast('Amount entered is more than available to spend');
+      Toast(sendScreen.amountMoreThanSpend, false, true);
       return;
     }
 
@@ -97,21 +99,23 @@ function SendToContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <View style={styles.leftText}>
-              <AppText variant="body1">@</AppText>
-            </View>
+            <SendAddressIcon />
           </View>
           <View style={styles.txnRightWrapper}>
-            <AppText variant="smallCTA" style={styles.sendToAddress}>
-              SENDING TO ADDRESS
+            <AppText variant="body1" style={styles.sendToAddress}>
+              {sendScreen.sendingToAddress}
             </AppText>
-            <AppText variant="body1" style={styles.txnID}>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.txnID}>
               {address}
             </AppText>
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           // keyboardType={'default'}
@@ -119,6 +123,7 @@ function SendToContainer({
           icon={<IconBitcoin />}
           // rightText={common.sendMax}
           // onRightTextPress={() => {}}
+          // rightCTATextColor={theme.colors.accent1}
         />
       </View>
       <View style={styles.primaryCTAContainer}>
@@ -135,7 +140,7 @@ function SendToContainer({
         <KeyPadView
           onPressNumber={onPressNumber}
           onDeletePressed={onDeletePressed}
-          keyColor={theme.colors.primaryCTA}
+          keyColor={theme.colors.accent1}
           ClearIcon={<DeleteIcon />}
         />
       </View>
@@ -170,22 +175,14 @@ const getStyles = (theme: AppTheme) =>
     txnLeftWrapper: {
       width: '20%',
     },
-    leftText: {
-      backgroundColor: theme.colors.primaryCTA,
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: hp(50),
-      width: hp(50),
-      borderRadius: hp(50),
-    },
     txnRightWrapper: {
       width: '80%',
     },
     sendToAddress: {
-      color: theme.colors.primaryCTA,
+      color: theme.colors.headingColor,
     },
     txnID: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default SendToContainer;

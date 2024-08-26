@@ -21,11 +21,11 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     onPress,
     title,
     width = wp(120),
-    buttonColor = theme.colors.primaryCTA,
+    buttonColor = theme.colors.ctaBackColor,
     loading,
     disabled = false,
   } = props;
-  const styles = getStyles(theme, width);
+  const styles = getStyles(theme, width, disabled);
 
   const generatedTestId = React.useMemo(() => {
     return `primary_cta_${title}`;
@@ -40,6 +40,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={disabled ? styles.disableButton : styles.ctaContainerStyle}
       buttonColor={buttonColor}
+      textColor={theme.colors.primaryCTAText}
       onPress={onPress}
       maxFontSizeMultiplier={1}
       loading={loading}
@@ -48,32 +49,35 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     </Button>
   );
 }
-const getStyles = (theme: AppTheme, width) =>
+const getStyles = (theme: AppTheme, width, disabled) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
       alignItems: 'center',
     },
     ctaContainerStyle: {
-      borderRadius: 10,
-      marginVertical: hp(20),
+      borderRadius: 18,
+      // marginVertical: hp(20),
       width: width,
     },
     labelStyle: {
       // minWidth: width,
-      marginVertical: hp(18),
+      marginVertical: hp(20),
+      color: disabled
+        ? theme.colors.disableCTATitle
+        : theme.colors.primaryCTAText,
     },
     primaryCTATitle: {
-      fontSize: 14,
-      fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 14 * 1.4,
-      height: 18,
+      fontSize: 16,
+      fontFamily: Fonts.LufgaSemiBold,
+      lineHeight: 16 * 1.4,
+      fontWeight: '500',
     },
     disableButton: {
-      borderRadius: 10,
-      marginVertical: hp(20),
+      borderRadius: 18,
+      // marginVertical: hp(20),
       width: width,
-      backgroundColor: theme.colors.disabledCTAColor,
+      backgroundColor: theme.colors.disableCtaBackColor,
     },
   });
 export default PrimaryCTA;

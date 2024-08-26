@@ -138,6 +138,51 @@ import CloudKit
     }
   }
   
+  @objc func getUnspents(callback: @escaping ((String) -> Void)){
+    do{
+      let unspents = try self.rgbManager.rgbWallet?.listUnspents(online: self.rgbManager.online, settledOnly: false)
+      var jsonString = "["
+      for (index, unspent) in unspents!.enumerated() {
+              jsonString += "{"
+              let utxo = unspent.utxo
+              jsonString += "\"utxo\":{"
+              jsonString += "\"outpoint\":{"
+              jsonString += "\"txid\":\"\(utxo.outpoint.txid)\","
+              jsonString += "\"vout\":\(utxo.outpoint.vout)"
+              jsonString += "},"
+              jsonString += "\"btcAmount\":\(utxo.btcAmount),"
+              jsonString += "\"colorable\":\(utxo.colorable),"
+              jsonString += "\"exists\":\(utxo.exists)"
+              jsonString += "},"
+                            jsonString += "\"rgbAllocations\":["
+              for (allocIndex, allocation) in unspent.rgbAllocations.enumerated() {
+                  jsonString += "{"
+                  if let assetId = allocation.assetId {
+                      jsonString += "\"assetId\":\"\(assetId)\","
+                  } else {
+                      jsonString += "\"assetId\":null,"
+                  }
+                  jsonString += "\"amount\":\(allocation.amount),"
+                  jsonString += "\"settled\":\(allocation.settled)"
+                  jsonString += "}"
+                  if allocIndex < unspent.rgbAllocations.count - 1 {
+                      jsonString += ","
+                  }
+              }
+              jsonString += "]"
+              jsonString += "}"
+        if index < unspents!.count - 1 {
+                  jsonString += ","
+              }
+          }
+          jsonString += "]"
+      callback(jsonString)
+    }catch {
+      print(error)
+      callback("[]")
+    }
+  }
+  
   func getRgbAssets()->String{
     do{
       let refresh = try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: nil, filter: [])
@@ -168,7 +213,6 @@ import CloudKit
         jsonObject["issuedSupply"] = asset.issuedSupply
         jsonObject["timestamp"] = asset.timestamp
         jsonObject["addedAt"] = asset.addedAt
-        jsonObject["dataPaths"] = asset.media
         jsonObject["assetIface"] = "\(asset.assetIface)"
         jsonArray.append(jsonObject)
       }
@@ -186,18 +230,12 @@ import CloudKit
         jsonRgb121Object["issuedSupply"] = asset.issuedSupply
         jsonRgb121Object["timestamp"] = asset.timestamp
         jsonRgb121Object["addedAt"] = asset.addedAt
-        jsonRgb121Object["dataPaths"] = asset.media
+        jsonRgb121Object["media"] = [
+          "filePath": asset.media?.filePath,
+          "mime": asset.media?.mime,
+        ]
         jsonRgb121Object["assetIface"] = "\(asset.assetIface)"
-        
         var jsonDataPaths: [[String: Any]] = []
-        
-//        asset.dataPaths.forEach { Media in
-//          let jsonDatapath: [String: Any] = [
-//            "mime": Media.mime,
-//            "filePath": Media.filePath
-//          ]
-//          jsonDataPaths.append(jsonDatapath)
-//        }
         jsonRgb121Object["dataPaths"] = jsonDataPaths
         jsonRgb121Array.append(jsonRgb121Object)
       }
@@ -385,13 +423,6 @@ import CloudKit
       return try handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(online: self.rgbManager.online!, name: name, details: description, precision: 0, amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
         var dataPaths: [[String: Any]] = []
-//        asset!.dataPaths.forEach { Media in
-//          let jsonDatapath: [String: Any] = [
-//            "mime": Media.mime,
-//            "filePath": Media.filePath
-//          ]
-//          dataPaths.append(jsonDatapath)
-//        }
         let data: [String: Any] = [
           "assetId": asset?.assetId,
           "name": asset?.name,
@@ -415,13 +446,13 @@ import CloudKit
     }
   }
   
-  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, fee: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do{
       var recipientMap: [String: [Recipient]] = [:]
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount)!, transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(Constants.defaultFeeRate), minConfirmations: 0)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0)
       }
       print(response)
       let data: [String: Any] = [
@@ -466,66 +497,57 @@ import CloudKit
           }
       }
   }
-
   
-  private func uploadBackupOnCloud(recordID: String, filePath: URL, completion: @escaping (_ error: String?, _ isError: Bool) -> Void) {
-    let container = CKContainer.default()
-    let privateDatabase = container.privateCloudDatabase
-    let recordID = CKRecord.ID(recordName:  recordID)
-    
-    privateDatabase.fetch(withRecordID: recordID) { (existingRecord, error) in
-      if let existingRecord = existingRecord {
-        print("Record already exists, removing it...")
-        privateDatabase.delete(withRecordID: existingRecord.recordID) { (deletedRecordID, deleteError) in
-          if let deleteError = deleteError {
-            print("Error deleting existing record: \(deleteError.localizedDescription)")
-            completion(deleteError.localizedDescription, true)
-          } else {
-            print("Deleted existing record...")
-            let record = CKRecord(recordType: "rgb_backup", recordID: recordID)
-            let fileURL = filePath
-            
-            let asset = CKAsset(fileURL: fileURL)
-            privateDatabase.save(record) { (record, error) in
-                if let error = error {
-                  completion(error.localizedDescription, true)
-                    print("Error uploading file to iCloud: \(error.localizedDescription)")
-                } else {
-                    completion("File uploaded successfully to iCloud", false)
-                    print("File uploaded successfully to iCloud")
-                  print("record: \(record)")
-
-                }
-            }
-          }
-        }
-      } else {
-        let record = CKRecord(recordType: "rgb_backup", recordID: recordID)
-        let fileURL = filePath
-        let asset = CKAsset(fileURL: fileURL)
-        privateDatabase.save(record) { (record, error) in
-            if let error = error {
-                print("Error uploading file to iCloud: \(error.localizedDescription)")
-              completion(error.localizedDescription, true)
-            } else {
-                print("File uploaded successfully to iCloud")
-              completion("File uploaded successfully to iCloud", false)
-            }
-        }
+  func getICloudFolder() -> URL? {
+    let fileManager = FileManager.default
+      guard let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents") else {
+          print("iCloud is not available.")
+          return nil
       }
+    return iCloudURL
+  }
+  
+  func uploadToIcloud(url: URL,  completion: @escaping (_ error: String?, _ isError: Bool) -> Void) {
+    print("uploading to iCloud...")
+    let fileManager = FileManager.default
+    let iCloudFolderURL = getICloudFolder()
+    do{
+      if iCloudFolderURL != nil {
+        let fileName = url.lastPathComponent
+        var destinationURL = iCloudFolderURL!.appendingPathComponent(fileName)
+        if(fileManager.fileExists(atPath: destinationURL.path)) {
+          try fileManager.removeItem(atPath: destinationURL.path)
+        }
+        try fileManager.copyItem(at: url, to: destinationURL)
+        
+        let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)
+        if filesURLs.isEmpty {
+                    print("No files found in folder: \(filesURLs)")
+                } else {
+                    print("Files in folder \(filesURLs):")
+                }
+        completion("File uploaded successfully to iCloud", false)
+      } else {
+        completion("iCloud is currently inaccessible. Please check authentication with your iCloud and try again.", false)
+      }
+    } catch {
+      print("Error uploading file to iCloud: \(error.localizedDescription)")
+      completion("Error uploading file to iCloud: \(error.localizedDescription)", false)
     }
   }
   
   @objc func backup(path: String, password: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: password)
+
       let filePath = Utility.getBackupPath(fileName: keys.accountXpubFingerprint)
-      let fileName = String(format: Constants.backupName, password)
+      print("filePath \(String(describing: filePath))")
+
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
-      //      print("backup \(TAG) \(String(describing: response))")
+            print("backup \(TAG) \(String(describing: response))")
       
       var data: [String: Any] = [:]
-      uploadBackupOnCloud(recordID: keys.accountXpubFingerprint, filePath: filePath!, completion: {
+      uploadToIcloud(url: filePath!, completion: {
         (error, isError) in
         if isError {
           print("Error: \(error ?? "Unknown error")")
@@ -570,19 +592,17 @@ import CloudKit
   @objc func restore(mnemonic: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: mnemonic)
-      fetchRecordFromICloud(recordID: keys.accountXpubFingerprint, completion: {
-        (error, isError, url) in
-        if isError {
-          callback(error!)
+      let fileManager = FileManager.default
+      let iCloudFolderURL = getICloudFolder()
+      let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)
+      if filesURLs.isEmpty {
+          print("No files found in folder: \(filesURLs)")
+          callback("false")
         } else {
-          do{
-           try restoreBackup(backupPath: url!, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+          print("Files in folder \(filesURLs):")
+          try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
             callback("true")
-          } catch {
-            callback("Error: \(error.localizedDescription)")
         }
-        }
-      })
     }
     catch let error{
       let data: [String: Any] = [

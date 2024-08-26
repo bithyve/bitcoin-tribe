@@ -1,4 +1,12 @@
-<svg id="icon_notifications" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <path id="bell" d="M21.752,16.9l-1-1.682a7.645,7.645,0,0,1-1.089-3.945V9.389a7.139,7.139,0,1,0-14.279,0v1.883a7.747,7.747,0,0,1-1.089,3.945l-1,1.671a1.809,1.809,0,0,0-.021,1.862,1.845,1.845,0,0,0,1.608.941H8.636a3.961,3.961,0,0,0,7.763,0h3.765a1.812,1.812,0,0,0,1.608-.941,1.833,1.833,0,0,0-.021-1.862Zm-9.234,4.389A2.371,2.371,0,0,1,10.286,19.7H14.75a2.381,2.381,0,0,1-2.232,1.587Zm7.88-3.311a.327.327,0,0,1-.233.137H4.871a.27.27,0,0,1-.233-.4l1-1.682a9.227,9.227,0,0,0,1.322-4.76V9.389a5.553,5.553,0,1,1,11.106,0v1.883a9.227,9.227,0,0,0,1.322,4.76l1,1.682A.256.256,0,0,1,20.4,17.978Z" transform="translate(1.984 2.75)" fill="#e0e0e0"/>
-  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="47" height="47" rx="14.5" stroke="url(#paint0_linear_201_1266)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M24 29.8476C29.6392 29.8476 32.2481 29.1242 32.5 26.2205C32.5 23.3188 30.6812 23.5054 30.6812 19.9451C30.6812 17.1641 28.0452 14 24 14C19.9548 14 17.3188 17.1641 17.3188 19.9451C17.3188 23.5054 15.5 23.3188 15.5 26.2205C15.753 29.1352 18.3618 29.8476 24 29.8476Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26.3889 32.8572C25.0247 34.3719 22.8967 34.3899 21.5195 32.8572" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_201_1266" x1="24" y1="0" x2="24" y2="48" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2F2F2F"/>
+<stop offset="0.5" stop-color="#191919"/>
+<stop offset="1" stop-color="#151515"/>
+</linearGradient>
+</defs>
 </svg>

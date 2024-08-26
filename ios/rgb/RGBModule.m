@@ -128,11 +128,12 @@ RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId
                   blindedUTXO:(NSString *)blindedUTXO
                   amount:(NSString *)amount
                   consignmentEndpoints:(NSString *)consignmentEndpoints
+                  fee:(nonnull NSNumber *)fee
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [
-    helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints callback:^(NSString * _Nonnull response) {
+    helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints fee: fee callback:^(NSString * _Nonnull response) {
       resolve(response);
     }
    ];
@@ -206,6 +207,13 @@ RCT_EXPORT_METHOD(createUtxos:(NSInteger*)feeRate
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [helper createUTXOsWithFeeRate:(NSInteger)feeRate callback:^(NSString * _Nonnull response) {
+    resolve(response);
+  }];
+}
+
+RCT_EXPORT_METHOD(getUnspents:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)rejecter){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [helper getUnspentsWithCallback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }

@@ -6,7 +6,7 @@ import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import GoBack from 'src/assets/images/icon_back.svg';
 import AppTouchable from './AppTouchable';
-import { useNavigation } from '@react-navigation/native';
+import { Route, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
@@ -17,8 +17,7 @@ type AppHeaderProps = {
   enableBack?: boolean;
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
-  actionText?: boolean;
-  onActionTextPress?: () => void;
+  onBackNavigation?;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -27,17 +26,13 @@ function AppHeader(props: AppHeaderProps) {
     subTitle,
     style,
     enableBack = true,
+    onBackNavigation,
     rightIcon,
     onSettingsPress,
-    actionText = false,
-    onActionTextPress,
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const styles = React.useMemo(
-    () => getStyles(theme, actionText),
-    [theme, actionText],
-  );
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   return (
@@ -45,7 +40,7 @@ function AppHeader(props: AppHeaderProps) {
       <View style={styles.iconContainer}>
         {enableBack && (
           <AppTouchable
-            onPress={navigation.goBack}
+            onPress={onBackNavigation ? onBackNavigation : navigation.goBack}
             style={styles.leftIconWrapper}>
             {<GoBack />}
           </AppTouchable>
@@ -61,28 +56,19 @@ function AppHeader(props: AppHeaderProps) {
       {title || subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="pageTitle1" style={styles.headerTitle}>
+            <AppText variant="heading1" style={styles.headerTitle}>
               {title}
             </AppText>
-            <AppText variant="body1" style={styles.headerSubTitle}>
+            <AppText variant="heading3" style={styles.headerSubTitle}>
               {subTitle}
             </AppText>
           </View>
-          {actionText ? (
-            <AppTouchable
-              style={styles.addNewWrapper}
-              onPress={onActionTextPress}>
-              <AppText variant="smallCTA" style={styles.addNewText}>
-                {common.addNew}
-              </AppText>
-            </AppTouchable>
-          ) : null}
         </View>
       ) : null}
     </View>
   );
 }
-const getStyles = (theme: AppTheme, actionText) =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
@@ -98,42 +84,23 @@ const getStyles = (theme: AppTheme, actionText) =>
       marginTop: hp(15),
       marginBottom: hp(20),
     },
-    leftIconWrapper: {
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.4,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-    },
+    leftIconWrapper: {},
     rightIconWrapper: {
       alignSelf: 'flex-end',
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.6,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
     },
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',
     },
     contentWrapper: {
-      width: actionText ? '80%' : '100%',
+      width: '100%',
       marginTop: hp(4),
     },
     headerTitle: {
       color: theme.colors.headingColor,
     },
     headerSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     addNewWrapper: {
       width: '20%',

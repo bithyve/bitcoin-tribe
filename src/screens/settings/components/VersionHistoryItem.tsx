@@ -8,9 +8,12 @@ import { hp } from 'src/constants/responsive';
 
 import { AppTheme } from 'src/theme';
 
-function VersionHistoryItem({ title, releaseNotes, date }) {
+function VersionHistoryItem({ title, releaseNotes, date, lastIndex }) {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, lastIndex),
+    [theme, lastIndex],
+  );
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -21,78 +24,75 @@ function VersionHistoryItem({ title, releaseNotes, date }) {
   return (
     <View style={styles.container}>
       <View style={styles.dotView} />
-      <View style={styles.wrapper}>
-        <AppTouchable onPress={toggleCollapse} style={styles.header}>
-          <AppText variant="body1" style={styles.version}>
-            {title}
-          </AppText>
-          <AppText variant="body2" style={styles.version}>
-            {moment(date).fromNow()}
-          </AppText>
-        </AppTouchable>
-        {!isCollapsed && releaseNotes && (
-          <View style={styles.content}>
-            <AppText variant="body2" style={styles.releaseNotes}>
-              {releaseNotes}
+      <View>
+        <View style={styles.borderLeft} />
+        <View style={styles.wrapper}>
+          <AppTouchable onPress={toggleCollapse} style={styles.header}>
+            <AppText variant="body1" style={styles.version}>
+              {title}
             </AppText>
-          </View>
-        )}
+            <AppText variant="body2" style={styles.versionSubTitle}>
+              {moment(date).fromNow()}
+            </AppText>
+          </AppTouchable>
+          {!isCollapsed && releaseNotes && (
+            <View style={styles.content}>
+              <AppText variant="body2" style={styles.releaseNotes}>
+                {releaseNotes}
+              </AppText>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, lastIndex) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      marginBottom: 10,
-      marginVertical: hp(10),
-      paddingTop: hp(15),
     },
     header: {
       marginLeft: hp(20),
     },
     wrapper: {
-      borderLeftColor: theme.colors.primaryCTA,
-      borderLeftWidth: 1,
+      // borderLeftColor: !lastIndex && theme.colors.accent2,
+      // borderLeftWidth: !lastIndex && 1,
+      paddingBottom: hp(30),
       //   borderStyle: 'dashed',
     },
     version: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
+    },
+    versionSubTitle: {
+      color: theme.colors.secondaryHeadingColor,
     },
     content: {
       backgroundColor: theme.colors.cardBackground,
       padding: 15,
       marginHorizontal: 15,
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       borderRadius: 10,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 0,
-      shadowOpacity: 0.2,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
     },
     dotView: {
-      backgroundColor: theme.colors.primaryCTA,
-      height: 12,
-      width: 12,
+      backgroundColor: theme.colors.accent2,
+      height: 11,
+      width: 11,
       borderRadius: 40,
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 5,
-      shadowOpacity: 1,
-      elevation: 8,
-      shadowOffset: {
-        width: 1,
-        height: 1,
-      },
       top: 0,
-      right: -6,
+      left: 6,
+      marginTop: 5,
     },
     releaseNotes: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
+    },
+    borderLeft: {
+      position: 'absolute',
+      left: 0,
+      top: 5,
+      bottom: -10,
+      width: !lastIndex && 2,
+      backgroundColor: !lastIndex && theme.colors.accent2,
     },
   });
 export default VersionHistoryItem;

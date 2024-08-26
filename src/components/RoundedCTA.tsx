@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 
 import Fonts from 'src/constants/Fonts';
-import { wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
+import GradientView from './GradientView';
 
 type RoundedCTAProps = {
   icon?: React.ReactNode;
@@ -15,41 +16,53 @@ type RoundedCTAProps = {
 };
 
 function RoundedCTA(props: RoundedCTAProps) {
+  const theme: AppTheme = useTheme();
   const { icon, buttonColor, onPress, title, height, width } = props;
-  const styles = getStyles(width);
+  const styles = getStyles(width, buttonColor);
   return (
-    <Button
-      icon={() => icon}
-      mode="contained"
-      uppercase={false}
-      labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+    <GradientView
       style={styles.ctaContainerStyle}
-      contentStyle={styles.contentStyle}
-      buttonColor={buttonColor}
-      onPress={onPress}
-      maxFontSizeMultiplier={1}>
-      {title}
-    </Button>
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
+      <Button
+        icon={() => icon}
+        mode="outlined"
+        uppercase={false}
+        labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+        style={styles.ctaContainerStyle}
+        contentStyle={styles.contentStyle}
+        // buttonColor={buttonColor}
+        textColor={theme.colors.headingColor}
+        onPress={onPress}
+        maxFontSizeMultiplier={1}>
+        {title}
+      </Button>
+    </GradientView>
   );
 }
-const getStyles = width =>
+const getStyles = (width, buttonColor) =>
   StyleSheet.create({
     ctaContainerStyle: {
-      borderRadius: 18,
+      borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
+      borderColor: buttonColor,
+      borderWidth: 1,
     },
     contentStyle: {
       width: width,
     },
     labelStyle: {
-      marginLeft: 0,
+      marginLeft: 5,
     },
     roundedCTATitle: {
-      fontSize: 13,
-      fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 13 * 1.5,
-      height: 18,
+      fontSize: 16,
+      fontFamily: Fonts.LufgaSemiBold,
+      lineHeight: 16 * 1.5,
+      height: 25,
       marginLeft: 10,
     },
   });

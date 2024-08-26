@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -19,15 +19,13 @@ function SendScreen({ route, navigation }) {
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
-
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      <QRScanner />
+      <View style={styles.scannerWrapper}>{!visible && <QRScanner />}</View>
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
-        style={styles.advanceOptionStyle}
         onPress={() => {
           receiveData === 'send'
             ? setVisible(true)
@@ -47,24 +45,8 @@ function SendScreen({ route, navigation }) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    advanceOptionStyle: {
+    scannerWrapper: {
       flex: 1,
-      position: 'absolute',
-      bottom: 10,
-      margin: hp(20),
-    },
-    qrCodeContainer: {
-      height: wp(340),
-      width: wp(340),
-      alignSelf: 'center',
-      justifyContent: 'center',
-      marginTop: wp(35),
-      borderRadius: wp(8),
-      overflow: 'hidden',
-    },
-    camera: {
-      height: wp(340),
-      width: wp(340),
     },
   });
 export default SendScreen;

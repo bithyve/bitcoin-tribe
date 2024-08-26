@@ -23,6 +23,8 @@ import {
   MetaData,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
+import { BackupHistorySchema } from './backupHistory';
+import { CloudBackupHistorySchema } from './cloudBackupHistory';
 
 export default [
   TribeAppSchema,
@@ -49,4 +51,6 @@ export default [
   MetaData,
   CollectibleMediaSchema,
   CollectibleSchema,
+  BackupHistorySchema,
+  CloudBackupHistorySchema,
 ];

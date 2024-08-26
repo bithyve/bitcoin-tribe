@@ -8,9 +8,11 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 
-import ConnectIcon from 'src/assets/images/icon_connect.svg';
-import DisConnectIcon from 'src/assets/images/icon_disconnect.svg';
-import DeleteIcon from 'src/assets/images/icon_close.svg';
+import ConnectIcon from 'src/assets/images/connected.svg';
+import DisConnectIcon from 'src/assets/images/disconnected.svg';
+import ConnectDeleteIcon from 'src/assets/images/connectedDelete.svg';
+import DisConnectDeleteIcon from 'src/assets/images/disconnectDelete.svg';
+import GradientView from 'src/components/GradientView';
 
 type nodeDetailsCardProps = {
   ipAddress: string;
@@ -26,36 +28,36 @@ function NodeDetailsCard(props: nodeDetailsCardProps) {
 
   return (
     <AppTouchable style={styles.container}>
-      <View style={styles.wrapper1}>
+      <GradientView
+        style={styles.wrapper1}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         <View style={styles.ipAddressWrapper}>
           <AppText variant="body2" style={styles.labelStyle}>
             {settings.ipAddress}
           </AppText>
-          <AppText variant="body1" style={styles.labelStyle}>
+          <AppText variant="body1" style={styles.valueStyle}>
             {ipAddress}
           </AppText>
         </View>
-        <View>
+        <View style={styles.portWrapper}>
           <AppText variant="body2" style={styles.labelStyle}>
             {settings.portNumber}
           </AppText>
-          <AppText variant="body1" style={styles.labelStyle}>
+          <AppText variant="body1" style={styles.valueStyle}>
             {portNumber}
           </AppText>
         </View>
-      </View>
+      </GradientView>
       <View style={styles.wrapper2}>
         <View style={styles.buttonWrapper1}>
           {status ? <ConnectIcon /> : <DisConnectIcon />}
-          <AppText variant="smallCTA" style={styles.buttonTextStyle}>
-            {status ? common.connect : common.disconnect}
-          </AppText>
         </View>
         <View style={styles.buttonWrapper2}>
-          <DeleteIcon />
-          <AppText variant="smallCTA" style={styles.buttonTextStyle}>
-            {common.delete}
-          </AppText>
+          {!status && <DisConnectDeleteIcon />}
         </View>
       </View>
     </AppTouchable>
@@ -65,51 +67,51 @@ const getStyles = (theme: AppTheme, status) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.cardBackground,
       alignItems: 'center',
-      padding: hp(15),
+      justifyContent: 'space-around',
       borderRadius: 10,
-      marginTop: hp(10),
+      marginTop: status ? hp(10) : 0,
       marginBottom: status ? hp(35) : hp(5),
-      // need to work
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 1,
-      shadowOpacity: 0.20,
-      elevation: 0.5,
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
+      paddingBottom: status ? hp(35) : 0,
+      borderBottomColor: status ? theme.colors.borderColor : 'transparent',
+      borderBottomWidth: status ? 1 : 0,
     },
     labelStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
+    },
+    valueStyle: {
+      color: theme.colors.headingColor,
     },
     wrapper1: {
-      width: '45%',
+      flexDirection: 'row',
+      width: status ? '78%' : '60%',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      padding: hp(15),
+      borderRadius: 15,
     },
     wrapper2: {
-      width: '55%',
+      width: status ? '20%' : '40%',
       flexDirection: 'row',
-      marginTop: hp(20),
+      justifyContent: 'flex-end',
     },
     buttonTextStyle: {
       color: theme.colors.accent1,
     },
     buttonWrapper1: {
-      width: '65%',
-      alignItems: 'center',
-      borderRightColor: theme.colors.borderColor,
-      borderRightWidth: 0.5,
-      paddingRight: hp(2),
+      width: '42%',
     },
     buttonWrapper2: {
-      width: '35%',
+      width: '52%',
       alignItems: 'center',
       justifyContent: 'flex-end',
       paddingLeft: hp(10),
     },
     ipAddressWrapper: {
-      marginBottom: hp(10),
+      width: '50%',
+    },
+    portWrapper: {
+      width: '50%',
     },
   });
 export default NodeDetailsCard;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   StyleProp,
   StyleSheet,
@@ -26,6 +25,7 @@ type ModalContainerProps = {
   children: React.ReactNode;
   conatinerModalStyle?: StyleProp<ViewStyle>;
   height?: string;
+  enableCloseIcon?: boolean;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
@@ -38,10 +38,11 @@ const ModalContainer = (props: ModalContainerProps) => {
     subTitle,
     conatinerModalStyle,
     height,
+    enableCloseIcon = true,
   } = props;
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(true);
-  const styles = getStyles(theme, height, isKeyboardVisible);
+  const styles = getStyles(theme, height, isKeyboardVisible, enableCloseIcon);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -68,29 +69,43 @@ const ModalContainer = (props: ModalContainerProps) => {
       onBackdropPress={onDismiss}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
-      backdropColor={theme.colors.cardBackground}
-      backdropOpacity={0.9}
+      backdropColor={theme.colors.primaryBackground}
+      backdropOpacity={0.8}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
-        <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-          <IconClose />
-        </AppTouchable>
+        <View style={styles.dashViewWrapper}>
+          <View style={styles.dashView} />
+        </View>
         <View style={styles.headingWrapper}>
-          <AppText variant="heading1" style={styles.titleText}>
-            {title}
-          </AppText>
-          {subTitle ? (
-            <AppText variant="body1" style={styles.subTitleText}>
-              {subTitle}
+          <View style={styles.contentWrapper}>
+            <AppText
+              variant={enableCloseIcon ? 'heading1' : 'heading2'}
+              style={styles.titleText}>
+              {title}
             </AppText>
-          ) : null}
+            {subTitle ? (
+              <AppText variant="body1" style={styles.subTitleText}>
+                {subTitle}
+              </AppText>
+            ) : null}
+          </View>
+          {enableCloseIcon && (
+            <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
+              <IconClose />
+            </AppTouchable>
+          )}
         </View>
         {children}
       </KeyboardAvoidView>
     </Modal>
   );
 };
-const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
+const getStyles = (
+  theme: AppTheme,
+  height,
+  isKeyboardVisible,
+  enableCloseIcon,
+) =>
   StyleSheet.create({
     container: {
       flex: Platform.OS === 'ios' ? 1 : 0,
@@ -98,34 +113,44 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
     },
     containerStyle: {
       height: isKeyboardVisible ? height : 'auto',
-      width: '94%',
+      width: '100%',
       position: 'absolute',
-      bottom: 0,
-      backgroundColor: theme.colors.cardBackground,
+      bottom: Platform.OS === 'ios' ? 10 : 0,
+      left: 0,
+      backgroundColor: theme.colors.modalBackColor,
       padding: hp(25),
-      borderRadius: 10,
-      marginHorizontal: 10,
+      borderTopLeftRadius: hp(30),
+      borderTopRightRadius: hp(30),
+      marginHorizontal: 0,
       marginBottom: isKeyboardVisible ? 0 : 5,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 3,
-      shadowOpacity: 0.2,
-      elevation: 5,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-    },
-    closeIconWrapper: {
-      alignSelf: 'flex-end',
     },
     headingWrapper: {
-      marginTop: hp(10),
+      flexDirection: 'row',
+      width: '100%',
+      // alignItems: 'center',
+      marginBottom: hp(50),
+    },
+    contentWrapper: {
+      width: enableCloseIcon ? '80%' : '100%',
+    },
+    closeIconWrapper: {
+      width: '20%',
+      alignItems: 'center',
     },
     titleText: {
       color: theme.colors.headingColor,
     },
     subTitleText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
+    },
+    dashViewWrapper: {
+      alignItems: 'center',
+    },
+    dashView: {
+      height: hp(3),
+      width: hp(60),
+      marginBottom: hp(30),
+      backgroundColor: theme.colors.headingColor,
     },
   });
 export default ModalContainer;

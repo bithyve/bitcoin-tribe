@@ -35,6 +35,18 @@ export type AppStackParams = {
   [NavigationRoutes.APPVERSIONHISTORY]: undefined;
   [NavigationRoutes.TRANSFERDETAILS]: undefined;
   [NavigationRoutes.COINALLTRANSACTION]: undefined;
+  [NavigationRoutes.VIEWUNSPENT]: undefined;
+  [NavigationRoutes.CREATEPIN]: undefined;
+  [NavigationRoutes.COLLECTIBLEDETAILS]: undefined;
+  [NavigationRoutes.COLLECTIBLEMETADATA]: undefined;
+  [NavigationRoutes.ADDASSET]: undefined;
+  [NavigationRoutes.APPBACKUPMENU]: undefined;
+  [NavigationRoutes.WALLETBACKUPHISTORY]: undefined;
+  [NavigationRoutes.SCANASSET]: undefined;
+  [NavigationRoutes.RGBCREATEUTXO]: undefined;
+  [NavigationRoutes.BACKUPPHRASESETTING]: undefined;
+  [NavigationRoutes.ENTERSEEDSCREEN]: undefined;
+  [NavigationRoutes.LOGIN]: undefined;
   // Add other routes as needed
 };
 

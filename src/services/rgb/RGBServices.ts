@@ -113,12 +113,14 @@ export default class RGBServices {
     blindedUTXO: string,
     amount: string,
     consignmentEndpoints: string,
+    feePerByte,
   ): Promise<{}> => {
     const data = await RGB.sendAsset(
       assetId,
       blindedUTXO,
       amount,
       consignmentEndpoints,
+      feePerByte,
     );
     return JSON.parse(data);
   };
@@ -130,7 +132,7 @@ export default class RGBServices {
 
   static backup = async (path: string, password: string): Promise<string> => {
     const data = await RGB.backup(path, password);
-    return data;
+    return JSON.parse(data);
   };
 
   static isBackupRequired = async (): Promise<{}> => {

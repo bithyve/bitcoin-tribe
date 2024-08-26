@@ -25,7 +25,7 @@ const TransactionButtons = (props: transButtonProps) => {
       <View style={styles.buttonWrapper}>
         <RoundedCTA
           icon={<IconSend />}
-          buttonColor={theme.colors.primaryCTA}
+          buttonColor={theme.colors.accent1}
           title={common.send}
           width={wp(85)}
           onPress={onPressSend}

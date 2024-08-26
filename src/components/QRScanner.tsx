@@ -1,6 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
-import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Linking,
+  PermissionsAndroid,
+  Alert,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
@@ -19,6 +25,7 @@ import config from 'src/utils/config';
 import Toast from './Toast';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
@@ -27,19 +34,80 @@ const QRScanner = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const wallet: Wallet = useWallets({}).wallets[0];
+  const { translations } = useContext(LocalizationContext);
+  const { sendScreen } = translations;
+
+  // useEffect(() => {
+  //   request(
+  //     Platform.OS === 'ios'
+  //       ? PERMISSIONS.IOS.CAMERA
+  //       : PERMISSIONS.ANDROID.CAMERA,
+  //   ).then(result => {
+  //     if (result === 'granted') {
+  //       setCameraPermission(result);
+  //     } else {
+  //       openSettings();
+  //     }
+  //   });
+  // }, []);
+
+  const showPermissionDeniedAlert = () => {
+    Alert.alert(
+      'Camera Permission Required',
+      'This app needs access to your camera to function properly. Please allow camera access in your device settings.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Open Settings', onPress: () => openSettings() },
+      ],
+    );
+  };
+
+  const requestCameraPermission = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        // Request permission for Android
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'This app needs access to your camera.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          setCameraPermission('granted');
+        } else {
+          openSettings();
+        }
+      } else if (Platform.OS === 'ios') {
+        // Request permission for iOS
+        const status = await Camera.getCameraPermissionStatus();
+
+        if (status === 'granted') {
+          setCameraPermission('granted');
+        } else if (status === 'not-determined') {
+          const newStatus = await Camera.requestCameraPermission();
+          setCameraPermission(
+            newStatus === 'authorized' ? 'granted' : 'denied',
+          );
+        } else {
+          // openSettings();
+          showPermissionDeniedAlert();
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const openSettings = () => {
+    Linking.openURL('app-settings:');
+  };
 
   useEffect(() => {
-    request(
-      Platform.OS === 'ios'
-        ? PERMISSIONS.IOS.CAMERA
-        : PERMISSIONS.ANDROID.CAMERA,
-    ).then(result => {
-      if (result === 'granted') {
-        setCameraPermission(result);
-      } else {
-        openSettings();
-      }
-    });
+    requestCameraPermission();
   }, []);
 
   const onCodeScanned = useCallback((codes: Code[]) => {
@@ -67,8 +135,15 @@ const QRScanner = () => {
           paymentURIAmount: amount,
         });
         break;
+      case PaymentInfoKind.RGB_INVOICE:
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          wallet,
+          address,
+          rgbInvoice: value,
+        });
+        break;
       default:
-        Toast('Invalid Bitcoin address');
+        Toast(sendScreen.invalidBtcAddress, false, true);
     }
   }, []);
 
@@ -112,7 +187,7 @@ const getStyles = (theme: AppTheme) =>
       width: wp(330),
       alignSelf: 'center',
       justifyContent: 'center',
-      marginTop: wp(60),
+      marginTop: wp(50),
       borderRadius: wp(8),
       overflow: 'hidden',
     },

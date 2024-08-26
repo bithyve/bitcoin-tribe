@@ -33,7 +33,9 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       />
       <LabeledContent
         label={wallet.date}
-        content={moment(transaction.updatedAt).format('DD MMM YY  •  hh:mm a')}
+        content={moment
+          .unix(transaction.updatedAt)
+          .format('DD MMM YY  •  hh:mm a')}
       />
     </View>
   );

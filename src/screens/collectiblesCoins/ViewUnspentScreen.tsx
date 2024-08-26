@@ -1,31 +1,29 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, FlatList, View } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { useMutation, UseMutationResult } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import Colors from 'src/theme/Colors';
-import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
 import { useTheme } from 'react-native-paper';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import openLink from 'src/utils/OpenLink';
+import config from 'src/utils/config';
+import { NetworkType } from 'src/services/wallets/enums';
+import AppTouchable from 'src/components/AppTouchable';
+import UnspentUTXOElement from './UnspentUTXOElement';
 
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    titleStyle: {
-      color: theme.colors.bodyColor,
-    },
-    containerItem: {
-      marginTop: hp(10),
-    },
-  });
+const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
 const ViewUnspentScreen = () => {
   const { mutate, data, isLoading }: UseMutationResult<RgbUnspent[]> =
     useMutation(ApiHandler.viewUtxos);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { wallet } = translations;
 
   useEffect(() => {
     mutate();
@@ -35,9 +33,17 @@ const ViewUnspentScreen = () => {
     console.log('data', JSON.stringify(data));
   }, [data]);
 
+  const redirectToBlockExplorer = txid => {
+    openLink(
+      `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${txid}`,
+    );
+  };
+
   return (
     <ScreenContainer>
-      <AppHeader title={'Unspent'} subTitle={''} enableBack={true} />
+      <AppHeader title={wallet.unspentTitle} subTitle={''} enableBack={true} />
       {isLoading ? (
         <ActivityIndicator
           size="large"
@@ -48,35 +54,14 @@ const ViewUnspentScreen = () => {
         <FlatList
           data={data}
           renderItem={({ item }) => (
-            <View style={styles.containerItem}>
-              <View style={{ flexDirection: 'row' }}>
-                <AppText
-                  selectable
-                  style={styles.titleStyle}
-                  numberOfLines={1}
-                  variant="subTitle">
-                  {`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
-                </AppText>
-                <AppText
-                  selectable
-                  style={styles.titleStyle}
-                  variant="subTitle">
-                  {`${item.utxo.btcAmount} sats`}
-                </AppText>
-              </View>
-              {item.rgbAllocations[0]?.assetId &&
-                item.rgbAllocations.map(allocation => (
-                  <View
-                    style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                    <AppText style={styles.titleStyle} variant="body2">
-                      {allocation.assetId}
-                    </AppText>
-                    <AppText
-                      style={styles.titleStyle}
-                      variant="body2">{`${allocation.amount}`}</AppText>
-                  </View>
-                ))}
-            </View>
+            <AppTouchable
+              onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
+              <UnspentUTXOElement
+                transID={`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
+                satsAmount={`${item.utxo.btcAmount}`}
+                assetID={item.rgbAllocations && item.rgbAllocations}
+              />
+            </AppTouchable>
           )}
         />
       )}

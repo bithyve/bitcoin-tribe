@@ -1,7 +1,15 @@
-<svg id="icon_scanner" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-  <g id="Group_47430" data-name="Group 47430" transform="translate(-2429 -327)">
-    <path id="full-screen" d="M5,2A2.015,2.015,0,0,0,3,4V7A1,1,0,1,0,5,7V4H8A1,1,0,1,0,8,2ZM16,2a1,1,0,1,0,0,2h3V7a1,1,0,1,0,2,0V4a2.015,2.015,0,0,0-2-2ZM3.984,15.986A1,1,0,0,0,3,17v3a2.015,2.015,0,0,0,2,2H8a1,1,0,1,0,0-2H5V17a1,1,0,0,0-1.016-1.014Zm16,0A1,1,0,0,0,19,17v3H16a1,1,0,1,0,0,2h3a2.015,2.015,0,0,0,2-2V17a1,1,0,0,0-1.016-1.014Z" transform="translate(2432 330)" fill="#e0e0e0"/>
-    <rect id="Rectangle_8440" data-name="Rectangle 8440" width="23" height="2" rx="1" transform="translate(2433 341)" fill="#e0e0e0"/>
-  </g>
-  <rect id="icon_trim" data-name="icon trim" width="30" height="30" fill="none"/>
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="47" height="47" rx="14.5" stroke="url(#paint0_linear_201_1163)"/>
+<path d="M34.5 24.8057H13.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M32.6299 20.5951V19.0821C32.6299 17.0211 30.9589 15.3501 28.8969 15.3501H27.6919" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.3701 20.5951V19.0821C15.3701 17.0211 17.0411 15.3501 19.1031 15.3501H20.3391" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M32.6299 24.8047V28.8787C32.6299 30.9407 30.9589 32.6117 28.8969 32.6117H27.6919" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.3701 24.8047V28.8787C15.3701 30.9407 17.0411 32.6117 19.1031 32.6117H20.3391" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_201_1163" x1="24" y1="0" x2="24" y2="48" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2F2F2F"/>
+<stop offset="0.5" stop-color="#191919"/>
+<stop offset="1" stop-color="#151515"/>
+</linearGradient>
+</defs>
 </svg>

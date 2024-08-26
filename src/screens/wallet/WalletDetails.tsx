@@ -15,7 +15,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery as realmUseQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
 
-function WalletDetails({ navigation }) {
+function WalletDetails({ navigation, route }) {
+  const { autoRefresh = false } = route.params || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
@@ -50,6 +51,7 @@ function WalletDetails({ navigation }) {
           navigation={navigation}
           transactions={wallet.specs.transactions}
           wallet={wallet}
+          autoRefresh={autoRefresh}
         />
       </View>
       <ModalContainer
@@ -73,13 +75,13 @@ const styles = StyleSheet.create({
     height: windowHeight < 670 ? '42%' : '35%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: wp(25),
+    padding: wp(16),
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '53%' : '60%',
-    marginHorizontal: wp(25),
+    height: windowHeight < 670 ? '50%' : '65%',
+    marginHorizontal: wp(16),
   },
 });
 export default WalletDetails;

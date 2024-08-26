@@ -3,10 +3,11 @@ import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrow from 'src/assets/images/icon_right_arrow.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
+import GradientView from './GradientView';
 
 type OptionCardProps = {
   icon?: React.ReactNode;
@@ -21,15 +22,21 @@ function OptionCard(props: OptionCardProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable style={[styles.container, style]} onPress={() => onPress()}>
-      <View>
+    <AppTouchable onPress={onPress}>
+      <GradientView
+        style={[styles.container, style]}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.menuCardTitle}>
+            <AppText variant="heading3" style={styles.menuCardTitle}>
               {title}
             </AppText>
-            <AppText variant="body2" style={styles.menuCardSubTitle}>
+            <AppText variant="body1" style={styles.menuCardSubTitle}>
               {subTitle}
             </AppText>
           </View>
@@ -37,7 +44,7 @@ function OptionCard(props: OptionCardProps) {
             <IconArrow />
           </View>
         </View>
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 }
@@ -45,38 +52,29 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      paddingHorizontal: hp(20),
-      paddingVertical: hp(10),
+      padding: hp(16),
       marginVertical: hp(10),
-      borderRadius: 10,
-      backgroundColor: theme.colors.cardBackground,
-      // need to work
-      shadowColor: theme.colors.cardShadowColor,
-      shadowRadius: 1,
-      shadowOpacity: 0.20,
-      elevation: 0.5,
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
+      borderRadius: 30,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: '85%',
       marginVertical: hp(5),
     },
     menuCardTitle: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
       lineHeight: 26,
     },
     menuCardSubTitle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     iconWrapper: {
-      width: '10%',
+      width: '15%',
       justifyContent: 'center',
     },
     iconContainer: {
