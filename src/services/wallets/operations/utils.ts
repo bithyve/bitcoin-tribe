@@ -22,6 +22,7 @@ import { OutputUTXOs } from '../interfaces';
 import { whirlPoolWalletTypes } from '../factories/WalletFactory';
 import ecc from './taproot-utils/noble_ecc';
 import { Signer, Vault } from '../interfaces/vault';
+import Toast from 'src/components/Toast';
 
 bitcoinJS.initEccLib(ecc);
 const bip32 = BIP32Factory(ecc);
@@ -226,6 +227,19 @@ export default class WalletUtilities {
       bitcoinJS.address.toOutputScript(address, network);
       return true;
     } catch (err) {
+      return false;
+    }
+  };
+  static isValidRGBAddress = scannedStr => {
+    // Match for utxo
+    const utxoMatch = scannedStr.match(/~\/~\/([^?]+)\?/);
+    const utxo = utxoMatch ? utxoMatch[1] : null;
+    // Match for endpoint
+    const endpointMatch = scannedStr.match(/endpoints=([^&]+)/);
+    const endpoint = endpointMatch ? endpointMatch[1] : null;
+    if (utxo && endpoint) {
+      return true;
+    } else {
       return false;
     }
   };
@@ -703,6 +717,7 @@ export default class WalletUtilities {
 
   static addressDiff = (scannedStr: string, network: bitcoinJS.Network) => {
     scannedStr = scannedStr.replace('BITCOIN', 'bitcoin');
+    console.log('scannedStr', scannedStr);
     if (WalletUtilities.isPaymentURI(scannedStr)) {
       const { address, options } = WalletUtilities.decodePaymentURI(scannedStr);
       if (WalletUtilities.isValidAddress(address, network)) {
@@ -718,8 +733,12 @@ export default class WalletUtilities {
         type: PaymentInfoKind.ADDRESS,
         address: scannedStr,
       };
+    } else if (WalletUtilities.isValidRGBAddress(scannedStr)) {
+      return {
+        type: PaymentInfoKind.RGB_INVOICE,
+        address: scannedStr,
+      };
     }
-
     return {
       type: null,
     };

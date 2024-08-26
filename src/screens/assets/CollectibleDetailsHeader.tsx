@@ -52,7 +52,7 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       </View>
       <TransactionButtons
         onPressSend={() =>
-          navigation.navigate(NavigationRoutes.SENDASSET, {
+          navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: collectible.assetId,
           })
         }

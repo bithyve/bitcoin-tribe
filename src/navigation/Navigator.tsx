@@ -44,6 +44,7 @@ import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
 import AddAsset from 'src/screens/home/components/AddAsset';
 import AppBackupMenu from 'src/screens/settings/AppBackupMenu';
 import WalletBackupHistory from 'src/screens/settings/WalletBackupHistory';
+import ScanAssetScreen from 'src/screens/assets/ScanAssetScreen';
 import Login from 'src/screens/onBoarding/Login';
 import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
@@ -163,6 +164,10 @@ function AppStack() {
           component={CollectibleMetaData}
         />
         <Stack.Screen name={NavigationRoutes.SENDASSET} component={SendAsset} />
+        <Stack.Screen
+          name={NavigationRoutes.SCANASSET}
+          component={ScanAssetScreen}
+        />
         <Stack.Screen name={NavigationRoutes.APPINFO} component={AppInfo} />
         <Stack.Screen
           name={NavigationRoutes.APPVERSIONHISTORY}

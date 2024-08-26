@@ -19,7 +19,6 @@ function SendScreen({ route, navigation }) {
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
-
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />

@@ -70,6 +70,13 @@ const QRScanner = () => {
           paymentURIAmount: amount,
         });
         break;
+      case PaymentInfoKind.RGB_INVOICE:
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          wallet,
+          address,
+          rgbInvoice: value,
+        });
+        break;
       default:
         Toast(sendScreen.invalidBtcAddress, false, true);
     }
