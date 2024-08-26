@@ -34,7 +34,7 @@ function EnterPinContainer() {
   const { setKey } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
-  console.log('isLoading', login, login.isLoading);
+
   useEffect(() => {
     biometricAuth();
   }, []);
