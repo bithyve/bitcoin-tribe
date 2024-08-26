@@ -11,7 +11,7 @@ import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
 import { windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
+// import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -29,7 +29,7 @@ type ProfileDetailsProps = {
   handlePickImage: () => void;
   inputPlaceholder: string;
   edit?: boolean;
-  onSettingsPress?: () => void;
+  // onSettingsPress?: () => void;
   primaryStatus?: string;
   disabled?: boolean;
   primaryCTATitle: string;
@@ -47,7 +47,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     handlePickImage,
     inputPlaceholder,
     edit,
-    onSettingsPress,
+    // onSettingsPress,
     primaryStatus,
     disabled,
     primaryCTATitle,
@@ -60,8 +60,8 @@ function ProfileDetails(props: ProfileDetailsProps) {
       <AppHeader
         title={title}
         subTitle={subTitle}
-        rightIcon={<SettingIcon />}
-        onSettingsPress={onSettingsPress}
+        // rightIcon={<SettingIcon />}
+        // onSettingsPress={onSettingsPress}
         style={styles.wrapper}
       />
       <KeyboardAvoidingView
