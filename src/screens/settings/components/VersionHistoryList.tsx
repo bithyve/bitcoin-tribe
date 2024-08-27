@@ -33,15 +33,16 @@ function VersionHistoryList() {
   const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
     getJSONFromRealmObject,
   );
-
+  const lastIndex = VersionHistoryData.length - 1;
   return (
     <FlatList
       data={VersionHistoryData.reverse()}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <VersionHistoryItem
           title={item.title}
           date={item.date}
           releaseNotes={item.releaseNotes}
+          lastIndex={lastIndex === index}
         />
       )}
     />

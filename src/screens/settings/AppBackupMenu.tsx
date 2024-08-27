@@ -30,7 +30,9 @@ function AppBackupMenu({ navigation }) {
       onPress: () =>
         backup
           ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
-          : navigation.navigate(NavigationRoutes.APPBACKUP),
+          : navigation.navigate(NavigationRoutes.APPBACKUP, {
+              viewOnly: false,
+            }),
     },
     {
       title: settings.rgbAssetsbackup,

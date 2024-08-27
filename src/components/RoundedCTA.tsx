@@ -4,6 +4,7 @@ import { Button, useTheme } from 'react-native-paper';
 
 import Fonts from 'src/constants/Fonts';
 import { AppTheme } from 'src/theme';
+import GradientView from './GradientView';
 
 type RoundedCTAProps = {
   icon?: React.ReactNode;
@@ -19,19 +20,27 @@ function RoundedCTA(props: RoundedCTAProps) {
   const { icon, buttonColor, onPress, title, height, width } = props;
   const styles = getStyles(width, buttonColor);
   return (
-    <Button
-      icon={() => icon}
-      mode="outlined"
-      uppercase={false}
-      labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+    <GradientView
       style={styles.ctaContainerStyle}
-      contentStyle={styles.contentStyle}
-      // buttonColor={buttonColor}
-      textColor={theme.colors.headingColor}
-      onPress={onPress}
-      maxFontSizeMultiplier={1}>
-      {title}
-    </Button>
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
+      <Button
+        icon={() => icon}
+        mode="outlined"
+        uppercase={false}
+        labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+        style={styles.ctaContainerStyle}
+        contentStyle={styles.contentStyle}
+        // buttonColor={buttonColor}
+        textColor={theme.colors.headingColor}
+        onPress={onPress}
+        maxFontSizeMultiplier={1}>
+        {title}
+      </Button>
+    </GradientView>
   );
 }
 const getStyles = (width, buttonColor) =>

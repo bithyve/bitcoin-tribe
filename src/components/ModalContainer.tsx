@@ -25,6 +25,7 @@ type ModalContainerProps = {
   children: React.ReactNode;
   conatinerModalStyle?: StyleProp<ViewStyle>;
   height?: string;
+  enableCloseIcon?: boolean;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
@@ -37,10 +38,11 @@ const ModalContainer = (props: ModalContainerProps) => {
     subTitle,
     conatinerModalStyle,
     height,
+    enableCloseIcon = true,
   } = props;
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(true);
-  const styles = getStyles(theme, height, isKeyboardVisible);
+  const styles = getStyles(theme, height, isKeyboardVisible, enableCloseIcon);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -76,7 +78,9 @@ const ModalContainer = (props: ModalContainerProps) => {
         </View>
         <View style={styles.headingWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="heading1" style={styles.titleText}>
+            <AppText
+              variant={enableCloseIcon ? 'heading1' : 'heading2'}
+              style={styles.titleText}>
               {title}
             </AppText>
             {subTitle ? (
@@ -85,16 +89,23 @@ const ModalContainer = (props: ModalContainerProps) => {
               </AppText>
             ) : null}
           </View>
-          <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-            <IconClose />
-          </AppTouchable>
+          {enableCloseIcon && (
+            <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
+              <IconClose />
+            </AppTouchable>
+          )}
         </View>
         {children}
       </KeyboardAvoidView>
     </Modal>
   );
 };
-const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
+const getStyles = (
+  theme: AppTheme,
+  height,
+  isKeyboardVisible,
+  enableCloseIcon,
+) =>
   StyleSheet.create({
     container: {
       flex: Platform.OS === 'ios' ? 1 : 0,
@@ -120,7 +131,7 @@ const getStyles = (theme: AppTheme, height, isKeyboardVisible) =>
       marginBottom: hp(50),
     },
     contentWrapper: {
-      width: '80%',
+      width: enableCloseIcon ? '80%' : '100%',
     },
     closeIconWrapper: {
       width: '20%',

@@ -13,14 +13,12 @@ interface Props {
 
 const CreateUtxosModal: React.FC<Props> = ({ visible, primaryOnPress }) => {
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, assets } = translations;
   const navigation = useNavigation();
   return (
     <ModalContainer
-      title={'Insufficient sats for RGB'}
-      subTitle={
-        'Your RGB wallet’s Bitcoin balance is low to create new UTXOs.\nYou need to transfer 9000 sats + transaction fee from the main Wallet.'
-      }
+      title={assets.insufficientSatsRGB}
+      subTitle={assets.insufficientSatsRGBSubTitle}
       visible={visible}
       onDismiss={() => navigation.goBack()}>
       <View>

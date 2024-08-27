@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
@@ -35,7 +35,9 @@ type ItemProps = {
   index?: number;
   ticker?: string;
   assetId?: string;
+  amount?: string;
 };
+
 const Item = ({
   name,
   image,
@@ -45,16 +47,18 @@ const Item = ({
   index,
   ticker,
   assetId,
+  amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
 
   return (
-    <View>
+    <View style={styles.alternateSpace}>
       <AssetCard
         image={image}
         name={name}
         details={details}
+        amount={amount}
         tag={tag}
         onPress={onPressAsset}
         ticker={ticker}
@@ -75,7 +79,6 @@ function AssetsList(props: AssetsListProps) {
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -102,7 +105,8 @@ function AssetsList(props: AssetsListProps) {
               <Item
                 key={index}
                 name={item.name}
-                details={item.balance.spendable}
+                details={''}
+                amount={item.balance.spendable}
                 tag="COIN"
                 assetId={item.assetId}
                 onPressAsset={() =>
@@ -118,7 +122,8 @@ function AssetsList(props: AssetsListProps) {
               <Item
                 key={index}
                 name={item.name}
-                details={item.balance.spendable}
+                details={''}
+                amount={item.balance.spendable}
                 tag="COLLECTIBLE"
                 onPressAsset={() =>
                   navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
@@ -148,19 +153,22 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '76%',
-      marginHorizontal: wp(16),
+      height: '80%',
+      marginHorizontal: wp(10),
     },
     assetWrapper: {
       flexWrap: 'wrap',
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 100,
+      bottom: 90,
       right: 30,
     },
     footer: {
       height: 100, // Adjust the height as needed
+    },
+    alternateSpace: {
+      top: index % 2 === 0 ? 0 : hp(50),
     },
   });
 export default AssetsList;

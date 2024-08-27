@@ -25,7 +25,7 @@ const CloudBackup = ({ navigation }) => {
     getJSONFromRealmObject,
   );
   const backup = useMutation(ApiHandler.backupRgbOnCloud);
-
+  const lastIndex = data.length - 1;
   return (
     <ScreenContainer>
       <ModalLoading visible={backup.isLoading} />
@@ -41,11 +41,12 @@ const CloudBackup = ({ navigation }) => {
       <FlatList
         data={data.reverse()}
         ListEmptyComponent={() => <AppText>No backup history</AppText>}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <VersionHistoryItem
             title={settings[item?.title]}
             date={item.date}
             releaseNotes={item.releaseNotes}
+            lastIndex={lastIndex === index}
           />
         )}
       />

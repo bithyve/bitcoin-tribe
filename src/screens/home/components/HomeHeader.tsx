@@ -5,9 +5,9 @@ import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 
-import IconBitcoin from 'src/assets/images/icon_btc3.svg';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
-import IconNotification from 'src/assets/images/icon_notifications.svg';
+// import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -55,8 +55,20 @@ function HomeHeader(props: HomeHeaderProps) {
                 numberOfLines={1}
                 variant="heading1"
                 style={styles.usernameText}>
-                {username}
+                {username ? username : 'Hi...!!'}
               </AppText>
+              <View style={styles.balanceWrapper}>
+                {initialCurrencyMode !== CurrencyKind.SATS &&
+                  getCurrencyIcon(IconBitcoin, 'dark', 15)}
+                <AppText variant="body2" style={styles.balanceText}>
+                  &nbsp;{getBalance(balance)}
+                </AppText>
+                {initialCurrencyMode === CurrencyKind.SATS && (
+                  <AppText variant="caption" style={styles.satsText}>
+                    sats
+                  </AppText>
+                )}
+              </View>
             </View>
           </View>
         </AppTouchable>
@@ -64,12 +76,13 @@ function HomeHeader(props: HomeHeaderProps) {
           <IconWrapper onPress={onPressScanner}>
             <IconScanner />
           </IconWrapper>
+          {/* To Do */}
           {/* <IconWrapper onPress={onPressNotification}>
             <IconNotification />
           </IconWrapper> */}
         </View>
       </View>
-      <View style={styles.balanceContainer}>
+      {/* <View style={styles.balanceContainer}>
         <View>
           <AppText variant="body2" style={styles.totalBalText}>
             {home.totalBalance}
@@ -87,7 +100,7 @@ function HomeHeader(props: HomeHeaderProps) {
             </AppText>
           )}
         </AppTouchable>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -116,11 +129,12 @@ const getStyles = (theme: AppTheme) =>
     balanceText: {
       color: theme.colors.headingColor,
       marginTop: hp(2),
+      fontWeight: '300',
     },
     satsText: {
       color: theme.colors.headingColor,
-      marginTop: hp(10),
       marginLeft: hp(5),
+      fontWeight: '300',
     },
     iconWrapper: {
       // width: '32%',

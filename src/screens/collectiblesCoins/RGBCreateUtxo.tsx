@@ -37,9 +37,11 @@ function RGBCreateUtxo() {
 
   useEffect(() => {
     if (createUtxos.data) {
-      setVisible(true);
+      setTimeout(() => {
+        setVisible(true);
+      }, 400);
     } else if (createUtxos.data === false) {
-      Toast('Failed to create UTXOs. Insufficiant sats', false, true);
+      Toast(walletTranslation.failedToCreateUTXO, false, true);
     }
   }, [createUtxos.data]);
 
