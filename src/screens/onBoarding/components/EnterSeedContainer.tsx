@@ -293,7 +293,7 @@ function EnterSeedContainer() {
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
         secondaryTitle={common.needHelp}
-        secondaryCTAWidth={hp(160)}
+        secondaryCTAWidth={hp(200)}
         secondaryOnPress={() => {
           console.log('');
         }}
