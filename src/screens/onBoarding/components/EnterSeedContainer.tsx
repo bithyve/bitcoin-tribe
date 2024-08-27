@@ -37,6 +37,7 @@ import * as SecureStore from 'src/storage/secure-store';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type seedWordItem = {
   id: number;
@@ -235,9 +236,11 @@ function EnterSeedContainer() {
   return (
     <View style={{ flex: 1 }}>
       <ModalLoading visible={isLoading || restoreFromCloudMutation.isLoading} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}>
+      <KeyboardAwareScrollView
+        style={{ flex: 1 }}
+        enableOnAndroid={true}
+        extraScrollHeight={150}
+        keyboardOpeningTime={0}>
         <FlatList
           keyboardShouldPersistTaps="handled"
           ref={ref}
@@ -285,7 +288,7 @@ function EnterSeedContainer() {
             </View>
           </ScrollView>
         ) : null}
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
       <Buttons
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
