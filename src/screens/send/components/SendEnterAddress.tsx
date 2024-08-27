@@ -1,9 +1,11 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
+import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -12,6 +14,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 
 import { AppTheme } from 'src/theme';
+import config from 'src/utils/config';
 
 function SendEnterAddress({
   onDismiss,
@@ -29,7 +32,9 @@ function SendEnterAddress({
 
   const onProceed = (paymentInfo: string) => {
     paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(wallet.networkType);
+    const network = WalletUtilities.getNetworkByType(
+      wallet && wallet.networkType,
+    );
 
     let {
       type: paymentInfoKind,
@@ -52,9 +57,30 @@ function SendEnterAddress({
           paymentURIAmount: amount,
         });
         break;
+      case PaymentInfoKind.RGB_INVOICE:
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          wallet,
+          rgbInvoice: address,
+        });
+        break;
       default:
-        // Toast('Invalid Bitcoin address'); // toast not working
-        Alert.alert('Invalid Bitcoin address');
+        Toast(sendScreen.invalidBtcAddress, false, true);
+    }
+  };
+  const handlePasteAddress = async () => {
+    const getClipboardValue = await Clipboard.getString();
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
+      getClipboardValue,
+      network,
+    );
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      setAddress(address);
+    } else {
+      Keyboard.dismiss();
+      onDismiss();
+      Toast(sendScreen.invalidBtcAddress, false, true);
     }
   };
 
@@ -66,6 +92,11 @@ function SendEnterAddress({
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         autoFocus={true}
+        inputStyle={styles.inputStyle}
+        rightText="Paste"
+        onRightTextPress={() => handlePasteAddress()}
+        rightCTAStyle={styles.rightCTAStyle}
+        rightCTATextColor={theme.colors.primaryCTAText}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -74,7 +105,9 @@ function SendEnterAddress({
           primaryOnPress={() => {
             Keyboard.dismiss();
             onDismiss();
-            onProceed(address);
+            setTimeout(() => {
+              onProceed(address);
+            }, 400);
           }}
           secondaryOnPress={navigation.goBack}
           width={wp(120)}
@@ -91,6 +124,18 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginTop: hp(45),
+    },
+    inputStyle: {
+      width: '80%',
+    },
+    rightCTAStyle: {
+      backgroundColor: theme.colors.ctaBackColor,
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+      marginHorizontal: hp(5),
     },
   });
 export default SendEnterAddress;

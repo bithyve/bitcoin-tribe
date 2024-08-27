@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -10,15 +10,24 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Transaction } from 'src/models/interfaces/RGBWallet';
 import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function TransactionsList({
   transactions,
   isLoading,
   refresh,
+  navigation,
+  wallet,
+  coin,
+  assetId = '',
 }: {
   transactions: Transaction[];
   isLoading: boolean;
   refresh: () => void;
+  navigation;
+  wallet;
+  coin: string;
+  assetId: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -31,18 +40,29 @@ function TransactionsList({
         <AppText variant="heading3" style={styles.recentTransText}>
           {walletTranslations.recentTransaction}
         </AppText>
-        <AppTouchable onPress={() => {}}>
-          <AppText variant="smallCTA" style={styles.viewAllText}>
+        <AppTouchable
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+              assetId: assetId,
+              transactions: transactions,
+            });
+          }}>
+          <AppText variant="body1" style={styles.viewAllText}>
             {walletTranslations.viewAll}
           </AppText>
         </AppTouchable>
       </View>
 
       <FlatList
-        style={styles.container}
+        style={styles.container2}
         data={transactions}
-        refreshing={isLoading}
-        onRefresh={() => refresh()}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => refresh()}
+            tintColor={theme.colors.accent1}
+          />
+        }
         renderItem={({ item }) => (
           <AssetTransaction
             transId={item.status.toUpperCase()}
@@ -50,6 +70,7 @@ function TransactionsList({
             transAmount={`${item.amount}`}
             transType={item.kind}
             transaction={item}
+            coin={coin}
           />
         )}
         keyExtractor={item => item.txid}
@@ -64,6 +85,11 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(30),
+      height: '100%',
+    },
+    container2: {
+      // marginTop: hp(30),
+      height: '100%',
     },
     contentWrapper: {
       flexDirection: 'row',
@@ -72,7 +98,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     recentTransText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     viewAllText: {
       color: theme.colors.accent1,

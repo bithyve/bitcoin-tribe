@@ -7,8 +7,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
-import { TransactionType } from 'src/services/wallets/enums';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { NetworkType, TransactionType } from 'src/services/wallets/enums';
+import openLink from 'src/utils/OpenLink';
+import AppTouchable from 'src/components/AppTouchable';
+import config from 'src/utils/config';
+import useBalance from 'src/hooks/useBalance';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -23,7 +26,15 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
+  const { getBalance } = useBalance();
 
+  const redirectToBlockExplorer = () => {
+    openLink(
+      `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${transaction.txid}`,
+    );
+  };
   return (
     <View>
       <WalletTransactions
@@ -47,15 +58,30 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           content={transaction.senderAddresses[0]}
         />
       )}
-      <LabeledContent label={wallet.transactionID} content={transaction.txid} />
+      <AppTouchable onPress={() => redirectToBlockExplorer()}>
+        <LabeledContent
+          label={wallet.transactionID}
+          content={transaction.txid}
+        />
+      </AppTouchable>
       <LabeledContent
         label={wallet.fees}
-        content={numberWithCommas(`${transaction.fee}`)}
+        enableCurrency={true}
+        content={`${transaction.fee}`}
+      />
+      <LabeledContent
+        label={wallet.amount}
+        enableCurrency={true}
+        content={`${transAmount}`}
       />
       <LabeledContent
         label={wallet.confirmations}
         content={`${
-          transaction.confirmations > 6 ? '6+' : transaction.confirmations
+          transaction.confirmations === 0
+            ? '0'
+            : transaction.confirmations > 6
+            ? '6+'
+            : transaction.confirmations
         }`}
       />
     </View>

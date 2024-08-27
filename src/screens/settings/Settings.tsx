@@ -1,58 +1,145 @@
-import React, { useContext, ReactNode } from 'react';
+import React, { useContext, ReactNode, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-
+import ReactNativeBiometrics from 'react-native-biometrics';
 import IconBackup from 'src/assets/images/icon_backup.svg';
-import IconLangCurrency from 'src/assets/images/icon_globe.svg';
+import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
+import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
+import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
-import SettingMenuContainer from './components/SettingMenuContainer';
 import SettingMenuItem from './components/SettingMenuItem';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { Keys, Storage } from 'src/storage';
+import PinMethod from 'src/models/enums/PinMethod';
+import Toast from 'src/components/Toast';
+import * as SecureStore from 'src/storage/secure-store';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { AppContext } from 'src/contexts/AppContext';
+
+const RNBiometrics = new ReactNativeBiometrics();
 
 type SettingMenuProps = {
+  id: number;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   icon: ReactNode;
-  onPress: () => void;
+  onPress?: () => void;
+  enableSwitch?: boolean;
+  toggleValue?: boolean;
+  onValueChange?: () => void;
+  testID?: string;
 };
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
+  const { settings, onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
+  const [biometrics, setBiometrics] = useState(false);
+  const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
+  const { key } = useContext(AppContext);
+
+  useEffect(() => {
+    if (pinMethod === PinMethod.BIOMETRIC) {
+      setBiometrics(true);
+    } else if (pinMethod === PinMethod.DEFAULT) {
+      setBiometrics(false);
+    }
+  }, [pinMethod]);
+
+  const enableBiometrics = async () => {
+    try {
+      const { available } = await RNBiometrics.isSensorAvailable();
+      if (available) {
+        const { keysExist } = await RNBiometrics.biometricKeysExist();
+        if (keysExist) {
+          await RNBiometrics.createKeys();
+        }
+        const { publicKey } = await RNBiometrics.createKeys();
+        const { success } = await RNBiometrics.simplePrompt({
+          promptMessage: 'Confirm your identity',
+        });
+        if (success) {
+          await SecureStore.storeBiometricPubKey(publicKey);
+          Storage.set(Keys.PIN_METHOD, PinMethod.BIOMETRIC);
+        }
+      } else {
+        Toast(
+          'Biometrics not enabled.\nPlease go to setting and enable it',
+          false,
+          true,
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleBiometrics = () => {
+    if (pinMethod === PinMethod.DEFAULT) {
+      Toast(onBoarding.createPinFirst, false, true);
+      navigation.navigate(NavigationRoutes.CREATEPIN);
+    } else if (pinMethod === PinMethod.PIN) {
+      enableBiometrics();
+    } else if (pinMethod === PinMethod.BIOMETRIC) {
+      ApiHandler.resetPinMethod(key);
+    }
+  };
 
   const SettingsMenu: SettingMenuProps[] = [
+    // TO DO - will implement theme functionality.  This commented temporarily
+    // {
+    //   id: 1,
+    //   title: settings.darkMode,
+    //   icon: <IconDarkMode />,
+    //   onValueChange: () => setDarkTheme(!darkTheme),
+    //   toggleValue: !darkTheme,
+    //   enableSwitch: true,
+    //   testID: 'dark_mode',
+    //   onPress: () => setDarkTheme(!darkTheme),
+    // },
     {
+      id: 2,
+      title: settings.biometricUnlock,
+      icon: <IconBiometric />,
+      onValueChange: toggleBiometrics,
+      toggleValue: biometrics,
+      enableSwitch: true,
+      testID: 'biometric_unlock',
+      onPress: toggleBiometrics,
+    },
+    {
+      id: 3,
       title: settings.langAndCurrency,
-      subtitle: settings.langAndCurrencySubTitle,
       icon: <IconLangCurrency />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
     {
+      id: 4,
       title: settings.appBackup,
-      subtitle: settings.appBackupSubTitle,
       icon: <IconBackup />,
-      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUP),
+      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
     },
+    // TO DO - will implement node setting functionality. This commented temporarily
+    // {
+    //   id: 5,
+    //   title: settings.nodeSettings,
+    //   icon: <IconNodes />,
+    //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
+    // },
     {
-      title: settings.connectionSettings,
-      subtitle: settings.connectionSettingSubTitle,
-      icon: <IconNodes />,
-      onPress: () => navigation.navigate(NavigationRoutes.CONNECTIONSETTINGS),
-    },
-    {
+      id: 6,
       title: settings.appInfo,
-      subtitle: settings.appInfoSubTitle,
       icon: <IconAppInfo />,
-      onPress: () => console.log('App info pressed'),
+      onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
     // Add more menu items as needed
   ];
@@ -62,7 +149,6 @@ function SettingsScreen({ navigation }) {
       <AppText variant="pageTitle2" style={styles.title}>
         {settings.setting}
       </AppText>
-      <SettingMenuContainer />
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );

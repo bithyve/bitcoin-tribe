@@ -1,8 +1,8 @@
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -14,21 +14,22 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import Colors from 'src/theme/Colors';
 import moment from 'moment';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-const Item = ({ title, value }) => {
+export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <View style={styles.contentWrapper}>
       <AppText
-        variant="body2"
+        variant="body1"
         style={[styles.assetDetailsText, styles.assetDetailsText2]}>
         {title}
       </AppText>
       <AppText
         variant="body1"
         selectable
-        style={[styles.assetDetailsText, styles.assetDetailsText2]}>
+        style={[styles.assetValueText, styles.assetDetailsText2]}>
         {value}
       </AppText>
     </View>
@@ -38,40 +39,57 @@ const Item = ({ title, value }) => {
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
 
   useEffect(() => {
-    mutate({ assetId });
+    mutate({ assetId, schema: RealmSchema.Coin });
   }, []);
 
   return (
-    <ScreenContainer>
-      <View style={styles.headerWrapper}>
-        <AppHeader title="Meta Data" enableBack={true} />
-      </View>
+    <ScreenContainer style={styles.container}>
+      <AppHeader
+        title={assets.coinMetaTitle}
+        subTitle={assets.coinMetaSubTitle}
+        enableBack={true}
+      />
       {isLoading ? (
         <ActivityIndicator color={Colors.ChineseOrange} size="large" />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          <Item title="Name" value={coin.name} />
-          <Item title="Ticker" value={coin.metaData.ticker} />
+          <Item title={assets.name} value={coin.name} />
           <Item
-            title="Schema"
-            value={coin.metaData.assetSchema.toUpperCase()}
+            title={assets.ticker}
+            value={coin.metaData && coin.metaData.ticker}
           />
-          <Item title="Iface" value={coin.metaData.assetIface.toUpperCase()} />
-          <Item title="Issued Supply" value={coin.metaData.issuedSupply} />
+          <Item title={assets.assetId} value={assetId} />
           <Item
-            title="Issued On"
-            value={moment(coin.metaData.timestamp).format(
-              'DD MMM YY • hh:mm A',
-            )}
+            title={assets.schema}
+            value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
           />
-          <Item title="Precision" value={coin.metaData.precision} />
+          <Item
+            title={assets.iFace}
+            value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
+          />
+          <Item
+            title={assets.issuedSupply}
+            value={coin.metaData && coin.metaData.issuedSupply}
+          />
+          <Item
+            title={assets.issuedOn}
+            value={moment
+              .unix(coin.metaData && coin.metaData.timestamp)
+              .format('DD MMM YY • hh:mm a')}
+          />
+          <Item
+            title={assets.precision}
+            value={coin.metaData && coin.metaData.precision}
+          />
         </ScrollView>
       )}
     </ScreenContainer>
@@ -84,31 +102,11 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
       flexDirection: 'column',
     },
-    assetContainer: {
-      height: windowHeight > 650 ? '35%' : '30%',
-      position: 'relative',
-      marginBottom: hp(20),
-      borderBottomColor: 'gray',
-      borderBottomWidth: 0.8,
-    },
-    assetStyle: {
-      height: '100%',
-      width: '100%',
-    },
-    assetChipWrapper: {
-      position: 'absolute',
-      zIndex: 999,
-      left: 30,
-      top: 10,
-    },
-    downloadWrapper: {
-      position: 'absolute',
-      zIndex: 999,
-      right: 25,
-      bottom: 15,
-    },
     assetDetailsText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
+    },
+    assetValueText: {
+      color: theme.colors.secondaryHeadingColor,
     },
     assetDetailsText2: {
       width: '50%',
@@ -118,18 +116,14 @@ const getStyles = (theme: AppTheme) =>
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',
-      marginVertical: hp(5),
+      marginVertical: hp(8),
     },
     assetInfoStyle: {
       marginVertical: hp(10),
     },
     scrollingContainer: {
       height: '60%',
-      marginHorizontal: wp(20),
-    },
-    headerWrapper: {
-      marginHorizontal: hp(25),
-      marginTop: hp(15),
+      marginTop: wp(20),
     },
   });
 

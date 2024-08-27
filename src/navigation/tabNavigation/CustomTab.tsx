@@ -1,33 +1,30 @@
-import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import React, { useContext } from 'react';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp } from 'src/constants/responsive';
+import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
-import TextIcon from 'src/assets/images/icon_bitcoin.svg';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
-import SettingsInActive from 'src/assets/images/icon_settings_inactive.svg';
+import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
+import GradientView from 'src/components/GradientView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
@@ -38,12 +35,29 @@ const CustomTab = ({ state, descriptors, navigation }) => {
       case NavigationRoutes.SETTINGS:
         return isFocused ? <SettingsActive /> : <SettingsInActive />;
       default:
-        return <TextIcon />;
+        return '';
     }
   };
-
+  const TabBarTitle = (isFocused, label) => {
+    switch (label) {
+      case NavigationRoutes.ASSETS:
+        return isFocused ? `${common.assets}` : '';
+      case NavigationRoutes.COMMUNITY:
+        return isFocused ? `${common.community}` : '';
+      case NavigationRoutes.SETTINGS:
+        return isFocused ? `${common.settings}` : '';
+      default:
+        return '';
+    }
+  };
   return (
-    <View style={styles.tabBar}>
+    <GradientView
+      style={styles.tabBar}
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -81,21 +95,23 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.tab}>
+            style={isFocused ? styles.activeTab : styles.inActiveTab}>
             <View>{TabBarIcon(isFocused, label)}</View>
-            {isFocused && (
-              <AppText
-                style={[
-                  styles.bottomNavigation,
-                  { color: isFocused ? theme.colors.primaryCTA : 'gray' },
-                ]}>
-                &nbsp;{Capitalize(label)}
-              </AppText>
-            )}
+            <AppText
+              style={[
+                styles.bottomNavigation,
+                {
+                  color: isFocused
+                    ? theme.colors.primaryCTAText
+                    : theme.colors.disablePrimaryCTAText,
+                },
+              ]}>
+              &nbsp;&nbsp;{Capitalize(TabBarTitle(isFocused, label))}
+            </AppText>
           </TouchableOpacity>
         );
       })}
-    </View>
+    </GradientView>
   );
 };
 
@@ -104,26 +120,36 @@ const getStyles = (theme: AppTheme) =>
     tabBar: {
       flexDirection: 'row',
       borderRadius: 40,
-      backgroundColor: theme.colors.inputBackground,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
       position: 'absolute',
-      bottom: hp(15),
-      height: hp(62),
-      width: wp(295),
+      bottom: windowHeight > 670 ? hp(15) : hp(5),
+      height: hp(68),
+      width: wp(300),
       marginBottom: hp(15),
       marginHorizontal: windowWidth * 0.1,
-      paddingHorizontal: wp(30),
     },
-    tab: {
+    activeTab: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: theme.colors.activeTabColor,
+      borderRadius: 100,
+      margin: 10,
+      paddingHorizontal: hp(15),
+    },
+    inActiveTab: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: hp(20),
     },
     bottomNavigation: {
-      fontSize: 11,
-      fontFamily: Fonts.PoppinsSemiBold,
-      lineHeight: 11 * 1.4,
-      height: 15,
+      fontSize: 13,
+      fontFamily: Fonts.LufgaSemiBold,
+      lineHeight: 13 * 1.4,
+      fontWeight: '400',
     },
   });
 

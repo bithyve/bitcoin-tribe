@@ -1,9 +1,11 @@
 import * as RNLocalize from 'react-native-localize';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import LocalizedContent from 'react-localization';
-import { MMKV } from 'react-native-mmkv';
+import { MMKV, useMMKVString } from 'react-native-mmkv';
 import en from '../loc/content/en.json';
 import es from '../loc/content/es.json';
+import { Keys } from 'src/storage';
+import moment from 'moment';
 
 export const Storage = new MMKV();
 
@@ -25,23 +27,23 @@ export const LocalizationContext = createContext({
 });
 
 export function LocalizationProvider({ children }) {
-  const [appLanguage, setAppLanguage] = useState(DEFAULT_LANGUAGE);
+  const [appLanguage, setAppLanguage] = useMMKVString(Keys.APP_LANGUAGE);
 
-  const setLanguage = language => {
-    translations.setLanguage(language);
-    setAppLanguage(language);
-    Storage.set(APP_LANGUAGE, language);
-  };
+  useEffect(() => {
+    initializeAppLanguage();
+  }, [appLanguage]);
 
   const formatString = (...param) => translations.formatString(...param);
 
-  const initializeAppLanguage = async () => {
-    const currentLanguage = await Storage.getString(APP_LANGUAGE);
-    if (currentLanguage) {
-      setLanguage(currentLanguage);
-      // moment.locale( currentLanguage )
+  const initializeAppLanguage = () => {
+    let localeCode = DEFAULT_LANGUAGE;
+    if (appLanguage) {
+      translations.setLanguage(appLanguage);
+      setAppLanguage(appLanguage);
+      // moment.locale(appLanguage);
     } else {
-      let localeCode = DEFAULT_LANGUAGE;
+      translations.setLanguage(DEFAULT_LANGUAGE);
+      setAppLanguage(DEFAULT_LANGUAGE);
       const supportedLocaleCodes = translations.getAvailableLanguages();
       const phoneLocaleCodes = RNLocalize.getLocales().map(
         locale => locale.languageCode,
@@ -52,8 +54,7 @@ export function LocalizationProvider({ children }) {
           return true;
         }
       });
-      // moment.locale( localeCode )
-      setLanguage(localeCode);
+      // moment.locale(DEFAULT_LANGUAGE);
     }
   };
 
@@ -61,7 +62,7 @@ export function LocalizationProvider({ children }) {
     <LocalizationContext.Provider
       value={{
         translations,
-        setAppLanguage: setLanguage,
+        setAppLanguage: appLanguage,
         appLanguage,
         initializeAppLanguage,
         formatString,

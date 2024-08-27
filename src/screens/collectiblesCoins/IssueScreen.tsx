@@ -1,27 +1,36 @@
-import React, {
-  useContext,
-  useState,
-  useMemo,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useContext, useState, useMemo, useCallback } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
+import { AssetType } from 'src/models/interfaces/RGBWallet';
+import pickImage from 'src/utils/imagePicker';
+import IconClose from 'src/assets/images/image_icon_close.svg';
+import SegmentedButtons from 'src/components/SegmentedButtons';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import UploadAssetFileButton from './components/UploadAssetFileButton';
+import UploadFile from 'src/assets/images/uploadFile.svg';
+import { formatNumber } from 'src/utils/numberWithCommas';
+import AppTouchable from 'src/components/AppTouchable';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function IssueScreen() {
+  const shouldRefresh = useRoute().params;
+  const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
@@ -29,10 +38,12 @@ function IssueScreen() {
   const { home, common, assets } = translations;
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
+  const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const createUtxos = useMutation(ApiHandler.createUtxos);
   const [loading, setLoading] = useState(false);
+  const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
+  const [image, setImage] = useState('');
 
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
@@ -40,84 +51,186 @@ function IssueScreen() {
     const response = await ApiHandler.issueNewCoin({
       name: assetName.trim(),
       ticker: assetTicker,
-      supply: totalSupplyAmt,
+      supply: totalSupplyAmt.replace(/,/g, ''),
     });
     setLoading(false);
     if (response?.assetId) {
-      Toast(assets.assetCreateMsg);
-      navigation.goBack();
+      Toast(assets.assetCreateMsg, true);
+      navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`);
+      Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
-  useEffect(() => {
-    if (createUtxos.error) {
-      Toast(assets.insufficientSatsMainWallet);
-    } else if (createUtxos.isSuccess) {
-      setShowErrorModal(false);
-      issueCoin();
+  const issueCollectible = useCallback(async () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    const response = await ApiHandler.issueNewCollectible({
+      name: assetName.trim(),
+      description: description,
+      supply: totalSupplyAmt.replace(/,/g, ''),
+      filePath: image?.path?.replace('file://', ''),
+    });
+    setLoading(false);
+    if (response?.assetId) {
+      Toast(assets.assetCreateMsg, true);
+      navigation.dispatch(popAction);
+    } else if (response?.error === 'Insufficient sats for RGB') {
+      setTimeout(() => {
+        setShowErrorModal(true);
+      }, 500);
+    } else if (response?.error) {
+      Toast(`Failed: ${response?.error}`, false, true);
     }
-  }, [createUtxos.error, createUtxos.isSuccess, createUtxos.data, issueCoin]);
+  }, [
+    assetName,
+    assets.assetCreateMsg,
+    description,
+    image?.path,
+    navigation,
+    totalSupplyAmt,
+  ]);
 
   const isButtonDisabled = useMemo(() => {
-    return !assetName || !assetTicker || !totalSupplyAmt;
-  }, [assetName, assetTicker, totalSupplyAmt]);
+    if (assetType === AssetType.Coin) {
+      return !assetName || !assetTicker || !totalSupplyAmt;
+    }
+    return !assetName || !description || !totalSupplyAmt || !image;
+  }, [assetName, assetTicker, totalSupplyAmt, image, description, assetType]);
 
-  const handleAmtChangeText = text => {
-    const positiveNumberRegex = /^\d*[1-9]\d*$/;
-    if (positiveNumberRegex.test(text)) {
-      setTotalSupplyAmt(text);
+  const handlePickImage = async () => {
+    Keyboard.dismiss();
+    try {
+      const result = await pickImage(1000, 1000, false);
+      setImage(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onPressIssue = () => {
+    if (assetType === AssetType.Coin) {
+      issueCoin();
     } else {
-      setTotalSupplyAmt('');
+      issueCollectible();
     }
   };
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.issue} subTitle={home.issueSubTitle} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <AppHeader title={home.issueNew} />
+      <ModalLoading visible={loading} />
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          createUtxos.mutate();
+          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+            refresh: () => onPressIssue(),
+          });
         }}
       />
-      <TextField
-        value={assetName}
-        onChangeText={text => setAssetName(text)}
-        placeholder={home.assetName}
-        maxLength={32}
-        style={styles.input}
-        autoCapitalize="words"
+      <SegmentedButtons
+        value={assetType}
+        onValueChange={value => setAssetType(value)}
+        buttons={[
+          {
+            value: AssetType.Coin,
+            label: 'Coins',
+          },
+          {
+            value: AssetType.Collectible,
+            label: 'Collectibles',
+          },
+        ]}
+        // style={styles.segmentedButtonsStyle}
       />
+      <KeyboardAvoidView style={styles.contentWrapper}>
+        {assetType === AssetType.Coin ? (
+          <View>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
 
-      <TextField
-        value={assetTicker}
-        onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-        placeholder={home.assetTicker}
-        maxLength={8}
-        style={styles.input}
-        autoCapitalize="characters"
-      />
+            <TextField
+              value={assetTicker}
+              onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+              placeholder={home.assetTicker}
+              maxLength={8}
+              style={styles.input}
+              autoCapitalize="characters"
+            />
 
-      <TextField
-        value={totalSupplyAmt}
-        onChangeText={handleAmtChangeText}
-        placeholder={home.totalSupplyAmount}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-
+            <TextField
+              value={formatNumber(totalSupplyAmt)}
+              onChangeText={text => setTotalSupplyAmt(text)}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
+        ) : (
+          <View>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+            <TextField
+              value={description}
+              onChangeText={text => setDescription(text)}
+              placeholder={home.assetDescription}
+              maxLength={32}
+              style={styles.input}
+            />
+            <TextField
+              value={formatNumber(totalSupplyAmt)}
+              onChangeText={text => setTotalSupplyAmt(text)}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <UploadAssetFileButton
+              onPress={handlePickImage}
+              title={home.uploadFile}
+              icon={<UploadFile />}
+            />
+            {image && (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{
+                    uri:
+                      Platform.OS === 'ios'
+                        ? image.path.replace('file://', '')
+                        : image.path,
+                  }}
+                  style={styles.imageStyle}
+                />
+                <AppTouchable
+                  style={styles.closeIconWrapper}
+                  onPress={() => setImage('')}>
+                  <IconClose />
+                </AppTouchable>
+              </View>
+            )}
+          </View>
+        )}
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={issueCoin}
+          primaryOnPress={onPressIssue}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled}
@@ -131,10 +244,47 @@ function IssueScreen() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     input: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(20),
+      // marginTop: hp(20),
+    },
+    contentWrapper: {
+      flex: 1,
+    },
+    segmentedButtonsStyle: {
+      backgroundColor: theme.colors.primaryBackground,
+      borderBottomColor: 'white',
+      borderBottomWidth: 1,
+    },
+    uploadCoinAssetWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+    },
+    selectAvatarStyle: {
+      color: theme.colors.headingColor,
+      width: '60%',
+      paddingLeft: hp(20),
+    },
+    uploadBtnWrapper: {
+      width: '40%',
+      // paddingRight: hp(5),
+    },
+    imageStyle: {
+      height: hp(110),
+      width: hp(110),
+      borderRadius: hp(15),
+      marginVertical: hp(10),
+    },
+    imageWrapper: {
+      flex: 1,
+      position: 'relative',
+    },
+    closeIconWrapper: {
+      position: 'absolute',
+      bottom: 0,
+      left: Platform.OS === 'ios' ? 100 : 112,
     },
   });
 export default IssueScreen;

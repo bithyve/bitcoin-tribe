@@ -54,3 +54,52 @@ export interface Coin {
   transactions: Transaction[];
   metaData: MetaData;
 }
+
+interface Media {
+  filePath: string;
+  mime: string;
+}
+export interface Collectible {
+  addedAt: number;
+  assetId: string;
+  assetIface: string;
+  balance: Balance;
+  details: string;
+  issuedSupply: number;
+  media: Media;
+  name: string;
+  precision: number;
+  timestamp: number;
+  metaData: MetaData;
+}
+
+export interface Asset extends Coin, Collectible {}
+interface RgbAllocation {
+  amount: number;
+  assetId: string;
+  settled: boolean;
+}
+interface Outpoint {
+  txid: string;
+  vout: number;
+}
+interface Utxo {
+  btcAmount: number;
+  colorable: boolean;
+  exists: boolean;
+  outpoint: Outpoint;
+}
+export interface RgbUnspent {
+  rgbAllocations: RgbAllocation[];
+  utxo: Utxo;
+}
+
+export enum AssetType {
+  Coin = 'Coin',
+  Collectible = 'Collectible',
+}
+
+export enum AssetFace {
+  RGB25 = 'RGB25',
+  RGB20 = 'RGB20',
+}

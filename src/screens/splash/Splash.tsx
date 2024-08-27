@@ -1,44 +1,100 @@
 import React, { useEffect, useContext } from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, ImageBackground, View, Platform } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import RGBServices from 'src/services/rgb/RGBServices';
 import { Keys, Storage } from 'src/storage';
-import { RealmSchema } from 'src/storage/enum';
-import dbManager from 'src/storage/realm/dbManager';
-import { stringToArrayBuffer } from 'src/utils/encryption';
+import PinMethod from 'src/models/enums/PinMethod';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
+import TribeText from 'src/assets/images/Tribe.svg';
+import AppText from 'src/components/AppText';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
+  const { translations } = useContext(LocalizationContext);
+  const { onBoarding } = translations;
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { setKey } = useContext(AppContext);
+  const { mutate, data } = useMutation(ApiHandler.login);
+  const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
   useEffect(() => {
-    setTimeout(async () => {
+    setTimeout(() => {
       init();
-    }, 500);
+    }, 1000);
   }, []);
+
+  useEffect(() => {
+    const onLoginSuccess = async () => {
+      if (data) {
+        setKey(data);
+        navigation.replace(NavigationRoutes.APPSTACK);
+      }
+    };
+    onLoginSuccess();
+  }, [data, navigation, setKey]);
 
   const init = async () => {
     const appId = Storage.get(Keys.APPID);
     if (appId) {
-      setKey('key');
-      const uint8array = stringToArrayBuffer('');
-      const isInit = await dbManager.initializeRealm(uint8array);
-      const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
-        RealmSchema.RgbWallet,
-      );
-      await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
-      navigation.replace(NavigationRoutes.APPSTACK);
+      if (pinMethod === PinMethod.DEFAULT) {
+        mutate();
+      } else {
+        navigation.replace(NavigationRoutes.LOGIN);
+      }
     } else {
       navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
     }
   };
 
   return (
-    <ScreenContainer>
-      <Text>Splash!</Text>
+    <ScreenContainer style={styles.container}>
+      <ImageBackground
+        source={require('src/assets/images/background.png')}
+        resizeMode="cover"
+        style={styles.backImage}>
+        <View style={styles.tribeImageWrapper}>
+          <TribeText />
+        </View>
+        <View style={styles.textWrapper}>
+          <AppText variant="body1" style={styles.textStyle}>
+            {onBoarding.splashText}
+          </AppText>
+        </View>
+      </ImageBackground>
     </ScreenContainer>
   );
 }
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingHorizontal: 0,
+      paddingBottom: 0,
+      paddingTop: 0,
+    },
+    backImage: {
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    tribeImageWrapper: {
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    textWrapper: {
+      bottom: 20,
+    },
+    textStyle: {
+      color: theme.colors.headingColor,
+    },
+  });
 export default Splash;

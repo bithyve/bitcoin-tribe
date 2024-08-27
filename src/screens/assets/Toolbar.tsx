@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-import UserAvatar from 'src/components/UserAvatar';
 import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';
@@ -45,22 +44,12 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     leftIconWrapper: {
-      width: '10%',
-      borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.8,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
+      width: '20%',
     },
     profileWrapper: {
-      width: '70%',
+      width: '60%',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingLeft: wp(26),
       marginTop: windowHeight > 650 ? 0 : 10,
     },
     rightIconWrapper: {
@@ -69,14 +58,6 @@ const getStyles = (theme: AppTheme) =>
     },
     rightIconWrapper1: {
       borderRadius: 100,
-      shadowColor: theme.colors.shodowColor,
-      shadowRadius: 10,
-      shadowOpacity: 0.8,
-      elevation: 8,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
     },
     text: {
       color: theme.colors.accent1,

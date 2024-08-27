@@ -29,7 +29,6 @@ export const AssetTransactionSchema = {
     recipientId: 'string?',
     expiration: 'int?',
   },
-  primaryKey: 'createdAt',
 };
 
 export const BalanceSchema: ObjectSchema = {

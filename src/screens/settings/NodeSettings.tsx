@@ -10,6 +10,7 @@ import AppText from 'src/components/AppText';
 import NodeDetailsCard from './components/NodeDetailsCard';
 import { hp } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AddNewIcon from 'src/assets/images/addNew.svg';
 
 const nodes = [
   {
@@ -48,13 +49,9 @@ function NodeSettings({ navigation }) {
       <AppHeader
         title={settings.nodeSettings}
         subTitle={settings.nodeSettingScreenSubTitle}
-        actionText={true}
-        onActionTextPress={() =>
-          navigation.navigate(NavigationRoutes.SENDSCREEN, {
-            receiveData: 'node',
-            title: settings.connectYourNode,
-            subTitle: settings.connectYourNodeSubTitle,
-          })
+        rightIcon={<AddNewIcon />}
+        onSettingsPress={() =>
+          navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY)
         }
       />
       <View>
@@ -80,7 +77,7 @@ function NodeSettings({ navigation }) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     titleText: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
       marginTop: hp(30),
       marginBottom: hp(10),
     },

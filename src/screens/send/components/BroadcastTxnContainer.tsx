@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
@@ -16,6 +16,13 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import SendAddressIcon from 'src/assets/images/sendAddress.svg';
+import useBalance from 'src/hooks/useBalance';
+import { useMMKVString } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessContainer from './SendSuccessContainer';
 
 function BroadcastTxnContainer({
   wallet,
@@ -30,7 +37,7 @@ function BroadcastTxnContainer({
 }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, sendScreen } = translations;
   const navigation = useNavigation();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [selectedPriority, setSelectedPriority] = React.useState(
@@ -38,16 +45,25 @@ function BroadcastTxnContainer({
   );
 
   const sendPhaseTwoMutation = useMutation(ApiHandler.sendPhaseTwo);
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (sendPhaseTwoMutation.status === 'success') {
-      Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS);
+      setVisible(true);
+      // Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`, true);
     } else if (sendPhaseTwoMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`);
+      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`, false, true);
     }
   }, [sendPhaseTwoMutation]);
-
+  const successTransaction = () => {
+    setVisible(false);
+    navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+      autoRefresh: true,
+    });
+  };
   const initiateSendPhaseTwo = () => {
     sendPhaseTwoMutation.mutate({
       sender: wallet,
@@ -65,81 +81,160 @@ function BroadcastTxnContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <View style={styles.leftText}>
-              <AppText variant="body1">@</AppText>
-            </View>
+            <SendAddressIcon />
           </View>
           <View style={styles.txnRightWrapper}>
-            <AppText variant="smallCTA" style={styles.sendToAddress}>
-              SENDING TO ADDRESS
+            <AppText variant="body1" style={styles.sendToAddress}>
+              {sendScreen.sendingToAddress}
             </AppText>
-            <AppText variant="body1" style={styles.txnID}>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.txnID}>
               {address}
             </AppText>
             <View style={styles.amountWrapper}>
-              <IconBitcoin />
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
               <AppText variant="heading1" style={styles.amountText}>
-                {amount} sats
+                &nbsp;{getBalance(amount)}
               </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.satsText}>
+                  sats
+                </AppText>
+              )}
             </View>
           </View>
         </View>
-        <AppText variant="heading1" style={styles.feeTitleText}>
-          Total Fee: {txPrerequisites[selectedPriority].fee} t-sats
-        </AppText>
+        <View style={styles.totalFeeWrapper}>
+          <AppText variant="heading1" style={styles.feeTitleText}>
+            Total Fee:
+          </AppText>
+          {initialCurrencyMode !== CurrencyKind.SATS
+            ? getCurrencyIcon(IconBitcoin, 'dark')
+            : null}
+          <AppText variant="heading1" style={styles.amountText}>
+            &nbsp;{getBalance(txPrerequisites[selectedPriority].fee)}
+          </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.satsText}>
+              sats
+            </AppText>
+          )}
+        </View>
         <View style={styles.feeWrapper}>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.LOW}
               status={
                 selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
               }
               onPress={() => setSelectedPriority(TxPriority.LOW)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              Low - ({txPrerequisites[TxPriority.LOW].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Low -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.LOW].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.MEDIUM}
               status={
                 selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
               }
               onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              Medium - ({txPrerequisites[TxPriority.MEDIUM].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Medium -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.MEDIUM].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
           <View style={styles.radioBtnWrapper}>
             <RadioButton.Android
-              color={theme.colors.accent2}
-              uncheckedColor={theme.colors.bodyColor}
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
               value={TxPriority.HIGH}
               status={
                 selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
               }
               onPress={() => setSelectedPriority(TxPriority.HIGH)}
             />
-            <AppText variant="body2" style={styles.feeText}>
-              High - ({txPrerequisites[TxPriority.HIGH].fee} sats)
-            </AppText>
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                High -
+              </AppText>
+              {initialCurrencyMode !== CurrencyKind.SATS
+                ? getCurrencyIcon(IconBitcoin, 'dark')
+                : null}
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getBalance(txPrerequisites[TxPriority.HIGH].fee)}
+              </AppText>
+              {initialCurrencyMode === CurrencyKind.SATS && (
+                <AppText variant="caption" style={styles.feeSatsText}>
+                  sats
+                </AppText>
+              )}
+            </View>
           </View>
         </View>
-        <View style={styles.primaryCTAContainer}>
-          <Buttons
-            primaryTitle={common.broadcast}
-            secondaryTitle={common.cancel}
-            primaryOnPress={initiateSendPhaseTwo}
-            secondaryOnPress={navigation.goBack}
-            width={wp(120)}
+        <ResponsePopupContainer
+          visible={visible}
+          title={sendScreen.sendSuccessTitle}
+          subTitle={sendScreen.sendSuccessSubTitle}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={styles.containerModalStyle}>
+          <SendSuccessContainer
+            transID={address}
+            amount={amount}
+            transFee={txPrerequisites[selectedPriority].fee}
+            total={
+              Number(amount) + Number(txPrerequisites[selectedPriority].fee)
+            }
+            onPress={() => successTransaction()}
           />
-        </View>
+        </ResponsePopupContainer>
+      </View>
+      <View style={styles.primaryCTAContainer}>
+        <Buttons
+          primaryTitle={common.broadcast}
+          secondaryTitle={common.cancel}
+          primaryOnPress={initiateSendPhaseTwo}
+          secondaryOnPress={navigation.goBack}
+          width={wp(160)}
+        />
       </View>
     </View>
   );
@@ -183,14 +278,14 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     sendToAddress: {
-      color: theme.colors.primaryCTA,
+      color: theme.colors.headingColor,
     },
     txnID: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountText: {
-      marginLeft: hp(5),
-      color: theme.colors.bodyColor,
+      // marginLeft: hp(5),
+      color: theme.colors.headingColor,
     },
     feeWrapper: {
       width: '100%',
@@ -201,12 +296,38 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       marginVertical: hp(10),
     },
+    feeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    feePriorityText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
     feeText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     feeTitleText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(5),
+      marginLeft: hp(5),
+    },
+    feeSatsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    totalFeeWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
       marginTop: hp(20),
-      color: theme.colors.bodyColor,
+    },
+    containerModalStyle: {
+      margin: 0,
+      padding: 10,
     },
   });
 export default BroadcastTxnContainer;

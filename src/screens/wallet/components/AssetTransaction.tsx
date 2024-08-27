@@ -16,6 +16,8 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 type AssetTransactionProps = {
   transId: string;
@@ -25,11 +27,20 @@ type AssetTransactionProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
+  coin: string;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const navigation = useNavigation();
-  const { transId, transDate, transAmount, transType, backColor, disabled } =
-    props;
+  const {
+    transId,
+    transDate,
+    transAmount,
+    transType,
+    backColor,
+    disabled,
+    transaction,
+    coin,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
 
@@ -37,20 +48,22 @@ function AssetTransaction(props: AssetTransactionProps) {
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
-      onPress={() => {}}>
+      onPress={() => {
+        navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+          transaction: transaction,
+          coin: coin,
+        });
+      }}>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {transType === TransactionType.SENT ? (
+            {props.transaction.confirmations === 0 ? (
+              <TransPendingIcon />
+            ) : transType === TransactionType.SENT ? (
               <SendTXNIcon />
             ) : (
               <RecieveTXNIcon />
             )}
-            {props.transaction.confirmations === 0 ? (
-              <View style={styles.transPendingWrapper}>
-                <TransPendingIcon />
-              </View>
-            ) : null}
           </View>
           <View style={styles.contentWrapper}>
             <AppText
@@ -58,20 +71,20 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {Capitalize(transId)}
             </AppText>
-            <AppText variant="body2" style={styles.transDateText}>
-              {moment(transDate).format('DD MMM YY  •  hh:mm a')}
+            <AppText variant="caption" style={styles.transDateText}>
+              {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
         </View>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
             <AppText variant="body1" style={styles.amountText}>
-              &nbsp;{transAmount}
+              &nbsp;{numberWithCommas(transAmount)}
             </AppText>
           </View>
-          {!disabled ? <IconArrow /> : null}
+          {/* {!disabled ? <IconArrow /> : null} */}
         </View>
       </View>
     </AppTouchable>
@@ -80,7 +93,9 @@ function AssetTransaction(props: AssetTransactionProps) {
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     containerWrapper: {
-      marginVertical: hp(15),
+      paddingVertical: hp(15),
+      borderBottomColor: theme.colors.borderColor,
+      borderBottomWidth: 1,
     },
     container: {
       flexDirection: 'row',
@@ -99,10 +114,10 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     transIdText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     transDateText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountWrapper: {
       flexDirection: 'row',
@@ -117,13 +132,8 @@ const getStyles = (theme: AppTheme, backColor) =>
       justifyContent: 'flex-end',
     },
     amountText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(2),
-    },
-    transPendingWrapper: {
-      top: -8,
-      left: 0,
-      position: 'absolute',
     },
   });
 export default AssetTransaction;

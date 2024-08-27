@@ -15,11 +15,11 @@ const KeyboardAvoidView = props => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={'padding'}
       enabled
       keyboardVerticalOffset={Platform.select({
-        ios: windowHeight > 670 ? 40 : 5,
-        android: 500,
+        ios: windowHeight > 670 ? 0 : 5,
+        android: 0,
       })}
       style={{ ...styles.container, ...props.style }}>
       <ScrollView

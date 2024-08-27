@@ -21,7 +21,7 @@ function WalletSetupOption({ navigation }) {
 
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle2" style={styles.title}>
+      <AppText variant="pageTitle1" style={styles.title}>
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
@@ -34,7 +34,7 @@ function WalletSetupOption({ navigation }) {
         icon={<IconRecovery />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
-        onPress={() => console.log('Recovery Phrase')}
+        onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
       />
     </ScreenContainer>
   );
@@ -49,8 +49,8 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(20),
-      marginBottom: hp(30),
+      marginTop: hp(25),
+      marginBottom: hp(20),
     },
   });
 export default WalletSetupOption;

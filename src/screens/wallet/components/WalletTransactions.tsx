@@ -8,15 +8,19 @@ import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import IconArrow from 'src/assets/images/icon_arrowr1.svg';
-import IconBitcoin from 'src/assets/images/icon_btc.svg';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Capitalize from 'src/utils/capitalizeUtils';
+import GradientView from 'src/components/GradientView';
+import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
+import { useMMKVString } from 'react-native-mmkv';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -26,36 +30,60 @@ type WalletTransactionsProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
+  tranStatus?: string;
+  coin?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
-  const { transId, transDate, transAmount, transType, backColor, disabled } =
-    props;
+  const {
+    transId,
+    transDate,
+    transAmount,
+    transType,
+    backColor,
+    disabled,
+    tranStatus,
+    coin,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
-
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   return (
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
-          transaction: props.transaction,
-        })
+        tranStatus
+          ? navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+              transaction: props.transaction,
+              coin: coin,
+            })
+          : navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
+              transaction: props.transaction,
+            })
       }>
-      <View style={styles.container}>
+      <GradientView
+        style={styles.container}
+        colors={
+          backColor
+            ? [
+                theme.colors.cardGradient1,
+                theme.colors.cardGradient2,
+                theme.colors.cardGradient3,
+              ]
+            : ['transparent', 'transparent', 'transparent']
+        }>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {transType === TransactionType.SENT ? (
+            {props.transaction.confirmations === 0 ? (
+              <TransPendingIcon />
+            ) : transType === TransactionType.SENT ? (
               <SendTXNIcon />
             ) : (
               <RecieveTXNIcon />
             )}
-            {props.transaction.confirmations === 0 ? (
-              <View style={styles.transPendingWrapper}>
-                <TransPendingIcon />
-              </View>
-            ) : null}
           </View>
           <View style={styles.contentWrapper}>
             <AppText
@@ -63,56 +91,68 @@ function WalletTransactions(props: WalletTransactionsProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {tranStatus ? Capitalize(tranStatus) : transId}
             </AppText>
-            <AppText variant="body2" style={styles.transDateText}>
+            <AppText variant="caption" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
         </View>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
-            <IconBitcoin />
+            {initialCurrencyMode !== CurrencyKind.SATS &&
+              getCurrencyIcon(IconBitcoin, 'dark')}
             <AppText variant="body1" style={styles.amountText}>
-              &nbsp;{numberWithCommas(transAmount)}
+              &nbsp;{getBalance(transAmount)}
             </AppText>
+            {initialCurrencyMode === CurrencyKind.SATS && (
+              <AppText variant="caption" style={styles.satsText}>
+                sats
+              </AppText>
+            )}
           </View>
-          {!disabled ? <IconArrow /> : null}
+          {/* {!disabled ? <IconArrow /> : null} */}
         </View>
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 }
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     containerWrapper: {
-      marginVertical: hp(15),
+      paddingVertical: hp(15),
+      borderBottomColor: backColor ? '' : theme.colors.borderColor,
+      borderBottomWidth: backColor ? 0 : 1,
     },
     container: {
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
       backgroundColor: backColor,
-      padding: backColor ? 15 : 0,
+      paddingVertical: backColor ? hp(20) : 0,
+      paddingHorizontal: backColor ? hp(15) : 0,
       borderRadius: backColor ? 10 : 0,
+      borderColor: backColor ? theme.colors.borderColor : '',
+      borderWidth: backColor ? 1 : 0,
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '60%',
+      width: '58%',
       alignItems: 'center',
     },
     contentWrapper: {
       marginLeft: 10,
     },
     transIdText: {
-      color: theme.colors.bodyColor,
+      lineHeight: 25,
+      color: theme.colors.headingColor,
     },
     transDateText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '40%',
+      width: '42%',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
@@ -123,13 +163,12 @@ const getStyles = (theme: AppTheme, backColor) =>
       justifyContent: 'flex-end',
     },
     amountText: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
-    transPendingWrapper: {
-      top: -8,
-      left: 0,
-      position: 'absolute',
+    satsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
     },
   });
 export default WalletTransactions;

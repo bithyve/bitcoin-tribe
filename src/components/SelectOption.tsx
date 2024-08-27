@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme, Switch } from 'react-native-paper';
 
-import IconArrow from 'src/assets/images/icon_arrowr1.svg';
+import IconArrow from 'src/assets/images/icon_right_arrow.svg';
 import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
-import Switch from './Switch';
 import { AppTheme } from 'src/theme';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
+import GradientView from './GradientView';
 
 type SelectOptionProps = {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   title: string;
   subTitle?: string;
   backColor?: string;
@@ -39,37 +39,44 @@ const SelectOption = (props: SelectOptionProps) => {
     showArrow = true,
   } = props;
   const styles = getStyles(theme, backColor);
-
   return (
-    <AppTouchable onPress={onPress} style={[styles.container, style]}>
-      <View style={styles.iconWrapper}>
-        {icon}
-        <View style={styles.contentWrapper}>
-          <AppText variant="body1" style={styles.titleStyle}>
-            {title}
-          </AppText>
-          {subTitle ? (
-            <AppText variant="body2" style={styles.subTitleStyle}>
-              {subTitle}
+    <AppTouchable onPress={onPress}>
+      <GradientView
+        style={[styles.container, style]}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        <View style={styles.iconWrapper}>
+          {icon}
+          <View style={styles.contentWrapper}>
+            <AppText variant="heading3" style={styles.titleStyle}>
+              {title}
             </AppText>
-          ) : null}
+            {subTitle ? (
+              <AppText variant="body2" style={styles.subTitleStyle}>
+                {subTitle}
+              </AppText>
+            ) : null}
+          </View>
         </View>
-      </View>
-      {showArrow ? (
-        <View>
-          {enableSwitch ? (
-            <Switch
-              onValueChange={onValueChange}
-              value={toggleValue}
-              testID={testID}
-            />
-          ) : backColor ? (
-            <IconArrow />
-          ) : (
-            <IconSettingArrow />
-          )}
-        </View>
-      ) : null}
+        {showArrow ? (
+          <View>
+            {enableSwitch ? (
+              <Switch
+                value={toggleValue}
+                onValueChange={onValueChange}
+                color={theme.colors.accent1}
+              />
+            ) : backColor ? (
+              <IconArrow />
+            ) : (
+              <IconSettingArrow />
+            )}
+          </View>
+        ) : null}
+      </GradientView>
     </AppTouchable>
   );
 };
@@ -80,9 +87,12 @@ const getStyles = (theme: AppTheme, backColor) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: windowHeight > 650 ? 15 : 10,
+      padding: windowHeight > 670 ? hp(20) : hp(10),
       backgroundColor: backColor,
-      borderRadius: 10,
+      borderRadius: 20,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      marginVertical: hp(5),
     },
     iconWrapper: {
       flexDirection: 'row',
@@ -92,10 +102,10 @@ const getStyles = (theme: AppTheme, backColor) =>
       marginLeft: 10,
     },
     titleStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
     },
     subTitleStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default SelectOption;

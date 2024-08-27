@@ -1,43 +1,67 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import ModalContainer from 'src/components/ModalContainer';
+import DeviceInfo from 'react-native-device-info';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AddAssetModal from './components/AddAssetModal';
 import AssetsList from './components/AssetsList';
 import HomeHeader from './components/HomeHeader';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { Keys } from 'src/storage';
+import { useMMKVString } from 'react-native-mmkv';
+import AppText from 'src/components/AppText';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home, common, sendScreen } = translations;
+  const { common, sendScreen, home } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-
-  const [visible, setVisible] = useState(false);
+  const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
+  const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
+  const initialCurrency = currency || 'USD';
+  const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+  const assets: Asset[] = useMemo(() => {
+    const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
+    return combiled.sort((a, b) => a.timestamp - b.timestamp);
+  }, [coins, collectibles]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
+    if (
+      version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
+    ) {
+      ApiHandler.checkVersion(
+        version,
+        `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+      );
+    }
+    ApiHandler.getFeeAndExchangeRates();
+    setCurrency(initialCurrency);
+    setCurrencyMode(initialCurrencyMode);
   }, []);
 
   useEffect(() => {
@@ -50,6 +74,16 @@ function HomeScreen() {
 
   const handleScreenNavigation = (screenPath: string, params?) => {
     navigation.dispatch(CommonActions.navigate(screenPath, params));
+  };
+
+  const toggleDisplayMode = () => {
+    if (!currencyMode || currencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else if (currencyMode === CurrencyKind.BITCOIN) {
+      setCurrencyMode(CurrencyKind.FIAT);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
   };
 
   return (
@@ -66,30 +100,38 @@ function HomeScreen() {
               receiveData: 'send',
               title: common.send,
               subTitle: sendScreen.headerSubTitle,
+              wallet: wallet,
             })
           }
           onPressNotification={() => console.log('notification')}
           onPressProfile={() =>
-            handleScreenNavigation(NavigationRoutes.WALLETDETAILS)
+            handleScreenNavigation(NavigationRoutes.WALLETDETAILS, {
+              autoRefresh: true,
+            })
           }
+          onPressTotalAmt={() => {
+            toggleDisplayMode();
+          }}
         />
       </View>
+      <AppText variant="pageTitle2" style={styles.assetsTitleStyle}>
+        {home.myAssets}
+      </AppText>
       <AssetsList
-        listData={coins}
-        onPressAddNew={() => setVisible(true)}
-        onPressAsset={(asset: Coin) =>
-          handleScreenNavigation(NavigationRoutes.COINDETAILS, {
-            assetId: asset.assetId,
-          })
-        }
+        listData={assets}
+        onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
+        onPressAsset={(asset: Asset) => {
+          if (asset.assetIface === AssetFace.RGB20) {
+            handleScreenNavigation(NavigationRoutes.COINDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else {
+            handleScreenNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: asset.assetId,
+            });
+          }
+        }}
       />
-      <ModalContainer
-        title={home.addAssets}
-        subTitle={home.addAssetSubTitle}
-        visible={visible}
-        onDismiss={() => setVisible(false)}>
-        <AddAssetModal onDismiss={() => setVisible(false)} />
-      </ModalContainer>
     </ScreenContainer>
   );
 }
@@ -100,7 +142,13 @@ const getStyles = (theme: AppTheme) =>
       paddingTop: 0,
     },
     headerWrapper: {
-      margin: hp(25),
+      margin: hp(16),
+    },
+    assetsTitleStyle: {
+      fontSize: 30,
+      color: theme.colors.headingColor,
+      marginHorizontal: hp(16),
+      marginVertical: hp(15),
     },
   });
 export default HomeScreen;

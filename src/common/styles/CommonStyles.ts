@@ -4,76 +4,97 @@ import Fonts from 'src/constants/Fonts';
 
 export default StyleSheet.create({
   heading1: {
-    fontSize: 18,
-    fontFamily: Fonts.PoppinsMedium,
+    fontSize: 25,
+    fontWeight: '400',
+    fontFamily: Fonts.LufgaMedium,
   },
   heading2: {
-    fontSize: 16,
-    fontFamily: Fonts.PoppinsMedium,
+    fontSize: 20,
+    fontWeight: '600',
+    fontFamily: Fonts.LufgaMedium,
   },
   heading3: {
-    fontSize: 14,
-    fontFamily: Fonts.PoppinsMedium,
+    fontSize: 18,
+    fontWeight: '400',
+    fontFamily: Fonts.LufgaMedium,
   },
   pageTitle1: {
-    fontSize: 20,
-    fontFamily: Fonts.PoppinsMedium,
+    fontSize: 48,
+    fontWeight: '500',
+    lineHeight: 60,
+    fontFamily: Fonts.LufgaMedium,
   },
+  //page title should be removed
   pageTitle2: {
-    fontSize: 24,
-    fontFamily: Fonts.PoppinsMedium,
+    fontSize: 36,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaMedium,
   },
+  //end
   subTitle: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsRegular,
+    fontFamily: Fonts.LufgaRegular,
   },
   body1: {
-    fontSize: 14,
-    fontFamily: Fonts.PoppinsRegular,
+    fontSize: 16,
+    fontWeight: '400',
+    fontFamily: Fonts.LufgaRegular,
   },
   body2: {
+    fontSize: 14,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaRegular,
+  },
+  caption: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsRegular,
+    fontWeight: '600',
+    fontFamily: Fonts.LufgaRegular,
+  },
+  // Should be removed - body 3, 4, 5, 6 and 7
+  body3: {
+    fontSize: 16,
+    fontFamily: Fonts.LufgaRegular,
   },
   body4: {
     fontSize: 16,
-    fontFamily: Fonts.PoppinsLight,
+    fontFamily: Fonts.LufgaLight,
   },
   body5: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   body6: {
     fontSize: 18,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   body7: {
     fontSize: 22,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
+  // end
   placeholder: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   textFieldLabel: {
-    fontSize: 15,
-    fontFamily: Fonts.PoppinsMedium,
-    fontWeight: '600',
+    fontSize: 16,
+    fontFamily: Fonts.LufgaRegular,
+    fontWeight: '400',
   },
   secondaryCta: {
     fontSize: 13,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   subtitle2: {
     fontSize: 14,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
   smallCTA: {
     fontSize: 12,
-    fontFamily: Fonts.PoppinsBold,
+    fontFamily: Fonts.LufgaBold,
   },
   walletBalance: {
     fontSize: 39,
-    fontFamily: Fonts.PoppinsSemiBold,
+    fontFamily: Fonts.LufgaSemiBold,
   },
 });

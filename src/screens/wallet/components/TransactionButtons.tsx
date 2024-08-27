@@ -12,7 +12,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type transButtonProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
-  onPressBuy: () => void;
+  onPressBuy?: () => void;
 };
 const TransactionButtons = (props: transButtonProps) => {
   const { onPressSend, onPressRecieve, onPressBuy } = props;
@@ -25,7 +25,7 @@ const TransactionButtons = (props: transButtonProps) => {
       <View style={styles.buttonWrapper}>
         <RoundedCTA
           icon={<IconSend />}
-          buttonColor={theme.colors.primaryCTA}
+          buttonColor={theme.colors.accent1}
           title={common.send}
           width={wp(85)}
           onPress={onPressSend}
@@ -40,15 +40,17 @@ const TransactionButtons = (props: transButtonProps) => {
           onPress={onPressRecieve}
         />
       </View>
-      <View style={styles.buttonWrapper}>
-        <RoundedCTA
-          icon={<IconBuy />}
-          buttonColor={theme.colors.accent1}
-          title={common.buy}
-          width={wp(70)}
-          onPress={onPressBuy}
-        />
-      </View>
+      {onPressBuy && (
+        <View style={styles.buttonWrapper}>
+          <RoundedCTA
+            icon={<IconBuy />}
+            buttonColor={theme.colors.accent1}
+            title={common.buy}
+            width={wp(70)}
+            onPress={onPressBuy}
+          />
+        </View>
+      )}
     </View>
   );
 };

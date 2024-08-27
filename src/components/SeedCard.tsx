@@ -23,11 +23,11 @@ function SeedCard(props: seedCardProps) {
     <AppTouchable
       style={styles.container}
       onPress={() => callback(index, item)}>
-      <AppText variant="body7" style={styles.indexStyle}>
+      <AppText variant="heading3" style={styles.indexStyle}>
         {index < 9 ? '0' : null}
         {index + 1}
       </AppText>
-      <AppText variant="body6" style={styles.seedWordStyle}>
+      <AppText variant="heading2" style={styles.seedWordStyle}>
         {visible ? item : '******'}
       </AppText>
     </AppTouchable>
@@ -41,18 +41,20 @@ const getStyles = (theme: AppTheme, visible, index) =>
       flexDirection: 'row',
       paddingLeft: hp(10),
       alignItems: 'center',
-      marginVertical: hp(8),
+      marginVertical: hp(7),
       marginRight: index % 2 ? 0 : hp(15),
       borderRadius: 10,
       backgroundColor: theme.colors.cardBackground,
-      opacity: visible ? 1 : 0.6,
+      opacity: visible ? 1 : 0.8,
     },
     indexStyle: {
       color: theme.colors.accent1,
       marginRight: wp(10),
+      fontWeight: 'bold',
     },
     seedWordStyle: {
-      color: theme.colors.bodyColor,
+      color: theme.colors.headingColor,
+      opacity: visible ? 1 : 0.8,
       paddingTop: visible ? 0 : hp(10),
       paddingBottom: visible ? 0 : hp(5),
     },
