@@ -253,42 +253,42 @@ function EnterSeedContainer() {
           pagingEnabled
           renderItem={({ item, index }) => seedItem(item, index)}
         />
-        {suggestedWords?.length > 0 ? (
-          <ScrollView
-            style={[
-              styles.suggestionScrollView,
-              {
-                marginTop: getPosition(onChangeIndex) * hp(60),
-                height:
-                  onChangeIndex === 4 || onChangeIndex === 5 ? hp(90) : null,
-              },
-            ]}
-            keyboardShouldPersistTaps="handled"
-            nestedScrollEnabled
-            testID="view_suggestionView">
-            <View style={styles.suggestionWrapper}>
-              {suggestedWords.map((word, wordIndex) => (
-                <AppTouchable
-                  testID={`btn_suggested_${word}`}
-                  key={word ? `${word + wordIndex}` : wordIndex}
-                  style={styles.suggestionTouchView}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    const data = [...seedData];
-                    data[onChangeIndex].name = word.trim();
-                    setSeedData(data);
-                    setSuggestedWords([]);
-                    if (onChangeIndex < (activePage + 1) * 6 - 1) {
-                      inputRef.current[onChangeIndex + 1].focus();
-                    }
-                  }}>
-                  <AppText variant="body2">{word}</AppText>
-                </AppTouchable>
-              ))}
-            </View>
-          </ScrollView>
-        ) : null}
       </KeyboardAwareScrollView>
+      {suggestedWords?.length > 0 ? (
+        <ScrollView
+          style={[
+            styles.suggestionScrollView,
+            {
+              marginTop: getPosition(onChangeIndex) * hp(60),
+              height:
+                onChangeIndex === 4 || onChangeIndex === 5 ? hp(90) : null,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          nestedScrollEnabled
+          testID="view_suggestionView">
+          <View style={styles.suggestionWrapper}>
+            {suggestedWords.map((word, wordIndex) => (
+              <AppTouchable
+                testID={`btn_suggested_${word}`}
+                key={word ? `${word + wordIndex}` : wordIndex}
+                style={styles.suggestionTouchView}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  const data = [...seedData];
+                  data[onChangeIndex].name = word.trim();
+                  setSeedData(data);
+                  setSuggestedWords([]);
+                  if (onChangeIndex < 11) {
+                    inputRef.current[onChangeIndex + 1].focus();
+                  }
+                }}>
+                <AppText variant="body2">{word}</AppText>
+              </AppTouchable>
+            ))}
+          </View>
+        </ScrollView>
+      ) : null}
       <Buttons
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
@@ -329,7 +329,7 @@ const getStyles = (theme: AppTheme) =>
     contentWrapper: {
       // height: '67%',
       // flexDirection: 'row',
-      flexWrap: 'wrap',
+      // flexWrap: 'wrap',
       gap: 10,
     },
     suggestionWrapper: {
