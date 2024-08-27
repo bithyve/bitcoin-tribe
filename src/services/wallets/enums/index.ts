@@ -112,6 +112,7 @@ export enum SignerType {
 export enum PaymentInfoKind {
   ADDRESS = 'address',
   PAYMENT_URI = 'paymentURI',
+  RGB_INVOICE = 'rgbInvoice',
 }
 
 export enum SignerStorage {

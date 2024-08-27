@@ -16,12 +16,12 @@ import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const SendAssetScreen = () => {
-  const { assetId } = useRoute().params;
+  const { assetId, rgbInvoice } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen, common, assets } = translations;
-  const [invoice, setInvoice] = useState('');
+  const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -126,11 +126,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderRadius: 0,
       marginVertical: hp(25),
       marginBottom: 0,
-      height: Math.max(80, inputHeight),
+      height: Math.max(95, inputHeight),
       marginTop: 0,
     },
     contentStyle1: {
       height: hp(50),
+      marginTop: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(20),

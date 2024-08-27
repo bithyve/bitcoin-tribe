@@ -104,7 +104,7 @@ export default class RGBServices {
     supply: string,
     filePath: string,
   ): Promise<{}> => {
-    const data = await RGB.issueRgb25Asset(description, name, supply, filePath);
+    const data = await RGB.issueRgb25Asset(name, description, supply, filePath);
     return JSON.parse(data);
   };
 
