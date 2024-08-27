@@ -227,6 +227,7 @@
     "issuedSupply": "Suministro emitido",
     "issuedOn": "Emitido el",
     "precision": "Precisión",
-    "details": "Detalles"
+    "details": "Detalles",
+    "selectAssetTitle": "Seleccione Activo para enviar"
   }
 }

@@ -227,6 +227,7 @@
     "issuedSupply": "Issued Supply",
     "issuedOn": "Issued On",
     "precision": "Precision",
-    "details": "Details"
+    "details": "Details",
+    "selectAssetTitle": "Select Asset to send"
   }
 }
