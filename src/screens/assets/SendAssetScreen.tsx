@@ -1,9 +1,18 @@
-import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, { useCallback, useContext, useState, useMemo } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { RadioButton, useTheme } from 'react-native-paper';
+import { useMMKVString } from 'react-native-mmkv';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -19,6 +28,10 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import Identicon from 'react-native-identicon';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import { TxPriority } from 'src/services/wallets/enums';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
 
 type ItemProps = {
   name: string;
@@ -39,7 +52,7 @@ const AssetItem = ({
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
-  console.log('image', image);
+
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -99,6 +112,13 @@ const SendAssetScreen = () => {
   const [inputHeight, setInputHeight] = React.useState(100);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedPriority, setSelectedPriority] = React.useState(
+    TxPriority.LOW,
+  );
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
     return !invoice || !amount;
@@ -137,10 +157,10 @@ const SendAssetScreen = () => {
       setAmount('');
     }
   };
-  console.log('item', item);
+
   return (
     <ScreenContainer>
-      <AppHeader title={'Send Asset'} subTitle={''} />
+      <AppHeader title={assets.sendAssetTitle} subTitle={''} />
       <ModalLoading visible={loading} />
       <CreateUtxosModal
         visible={showErrorModal}
@@ -151,47 +171,121 @@ const SendAssetScreen = () => {
           });
         }}
       />
-      <AssetItem
-        name={item.name}
-        image={
-          item.media?.filePath
-            ? Platform.select({
-                android: `file://${item.media?.filePath}`,
-                ios: `${item.media?.filePath}.${
-                  item.media?.mime.split('/')[1]
-                }`,
-              })
-            : null
-        }
-        tag={
-          item.assetIface.toUpperCase() === AssetFace.RGB20
-            ? 'Coin'
-            : 'Collectible'
-        }
-        assetId={assetId}
-        amount={item.balance.spendable}
-      />
-      <TextField
-        value={invoice}
-        onChangeText={text => setInvoice(text)}
-        placeholder={'Invoice'}
-        style={[styles.input, invoice && styles.invoiceInputStyle]}
-        onContentSizeChange={event => {
-          setInputHeight(event.nativeEvent.contentSize.height);
-        }}
-        multiline={true}
-        numberOfLines={5}
-        contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
-      />
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <AssetItem
+          name={item.name}
+          image={
+            item.media?.filePath
+              ? Platform.select({
+                  android: `file://${item.media?.filePath}`,
+                  ios: `${item.media?.filePath}.${
+                    item.media?.mime.split('/')[1]
+                  }`,
+                })
+              : null
+          }
+          tag={
+            item.assetIface.toUpperCase() === AssetFace.RGB20
+              ? assets.coin
+              : assets.collectible
+          }
+          assetId={assetId}
+          amount={item.balance.spendable}
+        />
+        <TextField
+          value={invoice}
+          onChangeText={text => setInvoice(text)}
+          placeholder={assets.invoice}
+          style={[styles.input, invoice && styles.invoiceInputStyle]}
+          onContentSizeChange={event => {
+            setInputHeight(event.nativeEvent.contentSize.height);
+          }}
+          multiline={true}
+          numberOfLines={5}
+          contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
+        />
 
-      <TextField
-        value={amount}
-        onChangeText={handleAmtChangeText}
-        placeholder={'Amount'}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-
+        <TextField
+          value={amount}
+          onChangeText={handleAmtChangeText}
+          placeholder={assets.amount}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        <View style={styles.totalFeeWrapper}>
+          <AppText variant="heading1" style={styles.feeTitleText}>
+            {assets.feeRate}
+          </AppText>
+        </View>
+        <View style={styles.feeWrapper}>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.LOW}
+              status={
+                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.LOW)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                {assets.low}
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;1 sat/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~3hours
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.MEDIUM}
+              status={
+                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                {assets.medium}
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;1 sat/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~3hours
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.HIGH}
+              status={
+                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.HIGH)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                {assets.high}
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;1 sat/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~3hours
+              </AppText>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -208,6 +302,9 @@ const SendAssetScreen = () => {
 
 const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
+    container: {
+      flex: 1,
+    },
     input: {
       marginVertical: hp(10),
     },
@@ -227,7 +324,8 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginTop: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(20),
+      marginTop: hp(5),
+      bottom: 10,
     },
     assetItemWrapper: {
       flexDirection: 'row',
@@ -267,6 +365,44 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     nameText: {
       color: theme.colors.secondaryHeadingColor,
+    },
+    totalFeeWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: hp(10),
+    },
+    feeWrapper: {
+      width: '100%',
+      marginVertical: hp(10),
+    },
+    radioBtnWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(8),
+    },
+    feeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    feePriorityText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
+    feeText: {
+      color: theme.colors.headingColor,
+    },
+    feeSatsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(5),
+      marginLeft: hp(5),
+    },
+    feeTitleText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
     },
   });
 

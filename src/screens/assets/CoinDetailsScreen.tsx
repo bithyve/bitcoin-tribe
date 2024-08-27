@@ -33,6 +33,7 @@ const CoinDetailsScreen = () => {
       <View style={styles.walletHeaderWrapper}>
         <CoinDetailsHeader
           coin={coin}
+          wallet={wallet}
           onPressSetting={() =>
             navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
           }

@@ -12,9 +12,11 @@ import TransactionButtons from '../wallet/components/TransactionButtons';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 type CoinDetailsHeaderProps = {
   coin: Coin;
+  wallet: Wallet;
   onPressSetting: () => void;
   onPressBuy?: () => void;
 };
@@ -24,8 +26,7 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
   const { home } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { coin, onPressSetting, onPressBuy } = props;
-
+  const { coin, wallet, onPressSetting, onPressBuy } = props;
   return (
     <View style={styles.container}>
       <Toolbar onPress={onPressSetting} ticker={coin.ticker} />
@@ -46,6 +47,9 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
+            item: coin,
+            rgbInvoice: '',
+            wallet: wallet,
           })
         }
         // onPressBuy={onPressBuy}
