@@ -225,6 +225,7 @@ import CloudKit
           "spendable": asset.balance.spendable,
         ]
         jsonRgb121Object["description"] = asset.details
+        jsonRgb121Object["details"] = asset.details
         jsonRgb121Object["name"] = asset.name
         jsonRgb121Object["precision"] = asset.precision
         jsonRgb121Object["issuedSupply"] = asset.issuedSupply
