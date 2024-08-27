@@ -228,6 +228,15 @@
     "issuedOn": "Issued On",
     "precision": "Precision",
     "details": "Details",
-    "selectAssetTitle": "Select Asset to send"
+    "selectAssetTitle": "Select Asset to send",
+    "sendAssetTitle": "Send Asset",
+    "coin": "Coin",
+    "collectible": "Collectible",
+    "invoice": "Invoice",
+    "amount": "Amount",
+    "feeRate": "Fee Rate:",
+    "low": "Low -",
+    "medium": "Medium -",
+    "high": "High -"
   }
 }
