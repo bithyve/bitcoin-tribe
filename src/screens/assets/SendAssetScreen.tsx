@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, { useCallback, useContext, useState, useMemo } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -14,9 +14,82 @@ import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AppText from 'src/components/AppText';
+import AppTouchable from 'src/components/AppTouchable';
+import GradientView from 'src/components/GradientView';
+import Identicon from 'react-native-identicon';
+import { AssetFace } from 'src/models/interfaces/RGBWallet';
+
+type ItemProps = {
+  name: string;
+  image?: string;
+  tag?: string;
+  onPressAsset?: (item: any) => void;
+  assetId?: string;
+  amount?: string;
+};
+
+const AssetItem = ({
+  name,
+  image,
+  tag,
+  onPressAsset,
+  assetId,
+  amount,
+}: ItemProps) => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
+  console.log('image', image);
+  return (
+    <AppTouchable onPress={onPressAsset}>
+      <GradientView
+        style={styles.assetItemWrapper}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        {image ? (
+          <View style={styles.identiconWrapper}>
+            <Image
+              source={{
+                uri: image,
+              }}
+              style={styles.imageStyle}
+            />
+          </View>
+        ) : (
+          <View style={styles.identiconWrapper}>
+            {/* <View style={styles.identiconWrapper2}> */}
+            <Identicon value={assetId} style={styles.identiconView} size={50} />
+            {/* </View> */}
+          </View>
+        )}
+        <View style={styles.assetDetailsWrapper}>
+          <AppText
+            variant="body2"
+            style={{
+              color:
+                tag === 'COIN' ? theme.colors.accent : theme.colors.accent2,
+            }}>
+            {tag}
+          </AppText>
+          <AppText variant="body2" style={styles.nameText}>
+            {name}
+          </AppText>
+        </View>
+        <View style={styles.amountWrapper}>
+          <AppText variant="smallCTA" style={styles.amountText}>
+            {amount}
+          </AppText>
+        </View>
+      </GradientView>
+    </AppTouchable>
+  );
+};
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice } = useRoute().params;
+  const { assetId, rgbInvoice, wallet, item } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -64,7 +137,7 @@ const SendAssetScreen = () => {
       setAmount('');
     }
   };
-
+  console.log('item', item);
   return (
     <ScreenContainer>
       <AppHeader title={'Send Asset'} subTitle={''} />
@@ -77,6 +150,26 @@ const SendAssetScreen = () => {
             refresh: () => mutate(),
           });
         }}
+      />
+      <AssetItem
+        name={item.name}
+        image={
+          item.media?.filePath
+            ? Platform.select({
+                android: `file://${item.media?.filePath}`,
+                ios: `${item.media?.filePath}.${
+                  item.media?.mime.split('/')[1]
+                }`,
+              })
+            : null
+        }
+        tag={
+          item.assetIface.toUpperCase() === AssetFace.RGB20
+            ? 'Coin'
+            : 'Collectible'
+        }
+        assetId={assetId}
+        amount={item.balance.spendable}
       />
       <TextField
         value={invoice}
@@ -135,6 +228,45 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
+    },
+    assetItemWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      padding: hp(15),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      alignItems: 'center',
+      borderRadius: 15,
+      height: hp(70),
+    },
+    imageStyle: {
+      height: hp(50),
+      width: hp(50),
+      borderRadius: 10,
+    },
+    assetDetailsWrapper: {
+      width: '60%',
+      paddingLeft: hp(20),
+    },
+    amountWrapper: {
+      width: '20%',
+      alignItems: 'flex-end',
+    },
+    identiconWrapper: {
+      width: '20%',
+      height: '100%',
+      justifyContent: 'center',
+    },
+    identiconView: {
+      height: 50,
+      width: 50,
+      borderRadius: 50,
+    },
+    amountText: {
+      color: theme.colors.headingColor,
+    },
+    nameText: {
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 

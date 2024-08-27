@@ -136,10 +136,9 @@ const QRScanner = () => {
         });
         break;
       case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SENDASSET, {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
           wallet,
-          address,
-          rgbInvoice: value,
+          rgbInvoice: address,
         });
         break;
       default:
