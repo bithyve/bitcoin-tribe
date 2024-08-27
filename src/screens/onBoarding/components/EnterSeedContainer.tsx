@@ -5,19 +5,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  FlatList,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { FlatList, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import * as bip39 from 'bip39';
 import { TextInput as RNTextInput } from 'react-native';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { getPlaceholderSuperScripted } from 'src/utils/placeholderUtils';
@@ -194,34 +186,23 @@ function EnterSeedContainer() {
     // }
   };
   const onPressHandleNext = async () => {
-    if (activePage === 0) {
-      if (isSeedFilled(6)) {
-        setActivePage(1);
-      } else {
-        Toast('error', false, true);
+    if (isSeedFilled(12)) {
+      //setVisible(true);
+      let seedWord = '';
+      for (let i = 0; i < seedData.length; i++) {
+        seedWord += `${seedData[i].name} `;
       }
-    }
-    if (activePage === 1) {
-      if (isSeedFilled(12)) {
-        //setVisible(true);
-        let seedWord = '';
-        for (let i = 0; i < seedData.length; i++) {
-          seedWord += `${seedData[i].name} `;
-        }
-        const mnemonic = seedWord.trim();
-        if (bip39.validateMnemonic(mnemonic)) {
-          mutate({
-            appName: '',
-            walletImage: '',
-            passcode: '',
-            pinMethod: PinMethod.DEFAULT,
-            mnemonic,
-          });
-        } else {
-          Toast('Invalid Mnemonic', false, true);
-        }
+      const mnemonic = seedWord.trim();
+      if (bip39.validateMnemonic(mnemonic)) {
+        mutate({
+          appName: '',
+          walletImage: '',
+          passcode: '',
+          pinMethod: PinMethod.DEFAULT,
+          mnemonic,
+        });
       } else {
-        Toast('error', false, true);
+        Toast('Invalid Mnemonic', false, true);
       }
     }
   };
@@ -293,7 +274,7 @@ function EnterSeedContainer() {
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
         secondaryTitle={common.needHelp}
-        secondaryCTAWidth={hp(200)}
+        secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
         secondaryOnPress={() => {
           console.log('');
         }}
