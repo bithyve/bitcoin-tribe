@@ -9,7 +9,7 @@ import { FlatList, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import * as bip39 from 'bip39';
 import { TextInput as RNTextInput } from 'react-native';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { getPlaceholderSuperScripted } from 'src/utils/placeholderUtils';
@@ -29,6 +29,7 @@ import * as SecureStore from 'src/storage/secure-store';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type seedWordItem = {
   id: number;
@@ -71,7 +72,7 @@ function EnterSeedContainer() {
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
-    for (let i = 1; i <= 24; i++) {
+    for (let i = 1; i <= 12; i++) {
       seedArray.push({
         id: i,
         name: '',
@@ -116,103 +117,92 @@ function EnterSeedContainer() {
     }
   };
   const seedItem = (item: seedWordItem, index: number) => {
-    if (
-      activePage === 3
-        ? index >= 18 && index < 24
-        : activePage === 2
-        ? index >= 12 && index < 18
-        : activePage === 1
-        ? index >= 6 && index < 12
-        : index < 6
-    ) {
-      return (
-        <View removeClippedSubviews style={styles.inputListWrapper}>
-          <TextInput
-            ref={ref => {
-              if (ref) {
-                inputRef.current[index] = ref as unknown as RNTextInput;
-              }
-            }}
-            mode="outlined"
-            outlineColor={theme.colors.inputBackground}
-            activeOutlineColor={theme.colors.accent1}
-            contextMenuHidden
-            outlineStyle={styles.outlineStyle}
-            style={styles.input}
-            underlineStyle={styles.underlineStyle}
-            contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
-            placeholder={`Enter ${getPlaceholderSuperScripted(index)} word`}
-            value={item?.name}
-            returnKeyType={isSeedFilled(12) ? 'done' : 'next'}
-            autoCapitalize="none"
-            //             blurOnSubmit={false}
-            keyboardType={'default'}
-            onChangeText={text => {
-              const data = [...seedData];
-              data[index].name = text.trim();
-              setSeedData(data);
-              if (text.length > 1) {
-                setOnChangeIndex(index);
-                getSuggestedWords(text.toLowerCase());
-              } else {
-                setSuggestedWords([]);
-              }
-            }}
-            onBlur={() => {
-              if (!bip39.wordlists.english.includes(seedData[index].name)) {
-                const data = [...seedData];
-                data[index].invalid = true;
-                setSeedData(data);
-              }
-            }}
-            onFocus={() => {
-              const data = [...seedData];
-              data[index].invalid = false;
-              setSeedData(data);
-              setSuggestedWords([]);
+    // if (
+    //   activePage === 3
+    //     ? index >= 18 && index < 24
+    //     : activePage === 2
+    //     ? index >= 12 && index < 18
+    //     : activePage === 1
+    //     ? index >= 6 && index < 12
+    //     : index < 6
+    // ) {
+    return (
+      <View removeClippedSubviews style={styles.inputListWrapper}>
+        <TextInput
+          ref={ref => {
+            if (ref) {
+              inputRef.current[index] = ref as unknown as RNTextInput;
+            }
+          }}
+          mode="outlined"
+          outlineColor={theme.colors.inputBackground}
+          activeOutlineColor={theme.colors.accent1}
+          contextMenuHidden
+          outlineStyle={styles.outlineStyle}
+          style={styles.input}
+          underlineStyle={styles.underlineStyle}
+          contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
+          placeholder={`Enter ${getPlaceholderSuperScripted(index)} word`}
+          value={item?.name}
+          returnKeyType={isSeedFilled(12) ? 'done' : 'next'}
+          autoCapitalize="none"
+          //             blurOnSubmit={false}
+          keyboardType={'default'}
+          onChangeText={text => {
+            const data = [...seedData];
+            data[index].name = text.trim();
+            setSeedData(data);
+            if (text.length > 1) {
               setOnChangeIndex(index);
-            }}
-            onSubmitEditing={() => {
+              getSuggestedWords(text.toLowerCase());
+            } else {
               setSuggestedWords([]);
-              Keyboard.dismiss();
-            }}
-            //             testID={`input_seedWord${getPlaceholder(index)}`}
-          />
-        </View>
-      );
-    } else {
-      return null;
-    }
+            }
+          }}
+          onBlur={() => {
+            if (!bip39.wordlists.english.includes(seedData[index].name)) {
+              const data = [...seedData];
+              data[index].invalid = true;
+              setSeedData(data);
+            }
+          }}
+          onFocus={() => {
+            const data = [...seedData];
+            data[index].invalid = false;
+            setSeedData(data);
+            setSuggestedWords([]);
+            setOnChangeIndex(index);
+          }}
+          onSubmitEditing={() => {
+            setSuggestedWords([]);
+            Keyboard.dismiss();
+          }}
+          //             testID={`input_seedWord${getPlaceholder(index)}`}
+        />
+      </View>
+    );
+    // } else {
+    //   return null;
+    // }
   };
   const onPressHandleNext = async () => {
-    if (activePage === 0) {
-      if (isSeedFilled(6)) {
-        setActivePage(1);
-      } else {
-        Toast('error', false, true);
+    if (isSeedFilled(12)) {
+      //setVisible(true);
+      let seedWord = '';
+      for (let i = 0; i < seedData.length; i++) {
+        seedWord += `${seedData[i].name} `;
       }
-    }
-    if (activePage === 1) {
-      if (isSeedFilled(12)) {
-        //setVisible(true);
-        let seedWord = '';
-        for (let i = 0; i < seedData.length; i++) {
-          seedWord += `${seedData[i].name} `;
-        }
-        const mnemonic = seedWord.trim();
-        if (bip39.validateMnemonic(mnemonic)) {
-          mutate({
-            appName: '',
-            walletImage: '',
-            passcode: '',
-            pinMethod: PinMethod.DEFAULT,
-            mnemonic,
-          });
-        } else {
-          Toast('Invalid Mnemonic', false, true);
-        }
+      const mnemonic = seedWord.trim();
+      if (bip39.validateMnemonic(mnemonic)) {
+        mutate({
+          appName: '',
+          walletImage: '',
+          passcode: '',
+          pinMethod: PinMethod.DEFAULT,
+          mnemonic,
+        });
       } else {
-        Toast('error', false, true);
+        Toast('Invalid Mnemonic', false, true);
       }
     }
   };
@@ -225,19 +215,26 @@ function EnterSeedContainer() {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <ModalLoading visible={isLoading || restoreFromCloudMutation.isLoading} />
-      <FlatList
-        ref={ref}
-        keyExtractor={item => item.id}
-        data={seedData}
-        extraData={seedData}
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        contentContainerStyle={styles.contentWrapper}
-        pagingEnabled
-        renderItem={({ item, index }) => seedItem(item, index)}
-      />
+      <KeyboardAwareScrollView
+        style={{ flex: 1 }}
+        enableOnAndroid={true}
+        extraScrollHeight={150}
+        keyboardOpeningTime={0}>
+        <FlatList
+          keyboardShouldPersistTaps="handled"
+          ref={ref}
+          keyExtractor={item => item.id}
+          data={seedData}
+          extraData={seedData}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          contentContainerStyle={styles.contentWrapper}
+          pagingEnabled
+          renderItem={({ item, index }) => seedItem(item, index)}
+        />
+      </KeyboardAwareScrollView>
       {suggestedWords?.length > 0 ? (
         <ScrollView
           style={[
@@ -263,7 +260,7 @@ function EnterSeedContainer() {
                   data[onChangeIndex].name = word.trim();
                   setSeedData(data);
                   setSuggestedWords([]);
-                  if (onChangeIndex < (activePage + 1) * 6 - 1) {
+                  if (onChangeIndex < 11) {
                     inputRef.current[onChangeIndex + 1].focus();
                   }
                 }}>
@@ -277,7 +274,7 @@ function EnterSeedContainer() {
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
         secondaryTitle={common.needHelp}
-        secondaryCTAWidth={hp(160)}
+        secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
         secondaryOnPress={() => {
           console.log('');
         }}
@@ -311,9 +308,9 @@ const getStyles = (theme: AppTheme) =>
       width: '50%',
     },
     contentWrapper: {
-      height: '67%',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
+      // height: '67%',
+      // flexDirection: 'row',
+      // flexWrap: 'wrap',
       gap: 10,
     },
     suggestionWrapper: {
