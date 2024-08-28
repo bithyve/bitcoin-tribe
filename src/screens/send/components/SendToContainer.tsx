@@ -9,8 +9,6 @@ import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
-import DeleteIcon from 'src/assets/images/delete.svg';
-import KeyPadView from 'src/components/KeyPadView';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -21,10 +19,16 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import SendAddressIcon from 'src/assets/images/sendAddress.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import { useMMKVString } from 'react-native-mmkv';
-import { Keys } from 'src/storage';
+import { Keys, Storage } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
 import { TxPriority } from 'src/services/wallets/enums';
+import {
+  AverageTxFees,
+  AverageTxFeesByNetwork,
+} from 'src/services/wallets/interfaces';
+import SendSuccessContainer from './SendSuccessContainer';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 
 function SendToContainer({
   wallet,
@@ -50,34 +54,51 @@ function SendToContainer({
     TxPriority.LOW,
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
-
-  const sendPhaseOneMutation = useMutation(ApiHandler.sendPhaseOne);
+  const [visible, setVisible] = useState(false);
+  const [averageTxFee, setAverageTxFee] = useState({});
+  const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
 
   useEffect(() => {
-    if (sendPhaseOneMutation.status === 'success') {
-      navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
-        wallet,
-        address,
-        amount,
-        txPrerequisites: sendPhaseOneMutation.data,
-      });
-    } else if (sendPhaseOneMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseOneMutation.error}`, false, true);
+    if (!averageTxFeeJSON) {
+      Toast('Error: Transaction Fee intel missing', false, true);
+    } else {
+      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+        JSON.parse(averageTxFeeJSON);
+      const averageTxFee: AverageTxFees =
+        averageTxFeeByNetwork[wallet.networkType];
+      setAverageTxFee(averageTxFee);
     }
-  }, [sendPhaseOneMutation]);
+  }, [averageTxFeeJSON]);
 
-  const initiateSendPhaseOne = () => {
-    if (insufficientBalance) {
-      Toast(sendScreen.amountMoreThanSpend, false, true);
-      return;
+  useEffect(() => {
+    if (sendTransactionMutation.status === 'success') {
+      setVisible(true);
+    } else if (sendTransactionMutation.status === 'error') {
+      Toast(
+        `Error while sending: ${sendTransactionMutation.error}`,
+        false,
+        true,
+      );
     }
+  }, [sendTransactionMutation]);
 
-    sendPhaseOneMutation.mutate({
+  const successTransaction = () => {
+    setVisible(false);
+    navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+      autoRefresh: true,
+    });
+  };
+
+  const initiateSend = () => {
+    sendTransactionMutation.mutate({
       sender: wallet,
       recipient: {
         address,
         amount: Number(amount),
       },
+      averageTxFee,
+      selectedPriority,
     });
   };
 
@@ -105,6 +126,20 @@ function SendToContainer({
     setAmount(amount.slice(0, -1));
   };
 
+  const getFeeRateByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
+  };
+
+  const getEstimatedBlocksByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
+  };
+
+  const transferFee =
+    idx(
+      sendTransactionMutation,
+      _ => _.data.txPrerequisites[selectedPriority].fee,
+    ) || 0;
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -126,7 +161,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
@@ -168,10 +203,10 @@ function SendToContainer({
                 Low -
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                &nbsp; {getFeeRateByPriority(TxPriority.LOW)} sats/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
               </AppText>
             </View>
           </View>
@@ -190,10 +225,10 @@ function SendToContainer({
                 Medium -
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                &nbsp;{getFeeRateByPriority(TxPriority.MEDIUM)} sat/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
               </AppText>
             </View>
           </View>
@@ -212,10 +247,10 @@ function SendToContainer({
                 High -
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                &nbsp;{getFeeRateByPriority(TxPriority.HIGH)} sat/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
               </AppText>
             </View>
           </View>
@@ -227,7 +262,7 @@ function SendToContainer({
           disabled={!amount}
           primaryTitle={common.broadcast}
           secondaryTitle={common.cancel}
-          primaryOnPress={initiateSendPhaseOne}
+          primaryOnPress={initiateSend}
           secondaryOnPress={navigation.goBack}
           width={wp(120)}
         />
@@ -240,6 +275,24 @@ function SendToContainer({
           ClearIcon={<DeleteIcon />}
         />
       </View> */}
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          title={sendScreen.sendSuccessTitle}
+          subTitle={sendScreen.sendSuccessSubTitle}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={styles.containerModalStyle}>
+          <SendSuccessContainer
+            transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
+            amount={amount}
+            transFee={transferFee}
+            total={Number(amount) + Number(transferFee)}
+            onPress={() => successTransaction()}
+          />
+        </ResponsePopupContainer>
+      </View>
     </View>
   );
 }
@@ -317,6 +370,10 @@ const getStyles = (theme: AppTheme) =>
     feeSatsText: {
       color: theme.colors.headingColor,
       marginLeft: hp(5),
+    },
+    containerModalStyle: {
+      margin: 0,
+      padding: 10,
     },
   });
 export default SendToContainer;
