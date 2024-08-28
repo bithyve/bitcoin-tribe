@@ -2,6 +2,7 @@ import React, { ReactNode, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 import { hp } from 'src/constants/responsive';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -12,10 +13,11 @@ type sendSuccessProps = {
   title: string;
   subTitle: string;
   description: string;
+  onPress: () => void;
 };
 
 function SendSuccessPopupContainer(props: sendSuccessProps) {
-  const { icon, title, subTitle, description } = props;
+  const { icon, title, subTitle, description, onPress } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -34,6 +36,7 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
           {description}
         </AppText>
       </View>
+      <PrimaryCTA title={common.proceed} onPress={onPress} width={hp(152)} />
     </View>
   );
 }
