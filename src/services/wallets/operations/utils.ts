@@ -717,7 +717,6 @@ export default class WalletUtilities {
 
   static addressDiff = (scannedStr: string, network: bitcoinJS.Network) => {
     scannedStr = scannedStr.replace('BITCOIN', 'bitcoin');
-    console.log('scannedStr', scannedStr);
     if (WalletUtilities.isPaymentURI(scannedStr)) {
       const { address, options } = WalletUtilities.decodePaymentURI(scannedStr);
       if (WalletUtilities.isValidAddress(address, network)) {
