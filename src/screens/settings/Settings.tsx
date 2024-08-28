@@ -86,7 +86,9 @@ function SettingsScreen({ navigation }) {
   const toggleBiometrics = () => {
     if (pinMethod === PinMethod.DEFAULT) {
       Toast(onBoarding.createPinFirst, false, true);
-      navigation.navigate(NavigationRoutes.CREATEPIN);
+      navigation.navigate(NavigationRoutes.CREATEPIN, {
+        OnBoarding: false,
+      });
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
     } else if (pinMethod === PinMethod.BIOMETRIC) {
