@@ -10,12 +10,14 @@ import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function CreatePinContainer() {
+  const { OnBoarding } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -32,7 +34,11 @@ function CreatePinContainer() {
       Toast(onBoarding.errorSettingPin, false, true);
     } else if (createPin.isSuccess) {
       Toast(onBoarding.newPinCreated, false, false);
-      navigation.goBack();
+      if (OnBoarding) {
+        navigation.replace(NavigationRoutes.APPSTACK);
+      } else {
+        navigation.goBack();
+      }
     }
   }, [createPin.error, createPin.isSuccess, createPin.data]);
 
@@ -135,8 +141,12 @@ function CreatePinContainer() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => createPin.mutate(passcode)}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
+          secondaryTitle={OnBoarding ? common.skip : 'Cancel'}
+          secondaryOnPress={() =>
+            OnBoarding
+              ? navigation.replace(NavigationRoutes.APPSTACK)
+              : navigation.goBack()
+          }
           disabled={disbleProceed}
           width={wp(120)}
         />

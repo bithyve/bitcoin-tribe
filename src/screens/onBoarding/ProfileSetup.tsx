@@ -4,8 +4,6 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
-import ModalContainer from 'src/components/ModalContainer';
-import CreatePin from './components/CreatePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -59,7 +57,9 @@ function ProfileSetup({ navigation }) {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    navigation.replace(NavigationRoutes.APPSTACK);
+    navigation.replace(NavigationRoutes.CREATEPIN, {
+      OnBoarding: true,
+    });
   };
 
   const initiateWalletCreation = () => {
@@ -80,22 +80,14 @@ function ProfileSetup({ navigation }) {
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
-        onSettingsPress={() => {
-          Keyboard.dismiss();
-          // setVisible(true);
-          navigation.navigate(NavigationRoutes.CREATEPIN);
-        }}
+        // onSettingsPress={() => {
+        // Keyboard.dismiss();
+        // setVisible(true);
+        // navigation.navigate(NavigationRoutes.CREATEPIN);
+        // }}
         primaryStatus={query.status}
-        disabled={name === ''}
         primaryCTATitle={common.next}
       />
-      {/* <ModalContainer
-        title={onBoarding.advanceSettingTitle}
-        subTitle={onBoarding.enterPin}
-        visible={visible}
-        onDismiss={() => setVisible(false)}>
-        <CreatePin />
-      </ModalContainer> */}
     </ScreenContainer>
   );
 }

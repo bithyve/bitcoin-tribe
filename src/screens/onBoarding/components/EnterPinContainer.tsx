@@ -113,6 +113,7 @@ function EnterPinContainer() {
           secondaryOnPress={() => navigation.goBack()}
           disabled={passcode === '' || passcode.length !== 4}
           width={wp(120)}
+          primaryLoading={login.isLoading}
         />
       </View>
       <KeyPadView
