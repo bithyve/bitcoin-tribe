@@ -22,6 +22,8 @@ import GradientView from 'src/components/GradientView';
 import AppTouchable from 'src/components/AppTouchable';
 import Identicon from 'react-native-identicon';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import AssetChip from 'src/components/AssetChip';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -55,7 +57,6 @@ const Item = ({
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -86,13 +87,22 @@ const Item = ({
             variant="body2"
             style={{
               color:
-                tag === 'COIN' ? theme.colors.accent : theme.colors.accent2,
+                tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1,
             }}>
-            {tag}
-          </AppText>
-          <AppText variant="body2" style={styles.nameText}>
             {name}
           </AppText>
+          <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
+            {details}
+          </AppText>
+        </View>
+        <View style={styles.tagWrapper}>
+          <AssetChip
+            tagText={Capitalize(tag)}
+            backColor={
+              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+            }
+            tagColor={theme.colors.primaryCTAText}
+          />
         </View>
         <View style={styles.amountWrapper}>
           <AppText variant="smallCTA" style={styles.amountText}>
@@ -136,7 +146,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
               <Item
                 key={index}
                 name={item.name}
-                details={''}
+                details={item.ticker}
                 amount={item.balance.spendable}
                 tag="COIN"
                 assetId={item.assetId}
@@ -156,7 +166,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
               <Item
                 key={index}
                 name={item.name}
-                details={''}
+                details={item.details}
                 amount={item.balance.spendable}
                 tag="COLLECTIBLE"
                 onPressAsset={() =>
@@ -208,7 +218,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     identiconWrapper: {
-      width: '20%',
+      width: '15%',
       height: '100%',
       justifyContent: 'center',
     },
@@ -218,11 +228,16 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 50,
     },
     assetDetailsWrapper: {
-      width: '60%',
+      width: '37%',
       paddingLeft: hp(20),
     },
     amountWrapper: {
       width: '20%',
+      alignItems: 'flex-end',
+    },
+    tagWrapper: {
+      width: '28%',
+      // justifyContent: 'flex-end',
       alignItems: 'flex-end',
     },
   });
