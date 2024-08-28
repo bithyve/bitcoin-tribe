@@ -42,7 +42,6 @@ const SendAssetScreen = () => {
       amount,
       consignmentEndpoints: endpoint,
     });
-    console.log('response', response);
     setLoading(false);
     if (response?.txid) {
       Toast(sendScreen.sentSuccessfully, true);
