@@ -30,16 +30,11 @@ import GradientView from 'src/components/GradientView';
 import SuccessPopupIcon from 'src/assets/images/successPopup.svg';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
-import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import dbManager from 'src/storage/realm/dbManager';
-import { RealmSchema } from 'src/storage/enum';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -130,6 +125,12 @@ const SendAssetScreen = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen, common, assets } = translations;
+
+  const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+    JSON.parse(averageTxFeeJSON);
+  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
+
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
@@ -139,14 +140,9 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
-  const { getBalance, getCurrencyIcon } = useBalance();
-  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
-  const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-    JSON.parse(averageTxFeeJSON);
-  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
-
+  const [selectedFeeRate, setSelectedFeeRate] = React.useState(
+    averageTxFee[TxPriority.LOW].feePerByte,
+  );
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
     return !invoice || !amount;
@@ -162,6 +158,7 @@ const SendAssetScreen = () => {
       blindedUTXO: utxo,
       amount,
       consignmentEndpoints: endpoint,
+      feeRate: selectedFeeRate,
     });
     setLoading(false);
     if (response?.txid) {
@@ -194,7 +191,7 @@ const SendAssetScreen = () => {
         primaryOnPress={() => {
           setShowErrorModal(false);
           navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => mutate(),
+            refresh: () => sendAsset(),
           });
         }}
       />
@@ -277,19 +274,21 @@ const SendAssetScreen = () => {
               status={
                 selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
               }
-              onPress={() => setSelectedPriority(TxPriority.LOW)}
+              onPress={() => {
+                setSelectedPriority(TxPriority.LOW);
+                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+              }}
             />
             <View style={styles.feeViewWrapper}>
               <AppText variant="body2" style={styles.feePriorityText}>
                 {assets.low}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                {/* &nbsp;1 sat/vbyte */}
-                {averageTxFee[TxPriority.LOW].feePerByte} sat/vbyte
+                {averageTxFee[TxPriority.LOW].feePerByte} sat/vB
               </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
+              {/* <AppText variant="caption" style={styles.feeSatsText}>
                 ~10 min
-              </AppText>
+              </AppText> */}
             </View>
           </View>
           <View style={styles.radioBtnWrapper}>
@@ -300,18 +299,21 @@ const SendAssetScreen = () => {
               status={
                 selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
               }
-              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
+              onPress={() => {
+                setSelectedPriority(TxPriority.MEDIUM);
+                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+              }}
             />
             <View style={styles.feeViewWrapper}>
               <AppText variant="body2" style={styles.feePriorityText}>
                 {assets.medium}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.MEDIUM].feePerByte} sat/vbyte
+                &nbsp;{averageTxFee[TxPriority.MEDIUM].feePerByte} sat/vB
               </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
+              {/* <AppText variant="caption" style={styles.feeSatsText}>
                 ~10 min
-              </AppText>
+              </AppText> */}
             </View>
           </View>
           <View style={styles.radioBtnWrapper}>
@@ -322,18 +324,21 @@ const SendAssetScreen = () => {
               status={
                 selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
               }
-              onPress={() => setSelectedPriority(TxPriority.HIGH)}
+              onPress={() => {
+                setSelectedPriority(TxPriority.HIGH);
+                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+              }}
             />
             <View style={styles.feeViewWrapper}>
               <AppText variant="body2" style={styles.feePriorityText}>
                 {assets.high}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.HIGH].feePerByte} sat/vbyte
+                &nbsp;{averageTxFee[TxPriority.HIGH].feePerByte} sat/vB
               </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
+              {/* <AppText variant="caption" style={styles.feeSatsText}>
                 ~10 min
-              </AppText>
+              </AppText> */}
             </View>
           </View>
         </View>
