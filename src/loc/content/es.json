@@ -238,6 +238,9 @@
     "feeRate": "Tasa de tarifa:",
     "low": "Bajo -",
     "medium": "Medio -",
-    "high": "Alto -"
+    "high": "Alto -",
+    "success": "¡Éxito!",
+    "operationSuccess": "¡Operación exitosa!",
+    "operationSuccessSubTitle": "Tus cambios se han guardado."
   }
 }

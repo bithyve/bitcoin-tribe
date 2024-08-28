@@ -9,7 +9,8 @@ import {
 import React, { useCallback, useContext, useState, useMemo } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
-import { useMMKVString } from 'react-native-mmkv';
+import Identicon from 'react-native-identicon';
+// import { useMMKVString } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -26,15 +27,20 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
-import Identicon from 'react-native-identicon';
+import SuccessPopupIcon from 'src/assets/images/successPopup.svg';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
-import useBalance from 'src/hooks/useBalance';
-import { Keys } from 'src/storage';
+// import CurrencyKind from 'src/models/enums/CurrencyKind';
+// import useBalance from 'src/hooks/useBalance';
+// import { Keys } from 'src/storage';
+import AssetChip from 'src/components/AssetChip';
+import Capitalize from 'src/utils/capitalizeUtils';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
 
 type ItemProps = {
   name: string;
+  details?: string;
   image?: string;
   tag?: string;
   onPressAsset?: (item: any) => void;
@@ -44,6 +50,7 @@ type ItemProps = {
 
 const AssetItem = ({
   name,
+  details,
   image,
   tag,
   onPressAsset,
@@ -85,11 +92,20 @@ const AssetItem = ({
               color:
                 tag === 'COIN' ? theme.colors.accent : theme.colors.accent2,
             }}>
-            {tag}
-          </AppText>
-          <AppText variant="body2" style={styles.nameText}>
             {name}
           </AppText>
+          <AppText variant="body2" style={styles.nameText}>
+            {details}
+          </AppText>
+        </View>
+        <View style={styles.tagWrapper}>
+          <AssetChip
+            tagText={Capitalize(tag)}
+            backColor={
+              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+            }
+            tagColor={theme.colors.primaryCTAText}
+          />
         </View>
         <View style={styles.amountWrapper}>
           <AppText variant="smallCTA" style={styles.amountText}>
@@ -112,12 +128,13 @@ const SendAssetScreen = () => {
   const [inputHeight, setInputHeight] = React.useState(100);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  const { getBalance, getCurrencyIcon } = useBalance();
-  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
-  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  // const { getBalance, getCurrencyIcon } = useBalance();
+  // const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  // const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
 
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
@@ -135,10 +152,10 @@ const SendAssetScreen = () => {
       amount,
       consignmentEndpoints: endpoint,
     });
-    console.log('response', response);
     setLoading(false);
     if (response?.txid) {
-      Toast(sendScreen.sentSuccessfully, true);
+      setVisible(true);
+      // Toast(sendScreen.sentSuccessfully, true);
       navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
@@ -171,9 +188,30 @@ const SendAssetScreen = () => {
           });
         }}
       />
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={styles.containerModalStyle}>
+          <SendSuccessPopupContainer
+            icon={<SuccessPopupIcon />}
+            title={assets.success}
+            subTitle={assets.operationSuccess}
+            description={assets.operationSuccessSubTitle}
+          />
+        </ResponsePopupContainer>
+      </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <AssetItem
           name={item.name}
+          details={
+            item.assetIface.toUpperCase() === AssetFace.RGB20
+              ? item.ticker
+              : item.details
+          }
           image={
             item.media?.filePath
               ? Platform.select({
@@ -288,7 +326,7 @@ const SendAssetScreen = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.proceed}
+          primaryTitle={common.send}
           primaryOnPress={sendAsset}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
@@ -343,7 +381,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderRadius: 10,
     },
     assetDetailsWrapper: {
-      width: '60%',
+      width: '37%',
       paddingLeft: hp(20),
     },
     amountWrapper: {
@@ -351,7 +389,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       alignItems: 'flex-end',
     },
     identiconWrapper: {
-      width: '20%',
+      width: '15%',
       height: '100%',
       justifyContent: 'center',
     },
@@ -403,6 +441,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     feeTitleText: {
       color: theme.colors.headingColor,
       marginRight: hp(10),
+    },
+    tagWrapper: {
+      width: '28%',
+      alignItems: 'flex-end',
+    },
+    containerModalStyle: {
+      // margin: 0,
+      // padding: 10,
     },
   });
 

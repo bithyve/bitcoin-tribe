@@ -238,6 +238,9 @@
     "feeRate": "Fee Rate:",
     "low": "Low -",
     "medium": "Medium -",
-    "high": "High -"
+    "high": "High -",
+    "success": "Success!",
+    "operationSuccess": "Operation successful!",
+    "operationSuccessSubTitle": "Your changes have been saved."
   }
 }
