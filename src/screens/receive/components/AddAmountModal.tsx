@@ -62,7 +62,7 @@ function AddAmountModal(props) {
       <KeyPadView
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
-        keyColor={theme.colors.primaryCTA}
+        keyColor={theme.colors.accent1}
         ClearIcon={<DeleteIcon />}
       />
     </View>
