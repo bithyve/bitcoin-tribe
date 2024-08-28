@@ -165,7 +165,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       right: 30,
     },
     footer: {
-      height: 100, // Adjust the height as needed
+      height: 180, // Adjust the height as needed
     },
     alternateSpace: {
       top: index % 2 === 0 ? 0 : hp(50),
