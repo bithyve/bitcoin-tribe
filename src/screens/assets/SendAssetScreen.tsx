@@ -162,7 +162,9 @@ const SendAssetScreen = () => {
     });
     setLoading(false);
     if (response?.txid) {
-      setVisible(true);
+      setTimeout(() => {
+        setVisible(true);
+      }, 400);
       // Toast(sendScreen.sentSuccessfully, true);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
