@@ -10,7 +10,7 @@ import React, { useCallback, useContext, useState, useMemo } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import Identicon from 'react-native-identicon';
-// import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVString } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -30,13 +30,20 @@ import GradientView from 'src/components/GradientView';
 import SuccessPopupIcon from 'src/assets/images/successPopup.svg';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
-// import CurrencyKind from 'src/models/enums/CurrencyKind';
-// import useBalance from 'src/hooks/useBalance';
-// import { Keys } from 'src/storage';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import useBalance from 'src/hooks/useBalance';
+import { Keys } from 'src/storage';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
+import {
+  AverageTxFees,
+  AverageTxFeesByNetwork,
+} from 'src/services/wallets/interfaces';
 
 type ItemProps = {
   name: string;
@@ -132,9 +139,13 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  // const { getBalance, getCurrencyIcon } = useBalance();
-  // const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
-  // const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+    JSON.parse(averageTxFeeJSON);
+  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
 
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
@@ -156,7 +167,6 @@ const SendAssetScreen = () => {
     if (response?.txid) {
       setVisible(true);
       // Toast(sendScreen.sentSuccessfully, true);
-      navigation.goBack();
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
         setShowErrorModal(true);
@@ -201,6 +211,9 @@ const SendAssetScreen = () => {
             title={assets.success}
             subTitle={assets.operationSuccess}
             description={assets.operationSuccessSubTitle}
+            onPress={() => {
+              navigation.goBack();
+            }}
           />
         </ResponsePopupContainer>
       </View>
@@ -271,10 +284,11 @@ const SendAssetScreen = () => {
                 {assets.low}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                {/* &nbsp;1 sat/vbyte */}
+                {averageTxFee[TxPriority.LOW].feePerByte} sat/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~10 min
               </AppText>
             </View>
           </View>
@@ -293,10 +307,10 @@ const SendAssetScreen = () => {
                 {assets.medium}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                &nbsp;{averageTxFee[TxPriority.MEDIUM].feePerByte} sat/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~10 min
               </AppText>
             </View>
           </View>
@@ -315,10 +329,10 @@ const SendAssetScreen = () => {
                 {assets.high}
               </AppText>
               <AppText variant="body2" style={styles.feeText}>
-                &nbsp;1 sat/vbyte
+                &nbsp;{averageTxFee[TxPriority.HIGH].feePerByte} sat/vbyte
               </AppText>
               <AppText variant="caption" style={styles.feeSatsText}>
-                ~3hours
+                ~10 min
               </AppText>
             </View>
           </View>
