@@ -108,7 +108,6 @@ function IssueScreen() {
     Keyboard.dismiss();
     try {
       const result = await pickImage(false);
-      console.log('result', result);
       setImage(result);
     } catch (error) {
       console.error(error);
