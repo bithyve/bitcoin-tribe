@@ -103,6 +103,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     detailText: {
+      marginBottom: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
     assetDetailsText: {

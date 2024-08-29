@@ -18,10 +18,11 @@ function EditWalletProfile({ navigation }) {
 
   const [name, setName] = useState(app.appName);
   const [profileImage, setProfileImage] = useState(app.walletImage);
+  const [loading, setLoading] = useState('');
 
   const handlePickImage = async () => {
     try {
-      const result = await pickImage(300, 300, true);
+      const result = await pickImage(true);
       setProfileImage(result);
     } catch (error) {
       console.error(error);
@@ -29,13 +30,16 @@ function EditWalletProfile({ navigation }) {
   };
 
   const updateWalletProfile = async () => {
+    setLoading('loading');
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
+      setLoading('');
       Toast(wallet.profileUpdateMsg, true);
       navigation.navigate(NavigationRoutes.WALLETDETAILS, {
         autoRefresh: true,
       });
     } else {
+      setLoading('');
       Toast(wallet.profileUpdateErrMsg, false, true);
     }
   };
@@ -56,6 +60,7 @@ function EditWalletProfile({ navigation }) {
         edit={true}
         disabled={name === ''}
         primaryCTATitle={common.save}
+        primaryStatus={loading}
       />
     </ScreenContainer>
   );

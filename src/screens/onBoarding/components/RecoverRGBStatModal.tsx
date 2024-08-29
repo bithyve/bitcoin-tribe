@@ -19,11 +19,11 @@ const RecoverRGBStatModal: React.FC<Props> = ({
   secondaryOnPress,
 }) => {
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, onBoarding } = translations;
   const navigation = useNavigation();
   return (
     <ModalContainer
-      title={'Would you like to recover your RGB stats from the cloud?'}
+      title={onBoarding.recoverRGBState}
       visible={visible}
       enableCloseIcon={false}
       onDismiss={() => {}}>

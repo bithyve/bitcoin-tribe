@@ -273,11 +273,11 @@ function EnterSeedContainer() {
       <Buttons
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
-        secondaryTitle={common.needHelp}
-        secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
-        secondaryOnPress={() => {
-          console.log('');
-        }}
+        // secondaryTitle={common.needHelp}
+        // secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
+        // secondaryOnPress={() => {
+        //   console.log('');
+        // }}
       />
       <RecoverRGBStatModal
         visible={visible}
