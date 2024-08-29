@@ -53,8 +53,8 @@ function IssueScreen() {
       ticker: assetTicker,
       supply: totalSupplyAmt.replace(/,/g, ''),
     });
-    setLoading(false);
     if (response?.assetId) {
+      setLoading(false);
       Toast(assets.assetCreateMsg, true);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
@@ -62,6 +62,7 @@ function IssueScreen() {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
+      setLoading(false);
       Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
@@ -73,10 +74,10 @@ function IssueScreen() {
       name: assetName.trim(),
       description: description,
       supply: totalSupplyAmt.replace(/,/g, ''),
-      filePath: image?.path?.replace('file://', ''),
+      filePath: image.replace('file://', ''),
     });
-    setLoading(false);
     if (response?.assetId) {
+      setLoading(false);
       Toast(assets.assetCreateMsg, true);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
@@ -84,13 +85,14 @@ function IssueScreen() {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
+      setLoading(false);
       Toast(`Failed: ${response?.error}`, false, true);
     }
   }, [
     assetName,
     assets.assetCreateMsg,
     description,
-    image?.path,
+    image,
     navigation,
     totalSupplyAmt,
   ]);
@@ -105,7 +107,8 @@ function IssueScreen() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(1000, 1000, false);
+      const result = await pickImage(false);
+      console.log('result', result);
       setImage(result);
     } catch (error) {
       console.error(error);
@@ -127,6 +130,7 @@ function IssueScreen() {
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
+          setLoading(false);
           setShowErrorModal(false);
           navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
             refresh: () => onPressIssue(),
@@ -212,8 +216,8 @@ function IssueScreen() {
                   source={{
                     uri:
                       Platform.OS === 'ios'
-                        ? image.path.replace('file://', '')
-                        : image.path,
+                        ? image.replace('file://', '')
+                        : image,
                   }}
                   style={styles.imageStyle}
                 />
