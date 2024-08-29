@@ -32,5 +32,6 @@ const Colors = {
   UFOGreen1: 'rgba(76, 217, 100, 1)',
   Gray: 'rgba(128, 128, 128, 1)',
   Green: 'rgba(116, 255, 81, 1)',
+  DarkSilver: 'rgba(111, 111, 111, 1)',
 };
 export default Colors;
