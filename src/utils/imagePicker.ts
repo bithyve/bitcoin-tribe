@@ -17,18 +17,20 @@ const requestPermission = async () => {
 };
 
 const pickImage = async (includeBase64 = false) => {
-  const permission = await requestPermission();
-  if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
-    Alert.alert(
-      'Permission Denied',
-      'You have denied the permission to access the photo library. Please enable it from the settings.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: openSettings },
-      ],
-    );
+  if (Platform.OS === 'android') {
+    const permission = await requestPermission();
+    if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+      Alert.alert(
+        'Permission Denied',
+        'You have denied the permission to access the photo library. Please enable it from the settings.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Open Settings', onPress: openSettings },
+        ],
+      );
 
-    return null;
+      return null;
+    }
   }
   return new Promise((resolve, reject) => {
     launchImageLibrary(
