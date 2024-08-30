@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
@@ -165,7 +165,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       right: 30,
     },
     footer: {
-      height: 100, // Adjust the height as needed
+      height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
     },
     alternateSpace: {
       top: index % 2 === 0 ? 0 : hp(50),
