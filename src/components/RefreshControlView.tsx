@@ -3,8 +3,14 @@ import { RefreshControl, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
-
-const RefreshControlView = ({ refreshing, onRefresh }) => {
+type RefreshControlViewProps = {
+  refreshing: boolean;
+  onRefresh: () => void;
+};
+const RefreshControlView = ({
+  refreshing,
+  onRefresh,
+}: RefreshControlViewProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
