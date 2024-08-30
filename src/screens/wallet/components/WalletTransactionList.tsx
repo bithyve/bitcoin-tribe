@@ -14,6 +14,9 @@ import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import ModalLoading from 'src/components/ModalLoading';
+import LottieView from 'lottie-react-native';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function WalletTransactionList({
   transactions,
@@ -63,10 +66,9 @@ function WalletTransactionList({
       style={styles.container}
       data={transactions}
       refreshControl={
-        <RefreshControl
+        <RefreshControlView
           refreshing={walletRefreshMutation.isLoading}
-          onRefresh={pullDownToRefresh}
-          tintColor={theme.colors.accent1}
+          onRefresh={() => pullDownToRefresh()}
         />
       }
       renderItem={({ item }) => (
@@ -101,6 +103,11 @@ const getStyles = (theme: AppTheme) =>
     },
     emptyStateContainer: {
       marginTop: '30%',
+    },
+    refreshLoader: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
     },
   });
 export default WalletTransactionList;

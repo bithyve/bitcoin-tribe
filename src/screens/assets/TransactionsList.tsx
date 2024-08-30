@@ -11,6 +11,7 @@ import { Transaction } from 'src/models/interfaces/RGBWallet';
 import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function TransactionsList({
   transactions,
@@ -57,10 +58,9 @@ function TransactionsList({
         style={styles.container2}
         data={transactions}
         refreshControl={
-          <RefreshControl
+          <RefreshControlView
             refreshing={isLoading}
             onRefresh={() => refresh()}
-            tintColor={theme.colors.accent1}
           />
         }
         renderItem={({ item }) => (

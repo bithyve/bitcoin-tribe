@@ -16,6 +16,7 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { hp } from 'src/constants/responsive';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
@@ -32,10 +33,9 @@ function CoinAllTransaction() {
         style={styles.container}
         data={transactions}
         refreshControl={
-          <RefreshControl
+          <RefreshControlView
             refreshing={isLoading}
             onRefresh={() => mutate({ assetId })}
-            tintColor={theme.colors.accent1}
           />
         }
         renderItem={({ item }) => (
