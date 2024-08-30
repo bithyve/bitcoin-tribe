@@ -133,7 +133,9 @@
     "backupPhraseSettingSubTitle": "View Backup Phrase",
     "viewBackupPhrase": "View Backup Phrase",
     "viewBackupPhraseSubTitle": "View seed words for your key",
-    "noBackHistory": "No Backup History yet."
+    "noBackHistory": "No Backup History yet.",
+    "cloudBackupTitle": "Cloud Backup",
+    "cloudBackupSubTitle": "Backup RGB Asset state on"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

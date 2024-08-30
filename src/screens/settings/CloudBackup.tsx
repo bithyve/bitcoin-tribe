@@ -5,7 +5,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { FlatList, Platform, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -22,6 +22,7 @@ const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
     getJSONFromRealmObject,
   );
@@ -32,11 +33,14 @@ const CloudBackup = ({ navigation }) => {
       <ModalLoading visible={backup.isLoading} />
 
       <AppHeader
-        title={'Cloud Backup'}
-        subTitle={`Backup RGB Asset state on ${Platform.select({
-          ios: 'iCloud',
-          android: 'Google Drive',
-        })}`}
+        title={settings.cloudBackupTitle}
+        subTitle={
+          settings.cloudBackupSubTitle +
+          `${Platform.select({
+            ios: 'iCloud',
+            android: 'Google Drive',
+          })}`
+        }
       />
 
       <FlatList
@@ -51,6 +55,7 @@ const CloudBackup = ({ navigation }) => {
         )}
         ListEmptyComponent={
           <EmptyStateView
+            style={styles.emptyStateContainer}
             title={settings.noBackHistory}
             subTitle={''}
             IllustartionImage={<NoBackupIllustration />}
@@ -72,5 +77,10 @@ const CloudBackup = ({ navigation }) => {
     </ScreenContainer>
   );
 };
-
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    emptyStateContainer: {
+      marginTop: '40%',
+    },
+  });
 export default CloudBackup;

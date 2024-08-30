@@ -133,7 +133,9 @@
     "backupPhraseSettingSubTitle": "Ver frase de respaldo",
     "viewBackupPhrase": "Ver frase de respaldo",
     "viewBackupPhraseSubTitle": "Ver palabras iniciales para su clave",
-    "noBackHistory": "Aún no hay historial de copias de seguridad."
+    "noBackHistory": "Aún no hay historial de copias de seguridad.",
+    "cloudBackupTitle": "Copia de seguridad en la nube",
+    "cloudBackupSubTitle": "Copia de seguridad del estado del activo RGB activado"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
