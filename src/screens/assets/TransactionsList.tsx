@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';

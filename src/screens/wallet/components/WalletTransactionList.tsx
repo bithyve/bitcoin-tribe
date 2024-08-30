@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -14,8 +14,6 @@ import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
-import ModalLoading from 'src/components/ModalLoading';
-import LottieView from 'lottie-react-native';
 import RefreshControlView from 'src/components/RefreshControlView';
 
 function WalletTransactionList({
