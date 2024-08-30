@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -14,6 +14,7 @@ import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function WalletTransactionList({
   transactions,
@@ -63,10 +64,9 @@ function WalletTransactionList({
       style={styles.container}
       data={transactions}
       refreshControl={
-        <RefreshControl
+        <RefreshControlView
           refreshing={walletRefreshMutation.isLoading}
-          onRefresh={pullDownToRefresh}
-          tintColor={theme.colors.accent1}
+          onRefresh={() => pullDownToRefresh()}
         />
       }
       renderItem={({ item }) => (
@@ -100,7 +100,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     emptyStateContainer: {
-      marginTop: '50%',
+      marginTop: '30%',
+    },
+    refreshLoader: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
     },
   });
 export default WalletTransactionList;

@@ -1,9 +1,7 @@
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
-
-import Colors from 'src/theme/Colors';
 
 type ModalProps = {
   visible: boolean;
@@ -35,7 +33,6 @@ const ModalLoading = (props: ModalProps) => {
       animationOut="fadeOut"
       style={styles.container}>
       <View style={styles.loaderWrapper}>
-        {/* <ActivityIndicator size="large" color={Colors.ChineseOrange} /> */}
         <LottieView
           source={require('src/assets/images/loader.json')}
           style={styles.loaderStyle}

@@ -147,7 +147,7 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-      width: '60%',
+      width: '45%',
     },
     amountText: {
       fontWeight: '300',

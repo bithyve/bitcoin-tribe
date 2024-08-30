@@ -5,7 +5,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { FlatList, Platform, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -13,14 +13,16 @@ import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import VersionHistoryItem from './components/VersionHistoryItem';
-import AppText from 'src/components/AppText';
 import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
+import EmptyStateView from 'src/components/EmptyStateView';
+import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
     getJSONFromRealmObject,
   );
@@ -31,16 +33,18 @@ const CloudBackup = ({ navigation }) => {
       <ModalLoading visible={backup.isLoading} />
 
       <AppHeader
-        title={'Cloud Backup'}
-        subTitle={`Backup RGB state on  ${Platform.select({
-          ios: 'iCloud',
-          android: 'Google Drive',
-        })}`}
+        title={settings.cloudBackupTitle}
+        subTitle={
+          settings.cloudBackupSubTitle +
+          `${Platform.select({
+            ios: 'iCloud',
+            android: 'Google Drive',
+          })}`
+        }
       />
 
       <FlatList
         data={data.reverse()}
-        ListEmptyComponent={() => <AppText>No backup history</AppText>}
         renderItem={({ item, index }) => (
           <VersionHistoryItem
             title={settings[item?.title]}
@@ -49,6 +53,14 @@ const CloudBackup = ({ navigation }) => {
             lastIndex={lastIndex === index}
           />
         )}
+        ListEmptyComponent={
+          <EmptyStateView
+            style={styles.emptyStateContainer}
+            title={settings.noBackHistory}
+            subTitle={''}
+            IllustartionImage={<NoBackupIllustration />}
+          />
+        }
       />
 
       <View>
@@ -65,5 +77,10 @@ const CloudBackup = ({ navigation }) => {
     </ScreenContainer>
   );
 };
-
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    emptyStateContainer: {
+      marginTop: '40%',
+    },
+  });
 export default CloudBackup;
