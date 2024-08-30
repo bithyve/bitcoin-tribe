@@ -73,7 +73,7 @@
     "yourCoinAvatar": "Your Coin Avatar",
     "select": "Select",
     "noAssetTitle": "No assets Yet.",
-    "noAssetSubTitle": "Add your first Bitcoin to see your portfolio here!"
+    "noAssetSubTitle": "Click on Plus icons below to issue your First Asset"
   },
   "settings": {
     "setting": "Settings",
@@ -132,7 +132,8 @@
     "backupPhraseSettingTitle": "Backup Phrase Settings",
     "backupPhraseSettingSubTitle": "View Backup Phrase",
     "viewBackupPhrase": "View Backup Phrase",
-    "viewBackupPhraseSubTitle": "View seed words for your key"
+    "viewBackupPhraseSubTitle": "View seed words for your key",
+    "noBackHistory": "No Backup History yet."
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -190,7 +191,7 @@
     "buyWithRamp": "Buy with Ramp",
     "buyWithRampSubTitle": "Low fee for those big buys",
     "noUTXOYet": "No transactions yet",
-    "noUTXOYetSubTitle": "Start trading to see your activity here!",
+    "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Scan or Copy paste the Xpub Address",
     "profileUpdateMsg": "Profile update successfully!",
     "profileUpdateErrMsg": "Failed to update!",

@@ -13,9 +13,10 @@ import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import VersionHistoryItem from './components/VersionHistoryItem';
-import AppText from 'src/components/AppText';
 import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
+import EmptyStateView from 'src/components/EmptyStateView';
+import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
@@ -32,7 +33,7 @@ const CloudBackup = ({ navigation }) => {
 
       <AppHeader
         title={'Cloud Backup'}
-        subTitle={`Backup RGB state on  ${Platform.select({
+        subTitle={`Backup RGB Asset state on ${Platform.select({
           ios: 'iCloud',
           android: 'Google Drive',
         })}`}
@@ -40,7 +41,6 @@ const CloudBackup = ({ navigation }) => {
 
       <FlatList
         data={data.reverse()}
-        ListEmptyComponent={() => <AppText>No backup history</AppText>}
         renderItem={({ item, index }) => (
           <VersionHistoryItem
             title={settings[item?.title]}
@@ -49,6 +49,13 @@ const CloudBackup = ({ navigation }) => {
             lastIndex={lastIndex === index}
           />
         )}
+        ListEmptyComponent={
+          <EmptyStateView
+            title={settings.noBackHistory}
+            subTitle={''}
+            IllustartionImage={<NoBackupIllustration />}
+          />
+        }
       />
 
       <View>

@@ -100,7 +100,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     emptyStateContainer: {
-      marginTop: '50%',
+      marginTop: '30%',
     },
   });
 export default WalletTransactionList;
