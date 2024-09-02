@@ -85,9 +85,11 @@ function SendToContainer({
 
   const successTransaction = () => {
     setVisible(false);
-    navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-      autoRefresh: true,
-    });
+    setTimeout(() => {
+      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+        autoRefresh: true,
+      });
+    }, 400);
   };
 
   const initiateSend = () => {

@@ -5,6 +5,7 @@ import { Button, useTheme } from 'react-native-paper';
 import Fonts from 'src/constants/Fonts';
 import { AppTheme } from 'src/theme';
 import GradientView from './GradientView';
+import { hp } from 'src/constants/responsive';
 
 type RoundedCTAProps = {
   icon?: React.ReactNode;
@@ -50,9 +51,10 @@ const getStyles = (width, buttonColor) =>
       alignItems: 'center',
       justifyContent: 'center',
       borderColor: buttonColor,
-      borderWidth: 1,
+      borderWidth: 0.5,
     },
     contentStyle: {
+      height: hp(50),
       width: width,
     },
     labelStyle: {
@@ -60,7 +62,7 @@ const getStyles = (width, buttonColor) =>
     },
     roundedCTATitle: {
       fontSize: 16,
-      fontFamily: Fonts.LufgaSemiBold,
+      fontFamily: Fonts.LufgaRegular,
       lineHeight: 16 * 1.5,
       height: 25,
       marginLeft: 10,

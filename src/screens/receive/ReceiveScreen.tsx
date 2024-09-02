@@ -51,7 +51,11 @@ function ReceiveScreen({ route }) {
         subTitle={receciveScreen.addAmountSubTitle}
         visible={visible}
         onDismiss={() => setVisible(false)}>
-        <AddAmountModal callback={setAmount} />
+        <AddAmountModal
+          callback={setAmount}
+          secondaryOnPress={() => setVisible(false)}
+          primaryOnPress={() => setVisible(false)}
+        />
       </ModalContainer>
     </ScreenContainer>
   );

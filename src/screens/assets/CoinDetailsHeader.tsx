@@ -38,7 +38,14 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         </AppText>
       </View>
       <View style={styles.balanceWrapper}>
-        <AppText variant="walletBalance" style={styles.balanceText}>
+        <AppText
+          variant="walletBalance"
+          style={[
+            styles.balanceText,
+            {
+              fontSize: coin.balance.spendable.toString().length > 10 ? 24 : 39,
+            },
+          ]}>
           {numberWithCommas(coin.balance.spendable)}
         </AppText>
       </View>

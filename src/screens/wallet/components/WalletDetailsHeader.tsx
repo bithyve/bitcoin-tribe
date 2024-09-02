@@ -114,7 +114,7 @@ const getStyles = (theme: AppTheme) =>
       paddingBottom: 10,
     },
     usernameText: {
-      color: theme.colors.accent3,
+      color: theme.colors.secondaryHeadingColor,
       textAlign: 'center',
       marginVertical: 10,
     },

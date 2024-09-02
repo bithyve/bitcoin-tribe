@@ -65,7 +65,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     primaryCTATitle: {
       fontSize: 16,
-      fontFamily: Fonts.LufgaSemiBold,
+      fontFamily: Fonts.LufgaRegular,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
     },

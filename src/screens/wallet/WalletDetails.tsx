@@ -18,20 +18,12 @@ import useWallets from 'src/hooks/useWallets';
 function WalletDetails({ navigation, route }) {
   const { autoRefresh = false } = route.params || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
-  const [profileImage, setProfileImage] = useState(null);
-  const [walletName, setWalletName] = useState(null);
+  const [profileImage, setProfileImage] = useState(app.walletImage || null);
+  const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
-
-  useEffect(() => {
-    if (app && app.walletImage && app.appName) {
-      const base64Image = app.walletImage;
-      setProfileImage(base64Image);
-      setWalletName(app.appName);
-    }
-  }, [app]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -72,7 +64,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 670 ? '42%' : '35%',
+    height: windowHeight < 670 ? '42%' : '40%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
@@ -80,7 +72,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '50%' : '65%',
+    height: windowHeight < 670 ? '50%' : '60%',
     marginHorizontal: wp(16),
   },
 });
