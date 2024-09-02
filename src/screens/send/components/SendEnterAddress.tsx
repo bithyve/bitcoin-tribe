@@ -105,7 +105,9 @@ function SendEnterAddress({
           primaryOnPress={() => {
             Keyboard.dismiss();
             onDismiss();
-            onProceed(address);
+            setTimeout(() => {
+              onProceed(address);
+            }, 400);
           }}
           secondaryOnPress={navigation.goBack}
           width={wp(120)}
