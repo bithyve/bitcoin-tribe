@@ -36,6 +36,7 @@ import {
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
 import {
+  AverageTxFees,
   AverageTxFeesByNetwork,
   NodeDetail,
   TransactionPrerequisite,
@@ -295,23 +296,20 @@ export class ApiHandler {
   static async sendPhaseOne({
     sender,
     recipient,
+    averageTxFee,
+    selectedPriority,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
+    averageTxFee: AverageTxFees;
+    selectedPriority: TxPriority;
   }): Promise<TransactionPrerequisite> {
-    const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-    if (!averageTxFeeJSON) {
-      throw new Error('Transaction fee not found');
-    }
-    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-      JSON.parse(averageTxFeeJSON);
-    const averageTxFee = averageTxFeeByNetwork[sender.networkType];
-
     const recipients = [recipient];
     const { txPrerequisites } = await WalletOperations.transferST1(
       sender,
       recipients,
       averageTxFee,
+      selectedPriority,
     );
 
     return txPrerequisites;
@@ -338,7 +336,7 @@ export class ApiHandler {
       dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
         specs: sender.specs,
       });
-      return txid;
+      return { txid };
     } else {
       throw new Error('Failed to execute the transaction');
     }
@@ -347,29 +345,35 @@ export class ApiHandler {
   static async sendTransaction({
     sender,
     recipient,
+    averageTxFee,
+    selectedPriority,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
-  }): Promise<{ txid: string }> {
-    try {
-      const txPrerequisites = await ApiHandler.sendPhaseOne({
-        sender,
-        recipient,
-      });
+    averageTxFee: AverageTxFees;
+    selectedPriority: TxPriority;
+  }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
+    const txPrerequisites = await ApiHandler.sendPhaseOne({
+      sender,
+      recipient,
+      averageTxFee,
+      selectedPriority,
+    });
 
-      if (!txPrerequisites) {
-        throw new Error('Failed to generate txPrerequisites');
-      }
-
-      return await ApiHandler.sendPhaseTwo({
-        sender,
-        recipient,
-        txPrerequisites,
-        txPriority: TxPriority.LOW,
-      });
-    } catch (err) {
-      console.log({ err });
+    if (!txPrerequisites) {
+      throw new Error('Failed to generate txPrerequisites');
     }
+    const { txid } = await ApiHandler.sendPhaseTwo({
+      sender,
+      recipient,
+      txPrerequisites,
+      txPriority: selectedPriority,
+    });
+
+    return {
+      txid,
+      txPrerequisites,
+    };
   }
 
   static async receiveTestSats() {

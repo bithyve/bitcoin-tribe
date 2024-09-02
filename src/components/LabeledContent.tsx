@@ -56,17 +56,18 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     labelStyle: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
     },
     textStyle: {
-      color: theme.colors.headingColor,
+      lineHeight: 20,
+      color: theme.colors.secondaryHeadingColor,
     },
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
     },
     satsText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
       marginLeft: hp(5),
     },
   });

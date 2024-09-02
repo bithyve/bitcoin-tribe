@@ -25,7 +25,7 @@ function ProfileSetup({ navigation }) {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(300, 300, true);
+      const result = await pickImage(true);
       setProfileImage(result);
     } catch (error) {
       console.error(error);

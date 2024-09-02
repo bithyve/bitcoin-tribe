@@ -50,11 +50,12 @@ function EnterSeedContainer() {
   const [suggestedWords, setSuggestedWords] = useState([]);
   const [visible, setVisible] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
-  const [activePage, setActivePage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { isLoading, mutate, status } = useMutation(ApiHandler.setupNewApp);
   const restoreFromCloudMutation = useMutation(ApiHandler.restoreRgbFromCloud);
 
   useEffect(() => {
+    setLoading(false);
     if (restoreFromCloudMutation.isSuccess) {
       setTimeout(() => {
         onSuccess();
@@ -64,6 +65,7 @@ function EnterSeedContainer() {
 
   useEffect(() => {
     if (status === 'success') {
+      setLoading(false);
       setTimeout(() => {
         setVisible(true);
       }, 400);
@@ -187,7 +189,7 @@ function EnterSeedContainer() {
   };
   const onPressHandleNext = async () => {
     if (isSeedFilled(12)) {
-      //setVisible(true);
+      setLoading(true);
       let seedWord = '';
       for (let i = 0; i < seedData.length; i++) {
         seedWord += `${seedData[i].name} `;
@@ -202,6 +204,7 @@ function EnterSeedContainer() {
           mnemonic,
         });
       } else {
+        setLoading(false);
         Toast('Invalid Mnemonic', false, true);
       }
     }
@@ -211,16 +214,19 @@ function EnterSeedContainer() {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    navigation.replace(NavigationRoutes.APPSTACK);
+    setLoading(false);
+    setTimeout(() => {
+      navigation.replace(NavigationRoutes.APPSTACK);
+    }, 400);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <ModalLoading visible={isLoading || restoreFromCloudMutation.isLoading} />
+      <ModalLoading visible={loading} />
       <KeyboardAwareScrollView
         style={{ flex: 1 }}
         enableOnAndroid={true}
-        extraScrollHeight={150}
+        extraScrollHeight={windowHeight > 670 ? 200 : 150}
         keyboardOpeningTime={0}>
         <FlatList
           keyboardShouldPersistTaps="handled"
@@ -273,16 +279,25 @@ function EnterSeedContainer() {
       <Buttons
         primaryOnPress={onPressHandleNext}
         primaryTitle={common.next}
-        secondaryTitle={common.needHelp}
-        secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
-        secondaryOnPress={() => {
-          console.log('');
-        }}
+        // secondaryTitle={common.needHelp}
+        // secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
+        // secondaryOnPress={() => {
+        //   console.log('');
+        // }}
       />
       <RecoverRGBStatModal
         visible={visible}
-        primaryOnPress={() => restoreFromCloudMutation.mutate()}
-        secondaryOnPress={onSuccess}
+        primaryOnPress={() => {
+          setLoading(true);
+          restoreFromCloudMutation.mutate();
+          setVisible(false);
+        }}
+        secondaryOnPress={() => {
+          setVisible(false);
+          setTimeout(() => {
+            onSuccess();
+          }, 400);
+        }}
       />
     </View>
   );

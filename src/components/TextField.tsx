@@ -132,7 +132,7 @@ const getStyles = (
     inputContainer: {
       justifyContent: 'center',
       height: hp(60),
-      width: icon ? (rightText ? '60%' : '80%') : '100%',
+      width: icon ? (rightText ? '60%' : '85%') : '100%',
       backgroundColor: theme.colors.inputBackground,
       borderRadius: 15,
       borderTopLeftRadius: 20,

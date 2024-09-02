@@ -1,14 +1,8 @@
 import React, { useContext } from 'react';
-import {
-  FlatList,
-  Platform,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import { AppTheme } from 'src/theme';
@@ -19,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -85,11 +80,7 @@ function AssetsList(props: AssetsListProps) {
         numColumns={2}
         data={listData}
         refreshControl={
-          <RefreshControl
-            refreshing={false}
-            onRefresh={() => {}}
-            tintColor={theme.colors.accent1}
-          />
+          <RefreshControlView refreshing={false} onRefresh={() => {}} />
         }
         ListFooterComponent={FooterComponent}
         ListEmptyComponent={
@@ -165,7 +156,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       right: 30,
     },
     footer: {
-      height: 180, // Adjust the height as needed
+      height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
     },
     alternateSpace: {
       top: index % 2 === 0 ? 0 : hp(50),
