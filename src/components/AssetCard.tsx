@@ -26,7 +26,10 @@ type AssetCardProps = {
 const AssetCard = (props: AssetCardProps) => {
   const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, amount.toString().length),
+    [theme, amount],
+  );
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -74,7 +77,7 @@ const AssetCard = (props: AssetCardProps) => {
               variant="caption"
               style={styles.amountText}
               numberOfLines={1}>
-              {numberWithCommas(amount)}&nbsp;
+              {numberWithCommas(amount)}
             </AppText>
           </View>
           <AppText variant="caption" style={styles.titleText}>
@@ -85,7 +88,7 @@ const AssetCard = (props: AssetCardProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, amtLength) =>
   StyleSheet.create({
     container: {
       height: hp(205),
@@ -147,7 +150,7 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-      width: '45%',
+      width: amtLength > 10 ? '25%' : '45%',
     },
     amountText: {
       fontWeight: '300',

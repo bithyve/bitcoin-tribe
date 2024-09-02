@@ -80,7 +80,14 @@ function AssetTransaction(props: AssetTransactionProps) {
         </View>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
-            <AppText variant="body1" style={styles.amountText}>
+            <AppText
+              variant="body1"
+              style={[
+                styles.amountText,
+                {
+                  fontSize: transAmount.toString().length > 10 ? 11 : 16,
+                },
+              ]}>
               &nbsp;{numberWithCommas(transAmount)}
             </AppText>
           </View>
