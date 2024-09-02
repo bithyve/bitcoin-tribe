@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
-import { hp, wp } from 'src/constants/responsive';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
