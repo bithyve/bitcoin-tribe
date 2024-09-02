@@ -55,6 +55,7 @@ const CollectibleDetailsScreen = () => {
       <View style={styles.walletHeaderWrapper}>
         <CollectibleDetailsHeader
           collectible={collectible}
+          wallet={wallet}
           onPressSetting={() =>
             navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
               assetId,

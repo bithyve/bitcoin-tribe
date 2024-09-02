@@ -49,6 +49,7 @@ import Login from 'src/screens/onBoarding/Login';
 import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
+import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -207,6 +208,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.BACKUPPHRASESETTING}
           component={BackupPhraseSetting}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.SELECTASSETTOSEND}
+          component={SelectAssetToSend}
         />
       </Stack.Navigator>
     </RealmProvider>

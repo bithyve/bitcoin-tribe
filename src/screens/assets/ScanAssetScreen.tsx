@@ -8,14 +8,15 @@ import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useRoute } from '@react-navigation/native';
 
 function ScanAssetScreen({ route, navigation }) {
-  const { assetId } = route;
+  const { assetId, wallet, rgbInvoice, item } = useRoute().params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
-
+  console.log('item scan', item);
   return (
     <ScreenContainer>
       <AppHeader
@@ -32,6 +33,9 @@ function ScanAssetScreen({ route, navigation }) {
         onPress={() => {
           navigation.navigate(NavigationRoutes.SENDASSET, {
             assetId: assetId,
+            wallet: wallet,
+            rgbInvoice: rgbInvoice,
+            item: item,
           });
         }}
       />

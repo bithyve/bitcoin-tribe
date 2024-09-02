@@ -232,6 +232,19 @@
     "issuedSupply": "Issued Supply",
     "issuedOn": "Issued On",
     "precision": "Precision",
-    "details": "Details"
+    "details": "Details",
+    "selectAssetTitle": "Select Asset to send",
+    "sendAssetTitle": "Send Asset",
+    "coin": "Coin",
+    "collectible": "Collectible",
+    "invoice": "Invoice",
+    "amount": "Amount",
+    "feeRate": "Fee Rate:",
+    "low": "Low -",
+    "medium": "Medium -",
+    "high": "High -",
+    "success": "Success!",
+    "operationSuccess": "Operation successful!",
+    "operationSuccessSubTitle": "Your changes have been saved."
   }
 }

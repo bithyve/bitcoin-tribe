@@ -10,7 +10,7 @@ import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 
 type popupContainerProps = {
-  title: string;
+  title?: string;
   subTitle?: string;
   visible: boolean;
   enableClose?: boolean;
@@ -51,9 +51,11 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
         <View style={styles.modalContainer}>
           <View style={styles.headingWrapper}>
             <View style={styles.contentWrapper}>
-              <AppText variant="heading1" style={styles.titleText}>
-                {title}
-              </AppText>
+              {title ? (
+                <AppText variant="heading1" style={styles.titleText}>
+                  {title}
+                </AppText>
+              ) : null}
               {subTitle ? (
                 <AppText variant="body1" style={styles.subTitleText}>
                   {subTitle}
