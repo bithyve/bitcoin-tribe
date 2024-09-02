@@ -232,6 +232,19 @@
     "issuedSupply": "Suministro emitido",
     "issuedOn": "Emitido el",
     "precision": "Precisión",
-    "details": "Detalles"
+    "details": "Detalles",
+    "selectAssetTitle": "Seleccione Activo para enviar",
+    "sendAssetTitle": "Enviar activo",
+    "coin": "Acuñar",
+    "collectible": "Coleccionable",
+    "invoice": "Factura",
+    "amount": "Cantidad",
+    "feeRate": "Tasa de tarifa:",
+    "low": "Bajo -",
+    "medium": "Medio -",
+    "high": "Alto -",
+    "success": "¡Éxito!",
+    "operationSuccess": "¡Operación exitosa!",
+    "operationSuccessSubTitle": "Tus cambios se han guardado."
   }
 }

@@ -545,24 +545,21 @@ export class ApiHandler {
     blindedUTXO,
     amount,
     consignmentEndpoints,
+    feeRate,
   }: {
     assetId: string;
     blindedUTXO: string;
     amount: string;
     consignmentEndpoints: string;
+    feeRate: number;
   }) {
     try {
-      const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-      const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-        JSON.parse(averageTxFeeJSON);
-      const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
       const response = await RGBServices.sendAsset(
         assetId,
         blindedUTXO,
         amount,
         consignmentEndpoints,
-        averageTxFee.low.feePerByte,
+        feeRate,
       );
       return response;
     } catch (error) {

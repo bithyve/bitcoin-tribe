@@ -58,7 +58,7 @@ function SendEnterAddress({
         });
         break;
       case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SENDASSET, {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
           wallet,
           rgbInvoice: address,
         });
