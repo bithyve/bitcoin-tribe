@@ -12,7 +12,13 @@ import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 
-function AddAmountModal(props) {
+type AddAmountModalProps = {
+  callback: (string) => void;
+  secondaryOnPress: () => void;
+  primaryOnPress: () => void;
+};
+function AddAmountModal(props: AddAmountModalProps) {
+  const { callback, secondaryOnPress, primaryOnPress } = props;
   const theme: AppTheme = useTheme();
 
   const [amount, setAmount] = useState('');
@@ -34,7 +40,7 @@ function AddAmountModal(props) {
   };
 
   useEffect(() => {
-    props.callback(amount);
+    callback(amount);
   }, [amount]);
 
   return (
@@ -54,8 +60,12 @@ function AddAmountModal(props) {
         <Buttons
           primaryTitle={common.save}
           secondaryTitle={common.cancel}
-          primaryOnPress={() => {}}
-          secondaryOnPress={() => setAmount('')}
+          primaryOnPress={() => primaryOnPress()}
+          secondaryOnPress={() => {
+            setAmount('');
+            secondaryOnPress();
+          }}
+          disabled={amount == ''}
           width={wp(120)}
         />
       </View>
