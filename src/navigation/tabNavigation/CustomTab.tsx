@@ -125,9 +125,11 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
-      width: wp(300),
+      width: '89%',
       marginBottom: hp(15),
-      marginHorizontal: windowWidth * 0.1,
+      marginHorizontal: hp(16),
+      // alignSelf: 'center',
+      // marginHorizontal: windowWidth * 0.1,
     },
     activeTab: {
       flex: 1,
