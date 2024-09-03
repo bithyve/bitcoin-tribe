@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
@@ -69,7 +69,8 @@ const getStyles = (theme: AppTheme, width, disabled) =>
     },
     primaryCTATitle: {
       fontSize: 16,
-      fontFamily: Fonts.LufgaRegular,
+      fontFamily:
+        Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
     },
