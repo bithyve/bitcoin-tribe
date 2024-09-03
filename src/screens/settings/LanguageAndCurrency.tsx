@@ -16,6 +16,8 @@ import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
 import availableCurrency from 'src/loc/availableCurrency';
+import SelectOption from 'src/components/SelectOption';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
@@ -26,21 +28,42 @@ function LanguageAndCurrency() {
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const [langDropdown, setLangDropdown] = React.useState(false);
   const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
+  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
 
   const selectedLanguage = availableLanguages.find(
     lang => lang.iso === language,
   );
+
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
 
   const initialCurrency = currency || 'USD';
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
 
+  const toggleDisplayMode = () => {
+    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
+      />
+      <SelectOption
+        title={'Sats Mode'}
+        subTitle={'Enable to see balance in sats'}
+        onPress={() => toggleDisplayMode()}
+        enableSwitch={true}
+        onValueChange={() => toggleDisplayMode()}
+        toggleValue={initialCurrencyMode === CurrencyKind.SATS}
       />
       <View style={{ position: 'relative' }}>
         <LangCurrencyOption
