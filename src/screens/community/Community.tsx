@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import AppText from 'src/components/AppText';
 
+import CommunityScreen from 'src/assets/images/communityScreen.svg';
 import ScreenContainer from 'src/components/ScreenContainer';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
@@ -11,22 +12,20 @@ function Community() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+  const styles = getStyles(theme);
   return (
-    <ScreenContainer>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <AppText variant="body1" style={{ color: theme.colors.headingColor }}>
-          {common.commingSoon}
-        </AppText>
-        <AppText
-          variant="body2"
-          style={{
-            color: theme.colors.secondaryHeadingColor,
-            textAlign: 'center',
-          }}>
-          {common.commingSoonSubTitle}
-        </AppText>
+    <ScreenContainer style={styles.container}>
+      <View>
+        <CommunityScreen height={windowHeight > 670 ? '98%' : '95%'} />
       </View>
     </ScreenContainer>
   );
 }
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      paddingTop: 0,
+    },
+  });
 export default Community;

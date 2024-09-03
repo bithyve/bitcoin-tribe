@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { useMutation, UseMutationResult } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
-import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -14,6 +13,7 @@ import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
 import UnspentUTXOElement from './UnspentUTXOElement';
+import ModalLoading from 'src/components/ModalLoading';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -45,11 +45,7 @@ const ViewUnspentScreen = () => {
     <ScreenContainer>
       <AppHeader title={wallet.unspentTitle} subTitle={''} enableBack={true} />
       {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={{ height: '60%' }}
-          color={Colors.ChineseOrange}
-        />
+        <ModalLoading visible={isLoading} />
       ) : (
         <FlatList
           data={data}

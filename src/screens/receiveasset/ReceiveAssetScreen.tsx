@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
@@ -9,12 +9,12 @@ import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
-import Colors from 'src/theme/Colors';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ModalLoading from 'src/components/ModalLoading';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -56,11 +56,7 @@ function ReceiveAssetScreen() {
       />
 
       {isLoading || createUtxos.isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={{ height: '70%' }}
-          color={Colors.ChineseOrange}
-        />
+        <ModalLoading visible={isLoading || createUtxos.isLoading} />
       ) : error ? (
         <View />
       ) : (

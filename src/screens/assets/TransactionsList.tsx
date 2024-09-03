@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Platform,
+  RefreshControl,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -58,10 +64,19 @@ function TransactionsList({
         style={styles.container2}
         data={transactions}
         refreshControl={
-          <RefreshControlView
-            refreshing={isLoading}
-            onRefresh={() => refresh()}
-          />
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={isLoading}
+              onRefresh={() => refresh()}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => refresh()}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
         }
         renderItem={({ item }) => (
           <AssetTransaction
