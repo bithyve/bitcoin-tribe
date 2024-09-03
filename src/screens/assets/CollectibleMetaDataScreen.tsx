@@ -1,14 +1,7 @@
-import {
-  ActivityIndicator,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -18,11 +11,11 @@ import { useMutation } from 'react-query';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import Colors from 'src/theme/Colors';
 import { Item } from './CoinsMetaDataScreen';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
+import ModalLoading from 'src/components/ModalLoading';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
@@ -46,7 +39,7 @@ const CoinsMetaDataScreen = () => {
         style={styles.headerWrapper}
       />
       {isLoading ? (
-        <ActivityIndicator color={Colors.ChineseOrange} size="large" />
+        <ModalLoading visible={isLoading} />
       ) : (
         <>
           <View style={styles.imageWrapper}>
