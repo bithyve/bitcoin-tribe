@@ -1,5 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -15,6 +21,7 @@ import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import RefreshControlView from 'src/components/RefreshControlView';
+import LottieView from 'lottie-react-native';
 
 function WalletTransactionList({
   transactions,
@@ -64,10 +71,19 @@ function WalletTransactionList({
       style={styles.container}
       data={transactions}
       refreshControl={
-        <RefreshControlView
-          refreshing={walletRefreshMutation.isLoading}
-          onRefresh={() => pullDownToRefresh()}
-        />
+        Platform.OS === 'ios' ? (
+          <RefreshControlView
+            refreshing={walletRefreshMutation.isLoading}
+            onRefresh={() => pullDownToRefresh()}
+          />
+        ) : (
+          <RefreshControl
+            refreshing={walletRefreshMutation.isLoading}
+            onRefresh={() => pullDownToRefresh()}
+            colors={[theme.colors.accent1]} // You can customize this part
+            progressBackgroundColor={theme.colors.inputBackground}
+          />
+        )
       }
       renderItem={({ item }) => (
         <WalletTransactions

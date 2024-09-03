@@ -79,9 +79,10 @@ function AssetsList(props: AssetsListProps) {
       <FlatList
         numColumns={2}
         data={listData}
-        refreshControl={
-          <RefreshControlView refreshing={false} onRefresh={() => {}} />
-        }
+        keyExtractor={(item, index) => index.toString()}
+        // refreshControl={
+        //   <RefreshControlView refreshing={false} onRefresh={() => {}} />
+        // }
         ListFooterComponent={FooterComponent}
         ListEmptyComponent={
           <EmptyStateView
