@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 
 import CommunityScreen from 'src/assets/images/communityScreen.svg';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
@@ -15,8 +15,8 @@ function Community() {
   const styles = getStyles(theme);
   return (
     <ScreenContainer style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <CommunityScreen />
+      <View>
+        <CommunityScreen height={windowHeight > 670 ? '98%' : '95%'} />
       </View>
     </ScreenContainer>
   );
