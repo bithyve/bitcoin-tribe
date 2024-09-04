@@ -8,7 +8,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
-import OptionCard from 'src/components/OptionCard';
+import SelectOption from 'src/components/SelectOption';
 
 function WalletSettings() {
   const { translations } = useContext(LocalizationContext);
@@ -33,26 +33,21 @@ function WalletSettings() {
         subTitle={strings.walletSettingSubTitle}
       />
       <ModalLoading visible={isLoading} />
-      <OptionCard
-        title={strings.nameAndPic}
-        subTitle={strings.nameAndPicSubTitle}
-        onPress={() => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE)}
-      />
-      <OptionCard
+      <SelectOption
         title={strings.showXPub}
-        subTitle={strings.showXPubSubTitle}
+        // subTitle={strings.showXPubSubTitle}
         onPress={() =>
           navigation.dispatch(CommonActions.navigate(NavigationRoutes.SHOWXPUB))
         }
       />
-      <OptionCard
+      <SelectOption
         title={strings.receiveTestSats}
-        subTitle={strings.receiveTestSatSubtitle}
+        // subTitle={strings.receiveTestSatSubtitle}
         onPress={() => mutate()}
       />
-      <OptionCard
+      <SelectOption
         title={strings.viewUnspent}
-        subTitle={strings.viewUnspent}
+        // subTitle={strings.viewUnspent}
         onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
       />
     </ScreenContainer>

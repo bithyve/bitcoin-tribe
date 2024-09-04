@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import UserAvatar from 'src/components/UserAvatar';
 import GoBack from 'src/assets/images/icon_back.svg';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
+// import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
 import { windowHeight, wp } from 'src/constants/responsive';
@@ -27,9 +27,9 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
       <View style={styles.profileWrapper}>
         <UserAvatar size={70} imageSource={profile} />
       </View>
-      <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
+      {/* <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>{<SettingIcon />}</View>
-      </IconWrapper>
+      </IconWrapper> */}
     </View>
   );
 }
@@ -46,7 +46,7 @@ const getStyles = (theme: AppTheme) =>
     },
     profileWrapper: {
       width: '60%',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'center',
       marginTop: windowHeight > 650 ? 0 : 10,
     },

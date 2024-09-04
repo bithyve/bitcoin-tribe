@@ -23,7 +23,7 @@ type walletDetailsHeaderProps = {
   profile: string;
   username: string;
   wallet: Wallet;
-  onPressSetting: () => void;
+  onPressSetting?: () => void;
   onPressBuy: () => void;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {

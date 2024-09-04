@@ -32,9 +32,9 @@ function WalletDetails({ navigation, route }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
-          onPressSetting={() =>
-            navigation.navigate(NavigationRoutes.WALLETSETTINGS)
-          }
+          // onPressSetting={() =>
+          //   navigation.navigate(NavigationRoutes.WALLETSETTINGS)
+          // }
           onPressBuy={() => setVisible(true)}
         />
       </View>
