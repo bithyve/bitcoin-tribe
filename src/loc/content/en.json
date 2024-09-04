@@ -212,7 +212,8 @@
     "testSatsRecived": "Test-sats received",
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
-    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats"
+    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
+    "rgbAssets": "RGB Assets"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

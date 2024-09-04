@@ -18,6 +18,7 @@ import { useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import AppTouchable from 'src/components/AppTouchable';
+import GradientView from 'src/components/GradientView';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -29,7 +30,13 @@ type walletDetailsHeaderProps = {
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common, sendScreen, home } = translations;
+  const {
+    receciveScreen,
+    common,
+    sendScreen,
+    home,
+    wallet: walletTranslations,
+  } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
@@ -81,6 +88,20 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
           </AppText>
         )}
       </AppTouchable>
+      <GradientView
+        style={styles.rgbBalanceWrapper}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        <AppText variant="body1" style={styles.rgbAssetTitleText}>
+          {walletTranslations.rgbAssets}
+        </AppText>
+        <AppText variant="body1" style={styles.rgbAssetAmountText}>
+          12023
+        </AppText>
+      </GradientView>
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
@@ -134,6 +155,21 @@ const getStyles = (theme: AppTheme) =>
     totalBalText: {
       color: theme.colors.secondaryHeadingColor,
       fontWeight: '400',
+    },
+    rgbBalanceWrapper: {
+      flexDirection: 'row',
+      padding: hp(10),
+      marginBottom: hp(10),
+      borderRadius: 10,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 0.5,
+    },
+    rgbAssetTitleText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginRight: hp(10),
+    },
+    rgbAssetAmountText: {
+      color: theme.colors.headingColor,
     },
   });
 export default WalletDetailsHeader;
