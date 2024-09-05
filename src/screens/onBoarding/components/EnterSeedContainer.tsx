@@ -40,7 +40,7 @@ type seedWordItem = {
 function EnterSeedContainer() {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const ref = useRef<FlatList>(null);
@@ -215,6 +215,7 @@ function EnterSeedContainer() {
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
     setLoading(false);
+    Toast(onBoarding.appRecoveryMsg, true, false);
     setTimeout(() => {
       navigation.replace(NavigationRoutes.APPSTACK);
     }, 400);

@@ -55,7 +55,8 @@
     "createPinFirst": "Primero crea un PIN",
     "invalidPin": "PIN no válido",
     "enterYourPin": "Introduce tu PIN",
-    "recoverRGBState": "¿Le gustaría recuperar el estado de su activo RGB de la nube?"
+    "recoverRGBState": "¿Le gustaría recuperar el estado de su activo RGB de la nube?",
+    "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!"
   },
   "home": {
     "addAssets": "Agregar activos",
