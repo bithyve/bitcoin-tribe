@@ -3,17 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import IconArrow from 'src/assets/images/icon_arrowr1.svg';
-import IconBitcoin from 'src/assets/images/icon_btc.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { TransactionType } from 'src/services/wallets/enums';
+import { RGBTransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
@@ -59,7 +56,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           <View>
             {props.transaction.confirmations === 0 ? (
               <TransPendingIcon />
-            ) : transType === TransactionType.SENT ? (
+            ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
               <SendTXNIcon />
             ) : (
               <RecieveTXNIcon />

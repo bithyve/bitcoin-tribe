@@ -33,6 +33,12 @@ export enum TransactionType {
   SENT = 'Sent',
 }
 
+export enum RGBTransactionType {
+  RECEIVE = 'RECEIVE',
+  SEND = 'SEND',
+  ISSUANCE = 'ISSUANCE',
+}
+
 export enum TxPriorityDefault {
   LOW = 'low',
   MEDIUM = 'medium',
