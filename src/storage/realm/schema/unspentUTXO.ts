@@ -4,7 +4,7 @@ export const RGBUTXOSchema = {
   name: RealmSchema.RGBUTXOSchema,
   embedded: true,
   properties: {
-    outpoint: `${RealmSchema.UnSpentOutpointSchema}`,
+    outpoint: RealmSchema.UnSpentOutpointSchema,
     btcAmount: 'int',
     colorable: 'bool',
     exists: 'bool',
@@ -33,7 +33,7 @@ export const RGBAllocationSchema = {
 export const UnspentRootObjectSchema = {
   name: RealmSchema.UnspentRootObjectSchema,
   properties: {
-    utxo: `${RealmSchema.RGBUTXOSchema}`,
-    rgbAllocations: `${RealmSchema.RGBAllocationSchema}[]`,
+    utxo: RealmSchema.RGBUTXOSchema,
+    rgbAllocations: `${RealmSchema.RGBAllocationSchema}[]`, // Correct way to define an array of objects
   },
 };
