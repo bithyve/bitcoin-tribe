@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
+import { useMutation, UseMutationResult } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,7 +18,12 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  Coin,
+  RgbUnspent,
+} from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
@@ -40,6 +45,9 @@ function HomeScreen() {
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { mutate }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -51,6 +59,7 @@ function HomeScreen() {
 
   useEffect(() => {
     refreshRgbWallet.mutate();
+    mutate();
     if (
       version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
     ) {

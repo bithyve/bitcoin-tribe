@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_btc3.svg';
+import IconBitcoin1 from 'src/assets/images/icon_btc2.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -19,6 +20,9 @@ import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -52,6 +56,18 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   } = wallet;
   const { changeAddress: receivingAddress } =
     WalletOperations.getNextFreeChangeAddress(wallet);
+  const UnspentUTXOData = useQuery(RealmSchema.UnspentRootObjectSchema).map(
+    getJSONFromRealmObject,
+  );
+
+  const totalBtcAmount = useMemo(() => {
+    return UnspentUTXOData.reduce((total, item) => {
+      // Check if utxo exists and if btcAmount is present
+      return (
+        total + (item.utxo && item.utxo.btcAmount ? item.utxo.btcAmount : 0)
+      );
+    }, 0);
+  }, [UnspentUTXOData]);
 
   const toggleDisplayMode = () => {
     if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
@@ -98,9 +114,18 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         <AppText variant="body1" style={styles.rgbAssetTitleText}>
           {walletTranslations.rgbAssets}
         </AppText>
-        <AppText variant="body1" style={styles.rgbAssetAmountText}>
-          12023
-        </AppText>
+        <View style={styles.rgbAssetAmountWrapper}>
+          {initialCurrencyMode !== CurrencyKind.SATS &&
+            getCurrencyIcon(IconBitcoin1, 'dark', 15)}
+          <AppText variant="body1" style={styles.rgbAssetAmountText}>
+            &nbsp;{getBalance(totalBtcAmount)}
+          </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.rgbSatsText}>
+              sats
+            </AppText>
+          )}
+        </View>
       </GradientView>
       <TransactionButtons
         onPressSend={() =>
@@ -163,6 +188,14 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 0.5,
+    },
+    rgbAssetAmountWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    rgbSatsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
     },
     rgbAssetTitleText: {
       color: theme.colors.secondaryHeadingColor,

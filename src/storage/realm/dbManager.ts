@@ -205,6 +205,22 @@ const deleteObjectByPrimaryKey = (
   }
 };
 
+const updateObject = (
+  schema: RealmSchema,
+  existingObject: any,
+  newData: any,
+) => {
+  realm.write(() => {
+    Object.keys(newData).forEach(key => {
+      existingObject[key] = newData[key];
+    });
+  });
+};
+
+const getObjectByTxid = (schema: RealmSchema, txid: string) => {
+  return realm.get(schema).filtered('utxo.outpoint.txid == $0', txid)[0];
+};
+
 export default {
   initializeRealm,
   deleteRealm,
@@ -219,4 +235,6 @@ export default {
   updateObjectByPrimaryId,
   getCollection,
   getObjectByField,
+  updateObject,
+  getObjectByTxid,
 };

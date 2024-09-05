@@ -25,6 +25,12 @@ import {
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
+import {
+  RGBAllocationSchema,
+  RGBUTXOSchema,
+  UnSpentOutpointSchema,
+  UnspentRootObjectSchema,
+} from './unspentUTXO';
 
 export default [
   TribeAppSchema,
@@ -53,4 +59,8 @@ export default [
   CollectibleSchema,
   BackupHistorySchema,
   CloudBackupHistorySchema,
+  RGBUTXOSchema,
+  UnSpentOutpointSchema,
+  RGBAllocationSchema,
+  UnspentRootObjectSchema,
 ];

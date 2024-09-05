@@ -621,6 +621,50 @@ export class ApiHandler {
   static async viewUtxos() {
     try {
       const response = await RGBServices.getUnspents();
+      if (Array.isArray(response)) {
+        response.forEach(dataItem => {
+          const existingUtxo = dbManager.getObjectByTxid(
+            RealmSchema.UnspentRootObjectSchema,
+            dataItem.utxo.outpoint.txid, // Query by unique identifier (txid)
+          );
+          const newUtxoData = {
+            utxo: {
+              outpoint: {
+                txid: dataItem.utxo.outpoint.txid,
+                vout: dataItem.utxo.outpoint.vout,
+              },
+              btcAmount: dataItem.utxo.btcAmount,
+              colorable: dataItem.utxo.colorable,
+              exists: dataItem.utxo.exists,
+            },
+            rgbAllocations: dataItem.rgbAllocations.map(allocation => ({
+              assetId: allocation.assetId,
+              amount: allocation.amount,
+              settled: allocation.settled,
+            })),
+          };
+
+          if (existingUtxo) {
+            // If the data exists, check if it's different, then update
+            if (JSON.stringify(existingUtxo) !== JSON.stringify(newUtxoData)) {
+              dbManager.updateObject(
+                RealmSchema.UnspentRootObjectSchema,
+                existingUtxo,
+                newUtxoData,
+              );
+            }
+          } else {
+            // If the data does not exist, create it
+            dbManager.createObject(
+              RealmSchema.UnspentRootObjectSchema,
+              newUtxoData,
+            );
+          }
+        });
+      } else {
+        console.error('Response is not an array:', response);
+      }
+
       return response;
     } catch (error) {
       console.log('Update Profile', error);
