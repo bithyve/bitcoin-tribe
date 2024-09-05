@@ -40,7 +40,7 @@ function HomeScreen() {
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-
+  const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
@@ -51,6 +51,9 @@ function HomeScreen() {
 
   useEffect(() => {
     refreshRgbWallet.mutate();
+    refreshWallet.mutate({
+      wallets: [wallet],
+    });
     if (
       version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
     ) {
