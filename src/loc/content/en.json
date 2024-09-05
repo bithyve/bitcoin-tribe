@@ -246,6 +246,8 @@
     "high": "High -",
     "success": "Success!",
     "operationSuccess": "Operation successful!",
-    "operationSuccessSubTitle": "Your changes have been saved."
+    "operationSuccessSubTitle": "Your changes have been saved.",
+    "noRGBUTXOsTitle": "No RGB UTXOs Found",
+    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs."
   }
 }
