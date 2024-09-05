@@ -528,6 +528,7 @@ export class ApiHandler {
   }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
+      console.log('response getAssetTransactions', response);
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
@@ -627,38 +628,25 @@ export class ApiHandler {
             RealmSchema.UnspentRootObjectSchema,
             dataItem.utxo.outpoint.txid, // Query by unique identifier (txid)
           );
-          const newUtxoData = {
-            utxo: {
-              outpoint: {
-                txid: dataItem.utxo.outpoint.txid,
-                vout: dataItem.utxo.outpoint.vout,
-              },
-              btcAmount: dataItem.utxo.btcAmount,
-              colorable: dataItem.utxo.colorable,
-              exists: dataItem.utxo.exists,
-            },
-            rgbAllocations: dataItem.rgbAllocations.map(allocation => ({
-              assetId: allocation.assetId,
-              amount: allocation.amount,
-              settled: allocation.settled,
-            })),
-          };
 
           if (existingUtxo) {
             // If the data exists, check if it's different, then update
-            if (JSON.stringify(existingUtxo) !== JSON.stringify(newUtxoData)) {
+            if (JSON.stringify(existingUtxo) !== JSON.stringify(dataItem)) {
               dbManager.updateObject(
                 RealmSchema.UnspentRootObjectSchema,
                 existingUtxo,
-                newUtxoData,
+                {
+                  utxo: dataItem.utxo,
+                  rgbAllocations: dataItem.rgbAllocations,
+                },
               );
             }
           } else {
             // If the data does not exist, create it
-            dbManager.createObject(
-              RealmSchema.UnspentRootObjectSchema,
-              newUtxoData,
-            );
+            dbManager.createObject(RealmSchema.UnspentRootObjectSchema, {
+              utxo: dataItem.utxo,
+              rgbAllocations: dataItem.rgbAllocations,
+            });
           }
         });
       } else {
