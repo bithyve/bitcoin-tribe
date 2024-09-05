@@ -184,7 +184,7 @@ const getStyles = (theme: AppTheme) =>
     rgbBalanceWrapper: {
       flexDirection: 'row',
       padding: hp(10),
-      marginBottom: hp(10),
+      marginBottom: hp(15),
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 0.5,
