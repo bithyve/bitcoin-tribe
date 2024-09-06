@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
@@ -157,7 +157,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 10,
+      paddingBottom: Platform.OS === 'android' ? 0 : 10,
     },
     usernameText: {
       color: theme.colors.secondaryHeadingColor,

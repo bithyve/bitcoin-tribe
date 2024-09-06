@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -73,7 +73,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginBottom: hp(15),
-      // marginTop: hp(10),
+      marginTop: Platform.OS === 'android' ? hp(10) : 0,
       alignItems: 'center',
     },
     iconContainer: {
