@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp, windowHeight } from 'src/constants/responsive';
@@ -126,7 +132,7 @@ const getStyles = (theme: AppTheme) =>
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
       width: '89%',
-      marginBottom: hp(15),
+      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(30),
       marginHorizontal: hp(16),
       // alignSelf: 'center',
       // marginHorizontal: windowWidth * 0.1,
