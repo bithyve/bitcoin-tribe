@@ -58,6 +58,7 @@ function IssueScreen() {
       Toast(assets.assetCreateMsg, true);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
+      setLoading(false);
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
@@ -81,6 +82,7 @@ function IssueScreen() {
       Toast(assets.assetCreateMsg, true);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
+      setLoading(false);
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);

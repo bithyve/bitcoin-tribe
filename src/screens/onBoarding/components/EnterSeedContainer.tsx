@@ -175,7 +175,7 @@ function EnterSeedContainer() {
       </View>
     );
   };
-  const onPressHandleNext = async () => {
+  const onPressHandleNext = () => {
     if (isSeedFilled(12)) {
       setLoading(true);
       let seedWord = '';
@@ -195,6 +195,9 @@ function EnterSeedContainer() {
         setLoading(false);
         Toast('Invalid Mnemonic', false, true);
       }
+    } else {
+      setLoading(false);
+      Toast('Please enter 12-word recovery phrase', false, true);
     }
   };
 
@@ -265,7 +268,16 @@ function EnterSeedContainer() {
           </View>
         </ScrollView>
       ) : null}
-      <Buttons primaryOnPress={onPressHandleNext} primaryTitle={common.next} />
+      <Buttons
+        primaryOnPress={() => {
+          setLoading(true);
+          setTimeout(() => {
+            onPressHandleNext();
+          }, 0);
+        }}
+        primaryTitle={common.next}
+        primaryLoading={loading}
+      />
       <RecoverRGBStatModal
         visible={visible}
         primaryOnPress={() => {
