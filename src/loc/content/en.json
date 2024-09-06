@@ -55,7 +55,8 @@
     "createPinFirst": "Create a PIN first",
     "invalidPin": "Invalid PIN",
     "enterYourPin": "Enter your PIN",
-    "recoverRGBState": "Would you like to recover your RGB Asset state from the cloud?"
+    "recoverRGBState": "Would you like to recover your RGB Asset state from the cloud?",
+    "appRecoveryMsg": "App recovery successful. You're all set!"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -174,7 +175,7 @@
     "confirmation": "Confirmation",
     "rgbUtxoCreateNote": "The RGB feature is currently in alpha. As a result, you may need to complete an additional transaction due to the early stage of this technology.",
     "walletSettings": "Wallet Settings",
-    "walletSettingSubTitle": "Check wallet related settings below",
+    "walletSettingSubTitle": "Manage Your Wallet Settings Effortlessly",
     "nameAndPic": "Name and Picture",
     "nameAndPicSubTitle": "Enter, Edit Name and photo",
     "showXPub": "Show xPub",
@@ -212,7 +213,8 @@
     "testSatsRecived": "Test-sats received",
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
-    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats"
+    "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
+    "rgbAssets": "RGB Assets"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -245,6 +247,8 @@
     "high": "High -",
     "success": "Success!",
     "operationSuccess": "Operation successful!",
-    "operationSuccessSubTitle": "Your changes have been saved."
+    "operationSuccessSubTitle": "Your changes have been saved.",
+    "noRGBUTXOsTitle": "No RGB UTXOs Found",
+    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs."
   }
 }

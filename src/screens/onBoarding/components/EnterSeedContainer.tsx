@@ -40,7 +40,7 @@ type seedWordItem = {
 function EnterSeedContainer() {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const ref = useRef<FlatList>(null);
@@ -119,15 +119,6 @@ function EnterSeedContainer() {
     }
   };
   const seedItem = (item: seedWordItem, index: number) => {
-    // if (
-    //   activePage === 3
-    //     ? index >= 18 && index < 24
-    //     : activePage === 2
-    //     ? index >= 12 && index < 18
-    //     : activePage === 1
-    //     ? index >= 6 && index < 12
-    //     : index < 6
-    // ) {
     return (
       <View removeClippedSubviews style={styles.inputListWrapper}>
         <TextInput
@@ -183,9 +174,6 @@ function EnterSeedContainer() {
         />
       </View>
     );
-    // } else {
-    //   return null;
-    // }
   };
   const onPressHandleNext = async () => {
     if (isSeedFilled(12)) {
@@ -215,6 +203,7 @@ function EnterSeedContainer() {
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
     setLoading(false);
+    Toast(onBoarding.appRecoveryMsg, true, false);
     setTimeout(() => {
       navigation.replace(NavigationRoutes.APPSTACK);
     }, 400);
@@ -276,15 +265,7 @@ function EnterSeedContainer() {
           </View>
         </ScrollView>
       ) : null}
-      <Buttons
-        primaryOnPress={onPressHandleNext}
-        primaryTitle={common.next}
-        // secondaryTitle={common.needHelp}
-        // secondaryCTAWidth={windowHeight > 670 ? hp(160) : hp(200)}
-        // secondaryOnPress={() => {
-        //   console.log('');
-        // }}
-      />
+      <Buttons primaryOnPress={onPressHandleNext} primaryTitle={common.next} />
       <RecoverRGBStatModal
         visible={visible}
         primaryOnPress={() => {
@@ -323,9 +304,6 @@ const getStyles = (theme: AppTheme) =>
       width: '50%',
     },
     contentWrapper: {
-      // height: '67%',
-      // flexDirection: 'row',
-      // flexWrap: 'wrap',
       gap: 10,
     },
     suggestionWrapper: {

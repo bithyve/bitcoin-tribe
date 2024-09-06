@@ -55,7 +55,8 @@
     "createPinFirst": "Primero crea un PIN",
     "invalidPin": "PIN no válido",
     "enterYourPin": "Introduce tu PIN",
-    "recoverRGBState": "¿Le gustaría recuperar el estado de su activo RGB de la nube?"
+    "recoverRGBState": "¿Le gustaría recuperar el estado de su activo RGB de la nube?",
+    "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!"
   },
   "home": {
     "addAssets": "Agregar activos",
@@ -174,7 +175,7 @@
     "confirmation": "Confirmacione",
     "rgbUtxoCreateNote": "La función RGB se encuentra actualmente en alfa. Como resultado, es posible que deba completar una transacción adicional debido a la etapa inicial de esta tecnología.",
     "walletSettings": "Configuración de la billetera",
-    "walletSettingSubTitle": "Verifique la configuración relacionada con la billetera a continuación",
+    "walletSettingSubTitle": "Administre la configuración de su billetera sin esfuerzo",
     "nameAndPic": "Nombre e imagen",
     "nameAndPicSubTitle": "Ingresar, Editar nombre y foto",
     "showXPub": "Mostrar xPub",
@@ -212,7 +213,8 @@
     "testSatsRecived": "Pruebas recibidas",
     "failedTestSatsRecived": "No se pudieron recibir los exámenes",
     "failRefreshWallet": "No se pudo actualizar la billetera",
-    "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes"
+    "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes",
+    "rgbAssets": "Activos RGB"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
@@ -245,6 +247,8 @@
     "high": "Alto -",
     "success": "¡Éxito!",
     "operationSuccess": "¡Operación exitosa!",
-    "operationSuccessSubTitle": "Tus cambios se han guardado."
+    "operationSuccessSubTitle": "Tus cambios se han guardado.",
+    "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
+    "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB."
   }
 }

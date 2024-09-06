@@ -14,6 +14,8 @@ import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
 import UnspentUTXOElement from './UnspentUTXOElement';
 import ModalLoading from 'src/components/ModalLoading';
+import EmptyStateView from 'src/components/EmptyStateView';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -23,7 +25,7 @@ const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet, assets } = translations;
 
   useEffect(() => {
     mutate();
@@ -59,6 +61,13 @@ const ViewUnspentScreen = () => {
               />
             </AppTouchable>
           )}
+          ListEmptyComponent={
+            <EmptyStateView
+              title={assets.noRGBUTXOsTitle}
+              subTitle={assets.noRGBUTXOSubTitle}
+              IllustartionImage={<NoTransactionIllustration />}
+            />
+          }
         />
       )}
     </ScreenContainer>

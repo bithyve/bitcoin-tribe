@@ -528,6 +528,7 @@ export class ApiHandler {
   }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
+      console.log('response getAssetTransactions', response);
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
@@ -621,6 +622,37 @@ export class ApiHandler {
   static async viewUtxos() {
     try {
       const response = await RGBServices.getUnspents();
+      if (Array.isArray(response)) {
+        response.forEach(dataItem => {
+          const existingUtxo = dbManager.getObjectByTxid(
+            RealmSchema.UnspentRootObjectSchema,
+            dataItem.utxo.outpoint.txid, // Query by unique identifier (txid)
+          );
+
+          if (existingUtxo) {
+            // If the data exists, check if it's different, then update
+            if (JSON.stringify(existingUtxo) !== JSON.stringify(dataItem)) {
+              dbManager.updateObject(
+                RealmSchema.UnspentRootObjectSchema,
+                existingUtxo,
+                {
+                  utxo: dataItem.utxo,
+                  rgbAllocations: dataItem.rgbAllocations,
+                },
+              );
+            }
+          } else {
+            // If the data does not exist, create it
+            dbManager.createObject(RealmSchema.UnspentRootObjectSchema, {
+              utxo: dataItem.utxo,
+              rgbAllocations: dataItem.rgbAllocations,
+            });
+          }
+        });
+      } else {
+        console.error('Response is not an array:', response);
+      }
+
       return response;
     } catch (error) {
       console.log('Update Profile', error);

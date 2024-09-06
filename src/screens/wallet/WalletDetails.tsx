@@ -24,7 +24,6 @@ function WalletDetails({ navigation, route }) {
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
-
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.walletHeaderWrapper}>
@@ -32,9 +31,9 @@ function WalletDetails({ navigation, route }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
-          onPressSetting={() =>
-            navigation.navigate(NavigationRoutes.WALLETSETTINGS)
-          }
+          // onPressSetting={() =>
+          //   navigation.navigate(NavigationRoutes.WALLETSETTINGS)
+          // }
           onPressBuy={() => setVisible(true)}
         />
       </View>
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 670 ? '42%' : '40%',
+    height: windowHeight < 670 ? '48%' : '45%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '50%' : '60%',
+    height: windowHeight < 670 ? '50%' : '55%',
     marginHorizontal: wp(16),
   },
 });

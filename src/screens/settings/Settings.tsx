@@ -12,6 +12,8 @@ import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
+import IconWalletSettings from 'src/assets/images/icon_wallet.svg';
+import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -39,7 +41,7 @@ type SettingMenuProps = {
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings, onBoarding } = translations;
+  const { settings, onBoarding, wallet: walletTranslation } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
@@ -97,6 +99,30 @@ function SettingsScreen({ navigation }) {
   };
 
   const SettingsMenu: SettingMenuProps[] = [
+    {
+      id: 1,
+      title: walletTranslation.nameAndPic,
+      icon: <IconNamePic />,
+      onPress: () => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE),
+    },
+    {
+      id: 2,
+      title: walletTranslation.walletSettings,
+      icon: <IconWalletSettings />,
+      onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
+    },
+    {
+      id: 3,
+      title: settings.appBackup,
+      icon: <IconBackup />,
+      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
+    },
+    {
+      id: 4,
+      title: settings.langAndCurrency,
+      icon: <IconLangCurrency />,
+      onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
+    },
     // TO DO - will implement theme functionality.  This commented temporarily
     // {
     //   id: 1,
@@ -109,7 +135,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => setDarkTheme(!darkTheme),
     // },
     {
-      id: 2,
+      id: 5,
       title: settings.biometricUnlock,
       icon: <IconBiometric />,
       onValueChange: toggleBiometrics,
@@ -118,18 +144,7 @@ function SettingsScreen({ navigation }) {
       testID: 'biometric_unlock',
       onPress: toggleBiometrics,
     },
-    {
-      id: 3,
-      title: settings.langAndCurrency,
-      icon: <IconLangCurrency />,
-      onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
-    },
-    {
-      id: 4,
-      title: settings.appBackup,
-      icon: <IconBackup />,
-      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
-    },
+
     // TO DO - will implement node setting functionality. This commented temporarily
     // {
     //   id: 5,
