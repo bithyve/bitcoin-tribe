@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
@@ -152,7 +152,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 0,
-      paddingTop: 0,
+      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
     },
     headerWrapper: {
       margin: hp(16),
