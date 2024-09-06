@@ -36,6 +36,7 @@ const CloudBackup = ({ navigation }) => {
         title={settings.cloudBackupTitle}
         subTitle={
           settings.cloudBackupSubTitle +
+          ' ' +
           `${Platform.select({
             ios: 'iCloud',
             android: 'Google Drive',
