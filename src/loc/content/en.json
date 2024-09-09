@@ -36,7 +36,7 @@
     "welcome": "Welcome",
     "profileSetupTitle": "Enter your details",
     "profileSetupSubTitle": "Enter your name and add picture ",
-    "enterName": "Enter name",
+    "enterName": "Enter name (optional)",
     "walletSetupTitle": "Welcome,",
     "createNew": "Create New",
     "createNewSubTitle": "Create a new wallet",

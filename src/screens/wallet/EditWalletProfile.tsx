@@ -61,6 +61,7 @@ function EditWalletProfile({ navigation }) {
         disabled={name === ''}
         primaryCTATitle={common.save}
         primaryStatus={loading}
+        secondaryCTATitle={common.cancel}
       />
     </ScreenContainer>
   );
