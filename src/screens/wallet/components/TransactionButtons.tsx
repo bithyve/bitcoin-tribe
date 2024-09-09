@@ -35,7 +35,7 @@ const TransactionButtons = (props: transButtonProps) => {
         <RoundedCTA
           icon={<IconReceive />}
           buttonColor={theme.colors.accent2}
-          title={common.recieve}
+          title={common.receive}
           width={wp(110)}
           onPress={onPressRecieve}
         />
