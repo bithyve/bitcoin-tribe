@@ -42,20 +42,6 @@ function RGBCreateUtxoContainer(props: utxoProps) {
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
-        {/* <GradientView
-          style={styles.statusWrapper}
-          colors={[
-            theme.colors.cardGradient1,
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient3,
-          ]}>
-          <AppText variant="body1" style={styles.statusText}>
-            {walletTranslation.status}:
-          </AppText>
-          <AppText variant="body1" style={styles.statusValue}>
-            Processing
-          </AppText>
-        </GradientView> */}
         <View style={styles.infoContainer}>
           <View style={styles.infoWrapper}>
             <View style={styles.labelWrapper}>
@@ -115,7 +101,7 @@ const getStyles = (theme: AppTheme) =>
       height: '85%',
     },
     contentWrapper: {
-      height: '60%',
+      height: '50%',
     },
     statusWrapper: {
       flexDirection: 'row',
