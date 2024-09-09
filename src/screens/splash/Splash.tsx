@@ -33,7 +33,7 @@ function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       init();
-    }, 4000);
+    }, 4500);
   }, []);
 
   useEffect(() => {
