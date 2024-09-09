@@ -7,7 +7,7 @@ import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import FooterNote from 'src/components/FooterNote';
 import GradientView from 'src/components/GradientView';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useBalance from 'src/hooks/useBalance';
@@ -101,7 +101,7 @@ const getStyles = (theme: AppTheme) =>
       height: '85%',
     },
     contentWrapper: {
-      height: '50%',
+      height: windowHeight > 670 ? '58%' : '50%',
     },
     statusWrapper: {
       flexDirection: 'row',
