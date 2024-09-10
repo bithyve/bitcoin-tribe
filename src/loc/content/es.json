@@ -8,7 +8,6 @@
     "note": "Nota",
     "send": "Enviar",
     "proceed": "Proceder",
-    "recieve": "Recibir",
     "buy": "Comprar",
     "exit": "Salir",
     "addNew": "AGREGAR NUEVO",
@@ -36,7 +35,7 @@
     "welcome": "Bienvenido",
     "profileSetupTitle": "Introduce tus detalles",
     "profileSetupSubTitle": "Ingrese su nombre y agregue una imagen",
-    "enterName": "Introduce tu nombre",
+    "enterName": "Introduzca el nombre (opcional)",
     "walletSetupTitle": "Bienvenido,",
     "createNew": "Crear nuevo",
     "createNewSubTitle": "Crear una nueva billetera",
@@ -74,7 +73,7 @@
     "yourCoinAvatar": "Tu avatar de moneda",
     "select": "Seleccionar",
     "noAssetTitle": "Aún no hay activos.",
-    "noAssetSubTitle": "Haga clic en los íconos Más a continuación para emitir su primer activo"
+    "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo."
   },
   "settings": {
     "setting": "Configuraciones",
@@ -196,7 +195,7 @@
     "noUTXOYet": "Aún no hay transacciones",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Escanee o copie y pegue la dirección de Xpub",
-    "profileUpdateMsg": "¡Actualización del perfil exitosa!",
+    "profileUpdateMsg": "¡Actualización de perfil exitosa!",
     "profileUpdateErrMsg": "¡Fallo en la actualización!",
     "rgbTransUnlockTitle": "5 Desbloqueo de transacciones RGB",
     "rgbTransUnlockSubTitle": "Puede realizar 5 transacciones RBG ahora",

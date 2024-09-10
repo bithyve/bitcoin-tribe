@@ -1,5 +1,11 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, ImageBackground, View, Platform } from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  Platform,
+  Image,
+} from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -9,8 +15,9 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import TribeText from 'src/assets/images/Tribe.svg';
-import AppText from 'src/components/AppText';
+// import TribeText from 'src/assets/images/Tribe.svg';
+// import AppText from 'src/components/AppText';
+// import RGBLOGO from 'src/assets/images/RGB_Splash.gif'
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVString } from 'react-native-mmkv';
 
@@ -26,7 +33,7 @@ function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       init();
-    }, 1000);
+    }, 4500);
   }, []);
 
   useEffect(() => {
@@ -58,14 +65,18 @@ function Splash({ navigation }) {
         source={require('src/assets/images/background.png')}
         resizeMode="cover"
         style={styles.backImage}>
-        <View style={styles.tribeImageWrapper}>
+        <Image
+          source={require('src/assets/images/RGB_Splash.gif')}
+          style={styles.splashImageStyle}
+        />
+        {/* <View style={styles.tribeImageWrapper}>
           <TribeText />
         </View>
         <View style={styles.textWrapper}>
           <AppText variant="body1" style={styles.textStyle}>
             {onBoarding.splashText}
           </AppText>
-        </View>
+        </View> */}
       </ImageBackground>
     </ScreenContainer>
   );
@@ -84,17 +95,21 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    tribeImageWrapper: {
-      height: '100%',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    textWrapper: {
-      bottom: 20,
-    },
-    textStyle: {
-      color: theme.colors.headingColor,
+    // tribeImageWrapper: {
+    //   height: '100%',
+    //   width: '100%',
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    // },
+    // textWrapper: {
+    //   bottom: 20,
+    // },
+    // textStyle: {
+    //   color: theme.colors.headingColor,
+    // },
+    splashImageStyle: {
+      width: 500,
+      height: 500,
     },
   });
 export default Splash;

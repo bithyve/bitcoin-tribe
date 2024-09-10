@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 import io.hexawallet.hexa.RGBPackage
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 class MainApplication : Application(), ReactApplication {
 
@@ -36,6 +37,7 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+    Fresco.initialize(this);  
     SoLoader.init(this, false)
     AppConstants.initContext(applicationContext);
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {

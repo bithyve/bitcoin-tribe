@@ -75,7 +75,7 @@ function ProfileSetup({ navigation }) {
         onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => navigation.goBack()}
+        secondaryOnPress={() => initiateWalletCreation()}
         addPicTitle={onBoarding.addPicture}
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
@@ -87,6 +87,7 @@ function ProfileSetup({ navigation }) {
         // }}
         primaryStatus={query.status}
         primaryCTATitle={common.next}
+        // secondaryCTATitle={common.skip}
       />
     </ScreenContainer>
   );

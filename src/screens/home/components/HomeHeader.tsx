@@ -55,7 +55,7 @@ function HomeHeader(props: HomeHeaderProps) {
                 numberOfLines={1}
                 variant="heading1"
                 style={styles.usernameText}>
-                {username ? username : 'Hi...!!'}
+                {username ? username : 'Hi!'}
               </AppText>
               <View style={styles.balanceWrapper}>
                 {initialCurrencyMode !== CurrencyKind.SATS &&

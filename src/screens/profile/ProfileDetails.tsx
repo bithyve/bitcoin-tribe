@@ -33,6 +33,7 @@ type ProfileDetailsProps = {
   primaryStatus?: string;
   disabled?: boolean;
   primaryCTATitle: string;
+  secondaryCTATitle?: string;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -51,6 +52,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
     primaryStatus,
     disabled,
     primaryCTATitle,
+    secondaryCTATitle,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -96,7 +98,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
           </View>
           <Buttons
             primaryTitle={primaryCTATitle}
-            secondaryTitle={common.cancel}
+            secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
             primaryLoading={primaryStatus === 'loading'}
