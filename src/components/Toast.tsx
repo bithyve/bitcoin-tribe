@@ -35,7 +35,12 @@ export default (message, icon = false, error = false) => {
       textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
-      containerStyle: { marginBottom: (windowWidth * 22) / 100 },
+      containerStyle: {
+        marginBottom: (windowWidth * 22) / 100,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     },
   );
 };
@@ -46,7 +51,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: wp(300),
     minHeight: hp(50),
-    borderRadius: 65,
     padding: 10,
   },
   toastMessageStyle: {
