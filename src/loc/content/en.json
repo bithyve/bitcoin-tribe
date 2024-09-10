@@ -54,7 +54,7 @@
     "createPinFirst": "Create a PIN first",
     "invalidPin": "Invalid PIN",
     "enterYourPin": "Enter your PIN",
-    "recoverRGBState": "Would you like to recover your RGB Asset state from the cloud?",
+    "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
     "appRecoveryMsg": "App recovery successful. You're all set!"
   },
   "home": {
