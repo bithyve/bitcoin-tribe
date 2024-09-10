@@ -10,6 +10,7 @@ import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { CommonActions } from '@react-navigation/native';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -35,9 +36,18 @@ function EditWalletProfile({ navigation }) {
     if (updated) {
       setLoading('');
       Toast(wallet.profileUpdateMsg, true);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-        autoRefresh: true,
-      });
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: NavigationRoutes.HOME },
+            {
+              name: NavigationRoutes.WALLETDETAILS,
+              params: { autoRefresh: true },
+            },
+          ],
+        }),
+      );
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, false, true);
