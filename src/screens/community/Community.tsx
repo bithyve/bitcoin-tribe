@@ -15,8 +15,8 @@ function Community() {
   const styles = getStyles(theme);
   return (
     <ScreenContainer style={styles.container}>
-      <View>
-        <CommunityScreen height={windowHeight > 670 ? '98%' : '95%'} />
+      <View style={styles.imageWrapper}>
+        <CommunityScreen height={windowHeight > 670 ? '94%' : '96%'} />
       </View>
     </ScreenContainer>
   );
@@ -25,7 +25,8 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: 0,
+      paddingTop: windowHeight > 670 ? 0 : hp(20),
     },
+    imageWrapper: {},
   });
 export default Community;
