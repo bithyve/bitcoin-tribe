@@ -44,6 +44,7 @@ function WalletSettings() {
         title={strings.receiveTestSats}
         // subTitle={strings.receiveTestSatSubtitle}
         onPress={() => mutate()}
+        showArrow={false}
       />
       <SelectOption
         title={strings.viewUnspent}
