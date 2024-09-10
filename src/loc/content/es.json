@@ -213,7 +213,7 @@
     "failedTestSatsRecived": "No se pudieron recibir los exámenes",
     "failRefreshWallet": "No se pudo actualizar la billetera",
     "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes",
-    "rgbAssets": "Activos RGB"
+    "rgbAssets": "Sats reservados"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
