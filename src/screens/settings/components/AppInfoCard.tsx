@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_right_arrow.svg';
+import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 
@@ -85,7 +85,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper2: {
       flexDirection: 'row',
-      width: '85%',
+      width: '92%',
       alignItems: 'center',
     },
     valueText: {
