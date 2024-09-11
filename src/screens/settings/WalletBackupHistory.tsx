@@ -20,6 +20,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { BackupType } from 'src/models/enums/Backup';
+import Toast from 'src/components/Toast';
 
 function WalletBackupHistory({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -65,6 +66,9 @@ function WalletBackupHistory({ navigation }) {
               if (response) {
                 setBackup(true);
                 setVisible(false);
+                setTimeout(() => {
+                  Toast(settings.SEED_BACKUP_CONFIRMED);
+                }, 400);
                 // navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
               }
             }
@@ -74,6 +78,9 @@ function WalletBackupHistory({ navigation }) {
             const response = await ApiHandler.createBackup(false);
             if (response) {
               setVisible(false);
+              setTimeout(() => {
+                Toast(settings.SEED_BACKUP_CONFIRMATION_SKIPPED);
+              }, 400);
               // navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
             }
           }}

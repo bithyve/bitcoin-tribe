@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 
@@ -17,6 +17,7 @@ import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
+import Toast from 'src/components/Toast';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
@@ -28,6 +29,15 @@ const CloudBackup = ({ navigation }) => {
   );
   const backup = useMutation(ApiHandler.backupRgbOnCloud);
   const lastIndex = data.length - 1;
+
+  useEffect(() => {
+    if (backup.isSuccess) {
+      Toast(settings.CLOUD_BACKUP_CREATED);
+    } else if (backup.isError) {
+      Toast(settings.CLOUD_BACKUP_FAILED);
+    }
+  }, [backup.isSuccess, backup.isError, backup.isLoading]);
+
   return (
     <ScreenContainer>
       <ModalLoading visible={backup.isLoading} />
