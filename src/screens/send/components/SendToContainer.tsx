@@ -266,7 +266,7 @@ function SendToContainer({
           secondaryTitle={common.cancel}
           primaryOnPress={initiateSend}
           secondaryOnPress={navigation.goBack}
-          width={wp(120)}
+          width={wp(160)}
         />
       </View>
       {/* <View style={styles.keyPadWrapper}>
