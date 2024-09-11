@@ -69,14 +69,6 @@ function Splash({ navigation }) {
           source={require('src/assets/images/RGB_Splash.gif')}
           style={styles.splashImageStyle}
         />
-        {/* <View style={styles.tribeImageWrapper}>
-          <TribeText />
-        </View>
-        <View style={styles.textWrapper}>
-          <AppText variant="body1" style={styles.textStyle}>
-            {onBoarding.splashText}
-          </AppText>
-        </View> */}
       </ImageBackground>
     </ScreenContainer>
   );
