@@ -3,7 +3,7 @@ import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import IconArrow from 'src/assets/images/icon_right_arrow.svg';
+import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -63,7 +63,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper: {
-      width: '85%',
+      width: '90%',
       marginVertical: hp(5),
     },
     menuCardTitle: {
