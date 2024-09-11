@@ -71,6 +71,7 @@ function AppBackup({ navigation }) {
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
         visible={visible}
+        enableCloseIcon={false}
         height={Platform.OS == 'ios' && '80%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup

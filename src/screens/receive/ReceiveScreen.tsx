@@ -50,6 +50,7 @@ function ReceiveScreen({ route }) {
         title={receciveScreen.addAmountTitle}
         subTitle={receciveScreen.addAmountSubTitle}
         visible={visible}
+        enableCloseIcon={false}
         onDismiss={() => setVisible(false)}>
         <AddAmountModal
           callback={setAmount}

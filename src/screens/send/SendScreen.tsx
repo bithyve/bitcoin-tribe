@@ -35,6 +35,7 @@ function SendScreen({ route, navigation }) {
         title={sendScreen.enterSendAddress}
         subTitle={sendScreen.enterSendAdrsSubTitle}
         visible={visible}
+        enableCloseIcon={false}
         height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
         <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />

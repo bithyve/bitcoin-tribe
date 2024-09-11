@@ -49,6 +49,7 @@ function WalletDetails({ navigation, route }) {
         title={common.buy}
         subTitle={walletTranslations.buySubtitle}
         visible={visible}
+        enableCloseIcon={false}
         onDismiss={() => setVisible(false)}>
         <BuyModal />
       </ModalContainer>

@@ -20,6 +20,7 @@ const CreateUtxosModal: React.FC<Props> = ({ visible, primaryOnPress }) => {
       title={assets.insufficientSatsRGB}
       subTitle={assets.insufficientSatsRGBSubTitle}
       visible={visible}
+      enableCloseIcon={false}
       onDismiss={() => navigation.goBack()}>
       <View>
         <View>

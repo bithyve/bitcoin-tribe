@@ -54,6 +54,7 @@ function WalletBackupHistory({ navigation }) {
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
         visible={visible}
+        enableCloseIcon={false}
         height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
