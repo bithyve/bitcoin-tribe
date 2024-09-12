@@ -55,7 +55,9 @@
     "invalidPin": "PIN no válido",
     "enterYourPin": "Introduce tu PIN",
     "recoverRGBState": "¿Le gustaría recuperar el estado de sus activos respaldados por Bitcoin desde la nube?",
-    "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!"
+    "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
+    "invalidMnemonic": "Mnemónico no válido",
+    "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras"
   },
   "home": {
     "addAssets": "Agregar activos",
@@ -161,7 +163,8 @@
     "sendSuccessSubTitle": "La transacción ha sido exitosa.",
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "sentSuccessfully": "Enviado exitosamente",
-    "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar"
+    "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
+    "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

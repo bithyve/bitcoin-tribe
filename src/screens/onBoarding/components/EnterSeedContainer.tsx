@@ -193,11 +193,11 @@ function EnterSeedContainer() {
         });
       } else {
         setLoading(false);
-        Toast('Invalid Mnemonic', true);
+        Toast(onBoarding.invalidMnemonic, true);
       }
     } else {
       setLoading(false);
-      Toast('Please enter 12-word recovery phrase', true);
+      Toast(onBoarding.enterRecoveryPhrase, true);
     }
   };
 

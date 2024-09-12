@@ -61,7 +61,7 @@ function SendToContainer({
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
-      Toast('Error: Transaction Fee intel missing', true);
+      Toast(sendScreen.transFeeErrMsg, true);
     } else {
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
