@@ -35,7 +35,7 @@ function EditWalletProfile({ navigation }) {
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
       setLoading('');
-      Toast(wallet.profileUpdateMsg, true);
+      Toast(wallet.profileUpdateMsg);
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
@@ -50,7 +50,7 @@ function EditWalletProfile({ navigation }) {
       );
     } else {
       setLoading('');
-      Toast(wallet.profileUpdateErrMsg, false, true);
+      Toast(wallet.profileUpdateErrMsg, true);
     }
   };
 

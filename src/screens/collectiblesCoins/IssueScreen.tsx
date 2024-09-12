@@ -55,7 +55,7 @@ function IssueScreen() {
     });
     if (response?.assetId) {
       setLoading(false);
-      Toast(assets.assetCreateMsg, true);
+      Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setLoading(false);
@@ -64,7 +64,7 @@ function IssueScreen() {
       }, 500);
     } else if (response?.error) {
       setLoading(false);
-      Toast(`Failed: ${response?.error}`, false, true);
+      Toast(`Failed: ${response?.error}`, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
@@ -79,7 +79,7 @@ function IssueScreen() {
     });
     if (response?.assetId) {
       setLoading(false);
-      Toast(assets.assetCreateMsg, true);
+      Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setLoading(false);
@@ -88,7 +88,7 @@ function IssueScreen() {
       }, 500);
     } else if (response?.error) {
       setLoading(false);
-      Toast(`Failed: ${response?.error}`, false, true);
+      Toast(`Failed: ${response?.error}`, true);
     }
   }, [
     assetName,

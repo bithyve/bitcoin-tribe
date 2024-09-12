@@ -142,7 +142,7 @@ const QRScanner = () => {
         });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, false, true);
+        Toast(sendScreen.invalidBtcAddress, true);
     }
   }, []);
 

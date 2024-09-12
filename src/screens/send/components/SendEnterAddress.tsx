@@ -64,7 +64,7 @@ function SendEnterAddress({
         });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, false, true);
+        Toast(sendScreen.invalidBtcAddress, true);
     }
   };
   const handlePasteAddress = async () => {
@@ -80,7 +80,7 @@ function SendEnterAddress({
     } else {
       Keyboard.dismiss();
       onDismiss();
-      Toast(sendScreen.invalidBtcAddress, false, true);
+      Toast(sendScreen.invalidBtcAddress, true);
     }
   };
 

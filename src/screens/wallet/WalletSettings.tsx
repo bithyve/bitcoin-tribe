@@ -20,9 +20,9 @@ function WalletSettings() {
 
   useEffect(() => {
     if (isSuccess) {
-      Toast(strings.testSatsRecived, true);
+      Toast(strings.testSatsRecived);
     } else if (isError) {
-      Toast(strings.failedTestSatsRecived, false, true);
+      Toast(strings.failedTestSatsRecived, true);
     }
   }, [isError, isSuccess]);
 

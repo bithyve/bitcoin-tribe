@@ -3,20 +3,34 @@ import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 
 import Colors from 'src/theme/Colors';
-import CheckIcon from 'src/assets/images/icon_check.svg';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
+import LottieView from 'lottie-react-native';
 
 // Need to work
-export default (message, icon = false, error = false) => {
+export default (message, error = false) => {
   return Toast.show(
     <View style={styles.container}>
-      {icon && <CheckIcon />}
+      {error ? (
+        <LottieView
+          source={require('src/assets/images/errorToast.json')}
+          style={styles.loaderStyle}
+          autoPlay
+          loop
+        />
+      ) : (
+        <LottieView
+          source={require('src/assets/images/successToast.json')}
+          style={styles.loaderStyle}
+          autoPlay
+          loop
+        />
+      )}
       <AppText
         style={[
           styles.toastMessageStyle,
-          { color: error ? Colors.ImperialRed : Colors.RaisinBlack },
+          { color: error ? Colors.White : Colors.RaisinBlack },
         ]}>
         {message && message.length > 100
           ? `${message.substring(0, 100)}...`
@@ -31,7 +45,7 @@ export default (message, icon = false, error = false) => {
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: error ? Colors.BulgarianRose : Colors.ScreaminGreen,
+      backgroundColor: error ? Colors.FireOpal : Colors.ScreaminGreen,
       textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
@@ -60,5 +74,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap',
     fontWeight: '600',
+  },
+  loaderStyle: {
+    height: hp(35),
+    width: hp(35),
   },
 });
