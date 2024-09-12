@@ -206,7 +206,6 @@ const SendAssetScreen = () => {
           borderColor={theme.colors.successPopupBorderColor}
           conatinerModalStyle={styles.containerModalStyle}>
           <SendSuccessPopupContainer
-            icon={<SuccessPopupIcon />}
             title={assets.success}
             subTitle={assets.operationSuccess}
             description={assets.operationSuccessSubTitle}
