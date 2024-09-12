@@ -62,11 +62,6 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
                 </AppText>
               ) : null}
             </View>
-            {enableClose && (
-              <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-                <IconClose />
-              </AppTouchable>
-            )}
           </View>
           {children}
         </View>
@@ -102,11 +97,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       marginBottom: hp(50),
     },
     contentWrapper: {
-      width: '80%',
-    },
-    closeIconWrapper: {
-      width: '20%',
-      alignItems: 'center',
+      width: '90%',
     },
     titleText: {
       color: theme.colors.headingColor,
