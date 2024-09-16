@@ -34,7 +34,7 @@ const CloudBackup = ({ navigation }) => {
     if (backup.isSuccess) {
       Toast(settings.CLOUD_BACKUP_CREATED);
     } else if (backup.isError) {
-      Toast(settings.CLOUD_BACKUP_FAILED);
+      Toast(settings.CLOUD_BACKUP_FAILED, true);
     }
   }, [backup.isSuccess, backup.isError, backup.isLoading]);
 
