@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
@@ -110,6 +110,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
+      marginTop: Platform.OS === 'android' ? hp(5) : 0,
     },
     contentWrapper: {
       flexDirection: 'row',
