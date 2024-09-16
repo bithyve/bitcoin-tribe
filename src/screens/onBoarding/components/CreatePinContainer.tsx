@@ -31,9 +31,9 @@ function CreatePinContainer() {
 
   useEffect(() => {
     if (createPin.error) {
-      Toast(onBoarding.errorSettingPin, false, true);
+      Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      Toast(onBoarding.newPinCreated, false, false);
+      Toast(onBoarding.newPinCreated);
       if (OnBoarding) {
         navigation.replace(NavigationRoutes.APPSTACK);
       } else {

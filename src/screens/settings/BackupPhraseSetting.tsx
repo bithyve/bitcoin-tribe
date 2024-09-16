@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import OptionCard from 'src/components/OptionCard';
 
 import ScreenContainer from 'src/components/ScreenContainer';
+import SelectOption from 'src/components/SelectOption';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -20,7 +20,7 @@ function BackupPhraseSetting() {
         title={settings.backupPhraseSettingTitle}
         subTitle={settings.backupPhraseSettingSubTitle}
       />
-      <OptionCard
+      <SelectOption
         title={settings.viewBackupPhrase}
         subTitle={settings.viewBackupPhraseSubTitle}
         onPress={() =>

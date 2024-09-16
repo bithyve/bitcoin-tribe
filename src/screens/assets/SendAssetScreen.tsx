@@ -171,7 +171,7 @@ const SendAssetScreen = () => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`, false, true);
+      Toast(`Failed: ${response?.error}`, true);
     }
   }, [invoice, amount, navigation]);
 
@@ -206,7 +206,6 @@ const SendAssetScreen = () => {
           borderColor={theme.colors.successPopupBorderColor}
           conatinerModalStyle={styles.containerModalStyle}>
           <SendSuccessPopupContainer
-            icon={<SuccessPopupIcon />}
             title={assets.success}
             subTitle={assets.operationSuccess}
             description={assets.operationSuccessSubTitle}

@@ -61,7 +61,7 @@ function SendToContainer({
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
-      Toast('Error: Transaction Fee intel missing', false, true);
+      Toast(sendScreen.transFeeErrMsg, true);
     } else {
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
@@ -75,11 +75,7 @@ function SendToContainer({
     if (sendTransactionMutation.status === 'success') {
       setVisible(true);
     } else if (sendTransactionMutation.status === 'error') {
-      Toast(
-        `Error while sending: ${sendTransactionMutation.error}`,
-        false,
-        true,
-      );
+      Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
     }
   }, [sendTransactionMutation]);
 
@@ -266,7 +262,7 @@ function SendToContainer({
           secondaryTitle={common.cancel}
           primaryOnPress={initiateSend}
           secondaryOnPress={navigation.goBack}
-          width={wp(120)}
+          width={wp(160)}
         />
       </View>
       {/* <View style={styles.keyPadWrapper}>

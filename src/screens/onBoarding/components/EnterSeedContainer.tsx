@@ -193,11 +193,11 @@ function EnterSeedContainer() {
         });
       } else {
         setLoading(false);
-        Toast('Invalid Mnemonic', false, true);
+        Toast(onBoarding.invalidMnemonic, true);
       }
     } else {
       setLoading(false);
-      Toast('Please enter 12-word recovery phrase', false, true);
+      Toast(onBoarding.enterRecoveryPhrase, true);
     }
   };
 
@@ -206,7 +206,7 @@ function EnterSeedContainer() {
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
     setLoading(false);
-    Toast(onBoarding.appRecoveryMsg, true, false);
+    Toast(onBoarding.appRecoveryMsg);
     setTimeout(() => {
       navigation.replace(NavigationRoutes.APPSTACK);
     }, 400);

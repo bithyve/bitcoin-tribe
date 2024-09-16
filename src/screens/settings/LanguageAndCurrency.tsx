@@ -18,10 +18,11 @@ import CurrencyDropDownListView from './components/CurrencyDropDownListView';
 import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import FooterNote from 'src/components/FooterNote';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
+  const { settings, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
@@ -113,6 +114,11 @@ function LanguageAndCurrency() {
           style={styles.currencyDropdownContainer}
         />
       )}
+      <FooterNote
+        title={common.note}
+        subTitle={settings.langNoteSubTitle}
+        customStyle={styles.noteWrapper}
+      />
     </ScreenContainer>
   );
 }
@@ -129,6 +135,11 @@ const getStyles = (theme: AppTheme) =>
       top: Platform.OS === 'ios' ? '72%' : '62%',
       borderRadius: 20,
       marginHorizontal: hp(15),
+    },
+    noteWrapper: {
+      position: 'absolute',
+      bottom: 20,
+      alignSelf: 'center',
     },
   });
 export default LanguageAndCurrency;

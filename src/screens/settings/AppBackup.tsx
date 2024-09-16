@@ -20,6 +20,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { BackupType } from 'src/models/enums/Backup';
+import Toast from 'src/components/Toast';
 
 function AppBackup({ navigation }) {
   const { viewOnly } = useRoute().params;
@@ -71,6 +72,7 @@ function AppBackup({ navigation }) {
         title={settings.confirmBackupPhrase}
         subTitle={settings.confirmBackupPhraseSubtitle}
         visible={visible}
+        enableCloseIcon={false}
         height={Platform.OS == 'ios' && '80%'}
         onDismiss={() => setVisible(false)}>
         <ConfirmAppBackup
@@ -81,6 +83,9 @@ function AppBackup({ navigation }) {
               if (response) {
                 setBackup(true);
                 navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
+                setTimeout(() => {
+                  Toast(settings.SEED_BACKUP_CONFIRMED);
+                }, 400);
               }
             }
           }}
@@ -89,6 +94,9 @@ function AppBackup({ navigation }) {
             const response = await ApiHandler.createBackup(false);
             if (response) {
               navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
+              setTimeout(() => {
+                Toast(settings.SEED_BACKUP_CONFIRMATION_SKIPPED);
+              }, 400);
             }
           }}
           words={words}

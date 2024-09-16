@@ -54,8 +54,10 @@
     "createPinFirst": "Create a PIN first",
     "invalidPin": "Invalid PIN",
     "enterYourPin": "Enter your PIN",
-    "recoverRGBState": "Would you like to recover your RGB Asset state from the cloud?",
-    "appRecoveryMsg": "App recovery successful. You're all set!"
+    "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
+    "appRecoveryMsg": "App recovery successful. You're all set!",
+    "invalidMnemonic": "Invalid Mnemonic",
+    "enterRecoveryPhrase": "Please enter 12-word recovery phrase"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -135,7 +137,8 @@
     "viewBackupPhraseSubTitle": "View seed words for your key",
     "noBackHistory": "No Backup History yet.",
     "cloudBackupTitle": "Cloud Backup",
-    "cloudBackupSubTitle": "Backup RGB Asset state on"
+    "cloudBackupSubTitle": "Backup RGB Asset state on",
+    "langNoteSubTitle": "Language support is in beta. We appreciate your feedback!"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -160,7 +163,8 @@
     "sendSuccessSubTitle": "The transaction has been successfully.",
     "invalidBtcAddress": "Invalid Bitcoin address",
     "sentSuccessfully": "Sent successfully",
-    "amountMoreThanSpend": "Amount entered is more than available to spend"
+    "amountMoreThanSpend": "Amount entered is more than available to spend",
+    "transFeeErrMsg": "Error: Transaction Fee intel missing"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -174,7 +178,7 @@
     "confirmation": "Confirmation",
     "rgbUtxoCreateNote": "The RGB feature is currently in alpha. As a result, you may need to complete an additional transaction due to the early stage of this technology.",
     "walletSettings": "Wallet Settings",
-    "walletSettingSubTitle": "Manage Your Wallet Settings Effortlessly",
+    "walletSettingSubTitle": "Easily Manage Your Wallet Settings",
     "nameAndPic": "Name and Picture",
     "nameAndPicSubTitle": "Enter, Edit Name and photo",
     "showXPub": "Show xPub",
@@ -213,7 +217,7 @@
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
     "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
-    "rgbAssets": "RGB Assets"
+    "rgbAssets": "Reserved Sats"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

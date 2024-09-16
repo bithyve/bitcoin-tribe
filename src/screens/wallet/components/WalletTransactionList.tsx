@@ -62,7 +62,7 @@ function WalletTransactionList({
     if (walletRefreshMutation.status === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
     } else if (walletRefreshMutation.status === 'error') {
-      Toast(walletStrings.failRefreshWallet, false, true);
+      Toast(walletStrings.failRefreshWallet, true);
     }
   }, [walletRefreshMutation]);
 

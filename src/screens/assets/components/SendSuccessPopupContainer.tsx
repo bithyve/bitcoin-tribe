@@ -1,3 +1,4 @@
+import LottieView from 'lottie-react-native';
 import React, { ReactNode, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -9,7 +10,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 
 type sendSuccessProps = {
-  icon: ReactNode;
   title: string;
   subTitle: string;
   description: string;
@@ -17,14 +17,21 @@ type sendSuccessProps = {
 };
 
 function SendSuccessPopupContainer(props: sendSuccessProps) {
-  const { icon, title, subTitle, description, onPress } = props;
+  const { title, subTitle, description, onPress } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   return (
     <View style={styles.container}>
-      <View>{icon}</View>
+      <View>
+        <LottieView
+          source={require('src/assets/images/successPopup.json')}
+          style={styles.loaderStyle}
+          autoPlay
+          loop
+        />
+      </View>
       <View style={styles.detailsWrapper}>
         <AppText variant="heading2" style={styles.titleText}>
           {title}
@@ -63,6 +70,11 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
       textAlign: 'center',
       marginBottom: hp(20),
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(120),
+      height: hp(120),
     },
   });
 export default SendSuccessPopupContainer;

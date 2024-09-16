@@ -24,7 +24,7 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
 
   const handleCopyText = async (text: string) => {
     await Clipboard.setString(text);
-    Toast(common.addressCopiedSuccessfully, true);
+    Toast(common.addressCopiedSuccessfully);
   };
 
   return (

@@ -53,9 +53,9 @@ function BroadcastTxnContainer({
   useEffect(() => {
     if (sendPhaseTwoMutation.status === 'success') {
       setVisible(true);
-      // Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`, true);
+      // Toast(`Send successful, txid: ${sendPhaseTwoMutation.data}`);
     } else if (sendPhaseTwoMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`, false, true);
+      Toast(`Error while sending: ${sendPhaseTwoMutation.error}`, true);
     }
   }, [sendPhaseTwoMutation]);
   const successTransaction = () => {

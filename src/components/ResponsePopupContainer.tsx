@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Modal from 'react-native-modal';
 
-import IconClose from 'src/assets/images/icon_close.svg';
 import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
-import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 
 type popupContainerProps = {
@@ -62,11 +60,6 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
                 </AppText>
               ) : null}
             </View>
-            {enableClose && (
-              <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-                <IconClose />
-              </AppTouchable>
-            )}
           </View>
           {children}
         </View>
@@ -102,11 +95,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       marginBottom: hp(50),
     },
     contentWrapper: {
-      width: '80%',
-    },
-    closeIconWrapper: {
-      width: '20%',
-      alignItems: 'center',
+      width: '90%',
     },
     titleText: {
       color: theme.colors.headingColor,

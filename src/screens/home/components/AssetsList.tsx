@@ -13,7 +13,6 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
-import RefreshControlView from 'src/components/RefreshControlView';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -80,9 +79,6 @@ function AssetsList(props: AssetsListProps) {
         numColumns={2}
         data={listData}
         keyExtractor={(item, index) => index.toString()}
-        // refreshControl={
-        //   <RefreshControlView refreshing={false} onRefresh={() => {}} />
-        // }
         ListFooterComponent={FooterComponent}
         ListEmptyComponent={
           <EmptyStateView
