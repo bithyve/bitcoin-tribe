@@ -79,38 +79,41 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
-        <ModalLoading visible={primaryStatus === 'loading'} />
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.content}>
-            <AddPicture
-              title={addPicTitle}
-              onPress={handlePickImage}
-              imageSource={profileImage}
-              edit={edit}
+        {primaryStatus === 'loading' ? (
+          <ModalLoading visible={primaryStatus === 'loading'} />
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.content}>
+              <AddPicture
+                title={addPicTitle}
+                onPress={handlePickImage}
+                imageSource={profileImage}
+                edit={edit}
+              />
+              <TextField
+                value={inputValue}
+                onChangeText={onChangeText}
+                placeholder={inputPlaceholder}
+                keyboardType={'default'}
+                returnKeyType={'done'}
+                onSubmitEditing={primaryOnPress}
+                autoFocus={true}
+                maxLength={15}
+              />
+            </View>
+            <Buttons
+              primaryTitle={primaryCTATitle}
+              secondaryTitle={secondaryCTATitle}
+              primaryOnPress={primaryOnPress}
+              secondaryOnPress={secondaryOnPress}
+              primaryLoading={primaryStatus === 'loading'}
+              disabled={disabled}
             />
-            <TextField
-              value={inputValue}
-              onChangeText={onChangeText}
-              placeholder={inputPlaceholder}
-              keyboardType={'default'}
-              returnKeyType={'done'}
-              onSubmitEditing={primaryOnPress}
-              autoFocus={true}
-              maxLength={15}
-            />
-          </View>
-          <Buttons
-            primaryTitle={primaryCTATitle}
-            secondaryTitle={secondaryCTATitle}
-            primaryOnPress={primaryOnPress}
-            secondaryOnPress={secondaryOnPress}
-            primaryLoading={primaryStatus === 'loading'}
-            disabled={disabled}
-          />
-        </ScrollView>
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </>
   );
