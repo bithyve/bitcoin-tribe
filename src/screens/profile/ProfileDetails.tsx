@@ -9,7 +9,7 @@ import {
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
@@ -79,41 +79,38 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
-        {primaryStatus === 'loading' ? (
-          <ModalLoading visible={primaryStatus === 'loading'} />
-        ) : (
-          <ScrollView
-            contentContainerStyle={styles.scrollView}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}>
-            <View style={styles.content}>
-              <AddPicture
-                title={addPicTitle}
-                onPress={handlePickImage}
-                imageSource={profileImage}
-                edit={edit}
-              />
-              <TextField
-                value={inputValue}
-                onChangeText={onChangeText}
-                placeholder={inputPlaceholder}
-                keyboardType={'default'}
-                returnKeyType={'done'}
-                onSubmitEditing={primaryOnPress}
-                autoFocus={true}
-                maxLength={15}
-              />
-            </View>
-            <Buttons
-              primaryTitle={primaryCTATitle}
-              secondaryTitle={secondaryCTATitle}
-              primaryOnPress={primaryOnPress}
-              secondaryOnPress={secondaryOnPress}
-              primaryLoading={primaryStatus === 'loading'}
-              disabled={disabled}
+        <ModalLoading visible={primaryStatus === 'loading'} />
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            <AddPicture
+              title={addPicTitle}
+              onPress={handlePickImage}
+              imageSource={profileImage}
+              edit={edit}
             />
-          </ScrollView>
-        )}
+            <TextField
+              value={inputValue}
+              onChangeText={onChangeText}
+              placeholder={inputPlaceholder}
+              keyboardType={'default'}
+              returnKeyType={'done'}
+              onSubmitEditing={primaryOnPress}
+              autoFocus={true}
+              maxLength={15}
+            />
+          </View>
+          <Buttons
+            primaryTitle={primaryCTATitle}
+            secondaryTitle={secondaryCTATitle}
+            primaryOnPress={primaryOnPress}
+            secondaryOnPress={secondaryOnPress}
+            primaryLoading={primaryStatus === 'loading'}
+            disabled={disabled}
+          />
+        </ScrollView>
       </KeyboardAvoidingView>
     </>
   );
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   wrapper: {
-    marginTop: 0,
+    marginTop: Platform.OS === 'android' ? hp(15) : 0,
   },
   scrollView: {
     flexGrow: 1,
