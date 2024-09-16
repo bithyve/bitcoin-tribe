@@ -120,7 +120,7 @@
     "appInfoScreenSubTitle": "Tribe RGB app details and Build version history",
     "walletBackup": "Wallet backup",
     "rgbAssetsbackup": "Asset backup",
-    "appBackupMenuSubTitle": "Wallet backup and assets backups are both required to secure your data.",
+    "appBackupMenuSubTitle": "Wallet and asset backups are both required to secure your data.",
     "walletBackupHistory": "Wallet backup history",
     "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
     "SEED_BACKUP_CREATED": "Seed backup is created",
