@@ -32,11 +32,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR code</string>
+	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes, Bitcoin addresses and RGB invoices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
+	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture to your wallet.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Allow Tribe requires FaceID access to allows you quick and secure access.</string>
+	<string>Tribe requires FaceID access to quick and secure access your $(PRODUCT_NAME) app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to use your current location</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LufgaBold.ttf</string>
