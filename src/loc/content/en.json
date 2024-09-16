@@ -226,7 +226,7 @@
     "receiveAssetTitle": "Receive Assset",
     "receiveAssetSubTitle": "Scan or Copy paste the RGB Invoice",
     "insufficientSatsRGB": "Sats reserved for asset transaction",
-    "insufficientSatsRGBSubTitle": "9000 + sats will be reserved from your wallet for this and four future asset transactions.",
+    "insufficientSatsRGBSubTitle": "5000 + sats will be reserved from your wallet for this and four future asset transactions.",
     "coinMetaTitle": "Meta Data",
     "coinMetaSubTitle": "Discover the power of data-driven insights and transform.",
     "name": "Name",
