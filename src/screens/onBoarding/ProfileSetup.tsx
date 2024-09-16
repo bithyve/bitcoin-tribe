@@ -80,11 +80,10 @@ function ProfileSetup({ navigation }) {
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
-        // onSettingsPress={() => {
-        // Keyboard.dismiss();
-        // setVisible(true);
-        // navigation.navigate(NavigationRoutes.CREATEPIN);
-        // }}
+        rightText={common.skip}
+        onRightTextPress={() => {
+          initiateWalletCreation();
+        }}
         primaryStatus={query.status}
         primaryCTATitle={common.next}
         // secondaryCTATitle={common.skip}

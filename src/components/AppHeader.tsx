@@ -18,6 +18,8 @@ type AppHeaderProps = {
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
   onBackNavigation?;
+  rightText?: string;
+  onRightTextPress?: () => void;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -28,6 +30,8 @@ function AppHeader(props: AppHeaderProps) {
     enableBack = true,
     onBackNavigation,
     rightIcon,
+    rightText,
+    onRightTextPress,
     onSettingsPress,
   } = props;
   const theme: AppTheme = useTheme();
@@ -50,6 +54,15 @@ function AppHeader(props: AppHeaderProps) {
             onPress={onSettingsPress}
             style={styles.rightIconWrapper}>
             {rightIcon}
+          </AppTouchable>
+        )}
+        {rightText && (
+          <AppTouchable
+            onPress={onRightTextPress}
+            style={styles.rightIconWrapper}>
+            <AppText variant="heading2" style={styles.rightTextStyle}>
+              {rightText}
+            </AppText>
           </AppTouchable>
         )}
       </View>
@@ -108,6 +121,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     addNewText: {
+      color: theme.colors.accent1,
+    },
+    rightTextStyle: {
       color: theme.colors.accent1,
     },
   });
