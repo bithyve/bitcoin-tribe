@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 
@@ -34,7 +34,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       width: '100%',
-      marginTop: hp(5),
+      marginTop: Platform.OS === 'ios' ? hp(5) : hp(25),
     },
     contentWrapper: {
       width: '87%',

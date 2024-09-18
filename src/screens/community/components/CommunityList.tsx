@@ -169,7 +169,7 @@ const getStyles = (theme: AppTheme) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 180,
+      bottom: Platform.OS === 'ios' ? 180 : 200,
       right: 30,
     },
   });
