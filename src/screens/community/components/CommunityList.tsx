@@ -16,8 +16,8 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import EmptyStateView from 'src/components/EmptyStateView';
 import RefreshControlView from 'src/components/RefreshControlView';
 import FnfNext from 'src/assets/images/fnfNext.svg';
-import AppTouchable from 'src/components/AppTouchable';
-import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+// import AppTouchable from 'src/components/AppTouchable';
+// import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 
 const data = [
   {
@@ -87,7 +87,7 @@ const CommunityListItem = ({ name, giftTime, profileText }) => {
 function CommunityList() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { community } = translations;
+  const { common } = translations;
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
@@ -122,9 +122,9 @@ function CommunityList() {
           />
         }
       />
-      <AppTouchable style={styles.addNewIconWrapper}>
+      {/* <AppTouchable style={styles.addNewIconWrapper}>
         <AddNewAsset />
-      </AppTouchable>
+      </AppTouchable> */}
     </View>
   );
 }
@@ -132,8 +132,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(20),
-      height: '100%',
+      height: '70%',
       width: '100%',
+      opacity: 0.4,
     },
     listItemContainer: {
       flexDirection: 'row',
