@@ -7,6 +7,8 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
+import CommunityHeader from './components/CommunityHeader';
+import CommunityList from './components/CommunityList';
 
 function Community() {
   const theme: AppTheme = useTheme();
@@ -15,9 +17,8 @@ function Community() {
   const styles = getStyles(theme);
   return (
     <ScreenContainer style={styles.container}>
-      <View style={styles.imageWrapper}>
-        <CommunityScreen height={windowHeight > 670 ? '94%' : '96%'} />
-      </View>
+      <CommunityHeader />
+      <CommunityList />
     </ScreenContainer>
   );
 }
@@ -25,7 +26,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: windowHeight > 670 ? 0 : hp(20),
     },
     imageWrapper: {},
   });
