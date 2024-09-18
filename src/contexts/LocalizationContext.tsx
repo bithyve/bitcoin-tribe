@@ -6,8 +6,9 @@ import en from '../loc/content/en.json';
 import es from '../loc/content/es.json';
 import hi from '../loc/content/hi.json';
 import it from '../loc/content/it.json';
+import ja from '../loc/content/ja.json';
+import cn from '../loc/content/cn.json';
 import { Keys } from 'src/storage';
-import moment from 'moment';
 
 export const Storage = new MMKV();
 
@@ -19,6 +20,8 @@ export const languages = {
   es,
   hi,
   it,
+  ja,
+  cn,
 };
 
 export const translations = new LocalizedContent(languages);

@@ -31,6 +31,22 @@ export default [
     country: 'Italy',
     country_code: 'it',
   },
+  {
+    language: 'Japanese',
+    displayTitle: '表示名',
+    iso: 'ja',
+    flag: '🇯🇵',
+    country: 'Japan',
+    country_code: 'ja',
+  },
+  {
+    language: 'Chinese',
+    displayTitle: '显示名称',
+    iso: 'cn',
+    flag: '🇨🇳',
+    country: 'China',
+    country_code: 'cn',
+  },
   /*{
     language: 'German',
     displayTitle: 'Deutsch',

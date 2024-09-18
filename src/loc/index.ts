@@ -5,6 +5,8 @@ const content = new LocalizedContent({
   es: require('./content/es.json'),
   hi: require('./content/hi.json'),
   it: require('./content/it.json'),
+  ja: require('./content/ja.json'),
+  cn: require('./content/cn.json'),
 });
 
 const setAppLanguage = async language => {
