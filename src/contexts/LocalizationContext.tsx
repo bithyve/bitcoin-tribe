@@ -4,6 +4,8 @@ import LocalizedContent from 'react-localization';
 import { MMKV, useMMKVString } from 'react-native-mmkv';
 import en from '../loc/content/en.json';
 import es from '../loc/content/es.json';
+import hi from '../loc/content/hi.json';
+import it from '../loc/content/it.json';
 import { Keys } from 'src/storage';
 import moment from 'moment';
 
@@ -15,6 +17,8 @@ export const APP_LANGUAGE = 'appLanguage';
 export const languages = {
   en,
   es,
+  hi,
+  it,
 };
 
 export const translations = new LocalizedContent(languages);
