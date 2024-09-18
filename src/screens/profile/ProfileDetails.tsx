@@ -9,13 +9,14 @@ import {
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
-// import SettingIcon from 'src/assets/images/icon_settings.svg';
+import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ProfileDetailsProps = {
   title: string;
@@ -29,11 +30,13 @@ type ProfileDetailsProps = {
   handlePickImage: () => void;
   inputPlaceholder: string;
   edit?: boolean;
-  // onSettingsPress?: () => void;
+  onSettingsPress?: () => void;
   primaryStatus?: string;
   disabled?: boolean;
   primaryCTATitle: string;
   secondaryCTATitle?: string;
+  rightText?: string;
+  onRightTextPress?: () => void;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -48,11 +51,13 @@ function ProfileDetails(props: ProfileDetailsProps) {
     handlePickImage,
     inputPlaceholder,
     edit,
-    // onSettingsPress,
+    onSettingsPress,
     primaryStatus,
     disabled,
     primaryCTATitle,
     secondaryCTATitle,
+    rightText,
+    onRightTextPress,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -62,8 +67,8 @@ function ProfileDetails(props: ProfileDetailsProps) {
       <AppHeader
         title={title}
         subTitle={subTitle}
-        // rightIcon={<SettingIcon />}
-        // onSettingsPress={onSettingsPress}
+        rightText={rightText}
+        onRightTextPress={onRightTextPress}
         style={styles.wrapper}
       />
       <KeyboardAvoidingView
@@ -74,37 +79,41 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.content}>
-            <AddPicture
-              title={addPicTitle}
-              onPress={handlePickImage}
-              imageSource={profileImage}
-              edit={edit}
+        {primaryStatus === 'loading' ? (
+          <ModalLoading visible={primaryStatus === 'loading'} />
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.content}>
+              <AddPicture
+                title={addPicTitle}
+                onPress={handlePickImage}
+                imageSource={profileImage}
+                edit={edit}
+              />
+              <TextField
+                value={inputValue}
+                onChangeText={onChangeText}
+                placeholder={inputPlaceholder}
+                keyboardType={'default'}
+                returnKeyType={'done'}
+                onSubmitEditing={primaryOnPress}
+                autoFocus={true}
+                maxLength={15}
+              />
+            </View>
+            <Buttons
+              primaryTitle={primaryCTATitle}
+              secondaryTitle={secondaryCTATitle}
+              primaryOnPress={primaryOnPress}
+              secondaryOnPress={secondaryOnPress}
+              primaryLoading={primaryStatus === 'loading'}
+              disabled={disabled}
             />
-            <TextField
-              value={inputValue}
-              onChangeText={onChangeText}
-              placeholder={inputPlaceholder}
-              keyboardType={'default'}
-              returnKeyType={'done'}
-              onSubmitEditing={primaryOnPress}
-              autoFocus={true}
-              maxLength={15}
-            />
-          </View>
-          <Buttons
-            primaryTitle={primaryCTATitle}
-            secondaryTitle={secondaryCTATitle}
-            primaryOnPress={primaryOnPress}
-            secondaryOnPress={secondaryOnPress}
-            primaryLoading={primaryStatus === 'loading'}
-            disabled={disabled}
-          />
-        </ScrollView>
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </>
   );
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   wrapper: {
-    marginTop: 0,
+    marginTop: Platform.OS === 'android' ? hp(15) : 0,
   },
   scrollView: {
     flexGrow: 1,

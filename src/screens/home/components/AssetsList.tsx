@@ -76,6 +76,7 @@ function AssetsList(props: AssetsListProps) {
   return (
     <View style={styles.container}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         numColumns={2}
         data={listData}
         keyExtractor={(item, index) => index.toString()}
