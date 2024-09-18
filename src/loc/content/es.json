@@ -92,6 +92,8 @@
     "appInfoSubTitle": "Versión y detalles de la aplicación",
     "language": "Idioma",
     "languageSubTitle": "Elige tu idioma",
+    "satsModeTitle": "Modo Sats",
+    "satsModeSubTitle": "Habilitar para ver el saldo en sats",
     "currency": "Moneda",
     "currencySubTitle": "Elige tu moneda",
     "appBackupScreenSubTitle": "Escribe esta frase de respaldo",
