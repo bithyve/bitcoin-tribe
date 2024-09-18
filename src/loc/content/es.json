@@ -253,5 +253,9 @@
     "operationSuccessSubTitle": "Tus cambios se han guardado.",
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
     "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB."
+  },
+  "community": {
+    "fnfTitle": "Amigas y familia",
+    "fnfSubTitle": "Bitcoin es mejor con amigas"
   }
 }
