@@ -7,7 +7,7 @@ import GoBack from 'src/assets/images/icon_back.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 
 type ToolbarProps = {
