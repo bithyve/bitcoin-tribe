@@ -140,7 +140,8 @@
     "noBackHistory": "Nessuna cronologia di backup ancora.",
     "cloudBackupTitle": "Backup sul cloud",
     "cloudBackupSubTitle": "Backup dello stato della risorsa RGB su",
-    "langNoteSubTitle": "Il supporto linguistico è in beta. Apprezziamo il tuo feedback!"
+    "langNoteSubTitle": "Il supporto linguistico è in beta. Apprezziamo il tuo feedback!",
+    "biometricsNotEnableMsg": "Biometria non abilitata.\nPer favore, vai alle impostazioni e abilitala"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

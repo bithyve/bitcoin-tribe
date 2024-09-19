@@ -140,7 +140,8 @@
     "noBackHistory": "尚无备份历史。",
     "cloudBackupTitle": "云备份",
     "cloudBackupSubTitle": "备份RGB资产状态到",
-    "langNoteSubTitle": "语言支持处于测试阶段。我们感谢您的反馈！"
+    "langNoteSubTitle": "语言支持处于测试阶段。我们感谢您的反馈！",
+    "biometricsNotEnableMsg": "生物识别未启用。\n请前往设置并启用"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

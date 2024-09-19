@@ -140,7 +140,8 @@
     "noBackHistory": "अभी तक कोई बैकअप इतिहास नहीं है।",
     "cloudBackupTitle": "क्लाउड बैकअप",
     "cloudBackupSubTitle": "क्लाउड पर आरजीबी एसेट स्टेट का बैकअप लें",
-    "langNoteSubTitle": "भाषा समर्थन बीटा में है। हम आपके फीडबैक की सराहना करते हैं!"
+    "langNoteSubTitle": "भाषा समर्थन बीटा में है। हम आपके फीडबैक की सराहना करते हैं!",
+    "biometricsNotEnableMsg": "बायोमेट्रिक्स सक्षम नहीं है।\nकृपया सेटिंग में जाकर इसे सक्षम करें"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

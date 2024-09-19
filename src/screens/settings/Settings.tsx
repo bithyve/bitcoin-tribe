@@ -74,10 +74,7 @@ function SettingsScreen({ navigation }) {
           Storage.set(Keys.PIN_METHOD, PinMethod.BIOMETRIC);
         }
       } else {
-        Toast(
-          'Biometrics not enabled.\nPlease go to setting and enable it',
-          true,
-        );
+        Toast(settings.biometricsNotEnableMsg, true);
       }
     } catch (error) {
       console.log(error);
