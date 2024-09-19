@@ -28,8 +28,8 @@
     "needHelp": "需要帮助？",
     "yes": "是",
     "no": "否",
-    "commingSoon": "即将推出！🎉",
-    "commingSoonSubTitle": "我们很高兴即将推出“朋友和家人”和“礼物”功能。敬请期待更新，并成为首批体验这些新功能的人！与此同时，您可以自由探索应用的其他部分。"
+    "commingSoon": "你的部落",
+    "commingSoonSubTitle": "准备好与您的朋友和家人一起享受基于比特币的资产。"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -255,5 +255,9 @@
     "operationSuccessSubTitle": "您的更改已保存。",
     "noRGBUTXOsTitle": "未找到RGB UTXO",
     "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。"
+  },
+  "community": {
+    "fnfTitle": "朋友和家人",
+    "fnfSubTitle": "比特币和朋友在一起更好"
   }
 }

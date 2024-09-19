@@ -28,8 +28,8 @@
     "needHelp": "Hai bisogno di aiuto?",
     "yes": "Sì",
     "no": "No",
-    "commingSoon": "Prossimamente! 🎉",
-    "commingSoonSubTitle": "Siamo entusiasti di presentare presto le nostre funzionalità \"Friends and Family\" e \"Gift\". Resta aggiornato per gli aggiornamenti e fai parte dei primi a provare queste nuove funzionalità! Nel frattempo, non esitare a esplorare altre parti dell'app."
+    "commingSoon": "La tua Tribù",
+    "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari."
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -255,5 +255,9 @@
     "operationSuccessSubTitle": "Le tue modifiche sono state salvate.",
     "noRGBUTXOsTitle": "Nessun UTXO RGB trovato",
     "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB."
+  },
+  "community": {
+    "fnfTitle": "Amici e Famiglia",
+    "fnfSubTitle": "Bitcoin è migliore con gli amici"
   }
 }

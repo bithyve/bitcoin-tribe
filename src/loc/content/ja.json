@@ -28,8 +28,8 @@
     "needHelp": "ヘルプが必要ですか？",
     "yes": "はい",
     "no": "いいえ",
-    "commingSoon": "近日公開！ 🎉",
-    "commingSoonSubTitle": "まもなく「友達と家族」および「ギフト」機能を導入できることを楽しみにしています。更新情報にご注目ください。これらの新機能を最初に体験してください！ その間、アプリの他の部分を探検してください。"
+    "commingSoon": "あなたのトライブ",
+    "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -255,5 +255,9 @@
     "operationSuccessSubTitle": "変更が保存されました。",
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
     "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。"
+  },
+  "community": {
+    "fnfTitle": "友達と家族",
+    "fnfSubTitle": "ビットコインは友達と一緒にいるともっと楽しい"
   }
 }
