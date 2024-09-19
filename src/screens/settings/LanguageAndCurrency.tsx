@@ -59,8 +59,8 @@ function LanguageAndCurrency() {
         subTitle={settings.langAndCurrencySubTitle}
       />
       <SelectOption
-        title={'Sats Mode'}
-        subTitle={'Enable to see balance in sats'}
+        title={settings.satsModeTitle}
+        subTitle={settings.satsModeSubTitle}
         onPress={() => toggleDisplayMode()}
         enableSwitch={true}
         onValueChange={() => toggleDisplayMode()}
@@ -126,7 +126,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '50%' : '42%',
+      top: Platform.OS === 'ios' ? '55%' : '42%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },

@@ -15,6 +15,38 @@ export default [
     country: 'Spain',
     country_code: 'es',
   },
+  {
+    language: 'Hindi',
+    displayTitle: 'हिंदी',
+    iso: 'hi',
+    flag: '🇮🇳',
+    country: 'India',
+    country_code: 'in',
+  },
+  {
+    language: 'Italian',
+    displayTitle: 'Italiano',
+    iso: 'it',
+    flag: '🇮🇹',
+    country: 'Italy',
+    country_code: 'it',
+  },
+  {
+    language: 'Japanese',
+    displayTitle: '表示名',
+    iso: 'ja',
+    flag: '🇯🇵',
+    country: 'Japan',
+    country_code: 'ja',
+  },
+  {
+    language: 'Chinese',
+    displayTitle: '显示名称',
+    iso: 'cn',
+    flag: '🇨🇳',
+    country: 'China',
+    country_code: 'cn',
+  },
   /*{
     language: 'German',
     displayTitle: 'Deutsch',
@@ -47,15 +79,8 @@ export default [
     country: 'Russia',
     country_code: 'ru',
   },
-  {
-    language: 'Hindi',
-    displayTitle: 'हिंदी',
-    iso: 'hi',
-    flag: '🇮🇳',
-    country: 'India',
-    country_code: 'in',
-  },
-
+  
+{
     language: 'Marathi',
     displayTitle: 'मराठी',
     iso: 'mr',

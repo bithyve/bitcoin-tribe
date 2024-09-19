@@ -34,10 +34,10 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       width: '100%',
-      marginTop: Platform.OS === 'ios' ? hp(5) : hp(25),
+      marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
     },
     contentWrapper: {
-      width: '87%',
+      width: '85%',
     },
     iconWrapper: {
       width: '10%',

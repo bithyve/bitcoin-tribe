@@ -16,58 +16,64 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import EmptyStateView from 'src/components/EmptyStateView';
 import RefreshControlView from 'src/components/RefreshControlView';
 import FnfNext from 'src/assets/images/fnfNext.svg';
-import AppTouchable from 'src/components/AppTouchable';
-import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+// import AppTouchable from 'src/components/AppTouchable';
+// import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+
+import User1 from 'src/assets/images/user1.svg';
+import User2 from 'src/assets/images/user2.svg';
+import User3 from 'src/assets/images/user3.svg';
+import User4 from 'src/assets/images/user4.svg';
+import User5 from 'src/assets/images/user5.svg';
 
 const data = [
   {
     id: 1,
-    name: 'Peter Parker',
-    giftTime: 'Last gift at 15 March 2024',
+    name: 'Rhaenyra Targaryen',
+    giftTime: 'Added just now',
     profileText: 'P',
+    profileImage: <User1 />,
   },
   {
     id: 2,
-    name: 'Sonny Foster',
-    giftTime: 'Last gift at 15 March 2024',
+    name: 'Larys Strong',
+    giftTime: 'Last seen 4 hours ago',
     profileText: 'S',
+    profileImage: <User2 />,
   },
   {
     id: 3,
-    name: 'Raymond Parr',
-    giftTime: 'Last gift at 15 March 2024',
+    name: 'Lady Baela Targaryen',
+    giftTime: 'Sent 10,000 sats 3 days back',
     profileText: 'R',
+    profileImage: <User3 />,
   },
   {
     id: 4,
-    name: 'Sol Parr',
-    giftTime: 'Last gift at 15 March 2024',
+    name: 'Ser Simon Strong',
+    giftTime: 'Gift received on 5th Feb 2024',
     profileText: 'S',
+    profileImage: <User4 />,
   },
   {
     id: 5,
-    name: 'Sol Smith',
+    name: 'Ser Harrold Westerling',
     giftTime: 'Last gift at 15 March 2024',
     profileText: 'S',
-  },
-  {
-    id: 6,
-    name: 'Sol Parker',
-    giftTime: 'Last gift at 15 March 2024',
-    profileText: 'S',
+    profileImage: <User5 />,
   },
 ];
 
-const CommunityListItem = ({ name, giftTime, profileText }) => {
+const CommunityListItem = ({ name, giftTime, profileImage, index }) => {
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, index);
   return (
     <View style={styles.listItemContainer}>
       <View style={styles.profileContainer}>
         <View style={styles.profileWrapper}>
-          <AppText variant="heading3" style={styles.profileTextStyle}>
+          {profileImage}
+          {/* <AppText variant="heading3" style={styles.profileTextStyle}>
             {profileText}
-          </AppText>
+          </AppText> */}
         </View>
       </View>
       <View style={styles.listItemContentWrapper}>
@@ -87,7 +93,7 @@ const CommunityListItem = ({ name, giftTime, profileText }) => {
 function CommunityList() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { community } = translations;
+  const { common } = translations;
   const styles = getStyles(theme);
   return (
     <View style={styles.container}>
@@ -109,7 +115,8 @@ function CommunityList() {
           <CommunityListItem
             name={item.name}
             giftTime={item.giftTime}
-            profileText={item.profileText}
+            profileImage={item.profileImage}
+            index={index}
           />
         )}
         keyExtractor={item => item.id}
@@ -122,23 +129,24 @@ function CommunityList() {
           />
         }
       />
-      <AppTouchable style={styles.addNewIconWrapper}>
+      {/* <AppTouchable style={styles.addNewIconWrapper}>
         <AddNewAsset />
-      </AppTouchable>
+      </AppTouchable> */}
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, index) =>
   StyleSheet.create({
     container: {
       marginTop: hp(20),
-      height: '100%',
+      height: '60%',
       width: '100%',
     },
     listItemContainer: {
       flexDirection: 'row',
       width: '100%',
-      marginVertical: hp(10),
+      marginVertical: hp(15),
+      opacity: index !== 0 ? 0.4 : 1,
     },
     profileWrapper: {
       backgroundColor: theme.colors.inputBackground,
@@ -149,10 +157,12 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     profileContainer: {
-      width: '18%',
+      width: '15%',
+      alignItems: 'center',
     },
     listItemContentWrapper: {
-      width: '67%',
+      width: '66%',
+      marginLeft: hp(10),
     },
     itemIconWrapper: {
       width: '15%',

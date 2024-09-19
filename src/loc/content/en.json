@@ -28,8 +28,9 @@
     "needHelp": "Need Help?",
     "yes": "Yes",
     "no": "No",
-    "commingSoon": "Coming Soon! 🎉",
-    "commingSoonSubTitle": "We're excited to introduce our \"Friends and Family\" and \"Gift\" features soon. Stay tuned for updates and be among the first to experience these new additions! In the meantime, feel free to explore other parts of the app."
+    "commingSoon": "Your Tribe",
+    "commingSoonSubTitle": "Get ready to enjoy bitcoin-based \nassets with your friends and family.",
+    "backup": "Backup"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -92,6 +93,8 @@
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Choose your Language",
+    "satsModeTitle": "Sats Mode",
+    "satsModeSubTitle": "Enable to see balance in sats",
     "currency": "Currency",
     "currencySubTitle": "Choose your Currency",
     "appBackupScreenSubTitle": "Write down this Backup Phrase",
@@ -126,8 +129,8 @@
     "SEED_BACKUP_CREATED": "Seed backup is created",
     "SEED_BACKUP_CONFIRMED": "Seed backup is confirmed",
     "SEED_BACKUP_CONFIRMATION_SKIPPED": "Seed backup confirmation is skipped",
-    "CLOUD_BACKUP_CREATED": "Cloud backup is created",
-    "CLOUD_BACKUP_FAILED": "Cloud backup is failed",
+    "CLOUD_BACKUP_CREATED": "Cloud backup created",
+    "CLOUD_BACKUP_FAILED": "Cloud backup failed",
     "CLOUD_BACKUP_HEALTH": "Cloud backup health",
     "CLOUD_BACKUP_HEALTH_FAILED": "Cloud backup health failed",
     "healthCheck": "Health Check",
@@ -138,7 +141,8 @@
     "noBackHistory": "No Backup History yet.",
     "cloudBackupTitle": "Cloud Backup",
     "cloudBackupSubTitle": "Backup RGB Asset state on",
-    "langNoteSubTitle": "Language support is in beta. We appreciate your feedback!"
+    "langNoteSubTitle": "Language support is in beta. We appreciate your feedback!",
+    "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -164,7 +168,8 @@
     "invalidBtcAddress": "Invalid Bitcoin address",
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
-    "transFeeErrMsg": "Error: Transaction Fee intel missing"
+    "transFeeErrMsg": "Error: Transaction Fee intel missing",
+    "paste": "Paste"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -252,7 +257,9 @@
     "operationSuccess": "Operation successful!",
     "operationSuccessSubTitle": "Your changes have been saved.",
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
-    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs."
+    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
+    "coins": "Coins",
+    "collectibles": "Collectibles"
   },
   "community": {
     "fnfTitle": "Friends & Family",
