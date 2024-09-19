@@ -12,7 +12,7 @@ type secondaryCTAProps = {
   width?: number;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
-  const { title, onPress, width = wp(120) } = props;
+  const { title, onPress, width = 'auto' } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, width);
 
