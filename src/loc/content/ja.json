@@ -29,7 +29,8 @@
     "yes": "はい",
     "no": "いいえ",
     "commingSoon": "あなたのトライブ",
-    "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。"
+    "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。",
+    "backup": "バックアップ"
   },
   "onBoarding": {
     "welcome": "ようこそ",

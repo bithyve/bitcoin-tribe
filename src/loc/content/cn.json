@@ -29,7 +29,8 @@
     "yes": "是",
     "no": "否",
     "commingSoon": "你的部落",
-    "commingSoonSubTitle": "准备好与您的朋友和家人一起享受基于比特币的资产。"
+    "commingSoonSubTitle": "准备好与您的朋友和家人一起享受基于比特币的资产。",
+    "backup": "备份"
   },
   "onBoarding": {
     "welcome": "欢迎",

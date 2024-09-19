@@ -29,7 +29,8 @@
     "yes": "Yes",
     "no": "No",
     "commingSoon": "Your Tribe",
-    "commingSoonSubTitle": "Get ready to enjoy bitcoin-based \nassets with your friends and family."
+    "commingSoonSubTitle": "Get ready to enjoy bitcoin-based \nassets with your friends and family.",
+    "backup": "Backup"
   },
   "onBoarding": {
     "welcome": "Welcome",

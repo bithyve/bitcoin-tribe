@@ -29,7 +29,8 @@
     "yes": "Sí",
     "no": "No",
     "commingSoon": "Tu Tribu",
-    "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares."
+    "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares.",
+    "backup": "Copia de seguridad"
   },
   "onBoarding": {
     "welcome": "Bienvenido",

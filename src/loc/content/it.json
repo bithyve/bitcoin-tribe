@@ -29,7 +29,8 @@
     "yes": "Sì",
     "no": "No",
     "commingSoon": "La tua Tribù",
-    "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari."
+    "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari.",
+    "backup": "Backup"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
