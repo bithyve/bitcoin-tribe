@@ -17,14 +17,14 @@ function Community() {
   const { common } = translations;
   const styles = getStyles(theme);
   return (
-    <ScreenContainer style={styles.container}>
+    <ScreenContainer>
       <CommunityHeader />
       <CommunityList />
       <View>
-        <AppText variant="heading2" style={styles.textStyle}>
+        <AppText variant="heading1" style={styles.textStyle}>
           {common.commingSoon}
         </AppText>
-        <AppText variant="body2" style={styles.subTextStyle}>
+        <AppText variant="body1" style={styles.subTextStyle}>
           {common.commingSoonSubTitle}
         </AppText>
       </View>
@@ -38,8 +38,10 @@ const getStyles = (theme: AppTheme) =>
     },
     imageWrapper: {},
     textStyle: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.headingColor,
       textAlign: 'center',
+      fontWeight: '600',
+      fontSize: 36,
     },
     subTextStyle: {
       color: theme.colors.secondaryHeadingColor,
