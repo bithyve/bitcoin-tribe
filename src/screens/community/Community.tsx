@@ -7,6 +7,9 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
+import CommunityHeader from './components/CommunityHeader';
+import CommunityList from './components/CommunityList';
+import AppText from 'src/components/AppText';
 
 function Community() {
   const theme: AppTheme = useTheme();
@@ -14,9 +17,16 @@ function Community() {
   const { common } = translations;
   const styles = getStyles(theme);
   return (
-    <ScreenContainer style={styles.container}>
-      <View style={styles.imageWrapper}>
-        <CommunityScreen height={windowHeight > 670 ? '94%' : '96%'} />
+    <ScreenContainer>
+      <CommunityHeader />
+      <CommunityList />
+      <View>
+        <AppText variant="heading1" style={styles.textStyle}>
+          {common.commingSoon}
+        </AppText>
+        <AppText variant="body1" style={styles.subTextStyle}>
+          {common.commingSoonSubTitle}
+        </AppText>
       </View>
     </ScreenContainer>
   );
@@ -25,8 +35,17 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: windowHeight > 670 ? 0 : hp(20),
     },
     imageWrapper: {},
+    textStyle: {
+      color: theme.colors.headingColor,
+      textAlign: 'center',
+      fontWeight: '600',
+      fontSize: 36,
+    },
+    subTextStyle: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'center',
+    },
   });
 export default Community;
