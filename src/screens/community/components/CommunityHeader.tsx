@@ -23,9 +23,7 @@ function CommunityHeader() {
           {community.fnfSubTitle}
         </AppText>
       </View>
-      <View style={styles.iconWrapper}>
-        <GiftIcon />
-      </View>
+      <View style={styles.iconWrapper}>{/* <GiftIcon /> */}</View>
     </View>
   );
 }

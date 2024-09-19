@@ -84,9 +84,7 @@ const CommunityListItem = ({ name, giftTime, profileImage, index }) => {
           {giftTime}
         </AppText>
       </View>
-      <View style={styles.itemIconWrapper}>
-        <FnfNext />
-      </View>
+      <View style={styles.itemIconWrapper}>{/* <FnfNext /> */}</View>
     </View>
   );
 };
@@ -146,7 +144,7 @@ const getStyles = (theme: AppTheme, index) =>
       flexDirection: 'row',
       width: '100%',
       marginVertical: hp(15),
-      opacity: index !== 0 ? 0.4 : 1,
+      opacity: 0.4,
     },
     profileWrapper: {
       backgroundColor: theme.colors.inputBackground,
@@ -161,15 +159,15 @@ const getStyles = (theme: AppTheme, index) =>
       alignItems: 'center',
     },
     listItemContentWrapper: {
-      width: '66%',
-      marginLeft: hp(10),
+      width: '70%',
+      marginLeft: hp(15),
     },
     itemIconWrapper: {
-      width: '15%',
+      // width: '15%',
       alignItems: 'flex-end',
     },
     nameText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
     },
     giftTimeText: {
       color: theme.colors.secondaryHeadingColor,

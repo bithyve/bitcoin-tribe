@@ -109,8 +109,8 @@ function EnterPinContainer() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => login.mutate(passcode)}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
+          // secondaryTitle={common.cancel}
+          // secondaryOnPress={() => navigation.goBack()}
           disabled={passcode === '' || passcode.length !== 4}
           width={wp(120)}
           primaryLoading={login.isLoading}
