@@ -166,7 +166,8 @@
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
     "amountMoreThanSpend": "दर्ज की गई राशि खर्च करने के लिए उपलब्ध राशि से अधिक है",
-    "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है"
+    "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
+    "paste": "पेस्ट करें"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -254,7 +255,9 @@
     "operationSuccess": "ऑपरेशन सफल!",
     "operationSuccessSubTitle": "आपके परिवर्तन सहेजे गए हैं।",
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
-    "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।"
+    "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
+    "coins": "सिक्के",
+    "collectibles": "संग्रहणीय वस्तुएं"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

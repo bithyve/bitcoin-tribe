@@ -166,7 +166,8 @@
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
-    "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción"
+    "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
+    "paste": "Pegar"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -254,7 +255,9 @@
     "operationSuccess": "¡Operación exitosa!",
     "operationSuccessSubTitle": "Tus cambios se han guardado.",
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
-    "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB."
+    "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB.",
+    "coins": "Monedas",
+    "collectibles": "Coleccionables"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

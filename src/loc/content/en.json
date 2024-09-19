@@ -166,7 +166,8 @@
     "invalidBtcAddress": "Invalid Bitcoin address",
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
-    "transFeeErrMsg": "Error: Transaction Fee intel missing"
+    "transFeeErrMsg": "Error: Transaction Fee intel missing",
+    "paste": "Paste"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -254,7 +255,9 @@
     "operationSuccess": "Operation successful!",
     "operationSuccessSubTitle": "Your changes have been saved.",
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
-    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs."
+    "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
+    "coins": "Coins",
+    "collectibles": "Collectibles"
   },
   "community": {
     "fnfTitle": "Friends & Family",

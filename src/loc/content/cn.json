@@ -166,7 +166,8 @@
     "invalidBtcAddress": "无效的比特币地址",
     "sentSuccessfully": "发送成功",
     "amountMoreThanSpend": "输入的金额超过了可支配金额",
-    "transFeeErrMsg": "错误：交易费用信息缺失"
+    "transFeeErrMsg": "错误：交易费用信息缺失",
+    "paste": "粘贴"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -254,7 +255,9 @@
     "operationSuccess": "操作成功！",
     "operationSuccessSubTitle": "您的更改已保存。",
     "noRGBUTXOsTitle": "未找到RGB UTXO",
-    "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。"
+    "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。",
+    "coins": "硬币",
+    "collectibles": "收藏品"
   },
   "community": {
     "fnfTitle": "朋友和家人",

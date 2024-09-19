@@ -166,7 +166,8 @@
     "invalidBtcAddress": "無効なビットコインアドレス",
     "sentSuccessfully": "正常に送信されました",
     "amountMoreThanSpend": "入力された金額が利用可能な金額を超えています",
-    "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています"
+    "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
+    "paste": "貼り付け"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
@@ -254,7 +255,9 @@
     "operationSuccess": "操作が成功しました！",
     "operationSuccessSubTitle": "変更が保存されました。",
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
-    "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。"
+    "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。",
+    "coins": "コイン",
+    "collectibles": "コレクション"
   },
   "community": {
     "fnfTitle": "友達と家族",

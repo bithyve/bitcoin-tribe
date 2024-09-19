@@ -166,7 +166,8 @@
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "sentSuccessfully": "Inviato con successo",
     "amountMoreThanSpend": "L'importo inserito è superiore a quello disponibile per la spesa",
-    "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione"
+    "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
+    "paste": "Incolla"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
@@ -254,7 +255,9 @@
     "operationSuccess": "Operazione riuscita!",
     "operationSuccessSubTitle": "Le tue modifiche sono state salvate.",
     "noRGBUTXOsTitle": "Nessun UTXO RGB trovato",
-    "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB."
+    "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB.",
+    "coins": "Monete",
+    "collectibles": "Oggetti da collezione"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
