@@ -55,7 +55,7 @@
     "invalidPin": "Invalid PIN",
     "enterYourPin": "Enter your PIN",
     "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
-    "appRecoveryMsg": "App recovery successful. You're all set!",
+    "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase"
   },
