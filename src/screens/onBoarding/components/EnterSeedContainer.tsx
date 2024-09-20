@@ -122,6 +122,7 @@ function EnterSeedContainer() {
     }
   };
   const seedItem = (item: seedWordItem, index: number) => {
+    console.log('item', item.invalid);
     return (
       <View removeClippedSubviews style={styles.inputListWrapper}>
         <TextInput
@@ -131,11 +132,22 @@ function EnterSeedContainer() {
             }
           }}
           mode="outlined"
-          outlineColor={theme.colors.inputBackground}
+          outlineColor={
+            item.invalid && item.name !== ''
+              ? 'red'
+              : theme.colors.inputBackground
+          }
           activeOutlineColor={theme.colors.accent1}
           contextMenuHidden
           outlineStyle={styles.outlineStyle}
-          style={styles.input}
+          style={[
+            styles.input,
+            // {
+            //   borderColor:
+            //     item.invalid && item.name !== '' ? 'transparent' : 'red',
+            //   borderWidth: 1,
+            // },
+          ]}
           underlineStyle={styles.underlineStyle}
           contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
           placeholder={`Enter ${getPlaceholder(index)} word`}
