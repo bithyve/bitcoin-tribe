@@ -44,10 +44,10 @@ function Splash({ navigation }) {
   }, [data, navigation, setKey]);
 
   // Trigger init after 4.5s
-  // useEffect(() => {
-  //   const timer = setTimeout(init, 4500);
-  //   return () => clearTimeout(timer);
-  // }, [init]);
+  useEffect(() => {
+    const timer = setTimeout(init, 4500);
+    return () => clearTimeout(timer);
+  }, [init]);
 
   return (
     <ScreenContainer style={styles.container}>
