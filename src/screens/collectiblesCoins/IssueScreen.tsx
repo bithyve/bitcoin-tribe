@@ -144,11 +144,11 @@ function IssueScreen() {
         buttons={[
           {
             value: AssetType.Coin,
-            label: 'Coins',
+            label: assets.coins,
           },
           {
             value: AssetType.Collectible,
-            label: 'Collectibles',
+            label: assets.collectibles,
           },
         ]}
         // style={styles.segmentedButtonsStyle}

@@ -21,7 +21,7 @@ import Toast from 'src/components/Toast';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
+  const { settings, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
@@ -76,7 +76,7 @@ const CloudBackup = ({ navigation }) => {
 
       <View>
         <Buttons
-          primaryTitle={'Backup'}
+          primaryTitle={common.backup}
           primaryOnPress={async () => {
             backup.mutate();
           }}

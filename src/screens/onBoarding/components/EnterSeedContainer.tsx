@@ -12,7 +12,10 @@ import { TextInput as RNTextInput } from 'react-native';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { getPlaceholderSuperScripted } from 'src/utils/placeholderUtils';
+import {
+  getPlaceholder,
+  getPlaceholderSuperScripted,
+} from 'src/utils/placeholderUtils';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -147,7 +150,7 @@ function EnterSeedContainer() {
           ]}
           underlineStyle={styles.underlineStyle}
           contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
-          placeholder={`Enter ${getPlaceholderSuperScripted(index)} word`}
+          placeholder={`Enter ${getPlaceholder(index)} word`}
           value={item?.name}
           returnKeyType={isSeedFilled(12) ? 'done' : 'next'}
           autoCapitalize="none"

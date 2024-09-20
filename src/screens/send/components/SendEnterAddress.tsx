@@ -93,7 +93,7 @@ function SendEnterAddress({
         keyboardType={'default'}
         autoFocus={true}
         inputStyle={styles.inputStyle}
-        rightText="Paste"
+        rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.primaryCTAText}

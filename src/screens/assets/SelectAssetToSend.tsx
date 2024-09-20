@@ -1,10 +1,8 @@
 import React, { useContext, useMemo } from 'react';
-import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
-import AppText from 'src/components/AppText';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';

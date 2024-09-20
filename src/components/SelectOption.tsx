@@ -97,6 +97,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     iconWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      width: '80%',
     },
     contentWrapper: {
       marginLeft: 10,
@@ -105,6 +106,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       color: theme.colors.headingColor,
     },
     subTitleStyle: {
+      flexWrap: 'wrap',
       color: theme.colors.secondaryHeadingColor,
     },
   });

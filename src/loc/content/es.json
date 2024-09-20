@@ -28,8 +28,9 @@
     "needHelp": "¿Necesitar ayuda?",
     "yes": "Sí",
     "no": "No",
-    "commingSoon": "tu tribu",
-    "commingSoonSubTitle": "Prepárese para disfrutar de activos \nbasados ​​en bitcoins con sus amigos y familiares."
+    "commingSoon": "Tu Tribu",
+    "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares.",
+    "backup": "Copia de seguridad"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -92,6 +93,8 @@
     "appInfoSubTitle": "Versión y detalles de la aplicación",
     "language": "Idioma",
     "languageSubTitle": "Elige tu idioma",
+    "satsModeTitle": "Modo Sats",
+    "satsModeSubTitle": "Habilitar para ver el saldo en sats",
     "currency": "Moneda",
     "currencySubTitle": "Elige tu moneda",
     "appBackupScreenSubTitle": "Escribe esta frase de respaldo",
@@ -138,7 +141,8 @@
     "noBackHistory": "Aún no hay historial de copias de seguridad.",
     "cloudBackupTitle": "Copia de seguridad en la nube",
     "cloudBackupSubTitle": "Copia de seguridad del estado del activo RGB activado",
-    "langNoteSubTitle": "El soporte de idiomas está en versión beta. ¡Apreciamos sus comentarios!"
+    "langNoteSubTitle": "El soporte de idiomas está en versión beta. ¡Apreciamos sus comentarios!",
+    "biometricsNotEnableMsg": "Biometría no habilitada.\nPor favor, ve a la configuración y actívala"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
@@ -164,7 +168,8 @@
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
-    "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción"
+    "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
+    "paste": "Pegar"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -252,7 +257,9 @@
     "operationSuccess": "¡Operación exitosa!",
     "operationSuccessSubTitle": "Tus cambios se han guardado.",
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
-    "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB."
+    "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB.",
+    "coins": "Monedas",
+    "collectibles": "Coleccionables"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
