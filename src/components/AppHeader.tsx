@@ -98,9 +98,7 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(20),
     },
     leftIconWrapper: {},
-    rightIconWrapper: {
-      alignSelf: 'flex-end',
-    },
+    rightIconWrapper: {},
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',
