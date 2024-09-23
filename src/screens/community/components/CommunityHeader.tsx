@@ -33,6 +33,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
+      marginHorizontal: hp(5),
     },
     contentWrapper: {
       width: '85%',
