@@ -125,7 +125,10 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      paddingHorizontal: hp(16),
+      padding: hp(16),
+      backgroundColor: theme.colors.cardGradient3,
+      marginHorizontal: hp(20),
+      borderRadius: 20,
     },
     imageStyle: {
       width: '100%',
@@ -135,8 +138,8 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(25),
     },
     imageWrapper: {
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 1,
+      // borderBottomColor: theme.colors.borderColor,
+      // borderBottomWidth: 1,
     },
   });
 
