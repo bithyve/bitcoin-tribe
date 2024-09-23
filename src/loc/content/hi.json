@@ -259,7 +259,9 @@
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
     "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
     "coins": "सिक्के",
-    "collectibles": "संग्रहणीय वस्तुएं"
+    "collectibles": "संग्रहणीय वस्तुएं",
+    "saveAssetSuccess": "संपत्ति छवि सफलतापूर्वक सहेजी गई",
+    "saveAssetFailed": "संपत्ति सहेजने में विफल"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -259,7 +259,9 @@
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
     "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB.",
     "coins": "Monedas",
-    "collectibles": "Coleccionables"
+    "collectibles": "Coleccionables",
+    "saveAssetSuccess": "Imagen del activo guardada con éxito",
+    "saveAssetFailed": "Error al guardar el activo"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

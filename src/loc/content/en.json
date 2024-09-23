@@ -259,7 +259,9 @@
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
     "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
     "coins": "Coins",
-    "collectibles": "Collectibles"
+    "collectibles": "Collectibles",
+    "saveAssetSuccess": "Asset Image saved successfully",
+    "saveAssetFailed": "Failed to save asset"
   },
   "community": {
     "fnfTitle": "Friends & Family",

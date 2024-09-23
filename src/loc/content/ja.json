@@ -259,7 +259,9 @@
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
     "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。",
     "coins": "コイン",
-    "collectibles": "コレクション"
+    "collectibles": "コレクション",
+    "saveAssetSuccess": "アセットの画像が正常に保存されました",
+    "saveAssetFailed": "アセットの保存に失敗しました"
   },
   "community": {
     "fnfTitle": "友達と家族",
