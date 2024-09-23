@@ -76,7 +76,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      marginTop: Platform.OS === 'android' ? hp(15) : 0,
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
       paddingBottom: 10,
     },
     usernameText: {
