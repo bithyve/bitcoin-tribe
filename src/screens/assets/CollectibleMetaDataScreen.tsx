@@ -17,6 +17,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
 import copyImageToDestination from 'src/utils/downloadImage';
+import Toast from 'src/components/Toast';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
@@ -46,8 +47,8 @@ const CoinsMetaDataScreen = () => {
           });
 
           copyImageToDestination(filePath)
-            .then(path => console.log('Image saved to:', path))
-            .catch(err => console.error('Error saving image:', err));
+            .then(path => Toast(assets.saveAssetSuccess))
+            .catch(err => Toast(assets.saveAssetFailed, true));
         }}
         style={styles.headerWrapper}
       />
