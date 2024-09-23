@@ -16,6 +16,7 @@ import DownloadIcon from 'src/assets/images/downloadBtn.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
+import copyImageToDestination from 'src/utils/downloadImage';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
@@ -36,6 +37,18 @@ const CoinsMetaDataScreen = () => {
         title={assets.coinMetaTitle}
         enableBack={true}
         rightIcon={<DownloadIcon />}
+        onSettingsPress={() => {
+          const filePath = Platform.select({
+            android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
+            ios: `${collectible.media?.filePath}.${
+              collectible.media?.mime.split('/')[1]
+            }`, // Add file extension
+          });
+
+          copyImageToDestination(filePath)
+            .then(path => console.log('Image saved to:', path))
+            .catch(err => console.error('Error saving image:', err));
+        }}
         style={styles.headerWrapper}
       />
       {isLoading ? (

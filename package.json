@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@noble/secp256k1": "1.6.3",
+    "@react-native-camera-roll/camera-roll": "^7.8.3",
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
