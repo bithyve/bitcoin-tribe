@@ -32,10 +32,11 @@ function IssueScreen() {
   const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { home, common, assets } = translations;
+  const [inputHeight, setInputHeight] = useState(100);
+  const styles = getStyles(theme, inputHeight);
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
@@ -140,7 +141,12 @@ function IssueScreen() {
       />
       <SegmentedButtons
         value={assetType}
-        onValueChange={value => setAssetType(value)}
+        onValueChange={value => {
+          if (value === AssetType.Coin) {
+            setDescription('');
+          }
+          setAssetType(value);
+        }}
         buttons={[
           {
             value: AssetType.Coin,
@@ -196,8 +202,13 @@ function IssueScreen() {
               value={description}
               onChangeText={text => setDescription(text)}
               placeholder={home.assetDescription}
-              maxLength={32}
-              style={styles.input}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              maxLength={100}
+              multiline={true}
+              numberOfLines={2}
+              style={[styles.input, description && styles.descInput]}
             />
             <TextField
               value={formatNumber(totalSupplyAmt)}
@@ -246,10 +257,14 @@ function IssueScreen() {
   );
 }
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
+    },
+    descInput: {
+      borderRadius: hp(20),
+      height: Math.max(100, inputHeight),
     },
     buttonWrapper: {
       // marginTop: hp(20),
