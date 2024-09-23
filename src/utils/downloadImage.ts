@@ -35,10 +35,10 @@ const copyImageToPhotoLibrary = async imagePath => {
   try {
     // Save image to the photo library
     const result = await CameraRoll.save(imagePath, { type: 'photo' });
-    Toast('Asset Image saved successfully');
+    return result;
   } catch (error) {
-    Toast('Failed to save asset');
     console.error('Error saving image to photo library:', error);
+    return error;
   }
 };
 
