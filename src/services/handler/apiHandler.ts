@@ -528,7 +528,6 @@ export class ApiHandler {
   }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(assetId);
-      console.log('response getAssetTransactions', response);
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
