@@ -45,7 +45,7 @@ export default (message, error = false) => {
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: error ? Colors.FireOpal : Colors.ScreaminGreen,
+      backgroundColor: error ? Colors.FireOpal : Colors.UFOGreen1,
       textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
