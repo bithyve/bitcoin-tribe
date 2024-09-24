@@ -124,6 +124,10 @@ const getStyles = (theme: AppTheme) =>
     scrollingContainer: {
       height: '60%',
       marginTop: wp(20),
+      padding: hp(16),
+      backgroundColor: theme.colors.cardGradient3,
+      marginHorizontal: hp(10),
+      borderRadius: 20,
     },
   });
 

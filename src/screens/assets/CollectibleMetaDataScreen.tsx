@@ -16,6 +16,8 @@ import DownloadIcon from 'src/assets/images/downloadBtn.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
+import copyImageToDestination from 'src/utils/downloadImage';
+import Toast from 'src/components/Toast';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
@@ -36,6 +38,18 @@ const CoinsMetaDataScreen = () => {
         title={assets.coinMetaTitle}
         enableBack={true}
         rightIcon={<DownloadIcon />}
+        onSettingsPress={() => {
+          const filePath = Platform.select({
+            android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
+            ios: `${collectible.media?.filePath}.${
+              collectible.media?.mime.split('/')[1]
+            }`, // Add file extension
+          });
+
+          copyImageToDestination(filePath)
+            .then(path => Toast(assets.saveAssetSuccess))
+            .catch(err => Toast(assets.saveAssetFailed, true));
+        }}
         style={styles.headerWrapper}
       />
       {isLoading ? (
@@ -60,10 +74,14 @@ const CoinsMetaDataScreen = () => {
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
             <AppText variant="heading2" style={styles.labelText}>
-              {collectible && collectible.name}
+              {Platform.OS === 'ios'
+                ? collectible && collectible.name
+                : collectible && collectible.details}
             </AppText>
             <AppText variant="body1" style={styles.detailText}>
-              {collectible && collectible.details}
+              {Platform.OS === 'ios'
+                ? collectible && collectible.details
+                : collectible && collectible.name}
             </AppText>
             <Item title={assets.assetId} value={assetId} />
             <Item
@@ -112,7 +130,10 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      paddingHorizontal: hp(16),
+      padding: hp(16),
+      backgroundColor: theme.colors.cardGradient3,
+      marginHorizontal: hp(20),
+      borderRadius: 20,
     },
     imageStyle: {
       width: '100%',
@@ -122,8 +143,8 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(25),
     },
     imageWrapper: {
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 1,
+      // borderBottomColor: theme.colors.borderColor,
+      // borderBottomWidth: 1,
     },
   });
 

@@ -138,7 +138,7 @@ const getStyles = (theme: AppTheme) =>
     },
     noteWrapper: {
       position: 'absolute',
-      bottom: 20,
+      bottom: Platform.OS === 'android' ? 50 : 20,
       alignSelf: 'center',
     },
   });

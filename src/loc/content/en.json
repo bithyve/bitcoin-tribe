@@ -50,11 +50,11 @@
     "recoverAppTitle": "Recover an existing app",
     "recoverAppSubTitle": "Enter existing 12-word recovery phrase below",
     "errorSettingPin": "Error setting pin",
-    "newPinCreated": "New PIN created",
+    "newPinCreated": "New Passcode created",
     "failToVerify": "Failed to verify",
-    "createPinFirst": "Create a PIN first",
-    "invalidPin": "Invalid PIN",
-    "enterYourPin": "Enter your PIN",
+    "createPinFirst": "Create a Passcode first",
+    "invalidPin": "Invalid Passcode",
+    "enterYourPin": "Enter your Passcode",
     "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
@@ -259,7 +259,9 @@
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
     "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
     "coins": "Coins",
-    "collectibles": "Collectibles"
+    "collectibles": "Collectibles",
+    "saveAssetSuccess": "Asset Image saved successfully",
+    "saveAssetFailed": "Failed to save asset"
   },
   "community": {
     "fnfTitle": "Friends & Family",
