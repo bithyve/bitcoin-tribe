@@ -58,7 +58,8 @@
     "recoverRGBState": "¿Le gustaría recuperar el estado de sus activos respaldados por Bitcoin desde la nube?",
     "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
     "invalidMnemonic": "Mnemónico no válido",
-    "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras"
+    "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras",
+    "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo"
   },
   "home": {
     "addAssets": "Agregar activos",

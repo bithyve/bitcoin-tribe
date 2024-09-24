@@ -50,6 +50,12 @@ function CreatePinContainer() {
     }
   }, [passcode, confirmPasscode]);
 
+  useEffect(() => {
+    if (passcode !== confirmPasscode && confirmPasscode.length === 4) {
+      Toast(onBoarding.mismatchPasscode, true);
+    }
+  }, [passcode !== confirmPasscode && confirmPasscode]);
+
   function onPressNumber(text) {
     let tmpPasscode = passcode;
     let tmpConfirmPasscode = confirmPasscode;

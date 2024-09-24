@@ -58,7 +58,8 @@
     "recoverRGBState": "Vuoi recuperare lo stato delle tue risorse supportate da Bitcoin dal cloud?",
     "appRecoveryMsg": "Recupero dell'app riuscito. Sei tutto pronto!",
     "invalidMnemonic": "Mnemonic non valido",
-    "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole"
+    "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole",
+    "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova"
   },
   "home": {
     "addAssets": "Aggiungi risorse",
