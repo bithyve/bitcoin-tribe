@@ -110,7 +110,7 @@ function AssetsList(props: AssetsListProps) {
             {item.assetIface.toUpperCase() === AssetFace.RGB25 && (
               <Item
                 key={index}
-                name={item.name}
+                name={Platform.OS === 'ios' ? item.name : item.details}
                 details={''}
                 amount={item.balance.spendable}
                 tag="COLLECTIBLE"

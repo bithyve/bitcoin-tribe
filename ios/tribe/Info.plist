@@ -35,6 +35,8 @@
 	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes, Bitcoin addresses and RGB invoices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture to your wallet.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+                    <string>$(PRODUCT_NAME) needs permission to save photos to your library</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Tribe requires FaceID access to quick and secure access your $(PRODUCT_NAME) app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

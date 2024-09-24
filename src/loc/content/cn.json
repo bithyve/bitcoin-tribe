@@ -260,7 +260,9 @@
     "noRGBUTXOsTitle": "未找到RGB UTXO",
     "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。",
     "coins": "硬币",
-    "collectibles": "收藏品"
+    "collectibles": "收藏品",
+    "saveAssetSuccess": "资产图片保存成功",
+    "saveAssetFailed": "保存资产失败"
   },
   "community": {
     "fnfTitle": "朋友和家人",

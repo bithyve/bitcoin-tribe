@@ -30,7 +30,10 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
 
   return (
     <View style={styles.container}>
-      <Toolbar onPress={onPressSetting} ticker={collectible.name} />
+      <Toolbar
+        onPress={onPressSetting}
+        ticker={Platform.OS === 'ios' ? collectible.name : collectible.details}
+      />
       <Image
         source={{
           uri: Platform.select({
@@ -76,7 +79,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      marginTop: Platform.OS === 'android' ? hp(15) : 0,
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
       paddingBottom: 10,
     },
     usernameText: {

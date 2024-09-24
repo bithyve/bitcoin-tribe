@@ -54,7 +54,7 @@
     "failToVerify": "No se pudo verificar",
     "createPinFirst": "Primero crea un PIN",
     "invalidPin": "PIN no válido",
-    "enterYourPin": "Introduce tu PIN",
+    "enterYourPin": "Introduce tu código de acceso",
     "recoverRGBState": "¿Le gustaría recuperar el estado de sus activos respaldados por Bitcoin desde la nube?",
     "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
     "invalidMnemonic": "Mnemónico no válido",
@@ -260,7 +260,9 @@
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
     "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB.",
     "coins": "Monedas",
-    "collectibles": "Coleccionables"
+    "collectibles": "Coleccionables",
+    "saveAssetSuccess": "Imagen del activo guardada con éxito",
+    "saveAssetFailed": "Error al guardar el activo"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

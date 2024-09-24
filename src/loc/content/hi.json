@@ -54,7 +54,7 @@
     "failToVerify": "सत्यापित करने में विफल",
     "createPinFirst": "पहले पिन बनाएँ",
     "invalidPin": "अमान्य पिन",
-    "enterYourPin": "अपना पिन दर्ज करें",
+    "enterYourPin": "अपना पासकोड दर्ज करें",
     "recoverRGBState": "क्या आप क्लाउड से अपने बिटकॉइन-समर्थित संपत्ति राज्य को पुनर्प्राप्त करना चाहते हैं?",
     "appRecoveryMsg": "ऐप पुनर्प्राप्ति सफल। आप सभी सेट हैं!",
     "invalidMnemonic": "अमान्य मोनिक",
@@ -260,7 +260,9 @@
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
     "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
     "coins": "सिक्के",
-    "collectibles": "संग्रहणीय वस्तुएं"
+    "collectibles": "संग्रहणीय वस्तुएं",
+    "saveAssetSuccess": "संपत्ति छवि सफलतापूर्वक सहेजी गई",
+    "saveAssetFailed": "संपत्ति सहेजने में विफल"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
