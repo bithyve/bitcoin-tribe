@@ -7,11 +7,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -154,9 +150,6 @@ function IssueScreen() {
         primaryOnPress={() => {
           setShowErrorModal(false);
           createUtxos.mutate();
-          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-          //   refresh: () => onPressIssue(),
-          // });
         }}
       />
       <SegmentedButtons
