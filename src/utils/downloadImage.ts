@@ -1,6 +1,9 @@
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import { PermissionsAndroid, Platform } from 'react-native';
-import Toast from 'src/components/Toast';
+import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
+
+const openSettings = () => {
+  Linking.openSettings();
+};
 
 // Request permission to access the photo library (for iOS)
 async function requestPhotoLibraryPermission() {
@@ -29,6 +32,14 @@ const copyImageToPhotoLibrary = async imagePath => {
   const hasPermission = await requestPhotoLibraryPermission();
   if (!hasPermission) {
     console.log('Permission denied');
+    Alert.alert(
+      'Permission Denied',
+      'You have denied the permission of your storage to save photos. Please enable it from the settings.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Open Settings', onPress: openSettings },
+      ],
+    );
     return;
   }
 
