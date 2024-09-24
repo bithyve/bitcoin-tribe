@@ -1,5 +1,18 @@
-import React, { useContext, useState, useMemo, useCallback } from 'react';
+import React, {
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useTheme } from 'react-native-paper';
+import { useMutation } from 'react-query';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,11 +21,6 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
@@ -26,16 +34,15 @@ import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function IssueScreen() {
-  const shouldRefresh = useRoute().params;
+  // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { home, common, assets } = translations;
+  const { home, common, assets, wallet: walletTranslation } = translations;
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
@@ -44,6 +51,20 @@ function IssueScreen() {
   const [loading, setLoading] = useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
+
+  const createUtxos = useMutation(ApiHandler.createUtxos);
+
+  useEffect(() => {
+    if (createUtxos.data) {
+      setLoading(true);
+      setTimeout(() => {
+        onPressIssue();
+      }, 400);
+    } else if (createUtxos.data === false) {
+      setLoading(false);
+      Toast(walletTranslation.failedToCreateUTXO, true);
+    }
+  }, [createUtxos.data]);
 
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
@@ -131,11 +152,11 @@ function IssueScreen() {
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
-          setLoading(false);
           setShowErrorModal(false);
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => onPressIssue(),
-          });
+          createUtxos.mutate();
+          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+          //   refresh: () => onPressIssue(),
+          // });
         }}
       />
       <SegmentedButtons
@@ -240,6 +261,7 @@ function IssueScreen() {
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled}
           width={wp(120)}
+          primaryLoading={createUtxos.isLoading}
         />
       </View>
     </ScreenContainer>

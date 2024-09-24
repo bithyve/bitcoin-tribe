@@ -13,12 +13,18 @@ import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+// import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common, assets } = translations;
+  const {
+    receciveScreen,
+    common,
+    assets,
+    wallet: walletTranslation,
+  } = translations;
   const navigation = useNavigation();
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -37,6 +43,18 @@ function ReceiveAssetScreen() {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (createUtxos.data) {
+      // setLoading(true);
+      setTimeout(() => {
+        mutate();
+      }, 400);
+    } else if (createUtxos.data === false) {
+      // setLoading(false);
+      Toast(walletTranslation.failedToCreateUTXO, true);
+    }
+  }, [createUtxos.data]);
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -49,9 +67,10 @@ function ReceiveAssetScreen() {
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => mutate(),
-          });
+          createUtxos.mutate();
+          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+          //   refresh: () => mutate(),
+          // });
         }}
       />
 
