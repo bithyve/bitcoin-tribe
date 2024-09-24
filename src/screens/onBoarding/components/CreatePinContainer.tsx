@@ -33,10 +33,10 @@ function CreatePinContainer() {
     if (createPin.error) {
       Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      Toast(onBoarding.newPinCreated);
       if (OnBoarding) {
         navigation.replace(NavigationRoutes.APPSTACK);
       } else {
+        Toast(onBoarding.newPinCreated);
         navigation.goBack();
       }
     }
