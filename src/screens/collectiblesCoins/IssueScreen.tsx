@@ -263,7 +263,7 @@ function IssueScreen() {
           primaryOnPress={onPressIssue}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || createUtxos.isLoading}
           width={wp(120)}
           primaryLoading={createUtxos.isLoading}
         />
