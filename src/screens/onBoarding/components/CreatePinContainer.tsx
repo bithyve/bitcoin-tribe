@@ -33,10 +33,10 @@ function CreatePinContainer() {
     if (createPin.error) {
       Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      Toast(onBoarding.newPinCreated);
       if (OnBoarding) {
         navigation.replace(NavigationRoutes.APPSTACK);
       } else {
+        Toast(onBoarding.newPinCreated);
         navigation.goBack();
       }
     }
@@ -49,6 +49,12 @@ function CreatePinContainer() {
       return passcode !== confirmPasscode;
     }
   }, [passcode, confirmPasscode]);
+
+  useEffect(() => {
+    if (passcode !== confirmPasscode && confirmPasscode.length === 4) {
+      Toast(onBoarding.mismatchPasscode, true);
+    }
+  }, [passcode !== confirmPasscode && confirmPasscode]);
 
   function onPressNumber(text) {
     let tmpPasscode = passcode;

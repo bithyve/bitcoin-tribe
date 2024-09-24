@@ -58,7 +58,8 @@
     "recoverRGBState": "クラウドからビットコインで裏打ちされた資産の状態を復元しますか？",
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
-    "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください"
+    "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
+    "mismatchPasscode": "パスコードが一致しません。もう一度お試しください"
   },
   "home": {
     "addAssets": "アセットを追加",

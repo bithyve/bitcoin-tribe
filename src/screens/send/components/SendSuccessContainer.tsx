@@ -121,12 +121,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     labelWrapper: {
-      width: '40%',
+      width: '45%',
     },
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '60%',
+      width: '55%',
     },
     labelText: {
       color: theme.colors.headingColor,

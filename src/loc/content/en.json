@@ -58,7 +58,8 @@
     "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
-    "enterRecoveryPhrase": "Please enter 12-word recovery phrase"
+    "enterRecoveryPhrase": "Please enter 12-word recovery phrase",
+    "mismatchPasscode": "Passcodes do not match. \nPlease try again"
   },
   "home": {
     "addAssets": "Add Assets",
