@@ -262,7 +262,8 @@
     "coins": "Monete",
     "collectibles": "Oggetti da collezione",
     "saveAssetSuccess": "Immagine dell'asset salvata con successo",
-    "saveAssetFailed": "Salvataggio dell'asset non riuscito"
+    "saveAssetFailed": "Salvataggio dell'asset non riuscito",
+    "checkSpendableAmt": "Inserisci un importo inferiore a "
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

@@ -262,7 +262,8 @@
     "coins": "コイン",
     "collectibles": "コレクション",
     "saveAssetSuccess": "アセットの画像が正常に保存されました",
-    "saveAssetFailed": "アセットの保存に失敗しました"
+    "saveAssetFailed": "アセットの保存に失敗しました",
+    "checkSpendableAmt": "以下の金額を入力してください "
   },
   "community": {
     "fnfTitle": "友達と家族",

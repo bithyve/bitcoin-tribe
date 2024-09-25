@@ -262,7 +262,8 @@
     "coins": "Coins",
     "collectibles": "Collectibles",
     "saveAssetSuccess": "Asset Image saved successfully",
-    "saveAssetFailed": "Failed to save asset"
+    "saveAssetFailed": "Failed to save asset",
+    "checkSpendableAmt": "Please enter amount less than "
   },
   "community": {
     "fnfTitle": "Friends & Family",

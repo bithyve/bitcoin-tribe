@@ -262,7 +262,8 @@
     "coins": "सिक्के",
     "collectibles": "संग्रहणीय वस्तुएं",
     "saveAssetSuccess": "संपत्ति छवि सफलतापूर्वक सहेजी गई",
-    "saveAssetFailed": "संपत्ति सहेजने में विफल"
+    "saveAssetFailed": "संपत्ति सहेजने में विफल",
+    "checkSpendableAmt": "कृपया इससे कम राशि दर्ज करें "
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

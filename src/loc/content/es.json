@@ -262,7 +262,8 @@
     "coins": "Monedas",
     "collectibles": "Coleccionables",
     "saveAssetSuccess": "Imagen del activo guardada con éxito",
-    "saveAssetFailed": "Error al guardar el activo"
+    "saveAssetFailed": "Error al guardar el activo",
+    "checkSpendableAmt": "Por favor ingrese una cantidad menor que "
   },
   "community": {
     "fnfTitle": "Amigas y familia",

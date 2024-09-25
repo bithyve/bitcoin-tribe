@@ -172,6 +172,11 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
+  useEffect(() => {
+    if (item.balance.spendable < amount)
+      Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+  }, [amount]);
+
   const sendAsset = useCallback(async () => {
     Keyboard.dismiss();
     const utxo = invoice.match(/~\/~\/([^?]+)\?/)[1];
