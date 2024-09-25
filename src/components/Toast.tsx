@@ -52,6 +52,10 @@ export default (message, error = false) => {
       containerStyle: {
         marginBottom: (windowWidth * 22) / 100,
         borderRadius: 20,
+        paddingHorizontal: hp(10),
+        paddingVertical: hp(15),
+        // width: wp(300),
+        // minHeight: hp(50),
         alignItems: 'center',
         justifyContent: 'center',
       },
@@ -61,22 +65,24 @@ export default (message, error = false) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: hp(5),
     width: wp(300),
-    minHeight: hp(50),
-    padding: 10,
+    // minHeight: hp(50),
+
+    // backgroundColor: 'blue',
   },
   toastMessageStyle: {
     marginLeft: wp(8),
     fontSize: 14,
     fontFamily: Fonts.LufgaSemiBold,
-    flex: 1,
+    // flex: 1,
     flexWrap: 'wrap',
     fontWeight: '600',
   },
   loaderStyle: {
-    height: hp(35),
-    width: hp(35),
+    height: hp(30),
+    width: hp(30),
   },
 });
