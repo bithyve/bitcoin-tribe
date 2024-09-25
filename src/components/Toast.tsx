@@ -54,6 +54,7 @@ export default (message, error = false) => {
         borderRadius: 20,
         paddingHorizontal: hp(10),
         paddingVertical: hp(15),
+        flexWrap: 'wrap',
         // width: wp(300),
         // minHeight: hp(50),
         alignItems: 'center',
@@ -65,19 +66,16 @@ export default (message, error = false) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: hp(5),
+    paddingHorizontal: hp(10),
     width: wp(300),
-    // minHeight: hp(50),
-
-    // backgroundColor: 'blue',
   },
   toastMessageStyle: {
     marginLeft: wp(8),
     fontSize: 14,
     fontFamily: Fonts.LufgaSemiBold,
-    // flex: 1,
+    flex: 1,
     flexWrap: 'wrap',
     fontWeight: '600',
   },
