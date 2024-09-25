@@ -64,7 +64,9 @@ function ReceiveAssetScreen() {
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          createUtxos.mutate();
+          setTimeout(() => {
+            createUtxos.mutate();
+          }, 400);
         }}
       />
 

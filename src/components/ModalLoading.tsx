@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     margin: 0,
+    zIndex: 999,
   },
   loaderWrapper: {
     alignItems: 'center',
