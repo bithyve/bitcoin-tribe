@@ -377,7 +377,7 @@ const SendAssetScreen = () => {
           primaryOnPress={sendAsset}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || createUtxos.isLoading || loading}
           width={wp(120)}
         />
       </View>
