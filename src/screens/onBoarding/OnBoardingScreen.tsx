@@ -69,15 +69,18 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     contentWrapper1: {
       marginVertical: hp(20),
+      paddingTop: hp(20),
       height: '20%',
     },
     illustrationWrapper: {
       alignItems: 'center',
+      justifyContent: 'center',
       height: '40%',
     },
     contentWrapper2: {
       height: '20%',
       marginVertical: hp(20),
+      justifyContent: 'center',
     },
     ctaWrapper: {
       marginVertical: hp(10),
