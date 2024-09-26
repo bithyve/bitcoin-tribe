@@ -48,6 +48,7 @@ export type AppStackParams = {
   [NavigationRoutes.ENTERSEEDSCREEN]: undefined;
   [NavigationRoutes.LOGIN]: undefined;
   [NavigationRoutes.SELECTASSETTOSEND]: undefined;
+  [NavigationRoutes.ONBOARDINGSCREEN]: undefined;
   // Add other routes as needed
 };
 
