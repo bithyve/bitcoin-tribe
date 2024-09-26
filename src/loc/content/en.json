@@ -64,7 +64,7 @@
     "mismatchPasscode": "Passcodes do not match. \nPlease try again",
     "btcBackedAssetTitle": "Bitcoin Backed Assets",
     "btcBackedAssetSubTitle": "RGB protocol enables anyone to issue, send or receive assets on top of the most secure blockchain.",
-    "btcBackedAssetInfo": "Sats from your wallet will be used as fuel fro these assets."
+    "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets."
   },
   "home": {
     "addAssets": "Add Assets",
