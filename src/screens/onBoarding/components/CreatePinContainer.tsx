@@ -34,7 +34,8 @@ function CreatePinContainer() {
       Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
       if (OnBoarding) {
-        navigation.replace(NavigationRoutes.APPSTACK);
+        navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
+        // navigation.replace(NavigationRoutes.APPSTACK);
       } else {
         Toast(onBoarding.newPinCreated);
         navigation.goBack();
@@ -150,7 +151,7 @@ function CreatePinContainer() {
           secondaryTitle={OnBoarding ? common.skip : 'Cancel'}
           secondaryOnPress={() =>
             OnBoarding
-              ? navigation.replace(NavigationRoutes.APPSTACK)
+              ? navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN) //navigation.replace(NavigationRoutes.APPSTACK)
               : navigation.goBack()
           }
           disabled={disbleProceed}
