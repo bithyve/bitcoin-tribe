@@ -30,7 +30,9 @@
     "no": "いいえ",
     "commingSoon": "あなたのトライブ",
     "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。",
-    "backup": "バックアップ"
+    "backup": "バックアップ",
+    "addFunds": "資金を追加",
+    "addLater": "後で追加"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -59,7 +61,10 @@
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
-    "mismatchPasscode": "パスコードが一致しません。もう一度お試しください"
+    "mismatchPasscode": "パスコードが一致しません。もう一度お試しください",
+    "btcBackedAssetTitle": "ビットコイン担保資産",
+    "btcBackedAssetSubTitle": "RGBプロトコルは、誰でも最も安全なブロックチェーン上で資産を発行、送信、または受信できるようにします",
+    "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。"
   },
   "home": {
     "addAssets": "アセットを追加",

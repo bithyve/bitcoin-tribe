@@ -30,7 +30,9 @@
     "no": "No",
     "commingSoon": "La tua Tribù",
     "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari.",
-    "backup": "Backup"
+    "backup": "Backup",
+    "addFunds": "Aggiungi fondi",
+    "addLater": "Aggiungi più tardi"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -59,7 +61,10 @@
     "appRecoveryMsg": "Recupero dell'app riuscito. Sei tutto pronto!",
     "invalidMnemonic": "Mnemonic non valido",
     "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole",
-    "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova"
+    "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova",
+    "btcBackedAssetTitle": "Asset supportati da Bitcoin",
+    "btcBackedAssetSubTitle": "Il protocollo RGB consente a chiunque di emettere, inviare o ricevere asset sulla blockchain più sicura.",
+    "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset."
   },
   "home": {
     "addAssets": "Aggiungi risorse",

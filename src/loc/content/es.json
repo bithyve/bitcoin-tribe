@@ -30,7 +30,9 @@
     "no": "No",
     "commingSoon": "Tu Tribu",
     "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares.",
-    "backup": "Copia de seguridad"
+    "backup": "Copia de seguridad",
+    "addFunds": "Añadir fondos",
+    "addLater": "Añadir más tarde"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -59,7 +61,10 @@
     "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
     "invalidMnemonic": "Mnemónico no válido",
     "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras",
-    "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo"
+    "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo",
+    "btcBackedAssetTitle": "Activos respaldados por Bitcoin",
+    "btcBackedAssetSubTitle": "El protocolo RGB permite a cualquiera emitir, enviar o recibir activos sobre la cadena de bloques más segura.",
+    "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos."
   },
   "home": {
     "addAssets": "Agregar activos",

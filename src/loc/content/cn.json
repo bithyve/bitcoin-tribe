@@ -30,7 +30,9 @@
     "no": "否",
     "commingSoon": "你的部落",
     "commingSoonSubTitle": "准备好与您的朋友和家人一起享受基于比特币的资产。",
-    "backup": "备份"
+    "backup": "备份",
+    "addFunds": "添加资金",
+    "addLater": "稍后添加"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -59,7 +61,10 @@
     "appRecoveryMsg": "应用恢复成功。您已准备好！",
     "invalidMnemonic": "无效的助记词",
     "enterRecoveryPhrase": "请输入12词恢复短语",
-    "mismatchPasscode": "密码不匹配。请再试一次"
+    "mismatchPasscode": "密码不匹配。请再试一次",
+    "btcBackedAssetTitle": "比特币支持的资产",
+    "btcBackedAssetSubTitle": "RGB 协议允许任何人在最安全的区块链上发行、发送或接收资产。",
+    "btcBackedAssetInfo": "您钱包中的 Sats 将作为这些资产的燃料使用。"
   },
   "home": {
     "addAssets": "添加资产",
