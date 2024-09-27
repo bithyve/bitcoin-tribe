@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 
 import Colors from 'src/theme/Colors';
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: hp(5),
+    paddingTop: Platform.OS === 'ios' ? hp(5) : 0,
     paddingHorizontal: hp(10),
     width: wp(300),
   },
