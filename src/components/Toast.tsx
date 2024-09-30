@@ -32,8 +32,8 @@ export default (message, error = false) => {
           styles.toastMessageStyle,
           { color: error ? Colors.White : Colors.RaisinBlack },
         ]}>
-        {message && message.length > 100
-          ? `${message.substring(0, 100)}...`
+        {message && message.length > 150
+          ? `${message.substring(0, 150)}...`
           : message}
       </AppText>
     </View>,
