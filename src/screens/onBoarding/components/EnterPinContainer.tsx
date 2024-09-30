@@ -18,6 +18,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import { useMMKVString } from 'react-native-mmkv';
+import ModalLoading from 'src/components/ModalLoading';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -34,6 +35,7 @@ function EnterPinContainer() {
   const { setKey } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     biometricAuth();
@@ -41,13 +43,15 @@ function EnterPinContainer() {
 
   useEffect(() => {
     if (biometricLogin.error) {
+      setLoading(false);
       Toast(onBoarding.failToVerify, true);
       setPasscode('');
     } else if (biometricLogin.data) {
+      setLoading(false);
       setKey(biometricLogin.data);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
-  }, [biometricLogin.error, biometricLogin.data, biometricLogin.data]);
+  }, [biometricLogin.error, biometricLogin.data]);
 
   useEffect(() => {
     if (login.error) {
@@ -69,6 +73,7 @@ function EnterPinContainer() {
             cancelButtonText: 'Use PIN',
           });
           if (success) {
+            setLoading(true);
             biometricLogin.mutate(signature);
           }
         }, 200);
@@ -111,7 +116,7 @@ function EnterPinContainer() {
           primaryOnPress={() => login.mutate(passcode)}
           // secondaryTitle={common.cancel}
           // secondaryOnPress={() => navigation.goBack()}
-          disabled={passcode === '' || passcode.length !== 4}
+          disabled={passcode === '' || passcode.length !== 4 || login.isLoading}
           width={wp(120)}
           primaryLoading={login.isLoading}
         />
@@ -122,6 +127,7 @@ function EnterPinContainer() {
         keyColor={theme.colors.accent1}
         ClearIcon={<DeleteIcon />}
       />
+      <ModalLoading visible={loading} />
     </>
   );
 }
