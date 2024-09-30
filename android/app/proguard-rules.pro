@@ -11,3 +11,5 @@
 -keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImpl {
     public <init>(...);
 }
+-keep class com.google.mlkit.** { *; }
+-keep class com.mrousavy.camera.** { *; }
