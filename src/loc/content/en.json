@@ -148,7 +148,9 @@
     "cloudBackupTitle": "Cloud Backup",
     "cloudBackupSubTitle": "Backup RGB Asset state on",
     "langNoteSubTitle": "Language support is in beta. We appreciate your feedback!",
-    "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it"
+    "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it",
+    "EnterPasscode": "Enter Passcode",
+    "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

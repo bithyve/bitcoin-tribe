@@ -148,7 +148,9 @@
     "cloudBackupTitle": "クラウドバックアップ",
     "cloudBackupSubTitle": "RGBアセットの状態をバックアップ",
     "langNoteSubTitle": "言語サポートはベータ版です。フィードバックをお待ちしています！",
-    "biometricsNotEnableMsg": "バイオメトリクスが有効ではありません。\n設定に移動して有効にしてください"
+    "biometricsNotEnableMsg": "バイオメトリクスが有効ではありません。\n設定に移動して有効にしてください",
+    "EnterPasscode": "パスコードを入力",
+    "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

@@ -1,0 +1,111 @@
+import { StyleSheet, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+
+import { hp, wp } from 'src/constants/responsive';
+import Buttons from './Buttons';
+import ModalContainer from './ModalContainer';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import PinInputsView from './PinInputsView';
+import KeyPadView from './KeyPadView';
+import { AppTheme } from 'src/theme';
+import DeleteIcon from 'src/assets/images/delete.svg';
+
+interface Props {
+  title: string;
+  subTitle: string;
+  visible: boolean;
+  isLoading?: boolean;
+  primaryOnPress: () => void;
+  passcode: string;
+  onPasscodeChange;
+  onDismiss?: () => void;
+}
+
+const EnterPasscodeModal: React.FC<Props> = ({
+  title,
+  subTitle,
+  visible,
+  primaryOnPress,
+  isLoading,
+  onPasscodeChange,
+  passcode,
+  onDismiss,
+}) => {
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { common, assets } = translations;
+  const navigation = useNavigation();
+  const [passcodeFlag, setPasscodeFlag] = useState(true);
+
+  const handleInputChange = value => {
+    // Update local state in the child
+    onPasscodeChange(value); // Call the parent function to update state
+  };
+
+  function onPressNumber(text) {
+    let tmpPasscode = passcode;
+    if (passcode.length < 4) {
+      if (text !== 'x') {
+        tmpPasscode += text;
+        handleInputChange(tmpPasscode);
+      }
+    } else if (passcode.length === 4 && passcodeFlag) {
+      setPasscodeFlag(false);
+      handleInputChange(passcode);
+    }
+    if (passcode && text === 'x') {
+      const passcodeTemp = passcode.slice(0, -1);
+      handleInputChange(passcodeTemp);
+    }
+  }
+
+  const onDeletePressed = text => {
+    handleInputChange(passcode.slice(0, -1));
+  };
+  return (
+    <ModalContainer
+      title={title}
+      subTitle={subTitle}
+      visible={visible}
+      enableCloseIcon={false}
+      onDismiss={onDismiss}>
+      <View style={styles.contentContainer}>
+        <PinInputsView passCode={passcode} showCursor={true} />
+      </View>
+      <View style={styles.ctaWrapper}>
+        <Buttons
+          primaryTitle={common.proceed}
+          primaryOnPress={primaryOnPress}
+          secondaryTitle={common.cancel}
+          secondaryOnPress={onDismiss}
+          disabled={passcode === '' || passcode.length !== 4 || isLoading}
+          width={wp(120)}
+          primaryLoading={isLoading}
+        />
+      </View>
+      <KeyPadView
+        onPressNumber={onPressNumber}
+        onDeletePressed={onDeletePressed}
+        keyColor={theme.colors.accent1}
+        ClearIcon={<DeleteIcon />}
+      />
+    </ModalContainer>
+  );
+};
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    contentContainer: {
+      flex: 1,
+    },
+    ctaWrapper: {
+      marginVertical: hp(10),
+    },
+    labelText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(15),
+    },
+  });
+export default EnterPasscodeModal;
