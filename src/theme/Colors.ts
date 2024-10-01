@@ -28,7 +28,7 @@ const Colors = {
   BulgarianRose: 'rgba(72, 10, 15, 1)',
   FireOpal: 'rgba(236, 85, 87, 1)',
   ImperialRed: 'rgba(236, 34, 64,1)',
-  Celadon: 'rgba(167, 224, 178,1)',
+  BrandeisBlue: 'rgba(1, 102, 255,1)',
   UFOGreen: 'rgba(12, 33, 17, 1)',
   UFOGreen1: 'rgba(76, 217, 100, 1)',
   Gray: 'rgba(128, 128, 128, 1)',
