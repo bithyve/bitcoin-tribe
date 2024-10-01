@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from './Buttons';
@@ -40,8 +39,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { common, assets } = translations;
-  const navigation = useNavigation();
+  const { common } = translations;
   const [passcodeFlag, setPasscodeFlag] = useState(true);
 
   const handleInputChange = value => {
@@ -79,7 +77,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
       <View style={styles.contentContainer}>
         <PinInputsView passCode={passcode} showCursor={true} />
       </View>
-      {invalidPin && passcode.length === 0 && (
+      {invalidPin && (
         <View>
           <AppText variant="caption" style={styles.invalidPinMsgStyle}>
             {invalidPin}
