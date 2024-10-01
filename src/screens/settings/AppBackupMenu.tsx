@@ -14,7 +14,6 @@ import { Keys } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
-import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
 
@@ -32,6 +31,7 @@ function AppBackupMenu({ navigation }) {
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
+  const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
   const login = useMutation(ApiHandler.verifyPin);
 
@@ -56,7 +56,7 @@ function AppBackupMenu({ navigation }) {
 
   useEffect(() => {
     if (login.error) {
-      Toast(onBoarding.invalidPin, true);
+      setInvalidPin(onBoarding.invalidPin);
       setPasscode('');
     } else if (login.data) {
       setVisible(false);
@@ -70,6 +70,7 @@ function AppBackupMenu({ navigation }) {
   }, [login.error, login.data]);
 
   const handlePasscodeChange = newPasscode => {
+    setInvalidPin('');
     setPasscode(newPasscode); // Update state from child
   };
 
@@ -87,6 +88,7 @@ function AppBackupMenu({ navigation }) {
         subTitle={settings.EnterPasscodeSubTitle}
         visible={visible}
         passcode={passcode}
+        invalidPin={invalidPin}
         onPasscodeChange={handlePasscodeChange}
         onDismiss={() => {
           setPasscode('');

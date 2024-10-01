@@ -8,7 +8,6 @@ import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -24,11 +23,12 @@ function BackupPhraseSetting() {
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
+  const [invalidPin, setInvalidPin] = useState('');
   const login = useMutation(ApiHandler.verifyPin);
 
   useEffect(() => {
     if (login.error) {
-      Toast(onBoarding.invalidPin, true);
+      setInvalidPin(onBoarding.invalidPin);
       setPasscode('');
     } else if (login.data) {
       setVisible(false);
@@ -73,6 +73,7 @@ function BackupPhraseSetting() {
         visible={visible}
         passcode={passcode}
         onPasscodeChange={handlePasscodeChange}
+        invalidPin={invalidPin}
         onDismiss={() => {
           setPasscode('');
           handlePasscodeChange('');
