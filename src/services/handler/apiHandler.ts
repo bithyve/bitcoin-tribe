@@ -174,10 +174,8 @@ export class ApiHandler {
     }
   }
   static async verifyPin(pin: string) {
-    console.log('pin', pin);
     try {
       const hash = hash512(pin);
-      console.log('hash'), hash;
       const key = decrypt(hash, await SecureStore.fetch(hash));
       return key;
     } catch (error) {
