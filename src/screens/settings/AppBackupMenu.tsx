@@ -32,6 +32,7 @@ function AppBackupMenu({ navigation }) {
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
+  const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
   const login = useMutation(ApiHandler.verifyPin);
 
@@ -56,7 +57,7 @@ function AppBackupMenu({ navigation }) {
 
   useEffect(() => {
     if (login.error) {
-      Toast(onBoarding.invalidPin, true);
+      setInvalidPin(onBoarding.invalidPin);
       setPasscode('');
     } else if (login.data) {
       setVisible(false);
@@ -87,6 +88,7 @@ function AppBackupMenu({ navigation }) {
         subTitle={settings.EnterPasscodeSubTitle}
         visible={visible}
         passcode={passcode}
+        invalidPin={invalidPin}
         onPasscodeChange={handlePasscodeChange}
         onDismiss={() => {
           setPasscode('');

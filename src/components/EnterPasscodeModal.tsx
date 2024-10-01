@@ -11,6 +11,8 @@ import PinInputsView from './PinInputsView';
 import KeyPadView from './KeyPadView';
 import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import AppText from './AppText';
+import Colors from 'src/theme/Colors';
 
 interface Props {
   title: string;
@@ -21,6 +23,7 @@ interface Props {
   passcode: string;
   onPasscodeChange;
   onDismiss?: () => void;
+  invalidPin?: string;
 }
 
 const EnterPasscodeModal: React.FC<Props> = ({
@@ -32,6 +35,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
   onPasscodeChange,
   passcode,
   onDismiss,
+  invalidPin,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -75,6 +79,13 @@ const EnterPasscodeModal: React.FC<Props> = ({
       <View style={styles.contentContainer}>
         <PinInputsView passCode={passcode} showCursor={true} />
       </View>
+      {invalidPin && passcode.length === 0 && (
+        <View>
+          <AppText variant="caption" style={styles.invalidPinMsgStyle}>
+            {invalidPin}
+          </AppText>
+        </View>
+      )}
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -106,6 +117,9 @@ const getStyles = (theme: AppTheme) =>
     labelText: {
       color: theme.colors.secondaryHeadingColor,
       marginTop: hp(15),
+    },
+    invalidPinMsgStyle: {
+      color: Colors.ImperialRed,
     },
   });
 export default EnterPasscodeModal;
