@@ -9,9 +9,15 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 import WalletUtilities from 'src/services/wallets/operations/utils';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import WalletOperations from 'src/services/wallets/operations';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useNavigation } from '@react-navigation/native';
 
 function ReceiveScreen({ route }) {
-  const { receivingAddress, title, subTitle } = route.params;
+  const navigation = useNavigation();
+  // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
 
@@ -19,6 +25,14 @@ function ReceiveScreen({ route }) {
 
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
+  const wallet: Wallet = useWallets({}).wallets[0];
+  const {
+    specs: { balances: { confirmed, unconfirmed } } = {
+      balances: { confirmed: 0, unconfirmed: 0 },
+    },
+  } = wallet;
+  const { changeAddress: receivingAddress } =
+    WalletOperations.getNextFreeChangeAddress(wallet);
 
   useEffect(() => {
     if (amount) {
@@ -36,7 +50,17 @@ function ReceiveScreen({ route }) {
 
   return (
     <ScreenContainer>
-      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
+      <AppHeader
+        title={common.receive}
+        subTitle={receciveScreen.headerSubTitle}
+        enableBack={true}
+        onBackNavigation={
+          () =>
+            navigation.canGoBack()
+              ? navigation.goBack()
+              : navigation.replace(NavigationRoutes.HOME) // Fallback if goBack is not possible
+        }
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <ReceiveQrDetails
           addMountModalVisible={() => setVisible(true)}

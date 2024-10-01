@@ -50,6 +50,7 @@ import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
+import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -71,6 +72,10 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.ENTERSEEDSCREEN}
         component={EnterSeedScreen}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ONBOARDINGSCREEN}
+        component={OnBoardingScreen}
       />
     </Stack.Navigator>
   );

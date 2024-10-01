@@ -30,7 +30,9 @@
     "no": "No",
     "commingSoon": "Tu Tribu",
     "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares.",
-    "backup": "Copia de seguridad"
+    "backup": "Copia de seguridad",
+    "addFunds": "Añadir fondos",
+    "addLater": "Añadir más tarde"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "Frase de recuperación",
     "recoveryPhraseSubTitle": "Recuperar una billetera existente",
     "addPicture": "Agregar imagen +",
-    "enterPin": "Crea tu contraseña",
+    "enterPin": "Introduce un código de acceso",
     "confirmPin": "Confirma tu contraseña",
     "advanceSettingTitle": "Configuración avanzada",
     "splashText": "Bitcoin es mejor con amigos",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
     "invalidMnemonic": "Mnemónico no válido",
     "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras",
-    "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo"
+    "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo",
+    "btcBackedAssetTitle": "Activos respaldados por Bitcoin",
+    "btcBackedAssetSubTitle": "El protocolo RGB permite a cualquiera emitir, enviar o recibir activos sobre la cadena de bloques más segura.",
+    "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos."
   },
   "home": {
     "addAssets": "Agregar activos",
     "addAssetSubTitle": "Emitir nuevo activo o recibir activo",
     "issueNew": "Emitir nuevo",
-    "myAssets": "Mis activos",
+    "myAssets": "Tus activos",
     "issue": "Emitir",
     "assetName": "Nombre del activo",
     "assetTicker": "Ticker del activo",
@@ -262,7 +267,8 @@
     "coins": "Monedas",
     "collectibles": "Coleccionables",
     "saveAssetSuccess": "Imagen del activo guardada con éxito",
-    "saveAssetFailed": "Error al guardar el activo"
+    "saveAssetFailed": "Error al guardar el activo",
+    "checkSpendableAmt": "Por favor ingrese una cantidad menor que "
   },
   "community": {
     "fnfTitle": "Amigas y familia",

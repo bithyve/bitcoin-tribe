@@ -30,7 +30,9 @@
     "no": "No",
     "commingSoon": "Your Tribe",
     "commingSoonSubTitle": "Get ready to enjoy bitcoin-based \nassets with your friends and family.",
-    "backup": "Backup"
+    "backup": "Backup",
+    "addFunds": "Add Funds",
+    "addLater": "Add Later"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "Recovery Phrase",
     "recoveryPhraseSubTitle": "Recover an existing wallet",
     "addPicture": "Add Picture +",
-    "enterPin": "Create your Passcode",
+    "enterPin": "Enter a Passcode",
     "confirmPin": "Confirm your Passcode",
     "advanceSettingTitle": "Advanced Setting",
     "splashText": "Bitcoin is better with friends",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase",
-    "mismatchPasscode": "Passcodes do not match. \nPlease try again"
+    "mismatchPasscode": "Passcodes do not match. \nPlease try again",
+    "btcBackedAssetTitle": "Bitcoin Backed Assets",
+    "btcBackedAssetSubTitle": "RGB protocol enables anyone to issue, send or receive assets on top of the most secure blockchain.",
+    "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets."
   },
   "home": {
     "addAssets": "Add Assets",
     "addAssetSubTitle": "Issue New Asset or Receive Asset",
     "issueNew": "Issue new",
-    "myAssets": "My Assets",
+    "myAssets": "Your Assets",
     "issue": "Issue",
     "assetName": "Asset Name",
     "assetTicker": "Asset ticker",
@@ -262,7 +267,8 @@
     "coins": "Coins",
     "collectibles": "Collectibles",
     "saveAssetSuccess": "Asset Image saved successfully",
-    "saveAssetFailed": "Failed to save asset"
+    "saveAssetFailed": "Failed to save asset",
+    "checkSpendableAmt": "Please enter amount less than "
   },
   "community": {
     "fnfTitle": "Friends & Family",

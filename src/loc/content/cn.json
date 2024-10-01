@@ -30,7 +30,9 @@
     "no": "否",
     "commingSoon": "你的部落",
     "commingSoonSubTitle": "准备好与您的朋友和家人一起享受基于比特币的资产。",
-    "backup": "备份"
+    "backup": "备份",
+    "addFunds": "添加资金",
+    "addLater": "稍后添加"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "恢复短语",
     "recoveryPhraseSubTitle": "恢复现有钱包",
     "addPicture": "添加图片 +",
-    "enterPin": "创建您的密码",
+    "enterPin": "输入密码",
     "confirmPin": "确认您的密码",
     "advanceSettingTitle": "高级设置",
     "splashText": "与朋友一起使用比特币更好",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "应用恢复成功。您已准备好！",
     "invalidMnemonic": "无效的助记词",
     "enterRecoveryPhrase": "请输入12词恢复短语",
-    "mismatchPasscode": "密码不匹配。请再试一次"
+    "mismatchPasscode": "密码不匹配。请再试一次",
+    "btcBackedAssetTitle": "比特币支持的资产",
+    "btcBackedAssetSubTitle": "RGB 协议允许任何人在最安全的区块链上发行、发送或接收资产。",
+    "btcBackedAssetInfo": "您钱包中的 Sats 将作为这些资产的燃料使用。"
   },
   "home": {
     "addAssets": "添加资产",
     "addAssetSubTitle": "发行新资产或接收资产",
     "issueNew": "发行新资产",
-    "myAssets": "我的资产",
+    "myAssets": "你的资产",
     "issue": "发行",
     "assetName": "资产名称",
     "assetTicker": "资产代码",
@@ -262,7 +267,8 @@
     "coins": "硬币",
     "collectibles": "收藏品",
     "saveAssetSuccess": "资产图片保存成功",
-    "saveAssetFailed": "保存资产失败"
+    "saveAssetFailed": "保存资产失败",
+    "checkSpendableAmt": "请输入小于的金额 "
   },
   "community": {
     "fnfTitle": "朋友和家人",

@@ -90,7 +90,10 @@ function SettingsScreen({ navigation }) {
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
     } else if (pinMethod === PinMethod.BIOMETRIC) {
-      ApiHandler.resetPinMethod(key);
+      // resetPinMethod will be used in future - need ux or something else
+      // ApiHandler.resetPinMethod(key);
+      Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
+      setBiometrics(false);
     }
   };
 

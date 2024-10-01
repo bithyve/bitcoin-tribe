@@ -6,11 +6,18 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, { useCallback, useContext, useState, useMemo } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+} from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import Identicon from 'react-native-identicon';
 import { useMMKVString } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -23,7 +30,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+// import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
@@ -123,12 +130,18 @@ const SendAssetScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { sendScreen, common, assets } = translations;
+  const {
+    sendScreen,
+    common,
+    assets,
+    wallet: walletTranslation,
+  } = translations;
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
     JSON.parse(averageTxFeeJSON);
   const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
+  const createUtxos = useMutation(ApiHandler.createUtxos);
 
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [amount, setAmount] = useState('');
@@ -147,6 +160,23 @@ const SendAssetScreen = () => {
     return !invoice || !amount;
   }, [invoice, amount]);
 
+  useEffect(() => {
+    if (createUtxos.data) {
+      setLoading(true);
+      setTimeout(() => {
+        sendAsset();
+      }, 500);
+    } else if (createUtxos.data === false) {
+      setLoading(false);
+      Toast(walletTranslation.failedToCreateUTXO, true);
+    }
+  }, [createUtxos.data]);
+
+  useEffect(() => {
+    if (item.balance.spendable < amount)
+      Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+  }, [amount]);
+
   const sendAsset = useCallback(async () => {
     Keyboard.dismiss();
     const utxo = invoice.match(/~\/~\/([^?]+)\?/)[1];
@@ -163,7 +193,7 @@ const SendAssetScreen = () => {
     if (response?.txid) {
       setTimeout(() => {
         setVisible(true);
-      }, 400);
+      }, 500);
       // Toast(sendScreen.sentSuccessfully, true);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setTimeout(() => {
@@ -186,14 +216,17 @@ const SendAssetScreen = () => {
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <ModalLoading visible={loading} />
+      <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => sendAsset(),
-          });
+          setTimeout(() => {
+            createUtxos.mutate();
+          }, 500);
+          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
+          //   refresh: () => sendAsset(),
+          // });
         }}
       />
       <View>
@@ -349,7 +382,7 @@ const SendAssetScreen = () => {
           primaryOnPress={sendAsset}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || createUtxos.isLoading || loading}
           width={wp(120)}
         />
       </View>

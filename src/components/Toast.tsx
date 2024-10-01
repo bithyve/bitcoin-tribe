@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 
 import Colors from 'src/theme/Colors';
@@ -32,8 +32,8 @@ export default (message, error = false) => {
           styles.toastMessageStyle,
           { color: error ? Colors.White : Colors.RaisinBlack },
         ]}>
-        {message && message.length > 100
-          ? `${message.substring(0, 100)}...`
+        {message && message.length > 150
+          ? `${message.substring(0, 150)}...`
           : message}
       </AppText>
     </View>,
@@ -52,6 +52,11 @@ export default (message, error = false) => {
       containerStyle: {
         marginBottom: (windowWidth * 22) / 100,
         borderRadius: 20,
+        paddingHorizontal: hp(10),
+        paddingVertical: hp(15),
+        flexWrap: 'wrap',
+        // width: wp(300),
+        // minHeight: hp(50),
         alignItems: 'center',
         justifyContent: 'center',
       },
@@ -61,11 +66,10 @@ export default (message, error = false) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: Platform.OS === 'ios' ? hp(5) : 0,
+    paddingHorizontal: hp(10),
     width: wp(300),
-    minHeight: hp(50),
-    padding: 10,
   },
   toastMessageStyle: {
     marginLeft: wp(8),
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   loaderStyle: {
-    height: hp(35),
-    width: hp(35),
+    height: hp(30),
+    width: hp(30),
   },
 });

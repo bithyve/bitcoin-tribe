@@ -54,9 +54,7 @@ function IssueScreen() {
   useEffect(() => {
     if (createUtxos.data) {
       setLoading(true);
-      setTimeout(() => {
-        onPressIssue();
-      }, 400);
+      setTimeout(onPressIssue, 500);
     } else if (createUtxos.data === false) {
       setLoading(false);
       Toast(walletTranslation.failedToCreateUTXO, true);
@@ -145,12 +143,14 @@ function IssueScreen() {
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading} />
+      <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          createUtxos.mutate();
+          setTimeout(() => {
+            createUtxos.mutate();
+          }, 400);
         }}
       />
       <SegmentedButtons
@@ -263,9 +263,9 @@ function IssueScreen() {
           primaryOnPress={onPressIssue}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || createUtxos.isLoading || loading}
           width={wp(120)}
-          primaryLoading={createUtxos.isLoading}
+          primaryLoading={createUtxos.isLoading || loading}
         />
       </View>
     </ScreenContainer>

@@ -30,7 +30,9 @@
     "no": "नहीं",
     "commingSoon": "आपका Tribe",
     "commingSoonSubTitle": "अपने दोस्तों और परिवार के साथ बिटकॉइन आधारित \nसंपत्तियों का आनंद लेने के लिए तैयार हो जाइए।",
-    "backup": "बैकअप"
+    "backup": "बैकअप",
+    "addFunds": "धन जोड़ें",
+    "addLater": "बाद में जोड़ें"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "रिकवरी वाक्यांश",
     "recoveryPhraseSubTitle": "मौजूदा वॉलेट को पुनर्प्राप्त करें",
     "addPicture": "चित्र जोड़ें +",
-    "enterPin": "अपना पासकोड बनाएँ",
+    "enterPin": "पासकोड दर्ज करें",
     "confirmPin": "अपना पासकोड पुष्टि करें",
     "advanceSettingTitle": "उन्नत सेटिंग",
     "splashText": "बिटकॉइन दोस्तों के साथ बेहतर है",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "ऐप पुनर्प्राप्ति सफल। आप सभी सेट हैं!",
     "invalidMnemonic": "अमान्य मोनिक",
     "enterRecoveryPhrase": "कृपया 12-शब्द रिकवरी वाक्यांश दर्ज करें",
-    "mismatchPasscode": "पासकोड मेल नहीं खाते। कृपया पुनः प्रयास करें"
+    "mismatchPasscode": "पासकोड मेल नहीं खाते। कृपया पुनः प्रयास करें",
+    "btcBackedAssetTitle": "बिटकॉइन समर्थित संपत्ति",
+    "btcBackedAssetSubTitle": "RGB प्रोटोकॉल किसी को भी सबसे सुरक्षित ब्लॉकचेन पर संपत्ति जारी करने, भेजने या प्राप्त करने में सक्षम बनाता है।",
+    "btcBackedAssetInfo": "आपके वॉलेट के सैट्स इन संपत्तियों के लिए ईंधन के रूप में उपयोग किए जाएंगे।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
     "addAssetSubTitle": "नई संपत्ति जारी करें या संपत्ति प्राप्त करें",
     "issueNew": "नया जारी करें",
-    "myAssets": "मेरी संपत्ति",
+    "myAssets": "आपकी संपत्तियां",
     "issue": "जारी करें",
     "assetName": "संपत्ति का नाम",
     "assetTicker": "संपत्ति टिकर",
@@ -262,7 +267,8 @@
     "coins": "सिक्के",
     "collectibles": "संग्रहणीय वस्तुएं",
     "saveAssetSuccess": "संपत्ति छवि सफलतापूर्वक सहेजी गई",
-    "saveAssetFailed": "संपत्ति सहेजने में विफल"
+    "saveAssetFailed": "संपत्ति सहेजने में विफल",
+    "checkSpendableAmt": "कृपया इससे कम राशि दर्ज करें "
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

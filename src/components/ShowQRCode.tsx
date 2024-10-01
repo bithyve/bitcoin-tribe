@@ -15,7 +15,7 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { value, title } = props;
-  const qrSize = (windowWidth * 50) / 100;
+  const qrSize = (windowWidth * 65) / 100;
   return (
     <>
       <View style={styles.qrViewWrapper}>
@@ -46,8 +46,8 @@ const getStyles = theme =>
       width: (windowWidth * 70) / 100,
     },
     qrImageWrapper: {
-      width: (windowWidth * 50) / 100,
-      height: (windowWidth * 50) / 100,
+      width: (windowWidth * 70) / 100,
+      height: (windowWidth * 70) / 100,
       alignItems: 'center',
       justifyContent: 'center',
     },

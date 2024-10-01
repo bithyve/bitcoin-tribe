@@ -37,20 +37,6 @@ const QRScanner = () => {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
 
-  // useEffect(() => {
-  //   request(
-  //     Platform.OS === 'ios'
-  //       ? PERMISSIONS.IOS.CAMERA
-  //       : PERMISSIONS.ANDROID.CAMERA,
-  //   ).then(result => {
-  //     if (result === 'granted') {
-  //       setCameraPermission(result);
-  //     } else {
-  //       openSettings();
-  //     }
-  //   });
-  // }, []);
-
   const showPermissionDeniedAlert = () => {
     Alert.alert(
       'Camera Permission Required',
@@ -153,13 +139,14 @@ const QRScanner = () => {
 
   return (
     <View style={styles.qrCodeContainer}>
-      {cameraPermission != null && device && (
+      {cameraPermission != null && device != null && (
         <>
           <Camera
             device={device}
             isActive={true}
             style={styles.visionCameraContainer}
             codeScanner={codeScanner}
+            enableZoomGesture={true}
           />
           <View style={[styles.visionCameraContainer, styles.outSideBorder]}>
             <View style={styles.scannerInnerBorderWrapper}>

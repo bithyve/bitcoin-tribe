@@ -30,7 +30,9 @@
     "no": "No",
     "commingSoon": "La tua Tribù",
     "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari.",
-    "backup": "Backup"
+    "backup": "Backup",
+    "addFunds": "Aggiungi fondi",
+    "addLater": "Aggiungi più tardi"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "Frasi di recupero",
     "recoveryPhraseSubTitle": "Recupera un portafoglio esistente",
     "addPicture": "Aggiungi immagine +",
-    "enterPin": "Crea il tuo codice PIN",
+    "enterPin": "Inserisci un codice di accesso",
     "confirmPin": "Conferma il tuo codice PIN",
     "advanceSettingTitle": "Impostazioni avanzate",
     "splashText": "Bitcoin è migliore con gli amici",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "Recupero dell'app riuscito. Sei tutto pronto!",
     "invalidMnemonic": "Mnemonic non valido",
     "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole",
-    "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova"
+    "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova",
+    "btcBackedAssetTitle": "Asset supportati da Bitcoin",
+    "btcBackedAssetSubTitle": "Il protocollo RGB consente a chiunque di emettere, inviare o ricevere asset sulla blockchain più sicura.",
+    "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset."
   },
   "home": {
     "addAssets": "Aggiungi risorse",
     "addAssetSubTitle": "Emetti nuova risorsa o ricevi risorsa",
     "issueNew": "Emetti nuovo",
-    "myAssets": "Le mie risorse",
+    "myAssets": "I tuoi beni",
     "issue": "Emetti",
     "assetName": "Nome della risorsa",
     "assetTicker": "Ticker della risorsa",
@@ -262,7 +267,8 @@
     "coins": "Monete",
     "collectibles": "Oggetti da collezione",
     "saveAssetSuccess": "Immagine dell'asset salvata con successo",
-    "saveAssetFailed": "Salvataggio dell'asset non riuscito"
+    "saveAssetFailed": "Salvataggio dell'asset non riuscito",
+    "checkSpendableAmt": "Inserisci un importo inferiore a "
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

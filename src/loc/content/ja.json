@@ -30,7 +30,9 @@
     "no": "いいえ",
     "commingSoon": "あなたのトライブ",
     "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。",
-    "backup": "バックアップ"
+    "backup": "バックアップ",
+    "addFunds": "資金を追加",
+    "addLater": "後で追加"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -43,7 +45,7 @@
     "recoveryPhrase": "リカバリーフレーズ",
     "recoveryPhraseSubTitle": "既存のウォレットを復元する",
     "addPicture": "画像を追加 +",
-    "enterPin": "パスコードを作成してください",
+    "enterPin": "パスコードを入力してください",
     "confirmPin": "パスコードを確認してください",
     "advanceSettingTitle": "高度な設定",
     "splashText": "ビットコインは友達と一緒だとより良いです",
@@ -59,13 +61,16 @@
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
-    "mismatchPasscode": "パスコードが一致しません。もう一度お試しください"
+    "mismatchPasscode": "パスコードが一致しません。もう一度お試しください",
+    "btcBackedAssetTitle": "ビットコイン担保資産",
+    "btcBackedAssetSubTitle": "RGBプロトコルは、誰でも最も安全なブロックチェーン上で資産を発行、送信、または受信できるようにします",
+    "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。"
   },
   "home": {
     "addAssets": "アセットを追加",
     "addAssetSubTitle": "新しいアセットを発行するか、アセットを受信する",
     "issueNew": "新規発行",
-    "myAssets": "マイアセット",
+    "myAssets": "あなたの資産",
     "issue": "発行",
     "assetName": "アセット名",
     "assetTicker": "アセットティッカー",
@@ -262,7 +267,8 @@
     "coins": "コイン",
     "collectibles": "コレクション",
     "saveAssetSuccess": "アセットの画像が正常に保存されました",
-    "saveAssetFailed": "アセットの保存に失敗しました"
+    "saveAssetFailed": "アセットの保存に失敗しました",
+    "checkSpendableAmt": "以下の金額を入力してください "
   },
   "community": {
     "fnfTitle": "友達と家族",

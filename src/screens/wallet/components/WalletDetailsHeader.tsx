@@ -141,11 +141,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         // onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN, {
-              receivingAddress,
-              title: common.receive,
-              subTitle: receciveScreen.headerSubTitle,
-            }),
+            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
           )
         }
       />
