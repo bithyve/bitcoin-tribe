@@ -120,6 +120,7 @@ const getStyles = (theme: AppTheme) =>
     },
     invalidPinMsgStyle: {
       color: Colors.ImperialRed,
+      margin: hp(10),
     },
   });
 export default EnterPasscodeModal;
