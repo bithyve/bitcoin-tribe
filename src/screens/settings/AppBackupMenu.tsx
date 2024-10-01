@@ -14,7 +14,6 @@ import { Keys } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
-import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
 
@@ -71,6 +70,7 @@ function AppBackupMenu({ navigation }) {
   }, [login.error, login.data]);
 
   const handlePasscodeChange = newPasscode => {
+    setInvalidPin('');
     setPasscode(newPasscode); // Update state from child
   };
 
