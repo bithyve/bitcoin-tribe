@@ -12,9 +12,9 @@ object RGBWalletRepository {
 
     val TAG = "RGBWalletRepository"
 
-    lateinit var wallet: Wallet
-    lateinit var online: Online
-    lateinit var rgbNetwork: BitcoinNetwork
+    var wallet: Wallet? = null
+    var online: Online? = null
+    var rgbNetwork: BitcoinNetwork? = null
 
     init {
 
@@ -25,16 +25,15 @@ object RGBWalletRepository {
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
                 AppConstants.rgbDir.absolutePath,
-                rgbNetwork,
+                rgbNetwork!!,
                 DatabaseType.SQLITE,
                 1u,
                 xpub,
                 mnemonic,
                 1u
             )
-            Log.d(TAG, "initialize: $mnemonic")
             wallet = Wallet(walletData)
-            online = wallet.goOnline(true, AppConstants.electrumURL)
+            online = wallet!!.goOnline(true, AppConstants.electrumURL)
             Log.d(TAG, "initialize:online $mnemonic")
             return "true"
         }catch (e: RgbLibException) {
@@ -42,6 +41,10 @@ object RGBWalletRepository {
             return "false"
         }
     }
+
+//    fun checkWalletInitialized(): Boolean {
+//        return this::wallet.isInitialized && this::online.isInitialized
+//    }
 
     private fun getNetwork(network: String) : BitcoinNetwork {
         return if(network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
