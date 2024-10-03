@@ -32,7 +32,8 @@
     "commingSoonSubTitle": "Preparati a godere di asset basati su bitcoin \ncon i tuoi amici e familiari.",
     "backup": "Backup",
     "addFunds": "Aggiungi fondi",
-    "addLater": "Aggiungi più tardi"
+    "addLater": "Aggiungi più tardi",
+    "continue": "Continua"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -64,7 +65,10 @@
     "mismatchPasscode": "I codici di accesso non corrispondono. Per favore riprova",
     "btcBackedAssetTitle": "Asset supportati da Bitcoin",
     "btcBackedAssetSubTitle": "Il protocollo RGB consente a chiunque di emettere, inviare o ricevere asset sulla blockchain più sicura.",
-    "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset."
+    "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset.",
+    "rememberPasscodeTitle": " Ricorda il tuo codice",
+    "rememberPasscodeSubTitle": "Ricorda il tuo codice e fai il backup dell'app scrivendo la chiave di recupero di 12 parole",
+    "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo"
   },
   "home": {
     "addAssets": "Aggiungi risorse",
