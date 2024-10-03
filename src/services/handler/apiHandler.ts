@@ -173,6 +173,15 @@ export class ApiHandler {
       throw new Error('Invalid PIN');
     }
   }
+  static async verifyPin(pin: string) {
+    try {
+      const hash = hash512(pin);
+      const key = decrypt(hash, await SecureStore.fetch(hash));
+      return key;
+    } catch (error) {
+      throw new Error('Invalid PIN');
+    }
+  }
 
   static async login() {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
