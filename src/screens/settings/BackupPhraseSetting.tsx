@@ -42,6 +42,7 @@ function BackupPhraseSetting() {
   }, [login.error, login.data]);
 
   const handlePasscodeChange = newPasscode => {
+    setInvalidPin('');
     setPasscode(newPasscode); // Update state from child
   };
 
