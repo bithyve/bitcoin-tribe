@@ -47,7 +47,11 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>
         <View style={styles.modalContainer}>
-          <View style={styles.headingWrapper}>
+          <View
+            style={[
+              styles.headingWrapper,
+              { marginBottom: title || subTitle ? hp(50) : 0 },
+            ]}>
             <View style={styles.contentWrapper}>
               {title ? (
                 <AppText variant="heading1" style={styles.titleText}>
@@ -92,7 +96,6 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
     headingWrapper: {
       flexDirection: 'row',
       width: '100%',
-      marginBottom: hp(50),
     },
     contentWrapper: {
       width: '90%',
