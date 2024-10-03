@@ -25,13 +25,13 @@ fileprivate extension RustBuffer {
     }
 
     static func from(_ ptr: UnsafeBufferPointer<UInt8>) -> RustBuffer {
-        try! rustCall { ffi_rgblibffi_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
+        try! rustCall { ffi_rgblibuniffi_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
     }
 
     // Frees the buffer in place.
     // The buffer must not be used after this is called.
     func deallocate() {
-        try! rustCall { ffi_rgblibffi_rustbuffer_free(self, $0) }
+        try! rustCall { ffi_rgblibuniffi_rustbuffer_free(self, $0) }
     }
 }
 
@@ -153,7 +153,7 @@ fileprivate func writeDouble(_ writer: inout [UInt8], _ value: Double) {
 }
 
 // Protocol for types that transfer other types across the FFI. This is
-// analogous go the Rust trait of the same name.
+// analogous to the Rust trait of the same name.
 fileprivate protocol FfiConverter {
     associatedtype FfiType
     associatedtype SwiftType
@@ -253,18 +253,19 @@ fileprivate extension RustCallStatus {
 }
 
 private func rustCall<T>(_ callback: (UnsafeMutablePointer<RustCallStatus>) -> T) throws -> T {
-    try makeRustCall(callback, errorHandler: nil)
+    let neverThrow: ((RustBuffer) throws -> Never)? = nil
+    return try makeRustCall(callback, errorHandler: neverThrow)
 }
 
-private func rustCallWithError<T>(
-    _ errorHandler: @escaping (RustBuffer) throws -> Error,
+private func rustCallWithError<T, E: Swift.Error>(
+    _ errorHandler: @escaping (RustBuffer) throws -> E,
     _ callback: (UnsafeMutablePointer<RustCallStatus>) -> T) throws -> T {
     try makeRustCall(callback, errorHandler: errorHandler)
 }
 
-private func makeRustCall<T>(
+private func makeRustCall<T, E: Swift.Error>(
     _ callback: (UnsafeMutablePointer<RustCallStatus>) -> T,
-    errorHandler: ((RustBuffer) throws -> Error)?
+    errorHandler: ((RustBuffer) throws -> E)?
 ) throws -> T {
     uniffiEnsureInitialized()
     var callStatus = RustCallStatus.init()
@@ -273,9 +274,9 @@ private func makeRustCall<T>(
     return returnedVal
 }
 
-private func uniffiCheckCallStatus(
+private func uniffiCheckCallStatus<E: Swift.Error>(
     callStatus: RustCallStatus,
-    errorHandler: ((RustBuffer) throws -> Error)?
+    errorHandler: ((RustBuffer) throws -> E)?
 ) throws {
     switch callStatus.code {
         case CALL_SUCCESS:
@@ -555,12 +556,12 @@ open class Invoice:
     }
 
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_rgblibffi_fn_clone_invoice(self.pointer, $0) }
+        return try! rustCall { uniffi_rgblibuniffi_fn_clone_invoice(self.pointer, $0) }
     }
 public convenience init(invoiceString: String)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_constructor_invoice_new(
+    uniffi_rgblibuniffi_fn_constructor_invoice_new(
         FfiConverterString.lower(invoiceString),$0
     )
 }
@@ -572,13 +573,13 @@ public convenience init(invoiceString: String)throws  {
             return
         }
 
-        try! rustCall { uniffi_rgblibffi_fn_free_invoice(pointer, $0) }
+        try! rustCall { uniffi_rgblibuniffi_fn_free_invoice(pointer, $0) }
     }
 
     
 public static func fromInvoiceData(invoiceData: InvoiceData)throws  -> Invoice {
     return try  FfiConverterTypeInvoice.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_constructor_invoice_from_invoice_data(
+    uniffi_rgblibuniffi_fn_constructor_invoice_from_invoice_data(
         FfiConverterTypeInvoiceData.lower(invoiceData),$0
     )
 })
@@ -588,14 +589,14 @@ public static func fromInvoiceData(invoiceData: InvoiceData)throws  -> Invoice {
     
 open func invoiceData() -> InvoiceData {
     return try!  FfiConverterTypeInvoiceData.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_invoice_invoice_data(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_invoice_invoice_data(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func invoiceString() -> String {
     return try!  FfiConverterString.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_invoice_invoice_string(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_invoice_invoice_string(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -682,12 +683,12 @@ open class RecipientInfo:
     }
 
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_rgblibffi_fn_clone_recipientinfo(self.pointer, $0) }
+        return try! rustCall { uniffi_rgblibuniffi_fn_clone_recipientinfo(self.pointer, $0) }
     }
 public convenience init(recipientId: String)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_constructor_recipientinfo_new(
+    uniffi_rgblibuniffi_fn_constructor_recipientinfo_new(
         FfiConverterString.lower(recipientId),$0
     )
 }
@@ -699,7 +700,7 @@ public convenience init(recipientId: String)throws  {
             return
         }
 
-        try! rustCall { uniffi_rgblibffi_fn_free_recipientinfo(pointer, $0) }
+        try! rustCall { uniffi_rgblibuniffi_fn_free_recipientinfo(pointer, $0) }
     }
 
     
@@ -707,14 +708,14 @@ public convenience init(recipientId: String)throws  {
     
 open func network() -> BitcoinNetwork {
     return try!  FfiConverterTypeBitcoinNetwork.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_recipientinfo_network(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_recipientinfo_network(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func recipientType() -> RecipientType {
     return try!  FfiConverterTypeRecipientType.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_recipientinfo_recipient_type(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_recipientinfo_recipient_type(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -799,12 +800,12 @@ open class TransportEndpoint:
     }
 
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_rgblibffi_fn_clone_transportendpoint(self.pointer, $0) }
+        return try! rustCall { uniffi_rgblibuniffi_fn_clone_transportendpoint(self.pointer, $0) }
     }
 public convenience init(transportEndpoint: String)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_constructor_transportendpoint_new(
+    uniffi_rgblibuniffi_fn_constructor_transportendpoint_new(
         FfiConverterString.lower(transportEndpoint),$0
     )
 }
@@ -816,7 +817,7 @@ public convenience init(transportEndpoint: String)throws  {
             return
         }
 
-        try! rustCall { uniffi_rgblibffi_fn_free_transportendpoint(pointer, $0) }
+        try! rustCall { uniffi_rgblibuniffi_fn_free_transportendpoint(pointer, $0) }
     }
 
     
@@ -824,7 +825,7 @@ public convenience init(transportEndpoint: String)throws  {
     
 open func transportType() -> TransportType {
     return try!  FfiConverterTypeTransportType.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_transportendpoint_transport_type(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_transportendpoint_transport_type(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -879,7 +880,7 @@ public func FfiConverterTypeTransportEndpoint_lower(_ value: TransportEndpoint) 
 
 public protocol WalletProtocol : AnyObject {
     
-    func backup(backupPath: String, password: String) throws
+    func backup(backupPath: String, password: String) throws 
     
     func backupInfo() throws  -> Bool
     
@@ -977,12 +978,12 @@ open class Wallet:
     }
 
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_rgblibffi_fn_clone_wallet(self.pointer, $0) }
+        return try! rustCall { uniffi_rgblibuniffi_fn_clone_wallet(self.pointer, $0) }
     }
 public convenience init(walletData: WalletData)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_constructor_wallet_new(
+    uniffi_rgblibuniffi_fn_constructor_wallet_new(
         FfiConverterTypeWalletData.lower(walletData),$0
     )
 }
@@ -994,14 +995,14 @@ public convenience init(walletData: WalletData)throws  {
             return
         }
 
-        try! rustCall { uniffi_rgblibffi_fn_free_wallet(pointer, $0) }
+        try! rustCall { uniffi_rgblibuniffi_fn_free_wallet(pointer, $0) }
     }
 
     
 
     
 open func backup(backupPath: String, password: String)throws  {try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_backup(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_backup(self.uniffiClonePointer(),
         FfiConverterString.lower(backupPath),
         FfiConverterString.lower(password),$0
     )
@@ -1010,14 +1011,14 @@ open func backup(backupPath: String, password: String)throws  {try rustCallWithE
     
 open func backupInfo()throws  -> Bool {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_backup_info(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_wallet_backup_info(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func blindReceive(assetId: String?, amount: UInt64?, durationSeconds: UInt32?, transportEndpoints: [String], minConfirmations: UInt8)throws  -> ReceiveData {
     return try  FfiConverterTypeReceiveData.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_blind_receive(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_blind_receive(self.uniffiClonePointer(),
         FfiConverterOptionString.lower(assetId),
         FfiConverterOptionUInt64.lower(amount),
         FfiConverterOptionUInt32.lower(durationSeconds),
@@ -1029,7 +1030,7 @@ open func blindReceive(assetId: String?, amount: UInt64?, durationSeconds: UInt3
     
 open func createUtxos(online: Online, upTo: Bool, num: UInt8?, size: UInt32?, feeRate: Float)throws  -> UInt8 {
     return try  FfiConverterUInt8.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_create_utxos(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_create_utxos(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterBool.lower(upTo),
         FfiConverterOptionUInt8.lower(num),
@@ -1041,7 +1042,7 @@ open func createUtxos(online: Online, upTo: Bool, num: UInt8?, size: UInt32?, fe
     
 open func createUtxosBegin(online: Online, upTo: Bool, num: UInt8?, size: UInt32?, feeRate: Float)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_create_utxos_begin(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_create_utxos_begin(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterBool.lower(upTo),
         FfiConverterOptionUInt8.lower(num),
@@ -1053,7 +1054,7 @@ open func createUtxosBegin(online: Online, upTo: Bool, num: UInt8?, size: UInt32
     
 open func createUtxosEnd(online: Online, signedPsbt: String)throws  -> UInt8 {
     return try  FfiConverterUInt8.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_create_utxos_end(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_create_utxos_end(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(signedPsbt),$0
     )
@@ -1062,7 +1063,7 @@ open func createUtxosEnd(online: Online, signedPsbt: String)throws  -> UInt8 {
     
 open func deleteTransfers(batchTransferIdx: Int32?, noAssetOnly: Bool)throws  -> Bool {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_delete_transfers(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_delete_transfers(self.uniffiClonePointer(),
         FfiConverterOptionInt32.lower(batchTransferIdx),
         FfiConverterBool.lower(noAssetOnly),$0
     )
@@ -1071,7 +1072,7 @@ open func deleteTransfers(batchTransferIdx: Int32?, noAssetOnly: Bool)throws  ->
     
 open func drainTo(online: Online, address: String, destroyAssets: Bool, feeRate: Float)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_drain_to(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_drain_to(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(address),
         FfiConverterBool.lower(destroyAssets),
@@ -1082,7 +1083,7 @@ open func drainTo(online: Online, address: String, destroyAssets: Bool, feeRate:
     
 open func drainToBegin(online: Online, address: String, destroyAssets: Bool, feeRate: Float)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_drain_to_begin(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_drain_to_begin(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(address),
         FfiConverterBool.lower(destroyAssets),
@@ -1093,7 +1094,7 @@ open func drainToBegin(online: Online, address: String, destroyAssets: Bool, fee
     
 open func drainToEnd(online: Online, signedPsbt: String)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_drain_to_end(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_drain_to_end(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(signedPsbt),$0
     )
@@ -1102,7 +1103,7 @@ open func drainToEnd(online: Online, signedPsbt: String)throws  -> String {
     
 open func failTransfers(online: Online, batchTransferIdx: Int32?, noAssetOnly: Bool)throws  -> Bool {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_fail_transfers(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_fail_transfers(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterOptionInt32.lower(batchTransferIdx),
         FfiConverterBool.lower(noAssetOnly),$0
@@ -1112,14 +1113,14 @@ open func failTransfers(online: Online, batchTransferIdx: Int32?, noAssetOnly: B
     
 open func getAddress()throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_get_address(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_wallet_get_address(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func getAssetBalance(assetId: String)throws  -> Balance {
     return try  FfiConverterTypeBalance.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_get_asset_balance(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_get_asset_balance(self.uniffiClonePointer(),
         FfiConverterString.lower(assetId),$0
     )
 })
@@ -1127,7 +1128,7 @@ open func getAssetBalance(assetId: String)throws  -> Balance {
     
 open func getAssetMetadata(assetId: String)throws  -> Metadata {
     return try  FfiConverterTypeMetadata.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_get_asset_metadata(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_get_asset_metadata(self.uniffiClonePointer(),
         FfiConverterString.lower(assetId),$0
     )
 })
@@ -1135,7 +1136,7 @@ open func getAssetMetadata(assetId: String)throws  -> Metadata {
     
 open func getBtcBalance(online: Online)throws  -> BtcBalance {
     return try  FfiConverterTypeBtcBalance.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_get_btc_balance(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_get_btc_balance(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),$0
     )
 })
@@ -1143,28 +1144,28 @@ open func getBtcBalance(online: Online)throws  -> BtcBalance {
     
 open func getMediaDir() -> String {
     return try!  FfiConverterString.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_wallet_get_media_dir(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_wallet_get_media_dir(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func getWalletData() -> WalletData {
     return try!  FfiConverterTypeWalletData.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_wallet_get_wallet_data(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_wallet_get_wallet_data(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func getWalletDir() -> String {
     return try!  FfiConverterString.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_method_wallet_get_wallet_dir(self.uniffiClonePointer(),$0
+    uniffi_rgblibuniffi_fn_method_wallet_get_wallet_dir(self.uniffiClonePointer(),$0
     )
 })
 }
     
 open func goOnline(skipConsistencyCheck: Bool, indexerUrl: String)throws  -> Online {
     return try  FfiConverterTypeOnline.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_go_online(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_go_online(self.uniffiClonePointer(),
         FfiConverterBool.lower(skipConsistencyCheck),
         FfiConverterString.lower(indexerUrl),$0
     )
@@ -1173,7 +1174,7 @@ open func goOnline(skipConsistencyCheck: Bool, indexerUrl: String)throws  -> Onl
     
 open func issueAssetCfa(online: Online, name: String, details: String?, precision: UInt8, amounts: [UInt64], filePath: String?)throws  -> AssetCfa {
     return try  FfiConverterTypeAssetCFA.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_issue_asset_cfa(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_issue_asset_cfa(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(name),
         FfiConverterOptionString.lower(details),
@@ -1186,7 +1187,7 @@ open func issueAssetCfa(online: Online, name: String, details: String?, precisio
     
 open func issueAssetNia(online: Online, ticker: String, name: String, precision: UInt8, amounts: [UInt64])throws  -> AssetNia {
     return try  FfiConverterTypeAssetNIA.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_issue_asset_nia(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_issue_asset_nia(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(ticker),
         FfiConverterString.lower(name),
@@ -1198,7 +1199,7 @@ open func issueAssetNia(online: Online, ticker: String, name: String, precision:
     
 open func issueAssetUda(online: Online, ticker: String, name: String, details: String?, precision: UInt8, mediaFilePath: String?, attachmentsFilePaths: [String])throws  -> AssetUda {
     return try  FfiConverterTypeAssetUDA.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_issue_asset_uda(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_issue_asset_uda(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(ticker),
         FfiConverterString.lower(name),
@@ -1212,7 +1213,7 @@ open func issueAssetUda(online: Online, ticker: String, name: String, details: S
     
 open func listAssets(filterAssetSchemas: [AssetSchema])throws  -> Assets {
     return try  FfiConverterTypeAssets.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_list_assets(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_list_assets(self.uniffiClonePointer(),
         FfiConverterSequenceTypeAssetSchema.lower(filterAssetSchemas),$0
     )
 })
@@ -1220,7 +1221,7 @@ open func listAssets(filterAssetSchemas: [AssetSchema])throws  -> Assets {
     
 open func listTransactions(online: Online?)throws  -> [Transaction] {
     return try  FfiConverterSequenceTypeTransaction.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_list_transactions(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_list_transactions(self.uniffiClonePointer(),
         FfiConverterOptionTypeOnline.lower(online),$0
     )
 })
@@ -1228,7 +1229,7 @@ open func listTransactions(online: Online?)throws  -> [Transaction] {
     
 open func listTransfers(assetId: String?)throws  -> [Transfer] {
     return try  FfiConverterSequenceTypeTransfer.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_list_transfers(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_list_transfers(self.uniffiClonePointer(),
         FfiConverterOptionString.lower(assetId),$0
     )
 })
@@ -1236,7 +1237,7 @@ open func listTransfers(assetId: String?)throws  -> [Transfer] {
     
 open func listUnspents(online: Online?, settledOnly: Bool)throws  -> [Unspent] {
     return try  FfiConverterSequenceTypeUnspent.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_list_unspents(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_list_unspents(self.uniffiClonePointer(),
         FfiConverterOptionTypeOnline.lower(online),
         FfiConverterBool.lower(settledOnly),$0
     )
@@ -1245,7 +1246,7 @@ open func listUnspents(online: Online?, settledOnly: Bool)throws  -> [Unspent] {
     
 open func refresh(online: Online, assetId: String?, filter: [RefreshFilter])throws  -> [Int32: RefreshedTransfer] {
     return try  FfiConverterDictionaryInt32TypeRefreshedTransfer.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_refresh(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_refresh(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterOptionString.lower(assetId),
         FfiConverterSequenceTypeRefreshFilter.lower(filter),$0
@@ -1255,7 +1256,7 @@ open func refresh(online: Online, assetId: String?, filter: [RefreshFilter])thro
     
 open func send(online: Online, recipientMap: [String: [Recipient]], donation: Bool, feeRate: Float, minConfirmations: UInt8)throws  -> SendResult {
     return try  FfiConverterTypeSendResult.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterDictionaryStringSequenceTypeRecipient.lower(recipientMap),
         FfiConverterBool.lower(donation),
@@ -1267,7 +1268,7 @@ open func send(online: Online, recipientMap: [String: [Recipient]], donation: Bo
     
 open func sendBegin(online: Online, recipientMap: [String: [Recipient]], donation: Bool, feeRate: Float, minConfirmations: UInt8)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send_begin(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send_begin(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterDictionaryStringSequenceTypeRecipient.lower(recipientMap),
         FfiConverterBool.lower(donation),
@@ -1279,7 +1280,7 @@ open func sendBegin(online: Online, recipientMap: [String: [Recipient]], donatio
     
 open func sendBtc(online: Online, address: String, amount: UInt64, feeRate: Float)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send_btc(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send_btc(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(address),
         FfiConverterUInt64.lower(amount),
@@ -1290,7 +1291,7 @@ open func sendBtc(online: Online, address: String, amount: UInt64, feeRate: Floa
     
 open func sendBtcBegin(online: Online, address: String, amount: UInt64, feeRate: Float)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send_btc_begin(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send_btc_begin(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(address),
         FfiConverterUInt64.lower(amount),
@@ -1301,7 +1302,7 @@ open func sendBtcBegin(online: Online, address: String, amount: UInt64, feeRate:
     
 open func sendBtcEnd(online: Online, signedPsbt: String)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send_btc_end(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send_btc_end(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(signedPsbt),$0
     )
@@ -1310,7 +1311,7 @@ open func sendBtcEnd(online: Online, signedPsbt: String)throws  -> String {
     
 open func sendEnd(online: Online, signedPsbt: String)throws  -> SendResult {
     return try  FfiConverterTypeSendResult.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_send_end(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_send_end(self.uniffiClonePointer(),
         FfiConverterTypeOnline.lower(online),
         FfiConverterString.lower(signedPsbt),$0
     )
@@ -1319,7 +1320,7 @@ open func sendEnd(online: Online, signedPsbt: String)throws  -> SendResult {
     
 open func signPsbt(unsignedPsbt: String)throws  -> String {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_sign_psbt(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_sign_psbt(self.uniffiClonePointer(),
         FfiConverterString.lower(unsignedPsbt),$0
     )
 })
@@ -1327,7 +1328,7 @@ open func signPsbt(unsignedPsbt: String)throws  -> String {
     
 open func witnessReceive(assetId: String?, amount: UInt64?, durationSeconds: UInt32?, transportEndpoints: [String], minConfirmations: UInt8)throws  -> ReceiveData {
     return try  FfiConverterTypeReceiveData.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_method_wallet_witness_receive(self.uniffiClonePointer(),
+    uniffi_rgblibuniffi_fn_method_wallet_witness_receive(self.uniffiClonePointer(),
         FfiConverterOptionString.lower(assetId),
         FfiConverterOptionUInt64.lower(amount),
         FfiConverterOptionUInt32.lower(durationSeconds),
@@ -1467,15 +1468,15 @@ public struct FfiConverterTypeAssetCFA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetCfa {
         return
             try AssetCfa(
-                assetId: FfiConverterString.read(from: &buf),
-                assetIface: FfiConverterTypeAssetIface.read(from: &buf),
-                name: FfiConverterString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
-                precision: FfiConverterUInt8.read(from: &buf),
-                issuedSupply: FfiConverterUInt64.read(from: &buf),
-                timestamp: FfiConverterInt64.read(from: &buf),
-                addedAt: FfiConverterInt64.read(from: &buf),
-                balance: FfiConverterTypeBalance.read(from: &buf),
+                assetId: FfiConverterString.read(from: &buf), 
+                assetIface: FfiConverterTypeAssetIface.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
+                precision: FfiConverterUInt8.read(from: &buf), 
+                issuedSupply: FfiConverterUInt64.read(from: &buf), 
+                timestamp: FfiConverterInt64.read(from: &buf), 
+                addedAt: FfiConverterInt64.read(from: &buf), 
+                balance: FfiConverterTypeBalance.read(from: &buf), 
                 media: FfiConverterOptionTypeMedia.read(from: &buf)
         )
     }
@@ -1594,16 +1595,16 @@ public struct FfiConverterTypeAssetNIA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetNia {
         return
             try AssetNia(
-                assetId: FfiConverterString.read(from: &buf),
-                assetIface: FfiConverterTypeAssetIface.read(from: &buf),
-                ticker: FfiConverterString.read(from: &buf),
-                name: FfiConverterString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
-                precision: FfiConverterUInt8.read(from: &buf),
-                issuedSupply: FfiConverterUInt64.read(from: &buf),
-                timestamp: FfiConverterInt64.read(from: &buf),
-                addedAt: FfiConverterInt64.read(from: &buf),
-                balance: FfiConverterTypeBalance.read(from: &buf),
+                assetId: FfiConverterString.read(from: &buf), 
+                assetIface: FfiConverterTypeAssetIface.read(from: &buf), 
+                ticker: FfiConverterString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
+                precision: FfiConverterUInt8.read(from: &buf), 
+                issuedSupply: FfiConverterUInt64.read(from: &buf), 
+                timestamp: FfiConverterInt64.read(from: &buf), 
+                addedAt: FfiConverterInt64.read(from: &buf), 
+                balance: FfiConverterTypeBalance.read(from: &buf), 
                 media: FfiConverterOptionTypeMedia.read(from: &buf)
         )
     }
@@ -1723,16 +1724,16 @@ public struct FfiConverterTypeAssetUDA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetUda {
         return
             try AssetUda(
-                assetId: FfiConverterString.read(from: &buf),
-                assetIface: FfiConverterTypeAssetIface.read(from: &buf),
-                ticker: FfiConverterString.read(from: &buf),
-                name: FfiConverterString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
-                precision: FfiConverterUInt8.read(from: &buf),
-                issuedSupply: FfiConverterUInt64.read(from: &buf),
-                timestamp: FfiConverterInt64.read(from: &buf),
-                addedAt: FfiConverterInt64.read(from: &buf),
-                balance: FfiConverterTypeBalance.read(from: &buf),
+                assetId: FfiConverterString.read(from: &buf), 
+                assetIface: FfiConverterTypeAssetIface.read(from: &buf), 
+                ticker: FfiConverterString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
+                precision: FfiConverterUInt8.read(from: &buf), 
+                issuedSupply: FfiConverterUInt64.read(from: &buf), 
+                timestamp: FfiConverterInt64.read(from: &buf), 
+                addedAt: FfiConverterInt64.read(from: &buf), 
+                balance: FfiConverterTypeBalance.read(from: &buf), 
                 token: FfiConverterOptionTypeTokenLight.read(from: &buf)
         )
     }
@@ -1804,8 +1805,8 @@ public struct FfiConverterTypeAssets: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Assets {
         return
             try Assets(
-                nia: FfiConverterOptionSequenceTypeAssetNIA.read(from: &buf),
-                uda: FfiConverterOptionSequenceTypeAssetUDA.read(from: &buf),
+                nia: FfiConverterOptionSequenceTypeAssetNIA.read(from: &buf), 
+                uda: FfiConverterOptionSequenceTypeAssetUDA.read(from: &buf), 
                 cfa: FfiConverterOptionSequenceTypeAssetCFA.read(from: &buf)
         )
     }
@@ -1869,8 +1870,8 @@ public struct FfiConverterTypeBalance: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Balance {
         return
             try Balance(
-                settled: FfiConverterUInt64.read(from: &buf),
-                future: FfiConverterUInt64.read(from: &buf),
+                settled: FfiConverterUInt64.read(from: &buf), 
+                future: FfiConverterUInt64.read(from: &buf), 
                 spendable: FfiConverterUInt64.read(from: &buf)
         )
     }
@@ -1928,7 +1929,7 @@ public struct FfiConverterTypeBlockTime: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BlockTime {
         return
             try BlockTime(
-                height: FfiConverterUInt32.read(from: &buf),
+                height: FfiConverterUInt32.read(from: &buf), 
                 timestamp: FfiConverterUInt64.read(from: &buf)
         )
     }
@@ -1985,7 +1986,7 @@ public struct FfiConverterTypeBtcBalance: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BtcBalance {
         return
             try BtcBalance(
-                vanilla: FfiConverterTypeBalance.read(from: &buf),
+                vanilla: FfiConverterTypeBalance.read(from: &buf), 
                 colored: FfiConverterTypeBalance.read(from: &buf)
         )
     }
@@ -2042,7 +2043,7 @@ public struct FfiConverterTypeEmbeddedMedia: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EmbeddedMedia {
         return
             try EmbeddedMedia(
-                mime: FfiConverterString.read(from: &buf),
+                mime: FfiConverterString.read(from: &buf), 
                 data: FfiConverterSequenceUInt8.read(from: &buf)
         )
     }
@@ -2129,12 +2130,12 @@ public struct FfiConverterTypeInvoiceData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> InvoiceData {
         return
             try InvoiceData(
-                recipientId: FfiConverterString.read(from: &buf),
-                assetIface: FfiConverterOptionTypeAssetIface.read(from: &buf),
-                assetId: FfiConverterOptionString.read(from: &buf),
-                amount: FfiConverterOptionUInt64.read(from: &buf),
-                network: FfiConverterTypeBitcoinNetwork.read(from: &buf),
-                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf),
+                recipientId: FfiConverterString.read(from: &buf), 
+                assetIface: FfiConverterOptionTypeAssetIface.read(from: &buf), 
+                assetId: FfiConverterOptionString.read(from: &buf), 
+                amount: FfiConverterOptionUInt64.read(from: &buf), 
+                network: FfiConverterTypeBitcoinNetwork.read(from: &buf), 
+                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf), 
                 transportEndpoints: FfiConverterSequenceString.read(from: &buf)
         )
     }
@@ -2208,9 +2209,9 @@ public struct FfiConverterTypeKeys: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Keys {
         return
             try Keys(
-                mnemonic: FfiConverterString.read(from: &buf),
-                xpub: FfiConverterString.read(from: &buf),
-                accountXpub: FfiConverterString.read(from: &buf),
+                mnemonic: FfiConverterString.read(from: &buf), 
+                xpub: FfiConverterString.read(from: &buf), 
+                accountXpub: FfiConverterString.read(from: &buf), 
                 accountXpubFingerprint: FfiConverterString.read(from: &buf)
         )
     }
@@ -2275,8 +2276,8 @@ public struct FfiConverterTypeMedia: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Media {
         return
             try Media(
-                filePath: FfiConverterString.read(from: &buf),
-                digest: FfiConverterString.read(from: &buf),
+                filePath: FfiConverterString.read(from: &buf), 
+                digest: FfiConverterString.read(from: &buf), 
                 mime: FfiConverterString.read(from: &buf)
         )
     }
@@ -2376,14 +2377,14 @@ public struct FfiConverterTypeMetadata: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Metadata {
         return
             try Metadata(
-                assetIface: FfiConverterTypeAssetIface.read(from: &buf),
-                assetSchema: FfiConverterTypeAssetSchema.read(from: &buf),
-                issuedSupply: FfiConverterUInt64.read(from: &buf),
-                timestamp: FfiConverterInt64.read(from: &buf),
-                name: FfiConverterString.read(from: &buf),
-                precision: FfiConverterUInt8.read(from: &buf),
-                ticker: FfiConverterOptionString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
+                assetIface: FfiConverterTypeAssetIface.read(from: &buf), 
+                assetSchema: FfiConverterTypeAssetSchema.read(from: &buf), 
+                issuedSupply: FfiConverterUInt64.read(from: &buf), 
+                timestamp: FfiConverterInt64.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                precision: FfiConverterUInt8.read(from: &buf), 
+                ticker: FfiConverterOptionString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
                 token: FfiConverterOptionTypeToken.read(from: &buf)
         )
     }
@@ -2447,7 +2448,7 @@ public struct FfiConverterTypeOnline: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Online {
         return
             try Online(
-                id: FfiConverterUInt64.read(from: &buf),
+                id: FfiConverterUInt64.read(from: &buf), 
                 indexerUrl: FfiConverterString.read(from: &buf)
         )
     }
@@ -2504,7 +2505,7 @@ public struct FfiConverterTypeOutpoint: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Outpoint {
         return
             try Outpoint(
-                txid: FfiConverterString.read(from: &buf),
+                txid: FfiConverterString.read(from: &buf), 
                 vout: FfiConverterUInt32.read(from: &buf)
         )
     }
@@ -2561,7 +2562,7 @@ public struct FfiConverterTypeProofOfReserves: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ProofOfReserves {
         return
             try ProofOfReserves(
-                utxo: FfiConverterTypeOutpoint.read(from: &buf),
+                utxo: FfiConverterTypeOutpoint.read(from: &buf), 
                 proof: FfiConverterSequenceUInt8.read(from: &buf)
         )
     }
@@ -2630,9 +2631,9 @@ public struct FfiConverterTypeReceiveData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ReceiveData {
         return
             try ReceiveData(
-                invoice: FfiConverterString.read(from: &buf),
-                recipientId: FfiConverterString.read(from: &buf),
-                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf),
+                invoice: FfiConverterString.read(from: &buf), 
+                recipientId: FfiConverterString.read(from: &buf), 
+                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf), 
                 batchTransferIdx: FfiConverterInt32.read(from: &buf)
         )
     }
@@ -2703,9 +2704,9 @@ public struct FfiConverterTypeRecipient: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Recipient {
         return
             try Recipient(
-                recipientId: FfiConverterString.read(from: &buf),
-                witnessData: FfiConverterOptionTypeWitnessData.read(from: &buf),
-                amount: FfiConverterUInt64.read(from: &buf),
+                recipientId: FfiConverterString.read(from: &buf), 
+                witnessData: FfiConverterOptionTypeWitnessData.read(from: &buf), 
+                amount: FfiConverterUInt64.read(from: &buf), 
                 transportEndpoints: FfiConverterSequenceString.read(from: &buf)
         )
     }
@@ -2764,7 +2765,7 @@ public struct FfiConverterTypeRefreshFilter: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RefreshFilter {
         return
             try RefreshFilter(
-                status: FfiConverterTypeRefreshTransferStatus.read(from: &buf),
+                status: FfiConverterTypeRefreshTransferStatus.read(from: &buf), 
                 incoming: FfiConverterBool.read(from: &buf)
         )
     }
@@ -2821,7 +2822,7 @@ public struct FfiConverterTypeRefreshedTransfer: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RefreshedTransfer {
         return
             try RefreshedTransfer(
-                updatedStatus: FfiConverterOptionTypeTransferStatus.read(from: &buf),
+                updatedStatus: FfiConverterOptionTypeTransferStatus.read(from: &buf), 
                 failure: FfiConverterOptionTypeRgbLibError.read(from: &buf)
         )
     }
@@ -2884,8 +2885,8 @@ public struct FfiConverterTypeRgbAllocation: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RgbAllocation {
         return
             try RgbAllocation(
-                assetId: FfiConverterOptionString.read(from: &buf),
-                amount: FfiConverterUInt64.read(from: &buf),
+                assetId: FfiConverterOptionString.read(from: &buf), 
+                amount: FfiConverterUInt64.read(from: &buf), 
                 settled: FfiConverterBool.read(from: &buf)
         )
     }
@@ -2943,7 +2944,7 @@ public struct FfiConverterTypeSendResult: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SendResult {
         return
             try SendResult(
-                txid: FfiConverterString.read(from: &buf),
+                txid: FfiConverterString.read(from: &buf), 
                 batchTransferIdx: FfiConverterInt32.read(from: &buf)
         )
     }
@@ -3036,13 +3037,13 @@ public struct FfiConverterTypeToken: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Token {
         return
             try Token(
-                index: FfiConverterUInt32.read(from: &buf),
-                ticker: FfiConverterOptionString.read(from: &buf),
-                name: FfiConverterOptionString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
-                embeddedMedia: FfiConverterOptionTypeEmbeddedMedia.read(from: &buf),
-                media: FfiConverterOptionTypeMedia.read(from: &buf),
-                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf),
+                index: FfiConverterUInt32.read(from: &buf), 
+                ticker: FfiConverterOptionString.read(from: &buf), 
+                name: FfiConverterOptionString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
+                embeddedMedia: FfiConverterOptionTypeEmbeddedMedia.read(from: &buf), 
+                media: FfiConverterOptionTypeMedia.read(from: &buf), 
+                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf), 
                 reserves: FfiConverterOptionTypeProofOfReserves.read(from: &buf)
         )
     }
@@ -3141,13 +3142,13 @@ public struct FfiConverterTypeTokenLight: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TokenLight {
         return
             try TokenLight(
-                index: FfiConverterUInt32.read(from: &buf),
-                ticker: FfiConverterOptionString.read(from: &buf),
-                name: FfiConverterOptionString.read(from: &buf),
-                details: FfiConverterOptionString.read(from: &buf),
-                embeddedMedia: FfiConverterBool.read(from: &buf),
-                media: FfiConverterOptionTypeMedia.read(from: &buf),
-                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf),
+                index: FfiConverterUInt32.read(from: &buf), 
+                ticker: FfiConverterOptionString.read(from: &buf), 
+                name: FfiConverterOptionString.read(from: &buf), 
+                details: FfiConverterOptionString.read(from: &buf), 
+                embeddedMedia: FfiConverterBool.read(from: &buf), 
+                media: FfiConverterOptionTypeMedia.read(from: &buf), 
+                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf), 
                 reserves: FfiConverterBool.read(from: &buf)
         )
     }
@@ -3234,11 +3235,11 @@ public struct FfiConverterTypeTransaction: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Transaction {
         return
             try Transaction(
-                transactionType: FfiConverterTypeTransactionType.read(from: &buf),
-                txid: FfiConverterString.read(from: &buf),
-                received: FfiConverterUInt64.read(from: &buf),
-                sent: FfiConverterUInt64.read(from: &buf),
-                fee: FfiConverterOptionUInt64.read(from: &buf),
+                transactionType: FfiConverterTypeTransactionType.read(from: &buf), 
+                txid: FfiConverterString.read(from: &buf), 
+                received: FfiConverterUInt64.read(from: &buf), 
+                sent: FfiConverterUInt64.read(from: &buf), 
+                fee: FfiConverterOptionUInt64.read(from: &buf), 
                 confirmationTime: FfiConverterOptionTypeBlockTime.read(from: &buf)
         )
     }
@@ -3365,18 +3366,18 @@ public struct FfiConverterTypeTransfer: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Transfer {
         return
             try Transfer(
-                idx: FfiConverterInt32.read(from: &buf),
-                batchTransferIdx: FfiConverterInt32.read(from: &buf),
-                createdAt: FfiConverterInt64.read(from: &buf),
-                updatedAt: FfiConverterInt64.read(from: &buf),
-                status: FfiConverterTypeTransferStatus.read(from: &buf),
-                amount: FfiConverterUInt64.read(from: &buf),
-                kind: FfiConverterTypeTransferKind.read(from: &buf),
-                txid: FfiConverterOptionString.read(from: &buf),
-                recipientId: FfiConverterOptionString.read(from: &buf),
-                receiveUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf),
-                changeUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf),
-                expiration: FfiConverterOptionInt64.read(from: &buf),
+                idx: FfiConverterInt32.read(from: &buf), 
+                batchTransferIdx: FfiConverterInt32.read(from: &buf), 
+                createdAt: FfiConverterInt64.read(from: &buf), 
+                updatedAt: FfiConverterInt64.read(from: &buf), 
+                status: FfiConverterTypeTransferStatus.read(from: &buf), 
+                amount: FfiConverterUInt64.read(from: &buf), 
+                kind: FfiConverterTypeTransferKind.read(from: &buf), 
+                txid: FfiConverterOptionString.read(from: &buf), 
+                recipientId: FfiConverterOptionString.read(from: &buf), 
+                receiveUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf), 
+                changeUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf), 
+                expiration: FfiConverterOptionInt64.read(from: &buf), 
                 transportEndpoints: FfiConverterSequenceTypeTransferTransportEndpoint.read(from: &buf)
         )
     }
@@ -3450,8 +3451,8 @@ public struct FfiConverterTypeTransferTransportEndpoint: FfiConverterRustBuffer 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransferTransportEndpoint {
         return
             try TransferTransportEndpoint(
-                endpoint: FfiConverterString.read(from: &buf),
-                transportType: FfiConverterTypeTransportType.read(from: &buf),
+                endpoint: FfiConverterString.read(from: &buf), 
+                transportType: FfiConverterTypeTransportType.read(from: &buf), 
                 used: FfiConverterBool.read(from: &buf)
         )
     }
@@ -3509,7 +3510,7 @@ public struct FfiConverterTypeUnspent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Unspent {
         return
             try Unspent(
-                utxo: FfiConverterTypeUtxo.read(from: &buf),
+                utxo: FfiConverterTypeUtxo.read(from: &buf), 
                 rgbAllocations: FfiConverterSequenceTypeRgbAllocation.read(from: &buf)
         )
     }
@@ -3578,9 +3579,9 @@ public struct FfiConverterTypeUtxo: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Utxo {
         return
             try Utxo(
-                outpoint: FfiConverterTypeOutpoint.read(from: &buf),
-                btcAmount: FfiConverterUInt64.read(from: &buf),
-                colorable: FfiConverterBool.read(from: &buf),
+                outpoint: FfiConverterTypeOutpoint.read(from: &buf), 
+                btcAmount: FfiConverterUInt64.read(from: &buf), 
+                colorable: FfiConverterBool.read(from: &buf), 
                 exists: FfiConverterBool.read(from: &buf)
         )
     }
@@ -3669,12 +3670,12 @@ public struct FfiConverterTypeWalletData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WalletData {
         return
             try WalletData(
-                dataDir: FfiConverterString.read(from: &buf),
-                bitcoinNetwork: FfiConverterTypeBitcoinNetwork.read(from: &buf),
-                databaseType: FfiConverterTypeDatabaseType.read(from: &buf),
-                maxAllocationsPerUtxo: FfiConverterUInt32.read(from: &buf),
-                pubkey: FfiConverterString.read(from: &buf),
-                mnemonic: FfiConverterOptionString.read(from: &buf),
+                dataDir: FfiConverterString.read(from: &buf), 
+                bitcoinNetwork: FfiConverterTypeBitcoinNetwork.read(from: &buf), 
+                databaseType: FfiConverterTypeDatabaseType.read(from: &buf), 
+                maxAllocationsPerUtxo: FfiConverterUInt32.read(from: &buf), 
+                pubkey: FfiConverterString.read(from: &buf), 
+                mnemonic: FfiConverterOptionString.read(from: &buf), 
                 vanillaKeychain: FfiConverterOptionUInt8.read(from: &buf)
         )
     }
@@ -3736,7 +3737,7 @@ public struct FfiConverterTypeWitnessData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WitnessData {
         return
             try WitnessData(
-                amountSat: FfiConverterUInt64.read(from: &buf),
+                amountSat: FfiConverterUInt64.read(from: &buf), 
                 blinding: FfiConverterOptionUInt64.read(from: &buf)
         )
     }
@@ -4194,8 +4195,11 @@ public enum RgbLibError {
     )
     case InvalidTransportEndpoints(details: String
     )
+    case InvalidTxid
     case InvalidVanillaKeychain
     case MinFeeNotMet(txid: String
+    )
+    case Network(details: String
     )
     case NoConsignment
     case NoIssuanceAmounts
@@ -4217,6 +4221,8 @@ public enum RgbLibError {
     case UnsupportedLayer1(layer1: String
     )
     case UnsupportedTransportType
+    case WalletDirAlreadyExists(path: String
+    )
     case WatchOnly
     case WrongPassword
 }
@@ -4270,7 +4276,7 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
         case 16: return .InexistentDataDir
         case 17: return .InsufficientAllocationSlots
         case 18: return .InsufficientBitcoins(
-            needed: try FfiConverterUInt64.read(from: &buf),
+            needed: try FfiConverterUInt64.read(from: &buf), 
             available: try FfiConverterUInt64.read(from: &buf)
             )
         case 19: return .InsufficientSpendableAssets(
@@ -4350,37 +4356,44 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
         case 47: return .InvalidTransportEndpoints(
             details: try FfiConverterString.read(from: &buf)
             )
-        case 48: return .InvalidVanillaKeychain
-        case 49: return .MinFeeNotMet(
+        case 48: return .InvalidTxid
+        case 49: return .InvalidVanillaKeychain
+        case 50: return .MinFeeNotMet(
             txid: try FfiConverterString.read(from: &buf)
             )
-        case 50: return .NoConsignment
-        case 51: return .NoIssuanceAmounts
-        case 52: return .NoValidTransportEndpoint
-        case 53: return .Offline
-        case 54: return .OutputBelowDustLimit
-        case 55: return .Proxy(
+        case 51: return .Network(
             details: try FfiConverterString.read(from: &buf)
             )
-        case 56: return .RecipientIdAlreadyUsed
-        case 57: return .RecipientIdDuplicated
-        case 58: return .TooHighIssuanceAmounts
-        case 59: return .UnknownRgbInterface(
+        case 52: return .NoConsignment
+        case 53: return .NoIssuanceAmounts
+        case 54: return .NoValidTransportEndpoint
+        case 55: return .Offline
+        case 56: return .OutputBelowDustLimit
+        case 57: return .Proxy(
+            details: try FfiConverterString.read(from: &buf)
+            )
+        case 58: return .RecipientIdAlreadyUsed
+        case 59: return .RecipientIdDuplicated
+        case 60: return .TooHighIssuanceAmounts
+        case 61: return .UnknownRgbInterface(
             interface: try FfiConverterString.read(from: &buf)
             )
-        case 60: return .UnknownRgbSchema(
+        case 62: return .UnknownRgbSchema(
             schemaId: try FfiConverterString.read(from: &buf)
             )
-        case 61: return .UnsupportedBackupVersion(
+        case 63: return .UnsupportedBackupVersion(
             version: try FfiConverterString.read(from: &buf)
             )
-        case 62: return .UnsupportedInvoice
-        case 63: return .UnsupportedLayer1(
+        case 64: return .UnsupportedInvoice
+        case 65: return .UnsupportedLayer1(
             layer1: try FfiConverterString.read(from: &buf)
             )
-        case 64: return .UnsupportedTransportType
-        case 65: return .WatchOnly
-        case 66: return .WrongPassword
+        case 66: return .UnsupportedTransportType
+        case 67: return .WalletDirAlreadyExists(
+            path: try FfiConverterString.read(from: &buf)
+            )
+        case 68: return .WatchOnly
+        case 69: return .WrongPassword
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -4617,86 +4630,100 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
             FfiConverterString.write(details, into: &buf)
             
         
-        case .InvalidVanillaKeychain:
+        case .InvalidTxid:
             writeInt(&buf, Int32(48))
         
         
-        case let .MinFeeNotMet(txid):
+        case .InvalidVanillaKeychain:
             writeInt(&buf, Int32(49))
+        
+        
+        case let .MinFeeNotMet(txid):
+            writeInt(&buf, Int32(50))
             FfiConverterString.write(txid, into: &buf)
             
         
-        case .NoConsignment:
-            writeInt(&buf, Int32(50))
-        
-        
-        case .NoIssuanceAmounts:
+        case let .Network(details):
             writeInt(&buf, Int32(51))
+            FfiConverterString.write(details, into: &buf)
+            
         
-        
-        case .NoValidTransportEndpoint:
+        case .NoConsignment:
             writeInt(&buf, Int32(52))
         
         
-        case .Offline:
+        case .NoIssuanceAmounts:
             writeInt(&buf, Int32(53))
         
         
-        case .OutputBelowDustLimit:
+        case .NoValidTransportEndpoint:
             writeInt(&buf, Int32(54))
         
         
-        case let .Proxy(details):
+        case .Offline:
             writeInt(&buf, Int32(55))
+        
+        
+        case .OutputBelowDustLimit:
+            writeInt(&buf, Int32(56))
+        
+        
+        case let .Proxy(details):
+            writeInt(&buf, Int32(57))
             FfiConverterString.write(details, into: &buf)
             
         
         case .RecipientIdAlreadyUsed:
-            writeInt(&buf, Int32(56))
-        
-        
-        case .RecipientIdDuplicated:
-            writeInt(&buf, Int32(57))
-        
-        
-        case .TooHighIssuanceAmounts:
             writeInt(&buf, Int32(58))
         
         
-        case let .UnknownRgbInterface(interface):
+        case .RecipientIdDuplicated:
             writeInt(&buf, Int32(59))
+        
+        
+        case .TooHighIssuanceAmounts:
+            writeInt(&buf, Int32(60))
+        
+        
+        case let .UnknownRgbInterface(interface):
+            writeInt(&buf, Int32(61))
             FfiConverterString.write(interface, into: &buf)
             
         
         case let .UnknownRgbSchema(schemaId):
-            writeInt(&buf, Int32(60))
+            writeInt(&buf, Int32(62))
             FfiConverterString.write(schemaId, into: &buf)
             
         
         case let .UnsupportedBackupVersion(version):
-            writeInt(&buf, Int32(61))
+            writeInt(&buf, Int32(63))
             FfiConverterString.write(version, into: &buf)
             
         
         case .UnsupportedInvoice:
-            writeInt(&buf, Int32(62))
+            writeInt(&buf, Int32(64))
         
         
         case let .UnsupportedLayer1(layer1):
-            writeInt(&buf, Int32(63))
+            writeInt(&buf, Int32(65))
             FfiConverterString.write(layer1, into: &buf)
             
         
         case .UnsupportedTransportType:
-            writeInt(&buf, Int32(64))
+            writeInt(&buf, Int32(66))
         
+        
+        case let .WalletDirAlreadyExists(path):
+            writeInt(&buf, Int32(67))
+            FfiConverterString.write(path, into: &buf)
+            
         
         case .WatchOnly:
-            writeInt(&buf, Int32(65))
+            writeInt(&buf, Int32(68))
         
         
         case .WrongPassword:
-            writeInt(&buf, Int32(66))
+            writeInt(&buf, Int32(69))
         
         }
     }
@@ -4705,7 +4732,11 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
 
 extension RgbLibError: Equatable, Hashable {}
 
-extension RgbLibError: Error { }
+extension RgbLibError: Foundation.LocalizedError {
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
@@ -5781,13 +5812,13 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeRecipient: FfiConvert
 }
 public func generateKeys(bitcoinNetwork: BitcoinNetwork) -> Keys {
     return try!  FfiConverterTypeKeys.lift(try! rustCall() {
-    uniffi_rgblibffi_fn_func_generate_keys(
+    uniffi_rgblibuniffi_fn_func_generate_keys(
         FfiConverterTypeBitcoinNetwork.lower(bitcoinNetwork),$0
     )
 })
 }
 public func restoreBackup(backupPath: String, password: String, dataDir: String)throws  {try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_func_restore_backup(
+    uniffi_rgblibuniffi_fn_func_restore_backup(
         FfiConverterString.lower(backupPath),
         FfiConverterString.lower(password),
         FfiConverterString.lower(dataDir),$0
@@ -5796,7 +5827,7 @@ public func restoreBackup(backupPath: String, password: String, dataDir: String)
 }
 public func restoreKeys(bitcoinNetwork: BitcoinNetwork, mnemonic: String)throws  -> Keys {
     return try  FfiConverterTypeKeys.lift(try rustCallWithError(FfiConverterTypeRgbLibError.lift) {
-    uniffi_rgblibffi_fn_func_restore_keys(
+    uniffi_rgblibuniffi_fn_func_restore_keys(
         FfiConverterTypeBitcoinNetwork.lower(bitcoinNetwork),
         FfiConverterString.lower(mnemonic),$0
     )
@@ -5808,163 +5839,163 @@ private enum InitializationResult {
     case contractVersionMismatch
     case apiChecksumMismatch
 }
-// Use a global variables to perform the versioning checks. Swift ensures that
+// Use a global variable to perform the versioning checks. Swift ensures that
 // the code inside is only computed once.
-private var initializationResult: InitializationResult {
+private var initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
     let bindings_contract_version = 26
     // Get the scaffolding contract version by calling the into the dylib
-    let scaffolding_contract_version = ffi_rgblibffi_uniffi_contract_version()
+    let scaffolding_contract_version = ffi_rgblibuniffi_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_rgblibffi_checksum_func_generate_keys() != 64259) {
+    if (uniffi_rgblibuniffi_checksum_func_generate_keys() != 50781) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_func_restore_backup() != 15101) {
+    if (uniffi_rgblibuniffi_checksum_func_restore_backup() != 4743) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_func_restore_keys() != 42405) {
+    if (uniffi_rgblibuniffi_checksum_func_restore_keys() != 38408) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_invoice_invoice_data() != 11706) {
+    if (uniffi_rgblibuniffi_checksum_method_invoice_invoice_data() != 31294) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_invoice_invoice_string() != 49576) {
+    if (uniffi_rgblibuniffi_checksum_method_invoice_invoice_string() != 25144) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_recipientinfo_network() != 1106) {
+    if (uniffi_rgblibuniffi_checksum_method_recipientinfo_network() != 22005) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_recipientinfo_recipient_type() != 53534) {
+    if (uniffi_rgblibuniffi_checksum_method_recipientinfo_recipient_type() != 3457) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_transportendpoint_transport_type() != 52347) {
+    if (uniffi_rgblibuniffi_checksum_method_transportendpoint_transport_type() != 33510) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_backup() != 60293) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_backup() != 41851) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_backup_info() != 938) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_backup_info() != 7253) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_blind_receive() != 34365) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_blind_receive() != 26641) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_create_utxos() != 59455) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_create_utxos() != 58778) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_create_utxos_begin() != 58076) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_create_utxos_begin() != 18787) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_create_utxos_end() != 37296) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_create_utxos_end() != 43077) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_delete_transfers() != 55560) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_delete_transfers() != 43847) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_drain_to() != 28781) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_drain_to() != 26199) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_drain_to_begin() != 37910) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_drain_to_begin() != 18017) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_drain_to_end() != 19119) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_drain_to_end() != 62328) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_fail_transfers() != 24813) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_fail_transfers() != 54189) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_address() != 51506) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_address() != 23668) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_asset_balance() != 34628) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_asset_balance() != 19662) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_asset_metadata() != 33881) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_asset_metadata() != 58573) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_btc_balance() != 29947) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_btc_balance() != 48437) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_media_dir() != 42269) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_media_dir() != 64429) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_wallet_data() != 14427) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_wallet_data() != 18071) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_get_wallet_dir() != 56411) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_get_wallet_dir() != 8726) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_go_online() != 36143) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_go_online() != 46399) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_issue_asset_cfa() != 10376) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_issue_asset_cfa() != 32318) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_issue_asset_nia() != 17069) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_issue_asset_nia() != 45243) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_issue_asset_uda() != 56590) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_issue_asset_uda() != 52344) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_list_assets() != 46965) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_list_assets() != 18027) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_list_transactions() != 56257) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_list_transactions() != 24012) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_list_transfers() != 36467) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_list_transfers() != 36530) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_list_unspents() != 4224) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_list_unspents() != 3915) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_refresh() != 41719) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_refresh() != 61710) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send() != 54460) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send() != 10938) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send_begin() != 21520) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send_begin() != 896) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send_btc() != 47940) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send_btc() != 45183) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send_btc_begin() != 31034) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send_btc_begin() != 49369) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send_btc_end() != 58866) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send_btc_end() != 1792) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_send_end() != 34331) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_send_end() != 37107) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_sign_psbt() != 29982) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_sign_psbt() != 10485) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_method_wallet_witness_receive() != 47965) {
+    if (uniffi_rgblibuniffi_checksum_method_wallet_witness_receive() != 62755) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_constructor_invoice_from_invoice_data() != 43541) {
+    if (uniffi_rgblibuniffi_checksum_constructor_invoice_from_invoice_data() != 55197) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_constructor_invoice_new() != 56538) {
+    if (uniffi_rgblibuniffi_checksum_constructor_invoice_new() != 37528) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_constructor_recipientinfo_new() != 42681) {
+    if (uniffi_rgblibuniffi_checksum_constructor_recipientinfo_new() != 13462) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_constructor_transportendpoint_new() != 1325) {
+    if (uniffi_rgblibuniffi_checksum_constructor_transportendpoint_new() != 59385) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_rgblibffi_checksum_constructor_wallet_new() != 55128) {
+    if (uniffi_rgblibuniffi_checksum_constructor_wallet_new() != 49006) {
         return InitializationResult.apiChecksumMismatch
     }
 
     return InitializationResult.ok
-}
+}()
 
 private func uniffiEnsureInitialized() {
     switch initializationResult {
