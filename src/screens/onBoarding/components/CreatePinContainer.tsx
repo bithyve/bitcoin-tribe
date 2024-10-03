@@ -15,6 +15,8 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import RememberPasscode from './RememberPasscode';
 
 function CreatePinContainer() {
   const { OnBoarding } = useRoute().params;
@@ -26,6 +28,7 @@ function CreatePinContainer() {
   const [passcode, setPasscode] = useState('');
   const [confirmPasscode, setConfirmPasscode] = useState('');
   const [passcodeFlag, setPasscodeFlag] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [confirmPasscodeFlag, setConfirmPasscodeFlag] = useState(0);
   const createPin = useMutation(ApiHandler.createPin);
 
@@ -33,13 +36,7 @@ function CreatePinContainer() {
     if (createPin.error) {
       Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      if (OnBoarding) {
-        navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
-        // navigation.replace(NavigationRoutes.APPSTACK);
-      } else {
-        Toast(onBoarding.newPinCreated);
-        navigation.goBack();
-      }
+      setVisible(true);
     }
   }, [createPin.error, createPin.isSuccess, createPin.data]);
 
@@ -164,6 +161,31 @@ function CreatePinContainer() {
         keyColor={theme.colors.accent1}
         ClearIcon={<DeleteIcon />}
       />
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <RememberPasscode
+            title={onBoarding.rememberPasscodeTitle}
+            subTitle={onBoarding.rememberPasscodeSubTitle}
+            description={onBoarding.rememberPasscodeDesc}
+            onPress={() => {
+              if (OnBoarding) {
+                setVisible(false);
+                navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
+                // navigation.replace(NavigationRoutes.APPSTACK);
+              } else {
+                setVisible(false);
+                // Toast(onBoarding.newPinCreated);
+                navigation.goBack();
+              }
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </>
   );
 }
