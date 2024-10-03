@@ -68,12 +68,12 @@
 	<false/>
 	<key>NSUbiquitousContainers</key>
 	<dict>
-		<key>iCloud.com.bithyve.tribe.dev</key>
+		<key>iCloud.com.bithyve.tribe</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>TribeDev</string>
+			<string>Tribe</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>One</string>
 		</dict>

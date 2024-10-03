@@ -707,7 +707,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -742,7 +742,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tribe;
@@ -770,12 +770,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 485AC58566B87F360E691727 /* Pods-tribe-tribe-dev.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -785,7 +786,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -805,12 +806,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A325B060B4F784ECCE9D9E8E /* Pods-tribe-tribe-dev.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";
@@ -819,7 +821,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
