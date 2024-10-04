@@ -2,7 +2,6 @@ import React, { useContext, useMemo } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import { useMMKVString } from 'react-native-mmkv';
 
 import AppText from 'src/components/AppText';
@@ -22,7 +21,6 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import { RealmSchema } from 'src/storage/enum';
-import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import dbManager from 'src/storage/realm/dbManager';
 
 type walletDetailsHeaderProps = {

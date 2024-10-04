@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation, UseMutationResult } from 'react-query';
-import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
