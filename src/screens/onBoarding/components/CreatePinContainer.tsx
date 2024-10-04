@@ -166,6 +166,7 @@ function CreatePinContainer() {
           visible={visible}
           enableClose={true}
           onDismiss={() => setVisible(false)}
+          width={'100%'}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
           <RememberPasscode
