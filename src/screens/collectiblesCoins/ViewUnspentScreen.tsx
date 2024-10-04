@@ -70,6 +70,7 @@ const ViewUnspentScreen = () => {
             />
           </AppTouchable>
         )}
+        keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
           <EmptyStateView
             title={assets.noRGBUTXOsTitle}
