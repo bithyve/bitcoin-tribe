@@ -28,5 +28,4 @@ export enum RealmSchema {
   RGBUTXOSchema = 'RGBUTXOSchema',
   UnSpentOutpointSchema = 'UnSpentOutpointSchema',
   RGBAllocationSchema = 'RGBAllocationSchema',
-  UnspentRootObjectSchema = 'UnspentRootObjectSchema',
 }
