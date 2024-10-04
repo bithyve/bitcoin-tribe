@@ -48,8 +48,10 @@ function EnterPinContainer() {
       setPasscode('');
     } else if (biometricLogin.data) {
       setLoading(false);
-      setKey(biometricLogin.data);
-      navigation.replace(NavigationRoutes.APPSTACK);
+      setTimeout(() => {
+        setKey(biometricLogin.data);
+        navigation.replace(NavigationRoutes.APPSTACK);
+      }, 400);
     }
   }, [biometricLogin.error, biometricLogin.data]);
 
