@@ -23,6 +23,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import { RealmSchema } from 'src/storage/enum';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
+import dbManager from 'src/storage/realm/dbManager';
 
 type walletDetailsHeaderProps = {
   profile: string;
@@ -57,8 +58,10 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const { changeAddress: receivingAddress } =
     WalletOperations.getNextFreeChangeAddress(wallet);
 
-  const UnspentUTXOData = useQuery(RealmSchema.UnspentRootObjectSchema).map(
-    getJSONFromRealmObject,
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  // Deserialize each UTXO string back into an object
+  const UnspentUTXOData = storedWallet.unspentUTXOs.map(utxoStr =>
+    JSON.parse(utxoStr),
   );
 
   const totalBtcAmount = useMemo(() => {

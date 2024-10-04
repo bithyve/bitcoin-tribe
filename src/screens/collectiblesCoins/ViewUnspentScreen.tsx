@@ -19,7 +19,7 @@ import UnspentUTXOElement from './UnspentUTXOElement';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import { RealmSchema } from 'src/storage/enum';
-import { getJSONFromRealmObject } from 'src/storage/realm/utils';
+import dbManager from 'src/storage/realm/dbManager';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -30,8 +30,11 @@ const ViewUnspentScreen = () => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations;
-  const UnspentUTXOData = useQuery(RealmSchema.UnspentRootObjectSchema).map(
-    getJSONFromRealmObject,
+
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  // Deserialize each UTXO string back into an object
+  const UnspentUTXOData = storedWallet.unspentUTXOs.map(utxoStr =>
+    JSON.parse(utxoStr),
   );
 
   useEffect(() => {
