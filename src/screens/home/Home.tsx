@@ -5,6 +5,7 @@ import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation, UseMutationResult } from 'react-query';
+import { useMMKVString } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -27,7 +28,6 @@ import {
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
 import AppText from 'src/components/AppText';
 
 function HomeScreen() {
@@ -45,7 +45,7 @@ function HomeScreen() {
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const { mutate }: UseMutationResult<RgbUnspent[]> = useMutation(
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
     ApiHandler.viewUtxos,
   );
 
@@ -60,7 +60,7 @@ function HomeScreen() {
 
   useEffect(() => {
     refreshRgbWallet.mutate();
-    mutate();
+    fetchUTXOs();
     refreshWallet.mutate({
       wallets: [wallet],
     });
