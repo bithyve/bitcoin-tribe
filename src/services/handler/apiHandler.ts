@@ -628,7 +628,6 @@ export class ApiHandler {
   }
 
   static async viewUtxos() {
-    console.log('call viewUtxos');
     try {
       const response = await RGBServices.getUnspents();
       if (Array.isArray(response)) {
