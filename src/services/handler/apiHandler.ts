@@ -622,12 +622,11 @@ export class ApiHandler {
       });
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
+      console.log('check Version', error);
       throw new Error(error);
     }
   }
   static async viewUtxos() {
-    console.log('call viewUtxos');
     try {
       const response = await RGBServices.getUnspents();
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
