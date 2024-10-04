@@ -65,9 +65,10 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const totalBtcAmount = useMemo(() => {
     return UnspentUTXOData.reduce((total, item) => {
       // Check if utxo exists and if btcAmount is present
-      return (
-        total + (item.utxo && item.utxo.btcAmount ? item.utxo.btcAmount : 0)
-      );
+      if (item.utxo && item.utxo.colorable === true) {
+        return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
+      }
+      return total; // If the condition isn't met, return the total as is
     }, 0);
   }, [UnspentUTXOData]);
 
