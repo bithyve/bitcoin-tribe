@@ -10,16 +10,14 @@ import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RememberPasscode from './RememberPasscode';
 
 function CreatePinContainer() {
-  const { OnBoarding } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -146,12 +144,7 @@ function CreatePinContainer() {
           primaryTitle={common.proceed}
           primaryOnPress={() => createPin.mutate(passcode)}
           secondaryTitle={common.cancel}
-          secondaryOnPress={() =>
-            // OnBoarding
-            //   ? navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN) //navigation.replace(NavigationRoutes.APPSTACK)
-            // :
-            navigation.goBack()
-          }
+          secondaryOnPress={() => navigation.goBack()}
           disabled={disbleProceed}
           width={wp(120)}
         />
@@ -175,15 +168,9 @@ function CreatePinContainer() {
             subTitle={onBoarding.rememberPasscodeSubTitle}
             description={onBoarding.rememberPasscodeDesc}
             onPress={() => {
-              if (OnBoarding) {
-                setVisible(false);
-                navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
-                // navigation.replace(NavigationRoutes.APPSTACK);
-              } else {
-                setVisible(false);
-                // Toast(onBoarding.newPinCreated);
-                navigation.goBack();
-              }
+              setVisible(false);
+              // Toast(onBoarding.newPinCreated);
+              navigation.goBack();
             }}
           />
         </ResponsePopupContainer>

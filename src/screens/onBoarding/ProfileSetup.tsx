@@ -58,9 +58,6 @@ function ProfileSetup({ navigation }) {
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
     navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
-    // navigation.replace(NavigationRoutes.CREATEPIN, {
-    //   OnBoarding: true,
-    // });
   };
 
   const initiateWalletCreation = () => {

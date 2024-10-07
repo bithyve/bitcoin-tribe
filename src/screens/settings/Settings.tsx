@@ -128,10 +128,7 @@ function SettingsScreen({ navigation }) {
       id: 5,
       title: settings.setPasscodeTitle,
       icon: <SetPasscode />,
-      onPress: () =>
-        navigation.navigate(NavigationRoutes.CREATEPIN, {
-          OnBoarding: false,
-        }),
+      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     // TO DO - will implement theme functionality.  This commented temporarily
