@@ -312,11 +312,11 @@ object RGBHelper {
 //                }
 //            }
             Log.d(TAG, "Backup operation completed")
-            return ""
+            return "{}"
         }catch (e: Exception){
             Log.d(TAG, "Exception: ${e}")
 
-            return ""
+            return "{error: '$e'}"
         }
     }
 
