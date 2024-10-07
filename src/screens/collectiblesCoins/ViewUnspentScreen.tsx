@@ -32,7 +32,7 @@ const ViewUnspentScreen = () => {
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   // Deserialize each UTXO string back into an object
-  const UnspentUTXOData = storedWallet.unspentUTXOs.map(utxoStr =>
+  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
   );
 
