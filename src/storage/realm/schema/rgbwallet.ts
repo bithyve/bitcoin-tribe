@@ -21,7 +21,7 @@ export const RgbWalletSchema: ObjectSchema = {
     accountXpubFingerprint: 'string',
     rgbDir: 'string?',
     receiveData: `${RealmSchema.ReceiveData}?`,
-    unspentUTXOs: 'string?[]',
+    utxos: 'string?[]',
   },
   primaryKey: 'mnemonic',
 };

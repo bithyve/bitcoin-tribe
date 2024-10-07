@@ -10,7 +10,7 @@ export interface RGBWallet {
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
-  unspentUTXOs: unspentUTXOs;
+  utxos: utxosRoot;
 }
 
 // Define the structure of an object in the rgbAllocations array
@@ -34,7 +34,7 @@ interface Utxo {
 }
 
 // Define the unspentUTXOs interface
-export interface unspentUTXOs {
+export interface utxosRoot {
   rgbAllocations: RgbAllocation[][]; // Array of array of RgbAllocation objects
   utxo: Utxo; // UTXO object
 }

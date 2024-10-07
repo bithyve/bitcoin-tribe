@@ -634,7 +634,7 @@ export class ApiHandler {
       );
 
       // Serialize the response to a JSON string for storage
-      const serializedUtxos = response.map(utxo => JSON.stringify(utxo));
+      const utxosData = response.map(utxo => JSON.stringify(utxo));
 
       // Update the RgbWallet object with the serialized unspentUTXOs
       dbManager.updateObjectByPrimaryId(
@@ -642,13 +642,13 @@ export class ApiHandler {
         'mnemonic',
         rgbWallet.mnemonic,
         {
-          unspentUTXOs: serializedUtxos, // Store the serialized array
+          utxos: utxosData, // Store the serialized array
         },
       );
 
       return response;
     } catch (error) {
-      console.log('unspentUTXOs', error);
+      console.log('utxos', error);
       throw new Error(error);
     }
   }
