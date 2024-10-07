@@ -73,10 +73,10 @@ function LoginStack() {
         name={NavigationRoutes.ENTERSEEDSCREEN}
         component={EnterSeedScreen}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={NavigationRoutes.ONBOARDINGSCREEN}
         component={OnBoardingScreen}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
@@ -217,6 +217,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.SELECTASSETTOSEND}
           component={SelectAssetToSend}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ONBOARDINGSCREEN}
+          component={OnBoardingScreen}
         />
       </Stack.Navigator>
     </RealmProvider>

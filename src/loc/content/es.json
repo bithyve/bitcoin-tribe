@@ -154,7 +154,8 @@
     "langNoteSubTitle": "El soporte de idiomas está en versión beta. ¡Apreciamos sus comentarios!",
     "biometricsNotEnableMsg": "Biometría no habilitada.\nPor favor, ve a la configuración y actívala",
     "EnterPasscode": "Introduce el código",
-    "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla"
+    "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
+    "setPasscodeTitle": "Establecer código"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",

@@ -145,11 +145,12 @@ function CreatePinContainer() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => createPin.mutate(passcode)}
-          secondaryTitle={OnBoarding ? common.skip : 'Cancel'}
+          secondaryTitle={common.cancel}
           secondaryOnPress={() =>
-            OnBoarding
-              ? navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN) //navigation.replace(NavigationRoutes.APPSTACK)
-              : navigation.goBack()
+            // OnBoarding
+            //   ? navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN) //navigation.replace(NavigationRoutes.APPSTACK)
+            // :
+            navigation.goBack()
           }
           disabled={disbleProceed}
           width={wp(120)}
