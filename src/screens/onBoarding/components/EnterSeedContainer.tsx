@@ -123,7 +123,6 @@ function EnterSeedContainer() {
     }
   };
   const seedItem = (item: seedWordItem, index: number) => {
-    console.log('item', item.invalid);
     return (
       <View removeClippedSubviews style={styles.inputListWrapper}>
         <TextInput
