@@ -634,7 +634,7 @@ export class ApiHandler {
       );
 
       // Serialize the response to a JSON string for storage
-      const utxosData = response.map(utxo => utxo);
+      const utxosData = response.map(utxo => JSON.stringify(utxo));
 
       // Update the RgbWallet object with the UTXOs
       dbManager.updateObjectByPrimaryId(
