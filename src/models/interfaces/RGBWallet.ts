@@ -10,6 +10,33 @@ export interface RGBWallet {
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
+  utxos: utxosRoot;
+}
+
+// Define the structure of an object in the rgbAllocations array
+interface RgbAllocation {
+  key: string;
+  value: any; // Adjust the type as needed, can be 'number', 'string', or other specific types
+}
+
+// Define the structure of the Outpoint object
+interface Outpoint {
+  txid: string; // Example field, represents a transaction ID
+  index: number; // Example field, represents an output index
+}
+
+// Define the structure of the UTXO object
+interface Utxo {
+  btcAmount: number;
+  colorable: boolean;
+  exists: boolean;
+  outpoint: Outpoint[]; // Array of Outpoint objects
+}
+
+// Define the unspentUTXOs interface
+export interface utxosRoot {
+  rgbAllocations: RgbAllocation[][]; // Array of array of RgbAllocation objects
+  utxo: Utxo; // UTXO object
 }
 
 interface Balance {

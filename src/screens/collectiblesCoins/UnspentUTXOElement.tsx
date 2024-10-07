@@ -37,7 +37,7 @@ function UnspentUTXOElement(props: UnspentUTXOElementProps) {
         </View>
         <View style={styles.amtWrapper}>
           <AppText variant="body2" style={styles.amountText}>
-            SATS &nbsp;{satsAmount}
+            &nbsp;{satsAmount} sats
           </AppText>
         </View>
       </View>

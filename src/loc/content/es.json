@@ -32,7 +32,8 @@
     "commingSoonSubTitle": "Prepárate para disfrutar de activos basados \nen bitcoin con tus amigos y familiares.",
     "backup": "Copia de seguridad",
     "addFunds": "Añadir fondos",
-    "addLater": "Añadir más tarde"
+    "addLater": "Añadir más tarde",
+    "continue": "Continuar"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -64,7 +65,10 @@
     "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo",
     "btcBackedAssetTitle": "Activos respaldados por Bitcoin",
     "btcBackedAssetSubTitle": "El protocolo RGB permite a cualquiera emitir, enviar o recibir activos sobre la cadena de bloques más segura.",
-    "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos."
+    "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos.",
+    "rememberPasscodeTitle": "Recuerda tu código",
+    "rememberPasscodeSubTitle": "Recuerda tu código y haz una copia de seguridad de la aplicación escribiendo la clave de recuperación de 12 palabras",
+    "rememberPasscodeDesc": "Si olvidas tu código, quedarás bloqueado fuera de la aplicación y tendrás que recuperarlo"
   },
   "home": {
     "addAssets": "Agregar activos",

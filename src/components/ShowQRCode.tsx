@@ -5,6 +5,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
+import Colors from 'src/theme/Colors';
 
 type ShowQRCodeProps = {
   value: string;
@@ -34,7 +35,7 @@ const getStyles = theme =>
   StyleSheet.create({
     qrViewWrapper: {
       alignSelf: 'center',
-      backgroundColor: theme.colors.cardGradient3,
+      backgroundColor: Colors.White,
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: wp(35),

@@ -32,7 +32,8 @@
     "commingSoonSubTitle": "ビットコインベースの資産を友人や家族と楽しむ準備をしましょう。",
     "backup": "バックアップ",
     "addFunds": "資金を追加",
-    "addLater": "後で追加"
+    "addLater": "後で追加",
+    "continue": "続ける"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -64,7 +65,10 @@
     "mismatchPasscode": "パスコードが一致しません。もう一度お試しください",
     "btcBackedAssetTitle": "ビットコイン担保資産",
     "btcBackedAssetSubTitle": "RGBプロトコルは、誰でも最も安全なブロックチェーン上で資産を発行、送信、または受信できるようにします",
-    "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。"
+    "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。",
+    "rememberPasscodeTitle": "パスコードを覚えておいてください",
+    "rememberPasscodeSubTitle": "パスコードを覚え、12単語のリカバリーキーを書き留めてアプリをバックアップしてください",
+    "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です"
   },
   "home": {
     "addAssets": "アセットを追加",

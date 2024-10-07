@@ -622,48 +622,33 @@ export class ApiHandler {
       });
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
+      console.log('check Version', error);
       throw new Error(error);
     }
   }
-
   static async viewUtxos() {
     try {
       const response = await RGBServices.getUnspents();
-      if (Array.isArray(response)) {
-        response.forEach(dataItem => {
-          const existingUtxo = dbManager.getObjectByTxid(
-            RealmSchema.UnspentRootObjectSchema,
-            dataItem.utxo.outpoint.txid, // Query by unique identifier (txid)
-          );
+      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
 
-          if (existingUtxo) {
-            // If the data exists, check if it's different, then update
-            if (JSON.stringify(existingUtxo) !== JSON.stringify(dataItem)) {
-              dbManager.updateObject(
-                RealmSchema.UnspentRootObjectSchema,
-                existingUtxo,
-                {
-                  utxo: dataItem.utxo,
-                  rgbAllocations: dataItem.rgbAllocations,
-                },
-              );
-            }
-          } else {
-            // If the data does not exist, create it
-            dbManager.createObject(RealmSchema.UnspentRootObjectSchema, {
-              utxo: dataItem.utxo,
-              rgbAllocations: dataItem.rgbAllocations,
-            });
-          }
-        });
-      } else {
-        console.error('Response is not an array:', response);
-      }
+      // Serialize the response to a JSON string for storage
+      const utxosData = response.map(utxo => utxo);
+
+      // Update the RgbWallet object with the UTXOs
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.RgbWallet,
+        'mnemonic',
+        rgbWallet.mnemonic,
+        {
+          utxos: utxosData, // Store the array
+        },
+      );
 
       return response;
     } catch (error) {
-      console.log('Update Profile', error);
+      console.log('utxos', error);
       throw new Error(error);
     }
   }
