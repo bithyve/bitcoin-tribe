@@ -50,7 +50,7 @@ function SettingsScreen({ navigation }) {
   const [biometrics, setBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
-  console.log('key', key);
+
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
       setBiometrics(true);
@@ -132,7 +132,7 @@ function SettingsScreen({ navigation }) {
         navigation.navigate(NavigationRoutes.CREATEPIN, {
           OnBoarding: false,
         }),
-      hideMenu: key.length > 1,
+      hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     // TO DO - will implement theme functionality.  This commented temporarily
     // {
