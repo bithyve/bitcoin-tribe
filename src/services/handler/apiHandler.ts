@@ -634,15 +634,15 @@ export class ApiHandler {
       );
 
       // Serialize the response to a JSON string for storage
-      const utxosData = response.map(utxo => JSON.stringify(utxo));
+      const utxosData = response.map(utxo => utxo);
 
-      // Update the RgbWallet object with the serialized unspentUTXOs
+      // Update the RgbWallet object with the UTXOs
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',
         rgbWallet.mnemonic,
         {
-          utxos: utxosData, // Store the serialized array
+          utxos: utxosData, // Store the array
         },
       );
 
