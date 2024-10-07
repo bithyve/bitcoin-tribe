@@ -16,7 +16,7 @@ function ScanAssetScreen({ route, navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
-  console.log('item scan', item);
+
   return (
     <ScreenContainer>
       <AppHeader

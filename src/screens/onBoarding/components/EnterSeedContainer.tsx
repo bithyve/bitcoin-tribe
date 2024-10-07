@@ -33,6 +33,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Fonts from 'src/constants/Fonts';
 
 type seedWordItem = {
   id: number;
@@ -122,7 +123,6 @@ function EnterSeedContainer() {
     }
   };
   const seedItem = (item: seedWordItem, index: number) => {
-    console.log('item', item.invalid);
     return (
       <View removeClippedSubviews style={styles.inputListWrapper}>
         <TextInput
@@ -149,8 +149,11 @@ function EnterSeedContainer() {
             // },
           ]}
           underlineStyle={styles.underlineStyle}
-          contentStyle={[CommonStyles.textFieldLabel, styles.textStyles]}
-          placeholder={`Enter ${getPlaceholder(index)} word`}
+          contentStyle={[
+            styles.textStyles,
+            { fontFamily: item?.name ? Fonts.LufgaRegular : 'Arial' },
+          ]}
+          placeholder={`Enter ${getPlaceholderSuperScripted(index)} word`}
           value={item?.name}
           returnKeyType={isSeedFilled(12) ? 'done' : 'next'}
           autoCapitalize="none"
@@ -360,6 +363,8 @@ const getStyles = (theme: AppTheme) =>
     },
     textStyles: {
       color: theme.colors.headingColor,
+      fontSize: 16,
+      fontWeight: '400',
     },
     underlineStyle: {
       backgroundColor: 'transparent',

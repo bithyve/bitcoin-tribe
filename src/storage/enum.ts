@@ -25,8 +25,4 @@ export enum RealmSchema {
   CollectibleMedia = 'CollectibleMedia',
   BackupHistory = 'BackupHistory',
   CloudBackupHistory = 'CloudBackupHistory',
-  RGBUTXOSchema = 'RGBUTXOSchema',
-  UnSpentOutpointSchema = 'UnSpentOutpointSchema',
-  RGBAllocationSchema = 'RGBAllocationSchema',
-  UnspentRootObjectSchema = 'UnspentRootObjectSchema',
 }

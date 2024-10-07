@@ -32,7 +32,8 @@
     "commingSoonSubTitle": "Get ready to enjoy bitcoin-based \nassets with your friends and family.",
     "backup": "Backup",
     "addFunds": "Add Funds",
-    "addLater": "Add Later"
+    "addLater": "Add Later",
+    "continue": "Continue"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -64,7 +65,10 @@
     "mismatchPasscode": "Passcodes do not match. \nPlease try again",
     "btcBackedAssetTitle": "Bitcoin Backed Assets",
     "btcBackedAssetSubTitle": "RGB protocol enables anyone to issue, send or receive assets on top of the most secure blockchain.",
-    "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets."
+    "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets.",
+    "rememberPasscodeTitle": "Remember your passcode",
+    "rememberPasscodeSubTitle": "Please remember your passcode and backup your app by writing down the 12-word recovery key",
+    "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it."
   },
   "home": {
     "addAssets": "Add Assets",

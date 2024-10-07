@@ -18,6 +18,7 @@ type popupContainerProps = {
   height?: string;
   backColor: string;
   borderColor: string;
+  width?: string;
 };
 
 const ResponsePopupContainer = (props: popupContainerProps) => {
@@ -32,9 +33,10 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     conatinerModalStyle,
     backColor,
     borderColor,
+    width = '95%',
   } = props;
 
-  const styles = getStyles(theme, backColor, borderColor);
+  const styles = getStyles(theme, backColor, borderColor, width);
 
   return (
     <View style={styles.container}>
@@ -47,7 +49,11 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>
         <View style={styles.modalContainer}>
-          <View style={styles.headingWrapper}>
+          <View
+            style={[
+              styles.headingWrapper,
+              { marginBottom: title || subTitle ? hp(50) : 0 },
+            ]}>
             <View style={styles.contentWrapper}>
               {title ? (
                 <AppText variant="heading1" style={styles.titleText}>
@@ -67,7 +73,7 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     </View>
   );
 };
-const getStyles = (theme: AppTheme, backColor, borderColor) =>
+const getStyles = (theme: AppTheme, backColor, borderColor, width) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -81,7 +87,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       // backgroundColor: theme.colors.primaryBackground,
     },
     modalContainer: {
-      width: '95%',
+      width: width,
       padding: 20,
       backgroundColor: backColor,
       borderRadius: 30,
@@ -92,7 +98,6 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
     headingWrapper: {
       flexDirection: 'row',
       width: '100%',
-      marginBottom: hp(50),
     },
     contentWrapper: {
       width: '90%',

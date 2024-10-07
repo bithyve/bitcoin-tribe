@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useQuery as realmUseQuery } from '@realm/react';
+import { useMutation, UseMutationResult } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { wp, windowHeight } from 'src/constants/responsive';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
@@ -12,8 +13,9 @@ import BuyModal from './components/BuyModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery as realmUseQuery } from '@realm/react';
 import useWallets from 'src/hooks/useWallets';
+import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh = false } = route.params || {};
@@ -24,6 +26,14 @@ function WalletDetails({ navigation, route }) {
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
+
+  useEffect(() => {
+    fetchUTXOs();
+  }, []);
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.walletHeaderWrapper}>

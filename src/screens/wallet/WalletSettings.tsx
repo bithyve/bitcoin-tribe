@@ -3,12 +3,13 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useMutation } from 'react-query';
+import { useMutation, UseMutationResult } from 'react-query';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import SelectOption from 'src/components/SelectOption';
+import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 
 function WalletSettings() {
   const { translations } = useContext(LocalizationContext);
@@ -18,13 +19,22 @@ function WalletSettings() {
     ApiHandler.receiveTestSats,
   );
 
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
+
   useEffect(() => {
     if (isSuccess) {
       Toast(strings.testSatsRecived);
+      fetchUTXOs();
     } else if (isError) {
       Toast(strings.failedTestSatsRecived, true);
     }
   }, [isError, isSuccess]);
+
+  useEffect(() => {
+    fetchUTXOs();
+  }, []);
 
   return (
     <ScreenContainer>
