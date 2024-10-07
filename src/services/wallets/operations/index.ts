@@ -52,6 +52,8 @@ const validator = (
   signature: Buffer,
 ): boolean => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
 
+const TESTNET_FEE_CUTOFF = 10;
+
 const testnetFeeSurcharge = (wallet: Wallet | Vault) =>
   /* !! TESTNET ONLY !!
      as the redeem script for vault is heavy(esp. 3-of-5/3-of-6),
@@ -564,21 +566,21 @@ export default class WalletOperations {
     // high fee: 10 minutes
     const highFeeBlockEstimate = 1;
     const high = {
-      feePerByte: 50,
+      feePerByte: 5,
       estimatedBlocks: highFeeBlockEstimate,
     };
 
     // medium fee: 30 mins
     const mediumFeeBlockEstimate = 3;
     const medium = {
-      feePerByte: 25,
+      feePerByte: 3,
       estimatedBlocks: mediumFeeBlockEstimate,
     };
 
     // low fee: 60 mins
     const lowFeeBlockEstimate = 6;
     const low = {
-      feePerByte: 12,
+      feePerByte: 1,
       estimatedBlocks: lowFeeBlockEstimate,
     };
     const feeRatesByPriority = { high, medium, low };
@@ -613,6 +615,13 @@ export default class WalletOperations {
         ),
         estimatedBlocks: lowFeeBlockEstimate,
       };
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
 
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
@@ -664,7 +673,13 @@ export default class WalletOperations {
         feePerByte: mempoolFee.hourFee,
         estimatedBlocks: lowFeeBlockEstimate,
       };
-
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
     } catch (err) {
