@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import PinInputsView from 'src/components/PinInputsView';
@@ -48,10 +48,13 @@ function EnterPinContainer() {
       setPasscode('');
     } else if (biometricLogin.data) {
       setLoading(false);
-      setTimeout(() => {
-        setKey(biometricLogin.data);
-        navigation.replace(NavigationRoutes.APPSTACK);
-      }, 400);
+      setKey(biometricLogin.data);
+      setTimeout(
+        () => {
+          navigation.replace(NavigationRoutes.APPSTACK);
+        },
+        Platform.OS === 'ios' ? 400 : 100,
+      );
     }
   }, [biometricLogin.error, biometricLogin.data]);
 
