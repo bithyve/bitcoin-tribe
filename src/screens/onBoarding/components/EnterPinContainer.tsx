@@ -36,6 +36,7 @@ function EnterPinContainer() {
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
   const [loading, setLoading] = useState(false);
+  const [primaryCTALoading, setPrimaryCTALoading] = useState(false);
 
   useEffect(() => {
     biometricAuth();
@@ -60,13 +61,15 @@ function EnterPinContainer() {
 
   useEffect(() => {
     if (login.error) {
-      Toast(onBoarding.invalidPin, true);
+      setPrimaryCTALoading(false);
       setPasscode('');
+      Toast(onBoarding.invalidPin, true);
     } else if (login.data) {
+      setPrimaryCTALoading(false);
       setKey(login.data);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
-  }, [login.error, login.data, login.data]);
+  }, [login.error, login.data]);
 
   const biometricAuth = async () => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -118,12 +121,20 @@ function EnterPinContainer() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => login.mutate(passcode)}
+          primaryOnPress={() => {
+            setPrimaryCTALoading(true);
+            login.mutate(passcode);
+          }}
           // secondaryTitle={common.cancel}
           // secondaryOnPress={() => navigation.goBack()}
-          disabled={passcode === '' || passcode.length !== 4 || login.isLoading}
+          disabled={
+            passcode === '' ||
+            passcode.length !== 4 ||
+            login.isLoading ||
+            primaryCTALoading
+          }
           width={wp(120)}
-          primaryLoading={login.isLoading}
+          primaryLoading={login.isLoading || primaryCTALoading}
         />
       </View>
       <KeyPadView
