@@ -70,7 +70,7 @@ function EnterPinContainer() {
     } else if (login.data) {
       setPrimaryCTALoading(false);
       setKey(login.data.key);
-      setCheckRGBWalletOnline(biometricLogin.data.checkRGBWalletOnline);
+      setCheckRGBWalletOnline(login.data.checkRGBWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [login.error, login.data]);
