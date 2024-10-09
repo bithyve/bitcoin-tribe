@@ -33,7 +33,8 @@
     "backup": "备份",
     "addFunds": "添加资金",
     "addLater": "稍后添加",
-    "continue": "继续"
+    "continue": "继续",
+    "noInternet": "无网络连接"
   },
   "onBoarding": {
     "welcome": "欢迎",

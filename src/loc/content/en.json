@@ -33,7 +33,8 @@
     "backup": "Backup",
     "addFunds": "Add Funds",
     "addLater": "Add Later",
-    "continue": "Continue"
+    "continue": "Continue",
+    "noInternet": "No network connection"
   },
   "onBoarding": {
     "welcome": "Welcome",

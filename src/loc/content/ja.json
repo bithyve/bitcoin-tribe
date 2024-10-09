@@ -33,7 +33,8 @@
     "backup": "バックアップ",
     "addFunds": "資金を追加",
     "addLater": "後で追加",
-    "continue": "続ける"
+    "continue": "続ける",
+    "noInternet": "ネットワーク接続がありません"
   },
   "onBoarding": {
     "welcome": "ようこそ",

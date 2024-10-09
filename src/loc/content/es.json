@@ -33,7 +33,8 @@
     "backup": "Copia de seguridad",
     "addFunds": "Añadir fondos",
     "addLater": "Añadir más tarde",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "noInternet": "Sin conexión de red"
   },
   "onBoarding": {
     "welcome": "Bienvenido",

@@ -33,7 +33,8 @@
     "backup": "Backup",
     "addFunds": "Aggiungi fondi",
     "addLater": "Aggiungi più tardi",
-    "continue": "Continua"
+    "continue": "Continua",
+    "noInternet": "Nessuna connessione di rete"
   },
   "onBoarding": {
     "welcome": "Benvenuto",

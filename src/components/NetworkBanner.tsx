@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const NetworkBanner = () => {
   const [isConnected, setIsConnected] = useState(true);
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -19,7 +22,7 @@ const NetworkBanner = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.banner}>
-        <Text style={styles.text}>No network connection</Text>
+        <Text style={styles.text}>{common.noInternet}</Text>
       </View>
     </SafeAreaView>
   );
