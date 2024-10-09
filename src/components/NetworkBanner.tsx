@@ -2,16 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
 
 const NetworkBanner = () => {
   const [isConnected, setIsConnected] = useState(true);
-  const [checkRGBWalletOnline] = useMMKVString(Keys.RGB_WALLET_ONLINE);
-  console.log('checkRGBWalletOnline', checkRGBWalletOnline);
-  //   useEffect(()=>{
-
-  //   })
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
