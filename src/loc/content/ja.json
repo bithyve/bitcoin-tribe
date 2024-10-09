@@ -34,7 +34,8 @@
     "addFunds": "資金を追加",
     "addLater": "後で追加",
     "continue": "続ける",
-    "noInternet": "ネットワーク接続がありません"
+    "noInternet": "ネットワーク接続がありません",
+    "rgbWalletOffline": "RGBウォレットはオフラインです。"
   },
   "onBoarding": {
     "welcome": "ようこそ",

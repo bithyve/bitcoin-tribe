@@ -34,7 +34,8 @@
     "addFunds": "Añadir fondos",
     "addLater": "Añadir más tarde",
     "continue": "Continuar",
-    "noInternet": "Sin conexión de red"
+    "noInternet": "Sin conexión de red",
+    "rgbWalletOffline": "La billetera RGB está desconectada."
   },
   "onBoarding": {
     "welcome": "Bienvenido",

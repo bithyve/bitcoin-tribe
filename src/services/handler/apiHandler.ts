@@ -109,7 +109,10 @@ export class ApiHandler {
           primaryMnemonic,
         );
         dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-        await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
+        const checkRGBWalletOnline = await RGBServices.initiate(
+          rgbWallet.mnemonic,
+          rgbWallet.accountXpub,
+        );
         Storage.set(Keys.APPID, appID);
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
@@ -137,8 +140,11 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
-    return key;
+    const checkRGBWalletOnline = await RGBServices.initiate(
+      rgbWallet.mnemonic,
+      rgbWallet.accountXpub,
+    );
+    return { key, checkRGBWalletOnline };
   }
 
   static async createPin(pin: string) {
@@ -167,8 +173,11 @@ export class ApiHandler {
       const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-      await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
-      return key;
+      const checkRGBWalletOnline = await RGBServices.initiate(
+        rgbWallet.mnemonic,
+        rgbWallet.accountXpub,
+      );
+      return { key, checkRGBWalletOnline };
     } catch (error) {
       throw new Error('Invalid PIN');
     }
@@ -191,8 +200,11 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    await RGBServices.initiate(rgbWallet.mnemonic, rgbWallet.accountXpub);
-    return key;
+    const checkRGBWalletOnline = await RGBServices.initiate(
+      rgbWallet.mnemonic,
+      rgbWallet.accountXpub,
+    );
+    return { key, checkRGBWalletOnline };
   }
 
   static async createNewWallet({

@@ -32,7 +32,7 @@ function EnterPinContainer() {
   const [passcodeFlag, setPasscodeFlag] = useState(true);
   const login = useMutation(ApiHandler.loginWithPin);
   const biometricLogin = useMutation(ApiHandler.biometricLogin);
-  const { setKey } = useContext(AppContext);
+  const { setKey, setCheckRGBWalletOnline } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
   const [loading, setLoading] = useState(false);
@@ -43,13 +43,15 @@ function EnterPinContainer() {
   }, []);
 
   useEffect(() => {
+    console.log('biometricLogin.data', biometricLogin.data);
     if (biometricLogin.error) {
       setLoading(false);
       Toast(onBoarding.failToVerify, true);
       setPasscode('');
     } else if (biometricLogin.data) {
       setLoading(false);
-      setKey(biometricLogin.data);
+      setKey(biometricLogin.data.key);
+      setCheckRGBWalletOnline(biometricLogin.data.checkRGBWalletOnline);
       setTimeout(
         () => {
           navigation.replace(NavigationRoutes.APPSTACK);
@@ -60,13 +62,15 @@ function EnterPinContainer() {
   }, [biometricLogin.error, biometricLogin.data]);
 
   useEffect(() => {
+    // console.log('login.data', login.data);
     if (login.error) {
       setPrimaryCTALoading(false);
       setPasscode('');
       Toast(onBoarding.invalidPin, true);
     } else if (login.data) {
       setPrimaryCTALoading(false);
-      setKey(login.data);
+      setKey(login.data.key);
+      setCheckRGBWalletOnline(biometricLogin.data.checkRGBWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [login.error, login.data]);

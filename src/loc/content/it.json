@@ -34,7 +34,8 @@
     "addFunds": "Aggiungi fondi",
     "addLater": "Aggiungi più tardi",
     "continue": "Continua",
-    "noInternet": "Nessuna connessione di rete"
+    "noInternet": "Nessuna connessione di rete",
+    "rgbWalletOffline": "Il portafoglio RGB è offline."
   },
   "onBoarding": {
     "welcome": "Benvenuto",
