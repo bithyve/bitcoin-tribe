@@ -43,7 +43,6 @@ function EnterPinContainer() {
   }, []);
 
   useEffect(() => {
-    console.log('biometricLogin.data', biometricLogin.data);
     if (biometricLogin.error) {
       setLoading(false);
       Toast(onBoarding.failToVerify, true);
@@ -62,7 +61,6 @@ function EnterPinContainer() {
   }, [biometricLogin.error, biometricLogin.data]);
 
   useEffect(() => {
-    // console.log('login.data', login.data);
     if (login.error) {
       setPrimaryCTALoading(false);
       setPasscode('');
