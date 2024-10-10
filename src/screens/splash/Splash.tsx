@@ -22,11 +22,7 @@ function Splash({ navigation }) {
     try {
       const appId = await Storage.get(Keys.APPID);
       if (appId) {
-        if (pinMethod === PinMethod.DEFAULT) {
-          mutate();
-        } else {
-          navigation.replace(NavigationRoutes.LOGIN);
-        }
+        navigation.replace(NavigationRoutes.LOGIN);
       } else {
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
@@ -34,6 +30,21 @@ function Splash({ navigation }) {
       console.error('Error initializing app: ', error);
     }
   }, [mutate, navigation, pinMethod]);
+
+  useEffect(() => {
+    const fetchAppId = async () => {
+      try {
+        const appId = await Storage.get(Keys.APPID);
+        if (appId && pinMethod === PinMethod.DEFAULT) {
+          mutate();
+        }
+      } catch (error) {
+        console.error('Error fetching appId:', error);
+      }
+    };
+
+    fetchAppId();
+  }, []);
 
   // Handle login success
   useEffect(() => {
