@@ -45,6 +45,12 @@ type CustomColors = {
   successPopupBorderColor: string;
   disableCTATitle: string;
   greenText: string;
+  accent4: string;
+  accent5: string;
+  tagText: string;
+  secondaryCTAGradient1: string;
+  secondaryCTAGradient2: string;
+  secondaryCTAGradient3: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -75,6 +81,7 @@ const CombinedDefaultTheme: AppTheme = {
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
+    tagText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
     accent2: Colors.BrandeisBlue,
     activeTabColor: Colors.BrandeisBlue,
@@ -89,6 +96,11 @@ const CombinedDefaultTheme: AppTheme = {
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
     cardBackground: Colors.White,
+    accent4: Colors.Golden,
+    accent5: Colors.TurquoiseBlue,
+    secondaryCTAGradient1: Colors.Lavender,
+    secondaryCTAGradient2: Colors.Lavender,
+    secondaryCTAGradient3: Colors.Lavender,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
@@ -136,6 +148,7 @@ const CombinedDarkTheme: AppTheme = {
     profileBackground: Colors.Black,
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
+    tagText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
     accent2: Colors.TurquoiseBlue,
     activeTabColor: Colors.White,
@@ -150,6 +163,11 @@ const CombinedDarkTheme: AppTheme = {
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
     cardBackground: Colors.RaisinBlack,
+    accent4: Colors.Golden,
+    accent5: Colors.TurquoiseBlue,
+    secondaryCTAGradient1: Colors.EerieBlack,
+    secondaryCTAGradient2: Colors.VampireBlack,
+    secondaryCTAGradient3: Colors.ChineseBlack,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
