@@ -22,7 +22,7 @@ import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import Toast from 'src/components/Toast';
 import * as SecureStore from 'src/storage/secure-store';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+// import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 
 const RNBiometrics = new ReactNativeBiometrics();
@@ -123,18 +123,18 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
     // TO DO - will implement theme functionality.  This commented temporarily
-    // {
-    //   id: 1,
-    //   title: settings.darkMode,
-    //   icon: <IconDarkMode />,
-    //   onValueChange: () => setDarkTheme(!darkTheme),
-    //   toggleValue: !darkTheme,
-    //   enableSwitch: true,
-    //   testID: 'dark_mode',
-    //   onPress: () => setDarkTheme(!darkTheme),
-    // },
     {
       id: 5,
+      title: settings.darkMode,
+      icon: <IconDarkMode />,
+      onValueChange: () => setDarkTheme(!darkTheme),
+      toggleValue: !darkTheme,
+      enableSwitch: true,
+      testID: 'dark_mode',
+      onPress: () => setDarkTheme(!darkTheme),
+    },
+    {
+      id: 6,
       title: settings.biometricUnlock,
       icon: <IconBiometric />,
       onValueChange: toggleBiometrics,
@@ -152,7 +152,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 6,
+      id: 7,
       title: settings.appInfo,
       icon: <IconAppInfo />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),

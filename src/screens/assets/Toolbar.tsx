@@ -4,11 +4,14 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import GoBack from 'src/assets/images/icon_back.svg';
+import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
 import { windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 type ToolbarProps = {
   onPress: () => void;
@@ -17,12 +20,13 @@ type ToolbarProps = {
 function Toolbar(props: ToolbarProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { onPress } = props;
   return (
     <View style={styles.headerWrapper}>
       <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
-        {<GoBack />}
+        {!isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
         <AppText style={styles.text} variant="heading1">

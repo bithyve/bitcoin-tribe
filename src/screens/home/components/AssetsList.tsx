@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
@@ -13,6 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -64,6 +67,7 @@ const Item = ({
 
 function AssetsList(props: AssetsListProps) {
   const { listData, onPressAsset, onPressAddNew } = props;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -132,8 +136,14 @@ function AssetsList(props: AssetsListProps) {
           </View>
         )}
       />
-      <AppTouchable style={styles.addNewIconWrapper} onPress={onPressAddNew}>
-        <AddNewAsset />
+      <AppTouchable
+        style={
+          !isThemeDark
+            ? styles.addNewIconWrapper
+            : styles.addNewIconWrapperLight
+        }
+        onPress={onPressAddNew}>
+        {!isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
       </AppTouchable>
     </View>
   );
@@ -152,6 +162,11 @@ const getStyles = (theme: AppTheme, index = null) =>
       position: 'absolute',
       bottom: 90,
       right: 30,
+    },
+    addNewIconWrapperLight: {
+      position: 'absolute',
+      bottom: 40,
+      right: 0,
     },
     footer: {
       height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
