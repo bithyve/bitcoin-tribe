@@ -13,33 +13,54 @@ import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <AssetsInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <AssetsActive />
+          ) : (
+            <AssetsActiveLight />
+          )
+        ) : (
+          <AssetsInActive />
+        );
       case NavigationRoutes.COMMUNITY:
         return isFocused ? <CommunityActive /> : <CommunityInActive />;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <SettingsInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <SettingsActive />
+          ) : (
+            <SettingsActiveLight />
+          )
+        ) : (
+          <SettingsInActive />
+        );
       default:
         return '';
     }
