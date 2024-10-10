@@ -7,6 +7,7 @@ import PinInputsView from 'src/components/PinInputsView';
 import { hp, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +18,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import ModalLoading from 'src/components/ModalLoading';
 
 const RNBiometrics = new ReactNativeBiometrics();
@@ -25,6 +26,7 @@ const RNBiometrics = new ReactNativeBiometrics();
 function EnterPinContainer() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
@@ -127,7 +129,7 @@ function EnterPinContainer() {
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={<DeleteIcon />}
+        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
       <ModalLoading visible={loading} />
     </>

@@ -8,6 +8,7 @@ import PinInputsView from 'src/components/PinInputsView';
 import { hp, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -17,9 +18,12 @@ import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RememberPasscode from './RememberPasscode';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 function CreatePinContainer() {
   const { OnBoarding } = useRoute().params;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -159,7 +163,7 @@ function CreatePinContainer() {
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={<DeleteIcon />}
+        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
       <View>
         <ResponsePopupContainer
