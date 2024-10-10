@@ -6,8 +6,11 @@ import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconSettingArrowLight from 'src/assets/images/icon_arrowr2light.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AppInfoCardProps = {
   title: string;
@@ -19,6 +22,7 @@ type AppInfoCardProps = {
 
 function AppInfoCard(props: AppInfoCardProps) {
   const { title, subTitle, icon, value, navigation } = props;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
@@ -51,7 +55,7 @@ function AppInfoCard(props: AppInfoCardProps) {
           </View>
           {navigation && (
             <View>
-              <IconArrow />
+              {!isThemeDark ? <IconArrow /> : <IconSettingArrowLight />}
             </View>
           )}
         </View>

@@ -76,7 +76,7 @@ const CombinedDefaultTheme: AppTheme = {
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
     disablePrimaryCTAText: Colors.SonicSilver,
-    accent2: Colors.TurquoiseBlue,
+    accent2: Colors.BrandeisBlue,
     activeTabColor: Colors.BrandeisBlue,
     toggleBackground: Colors.Golden,
     toggleButtonColor: Colors.White,
@@ -88,7 +88,7 @@ const CombinedDefaultTheme: AppTheme = {
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
-    cardBackground: Colors.RaisinBlack,
+    cardBackground: Colors.White,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
