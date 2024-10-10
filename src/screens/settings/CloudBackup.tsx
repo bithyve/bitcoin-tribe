@@ -17,11 +17,15 @@ import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
+import NoBackupIllustrationLight from 'src/assets/images/backupHistoryLight.svg';
 import Toast from 'src/components/Toast';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
   const { settings, common } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
@@ -69,7 +73,13 @@ const CloudBackup = ({ navigation }) => {
             style={styles.emptyStateContainer}
             title={settings.noBackHistory}
             subTitle={''}
-            IllustartionImage={<NoBackupIllustration />}
+            IllustartionImage={
+              !isThemeDark ? (
+                <NoBackupIllustration />
+              ) : (
+                <NoBackupIllustrationLight />
+              )
+            }
           />
         }
       />
