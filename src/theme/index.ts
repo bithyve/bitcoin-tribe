@@ -82,7 +82,7 @@ const CombinedDefaultTheme: AppTheme = {
     toggleButtonColor: Colors.White,
     toggleInActiveBtnColor: Colors.DimGray,
     toggleInActiveBackColor: Colors.Arsenic,
-    modalBackColor: Colors.EerieBlack,
+    modalBackColor: Colors.GhostWhite,
     coinsBorderColor: Colors.BrandeisBlue,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
