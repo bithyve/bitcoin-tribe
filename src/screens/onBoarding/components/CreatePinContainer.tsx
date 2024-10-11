@@ -21,7 +21,6 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 
 function CreatePinContainer() {
-  const { OnBoarding } = useRoute().params;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
