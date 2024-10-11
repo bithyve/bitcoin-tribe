@@ -57,9 +57,7 @@ function ProfileSetup({ navigation }) {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    navigation.replace(NavigationRoutes.CREATEPIN, {
-      OnBoarding: true,
-    });
+    navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
 
   const initiateWalletCreation = () => {

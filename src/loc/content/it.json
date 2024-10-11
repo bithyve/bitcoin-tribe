@@ -154,7 +154,8 @@
     "langNoteSubTitle": "Il supporto linguistico è in beta. Apprezziamo il tuo feedback!",
     "biometricsNotEnableMsg": "Biometria non abilitata.\nPer favore, vai alle impostazioni e abilitala",
     "EnterPasscode": "Inserisci il codice",
-    "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero"
+    "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
+    "setPasscodeTitle": "Imposta il codice"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
