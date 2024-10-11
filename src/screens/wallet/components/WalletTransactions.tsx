@@ -3,11 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
+import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
+import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
@@ -19,7 +22,6 @@ import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type WalletTransactionsProps = {
@@ -50,6 +52,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <AppTouchable
       disabled={disabled}
@@ -80,9 +83,15 @@ function WalletTransactions(props: WalletTransactionsProps) {
             {props.transaction.confirmations === 0 ? (
               <TransPendingIcon />
             ) : transType === TransactionType.SENT ? (
-              <SendTXNIcon />
-            ) : (
+              !isThemeDark ? (
+                <SendTXNIcon />
+              ) : (
+                <SendTXNIconLight />
+              )
+            ) : !isThemeDark ? (
               <RecieveTXNIcon />
+            ) : (
+              <RecieveTXNIconLight />
             )}
           </View>
           <View style={styles.contentWrapper}>
