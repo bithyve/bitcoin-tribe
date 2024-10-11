@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 
@@ -89,7 +90,13 @@ function AssetsList(props: AssetsListProps) {
           <EmptyStateView
             title={home.noAssetTitle}
             subTitle={home.noAssetSubTitle}
-            IllustartionImage={<NoAssetsIllustration />}
+            IllustartionImage={
+              !isThemeDark ? (
+                <NoAssetsIllustration />
+              ) : (
+                <NoAssetsIllustrationLight />
+              )
+            }
           />
         }
         renderItem={({ item, index }) => (
