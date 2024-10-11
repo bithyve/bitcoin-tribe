@@ -8,6 +8,7 @@ import React, {
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { StackActions, useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -24,18 +25,22 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
+import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
+import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
+import { Keys } from 'src/storage';
 
 function IssueScreen() {
   // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
@@ -234,7 +239,7 @@ function IssueScreen() {
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
-              icon={<UploadFile />}
+              icon={!isThemeDark ? <UploadFile /> : <UploadFileLight />}
             />
             {image && (
               <View style={styles.imageWrapper}>
@@ -250,7 +255,7 @@ function IssueScreen() {
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  <IconClose />
+                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}

@@ -107,6 +107,8 @@ function SendSuccessContainer(props: sendSuccessProps) {
           title={common.viewWallets}
           onPress={onPress}
           width={hp(200)}
+          textColor={theme.colors.popupCTATitleColor}
+          buttonColor={theme.colors.popupCTABackColor}
         />
       </View>
     </View>
@@ -129,17 +131,17 @@ const getStyles = (theme: AppTheme) =>
       width: '55%',
     },
     labelText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.popupText,
     },
     valueText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.popupText,
     },
     primaryCtaStyle: {
       marginTop: hp(30),
       alignSelf: 'center',
     },
     satsText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.popupText,
       marginTop: hp(5),
       marginLeft: hp(5),
     },

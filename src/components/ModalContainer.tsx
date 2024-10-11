@@ -16,6 +16,7 @@ import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import KeyboardAvoidView from './KeyboardAvoidView';
+import Colors from 'src/theme/Colors';
 
 type ModalContainerProps = {
   title: string;
@@ -69,7 +70,7 @@ const ModalContainer = (props: ModalContainerProps) => {
       onBackdropPress={onDismiss}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
-      backdropColor={theme.colors.primaryBackground}
+      backdropColor={Colors.Black}
       backdropOpacity={0.8}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>

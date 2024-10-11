@@ -24,9 +24,9 @@ function SecondaryCTA(props: secondaryCTAProps) {
     <GradientView
       style={styles.container}
       colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
+        theme.colors.secondaryCTAGradient1,
+        theme.colors.secondaryCTAGradient2,
+        theme.colors.secondaryCTAGradient3,
       ]}>
       <Button
         testID={generatedTestId}

@@ -13,16 +13,20 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import { Item } from './CoinsMetaDataScreen';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
+import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
 import copyImageToDestination from 'src/utils/downloadImage';
 import Toast from 'src/components/Toast';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
@@ -37,7 +41,7 @@ const CoinsMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        rightIcon={<DownloadIcon />}
+        rightIcon={!isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
         onSettingsPress={() => {
           const filePath = Platform.select({
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix

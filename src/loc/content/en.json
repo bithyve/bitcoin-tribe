@@ -184,7 +184,9 @@
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
-    "paste": "Paste"
+    "paste": "Paste",
+    "sendAssetTitle": "Send Asset",
+    "sendAssetSubtitle": "Scan the RGB address below"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

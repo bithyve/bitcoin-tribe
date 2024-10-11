@@ -135,5 +135,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  buttonsWrapper: {
+    marginRight: hp(5),
+    marginBottom: hp(3),
+  },
 });
 export default ProfileDetails;

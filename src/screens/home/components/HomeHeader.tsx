@@ -7,6 +7,7 @@ import { hp, wp } from 'src/constants/responsive';
 
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
+import IconScannerLight from 'src/assets/images/icon_scanner_light.svg';
 // import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
@@ -15,7 +16,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import HomeUserAvatar from './HomeUserAvatar';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type HomeHeaderProps = {
@@ -38,6 +39,7 @@ function HomeHeader(props: HomeHeaderProps) {
     onPressTotalAmt,
   } = props;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = React.useContext(LocalizationContext);
   const { home } = translations;
@@ -74,7 +76,7 @@ function HomeHeader(props: HomeHeaderProps) {
         </AppTouchable>
         <View style={styles.iconWrapper}>
           <IconWrapper onPress={onPressScanner}>
-            <IconScanner />
+            {isThemeDark ? <IconScannerLight /> : <IconScanner />}
           </IconWrapper>
           {/* To Do */}
           {/* <IconWrapper onPress={onPressNotification}>
