@@ -25,6 +25,7 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
+import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
@@ -254,7 +255,7 @@ function IssueScreen() {
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  <IconClose />
+                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}
