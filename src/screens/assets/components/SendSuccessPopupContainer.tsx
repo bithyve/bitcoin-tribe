@@ -68,12 +68,12 @@ const getStyles = (theme: AppTheme) =>
       lineHeight: 30,
     },
     subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.successPopupTitleColor,
       textAlign: 'center',
       lineHeight: 20,
     },
     descriptionText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.successPopupTitleColor,
       textAlign: 'center',
       marginBottom: hp(20),
     },

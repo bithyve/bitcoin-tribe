@@ -191,7 +191,7 @@ const CombinedDarkTheme: AppTheme = {
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.EerieBlack,
     coinsBorderColor: Colors.BrandeisBlue,
-    successPopupTitleColor: Colors.ChineseBlack,
+    successPopupTitleColor: Colors.White,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
