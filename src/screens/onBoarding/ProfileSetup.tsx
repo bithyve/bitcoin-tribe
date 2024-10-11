@@ -64,15 +64,7 @@ function ProfileSetup({ navigation }) {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    setLoading(false);
-    setTimeout(
-      () => {
-        navigation.replace(NavigationRoutes.CREATEPIN, {
-          OnBoarding: true,
-        });
-      },
-      Platform.OS === 'ios' ? 400 : 100,
-    );
+    navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
 
   const initiateWalletCreation = () => {
