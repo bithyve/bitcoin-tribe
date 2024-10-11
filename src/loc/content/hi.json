@@ -33,7 +33,9 @@
     "backup": "बैकअप",
     "addFunds": "धन जोड़ें",
     "addLater": "बाद में जोड़ें",
-    "continue": "जारी रखें"
+    "continue": "जारी रखें",
+    "noInternet": "नेटवर्क कनेक्शन नहीं है",
+    "rgbWalletOffline": "RGB वॉलेट ऑफ़लाइन है।"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
