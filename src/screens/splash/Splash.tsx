@@ -1,20 +1,22 @@
 import React, { useEffect, useContext, useCallback } from 'react';
 import { StyleSheet, ImageBackground, Image } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
-import { useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { setKey } = useContext(AppContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
@@ -52,7 +54,11 @@ function Splash({ navigation }) {
   return (
     <ScreenContainer style={styles.container}>
       <ImageBackground
-        source={require('src/assets/images/background.png')}
+        source={
+          !isThemeDark
+            ? require('src/assets/images/background.png')
+            : require('src/assets/images/background_light.png')
+        }
         resizeMode="cover"
         style={styles.backImage}>
         <Image
