@@ -51,6 +51,16 @@ type CustomColors = {
   secondaryCTAGradient1: string;
   secondaryCTAGradient2: string;
   secondaryCTAGradient3: string;
+  sendCtaBorderColor: string;
+  recieveCtaBorderColor: string;
+  roundSendCTAGradient1: string;
+  roundSendCTAGradient2: string;
+  roundSendCTAGradient3: string;
+  roundReceiveCTAGradient1: string;
+  roundReceiveCTAGradient2: string;
+  roundReceiveCTAGradient3: string;
+  roundSendCTATitle: string;
+  roundReceiveCTATitle: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -101,6 +111,16 @@ const CombinedDefaultTheme: AppTheme = {
     secondaryCTAGradient1: Colors.Lavender,
     secondaryCTAGradient2: Colors.Lavender,
     secondaryCTAGradient3: Colors.Lavender,
+    sendCtaBorderColor: Colors.CandyAppleRed,
+    recieveCtaBorderColor: Colors.UFOGreen1,
+    roundSendCTAGradient1: Colors.CandyAppleRed1,
+    roundSendCTAGradient2: Colors.CandyAppleRed1,
+    roundSendCTAGradient3: Colors.CandyAppleRed1,
+    roundReceiveCTAGradient1: Colors.UFOGreen2,
+    roundReceiveCTAGradient2: Colors.UFOGreen2,
+    roundReceiveCTAGradient3: Colors.UFOGreen2,
+    roundSendCTATitle: Colors.CandyAppleRed,
+    roundReceiveCTATitle: Colors.UFOGreen1,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
@@ -168,6 +188,16 @@ const CombinedDarkTheme: AppTheme = {
     secondaryCTAGradient1: Colors.EerieBlack,
     secondaryCTAGradient2: Colors.VampireBlack,
     secondaryCTAGradient3: Colors.ChineseBlack,
+    sendCtaBorderColor: Colors.Golden,
+    recieveCtaBorderColor: Colors.TurquoiseBlue,
+    roundSendCTAGradient1: Colors.EerieBlack,
+    roundSendCTAGradient2: Colors.VampireBlack,
+    roundSendCTAGradient3: Colors.ChineseBlack,
+    roundReceiveCTAGradient1: Colors.EerieBlack,
+    roundReceiveCTAGradient2: Colors.VampireBlack,
+    roundReceiveCTAGradient3: Colors.ChineseBlack,
+    roundSendCTATitle: Colors.White,
+    roundReceiveCTATitle: Colors.White,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
