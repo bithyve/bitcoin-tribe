@@ -109,7 +109,7 @@ export class ApiHandler {
           primaryMnemonic,
         );
         dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-        const checkRGBWalletOnline = await RGBServices.initiate(
+        const isWalletOnline = await RGBServices.initiate(
           rgbWallet.mnemonic,
           rgbWallet.accountXpub,
         );
@@ -140,11 +140,11 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const checkRGBWalletOnline = await RGBServices.initiate(
+    const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpub,
     );
-    return { key, checkRGBWalletOnline };
+    return { key, isWalletOnline };
   }
 
   static async createPin(pin: string) {
@@ -173,11 +173,11 @@ export class ApiHandler {
       const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-      const checkRGBWalletOnline = await RGBServices.initiate(
+      const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpub,
       );
-      return { key, checkRGBWalletOnline };
+      return { key, isWalletOnline };
     } catch (error) {
       throw new Error('Invalid PIN');
     }
@@ -200,11 +200,11 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const checkRGBWalletOnline = await RGBServices.initiate(
+    const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpub,
     );
-    return { key, checkRGBWalletOnline };
+    return { key, isWalletOnline };
   }
 
   static async createNewWallet({

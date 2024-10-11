@@ -32,7 +32,7 @@ function EnterPinContainer() {
   const [passcodeFlag, setPasscodeFlag] = useState(true);
   const login = useMutation(ApiHandler.loginWithPin);
   const biometricLogin = useMutation(ApiHandler.biometricLogin);
-  const { setKey, setCheckRGBWalletOnline } = useContext(AppContext);
+  const { setKey, setIsWalletOnline } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ function EnterPinContainer() {
     } else if (biometricLogin.data) {
       setLoading(false);
       setKey(biometricLogin.data.key);
-      setCheckRGBWalletOnline(biometricLogin.data.checkRGBWalletOnline);
+      setIsWalletOnline(biometricLogin.data.isWalletOnline);
       setTimeout(
         () => {
           navigation.replace(NavigationRoutes.APPSTACK);
@@ -68,7 +68,7 @@ function EnterPinContainer() {
     } else if (login.data) {
       setPrimaryCTALoading(false);
       setKey(login.data.key);
-      setCheckRGBWalletOnline(login.data.checkRGBWalletOnline);
+      setIsWalletOnline(login.data.isWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [login.error, login.data]);

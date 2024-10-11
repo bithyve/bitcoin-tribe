@@ -7,11 +7,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const RGBWalletStatus = () => {
-  const { checkRGBWalletOnline } = useContext(AppContext); // Access the context
+  const { isWalletOnline } = useContext(AppContext); // Access the context
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
-  return checkRGBWalletOnline === false ? (
+  return isWalletOnline === false ? (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.errorContainer}>
         <AppText style={styles.text}>{common.rgbWalletOffline}</AppText>

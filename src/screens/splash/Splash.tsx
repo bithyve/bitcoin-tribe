@@ -14,7 +14,7 @@ import { useMMKVString } from 'react-native-mmkv';
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { setKey, setCheckRGBWalletOnline } = useContext(AppContext);
+  const { setKey, setIsWalletOnline } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
@@ -50,7 +50,7 @@ function Splash({ navigation }) {
   useEffect(() => {
     if (data) {
       setKey(data.key);
-      setCheckRGBWalletOnline(data.checkRGBWalletOnline);
+      setIsWalletOnline(data.isWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [data, navigation, setKey]);
