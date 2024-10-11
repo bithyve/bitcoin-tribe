@@ -17,6 +17,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { RGBTransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
+import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
 import { Keys } from 'src/storage';
@@ -61,7 +62,11 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {props.transaction.confirmations === 0 ? (
-              <TransPendingIcon />
+              !isThemeDark ? (
+                <TransPendingIcon />
+              ) : (
+                TransPendingIconLight
+              )
             ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
               !isThemeDark ? (
                 <SendTXNIcon />
