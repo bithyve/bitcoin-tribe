@@ -1,14 +1,17 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
+import { windowHeight } from 'src/constants/responsive';
 
 function SettingMenuItem({ SettingsMenu }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-
+  const FooterComponent = () => {
+    return <View style={styles.footer} />;
+  };
   return (
     <FlatList
       style={styles.scrollingWrapper}
@@ -29,6 +32,7 @@ function SettingMenuItem({ SettingsMenu }) {
           />
         ) : null
       }
+      ListFooterComponent={FooterComponent}
     />
   );
 }
@@ -36,6 +40,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
       flex: 1,
+    },
+    footer: {
+      height: windowHeight > 670 ? 80 : 40, // Adjust the height as needed
     },
   });
 export default SettingMenuItem;

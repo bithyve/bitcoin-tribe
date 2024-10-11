@@ -15,6 +15,7 @@ import IconAppInfoLight from 'src/assets/images/icon_info_light.svg';
 // import IconNodes from 'src/assets/images/icon_node.svg';
 // import IconNodesLight from 'src/assets/images/icon_node_light.svg';
 import SetPasscode from 'src/assets/images/setPasscode.svg';
+import SetPasscodeLight from 'src/assets/images/setPasscode_light.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconBiometricLight from 'src/assets/images/icon_fingerprint_light.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
@@ -136,7 +137,7 @@ function SettingsScreen({ navigation }) {
     {
       id: 5,
       title: settings.setPasscodeTitle,
-      icon: <SetPasscode />,
+      icon: !isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
