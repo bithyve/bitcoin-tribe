@@ -16,6 +16,7 @@ import AssetsActive from 'src/assets/images/icon_assets_active.svg';
 import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
@@ -50,7 +51,15 @@ const CustomTab = ({ state, descriptors, navigation }) => {
           <AssetsInActive />
         );
       case NavigationRoutes.COMMUNITY:
-        return isFocused ? <CommunityActive /> : <CommunityInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <CommunityActive />
+          ) : (
+            <CommunityActiveLight />
+          )
+        ) : (
+          <CommunityInActive />
+        );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
           !isThemeDark ? (
