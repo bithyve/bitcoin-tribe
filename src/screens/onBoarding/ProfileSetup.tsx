@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
@@ -19,6 +19,7 @@ function ProfileSetup({ navigation }) {
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
   // const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
   const { setKey } = useContext(AppContext);
 
@@ -44,6 +45,12 @@ function ProfileSetup({ navigation }) {
     },
     {
       enabled: !!initiateQuery,
+      onSuccess: () => {
+        setLoading(false);
+      },
+      onError: () => {
+        setLoading(false);
+      },
     },
   );
 
@@ -62,7 +69,10 @@ function ProfileSetup({ navigation }) {
 
   const initiateWalletCreation = () => {
     Keyboard.dismiss();
-    setInitiateQuery(true);
+    setLoading(true);
+    setTimeout(() => {
+      setInitiateQuery(true);
+    }, 200);
   };
 
   return (
@@ -84,6 +94,8 @@ function ProfileSetup({ navigation }) {
         }}
         primaryStatus={query.status}
         primaryCTATitle={common.next}
+        primaryCtaLoader={loading}
+        disabled={loading}
         // secondaryCTATitle={common.skip}
       />
     </ScreenContainer>

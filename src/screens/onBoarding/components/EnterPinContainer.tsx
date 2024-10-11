@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import PinInputsView from 'src/components/PinInputsView';
@@ -32,10 +32,11 @@ function EnterPinContainer() {
   const [passcodeFlag, setPasscodeFlag] = useState(true);
   const login = useMutation(ApiHandler.loginWithPin);
   const biometricLogin = useMutation(ApiHandler.biometricLogin);
-  const { setKey } = useContext(AppContext);
+  const { setKey, setIsWalletOnline } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);
   const [loading, setLoading] = useState(false);
+  const [primaryCTALoading, setPrimaryCTALoading] = useState(false);
 
   useEffect(() => {
     biometricAuth();
@@ -48,22 +49,29 @@ function EnterPinContainer() {
       setPasscode('');
     } else if (biometricLogin.data) {
       setLoading(false);
-      setTimeout(() => {
-        setKey(biometricLogin.data);
-        navigation.replace(NavigationRoutes.APPSTACK);
-      }, 400);
+      setKey(biometricLogin.data.key);
+      setIsWalletOnline(biometricLogin.data.isWalletOnline);
+      setTimeout(
+        () => {
+          navigation.replace(NavigationRoutes.APPSTACK);
+        },
+        Platform.OS === 'ios' ? 400 : 100,
+      );
     }
   }, [biometricLogin.error, biometricLogin.data]);
 
   useEffect(() => {
     if (login.error) {
-      Toast(onBoarding.invalidPin, true);
+      setPrimaryCTALoading(false);
       setPasscode('');
+      Toast(onBoarding.invalidPin, true);
     } else if (login.data) {
-      setKey(login.data);
+      setPrimaryCTALoading(false);
+      setKey(login.data.key);
+      setIsWalletOnline(login.data.isWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
-  }, [login.error, login.data, login.data]);
+  }, [login.error, login.data]);
 
   const biometricAuth = async () => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -115,12 +123,20 @@ function EnterPinContainer() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => login.mutate(passcode)}
+          primaryOnPress={() => {
+            setPrimaryCTALoading(true);
+            login.mutate(passcode);
+          }}
           // secondaryTitle={common.cancel}
           // secondaryOnPress={() => navigation.goBack()}
-          disabled={passcode === '' || passcode.length !== 4 || login.isLoading}
+          disabled={
+            passcode === '' ||
+            passcode.length !== 4 ||
+            login.isLoading ||
+            primaryCTALoading
+          }
           width={wp(120)}
-          primaryLoading={login.isLoading}
+          primaryLoading={login.isLoading || primaryCTALoading}
         />
       </View>
       <KeyPadView

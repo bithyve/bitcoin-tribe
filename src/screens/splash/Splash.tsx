@@ -14,7 +14,7 @@ import { useMMKVString } from 'react-native-mmkv';
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { setKey } = useContext(AppContext);
+  const { setKey, setIsWalletOnline } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
@@ -22,11 +22,7 @@ function Splash({ navigation }) {
     try {
       const appId = await Storage.get(Keys.APPID);
       if (appId) {
-        if (pinMethod === PinMethod.DEFAULT) {
-          mutate();
-        } else {
-          navigation.replace(NavigationRoutes.LOGIN);
-        }
+        navigation.replace(NavigationRoutes.LOGIN);
       } else {
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
@@ -35,10 +31,26 @@ function Splash({ navigation }) {
     }
   }, [mutate, navigation, pinMethod]);
 
+  useEffect(() => {
+    const fetchAppId = async () => {
+      try {
+        const appId = await Storage.get(Keys.APPID);
+        if (appId && pinMethod === PinMethod.DEFAULT) {
+          mutate();
+        }
+      } catch (error) {
+        console.error('Error fetching appId:', error);
+      }
+    };
+
+    fetchAppId();
+  }, []);
+
   // Handle login success
   useEffect(() => {
     if (data) {
-      setKey(data);
+      setKey(data.key);
+      setIsWalletOnline(data.isWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [data, navigation, setKey]);

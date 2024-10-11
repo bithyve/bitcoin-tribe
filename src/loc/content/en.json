@@ -33,7 +33,9 @@
     "backup": "Backup",
     "addFunds": "Add Funds",
     "addLater": "Add Later",
-    "continue": "Continue"
+    "continue": "Continue",
+    "noInternet": "No network connection",
+    "rgbWalletOffline": "RGB wallet is offline."
   },
   "onBoarding": {
     "welcome": "Welcome",
