@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
+import SettingIconLight from 'src/assets/images/icon_settings_light.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
 import { windowHeight } from 'src/constants/responsive';
@@ -34,7 +35,9 @@ function Toolbar(props: ToolbarProps) {
         </AppText>
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
-        <View style={styles.rightIconWrapper1}>{<SettingIcon />}</View>
+        <View style={styles.rightIconWrapper1}>
+          {!isThemeDark ? <SettingIcon /> : <SettingIconLight />}
+        </View>
       </IconWrapper>
     </View>
   );
