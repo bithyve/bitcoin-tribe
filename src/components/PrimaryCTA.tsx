@@ -27,7 +27,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     loading,
     disabled = false,
   } = props;
-  const styles = getStyles(theme, width, disabled);
+  const styles = getStyles(theme, width, disabled, textColor);
 
   const generatedTestId = React.useMemo(() => {
     return `primary_cta_${title}`;
@@ -51,7 +51,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     </Button>
   );
 }
-const getStyles = (theme: AppTheme, width, disabled) =>
+const getStyles = (theme: AppTheme, width, disabled, textColor) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -65,9 +65,7 @@ const getStyles = (theme: AppTheme, width, disabled) =>
     labelStyle: {
       // minWidth: width,
       marginVertical: hp(20),
-      color: disabled
-        ? theme.colors.disableCTATitle
-        : theme.colors.primaryCTAText,
+      color: disabled ? theme.colors.disableCTATitle : textColor,
     },
     primaryCTATitle: {
       fontSize: 16,
