@@ -62,6 +62,10 @@ type CustomColors = {
   roundSendCTATitle: string;
   roundReceiveCTATitle: string;
   segmentSelectTitle: string;
+  successPopupTitleColor: string;
+  popupCTABackColor: string;
+  popupCTATitleColor: string;
+  popupText: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -87,6 +91,9 @@ const CombinedDefaultTheme: AppTheme = {
     bodyColor: Colors.ChineseBlack,
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,
+    popupCTABackColor: Colors.White,
+    popupCTATitleColor: Colors.Black,
+    popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
     profileBackground: Colors.Black,
@@ -102,7 +109,8 @@ const CombinedDefaultTheme: AppTheme = {
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.GhostWhite,
     coinsBorderColor: Colors.BrandeisBlue,
-    successPopupBackColor: Colors.UFOGreen,
+    successPopupTitleColor: Colors.White,
+    successPopupBackColor: Colors.GOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
@@ -165,6 +173,9 @@ const CombinedDarkTheme: AppTheme = {
     bodyColor: Colors.Quartz,
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
+    popupCTABackColor: Colors.White,
+    popupCTATitleColor: Colors.Black,
+    popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
     profileBackground: Colors.Black,
@@ -180,6 +191,7 @@ const CombinedDarkTheme: AppTheme = {
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.EerieBlack,
     coinsBorderColor: Colors.BrandeisBlue,
+    successPopupTitleColor: Colors.ChineseBlack,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,

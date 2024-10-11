@@ -13,6 +13,7 @@ type PrimaryCTAProps = {
   buttonColor?: string;
   loading?: boolean;
   disabled?: boolean;
+  textColor?: string;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
@@ -22,6 +23,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     title,
     width = wp(120),
     buttonColor = theme.colors.ctaBackColor,
+    textColor = theme.colors.primaryCTAText,
     loading,
     disabled = false,
   } = props;
@@ -40,7 +42,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={disabled ? styles.disableButton : styles.ctaContainerStyle}
       buttonColor={buttonColor}
-      textColor={theme.colors.primaryCTAText}
+      textColor={textColor}
       onPress={onPress}
       maxFontSizeMultiplier={1}
       loading={loading}
