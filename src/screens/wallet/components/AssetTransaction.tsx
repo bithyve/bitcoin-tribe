@@ -3,10 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
+import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
+import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -15,6 +19,7 @@ import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
+import { Keys } from 'src/storage';
 
 type AssetTransactionProps = {
   transId: string;
@@ -40,6 +45,7 @@ function AssetTransaction(props: AssetTransactionProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
     <AppTouchable
@@ -57,9 +63,15 @@ function AssetTransaction(props: AssetTransactionProps) {
             {props.transaction.confirmations === 0 ? (
               <TransPendingIcon />
             ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
-              <SendTXNIcon />
-            ) : (
+              !isThemeDark ? (
+                <SendTXNIcon />
+              ) : (
+                <SendTXNIconLight />
+              )
+            ) : !isThemeDark ? (
               <RecieveTXNIcon />
+            ) : (
+              <RecieveTXNIconLight />
             )}
           </View>
           <View style={styles.contentWrapper}>
