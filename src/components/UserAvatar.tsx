@@ -37,6 +37,8 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(70),
       alignItems: 'center',
       justifyContent: 'center',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
   });
 export default UserAvatar;
