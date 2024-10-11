@@ -15,18 +15,20 @@ function SettingMenuItem({ SettingsMenu }) {
       showsVerticalScrollIndicator={false}
       data={SettingsMenu}
       keyExtractor={item => item.id}
-      renderItem={({ item }) => (
-        <SelectOption
-          title={item.title}
-          subTitle={item.subtitle}
-          icon={item.icon}
-          onPress={item.onPress}
-          enableSwitch={item.enableSwitch}
-          onValueChange={item.onValueChange}
-          toggleValue={item.toggleValue}
-          testID={item.testID}
-        />
-      )}
+      renderItem={({ item }) =>
+        !item.hideMenu ? (
+          <SelectOption
+            title={item.title}
+            subTitle={item.subtitle}
+            icon={item.icon}
+            onPress={item.onPress}
+            enableSwitch={item.enableSwitch}
+            onValueChange={item.onValueChange}
+            toggleValue={item.toggleValue}
+            testID={item.testID}
+          />
+        ) : null
+      }
     />
   );
 }

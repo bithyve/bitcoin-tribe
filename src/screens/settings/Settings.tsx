@@ -10,6 +10,7 @@ import IconBackup from 'src/assets/images/icon_backup.svg';
 import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconNodes from 'src/assets/images/icon_node.svg';
+import SetPasscode from 'src/assets/images/setPasscode.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
 import IconWalletSettings from 'src/assets/images/icon_wallet.svg';
@@ -37,6 +38,7 @@ type SettingMenuProps = {
   toggleValue?: boolean;
   onValueChange?: () => void;
   testID?: string;
+  hideMenu?: boolean;
 };
 
 function SettingsScreen({ navigation }) {
@@ -122,6 +124,13 @@ function SettingsScreen({ navigation }) {
       icon: <IconLangCurrency />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
+    {
+      id: 5,
+      title: settings.setPasscodeTitle,
+      icon: <SetPasscode />,
+      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
+      hideMenu: pinMethod !== PinMethod.DEFAULT,
+    },
     // TO DO - will implement theme functionality.  This commented temporarily
     // {
     //   id: 1,
@@ -134,7 +143,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => setDarkTheme(!darkTheme),
     // },
     {
-      id: 5,
+      id: 6,
       title: settings.biometricUnlock,
       icon: <IconBiometric />,
       onValueChange: toggleBiometrics,
@@ -152,7 +161,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 6,
+      id: 7,
       title: settings.appInfo,
       icon: <IconAppInfo />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),

@@ -156,7 +156,8 @@
     "langNoteSubTitle": "言語サポートはベータ版です。フィードバックをお待ちしています！",
     "biometricsNotEnableMsg": "バイオメトリクスが有効ではありません。\n設定に移動して有効にしてください",
     "EnterPasscode": "パスコードを入力",
-    "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認"
+    "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
+    "setPasscodeTitle": "パスコードを設定"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

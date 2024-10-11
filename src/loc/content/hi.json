@@ -156,7 +156,8 @@
     "langNoteSubTitle": "भाषा समर्थन बीटा में है। हम आपके फीडबैक की सराहना करते हैं!",
     "biometricsNotEnableMsg": "बायोमेट्रिक्स सक्षम नहीं है।\nकृपया सेटिंग में जाकर इसे सक्षम करें",
     "EnterPasscode": "पासकोड दर्ज करें",
-    "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें"
+    "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
+    "setPasscodeTitle": "पासकोड सेट करें"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
