@@ -5,10 +5,13 @@ import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import GoBack from 'src/assets/images/icon_back.svg';
+import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import AppTouchable from './AppTouchable';
 import { Route, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AppHeaderProps = {
   title?: string;
@@ -36,6 +39,7 @@ function AppHeader(props: AppHeaderProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -46,7 +50,7 @@ function AppHeader(props: AppHeaderProps) {
           <AppTouchable
             onPress={onBackNavigation ? onBackNavigation : navigation.goBack}
             style={styles.leftIconWrapper}>
-            {<GoBack />}
+            {!isThemeDark ? <GoBack /> : <GoBackLight />}
           </AppTouchable>
         )}
         {rightIcon && (

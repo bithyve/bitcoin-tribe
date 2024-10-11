@@ -33,6 +33,13 @@ const Colors = {
   UFOGreen1: 'rgba(76, 217, 100, 1)',
   Gray: 'rgba(128, 128, 128, 1)',
   Green: 'rgba(116, 255, 81, 1)',
+  GOGreen: 'rgba(9, 185, 109, 1)',
   DarkSilver: 'rgba(111, 111, 111, 1)',
+  GhostWhite: 'rgba(249, 249, 249, 1)',
+  Platinum: 'rgba(232, 232, 232,1)',
+  Lavender: 'rgba(228, 235, 246, 1)',
+  CandyAppleRed: 'rgba(255, 10, 10,1)',
+  CandyAppleRed1: 'rgba(255, 10, 10,0.2)',
+  UFOGreen2: 'rgba(76, 217, 100, 0.1)',
 };
 export default Colors;

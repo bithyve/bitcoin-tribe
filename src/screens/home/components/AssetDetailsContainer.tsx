@@ -33,7 +33,7 @@ function AssetDetailsContainer(props: assetDetailsProps) {
             tagText={tag}
             backColor={theme.colors.cardBackground}
             tagColor={
-              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+              tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
             }
           />
         </View>

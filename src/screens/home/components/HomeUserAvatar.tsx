@@ -38,6 +38,8 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(15),
       alignItems: 'center',
       justifyContent: 'center',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
   });
 export default HomeUserAvatar;

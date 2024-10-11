@@ -1,13 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  FlatList,
-  Platform,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
+import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -15,13 +11,13 @@ import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import RefreshControlView from 'src/components/RefreshControlView';
-import LottieView from 'lottie-react-native';
+import { Keys } from 'src/storage';
 
 function WalletTransactionList({
   transactions,
@@ -36,6 +32,7 @@ function WalletTransactionList({
 }) {
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
@@ -101,7 +98,13 @@ function WalletTransactionList({
       ListEmptyComponent={
         <EmptyStateView
           style={styles.emptyStateContainer}
-          IllustartionImage={<NoTransactionIllustration />}
+          IllustartionImage={
+            !isThemeDark ? (
+              <NoTransactionIllustration />
+            ) : (
+              <NoTransactionIllustrationLight />
+            )
+          }
           title={walletStrings.noUTXOYet}
           subTitle={walletStrings.noUTXOYetSubTitle}
         />

@@ -3,12 +3,16 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme, Switch } from 'react-native-paper';
 
 import IconArrow from 'src/assets/images/icon_right_arrow.svg';
+import IconArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
 import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconSettingArrowLight from 'src/assets/images/icon_arrowr2light.svg';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight } from 'src/constants/responsive';
 import GradientView from './GradientView';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 type SelectOptionProps = {
   icon?: React.ReactNode;
@@ -38,6 +42,7 @@ const SelectOption = (props: SelectOptionProps) => {
     testID,
     showArrow = true,
   } = props;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, backColor);
   return (
     <AppTouchable onPress={onPress}>
@@ -70,9 +75,15 @@ const SelectOption = (props: SelectOptionProps) => {
                 color={theme.colors.accent1}
               />
             ) : backColor ? (
-              <IconArrow />
-            ) : (
+              !isThemeDark ? (
+                <IconArrow />
+              ) : (
+                <IconArrowLight />
+              )
+            ) : !isThemeDark ? (
               <IconSettingArrow />
+            ) : (
+              <IconSettingArrowLight />
             )}
           </View>
         ) : null}

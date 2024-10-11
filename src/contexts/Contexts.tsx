@@ -10,7 +10,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 function Contexts({ children }: any) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+  let theme = isThemeDark ? CombinedDefaultTheme : CombinedDarkTheme;
 
   return (
     <LocalizationProvider>

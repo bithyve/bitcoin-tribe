@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import { AppTheme } from 'src/theme';
+import Colors from 'src/theme/Colors';
 
 type popupContainerProps = {
   title?: string;
@@ -45,7 +46,7 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
         onBackdropPress={onDismiss}
         animationIn={'slideInUp'}
         animationOut={'slideOutDown'}
-        backdropColor={theme.colors.primaryBackground}
+        backdropColor={Colors.Black}
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>
         <View style={styles.modalContainer}>
@@ -103,10 +104,10 @@ const getStyles = (theme: AppTheme, backColor, borderColor, width) =>
       width: '90%',
     },
     titleText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.popupText,
     },
     subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.popupText,
     },
   });
 export default ResponsePopupContainer;

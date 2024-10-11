@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+import idx from 'idx';
 
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -12,13 +15,10 @@ import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import idx from 'idx';
 import Toast from 'src/components/Toast';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import SendAddressIcon from 'src/assets/images/sendAddress.svg';
-import { formatNumber } from 'src/utils/numberWithCommas';
-import { useMMKVString } from 'react-native-mmkv';
+import SendAddressIconLight from 'src/assets/images/sendAddress_light.svg';
 import { Keys, Storage } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
@@ -46,6 +46,7 @@ function SendToContainer({
   const { common, sendScreen } = translations;
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
@@ -143,7 +144,7 @@ function SendToContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <SendAddressIcon />
+            {!isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>

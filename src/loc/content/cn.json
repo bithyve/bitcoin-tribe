@@ -184,7 +184,9 @@
     "sentSuccessfully": "发送成功",
     "amountMoreThanSpend": "输入的金额超过了可支配金额",
     "transFeeErrMsg": "错误：交易费用信息缺失",
-    "paste": "粘贴"
+    "paste": "粘贴",
+    "sendAssetTitle": "发送资产",
+    "sendAssetSubtitle": "扫描下面的RGB地址"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

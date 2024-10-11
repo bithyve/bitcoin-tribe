@@ -20,7 +20,7 @@ const SegmentedButtons = ({ value, onValueChange, buttons }) => {
               styles.button,
               {
                 borderBottomColor: isSelected
-                  ? theme.colors.headingColor
+                  ? theme.colors.segmentSelectTitle
                   : theme.colors.secondaryHeadingColor,
               },
             ]}>
@@ -30,7 +30,7 @@ const SegmentedButtons = ({ value, onValueChange, buttons }) => {
                 styles.buttonText,
                 {
                   color: isSelected
-                    ? theme.colors.headingColor
+                    ? theme.colors.segmentSelectTitle
                     : theme.colors.secondaryHeadingColor,
                 },
               ]}>
