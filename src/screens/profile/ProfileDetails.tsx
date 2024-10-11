@@ -104,14 +104,16 @@ function ProfileDetails(props: ProfileDetailsProps) {
                 maxLength={15}
               />
             </View>
-            <Buttons
-              primaryTitle={primaryCTATitle}
-              secondaryTitle={secondaryCTATitle}
-              primaryOnPress={primaryOnPress}
-              secondaryOnPress={secondaryOnPress}
-              primaryLoading={primaryStatus === 'loading'}
-              disabled={disabled}
-            />
+            <View style={styles.buttonsWrapper}>
+              <Buttons
+                primaryTitle={primaryCTATitle}
+                secondaryTitle={secondaryCTATitle}
+                primaryOnPress={primaryOnPress}
+                secondaryOnPress={secondaryOnPress}
+                primaryLoading={primaryStatus === 'loading'}
+                disabled={disabled}
+              />
+            </View>
           </ScrollView>
         )}
       </KeyboardAvoidingView>
@@ -131,6 +133,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  buttonsWrapper: {
+    marginRight: hp(5),
+    marginBottom: hp(3),
   },
 });
 export default ProfileDetails;
