@@ -181,7 +181,9 @@
     "sentSuccessfully": "正常に送信されました",
     "amountMoreThanSpend": "入力された金額が利用可能な金額を超えています",
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
-    "paste": "貼り付け"
+    "paste": "貼り付け",
+    "sendAssetTitle": "資産を送信",
+    "sendAssetSubtitle": "下のRGBアドレスをスキャンしてください"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

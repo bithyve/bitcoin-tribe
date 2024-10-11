@@ -181,7 +181,9 @@
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
-    "paste": "Pegar"
+    "paste": "Pegar",
+    "sendAssetTitle": "Enviar activo",
+    "sendAssetSubtitle": "Escanee la dirección RGB a continuación"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

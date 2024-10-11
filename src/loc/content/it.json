@@ -181,7 +181,9 @@
     "sentSuccessfully": "Inviato con successo",
     "amountMoreThanSpend": "L'importo inserito è superiore a quello disponibile per la spesa",
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
-    "paste": "Incolla"
+    "paste": "Incolla",
+    "sendAssetTitle": "Invia asset",
+    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
