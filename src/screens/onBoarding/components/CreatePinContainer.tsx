@@ -15,7 +15,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RememberPasscode from './RememberPasscode';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -149,12 +148,8 @@ function CreatePinContainer() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => createPin.mutate(passcode)}
-          secondaryTitle={OnBoarding ? common.skip : 'Cancel'}
-          secondaryOnPress={() =>
-            OnBoarding
-              ? navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN) //navigation.replace(NavigationRoutes.APPSTACK)
-              : navigation.goBack()
-          }
+          secondaryTitle={common.cancel}
+          secondaryOnPress={() => navigation.goBack()}
           disabled={disbleProceed}
           width={wp(120)}
         />
@@ -178,15 +173,9 @@ function CreatePinContainer() {
             subTitle={onBoarding.rememberPasscodeSubTitle}
             description={onBoarding.rememberPasscodeDesc}
             onPress={() => {
-              if (OnBoarding) {
-                setVisible(false);
-                navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
-                // navigation.replace(NavigationRoutes.APPSTACK);
-              } else {
-                setVisible(false);
-                // Toast(onBoarding.newPinCreated);
-                navigation.goBack();
-              }
+              setVisible(false);
+              // Toast(onBoarding.newPinCreated);
+              navigation.goBack();
             }}
           />
         </ResponsePopupContainer>

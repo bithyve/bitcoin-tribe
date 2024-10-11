@@ -14,6 +14,7 @@ import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconAppInfoLight from 'src/assets/images/icon_info_light.svg';
 // import IconNodes from 'src/assets/images/icon_node.svg';
 // import IconNodesLight from 'src/assets/images/icon_node_light.svg';
+import SetPasscode from 'src/assets/images/setPasscode.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
 import IconBiometricLight from 'src/assets/images/icon_fingerprint_light.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
@@ -45,6 +46,7 @@ type SettingMenuProps = {
   toggleValue?: boolean;
   onValueChange?: () => void;
   testID?: string;
+  hideMenu?: boolean;
 };
 
 function SettingsScreen({ navigation }) {
@@ -130,6 +132,13 @@ function SettingsScreen({ navigation }) {
       title: settings.langAndCurrency,
       icon: !isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
+    },
+    {
+      id: 5,
+      title: settings.setPasscodeTitle,
+      icon: <SetPasscode />,
+      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
+      hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     // TO DO - will implement theme functionality.  This commented temporarily
     {
