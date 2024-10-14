@@ -187,11 +187,11 @@ object RGBHelper {
         }
     }
 
-    fun issueRgb25Asset(description: String, name: String, amounts: List<ULong>, filePath: String): String {
+    fun issueRgb25Asset(name: String, description: String, amounts: List<ULong>, filePath: String): String {
         return try {
             Log.d(TAG, "issueRgb25Asset: filePath= $filePath name= $name")
             //checkMaxAssets()
-            val contract = handleMissingFunds { issueAssetRgb25(description, name, amounts, filePath) }
+            val contract = handleMissingFunds { issueAssetRgb25(name, description, amounts, filePath) }
             val gson = Gson()
             val json = gson.toJson(contract)
             return json.toString()
@@ -218,7 +218,7 @@ object RGBHelper {
         return  asset
     }
 
-    private fun issueAssetRgb25(description: String, name: String, amounts: List<ULong>, filePath: String): AssetCfa? {
+    private fun issueAssetRgb25(name: String, description: String, amounts: List<ULong>, filePath: String): AssetCfa? {
         val asset = RGBWalletRepository.wallet?.issueAssetCfa(
             RGBWalletRepository.online!!,
             name,

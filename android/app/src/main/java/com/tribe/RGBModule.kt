@@ -131,11 +131,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun issueRgb25Asset( description: String, name: String, supply: String,filePath: String, promise: Promise){
+    fun issueRgb25Asset(name: String, description: String, supply: String,filePath: String, promise: Promise){
         backgroundHandler.post{
             try {
                 val amounts = listOf(supply)
-                val response = RGBHelper.issueRgb25Asset(description, name, amounts.map { it.toULong() }, filePath)
+                val response = RGBHelper.issueRgb25Asset(name, description, amounts.map { it.toULong() }, filePath)
                 promise.resolve(response)
             }catch (e: Exception) {
                 Log.d(TAG, "issueRgb20Asset:e.message ${e.message}")
