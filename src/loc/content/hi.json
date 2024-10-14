@@ -33,7 +33,9 @@
     "backup": "बैकअप",
     "addFunds": "धन जोड़ें",
     "addLater": "बाद में जोड़ें",
-    "continue": "जारी रखें"
+    "continue": "जारी रखें",
+    "noInternet": "नेटवर्क कनेक्शन नहीं है",
+    "rgbWalletOffline": "RGB वॉलेट ऑफ़लाइन है।"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "भाषा समर्थन बीटा में है। हम आपके फीडबैक की सराहना करते हैं!",
     "biometricsNotEnableMsg": "बायोमेट्रिक्स सक्षम नहीं है।\nकृपया सेटिंग में जाकर इसे सक्षम करें",
     "EnterPasscode": "पासकोड दर्ज करें",
-    "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें"
+    "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
+    "setPasscodeTitle": "पासकोड सेट करें"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
     "amountMoreThanSpend": "दर्ज की गई राशि खर्च करने के लिए उपलब्ध राशि से अधिक है",
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
-    "paste": "पेस्ट करें"
+    "paste": "पेस्ट करें",
+    "sendAssetTitle": "एसेट भेजें",
+    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

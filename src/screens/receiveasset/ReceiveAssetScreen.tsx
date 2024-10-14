@@ -7,6 +7,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
+import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
@@ -15,6 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -25,6 +28,7 @@ function ReceiveAssetScreen() {
     wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -82,7 +86,7 @@ function ReceiveAssetScreen() {
           />
           <ReceiveQrClipBoard
             qrCodeValue={rgbWallet?.receiveData?.invoice}
-            icon={<IconCopy />}
+            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
             title={common.note}

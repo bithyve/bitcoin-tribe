@@ -6,12 +6,14 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LangCurrencyOption from './components/LangCurrencyOption';
-import IconLanguage from 'src/assets/images/icon_globe.svg';
+import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
+import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
+import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
 import { hp } from 'src/constants/responsive';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
@@ -23,6 +25,7 @@ import FooterNote from 'src/components/FooterNote';
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
   const { settings, common } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
@@ -70,7 +73,7 @@ function LanguageAndCurrency() {
         <LangCurrencyOption
           title={settings.language}
           subTitle={settings.languageSubTitle}
-          icon={<IconLanguage />}
+          icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
           // langCurrency={'English'}
           // langCurrencyVariant={'English UK'}
           //We disabled for now because app crash (Blocker)
@@ -87,7 +90,7 @@ function LanguageAndCurrency() {
       <LangCurrencyOption
         title={settings.currency}
         subTitle={settings.currencySubTitle}
-        icon={<IconCurrency />}
+        icon={!isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
         langCurrency={selectedCurrency && selectedCurrency.currency}
         langCurrencyVariant={selectedCurrency && selectedCurrency.displayTitle}
         onPress={() => setCurrencyDropDown(!currencyDropDown)}

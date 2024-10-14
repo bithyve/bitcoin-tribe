@@ -33,7 +33,9 @@
     "backup": "Copia de seguridad",
     "addFunds": "Añadir fondos",
     "addLater": "Añadir más tarde",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "noInternet": "Sin conexión de red",
+    "rgbWalletOffline": "La billetera RGB está desconectada."
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "El soporte de idiomas está en versión beta. ¡Apreciamos sus comentarios!",
     "biometricsNotEnableMsg": "Biometría no habilitada.\nPor favor, ve a la configuración y actívala",
     "EnterPasscode": "Introduce el código",
-    "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla"
+    "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
+    "setPasscodeTitle": "Establecer código"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
-    "paste": "Pegar"
+    "paste": "Pegar",
+    "sendAssetTitle": "Enviar activo",
+    "sendAssetSubtitle": "Escanee la dirección RGB a continuación"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

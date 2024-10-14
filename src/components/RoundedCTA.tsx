@@ -14,20 +14,29 @@ type RoundedCTAProps = {
   title: string;
   height?: number;
   width?: number;
+  colors?: [string, string, string];
+  textColor?: string;
 };
 
 function RoundedCTA(props: RoundedCTAProps) {
   const theme: AppTheme = useTheme();
-  const { icon, buttonColor, onPress, title, height, width } = props;
+  const {
+    icon,
+    buttonColor,
+    onPress,
+    title,
+    height,
+    width,
+    colors = [
+      theme.colors.cardGradient1,
+      theme.colors.cardGradient2,
+      theme.colors.cardGradient3,
+    ],
+    textColor = theme.colors.headingColor,
+  } = props;
   const styles = getStyles(width, buttonColor);
   return (
-    <GradientView
-      style={styles.ctaContainerStyle}
-      colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
-      ]}>
+    <GradientView style={styles.ctaContainerStyle} colors={colors}>
       <Button
         icon={() => icon}
         mode="outlined"
@@ -36,7 +45,7 @@ function RoundedCTA(props: RoundedCTAProps) {
         style={styles.ctaContainerStyle}
         contentStyle={styles.contentStyle}
         // buttonColor={buttonColor}
-        textColor={theme.colors.headingColor}
+        textColor={textColor}
         onPress={onPress}
         maxFontSizeMultiplier={1}>
         {title}

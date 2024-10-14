@@ -10,8 +10,11 @@ import PinInputsView from './PinInputsView';
 import KeyPadView from './KeyPadView';
 import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import AppText from './AppText';
 import Colors from 'src/theme/Colors';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 interface Props {
   title: string;
@@ -37,6 +40,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
   invalidPin,
 }) => {
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -99,7 +103,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={<DeleteIcon />}
+        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
     </ModalContainer>
   );

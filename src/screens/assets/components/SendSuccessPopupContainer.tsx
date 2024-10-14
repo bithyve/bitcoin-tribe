@@ -43,7 +43,13 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
           {description}
         </AppText>
       </View>
-      <PrimaryCTA title={common.proceed} onPress={onPress} width={hp(152)} />
+      <PrimaryCTA
+        title={common.proceed}
+        onPress={onPress}
+        width={hp(152)}
+        textColor={theme.colors.popupCTATitleColor}
+        buttonColor={theme.colors.popupCTABackColor}
+      />
     </View>
   );
 }
@@ -57,17 +63,17 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(20),
     },
     titleText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.successPopupTitleColor,
       textAlign: 'center',
       lineHeight: 30,
     },
     subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.successPopupTitleColor,
       textAlign: 'center',
       lineHeight: 20,
     },
     descriptionText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.successPopupTitleColor,
       textAlign: 'center',
       marginBottom: hp(20),
     },

@@ -33,7 +33,9 @@
     "backup": "バックアップ",
     "addFunds": "資金を追加",
     "addLater": "後で追加",
-    "continue": "続ける"
+    "continue": "続ける",
+    "noInternet": "ネットワーク接続がありません",
+    "rgbWalletOffline": "RGBウォレットはオフラインです。"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "言語サポートはベータ版です。フィードバックをお待ちしています！",
     "biometricsNotEnableMsg": "バイオメトリクスが有効ではありません。\n設定に移動して有効にしてください",
     "EnterPasscode": "パスコードを入力",
-    "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認"
+    "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
+    "setPasscodeTitle": "パスコードを設定"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "正常に送信されました",
     "amountMoreThanSpend": "入力された金額が利用可能な金額を超えています",
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
-    "paste": "貼り付け"
+    "paste": "貼り付け",
+    "sendAssetTitle": "資産を送信",
+    "sendAssetSubtitle": "下のRGBアドレスをスキャンしてください"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

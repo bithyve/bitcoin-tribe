@@ -7,13 +7,23 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import IconBackup from 'src/assets/images/icon_backup.svg';
+import IconBackupLight from 'src/assets/images/icon_backup_light.svg';
 import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
+import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
-import IconNodes from 'src/assets/images/icon_node.svg';
+import IconAppInfoLight from 'src/assets/images/icon_info_light.svg';
+// import IconNodes from 'src/assets/images/icon_node.svg';
+// import IconNodesLight from 'src/assets/images/icon_node_light.svg';
+import SetPasscode from 'src/assets/images/setPasscode.svg';
+import SetPasscodeLight from 'src/assets/images/setPasscode_light.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
+import IconBiometricLight from 'src/assets/images/icon_fingerprint_light.svg';
 import IconDarkMode from 'src/assets/images/icon_moon.svg';
+import IconDarkModeLight from 'src/assets/images/icon_moon_light.svg';
 import IconWalletSettings from 'src/assets/images/icon_wallet.svg';
+import IconWalletSettingsLight from 'src/assets/images/icon_wallet_light.svg';
 import IconNamePic from 'src/assets/images/icon_namePic.svg';
+import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -22,7 +32,7 @@ import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import Toast from 'src/components/Toast';
 import * as SecureStore from 'src/storage/secure-store';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+// import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 
 const RNBiometrics = new ReactNativeBiometrics();
@@ -37,6 +47,7 @@ type SettingMenuProps = {
   toggleValue?: boolean;
   onValueChange?: () => void;
   testID?: string;
+  hideMenu?: boolean;
 };
 
 function SettingsScreen({ navigation }) {
@@ -48,6 +59,7 @@ function SettingsScreen({ navigation }) {
   const [biometrics, setBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -101,42 +113,49 @@ function SettingsScreen({ navigation }) {
     {
       id: 1,
       title: walletTranslation.nameAndPic,
-      icon: <IconNamePic />,
+      icon: !isThemeDark ? <IconNamePic /> : <IconNamePicLight />,
       onPress: () => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE),
     },
     {
       id: 2,
       title: walletTranslation.walletSettings,
-      icon: <IconWalletSettings />,
+      icon: !isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
       onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
     },
     {
       id: 3,
       title: settings.appBackup,
-      icon: <IconBackup />,
+      icon: !isThemeDark ? <IconBackup /> : <IconBackupLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
     },
     {
       id: 4,
       title: settings.langAndCurrency,
-      icon: <IconLangCurrency />,
+      icon: !isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
-    // TO DO - will implement theme functionality.  This commented temporarily
-    // {
-    //   id: 1,
-    //   title: settings.darkMode,
-    //   icon: <IconDarkMode />,
-    //   onValueChange: () => setDarkTheme(!darkTheme),
-    //   toggleValue: !darkTheme,
-    //   enableSwitch: true,
-    //   testID: 'dark_mode',
-    //   onPress: () => setDarkTheme(!darkTheme),
-    // },
     {
       id: 5,
+      title: settings.setPasscodeTitle,
+      icon: !isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
+      hideMenu: pinMethod !== PinMethod.DEFAULT,
+    },
+    // TO DO - will implement theme functionality.  This commented temporarily
+    {
+      id: 5,
+      title: settings.darkMode,
+      icon: !isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
+      onValueChange: () => setDarkTheme(!darkTheme),
+      toggleValue: !darkTheme,
+      enableSwitch: true,
+      testID: 'dark_mode',
+      onPress: () => setDarkTheme(!darkTheme),
+    },
+    {
+      id: 6,
       title: settings.biometricUnlock,
-      icon: <IconBiometric />,
+      icon: !isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
       toggleValue: biometrics,
       enableSwitch: true,
@@ -148,13 +167,13 @@ function SettingsScreen({ navigation }) {
     // {
     //   id: 5,
     //   title: settings.nodeSettings,
-    //   icon: <IconNodes />,
+    //   icon: !isThemeDark ? <IconNodes /> : <IconNodesLight/>,
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 6,
+      id: 7,
       title: settings.appInfo,
-      icon: <IconAppInfo />,
+      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
     // Add more menu items as needed

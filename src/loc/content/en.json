@@ -33,7 +33,9 @@
     "backup": "Backup",
     "addFunds": "Add Funds",
     "addLater": "Add Later",
-    "continue": "Continue"
+    "continue": "Continue",
+    "noInternet": "No network connection",
+    "rgbWalletOffline": "RGB wallet is offline."
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "Language support is in beta. We appreciate your feedback!",
     "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it",
     "EnterPasscode": "Enter Passcode",
-    "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase"
+    "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
+    "setPasscodeTitle": "Set Passcode"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
-    "paste": "Paste"
+    "paste": "Paste",
+    "sendAssetTitle": "Send Asset",
+    "sendAssetSubtitle": "Scan the RGB address below"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

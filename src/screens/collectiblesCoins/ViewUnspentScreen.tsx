@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation, UseMutationResult } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -17,8 +18,10 @@ import UnspentUTXOElement from './UnspentUTXOElement';
 // import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import { RealmSchema } from 'src/storage/enum';
 import dbManager from 'src/storage/realm/dbManager';
+import { Keys } from 'src/storage';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -26,6 +29,7 @@ const ViewUnspentScreen = () => {
   const { mutate, data, isLoading }: UseMutationResult<RgbUnspent[]> =
     useMutation(ApiHandler.viewUtxos);
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations;
@@ -75,7 +79,13 @@ const ViewUnspentScreen = () => {
           <EmptyStateView
             title={assets.noRGBUTXOsTitle}
             subTitle={assets.noRGBUTXOSubTitle}
-            IllustartionImage={<NoTransactionIllustration />}
+            IllustartionImage={
+              !isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
           />
         }
       />

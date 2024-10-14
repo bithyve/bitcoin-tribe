@@ -33,7 +33,9 @@
     "backup": "Backup",
     "addFunds": "Aggiungi fondi",
     "addLater": "Aggiungi più tardi",
-    "continue": "Continua"
+    "continue": "Continua",
+    "noInternet": "Nessuna connessione di rete",
+    "rgbWalletOffline": "Il portafoglio RGB è offline."
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "Il supporto linguistico è in beta. Apprezziamo il tuo feedback!",
     "biometricsNotEnableMsg": "Biometria non abilitata.\nPer favore, vai alle impostazioni e abilitala",
     "EnterPasscode": "Inserisci il codice",
-    "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero"
+    "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
+    "setPasscodeTitle": "Imposta il codice"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "Inviato con successo",
     "amountMoreThanSpend": "L'importo inserito è superiore a quello disponibile per la spesa",
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
-    "paste": "Incolla"
+    "paste": "Incolla",
+    "sendAssetTitle": "Invia asset",
+    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

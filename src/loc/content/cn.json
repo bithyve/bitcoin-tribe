@@ -33,7 +33,9 @@
     "backup": "备份",
     "addFunds": "添加资金",
     "addLater": "稍后添加",
-    "continue": "继续"
+    "continue": "继续",
+    "noInternet": "无网络连接",
+    "rgbWalletOffline": "RGB钱包离线。"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -154,7 +156,8 @@
     "langNoteSubTitle": "语言支持处于测试阶段。我们感谢您的反馈！",
     "biometricsNotEnableMsg": "生物识别未启用。\n请前往设置并启用",
     "EnterPasscode": "输入密码",
-    "EnterPasscodeSubTitle": "确认密码以显示种子短语"
+    "EnterPasscodeSubTitle": "确认密码以显示种子短语",
+    "setPasscodeTitle": "设置密码"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -181,7 +184,9 @@
     "sentSuccessfully": "发送成功",
     "amountMoreThanSpend": "输入的金额超过了可支配金额",
     "transFeeErrMsg": "错误：交易费用信息缺失",
-    "paste": "粘贴"
+    "paste": "粘贴",
+    "sendAssetTitle": "发送资产",
+    "sendAssetSubtitle": "扫描下面的RGB地址"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

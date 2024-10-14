@@ -99,9 +99,9 @@ const Item = ({
           <AssetChip
             tagText={Capitalize(tag)}
             backColor={
-              tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+              tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
             }
-            tagColor={theme.colors.primaryCTAText}
+            tagColor={theme.colors.tagText}
           />
         </View>
         <View style={styles.amountWrapper}>

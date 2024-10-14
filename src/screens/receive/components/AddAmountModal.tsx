@@ -10,7 +10,10 @@ import Buttons from 'src/components/Buttons';
 import KeyPadView from 'src/components/KeyPadView';
 import { AppTheme } from 'src/theme';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AddAmountModalProps = {
   callback: (string) => void;
@@ -20,6 +23,7 @@ type AddAmountModalProps = {
 function AddAmountModal(props: AddAmountModalProps) {
   const { callback, secondaryOnPress, primaryOnPress } = props;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const [amount, setAmount] = useState('');
   const { translations } = useContext(LocalizationContext);
@@ -73,7 +77,7 @@ function AddAmountModal(props: AddAmountModalProps) {
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={<DeleteIcon />}
+        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
     </View>
   );
