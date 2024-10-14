@@ -66,6 +66,7 @@ type CustomColors = {
   popupCTABackColor: string;
   popupCTATitleColor: string;
   popupText: string;
+  suggestedText: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -131,6 +132,7 @@ const CombinedDefaultTheme: AppTheme = {
     roundSendCTATitle: Colors.CandyAppleRed,
     roundReceiveCTATitle: Colors.UFOGreen1,
     segmentSelectTitle: Colors.BrandeisBlue,
+    suggestedText: Colors.White,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
@@ -213,6 +215,7 @@ const CombinedDarkTheme: AppTheme = {
     roundSendCTATitle: Colors.White,
     roundReceiveCTATitle: Colors.White,
     segmentSelectTitle: Colors.White,
+    suggestedText: Colors.Black,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
