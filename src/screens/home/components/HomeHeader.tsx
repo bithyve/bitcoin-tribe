@@ -46,7 +46,6 @@ function HomeHeader(props: HomeHeaderProps) {
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
-  console.log('isThemeDark', isThemeDark);
   return (
     <View>
       <View style={styles.container}>
