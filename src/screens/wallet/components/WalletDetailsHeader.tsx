@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_btc3.svg';
@@ -41,6 +41,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     wallet: walletTranslations,
   } = translations;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
@@ -97,7 +98,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         style={styles.balanceWrapper}
         onPress={() => toggleDisplayMode()}>
         {initialCurrencyMode !== CurrencyKind.SATS &&
-          getCurrencyIcon(IconBitcoin, 'dark', 30)}
+          getCurrencyIcon(IconBitcoin, !isThemeDark ? 'dark' : 'light', 30)}
         <AppText variant="walletBalance" style={styles.balanceText}>
           &nbsp;{getBalance(confirmed + unconfirmed)}
         </AppText>
@@ -119,7 +120,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         </AppText>
         <View style={styles.rgbAssetAmountWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
-            getCurrencyIcon(IconBitcoin1, 'dark', 15)}
+            getCurrencyIcon(IconBitcoin1, !isThemeDark ? 'dark' : 'light', 15)}
           <AppText variant="body1" style={styles.rgbAssetAmountText}>
             &nbsp;{getBalance(totalBtcAmount)}
           </AppText>

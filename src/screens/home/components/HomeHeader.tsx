@@ -46,6 +46,7 @@ function HomeHeader(props: HomeHeaderProps) {
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  console.log('isThemeDark', isThemeDark);
   return (
     <View>
       <View style={styles.container}>
@@ -61,7 +62,11 @@ function HomeHeader(props: HomeHeaderProps) {
               </AppText>
               <View style={styles.balanceWrapper}>
                 {initialCurrencyMode !== CurrencyKind.SATS &&
-                  getCurrencyIcon(IconBitcoin, 'dark', 15)}
+                  getCurrencyIcon(
+                    IconBitcoin,
+                    !isThemeDark ? 'dark' : 'light',
+                    15,
+                  )}
                 <AppText variant="body2" style={styles.balanceText}>
                   &nbsp;{getBalance(balance)}
                 </AppText>

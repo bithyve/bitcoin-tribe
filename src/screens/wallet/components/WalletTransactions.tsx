@@ -115,7 +115,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
             {initialCurrencyMode !== CurrencyKind.SATS &&
-              getCurrencyIcon(IconBitcoin, 'dark')}
+              getCurrencyIcon(IconBitcoin, !isThemeDark ? 'dark' : 'light')}
             <AppText
               variant="body1"
               style={[
