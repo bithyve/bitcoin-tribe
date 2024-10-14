@@ -6,6 +6,7 @@ import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconScannerLight from 'src/assets/images/icon_scanner_light.svg';
 // import IconNotification from 'src/assets/images/icon_notifications.svg';
@@ -62,7 +63,7 @@ function HomeHeader(props: HomeHeaderProps) {
               <View style={styles.balanceWrapper}>
                 {initialCurrencyMode !== CurrencyKind.SATS &&
                   getCurrencyIcon(
-                    IconBitcoin,
+                    !isThemeDark ? IconBitcoin : IconBitcoinLight,
                     !isThemeDark ? 'dark' : 'light',
                     15,
                   )}
