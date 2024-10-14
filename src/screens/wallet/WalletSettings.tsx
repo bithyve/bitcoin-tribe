@@ -23,14 +23,14 @@ function WalletSettings() {
     ApiHandler.viewUtxos,
   );
 
-  useEffect(() => {
-    if (isSuccess) {
-      Toast(strings.testSatsRecived);
-      fetchUTXOs();
-    } else if (isError) {
-      Toast(strings.failedTestSatsRecived, true);
-    }
-  }, [isError, isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     Toast(strings.testSatsRecived);
+  //     fetchUTXOs();
+  //   } else if (isError) {
+  //     Toast(strings.failedTestSatsRecived, true);
+  //   }
+  // }, [isError, isSuccess]);
 
   useEffect(() => {
     fetchUTXOs();
@@ -42,7 +42,7 @@ function WalletSettings() {
         title={strings.walletSettings}
         subTitle={strings.walletSettingSubTitle}
       />
-      <ModalLoading visible={isLoading} />
+      {/* <ModalLoading visible={isLoading} /> */}
       <SelectOption
         title={strings.showXPub}
         // subTitle={strings.showXPubSubTitle}
@@ -50,12 +50,12 @@ function WalletSettings() {
           navigation.dispatch(CommonActions.navigate(NavigationRoutes.SHOWXPUB))
         }
       />
-      <SelectOption
+      {/* <SelectOption
         title={strings.receiveTestSats}
         // subTitle={strings.receiveTestSatSubtitle}
         onPress={() => mutate()}
         showArrow={false}
-      />
+      /> */}
       <SelectOption
         title={strings.viewUnspent}
         // subTitle={strings.viewUnspent}

@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import UserAvatar from 'src/components/UserAvatar';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
-// import SettingIcon from 'src/assets/images/icon_settings.svg';
+import ReciveTestSatsIcon from 'src/assets/images/recieveTestSats.svg';
+import ReciveTestSatsLightIcon from 'src/assets/images/recieveTestSats_light.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
 import { windowHeight, wp } from 'src/constants/responsive';
@@ -31,9 +32,11 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
       <View style={styles.profileWrapper}>
         <UserAvatar size={70} imageSource={profile} />
       </View>
-      {/* <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
-        <View style={styles.rightIconWrapper1}>{<SettingIcon />}</View>
-      </IconWrapper> */}
+      <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
+        <View style={styles.rightIconWrapper1}>
+          {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />}
+        </View>
+      </IconWrapper>
     </View>
   );
 }
@@ -50,7 +53,7 @@ const getStyles = (theme: AppTheme) =>
     },
     profileWrapper: {
       width: '60%',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       justifyContent: 'center',
       marginTop: windowHeight > 650 ? 0 : 10,
     },

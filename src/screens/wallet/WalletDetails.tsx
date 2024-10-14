@@ -16,6 +16,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
 import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh = false } = route.params || {};
@@ -23,9 +25,14 @@ function WalletDetails({ navigation, route }) {
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
   const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
+  const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
+  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
+  const { mutate, isLoading, isError, isSuccess } = useMutation(
+    ApiHandler.receiveTestSats,
+  );
   const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
     ApiHandler.viewUtxos,
   );
@@ -34,6 +41,19 @@ function WalletDetails({ navigation, route }) {
     fetchUTXOs();
   }, []);
 
+  useEffect(() => {
+    if (isSuccess) {
+      Toast(walletTranslations.testSatsRecived);
+      fetchUTXOs();
+      setRefreshWallet(true);
+      walletRefreshMutation.mutate({
+        wallets: [wallet],
+      });
+    } else if (isError) {
+      Toast(walletTranslations.failedTestSatsRecived, true);
+    }
+  }, [isSuccess, isError]);
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.walletHeaderWrapper}>
@@ -41,9 +61,7 @@ function WalletDetails({ navigation, route }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
-          // onPressSetting={() =>
-          //   navigation.navigate(NavigationRoutes.WALLETSETTINGS)
-          // }
+          onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
       </View>
@@ -52,7 +70,7 @@ function WalletDetails({ navigation, route }) {
           navigation={navigation}
           transactions={wallet.specs.transactions}
           wallet={wallet}
-          autoRefresh={autoRefresh}
+          autoRefresh={autoRefresh || refreshWallet}
         />
       </View>
       <ModalContainer
@@ -63,6 +81,7 @@ function WalletDetails({ navigation, route }) {
         onDismiss={() => setVisible(false)}>
         <BuyModal />
       </ModalContainer>
+      <ModalLoading visible={isLoading} />
     </ScreenContainer>
   );
 }
