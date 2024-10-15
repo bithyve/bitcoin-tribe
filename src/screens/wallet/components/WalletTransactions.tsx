@@ -12,6 +12,7 @@ import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
 import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -115,7 +116,10 @@ function WalletTransactions(props: WalletTransactionsProps) {
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
             {initialCurrencyMode !== CurrencyKind.SATS &&
-              getCurrencyIcon(IconBitcoin, 'dark')}
+              getCurrencyIcon(
+                !isThemeDark ? IconBitcoin : IconBitcoinLight,
+                !isThemeDark ? 'dark' : 'light',
+              )}
             <AppText
               variant="body1"
               style={[

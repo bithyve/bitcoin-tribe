@@ -35,7 +35,8 @@
     "addLater": "Add Later",
     "continue": "Continue",
     "noInternet": "No network connection",
-    "rgbWalletOffline": "RGB wallet is offline."
+    "rgbWalletOffline": "RGB wallet is offline.",
+    "backupNow": "Backup Now"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -88,7 +89,9 @@
     "yourCoinAvatar": "Your Coin Avatar",
     "select": "Select",
     "noAssetTitle": "No assets yet.",
-    "noAssetSubTitle": "Tap the plus icon below to issue your first asset."
+    "noAssetSubTitle": "Tap the plus icon below to issue your first asset.",
+    "backupAlertTitle": "Secure Your Funds with a Backup",
+    "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now."
   },
   "settings": {
     "setting": "Settings",

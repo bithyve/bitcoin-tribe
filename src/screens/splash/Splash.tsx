@@ -9,11 +9,12 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { setKey, setIsWalletOnline } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
@@ -61,7 +62,11 @@ function Splash({ navigation }) {
   return (
     <ScreenContainer style={styles.container}>
       <ImageBackground
-        source={require('src/assets/images/background.png')}
+        source={
+          !isThemeDark
+            ? require('src/assets/images/background.png')
+            : require('src/assets/images/backgroundLight.png')
+        }
         resizeMode="cover"
         style={styles.backImage}>
         <Image
