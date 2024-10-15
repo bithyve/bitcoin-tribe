@@ -57,7 +57,7 @@ function EnterPinContainer() {
         () => {
           navigation.replace(NavigationRoutes.APPSTACK);
         },
-        Platform.OS === 'ios' ? 400 : 100,
+        Platform.OS === 'ios' ? 1000 : 300,
       );
     }
   }, [biometricLogin.error, biometricLogin.data]);
