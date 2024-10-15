@@ -12,6 +12,7 @@ export enum Keys {
   EXCHANGE_RATES = 'EXCHANGE_RATES',
   APP_CURRENCY = 'APP_CURRENCY',
   CURRENCY_MODE = 'CURRENCY_MODE',
+  BACKUPALERT = 'BACKUPALERT',
 }
 
 export class Storage {

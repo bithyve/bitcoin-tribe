@@ -11,9 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import BtcBackedAsset from 'src/assets/images/BtcBackedAsset.svg';
 import AppText from 'src/components/AppText';
-// import WalletOperations from 'src/services/wallets/operations';
-// import { Wallet } from 'src/services/wallets/interfaces/wallet';
-// import useWallets from 'src/hooks/useWallets';
+import { Keys, Storage } from 'src/storage';
 
 function OnBoardingScreen() {
   const navigation = useNavigation();
@@ -21,14 +19,6 @@ function OnBoardingScreen() {
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  //   const wallet: Wallet = useWallets({}).wallets[0];
-  //   const {
-  //     specs: { balances: { confirmed, unconfirmed } } = {
-  //       balances: { confirmed: 0, unconfirmed: 0 },
-  //     },
-  //   } = wallet;
-  //   const { changeAddress: receivingAddress } =
-  //     WalletOperations.getNextFreeChangeAddress(wallet);
 
   return (
     <ScreenContainer>
@@ -51,13 +41,17 @@ function OnBoardingScreen() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.addFunds}
-          primaryOnPress={() =>
+          primaryOnPress={() => {
+            Storage.set(Keys.BACKUPALERT, true);
             navigation.replace(NavigationRoutes.APPSTACK, {
               screen: NavigationRoutes.RECEIVESCREEN,
-            })
-          }
+            });
+          }}
           secondaryTitle={common.addLater}
-          secondaryOnPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
+          secondaryOnPress={() => {
+            Storage.set(Keys.BACKUPALERT, true);
+            navigation.replace(NavigationRoutes.APPSTACK);
+          }}
           disabled={false}
           width={wp(130)}
         />

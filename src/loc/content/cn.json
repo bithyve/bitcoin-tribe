@@ -35,7 +35,8 @@
     "addLater": "稍后添加",
     "continue": "继续",
     "noInternet": "无网络连接",
-    "rgbWalletOffline": "RGB钱包离线。"
+    "rgbWalletOffline": "RGB钱包离线。",
+    "backupNow": "立即备份"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -88,7 +89,9 @@
     "yourCoinAvatar": "您的币头像",
     "select": "选择",
     "noAssetTitle": "还没有资产。",
-    "noAssetSubTitle": "点击下面的加号图标以发行您的第一个资产。"
+    "noAssetSubTitle": "点击下面的加号图标以发行您的第一个资产。",
+    "backupAlertTitle": "使用备份保护您的资金",
+    "backupAlertSubTitle": "备份您的钱包可以确保您的资金安全，即使您丢失设备。请花点时间立即创建备份。"
   },
   "settings": {
     "setting": "设置",
