@@ -35,7 +35,8 @@
     "addLater": "後で追加",
     "continue": "続ける",
     "noInternet": "ネットワーク接続がありません",
-    "rgbWalletOffline": "RGBウォレットはオフラインです。"
+    "rgbWalletOffline": "RGBウォレットはオフラインです。",
+    "backupNow": "今すぐバックアップ"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -88,7 +89,9 @@
     "yourCoinAvatar": "あなたのコインアバター",
     "select": "選択",
     "noAssetTitle": "まだアセットがありません。",
-    "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。"
+    "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。",
+    "backupAlertTitle": "バックアップで資金を保護する",
+    "backupAlertSubTitle": "ウォレットをバックアップすることで、デバイスを紛失した場合でも資金を安全に保てます。今すぐバックアップを作成しましょう。"
   },
   "settings": {
     "setting": "設定",

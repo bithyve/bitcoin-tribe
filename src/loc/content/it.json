@@ -35,7 +35,8 @@
     "addLater": "Aggiungi più tardi",
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
-    "rgbWalletOffline": "Il portafoglio RGB è offline."
+    "rgbWalletOffline": "Il portafoglio RGB è offline.",
+    "backupNow": "Esegui backup ora"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -88,7 +89,9 @@
     "yourCoinAvatar": "Il tuo avatar della moneta",
     "select": "Seleziona",
     "noAssetTitle": "Ancora nessuna risorsa.",
-    "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto."
+    "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto.",
+    "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
+    "backupAlertSubTitle": "Eseguire il backup del tuo wallet garantisce che i tuoi fondi siano al sicuro, anche se perdi il dispositivo. Prenditi un momento per creare un backup ora."
   },
   "settings": {
     "setting": "Impostazioni",

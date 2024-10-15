@@ -35,7 +35,8 @@
     "addLater": "Añadir más tarde",
     "continue": "Continuar",
     "noInternet": "Sin conexión de red",
-    "rgbWalletOffline": "La billetera RGB está desconectada."
+    "rgbWalletOffline": "La billetera RGB está desconectada.",
+    "backupNow": "Respaldar ahora"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -88,7 +89,9 @@
     "yourCoinAvatar": "Tu avatar de moneda",
     "select": "Seleccionar",
     "noAssetTitle": "Aún no hay activos.",
-    "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo."
+    "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo.",
+    "backupAlertTitle": "Asegura tus fondos con un respaldo",
+    "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora."
   },
   "settings": {
     "setting": "Configuraciones",
