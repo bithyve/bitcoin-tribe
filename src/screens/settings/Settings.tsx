@@ -1,5 +1,5 @@
 import React, { useContext, ReactNode, useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
@@ -192,7 +192,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(40),
+      marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
       marginBottom: hp(20),
     },
   });
