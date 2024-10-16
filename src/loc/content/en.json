@@ -71,7 +71,12 @@
     "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets.",
     "rememberPasscodeTitle": "Remember your passcode",
     "rememberPasscodeSubTitle": "Please remember your passcode and backup your app by writing down the 12-word recovery key",
-    "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it."
+    "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it.",
+    "selectWalletType": "Select wallet type",
+    "selfCustody": "Self-Custody",
+    "mainnet": "Mainnet",
+    "mainnetAndLightning": "Mainnet & Lightning",
+    "supported": "Supported"
   },
   "home": {
     "addAssets": "Add Assets",

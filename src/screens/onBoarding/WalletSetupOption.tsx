@@ -33,7 +33,7 @@ function WalletSetupOption({ navigation }) {
         icon={!isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
-        onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
+        onPress={() => navigation.navigate(NavigationRoutes.SELECTWALLET)}
       />
       <OptionCard
         icon={!isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}

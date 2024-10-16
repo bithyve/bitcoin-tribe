@@ -71,7 +71,12 @@
     "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。",
     "rememberPasscodeTitle": "パスコードを覚えておいてください",
     "rememberPasscodeSubTitle": "パスコードを覚え、12単語のリカバリーキーを書き留めてアプリをバックアップしてください",
-    "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です"
+    "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です",
+    "selectWalletType": "ウォレットタイプを選択",
+    "selfCustody": "セルフカストディ",
+    "mainnet": "メインネット",
+    "mainnetAndLightning": "メインネット＆ライトニング",
+    "supported": "サポートされている"
   },
   "home": {
     "addAssets": "アセットを追加",
