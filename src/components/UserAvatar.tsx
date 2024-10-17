@@ -11,8 +11,8 @@ type UserAvatarProps = {
 };
 const UserAvatar = (props: UserAvatarProps) => {
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
   const { size, imageSource } = props;
+  const styles = getStyles(theme, size);
   return imageSource ? (
     <Avatar.Image
       size={size}
@@ -25,16 +25,16 @@ const UserAvatar = (props: UserAvatarProps) => {
     </View>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, size) =>
   StyleSheet.create({
     wrapper: {
       backgroundColor: theme.colors.inputBackground,
     },
     placeholderWrapper: {
       backgroundColor: theme.colors.inputBackground,
-      height: hp(70),
-      width: hp(70),
-      borderRadius: hp(70),
+      height: size,
+      width: size,
+      borderRadius: size,
       alignItems: 'center',
       justifyContent: 'center',
       borderColor: theme.colors.borderColor,
