@@ -1,14 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
 import LightningNodeDetailsContainer from './components/LightningNodeDetailsContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function LightningNodeDetails() {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
@@ -43,7 +46,9 @@ function LightningNodeDetails() {
         authChangeValue={authentication}
         onChangeAuthType={text => setAuthType(text)}
         authTypeValue={authType}
-        primaryOnPress={() => console.log('press')}
+        primaryOnPress={() =>
+          navigation.navigate(NavigationRoutes.PROFILESETUP)
+        }
       />
     </ScreenContainer>
   );
