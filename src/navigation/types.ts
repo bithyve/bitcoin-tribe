@@ -49,6 +49,7 @@ export type AppStackParams = {
   [NavigationRoutes.LOGIN]: undefined;
   [NavigationRoutes.SELECTASSETTOSEND]: undefined;
   [NavigationRoutes.ONBOARDINGSCREEN]: undefined;
+  [NavigationRoutes.SELECTWALLET]: undefined;
   // Add other routes as needed
 };
 

@@ -71,7 +71,12 @@
     "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset.",
     "rememberPasscodeTitle": " Ricorda il tuo codice",
     "rememberPasscodeSubTitle": "Ricorda il tuo codice e fai il backup dell'app scrivendo la chiave di recupero di 12 parole",
-    "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo"
+    "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo",
+    "selectWalletType": "Seleziona il tipo di wallet",
+    "selfCustody": "Auto-custodia",
+    "mainnet": "Rete principale",
+    "mainnetAndLightning": "Rete principale e Lightning",
+    "supported": "Supportato"
   },
   "home": {
     "addAssets": "Aggiungi risorse",

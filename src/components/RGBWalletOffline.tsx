@@ -23,14 +23,14 @@ const RGBWalletStatus = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: Colors.ImperialRed,
+    backgroundColor: Colors.FireOpal,
   },
   errorContainer: {
     position: 'absolute',
     top: Platform.OS === 'ios' ? 25 : 8,
     left: 0,
     right: 0,
-    backgroundColor: Colors.ImperialRed,
+    backgroundColor: Colors.FireOpal,
     padding: 20,
     zIndex: 1000, // Ensures the banner is above everything
     alignItems: 'center',

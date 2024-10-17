@@ -71,7 +71,12 @@
     "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos.",
     "rememberPasscodeTitle": "Recuerda tu código",
     "rememberPasscodeSubTitle": "Recuerda tu código y haz una copia de seguridad de la aplicación escribiendo la clave de recuperación de 12 palabras",
-    "rememberPasscodeDesc": "Si olvidas tu código, quedarás bloqueado fuera de la aplicación y tendrás que recuperarlo"
+    "rememberPasscodeDesc": "Si olvidas tu código, quedarás bloqueado fuera de la aplicación y tendrás que recuperarlo",
+    "selectWalletType": "Selecciona el tipo de billetera",
+    "selfCustody": "Auto-custodia",
+    "mainnet": "Red principal",
+    "mainnetAndLightning": "Red principal y Lightning",
+    "supported": "Soportado"
   },
   "home": {
     "addAssets": "Agregar activos",
