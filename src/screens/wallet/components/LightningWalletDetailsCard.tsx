@@ -17,10 +17,10 @@ import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 
 type LightningWalletDetailsProps = {
-  profile;
-  username;
-  confirmed;
-  unconfirmed;
+  profile: string;
+  username: string;
+  confirmed: number;
+  unconfirmed: number;
 };
 
 function LightningWalletDetailsCard(props: LightningWalletDetailsProps) {
@@ -45,6 +45,7 @@ function LightningWalletDetailsCard(props: LightningWalletDetailsProps) {
       setCurrencyMode(CurrencyKind.SATS);
     }
   };
+  console.log(username + ' ' + confirmed + ' ' + unconfirmed);
   return (
     <GradientView
       style={styles.balanceAndDetailsWrapper}

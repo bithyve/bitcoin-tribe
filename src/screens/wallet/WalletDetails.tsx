@@ -26,6 +26,7 @@ function WalletDetails({ navigation, route }) {
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
   const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('bitcoin');
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
@@ -62,6 +63,7 @@ function WalletDetails({ navigation, route }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
+          activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
@@ -75,7 +77,10 @@ function WalletDetails({ navigation, route }) {
         />
       </View>
       <View style={styles.footerView}>
-        <WalletFooter />
+        <WalletFooter
+          activeTab={activeTab}
+          setActiveTab={text => setActiveTab(text)}
+        />
       </View>
       <ModalContainer
         title={common.buy}
