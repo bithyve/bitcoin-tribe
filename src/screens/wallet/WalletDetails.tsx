@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'gray',
+    // borderBottomWidth: 0.2,
+    // borderBottomColor: 'gray',
   },
   walletTransWrapper: {
     height: windowHeight < 670 ? '40%' : '45%',
