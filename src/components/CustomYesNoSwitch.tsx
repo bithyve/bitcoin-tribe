@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -84,7 +84,7 @@ const getStyles = (theme: AppTheme) =>
     inActiveText: {
       textAlign: 'center',
       marginLeft: 5,
-      color: theme.colors.secondaryHeadingColor, // Active text color
+      color: theme.colors.secondaryHeadingColor, // InActive text color
     },
   });
 
