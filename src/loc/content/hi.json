@@ -76,7 +76,16 @@
     "selfCustody": "स्व-निगरानी",
     "mainnet": "मुख्य नेटवर्क",
     "mainnetAndLightning": "मुख्य नेटवर्क और लाइटनिंग",
-    "supported": "समर्थित"
+    "supported": "समर्थित",
+    "nodeDetails": "नोड विवरण",
+    "nodeConURL": "नोड कनेक्शन URL",
+    "nodeID": "नोड आईडी",
+    "userID": "उपयोगकर्ता आईडी (वैकल्पिक)",
+    "authentication": "प्रमाणीकरण",
+    "authSubTitle": " कृपया आगे बढ़ने के लिए अपनी पहचान सत्यापित करें और सुनिश्चित करें।",
+    "enterUsername": "उपयोगकर्ता नाम दर्ज करें",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "enterBearerToken": " बियरर टोकन दर्ज करें"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",

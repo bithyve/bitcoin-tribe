@@ -76,7 +76,16 @@
     "selfCustody": "セルフカストディ",
     "mainnet": "メインネット",
     "mainnetAndLightning": "メインネット＆ライトニング",
-    "supported": "サポートされている"
+    "supported": "サポートされている",
+    "nodeDetails": "ノードの詳細",
+    "nodeConURL": "ノード接続URL",
+    "nodeID": "ノードID",
+    "userID": "ユーザーID（オプション）",
+    "authentication": "認証",
+    "authSubTitle": "続行するには、認証を行い、確認してください。",
+    "enterUsername": "ユーザー名を入力してください",
+    "enterPassword": " パスワードを入力してください",
+    "enterBearerToken": "ベアラートークンを入力してください"
   },
   "home": {
     "addAssets": "アセットを追加",

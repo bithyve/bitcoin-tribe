@@ -76,7 +76,16 @@
     "selfCustody": "自主管理",
     "mainnet": "主网",
     "mainnetAndLightning": "主网和闪电网络",
-    "supported": "支持"
+    "supported": "支持",
+    "nodeDetails": "节点详情",
+    "nodeConURL": "节点连接URL",
+    "nodeID": "节点ID",
+    "userID": "用户ID（可选）",
+    "authentication": "认证",
+    "authSubTitle": "请进行身份认证并确保。",
+    "enterUsername": "输入用户名",
+    "enterPassword": "输入密码",
+    "enterBearerToken": "输入承载令牌"
   },
   "home": {
     "addAssets": "添加资产",

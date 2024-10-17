@@ -76,7 +76,16 @@
     "selfCustody": "Self-Custody",
     "mainnet": "Mainnet",
     "mainnetAndLightning": "Mainnet & Lightning",
-    "supported": "Supported"
+    "supported": "Supported",
+    "nodeDetails": "Node Details",
+    "nodeConURL": "Node connection URL",
+    "nodeID": "Node ID",
+    "userID": "User ID (optional)",
+    "authentication": "Authentication",
+    "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
+    "enterUsername": "Enter Username",
+    "enterPassword": "Enter Password",
+    "enterBearerToken": "Enter Bearer Token"
   },
   "home": {
     "addAssets": "Add Assets",

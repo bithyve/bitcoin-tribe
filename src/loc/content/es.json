@@ -76,7 +76,16 @@
     "selfCustody": "Auto-custodia",
     "mainnet": "Red principal",
     "mainnetAndLightning": "Red principal y Lightning",
-    "supported": "Soportado"
+    "supported": "Soportado",
+    "nodeDetails": "Detalles del nodo",
+    "nodeConURL": "URL de conexión del nodo",
+    "nodeID": "ID del nodo",
+    "userID": "ID de usuario (opcional)",
+    "authentication": "Autenticación",
+    "authSubTitle": "Para continuar, autentícate y asegúrate de que.",
+    "enterUsername": "Introduce el nombre de usuario",
+    "enterPassword": "Introduce la contraseña",
+    "enterBearerToken": "Introduce el Bearer Token"
   },
   "home": {
     "addAssets": "Agregar activos",
