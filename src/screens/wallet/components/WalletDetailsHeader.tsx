@@ -2,13 +2,13 @@ import React, { useContext, useMemo } from 'react';
 import { View, StyleSheet, Platform, ImageBackground } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+// import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
-import AppText from 'src/components/AppText';
-import IconBitcoin from 'src/assets/images/icon_btc3.svg';
-import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
-import IconBitcoin1 from 'src/assets/images/icon_btc2.svg';
-import IconBitcoin1Light from 'src/assets/images/icon_btc2_light.svg';
+// import AppText from 'src/components/AppText';
+// import IconBitcoin from 'src/assets/images/icon_btc3.svg';
+// import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
+// import IconBitcoin1 from 'src/assets/images/icon_btc2.svg';
+// import IconBitcoin1Light from 'src/assets/images/icon_btc2_light.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -16,15 +16,15 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import WalletOperations from 'src/services/wallets/operations';
-import useBalance from 'src/hooks/useBalance';
-import { Keys } from 'src/storage';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
-import AppTouchable from 'src/components/AppTouchable';
-import GradientView from 'src/components/GradientView';
+// import WalletOperations from 'src/services/wallets/operations';
+// import useBalance from 'src/hooks/useBalance';
+// import { Keys } from 'src/storage';
+// import CurrencyKind from 'src/models/enums/CurrencyKind';
+// import AppTouchable from 'src/components/AppTouchable';
+// import GradientView from 'src/components/GradientView';
 import { RealmSchema } from 'src/storage/enum';
 import dbManager from 'src/storage/realm/dbManager';
-import UserAvatar from 'src/components/UserAvatar';
+// import UserAvatar from 'src/components/UserAvatar';
 import LightningWalletDetailsCard from './LightningWalletDetailsCard';
 import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
 
@@ -32,6 +32,7 @@ type walletDetailsHeaderProps = {
   profile: string;
   username: string;
   wallet: Wallet;
+  activeTab: string;
   onPressSetting?: () => void;
   onPressBuy: () => void;
 };
@@ -48,7 +49,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const theme: AppTheme = useTheme();
 
   const styles = getStyles(theme);
-  const { profile, username, wallet, onPressSetting, onPressBuy } = props;
+  const { profile, username, wallet, activeTab, onPressSetting, onPressBuy } =
+    props;
   // const { getBalance, getCurrencyIcon } = useBalance();
   // const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
   //   Keys.CURRENCY_MODE,
@@ -91,18 +93,21 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
-      {/* <LightningWalletDetailsCard
-        profile={profile}
-        confirmed={confirmed}
-        unconfirmed={unconfirmed}
-        username={username}
-      /> */}
-      <BitcoinWalletDetailsCard
-        profile={profile}
-        confirmed={confirmed}
-        unconfirmed={unconfirmed}
-        username={username}
-      />
+      {activeTab === 'lightning' ? (
+        <LightningWalletDetailsCard
+          profile={profile}
+          confirmed={confirmed}
+          unconfirmed={unconfirmed}
+          username={username}
+        />
+      ) : (
+        <BitcoinWalletDetailsCard
+          profile={profile}
+          confirmed={confirmed}
+          unconfirmed={unconfirmed}
+          username={username}
+        />
+      )}
       {/* <AppText variant="body1" style={styles.usernameText}>
         {username}
       </AppText>
