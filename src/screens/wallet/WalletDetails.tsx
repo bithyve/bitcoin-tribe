@@ -18,6 +18,7 @@ import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import WalletFooter from './components/WalletFooter';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh = false } = route.params || {};
@@ -73,6 +74,9 @@ function WalletDetails({ navigation, route }) {
           autoRefresh={autoRefresh || refreshWallet}
         />
       </View>
+      <View style={styles.footerView}>
+        <WalletFooter />
+      </View>
       <ModalContainer
         title={common.buy}
         subTitle={walletTranslations.buySubtitle}
@@ -101,7 +105,11 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '50%' : '55%',
+    height: windowHeight < 670 ? '40%' : '45%',
+    marginHorizontal: wp(16),
+  },
+  footerView: {
+    height: windowHeight < 670 ? '10%' : '15%',
     marginHorizontal: wp(16),
   },
 });

@@ -256,7 +256,9 @@
     "failedTestSatsRecived": "टेस्ट-सैट्स प्राप्त करने में विफल",
     "failRefreshWallet": "वॉलेट को रिफ्रेश करने में विफल",
     "failedToCreateUTXO": "UTXO बनाने में विफल। अपर्याप्त सैट्स",
-    "rgbAssets": "आरक्षित सैट्स"
+    "rgbAssets": "आरक्षित सैट्स",
+    "lightning": "लाइटनिंग नेटवर्क",
+    "bitcoin": "बिटकॉइन"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

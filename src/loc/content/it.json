@@ -256,7 +256,9 @@
     "failedTestSatsRecived": "Impossibile ricevere test-sats",
     "failRefreshWallet": "Impossibile aggiornare il portafoglio",
     "failedToCreateUTXO": "Impossibile creare UTXO. Sats insufficienti",
-    "rgbAssets": "Sats riservati"
+    "rgbAssets": "Sats riservati",
+    "lightning": "Fulmine",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

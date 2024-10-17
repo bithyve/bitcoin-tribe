@@ -256,7 +256,9 @@
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
     "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
-    "rgbAssets": "Reserved Sats"
+    "rgbAssets": "Reserved Sats",
+    "lightning": "Lightning",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

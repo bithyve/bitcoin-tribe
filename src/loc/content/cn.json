@@ -256,7 +256,9 @@
     "failedTestSatsRecived": "未能接收测试Sats",
     "failRefreshWallet": "刷新钱包失败",
     "failedToCreateUTXO": "创建UTXO失败。Sats不足",
-    "rgbAssets": "保留Sats"
+    "rgbAssets": "保留Sats",
+    "lightning": "闪电网络",
+    "bitcoin": "比特币"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
