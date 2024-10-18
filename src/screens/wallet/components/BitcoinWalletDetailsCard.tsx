@@ -76,14 +76,18 @@ function BitcoinWalletDetailsCard(props: LightningWalletDetailsProps) {
           <AppTouchable
             style={styles.balanceWrapper}
             onPress={() => toggleDisplayMode()}>
-            {initialCurrencyMode !== CurrencyKind.SATS &&
-              getCurrencyIcon(
-                !isThemeDark ? IconBitcoin : IconBitcoinLight,
-                !isThemeDark ? 'dark' : 'light',
-                30,
-              )}
+            {initialCurrencyMode !== CurrencyKind.SATS && (
+              <View style={styles.currencyIconWrapper}>
+                {getCurrencyIcon(
+                  !isThemeDark ? IconBitcoin : IconBitcoinLight,
+                  !isThemeDark ? 'dark' : 'light',
+                  30,
+                )}
+              </View>
+            )}
+
             <AppText variant="walletBalance" style={styles.balanceText}>
-              &nbsp;{getBalance(confirmed + unconfirmed)}
+              {getBalance(confirmed + unconfirmed)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>
@@ -140,6 +144,9 @@ const getStyles = (theme: AppTheme) =>
     },
     balanceText: {
       color: theme.colors.headingColor,
+    },
+    currencyIconWrapper: {
+      marginRight: hp(5),
     },
   });
 export default BitcoinWalletDetailsCard;
