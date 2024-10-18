@@ -23,18 +23,11 @@ type walletDetailsHeaderProps = {
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const {
-    // receciveScreen,
-    common,
-    sendScreen,
-    // home,
-    // wallet: walletTranslations,
-  } = translations;
+  const { common, sendScreen } = translations;
   const theme: AppTheme = useTheme();
 
   const styles = getStyles(theme);
-  const { profile, username, wallet, activeTab, onPressSetting, onPressBuy } =
-    props;
+  const { profile, username, wallet, onPressSetting, onPressBuy } = props;
 
   const {
     specs: { balances: { confirmed, unconfirmed } } = {

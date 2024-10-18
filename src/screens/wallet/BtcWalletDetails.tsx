@@ -104,9 +104,5 @@ const styles = StyleSheet.create({
     height: windowHeight < 670 ? '40%' : '45%',
     marginHorizontal: wp(16),
   },
-  footerView: {
-    height: windowHeight < 670 ? '10%' : '15%',
-    marginHorizontal: wp(16),
-  },
 });
 export default BtcWalletDetails;
