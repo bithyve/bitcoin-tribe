@@ -1,14 +1,8 @@
-import React, { useContext, useMemo } from 'react';
-import { View, StyleSheet, Platform, ImageBackground } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-// import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
-// import AppText from 'src/components/AppText';
-// import IconBitcoin from 'src/assets/images/icon_btc3.svg';
-// import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
-// import IconBitcoin1 from 'src/assets/images/icon_btc2.svg';
-// import IconBitcoin1Light from 'src/assets/images/icon_btc2_light.svg';
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -16,15 +10,6 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-// import WalletOperations from 'src/services/wallets/operations';
-// import useBalance from 'src/hooks/useBalance';
-// import { Keys } from 'src/storage';
-// import CurrencyKind from 'src/models/enums/CurrencyKind';
-// import AppTouchable from 'src/components/AppTouchable';
-// import GradientView from 'src/components/GradientView';
-import { RealmSchema } from 'src/storage/enum';
-import dbManager from 'src/storage/realm/dbManager';
-// import UserAvatar from 'src/components/UserAvatar';
 import LightningWalletDetailsCard from './LightningWalletDetailsCard';
 import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
 
@@ -51,44 +36,12 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const styles = getStyles(theme);
   const { profile, username, wallet, activeTab, onPressSetting, onPressBuy } =
     props;
-  // const { getBalance, getCurrencyIcon } = useBalance();
-  // const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
-  //   Keys.CURRENCY_MODE,
-  // );
-  // const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+
   const {
     specs: { balances: { confirmed, unconfirmed } } = {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
   } = wallet;
-  // const { changeAddress: receivingAddress } =
-  //   WalletOperations.getNextFreeChangeAddress(wallet);
-
-  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
-  // Deserialize each UTXO string back into an object
-  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
-  );
-
-  // const totalBtcAmount = useMemo(() => {
-  //   return UnspentUTXOData.reduce((total, item) => {
-  //     // Check if utxo exists and if btcAmount is present
-  //     if (item.utxo && item.utxo.colorable === true) {
-  //       return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
-  //     }
-  //     return total; // If the condition isn't met, return the total as is
-  //   }, 0);
-  // }, [UnspentUTXOData]);
-
-  // const toggleDisplayMode = () => {
-  //   if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
-  //     setCurrencyMode(CurrencyKind.BITCOIN);
-  //   } else if (initialCurrencyMode === CurrencyKind.BITCOIN) {
-  //     setCurrencyMode(CurrencyKind.FIAT);
-  //   } else {
-  //     setCurrencyMode(CurrencyKind.SATS);
-  //   }
-  // };
 
   return (
     <View style={styles.container}>
@@ -108,60 +61,6 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
           username={username}
         />
       )}
-      {/* <AppText variant="body1" style={styles.usernameText}>
-        {username}
-      </AppText>
-      <View>
-        <AppText variant="body2" style={styles.totalBalText}>
-          {home.totalBalance}
-        </AppText>
-      </View>
-      <AppTouchable
-        style={styles.balanceWrapper}
-        onPress={() => toggleDisplayMode()}>
-        {initialCurrencyMode !== CurrencyKind.SATS &&
-          getCurrencyIcon(
-            !isThemeDark ? IconBitcoin : IconBitcoinLight,
-            !isThemeDark ? 'dark' : 'light',
-            30,
-          )}
-        <AppText variant="walletBalance" style={styles.balanceText}>
-          &nbsp;{getBalance(confirmed + unconfirmed)}
-        </AppText>
-        {initialCurrencyMode === CurrencyKind.SATS && (
-          <AppText variant="caption" style={styles.satsText}>
-            sats
-          </AppText>
-        )}
-      </AppTouchable>
-      <GradientView
-        style={styles.rgbBalanceWrapper}
-        colors={[
-          theme.colors.cardGradient1,
-          theme.colors.cardGradient2,
-          theme.colors.cardGradient3,
-        ]}>
-        <AppText variant="body1" style={styles.rgbAssetTitleText}>
-          {walletTranslations.rgbAssets}
-        </AppText>
-        <View style={styles.rgbAssetAmountWrapper}>
-          {initialCurrencyMode !== CurrencyKind.SATS &&
-            getCurrencyIcon(
-              !isThemeDark ? IconBitcoin1 : IconBitcoin1Light,
-              !isThemeDark ? 'dark' : 'light',
-              15,
-            )}
-          <AppText variant="body1" style={styles.rgbAssetAmountText}>
-            &nbsp;{getBalance(totalBtcAmount)}
-          </AppText>
-          {initialCurrencyMode === CurrencyKind.SATS && (
-            <AppText variant="caption" style={styles.rgbSatsText}>
-              sats
-            </AppText>
-          )}
-        </View>
-      </GradientView> */}
-
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
@@ -194,56 +93,13 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       paddingBottom: Platform.OS === 'android' ? 0 : 10,
     },
-    usernameText: {
-      color: theme.colors.secondaryHeadingColor,
-      textAlign: 'center',
-      marginVertical: 10,
-    },
-    balanceWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: hp(10),
-    },
-    balanceText: {
-      color: theme.colors.headingColor,
-    },
     satsText: {
       color: theme.colors.headingColor,
       marginTop: hp(10),
       marginLeft: hp(5),
     },
-    totalBalText: {
-      color: theme.colors.headingColor,
-      fontWeight: '400',
-    },
-
     profileWrapper: {
       flexDirection: 'row',
-    },
-    userInfoWrapper: {
-      width: '70%',
-    },
-    userProfileWrapper: {
-      width: '30%',
-      alignItems: 'flex-end',
-    },
-    rgbAssetAmountWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    rgbSatsText: {
-      color: theme.colors.headingColor,
-      marginLeft: hp(5),
-    },
-    rgbAssetTitleText: {
-      color: theme.colors.secondaryHeadingColor,
-      marginRight: hp(10),
-    },
-    rgbAssetAmountText: {
-      color: theme.colors.headingColor,
-    },
-    backImage: {
-      padding: hp(15),
     },
   });
 export default WalletDetailsHeader;
