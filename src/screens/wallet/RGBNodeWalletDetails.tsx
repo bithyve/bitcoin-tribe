@@ -4,7 +4,6 @@ import { useQuery as realmUseQuery } from '@realm/react';
 import { useMutation, UseMutationResult } from 'react-query';
 
 import { wp, windowHeight } from 'src/constants/responsive';
-import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 import { RealmSchema } from 'src/storage/enum';
 import ModalContainer from 'src/components/ModalContainer';
@@ -17,6 +16,7 @@ import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const { autoRefresh = false } = route.params || {};
@@ -56,7 +56,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   return (
     <View>
       <View style={styles.walletHeaderWrapper}>
-        <WalletDetailsHeader
+        <RGBNodeWalletHeader
           profile={profileImage}
           username={walletName}
           wallet={wallet}

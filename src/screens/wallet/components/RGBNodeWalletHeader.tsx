@@ -10,9 +10,9 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
+import LightningWalletDetailsCard from './LightningWalletDetailsCard';
 
-type walletDetailsHeaderProps = {
+type RGBNodeHeaderProps = {
   profile: string;
   username: string;
   wallet: Wallet;
@@ -20,7 +20,7 @@ type walletDetailsHeaderProps = {
   onPressSetting?: () => void;
   onPressBuy: () => void;
 };
-function WalletDetailsHeader(props: walletDetailsHeaderProps) {
+function RGBNodeWalletHeader(props: RGBNodeHeaderProps) {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const {
@@ -45,7 +45,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
-      <BitcoinWalletDetailsCard
+      <LightningWalletDetailsCard
         profile={profile}
         confirmed={confirmed}
         unconfirmed={unconfirmed}
@@ -65,7 +65,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         // onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
+            CommonActions.navigate(NavigationRoutes.LIGHTNINGRECEIVE),
           )
         }
       />
@@ -88,4 +88,4 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
     },
   });
-export default WalletDetailsHeader;
+export default RGBNodeWalletHeader;
