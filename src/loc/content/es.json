@@ -183,7 +183,8 @@
     "placeHolderText": "Introduce la cantidad",
     "invoiceAddress": "Factura RGB",
     "bitcoinAddress": "Dirección de Bitcoin",
-    "noteSubTitle": "El UTXO cegado en esta factura caducará en 24 horas después de su creación."
+    "noteSubTitle": "El UTXO cegado en esta factura caducará en 24 horas después de su creación.",
+    "lightningAddress": "Dirección Lightning"
   },
   "sendScreen": {
     "headerSubTitle": "Escanear QR",

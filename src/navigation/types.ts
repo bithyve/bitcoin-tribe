@@ -51,6 +51,7 @@ export type AppStackParams = {
   [NavigationRoutes.ONBOARDINGSCREEN]: undefined;
   [NavigationRoutes.SELECTWALLET]: undefined;
   [NavigationRoutes.LIGHTNINGNODEDETAILS]: undefined;
+  [NavigationRoutes.LIGHTNINGRECEIVE]: undefined;
   // Add other routes as needed
 };
 

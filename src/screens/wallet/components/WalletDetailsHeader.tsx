@@ -175,9 +175,13 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         }
         // onPressBuy={onPressBuy}
         onPressRecieve={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
-          )
+          activeTab === 'lightning'
+            ? navigation.dispatch(
+                CommonActions.navigate(NavigationRoutes.LIGHTNINGRECEIVE),
+              )
+            : navigation.dispatch(
+                CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
+              )
         }
       />
     </View>

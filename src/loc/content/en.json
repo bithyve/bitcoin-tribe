@@ -183,7 +183,8 @@
     "placeHolderText": "Enter Amount",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
-    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
+    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation.",
+    "lightningAddress": "Lightning Address"
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",

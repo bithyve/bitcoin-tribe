@@ -53,6 +53,7 @@ import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
 import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import LightningNodeDetails from 'src/screens/onBoarding/LightningNodeDetails';
+import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -227,6 +228,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.SELECTASSETTOSEND}
           component={SelectAssetToSend}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.LIGHTNINGRECEIVE}
+          component={LightningReceiveScreen}
         />
       </Stack.Navigator>
     </RealmProvider>
