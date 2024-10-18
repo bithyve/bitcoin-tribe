@@ -76,7 +76,16 @@
     "selfCustody": "Self-Custody",
     "mainnet": "Mainnet",
     "mainnetAndLightning": "Mainnet & Lightning",
-    "supported": "Supported"
+    "supported": "Supported",
+    "nodeDetails": "Node Details",
+    "nodeConURL": "Node connection URL",
+    "nodeID": "Node ID",
+    "userID": "User ID (optional)",
+    "authentication": "Authentication",
+    "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
+    "enterUsername": "Enter Username",
+    "enterPassword": "Enter Password",
+    "enterBearerToken": "Enter Bearer Token"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -174,7 +183,8 @@
     "placeHolderText": "Enter Amount",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
-    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
+    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation.",
+    "lightningAddress": "Lightning Address"
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
@@ -247,7 +257,9 @@
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
     "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
-    "rgbAssets": "Reserved Sats"
+    "rgbAssets": "Reserved Sats",
+    "lightning": "Lightning",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

@@ -18,6 +18,7 @@ import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import WalletFooter from './components/WalletFooter';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh = false } = route.params || {};
@@ -25,6 +26,7 @@ function WalletDetails({ navigation, route }) {
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
   const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('bitcoin');
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
@@ -61,6 +63,7 @@ function WalletDetails({ navigation, route }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
+          activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
@@ -71,6 +74,12 @@ function WalletDetails({ navigation, route }) {
           transactions={wallet.specs.transactions}
           wallet={wallet}
           autoRefresh={autoRefresh || refreshWallet}
+        />
+      </View>
+      <View style={styles.footerView}>
+        <WalletFooter
+          activeTab={activeTab}
+          setActiveTab={text => setActiveTab(text)}
         />
       </View>
       <ModalContainer
@@ -97,11 +106,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'gray',
+    // borderBottomWidth: 0.2,
+    // borderBottomColor: 'gray',
   },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '50%' : '55%',
+    height: windowHeight < 670 ? '40%' : '45%',
+    marginHorizontal: wp(16),
+  },
+  footerView: {
+    height: windowHeight < 670 ? '10%' : '15%',
     marginHorizontal: wp(16),
   },
 });

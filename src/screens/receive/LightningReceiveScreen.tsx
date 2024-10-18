@@ -15,7 +15,7 @@ import WalletOperations from 'src/services/wallets/operations';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 
-function ReceiveScreen({ route }) {
+function LightningReceiveScreen({ route }) {
   const navigation = useNavigation();
   // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
@@ -65,7 +65,7 @@ function ReceiveScreen({ route }) {
         <ReceiveQrDetails
           addMountModalVisible={() => setVisible(true)}
           receivingAddress={paymentURI || receivingAddress || 'address'}
-          qrTitle={receciveScreen.bitcoinAddress}
+          qrTitle={receciveScreen.lightningAddress}
         />
       </ScrollView>
       {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReceiveScreen;
+export default LightningReceiveScreen;

@@ -76,7 +76,16 @@
     "selfCustody": "セルフカストディ",
     "mainnet": "メインネット",
     "mainnetAndLightning": "メインネット＆ライトニング",
-    "supported": "サポートされている"
+    "supported": "サポートされている",
+    "nodeDetails": "ノードの詳細",
+    "nodeConURL": "ノード接続URL",
+    "nodeID": "ノードID",
+    "userID": "ユーザーID（オプション）",
+    "authentication": "認証",
+    "authSubTitle": "続行するには、認証を行い、確認してください。",
+    "enterUsername": "ユーザー名を入力してください",
+    "enterPassword": " パスワードを入力してください",
+    "enterBearerToken": "ベアラートークンを入力してください"
   },
   "home": {
     "addAssets": "アセットを追加",
@@ -174,7 +183,8 @@
     "placeHolderText": "金額を入力",
     "invoiceAddress": "RGB請求書",
     "bitcoinAddress": "ビットコインアドレス",
-    "noteSubTitle": "この請求書のブラインドUTXOは作成後24時間で失効します。"
+    "noteSubTitle": "この請求書のブラインドUTXOは作成後24時間で失効します。",
+    "lightningAddress": "ライトニングアドレス"
   },
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
@@ -247,7 +257,9 @@
     "failedTestSatsRecived": "テストサットの受信に失敗しました",
     "failRefreshWallet": "ウォレットの更新に失敗しました",
     "failedToCreateUTXO": "UTXOの作成に失敗しました。不足しているサット",
-    "rgbAssets": "予約されたサット"
+    "rgbAssets": "予約されたサット",
+    "lightning": "ライトニングネットワーク",
+    "bitcoin": "ビットコイン"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
