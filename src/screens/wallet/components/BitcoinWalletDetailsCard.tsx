@@ -105,7 +105,7 @@ const getStyles = (theme: AppTheme) =>
     balanceAndDetailsWrapper: {
       width: '100%',
       marginVertical: hp(15),
-      borderRadius: 10,
+      borderRadius: 20,
       borderColor: theme.colors.borderColor,
       borderWidth: 0.5,
     },
