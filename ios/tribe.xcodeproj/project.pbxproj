@@ -707,7 +707,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -742,7 +742,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tribe;
@@ -776,7 +776,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -812,7 +812,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";
