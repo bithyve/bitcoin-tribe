@@ -87,7 +87,7 @@ function LightningWalletDetailsCard(props: LightningWalletDetailsProps) {
               </View>
             )}
             <AppText variant="walletBalance" style={styles.balanceText}>
-              {getBalance(confirmed + unconfirmed)}
+              {getBalance(0)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>

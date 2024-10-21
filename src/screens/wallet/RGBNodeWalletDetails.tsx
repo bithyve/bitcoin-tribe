@@ -32,26 +32,6 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     ApiHandler.receiveTestSats,
   );
-  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
-    ApiHandler.viewUtxos,
-  );
-
-  useEffect(() => {
-    fetchUTXOs();
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      Toast(walletTranslations.testSatsRecived);
-      fetchUTXOs();
-      setRefreshWallet(true);
-      walletRefreshMutation.mutate({
-        wallets: [wallet],
-      });
-    } else if (isError) {
-      Toast(walletTranslations.failedTestSatsRecived, true);
-    }
-  }, [isSuccess, isError]);
 
   return (
     <View>
@@ -59,7 +39,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         <RGBNodeWalletHeader
           profile={profileImage}
           username={walletName}
-          wallet={wallet}
+          wallet={null}
           activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
@@ -68,8 +48,8 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
       <View style={styles.walletTransWrapper}>
         <WalletTransactionsContainer
           navigation={navigation}
-          transactions={wallet.specs.transactions}
-          wallet={wallet}
+          transactions={[]}
+          wallet={''}
           autoRefresh={autoRefresh || refreshWallet}
         />
       </View>
