@@ -70,7 +70,7 @@ function HomeScreen() {
   }, [coins, collectibles]);
 
   const balances = useMemo(() => {
-    console.log('rgbWallet?.nodeBtcBalance', rgbWallet?.nodeBtcBalance);
+    // console.log('rgbWallet?.nodeBtcBalance', rgbWallet?.nodeBtcBalance);
     if (app.appType === AppType.NODE_CONNECT) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {

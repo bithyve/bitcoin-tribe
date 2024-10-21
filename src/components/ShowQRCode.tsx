@@ -38,7 +38,7 @@ const getStyles = theme =>
       backgroundColor: Colors.White,
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: wp(35),
+      // marginTop: wp(35),
       padding: 10,
       borderRadius: 15,
       borderColor: theme.colors.borderColor,

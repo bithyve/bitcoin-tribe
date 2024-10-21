@@ -45,7 +45,7 @@ function LightningWalletDetailsCard(props: LightningWalletDetailsProps) {
       setCurrencyMode(CurrencyKind.SATS);
     }
   };
-  console.log(username + ' ' + confirmed + ' ' + unconfirmed);
+
   return (
     <GradientView
       style={styles.balanceAndDetailsWrapper}
