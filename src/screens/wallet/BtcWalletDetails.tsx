@@ -18,6 +18,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import useRgbWallets from 'src/hooks/useRgbWallets';
+import AppType from 'src/models/enums/AppType';
 
 function BtcWalletDetails({ navigation, route, activeTab }) {
   const { autoRefresh = false } = route.params || {};
@@ -37,9 +38,15 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
   const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
     ApiHandler.viewUtxos,
   );
+  const { mutate: fetchOnChainTransaction, data } = useMutation(
+    ApiHandler.getNodeOnchainBtcTransactions,
+  );
 
   useEffect(() => {
     fetchUTXOs();
+    if (app.appType === AppType.NODE_CONNECT) {
+      fetchOnChainTransaction();
+    }
   }, []);
 
   useEffect(() => {
@@ -68,10 +75,19 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           onPressBuy={() => setVisible(true)}
         />
       </View>
-      <View style={styles.walletTransWrapper}>
+      <View
+        style={
+          app.appType === AppType.NODE_CONNECT
+            ? styles.walletTransWrapper
+            : styles.onChainWalletTransWrapper
+        }>
         <WalletTransactionsContainer
           navigation={navigation}
-          transactions={wallet?.specs.transactions}
+          transactions={
+            app.appType === AppType.NODE_CONNECT
+              ? data?.transactions
+              : wallet?.specs.transactions
+          }
           wallet={wallet}
           autoRefresh={autoRefresh || refreshWallet}
         />
@@ -96,15 +112,19 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 670 ? '48%' : '45%',
+    height: '44%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
     // borderBottomWidth: 0.2,
     // borderBottomColor: 'gray',
   },
+  onChainWalletTransWrapper: {
+    height: '55%',
+    marginHorizontal: wp(16),
+  },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '40%' : '45%',
+    height: '50%',
     marginHorizontal: wp(16),
   },
 });

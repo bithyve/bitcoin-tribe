@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery as realmUseQuery } from '@realm/react';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -18,6 +19,9 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys } from 'src/storage';
+import AppType from 'src/models/enums/AppType';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function WalletTransactionList({
   transactions,
@@ -32,6 +36,7 @@ function WalletTransactionList({
 }) {
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -87,7 +92,11 @@ function WalletTransactionList({
           transId={item.txid}
           tranStatus={item.status}
           transDate={item.date}
-          transAmount={`${item.amount}`}
+          transAmount={
+            app.appType === AppType.NODE_CONNECT
+              ? `${item.received}`
+              : `${item.amount}`
+          }
           transType={item.transactionType}
           transaction={item}
           coin={coin}

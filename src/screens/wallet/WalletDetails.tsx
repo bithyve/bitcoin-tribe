@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp, windowHeight } from 'src/constants/responsive';
+import { wp, windowHeight, hp } from 'src/constants/responsive';
 import WalletFooter from './components/WalletFooter';
 import RGBNodeWalletDetails from './RGBNodeWalletDetails';
 import BtcWalletDetails from './BtcWalletDetails';
@@ -17,27 +17,29 @@ function WalletDetails({ navigation, route }) {
 
   return (
     <ScreenContainer style={styles.container}>
-      {activeTab === 'lightning' ? (
-        <RGBNodeWalletDetails
-          navigation={navigation}
-          route={route}
-          activeTab={activeTab}
-        />
-      ) : (
-        <BtcWalletDetails
-          navigation={navigation}
-          route={route}
-          activeTab={activeTab}
-        />
-      )}
-      <View style={styles.footerView}>
-        {app.appType === AppType.NODE_CONNECT && (
+      <View>
+        {activeTab === 'lightning' ? (
+          <RGBNodeWalletDetails
+            navigation={navigation}
+            route={route}
+            activeTab={activeTab}
+          />
+        ) : (
+          <BtcWalletDetails
+            navigation={navigation}
+            route={route}
+            activeTab={activeTab}
+          />
+        )}
+      </View>
+      {app.appType === AppType.NODE_CONNECT && (
+        <View style={styles.footerView}>
           <WalletFooter
             activeTab={activeTab}
             setActiveTab={text => setActiveTab(text)}
           />
-        )}
-      </View>
+        </View>
+      )}
     </ScreenContainer>
   );
 }
@@ -46,10 +48,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     paddingHorizontal: 0,
-    paddingTop: 0,
+    paddingTop: hp(20),
   },
   footerView: {
-    height: windowHeight < 670 ? '10%' : '15%',
+    height: '10%',
     marginHorizontal: wp(16),
   },
 });
