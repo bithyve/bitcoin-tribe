@@ -17,21 +17,19 @@ function WalletDetails({ navigation, route }) {
 
   return (
     <ScreenContainer style={styles.container}>
-      <View>
-        {activeTab === 'lightning' ? (
-          <RGBNodeWalletDetails
-            navigation={navigation}
-            route={route}
-            activeTab={activeTab}
-          />
-        ) : (
-          <BtcWalletDetails
-            navigation={navigation}
-            route={route}
-            activeTab={activeTab}
-          />
-        )}
-      </View>
+      {activeTab === 'lightning' ? (
+        <RGBNodeWalletDetails
+          navigation={navigation}
+          route={route}
+          activeTab={activeTab}
+        />
+      ) : (
+        <BtcWalletDetails
+          navigation={navigation}
+          route={route}
+          activeTab={activeTab}
+        />
+      )}
       {app.appType === AppType.NODE_CONNECT && (
         <View style={styles.footerView}>
           <WalletFooter

@@ -128,7 +128,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     emptyStateContainer: {
-      marginTop: '30%',
+      marginTop: '20%',
     },
     refreshLoader: {
       alignSelf: 'center',

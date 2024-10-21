@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: '44%',
+    height: '45%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(16),
   },
   walletTransWrapper: {
-    height: '50%',
+    height: '48%',
     marginHorizontal: wp(16),
   },
 });
