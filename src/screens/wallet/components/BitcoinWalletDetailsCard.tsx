@@ -19,12 +19,11 @@ import { AppTheme } from 'src/theme';
 type LightningWalletDetailsProps = {
   profile: string;
   username: string;
-  confirmed: number;
-  unconfirmed: number;
+  balances: string;
 };
 
 function BitcoinWalletDetailsCard(props: LightningWalletDetailsProps) {
-  const { profile, username, confirmed, unconfirmed } = props;
+  const { profile, username, balances } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, home } = translations;
@@ -87,7 +86,7 @@ function BitcoinWalletDetailsCard(props: LightningWalletDetailsProps) {
             )}
 
             <AppText variant="walletBalance" style={styles.balanceText}>
-              {getBalance(confirmed + unconfirmed)}
+              {getBalance(balances)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>

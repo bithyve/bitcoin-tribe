@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useQuery as realmUseQuery } from '@realm/react';
 
 import TransactionButtons from './TransactionButtons';
 import WalletSectionHeader from './WalletSectionHeader';
@@ -11,11 +12,16 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
+import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
 
 type walletDetailsHeaderProps = {
   profile: string;
   username: string;
   wallet?: Wallet;
+  rgbWallet?: RGBWallet;
   activeTab: string;
   onPressSetting?: () => void;
   onPressBuy: () => void;
@@ -27,21 +33,32 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const theme: AppTheme = useTheme();
 
   const styles = getStyles(theme);
-  const { profile, username, wallet, onPressSetting, onPressBuy } = props;
+  const { profile, username, wallet, rgbWallet, onPressSetting, onPressBuy } =
+    props;
 
-  const {
-    specs: { balances: { confirmed, unconfirmed } } = {
-      balances: { confirmed: 0, unconfirmed: 0 },
-    },
-  } = wallet || {};
+  // const {
+  //   specs: { balances: { confirmed, unconfirmed } } = {
+  //     balances: { confirmed: 0, unconfirmed: 0 },
+  //   },
+  // } = wallet || {};
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
+  const balances = useMemo(() => {
+    console.log('rgbWallet?.nodeBtcBalance', rgbWallet?.nodeBtcBalance);
+    if (app.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+    } else {
+      return (
+        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+      );
+    }
+  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
 
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
       <BitcoinWalletDetailsCard
         profile={profile}
-        confirmed={confirmed}
-        unconfirmed={unconfirmed}
+        balances={balances}
         username={username}
       />
       <TransactionButtons

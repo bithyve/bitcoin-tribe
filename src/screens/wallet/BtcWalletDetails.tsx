@@ -13,10 +13,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import useRgbWallets from 'src/hooks/useRgbWallets';
 
 function BtcWalletDetails({ navigation, route, activeTab }) {
   const { autoRefresh = false } = route.params || {};
@@ -27,6 +28,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const wallet: Wallet = useWallets({}).wallets[0];
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const { mutate, isLoading, isError, isSuccess } = useMutation(
@@ -60,6 +62,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
+          rgbWallet={rgbWallet}
           activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
