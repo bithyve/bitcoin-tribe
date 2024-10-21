@@ -969,7 +969,7 @@ export class ApiHandler {
     try {
       const response = await new OnChainApi(
         ApiHandler.config,
-      ).listtransactionsPost({ skipSync: false });
+      ).listtransactionsPost({ skip_sync: false });
       if (response.status === 200) {
         console.log(response.data);
         return response.data;
