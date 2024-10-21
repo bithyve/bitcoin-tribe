@@ -35,7 +35,8 @@
     "addLater": "Add Later",
     "continue": "Continue",
     "noInternet": "No network connection",
-    "rgbWalletOffline": "RGB wallet is offline."
+    "rgbWalletOffline": "RGB wallet is offline.",
+    "backupNow": "Backup Now"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -70,7 +71,21 @@
     "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets.",
     "rememberPasscodeTitle": "Remember your passcode",
     "rememberPasscodeSubTitle": "Please remember your passcode and backup your app by writing down the 12-word recovery key",
-    "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it."
+    "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it.",
+    "selectWalletType": "Select wallet type",
+    "selfCustody": "Self-Custody",
+    "mainnet": "Mainnet",
+    "mainnetAndLightning": "Mainnet & Lightning",
+    "supported": "Supported",
+    "nodeDetails": "Node Details",
+    "nodeConURL": "Node connection URL",
+    "nodeID": "Node ID",
+    "userID": "User ID (optional)",
+    "authentication": "Authentication",
+    "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
+    "enterUsername": "Enter Username",
+    "enterPassword": "Enter Password",
+    "enterBearerToken": "Enter Bearer Token"
   },
   "home": {
     "addAssets": "Add Assets",
@@ -88,7 +103,9 @@
     "yourCoinAvatar": "Your Coin Avatar",
     "select": "Select",
     "noAssetTitle": "No assets yet.",
-    "noAssetSubTitle": "Tap the plus icon below to issue your first asset."
+    "noAssetSubTitle": "Tap the plus icon below to issue your first asset.",
+    "backupAlertTitle": "Secure Your Funds with a Backup",
+    "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now."
   },
   "settings": {
     "setting": "Settings",
@@ -166,7 +183,8 @@
     "placeHolderText": "Enter Amount",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
-    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation."
+    "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation.",
+    "lightningAddress": "Lightning Address"
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
@@ -239,7 +257,9 @@
     "failedTestSatsRecived": "Failed to receive test-sats",
     "failRefreshWallet": "Failed to refresh wallet",
     "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
-    "rgbAssets": "Reserved Sats"
+    "rgbAssets": "Reserved Sats",
+    "lightning": "Lightning",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

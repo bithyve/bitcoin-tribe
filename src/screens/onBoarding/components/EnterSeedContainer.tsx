@@ -280,7 +280,9 @@ function EnterSeedContainer() {
                     inputRef.current[onChangeIndex + 1].focus();
                   }
                 }}>
-                <AppText variant="body2">{word}</AppText>
+                <AppText style={styles.suggestedWordStyle} variant="body2">
+                  {word}
+                </AppText>
               </AppTouchable>
             ))}
           </View>
@@ -368,6 +370,9 @@ const getStyles = (theme: AppTheme) =>
     },
     underlineStyle: {
       backgroundColor: 'transparent',
+    },
+    suggestedWordStyle: {
+      color: theme.colors.suggestedText,
     },
   });
 

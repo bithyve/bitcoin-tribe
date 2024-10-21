@@ -41,18 +41,18 @@ object RGBHelper {
 
             // val filter = listOf()
             val refresh =
-                RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, listOf())
+                RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, listOf(), false)
             var assets = RGBWalletRepository.wallet?.listAssets(listOf())
             val rgb25Assets = assets?.cfa
             val rgb20Assets = assets?.nia
             if (rgb20Assets != null) {
                 for (rgb20Asset in rgb20Assets) {
-                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb20Asset.assetId, listOf())
+                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb20Asset.assetId, listOf(), false)
                 }
             }
             if (rgb25Assets != null) {
                 for (rgb25Asset in rgb25Assets) {
-                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb25Asset.assetId, listOf())
+                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb25Asset.assetId, listOf(), false)
                 }
             }
             assets = RGBWalletRepository.wallet?.listAssets(listOf())
@@ -71,7 +71,7 @@ object RGBHelper {
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
-        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter)
+        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
         val blindedData = getBlindedUTXO(null, AppConstants.rgbBlindDuration)
         val gson = Gson()
         val json = gson.toJson(blindedData)
@@ -127,12 +127,12 @@ object RGBHelper {
     }
 
     fun getAssetTransfers(assetID: String): String {
-        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf())
+        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf(), false)
         return Gson().toJson(RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()).toString()
     }
 
     fun getTransactions(): String {
-        return Gson().toJson(RGBWalletRepository.wallet?.listTransactions(RGBWalletRepository.online)).toString()
+        return Gson().toJson(RGBWalletRepository.wallet?.listTransactions(RGBWalletRepository.online, true)).toString()
     }
 
     fun refresh(assetID: String? = null, light: Boolean = false): Boolean {
@@ -143,7 +143,7 @@ object RGBHelper {
                     RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
                 )
             else listOf()
-        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, filter)
+        val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, filter, false)
         Log.d(TAG, "refresh: $refresh")
         return true
     }
@@ -160,7 +160,8 @@ object RGBHelper {
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
             false,
             feeRate,
-            0u
+            0u,
+            false
         ) }
         val jsonObject = JsonObject()
         if (txid != null) {
@@ -238,7 +239,8 @@ object RGBHelper {
             false,
             null,
             null,
-            feeRate
+            feeRate,
+            false
         )
     }
 
@@ -263,7 +265,7 @@ object RGBHelper {
     }
 
     fun getUnspents(): List<Unspent>? {
-        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false)
+        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
     }
 
     fun refreshAsset(assetID: String) {

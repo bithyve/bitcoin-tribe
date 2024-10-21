@@ -137,4 +137,10 @@ export default [
     currency: '$ TWD',
     displayTitle: 'TWD',
   },
+  {
+    code: 'ZAR',
+    symbol: 'R',
+    currency: 'R ZAR',
+    displayTitle: 'TWD',
+  },
 ];

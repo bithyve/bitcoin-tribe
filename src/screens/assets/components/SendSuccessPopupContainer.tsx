@@ -1,12 +1,14 @@
 import LottieView from 'lottie-react-native';
 import React, { ReactNode, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
+
 import AppText from 'src/components/AppText';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import { hp } from 'src/constants/responsive';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 
 type sendSuccessProps = {
@@ -20,13 +22,18 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
   const { title, subTitle, description, onPress } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   return (
     <View style={styles.container}>
       <View>
         <LottieView
-          source={require('src/assets/images/successPopup.json')}
+          source={
+            !isThemeDark
+              ? require('src/assets/images/successPopup.json')
+              : require('src/assets/images/successPopup_light.json')
+          }
           style={styles.loaderStyle}
           autoPlay
           loop

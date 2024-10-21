@@ -13,21 +13,20 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type ReceiveQrDetailsProps = {
   addMountModalVisible: () => void;
   receivingAddress?: string;
+  qrTitle?: string;
 };
 
 const ReceiveQrDetails = ({
   addMountModalVisible,
   receivingAddress,
+  qrTitle,
 }: ReceiveQrDetailsProps) => {
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={styles.container}>
-      <ShowQRCode
-        value={receivingAddress}
-        title={receciveScreen.bitcoinAddress}
-      />
+      <ShowQRCode value={receivingAddress} title={qrTitle} />
 
       <ReceiveQrClipBoard
         qrCodeValue={receivingAddress}

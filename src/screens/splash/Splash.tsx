@@ -9,49 +9,52 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { setKey, setIsWalletOnline } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
-
-  const onInit = useCallback(async () => {
-    try {
-      if (data) {
-        setKey(data.key);
-        setIsWalletOnline(data.isWalletOnline);
-        navigation.replace(NavigationRoutes.APPSTACK);
-      } else {
-        const appId = await Storage.get(Keys.APPID);
-        if (appId && pinMethod !== PinMethod.DEFAULT) {
-          navigation.replace(NavigationRoutes.LOGIN);
-        } else {
-          navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
-        }
-      }
-    } catch (error) {
-      console.error('Error initializing app: ', error);
-    }
-  }, [mutate, navigation, pinMethod, data]);
 
   useEffect(() => {
     const init = async () => {
       try {
         const appId = await Storage.get(Keys.APPID);
         if (appId && pinMethod === PinMethod.DEFAULT) {
-          console.log('mutate');
           mutate();
         }
       } catch (error) {
         console.error('Error fetching appId:', error);
       }
     };
-
     init();
   }, []);
+
+  const onInit = useCallback(async () => {
+    try {
+      const appId = await Storage.get(Keys.APPID);
+      if (appId && pinMethod !== PinMethod.DEFAULT) {
+        navigation.replace(NavigationRoutes.LOGIN);
+      }
+      if (pinMethod === undefined) {
+        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      }
+    } catch (error) {
+      console.error('Error initializing app: ', error);
+    }
+  }, [mutate, navigation, pinMethod]);
+
+  // Handle login success
+  useEffect(() => {
+    if (data) {
+      setKey(data.key);
+      setIsWalletOnline(data.isWalletOnline);
+      navigation.replace(NavigationRoutes.APPSTACK);
+    }
+  }, [data, navigation, setKey]);
 
   useEffect(() => {
     const timer = setTimeout(onInit, 4500);
@@ -61,7 +64,11 @@ function Splash({ navigation }) {
   return (
     <ScreenContainer style={styles.container}>
       <ImageBackground
-        source={require('src/assets/images/background.png')}
+        source={
+          !isThemeDark
+            ? require('src/assets/images/background.png')
+            : require('src/assets/images/backgroundLight.png')
+        }
         resizeMode="cover"
         style={styles.backImage}>
         <Image

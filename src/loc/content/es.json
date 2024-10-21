@@ -35,7 +35,8 @@
     "addLater": "Añadir más tarde",
     "continue": "Continuar",
     "noInternet": "Sin conexión de red",
-    "rgbWalletOffline": "La billetera RGB está desconectada."
+    "rgbWalletOffline": "La billetera RGB está desconectada.",
+    "backupNow": "Respaldar ahora"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -70,7 +71,21 @@
     "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos.",
     "rememberPasscodeTitle": "Recuerda tu código",
     "rememberPasscodeSubTitle": "Recuerda tu código y haz una copia de seguridad de la aplicación escribiendo la clave de recuperación de 12 palabras",
-    "rememberPasscodeDesc": "Si olvidas tu código, quedarás bloqueado fuera de la aplicación y tendrás que recuperarlo"
+    "rememberPasscodeDesc": "Si olvidas tu código, quedarás bloqueado fuera de la aplicación y tendrás que recuperarlo",
+    "selectWalletType": "Selecciona el tipo de billetera",
+    "selfCustody": "Auto-custodia",
+    "mainnet": "Red principal",
+    "mainnetAndLightning": "Red principal y Lightning",
+    "supported": "Soportado",
+    "nodeDetails": "Detalles del nodo",
+    "nodeConURL": "URL de conexión del nodo",
+    "nodeID": "ID del nodo",
+    "userID": "ID de usuario (opcional)",
+    "authentication": "Autenticación",
+    "authSubTitle": "Para continuar, autentícate y asegúrate de que.",
+    "enterUsername": "Introduce el nombre de usuario",
+    "enterPassword": "Introduce la contraseña",
+    "enterBearerToken": "Introduce el Bearer Token"
   },
   "home": {
     "addAssets": "Agregar activos",
@@ -88,7 +103,9 @@
     "yourCoinAvatar": "Tu avatar de moneda",
     "select": "Seleccionar",
     "noAssetTitle": "Aún no hay activos.",
-    "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo."
+    "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo.",
+    "backupAlertTitle": "Asegura tus fondos con un respaldo",
+    "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora."
   },
   "settings": {
     "setting": "Configuraciones",
@@ -166,7 +183,8 @@
     "placeHolderText": "Introduce la cantidad",
     "invoiceAddress": "Factura RGB",
     "bitcoinAddress": "Dirección de Bitcoin",
-    "noteSubTitle": "El UTXO cegado en esta factura caducará en 24 horas después de su creación."
+    "noteSubTitle": "El UTXO cegado en esta factura caducará en 24 horas después de su creación.",
+    "lightningAddress": "Dirección Lightning"
   },
   "sendScreen": {
     "headerSubTitle": "Escanear QR",
@@ -239,7 +257,9 @@
     "failedTestSatsRecived": "No se pudieron recibir los exámenes",
     "failRefreshWallet": "No se pudo actualizar la billetera",
     "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes",
-    "rgbAssets": "Sats reservados"
+    "rgbAssets": "Sats reservados",
+    "lightning": "Relámpago",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

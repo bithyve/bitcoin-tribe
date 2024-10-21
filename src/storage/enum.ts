@@ -25,4 +25,6 @@ export enum RealmSchema {
   CollectibleMedia = 'CollectibleMedia',
   BackupHistory = 'BackupHistory',
   CloudBackupHistory = 'CloudBackupHistory',
+  NodeInfo = 'NodeInfo',
+  NodeBtcBalance = 'NodeBtcBalance',
 }

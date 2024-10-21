@@ -35,7 +35,8 @@
     "addLater": "後で追加",
     "continue": "続ける",
     "noInternet": "ネットワーク接続がありません",
-    "rgbWalletOffline": "RGBウォレットはオフラインです。"
+    "rgbWalletOffline": "RGBウォレットはオフラインです。",
+    "backupNow": "今すぐバックアップ"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -70,7 +71,21 @@
     "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。",
     "rememberPasscodeTitle": "パスコードを覚えておいてください",
     "rememberPasscodeSubTitle": "パスコードを覚え、12単語のリカバリーキーを書き留めてアプリをバックアップしてください",
-    "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です"
+    "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です",
+    "selectWalletType": "ウォレットタイプを選択",
+    "selfCustody": "セルフカストディ",
+    "mainnet": "メインネット",
+    "mainnetAndLightning": "メインネット＆ライトニング",
+    "supported": "サポートされている",
+    "nodeDetails": "ノードの詳細",
+    "nodeConURL": "ノード接続URL",
+    "nodeID": "ノードID",
+    "userID": "ユーザーID（オプション）",
+    "authentication": "認証",
+    "authSubTitle": "続行するには、認証を行い、確認してください。",
+    "enterUsername": "ユーザー名を入力してください",
+    "enterPassword": " パスワードを入力してください",
+    "enterBearerToken": "ベアラートークンを入力してください"
   },
   "home": {
     "addAssets": "アセットを追加",
@@ -88,7 +103,9 @@
     "yourCoinAvatar": "あなたのコインアバター",
     "select": "選択",
     "noAssetTitle": "まだアセットがありません。",
-    "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。"
+    "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。",
+    "backupAlertTitle": "バックアップで資金を保護する",
+    "backupAlertSubTitle": "ウォレットをバックアップすることで、デバイスを紛失した場合でも資金を安全に保てます。今すぐバックアップを作成しましょう。"
   },
   "settings": {
     "setting": "設定",
@@ -166,7 +183,8 @@
     "placeHolderText": "金額を入力",
     "invoiceAddress": "RGB請求書",
     "bitcoinAddress": "ビットコインアドレス",
-    "noteSubTitle": "この請求書のブラインドUTXOは作成後24時間で失効します。"
+    "noteSubTitle": "この請求書のブラインドUTXOは作成後24時間で失効します。",
+    "lightningAddress": "ライトニングアドレス"
   },
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
@@ -239,7 +257,9 @@
     "failedTestSatsRecived": "テストサットの受信に失敗しました",
     "failRefreshWallet": "ウォレットの更新に失敗しました",
     "failedToCreateUTXO": "UTXOの作成に失敗しました。不足しているサット",
-    "rgbAssets": "予約されたサット"
+    "rgbAssets": "予約されたサット",
+    "lightning": "ライトニングネットワーク",
+    "bitcoin": "ビットコイン"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

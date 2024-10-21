@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import GradientView from './GradientView';
+import { Keys } from 'src/storage';
 
 type OptionCardProps = {
   icon?: React.ReactNode;
@@ -20,6 +23,7 @@ type OptionCardProps = {
 function OptionCard(props: OptionCardProps) {
   const { icon, title, subTitle, style, onPress } = props;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable onPress={onPress}>
@@ -41,7 +45,8 @@ function OptionCard(props: OptionCardProps) {
             </AppText>
           </View>
           <View style={styles.iconWrapper}>
-            <IconArrow />
+            {/* <IconArrow /> */}
+            {!isThemeDark ? <IconArrow /> : <IconArrowLight />}
           </View>
         </View>
       </GradientView>

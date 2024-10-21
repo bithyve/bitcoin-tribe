@@ -35,7 +35,8 @@
     "addLater": "Aggiungi più tardi",
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
-    "rgbWalletOffline": "Il portafoglio RGB è offline."
+    "rgbWalletOffline": "Il portafoglio RGB è offline.",
+    "backupNow": "Esegui backup ora"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -70,7 +71,21 @@
     "btcBackedAssetInfo": "I sats dal tuo wallet verranno utilizzati come carburante per questi asset.",
     "rememberPasscodeTitle": " Ricorda il tuo codice",
     "rememberPasscodeSubTitle": "Ricorda il tuo codice e fai il backup dell'app scrivendo la chiave di recupero di 12 parole",
-    "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo"
+    "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo",
+    "selectWalletType": "Seleziona il tipo di wallet",
+    "selfCustody": "Auto-custodia",
+    "mainnet": "Rete principale",
+    "mainnetAndLightning": "Rete principale e Lightning",
+    "supported": "Supportato",
+    "nodeDetails": "Dettagli del nodo",
+    "nodeConURL": "URL di connessione del nodo",
+    "nodeID": "ID nodo",
+    "userID": "ID utente (opzionale)",
+    "authentication": "Autenticazione",
+    "authSubTitle": "Per procedere, autentica te stesso e assicurati che.",
+    "enterUsername": "Inserisci il nome utente",
+    "enterPassword": "Inserisci la password",
+    "enterBearerToken": "Inserisci il Bearer Token"
   },
   "home": {
     "addAssets": "Aggiungi risorse",
@@ -88,7 +103,9 @@
     "yourCoinAvatar": "Il tuo avatar della moneta",
     "select": "Seleziona",
     "noAssetTitle": "Ancora nessuna risorsa.",
-    "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto."
+    "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto.",
+    "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
+    "backupAlertSubTitle": "Eseguire il backup del tuo wallet garantisce che i tuoi fondi siano al sicuro, anche se perdi il dispositivo. Prenditi un momento per creare un backup ora."
   },
   "settings": {
     "setting": "Impostazioni",
@@ -166,7 +183,8 @@
     "placeHolderText": "Inserisci importo",
     "invoiceAddress": "Fattura RGB",
     "bitcoinAddress": "Indirizzo Bitcoin",
-    "noteSubTitle": "L'UTXO cieco in questa fattura scadrà 24 ore dopo la sua creazione."
+    "noteSubTitle": "L'UTXO cieco in questa fattura scadrà 24 ore dopo la sua creazione.",
+    "lightningAddress": "Indirizzo Lightning"
   },
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
@@ -239,7 +257,9 @@
     "failedTestSatsRecived": "Impossibile ricevere test-sats",
     "failRefreshWallet": "Impossibile aggiornare il portafoglio",
     "failedToCreateUTXO": "Impossibile creare UTXO. Sats insufficienti",
-    "rgbAssets": "Sats riservati"
+    "rgbAssets": "Sats riservati",
+    "lightning": "Fulmine",
+    "bitcoin": "Bitcoin"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

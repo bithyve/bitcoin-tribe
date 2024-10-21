@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Colors from 'src/theme/Colors';
 
 const RGBWalletStatus = () => {
   const { isWalletOnline } = useContext(AppContext); // Access the context
@@ -22,14 +23,14 @@ const RGBWalletStatus = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: 'red',
+    backgroundColor: Colors.FireOpal,
   },
   errorContainer: {
     position: 'absolute',
     top: Platform.OS === 'ios' ? 25 : 8,
     left: 0,
     right: 0,
-    backgroundColor: 'red',
+    backgroundColor: Colors.FireOpal,
     padding: 20,
     zIndex: 1000, // Ensures the banner is above everything
     alignItems: 'center',
