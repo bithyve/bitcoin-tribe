@@ -38,7 +38,7 @@ function BackupAlert(props: backAlertProps) {
         <SecondaryCTA
           onPress={onSkipPress}
           title={common.skip}
-          width={windowHeight > 670 ? hp(10) : hp(150)}
+          width={windowHeight > 670 ? hp(100) : hp(150)}
         />
         <PrimaryCTA
           title={common.backupNow}
