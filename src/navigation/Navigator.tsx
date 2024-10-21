@@ -52,7 +52,7 @@ import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
 import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
-import LightningNodeDetails from 'src/screens/onBoarding/LightningNodeDetails';
+import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
 
 function LoginStack() {
@@ -71,6 +71,7 @@ function LoginStack() {
         component={ProfileSetup}
       />
       <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+
       <Stack.Screen name={NavigationRoutes.LOGIN} component={Login} />
       <Stack.Screen
         name={NavigationRoutes.ENTERSEEDSCREEN}
@@ -85,8 +86,8 @@ function LoginStack() {
         component={SelectWallet}
       />
       <Stack.Screen
-        name={NavigationRoutes.LIGHTNINGNODEDETAILS}
-        component={LightningNodeDetails}
+        name={NavigationRoutes.RGBLIGHTNINGNODECONNECT}
+        component={RgbLightningNodeConnect}
       />
     </Stack.Navigator>
   );

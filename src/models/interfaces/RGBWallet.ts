@@ -1,16 +1,25 @@
+import { NodeInfoResponse } from 'src/services/rgbnode';
+
 export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
   accountXpub: string;
   accountXpubFingerprint: string;
-  receiveData: {
+  receiveData?: {
     invoice: string;
     recipientId: string;
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
-  utxos: utxosRoot;
+  utxos?: utxosRoot;
+  nodeUrl?: string;
+  nodeAuthentication?: string;
+  nodeInfo?: NodeInfoResponse;
+  nodeBtcBalance?: {
+    vanilla: Balance;
+    colored: Balance;
+  };
 }
 
 // Define the structure of an object in the rgbAllocations array
@@ -129,4 +138,10 @@ export enum AssetType {
 export enum AssetFace {
   RGB25 = 'RGB25',
   RGB20 = 'RGB20',
+}
+
+export interface RgbNodeConnectParams {
+  nodeUrl: string;
+  nodeId: string;
+  authentication: string;
 }

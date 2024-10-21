@@ -18,7 +18,7 @@ export const AssetTransactionSchema = {
   name: RealmSchema.AssetTransaction,
   properties: {
     amount: 'int',
-    batchTransferIdx: 'int',
+    batchTransferIdx: 'int?',
     createdAt: 'int',
     idx: 'int',
     kind: 'string',

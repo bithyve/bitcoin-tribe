@@ -9,7 +9,7 @@
 #import "RGBModule.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "tribe_dev-Swift.h"
+#import "tribe-Swift.h"
 
 #import <Foundation/Foundation.h>
 

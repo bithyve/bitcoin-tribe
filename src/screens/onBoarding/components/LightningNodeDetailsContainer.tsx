@@ -29,6 +29,7 @@ type LightningNodeProps = {
   onChangeAuthType: (text: string) => void;
   authTypeValue: string;
   primaryOnPress: () => void;
+  isLoading: boolean;
 };
 
 function LightningNodeDetailsContainer(props: LightningNodeProps) {
@@ -51,6 +52,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
     onChangeAuthType,
     authTypeValue,
     primaryOnPress,
+    isLoading,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
@@ -70,6 +72,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
             keyboardType={'default'}
             returnKeyType={'done'}
             style={styles.inputWrapper}
+            disabled={isLoading}
           />
           <TextField
             value={inputNodeIDValue}
@@ -78,6 +81,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
             keyboardType={'default'}
             returnKeyType={'done'}
             style={styles.inputWrapper}
+            disabled={isLoading}
           />
           <TextField
             value={inputUserIDValue}
@@ -86,6 +90,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
             keyboardType={'default'}
             returnKeyType={'done'}
             style={styles.inputWrapper}
+            disabled={isLoading}
           />
           <View style={styles.authContainer}>
             <View style={styles.authWrapper}>
@@ -111,20 +116,6 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                   <RadioButton.Android
                     color={theme.colors.accent1}
                     uncheckedColor={theme.colors.headingColor}
-                    value={'Basic'}
-                    status={authTypeValue === 'Basic' ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      onChangeAuthType('Basic');
-                    }}
-                  />
-                  <AppText variant="body2" style={styles.labelText}>
-                    Basic
-                  </AppText>
-                </View>
-                <View style={styles.radioBtnWrapper}>
-                  <RadioButton.Android
-                    color={theme.colors.accent1}
-                    uncheckedColor={theme.colors.headingColor}
                     value={'Bearer'}
                     status={
                       authTypeValue === 'Bearer' ? 'checked' : 'unchecked'
@@ -137,6 +128,20 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                     Bearer
                   </AppText>
                 </View>
+                <View style={styles.radioBtnWrapper}>
+                  <RadioButton.Android
+                    color={theme.colors.accent1}
+                    uncheckedColor={theme.colors.headingColor}
+                    value={'Basic'}
+                    status={authTypeValue === 'Basic' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      onChangeAuthType('Basic');
+                    }}
+                  />
+                  <AppText variant="body2" style={styles.labelText}>
+                    Basic
+                  </AppText>
+                </View>
               </View>
               {authTypeValue === 'Basic' ? (
                 <View>
@@ -147,6 +152,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                     keyboardType={'default'}
                     returnKeyType={'done'}
                     style={styles.inputWrapper}
+                    disabled={isLoading}
                   />
                   <TextField
                     value={inputPasswordValue}
@@ -155,6 +161,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                     keyboardType={'default'}
                     returnKeyType={'done'}
                     style={styles.inputWrapper}
+                    disabled={isLoading}
                   />
                 </View>
               ) : (
@@ -165,6 +172,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                   keyboardType={'default'}
                   returnKeyType={'done'}
                   style={styles.inputWrapper}
+                  disabled={isLoading}
                 />
               )}
             </View>
@@ -176,6 +184,8 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
           primaryTitle={common.proceed}
           primaryOnPress={primaryOnPress}
           width={wp(120)}
+          primaryLoading={isLoading}
+          disabled={isLoading}
         />
       </View>
     </>
