@@ -68,7 +68,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
       <View style={styles.walletTransWrapper}>
         <WalletTransactionsContainer
           navigation={navigation}
-          transactions={wallet.specs.transactions}
+          transactions={wallet?.specs.transactions}
           wallet={wallet}
           autoRefresh={autoRefresh || refreshWallet}
         />

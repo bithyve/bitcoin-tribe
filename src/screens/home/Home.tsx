@@ -24,6 +24,7 @@ import {
   AssetFace,
   Coin,
   RgbUnspent,
+  RGBWallet,
 } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
@@ -31,6 +32,8 @@ import { Keys, Storage } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import BackupAlert from './components/BackupAlert';
+import AppType from 'src/models/enums/AppType';
+import useRgbWallets from 'src/hooks/useRgbWallets';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -55,6 +58,7 @@ function HomeScreen() {
   const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
     ApiHandler.viewUtxos,
   );
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -64,6 +68,17 @@ function HomeScreen() {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
+
+  const balances = useMemo(() => {
+    console.log('rgbWallet?.nodeBtcBalance', rgbWallet?.nodeBtcBalance);
+    if (app.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+    } else {
+      return (
+        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+      );
+    }
+  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
@@ -112,9 +127,7 @@ function HomeScreen() {
         <HomeHeader
           profile={image}
           username={walletName}
-          balance={`${
-            wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
-          }`}
+          balance={balances}
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN, {
               receiveData: 'send',

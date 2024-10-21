@@ -15,7 +15,7 @@ import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
 type walletDetailsHeaderProps = {
   profile: string;
   username: string;
-  wallet: Wallet;
+  wallet?: Wallet;
   activeTab: string;
   onPressSetting?: () => void;
   onPressBuy: () => void;
@@ -33,7 +33,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     specs: { balances: { confirmed, unconfirmed } } = {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
-  } = wallet;
+  } = wallet || {};
 
   return (
     <View style={styles.container}>

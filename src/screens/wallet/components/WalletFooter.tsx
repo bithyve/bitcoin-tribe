@@ -28,19 +28,6 @@ function WalletFooter(props: walletFooterProps) {
   return (
     <View style={styles.container}>
       <AppTouchable
-        style={styles.lightningCtaWrapper}
-        onPress={() => setActiveTab('lightning')}>
-        {activeTab === 'lightning' ? (
-          <LightningActivCTAIcon />
-        ) : (
-          <LightningInActivCTAIcon />
-        )}
-
-        <AppText variant="body1" style={styles.lightningTitleText}>
-          &nbsp;{walletTranslations.lightning}
-        </AppText>
-      </AppTouchable>
-      <AppTouchable
         style={styles.btcCtaWrapper}
         onPress={() => setActiveTab('bitcoin')}>
         {activeTab === 'bitcoin' ? (
@@ -51,6 +38,20 @@ function WalletFooter(props: walletFooterProps) {
 
         <AppText variant="body1" style={styles.btcTitleText}>
           &nbsp;{walletTranslations.bitcoin}
+        </AppText>
+      </AppTouchable>
+
+      <AppTouchable
+        style={styles.lightningCtaWrapper}
+        onPress={() => setActiveTab('lightning')}>
+        {activeTab === 'lightning' ? (
+          <LightningActivCTAIcon />
+        ) : (
+          <LightningInActivCTAIcon />
+        )}
+
+        <AppText variant="body1" style={styles.lightningTitleText}>
+          &nbsp;{walletTranslations.lightning}
         </AppText>
       </AppTouchable>
     </View>

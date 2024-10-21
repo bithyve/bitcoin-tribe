@@ -57,7 +57,7 @@ function SelectWalletCollapse() {
               !isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
             }
             onPress={() =>
-              navigation.navigate(NavigationRoutes.LIGHTNINGNODEDETAILS)
+              navigation.navigate(NavigationRoutes.RGBLIGHTNINGNODECONNECT)
             }
           />
         </View>
