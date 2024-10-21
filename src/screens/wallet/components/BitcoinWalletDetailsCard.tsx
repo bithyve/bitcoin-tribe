@@ -106,7 +106,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
       borderRadius: 20,
       borderColor: theme.colors.borderColor,
-      borderWidth: 0.5,
+      borderWidth: 1,
     },
     backImage: {
       padding: hp(15),
