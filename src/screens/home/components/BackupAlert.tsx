@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
@@ -38,12 +38,12 @@ function BackupAlert(props: backAlertProps) {
         <SecondaryCTA
           onPress={onSkipPress}
           title={common.skip}
-          width={hp(100)}
+          width={windowHeight > 670 ? hp(10) : hp(150)}
         />
         <PrimaryCTA
           title={common.backupNow}
           onPress={onPrimaryPress}
-          width={hp(140)}
+          width={windowHeight > 670 ? hp(140) : hp(180)}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
         />
