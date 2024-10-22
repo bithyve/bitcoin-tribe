@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,8 +13,7 @@ import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
-import { hp, windowHeight } from 'src/constants/responsive';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
@@ -21,6 +21,8 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
+import CloseIcon from 'src/assets/images/closeIcon.svg';
+import CloseIconLight from 'src/assets/images/closeIcon_light.svg';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
@@ -30,8 +32,8 @@ function LanguageAndCurrency() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
-  const [langDropdown, setLangDropdown] = React.useState(false);
-  const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
+  const [langDropdown, setLangDropdown] = useState(false);
+  const [currencyDropDown, setCurrencyDropDown] = useState(false);
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
   );
@@ -60,6 +62,11 @@ function LanguageAndCurrency() {
       <AppHeader
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
+        rightIcon={!isThemeDark ? <CloseIcon /> : <CloseIconLight />}
+        onSettingsPress={() => {
+          setLangDropdown(false);
+          setCurrencyDropDown(false);
+        }}
       />
       <SelectOption
         title={settings.satsModeTitle}
