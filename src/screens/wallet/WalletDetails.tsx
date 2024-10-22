@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { wp, windowHeight, hp } from 'src/constants/responsive';
@@ -9,7 +10,6 @@ import BtcWalletDetails from './BtcWalletDetails';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { useQuery } from '@realm/react';
 
 function WalletDetails({ navigation, route }) {
   const [activeTab, setActiveTab] = useState('bitcoin');
