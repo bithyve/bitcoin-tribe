@@ -68,6 +68,7 @@ type CustomColors = {
   popupText: string;
   suggestedText: string;
   btcCtaBackColor: string;
+  lightningCtaBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -144,6 +145,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
     btcCtaBackColor: Colors.TennesseeOrange,
+    lightningCtaBackColor: Colors.Golden,
   },
   fonts: {
     regular: {
@@ -228,6 +230,7 @@ const CombinedDarkTheme: AppTheme = {
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
     btcCtaBackColor: Colors.TennesseeOrange,
+    lightningCtaBackColor: Colors.Golden,
   },
   fonts: {
     regular: {
