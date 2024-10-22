@@ -12,7 +12,7 @@ import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
@@ -112,6 +112,7 @@ function LanguageAndCurrency() {
           callback={item => {
             setCurrencyDropDown(false);
             setCurrency(item.code);
+            setCurrencyMode(CurrencyKind.FIAT);
           }}
           selectedCurrency={selectedCurrency && selectedCurrency.code}
           style={styles.currencyDropdownContainer}
