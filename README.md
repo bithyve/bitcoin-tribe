@@ -1,4 +1,3 @@
-![Logo](./ios/tribe/Images.xcassets/AppIcon.appiconset/AppIcon~ios-marketing.png)
 # Bitcoin Tribe - My Assets, My People 
 
 [![Playstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/gpbtn.png)](https://play.google.com/store/apps/details?id=com.bithyve.tribe)
