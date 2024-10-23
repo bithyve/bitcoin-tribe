@@ -12,13 +12,16 @@ import { AppContext } from 'src/contexts/AppContext';
 import { decrypt, hash512 } from 'src/utils/encryption';
 import * as SecureStore from 'src/storage/secure-store';
 import config from 'src/utils/config';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import AppType from 'src/models/enums/AppType';
 
-function ProfileSetup({ navigation }) {
+function ProfileSetup() {
+  const navigation = useNavigation();
+  const route = useRoute();
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  // const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
   const { setKey } = useContext(AppContext);
@@ -36,11 +39,15 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
+      const appType: AppType = route.params?.appType || AppType.ON_CHAIN;
       return await ApiHandler.setupNewApp({
         appName: name,
         pinMethod: PinMethod.DEFAULT,
         passcode: '',
         walletImage: profileImage,
+        appType,
+        rgbNodeConnectParams: route.params?.nodeConnectParams || null,
+        rgbNodeInfo: route.params?.nodeInfo || null,
       });
     },
     {

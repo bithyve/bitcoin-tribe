@@ -81,7 +81,7 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 40
+        versionCode 42
         versionName "0.2.2"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
@@ -134,7 +134,7 @@ afterEvaluate {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation 'org.rgbtools:rgb-lib-android:0.3.0-alpha.8'
+    implementation 'org.rgbtools:rgb-lib-android:0.3.0-alpha.9.1'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation "com.google.android.gms:play-services-drive:17.0.0"

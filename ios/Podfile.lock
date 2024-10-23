@@ -1034,6 +1034,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-randombytes (3.6.1):
     - React-Core
   - react-native-rsa-native (2.0.5):
@@ -1443,6 +1445,7 @@ DEPENDENCIES:
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1567,6 +1570,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-rsa-native:
@@ -1688,6 +1693,7 @@ SPEC CHECKSUMS:
   react-native-config: 8f7283449bbb048902f4e764affbbf24504454af
   react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
+  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-safe-area-context: ab8f4a3d8180913bd78ae75dd599c94cce3d5e9a
@@ -1731,4 +1737,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a306513d60e1c0f8be07666abca97380856f94d2
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

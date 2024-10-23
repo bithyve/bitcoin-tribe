@@ -30,7 +30,7 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
         {!isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
-        <UserAvatar size={70} imageSource={profile} />
+        {/* <UserAvatar size={70} imageSource={profile} /> */}
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>

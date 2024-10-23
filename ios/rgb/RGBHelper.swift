@@ -107,7 +107,7 @@ import CloudKit
           let refresh = try wallet.refresh(online: online, assetId: assetId, filter: [
               RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true),
               RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
-          ])
+          ], skipSync: false)
           
           let transfers = try wallet.listTransfers(assetId: assetId)
           var jsonArray = [[String: Any]]()
@@ -160,7 +160,7 @@ import CloudKit
               return
           }
           
-          let unspents = try wallet.listUnspents(online: online, settledOnly: false)
+        let unspents = try wallet.listUnspents(online: online, settledOnly: false, skipSync: false)
           var jsonString = "["
           
           for (index, unspent) in unspents.enumerated() {
@@ -213,18 +213,18 @@ import CloudKit
               return "{}"
           }
 
-          let refresh = try wallet.refresh(online: online, assetId: nil, filter: [])
+        let refresh = try wallet.refresh(online: online, assetId: nil, filter: [], skipSync: false)
           let assets = try wallet.listAssets(filterAssetSchemas: [])
           
           if let niaAssets = assets.nia {
               try niaAssets.forEach { assetNia in
-                  try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [])
+                try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [], skipSync: false)
               }
           }
           
           if let cfaAssets = assets.cfa {
               try cfaAssets.forEach { assetCfa in
-                  try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [])
+                try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
               }
           }
 
@@ -333,7 +333,7 @@ import CloudKit
               var newUTXOs: UInt8 = 0
                             while newUTXOs == 0 && attempts > 0 {
                   print("Attempting to create UTXOs, attempts left: \(attempts)")
-                  newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: Float(feeRate))
+                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: Float(feeRate), skipSync: true)
                   print("newUTXOs=\(newUTXOs)")
                   attempts -= 1
               }
@@ -376,7 +376,7 @@ import CloudKit
                   filter: [
                       RefreshFilter(status: .waitingCounterparty, incoming: true),
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
-                  ]
+                  ], skipSync: false
               )
               print("\(TAG) refresh_\(refresh_)")
               let bindData = try wallet.blindReceive(
@@ -527,7 +527,7 @@ import CloudKit
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount)!, transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0, skipSync: true)
       }
       print(response)
       let data: [String: Any] = [
@@ -675,11 +675,30 @@ import CloudKit
           callback("false")
         } else {
           print("Files in folder \(filesURLs):")
+          guard let rgbDirectoryPath = Utility.getRgbDir()?.path else {
+              print("Failed to get RGB directory path.")
+              return
+          }
           try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+//          if fileManager.fileExists(atPath: rgbDirectoryPath) {
+//              do {
+//                  //try fileManager.removeItem(atPath: rgbDirectoryPath)
+//                  print("RGB directory removed successfully.")
+//                let newPath = Utility.getRgbDir()?.path
+//                try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+//              } catch {
+//                  print("Failed to remove RGB directory: \(error)")
+//              }
+//          } else {
+//              print("RGB directory does not exist.")
+//          }
             callback("true")
         }
     }
     catch let error{
+      print("error \(error):")
+      print("error \(error.localizedDescription):")
+
       let data: [String: Any] = [
         "error": error.localizedDescription,
       ]

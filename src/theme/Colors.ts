@@ -41,5 +41,6 @@ const Colors = {
   CandyAppleRed: 'rgba(255, 10, 10,1)',
   CandyAppleRed1: 'rgba(255, 10, 10,0.2)',
   UFOGreen2: 'rgba(76, 217, 100, 0.1)',
+  TennesseeOrange: 'rgba(245, 124, 0, 1)',
 };
 export default Colors;

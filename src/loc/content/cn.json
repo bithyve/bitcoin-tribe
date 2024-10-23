@@ -71,7 +71,21 @@
     "btcBackedAssetInfo": "您钱包中的 Sats 将作为这些资产的燃料使用。",
     "rememberPasscodeTitle": "记住您的密码",
     "rememberPasscodeSubTitle": "请记住您的密码，并通过写下12个字的恢复密钥备份您的应用程序",
-    "rememberPasscodeDesc": "如果您忘记了密码，您将被锁定在应用程序之外，必须通过恢复来找回它"
+    "rememberPasscodeDesc": "如果您忘记了密码，您将被锁定在应用程序之外，必须通过恢复来找回它",
+    "selectWalletType": "选择钱包类型",
+    "selfCustody": "自主管理",
+    "mainnet": "主网",
+    "mainnetAndLightning": "主网和闪电网络",
+    "supported": "支持",
+    "nodeDetails": "节点详情",
+    "nodeConURL": "节点连接URL",
+    "nodeID": "节点ID",
+    "userID": "用户ID（可选）",
+    "authentication": "认证",
+    "authSubTitle": "请进行身份认证并确保。",
+    "enterUsername": "输入用户名",
+    "enterPassword": "输入密码",
+    "enterBearerToken": "输入承载令牌"
   },
   "home": {
     "addAssets": "添加资产",
@@ -169,7 +183,8 @@
     "placeHolderText": "输入金额",
     "invoiceAddress": "RGB发票",
     "bitcoinAddress": "比特币地址",
-    "noteSubTitle": "此发票中的盲UTXO将在创建后24小时内过期。"
+    "noteSubTitle": "此发票中的盲UTXO将在创建后24小时内过期。",
+    "lightningAddress": "闪电地址"
   },
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
@@ -242,7 +257,9 @@
     "failedTestSatsRecived": "未能接收测试Sats",
     "failRefreshWallet": "刷新钱包失败",
     "failedToCreateUTXO": "创建UTXO失败。Sats不足",
-    "rgbAssets": "保留Sats"
+    "rgbAssets": "保留Sats",
+    "lightning": "闪电网络",
+    "bitcoin": "比特币"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

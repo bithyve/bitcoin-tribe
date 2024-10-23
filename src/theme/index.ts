@@ -67,6 +67,7 @@ type CustomColors = {
   popupCTATitleColor: string;
   popupText: string;
   suggestedText: string;
+  btcCtaBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -142,6 +143,7 @@ const CombinedDefaultTheme: AppTheme = {
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
+    btcCtaBackColor: Colors.TennesseeOrange,
   },
   fonts: {
     regular: {
@@ -225,6 +227,7 @@ const CombinedDarkTheme: AppTheme = {
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
+    btcCtaBackColor: Colors.TennesseeOrange,
   },
   fonts: {
     regular: {
