@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp, windowHeight } from 'src/constants/responsive';
+import { wp, windowHeight, hp } from 'src/constants/responsive';
 import WalletFooter from './components/WalletFooter';
 import RGBNodeWalletDetails from './RGBNodeWalletDetails';
 import BtcWalletDetails from './BtcWalletDetails';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { useQuery } from '@realm/react';
 
 function WalletDetails({ navigation, route }) {
   const [activeTab, setActiveTab] = useState('bitcoin');
@@ -30,14 +30,14 @@ function WalletDetails({ navigation, route }) {
           activeTab={activeTab}
         />
       )}
-      <View style={styles.footerView}>
-        {app.appType === AppType.NODE_CONNECT && (
+      {app.appType === AppType.NODE_CONNECT && (
+        <View style={styles.footerView}>
           <WalletFooter
             activeTab={activeTab}
             setActiveTab={text => setActiveTab(text)}
           />
-        )}
-      </View>
+        </View>
+      )}
     </ScreenContainer>
   );
 }
@@ -46,10 +46,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     paddingHorizontal: 0,
-    paddingTop: 0,
+    paddingTop: hp(20),
   },
   footerView: {
-    height: windowHeight < 670 ? '10%' : '15%',
+    height: '10%',
     marginHorizontal: wp(16),
   },
 });
