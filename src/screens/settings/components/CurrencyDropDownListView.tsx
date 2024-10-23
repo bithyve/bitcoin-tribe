@@ -4,7 +4,7 @@ import { RadioButton, useTheme } from 'react-native-paper';
 
 import { AppTheme } from 'src/theme';
 import GradientView from '../../../components/GradientView';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from '../../../components/AppText';
 import AppTouchable from '../../../components/AppTouchable';
 
@@ -54,7 +54,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      height: '45%',
+      height: windowHeight > 670 ? '45%' : '30%',
       backgroundColor: theme.colors.cardBackground,
       zIndex: 999,
     },

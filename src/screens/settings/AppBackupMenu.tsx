@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { useQuery } from '@realm/react';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -9,17 +11,20 @@ import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingMenuItem from './components/SettingMenuItem';
 import { hp } from 'src/constants/responsive';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
+import AppType from 'src/models/enums/AppType';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmSchema } from 'src/storage/enum';
 
 type AppBackupMenuProps = {
   title: string;
   onPress: () => void;
+  hideMenu?: boolean;
 };
 
 function AppBackupMenu({ navigation }) {
@@ -34,6 +39,7 @@ function AppBackupMenu({ navigation }) {
   const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
   const login = useMutation(ApiHandler.verifyPin);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const AppBackupMenu: AppBackupMenuProps[] = [
     {
@@ -46,6 +52,7 @@ function AppBackupMenu({ navigation }) {
           : navigation.navigate(NavigationRoutes.APPBACKUP, {
               viewOnly: false,
             }),
+      hideMenu: app.appType === AppType.NODE_CONNECT,
     },
     {
       title: settings.rgbAssetsbackup,

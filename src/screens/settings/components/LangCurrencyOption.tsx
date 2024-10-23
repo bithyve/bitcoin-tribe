@@ -1,13 +1,16 @@
 import React, { ReactNode } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
+import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
+import { Keys } from 'src/storage';
 
 type LangCurrencyOptionProps = {
   icon: ReactNode;
@@ -23,6 +26,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
     props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
     <View style={styles.container}>
@@ -54,7 +58,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
             {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>
-            <IconArrowDown />
+            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>

@@ -80,11 +80,11 @@ const getStyles = (theme: AppTheme, activeTab) =>
       justifyContent: 'center',
       backgroundColor:
         activeTab === 'lightning'
-          ? theme.colors.accent1
+          ? theme.colors.lightningCtaBackColor
           : theme.colors.primaryBackground,
       borderColor:
         activeTab === 'lightning'
-          ? theme.colors.accent1
+          ? theme.colors.lightningCtaBackColor
           : theme.colors.borderColor,
       borderWidth: 1,
     },

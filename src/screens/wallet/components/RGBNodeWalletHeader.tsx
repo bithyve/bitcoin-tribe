@@ -29,19 +29,13 @@ function RGBNodeWalletHeader(props: RGBNodeHeaderProps) {
   const styles = getStyles(theme);
   const { profile, username, wallet, onPressSetting, onPressBuy } = props;
 
-  const {
-    specs: { balances: { confirmed, unconfirmed } } = {
-      balances: { confirmed: 0, unconfirmed: 0 },
-    },
-  } = wallet;
-
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
       <LightningWalletDetailsCard
         profile={profile}
-        confirmed={confirmed}
-        unconfirmed={unconfirmed}
+        confirmed={0}
+        unconfirmed={0}
         username={username}
       />
       <TransactionButtons

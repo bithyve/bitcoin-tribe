@@ -13,10 +13,12 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import useRgbWallets from 'src/hooks/useRgbWallets';
+import AppType from 'src/models/enums/AppType';
 
 function BtcWalletDetails({ navigation, route, activeTab }) {
   const { autoRefresh = false } = route.params || {};
@@ -27,6 +29,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const wallet: Wallet = useWallets({}).wallets[0];
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const { mutate, isLoading, isError, isSuccess } = useMutation(
@@ -35,9 +38,15 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
   const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
     ApiHandler.viewUtxos,
   );
+  const { mutate: fetchOnChainTransaction, data } = useMutation(
+    ApiHandler.getNodeOnchainBtcTransactions,
+  );
 
   useEffect(() => {
     fetchUTXOs();
+    if (app.appType === AppType.NODE_CONNECT) {
+      fetchOnChainTransaction();
+    }
   }, []);
 
   useEffect(() => {
@@ -60,15 +69,25 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           profile={profileImage}
           username={walletName}
           wallet={wallet}
+          rgbWallet={rgbWallet}
           activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
       </View>
-      <View style={styles.walletTransWrapper}>
+      <View
+        style={
+          app.appType === AppType.NODE_CONNECT
+            ? styles.walletTransWrapper
+            : styles.onChainWalletTransWrapper
+        }>
         <WalletTransactionsContainer
           navigation={navigation}
-          transactions={wallet?.specs.transactions}
+          transactions={
+            app.appType === AppType.NODE_CONNECT
+              ? data?.transactions
+              : wallet?.specs.transactions
+          }
           wallet={wallet}
           autoRefresh={autoRefresh || refreshWallet}
         />
@@ -93,15 +112,19 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 670 ? '48%' : '45%',
+    height: '45%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
     // borderBottomWidth: 0.2,
     // borderBottomColor: 'gray',
   },
+  onChainWalletTransWrapper: {
+    height: '55%',
+    marginHorizontal: wp(16),
+  },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '40%' : '45%',
+    height: '48%',
     marginHorizontal: wp(16),
   },
 });
