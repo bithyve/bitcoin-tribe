@@ -37,10 +37,6 @@ import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import InsufficiantBalancePopupContainer from './components/InsufficiantBalancePopupContainer';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import useWallets from 'src/hooks/useWallets';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
 
 function IssueScreen() {
@@ -48,7 +44,6 @@ function IssueScreen() {
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const wallet: Wallet = useWallets({}).wallets[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
@@ -60,7 +55,7 @@ function IssueScreen() {
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
@@ -154,13 +149,6 @@ function IssueScreen() {
   };
 
   const onPressIssue = () => {
-    if (
-      wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed ===
-      0
-    ) {
-      setVisible(true);
-      return;
-    }
     if (assetType === AssetType.Coin) {
       issueCoin();
     } else {
@@ -306,24 +294,7 @@ function IssueScreen() {
           primaryLoading={createUtxos.isLoading || loading}
         />
       </View>
-      <View>
-        <ResponsePopupContainer
-          visible={visible}
-          enableClose={true}
-          onDismiss={() => setVisible(false)}
-          backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}>
-          <InsufficiantBalancePopupContainer
-            primaryOnPress={() => {
-              setVisible(false);
-              setTimeout(() => {
-                navigation.replace(NavigationRoutes.RECEIVESCREEN);
-              }, 500);
-            }}
-            secondaryOnPress={() => setVisible(false)}
-          />
-        </ResponsePopupContainer>
-      </View>
+
       <View>
         <ResponsePopupContainer
           visible={visibleFailedToCreatePopup}
