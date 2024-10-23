@@ -1,3 +1,4 @@
+![Logo](./ios/tribe/Images.xcassets/AppIcon.appiconset/AppIcon~ios-marketing.png)
 # Bitcoin Tribe - My Assets, My People 
 
 [![Playstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/gpbtn.png)](https://play.google.com/store/apps/details?id=com.bithyve.tribe)
@@ -15,7 +16,7 @@ Before getting started, make sure you have a proper [React Native development en
 1. Clone this repository to your local machine:
 
    ```shell
-   git clone https://github.com/bithyve/tribe.git
+   git clone https://github.com/bithyve/bitcoin-tribe.git
    ```
 
 2. Navigate to the project directory:
@@ -59,7 +60,7 @@ yarn ios --scheme=tribe-dev
 
 ## Verify Authenticity of Android APK
 
-Please download an [APK](https://github.com/bithyve/bitcoin-keeper/releases) and keep all these files in the same directory: `Android APK file, SHA256SUM.asc, KEEPER_DETACHED_SIGN.sign`. Make a copy of `Android APK file` and rename it as `Android APK clone`.
+Please download an [APK](https://github.com/bithyve/bitcoin-tribe/releases) and keep all these files in the same directory: `Android APK file, SHA256SUM.asc, KEEPER_DETACHED_SIGN.sign`. Make a copy of `Android APK file` and rename it as `Android APK clone`.
 
 Get the public PGP key for `hexa@bithyve.com` (Hexa Team's PGP key) using
 
