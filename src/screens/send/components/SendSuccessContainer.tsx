@@ -109,6 +109,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           width={hp(200)}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
+          height={hp(14)}
         />
       </View>
     </View>

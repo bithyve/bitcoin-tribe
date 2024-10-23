@@ -39,6 +39,7 @@ function BackupAlert(props: backAlertProps) {
           onPress={onSkipPress}
           title={common.skip}
           width={windowHeight > 670 ? hp(100) : hp(150)}
+          height={hp(14)}
         />
         <PrimaryCTA
           title={common.backupNow}
@@ -46,6 +47,7 @@ function BackupAlert(props: backAlertProps) {
           width={windowHeight > 670 ? hp(140) : hp(180)}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
+          height={hp(14)}
         />
       </View>
     </View>

@@ -90,10 +90,10 @@ function IssueScreen() {
       Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
-      setLoading(false);
-      setTimeout(() => {
-        setShowErrorModal(true);
-      }, 500);
+      // setLoading(false);
+      // setTimeout(() => {
+      createUtxos.mutate();
+      // }, 500);
     } else if (response?.error) {
       setLoading(false);
       Toast(`Failed: ${response?.error}`, true);
@@ -114,10 +114,11 @@ function IssueScreen() {
       Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
-      setLoading(false);
-      setTimeout(() => {
-        setShowErrorModal(true);
-      }, 500);
+      // setLoading(false);
+      // setTimeout(() => {
+      // setShowErrorModal(true);
+      createUtxos.mutate();
+      // }, 500);
     } else if (response?.error) {
       setLoading(false);
       Toast(`Failed: ${response?.error}`, true);
@@ -160,7 +161,7 @@ function IssueScreen() {
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
       <ModalLoading visible={loading || createUtxos.isLoading} />
-      <CreateUtxosModal
+      {/* <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
@@ -168,7 +169,7 @@ function IssueScreen() {
             createUtxos.mutate();
           }, 400);
         }}
-      />
+      /> */}
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {

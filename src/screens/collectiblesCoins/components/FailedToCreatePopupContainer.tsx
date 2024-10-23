@@ -32,6 +32,7 @@ function FailedToCreatePopupContainer(props: insufficientBalanceProps) {
           primaryTitle={common.ok}
           primaryOnPress={primaryOnPress}
           width={wp(120)}
+          height={hp(14)}
         />
       </View>
     </View>
