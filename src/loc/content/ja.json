@@ -299,7 +299,10 @@
     "collectibles": "コレクション",
     "saveAssetSuccess": "アセットの画像が正常に保存されました",
     "saveAssetFailed": "アセットの保存に失敗しました",
-    "checkSpendableAmt": "以下の金額を入力してください "
+    "checkSpendableAmt": "以下の金額を入力してください ",
+    "reservedSats": "あなたのウォレットからのサッツは資産取引のために予約されます",
+    "insufficientBalance": "残高不足",
+    "insufficientBalanceSubtitle": "資産を作成するにはウォレットにサッツが必要です。ウォレットに資金を追加して、再試行してください"
   },
   "community": {
     "fnfTitle": "友達と家族",

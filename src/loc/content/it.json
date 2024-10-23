@@ -299,7 +299,10 @@
     "collectibles": "Oggetti da collezione",
     "saveAssetSuccess": "Immagine dell'asset salvata con successo",
     "saveAssetFailed": "Salvataggio dell'asset non riuscito",
-    "checkSpendableAmt": "Inserisci un importo inferiore a "
+    "checkSpendableAmt": "Inserisci un importo inferiore a ",
+    "reservedSats": "I Sats dal tuo portafoglio saranno riservati per le transazioni di asset",
+    "insufficientBalance": "Saldo insufficiente",
+    "insufficientBalanceSubtitle": "Hai bisogno di sats nel tuo portafoglio per creare asset. Per favore, ricarica il tuo portafoglio e riprova"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

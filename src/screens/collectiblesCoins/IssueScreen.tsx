@@ -26,6 +26,7 @@ import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
+import CheckIcon from 'src/assets/images/checkIcon.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
@@ -34,12 +35,19 @@ import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
+import AppText from 'src/components/AppText';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InsufficiantBalancePopupContainer from './components/InsufficiantBalancePopupContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 function IssueScreen() {
   // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
+  const wallet: Wallet = useWallets({}).wallets[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
@@ -51,6 +59,7 @@ function IssueScreen() {
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
 
@@ -138,6 +147,13 @@ function IssueScreen() {
   };
 
   const onPressIssue = () => {
+    if (
+      wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed ===
+      0
+    ) {
+      setVisible(true);
+      return;
+    }
     if (assetType === AssetType.Coin) {
       issueCoin();
     } else {
@@ -262,6 +278,16 @@ function IssueScreen() {
           </View>
         )}
       </KeyboardAvoidView>
+      <View style={styles.reservedSatsWrapper}>
+        <View style={styles.checkIconWrapper}>
+          <CheckIcon />
+        </View>
+        <View style={styles.reservedSatsWrapper1}>
+          <AppText variant="body2" style={styles.reservedSatsText}>
+            {assets.reservedSats}
+          </AppText>
+        </View>
+      </View>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -272,6 +298,24 @@ function IssueScreen() {
           width={wp(120)}
           primaryLoading={createUtxos.isLoading || loading}
         />
+      </View>
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.cardGradient1}
+          borderColor={theme.colors.borderColor}>
+          <InsufficiantBalancePopupContainer
+            primaryOnPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+              }, 500);
+            }}
+            secondaryOnPress={() => setVisible(false)}
+          />
+        </ResponsePopupContainer>
       </View>
     </ScreenContainer>
   );
@@ -325,6 +369,21 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       position: 'absolute',
       bottom: 0,
       left: Platform.OS === 'ios' ? 100 : 112,
+    },
+    reservedSatsWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginVertical: hp(20),
+    },
+    checkIconWrapper: {
+      width: '10%',
+    },
+    reservedSatsWrapper1: {
+      width: '90%',
+    },
+    reservedSatsText: {
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default IssueScreen;

@@ -299,7 +299,10 @@
     "collectibles": "收藏品",
     "saveAssetSuccess": "资产图片保存成功",
     "saveAssetFailed": "保存资产失败",
-    "checkSpendableAmt": "请输入小于的金额 "
+    "checkSpendableAmt": "请输入小于的金额 ",
+    "reservedSats": "您钱包中的Sats将被保留用于资产交易",
+    "insufficientBalance": "余额不足",
+    "insufficientBalanceSubtitle": "您的钱包需要有足够的Sats才能创建资产。请为您的钱包充值后重试"
   },
   "community": {
     "fnfTitle": "朋友和家人",

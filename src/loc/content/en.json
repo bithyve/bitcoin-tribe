@@ -299,7 +299,10 @@
     "collectibles": "Collectibles",
     "saveAssetSuccess": "Asset Image saved successfully",
     "saveAssetFailed": "Failed to save asset",
-    "checkSpendableAmt": "Please enter amount less than "
+    "checkSpendableAmt": "Please enter amount less than ",
+    "reservedSats": "Sats from your wallet will be reserved to use for asset transactions",
+    "insufficientBalance": "Insufficient Balance",
+    "insufficientBalanceSubtitle": "You need sats in your wallet to create assets. Please fund your wallet and try again"
   },
   "community": {
     "fnfTitle": "Friends & Family",
