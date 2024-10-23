@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp, windowHeight } from 'src/constants/responsive';
@@ -7,33 +13,63 @@ import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
 
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
+import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
+import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
-        return isFocused ? <AssetsActive /> : <AssetsInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <AssetsActive />
+          ) : (
+            <AssetsActiveLight />
+          )
+        ) : (
+          <AssetsInActive />
+        );
       case NavigationRoutes.COMMUNITY:
-        return isFocused ? <CommunityActive /> : <CommunityInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <CommunityActive />
+          ) : (
+            <CommunityActiveLight />
+          )
+        ) : (
+          <CommunityInActive />
+        );
       case NavigationRoutes.SETTINGS:
-        return isFocused ? <SettingsActive /> : <SettingsInActive />;
+        return isFocused ? (
+          !isThemeDark ? (
+            <SettingsActive />
+          ) : (
+            <SettingsActiveLight />
+          )
+        ) : (
+          <SettingsInActive />
+        );
       default:
         return '';
     }
@@ -125,9 +161,11 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
-      width: wp(300),
-      marginBottom: hp(15),
-      marginHorizontal: windowWidth * 0.1,
+      width: '89%',
+      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(30),
+      marginHorizontal: hp(16),
+      // alignSelf: 'center',
+      // marginHorizontal: windowWidth * 0.1,
     },
     activeTab: {
       flex: 1,

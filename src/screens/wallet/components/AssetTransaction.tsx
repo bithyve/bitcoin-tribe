@@ -3,21 +3,24 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
+import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
 import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import IconArrow from 'src/assets/images/icon_arrowr1.svg';
-import IconBitcoin from 'src/assets/images/icon_btc.svg';
+import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { TransactionType } from 'src/services/wallets/enums';
+import { RGBTransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
+import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Capitalize from 'src/utils/capitalizeUtils';
+import { Keys } from 'src/storage';
 
 type AssetTransactionProps = {
   transId: string;
@@ -43,6 +46,7 @@ function AssetTransaction(props: AssetTransactionProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
     <AppTouchable
@@ -58,11 +62,21 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {props.transaction.confirmations === 0 ? (
-              <TransPendingIcon />
-            ) : transType === TransactionType.SENT ? (
-              <SendTXNIcon />
-            ) : (
+              !isThemeDark ? (
+                <TransPendingIcon />
+              ) : (
+                TransPendingIconLight
+              )
+            ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
+              !isThemeDark ? (
+                <SendTXNIcon />
+              ) : (
+                <SendTXNIconLight />
+              )
+            ) : !isThemeDark ? (
               <RecieveTXNIcon />
+            ) : (
+              <RecieveTXNIconLight />
             )}
           </View>
           <View style={styles.contentWrapper}>
@@ -80,7 +94,14 @@ function AssetTransaction(props: AssetTransactionProps) {
         </View>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
-            <AppText variant="body1" style={styles.amountText}>
+            <AppText
+              variant="body1"
+              style={[
+                styles.amountText,
+                {
+                  fontSize: transAmount.toString().length > 10 ? 11 : 16,
+                },
+              ]}>
               &nbsp;{numberWithCommas(transAmount)}
             </AppText>
           </View>

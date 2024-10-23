@@ -15,7 +15,11 @@ import {
 import { TribeAppSchema } from './app';
 import { VersionHistorySchema } from './versionHistory';
 import { NodeConnectSchema, DefaultNodeConnectSchema } from './nodeConnect';
-import { RgbWalletSchema, ReceiveDataSchema } from './rgbwallet';
+import {
+  RgbWalletSchema,
+  ReceiveDataSchema,
+  NodeBtcBalanceSchema,
+} from './rgbwallet';
 import {
   BalanceSchema,
   CoinSchema,
@@ -25,6 +29,7 @@ import {
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
+import { NodeInfoSchema } from './nodeInfo';
 
 export default [
   TribeAppSchema,
@@ -53,4 +58,6 @@ export default [
   CollectibleSchema,
   BackupHistorySchema,
   CloudBackupHistorySchema,
+  NodeInfoSchema,
+  NodeBtcBalanceSchema,
 ];

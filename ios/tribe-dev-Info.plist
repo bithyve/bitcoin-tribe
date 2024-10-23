@@ -32,11 +32,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Access camera</string>
+	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library Access Warning</string>
+	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+                    <string>$(PRODUCT_NAME) needs permission to save photos to your library</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Allow Tribe requires FaceID access to allows you quick and secure access.</string>
+	<string>Tribe requires FaceID access to allows you quick and secure access.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LufgaBold.ttf</string>

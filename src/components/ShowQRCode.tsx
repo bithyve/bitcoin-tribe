@@ -5,6 +5,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
+import Colors from 'src/theme/Colors';
 
 type ShowQRCodeProps = {
   value: string;
@@ -15,7 +16,7 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { value, title } = props;
-  const qrSize = (windowWidth * 50) / 100;
+  const qrSize = (windowWidth * 65) / 100;
   return (
     <>
       <View style={styles.qrViewWrapper}>
@@ -34,7 +35,7 @@ const getStyles = theme =>
   StyleSheet.create({
     qrViewWrapper: {
       alignSelf: 'center',
-      backgroundColor: theme.colors.cardGradient3,
+      backgroundColor: Colors.White,
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: wp(35),
@@ -46,8 +47,8 @@ const getStyles = theme =>
       width: (windowWidth * 70) / 100,
     },
     qrImageWrapper: {
-      width: (windowWidth * 50) / 100,
-      height: (windowWidth * 50) / 100,
+      width: (windowWidth * 70) / 100,
+      height: (windowWidth * 70) / 100,
       alignItems: 'center',
       justifyContent: 'center',
     },

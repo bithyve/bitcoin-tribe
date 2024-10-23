@@ -10,6 +10,7 @@ import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { CommonActions } from '@react-navigation/native';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -18,10 +19,11 @@ function EditWalletProfile({ navigation }) {
 
   const [name, setName] = useState(app.appName);
   const [profileImage, setProfileImage] = useState(app.walletImage);
+  const [loading, setLoading] = useState('');
 
   const handlePickImage = async () => {
     try {
-      const result = await pickImage(300, 300, true);
+      const result = await pickImage(true);
       setProfileImage(result);
     } catch (error) {
       console.error(error);
@@ -29,14 +31,26 @@ function EditWalletProfile({ navigation }) {
   };
 
   const updateWalletProfile = async () => {
+    setLoading('loading');
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
-      Toast(wallet.profileUpdateMsg, true);
-      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-        autoRefresh: true,
-      });
+      setLoading('');
+      Toast(wallet.profileUpdateMsg);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: NavigationRoutes.HOME },
+            {
+              name: NavigationRoutes.WALLETDETAILS,
+              params: { autoRefresh: true },
+            },
+          ],
+        }),
+      );
     } else {
-      Toast(wallet.profileUpdateErrMsg, false, true);
+      setLoading('');
+      Toast(wallet.profileUpdateErrMsg, true);
     }
   };
 
@@ -56,6 +70,8 @@ function EditWalletProfile({ navigation }) {
         edit={true}
         disabled={name === ''}
         primaryCTATitle={common.save}
+        primaryStatus={loading}
+        secondaryCTATitle={common.cancel}
       />
     </ScreenContainer>
   );

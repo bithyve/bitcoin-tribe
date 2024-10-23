@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
+import IconScannerLight from 'src/assets/images/icon_scanner_light.svg';
 // import IconNotification from 'src/assets/images/icon_notifications.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
@@ -15,7 +17,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import HomeUserAvatar from './HomeUserAvatar';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 
 type HomeHeaderProps = {
@@ -38,6 +40,7 @@ function HomeHeader(props: HomeHeaderProps) {
     onPressTotalAmt,
   } = props;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = React.useContext(LocalizationContext);
   const { home } = translations;
@@ -55,11 +58,15 @@ function HomeHeader(props: HomeHeaderProps) {
                 numberOfLines={1}
                 variant="heading1"
                 style={styles.usernameText}>
-                {username ? username : 'Hi...!!'}
+                {username ? username : 'Hi!'}
               </AppText>
               <View style={styles.balanceWrapper}>
                 {initialCurrencyMode !== CurrencyKind.SATS &&
-                  getCurrencyIcon(IconBitcoin, 'dark', 15)}
+                  getCurrencyIcon(
+                    !isThemeDark ? IconBitcoin : IconBitcoinLight,
+                    !isThemeDark ? 'dark' : 'light',
+                    15,
+                  )}
                 <AppText variant="body2" style={styles.balanceText}>
                   &nbsp;{getBalance(balance)}
                 </AppText>
@@ -74,7 +81,7 @@ function HomeHeader(props: HomeHeaderProps) {
         </AppTouchable>
         <View style={styles.iconWrapper}>
           <IconWrapper onPress={onPressScanner}>
-            <IconScanner />
+            {isThemeDark ? <IconScannerLight /> : <IconScanner />}
           </IconWrapper>
           {/* To Do */}
           {/* <IconWrapper onPress={onPressNotification}>
@@ -110,10 +117,11 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
+      marginTop: Platform.OS === 'android' ? hp(5) : 0,
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '68%',
+      width: '67%',
       alignItems: 'center',
     },
     userDetailsWrapper: {
@@ -121,6 +129,7 @@ const getStyles = (theme: AppTheme) =>
     },
     usernameText: {
       color: theme.colors.headingColor,
+      width: '100%',
     },
     balanceWrapper: {
       flexDirection: 'row',

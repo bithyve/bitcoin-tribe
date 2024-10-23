@@ -8,14 +8,20 @@ import PinInputsView from 'src/components/PinInputsView';
 import { hp, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
+import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import RememberPasscode from './RememberPasscode';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 function CreatePinContainer() {
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
@@ -24,15 +30,15 @@ function CreatePinContainer() {
   const [passcode, setPasscode] = useState('');
   const [confirmPasscode, setConfirmPasscode] = useState('');
   const [passcodeFlag, setPasscodeFlag] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [confirmPasscodeFlag, setConfirmPasscodeFlag] = useState(0);
   const createPin = useMutation(ApiHandler.createPin);
 
   useEffect(() => {
     if (createPin.error) {
-      Toast(onBoarding.errorSettingPin, false, true);
+      Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      Toast(onBoarding.newPinCreated, false, false);
-      navigation.goBack();
+      setVisible(true);
     }
   }, [createPin.error, createPin.isSuccess, createPin.data]);
 
@@ -43,6 +49,12 @@ function CreatePinContainer() {
       return passcode !== confirmPasscode;
     }
   }, [passcode, confirmPasscode]);
+
+  useEffect(() => {
+    if (passcode !== confirmPasscode && confirmPasscode.length === 4) {
+      Toast(onBoarding.mismatchPasscode, true);
+    }
+  }, [passcode !== confirmPasscode && confirmPasscode]);
 
   function onPressNumber(text) {
     let tmpPasscode = passcode;
@@ -145,8 +157,28 @@ function CreatePinContainer() {
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={<DeleteIcon />}
+        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          width={'100%'}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <RememberPasscode
+            title={onBoarding.rememberPasscodeTitle}
+            subTitle={onBoarding.rememberPasscodeSubTitle}
+            description={onBoarding.rememberPasscodeDesc}
+            onPress={() => {
+              setVisible(false);
+              // Toast(onBoarding.newPinCreated);
+              navigation.goBack();
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </>
   );
 }

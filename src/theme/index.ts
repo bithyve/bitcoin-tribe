@@ -45,6 +45,29 @@ type CustomColors = {
   successPopupBorderColor: string;
   disableCTATitle: string;
   greenText: string;
+  accent4: string;
+  accent5: string;
+  tagText: string;
+  secondaryCTAGradient1: string;
+  secondaryCTAGradient2: string;
+  secondaryCTAGradient3: string;
+  sendCtaBorderColor: string;
+  recieveCtaBorderColor: string;
+  roundSendCTAGradient1: string;
+  roundSendCTAGradient2: string;
+  roundSendCTAGradient3: string;
+  roundReceiveCTAGradient1: string;
+  roundReceiveCTAGradient2: string;
+  roundReceiveCTAGradient3: string;
+  roundSendCTATitle: string;
+  roundReceiveCTATitle: string;
+  segmentSelectTitle: string;
+  successPopupTitleColor: string;
+  popupCTABackColor: string;
+  popupCTATitleColor: string;
+  popupText: string;
+  suggestedText: string;
+  btcCtaBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -60,35 +83,57 @@ const CombinedDefaultTheme: AppTheme = {
     ...MD2LightTheme.colors,
     ...NavigationDefaultTheme.colors,
     // New UX
-    primaryBackground: Colors.Black,
-    cardGradient1: Colors.EerieBlack,
-    cardGradient2: Colors.VampireBlack,
-    cardGradient3: Colors.ChineseBlack,
-    borderColor: Colors.DarkCharcoal,
-    headingColor: Colors.White,
-    secondaryHeadingColor: Colors.Quartz,
-    bodyColor: Colors.White,
-    secondaryCtaTitleColor: Colors.White,
-    ctaBackColor: Colors.White,
+    primaryBackground: Colors.GhostWhite,
+    cardGradient1: Colors.White,
+    cardGradient2: Colors.White,
+    cardGradient3: Colors.White,
+    borderColor: Colors.Platinum,
+    headingColor: Colors.ChineseBlack,
+    secondaryHeadingColor: Colors.SonicSilver,
+    bodyColor: Colors.ChineseBlack,
+    secondaryCtaTitleColor: Colors.BrandeisBlue,
+    ctaBackColor: Colors.BrandeisBlue,
+    popupCTABackColor: Colors.White,
+    popupCTATitleColor: Colors.Black,
+    popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
-    inputBackground: Colors.CharlestonGreen,
+    inputBackground: Colors.White,
     profileBackground: Colors.Black,
-    accent1: Colors.Golden,
-    primaryCTAText: Colors.Black,
+    accent1: Colors.BrandeisBlue,
+    primaryCTAText: Colors.White,
+    tagText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
-    accent2: Colors.TurquoiseBlue,
-    activeTabColor: Colors.White,
+    accent2: Colors.BrandeisBlue,
+    activeTabColor: Colors.BrandeisBlue,
     toggleBackground: Colors.Golden,
     toggleButtonColor: Colors.White,
     toggleInActiveBtnColor: Colors.DimGray,
     toggleInActiveBackColor: Colors.Arsenic,
-    modalBackColor: Colors.EerieBlack,
-    coinsBorderColor: Colors.Celadon,
-    successPopupBackColor: Colors.UFOGreen,
+    modalBackColor: Colors.GhostWhite,
+    coinsBorderColor: Colors.BrandeisBlue,
+    successPopupTitleColor: Colors.White,
+    successPopupBackColor: Colors.GOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
-    cardBackground: Colors.RaisinBlack,
+    cardBackground: Colors.White,
+    accent4: Colors.Golden,
+    accent5: Colors.TurquoiseBlue,
+    secondaryCTAGradient1: Colors.Lavender,
+    secondaryCTAGradient2: Colors.Lavender,
+    secondaryCTAGradient3: Colors.Lavender,
+    sendCtaBorderColor: Colors.CandyAppleRed,
+    recieveCtaBorderColor: Colors.UFOGreen1,
+    roundSendCTAGradient1: Colors.CandyAppleRed1,
+    roundSendCTAGradient2: Colors.CandyAppleRed1,
+    roundSendCTAGradient3: Colors.CandyAppleRed1,
+    roundReceiveCTAGradient1: Colors.UFOGreen2,
+    roundReceiveCTAGradient2: Colors.UFOGreen2,
+    roundReceiveCTAGradient3: Colors.UFOGreen2,
+    roundSendCTATitle: Colors.CandyAppleRed,
+    roundReceiveCTATitle: Colors.UFOGreen1,
+    segmentSelectTitle: Colors.BrandeisBlue,
+    suggestedText: Colors.White,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
@@ -98,6 +143,7 @@ const CombinedDefaultTheme: AppTheme = {
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
+    btcCtaBackColor: Colors.TennesseeOrange,
   },
   fonts: {
     regular: {
@@ -127,15 +173,19 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient3: Colors.ChineseBlack,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
-    secondaryHeadingColor: Colors.Quartz,
+    secondaryHeadingColor: Colors.SonicSilver,
     bodyColor: Colors.Quartz,
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
+    popupCTABackColor: Colors.White,
+    popupCTATitleColor: Colors.Black,
+    popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
     profileBackground: Colors.Black,
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
+    tagText: Colors.Black,
     disablePrimaryCTAText: Colors.SonicSilver,
     accent2: Colors.TurquoiseBlue,
     activeTabColor: Colors.White,
@@ -144,12 +194,30 @@ const CombinedDarkTheme: AppTheme = {
     toggleInActiveBtnColor: Colors.DimGray,
     toggleInActiveBackColor: Colors.Arsenic,
     modalBackColor: Colors.EerieBlack,
-    coinsBorderColor: Colors.Celadon,
+    coinsBorderColor: Colors.BrandeisBlue,
+    successPopupTitleColor: Colors.White,
     successPopupBackColor: Colors.UFOGreen,
     successPopupBorderColor: Colors.UFOGreen1,
     disableCTATitle: Colors.Gray,
     greenText: Colors.Green,
     cardBackground: Colors.RaisinBlack,
+    accent4: Colors.Golden,
+    accent5: Colors.TurquoiseBlue,
+    secondaryCTAGradient1: Colors.EerieBlack,
+    secondaryCTAGradient2: Colors.VampireBlack,
+    secondaryCTAGradient3: Colors.ChineseBlack,
+    sendCtaBorderColor: Colors.Golden,
+    recieveCtaBorderColor: Colors.TurquoiseBlue,
+    roundSendCTAGradient1: Colors.EerieBlack,
+    roundSendCTAGradient2: Colors.VampireBlack,
+    roundSendCTAGradient3: Colors.ChineseBlack,
+    roundReceiveCTAGradient1: Colors.EerieBlack,
+    roundReceiveCTAGradient2: Colors.VampireBlack,
+    roundReceiveCTAGradient3: Colors.ChineseBlack,
+    roundSendCTATitle: Colors.White,
+    roundReceiveCTATitle: Colors.White,
+    segmentSelectTitle: Colors.White,
+    suggestedText: Colors.Black,
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
@@ -159,6 +227,7 @@ const CombinedDarkTheme: AppTheme = {
     inActiveDotColor: Colors.QuickSilver,
     cardShadowColor: Colors.White,
     disabledCTAColor: Colors.DarkSalmon,
+    btcCtaBackColor: Colors.TennesseeOrange,
   },
   fonts: {
     regular: {

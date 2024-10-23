@@ -22,7 +22,6 @@ import { OutputUTXOs } from '../interfaces';
 import { whirlPoolWalletTypes } from '../factories/WalletFactory';
 import ecc from './taproot-utils/noble_ecc';
 import { Signer, Vault } from '../interfaces/vault';
-import Toast from 'src/components/Toast';
 
 bitcoinJS.initEccLib(ecc);
 const bip32 = BIP32Factory(ecc);
@@ -717,7 +716,6 @@ export default class WalletUtilities {
 
   static addressDiff = (scannedStr: string, network: bitcoinJS.Network) => {
     scannedStr = scannedStr.replace('BITCOIN', 'bitcoin');
-    console.log('scannedStr', scannedStr);
     if (WalletUtilities.isPaymentURI(scannedStr)) {
       const { address, options } = WalletUtilities.decodePaymentURI(scannedStr);
       if (WalletUtilities.isValidAddress(address, network)) {

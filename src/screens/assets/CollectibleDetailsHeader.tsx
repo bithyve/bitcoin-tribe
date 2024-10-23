@@ -11,9 +11,11 @@ import { Collectible } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 type CollectibleDetailsHeaderProps = {
   collectible: Collectible;
+  wallet: Wallet;
   onPressSetting: () => void;
   onPressBuy?: () => void;
 };
@@ -24,11 +26,14 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
-  const { collectible, onPressSetting } = props;
+  const { collectible, onPressSetting, wallet } = props;
 
   return (
     <View style={styles.container}>
-      <Toolbar onPress={onPressSetting} ticker={collectible.name} />
+      <Toolbar
+        onPress={onPressSetting}
+        ticker={Platform.OS === 'ios' ? collectible.name : collectible.details}
+      />
       <Image
         source={{
           uri: Platform.select({
@@ -54,6 +59,9 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: collectible.assetId,
+            item: collectible,
+            rgbInvoice: '',
+            wallet: wallet,
           })
         }
         // onPressBuy={onPressBuy}
@@ -71,6 +79,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
       paddingBottom: 10,
     },
     usernameText: {

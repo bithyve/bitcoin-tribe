@@ -8,7 +8,7 @@ export class RealmDatabase {
 
   public static file = 'tribe.realm';
 
-  public static schemaVersion = 23;
+  public static schemaVersion = 30;
 
   /**
    * initializes/opens realm w/ appropriate configuration

@@ -26,7 +26,10 @@ type AssetCardProps = {
 const AssetCard = (props: AssetCardProps) => {
   const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, amount.toString().length),
+    [theme, amount],
+  );
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -46,22 +49,22 @@ const AssetCard = (props: AssetCardProps) => {
             />
           ) : (
             <View style={styles.identiconWrapper}>
-              {/* <View style={styles.identiconWrapper2}> */}
-              <Identicon
-                value={assetId}
-                style={styles.identiconView}
-                size={110}
-              />
-              {/* </View> */}
+              <View style={styles.identiconWrapper2}>
+                <Identicon
+                  value={assetId}
+                  style={styles.identiconView}
+                  size={110}
+                />
+              </View>
             </View>
           )}
           <View style={styles.tagWrapper}>
             <AssetChip
               tagText={Capitalize(tag)}
               backColor={
-                tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1
+                tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
               }
-              tagColor={theme.colors.primaryCTAText}
+              tagColor={theme.colors.tagText}
             />
           </View>
         </View>
@@ -74,7 +77,7 @@ const AssetCard = (props: AssetCardProps) => {
               variant="caption"
               style={styles.amountText}
               numberOfLines={1}>
-              {numberWithCommas(amount)}&nbsp;
+              {numberWithCommas(amount)}
             </AppText>
           </View>
           <AppText variant="caption" style={styles.titleText}>
@@ -85,7 +88,7 @@ const AssetCard = (props: AssetCardProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, amtLength) =>
   StyleSheet.create({
     container: {
       height: hp(205),
@@ -108,12 +111,12 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    // identiconWrapper2: {
-    //   borderColor: theme.colors.coinsBorderColor,
-    //   borderWidth: 2,
-    //   padding: 5,
-    //   borderRadius: 110,
-    // },
+    identiconWrapper2: {
+      borderColor: theme.colors.coinsBorderColor,
+      borderWidth: 2,
+      padding: 5,
+      borderRadius: 110,
+    },
     identiconView: {
       height: 110,
       width: 110,
@@ -147,7 +150,7 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-      width: '60%',
+      width: amtLength > 10 ? '25%' : '45%',
     },
     amountText: {
       fontWeight: '300',

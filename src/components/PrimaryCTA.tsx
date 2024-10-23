@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 import Fonts from 'src/constants/Fonts';
@@ -13,6 +13,7 @@ type PrimaryCTAProps = {
   buttonColor?: string;
   loading?: boolean;
   disabled?: boolean;
+  textColor?: string;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
@@ -22,10 +23,11 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     title,
     width = wp(120),
     buttonColor = theme.colors.ctaBackColor,
+    textColor = theme.colors.primaryCTAText,
     loading,
     disabled = false,
   } = props;
-  const styles = getStyles(theme, width, disabled);
+  const styles = getStyles(theme, width, disabled, textColor);
 
   const generatedTestId = React.useMemo(() => {
     return `primary_cta_${title}`;
@@ -40,7 +42,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
       style={disabled ? styles.disableButton : styles.ctaContainerStyle}
       buttonColor={buttonColor}
-      textColor={theme.colors.primaryCTAText}
+      textColor={textColor}
       onPress={onPress}
       maxFontSizeMultiplier={1}
       loading={loading}
@@ -49,7 +51,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     </Button>
   );
 }
-const getStyles = (theme: AppTheme, width, disabled) =>
+const getStyles = (theme: AppTheme, width, disabled, textColor) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -63,13 +65,12 @@ const getStyles = (theme: AppTheme, width, disabled) =>
     labelStyle: {
       // minWidth: width,
       marginVertical: hp(20),
-      color: disabled
-        ? theme.colors.disableCTATitle
-        : theme.colors.primaryCTAText,
+      color: disabled ? theme.colors.disableCTATitle : textColor,
     },
     primaryCTATitle: {
       fontSize: 16,
-      fontFamily: Fonts.LufgaSemiBold,
+      fontFamily:
+        Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
     },

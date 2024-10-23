@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { StyleSheet, ImageBackground, View, Platform } from 'react-native';
+import React, { useEffect, useContext, useCallback } from 'react';
+import { StyleSheet, ImageBackground, Image } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -9,63 +9,72 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import TribeText from 'src/assets/images/Tribe.svg';
-import AppText from 'src/components/AppText';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 function Splash({ navigation }) {
-  const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { setKey } = useContext(AppContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { setKey, setIsWalletOnline } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
   useEffect(() => {
-    setTimeout(() => {
-      init();
-    }, 1000);
-  }, []);
-
-  useEffect(() => {
-    const onLoginSuccess = async () => {
-      if (data) {
-        setKey(data);
-        navigation.replace(NavigationRoutes.APPSTACK);
+    const init = async () => {
+      try {
+        const appId = await Storage.get(Keys.APPID);
+        if (appId && pinMethod === PinMethod.DEFAULT) {
+          mutate();
+        }
+      } catch (error) {
+        console.error('Error fetching appId:', error);
       }
     };
-    onLoginSuccess();
-  }, [data, navigation, setKey]);
+    init();
+  }, []);
 
-  const init = async () => {
-    const appId = Storage.get(Keys.APPID);
-    if (appId) {
-      if (pinMethod === PinMethod.DEFAULT) {
-        mutate();
-      } else {
+  const onInit = useCallback(async () => {
+    try {
+      const appId = await Storage.get(Keys.APPID);
+      if (appId && pinMethod !== PinMethod.DEFAULT) {
         navigation.replace(NavigationRoutes.LOGIN);
       }
-    } else {
-      navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      if (pinMethod === undefined) {
+        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      }
+    } catch (error) {
+      console.error('Error initializing app: ', error);
     }
-  };
+  }, [mutate, navigation, pinMethod]);
+
+  // Handle login success
+  useEffect(() => {
+    if (data) {
+      setKey(data.key);
+      setIsWalletOnline(data.isWalletOnline);
+      navigation.replace(NavigationRoutes.APPSTACK);
+    }
+  }, [data, navigation, setKey]);
+
+  useEffect(() => {
+    const timer = setTimeout(onInit, 4500);
+    return () => clearTimeout(timer);
+  }, [onInit]);
 
   return (
     <ScreenContainer style={styles.container}>
       <ImageBackground
-        source={require('src/assets/images/background.png')}
+        source={
+          !isThemeDark
+            ? require('src/assets/images/background.png')
+            : require('src/assets/images/backgroundLight.png')
+        }
         resizeMode="cover"
         style={styles.backImage}>
-        <View style={styles.tribeImageWrapper}>
-          <TribeText />
-        </View>
-        <View style={styles.textWrapper}>
-          <AppText variant="body1" style={styles.textStyle}>
-            {onBoarding.splashText}
-          </AppText>
-        </View>
+        <Image
+          source={require('src/assets/images/RGB_Splash.gif')}
+          style={styles.splashImageStyle}
+        />
       </ImageBackground>
     </ScreenContainer>
   );
@@ -84,17 +93,9 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    tribeImageWrapper: {
-      height: '100%',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    textWrapper: {
-      bottom: 20,
-    },
-    textStyle: {
-      color: theme.colors.headingColor,
+    splashImageStyle: {
+      width: 400,
+      height: 400,
     },
   });
 export default Splash;

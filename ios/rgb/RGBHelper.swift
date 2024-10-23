@@ -65,84 +65,105 @@ import CloudKit
     }
   }
   
+  func getRgbAssetMetaData(assetId: String)->String{
+    do{
+      
+      if let wallet = self.rgbManager.rgbWallet {
+        let metaData = try wallet.getAssetMetadata(assetId: assetId)
+        var jsonObject = [String: Any]()
+        jsonObject["assetId"] = assetId
+        jsonObject["precision"] = metaData.precision
+        jsonObject["name"] = metaData.name
+        jsonObject["ticker"] = metaData.ticker
+        jsonObject["description"] = metaData.details
+        jsonObject["timestamp"] = metaData.timestamp
+        jsonObject["assetIface"] = "\(metaData.assetIface)"
+        jsonObject["assetSchema"] = "\(metaData.assetSchema)"
+        jsonObject["issuedSupply"] = metaData.issuedSupply
+        let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+        let jsonString = String(data: jsonData, encoding: .utf8)!
+        return jsonString
+      } else {
+        print("rgbWallet is not initialized")
+        return "{}"
+      }
+    }catch{
+      print(error)
+      return "{}"
+    }
+  }
+  
   func getRgbWallet()->Wallet?{
     return self.rgbManager.rgbWallet
   }
   
-  func getRgbAssetMetaData(assetId: String)->String{
-    do{
-      let metaData = try self.rgbManager.rgbWallet!.getAssetMetadata(assetId: assetId)
-      var jsonObject = [String: Any]()
-      jsonObject["assetId"] = assetId
-      jsonObject["precision"] = metaData.precision
-      jsonObject["name"] = metaData.name
-      jsonObject["ticker"] = metaData.ticker
-      jsonObject["description"] = metaData.details
-      jsonObject["timestamp"] = metaData.timestamp
-      jsonObject["assetIface"] = "\(metaData.assetIface)"
-      jsonObject["assetSchema"] = "\(metaData.assetSchema)"
-      //jsonObject["parentId"] = metaData.parentId
-      jsonObject["issuedSupply"] = metaData.issuedSupply
-      
-      let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-      let jsonString = String(data: jsonData, encoding: .utf8)!
-      return jsonString
-    }catch{
-      print(error)
-      return "{}"
-    }
-  }
-  
-  func getRgbAssetTransfers(assetId: String)->String{
-    do{
-      let refresh = try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: assetId, filter: [RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true), RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)])
-      let transfers = try self.rgbManager.rgbWallet!.listTransfers(assetId: assetId)
-      var jsonArray = [[String: Any]]()
-      for transfer in transfers {
-        var jsonObject = [String: Any]()
-        jsonObject["idx"] = transfer.idx
-        jsonObject["txid"] = transfer.txid
-        jsonObject["amount"] = transfer.amount
-        jsonObject["createdAt"] = transfer.createdAt
-        jsonObject["updatedAt"] = transfer.updatedAt
-        jsonObject["recipientId"] = transfer.recipientId
-        jsonObject["status"] = "\(transfer.status)"
-        jsonObject["kind"] = "\(transfer.kind)"
-        jsonObject["expiration"] = transfer.expiration
-        jsonObject["batchTransferIdx"] = transfer.batchTransferIdx
-        jsonObject["receiveUtxo"] = [
-          "txid": transfer.receiveUtxo?.txid,
-          "vout": transfer.receiveUtxo?.vout,
-        ]
-        jsonObject["changeUtxo"] = [
-          "txid": transfer.changeUtxo?.txid,
-          "vout": transfer.changeUtxo?.vout,
-        ]
-        jsonObject["consignmentEndpoints"] =
-        transfer.transportEndpoints.map{ endpoint in
-          return [
-            "endpoint": endpoint.endpoint,
-            "used": endpoint.used,
-            "transportType": "\(endpoint.transportType)"
-          ]
-        }
-        jsonArray.append(jsonObject)
+  func getRgbAssetTransfers(assetId: String) -> String {
+      do {
+          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+              print("rgbWallet or online is not initialized")
+              return "{}"
+          }
+          
+          let refresh = try wallet.refresh(online: online, assetId: assetId, filter: [
+              RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true),
+              RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
+          ], skipSync: false)
+          
+          let transfers = try wallet.listTransfers(assetId: assetId)
+          var jsonArray = [[String: Any]]()
+          
+          for transfer in transfers {
+              var jsonObject = [String: Any]()
+              jsonObject["idx"] = transfer.idx
+              jsonObject["txid"] = transfer.txid
+              jsonObject["amount"] = transfer.amount
+              jsonObject["createdAt"] = transfer.createdAt
+              jsonObject["updatedAt"] = transfer.updatedAt
+              jsonObject["recipientId"] = transfer.recipientId
+              jsonObject["status"] = "\(transfer.status)"
+              jsonObject["kind"] = "\(transfer.kind)"
+              jsonObject["expiration"] = transfer.expiration
+              jsonObject["batchTransferIdx"] = transfer.batchTransferIdx
+              jsonObject["receiveUtxo"] = [
+                  "txid": transfer.receiveUtxo?.txid,
+                  "vout": transfer.receiveUtxo?.vout
+              ]
+              jsonObject["changeUtxo"] = [
+                  "txid": transfer.changeUtxo?.txid,
+                  "vout": transfer.changeUtxo?.vout
+              ]
+              jsonObject["consignmentEndpoints"] = transfer.transportEndpoints.map { endpoint in
+                  return [
+                      "endpoint": endpoint.endpoint,
+                      "used": endpoint.used,
+                      "transportType": "\(endpoint.transportType)"
+                  ]
+              }
+              jsonArray.append(jsonObject)
+          }
+          
+          let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
+          let jsonString = String(data: jsonData, encoding: .utf8)!
+          return jsonString
+      } catch {
+          print(error)
+          return "{}"
       }
-      print(jsonArray)
-      let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
-      let jsonString = String(data: jsonData, encoding: .utf8)!
-      return jsonString
-    }catch{
-      print(error)
-      return "{}"
-    }
   }
+
   
-  @objc func getUnspents(callback: @escaping ((String) -> Void)){
-    do{
-      let unspents = try self.rgbManager.rgbWallet?.listUnspents(online: self.rgbManager.online, settledOnly: false)
-      var jsonString = "["
-      for (index, unspent) in unspents!.enumerated() {
+  @objc func getUnspents(callback: @escaping ((String) -> Void)) {
+      do {
+          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+              print("rgbWallet or online is not initialized")
+              callback("[]")
+              return
+          }
+          
+        let unspents = try wallet.listUnspents(online: online, settledOnly: false, skipSync: false)
+          var jsonString = "["
+          
+          for (index, unspent) in unspents.enumerated() {
               jsonString += "{"
               let utxo = unspent.utxo
               jsonString += "\"utxo\":{"
@@ -154,7 +175,8 @@ import CloudKit
               jsonString += "\"colorable\":\(utxo.colorable),"
               jsonString += "\"exists\":\(utxo.exists)"
               jsonString += "},"
-                            jsonString += "\"rgbAllocations\":["
+              jsonString += "\"rgbAllocations\":["
+              
               for (allocIndex, allocation) in unspent.rgbAllocations.enumerated() {
                   jsonString += "{"
                   if let assetId = allocation.assetId {
@@ -171,86 +193,104 @@ import CloudKit
               }
               jsonString += "]"
               jsonString += "}"
-        if index < unspents!.count - 1 {
+              if index < unspents.count - 1 {
                   jsonString += ","
               }
           }
+          
           jsonString += "]"
-      callback(jsonString)
-    }catch {
-      print(error)
-      callback("[]")
-    }
+          callback(jsonString)
+      } catch {
+          print(error)
+          callback("[]")
+      }
   }
-  
-  func getRgbAssets()->String{
-    do{
-      let refresh = try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: nil, filter: [])
-      let assets = try self.rgbManager.rgbWallet!.listAssets(filterAssetSchemas: [])
-      if((assets.nia) != nil) {
-        try assets.nia?.forEach({ AssetNia in
-          try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: AssetNia.assetId, filter: [])
-        })
+
+  func getRgbAssets() -> String {
+      do {
+          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+              print("rgbWallet or online is not initialized")
+              return "{}"
+          }
+
+        let refresh = try wallet.refresh(online: online, assetId: nil, filter: [], skipSync: false)
+          let assets = try wallet.listAssets(filterAssetSchemas: [])
+          
+          if let niaAssets = assets.nia {
+              try niaAssets.forEach { assetNia in
+                try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [], skipSync: false)
+              }
+          }
+          
+          if let cfaAssets = assets.cfa {
+              try cfaAssets.forEach { assetCfa in
+                try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
+              }
+          }
+
+          var jsonArray = [[String: Any]]()
+          var jsonRgb121Array = [[String: Any]]()
+          
+          if let niaAssets = assets.nia {
+              for asset in niaAssets {
+                  var jsonObject = [String: Any]()
+                  jsonObject["assetId"] = asset.assetId
+                  jsonObject["ticker"] = asset.ticker
+                  jsonObject["name"] = asset.name
+                  jsonObject["precision"] = asset.precision
+                  jsonObject["balance"] = [
+                      "future": asset.balance.future,
+                      "settled": asset.balance.settled,
+                      "spendable": asset.balance.spendable,
+                  ]
+                  jsonObject["issuedSupply"] = asset.issuedSupply
+                  jsonObject["timestamp"] = asset.timestamp
+                  jsonObject["addedAt"] = asset.addedAt
+                  jsonObject["assetIface"] = "\(asset.assetIface)"
+                  jsonArray.append(jsonObject)
+              }
+          }
+          
+          if let cfaAssets = assets.cfa {
+              for asset in cfaAssets {
+                  var jsonRgb121Object = [String: Any]()
+                  jsonRgb121Object["assetId"] = asset.assetId
+                  jsonRgb121Object["balance"] = [
+                      "future": asset.balance.future,
+                      "settled": asset.balance.settled,
+                      "spendable": asset.balance.spendable,
+                  ]
+                  jsonRgb121Object["description"] = asset.details
+                  jsonRgb121Object["details"] = asset.details
+                  jsonRgb121Object["name"] = asset.name
+                  jsonRgb121Object["precision"] = asset.precision
+                  jsonRgb121Object["issuedSupply"] = asset.issuedSupply
+                  jsonRgb121Object["timestamp"] = asset.timestamp
+                  jsonRgb121Object["addedAt"] = asset.addedAt
+                  jsonRgb121Object["media"] = [
+                      "filePath": asset.media?.filePath,
+                      "mime": asset.media?.mime,
+                  ]
+                  jsonRgb121Object["assetIface"] = "\(asset.assetIface)"
+                  jsonRgb121Object["dataPaths"] = [[String: Any]]() // Empty dataPaths array
+                  jsonRgb121Array.append(jsonRgb121Object)
+              }
+          }
+          
+          let data: [String: Any] = [
+              "nia": jsonArray,
+              "cfa": jsonRgb121Array
+          ]
+          
+          let json = Utility.convertToJSONString(params: data)
+          return json
+          
+      } catch {
+          print("Error: \(error)")
+          return "{}"
       }
-      if((assets.cfa) != nil) {
-        try assets.cfa?.forEach({ AssetCfa in
-          try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: AssetCfa.assetId, filter: [])
-        })
-      }
-      var jsonArray = [[String: Any]]()
-      var jsonRgb121Array = [[String: Any]]()
-      for asset in assets.nia! {
-        var jsonObject = [String: Any]()
-        jsonObject["assetId"] = asset.assetId
-        jsonObject["ticker"] = asset.ticker
-        jsonObject["name"] = asset.name
-        jsonObject["precision"] = asset.precision
-        jsonObject["balance"] = [
-          "future": asset.balance.future,
-          "settled": asset.balance.settled,
-          "spendable": asset.balance.spendable,
-        ]
-        jsonObject["issuedSupply"] = asset.issuedSupply
-        jsonObject["timestamp"] = asset.timestamp
-        jsonObject["addedAt"] = asset.addedAt
-        jsonObject["assetIface"] = "\(asset.assetIface)"
-        jsonArray.append(jsonObject)
-      }
-      for asset in assets.cfa! {
-        var jsonRgb121Object = [String: Any]()
-        jsonRgb121Object["assetId"] = asset.assetId
-        jsonRgb121Object["balance"] = [
-          "future": asset.balance.future,
-          "settled": asset.balance.settled,
-          "spendable": asset.balance.spendable,
-        ]
-        jsonRgb121Object["description"] = asset.details
-        jsonRgb121Object["name"] = asset.name
-        jsonRgb121Object["precision"] = asset.precision
-        jsonRgb121Object["issuedSupply"] = asset.issuedSupply
-        jsonRgb121Object["timestamp"] = asset.timestamp
-        jsonRgb121Object["addedAt"] = asset.addedAt
-        jsonRgb121Object["media"] = [
-          "filePath": asset.media?.filePath,
-          "mime": asset.media?.mime,
-        ]
-        jsonRgb121Object["assetIface"] = "\(asset.assetIface)"
-        var jsonDataPaths: [[String: Any]] = []
-        jsonRgb121Object["dataPaths"] = jsonDataPaths
-        jsonRgb121Array.append(jsonRgb121Object)
-      }
-      try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
-      try JSONSerialization.data(withJSONObject: jsonRgb121Array, options: .prettyPrinted)
-      let data: [String: Any] = [
-        "nia": jsonArray,
-        "cfa": jsonRgb121Array
-      ]
-      let json = Utility.convertToJSONString(params: data)
-      return json
-    }catch{
-      return "{}"
-    }
   }
+
   
   private func handleMissingFunds<T>(_ callback: () throws -> T) rethrows -> T {
     do {
@@ -274,32 +314,44 @@ import CloudKit
     fatalError("Missing return statement")
   }
   
-  @objc func createUTXOs(feeRate: Int,callback: @escaping ((String) -> Void)) {
-    print("Creating UTXOs... " + String(feeRate))
-    do {
-      return try handleMissingFunds {
-        var attempts = 3
-        var newUTXOs: UInt8 = 0
-        while newUTXOs == 0 && attempts > 0 {
-          print("Calling create UTXOs...")
-          newUTXOs = try self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(feeRate))
-          print("newUTXOs=\(newUTXOs)")
-          attempts -= 1
-        }
-        let data: [String: Any] = [
-          "created": true,
-        ]
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
+  @objc func createUTXOs(feeRate: Int, callback: @escaping ((String) -> Void)) {
+      print("Creating UTXOs... \(feeRate)")
+      
+      // Safely unwrap rgbWallet and online
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+          let data: [String: Any] = [
+              "error": "RGB Wallet or Online service is not initialized."
+          ]
+          let json = Utility.convertToJSONString(params: data)
+          callback(json)
+          return
       }
       
-    } catch let error {
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
-      let json = Utility.convertToJSONString(params: data)
-      callback(json)
-    }
+      do {
+          return try handleMissingFunds {
+              var attempts = 3
+              var newUTXOs: UInt8 = 0
+                            while newUTXOs == 0 && attempts > 0 {
+                  print("Attempting to create UTXOs, attempts left: \(attempts)")
+                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: Float(feeRate), skipSync: true)
+                  print("newUTXOs=\(newUTXOs)")
+                  attempts -= 1
+              }
+              
+              let data: [String: Any] = [
+                  "created": newUTXOs > 0
+              ]
+              let json = Utility.convertToJSONString(params: data)
+              callback(json)
+          }
+          
+      } catch let error {
+          let data: [String: Any] = [
+              "error": error.localizedDescription
+          ]
+          let json = Utility.convertToJSONString(params: data)
+          callback(json)
+      }
   }
 
   
@@ -308,29 +360,52 @@ import CloudKit
 //  }
   
   func genReceiveData() -> String {
-    do {
-      return try handleMissingFunds {
-        let refresh_ = try self.rgbManager.rgbWallet!.refresh(online: self.rgbManager.online!, assetId: nil, filter: [RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true), RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)])
-        print("\(TAG) refresh_\(refresh_)")
-        let bindData = try self.rgbManager.rgbWallet!.blindReceive(assetId: nil, amount: nil, durationSeconds: Constants.rgbBlindDuration, transportEndpoints: [Constants.proxyConsignmentEndpoint], minConfirmations: 0)
-        let data: [String: Any] = [
-          "invoice": bindData.invoice,
-          "recipientId": bindData.recipientId,
-          "expirationTimestamp": bindData.expirationTimestamp ?? 0,
-          "batchTransferIdx": bindData.batchTransferIdx,
-        ]
-        let json = Utility.convertToJSONString(params: data)
-        return json
+      do {
+          return try handleMissingFunds {
+              guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+                  let data: [String: Any] = [
+                      "error": "RGB Wallet or Online service is not initialized."
+                  ]
+                  let json = Utility.convertToJSONString(params: data)
+                  return json
+              }
+
+              let refresh_ = try wallet.refresh(
+                  online: online,
+                  assetId: nil,
+                  filter: [
+                      RefreshFilter(status: .waitingCounterparty, incoming: true),
+                      RefreshFilter(status: .waitingCounterparty, incoming: false)
+                  ], skipSync: false
+              )
+              print("\(TAG) refresh_\(refresh_)")
+              let bindData = try wallet.blindReceive(
+                  assetId: nil,
+                  amount: nil,
+                  durationSeconds: Constants.rgbBlindDuration,
+                  transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                  minConfirmations: 0
+              )
+
+              let data: [String: Any] = [
+                  "invoice": bindData.invoice,
+                  "recipientId": bindData.recipientId,
+                  "expirationTimestamp": bindData.expirationTimestamp ?? 0,
+                  "batchTransferIdx": bindData.batchTransferIdx
+              ]
+              
+              let json = Utility.convertToJSONString(params: data)
+              return json
+          }
+      } catch let error {
+          let data: [String: Any] = [
+              "error": error.localizedDescription
+          ]
+          let json = Utility.convertToJSONString(params: data)
+          return json
       }
-    } catch let error {
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
-      let json = Utility.convertToJSONString(params: data)
-      return json
-    }
-    
   }
+
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
     do{
@@ -452,7 +527,7 @@ import CloudKit
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount)!, transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0, skipSync: true)
       }
       print(response)
       let data: [String: Any] = [
@@ -600,19 +675,36 @@ import CloudKit
           callback("false")
         } else {
           print("Files in folder \(filesURLs):")
+          guard let rgbDirectoryPath = Utility.getRgbDir()?.path else {
+              print("Failed to get RGB directory path.")
+              return
+          }
           try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+//          if fileManager.fileExists(atPath: rgbDirectoryPath) {
+//              do {
+//                  //try fileManager.removeItem(atPath: rgbDirectoryPath)
+//                  print("RGB directory removed successfully.")
+//                let newPath = Utility.getRgbDir()?.path
+//                try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
+//              } catch {
+//                  print("Failed to remove RGB directory: \(error)")
+//              }
+//          } else {
+//              print("RGB directory does not exist.")
+//          }
             callback("true")
         }
     }
     catch let error{
+      print("error \(error):")
+      print("error \(error.localizedDescription):")
+
       let data: [String: Any] = [
         "error": error.localizedDescription,
       ]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
     }}
-  
-  
   
   @objc func isValidBlindedUtxo(invoiceData: String,callback: @escaping ((Bool) -> Void)) -> Void{
     do{

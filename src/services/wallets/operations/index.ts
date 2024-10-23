@@ -52,6 +52,8 @@ const validator = (
   signature: Buffer,
 ): boolean => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
 
+const TESTNET_FEE_CUTOFF = 10;
+
 const testnetFeeSurcharge = (wallet: Wallet | Vault) =>
   /* !! TESTNET ONLY !!
      as the redeem script for vault is heavy(esp. 3-of-5/3-of-6),
@@ -564,21 +566,21 @@ export default class WalletOperations {
     // high fee: 10 minutes
     const highFeeBlockEstimate = 1;
     const high = {
-      feePerByte: 50,
+      feePerByte: 5,
       estimatedBlocks: highFeeBlockEstimate,
     };
 
     // medium fee: 30 mins
     const mediumFeeBlockEstimate = 3;
     const medium = {
-      feePerByte: 25,
+      feePerByte: 3,
       estimatedBlocks: mediumFeeBlockEstimate,
     };
 
     // low fee: 60 mins
     const lowFeeBlockEstimate = 6;
     const low = {
-      feePerByte: 12,
+      feePerByte: 1,
       estimatedBlocks: lowFeeBlockEstimate,
     };
     const feeRatesByPriority = { high, medium, low };
@@ -613,6 +615,13 @@ export default class WalletOperations {
         ),
         estimatedBlocks: lowFeeBlockEstimate,
       };
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
 
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
@@ -664,7 +673,13 @@ export default class WalletOperations {
         feePerByte: mempoolFee.hourFee,
         estimatedBlocks: lowFeeBlockEstimate,
       };
-
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
     } catch (err) {
@@ -765,6 +780,7 @@ export default class WalletOperations {
       amount: number;
     }[],
     averageTxFees: AverageTxFees,
+    selectedPriority: TxPriority,
     selectedUTXOs?: UTXO[],
   ):
     | {
@@ -794,76 +810,36 @@ export default class WalletOperations {
       });
     }
 
-    const defaultTxPriority = TxPriority.LOW; // doing base calculation with low fee (helps in sending the tx even if higher priority fee isn't possible)
-    const defaultFeePerByte = averageTxFees[defaultTxPriority].feePerByte;
-    const defaultEstimatedBlocks =
-      averageTxFees[defaultTxPriority].estimatedBlocks;
+    const feePerByte = averageTxFees[selectedPriority].feePerByte;
+    const estimatedBlocks = averageTxFees[selectedPriority].estimatedBlocks;
 
-    const assets = coinselect(
-      inputUTXOs,
-      outputUTXOs,
-      defaultFeePerByte + testnetFeeSurcharge(wallet),
-    );
-    const defaultPriorityInputs = assets.inputs;
-    const defaultPriorityOutputs = assets.outputs;
-    const defaultPriorityFee = assets.fee;
+    const assets = coinselect(inputUTXOs, outputUTXOs, feePerByte);
+    const priorityInputs = assets.inputs;
+    const priorityOutputs = assets.outputs;
+    const priorityFee = assets.fee;
 
     let netAmount = 0;
     recipients.forEach(recipient => {
       netAmount += recipient.amount;
     });
-    const defaultDebitedAmount = netAmount + defaultPriorityFee;
-    if (!defaultPriorityInputs || defaultDebitedAmount > confirmedBalance) {
+    const amountToDebit = netAmount + priorityFee;
+
+    if (!priorityInputs || amountToDebit > confirmedBalance) {
       // insufficient input utxos to compensate for output utxos + lowest priority fee
       return {
-        fee: defaultPriorityFee,
+        fee: priorityFee,
         balance: confirmedBalance,
       };
     }
 
-    const txPrerequisites: TransactionPrerequisite = {};
-
-    for (const priority of [
-      TxPriority.LOW,
-      TxPriority.MEDIUM,
-      TxPriority.HIGH,
-    ]) {
-      if (
-        priority === defaultTxPriority ||
-        defaultDebitedAmount === confirmedBalance
-      ) {
-        txPrerequisites[priority] = {
-          inputs: defaultPriorityInputs,
-          outputs: defaultPriorityOutputs,
-          fee: defaultPriorityFee,
-          estimatedBlocks: defaultEstimatedBlocks,
-        };
-      } else {
-        // re-computing inputs with a non-default priority fee
-        const { inputs, outputs, fee } = coinselect(
-          inputUTXOs,
-          outputUTXOs,
-          averageTxFees[priority].feePerByte + testnetFeeSurcharge(wallet),
-        );
-        const debitedAmount = netAmount + fee;
-        if (!inputs || debitedAmount > confirmedBalance) {
-          // to previous priority assets
-          if (priority === TxPriority.MEDIUM) {
-            txPrerequisites[priority] = txPrerequisites[TxPriority.LOW];
-          }
-          if (priority === TxPriority.HIGH) {
-            txPrerequisites[priority] = txPrerequisites[TxPriority.MEDIUM];
-          }
-        } else {
-          txPrerequisites[priority] = {
-            inputs,
-            outputs,
-            fee,
-            estimatedBlocks: averageTxFees[priority].estimatedBlocks,
-          };
-        }
-      }
-    }
+    const txPrerequisites: TransactionPrerequisite = {
+      [selectedPriority]: {
+        inputs: priorityInputs,
+        outputs: priorityOutputs,
+        fee: priorityFee,
+        estimatedBlocks: estimatedBlocks,
+      },
+    };
 
     return {
       txPrerequisites,
@@ -1430,6 +1406,7 @@ export default class WalletOperations {
       amount: number;
     }[],
     averageTxFees: AverageTxFees,
+    selectedPriority: TxPriority,
     selectedUTXOs?: UTXO[],
   ): Promise<{
     txPrerequisites: TransactionPrerequisite;
@@ -1446,6 +1423,7 @@ export default class WalletOperations {
         wallet,
         recipients,
         averageTxFees,
+        selectedPriority,
         selectedUTXOs,
       );
 

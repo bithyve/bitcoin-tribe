@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Modal from 'react-native-modal';
 
-import IconClose from 'src/assets/images/icon_close.svg';
 import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
-import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
+import Colors from 'src/theme/Colors';
 
 type popupContainerProps = {
-  title: string;
+  title?: string;
   subTitle?: string;
   visible: boolean;
   enableClose?: boolean;
@@ -20,6 +19,7 @@ type popupContainerProps = {
   height?: string;
   backColor: string;
   borderColor: string;
+  width?: string;
 };
 
 const ResponsePopupContainer = (props: popupContainerProps) => {
@@ -34,9 +34,10 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     conatinerModalStyle,
     backColor,
     borderColor,
+    width = '95%',
   } = props;
 
-  const styles = getStyles(theme, backColor, borderColor);
+  const styles = getStyles(theme, backColor, borderColor, width);
 
   return (
     <View style={styles.container}>
@@ -45,26 +46,27 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
         onBackdropPress={onDismiss}
         animationIn={'slideInUp'}
         animationOut={'slideOutDown'}
-        backdropColor={theme.colors.primaryBackground}
+        backdropColor={Colors.Black}
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>
         <View style={styles.modalContainer}>
-          <View style={styles.headingWrapper}>
+          <View
+            style={[
+              styles.headingWrapper,
+              { marginBottom: title || subTitle ? hp(50) : 0 },
+            ]}>
             <View style={styles.contentWrapper}>
-              <AppText variant="heading1" style={styles.titleText}>
-                {title}
-              </AppText>
+              {title ? (
+                <AppText variant="heading1" style={styles.titleText}>
+                  {title}
+                </AppText>
+              ) : null}
               {subTitle ? (
                 <AppText variant="body1" style={styles.subTitleText}>
                   {subTitle}
                 </AppText>
               ) : null}
             </View>
-            {enableClose && (
-              <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-                <IconClose />
-              </AppTouchable>
-            )}
           </View>
           {children}
         </View>
@@ -72,7 +74,7 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     </View>
   );
 };
-const getStyles = (theme: AppTheme, backColor, borderColor) =>
+const getStyles = (theme: AppTheme, backColor, borderColor, width) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -86,7 +88,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       // backgroundColor: theme.colors.primaryBackground,
     },
     modalContainer: {
-      width: '95%',
+      width: width,
       padding: 20,
       backgroundColor: backColor,
       borderRadius: 30,
@@ -97,20 +99,15 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
     headingWrapper: {
       flexDirection: 'row',
       width: '100%',
-      marginBottom: hp(50),
     },
     contentWrapper: {
-      width: '80%',
-    },
-    closeIconWrapper: {
-      width: '20%',
-      alignItems: 'center',
+      width: '90%',
     },
     titleText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.popupText,
     },
     subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.popupText,
     },
   });
 export default ResponsePopupContainer;

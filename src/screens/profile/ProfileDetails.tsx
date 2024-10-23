@@ -9,13 +9,13 @@ import {
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ProfileDetailsProps = {
   title: string;
@@ -33,6 +33,10 @@ type ProfileDetailsProps = {
   primaryStatus?: string;
   disabled?: boolean;
   primaryCTATitle: string;
+  secondaryCTATitle?: string;
+  rightText?: string;
+  onRightTextPress?: () => void;
+  primaryCtaLoader?: boolean;
 };
 function ProfileDetails(props: ProfileDetailsProps) {
   const {
@@ -51,17 +55,22 @@ function ProfileDetails(props: ProfileDetailsProps) {
     primaryStatus,
     disabled,
     primaryCTATitle,
+    secondaryCTATitle,
+    rightText,
+    onRightTextPress,
+    primaryCtaLoader,
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const theme: AppTheme = useTheme();
+
   return (
     <>
       <AppHeader
         title={title}
         subTitle={subTitle}
-        rightIcon={<SettingIcon />}
-        onSettingsPress={onSettingsPress}
+        rightText={rightText}
+        onRightTextPress={onRightTextPress}
         style={styles.wrapper}
       />
       <KeyboardAvoidingView
@@ -72,6 +81,11 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
+        <View>
+          <ModalLoading
+            visible={primaryStatus === 'loading' || primaryCtaLoader}
+          />
+        </View>
         <ScrollView
           contentContainerStyle={styles.scrollView}
           keyboardShouldPersistTaps="handled"
@@ -96,10 +110,10 @@ function ProfileDetails(props: ProfileDetailsProps) {
           </View>
           <Buttons
             primaryTitle={primaryCTATitle}
-            secondaryTitle={common.cancel}
+            secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            primaryLoading={primaryStatus === 'loading'}
+            primaryLoading={primaryCtaLoader}
             disabled={disabled}
           />
         </ScrollView>
@@ -112,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   wrapper: {
-    marginTop: 0,
+    marginTop: Platform.OS === 'android' ? hp(15) : 0,
   },
   scrollView: {
     flexGrow: 1,
@@ -120,6 +134,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  buttonsWrapper: {
+    marginRight: hp(5),
+    marginBottom: hp(3),
   },
 });
 export default ProfileDetails;

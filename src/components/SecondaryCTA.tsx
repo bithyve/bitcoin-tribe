@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
@@ -12,7 +12,7 @@ type secondaryCTAProps = {
   width?: number;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
-  const { title, onPress, width = wp(120) } = props;
+  const { title, onPress, width = 'auto' } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, width);
 
@@ -24,9 +24,9 @@ function SecondaryCTA(props: secondaryCTAProps) {
     <GradientView
       style={styles.container}
       colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
+        theme.colors.secondaryCTAGradient1,
+        theme.colors.secondaryCTAGradient2,
+        theme.colors.secondaryCTAGradient3,
       ]}>
       <Button
         testID={generatedTestId}
@@ -65,7 +65,8 @@ const getStyles = (theme: AppTheme, width) =>
     },
     primaryCTATitle: {
       fontSize: 16,
-      fontFamily: Fonts.LufgaSemiBold,
+      fontFamily:
+        Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
     },

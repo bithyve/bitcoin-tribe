@@ -1,19 +1,27 @@
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useMutation, UseMutationResult } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { useMutation, UseMutationResult } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
-import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
 import UnspentUTXOElement from './UnspentUTXOElement';
+// import ModalLoading from 'src/components/ModalLoading';
+import EmptyStateView from 'src/components/EmptyStateView';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
+import { RealmSchema } from 'src/storage/enum';
+import dbManager from 'src/storage/realm/dbManager';
+import { Keys } from 'src/storage';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -21,17 +29,24 @@ const ViewUnspentScreen = () => {
   const { mutate, data, isLoading }: UseMutationResult<RgbUnspent[]> =
     useMutation(ApiHandler.viewUtxos);
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet, assets } = translations;
+
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  // Deserialize each UTXO string back into an object
+  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
 
   useEffect(() => {
     mutate();
   }, []);
 
-  useEffect(() => {
-    console.log('data', JSON.stringify(data));
-  }, [data]);
+  // useEffect(() => {
+  //   console.log('data', JSON.stringify(data));
+  // }, [data]);
 
   const redirectToBlockExplorer = txid => {
     openLink(
@@ -44,27 +59,37 @@ const ViewUnspentScreen = () => {
   return (
     <ScreenContainer>
       <AppHeader title={wallet.unspentTitle} subTitle={''} enableBack={true} />
-      {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={{ height: '60%' }}
-          color={Colors.ChineseOrange}
-        />
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <AppTouchable
-              onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
-              <UnspentUTXOElement
-                transID={`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
-                satsAmount={`${item.utxo.btcAmount}`}
-                assetID={item.rgbAllocations && item.rgbAllocations}
-              />
-            </AppTouchable>
-          )}
-        />
-      )}
+      {/* {isLoading ? (
+        <ModalLoading visible={isLoading} />
+      ) : ( */}
+      <FlatList
+        data={UnspentUTXOData}
+        renderItem={({ item }) => (
+          <AppTouchable
+            onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
+            <UnspentUTXOElement
+              transID={`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
+              satsAmount={`${item.utxo.btcAmount}`}
+              assetID={item.rgbAllocations && item.rgbAllocations}
+            />
+          </AppTouchable>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={
+          <EmptyStateView
+            title={assets.noRGBUTXOsTitle}
+            subTitle={assets.noRGBUTXOSubTitle}
+            IllustartionImage={
+              !isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
+          />
+        }
+      />
+      {/* )} */}
     </ScreenContainer>
   );
 };

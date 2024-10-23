@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
@@ -12,9 +12,9 @@ import { useMutation } from 'react-query';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import Colors from 'src/theme/Colors';
 import moment from 'moment';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import ModalLoading from 'src/components/ModalLoading';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -57,7 +57,7 @@ const CoinsMetaDataScreen = () => {
         enableBack={true}
       />
       {isLoading ? (
-        <ActivityIndicator color={Colors.ChineseOrange} size="large" />
+        <ModalLoading visible={isLoading} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
@@ -124,6 +124,10 @@ const getStyles = (theme: AppTheme) =>
     scrollingContainer: {
       height: '60%',
       marginTop: wp(20),
+      padding: hp(16),
+      backgroundColor: theme.colors.cardGradient3,
+      marginHorizontal: hp(10),
+      borderRadius: 20,
     },
   });
 

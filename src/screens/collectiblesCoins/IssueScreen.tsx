@@ -1,5 +1,15 @@
-import React, { useContext, useState, useMemo, useCallback } from 'react';
+import React, {
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useTheme } from 'react-native-paper';
+import { useMutation } from 'react-query';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,11 +18,6 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
@@ -20,22 +25,26 @@ import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
+import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
+import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Keys } from 'src/storage';
 
 function IssueScreen() {
-  const shouldRefresh = useRoute().params;
+  // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { home, common, assets } = translations;
+  const { home, common, assets, wallet: walletTranslation } = translations;
+  const [inputHeight, setInputHeight] = useState(100);
+  const styles = getStyles(theme, inputHeight);
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
@@ -45,6 +54,18 @@ function IssueScreen() {
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
 
+  const createUtxos = useMutation(ApiHandler.createUtxos);
+
+  useEffect(() => {
+    if (createUtxos.data) {
+      setLoading(true);
+      setTimeout(onPressIssue, 500);
+    } else if (createUtxos.data === false) {
+      setLoading(false);
+      Toast(walletTranslation.failedToCreateUTXO, true);
+    }
+  }, [createUtxos.data]);
+
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -53,16 +74,18 @@ function IssueScreen() {
       ticker: assetTicker,
       supply: totalSupplyAmt.replace(/,/g, ''),
     });
-    setLoading(false);
     if (response?.assetId) {
-      Toast(assets.assetCreateMsg, true);
+      setLoading(false);
+      Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
+      setLoading(false);
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`, false, true);
+      setLoading(false);
+      Toast(`Failed: ${response?.error}`, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
@@ -73,24 +96,26 @@ function IssueScreen() {
       name: assetName.trim(),
       description: description,
       supply: totalSupplyAmt.replace(/,/g, ''),
-      filePath: image?.path?.replace('file://', ''),
+      filePath: image.replace('file://', ''),
     });
-    setLoading(false);
     if (response?.assetId) {
-      Toast(assets.assetCreateMsg, true);
+      setLoading(false);
+      Toast(assets.assetCreateMsg);
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
+      setLoading(false);
       setTimeout(() => {
         setShowErrorModal(true);
       }, 500);
     } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`, false, true);
+      setLoading(false);
+      Toast(`Failed: ${response?.error}`, true);
     }
   }, [
     assetName,
     assets.assetCreateMsg,
     description,
-    image?.path,
+    image,
     navigation,
     totalSupplyAmt,
   ]);
@@ -105,7 +130,7 @@ function IssueScreen() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(1000, 1000, false);
+      const result = await pickImage(false);
       setImage(result);
     } catch (error) {
       console.error(error);
@@ -123,27 +148,32 @@ function IssueScreen() {
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading} />
+      <ModalLoading visible={loading || createUtxos.isLoading} />
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => onPressIssue(),
-          });
+          setTimeout(() => {
+            createUtxos.mutate();
+          }, 400);
         }}
       />
       <SegmentedButtons
         value={assetType}
-        onValueChange={value => setAssetType(value)}
+        onValueChange={value => {
+          if (value === AssetType.Coin) {
+            setDescription('');
+          }
+          setAssetType(value);
+        }}
         buttons={[
           {
             value: AssetType.Coin,
-            label: 'Coins',
+            label: assets.coins,
           },
           {
             value: AssetType.Collectible,
-            label: 'Collectibles',
+            label: assets.collectibles,
           },
         ]}
         // style={styles.segmentedButtonsStyle}
@@ -191,8 +221,13 @@ function IssueScreen() {
               value={description}
               onChangeText={text => setDescription(text)}
               placeholder={home.assetDescription}
-              maxLength={32}
-              style={styles.input}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              maxLength={100}
+              multiline={true}
+              numberOfLines={2}
+              style={[styles.input, description && styles.descInput]}
             />
             <TextField
               value={formatNumber(totalSupplyAmt)}
@@ -204,7 +239,7 @@ function IssueScreen() {
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
-              icon={<UploadFile />}
+              icon={!isThemeDark ? <UploadFile /> : <UploadFileLight />}
             />
             {image && (
               <View style={styles.imageWrapper}>
@@ -212,15 +247,15 @@ function IssueScreen() {
                   source={{
                     uri:
                       Platform.OS === 'ios'
-                        ? image.path.replace('file://', '')
-                        : image.path,
+                        ? image.replace('file://', '')
+                        : image,
                   }}
                   style={styles.imageStyle}
                 />
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  <IconClose />
+                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}
@@ -233,18 +268,23 @@ function IssueScreen() {
           primaryOnPress={onPressIssue}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || createUtxos.isLoading || loading}
           width={wp(120)}
+          primaryLoading={createUtxos.isLoading || loading}
         />
       </View>
     </ScreenContainer>
   );
 }
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
+    },
+    descInput: {
+      borderRadius: hp(20),
+      height: Math.max(100, inputHeight),
     },
     buttonWrapper: {
       // marginTop: hp(20),

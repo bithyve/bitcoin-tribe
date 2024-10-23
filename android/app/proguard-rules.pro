@@ -8,3 +8,8 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+-keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImpl {
+    public <init>(...);
+}
+-keep class com.google.mlkit.** { *; }
+-keep class com.mrousavy.camera.** { *; }

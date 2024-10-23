@@ -58,13 +58,13 @@ function SendEnterAddress({
         });
         break;
       case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SENDASSET, {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
           wallet,
           rgbInvoice: address,
         });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, false, true);
+        Toast(sendScreen.invalidBtcAddress, true);
     }
   };
   const handlePasteAddress = async () => {
@@ -80,7 +80,7 @@ function SendEnterAddress({
     } else {
       Keyboard.dismiss();
       onDismiss();
-      Toast(sendScreen.invalidBtcAddress, false, true);
+      Toast(sendScreen.invalidBtcAddress, true);
     }
   };
 
@@ -93,7 +93,7 @@ function SendEnterAddress({
         keyboardType={'default'}
         autoFocus={true}
         inputStyle={styles.inputStyle}
-        rightText="Paste"
+        rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.primaryCTAText}

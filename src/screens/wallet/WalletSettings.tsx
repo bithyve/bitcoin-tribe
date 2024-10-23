@@ -3,12 +3,13 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useMutation } from 'react-query';
+import { useMutation, UseMutationResult } from 'react-query';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
-import OptionCard from 'src/components/OptionCard';
+import SelectOption from 'src/components/SelectOption';
+import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 
 function WalletSettings() {
   const { translations } = useContext(LocalizationContext);
@@ -18,13 +19,22 @@ function WalletSettings() {
     ApiHandler.receiveTestSats,
   );
 
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     Toast(strings.testSatsRecived);
+  //     fetchUTXOs();
+  //   } else if (isError) {
+  //     Toast(strings.failedTestSatsRecived, true);
+  //   }
+  // }, [isError, isSuccess]);
+
   useEffect(() => {
-    if (isSuccess) {
-      Toast(strings.testSatsRecived, true);
-    } else if (isError) {
-      Toast(strings.failedTestSatsRecived, false, true);
-    }
-  }, [isError, isSuccess]);
+    fetchUTXOs();
+  }, []);
 
   return (
     <ScreenContainer>
@@ -32,27 +42,23 @@ function WalletSettings() {
         title={strings.walletSettings}
         subTitle={strings.walletSettingSubTitle}
       />
-      <ModalLoading visible={isLoading} />
-      <OptionCard
-        title={strings.nameAndPic}
-        subTitle={strings.nameAndPicSubTitle}
-        onPress={() => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE)}
-      />
-      <OptionCard
+      {/* <ModalLoading visible={isLoading} /> */}
+      <SelectOption
         title={strings.showXPub}
-        subTitle={strings.showXPubSubTitle}
+        // subTitle={strings.showXPubSubTitle}
         onPress={() =>
           navigation.dispatch(CommonActions.navigate(NavigationRoutes.SHOWXPUB))
         }
       />
-      <OptionCard
+      {/* <SelectOption
         title={strings.receiveTestSats}
-        subTitle={strings.receiveTestSatSubtitle}
+        // subTitle={strings.receiveTestSatSubtitle}
         onPress={() => mutate()}
-      />
-      <OptionCard
+        showArrow={false}
+      /> */}
+      <SelectOption
         title={strings.viewUnspent}
-        subTitle={strings.viewUnspent}
+        // subTitle={strings.viewUnspent}
         onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
       />
     </ScreenContainer>

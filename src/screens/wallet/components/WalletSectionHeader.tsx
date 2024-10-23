@@ -5,10 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 
 import UserAvatar from 'src/components/UserAvatar';
 import GoBack from 'src/assets/images/icon_back.svg';
-import SettingIcon from 'src/assets/images/icon_settings.svg';
+import GoBackLight from 'src/assets/images/icon_back_light.svg';
+import ReciveTestSatsIcon from 'src/assets/images/recieveTestSats.svg';
+import ReciveTestSatsLightIcon from 'src/assets/images/recieveTestSats_light.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
 import { windowHeight, wp } from 'src/constants/responsive';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type WalletSectionHeaderProps = {
   profile: string;
@@ -17,18 +21,21 @@ type WalletSectionHeaderProps = {
 function WalletSectionHeader(props: WalletSectionHeaderProps) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { profile, onPress } = props;
   return (
     <View style={styles.headerWrapper}>
       <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
-        {<GoBack />}
+        {!isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
-        <UserAvatar size={70} imageSource={profile} />
+        {/* <UserAvatar size={70} imageSource={profile} /> */}
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
-        <View style={styles.rightIconWrapper1}>{<SettingIcon />}</View>
+        <View style={styles.rightIconWrapper1}>
+          {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />}
+        </View>
       </IconWrapper>
     </View>
   );

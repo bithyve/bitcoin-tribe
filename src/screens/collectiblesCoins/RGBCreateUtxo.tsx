@@ -41,7 +41,7 @@ function RGBCreateUtxo() {
         setVisible(true);
       }, 400);
     } else if (createUtxos.data === false) {
-      Toast(walletTranslation.failedToCreateUTXO, false, true);
+      Toast(walletTranslation.failedToCreateUTXO, true);
     }
   }, [createUtxos.data]);
 

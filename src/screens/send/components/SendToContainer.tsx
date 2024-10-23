@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useTheme } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+import idx from 'idx';
 
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -9,17 +12,23 @@ import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
-import DeleteIcon from 'src/assets/images/delete.svg';
-import KeyPadView from 'src/components/KeyPadView';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import idx from 'idx';
 import Toast from 'src/components/Toast';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import SendAddressIcon from 'src/assets/images/sendAddress.svg';
-import { formatNumber } from 'src/utils/numberWithCommas';
+import SendAddressIconLight from 'src/assets/images/sendAddress_light.svg';
+import { Keys, Storage } from 'src/storage';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import useBalance from 'src/hooks/useBalance';
+import { TxPriority } from 'src/services/wallets/enums';
+import {
+  AverageTxFees,
+  AverageTxFeesByNetwork,
+} from 'src/services/wallets/interfaces';
+import SendSuccessContainer from './SendSuccessContainer';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 
 function SendToContainer({
   wallet,
@@ -31,42 +40,64 @@ function SendToContainer({
   paymentURIAmount: Number;
 }) {
   const navigation = useNavigation();
+  const { getBalance, getCurrencyIcon } = useBalance();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
+  const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
+  const [selectedPriority, setSelectedPriority] = React.useState(
+    TxPriority.LOW,
+  );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
-
-  const sendPhaseOneMutation = useMutation(ApiHandler.sendPhaseOne);
+  const [visible, setVisible] = useState(false);
+  const [averageTxFee, setAverageTxFee] = useState({});
+  const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
 
   useEffect(() => {
-    if (sendPhaseOneMutation.status === 'success') {
-      navigation.navigate(NavigationRoutes.BROADCASTTRANSACTION, {
-        wallet,
-        address,
-        amount,
-        txPrerequisites: sendPhaseOneMutation.data,
+    if (!averageTxFeeJSON) {
+      Toast(sendScreen.transFeeErrMsg, true);
+    } else {
+      const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+        JSON.parse(averageTxFeeJSON);
+      const averageTxFee: AverageTxFees =
+        averageTxFeeByNetwork[wallet.networkType];
+      setAverageTxFee(averageTxFee);
+    }
+  }, [averageTxFeeJSON]);
+
+  useEffect(() => {
+    if (sendTransactionMutation.status === 'success') {
+      setVisible(true);
+    } else if (sendTransactionMutation.status === 'error') {
+      Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
+    }
+  }, [sendTransactionMutation]);
+
+  const successTransaction = () => {
+    setVisible(false);
+    setTimeout(() => {
+      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+        autoRefresh: true,
       });
-    } else if (sendPhaseOneMutation.status === 'error') {
-      Toast(`Error while sending: ${sendPhaseOneMutation.error}`, false, true);
-    }
-  }, [sendPhaseOneMutation]);
+    }, 400);
+  };
 
-  const initiateSendPhaseOne = () => {
-    if (insufficientBalance) {
-      Toast(sendScreen.amountMoreThanSpend, false, true);
-      return;
-    }
-
-    sendPhaseOneMutation.mutate({
+  const initiateSend = () => {
+    sendTransactionMutation.mutate({
       sender: wallet,
       recipient: {
         address,
         amount: Number(amount),
       },
+      averageTxFee,
+      selectedPriority,
     });
   };
 
@@ -94,12 +125,26 @@ function SendToContainer({
     setAmount(amount.slice(0, -1));
   };
 
+  const getFeeRateByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
+  };
+
+  const getEstimatedBlocksByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
+  };
+
+  const transferFee =
+    idx(
+      sendTransactionMutation,
+      _ => _.data.txPrerequisites[selectedPriority].fee,
+    ) || 0;
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            <SendAddressIcon />
+            {!isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>
@@ -115,34 +160,137 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
-          // keyboardType={'default'}
-          disabled={true}
+          keyboardType={'numeric'}
+          // disabled={true}
           icon={<IconBitcoin />}
           // rightText={common.sendMax}
           // onRightTextPress={() => {}}
           // rightCTATextColor={theme.colors.accent1}
         />
+        <View style={styles.totalFeeWrapper}>
+          <AppText variant="heading1" style={styles.feeTitleText}>
+            Total Fee:
+          </AppText>
+          {initialCurrencyMode !== CurrencyKind.SATS
+            ? getCurrencyIcon(IconBitcoin, 'dark')
+            : null}
+          <AppText variant="heading1" style={styles.amountText}>
+            &nbsp;{getBalance(2000)}
+          </AppText>
+          {initialCurrencyMode === CurrencyKind.SATS && (
+            <AppText variant="caption" style={styles.satsText}>
+              sats
+            </AppText>
+          )}
+        </View>
+        <View style={styles.feeWrapper}>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.LOW}
+              status={
+                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.LOW)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Low -
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp; {getFeeRateByPriority(TxPriority.LOW)} sats/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.MEDIUM}
+              status={
+                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Medium -
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getFeeRateByPriority(TxPriority.MEDIUM)} sat/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={TxPriority.HIGH}
+              status={
+                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
+              }
+              onPress={() => setSelectedPriority(TxPriority.HIGH)}
+            />
+            <View style={styles.feeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                High -
+              </AppText>
+              <AppText variant="body2" style={styles.feeText}>
+                &nbsp;{getFeeRateByPriority(TxPriority.HIGH)} sat/vbyte
+              </AppText>
+              <AppText variant="caption" style={styles.feeSatsText}>
+                ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
+              </AppText>
+            </View>
+          </View>
+        </View>
       </View>
+
       <View style={styles.primaryCTAContainer}>
         <Buttons
           disabled={!amount}
-          primaryTitle={common.proceed}
+          primaryTitle={common.broadcast}
           secondaryTitle={common.cancel}
-          primaryOnPress={initiateSendPhaseOne}
+          primaryOnPress={initiateSend}
           secondaryOnPress={navigation.goBack}
-          width={wp(120)}
+          width={wp(160)}
         />
       </View>
-      <View style={styles.keyPadWrapper}>
+      {/* <View style={styles.keyPadWrapper}>
         <KeyPadView
           onPressNumber={onPressNumber}
           onDeletePressed={onDeletePressed}
           keyColor={theme.colors.accent1}
           ClearIcon={<DeleteIcon />}
         />
+      </View> */}
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          title={sendScreen.sendSuccessTitle}
+          subTitle={sendScreen.sendSuccessSubTitle}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={styles.containerModalStyle}>
+          <SendSuccessContainer
+            transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
+            amount={amount}
+            transFee={transferFee}
+            total={Number(amount) + Number(transferFee)}
+            onPress={() => successTransaction()}
+          />
+        </ResponsePopupContainer>
       </View>
     </View>
   );
@@ -183,6 +331,48 @@ const getStyles = (theme: AppTheme) =>
     },
     txnID: {
       color: theme.colors.secondaryHeadingColor,
+    },
+    totalFeeWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: hp(20),
+    },
+    feeTitleText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
+    amountText: {
+      // marginLeft: hp(5),
+      color: theme.colors.headingColor,
+    },
+    satsText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(5),
+      marginLeft: hp(5),
+    },
+    radioBtnWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(10),
+    },
+    feeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    feePriorityText: {
+      color: theme.colors.headingColor,
+      marginRight: hp(10),
+    },
+    feeText: {
+      color: theme.colors.headingColor,
+    },
+    feeSatsText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    containerModalStyle: {
+      margin: 0,
+      padding: 10,
     },
   });
 export default SendToContainer;

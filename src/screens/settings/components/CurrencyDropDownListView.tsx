@@ -56,6 +56,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       height: '45%',
       backgroundColor: theme.colors.cardBackground,
+      zIndex: 999,
     },
     wrapper: {
       padding: hp(15),

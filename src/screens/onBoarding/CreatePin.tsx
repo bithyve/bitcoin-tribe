@@ -8,12 +8,12 @@ import AppHeader from 'src/components/AppHeader';
 
 function CreatePin() {
   const { translations } = useContext(LocalizationContext);
-  const { onBoarding } = translations;
+  const { onBoarding, settings } = translations;
 
   return (
     <ScreenContainer>
       <AppHeader
-        title={onBoarding.advanceSettingTitle}
+        title={settings.setPasscodeTitle}
         subTitle={onBoarding.enterPin}
         // onSettingsPress={onSettingsPress}
       />

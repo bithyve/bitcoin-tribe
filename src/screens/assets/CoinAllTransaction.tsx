@@ -14,8 +14,9 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import AssetTransaction from '../wallet/components/AssetTransaction';
-import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { hp } from 'src/constants/responsive';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
@@ -32,11 +33,19 @@ function CoinAllTransaction() {
         style={styles.container}
         data={transactions}
         refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={() => mutate({ assetId })}
-            tintColor={theme.colors.accent1}
-          />
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={isLoading}
+              onRefresh={() => mutate({ assetId })}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => mutate({ assetId })}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
         }
         renderItem={({ item }) => (
           <AssetTransaction

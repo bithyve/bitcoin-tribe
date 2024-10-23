@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
@@ -7,19 +7,28 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
+import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
-import Colors from 'src/theme/Colors';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
-  const { receciveScreen, common, assets } = translations;
+  const {
+    receciveScreen,
+    common,
+    assets,
+    wallet: walletTranslation,
+  } = translations;
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -37,6 +46,16 @@ function ReceiveAssetScreen() {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (createUtxos.data) {
+      setTimeout(() => {
+        mutate();
+      }, 400);
+    } else if (createUtxos.data === false) {
+      Toast(walletTranslation.failedToCreateUTXO, true);
+    }
+  }, [createUtxos.data]);
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -49,18 +68,14 @@ function ReceiveAssetScreen() {
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
-          navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-            refresh: () => mutate(),
-          });
+          setTimeout(() => {
+            createUtxos.mutate();
+          }, 400);
         }}
       />
 
       {isLoading || createUtxos.isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={{ height: '70%' }}
-          color={Colors.ChineseOrange}
-        />
+        <ModalLoading visible={isLoading || createUtxos.isLoading} />
       ) : error ? (
         <View />
       ) : (
@@ -71,7 +86,7 @@ function ReceiveAssetScreen() {
           />
           <ReceiveQrClipBoard
             qrCodeValue={rgbWallet?.receiveData?.invoice}
-            icon={<IconCopy />}
+            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
             title={common.note}

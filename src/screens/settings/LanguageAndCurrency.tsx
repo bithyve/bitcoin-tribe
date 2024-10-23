@@ -6,35 +6,54 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LangCurrencyOption from './components/LangCurrencyOption';
-import IconLanguage from 'src/assets/images/icon_globe.svg';
+import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
+import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
+import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
 import { hp } from 'src/constants/responsive';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
 import availableCurrency from 'src/loc/availableCurrency';
+import SelectOption from 'src/components/SelectOption';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import FooterNote from 'src/components/FooterNote';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
+  const { settings, common } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const [langDropdown, setLangDropdown] = React.useState(false);
   const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
+  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
 
   const selectedLanguage = availableLanguages.find(
     lang => lang.iso === language,
   );
 
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+
   const initialCurrency = currency || 'USD';
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
+
+  const toggleDisplayMode = () => {
+    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
+  };
 
   return (
     <ScreenContainer>
@@ -42,11 +61,19 @@ function LanguageAndCurrency() {
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
       />
+      <SelectOption
+        title={settings.satsModeTitle}
+        subTitle={settings.satsModeSubTitle}
+        onPress={() => toggleDisplayMode()}
+        enableSwitch={true}
+        onValueChange={() => toggleDisplayMode()}
+        toggleValue={initialCurrencyMode === CurrencyKind.SATS}
+      />
       <View style={{ position: 'relative' }}>
         <LangCurrencyOption
           title={settings.language}
           subTitle={settings.languageSubTitle}
-          icon={<IconLanguage />}
+          icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
           // langCurrency={'English'}
           // langCurrencyVariant={'English UK'}
           //We disabled for now because app crash (Blocker)
@@ -63,7 +90,7 @@ function LanguageAndCurrency() {
       <LangCurrencyOption
         title={settings.currency}
         subTitle={settings.currencySubTitle}
-        icon={<IconCurrency />}
+        icon={!isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
         langCurrency={selectedCurrency && selectedCurrency.currency}
         langCurrencyVariant={selectedCurrency && selectedCurrency.displayTitle}
         onPress={() => setCurrencyDropDown(!currencyDropDown)}
@@ -90,6 +117,11 @@ function LanguageAndCurrency() {
           style={styles.currencyDropdownContainer}
         />
       )}
+      <FooterNote
+        title={common.note}
+        subTitle={settings.langNoteSubTitle}
+        customStyle={styles.noteWrapper}
+      />
     </ScreenContainer>
   );
 }
@@ -97,7 +129,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '50%' : '42%',
+      top: Platform.OS === 'ios' ? '55%' : '42%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },
@@ -106,6 +138,11 @@ const getStyles = (theme: AppTheme) =>
       top: Platform.OS === 'ios' ? '72%' : '62%',
       borderRadius: 20,
       marginHorizontal: hp(15),
+    },
+    noteWrapper: {
+      position: 'absolute',
+      bottom: Platform.OS === 'android' ? 50 : 20,
+      alignSelf: 'center',
     },
   });
 export default LanguageAndCurrency;

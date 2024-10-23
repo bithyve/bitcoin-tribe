@@ -1,14 +1,7 @@
-import {
-  ActivityIndicator,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -18,16 +11,22 @@ import { useMutation } from 'react-query';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import Colors from 'src/theme/Colors';
 import { Item } from './CoinsMetaDataScreen';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
+import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
+import ModalLoading from 'src/components/ModalLoading';
+import copyImageToDestination from 'src/utils/downloadImage';
+import Toast from 'src/components/Toast';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
@@ -42,11 +41,23 @@ const CoinsMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        rightIcon={<DownloadIcon />}
+        rightIcon={!isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
+        onSettingsPress={() => {
+          const filePath = Platform.select({
+            android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
+            ios: `${collectible.media?.filePath}.${
+              collectible.media?.mime.split('/')[1]
+            }`, // Add file extension
+          });
+
+          copyImageToDestination(filePath)
+            .then(path => Toast(assets.saveAssetSuccess))
+            .catch(err => Toast(assets.saveAssetFailed, true));
+        }}
         style={styles.headerWrapper}
       />
       {isLoading ? (
-        <ActivityIndicator color={Colors.ChineseOrange} size="large" />
+        <ModalLoading visible={isLoading} />
       ) : (
         <>
           <View style={styles.imageWrapper}>
@@ -67,10 +78,14 @@ const CoinsMetaDataScreen = () => {
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
             <AppText variant="heading2" style={styles.labelText}>
-              {collectible && collectible.name}
+              {Platform.OS === 'ios'
+                ? collectible && collectible.name
+                : collectible && collectible.details}
             </AppText>
             <AppText variant="body1" style={styles.detailText}>
-              {collectible && collectible.details}
+              {Platform.OS === 'ios'
+                ? collectible && collectible.details
+                : collectible && collectible.name}
             </AppText>
             <Item title={assets.assetId} value={assetId} />
             <Item
@@ -103,6 +118,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     detailText: {
+      marginBottom: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
     assetDetailsText: {
@@ -118,7 +134,10 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      paddingHorizontal: hp(16),
+      padding: hp(16),
+      backgroundColor: theme.colors.cardGradient3,
+      marginHorizontal: hp(20),
+      borderRadius: 20,
     },
     imageStyle: {
       width: '100%',
@@ -128,8 +147,8 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(25),
     },
     imageWrapper: {
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 1,
+      // borderBottomColor: theme.colors.borderColor,
+      // borderBottomWidth: 1,
     },
   });
 

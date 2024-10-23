@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
@@ -10,6 +10,7 @@ import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 
 type labelContentProps = {
   label: string;
@@ -20,6 +21,7 @@ function LabeledContent(props: labelContentProps) {
   const { label, content, enableCurrency } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -36,7 +38,10 @@ function LabeledContent(props: labelContentProps) {
       ) : (
         <View style={styles.balanceWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
-            getCurrencyIcon(IconBitcoin, 'dark')}
+            getCurrencyIcon(
+              !isThemeDark ? IconBitcoin : IconBitcoinLight,
+              !isThemeDark ? 'dark' : 'light',
+            )}
           <AppText variant="body2" style={styles.textStyle}>
             &nbsp;{getBalance(content)}
           </AppText>
@@ -56,17 +61,18 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     labelStyle: {
-      color: theme.colors.accent3,
+      color: theme.colors.headingColor,
     },
     textStyle: {
-      color: theme.colors.headingColor,
+      lineHeight: 20,
+      color: theme.colors.secondaryHeadingColor,
     },
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
     },
     satsText: {
-      color: theme.colors.headingColor,
+      color: theme.colors.secondaryHeadingColor,
       marginLeft: hp(5),
     },
   });

@@ -1,15 +1,51 @@
+import { NodeInfoResponse } from 'src/services/rgbnode';
+
 export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
   accountXpub: string;
   accountXpubFingerprint: string;
-  receiveData: {
+  receiveData?: {
     invoice: string;
     recipientId: string;
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
+  utxos?: utxosRoot;
+  nodeUrl?: string;
+  nodeAuthentication?: string;
+  nodeInfo?: NodeInfoResponse;
+  nodeBtcBalance?: {
+    vanilla: Balance;
+    colored: Balance;
+  };
+}
+
+// Define the structure of an object in the rgbAllocations array
+interface RgbAllocation {
+  key: string;
+  value: any; // Adjust the type as needed, can be 'number', 'string', or other specific types
+}
+
+// Define the structure of the Outpoint object
+interface Outpoint {
+  txid: string; // Example field, represents a transaction ID
+  index: number; // Example field, represents an output index
+}
+
+// Define the structure of the UTXO object
+interface Utxo {
+  btcAmount: number;
+  colorable: boolean;
+  exists: boolean;
+  outpoint: Outpoint[]; // Array of Outpoint objects
+}
+
+// Define the unspentUTXOs interface
+export interface utxosRoot {
+  rgbAllocations: RgbAllocation[][]; // Array of array of RgbAllocation objects
+  utxo: Utxo; // UTXO object
 }
 
 interface Balance {
@@ -102,4 +138,10 @@ export enum AssetType {
 export enum AssetFace {
   RGB25 = 'RGB25',
   RGB20 = 'RGB20',
+}
+
+export interface RgbNodeConnectParams {
+  nodeUrl: string;
+  nodeId: string;
+  authentication: string;
 }

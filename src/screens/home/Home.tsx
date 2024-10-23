@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
+import { useMutation, UseMutationResult } from 'react-query';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,12 +19,21 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { Asset, AssetFace, Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  Coin,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Keys } from 'src/storage';
-import { useMMKVString } from 'react-native-mmkv';
+import { Keys, Storage } from 'src/storage';
 import AppText from 'src/components/AppText';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import BackupAlert from './components/BackupAlert';
+import AppType from 'src/models/enums/AppType';
+import useRgbWallets from 'src/hooks/useRgbWallets';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -32,15 +42,25 @@ function HomeScreen() {
   const { common, sendScreen, home } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
-  const [image, setImage] = useState(null);
-  const [walletName, setWalletName] = useState(null);
+  const [BackupAlertStatus] = useMMKVBoolean(Keys.BACKUPALERT);
+  const intialBackupAlertStatus = BackupAlertStatus || false;
   const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const initialCurrency = currency || 'USD';
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
+  const [image, setImage] = useState(null);
+  const [visibleBackupAlert, setVisibleBackupAlert] = useState(
+    intialBackupAlertStatus,
+  );
+  const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
 
+  const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
@@ -49,8 +69,22 @@ function HomeScreen() {
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
+  const balances = useMemo(() => {
+    if (app.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+    } else {
+      return (
+        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+      );
+    }
+  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
+
   useEffect(() => {
     refreshRgbWallet.mutate();
+    fetchUTXOs();
+    refreshWallet.mutate({
+      wallets: [wallet],
+    });
     if (
       version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
     ) {
@@ -92,9 +126,7 @@ function HomeScreen() {
         <HomeHeader
           profile={image}
           username={walletName}
-          balance={`${
-            wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
-          }`}
+          balance={balances}
           onPressScanner={() =>
             handleScreenNavigation(NavigationRoutes.SENDSCREEN, {
               receiveData: 'send',
@@ -132,6 +164,26 @@ function HomeScreen() {
           }
         }}
       />
+      <ResponsePopupContainer
+        visible={visibleBackupAlert}
+        enableClose={true}
+        onDismiss={() => setVisibleBackupAlert(false)}
+        backColor={theme.colors.primaryBackground}
+        borderColor={theme.colors.borderColor}>
+        <BackupAlert
+          onPrimaryPress={() => {
+            setVisibleBackupAlert(false);
+            Storage.set(Keys.BACKUPALERT, false);
+            setTimeout(() => {
+              navigation.navigate(NavigationRoutes.APPBACKUPMENU);
+            }, 400);
+          }}
+          onSkipPress={() => {
+            setVisibleBackupAlert(false);
+            Storage.set(Keys.BACKUPALERT, false);
+          }}
+        />
+      </ResponsePopupContainer>
     </ScreenContainer>
   );
 }
@@ -139,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 0,
-      paddingTop: 0,
+      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
     },
     headerWrapper: {
       margin: hp(16),

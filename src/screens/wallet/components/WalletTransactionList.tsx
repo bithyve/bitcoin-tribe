@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
+import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -9,11 +11,13 @@ import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
+import RefreshControlView from 'src/components/RefreshControlView';
+import { Keys } from 'src/storage';
 
 function WalletTransactionList({
   transactions,
@@ -28,6 +32,7 @@ function WalletTransactionList({
 }) {
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
@@ -54,7 +59,7 @@ function WalletTransactionList({
     if (walletRefreshMutation.status === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
     } else if (walletRefreshMutation.status === 'error') {
-      Toast(walletStrings.failRefreshWallet, false, true);
+      Toast(walletStrings.failRefreshWallet, true);
     }
   }, [walletRefreshMutation]);
 
@@ -63,11 +68,19 @@ function WalletTransactionList({
       style={styles.container}
       data={transactions}
       refreshControl={
-        <RefreshControl
-          refreshing={walletRefreshMutation.isLoading}
-          onRefresh={pullDownToRefresh}
-          tintColor={theme.colors.accent1}
-        />
+        Platform.OS === 'ios' ? (
+          <RefreshControlView
+            refreshing={walletRefreshMutation.isLoading}
+            onRefresh={() => pullDownToRefresh()}
+          />
+        ) : (
+          <RefreshControl
+            refreshing={walletRefreshMutation.isLoading}
+            onRefresh={() => pullDownToRefresh()}
+            colors={[theme.colors.accent1]} // You can customize this part
+            progressBackgroundColor={theme.colors.inputBackground}
+          />
+        )
       }
       renderItem={({ item }) => (
         <WalletTransactions
@@ -85,7 +98,13 @@ function WalletTransactionList({
       ListEmptyComponent={
         <EmptyStateView
           style={styles.emptyStateContainer}
-          IllustartionImage={<NoTransactionIllustration />}
+          IllustartionImage={
+            !isThemeDark ? (
+              <NoTransactionIllustration />
+            ) : (
+              <NoTransactionIllustrationLight />
+            )
+          }
           title={walletStrings.noUTXOYet}
           subTitle={walletStrings.noUTXOYetSubTitle}
         />
@@ -100,7 +119,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     emptyStateContainer: {
-      marginTop: '50%',
+      marginTop: '30%',
+    },
+    refreshLoader: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
     },
   });
 export default WalletTransactionList;

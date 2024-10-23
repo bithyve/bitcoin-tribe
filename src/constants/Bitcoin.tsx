@@ -167,7 +167,7 @@ export const getCurrencyImageByRegion = (
   const styles = {} as any;
   switch (type) {
     case 'light':
-      styles.color = Colors.White;
+      styles.color = Colors.Black;
       break;
     case 'yellow':
       styles.color = Colors.Golden;

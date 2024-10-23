@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,9 +12,11 @@ import TransactionButtons from '../wallet/components/TransactionButtons';
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 type CoinDetailsHeaderProps = {
   coin: Coin;
+  wallet: Wallet;
   onPressSetting: () => void;
   onPressBuy?: () => void;
 };
@@ -24,8 +26,7 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
   const { home } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { coin, onPressSetting, onPressBuy } = props;
-
+  const { coin, wallet, onPressSetting, onPressBuy } = props;
   return (
     <View style={styles.container}>
       <Toolbar onPress={onPressSetting} ticker={coin.ticker} />
@@ -38,7 +39,14 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         </AppText>
       </View>
       <View style={styles.balanceWrapper}>
-        <AppText variant="walletBalance" style={styles.balanceText}>
+        <AppText
+          variant="walletBalance"
+          style={[
+            styles.balanceText,
+            {
+              fontSize: coin.balance.spendable.toString().length > 10 ? 24 : 39,
+            },
+          ]}>
           {numberWithCommas(coin.balance.spendable)}
         </AppText>
       </View>
@@ -46,6 +54,9 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
+            item: coin,
+            rgbInvoice: '',
+            wallet: wallet,
           })
         }
         // onPressBuy={onPressBuy}
@@ -63,7 +74,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 10,
+      paddingBottom: Platform.OS === 'android' ? 0 : 10,
     },
     usernameText: {
       color: theme.colors.accent3,

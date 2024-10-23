@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import GoBack from 'src/assets/images/icon_back.svg';
+import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import AppTouchable from './AppTouchable';
 import { Route, useNavigation } from '@react-navigation/native';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 type AppHeaderProps = {
   title?: string;
@@ -18,6 +21,8 @@ type AppHeaderProps = {
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
   onBackNavigation?;
+  rightText?: string;
+  onRightTextPress?: () => void;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -28,10 +33,13 @@ function AppHeader(props: AppHeaderProps) {
     enableBack = true,
     onBackNavigation,
     rightIcon,
+    rightText,
+    onRightTextPress,
     onSettingsPress,
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -42,7 +50,7 @@ function AppHeader(props: AppHeaderProps) {
           <AppTouchable
             onPress={onBackNavigation ? onBackNavigation : navigation.goBack}
             style={styles.leftIconWrapper}>
-            {<GoBack />}
+            {!isThemeDark ? <GoBack /> : <GoBackLight />}
           </AppTouchable>
         )}
         {rightIcon && (
@@ -50,6 +58,15 @@ function AppHeader(props: AppHeaderProps) {
             onPress={onSettingsPress}
             style={styles.rightIconWrapper}>
             {rightIcon}
+          </AppTouchable>
+        )}
+        {rightText && (
+          <AppTouchable
+            onPress={onRightTextPress}
+            style={styles.rightIconWrapper}>
+            <AppText variant="heading2" style={styles.rightTextStyle}>
+              {rightText}
+            </AppText>
           </AppTouchable>
         )}
       </View>
@@ -73,7 +90,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       marginBottom: hp(15),
-      // marginTop: hp(10),
+      marginTop: Platform.OS === 'android' ? hp(15) : 0,
       alignItems: 'center',
     },
     iconContainer: {
@@ -85,9 +102,7 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(20),
     },
     leftIconWrapper: {},
-    rightIconWrapper: {
-      alignSelf: 'flex-end',
-    },
+    rightIconWrapper: {},
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',
@@ -108,6 +123,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     addNewText: {
+      color: theme.colors.accent1,
+    },
+    rightTextStyle: {
       color: theme.colors.accent1,
     },
   });

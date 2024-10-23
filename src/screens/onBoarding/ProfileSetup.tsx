@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
-import ModalContainer from 'src/components/ModalContainer';
-import CreatePin from './components/CreatePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useQuery } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -14,20 +12,24 @@ import { AppContext } from 'src/contexts/AppContext';
 import { decrypt, hash512 } from 'src/utils/encryption';
 import * as SecureStore from 'src/storage/secure-store';
 import config from 'src/utils/config';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import AppType from 'src/models/enums/AppType';
 
-function ProfileSetup({ navigation }) {
+function ProfileSetup() {
+  const navigation = useNavigation();
+  const route = useRoute();
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  // const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [initiateQuery, setInitiateQuery] = useState(false);
   const { setKey } = useContext(AppContext);
 
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(300, 300, true);
+      const result = await pickImage(true);
       setProfileImage(result);
     } catch (error) {
       console.error(error);
@@ -37,15 +39,25 @@ function ProfileSetup({ navigation }) {
   const query = useQuery(
     'setup_app',
     async () => {
+      const appType: AppType = route.params?.appType || AppType.ON_CHAIN;
       return await ApiHandler.setupNewApp({
         appName: name,
         pinMethod: PinMethod.DEFAULT,
         passcode: '',
         walletImage: profileImage,
+        appType,
+        rgbNodeConnectParams: route.params?.nodeConnectParams || null,
+        rgbNodeInfo: route.params?.nodeInfo || null,
       });
     },
     {
       enabled: !!initiateQuery,
+      onSuccess: () => {
+        setLoading(false);
+      },
+      onError: () => {
+        setLoading(false);
+      },
     },
   );
 
@@ -59,12 +71,15 @@ function ProfileSetup({ navigation }) {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    navigation.replace(NavigationRoutes.APPSTACK);
+    navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
 
   const initiateWalletCreation = () => {
     Keyboard.dismiss();
-    setInitiateQuery(true);
+    setLoading(true);
+    setTimeout(() => {
+      setInitiateQuery(true);
+    }, 200);
   };
 
   return (
@@ -75,27 +90,21 @@ function ProfileSetup({ navigation }) {
         onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => navigation.goBack()}
+        secondaryOnPress={() => initiateWalletCreation()}
         addPicTitle={onBoarding.addPicture}
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
-        onSettingsPress={() => {
-          Keyboard.dismiss();
-          // setVisible(true);
-          navigation.navigate(NavigationRoutes.CREATEPIN);
+        rightText={common.skip}
+        onRightTextPress={() => {
+          initiateWalletCreation();
         }}
         primaryStatus={query.status}
-        disabled={name === ''}
         primaryCTATitle={common.next}
+        primaryCtaLoader={loading}
+        disabled={loading}
+        // secondaryCTATitle={common.skip}
       />
-      {/* <ModalContainer
-        title={onBoarding.advanceSettingTitle}
-        subTitle={onBoarding.enterPin}
-        visible={visible}
-        onDismiss={() => setVisible(false)}>
-        <CreatePin />
-      </ModalContainer> */}
     </ScreenContainer>
   );
 }
