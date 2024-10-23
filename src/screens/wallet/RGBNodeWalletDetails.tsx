@@ -17,6 +17,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
+import AppType from 'src/models/enums/AppType';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const { autoRefresh = false } = route.params || {};
@@ -32,26 +33,6 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const { mutate, isLoading, isError, isSuccess } = useMutation(
     ApiHandler.receiveTestSats,
   );
-  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
-    ApiHandler.viewUtxos,
-  );
-
-  useEffect(() => {
-    fetchUTXOs();
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      Toast(walletTranslations.testSatsRecived);
-      fetchUTXOs();
-      setRefreshWallet(true);
-      walletRefreshMutation.mutate({
-        wallets: [wallet],
-      });
-    } else if (isError) {
-      Toast(walletTranslations.failedTestSatsRecived, true);
-    }
-  }, [isSuccess, isError]);
 
   return (
     <View>
@@ -59,17 +40,22 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         <RGBNodeWalletHeader
           profile={profileImage}
           username={walletName}
-          wallet={wallet}
+          wallet={null}
           activeTab={activeTab}
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
       </View>
-      <View style={styles.walletTransWrapper}>
+      <View
+        style={
+          app.appType === AppType.NODE_CONNECT
+            ? styles.walletTransWrapper
+            : styles.onChainWalletTransWrapper
+        }>
         <WalletTransactionsContainer
           navigation={navigation}
-          transactions={wallet.specs.transactions}
-          wallet={wallet}
+          transactions={[]}
+          wallet={''}
           autoRefresh={autoRefresh || refreshWallet}
         />
       </View>
@@ -93,15 +79,19 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: windowHeight < 670 ? '48%' : '45%',
+    height: '45%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
     // borderBottomWidth: 0.2,
     // borderBottomColor: 'gray',
   },
+  onChainWalletTransWrapper: {
+    height: '55%',
+    marginHorizontal: wp(16),
+  },
   walletTransWrapper: {
-    height: windowHeight < 670 ? '40%' : '45%',
+    height: '48%',
     marginHorizontal: wp(16),
   },
 });

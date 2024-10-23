@@ -35,7 +35,6 @@ function AppBackup({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const [backup, setBackup] = useMMKVBoolean(Keys.WALLET_BACKUP);
-
   return (
     <ScreenContainer>
       <AppHeader
