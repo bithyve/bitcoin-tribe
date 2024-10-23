@@ -36,7 +36,8 @@
     "continue": "Continue",
     "noInternet": "No network connection",
     "rgbWalletOffline": "RGB wallet is offline.",
-    "backupNow": "Backup Now"
+    "backupNow": "Backup Now",
+    "ok": "OK"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -302,7 +303,9 @@
     "checkSpendableAmt": "Please enter amount less than ",
     "reservedSats": "Sats from your wallet will be reserved to use for asset transactions",
     "insufficientBalance": "Insufficient Balance",
-    "insufficientBalanceSubtitle": "You need sats in your wallet to create assets. Please fund your wallet and try again"
+    "insufficientBalanceSubtitle": "You need sats in your wallet to create assets. Please fund your wallet and try again",
+    "failedToCreateUTXOTitle": "Insufficient Balance for Transaction",
+    "failedToCreateUTXOSubTitle": "Your wallet balance is too low to cover the current transaction fees due to high network congestion. Please increase your balance or try again when the fees are lower."
   },
   "community": {
     "fnfTitle": "Friends & Family",

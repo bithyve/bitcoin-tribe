@@ -41,6 +41,7 @@ import InsufficiantBalancePopupContainer from './components/InsufficiantBalanceP
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
 
 function IssueScreen() {
   // const shouldRefresh = useRoute().params;
@@ -60,6 +61,8 @@ function IssueScreen() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
+    useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
 
@@ -71,7 +74,11 @@ function IssueScreen() {
       setTimeout(onPressIssue, 500);
     } else if (createUtxos.data === false) {
       setLoading(false);
-      Toast(walletTranslation.failedToCreateUTXO, true);
+      setTimeout(() => {
+        setVisibleFailedToCreatePopup(true);
+      }, 500);
+
+      // Toast(walletTranslation.failedToCreateUTXO, true);
     }
   }, [createUtxos.data]);
 
@@ -314,6 +321,21 @@ function IssueScreen() {
               }, 500);
             }}
             secondaryOnPress={() => setVisible(false)}
+          />
+        </ResponsePopupContainer>
+      </View>
+      <View>
+        <ResponsePopupContainer
+          visible={visibleFailedToCreatePopup}
+          enableClose={true}
+          onDismiss={() => setVisibleFailedToCreatePopup(false)}
+          backColor={theme.colors.cardGradient1}
+          borderColor={theme.colors.borderColor}>
+          <FailedToCreatePopupContainer
+            primaryOnPress={() => {
+              setVisibleFailedToCreatePopup(false);
+            }}
+            secondaryOnPress={() => setVisibleFailedToCreatePopup(false)}
           />
         </ResponsePopupContainer>
       </View>

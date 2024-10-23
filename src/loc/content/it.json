@@ -36,7 +36,8 @@
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
-    "backupNow": "Esegui backup ora"
+    "backupNow": "Esegui backup ora",
+    "ok": "OK"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -302,7 +303,9 @@
     "checkSpendableAmt": "Inserisci un importo inferiore a ",
     "reservedSats": "I Sats dal tuo portafoglio saranno riservati per le transazioni di asset",
     "insufficientBalance": "Saldo insufficiente",
-    "insufficientBalanceSubtitle": "Hai bisogno di sats nel tuo portafoglio per creare asset. Per favore, ricarica il tuo portafoglio e riprova"
+    "insufficientBalanceSubtitle": "Hai bisogno di sats nel tuo portafoglio per creare asset. Per favore, ricarica il tuo portafoglio e riprova",
+    "failedToCreateUTXOTitle": "Saldo insufficiente per la transazione",
+    "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
