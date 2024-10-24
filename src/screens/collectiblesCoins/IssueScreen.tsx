@@ -38,6 +38,8 @@ import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
 
 function IssueScreen() {
   // const shouldRefresh = useRoute().params;
@@ -62,6 +64,20 @@ function IssueScreen() {
   const [image, setImage] = useState('');
 
   const createUtxos = useMutation(ApiHandler.createUtxos);
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+
+  const totalBtcAmount = useMemo(() => {
+    return UnspentUTXOData.reduce((total, item) => {
+      // Check if utxo exists and if btcAmount is present
+      if (item.utxo && item.utxo.colorable === true) {
+        return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
+      }
+      return total; // If the condition isn't met, return the total as is
+    }, 0);
+  }, [UnspentUTXOData]);
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -274,16 +290,18 @@ function IssueScreen() {
           </View>
         )}
       </KeyboardAvoidView>
-      <View style={styles.reservedSatsWrapper}>
-        <View style={styles.checkIconWrapper}>
-          <CheckIcon />
+      {totalBtcAmount === 0 && (
+        <View style={styles.reservedSatsWrapper}>
+          <View style={styles.checkIconWrapper}>
+            <CheckIcon />
+          </View>
+          <View style={styles.reservedSatsWrapper1}>
+            <AppText variant="body2" style={styles.reservedSatsText}>
+              {assets.reservedSats}
+            </AppText>
+          </View>
         </View>
-        <View style={styles.reservedSatsWrapper1}>
-          <AppText variant="body2" style={styles.reservedSatsText}>
-            {assets.reservedSats}
-          </AppText>
-        </View>
-      </View>
+      )}
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
