@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   },
   banner: {
     position: 'absolute',
-    // top: Platform.OS === 'ios' ? 30 : 8,
     left: 0,
     right: 0,
     bottom: Platform.OS === 'ios' ? -10 : -15,
