@@ -305,7 +305,9 @@
     "insufficientBalance": "Saldo insufficiente",
     "insufficientBalanceSubtitle": "Hai bisogno di sats nel tuo portafoglio per creare asset. Per favore, ricarica il tuo portafoglio e riprova",
     "failedToCreateUTXOTitle": "Saldo insufficiente per la transazione",
-    "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse."
+    "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse.",
+    "unexpectedErrorTitle": "Errore imprevisto",
+    "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

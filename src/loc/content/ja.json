@@ -305,7 +305,9 @@
     "insufficientBalance": "残高不足",
     "insufficientBalanceSubtitle": "資産を作成するにはウォレットにサッツが必要です。ウォレットに資金を追加して、再試行してください",
     "failedToCreateUTXOTitle": "トランザクションのための残高不足",
-    "failedToCreateUTXOSubTitle": "ネットワークの混雑により、現在のトランザクション手数料をカバーするにはウォレットの残高が不足しています。残高を増やすか、手数料が低いときにもう一度お試しください。"
+    "failedToCreateUTXOSubTitle": "ネットワークの混雑により、現在のトランザクション手数料をカバーするにはウォレットの残高が不足しています。残高を増やすか、手数料が低いときにもう一度お試しください。",
+    "unexpectedErrorTitle": "予期しないエラー",
+    "unexpectedErrorSubTitle": "リクエストの処理中に問題が発生しました。後でもう一度お試しください"
   },
   "community": {
     "fnfTitle": "友達と家族",

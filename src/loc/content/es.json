@@ -305,7 +305,9 @@
     "insufficientBalance": "Saldo insuficiente",
     "insufficientBalanceSubtitle": "Necesitas sats en tu billetera para crear activos. Por favor, recarga tu billetera e inténtalo de nuevo",
     "failedToCreateUTXOTitle": "Saldo insuficiente para la transacción",
-    "failedToCreateUTXOSubTitle": "El saldo de tu billetera es demasiado bajo para cubrir las tarifas de transacción actuales debido a la alta congestión de la red. Aumenta tu saldo o intenta de nuevo cuando las tarifas sean más bajas."
+    "failedToCreateUTXOSubTitle": "El saldo de tu billetera es demasiado bajo para cubrir las tarifas de transacción actuales debido a la alta congestión de la red. Aumenta tu saldo o intenta de nuevo cuando las tarifas sean más bajas.",
+    "unexpectedErrorTitle": "Error inesperado",
+    "unexpectedErrorSubTitle": "Hemos encontrado un problema al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

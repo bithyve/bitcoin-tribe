@@ -305,7 +305,9 @@
     "insufficientBalance": "余额不足",
     "insufficientBalanceSubtitle": "您的钱包需要有足够的Sats才能创建资产。请为您的钱包充值后重试",
     "failedToCreateUTXOTitle": "交易余额不足",
-    "failedToCreateUTXOSubTitle": " 由于网络拥堵，当前交易费用较高，您的钱包余额不足以支付。请增加余额或在费用较低时重试。"
+    "failedToCreateUTXOSubTitle": " 由于网络拥堵，当前交易费用较高，您的钱包余额不足以支付。请增加余额或在费用较低时重试。",
+    "unexpectedErrorTitle": "意外错误",
+    "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试"
   },
   "community": {
     "fnfTitle": "朋友和家人",
