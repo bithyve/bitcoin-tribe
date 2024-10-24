@@ -40,17 +40,17 @@ function OnBoardingScreen() {
       </View>
       <View style={styles.ctaWrapper}>
         <Buttons
-          primaryTitle={common.addFunds}
+          primaryTitle={common.addLater}
           primaryOnPress={() => {
+            Storage.set(Keys.BACKUPALERT, true);
+            navigation.replace(NavigationRoutes.APPSTACK);
+          }}
+          secondaryTitle={common.addFunds}
+          secondaryOnPress={() => {
             Storage.set(Keys.BACKUPALERT, true);
             navigation.replace(NavigationRoutes.APPSTACK, {
               screen: NavigationRoutes.RECEIVESCREEN,
             });
-          }}
-          secondaryTitle={common.addLater}
-          secondaryOnPress={() => {
-            Storage.set(Keys.BACKUPALERT, true);
-            navigation.replace(NavigationRoutes.APPSTACK);
           }}
           disabled={false}
           width={wp(130)}
@@ -69,10 +69,10 @@ const getStyles = (theme: AppTheme) =>
     illustrationWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: '40%',
+      height: '42%',
     },
     contentWrapper2: {
-      height: '20%',
+      height: '18%',
       marginVertical: hp(20),
       justifyContent: 'center',
     },
