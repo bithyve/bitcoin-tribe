@@ -67,11 +67,18 @@ function IssueScreen() {
     JSON.parse(utxoStr),
   );
 
-  const totalBtcAmount = useMemo(() => {
+  const totalReserveSatsAmount = useMemo(() => {
     return UnspentUTXOData.reduce((total, item) => {
       // Check if utxo exists and if btcAmount is present
       if (item.utxo && item.utxo.colorable === true) {
-        return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
+        // total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
+        const existingAsset = item.rgbAllocations.find(
+          allocation => allocation.settled === true,
+        );
+        if (!existingAsset) {
+          return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
+        }
+        return total;
       }
       return total; // If the condition isn't met, return the total as is
     }, 0);
@@ -284,7 +291,7 @@ function IssueScreen() {
           </View>
         )}
       </KeyboardAvoidView>
-      {totalBtcAmount === 0 && (
+      {totalReserveSatsAmount === 0 && (
         <View style={styles.reservedSatsWrapper}>
           <View style={styles.checkIconWrapper}>
             <CheckIcon />
