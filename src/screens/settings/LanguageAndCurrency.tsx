@@ -13,7 +13,7 @@ import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
@@ -81,9 +81,6 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
-          // langCurrency={'English'}
-          // langCurrencyVariant={'English UK'}
-          //We disabled for now because app crash (Blocker)
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
@@ -111,6 +108,13 @@ function LanguageAndCurrency() {
             setLanguage(item.iso);
           }}
           selectedLanguage={selectedLanguage && selectedLanguage.iso}
+          langCurrency={selectedLanguage && selectedLanguage.language}
+          langCurrencyVariant={
+            selectedLanguage &&
+            selectedLanguage.displayTitle +
+              ' ' +
+              selectedLanguage.iso.toUpperCase()
+          }
         />
       )}
       {currencyDropDown && (
@@ -123,6 +127,10 @@ function LanguageAndCurrency() {
           }}
           selectedCurrency={selectedCurrency && selectedCurrency.code}
           style={styles.currencyDropdownContainer}
+          langCurrency={selectedCurrency && selectedCurrency.currency}
+          langCurrencyVariant={
+            selectedCurrency && selectedCurrency.displayTitle
+          }
         />
       )}
       <FooterNote
@@ -137,13 +145,13 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '55%' : '42%',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },
     currencyDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '72%' : '62%',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },
