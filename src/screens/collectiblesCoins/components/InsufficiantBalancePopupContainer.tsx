@@ -33,7 +33,7 @@ function InsufficiantBalancePopupContainer(props: insufficientBalanceProps) {
           primaryOnPress={primaryOnPress}
           secondaryTitle={common.cancel}
           secondaryOnPress={secondaryOnPress}
-          width={wp(120)}
+          width={wp(155)}
           height={hp(14)}
         />
       </View>
