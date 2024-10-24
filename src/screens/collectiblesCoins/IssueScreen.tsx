@@ -21,7 +21,6 @@ import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
@@ -177,15 +176,6 @@ function IssueScreen() {
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
       <ModalLoading visible={loading || createUtxos.isLoading} />
-      {/* <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 400);
-        }}
-      /> */}
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
@@ -352,20 +342,6 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       backgroundColor: theme.colors.primaryBackground,
       borderBottomColor: 'white',
       borderBottomWidth: 1,
-    },
-    uploadCoinAssetWrapper: {
-      flexDirection: 'row',
-      width: '100%',
-      alignItems: 'center',
-    },
-    selectAvatarStyle: {
-      color: theme.colors.headingColor,
-      width: '60%',
-      paddingLeft: hp(20),
-    },
-    uploadBtnWrapper: {
-      width: '40%',
-      // paddingRight: hp(5),
     },
     imageStyle: {
       height: hp(110),
