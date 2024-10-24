@@ -41,7 +41,6 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 
 function IssueScreen() {
-  // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -54,7 +53,6 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
@@ -63,6 +61,7 @@ function IssueScreen() {
   const [image, setImage] = useState('');
 
   const createUtxos = useMutation(ApiHandler.createUtxos);
+  const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -92,6 +91,10 @@ function IssueScreen() {
     }
   }, [createUtxos.data]);
 
+  useEffect(() => {
+    viewUtxos.mutate();
+  }, []);
+
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -103,12 +106,13 @@ function IssueScreen() {
     if (response?.assetId) {
       setLoading(false);
       Toast(assets.assetCreateMsg);
+      viewUtxos.mutate();
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
-      // setLoading(false);
-      // setTimeout(() => {
-      createUtxos.mutate();
-      // }, 500);
+      setLoading(false);
+      setTimeout(() => {
+        createUtxos.mutate();
+      }, 500);
     } else if (response?.error) {
       setLoading(false);
       Toast(`Failed: ${response?.error}`, true);
@@ -127,13 +131,13 @@ function IssueScreen() {
     if (response?.assetId) {
       setLoading(false);
       Toast(assets.assetCreateMsg);
+      viewUtxos.mutate();
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
-      // setLoading(false);
-      // setTimeout(() => {
-      // setShowErrorModal(true);
-      createUtxos.mutate();
-      // }, 500);
+      setLoading(false);
+      setTimeout(() => {
+        createUtxos.mutate();
+      }, 500);
     } else if (response?.error) {
       setLoading(false);
       Toast(`Failed: ${response?.error}`, true);
@@ -303,7 +307,6 @@ function IssueScreen() {
           primaryLoading={createUtxos.isLoading || loading}
         />
       </View>
-
       <View>
         <ResponsePopupContainer
           visible={visibleFailedToCreatePopup}
