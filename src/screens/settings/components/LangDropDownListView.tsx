@@ -19,6 +19,7 @@ type DropdownProps = {
   callback: (item) => void;
   langCurrency: string;
   langCurrencyVariant: string;
+  onDissmiss?: () => void;
 };
 
 function LangDropDownListView(props: DropdownProps) {
@@ -29,13 +30,14 @@ function LangDropDownListView(props: DropdownProps) {
     selectedLanguage,
     langCurrency,
     langCurrencyVariant,
+    onDissmiss,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={[style, styles.container]}>
-      <View>
+      <AppTouchable onPress={onDissmiss}>
         <GradientView
           style={styles.inputWrapper}
           colors={[
@@ -55,7 +57,7 @@ function LangDropDownListView(props: DropdownProps) {
             {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
-      </View>
+      </AppTouchable>
 
       <FlatList
         style={styles.container2}

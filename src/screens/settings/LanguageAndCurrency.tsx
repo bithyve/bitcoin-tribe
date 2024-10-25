@@ -115,6 +115,7 @@ function LanguageAndCurrency() {
             setLangDropdown(false);
             setLanguage(item.iso);
           }}
+          onDissmiss={() => setLangDropdown(false)}
           selectedLanguage={selectedLanguage && selectedLanguage.iso}
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
@@ -133,6 +134,7 @@ function LanguageAndCurrency() {
             setCurrency(item.code);
             setCurrencyMode(CurrencyKind.FIAT);
           }}
+          onDissmiss={() => setCurrencyDropDown(false)}
           selectedCurrency={selectedCurrency && selectedCurrency.code}
           style={styles.currencyDropdownContainer}
           langCurrency={selectedCurrency && selectedCurrency.currency}
