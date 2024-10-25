@@ -101,9 +101,11 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(20),
       marginTop: hp(20),
       backgroundColor: theme.colors.cardBackground,
+      paddingTop: hp(10),
     },
     wrapper: {
-      padding: hp(15),
+      paddingHorizontal: hp(15),
+      paddingVertical: hp(5),
     },
     radioBtnWrapper: {
       flexDirection: 'row',
@@ -112,7 +114,8 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: 10,
-      padding: hp(15),
+      paddingHorizontal: hp(15),
+      paddingVertical: hp(10),
     },
     languageText: {
       color: theme.colors.headingColor,

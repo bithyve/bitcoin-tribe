@@ -62,7 +62,15 @@ function LanguageAndCurrency() {
       <AppHeader
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
-        rightIcon={!isThemeDark ? <CloseIcon /> : <CloseIconLight />}
+        rightIcon={
+          currencyDropDown || langDropdown ? (
+            !isThemeDark ? (
+              <CloseIcon />
+            ) : (
+              <CloseIconLight />
+            )
+          ) : null
+        }
         onSettingsPress={() => {
           setLangDropdown(false);
           setCurrencyDropDown(false);
