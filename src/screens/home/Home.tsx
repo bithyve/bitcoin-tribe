@@ -77,7 +77,11 @@ function HomeScreen() {
         wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
       );
     }
-  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
+  }, [
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
+    wallet.specs.balances.confirmed,
+    wallet.specs.balances.unconfirmed,
+  ]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
