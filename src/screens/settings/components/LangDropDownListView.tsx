@@ -64,13 +64,7 @@ function LangDropDownListView(props: DropdownProps) {
         data={languages}
         renderItem={({ item }) => (
           <AppTouchable onPress={() => callback(item)}>
-            <GradientView
-              style={styles.wrapper}
-              colors={[
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-              ]}>
+            <View style={styles.wrapper}>
               <View style={styles.radioBtnWrapper}>
                 <AppText variant="body2" style={styles.languageText}>
                   {item.language + ' ' + item.iso.toUpperCase()}
@@ -85,7 +79,7 @@ function LangDropDownListView(props: DropdownProps) {
                   onPress={() => callback(item)}
                 />
               </View>
-            </GradientView>
+            </View>
           </AppTouchable>
         )}
       />

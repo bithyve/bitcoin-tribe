@@ -63,13 +63,7 @@ function CurrencyDropDownListView(props: DropdownProps) {
         data={currencies}
         renderItem={({ item }) => (
           <AppTouchable onPress={() => callback(item)}>
-            <GradientView
-              style={styles.wrapper}
-              colors={[
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-              ]}>
+            <View style={styles.wrapper}>
               <View style={styles.radioBtnWrapper}>
                 <AppText variant="body2" style={styles.languageText}>
                   {item.currency}
@@ -84,7 +78,7 @@ function CurrencyDropDownListView(props: DropdownProps) {
                   onPress={() => callback(item)}
                 />
               </View>
-            </GradientView>
+            </View>
           </AppTouchable>
         )}
       />
@@ -100,7 +94,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     container2: {
-      borderRadius: hp(20),
+      borderRadius: hp(10),
       marginTop: hp(20),
       backgroundColor: theme.colors.cardBackground,
       paddingTop: hp(10),
