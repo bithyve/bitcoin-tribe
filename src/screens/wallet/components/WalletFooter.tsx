@@ -12,6 +12,7 @@ import BtcActiveCtaIcon from 'src/assets/images/BtcActiveCtaIcon.svg';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import Colors from 'src/theme/Colors';
+import GradientView from 'src/components/GradientView';
 
 type walletFooterProps = {
   activeTab: string;
@@ -26,7 +27,13 @@ function WalletFooter(props: walletFooterProps) {
   const styles = getStyles(theme, activeTab);
 
   return (
-    <View style={styles.container}>
+    <GradientView
+      style={styles.container}
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
       <AppTouchable
         style={styles.btcCtaWrapper}
         onPress={() => setActiveTab('bitcoin')}>
@@ -54,7 +61,7 @@ function WalletFooter(props: walletFooterProps) {
           &nbsp;{walletTranslations.lightning}
         </AppText>
       </AppTouchable>
-    </View>
+    </GradientView>
   );
 }
 const getStyles = (theme: AppTheme, activeTab) =>
@@ -64,6 +71,12 @@ const getStyles = (theme: AppTheme, activeTab) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: 40,
+      width: '89%',
+      alignSelf: 'center',
+      bottom: 5,
     },
     lightningTitleText: {
       color: activeTab === 'lightning' ? Colors.Black : Colors.DimGray,
@@ -72,37 +85,33 @@ const getStyles = (theme: AppTheme, activeTab) =>
       color: activeTab === 'bitcoin' ? Colors.White : Colors.DimGray,
     },
     lightningCtaWrapper: {
-      height: hp(48),
+      height: hp(50),
       width: hp(140),
       flexDirection: 'row',
-      borderRadius: hp(20),
+      borderRadius: hp(40),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor:
         activeTab === 'lightning'
           ? theme.colors.lightningCtaBackColor
-          : theme.colors.primaryBackground,
+          : 'transparent',
       borderColor:
         activeTab === 'lightning'
           ? theme.colors.lightningCtaBackColor
-          : theme.colors.borderColor,
+          : 'transparent',
       borderWidth: 1,
     },
     btcCtaWrapper: {
-      height: hp(48),
+      height: hp(50),
       width: hp(140),
       flexDirection: 'row',
-      borderRadius: hp(20),
+      borderRadius: hp(40),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor:
-        activeTab === 'bitcoin'
-          ? theme.colors.btcCtaBackColor
-          : theme.colors.primaryBackground,
+        activeTab === 'bitcoin' ? theme.colors.btcCtaBackColor : 'transparent',
       borderColor:
-        activeTab === 'bitcoin'
-          ? theme.colors.btcCtaBackColor
-          : theme.colors.borderColor,
+        activeTab === 'bitcoin' ? theme.colors.btcCtaBackColor : 'transparent',
       borderWidth: 1,
     },
   });
