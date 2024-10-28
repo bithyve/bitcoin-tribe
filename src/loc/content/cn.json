@@ -259,7 +259,8 @@
     "failedToCreateUTXO": "创建UTXO失败。Sats不足",
     "rgbAssets": "保留Sats",
     "lightning": "闪电网络",
-    "bitcoin": "比特币"
+    "bitcoin": "比特币",
+    "reserveAmtText": "为资产交易保留"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

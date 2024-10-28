@@ -3,12 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import { hp } from 'src/constants/responsive';
 import WalletTransactionList from './WalletTransactionList';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import ReservedSatsView from './ReservedSatsView';
 
 function WalletTransactionsContainer({
   navigation,
@@ -18,8 +18,10 @@ function WalletTransactionsContainer({
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
+
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -38,6 +40,7 @@ function WalletTransactionsContainer({
           </AppText>
         </AppTouchable>
       </View>
+      <ReservedSatsView />
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}

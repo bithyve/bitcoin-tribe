@@ -259,7 +259,8 @@
     "failedToCreateUTXO": "UTXO बनाने में विफल। अपर्याप्त सैट्स",
     "rgbAssets": "आरक्षित सैट्स",
     "lightning": "लाइटनिंग नेटवर्क",
-    "bitcoin": "बिटकॉइन"
+    "bitcoin": "बिटकॉइन",
+    "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

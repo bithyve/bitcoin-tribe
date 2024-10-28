@@ -259,7 +259,8 @@
     "failedToCreateUTXO": "Impossibile creare UTXO. Sats insufficienti",
     "rgbAssets": "Sats riservati",
     "lightning": "Fulmine",
-    "bitcoin": "Bitcoin"
+    "bitcoin": "Bitcoin",
+    "reserveAmtText": "Riservato per le transazioni di asset"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

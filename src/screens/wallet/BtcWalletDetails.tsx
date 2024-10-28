@@ -65,7 +65,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
       Toast(walletTranslations.failedTestSatsRecived, true);
     }
   }, [isSuccess, isError]);
-
+  console.log('app.appType', app.appType);
   return (
     <View>
       <GradientView
@@ -87,7 +87,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
       </GradientView>
       <View
         style={
-          app.appType === AppType.NODE_CONNECT
+          app.appType !== AppType.NODE_CONNECT
             ? styles.walletTransWrapper
             : styles.onChainWalletTransWrapper
         }>
@@ -126,12 +126,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   onChainWalletTransWrapper: {
-    height: '47%',
+    height: '50%',
     top: -40,
     marginHorizontal: wp(16),
   },
   walletTransWrapper: {
-    height: '50%',
+    height: '48%',
     top: -40,
     marginHorizontal: wp(16),
   },
