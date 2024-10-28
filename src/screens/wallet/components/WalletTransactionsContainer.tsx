@@ -48,9 +48,7 @@ function WalletTransactionsContainer({
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {
-      marginTop: hp(30),
-    },
+    container: {},
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',

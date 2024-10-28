@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { useMutation, UseMutationResult } from 'react-query';
+import { useTheme } from 'react-native-paper';
 
-import { wp, windowHeight } from 'src/constants/responsive';
+import { wp, windowHeight, hp } from 'src/constants/responsive';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 import { RealmSchema } from 'src/storage/enum';
 import ModalContainer from 'src/components/ModalContainer';
@@ -16,8 +17,11 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
 import AppType from 'src/models/enums/AppType';
+import GradientView from 'src/components/GradientView';
+import { AppTheme } from 'src/theme';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
+  const theme: AppTheme = useTheme();
   const { autoRefresh = false } = route.params || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
@@ -34,7 +38,13 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
 
   return (
     <View>
-      <View style={styles.walletHeaderWrapper}>
+      <GradientView
+        style={styles.walletHeaderWrapper}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         <RGBNodeWalletHeader
           profile={profileImage}
           username={walletName}
@@ -43,7 +53,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
           onPressSetting={() => mutate()}
           onPressBuy={() => setVisible(true)}
         />
-      </View>
+      </GradientView>
       <View
         style={
           app.appType === AppType.NODE_CONNECT
@@ -70,26 +80,24 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    height: '100%',
-    paddingHorizontal: 0,
-    paddingTop: 0,
-  },
   walletHeaderWrapper: {
-    height: '40%',
+    height: '55%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
-    // borderBottomWidth: 0.2,
-    // borderBottomColor: 'gray',
+    borderBottomLeftRadius: hp(40),
+    borderBottomRightRadius: hp(40),
+    top: -60,
+    marginHorizontal: 0,
   },
   onChainWalletTransWrapper: {
-    height: '55%',
+    height: '47%',
+    top: -40,
     marginHorizontal: wp(16),
   },
   walletTransWrapper: {
     height: '48%',
+    top: -40,
     marginHorizontal: wp(16),
   },
 });
