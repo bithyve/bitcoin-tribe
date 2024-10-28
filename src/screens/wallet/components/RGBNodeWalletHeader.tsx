@@ -49,7 +49,7 @@ function RGBNodeWalletHeader(props: RGBNodeHeaderProps) {
             }),
           )
         }
-        // onPressBuy={onPressBuy}
+        onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.LIGHTNINGRECEIVE),

@@ -47,81 +47,49 @@ function LightningWalletDetailsCard(props: LightningWalletDetailsProps) {
   };
 
   return (
-    <GradientView
-      style={styles.balanceAndDetailsWrapper}
-      colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
-      ]}>
-      <ImageBackground
-        source={require('src/assets/images/lightningCardBackImage.png')}
-        resizeMode="cover"
-        style={styles.backImage}>
-        <View style={styles.profileWrapper}>
-          <View style={styles.userInfoWrapper}>
-            <AppText variant="body1" style={styles.usernameText}>
-              {username}
-            </AppText>
-          </View>
-          <View style={styles.userProfileWrapper}>
-            <UserAvatar size={45} imageSource={profile} />
-          </View>
+    <View style={styles.container}>
+      {username && (
+        <View style={styles.usernameWrapper}>
+          <AppText variant="body1" style={styles.usernameText}>
+            {username}
+          </AppText>
         </View>
-        <View>
-          <View>
-            <AppText variant="body2" style={styles.totalBalText}>
-              {home.totalBalance}
-            </AppText>
+      )}
+      <AppTouchable
+        style={styles.balanceWrapper}
+        onPress={() => toggleDisplayMode()}>
+        {initialCurrencyMode !== CurrencyKind.SATS && (
+          <View style={styles.currencyIconWrapper}>
+            {getCurrencyIcon(
+              !isThemeDark ? IconBitcoin : IconBitcoinLight,
+              !isThemeDark ? 'dark' : 'light',
+              30,
+            )}
           </View>
-          <AppTouchable
-            style={styles.balanceWrapper}
-            onPress={() => toggleDisplayMode()}>
-            {initialCurrencyMode !== CurrencyKind.SATS && (
-              <View style={styles.currencyIconWrapper}>
-                {getCurrencyIcon(
-                  !isThemeDark ? IconBitcoin : IconBitcoinLight,
-                  !isThemeDark ? 'dark' : 'light',
-                  30,
-                )}
-              </View>
-            )}
-            <AppText variant="walletBalance" style={styles.balanceText}>
-              {getBalance(0)}
-            </AppText>
-            {initialCurrencyMode === CurrencyKind.SATS && (
-              <AppText variant="caption" style={styles.satsText}>
-                sats
-              </AppText>
-            )}
-          </AppTouchable>
-        </View>
-      </ImageBackground>
-    </GradientView>
+        )}
+        <AppText variant="walletBalance" style={styles.balanceText}>
+          {getBalance(0)}
+        </AppText>
+        {initialCurrencyMode === CurrencyKind.SATS && (
+          <AppText variant="caption" style={styles.satsText}>
+            sats
+          </AppText>
+        )}
+      </AppTouchable>
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    balanceAndDetailsWrapper: {
-      width: '100%',
+    container: {
       marginVertical: hp(15),
-      borderRadius: 20,
-      borderColor: theme.colors.borderColor,
-      borderWidth: 0.5,
     },
-    backImage: {
-      padding: hp(15),
+    usernameWrapper: {
+      marginBottom: hp(15),
+      alignItems: 'center',
     },
-    profileWrapper: {
-      flexDirection: 'row',
-    },
-    userInfoWrapper: {
-      width: '70%',
-      alignItems: 'flex-start',
-    },
-    userProfileWrapper: {
-      width: '30%',
-      alignItems: 'flex-end',
+    usernameText: {
+      color: theme.colors.headingColor,
     },
     satsText: {
       color: theme.colors.headingColor,
@@ -131,16 +99,8 @@ const getStyles = (theme: AppTheme) =>
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
       marginBottom: hp(10),
-    },
-    usernameText: {
-      color: theme.colors.headingColor,
-      textAlign: 'center',
-      marginVertical: 10,
-    },
-    totalBalText: {
-      color: theme.colors.headingColor,
-      fontWeight: '400',
     },
     balanceText: {
       color: theme.colors.headingColor,

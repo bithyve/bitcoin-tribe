@@ -37,6 +37,7 @@
     "noInternet": "无网络连接",
     "rgbWalletOffline": "RGB钱包离线。",
     "backupNow": "立即备份",
+    "request": "请求",
     "ok": "确定"
   },
   "onBoarding": {
@@ -260,7 +261,8 @@
     "failedToCreateUTXO": "创建UTXO失败。Sats不足",
     "rgbAssets": "保留Sats",
     "lightning": "闪电网络",
-    "bitcoin": "比特币"
+    "bitcoin": "比特币",
+    "reserveAmtText": "为资产交易保留"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

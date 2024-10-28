@@ -37,6 +37,7 @@
     "noInternet": "Nessuna connessione di rete",
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
     "backupNow": "Esegui backup ora",
+    "request": "Richiesta",
     "ok": "OK"
   },
   "onBoarding": {
@@ -260,7 +261,8 @@
     "failedToCreateUTXO": "Impossibile creare UTXO. Sats insufficienti",
     "rgbAssets": "Sats riservati",
     "lightning": "Fulmine",
-    "bitcoin": "Bitcoin"
+    "bitcoin": "Bitcoin",
+    "reserveAmtText": "Riservato per le transazioni di asset"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

@@ -37,6 +37,7 @@
     "noInternet": "ネットワーク接続がありません",
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
     "backupNow": "今すぐバックアップ",
+    "request": "リクエスト",
     "ok": "オーケー"
   },
   "onBoarding": {
@@ -260,7 +261,8 @@
     "failedToCreateUTXO": "UTXOの作成に失敗しました。不足しているサット",
     "rgbAssets": "予約されたサット",
     "lightning": "ライトニングネットワーク",
-    "bitcoin": "ビットコイン"
+    "bitcoin": "ビットコイン",
+    "reserveAmtText": "資産取引のために予約済み"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

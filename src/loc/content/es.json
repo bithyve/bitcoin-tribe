@@ -37,6 +37,7 @@
     "noInternet": "Sin conexión de red",
     "rgbWalletOffline": "La billetera RGB está desconectada.",
     "backupNow": "Respaldar ahora",
+    "request": "Solicitar",
     "ok": "OK"
   },
   "onBoarding": {
@@ -260,7 +261,8 @@
     "failedToCreateUTXO": "No se pudieron crear UTXO. Sats insuficientes",
     "rgbAssets": "Sats reservados",
     "lightning": "Relámpago",
-    "bitcoin": "Bitcoin"
+    "bitcoin": "Bitcoin",
+    "reserveAmtText": "Reservado para transacciones de activos"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

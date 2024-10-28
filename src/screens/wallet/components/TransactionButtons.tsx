@@ -9,10 +9,13 @@ import IconSendLight from 'src/assets/images/icon_send_light.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconReceiveLight from 'src/assets/images/icon_recieve_light.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
+import IconRequest from 'src/assets/images/satsRequestIcon.svg';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
+import { NetworkType } from 'src/services/wallets/enums';
+import config from 'src/utils/config';
 
 type transButtonProps = {
   onPressSend: () => void;
@@ -39,10 +42,33 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={!isThemeDark ? <IconSend /> : <IconSendLight />}
           buttonColor={theme.colors.sendCtaBorderColor}
           title={common.send}
-          width={wp(110)}
+          width={wp(100)}
           onPress={onPressSend}
         />
       </View>
+      {onPressBuy && (
+        <View style={styles.buttonWrapper}>
+          <RoundedCTA
+            icon={
+              config.NETWORK_TYPE === NetworkType.TESTNET ? (
+                <IconRequest />
+              ) : (
+                <IconBuy />
+              )
+            }
+            buttonColor={theme.colors.coinsBorderColor}
+            title={
+              config.NETWORK_TYPE === NetworkType.TESTNET
+                ? common.request
+                : common.buy
+            }
+            width={
+              config.NETWORK_TYPE === NetworkType.TESTNET ? wp(120) : wp(70)
+            }
+            onPress={onPressBuy}
+          />
+        </View>
+      )}
       <View style={styles.buttonWrapper}>
         <RoundedCTA
           colors={[
@@ -58,17 +84,6 @@ const TransactionButtons = (props: transButtonProps) => {
           onPress={onPressRecieve}
         />
       </View>
-      {onPressBuy && (
-        <View style={styles.buttonWrapper}>
-          <RoundedCTA
-            icon={<IconBuy />}
-            buttonColor={theme.colors.accent1}
-            title={common.buy}
-            width={wp(70)}
-            onPress={onPressBuy}
-          />
-        </View>
-      )}
     </View>
   );
 };
