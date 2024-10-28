@@ -19,6 +19,7 @@ type DropdownProps = {
   callback: (item) => void;
   langCurrency: string;
   langCurrencyVariant: string;
+  onDissmiss?: () => void;
 };
 
 function LangDropDownListView(props: DropdownProps) {
@@ -29,13 +30,14 @@ function LangDropDownListView(props: DropdownProps) {
     selectedLanguage,
     langCurrency,
     langCurrencyVariant,
+    onDissmiss,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={[style, styles.container]}>
-      <View>
+      <AppTouchable onPress={onDissmiss}>
         <GradientView
           style={styles.inputWrapper}
           colors={[
@@ -55,20 +57,14 @@ function LangDropDownListView(props: DropdownProps) {
             {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
-      </View>
+      </AppTouchable>
 
       <FlatList
         style={styles.container2}
         data={languages}
         renderItem={({ item }) => (
           <AppTouchable onPress={() => callback(item)}>
-            <GradientView
-              style={styles.wrapper}
-              colors={[
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient1,
-              ]}>
+            <View style={styles.wrapper}>
               <View style={styles.radioBtnWrapper}>
                 <AppText variant="body2" style={styles.languageText}>
                   {item.language + ' ' + item.iso.toUpperCase()}
@@ -83,7 +79,7 @@ function LangDropDownListView(props: DropdownProps) {
                   onPress={() => callback(item)}
                 />
               </View>
-            </GradientView>
+            </View>
           </AppTouchable>
         )}
       />
@@ -102,9 +98,11 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: hp(20),
       marginTop: hp(20),
       backgroundColor: theme.colors.cardBackground,
+      paddingTop: hp(10),
     },
     wrapper: {
-      padding: hp(15),
+      paddingHorizontal: hp(15),
+      paddingVertical: hp(5),
     },
     radioBtnWrapper: {
       flexDirection: 'row',
@@ -113,7 +111,8 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: 10,
-      padding: hp(15),
+      paddingHorizontal: hp(15),
+      paddingVertical: hp(10),
     },
     languageText: {
       color: theme.colors.headingColor,

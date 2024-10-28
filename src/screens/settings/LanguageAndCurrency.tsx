@@ -7,8 +7,8 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LangCurrencyOption from './components/LangCurrencyOption';
-import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
-import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
+import IconLangCurrency from 'src/assets/images/langIcon.svg';
+import IconLangCurrencyLight from 'src/assets/images/langIcon_light.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
@@ -62,7 +62,15 @@ function LanguageAndCurrency() {
       <AppHeader
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
-        rightIcon={!isThemeDark ? <CloseIcon /> : <CloseIconLight />}
+        rightIcon={
+          currencyDropDown || langDropdown ? (
+            !isThemeDark ? (
+              <CloseIcon />
+            ) : (
+              <CloseIconLight />
+            )
+          ) : null
+        }
         onSettingsPress={() => {
           setLangDropdown(false);
           setCurrencyDropDown(false);
@@ -107,6 +115,7 @@ function LanguageAndCurrency() {
             setLangDropdown(false);
             setLanguage(item.iso);
           }}
+          onDissmiss={() => setLangDropdown(false)}
           selectedLanguage={selectedLanguage && selectedLanguage.iso}
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
@@ -125,6 +134,7 @@ function LanguageAndCurrency() {
             setCurrency(item.code);
             setCurrencyMode(CurrencyKind.FIAT);
           }}
+          onDissmiss={() => setCurrencyDropDown(false)}
           selectedCurrency={selectedCurrency && selectedCurrency.code}
           style={styles.currencyDropdownContainer}
           langCurrency={selectedCurrency && selectedCurrency.currency}
