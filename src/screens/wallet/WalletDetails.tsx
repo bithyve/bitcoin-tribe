@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp, windowHeight, hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import WalletFooter from './components/WalletFooter';
 import RGBNodeWalletDetails from './RGBNodeWalletDetails';
 import BtcWalletDetails from './BtcWalletDetails';
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     paddingHorizontal: 0,
-    paddingTop: hp(20),
+    // paddingTop: hp(20),
   },
   footerView: {
     height: '10%',

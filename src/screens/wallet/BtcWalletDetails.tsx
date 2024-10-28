@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: '45%',
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),

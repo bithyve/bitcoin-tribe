@@ -12,10 +12,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
-import Toast from 'src/components/Toast';
 import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
 import AppType from 'src/models/enums/AppType';
 
@@ -79,7 +77,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   walletHeaderWrapper: {
-    height: '45%',
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),

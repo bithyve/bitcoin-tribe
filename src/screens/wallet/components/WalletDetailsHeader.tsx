@@ -56,11 +56,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   return (
     <View style={styles.container}>
       <WalletSectionHeader profile={profile} onPress={onPressSetting} />
-      <BitcoinWalletDetailsCard
-        profile={profile}
-        balances={balances}
-        username={username}
-      />
+      <BitcoinWalletDetailsCard balances={balances} username={username} />
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
@@ -93,9 +89,6 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       marginTop: hp(10),
       marginLeft: hp(5),
-    },
-    profileWrapper: {
-      flexDirection: 'row',
     },
   });
 export default WalletDetailsHeader;
