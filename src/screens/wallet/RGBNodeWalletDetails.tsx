@@ -62,6 +62,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         }>
         <WalletTransactionsContainer
           navigation={navigation}
+          activeTab={activeTab}
           transactions={[]}
           wallet={''}
           autoRefresh={autoRefresh || refreshWallet}

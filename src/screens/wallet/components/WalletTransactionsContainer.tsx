@@ -9,19 +9,25 @@ import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ReservedSatsView from './ReservedSatsView';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import AppType from 'src/models/enums/AppType';
 
 function WalletTransactionsContainer({
   navigation,
   transactions,
   wallet,
   autoRefresh,
+  activeTab,
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
 
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  console.log('activeTab', activeTab);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -40,7 +46,9 @@ function WalletTransactionsContainer({
           </AppText>
         </AppTouchable>
       </View>
-      <ReservedSatsView />
+      {app.appType === AppType.ON_CHAIN && activeTab === 'bitcoin' && (
+        <ReservedSatsView />
+      )}
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}

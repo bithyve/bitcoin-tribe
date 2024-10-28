@@ -65,7 +65,6 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
       Toast(walletTranslations.failedTestSatsRecived, true);
     }
   }, [isSuccess, isError]);
-  console.log('app.appType', app.appType);
   return (
     <View>
       <GradientView
@@ -93,6 +92,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
         }>
         <WalletTransactionsContainer
           navigation={navigation}
+          activeTab={activeTab}
           transactions={
             app.appType === AppType.NODE_CONNECT
               ? data?.transactions
