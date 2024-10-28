@@ -68,20 +68,7 @@ function IssueScreen() {
   );
 
   const totalReserveSatsAmount = useMemo(() => {
-    return UnspentUTXOData.reduce((total, item) => {
-      // Check if utxo exists and if btcAmount is present
-      if (item.utxo && item.utxo.colorable === true) {
-        // total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
-        const existingAsset = item.rgbAllocations.find(
-          allocation => allocation.settled === true,
-        );
-        if (!existingAsset) {
-          return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
-        }
-        return total;
-      }
-      return total; // If the condition isn't met, return the total as is
-    }, 0);
+    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
   }, [UnspentUTXOData]);
 
   useEffect(() => {
