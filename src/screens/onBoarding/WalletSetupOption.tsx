@@ -33,12 +33,14 @@ function WalletSetupOption({ navigation }) {
         icon={!isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
+        showRightArrow={true}
         onPress={() => navigation.navigate(NavigationRoutes.SELECTWALLET)}
       />
       <OptionCard
         icon={!isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
+        showRightArrow={true}
         onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
       />
     </ScreenContainer>
