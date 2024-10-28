@@ -19,6 +19,8 @@ import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
 import AppType from 'src/models/enums/AppType';
 import GradientView from 'src/components/GradientView';
 import { AppTheme } from 'src/theme';
+import { NetworkType } from 'src/services/wallets/enums';
+import config from 'src/utils/config';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const theme: AppTheme = useTheme();
@@ -50,8 +52,11 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
           username={walletName}
           wallet={null}
           activeTab={activeTab}
-          onPressSetting={() => mutate()}
-          onPressBuy={() => setVisible(true)}
+          onPressBuy={() =>
+            config.NETWORK_TYPE === NetworkType.TESTNET
+              ? mutate()
+              : setVisible(true)
+          }
         />
       </GradientView>
       <View

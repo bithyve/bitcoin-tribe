@@ -22,6 +22,8 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
 import GradientView from 'src/components/GradientView';
+import config from 'src/utils/config';
+import { NetworkType } from 'src/services/wallets/enums';
 
 function BtcWalletDetails({ navigation, route, activeTab }) {
   const theme: AppTheme = useTheme();
@@ -80,7 +82,11 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           wallet={wallet}
           rgbWallet={rgbWallet}
           activeTab={activeTab}
-          onPressBuy={() => mutate()}
+          onPressBuy={() =>
+            config.NETWORK_TYPE === NetworkType.TESTNET
+              ? mutate()
+              : setVisible(true)
+          }
         />
       </GradientView>
       <View
