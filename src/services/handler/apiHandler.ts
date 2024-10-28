@@ -981,4 +981,21 @@ export class ApiHandler {
       throw new Error('Failed to connect to node');
     }
   }
+
+  static calculateTotalReserveSatsAmount(UnspentUTXOData) {
+    return UnspentUTXOData.reduce((total, item) => {
+      // Check if utxo exists and is colorable
+      if (item.utxo && item.utxo.colorable === true) {
+        // Check if there's no existing settled asset allocation
+        const existingAsset = item.rgbAllocations.find(
+          allocation => allocation.settled === true,
+        );
+        if (!existingAsset) {
+          return total + (item.utxo.btcAmount || 0);
+        }
+        return total;
+      }
+      return total; // If the condition isn't met, return the total as is
+    }, 0);
+  }
 }
