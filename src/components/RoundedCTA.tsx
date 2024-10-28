@@ -63,7 +63,7 @@ const getStyles = (width, buttonColor) =>
       borderWidth: 0.5,
     },
     contentStyle: {
-      height: hp(50),
+      height: hp(48),
       width: width,
     },
     labelStyle: {
