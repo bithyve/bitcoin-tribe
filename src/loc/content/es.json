@@ -36,7 +36,8 @@
     "continue": "Continuar",
     "noInternet": "Sin conexión de red",
     "rgbWalletOffline": "La billetera RGB está desconectada.",
-    "backupNow": "Respaldar ahora"
+    "backupNow": "Respaldar ahora",
+    "request": "Solicitar"
   },
   "onBoarding": {
     "welcome": "Bienvenido",

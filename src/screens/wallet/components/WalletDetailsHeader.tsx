@@ -68,7 +68,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             }),
           )
         }
-        // onPressBuy={onPressBuy}
+        onPressBuy={onPressBuy}
         onPressRecieve={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),

@@ -80,8 +80,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           wallet={wallet}
           rgbWallet={rgbWallet}
           activeTab={activeTab}
-          onPressSetting={() => mutate()}
-          onPressBuy={() => setVisible(true)}
+          onPressBuy={() => mutate()}
         />
       </GradientView>
       <View

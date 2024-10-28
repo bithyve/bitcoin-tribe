@@ -36,7 +36,8 @@
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
-    "backupNow": "Esegui backup ora"
+    "backupNow": "Esegui backup ora",
+    "request": "Richiesta"
   },
   "onBoarding": {
     "welcome": "Benvenuto",

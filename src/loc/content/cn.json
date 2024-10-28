@@ -36,7 +36,8 @@
     "continue": "继续",
     "noInternet": "无网络连接",
     "rgbWalletOffline": "RGB钱包离线。",
-    "backupNow": "立即备份"
+    "backupNow": "立即备份",
+    "request": "请求"
   },
   "onBoarding": {
     "welcome": "欢迎",

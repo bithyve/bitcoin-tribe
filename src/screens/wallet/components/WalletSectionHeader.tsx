@@ -34,7 +34,7 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>
-          {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />}
+          {/* {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />} */}
         </View>
       </IconWrapper>
     </View>

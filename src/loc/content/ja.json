@@ -36,7 +36,8 @@
     "continue": "続ける",
     "noInternet": "ネットワーク接続がありません",
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
-    "backupNow": "今すぐバックアップ"
+    "backupNow": "今すぐバックアップ",
+    "request": "リクエスト"
   },
   "onBoarding": {
     "welcome": "ようこそ",
