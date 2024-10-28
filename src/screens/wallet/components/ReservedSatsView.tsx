@@ -16,7 +16,6 @@ import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import ReserveAmtIcon from 'src/assets/images/reserveAmtIcon.svg';
 import { RealmSchema } from 'src/storage/enum';
-import IconWrapper from 'src/components/IconWrapper';
 
 function ReservedSatsView() {
   const { translations } = useContext(LocalizationContext);
@@ -59,11 +58,11 @@ function ReservedSatsView() {
         theme.colors.cardGradient2,
         theme.colors.cardGradient3,
       ]}>
-      <View style={styles.iconWrapper}>
-        <ReserveAmtIcon />
-      </View>
       <View style={styles.titleWrapper}>
-        <AppText variant="caption">{walletTranslations.reserveAmtText}</AppText>
+        <ReserveAmtIcon />
+        <AppText variant="caption" style={styles.titleText}>
+          {walletTranslations.reserveAmtText}
+        </AppText>
       </View>
       <View style={styles.amountWrapper}>
         <View style={styles.amtIconWrapper}>
@@ -110,14 +109,14 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
-    iconWrapper: {
-      width: '5%',
-      alignItems: 'center',
-    },
     titleWrapper: {
-      width: '55%',
+      width: '60%',
       alignItems: 'center',
-      marginLeft: hp(5),
+      flexDirection: 'row',
+    },
+    titleText: {
+      marginLeft: hp(10),
+      color: theme.colors.headingColor,
     },
     amountWrapper: {
       width: '40%',
