@@ -36,7 +36,8 @@
     "continue": "Continuar",
     "noInternet": "Sin conexión de red",
     "rgbWalletOffline": "La billetera RGB está desconectada.",
-    "backupNow": "Respaldar ahora"
+    "backupNow": "Respaldar ahora",
+    "ok": "OK"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -299,7 +300,14 @@
     "collectibles": "Coleccionables",
     "saveAssetSuccess": "Imagen del activo guardada con éxito",
     "saveAssetFailed": "Error al guardar el activo",
-    "checkSpendableAmt": "Por favor ingrese una cantidad menor que "
+    "checkSpendableAmt": "Por favor ingrese una cantidad menor que ",
+    "reservedSats": "Los Sats de tu cartera se reservarán para transacciones de activos",
+    "insufficientBalance": "Saldo insuficiente",
+    "insufficientBalanceSubtitle": "Necesitas sats en tu billetera para crear activos. Por favor, recarga tu billetera e inténtalo de nuevo",
+    "failedToCreateUTXOTitle": "Saldo insuficiente para la transacción",
+    "failedToCreateUTXOSubTitle": "El saldo de tu billetera es demasiado bajo para cubrir las tarifas de transacción actuales debido a la alta congestión de la red. Aumenta tu saldo o intenta de nuevo cuando las tarifas sean más bajas.",
+    "unexpectedErrorTitle": "Error inesperado",
+    "unexpectedErrorSubTitle": "Hemos encontrado un problema al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

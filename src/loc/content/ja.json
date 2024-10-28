@@ -36,7 +36,8 @@
     "continue": "続ける",
     "noInternet": "ネットワーク接続がありません",
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
-    "backupNow": "今すぐバックアップ"
+    "backupNow": "今すぐバックアップ",
+    "ok": "オーケー"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -299,7 +300,14 @@
     "collectibles": "コレクション",
     "saveAssetSuccess": "アセットの画像が正常に保存されました",
     "saveAssetFailed": "アセットの保存に失敗しました",
-    "checkSpendableAmt": "以下の金額を入力してください "
+    "checkSpendableAmt": "以下の金額を入力してください ",
+    "reservedSats": "あなたのウォレットからのサッツは資産取引のために予約されます",
+    "insufficientBalance": "残高不足",
+    "insufficientBalanceSubtitle": "資産を作成するにはウォレットにサッツが必要です。ウォレットに資金を追加して、再試行してください",
+    "failedToCreateUTXOTitle": "トランザクションのための残高不足",
+    "failedToCreateUTXOSubTitle": "ネットワークの混雑により、現在のトランザクション手数料をカバーするにはウォレットの残高が不足しています。残高を増やすか、手数料が低いときにもう一度お試しください。",
+    "unexpectedErrorTitle": "予期しないエラー",
+    "unexpectedErrorSubTitle": "リクエストの処理中に問題が発生しました。後でもう一度お試しください"
   },
   "community": {
     "fnfTitle": "友達と家族",
