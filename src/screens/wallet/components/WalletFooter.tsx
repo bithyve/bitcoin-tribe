@@ -10,7 +10,7 @@ import LightningInActivCTAIcon from 'src/assets/images/lightningInActiveCtaIcon.
 import BtcInActiveCtaIcon from 'src/assets/images/BtcInActiveCtaIcon.svg';
 import BtcActiveCtaIcon from 'src/assets/images/BtcActiveCtaIcon.svg';
 import AppText from 'src/components/AppText';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Colors from 'src/theme/Colors';
 import GradientView from 'src/components/GradientView';
 
@@ -85,8 +85,8 @@ const getStyles = (theme: AppTheme, activeTab) =>
       color: activeTab === 'bitcoin' ? Colors.White : Colors.DimGray,
     },
     lightningCtaWrapper: {
-      height: hp(50),
-      width: hp(140),
+      height: windowHeight > 670 ? hp(50) : hp(55),
+      width: windowHeight > 670 ? hp(140) : hp(170),
       flexDirection: 'row',
       borderRadius: hp(40),
       alignItems: 'center',
@@ -102,8 +102,8 @@ const getStyles = (theme: AppTheme, activeTab) =>
       borderWidth: 1,
     },
     btcCtaWrapper: {
-      height: hp(50),
-      width: hp(140),
+      height: windowHeight > 670 ? hp(50) : hp(55),
+      width: windowHeight > 670 ? hp(140) : hp(170),
       flexDirection: 'row',
       borderRadius: hp(40),
       alignItems: 'center',
