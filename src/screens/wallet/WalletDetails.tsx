@@ -32,7 +32,7 @@ function WalletDetails({ navigation, route }) {
           />
         )}
       </View>
-      {app.appType !== AppType.NODE_CONNECT && (
+      {app.appType === AppType.NODE_CONNECT && (
         <View style={styles.footerView}>
           <WalletFooter
             activeTab={activeTab}
