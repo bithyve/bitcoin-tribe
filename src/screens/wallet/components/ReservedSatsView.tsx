@@ -15,6 +15,7 @@ import { AppTheme } from 'src/theme';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import ReserveAmtIcon from 'src/assets/images/reserveAmtIcon.svg';
+import ReserveAmtIconLight from 'src/assets/images/reserveAmtIcon_light.svg';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 
@@ -47,7 +48,7 @@ function ReservedSatsView() {
         theme.colors.cardGradient3,
       ]}>
       <View style={styles.titleWrapper}>
-        <ReserveAmtIcon />
+        {!isThemeDark ? <ReserveAmtIcon /> : <ReserveAmtIconLight />}
         <AppText variant="caption" style={styles.titleText}>
           {walletTranslations.reserveAmtText}
         </AppText>
