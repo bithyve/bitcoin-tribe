@@ -56,12 +56,14 @@ const ViewNodeInfo = () => {
     <ScreenContainer>
       <AppHeader title={'View Node Info'} subTitle={''} enableBack={true} />
       {isLoading ? (
-        <LottieView
-          source={require('src/assets/images/loader.json')}
-          autoPlay
-          loop
-          style={styles.refreshLoader}
-        />
+        <View style={styles.loadingWrapper}>
+          <LottieView
+            source={require('src/assets/images/loader.json')}
+            autoPlay
+            loop
+            style={styles.refreshLoader}
+          />
+        </View>
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={'false'}
@@ -137,6 +139,11 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
       height: '70%',
+    },
+    loadingWrapper: {
+      height: '70%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     refreshLoader: {
       alignSelf: 'center',
