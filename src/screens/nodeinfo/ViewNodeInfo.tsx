@@ -159,7 +159,7 @@ const getStyles = (theme: AppTheme) =>
       height: '70%',
     },
     loadingWrapper: {
-      height: '70%',
+      height: '76%',
       alignItems: 'center',
       justifyContent: 'center',
     },
