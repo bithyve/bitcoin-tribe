@@ -10,6 +10,7 @@ import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconReceiveLight from 'src/assets/images/icon_recieve_light.svg';
 import IconBuy from 'src/assets/images/icon_buy.svg';
 import IconRequest from 'src/assets/images/satsRequestIcon.svg';
+import IconRequestLight from 'src/assets/images/satsRequestIcon_light.svg';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -49,14 +50,24 @@ const TransactionButtons = (props: transButtonProps) => {
       {onPressBuy && (
         <View style={styles.buttonWrapper}>
           <RoundedCTA
+            colors={[
+              theme.colors.roundBuyCTAGradient1,
+              theme.colors.roundBuyCTAGradient2,
+              theme.colors.roundBuyCTAGradient3,
+            ]}
             icon={
               config.NETWORK_TYPE === NetworkType.TESTNET ? (
-                <IconRequest />
+                !isThemeDark ? (
+                  <IconRequest />
+                ) : (
+                  <IconRequestLight />
+                )
               ) : (
                 <IconBuy />
               )
             }
-            buttonColor={theme.colors.coinsBorderColor}
+            textColor={theme.colors.roundBuyCTATitle}
+            buttonColor={theme.colors.buyCtaBorderColor}
             title={
               config.NETWORK_TYPE === NetworkType.TESTNET
                 ? common.request
