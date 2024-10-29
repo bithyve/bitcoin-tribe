@@ -92,24 +92,31 @@ function IssueScreen() {
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
-    const response = await ApiHandler.issueNewCoin({
-      name: assetName.trim(),
-      ticker: assetTicker,
-      supply: totalSupplyAmt.replace(/,/g, ''),
-    });
-    if (response?.assetId) {
-      setLoading(false);
-      Toast(assets.assetCreateMsg);
-      viewUtxos.mutate();
-      navigation.dispatch(popAction);
-    } else if (response?.error === 'Insufficient sats for RGB') {
+    try {
+      const response = await ApiHandler.issueNewCoin({
+        name: assetName.trim(),
+        ticker: assetTicker,
+        supply: totalSupplyAmt.replace(/,/g, ''),
+      });
+      if (response?.assetId) {
+        setLoading(false);
+        Toast(assets.assetCreateMsg);
+        viewUtxos.mutate();
+        navigation.dispatch(popAction);
+      } else if (response?.error === 'Insufficient sats for RGB') {
+        setLoading(false);
+        setTimeout(() => {
+          //createUtxos.mutate();
+        }, 500);
+      } else if (response?.error) {
+        setLoading(false);
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
       setLoading(false);
       setTimeout(() => {
-        createUtxos.mutate();
+        //createUtxos.mutate();
       }, 500);
-    } else if (response?.error) {
-      setLoading(false);
-      Toast(`Failed: ${response?.error}`, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 

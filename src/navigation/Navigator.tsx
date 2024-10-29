@@ -27,6 +27,7 @@ import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
 import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
+import EnterInvoiceDetails from 'src/screens/receiveasset/EnterInvoiceDetails';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
@@ -54,6 +55,7 @@ import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
+import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -159,6 +161,10 @@ function AppStack() {
           name={NavigationRoutes.RECEIVEASSET}
           component={ReceiveAsset}
         />
+        <Stack.Screen
+          name={NavigationRoutes.ENTERINVOICEDETAILS}
+          component={EnterInvoiceDetails}
+        />
         <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
         <Stack.Screen
           name={NavigationRoutes.BROADCASTTRANSACTION}
@@ -233,6 +239,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.LIGHTNINGRECEIVE}
           component={LightningReceiveScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.VIEWNODEINFO}
+          component={ViewNodeInfo}
         />
       </Stack.Navigator>
     </RealmProvider>
