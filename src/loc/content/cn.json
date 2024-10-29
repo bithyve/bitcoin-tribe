@@ -314,5 +314,14 @@
   "community": {
     "fnfTitle": "朋友和家人",
     "fnfSubTitle": "比特币和朋友在一起更好"
+  },
+  "node": {
+    "viewNodeInfoTitle": "查看节点信息",
+    "pubKey": "公钥:",
+    "apiUrl": "API URL:",
+    "onchainPubkey": "链上公钥:",
+    "rgbHtlcMinMsat": "RGB HTLC最小毫秒:",
+    "rgbChannelCapMinSat": "RGB频道最小容量:",
+    "channelCapMisSat": "最小通道容量:"
   }
 }

@@ -314,5 +314,14 @@
   "community": {
     "fnfTitle": "मित्र और परिवार",
     "fnfSubTitle": "दोस्तों के साथ बिटकॉइन बेहतर है"
+  },
+  "node": {
+    "viewNodeInfoTitle": "नोड जानकारी देखें",
+    "pubKey": "सार्वजनिक कुंजी:",
+    "apiUrl": "एपीआई यूआरएल:",
+    "onchainPubkey": "ऑनचेन सार्वजनिक कुंजी:",
+    "rgbHtlcMinMsat": "आरजीबी एचटीएलसी न्यूनतम एमसैट:",
+    "rgbChannelCapMinSat": "आरजीबी चैनल न्यूनतम क्षमता:",
+    "channelCapMisSat": "चैनल न्यूनतम क्षमता:"
   }
 }

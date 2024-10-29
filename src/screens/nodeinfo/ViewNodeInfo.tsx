@@ -23,12 +23,7 @@ import { AppTheme } from 'src/theme';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
-  const {
-    receciveScreen,
-    common,
-    assets,
-    wallet: walletTranslation,
-  } = translations;
+  const { node } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -54,7 +49,11 @@ const ViewNodeInfo = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'View Node Info'} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={node.viewNodeInfoTitle}
+        subTitle={''}
+        enableBack={true}
+      />
       {isLoading ? (
         <View style={styles.loadingWrapper}>
           <LottieView
@@ -69,7 +68,7 @@ const ViewNodeInfo = () => {
           showsVerticalScrollIndicator={'false'}
           style={styles.scrollingWrapper}>
           <AppText variant="body2" style={styles.headerTitle}>
-            Pubkey:
+            {node.pubKey}
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={nodeInfo.pubkey}
@@ -77,7 +76,7 @@ const ViewNodeInfo = () => {
           />
 
           <AppText variant="body2" style={styles.headerTitle}>
-            API URL:
+            {node.apiUrl}
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={rgbWallet.nodeUrl}
@@ -86,7 +85,7 @@ const ViewNodeInfo = () => {
 
           <View>
             <AppText variant="body2" style={styles.headerTitle}>
-              Onchain Pubkey:
+              {node.onchainPubkey}
             </AppText>
             <ReceiveQrClipBoard
               qrCodeValue={nodeInfo.onchain_pubkey}
@@ -96,7 +95,7 @@ const ViewNodeInfo = () => {
 
           <View>
             <AppText variant="body2" style={styles.headerTitle}>
-              Rgb_htlc_min_msat:
+              {node.rgbHtlcMinMsat}
             </AppText>
             <CardBox>
               <AppText variant="body1" style={styles.valueText}>
@@ -107,7 +106,7 @@ const ViewNodeInfo = () => {
 
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
-              Rgb_channel_capacity_min_sat:
+              {node.rgbChannelCapMinSat}
             </AppText>
             <CardBox>
               <AppText variant="body1" style={styles.valueText}>
@@ -118,7 +117,7 @@ const ViewNodeInfo = () => {
 
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
-              Channel_capacity_min_sat:
+              {node.channelCapMisSat}
             </AppText>
             <CardBox>
               <AppText variant="body1" style={styles.valueText}>

@@ -314,5 +314,14 @@
   "community": {
     "fnfTitle": "Amici e Famiglia",
     "fnfSubTitle": "Bitcoin è migliore con gli amici"
+  },
+  "node": {
+    "viewNodeInfoTitle": "Visualizza informazioni sul nodo",
+    "pubKey": "Chiave pubblica:",
+    "apiUrl": "URL API:",
+    "onchainPubkey": "Chiave pubblica on-chain:",
+    "rgbHtlcMinMsat": "Rgb_htlc_min_msat:",
+    "rgbChannelCapMinSat": "Capacità minima del canale RGB:",
+    "channelCapMisSat": "Capacità minima del canale:"
   }
 }
