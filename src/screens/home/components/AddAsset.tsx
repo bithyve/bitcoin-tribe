@@ -37,9 +37,10 @@ function AddAsset() {
           style={styles.optionStyle}
           onPress={() => {
             if (
+              wallet &&
               wallet.specs.balances.confirmed +
                 wallet.specs.balances.unconfirmed ===
-              0
+                0
             ) {
               setVisible(true);
             } else {
@@ -55,9 +56,10 @@ function AddAsset() {
           style={styles.optionStyle}
           onPress={() => {
             if (
+              wallet &&
               wallet.specs.balances.confirmed +
                 wallet.specs.balances.unconfirmed ===
-              0
+                0
             ) {
               setVisible(true);
             } else {
