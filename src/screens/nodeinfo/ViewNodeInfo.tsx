@@ -68,7 +68,7 @@ const ViewNodeInfo = () => {
         <ScrollView
           showsVerticalScrollIndicator={'false'}
           style={styles.scrollingWrapper}>
-          <AppText variant="heading3" style={styles.headerTitle}>
+          <AppText variant="body2" style={styles.headerTitle}>
             Pubkey:
           </AppText>
           <ReceiveQrClipBoard
@@ -76,7 +76,7 @@ const ViewNodeInfo = () => {
             icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
 
-          <AppText variant="heading3" style={styles.headerTitle}>
+          <AppText variant="body2" style={styles.headerTitle}>
             API URL:
           </AppText>
           <ReceiveQrClipBoard
@@ -85,7 +85,7 @@ const ViewNodeInfo = () => {
           />
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
+            <AppText variant="body2" style={styles.headerTitle}>
               Onchain Pubkey:
             </AppText>
             <ReceiveQrClipBoard
@@ -95,33 +95,33 @@ const ViewNodeInfo = () => {
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
+            <AppText variant="body2" style={styles.headerTitle}>
               Rgb_htlc_min_msat:
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.rgb_htlc_min_msat}
               </AppText>
             </CardBox>
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
+            <AppText variant="body1" style={styles.headerTitle}>
               Rgb_channel_capacity_min_sat:
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.rgb_channel_capacity_min_sat}
               </AppText>
             </CardBox>
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
+            <AppText variant="body1" style={styles.headerTitle}>
               Channel_capacity_min_sat:
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.channel_capacity_min_sat}
               </AppText>
             </CardBox>
@@ -149,6 +149,12 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: 100,
       height: 100,
+    },
+    headerTitle: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    valueText: {
+      color: theme.colors.headingColor,
     },
   });
 export default ViewNodeInfo;
