@@ -50,7 +50,7 @@ function SelectWalletCollapse() {
             }
             onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
           />
-          {/* <SelectWalletTypeOption
+          <SelectWalletTypeOption
             title={onBoarding.mainnetAndLightning}
             icon={<LightningIcon />}
             rightIcon={
@@ -59,7 +59,7 @@ function SelectWalletCollapse() {
             onPress={() =>
               navigation.navigate(NavigationRoutes.RGBLIGHTNINGNODECONNECT)
             }
-          /> */}
+          />
         </View>
       )}
     </View>

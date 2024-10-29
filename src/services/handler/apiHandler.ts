@@ -58,6 +58,7 @@ import {
   OtherApi,
 } from '../rgbnode';
 import AppType from 'src/models/enums/AppType';
+import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 
 var RNFS = require('react-native-fs');
 
@@ -65,6 +66,7 @@ export class ApiHandler {
   private static app: RGBWallet;
   private static appType: AppType;
   private static config;
+  private static api: RLNNodeApiServices;
   constructor(app: RGBWallet, appType: AppType) {
     if (!ApiHandler.app) {
       ApiHandler.app = app;
@@ -73,6 +75,10 @@ export class ApiHandler {
         ApiHandler.config = new Configuration({
           basePath: app.nodeUrl,
           accessToken: app.nodeAuthentication,
+        });
+        ApiHandler.api = new RLNNodeApiServices({
+          baseUrl: app.nodeUrl,
+          apiKey: app.nodeAuthentication,
         });
       }
     }
@@ -195,7 +201,7 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(rgbWallet, appType);
           dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-          Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
+          Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
           dbManager.createObject(RealmSchema.VersionHistory, {
             version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             releaseNote: '',
@@ -371,7 +377,9 @@ export class ApiHandler {
   static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
     try {
       if (ApiHandler.appType === AppType.NODE_CONNECT) {
-        const balances = await RGBServices.getBtcBalance(ApiHandler.config);
+        const balances = await ApiHandler.api.getBtcBalance({
+          skip_sync: false,
+        });
         if (balances.vanilla) {
           const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
             RealmSchema.RgbWallet,
@@ -547,7 +555,7 @@ export class ApiHandler {
         const utxos = await RGBServices.createUtxos(
           5,
           ApiHandler.appType,
-          ApiHandler.config,
+          ApiHandler.api,
         );
         return utxos.created;
       } else {
@@ -573,7 +581,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset() {
+  static async receiveAsset(assetId, amount) {
     try {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
@@ -581,6 +589,8 @@ export class ApiHandler {
       let response = await RGBServices.receiveAsset(
         ApiHandler.appType,
         ApiHandler.config,
+        ApiHandler.api,
+        assetId,
       );
       if (response.error) {
         throw new Error(response.error);
@@ -646,14 +656,14 @@ export class ApiHandler {
         name,
         `${supply}`,
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
-      if (response?.assetId) {
+      if (response?.asset) {
         await ApiHandler.refreshRgbWallet();
+        return response.asset;
       }
       return response;
     } catch (error) {
-      console.log('issueNewCoin', error);
       throw new Error(`${error}`);
     }
   }
@@ -675,13 +685,14 @@ export class ApiHandler {
         description,
         `${supply}`,
         filePath,
+        ApiHandler.appType,
+        ApiHandler.api,
       );
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
       }
       return response;
     } catch (error) {
-      console.log('refreshRgbWallet', error);
       throw new Error(error);
     }
   }
@@ -731,6 +742,8 @@ export class ApiHandler {
         amount,
         consignmentEndpoints,
         feeRate,
+        ApiHandler.appType,
+        ApiHandler.api,
       );
       return response;
     } catch (error) {
@@ -750,7 +763,7 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetMetaData(
         assetId,
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       if (response) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -997,5 +1010,34 @@ export class ApiHandler {
       }
       return total; // If the condition isn't met, return the total as is
     }, 0);
+  }
+
+  static async viewNodeInfo() {
+    try {
+      const response = await ApiHandler.api.nodeinfo();
+      if (response) {
+        console.log(response);
+        return response;
+      } else {
+        throw new Error('Failed to connect to node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async getassetmedia(digest: string) {
+    try {
+      const response = await ApiHandler.api.getassetmedia({ digest });
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to connect to node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to connect to node');
+    }
   }
 }

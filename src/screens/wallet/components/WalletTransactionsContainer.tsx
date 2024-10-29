@@ -27,7 +27,7 @@ function WalletTransactionsContainer({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  console.log('activeTab', activeTab);
+
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
