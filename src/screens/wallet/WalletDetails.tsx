@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { wp, windowHeight, hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import WalletFooter from './components/WalletFooter';
 import RGBNodeWalletDetails from './RGBNodeWalletDetails';
 import BtcWalletDetails from './BtcWalletDetails';
@@ -17,19 +17,21 @@ function WalletDetails({ navigation, route }) {
 
   return (
     <ScreenContainer style={styles.container}>
-      {activeTab === 'lightning' ? (
-        <RGBNodeWalletDetails
-          navigation={navigation}
-          route={route}
-          activeTab={activeTab}
-        />
-      ) : (
-        <BtcWalletDetails
-          navigation={navigation}
-          route={route}
-          activeTab={activeTab}
-        />
-      )}
+      <View style={{ height: '93%' }}>
+        {activeTab === 'lightning' ? (
+          <RGBNodeWalletDetails
+            navigation={navigation}
+            route={route}
+            activeTab={activeTab}
+          />
+        ) : (
+          <BtcWalletDetails
+            navigation={navigation}
+            route={route}
+            activeTab={activeTab}
+          />
+        )}
+      </View>
       {app.appType === AppType.NODE_CONNECT && (
         <View style={styles.footerView}>
           <WalletFooter
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     paddingHorizontal: 0,
-    paddingTop: hp(20),
+    // paddingTop: hp(20),
   },
   footerView: {
     height: '10%',

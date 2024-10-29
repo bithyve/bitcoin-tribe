@@ -63,11 +63,11 @@ const getStyles = (width, buttonColor) =>
       borderWidth: 0.5,
     },
     contentStyle: {
-      height: hp(50),
+      height: hp(48),
       width: width,
     },
     labelStyle: {
-      marginLeft: 5,
+      marginLeft: 8,
     },
     roundedCTATitle: {
       fontSize: 16,

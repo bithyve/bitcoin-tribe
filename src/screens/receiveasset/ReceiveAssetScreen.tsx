@@ -12,7 +12,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
@@ -28,6 +28,9 @@ function ReceiveAssetScreen() {
     wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
+  const route = useRoute();
+  const assetId = route.params.assetId || '';
+  const amount = route.params.amount || '';
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -35,7 +38,7 @@ function ReceiveAssetScreen() {
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
 
   useEffect(() => {
-    mutate();
+    mutate(assetId, amount);
   }, []);
 
   useEffect(() => {

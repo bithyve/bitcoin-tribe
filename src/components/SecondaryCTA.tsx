@@ -10,11 +10,12 @@ type secondaryCTAProps = {
   title: string;
   onPress: () => void;
   width?: number;
+  height?: number;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
-  const { title, onPress, width = 'auto' } = props;
+  const { title, onPress, width = 'auto', height } = props;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme, width);
+  const styles = getStyles(theme, width, height);
 
   const generatedTestId = React.useMemo(() => {
     return `srcondary_cta_${title}`;
@@ -44,7 +45,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
   );
 }
 
-const getStyles = (theme: AppTheme, width) =>
+const getStyles = (theme: AppTheme, width, height) =>
   StyleSheet.create({
     container: {
       // flexDirection: 'row',
@@ -61,7 +62,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     labelStyle: {
       // minWidth: width,
-      marginVertical: hp(20),
+      marginVertical: height,
     },
     primaryCTATitle: {
       fontSize: 16,

@@ -21,11 +21,11 @@ import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
+import CheckIcon from 'src/assets/images/checkIcon.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
@@ -34,9 +34,13 @@ import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
+import AppText from 'src/components/AppText';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
 
 function IssueScreen() {
-  // const shouldRefresh = useRoute().params;
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -49,12 +53,23 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
+    useState(false);
   const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
   const [image, setImage] = useState('');
 
   const createUtxos = useMutation(ApiHandler.createUtxos);
+  const viewUtxos = useMutation(ApiHandler.viewUtxos);
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+
+  const totalReserveSatsAmount = useMemo(() => {
+    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
+  }, [UnspentUTXOData]);
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -62,30 +77,46 @@ function IssueScreen() {
       setTimeout(onPressIssue, 500);
     } else if (createUtxos.data === false) {
       setLoading(false);
-      Toast(walletTranslation.failedToCreateUTXO, true);
+      setTimeout(() => {
+        setVisibleFailedToCreatePopup(true);
+      }, 500);
+
+      // Toast(walletTranslation.failedToCreateUTXO, true);
     }
   }, [createUtxos.data]);
+
+  useEffect(() => {
+    viewUtxos.mutate();
+  }, []);
 
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
-    const response = await ApiHandler.issueNewCoin({
-      name: assetName.trim(),
-      ticker: assetTicker,
-      supply: totalSupplyAmt.replace(/,/g, ''),
-    });
-    if (response?.assetId) {
-      setLoading(false);
-      Toast(assets.assetCreateMsg);
-      navigation.dispatch(popAction);
-    } else if (response?.error === 'Insufficient sats for RGB') {
+    try {
+      const response = await ApiHandler.issueNewCoin({
+        name: assetName.trim(),
+        ticker: assetTicker,
+        supply: totalSupplyAmt.replace(/,/g, ''),
+      });
+      if (response?.assetId) {
+        setLoading(false);
+        Toast(assets.assetCreateMsg);
+        viewUtxos.mutate();
+        navigation.dispatch(popAction);
+      } else if (response?.error === 'Insufficient sats for RGB') {
+        setLoading(false);
+        setTimeout(() => {
+          //createUtxos.mutate();
+        }, 500);
+      } else if (response?.error) {
+        setLoading(false);
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
       setLoading(false);
       setTimeout(() => {
-        setShowErrorModal(true);
+        //createUtxos.mutate();
       }, 500);
-    } else if (response?.error) {
-      setLoading(false);
-      Toast(`Failed: ${response?.error}`, true);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
@@ -101,11 +132,12 @@ function IssueScreen() {
     if (response?.assetId) {
       setLoading(false);
       Toast(assets.assetCreateMsg);
+      viewUtxos.mutate();
       navigation.dispatch(popAction);
     } else if (response?.error === 'Insufficient sats for RGB') {
       setLoading(false);
       setTimeout(() => {
-        setShowErrorModal(true);
+        createUtxos.mutate();
       }, 500);
     } else if (response?.error) {
       setLoading(false);
@@ -149,15 +181,6 @@ function IssueScreen() {
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
       <ModalLoading visible={loading || createUtxos.isLoading} />
-      <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 400);
-        }}
-      />
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
@@ -262,6 +285,18 @@ function IssueScreen() {
           </View>
         )}
       </KeyboardAvoidView>
+      {totalReserveSatsAmount === 0 && (
+        <View style={styles.reservedSatsWrapper}>
+          <View style={styles.checkIconWrapper}>
+            <CheckIcon />
+          </View>
+          <View style={styles.reservedSatsWrapper1}>
+            <AppText variant="body2" style={styles.reservedSatsText}>
+              {assets.reservedSats}
+            </AppText>
+          </View>
+        </View>
+      )}
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.proceed}
@@ -272,6 +307,21 @@ function IssueScreen() {
           width={wp(120)}
           primaryLoading={createUtxos.isLoading || loading}
         />
+      </View>
+      <View>
+        <ResponsePopupContainer
+          visible={visibleFailedToCreatePopup}
+          enableClose={true}
+          onDismiss={() => setVisibleFailedToCreatePopup(false)}
+          backColor={theme.colors.cardGradient1}
+          borderColor={theme.colors.borderColor}>
+          <FailedToCreatePopupContainer
+            primaryOnPress={() => {
+              setVisibleFailedToCreatePopup(false);
+            }}
+            secondaryOnPress={() => setVisibleFailedToCreatePopup(false)}
+          />
+        </ResponsePopupContainer>
       </View>
     </ScreenContainer>
   );
@@ -297,20 +347,6 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderBottomColor: 'white',
       borderBottomWidth: 1,
     },
-    uploadCoinAssetWrapper: {
-      flexDirection: 'row',
-      width: '100%',
-      alignItems: 'center',
-    },
-    selectAvatarStyle: {
-      color: theme.colors.headingColor,
-      width: '60%',
-      paddingLeft: hp(20),
-    },
-    uploadBtnWrapper: {
-      width: '40%',
-      // paddingRight: hp(5),
-    },
     imageStyle: {
       height: hp(110),
       width: hp(110),
@@ -325,6 +361,21 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       position: 'absolute',
       bottom: 0,
       left: Platform.OS === 'ios' ? 100 : 112,
+    },
+    reservedSatsWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginVertical: hp(20),
+    },
+    checkIconWrapper: {
+      width: '10%',
+    },
+    reservedSatsWrapper1: {
+      width: '90%',
+    },
+    reservedSatsText: {
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default IssueScreen;

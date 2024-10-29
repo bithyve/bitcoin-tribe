@@ -36,7 +36,9 @@
     "continue": "Continue",
     "noInternet": "No network connection",
     "rgbWalletOffline": "RGB wallet is offline.",
-    "backupNow": "Backup Now"
+    "backupNow": "Backup Now",
+    "request": "Request",
+    "ok": "OK"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -259,7 +261,8 @@
     "failedToCreateUTXO": "Failed to create UTXOs. Insufficiant sats",
     "rgbAssets": "Reserved Sats",
     "lightning": "Lightning",
-    "bitcoin": "Bitcoin"
+    "bitcoin": "Bitcoin",
+    "reserveAmtText": "Reserved for asset transactions"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -299,7 +302,14 @@
     "collectibles": "Collectibles",
     "saveAssetSuccess": "Asset Image saved successfully",
     "saveAssetFailed": "Failed to save asset",
-    "checkSpendableAmt": "Please enter amount less than "
+    "checkSpendableAmt": "Please enter amount less than ",
+    "reservedSats": "Sats from your wallet will be reserved to use for asset transactions",
+    "insufficientBalance": "Insufficient Balance",
+    "insufficientBalanceSubtitle": "You need sats in your wallet to create assets. Please fund your wallet and try again",
+    "failedToCreateUTXOTitle": "Insufficient Balance for Transaction",
+    "failedToCreateUTXOSubTitle": "Your wallet balance is too low to cover the current transaction fees due to high network congestion. Please increase your balance or try again when the fees are lower.",
+    "unexpectedErrorTitle": "Unexpected Error",
+    "unexpectedErrorSubTitle": "We encountered an issue processing your request. Please try again later"
   },
   "community": {
     "fnfTitle": "Friends & Family",

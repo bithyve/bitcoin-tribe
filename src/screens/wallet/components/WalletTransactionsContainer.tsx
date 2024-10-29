@@ -3,23 +3,31 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import { hp } from 'src/constants/responsive';
 import WalletTransactionList from './WalletTransactionList';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import ReservedSatsView from './ReservedSatsView';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import AppType from 'src/models/enums/AppType';
 
 function WalletTransactionsContainer({
   navigation,
   transactions,
   wallet,
   autoRefresh,
+  activeTab,
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
+
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -38,6 +46,9 @@ function WalletTransactionsContainer({
           </AppText>
         </AppTouchable>
       </View>
+      {app.appType === AppType.ON_CHAIN && activeTab === 'bitcoin' && (
+        <ReservedSatsView />
+      )}
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}
@@ -48,9 +59,7 @@ function WalletTransactionsContainer({
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {
-      marginTop: hp(30),
-    },
+    container: {},
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',

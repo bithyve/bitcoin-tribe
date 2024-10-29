@@ -36,7 +36,9 @@
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
-    "backupNow": "Esegui backup ora"
+    "backupNow": "Esegui backup ora",
+    "request": "Richiesta",
+    "ok": "OK"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -259,7 +261,8 @@
     "failedToCreateUTXO": "Impossibile creare UTXO. Sats insufficienti",
     "rgbAssets": "Sats riservati",
     "lightning": "Fulmine",
-    "bitcoin": "Bitcoin"
+    "bitcoin": "Bitcoin",
+    "reserveAmtText": "Riservato per le transazioni di asset"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -299,7 +302,14 @@
     "collectibles": "Oggetti da collezione",
     "saveAssetSuccess": "Immagine dell'asset salvata con successo",
     "saveAssetFailed": "Salvataggio dell'asset non riuscito",
-    "checkSpendableAmt": "Inserisci un importo inferiore a "
+    "checkSpendableAmt": "Inserisci un importo inferiore a ",
+    "reservedSats": "I Sats dal tuo portafoglio saranno riservati per le transazioni di asset",
+    "insufficientBalance": "Saldo insufficiente",
+    "insufficientBalanceSubtitle": "Hai bisogno di sats nel tuo portafoglio per creare asset. Per favore, ricarica il tuo portafoglio e riprova",
+    "failedToCreateUTXOTitle": "Saldo insufficiente per la transazione",
+    "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse.",
+    "unexpectedErrorTitle": "Errore imprevisto",
+    "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

@@ -6,6 +6,9 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
+import IconRightArrow from 'src/assets/images/icon_right_arrow.svg';
+import IconRightArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
+
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -18,13 +21,24 @@ type OptionCardProps = {
   subTitle: string;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  showRightArrow?: React.ReactNode;
 };
 
 function OptionCard(props: OptionCardProps) {
-  const { icon, title, subTitle, style, onPress } = props;
+  const {
+    icon,
+    title,
+    subTitle,
+    style,
+    onPress,
+    showRightArrow = false,
+  } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, showRightArrow),
+    [theme, showRightArrow],
+  );
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -45,15 +59,24 @@ function OptionCard(props: OptionCardProps) {
             </AppText>
           </View>
           <View style={styles.iconWrapper}>
-            {/* <IconArrow /> */}
-            {!isThemeDark ? <IconArrow /> : <IconArrowLight />}
+            {showRightArrow ? (
+              !isThemeDark ? (
+                <IconRightArrow />
+              ) : (
+                <IconRightArrowLight />
+              )
+            ) : !isThemeDark ? (
+              <IconArrow />
+            ) : (
+              <IconArrowLight />
+            )}
           </View>
         </View>
       </GradientView>
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, showRightArrow) =>
   StyleSheet.create({
     container: {
       width: '100%',
@@ -68,7 +91,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: showRightArrow ? '85%' : '90%',
       marginVertical: hp(5),
     },
     menuCardTitle: {

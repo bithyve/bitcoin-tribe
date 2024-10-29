@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { useMutation, UseMutationResult } from 'react-query';
+import { useTheme } from 'react-native-paper';
 
-import { wp, windowHeight } from 'src/constants/responsive';
+import { wp, windowHeight, hp } from 'src/constants/responsive';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 import { RealmSchema } from 'src/storage/enum';
 import ModalContainer from 'src/components/ModalContainer';
@@ -12,14 +13,17 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useWallets from 'src/hooks/useWallets';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
-import Toast from 'src/components/Toast';
 import RGBNodeWalletHeader from './components/RGBNodeWalletHeader';
 import AppType from 'src/models/enums/AppType';
+import GradientView from 'src/components/GradientView';
+import { AppTheme } from 'src/theme';
+import { NetworkType } from 'src/services/wallets/enums';
+import config from 'src/utils/config';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
+  const theme: AppTheme = useTheme();
   const { autoRefresh = false } = route.params || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
@@ -36,16 +40,25 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
 
   return (
     <View>
-      <View style={styles.walletHeaderWrapper}>
+      <GradientView
+        style={styles.walletHeaderWrapper}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         <RGBNodeWalletHeader
           profile={profileImage}
           username={walletName}
           wallet={null}
           activeTab={activeTab}
-          onPressSetting={() => mutate()}
-          onPressBuy={() => setVisible(true)}
+          onPressBuy={() =>
+            config.NETWORK_TYPE === NetworkType.TESTNET
+              ? mutate()
+              : setVisible(true)
+          }
         />
-      </View>
+      </GradientView>
       <View
         style={
           app.appType === AppType.NODE_CONNECT
@@ -54,6 +67,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         }>
         <WalletTransactionsContainer
           navigation={navigation}
+          activeTab={activeTab}
           transactions={[]}
           wallet={''}
           autoRefresh={autoRefresh || refreshWallet}
@@ -72,26 +86,24 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    height: '100%',
-    paddingHorizontal: 0,
-    paddingTop: 0,
-  },
   walletHeaderWrapper: {
-    height: '45%',
+    height: '55%',
     alignItems: 'center',
     justifyContent: 'center',
     padding: wp(16),
-    // borderBottomWidth: 0.2,
-    // borderBottomColor: 'gray',
+    borderBottomLeftRadius: hp(40),
+    borderBottomRightRadius: hp(40),
+    top: -60,
+    marginHorizontal: 0,
   },
   onChainWalletTransWrapper: {
-    height: '55%',
+    height: '47%',
+    top: -40,
     marginHorizontal: wp(16),
   },
   walletTransWrapper: {
     height: '48%',
+    top: -40,
     marginHorizontal: wp(16),
   },
 });

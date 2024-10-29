@@ -176,6 +176,13 @@ function SettingsScreen({ navigation }) {
       icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
+
+    {
+      id: 7,
+      title: 'View Node Info',
+      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
+    },
     // Add more menu items as needed
   ];
 
