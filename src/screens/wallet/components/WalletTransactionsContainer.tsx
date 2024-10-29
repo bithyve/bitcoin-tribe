@@ -46,9 +46,7 @@ function WalletTransactionsContainer({
           </AppText>
         </AppTouchable>
       </View>
-      {app.appType === AppType.ON_CHAIN && activeTab === 'bitcoin' && (
-        <ReservedSatsView />
-      )}
+      {activeTab === 'bitcoin' ? <ReservedSatsView /> : null}
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}
