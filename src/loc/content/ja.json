@@ -322,6 +322,8 @@
     "onchainPubkey": "オンチェーン公開鍵:",
     "rgbHtlcMinMsat": "RGB_HTLC最小msat:",
     "rgbChannelCapMinSat": "RGBチャネル最小容量:",
-    "channelCapMisSat": "チャネル最小容量:"
+    "channelCapMisSat": "チャネル最小容量:",
+    "nodeStatusLock": "ノードステータス：ロック",
+    "initNode": "ノードを初期化"
   }
 }

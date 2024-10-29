@@ -322,6 +322,8 @@
     "onchainPubkey": "链上公钥:",
     "rgbHtlcMinMsat": "RGB HTLC最小毫秒:",
     "rgbChannelCapMinSat": "RGB频道最小容量:",
-    "channelCapMisSat": "最小通道容量:"
+    "channelCapMisSat": "最小通道容量:",
+    "nodeStatusLock": "节点状态：锁定",
+    "initNode": "初始化节点"
   }
 }

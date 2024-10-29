@@ -322,6 +322,8 @@
     "onchainPubkey": "ऑनचेन सार्वजनिक कुंजी:",
     "rgbHtlcMinMsat": "आरजीबी एचटीएलसी न्यूनतम एमसैट:",
     "rgbChannelCapMinSat": "आरजीबी चैनल न्यूनतम क्षमता:",
-    "channelCapMisSat": "चैनल न्यूनतम क्षमता:"
+    "channelCapMisSat": "चैनल न्यूनतम क्षमता:",
+    "nodeStatusLock": "नोड स्थिति: लॉक",
+    "initNode": "नोड प्रारंभ करें"
   }
 }

@@ -322,6 +322,8 @@
     "onchainPubkey": "Onchain Pubkey:",
     "rgbHtlcMinMsat": "Rgb_htlc_min_msat:",
     "rgbChannelCapMinSat": "Rgb_channel_capacity_min_sat:",
-    "channelCapMisSat": "Channel_capacity_min_sat:"
+    "channelCapMisSat": "Channel_capacity_min_sat:",
+    "nodeStatusLock": "Node Status: Lock",
+    "initNode": "Init Node"
   }
 }

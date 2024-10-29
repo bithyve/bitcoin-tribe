@@ -20,6 +20,7 @@ import AppText from 'src/components/AppText';
 import CardBox from 'src/components/CardBox';
 import NodeInfoFooter from './NodeInfoFooter';
 import { AppTheme } from 'src/theme';
+import SelectOption from 'src/components/SelectOption';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -32,6 +33,7 @@ const ViewNodeInfo = () => {
     ApiHandler.viewNodeInfo,
   );
   const [nodeStatus, setSetNodeStatus] = useState('run');
+  const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
 
@@ -124,6 +126,23 @@ const ViewNodeInfo = () => {
                 {nodeInfo.channel_capacity_min_sat}
               </AppText>
             </CardBox>
+          </View>
+          <View>
+            <SelectOption
+              title={node.nodeStatusLock}
+              onPress={() => setSetNodeStatusLock(!nodeStatusLock)}
+              enableSwitch={true}
+              onValueChange={() => setSetNodeStatusLock(!nodeStatusLock)}
+              toggleValue={nodeStatusLock}
+            />
+          </View>
+          <View>
+            <SelectOption
+              title={node.initNode}
+              onPress={() => console.log('press')}
+              enableSwitch={false}
+              showArrow={false}
+            />
           </View>
         </ScrollView>
       )}

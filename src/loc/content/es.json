@@ -322,6 +322,8 @@
     "onchainPubkey": "Clave pública en cadena:",
     "rgbHtlcMinMsat": "RGB_htlc_min_msat:",
     "rgbChannelCapMinSat": "Capacidad mínima de canal RGB:",
-    "channelCapMisSat": "Capacidad mínima del canal:"
+    "channelCapMisSat": "Capacidad mínima del canal:",
+    "nodeStatusLock": "Estado del nodo: Bloqueado",
+    "initNode": "Iniciar nodo"
   }
 }
