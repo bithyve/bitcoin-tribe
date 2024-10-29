@@ -16,6 +16,7 @@ import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import ReserveAmtIcon from 'src/assets/images/reserveAmtIcon.svg';
 import { RealmSchema } from 'src/storage/enum';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 function ReservedSatsView() {
   const { translations } = useContext(LocalizationContext);
@@ -34,20 +35,7 @@ function ReservedSatsView() {
   );
 
   const totalReserveSatsAmount = useMemo(() => {
-    return UnspentUTXOData.reduce((total, item) => {
-      // Check if utxo exists and if btcAmount is present
-      if (item.utxo && item.utxo.colorable === true) {
-        // total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
-        const existingAsset = item.rgbAllocations.find(
-          allocation => allocation.settled === true,
-        );
-        if (!existingAsset) {
-          return total + (item.utxo.btcAmount ? item.utxo.btcAmount : 0);
-        }
-        return total;
-      }
-      return total; // If the condition isn't met, return the total as is
-    }, 0);
+    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
   }, [UnspentUTXOData]);
 
   return (
