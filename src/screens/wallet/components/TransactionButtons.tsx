@@ -8,7 +8,8 @@ import IconSend from 'src/assets/images/icon_send.svg';
 import IconSendLight from 'src/assets/images/icon_send_light.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconReceiveLight from 'src/assets/images/icon_recieve_light.svg';
-import IconBuy from 'src/assets/images/icon_buy.svg';
+import IconBuy from 'src/assets/images/buyIcon.svg';
+import IconBuyLight from 'src/assets/images/buyIcon_light.svg';
 import IconRequest from 'src/assets/images/satsRequestIcon.svg';
 import IconRequestLight from 'src/assets/images/satsRequestIcon_light.svg';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -43,7 +44,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={!isThemeDark ? <IconSend /> : <IconSendLight />}
           buttonColor={theme.colors.sendCtaBorderColor}
           title={common.send}
-          width={wp(100)}
+          width={wp(105)}
           onPress={onPressSend}
         />
       </View>
@@ -62,8 +63,10 @@ const TransactionButtons = (props: transButtonProps) => {
                 ) : (
                   <IconRequestLight />
                 )
-              ) : (
+              ) : !isThemeDark ? (
                 <IconBuy />
+              ) : (
+                <IconBuyLight />
               )
             }
             textColor={theme.colors.roundBuyCTATitle}
@@ -74,7 +77,7 @@ const TransactionButtons = (props: transButtonProps) => {
                 : common.buy
             }
             width={
-              config.NETWORK_TYPE === NetworkType.TESTNET ? wp(120) : wp(70)
+              config.NETWORK_TYPE === NetworkType.TESTNET ? wp(105) : wp(105)
             }
             onPress={onPressBuy}
           />
@@ -91,7 +94,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={!isThemeDark ? <IconReceive /> : <IconReceiveLight />}
           buttonColor={theme.colors.recieveCtaBorderColor}
           title={common.receive}
-          width={wp(110)}
+          width={wp(105)}
           onPress={onPressRecieve}
         />
       </View>
