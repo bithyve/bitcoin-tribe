@@ -3,8 +3,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-// import AddNewIcon from 'src/assets/images/icon_addnew.svg';
-// import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -32,7 +30,6 @@ function AddAsset() {
       <View style={styles.container}>
         <SelectOption
           title={home.issueNew}
-          // icon={<AddNewIcon />}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -51,7 +48,6 @@ function AddAsset() {
         />
         <SelectOption
           title={home.addAssets}
-          // icon={<ReceiveIcon />}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
