@@ -614,7 +614,7 @@ export class ApiHandler {
     try {
       const assets = await RGBServices.syncRgbAssets(
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       if (assets.nia) {
         dbManager.createObjectBulk(RealmSchema.Coin, assets.nia);

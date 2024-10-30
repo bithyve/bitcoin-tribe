@@ -79,21 +79,17 @@ export default class RGBServices {
     return isSynched;
   };
 
-  static syncRgbAssets = async (appType: AppType, config: any) => {
+  static syncRgbAssets = async (appType: AppType, api: RLNNodeApiServices) => {
     if (appType === AppType.NODE_CONNECT) {
-      await new RGBApi(config).refreshtransfersPostForm(false);
-      const response = await new RGBApi(config).listassetsPost({
-        filter_asset_schemas: [
-          AssetSchema.Cfa,
-          AssetSchema.Nia,
-          AssetSchema.Uda,
-        ],
+      await api.refreshtransfers({ skip_sync: false });
+      const response = await api.listassets({
+        filter_asset_schemas: ['Nia', 'Cfa'],
       });
-      if (response.status === 200) {
-        const data = snakeCaseToCamelCaseCase(response.data);
+      if (response) {
+        const data = snakeCaseToCamelCaseCase(response);
         return data;
       } else {
-        return response.data;
+        return response;
       }
     } else {
       const assets = await RGB.syncRgbAssets();
