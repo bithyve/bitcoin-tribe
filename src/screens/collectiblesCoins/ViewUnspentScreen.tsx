@@ -3,6 +3,7 @@ import { StyleSheet, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation, UseMutationResult } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -22,7 +23,6 @@ import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_ligh
 import { RealmSchema } from 'src/storage/enum';
 import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
-import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 
