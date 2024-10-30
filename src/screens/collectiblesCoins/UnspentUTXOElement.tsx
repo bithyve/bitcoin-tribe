@@ -68,10 +68,10 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     transIDWrapper: {
-      width: '70%',
+      width: '55%',
     },
     amtWrapper: {
-      width: '30%',
+      width: '45%',
       alignItems: 'flex-end',
     },
     transIDText: {
