@@ -91,7 +91,7 @@
   },
   "home": {
     "addAssets": "アセットを追加",
-    "addAssetSubTitle": "新しいアセットを発行するか、アセットを受信する",
+    "addAssetSubTitle": "新しいアセットを発行するかアセットを追加する",
     "issueNew": "新規発行",
     "myAssets": "あなたの資産",
     "issue": "発行",

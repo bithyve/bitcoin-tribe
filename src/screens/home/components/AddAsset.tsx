@@ -50,7 +50,7 @@ function AddAsset() {
           testID="issue_new"
         />
         <SelectOption
-          title={common.receive}
+          title={home.addAssets}
           // icon={<ReceiveIcon />}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
