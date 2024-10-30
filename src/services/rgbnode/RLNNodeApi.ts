@@ -161,4 +161,25 @@ export class RLNNodeApiServices {
       body: JSON.stringify(body),
     });
   }
+
+  public async refreshtransfers(body: { skip_sync: boolean }): Promise<{}> {
+    const formData = new FormData();
+    formData.append('skip_sync', body.skip_sync);
+    return this.request('/refreshtransfers', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  public async listassets(body: {
+    filter_asset_schemas: string[];
+  }): Promise<{ bytes_hex: string }> {
+    return this.request('/listassets', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
 }
