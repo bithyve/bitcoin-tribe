@@ -57,7 +57,7 @@ function Splash({ navigation }) {
   }, [data, navigation, setKey]);
 
   useEffect(() => {
-    const timer = setTimeout(onInit, 4500);
+    const timer = setTimeout(onInit, 4000);
     return () => clearTimeout(timer);
   }, [onInit]);
 
