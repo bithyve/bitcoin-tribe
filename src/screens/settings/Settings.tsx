@@ -34,6 +34,10 @@ import Toast from 'src/components/Toast';
 import * as SecureStore from 'src/storage/secure-store';
 // import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -53,6 +57,7 @@ type SettingMenuProps = {
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings, onBoarding, wallet: walletTranslation } = translations;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
@@ -182,6 +187,7 @@ function SettingsScreen({ navigation }) {
       title: 'View Node Info',
       icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
+      hideMenu: app.appType === AppType.ON_CHAIN,
     },
     // Add more menu items as needed
   ];

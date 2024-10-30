@@ -1,49 +1,39 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
-import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
-import ModalLoading from 'src/components/ModalLoading';
-import Toast from 'src/components/Toast';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-import LottieView from 'lottie-react-native';
 import AppText from 'src/components/AppText';
 import CardBox from 'src/components/CardBox';
-
-const styles = StyleSheet.create({
-  refreshLoader: {
-    alignSelf: 'center',
-    width: 100,
-    height: 100,
-  },
-});
+import NodeInfoFooter from './NodeInfoFooter';
+import { AppTheme } from 'src/theme';
+import SelectOption from 'src/components/SelectOption';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
-  const {
-    receciveScreen,
-    common,
-    assets,
-    wallet: walletTranslation,
-  } = translations;
+  const { node } = translations;
   const navigation = useNavigation();
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [nodeStatus, setSetNodeStatus] = useState('run');
+  const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
 
@@ -61,26 +51,34 @@ const ViewNodeInfo = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'View Node Info'} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={node.viewNodeInfoTitle}
+        subTitle={''}
+        enableBack={true}
+      />
       {isLoading ? (
-        <LottieView
-          source={require('src/assets/images/loader.json')}
-          autoPlay
-          loop
-          style={styles.refreshLoader}
-        />
+        <View style={styles.loadingWrapper}>
+          <LottieView
+            source={require('src/assets/images/loader.json')}
+            autoPlay
+            loop
+            style={styles.refreshLoader}
+          />
+        </View>
       ) : (
-        <ScrollView>
-          <AppText variant="heading3" style={styles.headerTitle}>
-            Pubkey:
+        <ScrollView
+          showsVerticalScrollIndicator={'false'}
+          style={styles.scrollingWrapper}>
+          <AppText variant="body2" style={styles.headerTitle}>
+            {node.pubKey}
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={nodeInfo.pubkey}
             icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
 
-          <AppText variant="heading3" style={styles.headerTitle}>
-            API URL:
+          <AppText variant="body2" style={styles.headerTitle}>
+            {node.apiUrl}
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={rgbWallet.nodeUrl}
@@ -88,8 +86,8 @@ const ViewNodeInfo = () => {
           />
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
-              Onchain Pubkey:
+            <AppText variant="body2" style={styles.headerTitle}>
+              {node.onchainPubkey}
             </AppText>
             <ReceiveQrClipBoard
               qrCodeValue={nodeInfo.onchain_pubkey}
@@ -98,41 +96,83 @@ const ViewNodeInfo = () => {
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
-              Rgb_htlc_min_msat:
+            <AppText variant="body2" style={styles.headerTitle}>
+              {node.rgbHtlcMinMsat}
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.rgb_htlc_min_msat}
               </AppText>
             </CardBox>
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
-              Rgb_channel_capacity_min_sat:
+            <AppText variant="body1" style={styles.headerTitle}>
+              {node.rgbChannelCapMinSat}
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.rgb_channel_capacity_min_sat}
               </AppText>
             </CardBox>
           </View>
 
           <View>
-            <AppText variant="heading3" style={styles.headerTitle}>
-              Channel_capacity_min_sat:
+            <AppText variant="body1" style={styles.headerTitle}>
+              {node.channelCapMisSat}
             </AppText>
             <CardBox>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText variant="body1" style={styles.valueText}>
                 {nodeInfo.channel_capacity_min_sat}
               </AppText>
             </CardBox>
           </View>
+          <View>
+            <SelectOption
+              title={node.nodeStatusLock}
+              onPress={() => setSetNodeStatusLock(!nodeStatusLock)}
+              enableSwitch={true}
+              onValueChange={() => setSetNodeStatusLock(!nodeStatusLock)}
+              toggleValue={nodeStatusLock}
+            />
+          </View>
+          <View>
+            <SelectOption
+              title={node.initNode}
+              onPress={() => console.log('press')}
+              enableSwitch={false}
+              showArrow={false}
+            />
+          </View>
         </ScrollView>
       )}
+      <NodeInfoFooter
+        nodeStatus={nodeStatus}
+        setNodeStatus={text => setSetNodeStatus(text)}
+      />
     </ScreenContainer>
   );
 };
-
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    scrollingWrapper: {
+      height: '70%',
+    },
+    loadingWrapper: {
+      height: '76%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    refreshLoader: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
+    },
+    headerTitle: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    valueText: {
+      color: theme.colors.headingColor,
+    },
+  });
 export default ViewNodeInfo;

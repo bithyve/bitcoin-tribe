@@ -314,5 +314,16 @@
   "community": {
     "fnfTitle": "Amigas y familia",
     "fnfSubTitle": "Bitcoin es mejor con amigas"
+  },
+  "node": {
+    "viewNodeInfoTitle": "Ver información del nodo",
+    "pubKey": "Clave pública:",
+    "apiUrl": "URL de la API:",
+    "onchainPubkey": "Clave pública en cadena:",
+    "rgbHtlcMinMsat": "RGB_htlc_min_msat:",
+    "rgbChannelCapMinSat": "Capacidad mínima de canal RGB:",
+    "channelCapMisSat": "Capacidad mínima del canal:",
+    "nodeStatusLock": "Estado del nodo: Bloqueado",
+    "initNode": "Iniciar nodo"
   }
 }

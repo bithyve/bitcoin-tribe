@@ -17,7 +17,7 @@ function WalletDetails({ navigation, route }) {
 
   return (
     <ScreenContainer style={styles.container}>
-      <View style={{ height: '93%' }}>
+      <View style={styles.bodyView}>
         {activeTab === 'lightning' ? (
           <RGBNodeWalletDetails
             navigation={navigation}
@@ -44,6 +44,9 @@ function WalletDetails({ navigation, route }) {
   );
 }
 const styles = StyleSheet.create({
+  bodyView: {
+    height: '93%',
+  },
   container: {
     flexDirection: 'column',
     height: '100%',

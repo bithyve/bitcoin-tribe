@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useQuery } from '@realm/react';
 
 import AppText from 'src/components/AppText';
 import WalletTransactionList from './WalletTransactionList';
@@ -11,8 +12,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ReservedSatsView from './ReservedSatsView';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from '@realm/react';
-import AppType from 'src/models/enums/AppType';
 
 function WalletTransactionsContainer({
   navigation,
@@ -46,9 +45,7 @@ function WalletTransactionsContainer({
           </AppText>
         </AppTouchable>
       </View>
-      {app.appType === AppType.ON_CHAIN && activeTab === 'bitcoin' && (
-        <ReservedSatsView />
-      )}
+      {activeTab === 'bitcoin' ? <ReservedSatsView /> : null}
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}
