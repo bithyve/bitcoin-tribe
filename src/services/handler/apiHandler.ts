@@ -626,7 +626,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('ss', error);
     }
   }
 

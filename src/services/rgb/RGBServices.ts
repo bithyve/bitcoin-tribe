@@ -39,7 +39,6 @@ export default class RGBServices {
         skip_sync: false,
         up_to: false,
       });
-      console.log('response', response);
       if (response) {
         return { created: true };
       }
@@ -114,7 +113,6 @@ export default class RGBServices {
           min_confirmations: 0,
           duration_seconds: 86400,
         });
-        console.log('ss', response);
         if (response) {
           const data = snakeCaseToCamelCaseCase(response);
           return data;
@@ -208,7 +206,6 @@ export default class RGBServices {
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT) {
       const responseDigest = await api.postassetmedia({ filePath });
-      console.log('responseDigest', responseDigest);
       if (responseDigest) {
         const response = await api.issueassetcfa({
           amounts: [Number(supply)],
@@ -275,7 +272,6 @@ export default class RGBServices {
       const response = await api.listUnspents({ skip_sync: false });
       if (response) {
         const data = snakeCaseToCamelCaseCase(response.unspents);
-        console.log(data);
         return data;
       } else {
         return response.error;
