@@ -30,11 +30,11 @@ export class RLNNodeApiServices {
       const response = await fetch(url, { ...options, headers });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Request failed: ${errorData.message}`);
+        throw new Error(`Request failed: ${errorData.error}`);
       }
       return response.json();
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error(`Error: ${endpoint} failed `, error);
       throw error;
     }
   }
@@ -203,13 +203,12 @@ export class RLNNodeApiServices {
   }
 
   public async refreshtransfers(body: { skip_sync: boolean }): Promise<{}> {
-    const formData = new FormData();
-    formData.append('skip_sync', body.skip_sync);
     return this.request('/refreshtransfers', {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify(body),
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
     });
   }
