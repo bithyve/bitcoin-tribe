@@ -36,6 +36,7 @@
     "continue": "Continue",
     "noInternet": "No network connection",
     "rgbWalletOffline": "RGB wallet is offline.",
+    "rgbNodeOffline": "RGB node is locked/offline.",
     "backupNow": "Backup Now",
     "request": "Request",
     "ok": "OK"

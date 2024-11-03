@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -6,16 +6,23 @@ import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
+import AppType from 'src/models/enums/AppType';
 
 const RGBWalletStatus = () => {
-  const { isWalletOnline } = useContext(AppContext); // Access the context
+  const { isWalletOnline, appType } = useContext(AppContext); // Access the context
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+
+  const msg = useMemo(() => {
+    return appType === AppType.NODE_CONNECT
+      ? common.rgbNodeOffline
+      : common.rgbWalletOffline;
+  }, []);
 
   return isWalletOnline === false ? (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.errorContainer}>
-        <AppText style={styles.text}>{common.rgbWalletOffline}</AppText>
+        <AppText style={styles.text}>{msg}</AppText>
       </View>
     </SafeAreaView>
   ) : null;

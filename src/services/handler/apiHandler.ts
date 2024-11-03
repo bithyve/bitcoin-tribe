@@ -282,7 +282,12 @@ export class ApiHandler {
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType);
     if (app.appType === AppType.NODE_CONNECT) {
-      return { key, isWalletOnline: true };
+      const nodeInfo = await ApiHandler.api.nodeinfo();
+      if (nodeInfo.pubkey) {
+        return { key, isWalletOnline: true };
+      } else {
+        return { key, isWalletOnline: false };
+      }
     } else {
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
@@ -626,7 +631,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('ss', error);
+      console.log('refreshRgbWallet', error);
     }
   }
 
