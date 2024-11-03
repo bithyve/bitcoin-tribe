@@ -145,3 +145,19 @@ export interface RgbNodeConnectParams {
   nodeId: string;
   authentication: string;
 }
+
+export interface NodeInfo {
+  pubkey?: string;
+  numChannels?: number;
+  numUsableChannels?: number;
+  localBalanceMsat?: number;
+  numPeers?: number;
+  onchainPubkey?: string;
+  maxMediaUploadSizeMb?: number;
+  rgbHtlcMinMsat?: number;
+  rgbChannelCapacityMinSat?: number;
+  channelCapacityMinSat?: number;
+  channelCapacityMaxSat?: number;
+  channelAssetMinAmount?: number;
+  channelAssetMaxAmount?: number;
+}

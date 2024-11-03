@@ -1,3 +1,5 @@
+import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+
 export interface ApiConfig {
   baseUrl: string;
   apiKey?: string;
@@ -37,6 +39,20 @@ export class RLNNodeApiServices {
     }
   }
 
+  public static async checkNodeConnection(
+    baseUrl: string,
+    auth = '',
+  ): Promise<{}> {
+    const response = await fetch(`${baseUrl}/nodeinfo`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: auth,
+      },
+    });
+    return snakeCaseToCamelCaseCase(await response.json());
+  }
+
   public async getBtcBalance(body: { skip_sync: boolean }): Promise<{
     vanilla: { settled: number; future: number; spendable: number };
     colored: { settled: number; future: number; spendable: number };
@@ -46,6 +62,30 @@ export class RLNNodeApiServices {
       body: JSON.stringify(body),
     });
   }
+
+  public async getAddress(body: {}): Promise<{
+    address: string;
+  }> {
+    return this.request('/address', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listTransactions(body: { skip_sync: boolean }): Promise<{}> {
+    return this.request('/listtransactions', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
+    return this.request('/listunspents', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async createutxos(body: {
     up_to: boolean;
     num: number;
@@ -178,6 +218,15 @@ export class RLNNodeApiServices {
     filter_asset_schemas: string[];
   }): Promise<{ bytes_hex: string }> {
     return this.request('/listassets', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listtransfers(body: {
+    asset_id: string;
+  }): Promise<{ bytes_hex: string }> {
+    return this.request('/listtransfers', {
       method: 'POST',
       body: JSON.stringify(body),
     });
