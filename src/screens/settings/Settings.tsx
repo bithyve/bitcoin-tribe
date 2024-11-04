@@ -189,7 +189,13 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
-    // Add more menu items as needed
+    {
+      id: 7,
+      title: 'Channel Management',
+      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
   ];
 
   return (

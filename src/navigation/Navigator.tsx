@@ -57,6 +57,8 @@ import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConn
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
 import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
 import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondition';
+import RgbChannels from 'src/screens/channels/RgbChannels';
+import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -248,6 +250,14 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.VIEWNODEINFO}
           component={ViewNodeInfo}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RGBCHANNELS}
+          component={RgbChannels}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.OPENRGBCHANNEL}
+          component={OpenRgbChannel}
         />
       </Stack.Navigator>
     </RealmProvider>

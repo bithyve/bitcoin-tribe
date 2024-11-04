@@ -230,4 +230,28 @@ export class RLNNodeApiServices {
       body: JSON.stringify(body),
     });
   }
+
+  public async getNode(id: string): Promise<{ bytes_hex: string }> {
+    return this.request(`/api/nodes/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  public async openchannel(body: {
+    peer_pubkey_and_opt_addr: string;
+    capacity_sat: number;
+    push_msat: number;
+    asset_amount: number;
+    asset_id: string;
+    public: boolean;
+    with_anchors: boolean;
+    fee_base_msat: number;
+    fee_proportional_millionths: number;
+    temporary_channel_id: string;
+  }): Promise<{ temporary_channel_id: string }> {
+    return this.request('/openchannel', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
 }
