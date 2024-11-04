@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +21,7 @@ function SelectWallet() {
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding, assets } = translations;
   const styles = getStyles(theme);
+  const [supportedMode, SetSupportedMode] = useState(false);
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
@@ -29,33 +30,39 @@ function SelectWallet() {
         <SelectWalletTypeOption
           title={onBoarding.supported}
           icon={<SupportIcon />}
-          disabled={true}
+          onPress={() => SetSupportedMode(!supportedMode)}
         />
       </View>
-      <View style={styles.termConditionWrapper}>
-        <View style={styles.checkIconWrapper}>
-          <CheckIcon />
+      {supportedMode && (
+        <View>
+          <View style={styles.termConditionWrapper}>
+            <View style={styles.checkIconWrapper}>
+              <CheckIcon />
+            </View>
+            <View style={styles.termConditionWrapper1}>
+              <Text style={styles.termConditionText}>
+                {onBoarding.supportTermAndConditionTitle}&nbsp;
+                <Text
+                  style={styles.readMoreText}
+                  onPress={() =>
+                    navigation.navigate(
+                      NavigationRoutes.SUPPORTTERMANDCONDITION,
+                    )
+                  }>
+                  {onBoarding.readMore}
+                </Text>
+              </Text>
+            </View>
+          </View>
+          <View>
+            <Buttons
+              primaryTitle={common.proceed}
+              primaryOnPress={() => SetSupportedMode(false)}
+              width={wp(120)}
+            />
+          </View>
         </View>
-        <View style={styles.termConditionWrapper1}>
-          <Text style={styles.termConditionText}>
-            {onBoarding.supportTermAndConditionTitle}&nbsp;
-            <Text
-              style={styles.readMoreText}
-              onPress={() =>
-                navigation.navigate(NavigationRoutes.SUPPORTTERMANDCONDITION)
-              }>
-              {onBoarding.readMore}
-            </Text>
-          </Text>
-        </View>
-      </View>
-      <View>
-        <Buttons
-          primaryTitle={common.proceed}
-          primaryOnPress={() => console.log('press')}
-          width={wp(120)}
-        />
-      </View>
+      )}
     </ScreenContainer>
   );
 }
