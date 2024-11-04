@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,8 @@ import TermAndConditionView from './components/TermAndConditionView';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
+import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
+import AppTouchable from 'src/components/AppTouchable';
 
 function SupportTermAndCondition() {
   const navigation = useNavigation();
@@ -21,6 +23,7 @@ function SupportTermAndCondition() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const styles = getStyles(theme);
+  const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.termAndConditionTitle} />
@@ -62,9 +65,11 @@ function SupportTermAndCondition() {
           subTitle={onBoarding.termAndConditionSubTitle5}
         />
         <View style={styles.termConditionWrapper}>
-          <View style={styles.checkIconWrapper}>
-            <CheckIcon />
-          </View>
+          <AppTouchable
+            onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}
+            style={styles.checkIconWrapper}>
+            {checkedTermsCondition ? <CheckIcon /> : <UnCheckIcon />}
+          </AppTouchable>
           <View style={styles.termConditionWrapper1}>
             <Text style={styles.termConditionText}>
               {onBoarding.supportTermAndConditionTitle}&nbsp;
@@ -83,6 +88,7 @@ function SupportTermAndCondition() {
             primaryTitle={common.proceed}
             primaryOnPress={() => console.log('press')}
             width={wp(120)}
+            disabled={!checkedTermsCondition}
           />
         </View>
       </ScrollView>

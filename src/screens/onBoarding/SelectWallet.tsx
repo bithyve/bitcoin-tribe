@@ -12,8 +12,10 @@ import SelectWalletTypeOption from './components/SelectWalletTypeOption';
 import SupportIcon from 'src/assets/images/supportIcon.svg';
 import { hp, wp } from 'src/constants/responsive';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
+import AppTouchable from 'src/components/AppTouchable';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -22,6 +24,7 @@ function SelectWallet() {
   const { common, onBoarding, assets } = translations;
   const styles = getStyles(theme);
   const [supportedMode, SetSupportedMode] = useState(false);
+  const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
@@ -39,9 +42,11 @@ function SelectWallet() {
       {supportedMode && (
         <View>
           <View style={styles.termConditionWrapper}>
-            <View style={styles.checkIconWrapper}>
-              <CheckIcon />
-            </View>
+            <AppTouchable
+              style={styles.checkIconWrapper}
+              onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}>
+              {checkedTermsCondition ? <CheckIcon /> : <UnCheckIcon />}
+            </AppTouchable>
             <View style={styles.termConditionWrapper1}>
               <Text style={styles.termConditionText}>
                 {onBoarding.supportTermAndConditionTitle}&nbsp;
@@ -62,6 +67,7 @@ function SelectWallet() {
               primaryTitle={common.proceed}
               primaryOnPress={() => SetSupportedMode(false)}
               width={wp(120)}
+              disabled={!checkedTermsCondition}
             />
           </View>
         </View>
@@ -75,7 +81,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     bodyWrapper: {
-      height: '68%',
+      height: '67%',
     },
     textStyle: {
       color: theme.colors.headingColor,
