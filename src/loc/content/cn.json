@@ -91,7 +91,17 @@
     "supportTermAndConditionTitle": "勾选此框，即表示您同意条款和条件。",
     "readMore": "阅读更多",
     "termAndConditionTitle": "条款和条件",
-    "termAndConditionBrief": "提供连接外部节点的选项；然而，此功能的支持由外部服务提供商管理。请查看以下条款："
+    "termAndConditionBrief": "提供连接外部节点的选项；然而，此功能的支持由外部服务提供商管理。请查看以下条款：",
+    "termAndConditionTitle1": "Tribe RGB的角色范围",
+    "termAndConditionSubTitle1": "Tribe RGB提供连接外部节点的功能，但不支持或负责连接过程或相关问题。",
+    "termAndConditionTitle2": "外部支持",
+    "termAndConditionSubTitle2": "设置或故障排除时，请直接联系外部提供商，因为他们管理所有外部节点连接的支持。",
+    "termAndConditionTitle3": "责任免责声明",
+    "termAndConditionSubTitle3": "Tribe RGB不对连接外部节点导致的任何数据丢失、配置错误或其他后果承担责任。使用此选项需自行决定。",
+    "termAndConditionTitle4": "更新和可用性",
+    "termAndConditionSubTitle4": "Tribe RGB可能会在没有通知的情况下更新此功能。请与外部提供商确认支持可用性或条款的任何更改。",
+    "termAndConditionTitle5": "法律管辖",
+    "termAndConditionSubTitle5": "这些条款受适用司法管辖区的法律管辖。"
   },
   "home": {
     "addAssets": "添加资产",

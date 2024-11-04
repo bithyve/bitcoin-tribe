@@ -38,28 +38,28 @@ function SupportTermAndCondition() {
         </GradientView>
         <TermAndConditionView
           index={1}
-          title="Scope of Tribe RGB's Role"
-          subTitle="Tribe RGB offers a feature to connect external nodes but does not provide support or assume responsibility for the connection process or related issues."
+          title={onBoarding.termAndConditionTitle1}
+          subTitle={onBoarding.termAndConditionSubTitle1}
         />
         <TermAndConditionView
           index={2}
-          title="External Support"
-          subTitle="For assistance with setup or troubleshooting, please contact the external provider directly, as they manage all support for external node connectivity."
+          title={onBoarding.termAndConditionTitle2}
+          subTitle={onBoarding.termAndConditionSubTitle2}
         />
         <TermAndConditionView
           index={3}
-          title="Liability Disclaimer"
-          subTitle="Tribe RGB is not liable for any data loss, misconfigurations, or other consequences resulting from connecting to an external node. Use this option at your discretion."
+          title={onBoarding.termAndConditionTitle3}
+          subTitle={onBoarding.termAndConditionSubTitle3}
         />
         <TermAndConditionView
           index={4}
-          title="Updates and Availability"
-          subTitle="Tribe RGB may update this feature without notice. Any changes to support availability or terms should be confirmed with the external provider."
+          title={onBoarding.termAndConditionTitle4}
+          subTitle={onBoarding.termAndConditionSubTitle4}
         />
         <TermAndConditionView
           index={5}
-          title="Governing Law"
-          subTitle="These terms are governed by the applicable jurisdiction’s laws"
+          title={onBoarding.termAndConditionTitle5}
+          subTitle={onBoarding.termAndConditionSubTitle5}
         />
         <View style={styles.termConditionWrapper}>
           <View style={styles.checkIconWrapper}>

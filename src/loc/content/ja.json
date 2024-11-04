@@ -91,7 +91,17 @@
     "supportTermAndConditionTitle": "このボックスにチェックを入れることで、利用規約に同意したことになります。",
     "readMore": "詳しく読む",
     "termAndConditionTitle": "利用規約",
-    "termAndConditionBrief": "Tribe RGB は外部ノードを接続するオプションを提供しますが、この機能のサポートは外部サービスプロバイダーによって管理されます。以下の条件をご確認ください。"
+    "termAndConditionBrief": "Tribe RGB は外部ノードを接続するオプションを提供しますが、この機能のサポートは外部サービスプロバイダーによって管理されます。以下の条件をご確認ください。",
+    "termAndConditionTitle1": "Tribe RGBの役割の範囲",
+    "termAndConditionSubTitle1": "Tribe RGBは外部ノードに接続する機能を提供しますが、接続プロセスや関連する問題についてのサポートや責任は負いません。",
+    "termAndConditionTitle2": "外部サポート",
+    "termAndConditionSubTitle2": "セットアップやトラブルシューティングに関しては、外部のプロバイダーに直接お問い合わせください。",
+    "termAndConditionTitle3": "責任の免責事項",
+    "termAndConditionSubTitle3": "Tribe RGBは、外部ノードに接続した結果として生じるデータ損失、設定ミス、またはその他の影響について責任を負いません。自己責任でご利用ください。",
+    "termAndConditionTitle4": "更新と利用可能性",
+    "termAndConditionSubTitle4": "Tribe RGBは予告なくこの機能を更新する場合があります。サポートの可用性または利用規約の変更については、外部プロバイダーに確認してください。",
+    "termAndConditionTitle5": "準拠法",
+    "termAndConditionSubTitle5": "これらの条項は、適用される管轄の法律に準拠します。"
   },
   "home": {
     "addAssets": "アセットを追加",
