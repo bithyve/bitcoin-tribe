@@ -87,7 +87,11 @@
     "authSubTitle": "请进行身份认证并确保。",
     "enterUsername": "输入用户名",
     "enterPassword": "输入密码",
-    "enterBearerToken": "输入承载令牌"
+    "enterBearerToken": "输入承载令牌",
+    "supportTermAndConditionTitle": "勾选此框，即表示您同意条款和条件。",
+    "readMore": "阅读更多",
+    "termAndConditionTitle": "条款和条件",
+    "termAndConditionBrief": "提供连接外部节点的选项；然而，此功能的支持由外部服务提供商管理。请查看以下条款："
   },
   "home": {
     "addAssets": "添加资产",

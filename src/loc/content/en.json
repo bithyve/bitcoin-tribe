@@ -87,7 +87,11 @@
     "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
     "enterUsername": "Enter Username",
     "enterPassword": "Enter Password",
-    "enterBearerToken": "Enter Bearer Token"
+    "enterBearerToken": "Enter Bearer Token",
+    "supportTermAndConditionTitle": "By checking this box, you agree to the terms and conditions.",
+    "readMore": "Read More",
+    "termAndConditionTitle": "Terms and Conditions",
+    "termAndConditionBrief": "Tribe RGB provides an option to connect external nodes; however, support for this feature is managed by an external service provider. Please review the following terms:"
   },
   "home": {
     "addAssets": "Add Assets",

@@ -87,7 +87,11 @@
     "authSubTitle": "Para continuar, autentícate y asegúrate de que.",
     "enterUsername": "Introduce el nombre de usuario",
     "enterPassword": "Introduce la contraseña",
-    "enterBearerToken": "Introduce el Bearer Token"
+    "enterBearerToken": "Introduce el Bearer Token",
+    "supportTermAndConditionTitle": "Al marcar esta casilla, aceptas los términos y condiciones.",
+    "readMore": "Leer más",
+    "termAndConditionTitle": "Términos y Condiciones",
+    "termAndConditionBrief": "Tribe RGB ofrece una opción para conectar nodos externos; sin embargo, el soporte para esta función es gestionado por un proveedor de servicios externo. Por favor, revise los siguientes términos:"
   },
   "home": {
     "addAssets": "Agregar activos",

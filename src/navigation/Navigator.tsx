@@ -56,6 +56,7 @@ import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
 import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
+import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondition';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -90,6 +91,10 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.RGBLIGHTNINGNODECONNECT}
         component={RgbLightningNodeConnect}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORTTERMANDCONDITION}
+        component={SupportTermAndCondition}
       />
     </Stack.Navigator>
   );

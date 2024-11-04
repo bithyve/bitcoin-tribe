@@ -87,7 +87,11 @@
     "authSubTitle": "続行するには、認証を行い、確認してください。",
     "enterUsername": "ユーザー名を入力してください",
     "enterPassword": " パスワードを入力してください",
-    "enterBearerToken": "ベアラートークンを入力してください"
+    "enterBearerToken": "ベアラートークンを入力してください",
+    "supportTermAndConditionTitle": "このボックスにチェックを入れることで、利用規約に同意したことになります。",
+    "readMore": "詳しく読む",
+    "termAndConditionTitle": "利用規約",
+    "termAndConditionBrief": "Tribe RGB は外部ノードを接続するオプションを提供しますが、この機能のサポートは外部サービスプロバイダーによって管理されます。以下の条件をご確認ください。"
   },
   "home": {
     "addAssets": "アセットを追加",
