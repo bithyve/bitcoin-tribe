@@ -20,7 +20,7 @@ Before getting started, make sure you have a proper [React Native development en
 
 2. Navigate to the project directory:
    ```shell
-   cd tribe
+   cd bitcoin-tribe
    ```
 3. Install the project dependencies using Yarn:
    The prepare scripts will automatically install pods and nodify crypto-related packages for react-native
