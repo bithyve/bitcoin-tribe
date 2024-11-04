@@ -31,6 +31,9 @@ function SelectWallet() {
           title={onBoarding.supported}
           icon={<SupportIcon />}
           onPress={() => SetSupportedMode(!supportedMode)}
+          borderColor={
+            supportedMode ? theme.colors.accent1 : theme.colors.borderColor
+          }
         />
       </View>
       {supportedMode && (
