@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Share from 'react-native-share';
 
 import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
@@ -34,6 +35,18 @@ const AssetIDContainer = ({ assetId }: AssetIDContainerProps) => {
     Toast(common.assetIDCopySuccessfully);
   };
 
+  const onShare = async () => {
+    try {
+      const shareOptions = {
+        message: assetId, // Only share the asset ID
+      };
+
+      await Share.open(shareOptions);
+    } catch (error) {
+      console.log('Error sharing asset ID:', error);
+    }
+  };
+
   return (
     <View>
       <AppText variant="body2" style={styles.labelText}>
@@ -51,7 +64,7 @@ const AssetIDContainer = ({ assetId }: AssetIDContainerProps) => {
             {assetId}
           </AppText>
         </GradientView>
-        <AppTouchable style={styles.shareIconWrapper}>
+        <AppTouchable style={styles.shareIconWrapper} onPress={onShare}>
           {!isThemeDark ? <IconShare /> : <IconShareLight />}
         </AppTouchable>
         <AppTouchable
