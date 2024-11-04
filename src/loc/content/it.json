@@ -38,7 +38,8 @@
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
     "backupNow": "Esegui backup ora",
     "request": "Richiesta",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!"
   },
   "onBoarding": {
     "welcome": "Benvenuto",

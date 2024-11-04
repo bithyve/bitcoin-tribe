@@ -39,7 +39,8 @@
     "rgbNodeOffline": "RGB node is locked/offline.",
     "backupNow": "Backup Now",
     "request": "Request",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!"
   },
   "onBoarding": {
     "welcome": "Welcome",

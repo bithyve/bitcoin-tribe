@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGB वॉलेट ऑफ़लाइन है।",
     "backupNow": "अभी बैकअप करें",
     "request": "अनुरोध",
-    "ok": "ठीक है"
+    "ok": "ठीक है",
+    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!"
   },
   "onBoarding": {
     "welcome": "स्वागत है",

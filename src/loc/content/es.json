@@ -38,7 +38,8 @@
     "rgbWalletOffline": "La billetera RGB está desconectada.",
     "backupNow": "Respaldar ahora",
     "request": "Solicitar",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "ID del activo copiado con éxito!"
   },
   "onBoarding": {
     "welcome": "Bienvenido",

@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGB钱包离线。",
     "backupNow": "立即备份",
     "request": "请求",
-    "ok": "确定"
+    "ok": "确定",
+    "assetIDCopySuccessfully": "资产 ID 复制成功！"
   },
   "onBoarding": {
     "welcome": "欢迎",

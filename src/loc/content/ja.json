@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
-    "ok": "オーケー"
+    "ok": "オーケー",
+    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！"
   },
   "onBoarding": {
     "welcome": "ようこそ",
