@@ -1033,4 +1033,51 @@ export class ApiHandler {
       throw new Error('Failed to connect to node');
     }
   }
+
+  static async openChannel({
+    peerPubkeyAndOptAddr,
+    capacitySat,
+    pushMsat,
+    assetAmount,
+    assetId,
+    isPublic,
+    withAnchors,
+    feeBaseMsat,
+    feeProportionalMillionths,
+    temporaryChannelId,
+  }: {
+    peerPubkeyAndOptAddr: string;
+    capacitySat: number;
+    pushMsat: number;
+    assetAmount: number;
+    assetId: string;
+    isPublic: boolean;
+    withAnchors: boolean;
+    feeBaseMsat: number;
+    feeProportionalMillionths: number;
+    temporaryChannelId: string;
+  }) {
+    try {
+      const response = await ApiHandler.api.openchannel({
+        asset_amount: assetAmount,
+        asset_id: assetId,
+        capacity_sat: capacitySat,
+        fee_base_msat: feeBaseMsat,
+        fee_proportional_millionths: feeProportionalMillionths,
+        peer_pubkey_and_opt_addr: peerPubkeyAndOptAddr,
+        public: isPublic,
+        push_msat: pushMsat,
+        temporary_channel_id: temporaryChannelId,
+        with_anchors: withAnchors,
+      });
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to connect to node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to connect to node');
+    }
+  }
 }
