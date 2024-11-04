@@ -46,17 +46,12 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Collectible,
+  NodeInfo,
   RgbNodeConnectParams,
   RGBWallet,
 } from 'src/models/interfaces/RGBWallet';
 import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
-import {
-  Configuration,
-  NodeInfoResponse,
-  OnChainApi,
-  OtherApi,
-} from '../rgbnode';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 
@@ -65,17 +60,12 @@ var RNFS = require('react-native-fs');
 export class ApiHandler {
   private static app: RGBWallet;
   private static appType: AppType;
-  private static config;
   private static api: RLNNodeApiServices;
   constructor(app: RGBWallet, appType: AppType) {
     if (!ApiHandler.app) {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       if (appType === AppType.NODE_CONNECT) {
-        ApiHandler.config = new Configuration({
-          basePath: app.nodeUrl,
-          accessToken: app.nodeAuthentication,
-        });
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -109,7 +99,7 @@ export class ApiHandler {
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
-    rgbNodeInfo?: NodeInfoResponse;
+    rgbNodeInfo?: NodeInfo;
   }) {
     Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
@@ -292,7 +282,12 @@ export class ApiHandler {
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType);
     if (app.appType === AppType.NODE_CONNECT) {
-      return { key, isWalletOnline: true };
+      const nodeInfo = await ApiHandler.api.nodeinfo();
+      if (nodeInfo.pubkey) {
+        return { key, isWalletOnline: true };
+      } else {
+        return { key, isWalletOnline: false };
+      }
     } else {
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
@@ -567,7 +562,7 @@ export class ApiHandler {
         const utxos = await RGBServices.createUtxos(
           averageTxFee.high.feePerByte,
           ApiHandler.appType,
-          ApiHandler.config,
+          ApiHandler.api,
         );
         if (utxos.created) {
           return utxos.created;
@@ -588,7 +583,6 @@ export class ApiHandler {
       );
       let response = await RGBServices.receiveAsset(
         ApiHandler.appType,
-        ApiHandler.config,
         ApiHandler.api,
         assetId,
       );
@@ -637,7 +631,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('refreshRgbWallet', error);
     }
   }
 
@@ -708,7 +702,7 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetTransactions(
         assetId,
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -809,7 +803,7 @@ export class ApiHandler {
     try {
       const response = await RGBServices.getUnspents(
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
@@ -946,29 +940,28 @@ export class ApiHandler {
 
   static async checkRgbNodeConnection(params: RgbNodeConnectParams) {
     try {
-      const response = await new OtherApi(
-        new Configuration({
-          basePath: params.nodeUrl,
-          accessToken: params.authentication,
-        }),
-      ).nodeinfoGet();
-      if (response.status === 200) {
-        console.log(response.data);
-        return response.data;
+      const response = await RLNNodeApiServices.checkNodeConnection(
+        params.nodeUrl,
+        params.authentication,
+      );
+      if (response.error) {
+        throw new Error(response.error);
+      } else if (response) {
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
       console.log(error);
-      throw new Error('Failed to connect to node');
+      throw new Error(error);
     }
   }
 
   static async getNodeOnchainBtcAddress() {
     try {
-      const response = await new OnChainApi(ApiHandler.config).addressPost();
-      if (response.status === 200) {
-        return response.data;
+      const response = await ApiHandler.api.getAddress({});
+      if (response) {
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
@@ -980,12 +973,12 @@ export class ApiHandler {
 
   static async getNodeOnchainBtcTransactions() {
     try {
-      const response = await new OnChainApi(
-        ApiHandler.config,
-      ).listtransactionsPost({ skip_sync: false });
-      if (response.status === 200) {
-        console.log(response.data);
-        return response.data;
+      const response = await ApiHandler.api.listTransactions({
+        skip_sync: false,
+      });
+      if (response) {
+        console.log(response);
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
