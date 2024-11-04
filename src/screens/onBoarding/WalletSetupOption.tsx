@@ -56,7 +56,7 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(25),
+      marginTop: hp(35),
       marginBottom: hp(20),
     },
   });
