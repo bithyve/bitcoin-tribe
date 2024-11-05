@@ -244,6 +244,12 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async listchannels(): Promise<{}> {
+    return this.request('/listchannels', {
+      method: 'GET',
+    });
+  }
+
   public async openchannel(body: {
     peer_pubkey_and_opt_addr: string;
     capacity_sat: number;

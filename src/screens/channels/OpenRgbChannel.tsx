@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -23,9 +25,19 @@ const OpenRgbChannel = () => {
   const [tmpChannelId, setTmpChannelId] = useState('');
   const openChannelMutation = useMutation(ApiHandler.openChannel);
 
+  useEffect(() => {
+    if (openChannelMutation.isSuccess) {
+      navigation.goBack();
+    } else if (openChannelMutation.isError) {
+      Toast(openChannelMutation.error, true);
+    }
+  }, [openChannelMutation.isError, openChannelMutation.isSuccess]);
+
   return (
     <ScreenContainer>
       <AppHeader title={'Open Channel'} />
+
+      <ModalLoading visible={openChannelMutation.isLoading} />
 
       <TextField
         value={pubkeyAddress}
@@ -73,12 +85,12 @@ const OpenRgbChannel = () => {
         keyboardType="numeric"
       />
 
-      <TextField
+      {/* <TextField
         value={tmpChannelId}
         onChangeText={text => setTmpChannelId(text)}
         placeholder={'Temporary Channel ID'}
         style={styles.input}
-      />
+      /> */}
 
       <View style={styles.buttonWrapper}>
         <Buttons

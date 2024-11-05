@@ -54,6 +54,7 @@ import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
+import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 
 var RNFS = require('react-native-fs');
 
@@ -1077,6 +1078,20 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async getChannels() {
+    try {
+      const response = await ApiHandler.api.listchannels();
+      if (response && response.channels) {
+        return snakeCaseToCamelCaseCase(response).channels;
+      } else {
+        return snakeCaseToCamelCaseCase(response);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   }
 
