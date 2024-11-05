@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 
 import AppHeader from 'src/components/AppHeader';
@@ -21,6 +21,8 @@ import CardBox from 'src/components/CardBox';
 import NodeInfoFooter from './NodeInfoFooter';
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -32,6 +34,7 @@ const ViewNodeInfo = () => {
   const { mutate, isLoading, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
+  const syncMutation = useMutation(ApiHandler.syncNode);
   const [nodeStatus, setSetNodeStatus] = useState('run');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -40,6 +43,15 @@ const ViewNodeInfo = () => {
   useEffect(() => {
     mutate();
   }, []);
+
+  useEffect(() => {
+    if (syncMutation.isSuccess) {
+      Toast('Node synced', false);
+      syncMutation.reset();
+    } else if (syncMutation.isError) {
+      Toast(syncMutation.error, true);
+    }
+  }, [syncMutation.isSuccess, syncMutation, syncMutation.isError]);
 
   useEffect(() => {
     if (data) {
@@ -56,6 +68,7 @@ const ViewNodeInfo = () => {
         subTitle={''}
         enableBack={true}
       />
+      <ModalLoading visible={syncMutation.isLoading} />
       {isLoading ? (
         <View style={styles.loadingWrapper}>
           <LottieView
@@ -146,10 +159,13 @@ const ViewNodeInfo = () => {
           </View>
         </ScrollView>
       )}
-      <NodeInfoFooter
-        nodeStatus={nodeStatus}
-        setNodeStatus={text => setSetNodeStatus(text)}
-      />
+      {!isLoading && (
+        <NodeInfoFooter
+          nodeStatus={nodeStatus}
+          setNodeStatus={text => setSetNodeStatus(text)}
+          onPressRefresh={() => syncMutation.mutate()}
+        />
+      )}
     </ScreenContainer>
   );
 };

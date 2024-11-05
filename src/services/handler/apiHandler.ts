@@ -1009,7 +1009,6 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.nodeinfo();
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
@@ -1078,6 +1077,20 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async syncNode() {
+    try {
+      const response = await ApiHandler.api.sync();
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to sync node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   }
 }

@@ -22,6 +22,7 @@ import { Keys } from 'src/storage';
 type nodeInfoFooterProps = {
   nodeStatus: string;
   setNodeStatus: (text: string) => void;
+  onPressRefresh: () => void;
 };
 
 function NodeInfoFooter(props: nodeInfoFooterProps) {
@@ -31,7 +32,7 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={styles.container}>
-      <AppTouchable onPress={() => setNodeStatus('refresh')}>
+      <AppTouchable onPress={props.onPressRefresh}>
         {nodeStatus === 'refresh' ? (
           !isThemeDark ? (
             <IconRefreshActive />
