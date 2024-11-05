@@ -615,7 +615,7 @@ export class ApiHandler {
       }
       if (assets.cfa) {
         dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
-        if (Platform.OS === 'ios') {
+        if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
             const ext = element.media.mime.split('/')[1];
