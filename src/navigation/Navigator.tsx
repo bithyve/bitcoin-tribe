@@ -56,6 +56,7 @@ import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
 import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
+import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondition';
 import RgbChannels from 'src/screens/channels/RgbChannels';
 import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 
@@ -92,6 +93,10 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.RGBLIGHTNINGNODECONNECT}
         component={RgbLightningNodeConnect}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORTTERMANDCONDITION}
+        component={SupportTermAndCondition}
       />
     </Stack.Navigator>
   );

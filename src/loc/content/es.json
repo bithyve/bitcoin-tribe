@@ -38,7 +38,8 @@
     "rgbWalletOffline": "La billetera RGB está desconectada.",
     "backupNow": "Respaldar ahora",
     "request": "Solicitar",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "ID del activo copiado con éxito!"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -87,7 +88,21 @@
     "authSubTitle": "Para continuar, autentícate y asegúrate de que.",
     "enterUsername": "Introduce el nombre de usuario",
     "enterPassword": "Introduce la contraseña",
-    "enterBearerToken": "Introduce el Bearer Token"
+    "enterBearerToken": "Introduce el Bearer Token",
+    "supportTermAndConditionTitle": "Al marcar esta casilla, aceptas los términos y condiciones.",
+    "readMore": "Leer más",
+    "termAndConditionTitle": "Términos y Condiciones",
+    "termAndConditionBrief": "Tribe RGB ofrece una opción para conectar nodos externos; sin embargo, el soporte para esta función es gestionado por un proveedor de servicios externo. Por favor, revise los siguientes términos:",
+    "termAndConditionTitle1": "Alcance del Rol de Tribe RGB",
+    "termAndConditionSubTitle1": "Tribe RGB ofrece la función de conectar nodos externos, pero no proporciona soporte ni asume responsabilidad por el proceso de conexión o problemas relacionados.",
+    "termAndConditionTitle2": "Soporte Externo",
+    "termAndConditionSubTitle2": "Para asistencia en la configuración o resolución de problemas, comuníquese directamente con el proveedor externo.",
+    "termAndConditionTitle3": "Descargo de Responsabilidad",
+    "termAndConditionSubTitle3": "Tribe RGB no se responsabiliza de la pérdida de datos, errores de configuración u otras consecuencias derivadas de la conexión a un nodo externo. Utilice esta opción bajo su propio criterio.",
+    "termAndConditionTitle4": "Actualizaciones y Disponibilidad",
+    "termAndConditionSubTitle4": "Tribe RGB puede actualizar esta función sin previo aviso. Cualquier cambio en la disponibilidad de soporte o términos debe confirmarse con el proveedor externo.",
+    "termAndConditionTitle5": "Ley Aplicable",
+    "termAndConditionSubTitle5": "Estos términos están regidos por las leyes de la jurisdicción aplicable."
   },
   "home": {
     "addAssets": "Agregar activos",

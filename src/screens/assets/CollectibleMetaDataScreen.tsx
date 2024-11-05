@@ -1,17 +1,18 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { useObject, useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute } from '@react-navigation/native';
-import { useObject } from '@realm/react';
-import { useMutation } from 'react-query';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import { Item } from './CoinsMetaDataScreen';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
 import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -19,8 +20,34 @@ import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
 import copyImageToDestination from 'src/utils/downloadImage';
 import Toast from 'src/components/Toast';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import GradientView from 'src/components/GradientView';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
+import AssetIDContainer from './components/AssetIDContainer';
+
+export const Item = ({ title, value }) => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  return (
+    <View style={styles.itemWrapper}>
+      <AppText variant="body2" style={styles.labelText}>
+        {title}
+      </AppText>
+      <GradientView
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}
+        style={styles.assetNameWrapper}>
+        <AppText variant="body2" style={styles.valueText}>
+          {value}
+        </AppText>
+      </GradientView>
+    </View>
+  );
+};
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
@@ -30,6 +57,7 @@ const CoinsMetaDataScreen = () => {
   const { assets } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
 
   useEffect(() => {
@@ -77,23 +105,31 @@ const CoinsMetaDataScreen = () => {
           <ScrollView
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
-            <AppText variant="heading2" style={styles.labelText}>
-              {Platform.OS === 'ios'
-                ? collectible && collectible.name
-                : collectible && collectible.details}
-            </AppText>
-            <AppText variant="body1" style={styles.detailText}>
-              {Platform.OS === 'ios'
-                ? collectible && collectible.details
-                : collectible && collectible.name}
-            </AppText>
-            <Item title={assets.assetId} value={assetId} />
+            <Item
+              title={assets.name}
+              value={
+                Platform.OS === 'ios'
+                  ? collectible && collectible.name
+                  : collectible && collectible.details
+              }
+            />
+            <Item
+              title={assets.details}
+              value={
+                Platform.OS === 'ios'
+                  ? collectible && collectible.details
+                  : collectible && collectible.name
+              }
+            />
+            <AssetIDContainer assetId={assetId} />
             <Item
               title={assets.issuedSupply}
               value={
-                collectible &&
-                collectible.metaData &&
-                collectible.metaData.issuedSupply
+                app.appType === AppType.NODE_CONNECT
+                  ? collectible.issuedSupply
+                  : collectible &&
+                    collectible.metaData &&
+                    collectible.metaData.issuedSupply
               }
             />
           </ScrollView>
@@ -113,9 +149,21 @@ const getStyles = (theme: AppTheme) =>
     headerWrapper: {
       paddingHorizontal: 20,
     },
-    labelText: {
-      color: theme.colors.headingColor,
+    itemWrapper: {
       marginVertical: hp(10),
+    },
+    labelText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(5),
+    },
+    valueText: {
+      color: theme.colors.headingColor,
+    },
+    assetNameWrapper: {
+      padding: 10,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
     },
     detailText: {
       marginBottom: hp(10),
@@ -135,9 +183,6 @@ const getStyles = (theme: AppTheme) =>
     scrollingContainer: {
       height: '60%',
       padding: hp(16),
-      backgroundColor: theme.colors.cardGradient3,
-      marginHorizontal: hp(20),
-      borderRadius: 20,
     },
     imageStyle: {
       width: '100%',

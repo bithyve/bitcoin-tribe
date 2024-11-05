@@ -38,7 +38,8 @@
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
     "backupNow": "Esegui backup ora",
     "request": "Richiesta",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -87,7 +88,21 @@
     "authSubTitle": "Per procedere, autentica te stesso e assicurati che.",
     "enterUsername": "Inserisci il nome utente",
     "enterPassword": "Inserisci la password",
-    "enterBearerToken": "Inserisci il Bearer Token"
+    "enterBearerToken": "Inserisci il Bearer Token",
+    "supportTermAndConditionTitle": "Selezionando questa casella, accetti i termini e condizioni.",
+    "readMore": "Leggi di più",
+    "termAndConditionTitle": "Termini e Condizioni",
+    "termAndConditionBrief": "Tribe RGB fornisce un'opzione per connettere nodi esterni; tuttavia, il supporto per questa funzione è gestito da un fornitore di servizi esterno. Si prega di esaminare i seguenti termini:",
+    "termAndConditionTitle1": "Ambito del Ruolo di Tribe RGB",
+    "termAndConditionSubTitle1": "Tribe RGB offre una funzione per connettere nodi esterni, ma non fornisce supporto né assume responsabilità per il processo di connessione o problemi correlati.",
+    "termAndConditionTitle2": "Supporto Esterno",
+    "termAndConditionSubTitle2": "Per assistenza nell'installazione o nella risoluzione dei problemi, contattare direttamente il fornitore esterno, che gestisce il supporto per la connettività del nodo esterno.",
+    "termAndConditionTitle3": "Esclusione di Responsabilità",
+    "termAndConditionSubTitle3": "Tribe RGB non è responsabile per la perdita di dati, errori di configurazione o altre conseguenze derivanti dalla connessione a un nodo esterno. Usa questa opzione a tua discrezione.",
+    "termAndConditionTitle4": "Aggiornamenti e Disponibilità",
+    "termAndConditionSubTitle4": "Tribe RGB può aggiornare questa funzione senza preavviso. Qualsiasi modifica alla disponibilità o alle condizioni di supporto va confermata con il fornitore esterno.",
+    "termAndConditionTitle5": "Legge Applicabile",
+    "termAndConditionSubTitle5": "Questi termini sono regolati dalle leggi della giurisdizione applicabile."
   },
   "home": {
     "addAssets": "Aggiungi risorse",

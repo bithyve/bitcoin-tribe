@@ -15,23 +15,28 @@ import { RealmSchema } from 'src/storage/enum';
 import moment from 'moment';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalLoading from 'src/components/ModalLoading';
+import GradientView from 'src/components/GradientView';
+import AssetIDContainer from './components/AssetIDContainer';
 
-export const Item = ({ title, value }) => {
+export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(() => getStyles(theme, width), [theme, width]);
   return (
     <View style={styles.contentWrapper}>
-      <AppText
-        variant="body1"
-        style={[styles.assetDetailsText, styles.assetDetailsText2]}>
+      <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
-      <AppText
-        variant="body1"
-        selectable
-        style={[styles.assetValueText, styles.assetDetailsText2]}>
-        {value}
-      </AppText>
+      <GradientView
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}
+        style={styles.assetNameWrapper}>
+        <AppText variant="body2" style={styles.valueText}>
+          {value}
+        </AppText>
+      </GradientView>
     </View>
   );
 };
@@ -62,33 +67,44 @@ const CoinsMetaDataScreen = () => {
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          <Item title={assets.name} value={coin.name} />
-          <Item
-            title={assets.ticker}
-            value={coin.metaData && coin.metaData.ticker}
-          />
-          <Item title={assets.assetId} value={assetId} />
-          <Item
-            title={assets.schema}
-            value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
-          />
-          <Item
-            title={assets.iFace}
-            value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
-          />
-          <Item
-            title={assets.issuedSupply}
-            value={coin.metaData && coin.metaData.issuedSupply}
-          />
+          <View style={styles.rowWrapper}>
+            <Item title={assets.name} value={coin.name} width={'45%'} />
+            <Item
+              title={assets.ticker}
+              value={coin.metaData && coin.metaData.ticker}
+              width={'45%'}
+            />
+          </View>
+          <AssetIDContainer assetId={assetId} />
+          <View style={styles.rowWrapper}>
+            <Item
+              title={assets.schema}
+              value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
+              width={'45%'}
+            />
+            <Item
+              title={assets.iFace}
+              value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
+              width={'45%'}
+            />
+          </View>
+          <View style={styles.rowWrapper}>
+            <Item
+              title={assets.issuedSupply}
+              value={coin.metaData && coin.metaData.issuedSupply}
+              width={'45%'}
+            />
+            <Item
+              title={assets.precision}
+              value={coin.metaData && coin.metaData.precision}
+              width={'45%'}
+            />
+          </View>
           <Item
             title={assets.issuedOn}
             value={moment
               .unix(coin.metaData && coin.metaData.timestamp)
-              .format('DD MMM YY • hh:mm a')}
-          />
-          <Item
-            title={assets.precision}
-            value={coin.metaData && coin.metaData.precision}
+              .format('DD MMM YY  hh:mm A')}
           />
         </ScrollView>
       )}
@@ -96,11 +112,17 @@ const CoinsMetaDataScreen = () => {
   );
 };
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, width) =>
   StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'column',
+    },
+    assetNameWrapper: {
+      padding: 12,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
     },
     assetDetailsText: {
       color: theme.colors.headingColor,
@@ -114,9 +136,8 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'flex-start',
     },
     contentWrapper: {
-      flexDirection: 'row',
-      width: '100%',
-      marginVertical: hp(8),
+      marginVertical: hp(10),
+      width: width,
     },
     assetInfoStyle: {
       marginVertical: hp(10),
@@ -124,10 +145,18 @@ const getStyles = (theme: AppTheme) =>
     scrollingContainer: {
       height: '60%',
       marginTop: wp(20),
-      padding: hp(16),
-      backgroundColor: theme.colors.cardGradient3,
-      marginHorizontal: hp(10),
-      borderRadius: 20,
+    },
+    labelText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(5),
+    },
+    valueText: {
+      color: theme.colors.headingColor,
+    },
+    rowWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
     },
   });
 

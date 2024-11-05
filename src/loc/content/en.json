@@ -39,7 +39,8 @@
     "rgbNodeOffline": "RGB node is locked/offline.",
     "backupNow": "Backup Now",
     "request": "Request",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -88,7 +89,21 @@
     "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
     "enterUsername": "Enter Username",
     "enterPassword": "Enter Password",
-    "enterBearerToken": "Enter Bearer Token"
+    "enterBearerToken": "Enter Bearer Token",
+    "supportTermAndConditionTitle": "By checking this box, you agree to the terms and conditions.",
+    "readMore": "Read More",
+    "termAndConditionTitle": "Terms and Conditions",
+    "termAndConditionBrief": "Tribe RGB provides an option to connect external nodes; however, support for this feature is managed by an external service provider. Please review the following terms:",
+    "termAndConditionTitle1": "Scope of Tribe RGB's Role",
+    "termAndConditionSubTitle1": "Tribe RGB offers a feature to connect external nodes but does not provide support or assume responsibility for the connection process or related issues.",
+    "termAndConditionTitle2": "External Support",
+    "termAndConditionSubTitle2": "For assistance with setup or troubleshooting, please contact the external provider directly, as they manage all support for external node connectivity.",
+    "termAndConditionTitle3": "Liability Disclaimer",
+    "termAndConditionSubTitle3": "Tribe RGB is not liable for any data loss, misconfigurations, or other consequences resulting from connecting to an external node. Use this option at your discretion.",
+    "termAndConditionTitle4": "Updates and Availability",
+    "termAndConditionSubTitle4": "Tribe RGB may update this feature without notice. Any changes to support availability or terms should be confirmed with the external provider.",
+    "termAndConditionTitle5": "Governing Law",
+    "termAndConditionSubTitle5": "These terms are governed by the applicable jurisdiction’s laws"
   },
   "home": {
     "addAssets": "Add Assets",
