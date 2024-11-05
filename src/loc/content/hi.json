@@ -221,7 +221,8 @@
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
-    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें"
+    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें",
+    "totalFee": "कुल शुल्क："
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
