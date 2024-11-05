@@ -1,15 +1,14 @@
 import { NativeModules } from 'react-native';
-import { NetworkType } from '../wallets/enums';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
+import config from 'src/utils/config';
 
 const { RGB } = NativeModules;
-export const SATS_FOR_RGB = 9000;
 
 export default class RGBServices {
-  static NETWORK = NetworkType.TESTNET;
+  static NETWORK = config.NETWORK_TYPE;
 
   static generateKeys = async (): Promise<RGBWallet> => {
     const keys = await RGB.generateKeys(this.NETWORK);

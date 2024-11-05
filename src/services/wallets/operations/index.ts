@@ -591,17 +591,17 @@ export default class WalletOperations {
     // high fee: 10 minutes
     const highFeeBlockEstimate = 1;
     const high = {
-      feePerByte: 1,
+      feePerByte: 3,
       estimatedBlocks: highFeeBlockEstimate,
-      averageTxFee: 1,
+      averageTxFee: 3,
     };
 
     // medium fee: 30 mins
     const mediumFeeBlockEstimate = 1;
     const medium = {
-      feePerByte: 1,
+      feePerByte: 2,
       estimatedBlocks: mediumFeeBlockEstimate,
-      averageTxFee: 1,
+      averageTxFee: 2,
     };
 
     // low fee: 60 mins

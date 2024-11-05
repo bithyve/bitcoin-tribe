@@ -33,6 +33,7 @@ import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
+  predefinedRegtestNodes,
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
 import {
@@ -343,6 +344,8 @@ export class ApiHandler {
     const defaultNodes =
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
+        : config.NETWORK_TYPE === NetworkType.REGTEST
+        ? predefinedRegtestNodes
         : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
@@ -517,7 +520,7 @@ export class ApiHandler {
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
             response.address,
-            NetworkType.TESTNET,
+            config.NETWORK_TYPE,
           );
           if (!funded) {
             throw new Error('Failed to get test coins');

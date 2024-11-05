@@ -39,7 +39,7 @@ export default class WalletUtilities {
       return NetworkType.MAINNET;
     } catch (err) {
       try {
-        bitcoinJS.address.toOutputScript(address, bitcoinJS.networks.testnet);
+        bitcoinJS.address.toOutputScript(address, bitcoinJS.networks.regtest);
         return NetworkType.TESTNET;
       } catch (err) {
         return null;
@@ -48,10 +48,12 @@ export default class WalletUtilities {
   };
 
   static getNetworkByType = (type: NetworkType) => {
-    if (type === NetworkType.TESTNET) {
-      return bitcoinJS.networks.testnet;
+    if (type === NetworkType.MAINNET) {
+      return bitcoinJS.networks.bitcoin;
+    } else if (type === NetworkType.REGTEST) {
+      return bitcoinJS.networks.regtest;
     }
-    return bitcoinJS.networks.bitcoin;
+    return bitcoinJS.networks.testnet;
   };
 
   static getFingerprintFromNode = node => {

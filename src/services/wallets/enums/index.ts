@@ -55,6 +55,7 @@ export enum TxPriority {
 export enum NetworkType {
   TESTNET = 'TESTNET',
   MAINNET = 'MAINNET',
+  REGTEST = 'REGTEST',
 }
 
 export enum NodeType {
