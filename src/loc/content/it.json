@@ -346,6 +346,9 @@
     "rgbChannelCapMinSat": "Capacità minima del canale RGB:",
     "channelCapMisSat": "Capacità minima del canale:",
     "nodeStatusLock": "Stato del nodo: Bloccato",
-    "initNode": "Inizializza Nodo"
+    "initNode": "Inizializza Nodo",
+    "channelsTitle": "Canali",
+    "channelEmptyTitle": "La lista dei canali è vuota",
+    "channelEmptySubTitle": "Inizia ad aggiungere canali per migliorare la tua esperienza Bitcoin!"
   }
 }

@@ -347,6 +347,9 @@
     "rgbChannelCapMinSat": "Rgb_channel_capacity_min_sat:",
     "channelCapMisSat": "Channel_capacity_min_sat:",
     "nodeStatusLock": "Node Status: Lock",
-    "initNode": "Init Node"
+    "initNode": "Init Node",
+    "channelsTitle": "Channels",
+    "channelEmptyTitle": "Channel List is Empty",
+    "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!"
   }
 }

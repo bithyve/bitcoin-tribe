@@ -346,6 +346,9 @@
     "rgbChannelCapMinSat": "आरजीबी चैनल न्यूनतम क्षमता:",
     "channelCapMisSat": "चैनल न्यूनतम क्षमता:",
     "nodeStatusLock": "नोड स्थिति: लॉक",
-    "initNode": "नोड प्रारंभ करें"
+    "initNode": "नोड प्रारंभ करें",
+    "channelsTitle": "चैनल्स",
+    "channelEmptyTitle": "चैनल सूची खाली है",
+    "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!"
   }
 }
