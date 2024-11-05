@@ -80,7 +80,7 @@ const ViewNodeInfo = () => {
         </View>
       ) : (
         <ScrollView
-          showsVerticalScrollIndicator={'false'}
+          showsVerticalScrollIndicator={false}
           style={styles.scrollingWrapper}>
           <AppText variant="body2" style={styles.headerTitle}>
             {node.pubKey}
