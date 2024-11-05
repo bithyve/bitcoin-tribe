@@ -79,7 +79,7 @@
     "selectWalletType": "Select wallet type",
     "selfCustody": "Self-Custody",
     "mainnet": "Mainnet",
-    "mainnetAndLightning": "Mainnet & Lightning",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "Supported",
     "nodeDetails": "Node Details",
     "nodeConURL": "Node connection URL",

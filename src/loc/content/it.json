@@ -78,7 +78,7 @@
     "selectWalletType": "Seleziona il tipo di wallet",
     "selfCustody": "Auto-custodia",
     "mainnet": "Rete principale",
-    "mainnetAndLightning": "Rete principale e Lightning",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "Supportato",
     "nodeDetails": "Dettagli del nodo",
     "nodeConURL": "URL di connessione del nodo",

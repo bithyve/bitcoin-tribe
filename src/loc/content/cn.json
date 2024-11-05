@@ -78,7 +78,7 @@
     "selectWalletType": "选择钱包类型",
     "selfCustody": "自主管理",
     "mainnet": "主网",
-    "mainnetAndLightning": "主网和闪电网络",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "支持",
     "nodeDetails": "节点详情",
     "nodeConURL": "节点连接URL",

@@ -78,7 +78,7 @@
     "selectWalletType": "वॉलेट प्रकार चुनें",
     "selfCustody": "स्व-निगरानी",
     "mainnet": "मुख्य नेटवर्क",
-    "mainnetAndLightning": "मुख्य नेटवर्क और लाइटनिंग",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "समर्थित",
     "nodeDetails": "नोड विवरण",
     "nodeConURL": "नोड कनेक्शन URL",

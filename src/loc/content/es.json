@@ -78,7 +78,7 @@
     "selectWalletType": "Selecciona el tipo de billetera",
     "selfCustody": "Auto-custodia",
     "mainnet": "Red principal",
-    "mainnetAndLightning": "Red principal y Lightning",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "Soportado",
     "nodeDetails": "Detalles del nodo",
     "nodeConURL": "URL de conexión del nodo",

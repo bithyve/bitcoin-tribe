@@ -78,7 +78,7 @@
     "selectWalletType": "ウォレットタイプを選択",
     "selfCustody": "セルフカストディ",
     "mainnet": "メインネット",
-    "mainnetAndLightning": "メインネット＆ライトニング",
+    "mainnetAndLightning": "OnChain & Lightning",
     "supported": "サポートされている",
     "nodeDetails": "ノードの詳細",
     "nodeConURL": "ノード接続URL",
