@@ -412,7 +412,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      marginTop: hp(5),
+      // marginTop: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(5),
