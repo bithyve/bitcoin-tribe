@@ -193,8 +193,8 @@
     "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
     "setPasscodeTitle": "पासकोड सेट करें",
     "settled": "निपटान हो गया",
-    "waitingCounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
-    "WaitingConfirmation": "पुष्टि की प्रतीक्षा में",
+    "waitingcounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
+    "Waitingconfirmation": "पुष्टि की प्रतीक्षा में",
     "Failed": "असफल",
     "removed": "हटा दिया गया",
     "expired": "समाप्त हो गया"

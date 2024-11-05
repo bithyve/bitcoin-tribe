@@ -194,9 +194,9 @@
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
     "setPasscodeTitle": "Set Passcode",
     "settled": "Settled",
-    "waitingCounterparty": "Waiting Counter Party",
-    "WaitingConfirmation": "Waiting Confirmation",
-    "Failed": "Failed",
+    "waitingcounterparty": "Waiting Counterparty",
+    "Waitingconfirmation": "Waiting Confirmation",
+    "failed": "Failed",
     "removed": "Removed",
     "expired": "Expired"
   },

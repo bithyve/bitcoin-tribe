@@ -193,8 +193,8 @@
     "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
     "setPasscodeTitle": "Establecer código",
     "settled": "Liquidado",
-    "waitingCounterparty": "Esperando contraparte",
-    "WaitingConfirmation": "Esperando confirmación",
+    "waitingcounterparty": "Esperando contraparte",
+    "Waitingconfirmation": "Esperando confirmación",
     "Failed": "Fallido",
     "removed": "Eliminado",
     "expired": "Expirado"

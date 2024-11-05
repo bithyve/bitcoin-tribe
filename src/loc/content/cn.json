@@ -193,8 +193,8 @@
     "EnterPasscodeSubTitle": "确认密码以显示种子短语",
     "setPasscodeTitle": "设置密码",
     "settled": "结算完成",
-    "waitingCounterparty": "等待对方",
-    "WaitingConfirmation": "等待确认",
+    "waitingcounterparty": "等待对方",
+    "Waitingconfirmation": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
     "expired": "已过期"

@@ -193,8 +193,8 @@
     "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
     "setPasscodeTitle": "Imposta il codice",
     "settled": "Sistemato",
-    "waitingCounterparty": "In attesa della controparte",
-    "WaitingConfirmation": "In attesa di conferma",
+    "waitingcounterparty": "In attesa della controparte",
+    "Waitingconfirmation": "In attesa di conferma",
     "Failed": "Fallito",
     "removed": "Rimosso",
     "expired": "Scaduto"

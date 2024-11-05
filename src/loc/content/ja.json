@@ -193,8 +193,8 @@
     "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
     "setPasscodeTitle": "パスコードを設定",
     "settled": "清算済み",
-    "waitingCounterparty": "相手を待っています",
-    "WaitingConfirmation": "確認待ち",
+    "waitingcounterparty": "相手を待っています",
+    "Waitingconfirmation": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",
     "expired": "有効期限が切れました"
