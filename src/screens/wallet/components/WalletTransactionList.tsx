@@ -1,12 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
 
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
@@ -68,6 +74,9 @@ function WalletTransactionList({
     }
   }, [walletRefreshMutation]);
 
+  const FooterComponent = () => {
+    return <View style={styles.footer} />;
+  };
   return (
     <FlatList
       style={styles.container}
@@ -87,6 +96,7 @@ function WalletTransactionList({
           />
         )
       }
+      ListFooterComponent={FooterComponent}
       renderItem={({ item }) => (
         <WalletTransactions
           transId={item.txid}
@@ -134,6 +144,9 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: 100,
       height: 100,
+    },
+    footer: {
+      height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
     },
   });
 export default WalletTransactionList;
