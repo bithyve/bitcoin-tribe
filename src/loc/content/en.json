@@ -192,7 +192,13 @@
     "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it",
     "EnterPasscode": "Enter Passcode",
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
-    "setPasscodeTitle": "Set Passcode"
+    "setPasscodeTitle": "Set Passcode",
+    "settled": "Settled",
+    "waitingCounterparty": "Waiting Counter Party",
+    "WaitingConfirmation": "Waiting Confirmation",
+    "Failed": "Failed",
+    "removed": "Removed",
+    "expired": "Expired"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

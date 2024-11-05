@@ -191,7 +191,13 @@
     "biometricsNotEnableMsg": "Biometria non abilitata.\nPer favore, vai alle impostazioni e abilitala",
     "EnterPasscode": "Inserisci il codice",
     "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
-    "setPasscodeTitle": "Imposta il codice"
+    "setPasscodeTitle": "Imposta il codice",
+    "settled": "Sistemato",
+    "waitingCounterparty": "In attesa della controparte",
+    "WaitingConfirmation": "In attesa di conferma",
+    "Failed": "Fallito",
+    "removed": "Rimosso",
+    "expired": "Scaduto"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

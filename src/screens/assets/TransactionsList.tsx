@@ -37,10 +37,10 @@ function TransactionsList({
   assetId: string;
 }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations } = translations;
+  const { wallet: walletTranslations, settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-
+  console.log('transactions', transactions);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -80,7 +80,7 @@ function TransactionsList({
         }
         renderItem={({ item }) => (
           <AssetTransaction
-            transId={item.status.toUpperCase()}
+            transId={settings[item.status]}
             transDate={item.createdAt}
             transAmount={`${item.amount}`}
             transType={item.kind}

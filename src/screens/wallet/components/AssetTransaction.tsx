@@ -85,7 +85,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {Capitalize(transId)}
+              {transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
