@@ -45,6 +45,7 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 type ItemProps = {
   name: string;
@@ -287,7 +288,7 @@ const SendAssetScreen = () => {
         />
 
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={handleAmtChangeText}
           placeholder={assets.amount}
           keyboardType="numeric"
