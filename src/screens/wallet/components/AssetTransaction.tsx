@@ -19,7 +19,6 @@ import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import Capitalize from 'src/utils/capitalizeUtils';
 import { Keys } from 'src/storage';
 
 type AssetTransactionProps = {
@@ -85,7 +84,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {Capitalize(transId)}
+              {transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}

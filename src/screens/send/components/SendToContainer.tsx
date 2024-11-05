@@ -29,6 +29,7 @@ import {
 } from 'src/services/wallets/interfaces';
 import SendSuccessContainer from './SendSuccessContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 function SendToContainer({
   wallet,
@@ -160,7 +161,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
@@ -172,17 +173,17 @@ function SendToContainer({
         />
         <View style={styles.totalFeeWrapper}>
           <AppText variant="heading1" style={styles.feeTitleText}>
-            Total Fee:
+            {sendScreen.totalFee}
           </AppText>
           {initialCurrencyMode !== CurrencyKind.SATS
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="heading1" style={styles.amountText}>
-            &nbsp;{getBalance(2000)}
+            &nbsp; {getFeeRateByPriority(selectedPriority)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
-              sats
+              sats/vbyte
             </AppText>
           )}
         </View>

@@ -191,7 +191,13 @@
     "biometricsNotEnableMsg": "生物识别未启用。\n请前往设置并启用",
     "EnterPasscode": "输入密码",
     "EnterPasscodeSubTitle": "确认密码以显示种子短语",
-    "setPasscodeTitle": "设置密码"
+    "setPasscodeTitle": "设置密码",
+    "settled": "结算完成",
+    "waitingCounterparty": "等待对方",
+    "WaitingConfirmation": "等待确认",
+    "Failed": "失败",
+    "removed": "已移除",
+    "expired": "已过期"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -221,7 +227,8 @@
     "transFeeErrMsg": "错误：交易费用信息缺失",
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
-    "sendAssetSubtitle": "扫描下面的RGB地址"
+    "sendAssetSubtitle": "扫描下面的RGB地址",
+    "totalFee": "总费用："
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -339,6 +346,9 @@
     "rgbChannelCapMinSat": "RGB频道最小容量:",
     "channelCapMisSat": "最小通道容量:",
     "nodeStatusLock": "节点状态：锁定",
-    "initNode": "初始化节点"
+    "initNode": "初始化节点",
+    "channelsTitle": "通道",
+    "channelEmptyTitle": "通道列表为空",
+    "channelEmptySubTitle": "开始添加通道以增强您的比特币体验！"
   }
 }

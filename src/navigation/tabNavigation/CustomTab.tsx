@@ -179,9 +179,9 @@ const getStyles = (theme: AppTheme) =>
     },
     inActiveTab: {
       flex: 1,
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: hp(20),
     },
     bottomNavigation: {
       fontSize: 13,

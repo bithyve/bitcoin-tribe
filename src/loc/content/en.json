@@ -192,7 +192,13 @@
     "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it",
     "EnterPasscode": "Enter Passcode",
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
-    "setPasscodeTitle": "Set Passcode"
+    "setPasscodeTitle": "Set Passcode",
+    "settled": "Settled",
+    "waitingCounterparty": "Waiting Counter Party",
+    "WaitingConfirmation": "Waiting Confirmation",
+    "Failed": "Failed",
+    "removed": "Removed",
+    "expired": "Expired"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -222,7 +228,8 @@
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
-    "sendAssetSubtitle": "Scan the RGB address below"
+    "sendAssetSubtitle": "Scan the RGB address below",
+    "totalFee": "Total Fee:"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -340,6 +347,9 @@
     "rgbChannelCapMinSat": "Rgb_channel_capacity_min_sat:",
     "channelCapMisSat": "Channel_capacity_min_sat:",
     "nodeStatusLock": "Node Status: Lock",
-    "initNode": "Init Node"
+    "initNode": "Init Node",
+    "channelsTitle": "Channels",
+    "channelEmptyTitle": "Channel List is Empty",
+    "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!"
   }
 }

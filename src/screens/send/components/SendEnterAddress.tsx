@@ -123,7 +123,6 @@ const getStyles = (theme: AppTheme) =>
     },
     container: {
       width: '100%',
-      marginTop: hp(45),
     },
     inputStyle: {
       width: '80%',

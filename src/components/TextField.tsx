@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -62,20 +62,21 @@ const TextField = (props: TextFieldProps) => {
     onContentSizeChange,
     contentStyle,
   } = props;
+  const [isFocused, setIsFocused] = useState(false);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
-    () => getStyles(theme, icon, rightText, rightCTATextColor),
-    [theme, icon, rightText, rightCTATextColor],
+    () => getStyles(theme, icon, rightText, rightCTATextColor, isFocused),
+    [theme, icon, rightText, rightCTATextColor, isFocused],
   );
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style, isFocused && styles.outlineStyle]}>
       {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
       <TextInput
-        mode="outlined"
-        outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
-        activeOutlineColor={theme.colors.accent1}
-        outlineStyle={styles.outlineStyle}
+        // mode="outlined"
+        // outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
+        // activeOutlineColor={theme.colors.accent1}
+        // outlineStyle={styles.outlineStyle}
         disabled={disabled}
         cursorColor={theme.colors.accent1}
         selectionColor={theme.colors.accent1}
@@ -102,6 +103,8 @@ const TextField = (props: TextFieldProps) => {
         numberOfLines={numberOfLines}
         onContentSizeChange={onContentSizeChange}
         // contentStyle={contentStyle}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
       {rightText && (
         <AppTouchable
@@ -164,6 +167,8 @@ const getStyles = (
     },
     outlineStyle: {
       borderRadius: 15,
+      borderColor: theme.colors.accent1,
+      borderWidth: 1.5,
     },
   });
 

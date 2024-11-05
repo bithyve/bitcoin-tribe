@@ -191,7 +191,13 @@
     "biometricsNotEnableMsg": "बायोमेट्रिक्स सक्षम नहीं है।\nकृपया सेटिंग में जाकर इसे सक्षम करें",
     "EnterPasscode": "पासकोड दर्ज करें",
     "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
-    "setPasscodeTitle": "पासकोड सेट करें"
+    "setPasscodeTitle": "पासकोड सेट करें",
+    "settled": "निपटान हो गया",
+    "waitingCounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
+    "WaitingConfirmation": "पुष्टि की प्रतीक्षा में",
+    "Failed": "असफल",
+    "removed": "हटा दिया गया",
+    "expired": "समाप्त हो गया"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -221,7 +227,8 @@
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
-    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें"
+    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें",
+    "totalFee": "कुल शुल्क："
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -339,6 +346,9 @@
     "rgbChannelCapMinSat": "आरजीबी चैनल न्यूनतम क्षमता:",
     "channelCapMisSat": "चैनल न्यूनतम क्षमता:",
     "nodeStatusLock": "नोड स्थिति: लॉक",
-    "initNode": "नोड प्रारंभ करें"
+    "initNode": "नोड प्रारंभ करें",
+    "channelsTitle": "चैनल्स",
+    "channelEmptyTitle": "चैनल सूची खाली है",
+    "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!"
   }
 }

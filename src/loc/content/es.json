@@ -191,7 +191,13 @@
     "biometricsNotEnableMsg": "Biometría no habilitada.\nPor favor, ve a la configuración y actívala",
     "EnterPasscode": "Introduce el código",
     "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
-    "setPasscodeTitle": "Establecer código"
+    "setPasscodeTitle": "Establecer código",
+    "settled": "Liquidado",
+    "waitingCounterparty": "Esperando contraparte",
+    "WaitingConfirmation": "Esperando confirmación",
+    "Failed": "Fallido",
+    "removed": "Eliminado",
+    "expired": "Expirado"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
@@ -221,7 +227,8 @@
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
     "paste": "Pegar",
     "sendAssetTitle": "Enviar activo",
-    "sendAssetSubtitle": "Escanee la dirección RGB a continuación"
+    "sendAssetSubtitle": "Escanee la dirección RGB a continuación",
+    "totalFee": "Tarifa total："
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -339,6 +346,9 @@
     "rgbChannelCapMinSat": "Capacidad mínima de canal RGB:",
     "channelCapMisSat": "Capacidad mínima del canal:",
     "nodeStatusLock": "Estado del nodo: Bloqueado",
-    "initNode": "Iniciar nodo"
+    "initNode": "Iniciar nodo",
+    "channelsTitle": "Canales",
+    "channelEmptyTitle": "La lista de canales está vacía",
+    "channelEmptySubTitle": "¡Comienza a agregar canales para mejorar tu experiencia con Bitcoin!"
   }
 }

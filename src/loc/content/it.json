@@ -191,7 +191,13 @@
     "biometricsNotEnableMsg": "Biometria non abilitata.\nPer favore, vai alle impostazioni e abilitala",
     "EnterPasscode": "Inserisci il codice",
     "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
-    "setPasscodeTitle": "Imposta il codice"
+    "setPasscodeTitle": "Imposta il codice",
+    "settled": "Sistemato",
+    "waitingCounterparty": "In attesa della controparte",
+    "WaitingConfirmation": "In attesa di conferma",
+    "Failed": "Fallito",
+    "removed": "Rimosso",
+    "expired": "Scaduto"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -221,7 +227,8 @@
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
     "paste": "Incolla",
     "sendAssetTitle": "Invia asset",
-    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto"
+    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto",
+    "totalFee": "Costo totale："
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
@@ -339,6 +346,9 @@
     "rgbChannelCapMinSat": "Capacità minima del canale RGB:",
     "channelCapMisSat": "Capacità minima del canale:",
     "nodeStatusLock": "Stato del nodo: Bloccato",
-    "initNode": "Inizializza Nodo"
+    "initNode": "Inizializza Nodo",
+    "channelsTitle": "Canali",
+    "channelEmptyTitle": "La lista dei canali è vuota",
+    "channelEmptySubTitle": "Inizia ad aggiungere canali per migliorare la tua esperienza Bitcoin!"
   }
 }
