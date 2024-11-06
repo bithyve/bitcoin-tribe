@@ -39,7 +39,10 @@
     "backupNow": "立即备份",
     "request": "请求",
     "ok": "确定",
-    "assetIDCopySuccessfully": "资产 ID 复制成功！"
+    "assetIDCopySuccessfully": "资产 ID 复制成功！",
+    "cameraPermissionTitle": "相机访问已关闭",
+    "cameraPermissionSubTitle": "在设备设置中开启相机",
+    "cameraPermissionCTA": "点击进入设置"
   },
   "onBoarding": {
     "welcome": "欢迎",

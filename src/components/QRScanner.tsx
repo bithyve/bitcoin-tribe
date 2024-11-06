@@ -26,6 +26,7 @@ import Toast from './Toast';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import CameraUnauthorized from './CameraUnauthorized';
 
 const QRScanner = () => {
   const device = useCameraDevice('back');
@@ -37,35 +38,17 @@ const QRScanner = () => {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
 
-  const showPermissionDeniedAlert = () => {
-    Alert.alert(
-      'Camera Permission Required',
-      'This app needs access to your camera to function properly. Please allow camera access in your device settings.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: () => openSettings() },
-      ],
-    );
-  };
-
   const requestCameraPermission = async () => {
     try {
       if (Platform.OS === 'android') {
         // Request permission for Android
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'This app needs access to your camera.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           setCameraPermission('granted');
         } else {
-          openSettings();
+          // openSettings();
         }
       } else if (Platform.OS === 'ios') {
         // Request permission for iOS
@@ -80,16 +63,12 @@ const QRScanner = () => {
           );
         } else {
           // openSettings();
-          showPermissionDeniedAlert();
+          // showPermissionDeniedAlert();
         }
       }
     } catch (err) {
       console.warn(err);
     }
-  };
-
-  const openSettings = () => {
-    Linking.openURL('app-settings:');
   };
 
   useEffect(() => {
@@ -139,7 +118,7 @@ const QRScanner = () => {
 
   return (
     <View style={styles.qrCodeContainer}>
-      {cameraPermission != null && device != null && (
+      {cameraPermission != null && device != null ? (
         <>
           <Camera
             device={device}
@@ -161,6 +140,8 @@ const QRScanner = () => {
             </View>
           </View>
         </>
+      ) : (
+        <CameraUnauthorized />
       )}
     </View>
   );

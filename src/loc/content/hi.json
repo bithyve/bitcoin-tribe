@@ -39,7 +39,10 @@
     "backupNow": "अभी बैकअप करें",
     "request": "अनुरोध",
     "ok": "ठीक है",
-    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!"
+    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!",
+    "cameraPermissionTitle": "कैमरा एक्सेस बंद है",
+    "cameraPermissionSubTitle": "अपने डिवाइस सेटिंग्स में कैमरा चालू करें",
+    "cameraPermissionCTA": "सेटिंग्स में जाने के लिए टैप करें"
   },
   "onBoarding": {
     "welcome": "स्वागत है",

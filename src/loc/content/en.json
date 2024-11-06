@@ -40,7 +40,10 @@
     "backupNow": "Backup Now",
     "request": "Request",
     "ok": "OK",
-    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!"
+    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!",
+    "cameraPermissionTitle": "Camera access is turned off",
+    "cameraPermissionSubTitle": "Turn on the camera in your device settings",
+    "cameraPermissionCTA": "Tap to go to settings"
   },
   "onBoarding": {
     "welcome": "Welcome",

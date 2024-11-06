@@ -39,7 +39,10 @@
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
     "ok": "オーケー",
-    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！"
+    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！",
+    "cameraPermissionTitle": "カメラアクセスがオフになっています",
+    "cameraPermissionSubTitle": "デバイスの設定でカメラをオンにしてください",
+    "cameraPermissionCTA": "設定に移動するにはタップしてください"
   },
   "onBoarding": {
     "welcome": "ようこそ",

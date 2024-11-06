@@ -39,7 +39,10 @@
     "backupNow": "Esegui backup ora",
     "request": "Richiesta",
     "ok": "OK",
-    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!"
+    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!",
+    "cameraPermissionTitle": " L'accesso alla fotocamera è disattivato",
+    "cameraPermissionSubTitle": "Attiva la fotocamera nelle impostazioni del dispositivo",
+    "cameraPermissionCTA": "Tocca per andare alle impostazioni"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
