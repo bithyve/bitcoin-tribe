@@ -92,6 +92,8 @@ function SendEnterAddress({
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         autoFocus={true}
+        multiline={true}
+        numberOfLines={1}
         inputStyle={styles.inputStyle}
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
