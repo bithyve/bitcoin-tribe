@@ -57,7 +57,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
   const [inputURLHeight, setURLInputHeight] = React.useState(50);
-  const [inputBearerHeight, setBearerInputHeight] = React.useState(50);
+  const [inputBearerHeight, setBearerInputHeight] = React.useState(0);
   const styles = getStyles(theme, inputURLHeight, inputBearerHeight);
 
   return (
@@ -191,9 +191,9 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                       : styles.inputWrapper1
                   }
                   style={styles.multilineTextInput}
-                  onContentSizeChange={event => {
-                    setBearerInputHeight(event.nativeEvent.contentSize.height);
-                  }}
+                  // onContentSizeChange={event => {
+                  //   setBearerInputHeight(event.nativeEvent.contentSize.height);
+                  // }}
                   multiline={true}
                   numberOfLines={5}
                 />
@@ -229,9 +229,9 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
     },
     inputBearerWrapper: {
       borderRadius: 10,
-      marginVertical: hp(25),
+      // marginVertical: hp(25),
       marginBottom: 0,
-      height: Math.max(45, inputBearerHeight),
+      // height: Math.max(0, inputBearerHeight),
       marginTop: 0,
     },
     inputWrapper1: {
