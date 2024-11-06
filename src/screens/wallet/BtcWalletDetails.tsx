@@ -83,7 +83,8 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           rgbWallet={rgbWallet}
           activeTab={activeTab}
           onPressBuy={() =>
-            config.NETWORK_TYPE === NetworkType.TESTNET
+            config.NETWORK_TYPE === NetworkType.TESTNET ||
+            config.NETWORK_TYPE === NetworkType.REGTEST
               ? mutate()
               : setVisible(true)
           }

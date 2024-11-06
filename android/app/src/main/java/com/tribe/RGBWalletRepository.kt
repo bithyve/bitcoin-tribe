@@ -46,7 +46,13 @@ object RGBWalletRepository {
 //        return this::wallet.isInitialized && this::online.isInitialized
 //    }
 
-    private fun getNetwork(network: String) : BitcoinNetwork {
-        return if(network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
+    private fun getNetwork(network: String): BitcoinNetwork {
+        return when (network.uppercase()) {
+            "TESTNET" -> BitcoinNetwork.TESTNET
+            "REGTEST" -> BitcoinNetwork.REGTEST
+            "MAINNET" -> BitcoinNetwork.MAINNET
+            "SIGNET" -> BitcoinNetwork.SIGNET
+            else -> BitcoinNetwork.TESTNET
+        }
     }
 }

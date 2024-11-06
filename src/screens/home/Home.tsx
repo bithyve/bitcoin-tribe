@@ -157,6 +157,13 @@ function HomeScreen() {
       </AppText>
       <AssetsList
         listData={assets}
+        loading={refreshRgbWallet.isLoading}
+        onRefresh={() => {
+          refreshRgbWallet.mutate();
+          refreshWallet.mutate({
+            wallets: [wallet],
+          });
+        }}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={(asset: Asset) => {
           if (asset.assetIface === AssetFace.RGB20) {

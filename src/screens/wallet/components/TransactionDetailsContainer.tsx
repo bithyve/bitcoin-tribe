@@ -11,7 +11,6 @@ import { NetworkType, TransactionType } from 'src/services/wallets/enums';
 import openLink from 'src/utils/OpenLink';
 import AppTouchable from 'src/components/AppTouchable';
 import config from 'src/utils/config';
-import useBalance from 'src/hooks/useBalance';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -26,14 +25,15 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const { transId, transDate, transAmount, transType, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
-  const { getBalance } = useBalance();
 
   const redirectToBlockExplorer = () => {
-    openLink(
-      `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${transaction.txid}`,
-    );
+    if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
+      openLink(
+        `https://mempool.space${
+          config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+        }/tx/${transaction.txid}`,
+      );
+    }
   };
   return (
     <View>

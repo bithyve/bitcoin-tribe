@@ -33,6 +33,7 @@ import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
+  predefinedRegtestNodes,
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
 import {
@@ -54,6 +55,7 @@ import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
+import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 
 var RNFS = require('react-native-fs');
 
@@ -342,6 +344,8 @@ export class ApiHandler {
     const defaultNodes =
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
+        : config.NETWORK_TYPE === NetworkType.REGTEST
+        ? predefinedRegtestNodes
         : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
@@ -516,7 +520,7 @@ export class ApiHandler {
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
             response.address,
-            NetworkType.TESTNET,
+            config.NETWORK_TYPE,
           );
           if (!funded) {
             throw new Error('Failed to get test coins');
@@ -615,7 +619,7 @@ export class ApiHandler {
       }
       if (assets.cfa) {
         dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
-        if (Platform.OS === 'ios') {
+        if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
             const ext = element.media.mime.split('/')[1];
@@ -1009,7 +1013,6 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.nodeinfo();
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
@@ -1078,6 +1081,34 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async getChannels() {
+    try {
+      const response = await ApiHandler.api.listchannels();
+      if (response && response.channels) {
+        return snakeCaseToCamelCaseCase(response).channels;
+      } else {
+        return snakeCaseToCamelCaseCase(response);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  static async syncNode() {
+    try {
+      const response = await ApiHandler.api.sync();
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to sync node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   }
 }

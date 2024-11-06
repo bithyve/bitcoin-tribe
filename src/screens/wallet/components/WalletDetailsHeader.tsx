@@ -36,14 +36,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const { profile, username, wallet, rgbWallet, onPressSetting, onPressBuy } =
     props;
 
-  // const {
-  //   specs: { balances: { confirmed, unconfirmed } } = {
-  //     balances: { confirmed: 0, unconfirmed: 0 },
-  //   },
-  // } = wallet || {};
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const balances = useMemo(() => {
-    // console.log('rgbWallet?.nodeBtcBalance', rgbWallet?.nodeBtcBalance);
     if (app.appType === AppType.NODE_CONNECT) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {
@@ -51,7 +45,11 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
       );
     }
-  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
+  }, [
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
+    wallet.specs.balances.confirmed,
+    wallet.specs.balances.unconfirmed,
+  ]);
 
   return (
     <View style={styles.container}>

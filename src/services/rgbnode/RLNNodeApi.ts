@@ -231,8 +231,21 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async sync(): Promise<{ bytes_hex: string }> {
+    return this.request('/sync', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  }
+
   public async getNode(id: string): Promise<{ bytes_hex: string }> {
     return this.request(`/api/nodes/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  public async listchannels(): Promise<{}> {
+    return this.request('/listchannels', {
       method: 'GET',
     });
   }
