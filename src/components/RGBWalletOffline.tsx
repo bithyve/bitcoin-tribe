@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import { AppContext } from 'src/contexts/AppContext';
@@ -42,7 +42,7 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : Platform.OS === 'ios' && windowHeight > 820
         ? 50
         : Platform.OS === 'android'
-        ? 35
+        ? 40
         : 16,
       left: 0,
       right: 0,
