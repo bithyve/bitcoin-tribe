@@ -195,7 +195,7 @@
     "setPasscodeTitle": "Set Passcode",
     "settled": "Settled",
     "waitingcounterparty": "Waiting Counterparty",
-    "Waitingconfirmation": "Waiting Confirmation",
+    "waitingconfirmations": "Waiting Confirmation",
     "failed": "Failed",
     "removed": "Removed",
     "expired": "Expired"
