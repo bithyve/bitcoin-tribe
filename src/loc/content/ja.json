@@ -194,7 +194,7 @@
     "setPasscodeTitle": "パスコードを設定",
     "settled": "清算済み",
     "waitingcounterparty": "相手を待っています",
-    "Waitingconfirmation": "確認待ち",
+    "waitingconfirmations": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",
     "expired": "有効期限が切れました"
