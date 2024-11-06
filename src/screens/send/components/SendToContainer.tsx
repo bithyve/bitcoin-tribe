@@ -95,7 +95,7 @@ function SendToContainer({
       sender: wallet,
       recipient: {
         address,
-        amount: Number(amount),
+        amount: Number(amount.replace(/,/g, '')),
       },
       averageTxFee,
       selectedPriority,
