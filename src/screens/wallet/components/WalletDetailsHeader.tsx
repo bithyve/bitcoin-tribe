@@ -42,13 +42,13 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {
       return (
-        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
+        wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed
       );
     }
   }, [
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
-    wallet.specs.balances.confirmed,
-    wallet.specs.balances.unconfirmed,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
   ]);
 
   return (
