@@ -118,5 +118,7 @@ const getStyles = (theme: AppTheme) =>
     labelText: {
       color: theme.colors.secondaryHeadingColor,
       marginBottom: hp(5),
+      flex: 1,
+      textAlign: 'left',
     },
   });
