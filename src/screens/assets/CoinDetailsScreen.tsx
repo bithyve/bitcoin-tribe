@@ -25,8 +25,11 @@ const CoinDetailsScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
   useEffect(() => {
-    mutate({ assetId, schema: RealmSchema.Coin });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      mutate({ assetId, schema: RealmSchema.Coin });
+    });
+    return unsubscribe;
+  }, [navigation, assetId]);
 
   return (
     <ScreenContainer style={styles.container}>

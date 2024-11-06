@@ -9,7 +9,6 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -62,6 +61,7 @@ function IssueScreen() {
 
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
+  const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -81,7 +81,7 @@ function IssueScreen() {
         setVisibleFailedToCreatePopup(true);
       }, 500);
 
-      // Toast(walletTranslation.failedToCreateUTXO, true);
+      Toast(walletTranslation.failedToCreateUTXO, true);
     }
   }, [createUtxos.data]);
 
@@ -102,11 +102,12 @@ function IssueScreen() {
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
+        refreshRgbWalletMutation.mutate();
         navigation.dispatch(popAction);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setLoading(false);
         setTimeout(() => {
-          //createUtxos.mutate();
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
@@ -114,9 +115,6 @@ function IssueScreen() {
       }
     } catch (error) {
       setLoading(false);
-      setTimeout(() => {
-        //createUtxos.mutate();
-      }, 500);
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt]);
 
