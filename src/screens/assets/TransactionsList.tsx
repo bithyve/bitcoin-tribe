@@ -80,7 +80,7 @@ function TransactionsList({
         }
         renderItem={({ item }) => (
           <AssetTransaction
-            transId={settings[item.status.toLocaleLowerCase()]}
+            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
             transDate={item.createdAt}
             transAmount={`${item.amount}`}
             transType={item.kind}
