@@ -6,6 +6,7 @@ import {
   Linking,
   PermissionsAndroid,
   Alert,
+  AppState,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
@@ -73,6 +74,17 @@ const QRScanner = () => {
 
   useEffect(() => {
     requestCameraPermission();
+    // Listen to AppState changes
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        requestCameraPermission(); // Re-check permissions when app returns to foreground
+      }
+    });
+
+    // Cleanup the AppState listener
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const onCodeScanned = useCallback((codes: Code[]) => {
