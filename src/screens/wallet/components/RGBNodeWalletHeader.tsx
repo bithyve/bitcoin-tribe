@@ -41,10 +41,10 @@ function RGBNodeWalletHeader(props: RGBNodeHeaderProps) {
       <TransactionButtons
         onPressSend={() =>
           navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SENDSCREEN, {
+            CommonActions.navigate(NavigationRoutes.SENDBTCSCREEN, {
               receiveData: 'send',
               title: common.send,
-              subTitle: sendScreen.headerSubTitle,
+              subTitle: sendScreen.btcHeaderSubTitle,
               wallet: wallet,
             }),
           )

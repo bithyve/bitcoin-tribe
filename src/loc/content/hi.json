@@ -211,6 +211,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "नीचे बिटकॉइन पता या आरजीबी इनवॉइस स्कैन करें",
+    "btcHeaderSubTitle": "एक बिटकॉइन पता स्कैन करें",
     "optionCardTitle": "या विवरण मैन्युअल रूप से दर्ज करें",
     "optionCardSubTitle": "बिटकॉइन पता या आरजीबी इनवॉइस दर्ज करें",
     "enterSendAddress": "सेंड पता दर्ज करें",

@@ -211,6 +211,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
+    "btcHeaderSubTitle": "ビットコインアドレスをスキャンする",
     "optionCardTitle": "または手動で詳細を入力",
     "optionCardSubTitle": "ビットコインアドレスまたはRGB請求書を入力",
     "enterSendAddress": "送信アドレスを入力",

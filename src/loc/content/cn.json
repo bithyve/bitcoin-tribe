@@ -211,6 +211,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
+    "btcHeaderSubTitle": "扫描比特币地址",
     "optionCardTitle": "或手动输入详细信息",
     "optionCardSubTitle": "输入比特币地址或RGB发票",
     "enterSendAddress": "输入发送地址",
