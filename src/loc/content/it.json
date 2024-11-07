@@ -230,7 +230,7 @@
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
     "paste": "Incolla",
     "sendAssetTitle": "Invia asset",
-    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto",
+    "sendAssetSubtitle": "Scansiona la fattura RGB",
     "totalFee": "Costo totale："
   },
   "wallet": {

@@ -230,7 +230,7 @@
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
     "paste": "Pegar",
     "sendAssetTitle": "Enviar activo",
-    "sendAssetSubtitle": "Escanee la dirección RGB a continuación",
+    "sendAssetSubtitle": "Escanea la factura RGB",
     "totalFee": "Tarifa total："
   },
   "wallet": {

@@ -231,7 +231,7 @@
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
-    "sendAssetSubtitle": "Scan the RGB address below",
+    "sendAssetSubtitle": "Scan the RGB invoice",
     "totalFee": "Total Fee:"
   },
   "wallet": {

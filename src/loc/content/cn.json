@@ -230,7 +230,7 @@
     "transFeeErrMsg": "错误：交易费用信息缺失",
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
-    "sendAssetSubtitle": "扫描下面的RGB地址",
+    "sendAssetSubtitle": "扫描RGB发票",
     "totalFee": "总费用："
   },
   "wallet": {
