@@ -10,6 +10,7 @@ export enum APP_STAGE {
 export enum BITCOIN_NETWORK {
   TESTNET = 'TESTNET',
   MAINNET = 'MAINNET',
+  REGTEST = 'REGTEST',
 }
 
 class Configuration {
@@ -32,15 +33,20 @@ class Configuration {
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
-    this.NETWORK_TYPE =
-      this.ENVIRONMENT === APP_STAGE.PRODUCTION
-        ? NetworkType.MAINNET
-        : NetworkType.TESTNET;
-    this.NETWORK =
-      this.NETWORK_TYPE === NetworkType.MAINNET
-        ? bitcoinJS.networks.bitcoin
-        : bitcoinJS.networks.testnet;
+    this.NETWORK_TYPE = NetworkType.REGTEST;
+    this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
   }
+
+  getBitcoinNetwork = (networkType: NetworkType) => {
+    switch (networkType) {
+      case NetworkType.MAINNET:
+        return bitcoinJS.networks.bitcoin;
+      case NetworkType.REGTEST:
+        return bitcoinJS.networks.regtest;
+      default:
+        return bitcoinJS.networks.testnet;
+    }
+  };
 }
 
 export default new Configuration();

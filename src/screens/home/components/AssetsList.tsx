@@ -17,11 +17,18 @@ import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
 import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import AppType from 'src/models/enums/AppType';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 type AssetsListProps = {
   listData: Asset[];
   onPressAsset?: () => void;
   onPressAddNew?: () => void;
+  onRefresh?: () => void;
+  loading?: boolean;
 };
 type ItemProps = {
   name: string;
@@ -86,6 +93,21 @@ function AssetsList(props: AssetsListProps) {
         data={listData}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={FooterComponent}
+        refreshControl={
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={props.loading}
+              onRefresh={props.onRefresh}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={props.loading}
+              onRefresh={props.onRefresh}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
+        }
         ListEmptyComponent={
           <EmptyStateView
             title={home.noAssetTitle}

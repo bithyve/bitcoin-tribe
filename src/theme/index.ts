@@ -60,6 +60,7 @@ type CustomColors = {
   roundReceiveCTAGradient2: string;
   roundReceiveCTAGradient3: string;
   roundSendCTATitle: string;
+  roundBuyCTATitle: string;
   roundReceiveCTATitle: string;
   segmentSelectTitle: string;
   successPopupTitleColor: string;
@@ -69,6 +70,10 @@ type CustomColors = {
   suggestedText: string;
   btcCtaBackColor: string;
   lightningCtaBackColor: string;
+  roundBuyCTAGradient1: string;
+  roundBuyCTAGradient2: string;
+  roundBuyCTAGradient3: string;
+  buyCtaBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -125,13 +130,18 @@ const CombinedDefaultTheme: AppTheme = {
     secondaryCTAGradient3: Colors.Lavender,
     sendCtaBorderColor: Colors.CandyAppleRed,
     recieveCtaBorderColor: Colors.UFOGreen1,
+    buyCtaBorderColor: Colors.BrandeisBlue,
     roundSendCTAGradient1: Colors.CandyAppleRed1,
     roundSendCTAGradient2: Colors.CandyAppleRed1,
     roundSendCTAGradient3: Colors.CandyAppleRed1,
     roundReceiveCTAGradient1: Colors.UFOGreen2,
     roundReceiveCTAGradient2: Colors.UFOGreen2,
     roundReceiveCTAGradient3: Colors.UFOGreen2,
+    roundBuyCTAGradient1: Colors.BrandeisBlue2,
+    roundBuyCTAGradient2: Colors.BrandeisBlue2,
+    roundBuyCTAGradient3: Colors.BrandeisBlue2,
     roundSendCTATitle: Colors.CandyAppleRed,
+    roundBuyCTATitle: Colors.BrandeisBlue,
     roundReceiveCTATitle: Colors.UFOGreen1,
     segmentSelectTitle: Colors.BrandeisBlue,
     suggestedText: Colors.White,
@@ -210,13 +220,18 @@ const CombinedDarkTheme: AppTheme = {
     secondaryCTAGradient3: Colors.ChineseBlack,
     sendCtaBorderColor: Colors.Golden,
     recieveCtaBorderColor: Colors.TurquoiseBlue,
+    buyCtaBorderColor: Colors.BrandeisBlue,
     roundSendCTAGradient1: Colors.EerieBlack,
     roundSendCTAGradient2: Colors.VampireBlack,
     roundSendCTAGradient3: Colors.ChineseBlack,
     roundReceiveCTAGradient1: Colors.EerieBlack,
     roundReceiveCTAGradient2: Colors.VampireBlack,
     roundReceiveCTAGradient3: Colors.ChineseBlack,
+    roundBuyCTAGradient1: Colors.EerieBlack,
+    roundBuyCTAGradient2: Colors.VampireBlack,
+    roundBuyCTAGradient3: Colors.ChineseBlack,
     roundSendCTATitle: Colors.White,
+    roundBuyCTATitle: Colors.White,
     roundReceiveCTATitle: Colors.White,
     segmentSelectTitle: Colors.White,
     suggestedText: Colors.Black,

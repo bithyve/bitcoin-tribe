@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   onChainWalletTransWrapper: {
-    height: '47%',
+    height: '46%',
     top: -40,
     marginHorizontal: wp(16),
   },
   walletTransWrapper: {
-    height: '48%',
+    height: '46%',
     top: -40,
     marginHorizontal: wp(16),
   },

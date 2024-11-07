@@ -33,7 +33,7 @@ object RGBWalletRepository {
                 1u
             )
             wallet = Wallet(walletData)
-            online = wallet!!.goOnline(true, AppConstants.electrumURL)
+            online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))
             Log.d(TAG, "initialize:online $mnemonic")
             return "true"
         }catch (e: RgbLibException) {
@@ -46,7 +46,13 @@ object RGBWalletRepository {
 //        return this::wallet.isInitialized && this::online.isInitialized
 //    }
 
-    private fun getNetwork(network: String) : BitcoinNetwork {
-        return if(network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
+    fun getNetwork(network: String): BitcoinNetwork {
+        return when (network.uppercase()) {
+            "TESTNET" -> BitcoinNetwork.TESTNET
+            "REGTEST" -> BitcoinNetwork.REGTEST
+            "MAINNET" -> BitcoinNetwork.MAINNET
+            "SIGNET" -> BitcoinNetwork.SIGNET
+            else -> BitcoinNetwork.TESTNET
+        }
     }
 }

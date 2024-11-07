@@ -3,8 +3,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-// import AddNewIcon from 'src/assets/images/icon_addnew.svg';
-// import ReceiveIcon from 'src/assets/images/icon_recievedtxn.svg';
 import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -32,14 +30,14 @@ function AddAsset() {
       <View style={styles.container}>
         <SelectOption
           title={home.issueNew}
-          // icon={<AddNewIcon />}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
             if (
+              wallet &&
               wallet.specs.balances.confirmed +
                 wallet.specs.balances.unconfirmed ===
-              0
+                0
             ) {
               setVisible(true);
             } else {
@@ -49,15 +47,15 @@ function AddAsset() {
           testID="issue_new"
         />
         <SelectOption
-          title={common.receive}
-          // icon={<ReceiveIcon />}
+          title={home.addAssets}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
             if (
+              wallet &&
               wallet.specs.balances.confirmed +
                 wallet.specs.balances.unconfirmed ===
-              0
+                0
             ) {
               setVisible(true);
             } else {

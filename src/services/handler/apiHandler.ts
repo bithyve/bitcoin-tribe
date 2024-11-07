@@ -33,6 +33,7 @@ import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
+  predefinedRegtestNodes,
   predefinedTestnetNodes,
 } from '../electrum/predefinedNodes';
 import {
@@ -46,36 +47,27 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Collectible,
+  NodeInfo,
   RgbNodeConnectParams,
   RGBWallet,
 } from 'src/models/interfaces/RGBWallet';
 import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
-import {
-  Configuration,
-  NodeInfoResponse,
-  OnChainApi,
-  OtherApi,
-} from '../rgbnode';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
+import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 
 var RNFS = require('react-native-fs');
 
 export class ApiHandler {
   private static app: RGBWallet;
   private static appType: AppType;
-  private static config;
   private static api: RLNNodeApiServices;
   constructor(app: RGBWallet, appType: AppType) {
     if (!ApiHandler.app) {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       if (appType === AppType.NODE_CONNECT) {
-        ApiHandler.config = new Configuration({
-          basePath: app.nodeUrl,
-          accessToken: app.nodeAuthentication,
-        });
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -109,7 +101,7 @@ export class ApiHandler {
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
-    rgbNodeInfo?: NodeInfoResponse;
+    rgbNodeInfo?: NodeInfo;
   }) {
     Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
@@ -292,7 +284,12 @@ export class ApiHandler {
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType);
     if (app.appType === AppType.NODE_CONNECT) {
-      return { key, isWalletOnline: true };
+      const nodeInfo = await ApiHandler.api.nodeinfo();
+      if (nodeInfo.pubkey) {
+        return { key, isWalletOnline: true };
+      } else {
+        return { key, isWalletOnline: false };
+      }
     } else {
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
@@ -347,6 +344,8 @@ export class ApiHandler {
     const defaultNodes =
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
+        : config.NETWORK_TYPE === NetworkType.REGTEST
+        ? predefinedRegtestNodes
         : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
@@ -521,7 +520,7 @@ export class ApiHandler {
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
             response.address,
-            NetworkType.TESTNET,
+            config.NETWORK_TYPE,
           );
           if (!funded) {
             throw new Error('Failed to get test coins');
@@ -567,7 +566,7 @@ export class ApiHandler {
         const utxos = await RGBServices.createUtxos(
           averageTxFee.high.feePerByte,
           ApiHandler.appType,
-          ApiHandler.config,
+          ApiHandler.api,
         );
         if (utxos.created) {
           return utxos.created;
@@ -577,7 +576,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log({ error });
-      throw new Error('Insufficient sats for RGB');
+      throw new Error(error);
     }
   }
 
@@ -588,7 +587,6 @@ export class ApiHandler {
       );
       let response = await RGBServices.receiveAsset(
         ApiHandler.appType,
-        ApiHandler.config,
         ApiHandler.api,
         assetId,
       );
@@ -614,14 +612,14 @@ export class ApiHandler {
     try {
       const assets = await RGBServices.syncRgbAssets(
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       if (assets.nia) {
         dbManager.createObjectBulk(RealmSchema.Coin, assets.nia);
       }
       if (assets.cfa) {
         dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
-        if (Platform.OS === 'ios') {
+        if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
             const ext = element.media.mime.split('/')[1];
@@ -637,7 +635,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('refreshRgbWallet', error);
     }
   }
 
@@ -708,7 +706,7 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetTransactions(
         assetId,
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       if (response.length > 0) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -809,7 +807,7 @@ export class ApiHandler {
     try {
       const response = await RGBServices.getUnspents(
         ApiHandler.appType,
-        ApiHandler.config,
+        ApiHandler.api,
       );
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
@@ -946,29 +944,28 @@ export class ApiHandler {
 
   static async checkRgbNodeConnection(params: RgbNodeConnectParams) {
     try {
-      const response = await new OtherApi(
-        new Configuration({
-          basePath: params.nodeUrl,
-          accessToken: params.authentication,
-        }),
-      ).nodeinfoGet();
-      if (response.status === 200) {
-        console.log(response.data);
-        return response.data;
+      const response = await RLNNodeApiServices.checkNodeConnection(
+        params.nodeUrl,
+        params.authentication,
+      );
+      if (response.error) {
+        throw new Error(response.error);
+      } else if (response) {
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
       console.log(error);
-      throw new Error('Failed to connect to node');
+      throw new Error(error);
     }
   }
 
   static async getNodeOnchainBtcAddress() {
     try {
-      const response = await new OnChainApi(ApiHandler.config).addressPost();
-      if (response.status === 200) {
-        return response.data;
+      const response = await ApiHandler.api.getAddress({});
+      if (response) {
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
@@ -980,12 +977,12 @@ export class ApiHandler {
 
   static async getNodeOnchainBtcTransactions() {
     try {
-      const response = await new OnChainApi(
-        ApiHandler.config,
-      ).listtransactionsPost({ skip_sync: false });
-      if (response.status === 200) {
-        console.log(response.data);
-        return response.data;
+      const response = await ApiHandler.api.listTransactions({
+        skip_sync: false,
+      });
+      if (response) {
+        console.log(response);
+        return response;
       } else {
         throw new Error('Failed to connect to node');
       }
@@ -1016,7 +1013,6 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.nodeinfo();
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
@@ -1038,6 +1034,81 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async openChannel({
+    peerPubkeyAndOptAddr,
+    capacitySat,
+    pushMsat,
+    assetAmount,
+    assetId,
+    isPublic,
+    withAnchors,
+    feeBaseMsat,
+    feeProportionalMillionths,
+    temporaryChannelId,
+  }: {
+    peerPubkeyAndOptAddr: string;
+    capacitySat: number;
+    pushMsat: number;
+    assetAmount: number;
+    assetId: string;
+    isPublic: boolean;
+    withAnchors: boolean;
+    feeBaseMsat: number;
+    feeProportionalMillionths: number;
+    temporaryChannelId: string;
+  }) {
+    try {
+      const response = await ApiHandler.api.openchannel({
+        asset_amount: assetAmount,
+        asset_id: assetId,
+        capacity_sat: capacitySat,
+        fee_base_msat: feeBaseMsat,
+        fee_proportional_millionths: feeProportionalMillionths,
+        peer_pubkey_and_opt_addr: peerPubkeyAndOptAddr,
+        public: isPublic,
+        push_msat: pushMsat,
+        temporary_channel_id: temporaryChannelId,
+        with_anchors: withAnchors,
+      });
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to connect to node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async getChannels() {
+    try {
+      const response = await ApiHandler.api.listchannels();
+      if (response && response.channels) {
+        return snakeCaseToCamelCaseCase(response).channels;
+      } else {
+        return snakeCaseToCamelCaseCase(response);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  static async syncNode() {
+    try {
+      const response = await ApiHandler.api.sync();
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to sync node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   }
 }

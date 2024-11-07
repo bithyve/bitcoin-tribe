@@ -1,3 +1,5 @@
+import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+
 export interface ApiConfig {
   baseUrl: string;
   apiKey?: string;
@@ -28,13 +30,27 @@ export class RLNNodeApiServices {
       const response = await fetch(url, { ...options, headers });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Request failed: ${errorData.message}`);
+        throw new Error(`Request failed: ${errorData.error}`);
       }
       return response.json();
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error(`Error: ${endpoint} failed `, error);
       throw error;
     }
+  }
+
+  public static async checkNodeConnection(
+    baseUrl: string,
+    auth = '',
+  ): Promise<{}> {
+    const response = await fetch(`${baseUrl}/nodeinfo`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: auth,
+      },
+    });
+    return snakeCaseToCamelCaseCase(await response.json());
   }
 
   public async getBtcBalance(body: { skip_sync: boolean }): Promise<{
@@ -46,6 +62,30 @@ export class RLNNodeApiServices {
       body: JSON.stringify(body),
     });
   }
+
+  public async getAddress(body: {}): Promise<{
+    address: string;
+  }> {
+    return this.request('/address', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listTransactions(body: { skip_sync: boolean }): Promise<{}> {
+    return this.request('/listtransactions', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
+    return this.request('/listunspents', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async createutxos(body: {
     up_to: boolean;
     num: number;
@@ -157,6 +197,72 @@ export class RLNNodeApiServices {
     digest: string;
   }): Promise<{ bytes_hex: string }> {
     return this.request('/getassetmedia', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async refreshtransfers(body: { skip_sync: boolean }): Promise<{}> {
+    return this.request('/refreshtransfers', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+  }
+
+  public async listassets(body: {
+    filter_asset_schemas: string[];
+  }): Promise<{ bytes_hex: string }> {
+    return this.request('/listassets', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listtransfers(body: {
+    asset_id: string;
+  }): Promise<{ bytes_hex: string }> {
+    return this.request('/listtransfers', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async sync(): Promise<{ bytes_hex: string }> {
+    return this.request('/sync', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  }
+
+  public async getNode(id: string): Promise<{ bytes_hex: string }> {
+    return this.request(`/api/nodes/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  public async listchannels(): Promise<{}> {
+    return this.request('/listchannels', {
+      method: 'GET',
+    });
+  }
+
+  public async openchannel(body: {
+    peer_pubkey_and_opt_addr: string;
+    capacity_sat: number;
+    push_msat: number;
+    asset_amount: number;
+    asset_id: string;
+    public: boolean;
+    with_anchors: boolean;
+    fee_base_msat: number;
+    fee_proportional_millionths: number;
+    temporary_channel_id: string;
+  }): Promise<{ temporary_channel_id: string }> {
+    return this.request('/openchannel', {
       method: 'POST',
       body: JSON.stringify(body),
     });

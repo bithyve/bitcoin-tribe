@@ -1,16 +1,14 @@
 import { NativeModules } from 'react-native';
-import { NetworkType } from '../wallets/enums';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
-import { AssetSchema, OnChainApi, RGBApi } from '../rgbnode';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
+import config from 'src/utils/config';
 
 const { RGB } = NativeModules;
-export const SATS_FOR_RGB = 9000;
 
 export default class RGBServices {
-  static NETWORK = NetworkType.TESTNET;
+  static NETWORK = config.NETWORK_TYPE;
 
   static generateKeys = async (): Promise<RGBWallet> => {
     const keys = await RGB.generateKeys(this.NETWORK);
@@ -19,7 +17,6 @@ export default class RGBServices {
 
   static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
     const keys = await RGB.restoreKeys(this.NETWORK, mnemonic);
-    console.log('keys', keys);
     return JSON.parse(keys);
   };
 
@@ -41,7 +38,6 @@ export default class RGBServices {
         skip_sync: false,
         up_to: false,
       });
-      console.log('response', response);
       if (response) {
         return { created: true };
       }
@@ -79,21 +75,17 @@ export default class RGBServices {
     return isSynched;
   };
 
-  static syncRgbAssets = async (appType: AppType, config: any) => {
+  static syncRgbAssets = async (appType: AppType, api: RLNNodeApiServices) => {
     if (appType === AppType.NODE_CONNECT) {
-      await new RGBApi(config).refreshtransfersPostForm(false);
-      const response = await new RGBApi(config).listassetsPost({
-        filter_asset_schemas: [
-          AssetSchema.Cfa,
-          AssetSchema.Nia,
-          AssetSchema.Uda,
-        ],
+      await api.refreshtransfers({ skip_sync: false });
+      const response = await api.listassets({
+        filter_asset_schemas: ['Nia', 'Cfa'],
       });
-      if (response.status === 200) {
-        const data = snakeCaseToCamelCaseCase(response.data);
+      if (response) {
+        const data = snakeCaseToCamelCaseCase(response);
         return data;
       } else {
-        return response.data;
+        return response;
       }
     } else {
       const assets = await RGB.syncRgbAssets();
@@ -103,7 +95,6 @@ export default class RGBServices {
 
   static receiveAsset = async (
     appType: AppType,
-    config: any,
     api: RLNNodeApiServices,
     assetId: string,
   ): Promise<{
@@ -115,13 +106,12 @@ export default class RGBServices {
   }> => {
     try {
       if (appType === AppType.NODE_CONNECT) {
-        await new RGBApi(config).refreshtransfersPostForm(false);
+        await api.refreshtransfers({ skip_sync: false });
         const response = await api.rgbinvoice({
           asset_id: assetId,
           min_confirmations: 0,
           duration_seconds: 86400,
         });
-        console.log('ss', response);
         if (response) {
           const data = snakeCaseToCamelCaseCase(response);
           return data;
@@ -148,7 +138,6 @@ export default class RGBServices {
       const response = await api.assetmetadata({
         asset_id: assetId,
       });
-      console.log('response', response);
       if (response) {
         const data = snakeCaseToCamelCaseCase(response);
         return data;
@@ -164,17 +153,15 @@ export default class RGBServices {
   static getRgbAssetTransactions = async (
     assetId: string,
     appType: AppType,
-    config: any,
+    api: RLNNodeApiServices,
   ): Promise<{}[]> => {
     if (appType === AppType.NODE_CONNECT) {
-      const response = await new RGBApi(config).listtransfersPost({
-        asset_id: assetId,
-      });
-      if (response.status === 200) {
-        const data = snakeCaseToCamelCaseCase(response.data.transfers);
+      const response = await api.listtransfers({ asset_id: assetId });
+      if (response) {
+        const data = snakeCaseToCamelCaseCase(response.transfers);
         return data;
       } else {
-        return response.data.transfers;
+        return response;
       }
     } else {
       const data = await RGB.getRgbAssetTransactions(assetId);
@@ -218,7 +205,6 @@ export default class RGBServices {
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT) {
       const responseDigest = await api.postassetmedia({ filePath });
-      console.log('responseDigest', responseDigest);
       if (responseDigest) {
         const response = await api.issueassetcfa({
           amounts: [Number(supply)],
@@ -277,20 +263,17 @@ export default class RGBServices {
     }
   };
 
-  static getUnspents = async (appType: AppType, config: any): Promise<{}> => {
+  static getUnspents = async (
+    appType: AppType,
+    api: RLNNodeApiServices,
+  ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT) {
-      const response = await new OnChainApi(config).listunspentsPost(
-        { skip_sync: false },
-        {
-          validateStatus: (status: number) => true,
-        },
-      );
-      if (response.status === 200) {
-        const data = snakeCaseToCamelCaseCase(response.data.unspents);
-        console.log(data);
+      const response = await api.listUnspents({ skip_sync: false });
+      if (response) {
+        const data = snakeCaseToCamelCaseCase(response.unspents);
         return data;
       } else {
-        return response.data.error;
+        return response.error;
       }
     } else {
       const data = await RGB.getUnspents();
@@ -298,14 +281,9 @@ export default class RGBServices {
     }
   };
 
-  static getBtcBalance = async (config: any) => {
-    const response = await new OnChainApi(config).btcbalancePost(
-      { skip_sync: false },
-      {
-        validateStatus: (status: number) => true,
-      },
-    );
-    return response.data;
+  static getBtcBalance = async (api: RLNNodeApiServices) => {
+    const response = await api.getBtcBalance({ skip_sync: false });
+    return response;
   };
 
   static backup = async (path: string, password: string): Promise<string> => {

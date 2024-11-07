@@ -31,7 +31,7 @@ function ScanAssetScreen({ route, navigation }) {
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         onPress={() => {
-          navigation.navigate(NavigationRoutes.SENDASSET, {
+          navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
             wallet: wallet,
             rgbInvoice: rgbInvoice,

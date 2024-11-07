@@ -36,9 +36,11 @@
     "continue": "Continue",
     "noInternet": "No network connection",
     "rgbWalletOffline": "RGB wallet is offline.",
+    "rgbNodeOffline": "RGB node is locked/offline.",
     "backupNow": "Backup Now",
     "request": "Request",
-    "ok": "OK"
+    "ok": "OK",
+    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -76,8 +78,8 @@
     "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it.",
     "selectWalletType": "Select wallet type",
     "selfCustody": "Self-Custody",
-    "mainnet": "Mainnet",
-    "mainnetAndLightning": "Mainnet & Lightning",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "Supported",
     "nodeDetails": "Node Details",
     "nodeConURL": "Node connection URL",
@@ -87,11 +89,25 @@
     "authSubTitle": "To proceed, please authenticate yourself and ensure the.",
     "enterUsername": "Enter Username",
     "enterPassword": "Enter Password",
-    "enterBearerToken": "Enter Bearer Token"
+    "enterBearerToken": "Enter Bearer Token",
+    "supportTermAndConditionTitle": "By checking this box, you agree to the terms and conditions.",
+    "readMore": "Read More",
+    "termAndConditionTitle": "Terms and Conditions",
+    "termAndConditionBrief": "Tribe RGB provides an option to connect external nodes; however, support for this feature is managed by an external service provider. Please review the following terms:",
+    "termAndConditionTitle1": "Scope of Tribe RGB's Role",
+    "termAndConditionSubTitle1": "Tribe RGB offers a feature to connect external nodes but does not provide support or assume responsibility for the connection process or related issues.",
+    "termAndConditionTitle2": "External Support",
+    "termAndConditionSubTitle2": "For assistance with setup or troubleshooting, please contact the external provider directly, as they manage all support for external node connectivity.",
+    "termAndConditionTitle3": "Liability Disclaimer",
+    "termAndConditionSubTitle3": "Tribe RGB is not liable for any data loss, misconfigurations, or other consequences resulting from connecting to an external node. Use this option at your discretion.",
+    "termAndConditionTitle4": "Updates and Availability",
+    "termAndConditionSubTitle4": "Tribe RGB may update this feature without notice. Any changes to support availability or terms should be confirmed with the external provider.",
+    "termAndConditionTitle5": "Governing Law",
+    "termAndConditionSubTitle5": "These terms are governed by the applicable jurisdiction’s laws"
   },
   "home": {
     "addAssets": "Add Assets",
-    "addAssetSubTitle": "Issue New Asset or Receive Asset",
+    "addAssetSubTitle": "Issue new asset or add asset",
     "issueNew": "Issue new",
     "myAssets": "Your Assets",
     "issue": "Issue",
@@ -176,7 +192,13 @@
     "biometricsNotEnableMsg": "Biometrics not enabled.\nPlease go to setting and enable it",
     "EnterPasscode": "Enter Passcode",
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
-    "setPasscodeTitle": "Set Passcode"
+    "setPasscodeTitle": "Set Passcode",
+    "settled": "Settled",
+    "waitingcounterparty": "Waiting Counterparty",
+    "waitingconfirmations": "Waiting Confirmation",
+    "failed": "Failed",
+    "removed": "Removed",
+    "expired": "Expired"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -206,7 +228,8 @@
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
-    "sendAssetSubtitle": "Scan the RGB address below"
+    "sendAssetSubtitle": "Scan the RGB address below",
+    "totalFee": "Total Fee:"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -314,5 +337,19 @@
   "community": {
     "fnfTitle": "Friends & Family",
     "fnfSubTitle": "Bitcoin is better with friends"
+  },
+  "node": {
+    "viewNodeInfoTitle": "View Node Info",
+    "pubKey": "Pubkey:",
+    "apiUrl": "API URL:",
+    "onchainPubkey": "Onchain Pubkey:",
+    "rgbHtlcMinMsat": "Rgb_htlc_min_msat:",
+    "rgbChannelCapMinSat": "Rgb_channel_capacity_min_sat:",
+    "channelCapMisSat": "Channel_capacity_min_sat:",
+    "nodeStatusLock": "Node Status: Lock",
+    "initNode": "Init Node",
+    "channelsTitle": "Channels",
+    "channelEmptyTitle": "Channel List is Empty",
+    "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!"
   }
 }

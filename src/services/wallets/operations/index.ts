@@ -585,6 +585,36 @@ export default class WalletOperations {
     return feeRatesByPriority;
   };
 
+  static regtestFeeRates = () => {
+    // final safety net, enables send flow and consequently the usability of custom fee during fee-info failure scenarios
+
+    // high fee: 10 minutes
+    const highFeeBlockEstimate = 1;
+    const high = {
+      feePerByte: 3,
+      estimatedBlocks: highFeeBlockEstimate,
+      averageTxFee: 3,
+    };
+
+    // medium fee: 30 mins
+    const mediumFeeBlockEstimate = 1;
+    const medium = {
+      feePerByte: 2,
+      estimatedBlocks: mediumFeeBlockEstimate,
+      averageTxFee: 2,
+    };
+
+    // low fee: 60 mins
+    const lowFeeBlockEstimate = 1;
+    const low = {
+      feePerByte: 1,
+      estimatedBlocks: lowFeeBlockEstimate,
+      averageTxFee: 1,
+    };
+    const feeRatesByPriority = { high, medium, low };
+    return feeRatesByPriority;
+  };
+
   static estimateFeeRatesViaElectrum = async () => {
     try {
       // high fee: 10 minutes
@@ -714,6 +744,7 @@ export default class WalletOperations {
     const averageTxFeeByNetwork: AverageTxFeesByNetwork = {
       [NetworkType.TESTNET]: averageTxFees,
       [NetworkType.MAINNET]: averageTxFees,
+      [NetworkType.REGTEST]: this.regtestFeeRates(),
     };
     return averageTxFeeByNetwork;
   };

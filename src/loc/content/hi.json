@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGB वॉलेट ऑफ़लाइन है।",
     "backupNow": "अभी बैकअप करें",
     "request": "अनुरोध",
-    "ok": "ठीक है"
+    "ok": "ठीक है",
+    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -76,8 +77,8 @@
     "rememberPasscodeDesc": "यदि आप अपना पासकोड भूल जाते हैं, तो आप ऐप से बाहर हो जाएंगे और इसे पुनः प्राप्त करना होगा",
     "selectWalletType": "वॉलेट प्रकार चुनें",
     "selfCustody": "स्व-निगरानी",
-    "mainnet": "मुख्य नेटवर्क",
-    "mainnetAndLightning": "मुख्य नेटवर्क और लाइटनिंग",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "समर्थित",
     "nodeDetails": "नोड विवरण",
     "nodeConURL": "नोड कनेक्शन URL",
@@ -87,11 +88,25 @@
     "authSubTitle": " कृपया आगे बढ़ने के लिए अपनी पहचान सत्यापित करें और सुनिश्चित करें।",
     "enterUsername": "उपयोगकर्ता नाम दर्ज करें",
     "enterPassword": "पासवर्ड दर्ज करें",
-    "enterBearerToken": " बियरर टोकन दर्ज करें"
+    "enterBearerToken": " बियरर टोकन दर्ज करें",
+    "supportTermAndConditionTitle": "इस बॉक्स पर टिक करने से, आप नियम और शर्तों से सहमत होते हैं।",
+    "readMore": "और पढ़ें",
+    "termAndConditionTitle": "नियम और शर्तें",
+    "termAndConditionBrief": "बाहरी नोड्स को कनेक्ट करने का विकल्प प्रदान करता है; हालाँकि, इस सुविधा का समर्थन एक बाहरी सेवा प्रदाता द्वारा प्रबंधित किया जाता है। कृपया निम्नलिखित शर्तों की समीक्षा करें:",
+    "termAndConditionTitle1": "Tribe RGB की भूमिका का क्षेत्र",
+    "termAndConditionSubTitle1": "Tribe RGB बाहरी नोड्स से कनेक्ट करने का विकल्प देता है, लेकिन वह कनेक्शन प्रक्रिया या उससे संबंधित समस्याओं की जिम्मेदारी नहीं लेता।",
+    "termAndConditionTitle2": "बाहरी सहायता",
+    "termAndConditionSubTitle2": "सेटअप या समस्या समाधान के लिए कृपया सीधे बाहरी सेवा प्रदाता से संपर्क करें, क्योंकि वे सभी बाहरी नोड्स कनेक्टिविटी का समर्थन करते हैं।",
+    "termAndConditionTitle3": "उत्तरदायित्व अस्वीकरण",
+    "termAndConditionSubTitle3": "Tribe RGB बाहरी नोड से कनेक्ट होने के कारण किसी भी डेटा हानि, गलत कॉन्फ़िगरेशन या अन्य परिणामों के लिए उत्तरदायी नहीं है। इसे अपने विवेक से उपयोग करें।",
+    "termAndConditionTitle4": "अपडेट और उपलब्धता",
+    "termAndConditionSubTitle4": "Tribe RGB बिना सूचना के इस सुविधा को अपडेट कर सकता है। समर्थन की उपलब्धता या शर्तों में किसी भी बदलाव की पुष्टि के लिए कृपया बाहरी प्रदाता से संपर्क करें।",
+    "termAndConditionTitle5": "प्रासंगिक कानून",
+    "termAndConditionSubTitle5": "इन शर्तों पर लागू क्षेत्राधिकार के कानूनों द्वारा शासन किया जाता है।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
-    "addAssetSubTitle": "नई संपत्ति जारी करें या संपत्ति प्राप्त करें",
+    "addAssetSubTitle": "नया एसेट जारी करें या एसेट जोड़ें",
     "issueNew": "नया जारी करें",
     "myAssets": "आपकी संपत्तियां",
     "issue": "जारी करें",
@@ -176,7 +191,13 @@
     "biometricsNotEnableMsg": "बायोमेट्रिक्स सक्षम नहीं है।\nकृपया सेटिंग में जाकर इसे सक्षम करें",
     "EnterPasscode": "पासकोड दर्ज करें",
     "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
-    "setPasscodeTitle": "पासकोड सेट करें"
+    "setPasscodeTitle": "पासकोड सेट करें",
+    "settled": "निपटान हो गया",
+    "waitingcounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
+    "waitingconfirmations": "पुष्टि की प्रतीक्षा में",
+    "Failed": "असफल",
+    "removed": "हटा दिया गया",
+    "expired": "समाप्त हो गया"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -206,7 +227,8 @@
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
-    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें"
+    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें",
+    "totalFee": "कुल शुल्क："
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -314,5 +336,19 @@
   "community": {
     "fnfTitle": "मित्र और परिवार",
     "fnfSubTitle": "दोस्तों के साथ बिटकॉइन बेहतर है"
+  },
+  "node": {
+    "viewNodeInfoTitle": "नोड जानकारी देखें",
+    "pubKey": "सार्वजनिक कुंजी:",
+    "apiUrl": "एपीआई यूआरएल:",
+    "onchainPubkey": "ऑनचेन सार्वजनिक कुंजी:",
+    "rgbHtlcMinMsat": "आरजीबी एचटीएलसी न्यूनतम एमसैट:",
+    "rgbChannelCapMinSat": "आरजीबी चैनल न्यूनतम क्षमता:",
+    "channelCapMisSat": "चैनल न्यूनतम क्षमता:",
+    "nodeStatusLock": "नोड स्थिति: लॉक",
+    "initNode": "नोड प्रारंभ करें",
+    "channelsTitle": "चैनल्स",
+    "channelEmptyTitle": "चैनल सूची खाली है",
+    "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!"
   }
 }

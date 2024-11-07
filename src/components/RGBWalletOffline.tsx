@@ -1,47 +1,60 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import DeviceInfo from 'react-native-device-info';
 
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
+import AppType from 'src/models/enums/AppType';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
+import { windowHeight } from 'src/constants/responsive';
+import AppTouchable from './AppTouchable';
 
 const RGBWalletStatus = () => {
-  const { isWalletOnline } = useContext(AppContext); // Access the context
+  const { isWalletOnline, appType } = useContext(AppContext); // Access the context
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
+  const hasNotch = DeviceInfo.hasNotch();
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme, hasNotch);
+
+  const msg = useMemo(() => {
+    return appType === AppType.NODE_CONNECT
+      ? common.rgbNodeOffline
+      : common.rgbWalletOffline;
+  }, []);
 
   return isWalletOnline === false ? (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.errorContainer}>
-        <AppText style={styles.text}>{common.rgbWalletOffline}</AppText>
-      </View>
-    </SafeAreaView>
+    <AppTouchable style={styles.errorContainer}>
+      <AppText style={styles.text}>{msg}</AppText>
+    </AppTouchable>
   ) : null;
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    height: '7%',
-    backgroundColor: Colors.FireOpal,
-  },
-  errorContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: Platform.OS === 'ios' ? -10 : -15,
-    backgroundColor: Colors.FireOpal,
-    padding: 20,
-    zIndex: 1000, // Ensures the banner is above everything
-    elevation: 10,
-    alignItems: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
+const getStyles = (theme: AppTheme, hasNotch) =>
+  StyleSheet.create({
+    errorContainer: {
+      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
+      top: hasNotch
+        ? 40
+        : Platform.OS === 'ios' && windowHeight > 820
+        ? 50
+        : Platform.OS === 'android'
+        ? 35
+        : 16,
+      left: 0,
+      right: 0,
+      backgroundColor: Colors.FireOpal,
+      zIndex: 1000, // Ensures the banner is above everything
+      alignItems: 'center',
+    },
+    text: {
+      color: 'white',
+      fontSize: 14,
+      fontWeight: 'bold',
+    },
+  });
 
 export default RGBWalletStatus;

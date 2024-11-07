@@ -45,6 +45,8 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
+import { formatNumber } from 'src/utils/numberWithCommas';
+import config from 'src/utils/config';
 
 type ItemProps = {
   name: string;
@@ -140,7 +142,8 @@ const SendAssetScreen = () => {
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
     JSON.parse(averageTxFeeJSON);
-  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
+  const averageTxFee: AverageTxFees =
+    averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
 
   const [invoice, setInvoice] = useState(rgbInvoice || '');
@@ -173,8 +176,9 @@ const SendAssetScreen = () => {
   }, [createUtxos.data]);
 
   useEffect(() => {
-    if (item.balance.spendable < amount)
+    if (item.balance.spendable < amount) {
       Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+    }
   }, [amount]);
 
   const sendAsset = useCallback(async () => {
@@ -287,7 +291,7 @@ const SendAssetScreen = () => {
         />
 
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={handleAmtChangeText}
           placeholder={assets.amount}
           keyboardType="numeric"
@@ -411,7 +415,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      marginTop: hp(5),
+      // marginTop: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(5),

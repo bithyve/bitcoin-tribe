@@ -34,6 +34,7 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import BackupAlert from './components/BackupAlert';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
+import { AppContext } from 'src/contexts/AppContext';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -59,7 +60,7 @@ function HomeScreen() {
     ApiHandler.viewUtxos,
   );
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-
+  const { setAppType } = useContext(AppContext);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -67,7 +68,7 @@ function HomeScreen() {
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
-  }, [coins, collectibles]);
+  }, [coins?.length, collectibles?.length]);
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
@@ -86,6 +87,7 @@ function HomeScreen() {
   useEffect(() => {
     refreshRgbWallet.mutate();
     fetchUTXOs();
+    setAppType(app.appType);
     refreshWallet.mutate({
       wallets: [wallet],
     });
@@ -155,6 +157,13 @@ function HomeScreen() {
       </AppText>
       <AssetsList
         listData={assets}
+        loading={refreshRgbWallet.isLoading}
+        onRefresh={() => {
+          refreshRgbWallet.mutate();
+          refreshWallet.mutate({
+            wallets: [wallet],
+          });
+        }}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={(asset: Asset) => {
           if (asset.assetIface === AssetFace.RGB20) {

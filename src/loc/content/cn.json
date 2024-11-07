@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGB钱包离线。",
     "backupNow": "立即备份",
     "request": "请求",
-    "ok": "确定"
+    "ok": "确定",
+    "assetIDCopySuccessfully": "资产 ID 复制成功！"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -76,8 +77,8 @@
     "rememberPasscodeDesc": "如果您忘记了密码，您将被锁定在应用程序之外，必须通过恢复来找回它",
     "selectWalletType": "选择钱包类型",
     "selfCustody": "自主管理",
-    "mainnet": "主网",
-    "mainnetAndLightning": "主网和闪电网络",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "支持",
     "nodeDetails": "节点详情",
     "nodeConURL": "节点连接URL",
@@ -87,11 +88,25 @@
     "authSubTitle": "请进行身份认证并确保。",
     "enterUsername": "输入用户名",
     "enterPassword": "输入密码",
-    "enterBearerToken": "输入承载令牌"
+    "enterBearerToken": "输入承载令牌",
+    "supportTermAndConditionTitle": "勾选此框，即表示您同意条款和条件。",
+    "readMore": "阅读更多",
+    "termAndConditionTitle": "条款和条件",
+    "termAndConditionBrief": "提供连接外部节点的选项；然而，此功能的支持由外部服务提供商管理。请查看以下条款：",
+    "termAndConditionTitle1": "Tribe RGB的角色范围",
+    "termAndConditionSubTitle1": "Tribe RGB提供连接外部节点的功能，但不支持或负责连接过程或相关问题。",
+    "termAndConditionTitle2": "外部支持",
+    "termAndConditionSubTitle2": "设置或故障排除时，请直接联系外部提供商，因为他们管理所有外部节点连接的支持。",
+    "termAndConditionTitle3": "责任免责声明",
+    "termAndConditionSubTitle3": "Tribe RGB不对连接外部节点导致的任何数据丢失、配置错误或其他后果承担责任。使用此选项需自行决定。",
+    "termAndConditionTitle4": "更新和可用性",
+    "termAndConditionSubTitle4": "Tribe RGB可能会在没有通知的情况下更新此功能。请与外部提供商确认支持可用性或条款的任何更改。",
+    "termAndConditionTitle5": "法律管辖",
+    "termAndConditionSubTitle5": "这些条款受适用司法管辖区的法律管辖。"
   },
   "home": {
     "addAssets": "添加资产",
-    "addAssetSubTitle": "发行新资产或接收资产",
+    "addAssetSubTitle": "发行新资产或添加资产",
     "issueNew": "发行新资产",
     "myAssets": "你的资产",
     "issue": "发行",
@@ -176,7 +191,13 @@
     "biometricsNotEnableMsg": "生物识别未启用。\n请前往设置并启用",
     "EnterPasscode": "输入密码",
     "EnterPasscodeSubTitle": "确认密码以显示种子短语",
-    "setPasscodeTitle": "设置密码"
+    "setPasscodeTitle": "设置密码",
+    "settled": "结算完成",
+    "waitingcounterparty": "等待对方",
+    "waitingconfirmations": "等待确认",
+    "Failed": "失败",
+    "removed": "已移除",
+    "expired": "已过期"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -206,7 +227,8 @@
     "transFeeErrMsg": "错误：交易费用信息缺失",
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
-    "sendAssetSubtitle": "扫描下面的RGB地址"
+    "sendAssetSubtitle": "扫描下面的RGB地址",
+    "totalFee": "总费用："
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -314,5 +336,19 @@
   "community": {
     "fnfTitle": "朋友和家人",
     "fnfSubTitle": "比特币和朋友在一起更好"
+  },
+  "node": {
+    "viewNodeInfoTitle": "查看节点信息",
+    "pubKey": "公钥:",
+    "apiUrl": "API URL:",
+    "onchainPubkey": "链上公钥:",
+    "rgbHtlcMinMsat": "RGB HTLC最小毫秒:",
+    "rgbChannelCapMinSat": "RGB频道最小容量:",
+    "channelCapMisSat": "最小通道容量:",
+    "nodeStatusLock": "节点状态：锁定",
+    "initNode": "初始化节点",
+    "channelsTitle": "通道",
+    "channelEmptyTitle": "通道列表为空",
+    "channelEmptySubTitle": "开始添加通道以增强您的比特币体验！"
   }
 }

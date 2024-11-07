@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     width: wp(300),
   },
   toastMessageStyle: {
-    marginLeft: wp(8),
+    marginHorizontal: wp(8),
     fontSize: 14,
     fontFamily: Fonts.LufgaSemiBold,
     flex: 1,

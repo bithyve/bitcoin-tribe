@@ -27,7 +27,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     textColor = theme.colors.primaryCTAText,
     loading,
     disabled = false,
-    height,
+    height = hp(14),
   } = props;
   const styles = getStyles(theme, width, disabled, textColor, height);
 

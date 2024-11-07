@@ -38,7 +38,8 @@
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
-    "ok": "オーケー"
+    "ok": "オーケー",
+    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -76,8 +77,8 @@
     "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です",
     "selectWalletType": "ウォレットタイプを選択",
     "selfCustody": "セルフカストディ",
-    "mainnet": "メインネット",
-    "mainnetAndLightning": "メインネット＆ライトニング",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "サポートされている",
     "nodeDetails": "ノードの詳細",
     "nodeConURL": "ノード接続URL",
@@ -87,11 +88,25 @@
     "authSubTitle": "続行するには、認証を行い、確認してください。",
     "enterUsername": "ユーザー名を入力してください",
     "enterPassword": " パスワードを入力してください",
-    "enterBearerToken": "ベアラートークンを入力してください"
+    "enterBearerToken": "ベアラートークンを入力してください",
+    "supportTermAndConditionTitle": "このボックスにチェックを入れることで、利用規約に同意したことになります。",
+    "readMore": "詳しく読む",
+    "termAndConditionTitle": "利用規約",
+    "termAndConditionBrief": "Tribe RGB は外部ノードを接続するオプションを提供しますが、この機能のサポートは外部サービスプロバイダーによって管理されます。以下の条件をご確認ください。",
+    "termAndConditionTitle1": "Tribe RGBの役割の範囲",
+    "termAndConditionSubTitle1": "Tribe RGBは外部ノードに接続する機能を提供しますが、接続プロセスや関連する問題についてのサポートや責任は負いません。",
+    "termAndConditionTitle2": "外部サポート",
+    "termAndConditionSubTitle2": "セットアップやトラブルシューティングに関しては、外部のプロバイダーに直接お問い合わせください。",
+    "termAndConditionTitle3": "責任の免責事項",
+    "termAndConditionSubTitle3": "Tribe RGBは、外部ノードに接続した結果として生じるデータ損失、設定ミス、またはその他の影響について責任を負いません。自己責任でご利用ください。",
+    "termAndConditionTitle4": "更新と利用可能性",
+    "termAndConditionSubTitle4": "Tribe RGBは予告なくこの機能を更新する場合があります。サポートの可用性または利用規約の変更については、外部プロバイダーに確認してください。",
+    "termAndConditionTitle5": "準拠法",
+    "termAndConditionSubTitle5": "これらの条項は、適用される管轄の法律に準拠します。"
   },
   "home": {
     "addAssets": "アセットを追加",
-    "addAssetSubTitle": "新しいアセットを発行するか、アセットを受信する",
+    "addAssetSubTitle": "新しいアセットを発行するかアセットを追加する",
     "issueNew": "新規発行",
     "myAssets": "あなたの資産",
     "issue": "発行",
@@ -176,7 +191,13 @@
     "biometricsNotEnableMsg": "バイオメトリクスが有効ではありません。\n設定に移動して有効にしてください",
     "EnterPasscode": "パスコードを入力",
     "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
-    "setPasscodeTitle": "パスコードを設定"
+    "setPasscodeTitle": "パスコードを設定",
+    "settled": "清算済み",
+    "waitingcounterparty": "相手を待っています",
+    "waitingconfirmations": "確認待ち",
+    "Failed": "失敗",
+    "removed": "削除されました",
+    "expired": "有効期限が切れました"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -206,7 +227,8 @@
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
     "paste": "貼り付け",
     "sendAssetTitle": "資産を送信",
-    "sendAssetSubtitle": "下のRGBアドレスをスキャンしてください"
+    "sendAssetSubtitle": "下のRGBアドレスをスキャンしてください",
+    "totalFee": "合計料金："
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
@@ -314,5 +336,19 @@
   "community": {
     "fnfTitle": "友達と家族",
     "fnfSubTitle": "ビットコインは友達と一緒にいるともっと楽しい"
+  },
+  "node": {
+    "viewNodeInfoTitle": "ノード情報を表示",
+    "pubKey": "公開鍵:",
+    "apiUrl": "API URL:",
+    "onchainPubkey": "オンチェーン公開鍵:",
+    "rgbHtlcMinMsat": "RGB_HTLC最小msat:",
+    "rgbChannelCapMinSat": "RGBチャネル最小容量:",
+    "channelCapMisSat": "チャネル最小容量:",
+    "nodeStatusLock": "ノードステータス：ロック",
+    "initNode": "ノードを初期化",
+    "channelsTitle": "チャンネル",
+    "channelEmptyTitle": "チャンネルリストは空です",
+    "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！"
   }
 }
