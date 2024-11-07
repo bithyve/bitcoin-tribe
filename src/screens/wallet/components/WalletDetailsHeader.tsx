@@ -47,8 +47,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     }
   }, [
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
-    wallet.specs.balances.confirmed,
-    wallet.specs.balances.unconfirmed,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
   ]);
 
   return (
