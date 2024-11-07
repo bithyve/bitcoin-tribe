@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { hp, windowHeight, wp } from 'src/constants/responsive';
