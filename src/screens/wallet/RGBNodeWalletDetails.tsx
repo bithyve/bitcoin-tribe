@@ -57,12 +57,12 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
           wallet={null}
           activeTab={activeTab}
           onPressBuy={() =>
-            app.appType === AppType.NODE_CONNECT
-              ? setVisibleRequestTSats(true)
+            config.NETWORK_TYPE === NetworkType.MAINNET
+              ? setVisible(true)
               : config.NETWORK_TYPE === NetworkType.TESTNET ||
                 config.NETWORK_TYPE === NetworkType.REGTEST
               ? mutate()
-              : setVisible(true)
+              : setVisibleRequestTSats(true)
           }
         />
       </GradientView>
