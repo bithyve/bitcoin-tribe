@@ -39,7 +39,9 @@
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
     "ok": "オーケー",
-    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！"
+    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！",
+    "later": "後で",
+    "joinGroup": "グループに参加する"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -285,7 +287,9 @@
     "rgbAssets": "予約されたサット",
     "lightning": "ライトニングネットワーク",
     "bitcoin": "ビットコイン",
-    "reserveAmtText": "資産取引のために予約済み"
+    "reserveAmtText": "資産取引のために予約済み",
+    "requestTSatsTitle": "テストサッツをリクエスト",
+    "requestTSatSubTitle": "テストサッツを受け取り、RGBを楽しむために、私たちのTelegramグループに参加してください。"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

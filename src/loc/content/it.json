@@ -39,7 +39,9 @@
     "backupNow": "Esegui backup ora",
     "request": "Richiesta",
     "ok": "OK",
-    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!"
+    "assetIDCopySuccessfully": "ID dell'asset copiato con successo!",
+    "later": "Più tardi",
+    "joinGroup": "Unisciti al gruppo"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -285,7 +287,9 @@
     "rgbAssets": "Sats riservati",
     "lightning": "Fulmine",
     "bitcoin": "Bitcoin",
-    "reserveAmtText": "Riservato per le transazioni di asset"
+    "reserveAmtText": "Riservato per le transazioni di asset",
+    "requestTSatsTitle": "Richiedi Test Sats",
+    "requestTSatSubTitle": "Unisciti al nostro gruppo Telegram per ricevere test sats e divertirti con RGB."
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

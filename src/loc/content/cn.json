@@ -39,7 +39,9 @@
     "backupNow": "立即备份",
     "request": "请求",
     "ok": "确定",
-    "assetIDCopySuccessfully": "资产 ID 复制成功！"
+    "assetIDCopySuccessfully": "资产 ID 复制成功！",
+    "later": "稍后",
+    "joinGroup": "加入群组"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -285,7 +287,9 @@
     "rgbAssets": "保留Sats",
     "lightning": "闪电网络",
     "bitcoin": "比特币",
-    "reserveAmtText": "为资产交易保留"
+    "reserveAmtText": "为资产交易保留",
+    "requestTSatsTitle": "请求测试 Sats",
+    "requestTSatSubTitle": "请加入我们的Telegram群组以接收测试Sats，体验RGB的乐趣。"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

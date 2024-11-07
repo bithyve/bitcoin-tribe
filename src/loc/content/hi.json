@@ -39,7 +39,9 @@
     "backupNow": "अभी बैकअप करें",
     "request": "अनुरोध",
     "ok": "ठीक है",
-    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!"
+    "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!",
+    "later": "बाद में",
+    "joinGroup": "समूह में शामिल हों"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -285,7 +287,9 @@
     "rgbAssets": "आरक्षित सैट्स",
     "lightning": "लाइटनिंग नेटवर्क",
     "bitcoin": "बिटकॉइन",
-    "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित"
+    "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित",
+    "requestTSatsTitle": "टेस्ट सैट्स का अनुरोध करें",
+    "requestTSatSubTitle": "कृपया टेस्ट सैट्स प्राप्त करने और RGB के साथ खेलने का आनंद लेने के लिए हमारे टेलीग्राम समूह में शामिल हों।"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

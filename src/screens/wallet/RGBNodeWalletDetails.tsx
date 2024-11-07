@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useQuery as realmUseQuery } from '@realm/react';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 
-import { wp, windowHeight, hp } from 'src/constants/responsive';
+import { wp, hp } from 'src/constants/responsive';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 import { RealmSchema } from 'src/storage/enum';
 import ModalContainer from 'src/components/ModalContainer';
@@ -21,6 +21,9 @@ import GradientView from 'src/components/GradientView';
 import { AppTheme } from 'src/theme';
 import { NetworkType } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import RequestTSatsModal from './components/RequestTSatsModal';
+import openLink from 'src/utils/OpenLink';
 
 function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const theme: AppTheme = useTheme();
@@ -29,6 +32,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
   const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
+  const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
@@ -53,7 +57,10 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
           wallet={null}
           activeTab={activeTab}
           onPressBuy={() =>
-            config.NETWORK_TYPE === NetworkType.TESTNET
+            app.appType === AppType.NODE_CONNECT
+              ? setVisibleRequestTSats(true)
+              : config.NETWORK_TYPE === NetworkType.TESTNET ||
+                config.NETWORK_TYPE === NetworkType.REGTEST
               ? mutate()
               : setVisible(true)
           }
@@ -81,6 +88,19 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         onDismiss={() => setVisible(false)}>
         <BuyModal />
       </ModalContainer>
+      <ResponsePopupContainer
+        backColor={theme.colors.modalBackColor}
+        borderColor={theme.colors.modalBackColor}
+        visible={visibleRequestTSats}
+        enableClose={true}
+        onDismiss={() => setVisibleRequestTSats(false)}>
+        <RequestTSatsModal
+          title={walletTranslations.requestTSatsTitle}
+          subTitle={walletTranslations.requestTSatSubTitle}
+          onLaterPress={() => setVisibleRequestTSats(false)}
+          onPrimaryPress={() => openLink('https://t.me/BitcoinTribeSupport')}
+        />
+      </ResponsePopupContainer>
       <ModalLoading visible={isLoading} />
     </View>
   );
