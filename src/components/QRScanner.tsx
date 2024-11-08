@@ -19,6 +19,7 @@ import {
 import { AppTheme } from 'src/theme';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import CameraUnauthorized from './CameraUnauthorized';
 type QRScannerProps = {
   onCodeScanned: (codes: string) => void;
 };
