@@ -13,29 +13,21 @@ import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
 import {
   Camera,
-  Code,
   useCameraDevice,
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { AppTheme } from 'src/theme';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { PaymentInfoKind } from 'src/services/wallets/enums';
-import WalletUtilities from 'src/services/wallets/operations/utils';
-import { useNavigation } from '@react-navigation/native';
-import config from 'src/utils/config';
-import Toast from './Toast';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import useWallets from 'src/hooks/useWallets';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import CameraUnauthorized from './CameraUnauthorized';
 
-const QRScanner = () => {
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+type QRScannerProps = {
+  onCodeScanned: (codes: string) => void;
+};
+const QRScanner = (props: QRScannerProps) => {
+  const { onCodeScanned } = props;
   const device = useCameraDevice('back');
   const [cameraPermission, setCameraPermission] = useState(null);
-  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
 
@@ -85,42 +77,6 @@ const QRScanner = () => {
     return () => {
       subscription.remove();
     };
-  }, []);
-
-  const onCodeScanned = useCallback((codes: Code[]) => {
-    const value = codes[0]?.value;
-    if (value == null) {
-      return;
-    }
-    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(value, network);
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
-    switch (paymentInfoKind) {
-      case PaymentInfoKind.ADDRESS:
-        navigation.replace(NavigationRoutes.SENDTO, { wallet, address });
-        break;
-      case PaymentInfoKind.PAYMENT_URI:
-        navigation.replace(NavigationRoutes.SENDTO, {
-          wallet,
-          address,
-          paymentURIAmount: amount,
-        });
-        break;
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-        });
-        break;
-      default:
-        Toast(sendScreen.invalidBtcAddress, true);
-    }
   }, []);
 
   const codeScanner = useCodeScanner({

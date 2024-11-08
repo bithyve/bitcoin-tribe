@@ -68,7 +68,7 @@ function HomeScreen() {
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => a.timestamp - b.timestamp);
-  }, [coins, collectibles]);
+  }, [coins?.length, collectibles?.length]);
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {

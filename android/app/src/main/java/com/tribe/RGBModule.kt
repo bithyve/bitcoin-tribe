@@ -41,7 +41,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun restoreKeys(network: String, mnemonic: String, promise: Promise) {
-        val rgbNetwork = if(network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
+        val rgbNetwork = RGBWalletRepository.getNetwork(network)
         val keys = org.rgbtools.restoreKeys(rgbNetwork, mnemonic)
         val gson = Gson()
         val json = gson.toJson(keys)

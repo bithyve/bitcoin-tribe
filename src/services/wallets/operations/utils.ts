@@ -98,7 +98,8 @@ export default class WalletUtilities {
     purpose: DerivationPurpose = DerivationPurpose.BIP84,
     scriptType: BIP48ScriptTypes = BIP48ScriptTypes.NATIVE_SEGWIT,
   ): string => {
-    const isTestnet = type === NetworkType.TESTNET ? 1 : 0;
+    const isTestnet =
+      type === NetworkType.TESTNET || type === NetworkType.REGTEST ? 1 : 0;
     if (entity === EntityKind.VAULT) {
       const scriptNum = scriptType === BIP48ScriptTypes.NATIVE_SEGWIT ? 2 : 1;
       return `m/${DerivationPurpose.BIP48}'/${isTestnet}'/${accountNumber}'/${scriptNum}'`;

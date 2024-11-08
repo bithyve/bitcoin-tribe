@@ -106,7 +106,7 @@ import CloudKit
               RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
           ], skipSync: false)
           
-          let transfers = try wallet.listTransfers(assetId: assetId)
+        let transfers = try wallet.listTransfers(assetId: assetId).reversed()
           var jsonArray = [[String: Any]]()
           
           for transfer in transfers {

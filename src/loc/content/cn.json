@@ -42,7 +42,9 @@
     "assetIDCopySuccessfully": "资产 ID 复制成功！",
     "cameraPermissionTitle": "相机访问已关闭",
     "cameraPermissionSubTitle": "在设备设置中开启相机",
-    "cameraPermissionCTA": "点击进入设置"
+    "cameraPermissionCTA": "点击进入设置",
+    "later": "稍后",
+    "joinGroup": "加入群组"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -80,8 +82,8 @@
     "rememberPasscodeDesc": "如果您忘记了密码，您将被锁定在应用程序之外，必须通过恢复来找回它",
     "selectWalletType": "选择钱包类型",
     "selfCustody": "自主管理",
-    "mainnet": "主网",
-    "mainnetAndLightning": "OnChain & Lightning",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "支持",
     "nodeDetails": "节点详情",
     "nodeConURL": "节点连接URL",
@@ -197,7 +199,7 @@
     "setPasscodeTitle": "设置密码",
     "settled": "结算完成",
     "waitingcounterparty": "等待对方",
-    "Waitingconfirmation": "等待确认",
+    "waitingconfirmations": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
     "expired": "已过期"
@@ -214,6 +216,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
+    "btcHeaderSubTitle": "扫描比特币地址",
     "optionCardTitle": "或手动输入详细信息",
     "optionCardSubTitle": "输入比特币地址或RGB发票",
     "enterSendAddress": "输入发送地址",
@@ -230,7 +233,7 @@
     "transFeeErrMsg": "错误：交易费用信息缺失",
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
-    "sendAssetSubtitle": "扫描下面的RGB地址",
+    "sendAssetSubtitle": "扫描RGB发票",
     "totalFee": "总费用："
   },
   "wallet": {
@@ -287,7 +290,9 @@
     "rgbAssets": "保留Sats",
     "lightning": "闪电网络",
     "bitcoin": "比特币",
-    "reserveAmtText": "为资产交易保留"
+    "reserveAmtText": "为资产交易保留",
+    "requestTSatsTitle": "请求测试 Sats",
+    "requestTSatSubTitle": "请加入我们的Telegram群组以接收测试Sats，体验RGB的乐趣。"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

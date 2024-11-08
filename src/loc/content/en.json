@@ -43,7 +43,9 @@
     "assetIDCopySuccessfully": "Asset's ID Copied Successfully!",
     "cameraPermissionTitle": "Camera access is turned off",
     "cameraPermissionSubTitle": "Turn on the camera in your device settings",
-    "cameraPermissionCTA": "Tap to go to settings"
+    "cameraPermissionCTA": "Tap to go to settings",
+    "later": "Later",
+    "joinGroup": "Join Group"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -81,8 +83,8 @@
     "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it.",
     "selectWalletType": "Select wallet type",
     "selfCustody": "Self-Custody",
-    "mainnet": "Mainnet",
-    "mainnetAndLightning": "OnChain & Lightning",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "Supported",
     "nodeDetails": "Node Details",
     "nodeConURL": "Node connection URL",
@@ -198,7 +200,7 @@
     "setPasscodeTitle": "Set Passcode",
     "settled": "Settled",
     "waitingcounterparty": "Waiting Counterparty",
-    "Waitingconfirmation": "Waiting Confirmation",
+    "waitingconfirmations": "Waiting Confirmation",
     "failed": "Failed",
     "removed": "Removed",
     "expired": "Expired"
@@ -215,6 +217,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
+    "btcHeaderSubTitle": "Scan a Bitcoin Address",
     "optionCardTitle": "or Enter details manually",
     "optionCardSubTitle": "Enter a Bitcoin Address or RGB invoice",
     "enterSendAddress": "Enter Send Address",
@@ -231,7 +234,7 @@
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
-    "sendAssetSubtitle": "Scan the RGB address below",
+    "sendAssetSubtitle": "Scan the RGB invoice",
     "totalFee": "Total Fee:"
   },
   "wallet": {
@@ -288,7 +291,9 @@
     "rgbAssets": "Reserved Sats",
     "lightning": "Lightning",
     "bitcoin": "Bitcoin",
-    "reserveAmtText": "Reserved for asset transactions"
+    "reserveAmtText": "Reserved for asset transactions",
+    "requestTSatsTitle": "Request Test Sats",
+    "requestTSatSubTitle": "Please join our Telegram group to receive test sats and enjoy playing around with RGB."
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

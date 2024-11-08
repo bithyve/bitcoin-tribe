@@ -42,7 +42,9 @@
     "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!",
     "cameraPermissionTitle": "कैमरा एक्सेस बंद है",
     "cameraPermissionSubTitle": "अपने डिवाइस सेटिंग्स में कैमरा चालू करें",
-    "cameraPermissionCTA": "सेटिंग्स में जाने के लिए टैप करें"
+    "cameraPermissionCTA": "सेटिंग्स में जाने के लिए टैप करें",
+    "later": "बाद में",
+    "joinGroup": "समूह में शामिल हों"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -80,8 +82,8 @@
     "rememberPasscodeDesc": "यदि आप अपना पासकोड भूल जाते हैं, तो आप ऐप से बाहर हो जाएंगे और इसे पुनः प्राप्त करना होगा",
     "selectWalletType": "वॉलेट प्रकार चुनें",
     "selfCustody": "स्व-निगरानी",
-    "mainnet": "मुख्य नेटवर्क",
-    "mainnetAndLightning": "OnChain & Lightning",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "समर्थित",
     "nodeDetails": "नोड विवरण",
     "nodeConURL": "नोड कनेक्शन URL",
@@ -197,7 +199,7 @@
     "setPasscodeTitle": "पासकोड सेट करें",
     "settled": "निपटान हो गया",
     "waitingcounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
-    "Waitingconfirmation": "पुष्टि की प्रतीक्षा में",
+    "waitingconfirmations": "पुष्टि की प्रतीक्षा में",
     "Failed": "असफल",
     "removed": "हटा दिया गया",
     "expired": "समाप्त हो गया"
@@ -214,6 +216,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "नीचे बिटकॉइन पता या आरजीबी इनवॉइस स्कैन करें",
+    "btcHeaderSubTitle": "एक बिटकॉइन पता स्कैन करें",
     "optionCardTitle": "या विवरण मैन्युअल रूप से दर्ज करें",
     "optionCardSubTitle": "बिटकॉइन पता या आरजीबी इनवॉइस दर्ज करें",
     "enterSendAddress": "सेंड पता दर्ज करें",
@@ -230,7 +233,7 @@
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
-    "sendAssetSubtitle": "नीचे दिए गए RGB पते को स्कैन करें",
+    "sendAssetSubtitle": "RGB इनवॉइस को स्कैन करें",
     "totalFee": "कुल शुल्क："
   },
   "wallet": {
@@ -287,7 +290,9 @@
     "rgbAssets": "आरक्षित सैट्स",
     "lightning": "लाइटनिंग नेटवर्क",
     "bitcoin": "बिटकॉइन",
-    "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित"
+    "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित",
+    "requestTSatsTitle": "टेस्ट सैट्स का अनुरोध करें",
+    "requestTSatSubTitle": "कृपया टेस्ट सैट्स प्राप्त करने और RGB के साथ खेलने का आनंद लेने के लिए हमारे टेलीग्राम समूह में शामिल हों।"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

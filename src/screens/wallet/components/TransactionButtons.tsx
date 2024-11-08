@@ -72,13 +72,12 @@ const TransactionButtons = (props: transButtonProps) => {
             textColor={theme.colors.roundBuyCTATitle}
             buttonColor={theme.colors.buyCtaBorderColor}
             title={
-              config.NETWORK_TYPE === NetworkType.TESTNET
+              config.NETWORK_TYPE === NetworkType.TESTNET ||
+              config.NETWORK_TYPE === NetworkType.REGTEST
                 ? common.request
                 : common.buy
             }
-            width={
-              config.NETWORK_TYPE === NetworkType.TESTNET ? wp(105) : wp(105)
-            }
+            width={wp(105)}
             onPress={onPressBuy}
           />
         </View>

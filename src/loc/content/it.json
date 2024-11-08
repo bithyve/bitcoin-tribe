@@ -42,7 +42,9 @@
     "assetIDCopySuccessfully": "ID dell'asset copiato con successo!",
     "cameraPermissionTitle": " L'accesso alla fotocamera è disattivato",
     "cameraPermissionSubTitle": "Attiva la fotocamera nelle impostazioni del dispositivo",
-    "cameraPermissionCTA": "Tocca per andare alle impostazioni"
+    "cameraPermissionCTA": "Tocca per andare alle impostazioni",
+    "later": "Più tardi",
+    "joinGroup": "Unisciti al gruppo"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -80,8 +82,8 @@
     "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo",
     "selectWalletType": "Seleziona il tipo di wallet",
     "selfCustody": "Auto-custodia",
-    "mainnet": "Rete principale",
-    "mainnetAndLightning": "OnChain & Lightning",
+    "mainnet": "On-Chain",
+    "mainnetAndLightning": "On-Chain & Lightning",
     "supported": "Supportato",
     "nodeDetails": "Dettagli del nodo",
     "nodeConURL": "URL di connessione del nodo",
@@ -197,7 +199,7 @@
     "setPasscodeTitle": "Imposta il codice",
     "settled": "Sistemato",
     "waitingcounterparty": "In attesa della controparte",
-    "Waitingconfirmation": "In attesa di conferma",
+    "waitingconfirmations": "In attesa di conferma",
     "Failed": "Fallito",
     "removed": "Rimosso",
     "expired": "Scaduto"
@@ -214,6 +216,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
+    "btcHeaderSubTitle": "Scansiona un indirizzo Bitcoin",
     "optionCardTitle": "oppure inserisci i dettagli manualmente",
     "optionCardSubTitle": "Inserisci un indirizzo Bitcoin o una fattura RGB",
     "enterSendAddress": "Inserisci indirizzo di invio",
@@ -230,7 +233,7 @@
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
     "paste": "Incolla",
     "sendAssetTitle": "Invia asset",
-    "sendAssetSubtitle": "Scansiona l'indirizzo RGB qui sotto",
+    "sendAssetSubtitle": "Scansiona la fattura RGB",
     "totalFee": "Costo totale："
   },
   "wallet": {
@@ -287,7 +290,9 @@
     "rgbAssets": "Sats riservati",
     "lightning": "Fulmine",
     "bitcoin": "Bitcoin",
-    "reserveAmtText": "Riservato per le transazioni di asset"
+    "reserveAmtText": "Riservato per le transazioni di asset",
+    "requestTSatsTitle": "Richiedi Test Sats",
+    "requestTSatSubTitle": "Unisciti al nostro gruppo Telegram per ricevere test sats e divertirti con RGB."
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

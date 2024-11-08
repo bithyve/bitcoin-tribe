@@ -576,7 +576,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log({ error });
-      throw new Error('Insufficient sats for RGB');
+      throw new Error(error);
     }
   }
 
