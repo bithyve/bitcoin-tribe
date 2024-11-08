@@ -92,7 +92,10 @@ function SendEnterAddress({
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         autoFocus={true}
+        multiline={true}
+        numberOfLines={2}
         inputStyle={styles.inputStyle}
+        contentStyle={styles.contentStyle}
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
@@ -125,6 +128,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     inputStyle: {
+      padding: 10,
       width: '80%',
     },
     rightCTAStyle: {
@@ -135,6 +139,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
       borderRadius: 10,
       marginHorizontal: hp(5),
+    },
+    contentStyle: {
+      marginTop: 0,
     },
   });
 export default SendEnterAddress;

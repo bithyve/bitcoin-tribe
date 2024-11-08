@@ -315,7 +315,7 @@ const SendAssetScreen = () => {
         />
 
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={handleAmtChangeText}
           placeholder={assets.amount}
           keyboardType="numeric"

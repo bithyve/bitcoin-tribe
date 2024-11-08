@@ -6,6 +6,7 @@ import {
   Linking,
   PermissionsAndroid,
   Alert,
+  AppState,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { wp } from 'src/constants/responsive';
@@ -18,6 +19,7 @@ import {
 import { AppTheme } from 'src/theme';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import CameraUnauthorized from './CameraUnauthorized';
 type QRScannerProps = {
   onCodeScanned: (codes: string) => void;
 };
@@ -30,35 +32,17 @@ const QRScanner = (props: QRScannerProps) => {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
 
-  const showPermissionDeniedAlert = () => {
-    Alert.alert(
-      'Camera Permission Required',
-      'This app needs access to your camera to function properly. Please allow camera access in your device settings.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: () => openSettings() },
-      ],
-    );
-  };
-
   const requestCameraPermission = async () => {
     try {
       if (Platform.OS === 'android') {
         // Request permission for Android
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'This app needs access to your camera.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           setCameraPermission('granted');
         } else {
-          openSettings();
+          // openSettings();
         }
       } else if (Platform.OS === 'ios') {
         // Request permission for iOS
@@ -73,7 +57,7 @@ const QRScanner = (props: QRScannerProps) => {
           );
         } else {
           // openSettings();
-          showPermissionDeniedAlert();
+          // showPermissionDeniedAlert();
         }
       }
     } catch (err) {
@@ -81,12 +65,19 @@ const QRScanner = (props: QRScannerProps) => {
     }
   };
 
-  const openSettings = () => {
-    Linking.openURL('app-settings:');
-  };
-
   useEffect(() => {
     requestCameraPermission();
+    // Listen to AppState changes
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        requestCameraPermission(); // Re-check permissions when app returns to foreground
+      }
+    });
+
+    // Cleanup the AppState listener
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const codeScanner = useCodeScanner({
@@ -96,7 +87,7 @@ const QRScanner = (props: QRScannerProps) => {
 
   return (
     <View style={styles.qrCodeContainer}>
-      {cameraPermission != null && device != null && (
+      {cameraPermission != null && device != null ? (
         <>
           <Camera
             device={device}
@@ -118,6 +109,8 @@ const QRScanner = (props: QRScannerProps) => {
             </View>
           </View>
         </>
+      ) : (
+        <CameraUnauthorized />
       )}
     </View>
   );

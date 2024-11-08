@@ -40,6 +40,9 @@
     "request": "Solicitar",
     "ok": "OK",
     "assetIDCopySuccessfully": "ID del activo copiado con éxito!",
+    "cameraPermissionTitle": "El acceso a la cámara está desactivado",
+    "cameraPermissionSubTitle": "Activa la cámara en la configuración de tu dispositivo",
+    "cameraPermissionCTA": "Toca para ir a la configuración",
     "later": "Más tarde",
     "joinGroup": "Unirse al grupo"
   },

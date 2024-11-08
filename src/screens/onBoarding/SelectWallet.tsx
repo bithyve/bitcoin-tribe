@@ -23,17 +23,27 @@ function SelectWallet() {
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding, assets } = translations;
   const styles = getStyles(theme);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
       <View style={styles.bodyWrapper}>
-        <SelectWalletCollapse />
+        <SelectWalletCollapse
+          isCollapsed={isCollapsed}
+          setIsCollapsed={status => {
+            SetSupportedMode(false);
+            setIsCollapsed(status);
+          }}
+        />
         <SelectWalletTypeOption
           title={onBoarding.supported}
           icon={<SupportIcon />}
-          onPress={() => SetSupportedMode(!supportedMode)}
+          onPress={() => {
+            setIsCollapsed(false);
+            SetSupportedMode(!supportedMode);
+          }}
           borderColor={
             supportedMode ? theme.colors.accent1 : theme.colors.borderColor
           }
