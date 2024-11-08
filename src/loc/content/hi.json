@@ -36,6 +36,7 @@
     "continue": "जारी रखें",
     "noInternet": "नेटवर्क कनेक्शन नहीं है",
     "rgbWalletOffline": "RGB वॉलेट ऑफ़लाइन है।",
+    "rgbNodeOffline": "आरजीबी नोड लॉक/ऑफलाइन है।",
     "backupNow": "अभी बैकअप करें",
     "request": "अनुरोध",
     "ok": "ठीक है",

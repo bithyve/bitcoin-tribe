@@ -36,6 +36,7 @@
     "continue": "Continuar",
     "noInternet": "Sin conexión de red",
     "rgbWalletOffline": "La billetera RGB está desconectada.",
+    "rgbNodeOffline": "El nodo RGB está bloqueado/desconectado.",
     "backupNow": "Respaldar ahora",
     "request": "Solicitar",
     "ok": "OK",

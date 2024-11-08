@@ -36,6 +36,7 @@
     "continue": "Continua",
     "noInternet": "Nessuna connessione di rete",
     "rgbWalletOffline": "Il portafoglio RGB è offline.",
+    "rgbNodeOffline": "Nodo RGB bloccato/offline.",
     "backupNow": "Esegui backup ora",
     "request": "Richiesta",
     "ok": "OK",

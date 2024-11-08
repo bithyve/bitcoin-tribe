@@ -36,6 +36,7 @@
     "continue": "继续",
     "noInternet": "无网络连接",
     "rgbWalletOffline": "RGB钱包离线。",
+    "rgbNodeOffline": "RGB 节点已锁定/离线。",
     "backupNow": "立即备份",
     "request": "请求",
     "ok": "确定",

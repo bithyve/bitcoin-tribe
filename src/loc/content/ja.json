@@ -36,6 +36,7 @@
     "continue": "続ける",
     "noInternet": "ネットワーク接続がありません",
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
+    "rgbNodeOffline": "RGBノードがロックされているかオフラインです。",
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
     "ok": "オーケー",
