@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -18,6 +18,12 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import { useQuery } from '@realm/react';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import WalletFooter from '../wallet/components/WalletFooter';
+import { wp } from 'src/constants/responsive';
+import AppType from 'src/models/enums/AppType';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -33,9 +39,13 @@ function ReceiveAssetScreen() {
   const amount = route.params.amount || '';
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
+  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const [activeTab, setActiveTab] = useState('bitcoin');
+  const [lightningInvoice, setLightningInvoice] = useState('');
 
   useEffect(() => {
     mutate(assetId, amount);
@@ -50,6 +60,15 @@ function ReceiveAssetScreen() {
   }, [error]);
 
   useEffect(() => {
+    if (generateLNInvoiceMutation.error) {
+      Toast(generateLNInvoiceMutation.error, true);
+    } else if (generateLNInvoiceMutation.data) {
+      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
+      setActiveTab('lightning');
+    }
+  }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
+
+  useEffect(() => {
     if (createUtxos.data) {
       setTimeout(() => {
         mutate();
@@ -58,6 +77,26 @@ function ReceiveAssetScreen() {
       Toast(walletTranslation.failedToCreateUTXO, true);
     }
   }, [createUtxos.data]);
+
+  const onTabChange = (tab: string) => {
+    if (tab === 'lightning') {
+      if (lightningInvoice === '') {
+        generateLNInvoiceMutation.mutate();
+      } else {
+        setActiveTab(tab);
+      }
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const qrValue = useMemo(() => {
+    if (activeTab === 'bitcoin') {
+      return rgbWallet?.receiveData?.invoice;
+    } else {
+      return lightningInvoice;
+    }
+  }, [activeTab]);
 
   return (
     <ScreenContainer>
@@ -77,18 +116,28 @@ function ReceiveAssetScreen() {
         }}
       />
 
-      {isLoading || createUtxos.isLoading ? (
-        <ModalLoading visible={isLoading || createUtxos.isLoading} />
+      {isLoading ||
+      createUtxos.isLoading ||
+      generateLNInvoiceMutation.isLoading ? (
+        <ModalLoading
+          visible={
+            isLoading ||
+            createUtxos.isLoading ||
+            generateLNInvoiceMutation.isLoading
+          }
+        />
       ) : error ? (
         <View />
       ) : (
         <View>
-          <ShowQRCode
-            value={rgbWallet?.receiveData?.invoice}
-            title={receciveScreen.invoiceAddress}
-          />
+          {app.appType !== AppType.ON_CHAIN && (
+            <View style={styles.footerView}>
+              <WalletFooter activeTab={activeTab} setActiveTab={onTabChange} />
+            </View>
+          )}
+          <ShowQRCode value={qrValue} title={receciveScreen.invoiceAddress} />
           <ReceiveQrClipBoard
-            qrCodeValue={rgbWallet?.receiveData?.invoice}
+            qrCodeValue={qrValue}
             icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
@@ -109,6 +158,11 @@ const styles = StyleSheet.create({
   addAmountModalContainerStyle: {
     width: '96%',
     alignSelf: 'center',
+  },
+  footerView: {
+    height: '8%',
+    marginHorizontal: wp(16),
+    marginBottom: wp(10),
   },
 });
 
