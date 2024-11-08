@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,11 @@ import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
+import AppType from 'src/models/enums/AppType';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -26,9 +31,30 @@ function SelectWallet() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
+  const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
+
+  useEffect(() => {
+    if (createNodeMutation.error) {
+      Toast(`${createNodeMutation.error}`, true);
+    } else if (createNodeMutation.data) {
+      setTimeout(() => {
+        navigation.navigate(NavigationRoutes.PROFILESETUP, {
+          nodeConnectParams: {
+            nodeUrl: createNodeMutation.data.apiUrl,
+            nodeId: createNodeMutation.data.node.nodeId,
+            authentication: createNodeMutation.data.token,
+          },
+          nodeInfo: {},
+          appType: AppType.SUPPORTED_RLN,
+        });
+      }, 100);
+    }
+  }, [createNodeMutation.data, createNodeMutation.error]);
+
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
+      <ModalLoading visible={createNodeMutation.isLoading} />
       <View style={styles.bodyWrapper}>
         <SelectWalletCollapse
           isCollapsed={isCollapsed}
@@ -75,7 +101,7 @@ function SelectWallet() {
           <View>
             <Buttons
               primaryTitle={common.proceed}
-              primaryOnPress={() => SetSupportedMode(false)}
+              primaryOnPress={() => createNodeMutation.mutate()}
               width={wp(120)}
               disabled={!checkedTermsCondition}
             />
