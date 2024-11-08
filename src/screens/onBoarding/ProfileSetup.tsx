@@ -24,7 +24,6 @@ function ProfileSetup() {
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  const [loading, setLoading] = useState(false);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
 
@@ -55,7 +54,6 @@ function ProfileSetup() {
 
   const initiateWalletCreation = () => {
     Keyboard.dismiss();
-    setLoading(true);
     setTimeout(() => {
       const appType: AppType = route.params?.appType || AppType.ON_CHAIN;
       setupNewAppMutation.mutate({
@@ -90,8 +88,8 @@ function ProfileSetup() {
         }}
         primaryStatus={setupNewAppMutation.status}
         primaryCTATitle={common.next}
-        primaryCtaLoader={loading}
-        disabled={loading}
+        primaryCtaLoader={false}
+        disabled={false}
         // secondaryCTATitle={common.skip}
       />
     </ScreenContainer>
