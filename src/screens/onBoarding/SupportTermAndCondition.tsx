@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, wp } from 'src/constants/responsive';
@@ -12,10 +13,11 @@ import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import TermAndConditionView from './components/TermAndConditionView';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 
 function SupportTermAndCondition() {
   const navigation = useNavigation();
@@ -24,6 +26,26 @@ function SupportTermAndCondition() {
   const { onBoarding, common } = translations;
   const styles = getStyles(theme);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
+  const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
+
+  useEffect(() => {
+    if (createNodeMutation.error) {
+      Toast(`${createNodeMutation.error}`, true);
+    } else if (createNodeMutation.data) {
+      setTimeout(() => {
+        navigation.navigate(NavigationRoutes.PROFILESETUP, {
+          nodeConnectParams: {
+            nodeUrl: createNodeMutation.data.apiUrl,
+            nodeId: createNodeMutation.data.node.nodeId,
+            authentication: createNodeMutation.data.token,
+          },
+          nodeInfo: {},
+          appType: AppType.SUPPORTED_RLN,
+        });
+      }, 100);
+    }
+  }, [createNodeMutation.data, createNodeMutation.error]);
+
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.termAndConditionTitle} />
@@ -73,20 +95,13 @@ function SupportTermAndCondition() {
           <View style={styles.termConditionWrapper1}>
             <Text style={styles.termConditionText}>
               {onBoarding.supportTermAndConditionTitle}&nbsp;
-              <Text
-                style={styles.readMoreText}
-                onPress={() =>
-                  navigation.navigate(NavigationRoutes.SUPPORTTERMANDCONDITION)
-                }>
-                {onBoarding.readMore}
-              </Text>
             </Text>
           </View>
         </View>
         <View>
           <Buttons
             primaryTitle={common.proceed}
-            primaryOnPress={() => console.log('press')}
+            primaryOnPress={() => createNodeMutation.mutate()}
             width={wp(120)}
             disabled={!checkedTermsCondition}
           />
