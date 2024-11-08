@@ -60,6 +60,7 @@ import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondit
 import RgbChannels from 'src/screens/channels/RgbChannels';
 import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 import SendBTCScreen from 'src/screens/send/SendBTCScreen';
+import LightningSend from 'src/screens/send/LightningSend';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -263,6 +264,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.SENDBTCSCREEN}
           component={SendBTCScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.LIGHTNINGSEND}
+          component={LightningSend}
         />
       </Stack.Navigator>
     </RealmProvider>

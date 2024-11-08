@@ -81,7 +81,10 @@ function ReceiveAssetScreen() {
   const onTabChange = (tab: string) => {
     if (tab === 'lightning') {
       if (lightningInvoice === '') {
-        generateLNInvoiceMutation.mutate();
+        generateLNInvoiceMutation.mutate({
+          amount: Number(amount),
+          assetId,
+        });
       } else {
         setActiveTab(tab);
       }
@@ -96,7 +99,7 @@ function ReceiveAssetScreen() {
     } else {
       return lightningInvoice;
     }
-  }, [activeTab]);
+  }, [activeTab, rgbWallet?.receiveData?.invoice, lightningInvoice]);
 
   return (
     <ScreenContainer>

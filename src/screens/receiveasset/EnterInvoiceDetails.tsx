@@ -53,6 +53,7 @@ const EnterInvoiceDetails = () => {
         onChangeText={text => setAmount(text.trim())}
         placeholder={'Amount'}
         style={styles.input}
+        keyboardType="numeric"
       />
 
       <View style={styles.btns}>
@@ -65,8 +66,14 @@ const EnterInvoiceDetails = () => {
               amount,
             });
           }}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
+          secondaryTitle={common.skip}
+          secondaryOnPress={() =>
+            navigation.replace(NavigationRoutes.RECEIVEASSET, {
+              refresh: true,
+              assetId,
+              amount,
+            })
+          }
           disabled={assetId === '' || amount === ''}
           width={wp(120)}
         />

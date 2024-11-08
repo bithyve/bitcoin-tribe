@@ -96,7 +96,7 @@ export default class RGBServices {
   static receiveAsset = async (
     appType: AppType,
     api: RLNNodeApiServices,
-    assetId: string,
+    asset_id?: string,
   ): Promise<{
     batchTransferIdx?: number;
     expirationTimestamp?: number;
@@ -108,7 +108,7 @@ export default class RGBServices {
       if (appType === AppType.NODE_CONNECT) {
         await api.refreshtransfers({ skip_sync: false });
         const response = await api.rgbinvoice({
-          asset_id: assetId,
+          //asset_id,
           min_confirmations: 0,
           duration_seconds: 86400,
         });
@@ -158,7 +158,7 @@ export default class RGBServices {
     if (appType === AppType.NODE_CONNECT) {
       const response = await api.listtransfers({ asset_id: assetId });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response.transfers);
+        const data = snakeCaseToCamelCaseCase(response.transfers.reverse());
         return data;
       } else {
         return response;
@@ -244,11 +244,12 @@ export default class RGBServices {
       const response = await api.sendasset({
         asset_id: assetId,
         donation: false,
-        fee_rate: 5,
+        fee_rate: feePerByte,
         min_confirmations: 0,
         recipient_id: blindedUTXO,
-        transport_endpoints: ['rpcs://proxy.iriswallet.com/0.2/json-rpc'],
+        transport_endpoints: [consignmentEndpoints],
         amount: Number(amount),
+        skip_sync: false,
       });
       return response;
     } else {

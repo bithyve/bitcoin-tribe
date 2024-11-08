@@ -83,7 +83,9 @@ function ReceiveScreen({ route }) {
         }).paymentURI;
         setPaymentURI(newPaymentURI);
       } else {
-        generateLNInvoiceMutation.mutate(null, amount);
+        generateLNInvoiceMutation.mutate({
+          amount: Number(amount),
+        });
       }
     } else if (paymentURI) {
       setPaymentURI(null);
@@ -93,7 +95,9 @@ function ReceiveScreen({ route }) {
   const onTabChange = (tab: string) => {
     if (tab === 'lightning') {
       if (lightningInvoice === '') {
-        generateLNInvoiceMutation.mutate(null, null);
+        generateLNInvoiceMutation.mutate({
+          amount: 100,
+        });
       } else {
         setActiveTab(tab);
       }
@@ -112,7 +116,12 @@ function ReceiveScreen({ route }) {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={generateLNInvoiceMutation.isLoading} />
+      <ModalLoading
+        visible={
+          generateLNInvoiceMutation.isLoading ||
+          getNodeOnchainBtcAddress.isLoading
+        }
+      />
       <AppHeader
         title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
@@ -126,7 +135,7 @@ function ReceiveScreen({ route }) {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         {getNodeOnchainBtcAddress.isLoading ? (
-          <RefreshControlView refreshing={true} onRefresh={() => {}} />
+          <View />
         ) : (
           <View>
             {app.appType !== AppType.ON_CHAIN && (

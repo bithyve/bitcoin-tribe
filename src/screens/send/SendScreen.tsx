@@ -23,6 +23,7 @@ function SendScreen({ route, navigation }) {
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
+
   const onCodeScanned = useCallback((codes: Code[]) => {
     const value = codes[0]?.value;
     if (value == null) {
@@ -54,10 +55,14 @@ function SendScreen({ route, navigation }) {
           rgbInvoice: address,
         });
         break;
+      case PaymentInfoKind.RLN_INVOICE:
+        navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
+        break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
     }
   }, []);
+
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
