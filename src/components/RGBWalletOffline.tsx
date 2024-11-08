@@ -3,7 +3,6 @@ import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
-import { NavigationContext } from '@react-navigation/native';
 
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
@@ -16,7 +15,7 @@ import AppTouchable from './AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 
 const RGBWalletStatus = () => {
-  const { isWalletOnline, appType } = useContext(AppContext); // Access the context
+  const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext); // Access the context
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
@@ -28,9 +27,17 @@ const RGBWalletStatus = () => {
   const handleRGBWalletConnectionStatus = () => {
     if (!isWalletOnline) {
       if (appType === AppType.NODE_CONNECT) {
-        syncMutation.mutate();
+        syncMutation.mutate(undefined, {
+          onSuccess: () => {
+            setIsWalletOnline(true);
+          },
+        });
       } else {
-        refreshRgbWallet.mutate();
+        refreshRgbWallet.mutate(undefined, {
+          onSuccess: () => {
+            setIsWalletOnline(true);
+          },
+        });
       }
     } else {
       // Not working - this component not wrapped in NavigationContainer
@@ -45,9 +52,7 @@ const RGBWalletStatus = () => {
   }, []);
 
   return isWalletOnline === false ? (
-    <AppTouchable
-      style={styles.errorContainer}
-      onPress={handleRGBWalletConnectionStatus}>
+    <AppTouchable style={styles.errorContainer} onPress={() => {}}>
       <AppText style={styles.text}>{msg}</AppText>
     </AppTouchable>
   ) : null;
