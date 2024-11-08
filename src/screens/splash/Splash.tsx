@@ -10,6 +10,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import TribeIcon from 'src/assets/images/Tribe.svg';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
@@ -71,10 +72,11 @@ function Splash({ navigation }) {
         }
         resizeMode="cover"
         style={styles.backImage}>
-        <Image
+        {/* <Image
           source={require('src/assets/images/RGB_Splash.gif')}
           style={styles.splashImageStyle}
-        />
+        /> */}
+        <TribeIcon />
       </ImageBackground>
     </ScreenContainer>
   );
