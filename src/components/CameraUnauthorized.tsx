@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import { Image, Linking, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 
@@ -20,16 +20,19 @@ function CameraUnauthorized() {
 
   return (
     <View style={styles.container}>
-      <AppText variant="body1" style={styles.titleText}>
+      <View>
+        <Image
+          source={require('src/assets/images/cameraAuthFailed.png')}
+          style={styles.imageStyle}
+        />
+      </View>
+      <AppText variant="heading3" style={styles.titleText}>
         {common.cameraPermissionTitle}
-      </AppText>
-      <AppText variant="caption" style={styles.subTitleText}>
-        {common.cameraPermissionSubTitle}
       </AppText>
       <PrimaryCTA
         title={common.cameraPermissionCTA}
         onPress={requestPermission}
-        width={hp(250)}
+        width={hp(170)}
       />
     </View>
   );
@@ -37,22 +40,22 @@ function CameraUnauthorized() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: wp(340),
-      width: wp(330),
+      height: '100%',
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: wp(50),
       borderRadius: wp(8),
-      overflow: 'hidden',
     },
     titleText: {
       color: theme.colors.headingColor,
       lineHeight: 20,
-    },
-    subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
-      lineHeight: 20,
+      marginTop: hp(10),
       marginBottom: hp(20),
+    },
+    imageStyle: {
+      height: wp(250),
+      width: wp(250),
+      marginBottom: hp(5),
     },
   });
 export default CameraUnauthorized;

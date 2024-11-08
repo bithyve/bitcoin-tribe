@@ -41,9 +41,9 @@
     "request": "Request",
     "ok": "OK",
     "assetIDCopySuccessfully": "Asset's ID Copied Successfully!",
-    "cameraPermissionTitle": "Camera access is turned off",
+    "cameraPermissionTitle": "Camera Access Needed",
     "cameraPermissionSubTitle": "Turn on the camera in your device settings",
-    "cameraPermissionCTA": "Tap to go to settings",
+    "cameraPermissionCTA": "Open Settings",
     "later": "Later",
     "joinGroup": "Join Group"
   },

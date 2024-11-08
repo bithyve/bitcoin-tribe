@@ -1,6 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { useMutation } from 'react-query';
+import { useTheme } from 'react-native-paper';
 
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
@@ -8,17 +10,40 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import { windowHeight } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 const RGBWalletStatus = () => {
-  const { isWalletOnline, appType } = useContext(AppContext); // Access the context
+  const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext); // Access the context
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const syncMutation = useMutation(ApiHandler.syncNode);
+
+  const handleRGBWalletConnectionStatus = () => {
+    if (!isWalletOnline) {
+      if (appType === AppType.NODE_CONNECT) {
+        syncMutation.mutate(undefined, {
+          onSuccess: () => {
+            setIsWalletOnline(true);
+          },
+        });
+      } else {
+        refreshRgbWallet.mutate(undefined, {
+          onSuccess: () => {
+            setIsWalletOnline(true);
+          },
+        });
+      }
+    } else {
+      // Not working - this component not wrapped in NavigationContainer
+      // navigation.navigate(NavigationRoutes.VIEWNODEINFO);
+    }
+  };
 
   const msg = useMemo(() => {
     return appType === AppType.NODE_CONNECT
@@ -27,7 +52,7 @@ const RGBWalletStatus = () => {
   }, []);
 
   return isWalletOnline === false ? (
-    <AppTouchable style={styles.errorContainer}>
+    <AppTouchable style={styles.errorContainer} onPress={() => {}}>
       <AppText style={styles.text}>{msg}</AppText>
     </AppTouchable>
   ) : null;
