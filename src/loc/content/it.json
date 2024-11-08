@@ -40,9 +40,9 @@
     "request": "Richiesta",
     "ok": "OK",
     "assetIDCopySuccessfully": "ID dell'asset copiato con successo!",
-    "cameraPermissionTitle": " L'accesso alla fotocamera è disattivato",
+    "cameraPermissionTitle": "Accesso alla fotocamera necessario",
     "cameraPermissionSubTitle": "Attiva la fotocamera nelle impostazioni del dispositivo",
-    "cameraPermissionCTA": "Tocca per andare alle impostazioni",
+    "cameraPermissionCTA": "Apri impostazioni",
     "later": "Più tardi",
     "joinGroup": "Unisciti al gruppo"
   },

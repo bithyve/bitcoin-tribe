@@ -40,9 +40,9 @@
     "request": "リクエスト",
     "ok": "オーケー",
     "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！",
-    "cameraPermissionTitle": "カメラアクセスがオフになっています",
+    "cameraPermissionTitle": "カメラアクセスが必要です",
     "cameraPermissionSubTitle": "デバイスの設定でカメラをオンにしてください",
-    "cameraPermissionCTA": "設定に移動するにはタップしてください",
+    "cameraPermissionCTA": "設定を開く",
     "later": "後で",
     "joinGroup": "グループに参加する"
   },

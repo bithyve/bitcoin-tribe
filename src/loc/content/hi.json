@@ -40,9 +40,9 @@
     "request": "अनुरोध",
     "ok": "ठीक है",
     "assetIDCopySuccessfully": "एसेट आईडी सफलतापूर्वक कॉपी किया गया!",
-    "cameraPermissionTitle": "कैमरा एक्सेस बंद है",
+    "cameraPermissionTitle": "कैमरा एक्सेस आवश्यक है",
     "cameraPermissionSubTitle": "अपने डिवाइस सेटिंग्स में कैमरा चालू करें",
-    "cameraPermissionCTA": "सेटिंग्स में जाने के लिए टैप करें",
+    "cameraPermissionCTA": "सेटिंग्स खोलें",
     "later": "बाद में",
     "joinGroup": "समूह में शामिल हों"
   },

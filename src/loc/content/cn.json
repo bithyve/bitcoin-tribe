@@ -40,9 +40,9 @@
     "request": "请求",
     "ok": "确定",
     "assetIDCopySuccessfully": "资产 ID 复制成功！",
-    "cameraPermissionTitle": "相机访问已关闭",
+    "cameraPermissionTitle": "需要相机访问",
     "cameraPermissionSubTitle": "在设备设置中开启相机",
-    "cameraPermissionCTA": "点击进入设置",
+    "cameraPermissionCTA": "打开设置",
     "later": "稍后",
     "joinGroup": "加入群组"
   },
