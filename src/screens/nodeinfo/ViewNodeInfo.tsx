@@ -3,9 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
-import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -27,7 +25,6 @@ import Toast from 'src/components/Toast';
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
-  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -35,6 +32,8 @@ const ViewNodeInfo = () => {
     ApiHandler.viewNodeInfo,
   );
   const syncMutation = useMutation(ApiHandler.syncNode);
+  const initNodeMutation = useMutation(ApiHandler.initNode);
+  const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
   const [nodeStatus, setSetNodeStatus] = useState('run');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -49,15 +48,38 @@ const ViewNodeInfo = () => {
       Toast('Node synced', false);
       syncMutation.reset();
     } else if (syncMutation.isError) {
-      Toast(syncMutation.error, true);
+      Toast(`${syncMutation.error}`, true);
     }
   }, [syncMutation.isSuccess, syncMutation, syncMutation.isError]);
+
+  useEffect(() => {
+    if (initNodeMutation.isSuccess) {
+      Toast('Node initiated', false);
+      initNodeMutation.reset();
+      mutate();
+    } else if (initNodeMutation.isError) {
+      Toast(`${initNodeMutation.error}`, true);
+    }
+  }, [initNodeMutation.isSuccess, initNodeMutation, initNodeMutation.isError]);
+
+  useEffect(() => {
+    if (unlockNodeMutation.isSuccess) {
+      Toast('Node unlocked', false);
+      unlockNodeMutation.reset();
+    } else if (unlockNodeMutation.isError) {
+      Toast(`${unlockNodeMutation.error}`, true);
+    }
+  }, [
+    unlockNodeMutation.isSuccess,
+    unlockNodeMutation,
+    unlockNodeMutation.isError,
+  ]);
 
   useEffect(() => {
     if (data) {
       setnodeInfo(data);
     } else if (error) {
-      navigation.goBack();
+      Toast(error, false);
     }
   }, [data, error]);
 
@@ -68,7 +90,13 @@ const ViewNodeInfo = () => {
         subTitle={''}
         enableBack={true}
       />
-      <ModalLoading visible={syncMutation.isLoading} />
+      <ModalLoading
+        visible={
+          syncMutation.isLoading ||
+          initNodeMutation.isLoading ||
+          unlockNodeMutation.isLoading
+        }
+      />
       {isLoading ? (
         <View style={styles.loadingWrapper}>
           <LottieView
@@ -142,21 +170,21 @@ const ViewNodeInfo = () => {
           </View>
           <View>
             <SelectOption
-              title={node.nodeStatusLock}
-              onPress={() => setSetNodeStatusLock(!nodeStatusLock)}
-              enableSwitch={true}
-              onValueChange={() => setSetNodeStatusLock(!nodeStatusLock)}
+              title={'Unlock Node'}
+              onPress={() => unlockNodeMutation.mutate()}
+              enableSwitch={false}
+              onValueChange={() => {}}
               toggleValue={nodeStatusLock}
             />
           </View>
-          <View>
+          {/* <View>
             <SelectOption
               title={node.initNode}
-              onPress={() => console.log('press')}
+              onPress={() => initNodeMutation.mutate()}
               enableSwitch={false}
               showArrow={false}
             />
-          </View>
+          </View> */}
         </ScrollView>
       )}
       {!isLoading && (

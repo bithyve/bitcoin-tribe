@@ -31,6 +31,12 @@ function SendEnterAddress({
   const [address, setAddress] = useState('');
 
   const onProceed = (paymentInfo: string) => {
+    if (paymentInfo.startsWith('lnbc')) {
+      navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
+        invoice: paymentInfo,
+      });
+      return;
+    }
     paymentInfo = paymentInfo.trim();
     const network = WalletUtilities.getNetworkByType(
       wallet && wallet.networkType,

@@ -29,7 +29,7 @@ const OpenRgbChannel = () => {
     if (openChannelMutation.isSuccess) {
       navigation.goBack();
     } else if (openChannelMutation.isError) {
-      Toast(openChannelMutation.error, true);
+      Toast(`${openChannelMutation.error}`, true);
     }
   }, [openChannelMutation.isError, openChannelMutation.isSuccess]);
 

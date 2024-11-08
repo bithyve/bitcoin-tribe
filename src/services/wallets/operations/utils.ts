@@ -739,6 +739,11 @@ export default class WalletUtilities {
         type: PaymentInfoKind.RGB_INVOICE,
         address: scannedStr,
       };
+    } else if (scannedStr.startsWith('lnbc')) {
+      return {
+        type: PaymentInfoKind.RLN_INVOICE,
+        address: scannedStr,
+      };
     }
     return {
       type: null,

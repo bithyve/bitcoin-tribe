@@ -69,4 +69,25 @@ export default class Relay {
       throw new Error('Failed fetch fee and exchange rates');
     }
   };
+
+  public static createSupportedNode = async (): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(
+          'https://grand-utterly-gorilla.ngrok-free.app/node',
+        );
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }

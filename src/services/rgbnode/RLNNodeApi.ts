@@ -28,10 +28,10 @@ export class RLNNodeApiServices {
 
     try {
       const response = await fetch(url, { ...options, headers });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Request failed: ${errorData.error}`);
-      }
+      // if (!response.ok) {
+      //   const errorData = await response.json();
+      //   throw new Error(`Request failed: ${errorData.error}`);
+      // }
       return response.json();
     } catch (error) {
       console.error(`Error: ${endpoint} failed `, error);
@@ -113,7 +113,7 @@ export class RLNNodeApiServices {
 
   public async rgbinvoice(body: {
     min_confirmations: number;
-    asset_id: string;
+    // asset_id?: string;
     duration_seconds: number;
   }): Promise<{}> {
     return this.request('/rgbinvoice', {
@@ -173,9 +173,13 @@ export class RLNNodeApiServices {
     channel_asset_min_amount: number;
     channel_asset_max_amount: number;
   }> {
-    return this.request('/nodeinfo', {
+    const response = await this.request('/nodeinfo', {
       method: 'GET',
     });
+
+    console.log(JSON.stringify(response));
+
+    return response;
   }
 
   public async sendasset(body: {
@@ -186,6 +190,7 @@ export class RLNNodeApiServices {
     fee_rate: number;
     min_confirmations: number;
     transport_endpoints: string[];
+    skip_sync: false;
   }): Promise<{ txid: string }> {
     return this.request('/sendasset', {
       method: 'POST',
@@ -260,11 +265,66 @@ export class RLNNodeApiServices {
     with_anchors: boolean;
     fee_base_msat: number;
     fee_proportional_millionths: number;
-    temporary_channel_id: string;
+    temporary_channel_id?: string;
   }): Promise<{ temporary_channel_id: string }> {
     return this.request('/openchannel', {
       method: 'POST',
       body: JSON.stringify(body),
+    });
+  }
+
+  public async lninvoice(body: {
+    amt_msat: number;
+    expiry_sec: 420;
+    asset_id?: string;
+    asset_amount?: number;
+  }): Promise<{ invoice: string }> {
+    return this.request('/lninvoice', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async decodelninvoice(body: { invoice: string }): Promise<{}> {
+    console.log('decodelninvoice', body);
+    return this.request('/decodelninvoice', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async sendPayment(body: { invoice: string }): Promise<{}> {
+    return this.request('/sendpayment', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async listpayments(): Promise<{}> {
+    return this.request('/listpayments', {
+      method: 'GET',
+    });
+  }
+
+  public async init(body: { password: string }): Promise<{ mnemonic: string }> {
+    return this.request('/init', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async unlock(password: string): Promise<{ invoice: string }> {
+    return this.request('/unlock', {
+      method: 'POST',
+      body: JSON.stringify({
+        password: password,
+        bitcoind_rpc_username: 'user',
+        bitcoind_rpc_password: 'password',
+        bitcoind_rpc_host: 'regtest.thunderstack.org',
+        bitcoind_rpc_port: 18443,
+        indexer_url: 'regtest.thunderstack.org:50001',
+        proxy_endpoint: 'rpc://regtest.thunderstack.org:3000/json-rpc',
+      }),
     });
   }
 }

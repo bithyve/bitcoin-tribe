@@ -23,7 +23,7 @@ function RgbLightningNodeConnect() {
   const styles = getStyles(theme);
 
   const [connectionURL, setConnectionURL] = useState('');
-  const [nodeID, setNodeID] = useState('743aa565db274cd7a497bec83ad794a6');
+  const [nodeID, setNodeID] = useState('');
   const [userID, setUserID] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,7 +46,7 @@ function RgbLightningNodeConnect() {
         appType: AppType.NODE_CONNECT,
       });
     } else if (checkNodeConnection.isError) {
-      Toast('Failed to connect to the node', true);
+      Toast(`${checkNodeConnection.error}`, true);
     }
   }, [checkNodeConnection.data, checkNodeConnection.isError]);
 

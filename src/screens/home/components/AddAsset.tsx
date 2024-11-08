@@ -34,10 +34,9 @@ function AddAsset() {
           style={styles.optionStyle}
           onPress={() => {
             if (
-              wallet &&
-              wallet.specs.balances.confirmed +
-                wallet.specs.balances.unconfirmed ===
-                0
+              wallet?.specs.balances.confirmed +
+                wallet?.specs.balances.unconfirmed ===
+              0
             ) {
               setVisible(true);
             } else {
@@ -52,14 +51,13 @@ function AddAsset() {
           style={styles.optionStyle}
           onPress={() => {
             if (
-              wallet &&
-              wallet.specs.balances.confirmed +
-                wallet.specs.balances.unconfirmed ===
-                0
+              wallet?.specs.balances.confirmed +
+                wallet?.specs.balances.unconfirmed ===
+              0
             ) {
               setVisible(true);
             } else {
-              navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+              navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
                 refresh: true,
               });
             }
