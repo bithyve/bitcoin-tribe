@@ -1,9 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
-import FooterNote from 'src/components/FooterNote';
 import ModalContainer from 'src/components/ModalContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
@@ -21,16 +19,17 @@ import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import RefreshControlView from 'src/components/RefreshControlView';
+import WalletFooter from '../wallet/components/WalletFooter';
+import { wp } from 'src/constants/responsive';
+import Toast from 'src/components/Toast';
+import ModalLoading from 'src/components/ModalLoading';
 
 function ReceiveScreen({ route }) {
   const navigation = useNavigation();
-  // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
-
   const [visible, setVisible] = useState(false);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -39,6 +38,9 @@ function ReceiveScreen({ route }) {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
   } = wallet || {};
+  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
+  const [activeTab, setActiveTab] = useState('bitcoin');
+  const [lightningInvoice, setLightningInvoice] = useState('');
 
   const [address, setAddress] = useState('');
   const getNodeOnchainBtcAddress = useMutation(
@@ -65,18 +67,52 @@ function ReceiveScreen({ route }) {
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);
 
   useEffect(() => {
+    if (generateLNInvoiceMutation.error) {
+      Toast(generateLNInvoiceMutation.error, true);
+    } else if (generateLNInvoiceMutation.data) {
+      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
+      setActiveTab('lightning');
+    }
+  }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
+
+  useEffect(() => {
     if (amount) {
-      const newPaymentURI = WalletUtilities.generatePaymentURI(address, {
-        amount: parseInt(amount) / 1e8,
-      }).paymentURI;
-      setPaymentURI(newPaymentURI);
+      if (activeTab === 'bitcoin') {
+        const newPaymentURI = WalletUtilities.generatePaymentURI(address, {
+          amount: parseInt(amount) / 1e8,
+        }).paymentURI;
+        setPaymentURI(newPaymentURI);
+      } else {
+        generateLNInvoiceMutation.mutate(null, amount);
+      }
     } else if (paymentURI) {
       setPaymentURI(null);
     }
   }, [amount, address]);
 
+  const onTabChange = (tab: string) => {
+    if (tab === 'lightning') {
+      if (lightningInvoice === '') {
+        generateLNInvoiceMutation.mutate(null, null);
+      } else {
+        setActiveTab(tab);
+      }
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const qrValue = useMemo(() => {
+    if (activeTab === 'bitcoin') {
+      return paymentURI || address || 'address';
+    } else {
+      return lightningInvoice;
+    }
+  }, [activeTab, address, lightningInvoice, paymentURI]);
+
   return (
     <ScreenContainer>
+      <ModalLoading visible={generateLNInvoiceMutation.isLoading} />
       <AppHeader
         title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
@@ -92,11 +128,25 @@ function ReceiveScreen({ route }) {
         {getNodeOnchainBtcAddress.isLoading ? (
           <RefreshControlView refreshing={true} onRefresh={() => {}} />
         ) : (
-          <ReceiveQrDetails
-            addMountModalVisible={() => setVisible(true)}
-            receivingAddress={paymentURI || address || 'address'}
-            qrTitle={receciveScreen.bitcoinAddress}
-          />
+          <View>
+            {app.appType !== AppType.ON_CHAIN && (
+              <View style={styles.footerView}>
+                <WalletFooter
+                  activeTab={activeTab}
+                  setActiveTab={onTabChange}
+                />
+              </View>
+            )}
+            <ReceiveQrDetails
+              addMountModalVisible={() => setVisible(true)}
+              receivingAddress={qrValue}
+              qrTitle={
+                activeTab === 'bitcoin'
+                  ? receciveScreen.bitcoinAddress
+                  : 'Lightning Invoice'
+              }
+            />
+          </View>
         )}
       </ScrollView>
       {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
@@ -122,6 +172,11 @@ const styles = StyleSheet.create({
   addAmountModalContainerStyle: {
     width: '96%',
     alignSelf: 'center',
+  },
+  footerView: {
+    height: '8%',
+    marginHorizontal: wp(16),
+    marginBottom: wp(10),
   },
 });
 

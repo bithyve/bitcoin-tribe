@@ -39,7 +39,12 @@
     "backupNow": "Respaldar ahora",
     "request": "Solicitar",
     "ok": "OK",
-    "assetIDCopySuccessfully": "ID del activo copiado con éxito!"
+    "assetIDCopySuccessfully": "ID del activo copiado con éxito!",
+    "cameraPermissionTitle": "El acceso a la cámara está desactivado",
+    "cameraPermissionSubTitle": "Activa la cámara en la configuración de tu dispositivo",
+    "cameraPermissionCTA": "Toca para ir a la configuración",
+    "later": "Más tarde",
+    "joinGroup": "Unirse al grupo"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -200,7 +205,7 @@
     "expired": "Expirado"
   },
   "receciveScreen": {
-    "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
+    "headerSubTitle": "Escanear QR",
     "addAmountTitle": "Agregar cantidad",
     "addAmountSubTitle": "Ingrese el monto que desea recibir",
     "placeHolderText": "Introduce la cantidad",
@@ -210,7 +215,8 @@
     "lightningAddress": "Dirección Lightning"
   },
   "sendScreen": {
-    "headerSubTitle": "Escanear QR",
+    "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
+    "btcHeaderSubTitle": "Escanear una dirección de Bitcoin",
     "optionCardTitle": "o introduce los detalles manualmente",
     "optionCardSubTitle": "Ingrese una dirección Bitcoin o una factura RGB",
     "enterSendAddress": "Introduce la dirección de envío",
@@ -227,7 +233,7 @@
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
     "paste": "Pegar",
     "sendAssetTitle": "Enviar activo",
-    "sendAssetSubtitle": "Escanee la dirección RGB a continuación",
+    "sendAssetSubtitle": "Escanea la factura RGB",
     "totalFee": "Tarifa total："
   },
   "wallet": {
@@ -284,7 +290,9 @@
     "rgbAssets": "Sats reservados",
     "lightning": "Relámpago",
     "bitcoin": "Bitcoin",
-    "reserveAmtText": "Reservado para transacciones de activos"
+    "reserveAmtText": "Reservado para transacciones de activos",
+    "requestTSatsTitle": "Solicitar Sats de Prueba",
+    "requestTSatSubTitle": "Únete a nuestro grupo de Telegram para recibir sats de prueba y disfrutar experimentando con RGB."
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

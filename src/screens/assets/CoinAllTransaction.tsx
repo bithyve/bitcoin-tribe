@@ -22,7 +22,7 @@ function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations } = translations;
+  const { wallet: walletTranslations, settings } = translations;
   const { assetId, transactions } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -49,7 +49,7 @@ function CoinAllTransaction() {
         }
         renderItem={({ item }) => (
           <AssetTransaction
-            transId={item.status.toUpperCase()}
+            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
             transDate={item.createdAt}
             transAmount={`${item.amount}`}
             transType={item.kind}

@@ -24,6 +24,9 @@ import { AppTheme } from 'src/theme';
 import GradientView from 'src/components/GradientView';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
+import RequestTSatsModal from './components/RequestTSatsModal';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import openLink from 'src/utils/OpenLink';
 
 function BtcWalletDetails({ navigation, route, activeTab }) {
   const theme: AppTheme = useTheme();
@@ -32,6 +35,7 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
   const [profileImage, setProfileImage] = useState(app.walletImage || null);
   const [walletName, setWalletName] = useState(app.appName || null);
   const [visible, setVisible] = useState(false);
+  const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
@@ -83,10 +87,12 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
           rgbWallet={rgbWallet}
           activeTab={activeTab}
           onPressBuy={() =>
-            config.NETWORK_TYPE === NetworkType.TESTNET ||
-            config.NETWORK_TYPE === NetworkType.REGTEST
+            config.NETWORK_TYPE === NetworkType.MAINNET
+              ? setVisible(true)
+              : config.NETWORK_TYPE === NetworkType.TESTNET ||
+                config.NETWORK_TYPE === NetworkType.REGTEST
               ? mutate()
-              : setVisible(true)
+              : setVisibleRequestTSats(true)
           }
         />
       </GradientView>
@@ -116,6 +122,19 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
         onDismiss={() => setVisible(false)}>
         <BuyModal />
       </ModalContainer>
+      <ResponsePopupContainer
+        backColor={theme.colors.modalBackColor}
+        borderColor={theme.colors.modalBackColor}
+        visible={visibleRequestTSats}
+        enableClose={true}
+        onDismiss={() => setVisibleRequestTSats(false)}>
+        <RequestTSatsModal
+          title={walletTranslations.requestTSatsTitle}
+          subTitle={walletTranslations.requestTSatSubTitle}
+          onLaterPress={() => setVisibleRequestTSats(false)}
+          onPrimaryPress={() => openLink('https://t.me/BitcoinTribeSupport')}
+        />
+      </ResponsePopupContainer>
       <ModalLoading visible={isLoading} />
     </View>
   );

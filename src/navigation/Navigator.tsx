@@ -59,6 +59,7 @@ import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
 import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondition';
 import RgbChannels from 'src/screens/channels/RgbChannels';
 import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
+import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -258,6 +259,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.OPENRGBCHANNEL}
           component={OpenRgbChannel}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.SENDBTCSCREEN}
+          component={SendBTCScreen}
         />
       </Stack.Navigator>
     </RealmProvider>

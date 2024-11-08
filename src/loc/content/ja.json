@@ -39,7 +39,12 @@
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
     "ok": "オーケー",
-    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！"
+    "assetIDCopySuccessfully": "アセットIDが正常にコピーされました！",
+    "cameraPermissionTitle": "カメラアクセスがオフになっています",
+    "cameraPermissionSubTitle": "デバイスの設定でカメラをオンにしてください",
+    "cameraPermissionCTA": "設定に移動するにはタップしてください",
+    "later": "後で",
+    "joinGroup": "グループに参加する"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -211,6 +216,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
+    "btcHeaderSubTitle": "ビットコインアドレスをスキャンする",
     "optionCardTitle": "または手動で詳細を入力",
     "optionCardSubTitle": "ビットコインアドレスまたはRGB請求書を入力",
     "enterSendAddress": "送信アドレスを入力",
@@ -227,7 +233,7 @@
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
     "paste": "貼り付け",
     "sendAssetTitle": "資産を送信",
-    "sendAssetSubtitle": "下のRGBアドレスをスキャンしてください",
+    "sendAssetSubtitle": "RGB請求書をスキャン",
     "totalFee": "合計料金："
   },
   "wallet": {
@@ -284,7 +290,9 @@
     "rgbAssets": "予約されたサット",
     "lightning": "ライトニングネットワーク",
     "bitcoin": "ビットコイン",
-    "reserveAmtText": "資産取引のために予約済み"
+    "reserveAmtText": "資産取引のために予約済み",
+    "requestTSatsTitle": "テストサッツをリクエスト",
+    "requestTSatSubTitle": "テストサッツを受け取り、RGBを楽しむために、私たちのTelegramグループに参加してください。"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

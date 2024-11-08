@@ -40,7 +40,12 @@
     "backupNow": "Backup Now",
     "request": "Request",
     "ok": "OK",
-    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!"
+    "assetIDCopySuccessfully": "Asset's ID Copied Successfully!",
+    "cameraPermissionTitle": "Camera access is turned off",
+    "cameraPermissionSubTitle": "Turn on the camera in your device settings",
+    "cameraPermissionCTA": "Tap to go to settings",
+    "later": "Later",
+    "joinGroup": "Join Group"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -212,6 +217,7 @@
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
+    "btcHeaderSubTitle": "Scan a Bitcoin Address",
     "optionCardTitle": "or Enter details manually",
     "optionCardSubTitle": "Enter a Bitcoin Address or RGB invoice",
     "enterSendAddress": "Enter Send Address",
@@ -228,7 +234,7 @@
     "transFeeErrMsg": "Error: Transaction Fee intel missing",
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
-    "sendAssetSubtitle": "Scan the RGB address below",
+    "sendAssetSubtitle": "Scan the RGB invoice",
     "totalFee": "Total Fee:"
   },
   "wallet": {
@@ -285,7 +291,9 @@
     "rgbAssets": "Reserved Sats",
     "lightning": "Lightning",
     "bitcoin": "Bitcoin",
-    "reserveAmtText": "Reserved for asset transactions"
+    "reserveAmtText": "Reserved for asset transactions",
+    "requestTSatsTitle": "Request Test Sats",
+    "requestTSatSubTitle": "Please join our Telegram group to receive test sats and enjoy playing around with RGB."
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Code } from 'react-native-vision-camera';
+import React, { useState, useContext, useCallback } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -9,19 +8,21 @@ import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useRoute } from '@react-navigation/native';
-import Toast from 'src/components/Toast';
-import config from 'src/utils/config';
+import ModalContainer from 'src/components/ModalContainer';
+import SendEnterAddress from './components/SendEnterAddress';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
+import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
+import config from 'src/utils/config';
+import { Code } from 'react-native-vision-camera';
 
-function ScanAssetScreen({ route, navigation }) {
-  const { assetId, wallet, rgbInvoice, item } = useRoute().params;
+function SendBTCScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
-
+  const [visible, setVisible] = useState(false);
+  const { receiveData, title, subTitle, wallet } = route.params;
   const onCodeScanned = useCallback((codes: Code[]) => {
     const value = codes[0]?.value;
     if (value == null) {
@@ -37,41 +38,44 @@ function ScanAssetScreen({ route, navigation }) {
       amount = Math.trunc(amount * 1e8);
     } // convert from bitcoins to sats
     switch (paymentInfoKind) {
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SENDASSET, {
-          assetId: assetId,
-          wallet: wallet,
-          rgbInvoice: rgbInvoice,
-          item: item,
+      case PaymentInfoKind.ADDRESS:
+        navigation.replace(NavigationRoutes.SENDTO, { wallet, address });
+        break;
+      case PaymentInfoKind.PAYMENT_URI:
+        navigation.replace(NavigationRoutes.SENDTO, {
+          wallet,
+          address,
+          paymentURIAmount: amount,
         });
         break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
     }
   }, []);
-
   return (
     <ScreenContainer>
-      <AppHeader
-        title={sendScreen.sendAssetTitle}
-        subTitle={sendScreen.sendAssetSubtitle}
-        enableBack={true}
-      />
+      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <View style={styles.scannerWrapper}>
-        <QRScanner onCodeScanned={onCodeScanned} />
+        {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
         subTitle={sendScreen.optionCardSubTitle}
         onPress={() => {
-          navigation.replace(NavigationRoutes.SENDASSET, {
-            assetId: assetId,
-            wallet: wallet,
-            rgbInvoice: rgbInvoice,
-            item: item,
-          });
+          receiveData === 'send'
+            ? setVisible(true)
+            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
         }}
       />
+      <ModalContainer
+        title={sendScreen.enterSendAddress}
+        subTitle={sendScreen.enterSendAdrsSubTitle}
+        visible={visible}
+        enableCloseIcon={false}
+        height={Platform.OS == 'ios' && '85%'}
+        onDismiss={() => setVisible(false)}>
+        <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
@@ -81,4 +85,4 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
     },
   });
-export default ScanAssetScreen;
+export default SendBTCScreen;
