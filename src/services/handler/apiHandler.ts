@@ -1070,17 +1070,43 @@ export class ApiHandler {
         peer_pubkey_and_opt_addr: peerPubkeyAndOptAddr,
         public: isPublic,
         push_msat: pushMsat,
-        temporary_channel_id: temporaryChannelId,
+        //temporary_channel_id: temporaryChannelId,
         with_anchors: withAnchors,
       });
-      if (response) {
+      if (response.error) {
+        if (response.name === 'NoAvailableUtxos') {
+          const createUtxos = await ApiHandler.api.createutxos({
+            fee_rate: 1,
+            num: 1,
+            size: capacitySat,
+            skip_sync: false,
+            up_to: false,
+          });
+          if (createUtxos) {
+            await ApiHandler.openChannel({
+              peerPubkeyAndOptAddr,
+              capacitySat,
+              pushMsat,
+              assetAmount,
+              assetId,
+              isPublic,
+              withAnchors,
+              feeBaseMsat,
+              feeProportionalMillionths,
+              temporaryChannelId,
+            });
+          }
+        } else {
+          throw new Error(response.error);
+        }
+      } else if (response) {
         return response;
       } else {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
       console.log(error);
-      throw new Error('Failed to connect to node');
+      throw new Error(error);
     }
   }
 
