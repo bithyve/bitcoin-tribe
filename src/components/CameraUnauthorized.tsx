@@ -32,7 +32,7 @@ function CameraUnauthorized() {
       <PrimaryCTA
         title={common.cameraPermissionCTA}
         onPress={requestPermission}
-        width={hp(170)}
+        width={hp(220)}
       />
     </View>
   );
