@@ -108,7 +108,9 @@
     "termAndConditionTitle4": "Aggiornamenti e Disponibilità",
     "termAndConditionSubTitle4": "Tribe RGB può aggiornare questa funzione senza preavviso. Qualsiasi modifica alla disponibilità o alle condizioni di supporto va confermata con il fornitore esterno.",
     "termAndConditionTitle5": "Legge Applicabile",
-    "termAndConditionSubTitle5": "Questi termini sono regolati dalle leggi della giurisdizione applicabile."
+    "termAndConditionSubTitle5": "Questi termini sono regolati dalle leggi della giurisdizione applicabile.",
+    "hide": "Nascondi",
+    "show": "Mostra"
   },
   "home": {
     "addAssets": "Aggiungi risorse",

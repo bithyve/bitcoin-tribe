@@ -108,7 +108,9 @@
     "termAndConditionTitle4": "Actualizaciones y Disponibilidad",
     "termAndConditionSubTitle4": "Tribe RGB puede actualizar esta función sin previo aviso. Cualquier cambio en la disponibilidad de soporte o términos debe confirmarse con el proveedor externo.",
     "termAndConditionTitle5": "Ley Aplicable",
-    "termAndConditionSubTitle5": "Estos términos están regidos por las leyes de la jurisdicción aplicable."
+    "termAndConditionSubTitle5": "Estos términos están regidos por las leyes de la jurisdicción aplicable.",
+    "hide": "Ocultar",
+    "show": "Mostrar"
   },
   "home": {
     "addAssets": "Agregar activos",
