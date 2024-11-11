@@ -24,6 +24,8 @@ import IconWalletSettings from 'src/assets/images/icon_wallet.svg';
 import IconWalletSettingsLight from 'src/assets/images/icon_wallet_light.svg';
 import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
+import IconChannelMgt from 'src/assets/images/channelMgt.svg';
+import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -192,7 +194,7 @@ function SettingsScreen({ navigation }) {
     {
       id: 7,
       title: 'Channel Management',
-      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
+      icon: !isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
