@@ -20,6 +20,7 @@ export interface RGBWallet {
     vanilla: Balance;
     colored: Balance;
   };
+  peerDNS?: string;
 }
 
 // Define the structure of an object in the rgbAllocations array
@@ -144,6 +145,7 @@ export interface RgbNodeConnectParams {
   nodeUrl: string;
   nodeId: string;
   authentication: string;
+  peerDNS?: string;
 }
 
 export interface NodeInfo {
