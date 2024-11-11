@@ -12,11 +12,11 @@ struct Constants{
   static let bdkDirName = "bdk"
 
   static let testnetElectrumUrl = "ssl://electrum.iriswallet.com:50013"
-  static let regtestElectrumUrl = "regtest.thunderstack.org:50001"
+  static let regtestElectrumUrl = ""
   static let mainnetElectrumUrl = "electrum.acinq.co:50002"
   static let rgbHttpJsonRpcProtocol = "rgbhttpjsonrpc:"
   static let proxyURL = "https://proxy.iriswallet.com/json-rpc"
-  static let proxyConsignmentEndpoint = "rpc://regtest.thunderstack.org:3000/json-rpc"
+  static let proxyConsignmentEndpoint = "rpcs://proxy.iriswallet.com/0.2/json-rpc"
   static let satsForRgb = 9000
   static let defaultFeeRate = 58.0
   static let rgbBlindDuration = UInt32(86400)

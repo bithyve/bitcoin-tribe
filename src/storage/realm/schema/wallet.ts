@@ -160,12 +160,3 @@ export const WalletSchema: ObjectSchema = {
   },
   primaryKey: 'id',
 };
-
-export const WalletStatusSchema = {
-  name: RealmSchema.WalletStatus,
-  primaryKey: 'id',
-  properties: {
-    id: 'string', // Unique identifier for the status record
-    inProgress: 'bool', // Track if wallet creation is in progress
-  },
-};

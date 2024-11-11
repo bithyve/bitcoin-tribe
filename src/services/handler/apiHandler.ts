@@ -96,8 +96,8 @@ export class ApiHandler {
   }: {
     appName: string;
     pinMethod: PinMethod;
-    passcode: string;
-    walletImage: string;
+    passcode: '';
+    walletImage: '';
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
@@ -118,7 +118,9 @@ export class ApiHandler {
     if (isRealmInit) {
       try {
         if (appType === AppType.ON_CHAIN) {
-          const primaryMnemonic = mnemonic || bip39.generateMnemonic();
+          const primaryMnemonic = mnemonic
+            ? mnemonic
+            : bip39.generateMnemonic();
           const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
           const appID = crypto
             .createHash('sha256')
@@ -165,7 +167,6 @@ export class ApiHandler {
             });
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
-          // Handle RLN (example for connecting nodes and creating wallet)
           let rgbWallet: RGBWallet = {
             mnemonic: '',
             xpub: '',
@@ -180,10 +181,14 @@ export class ApiHandler {
           const resInitNode = await ApiHandler.api.init({
             password: 'tribe@2024',
           });
+          console.log('resInitNode', JSON.stringify(resInitNode));
           if (resInitNode && resInitNode.mnemonic) {
             rgbWallet.mnemonic = resInitNode.mnemonic;
             const resUnlockNode = await ApiHandler.api.unlock('tribe@2024');
             const resNodeInfo = await ApiHandler.api.nodeinfo();
+            rgbWallet.xpub = resNodeInfo.pubkey;
+            rgbWallet.accountXpub = resNodeInfo.pubkey;
+            rgbWallet.accountXpubFingerprint = resNodeInfo.pubkey;
             const newAPP: TribeApp = {
               id: rgbNodeConnectParams.nodeId,
               publicId: resNodeInfo.pubkey || rgbNodeConnectParams.nodeId,
@@ -215,13 +220,56 @@ export class ApiHandler {
                 title: 'Initially installed',
               });
             }
+          } else {
+            throw new Error(
+              resInitNode.message || resInitNode.error || 'Failed to init node',
+            );
+          }
+        } else {
+          const newAPP: TribeApp = {
+            id: rgbNodeConnectParams.nodeId,
+            publicId: rgbNodeInfo.pubkey,
+            appName,
+            walletImage,
+            primaryMnemonic: rgbNodeConnectParams.nodeId,
+            primarySeed: rgbNodeConnectParams.nodeId,
+            imageEncryptionKey: '',
+            version: DeviceInfo.getVersion(),
+            networkType: config.NETWORK_TYPE,
+            enableAnalytics: true,
+            appType,
+            nodeInfo: rgbNodeInfo,
+            nodeUrl: rgbNodeConnectParams.nodeUrl,
+            nodeAuthentication: rgbNodeConnectParams.authentication,
+          };
+          const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
+          if (created) {
+            const rgbWallet: RGBWallet = {
+              mnemonic: rgbNodeInfo.pubkey,
+              xpub: rgbNodeInfo.pubkey,
+              rgbDir: '',
+              accountXpub: rgbNodeInfo.pubkey,
+              accountXpubFingerprint: rgbNodeInfo.pubkey,
+              nodeUrl: rgbNodeConnectParams.nodeUrl,
+              nodeAuthentication: rgbNodeConnectParams.authentication,
+            };
+            const apiHandler = new ApiHandler(rgbWallet, appType);
+            dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
+            Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
+            dbManager.createObject(RealmSchema.VersionHistory, {
+              version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+              releaseNote: '',
+              date: new Date().toString(),
+              title: 'Initially installed',
+            });
           }
         }
       } catch (error) {
+        console.log(error);
         throw new Error(error);
       }
     } else {
-      throw new Error('Realm initialization failed');
+      throw new Error('Realm initialisation failed');
     }
   }
 
