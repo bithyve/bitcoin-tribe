@@ -17,10 +17,10 @@ object AppConstants {
     const val backupName = "%s.rgb_backup"
 
     const val testnetElectrumURL = "ssl://electrum.iriswallet.com:50013"
-    const val regtestElectrumURL = ""
+    const val regtestElectrumURL = "regtest.thunderstack.org:50001"
     const val mainnetElectrumUrl = "electrum.acinq.co:50002"
 
-    const val proxyConsignmentEndpoint = "rpcs://proxy.iriswallet.com/0.2/json-rpc"
+    const val proxyConsignmentEndpoint = "rpc://regtest.thunderstack.org:3000/json-rpc"
     const val rgbDefaultPrecision: UByte = 0U
     const val rgbBlindDuration = 86400U
 

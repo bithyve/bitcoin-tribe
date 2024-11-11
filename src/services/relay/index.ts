@@ -5,7 +5,35 @@ import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
-  public static getRegtestSats = async (address: string, amount: number) => {};
+  public static getRegtestSats = async (address: string, amount: number) => {
+    try {
+      const response = await fetch(
+        'http://regtest.thunderstack.org:5000/execute',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            args: `sendtoaddress ${address} ${amount}`,
+          }),
+        },
+      );
+      if (response) {
+        await fetch('http://regtest.thunderstack.org:5000/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            args: 'mine 2',
+          }),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   public static getTestcoins = async (
     recipientAddress: string,

@@ -12,7 +12,17 @@ export const predefinedTestnetNodes: NodeDetail[] = [
   },
 ];
 
-export const predefinedRegtestNodes: NodeDetail[] = [];
+export const predefinedRegtestNodes: NodeDetail[] = [
+  {
+    id: 222,
+    host: 'regtest.thunderstack.org',
+    port: '50001',
+    isConnected: false,
+    useKeeperNode: false,
+    useSSL: false,
+    isDefault: true,
+  },
+];
 
 export const predefinedMainnetNodes: NodeDetail[] = [
   {
