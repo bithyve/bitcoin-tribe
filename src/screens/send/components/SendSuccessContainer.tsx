@@ -21,7 +21,6 @@ type sendSuccessProps = {
 };
 function SendSuccessContainer(props: sendSuccessProps) {
   const { transID, amount, transFee, total, onPress } = props;
-  console.log('total', amount);
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;

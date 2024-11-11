@@ -27,5 +27,4 @@ export enum RealmSchema {
   CloudBackupHistory = 'CloudBackupHistory',
   NodeInfo = 'NodeInfo',
   NodeBtcBalance = 'NodeBtcBalance',
-  WalletStatus = 'WalletStatus',
 }

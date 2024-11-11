@@ -11,8 +11,6 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import TribeIcon from 'src/assets/images/Tribe.svg';
-import dbManager from 'src/storage/realm/dbManager';
-import { RealmSchema } from 'src/storage/enum';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
@@ -35,53 +33,20 @@ function Splash({ navigation }) {
     };
     init();
   }, []);
-  // Function to check wallet creation status
-  const checkWalletCreationStatus = useCallback(async () => {
-    try {
-      const status = dbManager.getObjectById(RealmSchema.WalletStatus, {
-        id: 'walletCreationStatus',
-      });
-      return status?.inProgress ?? false; // Return the status of wallet creation
-    } catch (error) {
-      console.error('Error checking wallet creation status:', error);
-      return false;
-    }
-  }, []);
-  // const onInit = useCallback(async () => {
-  //   try {
-  //     const appId = await Storage.get(Keys.APPID);
-  //     if (appId && pinMethod !== PinMethod.DEFAULT) {
-  //       navigation.replace(NavigationRoutes.LOGIN);
-  //     }
-  //     if (pinMethod === undefined) {
-  //       navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error initializing app: ', error);
-  //   }
-  // }, [mutate, navigation, pinMethod]);
 
-  // Handle initialization logic
   const onInit = useCallback(async () => {
     try {
       const appId = await Storage.get(Keys.APPID);
-      // const isWalletCreationInProgress = await checkWalletCreationStatus();
-      // console.log('isWalletCreationInProgress', isWalletCreationInProgress);
-      // if (!isWalletCreationInProgress) {
-      //   // Navigate to a screen to resume wallet setup if creation is in progress
-      //   navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
-      //   return;
-      // }
-
       if (appId && pinMethod !== PinMethod.DEFAULT) {
         navigation.replace(NavigationRoutes.LOGIN);
-      } else if (pinMethod === undefined) {
+      }
+      if (pinMethod === undefined) {
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
     } catch (error) {
       console.error('Error initializing app: ', error);
     }
-  }, [navigation, checkWalletCreationStatus]);
+  }, [mutate, navigation, pinMethod]);
 
   // Handle login success
   useEffect(() => {
