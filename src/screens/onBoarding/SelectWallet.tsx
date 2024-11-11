@@ -43,6 +43,7 @@ function SelectWallet() {
             nodeUrl: createNodeMutation.data.apiUrl,
             nodeId: createNodeMutation.data.node.nodeId,
             authentication: createNodeMutation.data.token,
+            peerDNS: createNodeMutation.data.peerDNS,
           },
           nodeInfo: {},
           appType: AppType.SUPPORTED_RLN,

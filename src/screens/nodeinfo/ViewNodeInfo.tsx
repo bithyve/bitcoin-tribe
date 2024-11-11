@@ -136,6 +136,18 @@ const ViewNodeInfo = () => {
             />
           </View>
 
+          {rgbWallet.peerDNS && (
+            <View>
+              <AppText variant="body2" style={styles.headerTitle}>
+                Peer DNS
+              </AppText>
+              <ReceiveQrClipBoard
+                qrCodeValue={rgbWallet.peerDNS}
+                icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+              />
+            </View>
+          )}
+
           <View>
             <AppText variant="body2" style={styles.headerTitle}>
               {node.rgbHtlcMinMsat}

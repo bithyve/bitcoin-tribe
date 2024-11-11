@@ -32,9 +32,9 @@ export const RgbWalletSchema: ObjectSchema = {
     receiveData: `${RealmSchema.ReceiveData}?`,
     utxos: 'string?[]',
     nodeUrl: 'string?',
-    //nodeInfo: RealmSchema.NodeInfo,
     nodeAuthentication: 'string?',
     nodeBtcBalance: `${RealmSchema.NodeBtcBalance}?`,
+    peerDNS: 'string?',
   },
   primaryKey: 'mnemonic',
 };
