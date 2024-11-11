@@ -26,6 +26,8 @@ import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
 import IconChannelMgt from 'src/assets/images/channelMgt.svg';
 import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
+import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
+import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -185,21 +187,20 @@ function SettingsScreen({ navigation }) {
     },
 
     {
-      id: 7,
+      id: 8,
       title: 'View Node Info',
-      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
+      icon: !isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
     {
-      id: 7,
+      id: 9,
       title: 'Channel Management',
       icon: !isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
   ];
-
   return (
     <ScreenContainer>
       <AppText variant="pageTitle2" style={styles.title}>
