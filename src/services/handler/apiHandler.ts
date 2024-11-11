@@ -175,6 +175,7 @@ export class ApiHandler {
             accountXpubFingerprint: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
+            peerDNS: rgbNodeConnectParams?.peerDNS,
           };
           const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT);
           const resInitNode = await ApiHandler.api.init({
@@ -184,12 +185,13 @@ export class ApiHandler {
           if (resInitNode && resInitNode.mnemonic) {
             rgbWallet.mnemonic = resInitNode.mnemonic;
             const resUnlockNode = await ApiHandler.api.unlock('tribe@2024');
-            console.log('resUnlockNode', JSON.stringify(resUnlockNode));
             const resNodeInfo = await ApiHandler.api.nodeinfo();
-            console.log('resNodeInfo', JSON.stringify(resNodeInfo));
+            rgbWallet.xpub = resNodeInfo.pubkey;
+            rgbWallet.accountXpub = resNodeInfo.pubkey;
+            rgbWallet.accountXpubFingerprint = resNodeInfo.pubkey;
             const newAPP: TribeApp = {
               id: rgbNodeConnectParams.nodeId,
-              publicId: rgbNodeInfo.pubkey,
+              publicId: resNodeInfo.pubkey || rgbNodeConnectParams.nodeId,
               appName,
               walletImage,
               primaryMnemonic: resInitNode.mnemonic,
@@ -198,7 +200,7 @@ export class ApiHandler {
               version: DeviceInfo.getVersion(),
               networkType: config.NETWORK_TYPE,
               enableAnalytics: true,
-              appType,
+              appType: AppType.NODE_CONNECT,
               nodeInfo: rgbNodeInfo,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -210,7 +212,7 @@ export class ApiHandler {
             );
             if (created) {
               dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-              Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
+              Storage.set(Keys.APPID, resNodeInfo.pubkey);
               dbManager.createObject(RealmSchema.VersionHistory, {
                 version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
                 releaseNote: '',
@@ -263,6 +265,7 @@ export class ApiHandler {
           }
         }
       } catch (error) {
+        console.log(error);
         throw new Error(error);
       }
     } else {

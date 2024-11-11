@@ -34,17 +34,28 @@ function RgbLightningNodeConnect() {
 
   useEffect(() => {
     if (checkNodeConnection.data) {
-      navigation.navigate(NavigationRoutes.PROFILESETUP, {
-        nodeConnectParams: {
-          nodeUrl: connectionURL,
-          nodeId: nodeID,
-          authentication: `${authType} ${
-            authType === 'Basic' ? btoa(`${username}:${password}`) : bearerToken
+      if (checkNodeConnection.data.pubkey) {
+        navigation.navigate(NavigationRoutes.PROFILESETUP, {
+          nodeConnectParams: {
+            nodeUrl: connectionURL,
+            nodeId: nodeID,
+            authentication: `${authType} ${
+              authType === 'Basic'
+                ? btoa(`${username}:${password}`)
+                : bearerToken
+            }`,
+          },
+          nodeInfo: checkNodeConnection.data,
+          appType: AppType.NODE_CONNECT,
+        });
+      } else {
+        Toast(
+          `${
+            checkNodeConnection.data.error || checkNodeConnection.data.Message
           }`,
-        },
-        nodeInfo: checkNodeConnection.data,
-        appType: AppType.NODE_CONNECT,
-      });
+          true,
+        );
+      }
     } else if (checkNodeConnection.isError) {
       Toast(`${checkNodeConnection.error}`, true);
     }

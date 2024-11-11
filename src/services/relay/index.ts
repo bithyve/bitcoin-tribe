@@ -74,9 +74,7 @@ export default class Relay {
     try {
       let res;
       try {
-        res = await RestClient.get(
-          'https://grand-utterly-gorilla.ngrok-free.app/node',
-        );
+        res = await RestClient.get('https://bhrelay.appspot.com/node');
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
