@@ -14,19 +14,25 @@ type ReceiveQrDetailsProps = {
   addMountModalVisible: () => void;
   receivingAddress?: string;
   qrTitle?: string;
+  qrTitleColor?: string;
 };
 
 const ReceiveQrDetails = ({
   addMountModalVisible,
   receivingAddress,
   qrTitle,
+  qrTitleColor,
 }: ReceiveQrDetailsProps) => {
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={styles.container}>
-      <ShowQRCode value={receivingAddress} title={qrTitle} />
+      <ShowQRCode
+        value={receivingAddress}
+        title={qrTitle}
+        qrTitleColor={qrTitleColor}
+      />
 
       <ReceiveQrClipBoard
         qrCodeValue={receivingAddress}
