@@ -25,7 +25,7 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: totalReserveSatsAmount === 0 ? '64%' : '66%',
+      height: totalReserveSatsAmount === 0 ? '64%' : '74%',
     },
     footerWrapper: {
       marginVertical: hp(10),
