@@ -19,13 +19,13 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import AppText from 'src/components/AppText';
 
-const getStyles = (theme: AppTheme, inputHeight) =>
+const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: '63%',
+      height: totalReserveSatsAmount === 0 ? '64%' : '66%',
     },
     footerWrapper: {
       marginVertical: hp(10),
@@ -72,7 +72,6 @@ const EnterInvoiceDetails = () => {
   const [assetId, setAssetId] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
-  const styles = getStyles(theme, inputHeight);
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -82,6 +81,8 @@ const EnterInvoiceDetails = () => {
   const totalReserveSatsAmount = useMemo(() => {
     return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
   }, [UnspentUTXOData]);
+
+  const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
 
   return (
     <ScreenContainer>
@@ -114,7 +115,7 @@ const EnterInvoiceDetails = () => {
       </View>
 
       <View style={styles.footerWrapper}>
-        {totalReserveSatsAmount === 0 && (
+        {totalReserveSatsAmount === 0 ? (
           <View style={styles.reservedSatsWrapper}>
             <View style={styles.checkIconWrapper}>
               <CheckIcon />
@@ -125,7 +126,7 @@ const EnterInvoiceDetails = () => {
               </AppText>
             </View>
           </View>
-        )}
+        ) : null}
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => {
