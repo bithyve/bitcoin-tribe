@@ -21,6 +21,8 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -55,7 +57,7 @@ function SelectWallet() {
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
-      <ModalLoading visible={createNodeMutation.isLoading} />
+      {/* <ModalLoading visible={createNodeMutation.isLoading} /> */}
       <View style={styles.bodyWrapper}>
         <SelectWalletCollapse
           isCollapsed={isCollapsed}
@@ -108,6 +110,18 @@ function SelectWallet() {
             />
           </View>
         </View>
+      )}
+      {createNodeMutation.isLoading && (
+        <ResponsePopupContainer
+          visible={createNodeMutation.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <NodeConnectingPopupContainer
+            title={onBoarding.supportNodeConnectingTitle}
+            subTitle={onBoarding.supportNodeConnectingSubTitle}
+          />
+        </ResponsePopupContainer>
       )}
     </ScreenContainer>
   );
