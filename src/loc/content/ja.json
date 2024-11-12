@@ -108,7 +108,9 @@
     "termAndConditionTitle4": "更新と利用可能性",
     "termAndConditionSubTitle4": "Tribe RGBは予告なくこの機能を更新する場合があります。サポートの可用性または利用規約の変更については、外部プロバイダーに確認してください。",
     "termAndConditionTitle5": "準拠法",
-    "termAndConditionSubTitle5": "これらの条項は、適用される管轄の法律に準拠します。"
+    "termAndConditionSubTitle5": "これらの条項は、適用される管轄の法律に準拠します。",
+    "hide": "隠す",
+    "show": "表示"
   },
   "home": {
     "addAssets": "アセットを追加",
