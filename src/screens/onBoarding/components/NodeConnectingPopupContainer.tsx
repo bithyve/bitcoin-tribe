@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
+import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
 import NodeConnectingIllustration from 'src/assets/images/nodeConnecting.svg';
@@ -30,7 +31,12 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
         </AppText>
       </View>
       <View style={styles.illustrationWrapper}>
-        <NodeConnectingIllustration />
+        <LottieView
+          source={require('src/assets/images/nodeConnecting.json')}
+          style={styles.loaderStyle}
+          autoPlay
+          loop
+        />
       </View>
     </View>
   );
@@ -57,6 +63,13 @@ const getStyles = (theme: AppTheme) =>
     },
     illustrationWrapper: {
       marginVertical: hp(20),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(350),
+      height: hp(350),
     },
   });
 export default NodeConnectingPopupContainer;

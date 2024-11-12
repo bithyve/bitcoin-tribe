@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
+import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
 import NodeConnectSuccessIllustration from 'src/assets/images/nodeConnectSuccess.svg';
@@ -35,7 +36,12 @@ function NodeConnectSuccessPopupContainer(props: nodeConnectSuccessProps) {
         </AppText>
       </View>
       <View style={styles.illustrationWrapper}>
-        <NodeConnectSuccessIllustration />
+        <LottieView
+          source={require('src/assets/images/nodeConnectSuccess.json')}
+          style={styles.loaderStyle}
+          autoPlay
+          loop
+        />
       </View>
       <View>
         <PrimaryCTA
@@ -69,7 +75,14 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     illustrationWrapper: {
-      marginVertical: hp(20),
+      marginVertical: hp(10),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(300),
+      height: hp(300),
     },
   });
 export default NodeConnectSuccessPopupContainer;
