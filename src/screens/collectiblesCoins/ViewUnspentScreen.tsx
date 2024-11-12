@@ -87,7 +87,7 @@ const ViewUnspentScreen = () => {
             title={assets.noRGBUTXOsTitle}
             subTitle={assets.noRGBUTXOSubTitle}
             IllustartionImage={
-              !isThemeDark ? (
+              isThemeDark ? (
                 <NoTransactionIllustration />
               ) : (
                 <NoTransactionIllustrationLight />

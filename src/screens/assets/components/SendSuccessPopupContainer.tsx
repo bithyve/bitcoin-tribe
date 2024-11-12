@@ -30,7 +30,7 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
       <View>
         <LottieView
           source={
-            !isThemeDark
+            isThemeDark
               ? require('src/assets/images/successPopup.json')
               : require('src/assets/images/successPopup_light.json')
           }

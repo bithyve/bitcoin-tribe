@@ -75,12 +75,12 @@ const SelectOption = (props: SelectOptionProps) => {
                 color={theme.colors.accent1}
               />
             ) : backColor ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <IconArrow />
               ) : (
                 <IconArrowLight />
               )
-            ) : !isThemeDark ? (
+            ) : isThemeDark ? (
               <IconSettingArrow />
             ) : (
               <IconSettingArrowLight />

@@ -69,7 +69,7 @@ const CoinsMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        rightIcon={!isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
+        rightIcon={isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
         onSettingsPress={() => {
           const filePath = Platform.select({
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix

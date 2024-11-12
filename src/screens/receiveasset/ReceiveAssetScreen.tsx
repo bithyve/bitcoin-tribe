@@ -141,7 +141,7 @@ function ReceiveAssetScreen() {
           <ShowQRCode value={qrValue} title={receciveScreen.invoiceAddress} />
           <ReceiveQrClipBoard
             qrCodeValue={qrValue}
-            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
             title={common.note}

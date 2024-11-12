@@ -118,7 +118,7 @@ function WalletTransactionList({
         <EmptyStateView
           style={styles.emptyStateContainer}
           IllustartionImage={
-            !isThemeDark ? (
+            isThemeDark ? (
               <NoTransactionIllustration />
             ) : (
               <NoTransactionIllustrationLight />

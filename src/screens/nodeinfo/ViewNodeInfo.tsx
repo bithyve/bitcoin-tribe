@@ -115,7 +115,7 @@ const ViewNodeInfo = () => {
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={nodeInfo.pubkey}
-            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
 
           <AppText variant="body2" style={styles.headerTitle}>
@@ -123,7 +123,7 @@ const ViewNodeInfo = () => {
           </AppText>
           <ReceiveQrClipBoard
             qrCodeValue={rgbWallet.nodeUrl}
-            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
 
           <View>
@@ -132,7 +132,7 @@ const ViewNodeInfo = () => {
             </AppText>
             <ReceiveQrClipBoard
               qrCodeValue={nodeInfo.onchain_pubkey}
-              icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+              icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
             />
           </View>
 
@@ -143,7 +143,7 @@ const ViewNodeInfo = () => {
               </AppText>
               <ReceiveQrClipBoard
                 qrCodeValue={rgbWallet.peerDNS}
-                icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+                icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
               />
             </View>
           )}

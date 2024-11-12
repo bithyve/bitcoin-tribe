@@ -66,7 +66,7 @@ function Splash({ navigation }) {
     <ScreenContainer style={styles.container}>
       <ImageBackground
         source={
-          !isThemeDark
+          isThemeDark
             ? require('src/assets/images/background.png')
             : require('src/assets/images/backgroundLight.png')
         }
