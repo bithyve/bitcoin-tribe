@@ -38,7 +38,16 @@ function SelectWallet() {
 
   useEffect(() => {
     if (createNodeMutation.error) {
-      Toast(`${createNodeMutation.error}`, true);
+      let errorMessage;
+      // Check if the error is an instance of Error and extract the message
+      if (createNodeMutation.error instanceof Error) {
+        errorMessage = createNodeMutation.error.message;
+      } else if (typeof createNodeMutation.error === 'string') {
+        errorMessage = createNodeMutation.error;
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+      Toast(errorMessage, true);
     } else if (createNodeMutation.data) {
       setTimeout(() => {
         setVisible(true);
