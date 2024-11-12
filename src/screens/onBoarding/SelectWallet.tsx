@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -16,7 +17,6 @@ import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';

@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { encode as btoa } from 'base-64';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -10,9 +12,7 @@ import AppHeader from 'src/components/AppHeader';
 import LightningNodeDetailsContainer from './components/LightningNodeDetailsContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
-import { encode as btoa } from 'base-64';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
