@@ -36,6 +36,7 @@ type TextFieldProps = {
   multiline?: boolean;
   numberOfLines?: number;
   onContentSizeChange?: (event) => void;
+  secureTextEntry?: boolean;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -61,6 +62,7 @@ const TextField = (props: TextFieldProps) => {
     numberOfLines,
     onContentSizeChange,
     contentStyle,
+    secureTextEntry = false,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const theme: AppTheme = useTheme();
@@ -105,6 +107,7 @@ const TextField = (props: TextFieldProps) => {
         // contentStyle={contentStyle}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        secureTextEntry={secureTextEntry}
       />
       {rightText && (
         <AppTouchable

@@ -108,7 +108,9 @@
     "termAndConditionTitle4": "Updates and Availability",
     "termAndConditionSubTitle4": "Tribe RGB may update this feature without notice. Any changes to support availability or terms should be confirmed with the external provider.",
     "termAndConditionTitle5": "Governing Law",
-    "termAndConditionSubTitle5": "These terms are governed by the applicable jurisdiction’s laws"
+    "termAndConditionSubTitle5": "These terms are governed by the applicable jurisdiction’s laws",
+    "hide": "Hide",
+    "show": "Show"
   },
   "home": {
     "addAssets": "Add Assets",

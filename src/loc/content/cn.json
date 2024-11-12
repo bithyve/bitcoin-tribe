@@ -108,7 +108,9 @@
     "termAndConditionTitle4": "更新和可用性",
     "termAndConditionSubTitle4": "Tribe RGB可能会在没有通知的情况下更新此功能。请与外部提供商确认支持可用性或条款的任何更改。",
     "termAndConditionTitle5": "法律管辖",
-    "termAndConditionSubTitle5": "这些条款受适用司法管辖区的法律管辖。"
+    "termAndConditionSubTitle5": "这些条款受适用司法管辖区的法律管辖。",
+    "hide": "隐藏",
+    "show": "显示"
   },
   "home": {
     "addAssets": "添加资产",

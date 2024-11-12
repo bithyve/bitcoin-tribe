@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RadioButton, useTheme } from 'react-native-paper';
@@ -56,8 +56,9 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
   } = props;
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
-  const [inputURLHeight, setURLInputHeight] = React.useState(50);
-  const [inputBearerHeight, setBearerInputHeight] = React.useState(0);
+  const [inputURLHeight, setURLInputHeight] = useState(50);
+  const [inputBearerHeight, setBearerInputHeight] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
   const styles = getStyles(theme, inputURLHeight, inputBearerHeight);
 
   return (
@@ -174,7 +175,14 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                     keyboardType={'default'}
                     returnKeyType={'done'}
                     style={styles.inputWrapper2}
+                    inputStyle={styles.inputStyle}
+                    contentStyle={styles.contentStyle}
                     disabled={isLoading}
+                    secureTextEntry={!showPassword}
+                    rightText={showPassword ? onBoarding.hide : onBoarding.show}
+                    onRightTextPress={() => setShowPassword(!showPassword)}
+                    rightCTAStyle={styles.rightCTAStyle}
+                    rightCTATextColor={theme.colors.primaryCTAText}
                   />
                 </View>
               ) : (
@@ -243,7 +251,12 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
     inputWrapper2: {
       marginVertical: hp(5),
     },
-
+    inputStyle: {
+      width: '80%',
+    },
+    contentStyle: {
+      marginTop: 0,
+    },
     authContainer: {
       flexDirection: 'row',
       width: '100%',
@@ -277,5 +290,14 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
       color: theme.colors.headingColor,
     },
     ctaWrapper: {},
+    rightCTAStyle: {
+      backgroundColor: theme.colors.ctaBackColor,
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+      marginHorizontal: hp(5),
+    },
   });
 export default LightningNodeDetailsContainer;

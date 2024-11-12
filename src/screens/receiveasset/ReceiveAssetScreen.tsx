@@ -54,7 +54,7 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (error) {
       setTimeout(() => {
-        setShowErrorModal(true);
+        createUtxos.mutate();
       }, 500);
     }
   }, [error]);
