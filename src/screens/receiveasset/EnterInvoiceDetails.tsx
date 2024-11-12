@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -13,13 +13,21 @@ import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import CheckIcon from 'src/assets/images/checkIcon.svg';
+import AppText from 'src/components/AppText';
 
 const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
     },
-    btns: {
+    bodyWrapper: {
+      height: '63%',
+    },
+    footerWrapper: {
       marginVertical: hp(10),
     },
     contentStyle: {
@@ -32,6 +40,21 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     contentStyle1: {
       height: hp(50),
       // marginTop: hp(5),
+    },
+    reservedSatsWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginVertical: hp(20),
+    },
+    checkIconWrapper: {
+      width: '10%',
+    },
+    reservedSatsWrapper1: {
+      width: '90%',
+    },
+    reservedSatsText: {
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 
@@ -51,6 +74,15 @@ const EnterInvoiceDetails = () => {
   const [inputHeight, setInputHeight] = React.useState(50);
   const styles = getStyles(theme, inputHeight);
 
+  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+
+  const totalReserveSatsAmount = useMemo(() => {
+    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
+  }, [UnspentUTXOData]);
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -58,29 +90,42 @@ const EnterInvoiceDetails = () => {
         subTitle={''}
         enableBack={true}
       />
+      <View style={styles.bodyWrapper}>
+        <TextField
+          value={assetId}
+          onChangeText={text => setAssetId(text.trim())}
+          placeholder={assets.assetId}
+          style={styles.input}
+          multiline={true}
+          onContentSizeChange={event => {
+            setInputHeight(event.nativeEvent.contentSize.height);
+          }}
+          numberOfLines={3}
+          contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
+        />
 
-      <TextField
-        value={assetId}
-        onChangeText={text => setAssetId(text.trim())}
-        placeholder={'Asset ID'}
-        style={styles.input}
-        multiline={true}
-        onContentSizeChange={event => {
-          setInputHeight(event.nativeEvent.contentSize.height);
-        }}
-        numberOfLines={3}
-        contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
-      />
+        <TextField
+          value={amount}
+          onChangeText={text => setAmount(text.trim())}
+          placeholder={assets.amount}
+          style={styles.input}
+          keyboardType="numeric"
+        />
+      </View>
 
-      <TextField
-        value={amount}
-        onChangeText={text => setAmount(text.trim())}
-        placeholder={'Amount'}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-
-      <View style={styles.btns}>
+      <View style={styles.footerWrapper}>
+        {totalReserveSatsAmount === 0 && (
+          <View style={styles.reservedSatsWrapper}>
+            <View style={styles.checkIconWrapper}>
+              <CheckIcon />
+            </View>
+            <View style={styles.reservedSatsWrapper1}>
+              <AppText variant="body2" style={styles.reservedSatsText}>
+                {assets.reservedSats}
+              </AppText>
+            </View>
+          </View>
+        )}
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => {

@@ -286,7 +286,7 @@ function SendToContainer({
           conatinerModalStyle={styles.containerModalStyle}>
           <SendSuccessContainer
             transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            amount={amount}
+            amount={amount.replace(/,/g, '')}
             transFee={transferFee}
             total={Number(amount) + Number(transferFee)}
             onPress={() => successTransaction()}

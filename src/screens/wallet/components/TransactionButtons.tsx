@@ -57,7 +57,8 @@ const TransactionButtons = (props: transButtonProps) => {
               theme.colors.roundBuyCTAGradient3,
             ]}
             icon={
-              config.NETWORK_TYPE === NetworkType.TESTNET ? (
+              config.NETWORK_TYPE === NetworkType.TESTNET ||
+              config.NETWORK_TYPE === NetworkType.REGTEST ? (
                 !isThemeDark ? (
                   <IconRequest />
                 ) : (
