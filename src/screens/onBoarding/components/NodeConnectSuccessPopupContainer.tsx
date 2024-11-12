@@ -43,7 +43,7 @@ function NodeConnectSuccessPopupContainer(props: nodeConnectSuccessProps) {
           loop
         />
       </View>
-      <View>
+      <View style={styles.ctaWrapper}>
         <PrimaryCTA
           onPress={onPress}
           title={common.proceed}
@@ -83,6 +83,9 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: hp(300),
       height: hp(300),
+    },
+    ctaWrapper: {
+      marginBottom: hp(10),
     },
   });
 export default NodeConnectSuccessPopupContainer;
