@@ -18,11 +18,11 @@ import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
+import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -32,6 +32,7 @@ function SelectWallet() {
   const styles = getStyles(theme);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
 
@@ -40,16 +41,7 @@ function SelectWallet() {
       Toast(`${createNodeMutation.error}`, true);
     } else if (createNodeMutation.data) {
       setTimeout(() => {
-        navigation.navigate(NavigationRoutes.PROFILESETUP, {
-          nodeConnectParams: {
-            nodeUrl: createNodeMutation.data.apiUrl,
-            nodeId: createNodeMutation.data.node.nodeId,
-            authentication: createNodeMutation.data.token,
-            peerDNS: createNodeMutation.data.peerDNS,
-          },
-          nodeInfo: {},
-          appType: AppType.SUPPORTED_RLN,
-        });
+        setVisible(true);
       }, 100);
     }
   }, [createNodeMutation.data, createNodeMutation.error]);
@@ -112,17 +104,44 @@ function SelectWallet() {
         </View>
       )}
       {createNodeMutation.isLoading && (
+        <View>
+          <ResponsePopupContainer
+            visible={createNodeMutation.isLoading}
+            enableClose={true}
+            backColor={theme.colors.modalBackColor}
+            borderColor={theme.colors.modalBackColor}>
+            <NodeConnectingPopupContainer
+              title={onBoarding.supportNodeConnectingTitle}
+              subTitle={onBoarding.supportNodeConnectingSubTitle}
+            />
+          </ResponsePopupContainer>
+        </View>
+      )}
+      <View>
         <ResponsePopupContainer
-          visible={createNodeMutation.isLoading}
+          visible={visible}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
-          <NodeConnectingPopupContainer
-            title={onBoarding.supportNodeConnectingTitle}
-            subTitle={onBoarding.supportNodeConnectingSubTitle}
+          <NodeConnectSuccessPopupContainer
+            title={onBoarding.nodeconnectSuccessfulTitle}
+            subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
+            onPress={() => {
+              setVisible(false);
+              navigation.navigate(NavigationRoutes.PROFILESETUP, {
+                nodeConnectParams: {
+                  nodeUrl: createNodeMutation.data.apiUrl,
+                  nodeId: createNodeMutation.data.node.nodeId,
+                  authentication: createNodeMutation.data.token,
+                  peerDNS: createNodeMutation.data.peerDNS,
+                },
+                nodeInfo: {},
+                appType: AppType.SUPPORTED_RLN,
+              });
+            }}
           />
         </ResponsePopupContainer>
-      )}
+      </View>
     </ScreenContainer>
   );
 }
