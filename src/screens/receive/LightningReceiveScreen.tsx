@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 
@@ -57,11 +57,17 @@ function LightningReceiveScreen({ route }) {
         }
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ReceiveQrDetails
-          addMountModalVisible={() => setVisible(true)}
-          receivingAddress={lightningInvoice || 'address'}
-          qrTitle={receciveScreen.lightningAddress}
-        />
+        {generateLNInvoiceMutation.isLoading ? (
+          <View />
+        ) : (
+          <View>
+            <ReceiveQrDetails
+              addMountModalVisible={() => setVisible(true)}
+              receivingAddress={lightningInvoice || 'address'}
+              qrTitle={receciveScreen.lightningAddress}
+            />
+          </View>
+        )}
       </ScrollView>
       {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
 
