@@ -1,5 +1,10 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import ModalContainer from 'src/components/ModalContainer';
@@ -11,20 +16,17 @@ import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
-import RefreshControlView from 'src/components/RefreshControlView';
 import WalletFooter from '../wallet/components/WalletFooter';
 import { wp } from 'src/constants/responsive';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 
 function ReceiveScreen({ route }) {
+  const theme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
@@ -154,6 +156,11 @@ function ReceiveScreen({ route }) {
                   ? receciveScreen.bitcoinAddress
                   : 'Lightning Invoice'
               }
+              qrTitleColor={
+                activeTab === 'bitcoin'
+                  ? theme.colors.btcCtaBackColor
+                  : theme.colors.accent1
+              }
             />
           </View>
         )}
@@ -185,7 +192,7 @@ const styles = StyleSheet.create({
   footerView: {
     height: '8%',
     marginHorizontal: wp(16),
-    marginBottom: wp(10),
+    marginVertical: wp(20),
   },
 });
 
