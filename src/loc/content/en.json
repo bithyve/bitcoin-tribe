@@ -187,6 +187,7 @@
     "walletBackup": "Wallet backup",
     "rgbAssetsbackup": "Asset backup",
     "appBackupMenuSubTitle": "Wallet and asset backups are both required to secure your data.",
+    "nodeAppBackupMenuSubTitle": "Asset backup is required to secure your data.",
     "walletBackupHistory": "Wallet backup history",
     "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
     "SEED_BACKUP_CREATED": "Seed backup is created",

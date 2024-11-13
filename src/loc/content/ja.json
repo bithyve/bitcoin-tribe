@@ -187,6 +187,7 @@
     "walletBackup": "ウォレットバックアップ",
     "rgbAssetsbackup": "アセットバックアップ",
     "appBackupMenuSubTitle": "データを保護するためにウォレットとアセットの両方のバックアップが必要です。",
+    "nodeAppBackupMenuSubTitle": "データを保護するために資産のバックアップが必要です。",
     "walletBackupHistory": "ウォレットバックアップ履歴",
     "walletBackupHistorySubTitle": "過去を守り、未来を安全に。",
     "SEED_BACKUP_CREATED": "シードバックアップが作成されました",

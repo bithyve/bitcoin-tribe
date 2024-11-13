@@ -85,7 +85,11 @@ function AppBackupMenu({ navigation }) {
     <ScreenContainer>
       <AppHeader
         title={settings.appBackup}
-        subTitle={settings.appBackupMenuSubTitle}
+        subTitle={
+          app.appType === AppType.ON_CHAIN
+            ? settings.appBackupMenuSubTitle
+            : settings.nodeAppBackupMenuSubTitle
+        }
         enableBack={true}
         style={styles.headerWrapper}
       />

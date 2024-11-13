@@ -187,6 +187,7 @@
     "walletBackup": "Backup del portafoglio",
     "rgbAssetsbackup": "Backup delle risorse",
     "appBackupMenuSubTitle": "Per proteggere i tuoi dati sono necessari sia il backup del portafoglio che delle risorse.",
+    "nodeAppBackupMenuSubTitle": "È necessario il backup degli asset per proteggere i tuoi dati.",
     "walletBackupHistory": "Cronologia del backup del portafoglio",
     "walletBackupHistorySubTitle": "Proteggi il tuo passato, salvaguarda il tuo futuro.",
     "SEED_BACKUP_CREATED": "Il backup del seme è stato creato",

@@ -187,6 +187,7 @@
     "walletBackup": "Respaldo de la billetera",
     "rgbAssetsbackup": "Copia de seguridad de activos",
     "appBackupMenuSubTitle": "Se requieren copias de seguridad de billetera y activos para proteger sus datos.",
+    "nodeAppBackupMenuSubTitle": "Se requiere una copia de seguridad de los activos para proteger sus datos.",
     "walletBackupHistory": "Historial de respaldos de la billetera",
     "walletBackupHistorySubTitle": "Asegura tu pasado, protege tu futuro.",
     "SEED_BACKUP_CREATED": "Respaldo de semilla creado",

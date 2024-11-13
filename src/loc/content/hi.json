@@ -187,6 +187,7 @@
     "walletBackup": "वॉलेट बैकअप",
     "rgbAssetsbackup": "संपत्ति बैकअप",
     "appBackupMenuSubTitle": "अपना डेटा सुरक्षित करने के लिए वॉलेट और संपत्ति बैकअप दोनों आवश्यक हैं।",
+    "nodeAppBackupMenuSubTitle": "आपके डेटा की सुरक्षा के लिए एसेट बैकअप आवश्यक है।",
     "walletBackupHistory": "वॉलेट बैकअप इतिहास",
     "walletBackupHistorySubTitle": "अपने अतीत को सुरक्षित करें, अपने भविष्य की रक्षा करें।",
     "SEED_BACKUP_CREATED": "सीड बैकअप बनाया गया है",
