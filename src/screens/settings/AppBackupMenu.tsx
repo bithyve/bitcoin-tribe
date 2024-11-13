@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -14,7 +15,6 @@ import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import AppType from 'src/models/enums/AppType';
@@ -141,12 +141,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     headerWrapper: {
       marginBottom: hp(25),
-    },
-    backupDoneWrapper: {
-      marginVertical: hp(20),
-    },
-    backupDoneText: {
-      color: theme.colors.backupDoneMsg,
     },
   });
 export default AppBackupMenu;
