@@ -20,7 +20,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import WalletFooter from '../wallet/components/WalletFooter';
+// import WalletFooter from '../wallet/components/WalletFooter';
 import { wp } from 'src/constants/responsive';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
@@ -140,14 +140,14 @@ function ReceiveScreen({ route }) {
           <View />
         ) : (
           <View>
-            {app.appType !== AppType.ON_CHAIN && (
+            {/* {app.appType !== AppType.ON_CHAIN && (
               <View style={styles.footerView}>
                 <WalletFooter
                   activeTab={activeTab}
                   setActiveTab={onTabChange}
                 />
               </View>
-            )}
+            )} */}
             <ReceiveQrDetails
               addMountModalVisible={() => setVisible(true)}
               receivingAddress={qrValue}

@@ -9,21 +9,42 @@ import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
+import Toast from 'src/components/Toast';
+import ModalLoading from 'src/components/ModalLoading';
 
 function LightningReceiveScreen({ route }) {
   const navigation = useNavigation();
   // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
+  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
 
   const [visible, setVisible] = useState(false);
+  const [lightningInvoice, setLightningInvoice] = useState('');
 
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
   const [receivingAddress, setReceivingAddress] = useState(null);
+  useEffect(() => {
+    if (lightningInvoice === '') {
+      generateLNInvoiceMutation.mutate({
+        amount: 100,
+      });
+    }
+  }, []);
+  useEffect(() => {
+    if (generateLNInvoiceMutation.error) {
+      Toast(generateLNInvoiceMutation.error, true);
+    } else if (generateLNInvoiceMutation.data) {
+      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
+    }
+  }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
 
   return (
     <ScreenContainer>
+      <ModalLoading visible={generateLNInvoiceMutation.isLoading} />
       <AppHeader
         title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
@@ -38,7 +59,7 @@ function LightningReceiveScreen({ route }) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ReceiveQrDetails
           addMountModalVisible={() => setVisible(true)}
-          receivingAddress={paymentURI || receivingAddress || 'address'}
+          receivingAddress={lightningInvoice || 'address'}
           qrTitle={receciveScreen.lightningAddress}
         />
       </ScrollView>
