@@ -13,7 +13,7 @@ import { useMutation } from 'react-query';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
+// import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -41,7 +41,7 @@ function ReceiveAssetScreen() {
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
   const createUtxos = useMutation(ApiHandler.createUtxos);
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [activeTab, setActiveTab] = useState('bitcoin');
@@ -109,7 +109,7 @@ function ReceiveAssetScreen() {
         enableBack={true}
       />
 
-      <CreateUtxosModal
+      {/* <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
           setShowErrorModal(false);
@@ -117,7 +117,7 @@ function ReceiveAssetScreen() {
             createUtxos.mutate();
           }, 400);
         }}
-      />
+      /> */}
 
       {isLoading ||
       createUtxos.isLoading ||

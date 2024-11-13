@@ -45,7 +45,8 @@
     "cameraPermissionSubTitle": "Activa la cámara en la configuración de tu dispositivo",
     "cameraPermissionCTA": "Abrir configuración",
     "later": "Más tarde",
-    "joinGroup": "Unirse al grupo"
+    "joinGroup": "Unirse al grupo",
+    "understood": "Entendido"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -110,7 +111,15 @@
     "termAndConditionTitle5": "Ley Aplicable",
     "termAndConditionSubTitle5": "Estos términos están regidos por las leyes de la jurisdicción aplicable.",
     "hide": "Ocultar",
-    "show": "Mostrar"
+    "show": "Mostrar",
+    "useRGBAssetTitle": "Usar activos RGB",
+    "useRGBAssetSubTitle": "Estos activos están en testnet/regnet, no tienen valor real y se pueden restablecer en cualquier momento. Solo para jugar.",
+    "nodeConnectingTitle": "Mantener la pantalla encendida",
+    "nodeConnectingSubTitle": "Conectando a tu nodo. Mantén la aplicación abierta y la pantalla desbloqueada.",
+    "supportNodeConnectingTitle": "Configurando tu modo de soporte",
+    "supportNodeConnectingSubTitle": "Conectando a tu nodo. Mantén la aplicación abierta y la pantalla desbloqueada.",
+    "nodeconnectSuccessfulTitle": "Conexión exitosa",
+    "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso."
   },
   "home": {
     "addAssets": "Agregar activos",

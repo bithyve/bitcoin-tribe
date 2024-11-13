@@ -45,7 +45,8 @@
     "cameraPermissionSubTitle": "Turn on the camera in your device settings",
     "cameraPermissionCTA": "Open Settings",
     "later": "Later",
-    "joinGroup": "Join Group"
+    "joinGroup": "Join Group",
+    "understood": "Understood"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -110,7 +111,15 @@
     "termAndConditionTitle5": "Governing Law",
     "termAndConditionSubTitle5": "These terms are governed by the applicable jurisdiction’s laws",
     "hide": "Hide",
-    "show": "Show"
+    "show": "Show",
+    "useRGBAssetTitle": "Use RGB Assets",
+    "useRGBAssetSubTitle": "These assets are on the testnet/regnet, have no real value, and can be reset anytime. For play only.",
+    "nodeConnectingTitle": "Keep Screen On",
+    "nodeConnectingSubTitle": "Connecting to your node. Keep the app open and screen unlocked.",
+    "supportNodeConnectingTitle": "Setting Up Your \nSupported Mode",
+    "supportNodeConnectingSubTitle": "Connecting to your node. Keep the app open and screen unlocked.",
+    "nodeconnectSuccessfulTitle": "Connection Successful",
+    "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step."
   },
   "home": {
     "addAssets": "Add Assets",
