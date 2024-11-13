@@ -63,6 +63,9 @@ function BtcWalletDetails({ navigation, route, activeTab }) {
     if (isSuccess) {
       Toast(walletTranslations.testSatsRecived);
       fetchUTXOs();
+      if (app.appType === AppType.NODE_CONNECT) {
+        fetchOnChainTransaction();
+      }
       setRefreshWallet(true);
       walletRefreshMutation.mutate({
         wallets: [wallet],
