@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -16,11 +17,12 @@ import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
+import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -30,24 +32,25 @@ function SelectWallet() {
   const styles = getStyles(theme);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
 
   useEffect(() => {
     if (createNodeMutation.error) {
-      Toast(`${createNodeMutation.error}`, true);
+      let errorMessage;
+      // Check if the error is an instance of Error and extract the message
+      if (createNodeMutation.error instanceof Error) {
+        errorMessage = createNodeMutation.error.message;
+      } else if (typeof createNodeMutation.error === 'string') {
+        errorMessage = createNodeMutation.error;
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+      Toast(errorMessage, true);
     } else if (createNodeMutation.data) {
       setTimeout(() => {
-        navigation.navigate(NavigationRoutes.PROFILESETUP, {
-          nodeConnectParams: {
-            nodeUrl: createNodeMutation.data.apiUrl,
-            nodeId: createNodeMutation.data.node.nodeId,
-            authentication: createNodeMutation.data.token,
-            peerDNS: createNodeMutation.data.peerDNS,
-          },
-          nodeInfo: {},
-          appType: AppType.SUPPORTED_RLN,
-        });
+        setVisible(true);
       }, 100);
     }
   }, [createNodeMutation.data, createNodeMutation.error]);
@@ -55,7 +58,7 @@ function SelectWallet() {
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.selectWalletType} />
-      <ModalLoading visible={createNodeMutation.isLoading} />
+      {/* <ModalLoading visible={createNodeMutation.isLoading} /> */}
       <View style={styles.bodyWrapper}>
         <SelectWalletCollapse
           isCollapsed={isCollapsed}
@@ -109,6 +112,45 @@ function SelectWallet() {
           </View>
         </View>
       )}
+      {createNodeMutation.isLoading && (
+        <View>
+          <ResponsePopupContainer
+            visible={createNodeMutation.isLoading}
+            enableClose={true}
+            backColor={theme.colors.modalBackColor}
+            borderColor={theme.colors.modalBackColor}>
+            <NodeConnectingPopupContainer
+              title={onBoarding.supportNodeConnectingTitle}
+              subTitle={onBoarding.supportNodeConnectingSubTitle}
+            />
+          </ResponsePopupContainer>
+        </View>
+      )}
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <NodeConnectSuccessPopupContainer
+            title={onBoarding.nodeconnectSuccessfulTitle}
+            subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
+            onPress={() => {
+              setVisible(false);
+              navigation.navigate(NavigationRoutes.PROFILESETUP, {
+                nodeConnectParams: {
+                  nodeUrl: createNodeMutation.data.apiUrl,
+                  nodeId: createNodeMutation.data.node.nodeId,
+                  authentication: createNodeMutation.data.token,
+                  peerDNS: createNodeMutation.data.peerDNS,
+                },
+                nodeInfo: {},
+                appType: AppType.SUPPORTED_RLN,
+              });
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }

@@ -45,7 +45,8 @@
     "cameraPermissionSubTitle": "अपने डिवाइस सेटिंग्स में कैमरा चालू करें",
     "cameraPermissionCTA": "सेटिंग्स खोलें",
     "later": "बाद में",
-    "joinGroup": "समूह में शामिल हों"
+    "joinGroup": "समूह में शामिल हों",
+    "understood": "समझ गया"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -110,7 +111,15 @@
     "termAndConditionTitle5": "प्रासंगिक कानून",
     "termAndConditionSubTitle5": "इन शर्तों पर लागू क्षेत्राधिकार के कानूनों द्वारा शासन किया जाता है।",
     "hide": "छिपाएं",
-    "show": "दिखाएं"
+    "show": "दिखाएं",
+    "useRGBAssetTitle": "RGB संपत्तियों का उपयोग करें",
+    "useRGBAssetSubTitle": "ये संपत्तियां टेस्टनेट/रीगनेट पर हैं, इनका कोई वास्तविक मूल्य नहीं है, और इन्हें कभी भी रीसेट किया जा सकता है। केवल खेलने के लिए।",
+    "nodeConnectingTitle": "स्क्रीन चालू रखें",
+    "nodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
+    "supportNodeConnectingTitle": "आपका समर्थित मोड सेट किया जा रहा है",
+    "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
+    "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
+    "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
