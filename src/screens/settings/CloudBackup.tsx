@@ -26,6 +26,7 @@ const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
   const { settings, common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
@@ -36,6 +37,7 @@ const CloudBackup = ({ navigation }) => {
 
   useEffect(() => {
     if (backup.isSuccess) {
+      setAssetBackup(true);
       Toast(settings.CLOUD_BACKUP_CREATED);
     } else if (backup.isError) {
       Toast(settings.CLOUD_BACKUP_FAILED, true);
@@ -45,7 +47,6 @@ const CloudBackup = ({ navigation }) => {
   return (
     <ScreenContainer>
       <ModalLoading visible={backup.isLoading} />
-
       <AppHeader
         title={settings.cloudBackupTitle}
         subTitle={

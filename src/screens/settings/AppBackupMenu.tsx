@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
@@ -25,6 +25,7 @@ type AppBackupMenuProps = {
   title: string;
   onPress: () => void;
   hideMenu?: boolean;
+  backup?: boolean;
 };
 
 function AppBackupMenu({ navigation }) {
@@ -33,6 +34,7 @@ function AppBackupMenu({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const [assetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -53,10 +55,12 @@ function AppBackupMenu({ navigation }) {
               viewOnly: false,
             }),
       hideMenu: app.appType === AppType.NODE_CONNECT,
+      backup: backup,
     },
     {
       title: settings.rgbAssetsbackup,
       onPress: () => navigation.navigate(NavigationRoutes.CLOUDBACKUP),
+      backup: assetBackup,
     },
     // Add more menu items as needed
   ];
@@ -81,15 +85,32 @@ function AppBackupMenu({ navigation }) {
     setPasscode(newPasscode); // Update state from child
   };
 
+  const subtitle = useMemo(() => {
+    if (backup && !assetBackup) {
+      return settings.walletBackupDone;
+    } else if (assetBackup && !backup) {
+      return (
+        `${Platform.select({
+          ios: 'iCloud',
+          android: 'Google Drive',
+        })}` +
+        ' ' +
+        settings.assetBackupDone
+      );
+    } else if (backup && assetBackup) {
+      return settings.walletAssetBackupDone;
+    } else {
+      return app.appType === AppType.ON_CHAIN
+        ? settings.appBackupMenuSubTitle
+        : settings.nodeAppBackupMenuSubTitle;
+    }
+  }, [backup, app.appType, assetBackup]);
+
   return (
     <ScreenContainer>
       <AppHeader
         title={settings.appBackup}
-        subTitle={
-          app.appType === AppType.ON_CHAIN
-            ? settings.appBackupMenuSubTitle
-            : settings.nodeAppBackupMenuSubTitle
-        }
+        subTitle={subtitle}
         enableBack={true}
         style={styles.headerWrapper}
       />
@@ -120,6 +141,12 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     headerWrapper: {
       marginBottom: hp(25),
+    },
+    backupDoneWrapper: {
+      marginVertical: hp(20),
+    },
+    backupDoneText: {
+      color: theme.colors.backupDoneMsg,
     },
   });
 export default AppBackupMenu;
