@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   footerView: {
     height: '8%',
     marginHorizontal: wp(16),
-    marginBottom: wp(10),
+    marginVertical: wp(10),
   },
 });
 
