@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import { useMutation } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,9 +10,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useNavigation } from '@react-navigation/native';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 
