@@ -45,7 +45,8 @@
     "cameraPermissionSubTitle": "在设备设置中开启相机",
     "cameraPermissionCTA": "打开设置",
     "later": "稍后",
-    "joinGroup": "加入群组"
+    "joinGroup": "加入群组",
+    "understood": "明白了"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -110,7 +111,15 @@
     "termAndConditionTitle5": "法律管辖",
     "termAndConditionSubTitle5": "这些条款受适用司法管辖区的法律管辖。",
     "hide": "隐藏",
-    "show": "显示"
+    "show": "显示",
+    "useRGBAssetTitle": "使用 RGB 资产",
+    "useRGBAssetSubTitle": "这些资产在测试网/回归网上，没有实际价值，可以随时重置。仅供娱乐。",
+    "nodeConnectingTitle": "保持屏幕常亮",
+    "nodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
+    "supportNodeConnectingTitle": "设置您的支持模式",
+    "supportNodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
+    "nodeconnectSuccessfulTitle": "连接成功",
+    "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。"
   },
   "home": {
     "addAssets": "添加资产",

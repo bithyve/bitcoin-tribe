@@ -18,6 +18,9 @@ import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
+import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
 
 function SupportTermAndCondition() {
   const navigation = useNavigation();
@@ -26,22 +29,24 @@ function SupportTermAndCondition() {
   const { onBoarding, common } = translations;
   const styles = getStyles(theme);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
+  const [visible, setVisible] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
 
   useEffect(() => {
     if (createNodeMutation.error) {
-      Toast(`${createNodeMutation.error}`, true);
+      let errorMessage;
+      // Check if the error is an instance of Error and extract the message
+      if (createNodeMutation.error instanceof Error) {
+        errorMessage = createNodeMutation.error.message;
+      } else if (typeof createNodeMutation.error === 'string') {
+        errorMessage = createNodeMutation.error;
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+      Toast(errorMessage, true);
     } else if (createNodeMutation.data) {
       setTimeout(() => {
-        navigation.navigate(NavigationRoutes.PROFILESETUP, {
-          nodeConnectParams: {
-            nodeUrl: createNodeMutation.data.apiUrl,
-            nodeId: createNodeMutation.data.node.nodeId,
-            authentication: createNodeMutation.data.token,
-          },
-          nodeInfo: {},
-          appType: AppType.SUPPORTED_RLN,
-        });
+        setVisible(true);
       }, 100);
     }
   }, [createNodeMutation.data, createNodeMutation.error]);
@@ -107,6 +112,44 @@ function SupportTermAndCondition() {
           />
         </View>
       </ScrollView>
+      {createNodeMutation.isLoading && (
+        <View>
+          <ResponsePopupContainer
+            visible={createNodeMutation.isLoading}
+            enableClose={true}
+            backColor={theme.colors.modalBackColor}
+            borderColor={theme.colors.modalBackColor}>
+            <NodeConnectingPopupContainer
+              title={onBoarding.supportNodeConnectingTitle}
+              subTitle={onBoarding.supportNodeConnectingSubTitle}
+            />
+          </ResponsePopupContainer>
+        </View>
+      )}
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <NodeConnectSuccessPopupContainer
+            title={onBoarding.nodeconnectSuccessfulTitle}
+            subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
+            onPress={() => {
+              setVisible(false);
+              navigation.navigate(NavigationRoutes.PROFILESETUP, {
+                nodeConnectParams: {
+                  nodeUrl: createNodeMutation.data.apiUrl,
+                  nodeId: createNodeMutation.data.node.nodeId,
+                  authentication: createNodeMutation.data.token,
+                },
+                nodeInfo: {},
+                appType: AppType.SUPPORTED_RLN,
+              });
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }

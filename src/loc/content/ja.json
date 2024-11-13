@@ -45,7 +45,8 @@
     "cameraPermissionSubTitle": "デバイスの設定でカメラをオンにしてください",
     "cameraPermissionCTA": "設定を開く",
     "later": "後で",
-    "joinGroup": "グループに参加する"
+    "joinGroup": "グループに参加する",
+    "understood": "理解しました"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -110,7 +111,15 @@
     "termAndConditionTitle5": "準拠法",
     "termAndConditionSubTitle5": "これらの条項は、適用される管轄の法律に準拠します。",
     "hide": "隠す",
-    "show": "表示"
+    "show": "表示",
+    "useRGBAssetTitle": "RGB資産を使用する",
+    "useRGBAssetSubTitle": "これらの資産はテストネット/レグネット上にあり、実際の価値はなく、いつでもリセットできます。遊びのためのみ。",
+    "nodeConnectingTitle": "画面をオンにしておく",
+    "nodeConnectingSubTitle": "ノードに接続中です。アプリを開き、画面をロック解除したままにしてください。",
+    "supportNodeConnectingTitle": "サポートモードの設定",
+    "supportNodeConnectingSubTitle": "ノードに接続中です。アプリを開き、画面をロック解除したままにしてください。",
+    "nodeconnectSuccessfulTitle": "接続成功",
+    "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。"
   },
   "home": {
     "addAssets": "アセットを追加",

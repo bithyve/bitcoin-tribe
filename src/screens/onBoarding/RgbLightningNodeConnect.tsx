@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard, StyleSheet } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { encode as btoa } from 'base-64';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -10,10 +12,11 @@ import AppHeader from 'src/components/AppHeader';
 import LightningNodeDetailsContainer from './components/LightningNodeDetailsContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import Toast from 'src/components/Toast';
-import { encode as btoa } from 'base-64';
 import AppType from 'src/models/enums/AppType';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
+import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
 
 function RgbLightningNodeConnect() {
   const navigation = useNavigation();
@@ -29,25 +32,16 @@ function RgbLightningNodeConnect() {
   const [password, setPassword] = useState('');
   const [bearerToken, setBearerToken] = useState('');
   const [authentication, setAuthentication] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [authType, setAuthType] = useState('Bearer');
   const checkNodeConnection = useMutation(ApiHandler.checkRgbNodeConnection);
 
   useEffect(() => {
     if (checkNodeConnection.data) {
       if (checkNodeConnection.data.pubkey) {
-        navigation.navigate(NavigationRoutes.PROFILESETUP, {
-          nodeConnectParams: {
-            nodeUrl: connectionURL,
-            nodeId: nodeID,
-            authentication: `${authType} ${
-              authType === 'Basic'
-                ? btoa(`${username}:${password}`)
-                : bearerToken
-            }`,
-          },
-          nodeInfo: checkNodeConnection.data,
-          appType: AppType.NODE_CONNECT,
-        });
+        setTimeout(() => {
+          setVisible(true);
+        }, 400);
       } else {
         Toast(
           `${
@@ -96,6 +90,48 @@ function RgbLightningNodeConnect() {
         }}
         isLoading={checkNodeConnection.isLoading}
       />
+      {checkNodeConnection.isLoading && (
+        <View>
+          <ResponsePopupContainer
+            visible={checkNodeConnection.isLoading}
+            enableClose={true}
+            backColor={theme.colors.modalBackColor}
+            borderColor={theme.colors.modalBackColor}>
+            <NodeConnectingPopupContainer
+              title={onBoarding.nodeConnectingTitle}
+              subTitle={onBoarding.nodeConnectingSubTitle}
+            />
+          </ResponsePopupContainer>
+        </View>
+      )}
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <NodeConnectSuccessPopupContainer
+            title={onBoarding.nodeconnectSuccessfulTitle}
+            subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
+            onPress={() => {
+              setVisible(false);
+              navigation.navigate(NavigationRoutes.PROFILESETUP, {
+                nodeConnectParams: {
+                  nodeUrl: connectionURL,
+                  nodeId: nodeID,
+                  authentication: `${authType} ${
+                    authType === 'Basic'
+                      ? btoa(`${username}:${password}`)
+                      : bearerToken
+                  }`,
+                },
+                nodeInfo: checkNodeConnection.data,
+                appType: AppType.NODE_CONNECT,
+              });
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }
