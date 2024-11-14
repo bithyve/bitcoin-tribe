@@ -50,9 +50,6 @@ function HomeScreen() {
   const initialCurrency = currency || 'USD';
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const [image, setImage] = useState(null);
-  const [visibleBackupAlert, setVisibleBackupAlert] = useState(
-    intialBackupAlertStatus,
-  );
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -69,6 +66,9 @@ function HomeScreen() {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => b.timestamp - a.timestamp);
   }, [coins?.length, collectibles?.length]);
+  const [visibleBackupAlert, setVisibleBackupAlert] = useState(
+    intialBackupAlertStatus && app.appType === AppType.ON_CHAIN,
+  );
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
