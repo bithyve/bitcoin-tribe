@@ -286,7 +286,7 @@ export class RLNNodeApiServices {
 
   public async lninvoice(body: {
     amt_msat: number;
-    expiry_sec: 420;
+    expiry_sec: 4200;
     asset_id?: string;
     asset_amount?: number;
   }): Promise<{ invoice: string }> {

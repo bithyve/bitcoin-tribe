@@ -14,6 +14,8 @@ import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import CardBox from 'src/components/CardBox';
 import { useTheme } from 'react-native-paper';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessPopupContainer from '../assets/components/SendSuccessPopupContainer';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -32,13 +34,14 @@ const getStyles = (theme: AppTheme) =>
 const LightningSend = () => {
   const { invoice } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { sendScreen, common, wallet: walletTranslation } = translations;
+  const { assets, common, wallet: walletTranslation } = translations;
   const navigation = useNavigation();
   const decodeInvoiceMutation = useMutation(ApiHandler.decodeLnInvoice);
   const sendLnPaymentMutation = useMutation(ApiHandler.sendLNPayment);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     decodeInvoiceMutation.mutate({ invoice });
@@ -57,7 +60,9 @@ const LightningSend = () => {
     if (sendLnPaymentMutation.error) {
       Toast(`${sendLnPaymentMutation.error}`, true);
     } else if (sendLnPaymentMutation.data) {
-      //setInvoiceDetails(sendLnPaymentMutation.data); show success
+      setTimeout(() => {
+        setVisible(true);
+      }, 500);
     }
   }, [sendLnPaymentMutation.data, sendLnPaymentMutation.error]);
 
@@ -85,7 +90,10 @@ const LightningSend = () => {
           </View>
           {invoiceDetails.assetId && (
             <View>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText
+                numberOfLines={1}
+                variant="body1"
+                style={styles.headerTitle}>
                 Asset ID
               </AppText>
               <CardBox>
@@ -111,22 +119,25 @@ const LightningSend = () => {
               Payment Hash
             </AppText>
             <CardBox>
-              <AppText variant="body2" style={styles.valueText}>
+              <AppText
+                numberOfLines={1}
+                variant="body2"
+                style={styles.valueText}>
                 {invoiceDetails.paymentHash}
               </AppText>
             </CardBox>
           </View>
 
-          <View>
+          {/* <View>
             <AppText variant="body1" style={styles.headerTitle}>
               Expiry Secs
             </AppText>
             <CardBox>
               <AppText variant="body2" style={styles.headerTitle}>
-                {invoiceDetails.expiry_sec}
+                {`${invoiceDetails.expiry_sec}`}
               </AppText>
             </CardBox>
-          </View>
+          </View> */}
 
           <View style={styles.buttonWrapper}>
             <Buttons
@@ -140,6 +151,23 @@ const LightningSend = () => {
           </View>
         </View>
       )}
+
+      <ResponsePopupContainer
+        visible={visible}
+        enableClose={true}
+        onDismiss={() => setVisible(false)}
+        backColor={theme.colors.successPopupBackColor}
+        borderColor={theme.colors.successPopupBorderColor}
+        conatinerModalStyle={{}}>
+        <SendSuccessPopupContainer
+          title={assets.success}
+          subTitle={assets.operationSuccess}
+          description={assets.operationSuccessSubTitle}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      </ResponsePopupContainer>
     </ScreenContainer>
   );
 };
