@@ -46,7 +46,7 @@ function ScanAssetScreen({ route, navigation }) {
         });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, true);
+        Toast(sendScreen.invalidRGBInvoiceAddress, true);
     }
   }, []);
 

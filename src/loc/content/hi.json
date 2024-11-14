@@ -246,6 +246,7 @@
     "sendSuccessTitle": "भेजें\nसफल",
     "sendSuccessSubTitle": "लेनदेन सफलतापूर्वक हो गया है।",
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
+    "invalidRGBInvoiceAddress": "अमान्य RGB इनवॉइस",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
     "amountMoreThanSpend": "दर्ज की गई राशि खर्च करने के लिए उपलब्ध राशि से अधिक है",
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",

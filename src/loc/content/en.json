@@ -246,6 +246,7 @@
     "sendSuccessTitle": "Send\nSuccessful",
     "sendSuccessSubTitle": "The transaction has been successfully.",
     "invalidBtcAddress": "Invalid Bitcoin address",
+    "invalidRGBInvoiceAddress": "Invalid RGB invoice",
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
     "transFeeErrMsg": "Error: Transaction Fee intel missing",

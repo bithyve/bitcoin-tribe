@@ -246,6 +246,7 @@
     "sendSuccessTitle": "送信\n成功",
     "sendSuccessSubTitle": "取引が正常に完了しました。",
     "invalidBtcAddress": "無効なビットコインアドレス",
+    "invalidRGBInvoiceAddress": "無効なRGBインボイス",
     "sentSuccessfully": "正常に送信されました",
     "amountMoreThanSpend": "入力された金額が利用可能な金額を超えています",
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",
