@@ -37,6 +37,8 @@ export const BalanceSchema: ObjectSchema = {
     future: 'int?',
     settled: 'int?',
     spendable: 'int?',
+    offchainOutbound: 'int?',
+    offchainInbound: 'int?',
   },
 };
 

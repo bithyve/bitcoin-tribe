@@ -56,6 +56,7 @@ import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+import Realm from 'realm';
 
 var RNFS = require('react-native-fs');
 
@@ -177,6 +178,7 @@ export class ApiHandler {
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
           };
+          console.log('rgbWallet', rgbWallet);
           const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT);
           const resInitNode = await ApiHandler.api.init({
             password: 'tribe@2024',
@@ -732,7 +734,7 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.listpayments();
       if (response.payments) {
-        return snakeCaseToCamelCaseCase(response);
+        return snakeCaseToCamelCaseCase(response.payments);
       } else {
         throw new Error(response.error);
       }
@@ -749,10 +751,18 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (assets.nia) {
-        dbManager.createObjectBulk(RealmSchema.Coin, assets.nia);
+        dbManager.createObjectBulk(
+          RealmSchema.Coin,
+          assets.nia,
+          Realm.UpdateMode.Modified,
+        );
       }
       if (assets.cfa) {
-        dbManager.createObjectBulk(RealmSchema.Collectible, assets.cfa);
+        dbManager.createObjectBulk(
+          RealmSchema.Collectible,
+          assets.cfa,
+          Realm.UpdateMode.Modified,
+        );
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
@@ -846,6 +856,16 @@ export class ApiHandler {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
         });
+      }
+      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        const balances = await ApiHandler.api.assetbalance({
+          asset_id: assetId,
+        });
+        if (balances && balances.future) {
+          dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+            balance: snakeCaseToCamelCaseCase(balances),
+          });
+        }
       }
       return response;
     } catch (error) {
@@ -1244,6 +1264,32 @@ export class ApiHandler {
     }
   }
 
+  static async closeChannel({
+    channelId,
+    peerPubKey,
+  }: {
+    channelId: string;
+    peerPubKey: number;
+  }) {
+    try {
+      const response = await ApiHandler.api.closechannel({
+        channel_id: channelId,
+        peer_pubkey: peerPubKey,
+        force: false,
+      });
+      if (response.error) {
+        throw new Error(response.error);
+      } else if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to create node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   static async getChannels() {
     try {
       const response = await ApiHandler.api.listchannels();
@@ -1275,7 +1321,6 @@ export class ApiHandler {
   static async createSupportedNode() {
     try {
       const response = await Relay.createSupportedNode();
-      console.log('createSupportedNode', JSON.stringify(response));
       if (response.error) {
         throw new Error(response.error);
       } else if (response) {
@@ -1297,6 +1342,25 @@ export class ApiHandler {
       }
       if (response) {
         return response;
+      } else {
+        throw new Error('Failed to unlock node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  static async getAssetBalance(assetId: string) {
+    try {
+      const response = await ApiHandler.api.assetbalance({
+        asset_id: assetId,
+      });
+      if (response.error) {
+        throw new Error(response.error);
+      }
+      if (response) {
+        return snakeCaseToCamelCaseCase(response);
       } else {
         throw new Error('Failed to unlock node');
       }

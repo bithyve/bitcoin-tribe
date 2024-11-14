@@ -71,8 +71,9 @@ const RgbChannels = () => {
           renderItem={({ item }) => (
             <ChannelItem
               name={item.assetId}
-              inbound={item.inboundBalanceMsat}
-              outbound={item.outboundBalanceMsat}
+              inbound={item.assetRemoteAmount}
+              outbound={item.assetLocalAmount}
+              channel={item}
             />
           )}
           ListEmptyComponent={
