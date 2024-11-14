@@ -313,6 +313,21 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async assetbalance(body: {
+    asset_id: string;
+  }): Promise<{
+    future: number;
+    settled: number;
+    spendable: number;
+    offchain_inbound: number;
+    offchain_outbound: number;
+  }> {
+    return this.request('/assetbalance', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async unlock(password: string): Promise<{ invoice: string }> {
     return this.request('/unlock', {
       method: 'POST',

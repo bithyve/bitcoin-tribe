@@ -53,6 +53,8 @@ interface Balance {
   future: number;
   settled: number;
   spendable: number;
+  offchainOutbound?: number;
+  offchainInbound?: number;
 }
 
 export interface Transaction {
