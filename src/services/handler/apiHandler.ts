@@ -688,7 +688,7 @@ export class ApiHandler {
         amt_msat: 3000000,
         asset_id: assetId,
         asset_amount: Number(amount),
-        expiry_sec: 420,
+        expiry_sec: 4200,
       });
       if (response.invoice) {
         return response;
