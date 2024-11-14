@@ -61,6 +61,7 @@ import RgbChannels from 'src/screens/channels/RgbChannels';
 import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 import LightningSend from 'src/screens/send/LightningSend';
+import ChannelDetails from 'src/screens/channels/ChannelDetails';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -256,6 +257,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.RGBCHANNELS}
           component={RgbChannels}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CHANNELDETAILS}
+          component={ChannelDetails}
         />
         <Stack.Screen
           name={NavigationRoutes.OPENRGBCHANNEL}

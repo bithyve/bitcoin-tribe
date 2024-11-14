@@ -255,6 +255,17 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async closechannel(body: {
+    channel_id: string;
+    peer_pubkey: number;
+    force: boolean;
+  }): Promise<{}> {
+    return this.request('/closechannel', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async openchannel(body: {
     peer_pubkey_and_opt_addr: string;
     capacity_sat: number;
@@ -313,9 +324,7 @@ export class RLNNodeApiServices {
     });
   }
 
-  public async assetbalance(body: {
-    asset_id: string;
-  }): Promise<{
+  public async assetbalance(body: { asset_id: string }): Promise<{
     future: number;
     settled: number;
     spendable: number;

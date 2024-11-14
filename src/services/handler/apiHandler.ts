@@ -1264,6 +1264,32 @@ export class ApiHandler {
     }
   }
 
+  static async closeChannel({
+    channelId,
+    peerPubKey,
+  }: {
+    channelId: string;
+    peerPubKey: number;
+  }) {
+    try {
+      const response = await ApiHandler.api.closechannel({
+        channel_id: channelId,
+        peer_pubkey: peerPubKey,
+        force: false,
+      });
+      if (response.error) {
+        throw new Error(response.error);
+      } else if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to create node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   static async getChannels() {
     try {
       const response = await ApiHandler.api.listchannels();
