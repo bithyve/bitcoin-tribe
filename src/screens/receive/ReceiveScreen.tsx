@@ -20,9 +20,8 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import WalletFooter from '../wallet/components/WalletFooter';
 import { wp } from 'src/constants/responsive';
-import Toast from 'src/components/Toast';
+// import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 
 function ReceiveScreen({ route }) {
@@ -40,9 +39,7 @@ function ReceiveScreen({ route }) {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
   } = wallet || {};
-  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
-  const [activeTab, setActiveTab] = useState('bitcoin');
-  const [lightningInvoice, setLightningInvoice] = useState('');
+  // const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
 
   const [address, setAddress] = useState('');
   const getNodeOnchainBtcAddress = useMutation(
@@ -69,61 +66,23 @@ function ReceiveScreen({ route }) {
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);
 
   useEffect(() => {
-    if (generateLNInvoiceMutation.error) {
-      Toast(generateLNInvoiceMutation.error, true);
-    } else if (generateLNInvoiceMutation.data) {
-      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
-      setActiveTab('lightning');
-    }
-  }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
-
-  useEffect(() => {
     if (amount) {
-      if (activeTab === 'bitcoin') {
-        const newPaymentURI = WalletUtilities.generatePaymentURI(address, {
-          amount: parseInt(amount) / 1e8,
-        }).paymentURI;
-        setPaymentURI(newPaymentURI);
-      } else {
-        generateLNInvoiceMutation.mutate({
-          amount: Number(amount),
-        });
-      }
+      const newPaymentURI = WalletUtilities.generatePaymentURI(address, {
+        amount: parseInt(amount) / 1e8,
+      }).paymentURI;
+      setPaymentURI(newPaymentURI);
     } else if (paymentURI) {
       setPaymentURI(null);
     }
   }, [amount, address]);
 
-  const onTabChange = (tab: string) => {
-    if (tab === 'lightning') {
-      if (lightningInvoice === '') {
-        generateLNInvoiceMutation.mutate({
-          amount: 100,
-        });
-      } else {
-        setActiveTab(tab);
-      }
-    } else {
-      setActiveTab(tab);
-    }
-  };
-
   const qrValue = useMemo(() => {
-    if (activeTab === 'bitcoin') {
-      return paymentURI || address || 'address';
-    } else {
-      return lightningInvoice;
-    }
-  }, [activeTab, address, lightningInvoice, paymentURI]);
+    return paymentURI || address || 'address';
+  }, [address, paymentURI]);
 
   return (
     <ScreenContainer>
-      <ModalLoading
-        visible={
-          generateLNInvoiceMutation.isLoading ||
-          getNodeOnchainBtcAddress.isLoading
-        }
-      />
+      <ModalLoading visible={getNodeOnchainBtcAddress.isLoading} />
       <AppHeader
         title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
@@ -140,27 +99,10 @@ function ReceiveScreen({ route }) {
           <View />
         ) : (
           <View>
-            {app.appType !== AppType.ON_CHAIN && (
-              <View style={styles.footerView}>
-                <WalletFooter
-                  activeTab={activeTab}
-                  setActiveTab={onTabChange}
-                />
-              </View>
-            )}
             <ReceiveQrDetails
               addMountModalVisible={() => setVisible(true)}
               receivingAddress={qrValue}
-              qrTitle={
-                activeTab === 'bitcoin'
-                  ? receciveScreen.bitcoinAddress
-                  : 'Lightning Invoice'
-              }
-              qrTitleColor={
-                activeTab === 'bitcoin'
-                  ? theme.colors.btcCtaBackColor
-                  : theme.colors.accent1
-              }
+              qrTitle={receciveScreen.bitcoinAddress}
             />
           </View>
         )}

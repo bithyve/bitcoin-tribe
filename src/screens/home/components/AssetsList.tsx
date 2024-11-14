@@ -47,6 +47,7 @@ type ItemProps = {
   ticker?: string;
   assetId?: string;
   amount?: string;
+  appType: AppType;
 };
 
 const Item = ({
@@ -59,6 +60,7 @@ const Item = ({
   ticker,
   assetId,
   amount,
+  appType,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, index), [theme, index]);
@@ -74,6 +76,7 @@ const Item = ({
         onPress={onPressAsset}
         ticker={ticker}
         assetId={assetId}
+        appType={appType}
       />
     </View>
   );
@@ -87,6 +90,7 @@ function AssetsList(props: AssetsListProps) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const FooterComponent = () => {
     return <View style={styles.footer} />;
@@ -97,6 +101,7 @@ function AssetsList(props: AssetsListProps) {
         showsVerticalScrollIndicator={false}
         numColumns={2}
         data={listData}
+        extraData={[listData]}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={FooterComponent}
         refreshControl={
@@ -134,7 +139,7 @@ function AssetsList(props: AssetsListProps) {
                 key={index}
                 name={item.name}
                 details={''}
-                amount={item.balance.spendable}
+                amount={item.balance.spendable + item.balance?.offchainOutbound}
                 tag="COIN"
                 assetId={item.assetId}
                 onPressAsset={() =>
@@ -144,6 +149,7 @@ function AssetsList(props: AssetsListProps) {
                 }
                 index={index}
                 ticker={item.ticker}
+                appType={app.appType}
               />
             )}
             {item.assetIface.toUpperCase() === AssetFace.RGB25 && (
@@ -166,6 +172,7 @@ function AssetsList(props: AssetsListProps) {
                     item.media?.mime.split('/')[1]
                   }`,
                 })}
+                appType={app.appType}
               />
             )}
           </View>

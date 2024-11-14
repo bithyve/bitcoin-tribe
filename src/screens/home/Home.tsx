@@ -67,7 +67,7 @@ function HomeScreen() {
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
-    return combiled.sort((a, b) => a.timestamp - b.timestamp);
+    return combiled.sort((a, b) => b.timestamp - a.timestamp);
   }, [coins?.length, collectibles?.length]);
 
   const balances = useMemo(() => {

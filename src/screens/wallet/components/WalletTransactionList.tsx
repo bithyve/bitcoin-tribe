@@ -104,7 +104,7 @@ function WalletTransactionList({
           transDate={item.date}
           transAmount={
             app.appType === AppType.NODE_CONNECT
-              ? `${item.received}`
+              ? `${item.received || item?.amtMsat / 1000}`
               : `${item.amount}`
           }
           transType={item.transactionType}

@@ -255,6 +255,17 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async closechannel(body: {
+    channel_id: string;
+    peer_pubkey: number;
+    force: boolean;
+  }): Promise<{}> {
+    return this.request('/closechannel', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async openchannel(body: {
     peer_pubkey_and_opt_addr: string;
     capacity_sat: number;
@@ -275,7 +286,7 @@ export class RLNNodeApiServices {
 
   public async lninvoice(body: {
     amt_msat: number;
-    expiry_sec: 420;
+    expiry_sec: 4200;
     asset_id?: string;
     asset_amount?: number;
   }): Promise<{ invoice: string }> {
@@ -308,6 +319,19 @@ export class RLNNodeApiServices {
 
   public async init(body: { password: string }): Promise<{ mnemonic: string }> {
     return this.request('/init', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async assetbalance(body: { asset_id: string }): Promise<{
+    future: number;
+    settled: number;
+    spendable: number;
+    offchain_inbound: number;
+    offchain_outbound: number;
+  }> {
+    return this.request('/assetbalance', {
       method: 'POST',
       body: JSON.stringify(body),
     });

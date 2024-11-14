@@ -36,11 +36,12 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations } = translations;
-  const wallet: Wallet = useWallets({}).wallets[0];
-  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
-  const { mutate, isLoading, isError, isSuccess } = useMutation(
-    ApiHandler.receiveTestSats,
-  );
+  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
+  const { mutate, isLoading } = useMutation(ApiHandler.receiveTestSats);
+
+  useEffect(() => {
+    listPaymentshMutation.mutate();
+  }, []);
 
   return (
     <View>
@@ -75,7 +76,7 @@ function RGBNodeWalletDetails({ navigation, route, activeTab }) {
         <WalletTransactionsContainer
           navigation={navigation}
           activeTab={activeTab}
-          transactions={[]}
+          transactions={listPaymentshMutation.data}
           wallet={''}
           autoRefresh={autoRefresh || refreshWallet}
         />
