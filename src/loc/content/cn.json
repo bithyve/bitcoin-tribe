@@ -235,6 +235,8 @@
     "btcHeaderSubTitle": "扫描比特币地址",
     "optionCardTitle": "或手动输入详细信息",
     "optionCardSubTitle": "输入比特币地址或RGB发票",
+    "sendAssetOptionCardSubTitle": "输入RGB发票",
+    "sendBtcOptionCardSubTitle": "输入比特币地址",
     "enterSendAddress": "输入发送地址",
     "enterSendAdrsSubTitle": "输入发送地址或粘贴",
     "enterAddress": "输入地址",

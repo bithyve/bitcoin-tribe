@@ -60,7 +60,7 @@ function SendBTCScreen({ route, navigation }) {
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.optionCardSubTitle}
+        subTitle={sendScreen.sendBtcOptionCardSubTitle}
         onPress={() => {
           receiveData === 'send'
             ? setVisible(true)

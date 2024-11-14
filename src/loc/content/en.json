@@ -235,6 +235,8 @@
     "btcHeaderSubTitle": "Scan a Bitcoin Address",
     "optionCardTitle": "or Enter details manually",
     "optionCardSubTitle": "Enter a Bitcoin Address or RGB invoice",
+    "sendAssetOptionCardSubTitle": "Enter a RGB invoice",
+    "sendBtcOptionCardSubTitle": "Enter a Bitcoin Address",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Enter Send Address or Paste",
     "enterAddress": "Enter address",

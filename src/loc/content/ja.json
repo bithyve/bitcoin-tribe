@@ -235,6 +235,8 @@
     "btcHeaderSubTitle": "ビットコインアドレスをスキャンする",
     "optionCardTitle": "または手動で詳細を入力",
     "optionCardSubTitle": "ビットコインアドレスまたはRGB請求書を入力",
+    "sendAssetOptionCardSubTitle": "RGB請求書を入力",
+    "sendBtcOptionCardSubTitle": "ビットコインアドレスを入力",
     "enterSendAddress": "送信アドレスを入力",
     "enterSendAdrsSubTitle": "送信アドレスを入力または貼り付け",
     "enterAddress": "アドレスを入力",

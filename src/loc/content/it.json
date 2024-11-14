@@ -235,6 +235,8 @@
     "btcHeaderSubTitle": "Scansiona un indirizzo Bitcoin",
     "optionCardTitle": "oppure inserisci i dettagli manualmente",
     "optionCardSubTitle": "Inserisci un indirizzo Bitcoin o una fattura RGB",
+    "sendAssetOptionCardSubTitle": "Inserisci una fattura RGB",
+    "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
     "enterSendAddress": "Inserisci indirizzo di invio",
     "enterSendAdrsSubTitle": "Inserisci indirizzo di invio o incolla",
     "enterAddress": "Inserisci indirizzo",
