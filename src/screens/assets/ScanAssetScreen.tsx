@@ -28,20 +28,13 @@ function ScanAssetScreen({ route, navigation }) {
       return;
     }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(value, network);
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
+    let { type: paymentInfoKind } = WalletUtilities.addressDiff(value, network);
     switch (paymentInfoKind) {
       case PaymentInfoKind.RGB_INVOICE:
         navigation.replace(NavigationRoutes.SENDASSET, {
           assetId: assetId,
           wallet: wallet,
-          rgbInvoice: rgbInvoice,
+          rgbInvoice: value,
           item: item,
         });
         break;
