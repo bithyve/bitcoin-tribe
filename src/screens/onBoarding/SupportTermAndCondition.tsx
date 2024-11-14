@@ -21,6 +21,8 @@ import Toast from 'src/components/Toast';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
 import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AppType from 'src/models/enums/AppType';
 
 function SupportTermAndCondition() {
   const navigation = useNavigation();
