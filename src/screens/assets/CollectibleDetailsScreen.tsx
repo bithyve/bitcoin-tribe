@@ -73,7 +73,10 @@ const CollectibleDetailsScreen = () => {
         <TransactionsList
           transactions={collectible?.transactions}
           isLoading={isLoading}
-          refresh={() => mutate({ assetId, schema: RealmSchema.Collectible })}
+          refresh={() => {
+            refreshRgbWallet.mutate();
+            mutate({ assetId, schema: RealmSchema.Collectible });
+          }}
           navigation={navigation}
           wallet={wallet}
           coin={collectible.details}
