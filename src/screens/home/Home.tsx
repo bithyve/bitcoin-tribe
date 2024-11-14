@@ -66,7 +66,7 @@ function HomeScreen() {
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => b.timestamp - a.timestamp);
-  }, [coins?.length, collectibles?.length]);
+  }, [coins, collectibles]);
 
   const [visibleBackupAlert, setVisibleBackupAlert] = useState(
     intialBackupAlertStatus && app.appType === AppType.ON_CHAIN,
