@@ -11,19 +11,24 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import AppText from 'src/components/AppText';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const [pubkeyAddress, setPubkeyAddress] = useState('');
-  const [capacity, setCapacity] = useState('');
-  const [pushMsats, setPushMsats] = useState('');
+  const [capacity, setCapacity] = useState('4000000');
+  const [pushMsats, setPushMsats] = useState('400000');
   const [assetId, setAssetId] = useState('');
   const [assetAmt, setAssetAmt] = useState('');
-  const [baseFeeRate, setBaseFeeRate] = useState('');
+  const [baseFeeRate, setBaseFeeRate] = useState('1');
   const [tmpChannelId, setTmpChannelId] = useState('');
   const openChannelMutation = useMutation(ApiHandler.openChannel);
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
 
   useEffect(() => {
     if (openChannelMutation.isSuccess) {
@@ -46,6 +51,11 @@ const OpenRgbChannel = () => {
         style={styles.input}
       />
 
+      <AppText variant="caption" style={styles.textHint}>
+        Public key and address of the peer you want to connect
+        to(pubkey@address)
+      </AppText>
+
       <TextField
         value={capacity}
         onChangeText={text => setCapacity(text)}
@@ -53,6 +63,10 @@ const OpenRgbChannel = () => {
         style={styles.input}
         keyboardType="numeric"
       />
+      <AppText variant="caption" style={styles.textHint}>
+        Total amount of sats that a payment channel on the Lightning Network can
+        hold(in msats).
+      </AppText>
 
       <TextField
         value={pushMsats}
@@ -61,14 +75,18 @@ const OpenRgbChannel = () => {
         style={styles.input}
         keyboardType="numeric"
       />
-
+      <AppText variant="caption" style={styles.textHint}>
+        Transfer initial sats to peer when opening a channel.(in msats).
+      </AppText>
       <TextField
         value={assetId}
         onChangeText={text => setAssetId(text)}
         placeholder={'Asset ID'}
         style={styles.input}
       />
-
+      <AppText variant="caption" style={styles.textHint}>
+        RGB Asset ID
+      </AppText>
       <TextField
         value={assetAmt}
         onChangeText={text => setAssetAmt(text)}
@@ -76,14 +94,16 @@ const OpenRgbChannel = () => {
         style={styles.input}
         keyboardType="numeric"
       />
-
-      <TextField
+      <AppText variant="caption" style={styles.textHint}>
+        RGB Asset Amount
+      </AppText>
+      {/* <TextField
         value={baseFeeRate}
         onChangeText={text => setBaseFeeRate(text)}
         placeholder={'Base Fee Rate'}
         style={styles.input}
         keyboardType="numeric"
-      />
+      /> */}
 
       {/* <TextField
         value={tmpChannelId}
@@ -122,11 +142,17 @@ const OpenRgbChannel = () => {
 
 export default OpenRgbChannel;
 
-const styles = StyleSheet.create({
-  input: {
-    marginVertical: hp(5),
-  },
-  buttonWrapper: {
-    marginTop: hp(20),
-  },
-});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    input: {
+      marginVertical: hp(5),
+    },
+    buttonWrapper: {
+      marginTop: hp(20),
+    },
+    textHint: {
+      marginVertical: hp(5),
+      marginHorizontal: wp(20),
+      color: theme.colors.secondaryHeadingColor,
+    },
+  });
