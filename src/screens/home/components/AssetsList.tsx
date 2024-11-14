@@ -97,6 +97,7 @@ function AssetsList(props: AssetsListProps) {
         showsVerticalScrollIndicator={false}
         numColumns={2}
         data={listData}
+        extraData={[listData]}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={FooterComponent}
         refreshControl={
