@@ -62,10 +62,12 @@ function HomeScreen() {
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => b.timestamp - a.timestamp);
   }, [coins?.length, collectibles?.length]);
+
   const [visibleBackupAlert, setVisibleBackupAlert] = useState(
     intialBackupAlertStatus && app.appType === AppType.ON_CHAIN,
   );
