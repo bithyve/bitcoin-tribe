@@ -376,6 +376,17 @@
     "initNode": "ノードを初期化",
     "channelsTitle": "チャンネル",
     "channelEmptyTitle": "チャンネルリストは空です",
-    "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！"
+    "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！",
+    "openChannelTitle": "チャネルを開く",
+    "peerPubAndAddress": "ピアの公開鍵とアドレス",
+    "peerPubAndAddressNote": "接続したいピアの公開鍵とアドレス (pubkey@address)",
+    "capacity": "容量",
+    "capacityNote": "ライトニングネットワークの支払いチャネルが保持できるサツの総量（msats単位）。",
+    "pushMsats": "ミリサツの送信",
+    "pushMsatsNote": "チャネルを開く際にピアに初期のサツを転送します（msats単位）。",
+    "assetID": "資産ID",
+    "assetIDNote": "RGB資産ID",
+    "assetAmount": "資産額",
+    "assetAmountNote": "RGB資産額"
   }
 }

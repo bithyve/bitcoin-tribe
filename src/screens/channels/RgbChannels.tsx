@@ -48,7 +48,7 @@ const RgbChannels = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={`${node.channelsTitle}  ${data ? `  (${data.length})` : ''}`}
+        title={`${node.channelsTitle}  ${data ? ` (${data.length})` : ''}`}
         rightIcon={!isThemeDark ? <PlusIcon /> : <PlusLightIcon />}
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)

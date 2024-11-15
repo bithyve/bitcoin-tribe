@@ -376,6 +376,17 @@
     "initNode": "नोड प्रारंभ करें",
     "channelsTitle": "चैनल्स",
     "channelEmptyTitle": "चैनल सूची खाली है",
-    "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!"
+    "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!",
+    "openChannelTitle": "चैनल खोलें",
+    "peerPubAndAddress": "पीयर पब्लिक की और पता",
+    "peerPubAndAddressNote": "उस पीयर का सार्वजनिक कुंजी और पता जिससे आप कनेक्ट करना चाहते हैं (pubkey@address)",
+    "capacity": "क्षमता",
+    "capacityNote": "लाइटनिंग नेटवर्क पर भुगतान चैनल की कुल राशि (msats में)।",
+    "pushMsats": "पुश एमसैट्स",
+    "pushMsatsNote": "चैनल खोलते समय प्रारंभिक सैट्स पीयर को भेजें। (msats में)।",
+    "assetID": "एसेट आईडी",
+    "assetIDNote": "आरजीबी एसेट आईडी",
+    "assetAmount": "एसेट राशि",
+    "assetAmountNote": "आरजीबी एसेट राशि"
   }
 }

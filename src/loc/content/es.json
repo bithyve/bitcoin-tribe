@@ -376,6 +376,17 @@
     "initNode": "Iniciar nodo",
     "channelsTitle": "Canales",
     "channelEmptyTitle": "La lista de canales está vacía",
-    "channelEmptySubTitle": "¡Comienza a agregar canales para mejorar tu experiencia con Bitcoin!"
+    "channelEmptySubTitle": "¡Comienza a agregar canales para mejorar tu experiencia con Bitcoin!",
+    "openChannelTitle": "Abrir Canal",
+    "peerPubAndAddress": "Clave Pública y Dirección del Par",
+    "peerPubAndAddressNote": "Clave pública y dirección del par al que quieres conectarte (pubkey@address)",
+    "capacity": "Capacidad",
+    "capacityNote": "Cantidad total de sats que puede contener un canal de pago en la Red Lightning (en msats).",
+    "pushMsats": "Enviar msats",
+    "pushMsatsNote": "Transferir sats iniciales al par al abrir un canal (en msats).",
+    "assetID": "ID de Activo",
+    "assetIDNote": "ID de Activo RGB",
+    "assetAmount": "Cantidad de Activo",
+    "assetAmountNote": "Cantidad de Activo RGB"
   }
 }
