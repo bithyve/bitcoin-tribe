@@ -27,7 +27,6 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
-      bottom: 10,
     },
   });
 
@@ -60,21 +59,27 @@ const LightningSend = () => {
     if (sendLnPaymentMutation.error) {
       Toast(`${sendLnPaymentMutation.error}`, true);
     } else if (sendLnPaymentMutation.data) {
-      setTimeout(() => {
-        setVisible(true);
-      }, 500);
+      if (sendLnPaymentMutation.data?.status === 'Pending') {
+        setTimeout(() => {
+          setVisible(true);
+        }, 500);
+      } else {
+        Toast(`${sendLnPaymentMutation.data?.status}`, true);
+      }
     }
   }, [sendLnPaymentMutation.data, sendLnPaymentMutation.error]);
 
   return (
     <ScreenContainer>
       <AppHeader title={'Send'} subTitle={''} />
-      <ModalLoading visible={sendLnPaymentMutation.isLoading} />
+      <ModalLoading
+        visible={!invoiceDetails || sendLnPaymentMutation.isLoading}
+      />
 
       {!invoiceDetails ? (
-        <ModalLoading visible={true} />
+        <View />
       ) : (
-        <View style={{ flex: 1 }}>
+        <View>
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
               Invoice
@@ -145,8 +150,8 @@ const LightningSend = () => {
               primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
               secondaryTitle={common.cancel}
               secondaryOnPress={() => navigation.goBack()}
-              disabled={sendLnPaymentMutation.isLoading}
               width={wp(120)}
+              disabled={false}
             />
           </View>
         </View>
