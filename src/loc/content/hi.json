@@ -218,7 +218,9 @@
     "waitingconfirmations": "पुष्टि की प्रतीक्षा में",
     "Failed": "असफल",
     "removed": "हटा दिया गया",
-    "expired": "समाप्त हो गया"
+    "expired": "समाप्त हो गया",
+    "viewNodeInfo": "नोड जानकारी देखें",
+    "channelManagement": "चैनल प्रबंधन"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

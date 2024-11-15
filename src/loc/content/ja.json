@@ -218,7 +218,9 @@
     "waitingconfirmations": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",
-    "expired": "有効期限が切れました"
+    "expired": "有効期限が切れました",
+    "viewNodeInfo": "ノード情報を表示",
+    "channelManagement": "チャネル管理"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

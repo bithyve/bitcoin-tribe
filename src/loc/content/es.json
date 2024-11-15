@@ -218,7 +218,9 @@
     "waitingconfirmations": "Esperando confirmación",
     "Failed": "Fallido",
     "removed": "Eliminado",
-    "expired": "Expirado"
+    "expired": "Expirado",
+    "viewNodeInfo": "Ver información del nodo",
+    "channelManagement": "Gestión de canales"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

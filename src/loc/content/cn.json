@@ -218,7 +218,9 @@
     "waitingconfirmations": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
-    "expired": "已过期"
+    "expired": "已过期",
+    "viewNodeInfo": "查看节点信息",
+    "channelManagement": "渠道管理"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
