@@ -98,6 +98,7 @@ const EnterInvoiceDetails = () => {
           placeholder={assets.assetId}
           style={styles.input}
           multiline={true}
+          returnKeyType={'Enter'}
           onContentSizeChange={event => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
