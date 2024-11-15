@@ -39,7 +39,7 @@ function ScanAssetScreen({ route, navigation }) {
         });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, true);
+        Toast(sendScreen.invalidRGBInvoiceAddress, true);
     }
   }, []);
 
@@ -55,7 +55,7 @@ function ScanAssetScreen({ route, navigation }) {
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.optionCardSubTitle}
+        subTitle={sendScreen.sendAssetOptionCardSubTitle}
         onPress={() => {
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,

@@ -41,7 +41,7 @@ function UseRGBAssetPopupContainer(props: UseRGBAssetProps) {
         <SecondaryCTA
           onPress={onPress}
           title={common.understood}
-          width={hp(150)}
+          width={hp(200)}
           height={hp(14)}
         />
       </View>
