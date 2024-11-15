@@ -389,6 +389,11 @@
     "assetID": "एसेट आईडी",
     "assetIDNote": "आरजीबी एसेट आईडी",
     "assetAmount": "एसेट राशि",
-    "assetAmountNote": "आरजीबी एसेट राशि"
+    "assetAmountNote": "आरजीबी एसेट राशि",
+    "peerDns": "पीयर DNS",
+    "unlockNode": "नोड अनलॉक करें",
+    "pubKeyCopyMsg": "पब की सफलतापूर्वक कॉपी किया गया",
+    "nodeUrlCopyMsg": "नोड URL सफलतापूर्वक कॉपी किया गया",
+    "onChainPubKeyCopyMsg": "ऑनचेन पब की सफलतापूर्वक कॉपी किया गया"
   }
 }

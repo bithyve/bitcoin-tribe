@@ -389,6 +389,11 @@
     "assetID": " 资产 ID",
     "assetIDNote": "RGB 资产 ID",
     "assetAmount": "资产金额",
-    "assetAmountNote": "RGB 资产金额"
+    "assetAmountNote": "RGB 资产金额",
+    "peerDns": "对等 DNS",
+    "unlockNode": "解锁节点",
+    "pubKeyCopyMsg": "公钥复制成功",
+    "nodeUrlCopyMsg": "节点 URL 复制成功",
+    "onChainPubKeyCopyMsg": "链上公钥复制成功"
   }
 }

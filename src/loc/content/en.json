@@ -389,6 +389,11 @@
     "assetID": "Asset ID",
     "assetIDNote": "RGB Asset ID",
     "assetAmount": "Asset Amount",
-    "assetAmountNote": "RGB Asset Amount"
+    "assetAmountNote": "RGB Asset Amount",
+    "peerDns": "Peer DNS",
+    "unlockNode": "Unlock Node",
+    "pubKeyCopyMsg": "Pub Key copied successfully",
+    "nodeUrlCopyMsg": "Node URL copied successfully",
+    "onChainPubKeyCopyMsg": "OnChain Pub Key copied successfully"
   }
 }

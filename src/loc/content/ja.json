@@ -389,6 +389,11 @@
     "assetID": "資産ID",
     "assetIDNote": "RGB資産ID",
     "assetAmount": "資産額",
-    "assetAmountNote": "RGB資産額"
+    "assetAmountNote": "RGB資産額",
+    "peerDns": "ピア DNS",
+    "unlockNode": "ノードを解除する",
+    "pubKeyCopyMsg": "公開鍵が正常にコピーされました",
+    "nodeUrlCopyMsg": "ノード URL が正常にコピーされました",
+    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました"
   }
 }

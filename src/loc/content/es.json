@@ -389,6 +389,11 @@
     "assetID": "ID de Activo",
     "assetIDNote": "ID de Activo RGB",
     "assetAmount": "Cantidad de Activo",
-    "assetAmountNote": "Cantidad de Activo RGB"
+    "assetAmountNote": "Cantidad de Activo RGB",
+    "peerDns": "DNS de pares",
+    "unlockNode": "Desbloquear nodo",
+    "pubKeyCopyMsg": "Clave pública copiada con éxito",
+    "nodeUrlCopyMsg": "URL del nodo copiada con éxito",
+    "onChainPubKeyCopyMsg": "Clave pública OnChain copiada con éxito"
   }
 }

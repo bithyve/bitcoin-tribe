@@ -389,6 +389,11 @@
     "assetID": "ID Asset",
     "assetIDNote": "ID Asset RGB",
     "assetAmount": "Importo dell'Asset",
-    "assetAmountNote": "Importo Asset RGB"
+    "assetAmountNote": "Importo Asset RGB",
+    "peerDns": "DNS peer",
+    "unlockNode": "Sblocca nodo",
+    "pubKeyCopyMsg": "Chiave Pub copiata con successo",
+    "nodeUrlCopyMsg": "URL del nodo copiato con successo",
+    "onChainPubKeyCopyMsg": "Chiave Pub OnChain copiata con successo"
   }
 }
