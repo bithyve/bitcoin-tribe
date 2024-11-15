@@ -1,20 +1,21 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useMutation } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -45,7 +46,7 @@ const OpenRgbChannel = () => {
     <ScreenContainer>
       <AppHeader title={node.openChannelTitle} />
       <ModalLoading visible={openChannelMutation.isLoading} />
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <TextField
           value={pubkeyAddress}
           onChangeText={text => {
