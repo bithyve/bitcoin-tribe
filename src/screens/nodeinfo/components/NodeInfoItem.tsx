@@ -87,7 +87,6 @@ const getStyles = (theme: AppTheme, isCopiable) =>
       //       paddingVertical: hp(8),
     },
     valueWrapper: {
-      alignItems: 'center',
       justifyContent: 'center',
       width: isCopiable ? '85%' : '100%',
       paddingHorizontal: hp(8),
