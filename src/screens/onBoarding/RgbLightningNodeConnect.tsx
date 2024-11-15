@@ -45,7 +45,9 @@ function RgbLightningNodeConnect() {
       } else {
         Toast(
           `${
-            checkNodeConnection.data.error || checkNodeConnection.data.Message
+            checkNodeConnection.data.error ||
+            checkNodeConnection.data.message ||
+            checkNodeConnection.data.Message
           }`,
           true,
         );
