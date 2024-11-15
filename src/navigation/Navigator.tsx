@@ -51,7 +51,6 @@ import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
-import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
@@ -84,10 +83,6 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.ENTERSEEDSCREEN}
         component={EnterSeedScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.ONBOARDINGSCREEN}
-        component={OnBoardingScreen}
       />
       <Stack.Screen
         name={NavigationRoutes.SELECTWALLET}
