@@ -104,6 +104,7 @@ export class ApiHandler {
     rgbNodeConnectParams?: RgbNodeConnectParams;
     rgbNodeInfo?: NodeInfo;
   }) {
+    Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
     const AES_KEY = generateEncryptionKey();
     const hash = hash512(
@@ -223,6 +224,7 @@ export class ApiHandler {
               });
             }
           } else {
+            Storage.set(Keys.SETUPAPP, true);
             throw new Error(
               resInitNode.message || resInitNode.error || 'Failed to init node',
             );
@@ -266,11 +268,14 @@ export class ApiHandler {
             });
           }
         }
+        Storage.set(Keys.SETUPAPP, false);
       } catch (error) {
+        Storage.set(Keys.SETUPAPP, false);
         console.log(error);
         throw new Error(error);
       }
     } else {
+      Storage.set(Keys.SETUPAPP, false);
       throw new Error('Realm initialisation failed');
     }
   }

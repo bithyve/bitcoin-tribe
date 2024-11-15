@@ -1,6 +1,11 @@
 import * as Keychain from 'react-native-keychain';
 import NodeRSA from 'node-rsa';
 import config from 'src/utils/config';
+import {
+  generateEncryptionKey,
+  stringToArrayBuffer,
+} from 'src/utils/encryption';
+import dbManager from './realm/dbManager';
 
 export const store = async (hash: string, enc_key: string) => {
   try {
@@ -125,5 +130,25 @@ export const verifyBiometricAuth = async (
     return {
       success: false,
     };
+  }
+};
+
+export const deleteExistingEncryptionKey = async () => {
+  // Remove the stored encryption key from Keychain
+  try {
+    await Keychain.resetGenericPassword(); // Clears the stored item
+    console.log('Encryption key removed from Keychain.');
+  } catch (error) {
+    console.error('Failed to remove encryption key from Keychain:', error);
+  }
+
+  // Reset the Realm database
+  try {
+    const AES_KEY = generateEncryptionKey();
+    const uint8array = stringToArrayBuffer(AES_KEY);
+    await dbManager.deleteRealm(uint8array); // This method should delete or reset your Realm database
+    console.log('Realm database reset.');
+  } catch (error) {
+    console.error('Failed to reset Realm database:', error);
   }
 };

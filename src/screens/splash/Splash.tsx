@@ -11,6 +11,7 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import TribeIcon from 'src/assets/images/Tribe.svg';
+import * as SecureStore from 'src/storage/secure-store';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
@@ -36,6 +37,12 @@ function Splash({ navigation }) {
 
   const onInit = useCallback(async () => {
     try {
+      const setupAppStatus = await Storage.get(Keys.SETUPAPP);
+      console.log('setupAppStatus', setupAppStatus);
+      if (setupAppStatus === undefined || setupAppStatus) {
+        SecureStore.deleteExistingEncryptionKey();
+        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      }
       const appId = await Storage.get(Keys.APPID);
       if (appId && pinMethod !== PinMethod.DEFAULT) {
         navigation.replace(NavigationRoutes.LOGIN);
