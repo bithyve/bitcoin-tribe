@@ -74,7 +74,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
             onChangeText={onChangeConnectionURLText}
             placeholder={onBoarding.nodeConURL}
             keyboardType={'default'}
-            returnKeyType={'done'}
+            returnKeyType={'Enter'}
             contentStyle={
               inputConnectionURLValue
                 ? styles.inputURLWrapper
@@ -191,7 +191,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                   onChangeText={onBearerTokenText}
                   placeholder={onBoarding.enterBearerToken}
                   keyboardType={'default'}
-                  returnKeyType={'done'}
+                  returnKeyType={'Enter'}
                   disabled={isLoading}
                   contentStyle={
                     inputBearerTokenValue

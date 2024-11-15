@@ -22,7 +22,7 @@ type TextFieldProps = {
   onChangeText: (text: string) => void;
   maxLength?: number;
   disabled?: boolean;
-  returnKeyType?: 'done';
+  returnKeyType?: 'done' | 'Enter';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
   rightText?: string;
