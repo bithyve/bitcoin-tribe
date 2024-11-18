@@ -152,7 +152,7 @@ function SettingsScreen({ navigation }) {
     },
     // TO DO - will implement theme functionality.  This commented temporarily
     {
-      id: 5,
+      id: 6,
       title: settings.darkMode,
       icon: !isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => setDarkTheme(!darkTheme),
@@ -162,7 +162,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 6,
+      id: 7,
       title: settings.biometricUnlock,
       icon: !isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -180,22 +180,22 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 7,
+      id: 8,
       title: settings.appInfo,
       icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
 
     {
-      id: 8,
-      title: 'View Node Info',
+      id: 9,
+      title: settings.viewNodeInfo,
       icon: !isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
     {
-      id: 9,
-      title: 'Channel Management',
+      id: 10,
+      title: settings.channelManagement,
       icon: !isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
       hideMenu: app.appType === AppType.ON_CHAIN,

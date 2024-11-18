@@ -310,6 +310,7 @@ const SendAssetScreen = () => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
           multiline={true}
+          returnKeyType={'Enter'}
           numberOfLines={5}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
         />

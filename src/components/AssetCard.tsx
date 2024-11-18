@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image, GestureResponderEvent } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp } from 'src/constants/responsive';
+import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -53,7 +53,7 @@ const AssetCard = (props: AssetCardProps) => {
                 <Identicon
                   value={assetId}
                   style={styles.identiconView}
-                  size={110}
+                  size={windowHeight > 670 ? 110 : 90}
                 />
               </View>
             </View>
@@ -118,9 +118,9 @@ const getStyles = (theme: AppTheme, amtLength) =>
       borderRadius: 110,
     },
     identiconView: {
-      height: 110,
-      width: 110,
-      borderRadius: 110,
+      height: windowHeight > 670 ? 110 : 90,
+      width: windowHeight > 670 ? 110 : 90,
+      borderRadius: windowHeight > 670 ? 110 : 90,
     },
     contentWrapper: {
       paddingHorizontal: 10,

@@ -218,7 +218,9 @@
     "waitingconfirmations": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
-    "expired": "已过期"
+    "expired": "已过期",
+    "viewNodeInfo": "查看节点信息",
+    "channelManagement": "渠道管理"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -376,6 +378,22 @@
     "initNode": "初始化节点",
     "channelsTitle": "通道",
     "channelEmptyTitle": "通道列表为空",
-    "channelEmptySubTitle": "开始添加通道以增强您的比特币体验！"
+    "channelEmptySubTitle": "开始添加通道以增强您的比特币体验！",
+    "openChannelTitle": "打开通道",
+    "peerPubAndAddress": "对等公钥和地址",
+    "peerPubAndAddressNote": "您想连接的对等方的公钥和地",
+    "capacity": "容量",
+    "capacityNote": "闪电网络支付通道可以容纳的总金额（单位：毫萨）。",
+    "pushMsats": "推送毫萨",
+    "pushMsatsNote": "在打开通道时将初始萨币转移给对等方（单位：毫萨）。",
+    "assetID": " 资产 ID",
+    "assetIDNote": "RGB 资产 ID",
+    "assetAmount": "资产金额",
+    "assetAmountNote": "RGB 资产金额",
+    "peerDns": "对等 DNS",
+    "unlockNode": "解锁节点",
+    "pubKeyCopyMsg": "公钥复制成功",
+    "nodeUrlCopyMsg": "节点 URL 复制成功",
+    "onChainPubKeyCopyMsg": "链上公钥复制成功"
   }
 }

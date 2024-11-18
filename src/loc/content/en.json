@@ -218,7 +218,9 @@
     "waitingconfirmations": "Waiting Confirmation",
     "failed": "Failed",
     "removed": "Removed",
-    "expired": "Expired"
+    "expired": "Expired",
+    "viewNodeInfo": "View Node Info",
+    "channelManagement": "Channel Management"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -376,6 +378,22 @@
     "initNode": "Init Node",
     "channelsTitle": "Channels",
     "channelEmptyTitle": "Channel List is Empty",
-    "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!"
+    "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!",
+    "openChannelTitle": "Open Channel",
+    "peerPubAndAddress": "Peer Pubkey and Address",
+    "peerPubAndAddressNote": "Public key and address of the peer you want to connect to(pubkey@address)",
+    "capacity": "Capacity",
+    "capacityNote": "Total amount of sats that a payment channel on the Lightning Network can hold(in msats).",
+    "pushMsats": "Push msats",
+    "pushMsatsNote": "Transfer initial sats to peer when opening a channel.(in msats).",
+    "assetID": "Asset ID",
+    "assetIDNote": "RGB Asset ID",
+    "assetAmount": "Asset Amount",
+    "assetAmountNote": "RGB Asset Amount",
+    "peerDns": "Peer DNS",
+    "unlockNode": "Unlock Node",
+    "pubKeyCopyMsg": "Pub Key copied successfully",
+    "nodeUrlCopyMsg": "Node URL copied successfully",
+    "onChainPubKeyCopyMsg": "OnChain Pub Key copied successfully"
   }
 }
