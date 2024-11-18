@@ -16,6 +16,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -109,7 +110,7 @@ const OpenRgbChannel = () => {
           {node.assetIDNote}
         </AppText>
         <TextField
-          value={assetAmt}
+          value={formatNumber(assetAmt)}
           onChangeText={text => setAssetAmt(text)}
           placeholder={node.assetAmount}
           style={styles.input}
