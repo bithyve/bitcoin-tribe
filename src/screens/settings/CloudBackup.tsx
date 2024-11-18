@@ -1,31 +1,32 @@
 import React, { useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
-import AppHeader from 'src/components/AppHeader';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 
+import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import { useQuery } from '@realm/react';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import VersionHistoryItem from './components/VersionHistoryItem';
-import { useMutation } from 'react-query';
 import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
 import NoBackupIllustrationLight from 'src/assets/images/backupHistoryLight.svg';
 import Toast from 'src/components/Toast';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
   const { settings, common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
@@ -36,6 +37,7 @@ const CloudBackup = ({ navigation }) => {
 
   useEffect(() => {
     if (backup.isSuccess) {
+      setAssetBackup(true);
       Toast(settings.CLOUD_BACKUP_CREATED);
     } else if (backup.isError) {
       Toast(settings.CLOUD_BACKUP_FAILED, true);
@@ -45,7 +47,6 @@ const CloudBackup = ({ navigation }) => {
   return (
     <ScreenContainer>
       <ModalLoading visible={backup.isLoading} />
-
       <AppHeader
         title={settings.cloudBackupTitle}
         subTitle={

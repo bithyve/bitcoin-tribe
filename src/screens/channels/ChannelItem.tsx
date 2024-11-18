@@ -8,25 +8,34 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type Props = {
   name: string;
   inbound: number;
   outbound: number;
+  channel: object;
 };
 
 const ChannelItem = (props: Props) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, theme.colors.ctaBackColor);
+  const navigation = useNavigation();
 
   const progress = useMemo(() => {
     const total = props.inbound + props.outbound;
-    return props.inbound / total;
+    return props.outbound / total;
   }, [props.inbound, props.outbound]);
 
   return (
-    <AppTouchable>
+    <AppTouchable
+      onPress={() =>
+        navigation.navigate(NavigationRoutes.CHANNELDETAILS, {
+          channel: props.channel,
+        })
+      }>
       <GradientView
         style={[styles.container]}
         colors={[
@@ -37,8 +46,8 @@ const ChannelItem = (props: Props) => {
         <View>
           <AppText numberOfLines={1}>{props.name}</AppText>
           <View style={styles.containerAmts}>
-            <AppText>{`${props.inbound / 1000} sats`}</AppText>
-            <AppText>{`${props.outbound / 1000} sats`}</AppText>
+            <AppText>{`${props.outbound}`}</AppText>
+            <AppText>{`${props.inbound}`}</AppText>
           </View>
 
           <ProgressBar progress={progress} color={theme.colors.accent4} />

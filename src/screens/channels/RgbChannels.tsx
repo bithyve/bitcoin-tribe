@@ -48,7 +48,7 @@ const RgbChannels = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={`${node.channelsTitle}  ${data ? `  (${data.length})` : ''}`}
+        title={`${node.channelsTitle}  ${data ? `(${data.length})` : ''}`}
         rightIcon={isThemeDark ? <PlusIcon /> : <PlusLightIcon />}
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)
@@ -71,8 +71,9 @@ const RgbChannels = () => {
           renderItem={({ item }) => (
             <ChannelItem
               name={item.assetId}
-              inbound={item.inboundBalanceMsat}
-              outbound={item.outboundBalanceMsat}
+              inbound={item.assetRemoteAmount}
+              outbound={item.assetLocalAmount}
+              channel={item}
             />
           )}
           ListEmptyComponent={

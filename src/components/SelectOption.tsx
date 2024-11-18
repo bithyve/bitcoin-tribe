@@ -13,6 +13,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import GradientView from './GradientView';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import CheckMarkGreen from 'src/assets/images/checkmarkGreen.svg';
 
 type SelectOptionProps = {
   icon?: React.ReactNode;
@@ -26,6 +27,7 @@ type SelectOptionProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   showArrow?: boolean;
+  backup?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -41,9 +43,10 @@ const SelectOption = (props: SelectOptionProps) => {
     toggleValue,
     testID,
     showArrow = true,
+    backup = false,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = getStyles(theme, backColor);
+  const styles = getStyles(theme, backColor, backup);
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -66,32 +69,36 @@ const SelectOption = (props: SelectOptionProps) => {
             ) : null}
           </View>
         </View>
-        {showArrow ? (
-          <View>
-            {enableSwitch ? (
-              <Switch
-                value={toggleValue}
-                onValueChange={onValueChange}
-                color={theme.colors.accent1}
-              />
-            ) : backColor ? (
-              isThemeDark ? (
-                <IconArrow />
+        {!backup ? (
+          showArrow ? (
+            <View>
+              {enableSwitch ? (
+                <Switch
+                  value={toggleValue}
+                  onValueChange={onValueChange}
+                  color={theme.colors.accent1}
+                />
+              ) : backColor ? (
+                isThemeDark ? (
+                  <IconArrow />
+                ) : (
+                  <IconArrowLight />
+                )
+              ) : isThemeDark ? (
+                <IconSettingArrow />
               ) : (
-                <IconArrowLight />
-              )
-            ) : isThemeDark ? (
-              <IconSettingArrow />
-            ) : (
-              <IconSettingArrowLight />
-            )}
-          </View>
-        ) : null}
+                <IconSettingArrowLight />
+              )}
+            </View>
+          ) : null
+        ) : (
+          <CheckMarkGreen />
+        )}
       </GradientView>
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme, backColor, backup) =>
   StyleSheet.create({
     container: {
       width: '100%',
@@ -101,7 +108,9 @@ const getStyles = (theme: AppTheme, backColor) =>
       padding: windowHeight > 670 ? hp(20) : hp(10),
       backgroundColor: backColor,
       borderRadius: 20,
-      borderColor: theme.colors.borderColor,
+      borderColor: backup
+        ? theme.colors.backupDoneBorder
+        : theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(5),
     },

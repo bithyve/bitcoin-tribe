@@ -61,7 +61,9 @@ const CoinsMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
 
   useEffect(() => {
-    mutate({ assetId, schema: RealmSchema.Collectible });
+    if (!collectible.metaData) {
+      mutate({ assetId, schema: RealmSchema.Collectible });
+    }
   }, []);
 
   return (

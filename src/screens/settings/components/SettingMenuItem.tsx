@@ -29,6 +29,7 @@ function SettingMenuItem({ SettingsMenu }) {
             onValueChange={item.onValueChange}
             toggleValue={item.toggleValue}
             testID={item.testID}
+            backup={item.backup}
           />
         ) : null
       }

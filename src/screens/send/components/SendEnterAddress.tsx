@@ -97,6 +97,7 @@ function SendEnterAddress({
         onChangeText={text => setAddress(text)}
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
+        returnKeyType={'Enter'}
         autoFocus={true}
         multiline={true}
         numberOfLines={2}

@@ -104,7 +104,10 @@ function IssueScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         navigation.dispatch(popAction);
-      } else if (response?.error === 'Insufficient sats for RGB') {
+      } else if (
+        response?.error === 'Insufficient sats for RGB' ||
+        response?.name === 'NoAvailableUtxos'
+      ) {
         setLoading(false);
         setTimeout(() => {
           createUtxos.mutate();
@@ -132,7 +135,10 @@ function IssueScreen() {
       Toast(assets.assetCreateMsg);
       viewUtxos.mutate();
       navigation.dispatch(popAction);
-    } else if (response?.error === 'Insufficient sats for RGB') {
+    } else if (
+      response?.error === 'Insufficient sats for RGB' ||
+      response?.name === 'NoAvailableUtxos'
+    ) {
       setLoading(false);
       setTimeout(() => {
         createUtxos.mutate();
@@ -245,6 +251,8 @@ function IssueScreen() {
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
+              keyboardType={'default'}
+              returnKeyType={'Enter'}
               maxLength={100}
               multiline={true}
               numberOfLines={2}

@@ -4,23 +4,21 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import LottieView from 'lottie-react-native';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { Keys } from 'src/storage';
-import AppText from 'src/components/AppText';
-import CardBox from 'src/components/CardBox';
 import NodeInfoFooter from './NodeInfoFooter';
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import NodeInfoItem from './components/NodeInfoItem';
+import { hp } from 'src/constants/responsive';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -110,85 +108,59 @@ const ViewNodeInfo = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.scrollingWrapper}>
-          <AppText variant="body2" style={styles.headerTitle}>
-            {node.pubKey}
-          </AppText>
-          <ReceiveQrClipBoard
-            qrCodeValue={nodeInfo.pubkey}
-            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-          />
-
-          <AppText variant="body2" style={styles.headerTitle}>
-            {node.apiUrl}
-          </AppText>
-          <ReceiveQrClipBoard
-            qrCodeValue={rgbWallet.nodeUrl}
-            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-          />
-
-          <View>
-            <AppText variant="body2" style={styles.headerTitle}>
-              {node.onchainPubkey}
-            </AppText>
-            <ReceiveQrClipBoard
-              qrCodeValue={nodeInfo.onchain_pubkey}
-              icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-            />
-          </View>
-
-          {rgbWallet.peerDNS && (
-            <View>
-              <AppText variant="body2" style={styles.headerTitle}>
-                Peer DNS
-              </AppText>
-              <ReceiveQrClipBoard
-                qrCodeValue={rgbWallet.peerDNS}
-                icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-              />
-            </View>
-          )}
-
-          <View>
-            <AppText variant="body2" style={styles.headerTitle}>
-              {node.rgbHtlcMinMsat}
-            </AppText>
-            <CardBox>
-              <AppText variant="body1" style={styles.valueText}>
-                {nodeInfo.rgb_htlc_min_msat}
-              </AppText>
-            </CardBox>
-          </View>
-
-          <View>
-            <AppText variant="body1" style={styles.headerTitle}>
-              {node.rgbChannelCapMinSat}
-            </AppText>
-            <CardBox>
-              <AppText variant="body1" style={styles.valueText}>
-                {nodeInfo.rgb_channel_capacity_min_sat}
-              </AppText>
-            </CardBox>
-          </View>
-
-          <View>
-            <AppText variant="body1" style={styles.headerTitle}>
-              {node.channelCapMisSat}
-            </AppText>
-            <CardBox>
-              <AppText variant="body1" style={styles.valueText}>
-                {nodeInfo.channel_capacity_min_sat}
-              </AppText>
-            </CardBox>
-          </View>
-          <View>
+          <View style={styles.unLockWrapper}>
             <SelectOption
-              title={'Unlock Node'}
+              title={node.unlockNode}
               onPress={() => unlockNodeMutation.mutate()}
               enableSwitch={false}
               onValueChange={() => {}}
               toggleValue={nodeStatusLock}
             />
           </View>
+          <NodeInfoItem
+            title={node.pubKey}
+            value={nodeInfo.pubkey}
+            isCopiable={true}
+            copyMessage={node.pubKeyCopyMsg}
+          />
+
+          <NodeInfoItem
+            title={node.apiUrl}
+            value={rgbWallet.nodeUrl}
+            isCopiable={true}
+            copyMessage={node.nodeUrlCopyMsg}
+          />
+
+          <NodeInfoItem
+            title={node.onchainPubkey}
+            value={nodeInfo.onchain_pubkey}
+            isCopiable={true}
+            copyMessage={node.onChainPubKeyCopyMsg}
+          />
+
+          {rgbWallet.peerDNS && (
+            <NodeInfoItem
+              title={node.peerDns}
+              value={`${nodeInfo.pubkey}@${rgbWallet.peerDNS}`}
+              isCopiable={true}
+              copyMessage={() => 'Peer URL copied'}
+            />
+          )}
+
+          <NodeInfoItem
+            title={node.rgbHtlcMinMsat}
+            value={nodeInfo.rgb_htlc_min_msat}
+          />
+          <NodeInfoItem
+            title={node.rgbChannelCapMinSat}
+            value={nodeInfo.rgb_channel_capacity_min_sat}
+          />
+
+          <NodeInfoItem
+            title={node.channelCapMisSat}
+            value={nodeInfo.channel_capacity_min_sat}
+          />
+
           {/* <View>
             <SelectOption
               title={node.initNode}
@@ -229,6 +201,9 @@ const getStyles = (theme: AppTheme) =>
     },
     valueText: {
       color: theme.colors.headingColor,
+    },
+    unLockWrapper: {
+      marginVertical: hp(20),
     },
   });
 export default ViewNodeInfo;

@@ -255,6 +255,17 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async closechannel(body: {
+    channel_id: string;
+    peer_pubkey: number;
+    force: boolean;
+  }): Promise<{}> {
+    return this.request('/closechannel', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async openchannel(body: {
     peer_pubkey_and_opt_addr: string;
     capacity_sat: number;
@@ -275,7 +286,7 @@ export class RLNNodeApiServices {
 
   public async lninvoice(body: {
     amt_msat: number;
-    expiry_sec: 420;
+    expiry_sec: 4200;
     asset_id?: string;
     asset_amount?: number;
   }): Promise<{ invoice: string }> {
@@ -313,6 +324,19 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async assetbalance(body: { asset_id: string }): Promise<{
+    future: number;
+    settled: number;
+    spendable: number;
+    offchain_inbound: number;
+    offchain_outbound: number;
+  }> {
+    return this.request('/assetbalance', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async unlock(password: string): Promise<{ invoice: string }> {
     return this.request('/unlock', {
       method: 'POST',
@@ -324,6 +348,8 @@ export class RLNNodeApiServices {
         bitcoind_rpc_port: 18443,
         indexer_url: 'regtest.thunderstack.org:50001',
         proxy_endpoint: 'rpc://regtest.thunderstack.org:3000/json-rpc',
+        announce_addresses: ['pub.addr.example.com:9735'],
+        announce_alias: 'nodeAlias',
       }),
     });
   }

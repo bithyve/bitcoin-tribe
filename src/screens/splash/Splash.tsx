@@ -11,12 +11,14 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import TribeIcon from 'src/assets/images/Tribe.svg';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { setKey, setIsWalletOnline } = useContext(AppContext);
+  const { setKey, setIsWalletOnline, setAppType } = useContext(AppContext);
   const { mutate, data } = useMutation(ApiHandler.login);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
 
@@ -52,7 +54,9 @@ function Splash({ navigation }) {
   useEffect(() => {
     if (data) {
       setKey(data.key);
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       setIsWalletOnline(data.isWalletOnline);
+      setAppType(app.appType);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [data, navigation, setKey]);

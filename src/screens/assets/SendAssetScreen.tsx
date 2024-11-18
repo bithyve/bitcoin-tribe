@@ -232,14 +232,14 @@ const SendAssetScreen = () => {
     }
   }, [invoice, amount, navigation]);
 
-  const handleAmtChangeText = text => {
-    const positiveNumberRegex = /^\d*[1-9]\d*$/;
-    if (positiveNumberRegex.test(text)) {
-      setAmount(text);
-    } else {
-      setAmount('');
-    }
-  };
+  // const handleAmtChangeText = text => {
+  //   const positiveNumberRegex = /^\d*[1-9]\d*$/;
+  //   if (positiveNumberRegex.test(text)) {
+  //     setAmount(text);
+  //   } else {
+  //     setAmount('');
+  //   }
+  // };
 
   return (
     <ScreenContainer>
@@ -310,13 +310,14 @@ const SendAssetScreen = () => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
           multiline={true}
+          returnKeyType={'Enter'}
           numberOfLines={5}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
         />
 
         <TextField
-          value={amount}
-          onChangeText={handleAmtChangeText}
+          value={formatNumber(amount)}
+          onChangeText={text => setAmount(text)}
           placeholder={assets.amount}
           keyboardType="numeric"
           style={styles.input}

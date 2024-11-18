@@ -14,6 +14,8 @@ import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import CardBox from 'src/components/CardBox';
 import { useTheme } from 'react-native-paper';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessPopupContainer from '../assets/components/SendSuccessPopupContainer';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -25,20 +27,20 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
-      bottom: 10,
     },
   });
 
 const LightningSend = () => {
   const { invoice } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { sendScreen, common, wallet: walletTranslation } = translations;
+  const { assets, common, wallet: walletTranslation } = translations;
   const navigation = useNavigation();
   const decodeInvoiceMutation = useMutation(ApiHandler.decodeLnInvoice);
   const sendLnPaymentMutation = useMutation(ApiHandler.sendLNPayment);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     decodeInvoiceMutation.mutate({ invoice });
@@ -57,19 +59,27 @@ const LightningSend = () => {
     if (sendLnPaymentMutation.error) {
       Toast(`${sendLnPaymentMutation.error}`, true);
     } else if (sendLnPaymentMutation.data) {
-      //setInvoiceDetails(sendLnPaymentMutation.data); show success
+      if (sendLnPaymentMutation.data?.status === 'Pending') {
+        setTimeout(() => {
+          setVisible(true);
+        }, 500);
+      } else {
+        Toast(`${sendLnPaymentMutation.data?.status}`, true);
+      }
     }
   }, [sendLnPaymentMutation.data, sendLnPaymentMutation.error]);
 
   return (
     <ScreenContainer>
       <AppHeader title={'Send'} subTitle={''} />
-      <ModalLoading visible={sendLnPaymentMutation.isLoading} />
+      <ModalLoading
+        visible={!invoiceDetails || sendLnPaymentMutation.isLoading}
+      />
 
       {!invoiceDetails ? (
-        <ModalLoading visible={true} />
+        <View />
       ) : (
-        <View style={{ flex: 1 }}>
+        <View>
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
               Invoice
@@ -85,7 +95,10 @@ const LightningSend = () => {
           </View>
           {invoiceDetails.assetId && (
             <View>
-              <AppText variant="body1" style={styles.headerTitle}>
+              <AppText
+                numberOfLines={1}
+                variant="body1"
+                style={styles.headerTitle}>
                 Asset ID
               </AppText>
               <CardBox>
@@ -111,22 +124,25 @@ const LightningSend = () => {
               Payment Hash
             </AppText>
             <CardBox>
-              <AppText variant="body2" style={styles.valueText}>
+              <AppText
+                numberOfLines={1}
+                variant="body2"
+                style={styles.valueText}>
                 {invoiceDetails.paymentHash}
               </AppText>
             </CardBox>
           </View>
 
-          <View>
+          {/* <View>
             <AppText variant="body1" style={styles.headerTitle}>
               Expiry Secs
             </AppText>
             <CardBox>
               <AppText variant="body2" style={styles.headerTitle}>
-                {invoiceDetails.expiry_sec}
+                {`${invoiceDetails.expiry_sec}`}
               </AppText>
             </CardBox>
-          </View>
+          </View> */}
 
           <View style={styles.buttonWrapper}>
             <Buttons
@@ -134,12 +150,29 @@ const LightningSend = () => {
               primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
               secondaryTitle={common.cancel}
               secondaryOnPress={() => navigation.goBack()}
-              disabled={sendLnPaymentMutation.isLoading}
               width={wp(120)}
+              disabled={false}
             />
           </View>
         </View>
       )}
+
+      <ResponsePopupContainer
+        visible={visible}
+        enableClose={true}
+        onDismiss={() => setVisible(false)}
+        backColor={theme.colors.successPopupBackColor}
+        borderColor={theme.colors.successPopupBorderColor}
+        conatinerModalStyle={{}}>
+        <SendSuccessPopupContainer
+          title={assets.success}
+          subTitle={assets.operationSuccess}
+          description={assets.operationSuccessSubTitle}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      </ResponsePopupContainer>
     </ScreenContainer>
   );
 };
