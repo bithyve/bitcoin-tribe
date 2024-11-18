@@ -15,7 +15,6 @@ function App() {
   return (
     <Contexts>
       <NetworkBanner />
-      <RGBWalletStatus />
       <Navigator />
     </Contexts>
   );
