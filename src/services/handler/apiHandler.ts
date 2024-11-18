@@ -106,14 +106,26 @@ export class ApiHandler {
   }) {
     Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
-    const AES_KEY = generateEncryptionKey();
     const hash = hash512(
       pinMethod !== PinMethod.DEFAULT
         ? passcode
         : config.ENC_KEY_STORAGE_IDENTIFIER,
     );
-    const encryptedKey = encrypt(hash, AES_KEY);
-    SecureStore.store(hash, encryptedKey);
+    // Check if the encrypted key already exists
+    let AES_KEY: string;
+    const existingEncryptedKey = await SecureStore.fetch(hash);
+    if (!existingEncryptedKey) {
+      // Generate a new AES key
+      AES_KEY = generateEncryptionKey();
+      // Encrypt the key using the hash
+      const encryptedKey = encrypt(hash, AES_KEY);
+      // Store the encrypted key securely
+      await SecureStore.store(hash, encryptedKey);
+    } else {
+      console.log('Encryption key already exists. Skipping encryption step.');
+      // Decrypt the existing key to get AES_KEY
+      AES_KEY = decrypt(hash, existingEncryptedKey);
+    }
     const uint8array = stringToArrayBuffer(AES_KEY);
 
     const isRealmInit = await dbManager.initializeRealm(uint8array);
