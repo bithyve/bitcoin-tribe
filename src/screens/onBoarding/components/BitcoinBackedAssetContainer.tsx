@@ -48,13 +48,13 @@ function BitcoinBackedAssetContainer({
         <SecondaryCTA
           onPress={onLaterPress}
           title={common.addFunds}
-          width={hp(190)}
+          width={windowHeight > 670 ? hp(150) : hp(190)}
           height={hp(14)}
         />
         <PrimaryCTA
           title={common.addLater}
           onPress={onPrimaryPress}
-          width={hp(180)}
+          width={windowHeight > 670 ? hp(150) : hp(170)}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
           height={hp(14)}
