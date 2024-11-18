@@ -796,7 +796,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('refreshRgbWallet', error);
+      console.log('error', error);
     }
   }
 
