@@ -46,7 +46,8 @@ function ReceiveAssetScreen() {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [activeTab, setActiveTab] = useState('bitcoin');
   const [lightningInvoice, setLightningInvoice] = useState('');
-
+  console.log('lightningInvoice', lightningInvoice);
+  console.log('assetId', assetId);
   useEffect(() => {
     mutate(assetId, amount);
   }, []);
@@ -60,10 +61,23 @@ function ReceiveAssetScreen() {
   }, [error]);
 
   useEffect(() => {
+    console.log('generateLNInvoiceMutation.data', generateLNInvoiceMutation);
     if (generateLNInvoiceMutation.error) {
-      Toast(generateLNInvoiceMutation.error, true);
+      let errorMessage;
+
+      // Check if the error is an instance of Error and extract the message
+      if (generateLNInvoiceMutation.error instanceof Error) {
+        errorMessage = generateLNInvoiceMutation.error.message;
+      } else if (typeof generateLNInvoiceMutation.error === 'string') {
+        errorMessage = generateLNInvoiceMutation.error;
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+
+      Toast(`${errorMessage}`, true);
+      // Toast(generateLNInvoiceMutation.error, true);
     } else if (generateLNInvoiceMutation.data) {
-      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
+      setLightningInvoice(generateLNInvoiceMutation?.data?.invoice);
       setActiveTab('lightning');
     }
   }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
@@ -80,6 +94,7 @@ function ReceiveAssetScreen() {
 
   const onTabChange = (tab: string) => {
     if (tab === 'lightning') {
+      console.log('tab lightning', lightningInvoice);
       if (lightningInvoice === '') {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
@@ -138,7 +153,10 @@ function ReceiveAssetScreen() {
               <WalletFooter activeTab={activeTab} setActiveTab={onTabChange} />
             </View>
           )}
-          <ShowQRCode value={qrValue} title={receciveScreen.invoiceAddress} />
+          <ShowQRCode
+            value={qrValue || 'address'}
+            title={receciveScreen.invoiceAddress}
+          />
           <ReceiveQrClipBoard
             qrCodeValue={qrValue}
             icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
