@@ -46,8 +46,6 @@ function ReceiveAssetScreen() {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [activeTab, setActiveTab] = useState('bitcoin');
   const [lightningInvoice, setLightningInvoice] = useState('');
-  console.log('lightningInvoice', lightningInvoice);
-  console.log('assetId', assetId);
   useEffect(() => {
     mutate(assetId, amount);
   }, []);
@@ -61,10 +59,8 @@ function ReceiveAssetScreen() {
   }, [error]);
 
   useEffect(() => {
-    console.log('generateLNInvoiceMutation.data', generateLNInvoiceMutation);
     if (generateLNInvoiceMutation.error) {
       let errorMessage;
-
       // Check if the error is an instance of Error and extract the message
       if (generateLNInvoiceMutation.error instanceof Error) {
         errorMessage = generateLNInvoiceMutation.error.message;
@@ -73,7 +69,6 @@ function ReceiveAssetScreen() {
       } else {
         errorMessage = 'An unexpected error occurred. Please try again.';
       }
-
       Toast(`${errorMessage}`, true);
       // Toast(generateLNInvoiceMutation.error, true);
     } else if (generateLNInvoiceMutation.data) {
@@ -94,7 +89,6 @@ function ReceiveAssetScreen() {
 
   const onTabChange = (tab: string) => {
     if (tab === 'lightning') {
-      console.log('tab lightning', lightningInvoice);
       if (lightningInvoice === '') {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
