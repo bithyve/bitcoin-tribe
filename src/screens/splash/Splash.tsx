@@ -40,7 +40,6 @@ function Splash({ navigation }) {
       const setupAppStatus = await Storage.get(Keys.SETUPAPP);
       console.log('setupAppStatus', setupAppStatus);
       if (setupAppStatus === undefined || setupAppStatus) {
-        SecureStore.deleteExistingEncryptionKey();
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
       const appId = await Storage.get(Keys.APPID);
