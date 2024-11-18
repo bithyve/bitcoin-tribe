@@ -28,8 +28,8 @@ const OpenRgbChannel = () => {
   const [assetAmt, setAssetAmt] = useState('');
   const [baseFeeRate, setBaseFeeRate] = useState('1000');
   const [tmpChannelId, setTmpChannelId] = useState('');
-  const [inputHeight, setInputHeight] = useState(50);
-  const [inputAssetIDHeight, setInputAssetIDHeight] = useState(50);
+  const [inputHeight, setInputHeight] = useState(100);
+  const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
@@ -171,11 +171,11 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
     },
     multilinePubKeyInput: {
       borderRadius: hp(20),
-      height: Math.max(50, inputHeight),
+      height: Math.max(100, inputHeight),
     },
     multilineAssetIDInput: {
       borderRadius: hp(20),
-      height: Math.max(50, inputAssetIDHeight),
+      height: Math.max(100, inputAssetIDHeight),
     },
 
     buttonWrapper: {
