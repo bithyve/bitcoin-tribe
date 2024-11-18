@@ -22,11 +22,11 @@ const OpenRgbChannel = () => {
   const { translations } = useContext(LocalizationContext);
   const { common, node } = translations;
   const [pubkeyAddress, setPubkeyAddress] = useState('');
-  const [capacity, setCapacity] = useState('4000000');
-  const [pushMsats, setPushMsats] = useState('400000');
+  const [capacity, setCapacity] = useState('30010');
+  const [pushMsats, setPushMsats] = useState('1394000');
   const [assetId, setAssetId] = useState('');
   const [assetAmt, setAssetAmt] = useState('');
-  const [baseFeeRate, setBaseFeeRate] = useState('1');
+  const [baseFeeRate, setBaseFeeRate] = useState('1000');
   const [tmpChannelId, setTmpChannelId] = useState('');
   const [inputHeight, setInputHeight] = useState(50);
   const [inputAssetIDHeight, setInputAssetIDHeight] = useState(50);
