@@ -35,11 +35,13 @@ function ProfileSetup() {
   const [profileImage, setProfileImage] = useState('');
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (setupNewAppMutation.isSuccess) {
       onSuccess();
     } else if (setupNewAppMutation.isError) {
+      setIsLoading(false);
       Toast(`${setupNewAppMutation.error}`, true);
     }
   }, [setupNewAppMutation.isError, setupNewAppMutation.isSuccess]);
@@ -55,6 +57,7 @@ function ProfileSetup() {
   };
 
   const onSuccess = async () => {
+    setIsLoading(false);
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
@@ -65,6 +68,7 @@ function ProfileSetup() {
   };
 
   const initiateWalletCreation = () => {
+    setIsLoading(true);
     Keyboard.dismiss();
     setTimeout(() => {
       const appType: AppType = route.params?.appType || AppType.ON_CHAIN;
@@ -82,7 +86,7 @@ function ProfileSetup() {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={setupNewAppMutation.isLoading} />
+      <ModalLoading visible={isLoading} />
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}

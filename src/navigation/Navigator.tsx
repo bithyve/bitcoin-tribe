@@ -61,6 +61,7 @@ import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
+import RGBWalletStatus from 'src/components/RGBWalletOffline';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -277,6 +278,8 @@ function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
     <NavigationContainer>
+      <RGBWalletStatus />
+
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

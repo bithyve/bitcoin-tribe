@@ -108,6 +108,15 @@ const ViewNodeInfo = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.scrollingWrapper}>
+          <View style={styles.unLockWrapper}>
+            <SelectOption
+              title={node.unlockNode}
+              onPress={() => unlockNodeMutation.mutate()}
+              enableSwitch={false}
+              onValueChange={() => {}}
+              toggleValue={nodeStatusLock}
+            />
+          </View>
           <NodeInfoItem
             title={node.pubKey}
             value={nodeInfo.pubkey}
@@ -130,7 +139,12 @@ const ViewNodeInfo = () => {
           />
 
           {rgbWallet.peerDNS && (
-            <NodeInfoItem title={node.peerDns} value={rgbWallet.peerDNS} />
+            <NodeInfoItem
+              title={node.peerDns}
+              value={`${nodeInfo.pubkey}@${rgbWallet.peerDNS}`}
+              isCopiable={true}
+              copyMessage={() => 'Peer URL copied'}
+            />
           )}
 
           <NodeInfoItem
@@ -147,15 +161,6 @@ const ViewNodeInfo = () => {
             value={nodeInfo.channel_capacity_min_sat}
           />
 
-          <View style={styles.unLockWrapper}>
-            <SelectOption
-              title={node.unlockNode}
-              onPress={() => unlockNodeMutation.mutate()}
-              enableSwitch={false}
-              onValueChange={() => {}}
-              toggleValue={nodeStatusLock}
-            />
-          </View>
           {/* <View>
             <SelectOption
               title={node.initNode}
