@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
+import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -30,6 +31,9 @@ import {
 import SendSuccessContainer from './SendSuccessContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { formatNumber } from 'src/utils/numberWithCommas';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmSchema } from 'src/storage/enum';
+import ModalLoading from 'src/components/ModalLoading';
 
 function SendToContainer({
   wallet,
@@ -52,10 +56,11 @@ function SendToContainer({
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  const [insufficientBalance, setInsufficientBalance] = useState(false);
+  // const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
@@ -68,7 +73,7 @@ function SendToContainer({
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
       const averageTxFee: AverageTxFees =
-        averageTxFeeByNetwork[wallet.networkType];
+        averageTxFeeByNetwork[app.networkType];
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -102,15 +107,15 @@ function SendToContainer({
     });
   };
 
-  useEffect(() => {
-    const balance = idx(wallet, _ => _.specs.balances);
-    const availableToSpend = balance.confirmed + balance.unconfirmed;
-    if (availableToSpend < Number(amount)) {
-      setInsufficientBalance(true);
-    } else {
-      setInsufficientBalance(false);
-    }
-  }, [amount, wallet]);
+  // useEffect(() => {
+  //   const balance = idx(wallet, _ => _.specs.balances);
+  //   const availableToSpend = balance.confirmed + balance.unconfirmed;
+  //   if (availableToSpend < Number(amount)) {
+  //     setInsufficientBalance(true);
+  //   } else {
+  //     setInsufficientBalance(false);
+  //   }
+  // }, [amount, wallet]);
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -139,8 +144,10 @@ function SendToContainer({
       sendTransactionMutation,
       _ => _.data.txPrerequisites[selectedPriority].fee,
     ) || 0;
-
-  return (
+  console.log('transferFee', transferFee);
+  return sendTransactionMutation.status === 'loading' ? (
+    <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
+  ) : (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>

@@ -69,6 +69,9 @@ function SendEnterAddress({
           rgbInvoice: address,
         });
         break;
+      case PaymentInfoKind.RLN_INVOICE:
+        navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
+        break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
     }
