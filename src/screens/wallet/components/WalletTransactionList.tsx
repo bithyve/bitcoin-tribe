@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -28,7 +28,6 @@ import { Keys } from 'src/storage';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import ModalLoading from 'src/components/ModalLoading';
 import LottieView from 'lottie-react-native';
 
 function WalletTransactionList({
@@ -85,12 +84,20 @@ function WalletTransactionList({
     return <View style={styles.footer} />;
   };
   return walletRefreshMutation.isLoading && !refreshing ? (
-    <LottieView
-      source={require('src/assets/images/loader.json')}
-      style={styles.loaderStyle}
-      autoPlay
-      loop
-    />
+    Platform.OS === 'ios' ? (
+      <LottieView
+        source={require('src/assets/images/loader.json')}
+        style={styles.loaderStyle}
+        autoPlay
+        loop
+      />
+    ) : (
+      <ActivityIndicator
+        size="small"
+        color={theme.colors.accent1}
+        style={styles.activityIndicatorWrapper}
+      />
+    )
   ) : (
     <FlatList
       style={styles.container}
@@ -166,6 +173,9 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: 100,
       height: 100,
+    },
+    activityIndicatorWrapper: {
+      marginTop: hp(20),
     },
   });
 export default WalletTransactionList;
