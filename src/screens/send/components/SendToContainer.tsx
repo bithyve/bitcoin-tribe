@@ -30,6 +30,9 @@ import {
 import SendSuccessContainer from './SendSuccessContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { formatNumber } from 'src/utils/numberWithCommas';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function SendToContainer({
   wallet,
@@ -60,6 +63,7 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -68,7 +72,7 @@ function SendToContainer({
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
       const averageTxFee: AverageTxFees =
-        averageTxFeeByNetwork[wallet.networkType];
+        averageTxFeeByNetwork[app.networkType];
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -104,7 +108,7 @@ function SendToContainer({
 
   useEffect(() => {
     const balance = idx(wallet, _ => _.specs.balances);
-    const availableToSpend = balance.confirmed + balance.unconfirmed;
+    const availableToSpend = balance?.confirmed + balance?.unconfirmed;
     if (availableToSpend < Number(amount)) {
       setInsufficientBalance(true);
     } else {
