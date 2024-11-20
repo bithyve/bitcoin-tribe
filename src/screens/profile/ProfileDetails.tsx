@@ -81,6 +81,11 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
+        <View>
+          <ModalLoading
+            visible={primaryStatus === 'loading' || primaryCtaLoader}
+          />
+        </View>
         <ScrollView
           contentContainerStyle={styles.scrollView}
           keyboardShouldPersistTaps="handled"

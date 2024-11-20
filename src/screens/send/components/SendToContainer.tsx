@@ -168,7 +168,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
