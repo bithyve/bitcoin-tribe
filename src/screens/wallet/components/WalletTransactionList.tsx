@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlatList,
   Platform,
@@ -28,6 +28,8 @@ import { Keys } from 'src/storage';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import ModalLoading from 'src/components/ModalLoading';
+import LottieView from 'lottie-react-native';
 
 function WalletTransactionList({
   transactions,
@@ -47,18 +49,23 @@ function WalletTransactionList({
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
+  const [refreshing, setRefreshing] = useState(false);
 
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
+    setRefreshing(true);
     walletRefreshMutation.mutate({
       wallets: [wallet],
     });
+    setTimeout(() => setRefreshing(false), 2000);
   };
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      pullDownToRefresh();
+      walletRefreshMutation.mutate({
+        wallets: [wallet],
+      });
     }
   }, [autoRefresh && isFocused]);
 
@@ -77,19 +84,26 @@ function WalletTransactionList({
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
-  return (
+  return walletRefreshMutation.isLoading && !refreshing ? (
+    <LottieView
+      source={require('src/assets/images/loader.json')}
+      style={styles.loaderStyle}
+      autoPlay
+      loop
+    />
+  ) : (
     <FlatList
       style={styles.container}
       data={transactions}
       refreshControl={
         Platform.OS === 'ios' ? (
           <RefreshControlView
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
           />
         ) : (
           <RefreshControl
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
             colors={[theme.colors.accent1]} // You can customize this part
             progressBackgroundColor={theme.colors.inputBackground}
@@ -147,6 +161,11 @@ const getStyles = (theme: AppTheme) =>
     },
     footer: {
       height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
     },
   });
 export default WalletTransactionList;
