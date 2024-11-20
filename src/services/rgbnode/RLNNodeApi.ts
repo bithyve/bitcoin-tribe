@@ -79,6 +79,19 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async sendBTCTransaction(body: {
+    amount: number;
+    address: string;
+    fee_rate: any;
+    skip_sync: boolean;
+  }): Promise<{}> {
+    console.log('RLN body', body);
+    return this.request('/sendbtc', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
   public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
     return this.request('/listunspents', {
       method: 'POST',
