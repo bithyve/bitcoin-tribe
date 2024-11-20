@@ -27,6 +27,19 @@ function WalletSettings() {
     ApiHandler.viewUtxos,
   );
 
+  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
+    ApiHandler.viewUtxos,
+  );
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     Toast(strings.testSatsRecived);
+  //     fetchUTXOs();
+  //   } else if (isError) {
+  //     Toast(strings.failedTestSatsRecived, true);
+  //   }
+  // }, [isError, isSuccess]);
+
   useEffect(() => {
     fetchUTXOs();
   }, []);

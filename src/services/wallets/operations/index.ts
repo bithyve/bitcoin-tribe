@@ -52,6 +52,8 @@ const validator = (
   signature: Buffer,
 ): boolean => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
 
+const TESTNET_FEE_CUTOFF = 10;
+
 const testnetFeeSurcharge = (wallet: Wallet | Vault) =>
   /* !! TESTNET ONLY !!
      as the redeem script for vault is heavy(esp. 3-of-5/3-of-6),
@@ -643,6 +645,13 @@ export default class WalletOperations {
         ),
         estimatedBlocks: lowFeeBlockEstimate,
       };
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
 
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
@@ -694,7 +703,13 @@ export default class WalletOperations {
         feePerByte: mempoolFee.hourFee,
         estimatedBlocks: lowFeeBlockEstimate,
       };
-
+      if (
+        config.NETWORK_TYPE === NetworkType.TESTNET &&
+        low.feePerByte > TESTNET_FEE_CUTOFF
+      ) {
+        // working around testnet fee spikes
+        return WalletOperations.mockFeeRates();
+      }
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
     } catch (err) {
