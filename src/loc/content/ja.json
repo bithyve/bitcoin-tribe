@@ -394,6 +394,8 @@
     "unlockNode": "ノードを解除する",
     "pubKeyCopyMsg": "公開鍵が正常にコピーされました",
     "nodeUrlCopyMsg": "ノード URL が正常にコピーされました",
-    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました"
+    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました",
+    "channelCreatedMsg": "チャンネルが正常に作成されました",
+    "channelCloseMsg": "チャンネルが閉じました"
   }
 }

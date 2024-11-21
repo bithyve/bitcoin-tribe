@@ -394,6 +394,8 @@
     "unlockNode": "Desbloquear nodo",
     "pubKeyCopyMsg": "Clave pública copiada con éxito",
     "nodeUrlCopyMsg": "URL del nodo copiada con éxito",
-    "onChainPubKeyCopyMsg": "Clave pública OnChain copiada con éxito"
+    "onChainPubKeyCopyMsg": "Clave pública OnChain copiada con éxito",
+    "channelCreatedMsg": "Canal creado con éxito",
+    "channelCloseMsg": "Canal cerrado"
   }
 }

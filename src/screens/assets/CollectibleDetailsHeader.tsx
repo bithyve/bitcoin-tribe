@@ -30,10 +30,7 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
 
   return (
     <View style={styles.container}>
-      <Toolbar
-        onPress={onPressSetting}
-        ticker={Platform.OS === 'ios' ? collectible.name : collectible.details}
-      />
+      <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
           uri: Platform.select({
