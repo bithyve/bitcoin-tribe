@@ -169,7 +169,7 @@ export class ApiHandler {
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
-            mnemonic: '',
+            mnemonic: rgbNodeConnectParams.mnemonic,
             xpub: '',
             rgbDir: '',
             accountXpub: '',
@@ -178,25 +178,17 @@ export class ApiHandler {
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
           };
-          console.log('rgbWallet', rgbWallet);
           const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT);
-          const resInitNode = await ApiHandler.api.init({
-            password: 'tribe@2024',
-          });
-          console.log('resInitNode', JSON.stringify(resInitNode));
-          if (resInitNode && resInitNode.mnemonic) {
-            rgbWallet.mnemonic = resInitNode.mnemonic;
-            const resUnlockNode = await ApiHandler.api.unlock('tribe@2024');
-            const resNodeInfo = await ApiHandler.api.nodeinfo();
-            rgbWallet.xpub = resNodeInfo.pubkey;
-            rgbWallet.accountXpub = resNodeInfo.pubkey;
-            rgbWallet.accountXpubFingerprint = resNodeInfo.pubkey;
+
+            rgbWallet.xpub = rgbNodeConnectParams.nodeId;
+            rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
+            rgbWallet.accountXpubFingerprint = rgbNodeConnectParams.nodeId;
             const newAPP: TribeApp = {
               id: rgbNodeConnectParams.nodeId,
-              publicId: resNodeInfo.pubkey || rgbNodeConnectParams.nodeId,
+              publicId: rgbNodeConnectParams.nodeId,
               appName,
               walletImage,
-              primaryMnemonic: resInitNode.mnemonic,
+              primaryMnemonic: rgbNodeConnectParams.mnemonic,
               primarySeed: rgbNodeConnectParams.nodeId,
               imageEncryptionKey: '',
               version: DeviceInfo.getVersion(),
@@ -214,7 +206,7 @@ export class ApiHandler {
             );
             if (created) {
               dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-              Storage.set(Keys.APPID, resNodeInfo.pubkey);
+              Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
               dbManager.createObject(RealmSchema.VersionHistory, {
                 version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
                 releaseNote: '',
@@ -222,11 +214,6 @@ export class ApiHandler {
                 title: 'Initially installed',
               });
             }
-          } else {
-            throw new Error(
-              resInitNode.message || resInitNode.error || 'Failed to init node',
-            );
-          }
         } else {
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
@@ -558,27 +545,50 @@ export class ApiHandler {
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
-    const txPrerequisites = await ApiHandler.sendPhaseOne({
-      sender,
-      recipient,
-      averageTxFee,
-      selectedPriority,
-    });
+    try {
+      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        const response = await ApiHandler.api.sendBTCTransaction({
+          amount: recipient.amount,
+          address: recipient.address,
+          fee_rate: averageTxFee[selectedPriority].averageTxFee,
+          skip_sync: false,
+        });
+        if (response) {
+          const feeEstimate = await ApiHandler.api.estimateFee({ blocks: 7 });
+          return {
+            txid: response.txid,
+            txPrerequisites:  feeEstimate
+          };
+        } else {
+          throw new Error('Failed to connect to node');
+        }
+      } else {
+        const txPrerequisites = await ApiHandler.sendPhaseOne({
+          sender,
+          recipient,
+          averageTxFee,
+          selectedPriority,
+        });
 
-    if (!txPrerequisites) {
-      throw new Error('Failed to generate txPrerequisites');
+        if (!txPrerequisites) {
+          throw new Error('Failed to generate txPrerequisites');
+        }
+        const { txid } = await ApiHandler.sendPhaseTwo({
+          sender,
+          recipient,
+          txPrerequisites,
+          txPriority: selectedPriority,
+        });
+
+        return {
+          txid,
+          txPrerequisites,
+        };
+      }
+    } catch (error) {
+      console.log({ error });
+      throw new Error('Failed to send txn');
     }
-    const { txid } = await ApiHandler.sendPhaseTwo({
-      sender,
-      recipient,
-      txPrerequisites,
-      txPriority: selectedPriority,
-    });
-
-    return {
-      txid,
-      txPrerequisites,
-    };
   }
 
   static async receiveTestSats() {
