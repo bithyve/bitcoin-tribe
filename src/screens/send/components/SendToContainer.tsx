@@ -35,6 +35,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
 
+
 function SendToContainer({
   wallet,
   address,
@@ -60,11 +61,12 @@ function SendToContainer({
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
-  // const [insufficientBalance, setInsufficientBalance] = useState(false);
+  const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -107,15 +109,15 @@ function SendToContainer({
     });
   };
 
-  // useEffect(() => {
-  //   const balance = idx(wallet, _ => _.specs.balances);
-  //   const availableToSpend = balance.confirmed + balance.unconfirmed;
-  //   if (availableToSpend < Number(amount)) {
-  //     setInsufficientBalance(true);
-  //   } else {
-  //     setInsufficientBalance(false);
-  //   }
-  // }, [amount, wallet]);
+  useEffect(() => {
+    const balance = idx(wallet, _ => _.specs.balances);
+    const availableToSpend = balance?.confirmed + balance?.unconfirmed;
+    if (availableToSpend < Number(amount)) {
+      setInsufficientBalance(true);
+    } else {
+      setInsufficientBalance(false);
+    }
+  }, [amount, wallet]);
 
   function onPressNumber(text) {
     let tmpPasscode = amount;
@@ -144,7 +146,7 @@ function SendToContainer({
       sendTransactionMutation,
       _ => _.data.txPrerequisites[selectedPriority].fee,
     ) || 0;
-  console.log('transferFee', transferFee);
+    
   return sendTransactionMutation.status === 'loading' ? (
     <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
   ) : (
