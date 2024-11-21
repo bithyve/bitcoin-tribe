@@ -85,7 +85,6 @@ export class RLNNodeApiServices {
     fee_rate: any;
     skip_sync: boolean;
   }): Promise<{}> {
-    console.log('RLN body', body);
     return this.request('/sendbtc', {
       method: 'POST',
       body: JSON.stringify(body),
@@ -310,7 +309,6 @@ export class RLNNodeApiServices {
   }
 
   public async decodelninvoice(body: { invoice: string }): Promise<{}> {
-    console.log('decodelninvoice', body);
     return this.request('/decodelninvoice', {
       method: 'POST',
       body: JSON.stringify(body),

@@ -567,7 +567,6 @@ export class ApiHandler {
           skip_sync: false,
         });
         if (response) {
-          console.log('sendNodeOnchainBtcTransactions res', response);
           return response.txid;
         } else {
           throw new Error('Failed to connect to node');
