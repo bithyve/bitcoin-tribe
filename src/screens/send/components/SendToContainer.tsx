@@ -66,7 +66,7 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+ 
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -146,7 +146,8 @@ function SendToContainer({
       sendTransactionMutation,
       _ => _.data.txPrerequisites[selectedPriority].fee,
     ) || 0;
-    
+    console.log('transferFee', transferFee)
+
   return sendTransactionMutation.status === 'loading' ? (
     <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
   ) : (
