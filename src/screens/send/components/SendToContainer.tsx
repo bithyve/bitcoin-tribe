@@ -150,7 +150,6 @@ function SendToContainer({
         sendTransactionMutation,
         _ => _.data.txPrerequisites[selectedPriority]?.fee,
       ) || 0; 
-    console.log('transferFee', transferFee)
 
   return sendTransactionMutation.status === 'loading' ? (
     <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
