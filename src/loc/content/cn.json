@@ -394,6 +394,8 @@
     "unlockNode": "解锁节点",
     "pubKeyCopyMsg": "公钥复制成功",
     "nodeUrlCopyMsg": "节点 URL 复制成功",
-    "onChainPubKeyCopyMsg": "链上公钥复制成功"
+    "onChainPubKeyCopyMsg": "链上公钥复制成功",
+    "channelCreatedMsg": "频道创建成功",
+    "channelCloseMsg": "频道已关闭"
   }
 }

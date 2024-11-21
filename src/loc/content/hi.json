@@ -394,6 +394,8 @@
     "unlockNode": "नोड अनलॉक करें",
     "pubKeyCopyMsg": "पब की सफलतापूर्वक कॉपी किया गया",
     "nodeUrlCopyMsg": "नोड URL सफलतापूर्वक कॉपी किया गया",
-    "onChainPubKeyCopyMsg": "ऑनचेन पब की सफलतापूर्वक कॉपी किया गया"
+    "onChainPubKeyCopyMsg": "ऑनचेन पब की सफलतापूर्वक कॉपी किया गया",
+    "channelCreatedMsg": "चैनल सफलतापूर्वक बनाया गया",
+    "channelCloseMsg": "चैनल बंद कर दिया गया"
   }
 }

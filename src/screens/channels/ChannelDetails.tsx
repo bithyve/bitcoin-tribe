@@ -57,6 +57,7 @@ const ChannelDetails = () => {
   useEffect(() => {
     if (closeChannelMutation.isSuccess) {
       navigation.goBack();
+      Toast(node.channelCreatedMsg);
     } else if (closeChannelMutation.isError) {
       Toast(`${closeChannelMutation.error}`, true);
     }

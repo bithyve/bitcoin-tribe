@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
@@ -8,7 +8,7 @@ import { useTheme } from 'react-native-paper';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -16,6 +16,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -28,25 +29,41 @@ const OpenRgbChannel = () => {
   const [assetAmt, setAssetAmt] = useState('');
   const [baseFeeRate, setBaseFeeRate] = useState('1000');
   const [tmpChannelId, setTmpChannelId] = useState('');
-  const [inputHeight, setInputHeight] = useState(50);
-  const [inputAssetIDHeight, setInputAssetIDHeight] = useState(50);
+  const [inputHeight, setInputHeight] = useState(100);
+  const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
 
+  // useEffect(() => {
+  //   console.log('openChannelMutation', openChannelMutation);
+  //   if (openChannelMutation.isSuccess) {
+  //     navigation.goBack();
+  //     Toast(node.channelCreatedMsg);
+  //   } else if (openChannelMutation.isError) {
+  //     Toast(`${openChannelMutation.error}`, true);
+  //   }
+  // }, [openChannelMutation.isError, openChannelMutation.isSuccess]);
   useEffect(() => {
-    if (openChannelMutation.isSuccess) {
+    const { isSuccess, isError, error } = openChannelMutation;
+    if (isSuccess) {
       navigation.goBack();
-    } else if (openChannelMutation.isError) {
-      Toast(`${openChannelMutation.error}`, true);
+      Toast(node.channelCreatedMsg);
+    } else if (isError) {
+      Toast(`${error}`, true);
     }
-  }, [openChannelMutation.isError, openChannelMutation.isSuccess]);
+  }, [openChannelMutation.isSuccess, openChannelMutation.isError]);
 
   return (
     <ScreenContainer>
       <AppHeader title={node.openChannelTitle} />
       <ModalLoading visible={openChannelMutation.isLoading} />
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        enableOnAndroid={true}
+        // extraScrollHeight={windowHeight > 670 ? 200 : 150}
+        keyboardOpeningTime={0}>
         <TextField
           value={pubkeyAddress}
           onChangeText={text => {
@@ -109,7 +126,7 @@ const OpenRgbChannel = () => {
           {node.assetIDNote}
         </AppText>
         <TextField
-          value={assetAmt}
+          value={formatNumber(assetAmt)}
           onChangeText={text => setAssetAmt(text)}
           placeholder={node.assetAmount}
           style={styles.input}
@@ -171,11 +188,11 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
     },
     multilinePubKeyInput: {
       borderRadius: hp(20),
-      height: Math.max(50, inputHeight),
+      height: Math.max(100, inputHeight),
     },
     multilineAssetIDInput: {
       borderRadius: hp(20),
-      height: Math.max(50, inputAssetIDHeight),
+      height: Math.max(100, inputAssetIDHeight),
     },
 
     buttonWrapper: {
