@@ -148,6 +148,7 @@ export interface RgbNodeConnectParams {
   nodeId: string;
   authentication: string;
   peerDNS?: string;
+  mnemonic?: string
 }
 
 export interface NodeInfo {
