@@ -80,6 +80,7 @@ function ProfileSetup() {
         appType,
         rgbNodeConnectParams: route.params?.nodeConnectParams || null,
         rgbNodeInfo: route.params?.nodeInfo || null,
+        mnemonic: route.params?.mnemonic || '',
       });
     }, 200);
   };
