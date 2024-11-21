@@ -1,29 +1,27 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import BackupAlertIllustration from 'src/assets/images/backupAlertIllustration.svg';
-import PrimaryCTA from 'src/components/PrimaryCTA';
-import SecondaryCTA from 'src/components/SecondaryCTA';
+import Buttons from 'src/components/Buttons';
+import ScreenContainer from 'src/components/ScreenContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-type backAlertProps = {
-  onSkipPress: () => void;
-  onPrimaryPress: () => void;
-};
 
-function BackupAlert(props: backAlertProps) {
-  const { onSkipPress, onPrimaryPress } = props;
+function BackupOnboardingScreen() {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, home } = translations;
   const styles = getStyles(theme);
   return (
-    <View style={styles.container}>
-      <View>
+    <ScreenContainer>
+      <View style={styles.contentWrapper1}>
         <AppText variant="heading1" style={styles.titleText}>
           {home.backupAlertTitle}
         </AppText>
@@ -35,28 +33,25 @@ function BackupAlert(props: backAlertProps) {
         <BackupAlertIllustration />
       </View>
       <View style={styles.ctaWrapper}>
-        <SecondaryCTA
-          onPress={onSkipPress}
-          title={common.skip}
-          width={windowHeight > 670 ? hp(100) : hp(150)}
-          height={hp(14)}
-        />
-        <PrimaryCTA
-          title={common.backupNow}
-          onPress={onPrimaryPress}
-          width={windowHeight > 670 ? hp(140) : hp(180)}
-          textColor={theme.colors.popupCTATitleColor}
-          buttonColor={theme.colors.popupCTABackColor}
-          height={hp(14)}
+        <Buttons
+          primaryTitle={common.next}
+          primaryOnPress={() => {
+            navigation.replace(NavigationRoutes.APPSTACK);
+          }}
+          disabled={false}
+          width={wp(130)}
         />
       </View>
-    </View>
+    
+    </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {
-      alignItems: 'center',
+    contentWrapper1: {
+      marginVertical: hp(20),
+      paddingTop: hp(20),
+      height: '30%',
     },
     titleText: {
       color: theme.colors.headingColor,
@@ -68,13 +63,14 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     illustrationWrapper: {
-      marginVertical: hp(20),
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '50%',
     },
     ctaWrapper: {
-      flexDirection: 'row',
-      marginVertical: hp(15),
+      height: '20%',
       alignItems: 'center',
       justifyContent: 'center',
     },
   });
-export default BackupAlert;
+export default BackupOnboardingScreen;
