@@ -4,12 +4,12 @@ import { RealmSchema } from '../../enum';
 export const MetaData = {
   name: RealmSchema.MetaData,
   properties: {
-    assetIface: 'string',
+    assetIface: 'string?',
     assetSchema: 'string',
     issuedSupply: 'int',
     name: 'string',
-    precision: 'int',
-    ticker: 'string',
+    precision: 'int?',
+    ticker: 'string?',
     timestamp: 'int',
   },
 };
