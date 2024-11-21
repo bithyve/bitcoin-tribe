@@ -79,6 +79,28 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async sendBTCTransaction(body: {
+    amount: number;
+    address: string;
+    fee_rate: any;
+    skip_sync: boolean;
+  }): Promise<{}> {
+    return this.request('/sendbtc', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  public async estimateFee(body: {
+    blocks: number;
+  }): Promise<{}> {
+    return this.request('/estimatefee', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+
   public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
     return this.request('/listunspents', {
       method: 'POST',
@@ -297,7 +319,6 @@ export class RLNNodeApiServices {
   }
 
   public async decodelninvoice(body: { invoice: string }): Promise<{}> {
-    console.log('decodelninvoice', body);
     return this.request('/decodelninvoice', {
       method: 'POST',
       body: JSON.stringify(body),

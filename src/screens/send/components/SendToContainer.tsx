@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
+import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -30,9 +31,11 @@ import {
 import SendSuccessContainer from './SendSuccessContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { formatNumber } from 'src/utils/numberWithCommas';
-import { RealmSchema } from 'src/storage/enum';
-import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmSchema } from 'src/storage/enum';
+import ModalLoading from 'src/components/ModalLoading';
+import AppType from 'src/models/enums/AppType';
+
 
 function SendToContainer({
   wallet,
@@ -55,6 +58,7 @@ function SendToContainer({
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
@@ -63,7 +67,7 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+ 
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -87,6 +91,7 @@ function SendToContainer({
 
   const successTransaction = () => {
     setVisible(false);
+    sendTransactionMutation.reset();
     setTimeout(() => {
       navigation.navigate(NavigationRoutes.WALLETDETAILS, {
         autoRefresh: true,
@@ -139,12 +144,16 @@ function SendToContainer({
   };
 
   const transferFee =
-    idx(
-      sendTransactionMutation,
-      _ => _.data.txPrerequisites[selectedPriority].fee,
-    ) || 0;
+  app.appType === AppType.NODE_CONNECT
+    ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
+    : idx(
+        sendTransactionMutation,
+        _ => _.data.txPrerequisites[selectedPriority]?.fee,
+      ) || 0; 
 
-  return (
+  return sendTransactionMutation.status === 'loading' ? (
+    <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
+  ) : (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
@@ -165,7 +174,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
@@ -292,7 +301,7 @@ function SendToContainer({
             transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             amount={amount.replace(/,/g, '')}
             transFee={transferFee}
-            total={Number(amount) + Number(transferFee)}
+            total={app.appType === AppType.NODE_CONNECT? Number(amount) : Number(amount) + Number(transferFee)}
             onPress={() => successTransaction()}
           />
         </ResponsePopupContainer>
