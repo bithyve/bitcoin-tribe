@@ -34,6 +34,7 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
+import AppType from 'src/models/enums/AppType';
 
 
 function SendToContainer({
@@ -90,6 +91,7 @@ function SendToContainer({
 
   const successTransaction = () => {
     setVisible(false);
+    sendTransactionMutation.reset();
     setTimeout(() => {
       navigation.navigate(NavigationRoutes.WALLETDETAILS, {
         autoRefresh: true,
@@ -142,10 +144,12 @@ function SendToContainer({
   };
 
   const transferFee =
-    idx(
-      sendTransactionMutation,
-      _ => _.data.txPrerequisites[selectedPriority].fee,
-    ) || 0;
+  app.appType === AppType.NODE_CONNECT
+    ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
+    : idx(
+        sendTransactionMutation,
+        _ => _.data.txPrerequisites[selectedPriority]?.fee,
+      ) || 0; 
     console.log('transferFee', transferFee)
 
   return sendTransactionMutation.status === 'loading' ? (
@@ -171,7 +175,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
@@ -298,7 +302,7 @@ function SendToContainer({
             transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             amount={amount.replace(/,/g, '')}
             transFee={transferFee}
-            total={Number(amount) + Number(transferFee)}
+            total={app.appType === AppType.NODE_CONNECT? Number(amount) : Number(amount) + Number(transferFee)}
             onPress={() => successTransaction()}
           />
         </ResponsePopupContainer>

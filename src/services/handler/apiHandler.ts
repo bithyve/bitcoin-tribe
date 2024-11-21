@@ -567,7 +567,11 @@ export class ApiHandler {
           skip_sync: false,
         });
         if (response) {
-          return response.txid;
+          const feeEstimate = await ApiHandler.api.estimateFee({ blocks: 7 });
+          return {
+            txid: response.txid,
+            txPrerequisites:  feeEstimate
+          };
         } else {
           throw new Error('Failed to connect to node');
         }

@@ -91,6 +91,16 @@ export class RLNNodeApiServices {
     });
   }
 
+  public async estimateFee(body: {
+    blocks: number;
+  }): Promise<{}> {
+    return this.request('/estimatefee', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+
   public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
     return this.request('/listunspents', {
       method: 'POST',

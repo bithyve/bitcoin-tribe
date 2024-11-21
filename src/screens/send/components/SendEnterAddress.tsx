@@ -1,5 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -8,10 +9,12 @@ import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
+import { RealmSchema } from 'src/storage/enum';
 
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
@@ -29,6 +32,7 @@ function SendEnterAddress({
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const onProceed = (paymentInfo: string) => {
     if (paymentInfo.startsWith('lnbc')) {
@@ -39,7 +43,7 @@ function SendEnterAddress({
     }
     paymentInfo = paymentInfo.trim();
     const network = WalletUtilities.getNetworkByType(
-      wallet && wallet.networkType,
+      app.networkType,
     );
 
     let {
