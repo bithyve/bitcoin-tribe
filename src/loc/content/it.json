@@ -218,7 +218,9 @@
     "waitingconfirmations": "In attesa di conferma",
     "Failed": "Fallito",
     "removed": "Rimosso",
-    "expired": "Scaduto"
+    "expired": "Scaduto",
+    "viewNodeInfo": "Visualizza informazioni sul nodo",
+    "channelManagement": "Gestione del canale"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -376,6 +378,24 @@
     "initNode": "Inizializza Nodo",
     "channelsTitle": "Canali",
     "channelEmptyTitle": "La lista dei canali è vuota",
-    "channelEmptySubTitle": "Inizia ad aggiungere canali per migliorare la tua esperienza Bitcoin!"
+    "channelEmptySubTitle": "Inizia ad aggiungere canali per migliorare la tua esperienza Bitcoin!",
+    "openChannelTitle": "Apri Canale",
+    "peerPubAndAddress": "Pubkey e Indirizzo del Peer",
+    "peerPubAndAddressNote": "Chiave pubblica e indirizzo del peer a cui vuoi connetterti (pubkey@address)",
+    "capacity": "Capacità",
+    "capacityNote": "Importo totale di sats che un canale di pagamento sulla Lightning Network può contenere (in msats).",
+    "pushMsats": "Invia msats",
+    "pushMsatsNote": "Trasferisci i sats iniziali al peer durante l'apertura di un canale. (in msats).",
+    "assetID": "ID Asset",
+    "assetIDNote": "ID Asset RGB",
+    "assetAmount": "Importo dell'Asset",
+    "assetAmountNote": "Importo Asset RGB",
+    "peerDns": "DNS peer",
+    "unlockNode": "Sblocca nodo",
+    "pubKeyCopyMsg": "Chiave Pub copiata con successo",
+    "nodeUrlCopyMsg": "URL del nodo copiato con successo",
+    "onChainPubKeyCopyMsg": "Chiave Pub OnChain copiata con successo",
+    "channelCreatedMsg": "Canale creato con successo",
+    "channelCloseMsg": "Canale chiuso"
   }
 }

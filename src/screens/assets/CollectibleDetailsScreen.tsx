@@ -79,7 +79,7 @@ const CollectibleDetailsScreen = () => {
           }}
           navigation={navigation}
           wallet={wallet}
-          coin={collectible.details}
+          coin={collectible.name}
           assetId={assetId}
         />
       </View>

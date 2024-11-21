@@ -251,6 +251,8 @@ function IssueScreen() {
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
+              keyboardType={'default'}
+              returnKeyType={'Enter'}
               maxLength={100}
               multiline={true}
               numberOfLines={2}

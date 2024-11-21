@@ -218,7 +218,9 @@
     "waitingconfirmations": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",
-    "expired": "有効期限が切れました"
+    "expired": "有効期限が切れました",
+    "viewNodeInfo": "ノード情報を表示",
+    "channelManagement": "チャネル管理"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -376,6 +378,24 @@
     "initNode": "ノードを初期化",
     "channelsTitle": "チャンネル",
     "channelEmptyTitle": "チャンネルリストは空です",
-    "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！"
+    "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！",
+    "openChannelTitle": "チャネルを開く",
+    "peerPubAndAddress": "ピアの公開鍵とアドレス",
+    "peerPubAndAddressNote": "接続したいピアの公開鍵とアドレス (pubkey@address)",
+    "capacity": "容量",
+    "capacityNote": "ライトニングネットワークの支払いチャネルが保持できるサツの総量（msats単位）。",
+    "pushMsats": "ミリサツの送信",
+    "pushMsatsNote": "チャネルを開く際にピアに初期のサツを転送します（msats単位）。",
+    "assetID": "資産ID",
+    "assetIDNote": "RGB資産ID",
+    "assetAmount": "資産額",
+    "assetAmountNote": "RGB資産額",
+    "peerDns": "ピア DNS",
+    "unlockNode": "ノードを解除する",
+    "pubKeyCopyMsg": "公開鍵が正常にコピーされました",
+    "nodeUrlCopyMsg": "ノード URL が正常にコピーされました",
+    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました",
+    "channelCreatedMsg": "チャンネルが正常に作成されました",
+    "channelCloseMsg": "チャンネルが閉じました"
   }
 }

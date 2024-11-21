@@ -348,6 +348,8 @@ export class RLNNodeApiServices {
         bitcoind_rpc_port: 18443,
         indexer_url: 'regtest.thunderstack.org:50001',
         proxy_endpoint: 'rpc://regtest.thunderstack.org:3000/json-rpc',
+        announce_addresses: ['pub.addr.example.com:9735'],
+        announce_alias: 'nodeAlias',
       }),
     });
   }

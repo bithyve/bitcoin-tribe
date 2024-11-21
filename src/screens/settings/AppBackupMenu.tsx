@@ -54,7 +54,7 @@ function AppBackupMenu({ navigation }) {
           : navigation.navigate(NavigationRoutes.APPBACKUP, {
               viewOnly: false,
             }),
-      hideMenu: app.appType === AppType.NODE_CONNECT,
+      hideMenu: app.primaryMnemonic === '',
       backup: backup,
     },
     {

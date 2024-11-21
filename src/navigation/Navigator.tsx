@@ -51,7 +51,6 @@ import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
-import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
@@ -62,6 +61,7 @@ import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
+import RGBWalletStatus from 'src/components/RGBWalletOffline';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -84,10 +84,6 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.ENTERSEEDSCREEN}
         component={EnterSeedScreen}
-      />
-      <Stack.Screen
-        name={NavigationRoutes.ONBOARDINGSCREEN}
-        component={OnBoardingScreen}
       />
       <Stack.Screen
         name={NavigationRoutes.SELECTWALLET}
@@ -282,6 +278,8 @@ function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
     <NavigationContainer>
+      <RGBWalletStatus />
+
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

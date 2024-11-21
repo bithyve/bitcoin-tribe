@@ -61,7 +61,10 @@ function RgbLightningNodeConnect() {
     <ScreenContainer>
       <AppHeader title={onBoarding.nodeDetails} />
       <LightningNodeDetailsContainer
-        onChangeConnectionURLText={text => setConnectionURL(text)}
+        onChangeConnectionURLText={text => {
+          const trimmedText = text.trim();
+          setConnectionURL(trimmedText);
+        }}
         inputConnectionURLValue={connectionURL}
         onChangeNodeIDText={text => setNodeID(text)}
         inputNodeIDValue={nodeID}
@@ -71,7 +74,10 @@ function RgbLightningNodeConnect() {
         inputUsernameValue={username}
         onChangePasswordText={text => setPassword(text)}
         inputPasswordValue={password}
-        onBearerTokenText={text => setBearerToken(text)}
+        onBearerTokenText={text => {
+          const trimmedText = text.trim();
+          setBearerToken(trimmedText);
+        }}
         inputBearerTokenValue={bearerToken}
         onChangeAuthentication={text => setAuthentication(!authentication)}
         authChangeValue={authentication}

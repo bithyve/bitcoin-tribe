@@ -72,8 +72,9 @@ const getStyles = (theme: AppTheme) =>
     },
     ctaWrapper: {
       flexDirection: 'row',
-      marginTop: hp(15),
-      marginRight: hp(10),
+      marginVertical: hp(15),
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default BackupAlert;

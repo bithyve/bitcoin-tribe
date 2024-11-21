@@ -107,21 +107,10 @@ const CoinsMetaDataScreen = () => {
           <ScrollView
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
-            <Item
-              title={assets.name}
-              value={
-                Platform.OS === 'ios'
-                  ? collectible && collectible.name
-                  : collectible && collectible.details
-              }
-            />
+            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={assets.details}
-              value={
-                Platform.OS === 'ios'
-                  ? collectible && collectible.details
-                  : collectible && collectible.name
-              }
+              value={collectible && collectible.details}
             />
             <AssetIDContainer assetId={assetId} />
             <Item
