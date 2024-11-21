@@ -23,7 +23,7 @@ const OpenRgbChannel = () => {
   const { common, node } = translations;
   const [pubkeyAddress, setPubkeyAddress] = useState('');
   const [capacity, setCapacity] = useState('30010');
-  const [pushMsats, setPushMsats] = useState('1394000');
+  const [pushMsats, setPushMsats] = useState('1394');
   const [assetId, setAssetId] = useState('');
   const [assetAmt, setAssetAmt] = useState('');
   const [baseFeeRate, setBaseFeeRate] = useState('1000');
@@ -140,7 +140,7 @@ const OpenRgbChannel = () => {
               openChannelMutation.mutate({
                 peerPubkeyAndOptAddr: pubkeyAddress,
                 capacitySat: Number(capacity),
-                pushMsat: Number(pushMsats),
+                pushMsat: Number(pushMsats) * 1000,
                 assetId: assetId,
                 assetAmount: Number(assetAmt),
                 feeBaseMsat: Number(baseFeeRate),
