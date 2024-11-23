@@ -61,10 +61,7 @@ function ProfileSetup() {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    // navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
-    setTimeout(() => {
-      setVisibleBackAssetAlert(true);
-    }, 400);
+    navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
 
   const initiateWalletCreation = () => {
@@ -109,33 +106,6 @@ function ProfileSetup() {
         disabled={false}
         // secondaryCTATitle={common.skip}
       />
-      <View>
-        <ResponsePopupContainer
-          visible={visibleBackAssetAlert}
-          enableClose={true}
-          backColor={theme.colors.modalBackColor}
-          borderColor={theme.colors.borderColor}
-          width={'100%'}>
-          <BitcoinBackedAssetContainer
-            onPrimaryPress={() => {
-              setVisibleBackAssetAlert(false);
-              Storage.set(Keys.BACKUPALERT, true);
-              setTimeout(() => {
-                navigation.replace(NavigationRoutes.APPSTACK);
-              }, 400);
-            }}
-            onLaterPress={() => {
-              setVisibleBackAssetAlert(false);
-              Storage.set(Keys.BACKUPALERT, true);
-              setTimeout(() => {
-                navigation.replace(NavigationRoutes.APPSTACK, {
-                  screen: NavigationRoutes.RECEIVESCREEN,
-                });
-              }, 400);
-            }}
-          />
-        </ResponsePopupContainer>
-      </View>
     </ScreenContainer>
   );
 }

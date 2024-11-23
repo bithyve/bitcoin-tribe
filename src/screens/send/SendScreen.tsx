@@ -59,7 +59,11 @@ function SendScreen({ route, navigation }) {
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
         break;
       default:
-        Toast(sendScreen.invalidBtcAddress, true);
+        if (value.startsWith('rgb:')) {
+          Toast(sendScreen.invalidRGBInvoiceAddress, true);
+        } else {
+          Toast(sendScreen.invalidBtcAddress, true);
+        } 
     }
   }, []);
 
