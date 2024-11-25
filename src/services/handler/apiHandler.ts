@@ -104,15 +104,28 @@ export class ApiHandler {
     rgbNodeConnectParams?: RgbNodeConnectParams;
     rgbNodeInfo?: NodeInfo;
   }) {
+    Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
-    const AES_KEY = generateEncryptionKey();
     const hash = hash512(
       pinMethod !== PinMethod.DEFAULT
         ? passcode
         : config.ENC_KEY_STORAGE_IDENTIFIER,
     );
-    const encryptedKey = encrypt(hash, AES_KEY);
-    SecureStore.store(hash, encryptedKey);
+    // Check if the encrypted key already exists
+    let AES_KEY: string;
+    const existingEncryptedKey = await SecureStore.fetch(hash);
+    if (!existingEncryptedKey) {
+      // Generate a new AES key
+      AES_KEY = generateEncryptionKey();
+      // Encrypt the key using the hash
+      const encryptedKey = encrypt(hash, AES_KEY);
+      // Store the encrypted key securely
+      await SecureStore.store(hash, encryptedKey);
+    } else {
+      console.log('Encryption key already exists. Skipping encryption step.');
+      // Decrypt the existing key to get AES_KEY
+      AES_KEY = decrypt(hash, existingEncryptedKey);
+    }
     const uint8array = stringToArrayBuffer(AES_KEY);
 
     const isRealmInit = await dbManager.initializeRealm(uint8array);
@@ -253,11 +266,14 @@ export class ApiHandler {
             });
           }
         }
+        Storage.set(Keys.SETUPAPP, false);
       } catch (error) {
+        Storage.set(Keys.SETUPAPP, false);
         console.log(error);
-        throw new Error(error);
+        throw error;
       }
     } else {
+      Storage.set(Keys.SETUPAPP, false);
       throw new Error('Realm initialisation failed');
     }
   }
@@ -654,7 +670,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log({ error });
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -682,7 +698,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -707,7 +723,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -722,7 +738,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -736,7 +752,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -750,7 +766,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('payments', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -845,7 +861,7 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -880,7 +896,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -910,7 +926,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('sendAsset', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -936,7 +952,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -949,7 +965,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('Update Profile', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -964,7 +980,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('check Version', error);
-      throw new Error(error);
+      throw error;
     }
   }
   static async viewUtxos() {
@@ -993,7 +1009,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('utxos', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1018,7 +1034,7 @@ export class ApiHandler {
         console.log(restore);
       }
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1076,7 +1092,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1093,7 +1109,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('backup', error);
-      throw new Error(error);
+      throw error;
     }
   }
   static async getFeeAndExchangeRates() {
@@ -1121,7 +1137,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1270,7 +1286,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1289,14 +1305,11 @@ export class ApiHandler {
       });
       if (response.error) {
         throw new Error(response.error);
-      } else if (response) {
-        return response;
-      } else {
-        throw new Error('Failed to create node');
       }
+      return response;
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1310,7 +1323,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1324,7 +1337,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1340,7 +1353,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1357,7 +1370,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1376,7 +1389,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1405,7 +1418,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 }
