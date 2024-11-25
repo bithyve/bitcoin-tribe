@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -19,7 +20,7 @@ import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
-import LottieView from 'lottie-react-native';
+
 
 function TransactionsList({
   transactions,
