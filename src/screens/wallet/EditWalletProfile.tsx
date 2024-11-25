@@ -36,18 +36,19 @@ function EditWalletProfile({ navigation }) {
     if (updated) {
       setLoading('');
       Toast(wallet.profileUpdateMsg);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            { name: NavigationRoutes.HOME },
-            {
-              name: NavigationRoutes.WALLETDETAILS,
-              params: { autoRefresh: true },
-            },
-          ],
-        }),
-      );
+      navigation.goBack()
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [
+      //       { name: NavigationRoutes.HOME },
+      //       {
+      //         name: NavigationRoutes.WALLETDETAILS,
+      //         params: { autoRefresh: true },
+      //       },
+      //     ],
+      //   }),
+      // );
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, true);
