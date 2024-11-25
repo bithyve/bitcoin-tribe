@@ -28,6 +28,7 @@ export const store = async (hash: string, enc_key: string) => {
 export const fetch = async (hash_current: string) => {
   try {
     const credentials = await Keychain.getGenericPassword();
+    console.log('credentials', credentials)
     if (credentials) {
       const password = JSON.parse(credentials.password);
       if (hash_current === '') {
@@ -39,7 +40,8 @@ export const fetch = async (hash_current: string) => {
         return password.enc_key;
       }
     } else {
-      throw new Error('Password not found');
+      return false
+      // throw new Error('Password not found');
     }
   } catch (err) {
     console.log(err);
