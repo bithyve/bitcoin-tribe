@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
     "enterSendAddress": "Inserisci indirizzo di invio",
     "enterSendAdrsSubTitle": "Inserisci indirizzo di invio o incolla",
+    "enterSendAddressInvoice": "Inserisci l'indirizzo di invio o la fattura RGB",
+    "enterSendAdrsInvoiceSubTitle": "Inserisci o incolla l'indirizzo di invio o la fattura RGB",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
     "enterAmount": "Inserisci importo",

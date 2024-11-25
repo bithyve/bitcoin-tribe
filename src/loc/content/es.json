@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "Ingrese una dirección de Bitcoin",
     "enterSendAddress": "Introduce la dirección de envío",
     "enterSendAdrsSubTitle": "Ingrese la dirección de envío o pegue",
+    "enterSendAddressInvoice": "Enter Send Addres/Invoice",
+    "enterSendAdrsInvoiceSubTitle": "Enter Send Address/Invoice or Paste",
     "enterAddress": "Introduce la dirección",
     "sendToTitle": "Enviar a",
     "enterAmount": "Introduce la cantidad",

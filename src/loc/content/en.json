@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "Enter a Bitcoin Address",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Enter Send Address or Paste",
+    "enterSendAddressInvoice": "Enter Send Address or RGB Invoice",
+    "enterSendAdrsInvoiceSubTitle": "Enter or Paste Send Address or RGB Invoice",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
     "enterAmount": "Enter Amount",
