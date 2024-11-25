@@ -49,6 +49,7 @@ export type AppStackParams = {
   [NavigationRoutes.LOGIN]: undefined;
   [NavigationRoutes.SELECTASSETTOSEND]: undefined;
   [NavigationRoutes.ONBOARDINGSCREEN]: undefined;
+  [NavigationRoutes.BACKUPONBOARDINGSCREEN]: undefined;
   [NavigationRoutes.SELECTWALLET]: undefined;
   [NavigationRoutes.LIGHTNINGNODEDETAILS]: undefined;
   [NavigationRoutes.LIGHTNINGRECEIVE]: undefined;

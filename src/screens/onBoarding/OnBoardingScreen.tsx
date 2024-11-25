@@ -1,17 +1,16 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import BtcBackedAsset from 'src/assets/images/BtcBackedAsset.svg';
 import AppText from 'src/components/AppText';
-import { Keys, Storage } from 'src/storage';
 
 function OnBoardingScreen() {
   const navigation = useNavigation();
@@ -40,17 +39,9 @@ function OnBoardingScreen() {
       </View>
       <View style={styles.ctaWrapper}>
         <Buttons
-          primaryTitle={common.addFunds}
+          primaryTitle={common.next}
           primaryOnPress={() => {
-            Storage.set(Keys.BACKUPALERT, true);
-            navigation.replace(NavigationRoutes.APPSTACK, {
-              screen: NavigationRoutes.RECEIVESCREEN,
-            });
-          }}
-          secondaryTitle={common.addLater}
-          secondaryOnPress={() => {
-            Storage.set(Keys.BACKUPALERT, true);
-            navigation.replace(NavigationRoutes.APPSTACK);
+            navigation.navigate(NavigationRoutes.BACKUPONBOARDINGSCREEN)
           }}
           disabled={false}
           width={wp(130)}

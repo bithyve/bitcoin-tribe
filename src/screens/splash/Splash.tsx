@@ -41,17 +41,23 @@ function Splash({ navigation }) {
 
   const onInit = useCallback(async () => {
     try {
+      const setupAppStatus = await Storage.get(Keys.SETUPAPP);
       const appId = await Storage.get(Keys.APPID);
-      if (appId && pinMethod !== PinMethod.DEFAULT) {
-        navigation.replace(NavigationRoutes.LOGIN);
+      if (
+        setupAppStatus ||
+        setupAppStatus === undefined ||
+        pinMethod === undefined
+      ) {
+        return navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
-      if (pinMethod === undefined) {
-        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+
+      if (appId && pinMethod !== PinMethod.DEFAULT) {
+        return navigation.replace(NavigationRoutes.LOGIN);
       }
     } catch (error) {
       console.error('Error initializing app: ', error);
     }
-  }, [mutate, navigation, pinMethod]);
+  }, [navigation, pinMethod, mutate]);
 
   // Handle login success
   useEffect(() => {

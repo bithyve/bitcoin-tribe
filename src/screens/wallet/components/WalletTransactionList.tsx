@@ -11,6 +11,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
+import LottieView from 'lottie-react-native';
 
 import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -28,7 +29,6 @@ import { Keys } from 'src/storage';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import LottieView from 'lottie-react-native';
 
 function WalletTransactionList({
   transactions,

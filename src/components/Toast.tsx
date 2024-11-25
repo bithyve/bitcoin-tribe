@@ -8,7 +8,7 @@ import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 import LottieView from 'lottie-react-native';
 
-// Need to work
+
 export default (message, error = false) => {
   return Toast.show(
     <View style={styles.container}>

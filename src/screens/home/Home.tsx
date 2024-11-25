@@ -28,10 +28,8 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Keys, Storage } from 'src/storage';
+import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import BackupAlert from './components/BackupAlert';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
@@ -44,7 +42,6 @@ function HomeScreen() {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [BackupAlertStatus] = useMMKVBoolean(Keys.BACKUPALERT);
-  const intialBackupAlertStatus = BackupAlertStatus || false;
   const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const initialCurrency = currency || 'USD';
@@ -67,10 +64,6 @@ function HomeScreen() {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combiled.sort((a, b) => b.timestamp - a.timestamp);
   }, [coins, collectibles]);
-
-  const [visibleBackupAlert, setVisibleBackupAlert] = useState(
-    intialBackupAlertStatus && app.appType === AppType.ON_CHAIN,
-  );
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
@@ -179,26 +172,7 @@ function HomeScreen() {
           }
         }}
       />
-      <ResponsePopupContainer
-        visible={visibleBackupAlert}
-        enableClose={true}
-        onDismiss={() => setVisibleBackupAlert(false)}
-        backColor={theme.colors.primaryBackground}
-        borderColor={theme.colors.borderColor}>
-        <BackupAlert
-          onPrimaryPress={() => {
-            setVisibleBackupAlert(false);
-            Storage.set(Keys.BACKUPALERT, false);
-            setTimeout(() => {
-              navigation.navigate(NavigationRoutes.APPBACKUPMENU);
-            }, 400);
-          }}
-          onSkipPress={() => {
-            setVisibleBackupAlert(false);
-            Storage.set(Keys.BACKUPALERT, false);
-          }}
-        />
-      </ResponsePopupContainer>
+      
     </ScreenContainer>
   );
 }

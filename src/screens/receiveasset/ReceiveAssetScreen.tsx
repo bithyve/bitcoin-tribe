@@ -44,10 +44,23 @@ function ReceiveAssetScreen() {
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const [activeTab, setActiveTab] = useState('bitcoin');
+  const [activeTab, setActiveTab] = useState((app.appType !== AppType.ON_CHAIN && assetId !== '') ? 'lightning' : 'bitcoin');
   const [lightningInvoice, setLightningInvoice] = useState('');
+  const [rgbInvoice, setRgbInvoice] = useState('')
+
   useEffect(() => {
-    mutate(assetId, amount);
+    if(app.appType !== AppType.ON_CHAIN) {
+      if(assetId === '') {
+        mutate(assetId, amount);
+      } else {
+        generateLNInvoiceMutation.mutate({
+          amount: Number(amount),
+          assetId,
+        });
+      }
+    } else {
+      mutate(assetId, amount);
+    }
   }, []);
 
   useEffect(() => {
@@ -99,11 +112,15 @@ function ReceiveAssetScreen() {
       }
     } else {
       setActiveTab(tab);
+      if(rgbInvoice === '') {
+        mutate(assetId, amount);
+      }
     }
   };
 
   const qrValue = useMemo(() => {
     if (activeTab === 'bitcoin') {
+      setRgbInvoice(rgbWallet?.receiveData?.invoice)
       return rgbWallet?.receiveData?.invoice;
     } else {
       return lightningInvoice;
@@ -142,7 +159,7 @@ function ReceiveAssetScreen() {
         <View />
       ) : (
         <View>
-          {app.appType !== AppType.ON_CHAIN && (
+          {(app.appType !== AppType.ON_CHAIN && assetId !== '') && (
             <View style={styles.footerView}>
               <WalletFooter activeTab={activeTab} setActiveTab={onTabChange} />
             </View>

@@ -35,6 +35,20 @@ function WalletFooter(props: walletFooterProps) {
         theme.colors.cardGradient3,
       ]}>
       <AppTouchable
+        style={styles.lightningCtaWrapper}
+        onPress={() => setActiveTab('lightning')}>
+        {activeTab === 'lightning' ? (
+          <LightningActivCTAIcon />
+        ) : (
+          <LightningInActivCTAIcon />
+        )}
+
+        <AppText variant="body1" style={styles.lightningTitleText}>
+          &nbsp;{walletTranslations.lightning}
+        </AppText>
+      </AppTouchable>
+
+      <AppTouchable
         style={styles.btcCtaWrapper}
         onPress={() => setActiveTab('bitcoin')}>
         {activeTab === 'bitcoin' ? (
@@ -48,19 +62,7 @@ function WalletFooter(props: walletFooterProps) {
         </AppText>
       </AppTouchable>
 
-      <AppTouchable
-        style={styles.lightningCtaWrapper}
-        onPress={() => setActiveTab('lightning')}>
-        {activeTab === 'lightning' ? (
-          <LightningActivCTAIcon />
-        ) : (
-          <LightningInActivCTAIcon />
-        )}
 
-        <AppText variant="body1" style={styles.lightningTitleText}>
-          &nbsp;{walletTranslations.lightning}
-        </AppText>
-      </AppTouchable>
     </GradientView>
   );
 }

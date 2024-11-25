@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
@@ -93,9 +93,18 @@ function SendToContainer({
     setVisible(false);
     sendTransactionMutation.reset();
     setTimeout(() => {
-      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-        autoRefresh: true,
-      });
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: NavigationRoutes.HOME },
+            {
+              name: NavigationRoutes.WALLETDETAILS,
+              params: { autoRefresh: true },
+            },
+          ],
+        }),
+      );
     }, 400);
   };
 
