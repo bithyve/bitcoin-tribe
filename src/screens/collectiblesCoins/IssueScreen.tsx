@@ -124,6 +124,7 @@ function IssueScreen() {
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
+    try {
     const response = await ApiHandler.issueNewCollectible({
       name: assetName.trim(),
       description: description,
@@ -147,6 +148,10 @@ function IssueScreen() {
       setLoading(false);
       Toast(`Failed: ${response?.error}`, true);
     }
+  } catch (error) {
+    setLoading(false);
+    Toast(`Unexpected error: ${error.message}`, true);
+  }
   }, [
     assetName,
     assets.assetCreateMsg,
