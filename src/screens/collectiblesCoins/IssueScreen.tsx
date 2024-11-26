@@ -186,6 +186,14 @@ function IssueScreen() {
     }
   };
 
+  const handleTabChange = () => {
+    setDescription('');
+    setAssetTicker('');
+    setAssetName('')
+    setTotalSupplyAmt('')
+    setImage('')
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
@@ -193,10 +201,11 @@ function IssueScreen() {
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
-          if (value === AssetType.Coin) {
-            setDescription('');
-          }
-          setAssetType(value);
+          if (value !== assetType) {
+            // Switching to a different tab, reset all states
+            handleTabChange();
+            setAssetType(value);
+          } else {}
         }}
         buttons={[
           {
