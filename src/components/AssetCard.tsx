@@ -11,6 +11,7 @@ import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'react-native-identicon';
 import AssetChip from './AssetChip';
+import { AssetFace } from 'src/models/interfaces/RGBWallet';
 
 type AssetCardProps = {
   image?: string;
@@ -21,15 +22,17 @@ type AssetCardProps = {
   assetId?: string;
   amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
+  assetIface?: AssetFace
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
+  const { image, name, ticker, tag, onPress, assetId, amount, details, assetIface } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, amount.toString().length),
     [theme, amount],
   );
+
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -40,7 +43,7 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient3,
         ]}>
         <View style={styles.assetImageWrapper}>
-          {image ? (
+          {assetIface === AssetFace.RGB25 ? (
             <Image
               source={{
                 uri: image,
