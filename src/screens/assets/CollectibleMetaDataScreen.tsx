@@ -25,6 +25,7 @@ import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -59,6 +60,7 @@ const CoinsMetaDataScreen = () => {
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const { appType } = useContext(AppContext);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -93,12 +95,14 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.imageWrapper}>
             <Image
               source={{
-                uri: Platform.select({
-                  android: `file://${collectible.media?.filePath}`,
-                  ios: `${collectible.media?.filePath}.${
-                    collectible.media?.mime.split('/')[1]
-                  }`,
-                }),
+                uri: appType === AppType.ON_CHAIN
+                ? Platform.select({
+                    android: `file://${collectible.media?.filePath}`,
+                    ios: `${collectible.media?.filePath}.${
+                      collectible.media?.mime.split('/')[1]
+                    }`,
+                  })
+                : collectible.media?.base64Image,
               }}
               resizeMode="contain"
               style={styles.imageStyle}
