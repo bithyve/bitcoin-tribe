@@ -57,6 +57,7 @@ import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
+import { hexToBase64 } from 'src/utils/hexToBase64';
 
 var RNFS = require('react-native-fs');
 
@@ -772,7 +773,7 @@ export class ApiHandler {
 
   static async refreshRgbWallet() {
     try {
-      const assets = await RGBServices.syncRgbAssets(
+      let assets = await RGBServices.syncRgbAssets(
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -784,6 +785,17 @@ export class ApiHandler {
         );
       }
       if (assets.cfa) {
+        if(ApiHandler.appType === AppType.NODE_CONNECT) {
+          for (let i = 0; i < assets.cfa.length; i++) {
+            const dbRecord = dbManager.getObjectByPrimaryId(RealmSchema.Collectible,'assetId', assets.cfa[i].assetId).toJSON();
+            if(!dbRecord || !dbRecord.media?.base64Image) {
+              const collectible: Collectible = assets.cfa[i];
+              console.log('getting image', assets.cfa[i].assetId)
+              const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
+              assets.cfa[i].media.base64Image = hexToBase64(mediaByte.bytes_hex, collectible.media.mime)
+            }
+          }
+        }
         dbManager.createObjectBulk(
           RealmSchema.Collectible,
           assets.cfa,
