@@ -216,7 +216,7 @@ export default class RGBServices {
         });
         if (response) {
           const data = snakeCaseToCamelCaseCase(response);
-          return data.asset;
+          return data.asset ? data.asset : data;
         } else {
           return response;
         }

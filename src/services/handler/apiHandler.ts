@@ -787,10 +787,9 @@ export class ApiHandler {
       if (assets.cfa) {
         if(ApiHandler.appType === AppType.NODE_CONNECT) {
           for (let i = 0; i < assets.cfa.length; i++) {
-            const dbRecord = dbManager.getObjectByPrimaryId(RealmSchema.Collectible,'assetId', assets.cfa[i].assetId).toJSON();
+            const dbRecord = dbManager.getObjectByPrimaryId(RealmSchema.Collectible,'assetId', assets.cfa[i].assetId)?.toJSON();
             if(!dbRecord || !dbRecord.media?.base64Image) {
               const collectible: Collectible = assets.cfa[i];
-              console.log('getting image', assets.cfa[i].assetId)
               const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
               assets.cfa[i].media.base64Image = hexToBase64(mediaByte.bytes_hex, collectible.media.mime)
             }
