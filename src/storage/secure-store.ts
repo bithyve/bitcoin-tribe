@@ -1,11 +1,6 @@
 import * as Keychain from 'react-native-keychain';
 import NodeRSA from 'node-rsa';
 import config from 'src/utils/config';
-import {
-  generateEncryptionKey,
-  stringToArrayBuffer,
-} from 'src/utils/encryption';
-import dbManager from './realm/dbManager';
 
 export const store = async (hash: string, enc_key: string) => {
   try {
@@ -28,7 +23,6 @@ export const store = async (hash: string, enc_key: string) => {
 export const fetch = async (hash_current: string) => {
   try {
     const credentials = await Keychain.getGenericPassword();
-    console.log('credentials', credentials)
     if (credentials) {
       const password = JSON.parse(credentials.password);
       if (hash_current === '') {
