@@ -81,7 +81,7 @@ function ProfileSetup() {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={isLoading} />
+      <ModalLoading visible={isLoading || setupNewAppMutation.status === 'loading'} />
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}
