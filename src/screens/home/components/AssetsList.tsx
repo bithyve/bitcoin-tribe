@@ -103,7 +103,7 @@ function AssetsList(props: AssetsListProps) {
                     android: `file://${item.media?.filePath}`,
                     ios: `${item.media?.filePath}.${item.media?.mime.split('/')[1]}`,
                     }
-                  ) : item.media?.base64Image}
+                  ) : item.media?.filePath}
                   details={item.details}
                   amount={item.balance.spendable + item.balance.offchainOutbound}
                   tag={isCoin ? 'COIN' : 'COLLECTIBLE'}

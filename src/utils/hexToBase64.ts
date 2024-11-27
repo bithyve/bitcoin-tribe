@@ -12,5 +12,5 @@ export const hexToBase64 = (hexString: string, mime: string): string => {
     }
     const byteArray = Uint8Array.from(binary);
     const base64String = Buffer.from(byteArray).toString('base64');
-    return `data:${mime};base64,${base64String}`;
+    return base64String;
 };

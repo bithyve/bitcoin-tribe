@@ -59,7 +59,7 @@ import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 
-var RNFS = require('react-native-fs');
+import * as RNFS from '@dr.pogodin/react-native-fs';
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -787,11 +787,13 @@ export class ApiHandler {
       if (assets.cfa) {
         if(ApiHandler.appType === AppType.NODE_CONNECT) {
           for (let i = 0; i < assets.cfa.length; i++) {
-            const dbRecord = dbManager.getObjectByPrimaryId(RealmSchema.Collectible,'assetId', assets.cfa[i].assetId)?.toJSON();
-            if(!dbRecord || !dbRecord.media?.base64Image) {
-              const collectible: Collectible = assets.cfa[i];
+            const collectible: Collectible = assets.cfa[i];
+            const ext = collectible.media.mime.split('/')[1];
+            const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
+            if(!await RNFS.exists(path)) {
               const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
-              assets.cfa[i].media.base64Image = hexToBase64(mediaByte.bytes_hex, collectible.media.mime)
+              await RNFS.writeFile(path, hexToBase64(mediaByte.bytes_hex, collectible.media.mime), 'base64');
+              assets.cfa[i].media.filePath = path;
             }
           }
         }
