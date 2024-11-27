@@ -24,7 +24,6 @@ import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
-import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -70,7 +69,6 @@ const CoinsMetaDataScreen = () => {
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
-  const { appType } = useContext(AppContext);
 
   useEffect(() => {
     if (!collectible.metaData) {
