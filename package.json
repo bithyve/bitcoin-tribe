@@ -20,6 +20,7 @@
     "releaseAndroidProd": "cd android && ENVFILE=.env.production bundle exec fastlane live --env production"
   },
   "dependencies": {
+    "@dr.pogodin/react-native-fs": "2.26.0",
     "@noble/secp256k1": "1.6.3",
     "@react-native-camera-roll/camera-roll": "^7.8.3",
     "@react-native-clipboard/clipboard": "^1.14.1",
@@ -60,7 +61,6 @@
     "react-native-config": "^1.5.2",
     "react-native-crypto": "^2.1.0",
     "react-native-device-info": "10.0.2",
-    "react-native-fs": "2.20.0",
     "react-native-identicon": "^1.0.14",
     "react-native-image-picker": "^7.1.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
@@ -82,7 +82,7 @@
     "react-native-svg-transformer": "^1.4.0",
     "react-native-tcp-socket": "5.6.2",
     "react-native-url-polyfill": "^2.0.0",
-    "react-native-vision-camera": "^4.3.2",
+    "react-native-vision-camera": "4.3.2",
     "react-native-webview": "^13.10.5",
     "react-query": "^3.39.3",
     "readable-stream": "1.0.33",
