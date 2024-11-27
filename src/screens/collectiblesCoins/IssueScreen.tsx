@@ -133,7 +133,7 @@ function IssueScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         filePath: Platform.select({
-          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}`: image.replace('file://', ''),
+          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}` : image.replace('file://', ''),
           ios: image.replace('file://', ''),
         }),
       });
@@ -195,9 +195,9 @@ function IssueScreen() {
   const handleTabChange = () => {
     setDescription('');
     setAssetTicker('');
-    setAssetName('')
-    setTotalSupplyAmt('')
-    setImage('')
+    setAssetName('');
+    setTotalSupplyAmt('');
+    setImage('');
   };
 
   return (
@@ -211,7 +211,8 @@ function IssueScreen() {
             // Switching to a different tab, reset all states
             handleTabChange();
             setAssetType(value);
-          } else {}
+          } else {
+          }
         }}
         buttons={[
           {
