@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
-import NodeConnectingIllustration from 'src/assets/images/nodeConnecting.svg';
 import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type UseRGBAssetProps = {
   title: string;
@@ -18,6 +18,8 @@ type UseRGBAssetProps = {
 function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
   const { title, subTitle } = props;
   const theme: AppTheme = useTheme();
+  const { translations } = useContext(LocalizationContext);
+  const { node } = translations;
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
@@ -38,6 +40,19 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
           loop
         />
       </View>
+     <View style={styles.loaderWrapper}>
+        <View style={styles.loaderContentWrapper}>
+          <AppText variant='body2' style={styles.loaderMsgText}>{node.takeTimeMsg}</AppText>
+        </View>
+        <View style={styles.dotLoaderWrapper}>
+           <LottieView
+           source={require('src/assets/images/DotsLoader.json')}
+            style={styles.dotLoaderStyle}
+            autoPlay
+            loop
+           />
+        </View>
+      </View> 
     </View>
   );
 }
@@ -62,14 +77,35 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     illustrationWrapper: {
-      marginVertical: hp(20),
+      marginVertical: hp(5),
       alignItems: 'center',
       justifyContent: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(350),
-      height: hp(350),
+      width: hp(300),
+      height: hp(300),
     },
+    loaderWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
+      marginVertical: hp(10),
+      alignItems: 'center'
+    },
+    dotLoaderStyle: {
+      alignSelf: 'center',
+      width: hp(150),
+      height: hp(120),
+    },
+    loaderMsgText:{
+      color: theme.colors.headingColor
+    },
+    loaderContentWrapper:{
+      width: '55%'
+    },
+    dotLoaderWrapper:{
+      width: '45%',
+    }
   });
 export default NodeConnectingPopupContainer;

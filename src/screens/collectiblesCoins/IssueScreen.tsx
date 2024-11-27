@@ -124,28 +124,36 @@ function IssueScreen() {
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
-    const response = await ApiHandler.issueNewCollectible({
-      name: assetName.trim(),
-      description: description,
-      supply: totalSupplyAmt.replace(/,/g, ''),
-      filePath: image.replace('file://', ''),
-    });
-    if (response?.assetId) {
+    try {
+      const response = await ApiHandler.issueNewCollectible({
+        name: assetName.trim(),
+        description: description,
+        supply: totalSupplyAmt.replace(/,/g, ''),
+        filePath: Platform.select({
+          android: image.startsWith('file://') ? image : `file://${path}`,
+          ios: image.replace('file://', ''),
+        }),
+      });
+      if (response?.assetId) {
+        setLoading(false);
+        Toast(assets.assetCreateMsg);
+        viewUtxos.mutate();
+        navigation.dispatch(popAction);
+      } else if (
+        response?.error === 'Insufficient sats for RGB' ||
+        response?.name === 'NoAvailableUtxos'
+      ) {
+        setLoading(false);
+        setTimeout(() => {
+          createUtxos.mutate();
+        }, 500);
+      } else if (response?.error) {
+        setLoading(false);
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
       setLoading(false);
-      Toast(assets.assetCreateMsg);
-      viewUtxos.mutate();
-      navigation.dispatch(popAction);
-    } else if (
-      response?.error === 'Insufficient sats for RGB' ||
-      response?.name === 'NoAvailableUtxos'
-    ) {
-      setLoading(false);
-      setTimeout(() => {
-        createUtxos.mutate();
-      }, 500);
-    } else if (response?.error) {
-      setLoading(false);
-      Toast(`Failed: ${response?.error}`, true);
+      Toast(`Unexpected error: ${error.message}`, true);
     }
   }, [
     assetName,
@@ -181,6 +189,14 @@ function IssueScreen() {
     }
   };
 
+  const handleTabChange = () => {
+    setDescription('');
+    setAssetTicker('');
+    setAssetName('')
+    setTotalSupplyAmt('')
+    setImage('')
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
@@ -188,10 +204,11 @@ function IssueScreen() {
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
-          if (value === AssetType.Coin) {
-            setDescription('');
-          }
-          setAssetType(value);
+          if (value !== assetType) {
+            // Switching to a different tab, reset all states
+            handleTabChange();
+            setAssetType(value);
+          } else {}
         }}
         buttons={[
           {

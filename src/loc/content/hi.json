@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "बिटकॉइन पता दर्ज करें",
     "enterSendAddress": "सेंड पता दर्ज करें",
     "enterSendAdrsSubTitle": "सेंड पता दर्ज करें या पेस्ट करें",
+    "enterSendAddressInvoice": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें",
+    "enterSendAdrsInvoiceSubTitle": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें या पेस्ट करें",
     "enterAddress": "पता दर्ज करें",
     "sendToTitle": "भेजें",
     "enterAmount": "राशि दर्ज करें",
@@ -396,6 +398,7 @@
     "nodeUrlCopyMsg": "नोड URL सफलतापूर्वक कॉपी किया गया",
     "onChainPubKeyCopyMsg": "ऑनचेन पब की सफलतापूर्वक कॉपी किया गया",
     "channelCreatedMsg": "चैनल सफलतापूर्वक बनाया गया",
-    "channelCloseMsg": "चैनल बंद कर दिया गया"
+    "channelCloseMsg": "चैनल बंद कर दिया गया",
+    "takeTimeMsg": "इस चरण में कुछ सेकंड लगेंगे।"
   }
 }

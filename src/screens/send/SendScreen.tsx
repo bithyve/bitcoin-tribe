@@ -83,8 +83,8 @@ function SendScreen({ route, navigation }) {
         }}
       />
       <ModalContainer
-        title={sendScreen.enterSendAddress}
-        subTitle={sendScreen.enterSendAdrsSubTitle}
+        title={sendScreen.enterSendAddressInvoice}
+        subTitle={sendScreen.enterSendAdrsInvoiceSubTitle}
         visible={visible}
         enableCloseIcon={false}
         height={Platform.OS == 'ios' && '85%'}
