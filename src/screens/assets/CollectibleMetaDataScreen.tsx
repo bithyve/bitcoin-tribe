@@ -18,7 +18,7 @@ import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
-import copyImageToDestination from 'src/utils/downloadImage';
+import {copyImageToPhotoLibrary} from 'src/utils/downloadImage';
 import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
 import GradientView from 'src/components/GradientView';
@@ -77,12 +77,9 @@ const CoinsMetaDataScreen = () => {
         onSettingsPress={() => {
           const filePath = Platform.select({
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
-            ios: `${collectible.media?.filePath}.${
-              collectible.media?.mime.split('/')[1]
-            }`, // Add file extension
+            ios: `${collectible.media?.filePath}`, // Add file extension
           });
-
-          copyImageToDestination(filePath)
+          copyImageToPhotoLibrary(filePath)
             .then(path => Toast(assets.saveAssetSuccess))
             .catch(err => Toast(assets.saveAssetFailed, true));
         }}

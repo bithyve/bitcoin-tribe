@@ -1,17 +1,14 @@
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import * as RNFS from '@dr.pogodin/react-native-fs';
 import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
 
 const openSettings = () => {
   Linking.openSettings();
 };
 
-// Request permission to access the photo library (for iOS)
 async function requestPhotoLibraryPermission() {
   if (Platform.OS === 'ios') {
-    // iOS doesn't need runtime permissions for CameraRoll, but we still check
     return true;
   } else {
-    // Android requires explicit permission to access the photo library
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -28,10 +25,9 @@ async function requestPhotoLibraryPermission() {
   }
 }
 
-const copyImageToPhotoLibrary = async imagePath => {
+export const copyImageToPhotoLibrary = async imagePath => {
   const hasPermission = await requestPhotoLibraryPermission();
   if (!hasPermission) {
-    console.log('Permission denied');
     Alert.alert(
       'Permission Denied',
       'You have denied the permission of your storage to save photos. Please enable it from the settings.',
@@ -42,15 +38,20 @@ const copyImageToPhotoLibrary = async imagePath => {
     );
     return;
   }
-
   try {
-    // Save image to the photo library
-    const result = await CameraRoll.save(imagePath, { type: 'photo' });
-    return result;
+    const originalFileName = imagePath.split('/').pop();
+    let targetPath;
+    if (Platform.OS === 'android') {
+      targetPath = `${RNFS.DownloadDirectoryPath}/${originalFileName}`;
+      await RNFS.copyFile(imagePath, targetPath);
+      await RNFS.scanFile(targetPath);
+    } else if (Platform.OS === 'ios') {
+      targetPath = `${RNFS.LibraryDirectoryPath}/${originalFileName}`;
+      await RNFS.copyFile(imagePath, targetPath);
+    }
+    return targetPath;
   } catch (error) {
-    console.error('Error saving image to photo library:', error);
-    return error;
+    return null;
   }
 };
 
-export default copyImageToPhotoLibrary;
