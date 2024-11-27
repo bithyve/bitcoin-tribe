@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import BtcBackedAsset from 'src/assets/images/BtcBackedAsset.svg';
@@ -119,9 +119,9 @@ function OnboardingSlides() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     skipWrapperView: {
-      height: '5%',
+      height: '6%',
       width: '100%',
-      justifyContent: 'center',
+      justifyContent: 'flex-end',
       alignItems: 'flex-end',
       paddingHorizontal: wp(4),
     },
@@ -145,6 +145,7 @@ const getStyles = (theme: AppTheme) =>
     skipText: {
       letterSpacing: 0.42,
       textAlign: 'center',
+      color: theme.colors.accent1
     },
     selectedDot: {
       width: 25,
