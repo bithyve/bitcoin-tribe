@@ -38,8 +38,11 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import AppType from 'src/models/enums/AppType';
+import { AppContext } from 'src/contexts/AppContext';
 
 function IssueScreen() {
+  const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -130,7 +133,7 @@ function IssueScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         filePath: Platform.select({
-          android: image.startsWith('file://') ? image : `file://${path}`,
+          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}` : image.replace('file://', ''),
           ios: image.replace('file://', ''),
         }),
       });
