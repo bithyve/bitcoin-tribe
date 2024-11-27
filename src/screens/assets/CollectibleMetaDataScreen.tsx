@@ -4,6 +4,8 @@ import { useRoute } from '@react-navigation/native';
 import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Share from 'react-native-share';
+import mime from 'mime';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
@@ -18,8 +20,6 @@ import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
-import {copyImageToPhotoLibrary} from 'src/utils/downloadImage';
-import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
 import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -48,6 +48,20 @@ export const Item = ({ title, value }) => {
       </GradientView>
     </View>
   );
+};
+
+const onShare = async (filePath) => {
+  try {
+    const detectedMimeType = mime.getType(filePath) || 'image/jpeg';
+    const options = {
+      url: filePath,
+      type: detectedMimeType,
+     
+    };
+    await Share.open(options);
+  } catch (error) {
+    console.log('Error sharing file:', error);
+  }
 };
 
 const CoinsMetaDataScreen = () => {
@@ -79,9 +93,7 @@ const CoinsMetaDataScreen = () => {
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
             ios: `${collectible.media?.filePath}`, // Add file extension
           });
-          copyImageToPhotoLibrary(filePath)
-            .then(path => Toast(assets.saveAssetSuccess))
-            .catch(err => Toast(assets.saveAssetFailed, true));
+          onShare(filePath)
         }}
         style={styles.headerWrapper}
       />
