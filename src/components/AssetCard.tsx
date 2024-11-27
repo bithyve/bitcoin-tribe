@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image, GestureResponderEvent } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp } from 'src/constants/responsive';
+import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -11,6 +11,7 @@ import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'react-native-identicon';
 import AssetChip from './AssetChip';
+import { AssetFace } from 'src/models/interfaces/RGBWallet';
 
 type AssetCardProps = {
   image?: string;
@@ -21,15 +22,17 @@ type AssetCardProps = {
   assetId?: string;
   amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
+  assetIface?: AssetFace
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, ticker, tag, onPress, assetId, amount, details } = props;
+  const { image, name, ticker, tag, onPress, assetId, amount, details, assetIface } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, amount.toString().length),
     [theme, amount],
   );
+
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -40,7 +43,7 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient3,
         ]}>
         <View style={styles.assetImageWrapper}>
-          {image ? (
+          {assetIface === AssetFace.RGB25 ? (
             <Image
               source={{
                 uri: image,
@@ -53,7 +56,7 @@ const AssetCard = (props: AssetCardProps) => {
                 <Identicon
                   value={assetId}
                   style={styles.identiconView}
-                  size={110}
+                  size={windowHeight > 670 ? 110 : 90}
                 />
               </View>
             </View>
@@ -118,9 +121,9 @@ const getStyles = (theme: AppTheme, amtLength) =>
       borderRadius: 110,
     },
     identiconView: {
-      height: 110,
-      width: 110,
-      borderRadius: 110,
+      height: windowHeight > 670 ? 110 : 90,
+      width: windowHeight > 670 ? 110 : 90,
+      borderRadius: windowHeight > 670 ? 110 : 90,
     },
     contentWrapper: {
       paddingHorizontal: 10,

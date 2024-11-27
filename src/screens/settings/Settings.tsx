@@ -24,6 +24,10 @@ import IconWalletSettings from 'src/assets/images/icon_wallet.svg';
 import IconWalletSettingsLight from 'src/assets/images/icon_wallet_light.svg';
 import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
+import IconChannelMgt from 'src/assets/images/channelMgt.svg';
+import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
+import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
+import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
@@ -34,6 +38,10 @@ import Toast from 'src/components/Toast';
 import * as SecureStore from 'src/storage/secure-store';
 // import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -53,6 +61,7 @@ type SettingMenuProps = {
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings, onBoarding, wallet: walletTranslation } = translations;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
@@ -143,7 +152,7 @@ function SettingsScreen({ navigation }) {
     },
     // TO DO - will implement theme functionality.  This commented temporarily
     {
-      id: 5,
+      id: 6,
       title: settings.darkMode,
       icon: !isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => setDarkTheme(!darkTheme),
@@ -153,7 +162,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 6,
+      id: 7,
       title: settings.biometricUnlock,
       icon: !isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -171,14 +180,27 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 7,
+      id: 8,
       title: settings.appInfo,
       icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
-    // Add more menu items as needed
-  ];
 
+    {
+      id: 9,
+      title: settings.viewNodeInfo,
+      icon: !isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+    {
+      id: 10,
+      title: settings.channelManagement,
+      icon: !isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+  ];
   return (
     <ScreenContainer>
       <AppText variant="pageTitle2" style={styles.title}>

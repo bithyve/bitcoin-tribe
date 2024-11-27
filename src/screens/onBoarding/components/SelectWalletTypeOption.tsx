@@ -4,8 +4,6 @@ import { useTheme } from 'react-native-paper';
 
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight } from 'src/constants/responsive';
-import { Keys } from 'src/storage';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
@@ -17,10 +15,9 @@ type SelectOptionProps = {
   backColor?: string;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
-  testID?: string;
-  showArrow?: boolean;
   rightIcon?: React.ReactNode;
   disabled?: boolean;
+  borderColor?: string;
 };
 const SelectWalletTypeOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -31,12 +28,11 @@ const SelectWalletTypeOption = (props: SelectOptionProps) => {
     onPress,
     backColor,
     style,
-    testID,
-    showArrow = true,
     disabled = false,
     rightIcon,
+    borderColor = theme.colors.borderColor,
   } = props;
-  const styles = getStyles(theme, backColor);
+  const styles = getStyles(theme, backColor, borderColor);
   return (
     <AppTouchable onPress={onPress} disabled={disabled}>
       <GradientView
@@ -65,7 +61,7 @@ const SelectWalletTypeOption = (props: SelectOptionProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme, backColor, borderColor) =>
   StyleSheet.create({
     container: {
       width: '100%',
@@ -75,7 +71,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       padding: windowHeight > 670 ? hp(20) : hp(10),
       backgroundColor: backColor,
       borderRadius: 20,
-      borderColor: theme.colors.borderColor,
+      borderColor: borderColor,
       borderWidth: 1,
       marginVertical: hp(5),
     },

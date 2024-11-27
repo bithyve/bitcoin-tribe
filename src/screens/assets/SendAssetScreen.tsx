@@ -45,6 +45,8 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
+import { formatNumber } from 'src/utils/numberWithCommas';
+import config from 'src/utils/config';
 
 type ItemProps = {
   name: string;
@@ -140,7 +142,8 @@ const SendAssetScreen = () => {
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
     JSON.parse(averageTxFeeJSON);
-  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[wallet.networkType];
+  const averageTxFee: AverageTxFees =
+    averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
 
   const [invoice, setInvoice] = useState(rgbInvoice || '');
@@ -173,45 +176,70 @@ const SendAssetScreen = () => {
   }, [createUtxos.data]);
 
   useEffect(() => {
-    if (item.balance.spendable < amount)
+    if (item.balance.spendable < amount) {
       Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+    }
   }, [amount]);
 
+  const decodeInvoice = (_invoice: string) => {
+    const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
+    const assetIdPattern = /(?:^|\s)([a-zA-Z0-9\-$]{20,})(?=\/|$)/;
+    const assetTypePattern = /\/(RGB20Fixed|RGB20|RGB25|RGB|[^/]+)(?=\/|$)/;
+    const expiryPattern = /expiry=(\d+)/;
+    const endpointPattern = /endpoints=([a-zA-Z0-9:\/\.\-_]+)$/;
+    let parts = {
+      utxo: null,
+      assetId: null,
+      assetType: null,
+      expiry: null,
+      endpoints: null,
+    };
+    parts.utxo = _invoice.match(utxoPattern)?.[0] || null;
+    parts.assetId = _invoice.match(assetIdPattern)?.[1] || '';
+    parts.assetType = _invoice.match(assetTypePattern)?.[1] || '';
+    parts.expiry = _invoice.match(expiryPattern)?.[1] || null;
+    parts.endpoints = _invoice.match(endpointPattern)?.[1] || null;
+    return parts;
+  };
+
   const sendAsset = useCallback(async () => {
-    Keyboard.dismiss();
-    const utxo = invoice.match(/~\/~\/([^?]+)\?/)[1];
-    const endpoint = invoice.match(/endpoints=([^&]+)/)[1];
-    setLoading(true);
-    const response = await ApiHandler.sendAsset({
-      assetId,
-      blindedUTXO: utxo,
-      amount,
-      consignmentEndpoints: endpoint,
-      feeRate: selectedFeeRate,
-    });
-    setLoading(false);
-    if (response?.txid) {
-      setTimeout(() => {
-        setVisible(true);
-      }, 500);
-      // Toast(sendScreen.sentSuccessfully, true);
-    } else if (response?.error === 'Insufficient sats for RGB') {
-      setTimeout(() => {
-        setShowErrorModal(true);
-      }, 500);
-    } else if (response?.error) {
-      Toast(`Failed: ${response?.error}`, true);
+    try {
+      Keyboard.dismiss();
+      const { utxo, endpoints } = decodeInvoice(invoice);
+      setLoading(true);
+      const response = await ApiHandler.sendAsset({
+        assetId,
+        blindedUTXO: utxo,
+        amount,
+        consignmentEndpoints: endpoints,
+        feeRate: selectedFeeRate,
+      });
+      setLoading(false);
+      if (response?.txid) {
+        setTimeout(() => {
+          setVisible(true);
+        }, 500);
+        // Toast(sendScreen.sentSuccessfully, true);
+      } else if (response?.error === 'Insufficient sats for RGB') {
+        setTimeout(() => {
+          setShowErrorModal(true);
+        }, 500);
+      } else if (response?.error) {
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [invoice, amount, navigation]);
 
-  const handleAmtChangeText = text => {
-    const positiveNumberRegex = /^\d*[1-9]\d*$/;
-    if (positiveNumberRegex.test(text)) {
-      setAmount(text);
-    } else {
-      setAmount('');
-    }
-  };
+  // const handleAmtChangeText = text => {
+  //   const positiveNumberRegex = /^\d*[1-9]\d*$/;
+  //   if (positiveNumberRegex.test(text)) {
+  //     setAmount(text);
+  //   } else {
+  //     setAmount('');
+  //   }
+  // };
 
   return (
     <ScreenContainer>
@@ -282,13 +310,14 @@ const SendAssetScreen = () => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
           multiline={true}
+          returnKeyType={'Enter'}
           numberOfLines={5}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
         />
 
         <TextField
-          value={amount}
-          onChangeText={handleAmtChangeText}
+          value={formatNumber(amount)}
+          onChangeText={text => setAmount(text)}
           placeholder={assets.amount}
           keyboardType="numeric"
           style={styles.input}
@@ -411,7 +440,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      marginTop: hp(5),
+      // marginTop: hp(5),
     },
     buttonWrapper: {
       marginTop: hp(5),

@@ -10,7 +10,7 @@ import ReciveTestSatsIcon from 'src/assets/images/recieveTestSats.svg';
 import ReciveTestSatsLightIcon from 'src/assets/images/recieveTestSats_light.svg';
 import { AppTheme } from 'src/theme';
 import IconWrapper from 'src/components/IconWrapper';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 
@@ -30,11 +30,11 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
         {!isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
-        {/* <UserAvatar size={70} imageSource={profile} /> */}
+        <UserAvatar size={80} imageSource={profile} />
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>
-          {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />}
+          {/* {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />} */}
         </View>
       </IconWrapper>
     </View>
@@ -43,7 +43,7 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     headerWrapper: {
-      alignItems: 'center',
+      marginTop: hp(30),
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',

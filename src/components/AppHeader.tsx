@@ -46,36 +46,41 @@ function AppHeader(props: AppHeaderProps) {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        {enableBack && (
-          <AppTouchable
-            onPress={onBackNavigation ? onBackNavigation : navigation.goBack}
-            style={styles.leftIconWrapper}>
-            {!isThemeDark ? <GoBack /> : <GoBackLight />}
-          </AppTouchable>
-        )}
-        {rightIcon && (
-          <AppTouchable
-            onPress={onSettingsPress}
-            style={styles.rightIconWrapper}>
-            {rightIcon}
-          </AppTouchable>
-        )}
-        {rightText && (
-          <AppTouchable
-            onPress={onRightTextPress}
-            style={styles.rightIconWrapper}>
-            <AppText variant="heading2" style={styles.rightTextStyle}>
-              {rightText}
-            </AppText>
-          </AppTouchable>
-        )}
-      </View>
-      {title || subTitle ? (
-        <View style={styles.detailsWrapper}>
-          <View style={styles.contentWrapper}>
-            <AppText variant="heading1" style={styles.headerTitle}>
+        <View style={styles.leftIconWrapper}>
+          {enableBack && (
+            <AppTouchable
+              onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
+              {!isThemeDark ? <GoBack /> : <GoBackLight />}
+            </AppTouchable>
+          )}
+        </View>
+        <View style={styles.middleTitleWrapper}>
+          {title && (
+            <AppText variant="heading3" style={styles.headerTitle}>
               {title}
             </AppText>
+          )}
+        </View>
+        <View style={styles.rightIconWrapper}>
+          {rightIcon && (
+            <AppTouchable
+              onPress={onSettingsPress}
+              style={styles.rightIconWrapper}>
+              {rightIcon}
+            </AppTouchable>
+          )}
+          {rightText && (
+            <AppTouchable onPress={onRightTextPress}>
+              <AppText variant="heading2" style={styles.rightTextStyle}>
+                {rightText}
+              </AppText>
+            </AppTouchable>
+          )}
+        </View>
+      </View>
+      {subTitle ? (
+        <View style={styles.detailsWrapper}>
+          <View style={styles.contentWrapper}>
             <AppText variant="heading3" style={styles.headerSubTitle}>
               {subTitle}
             </AppText>
@@ -101,8 +106,18 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(15),
       marginBottom: hp(20),
     },
-    leftIconWrapper: {},
-    rightIconWrapper: {},
+    leftIconWrapper: {
+      width: '15%',
+      alignItems: 'center',
+    },
+    middleTitleWrapper: {
+      width: '70%',
+      alignItems: 'center',
+    },
+    rightIconWrapper: {
+      width: '15%',
+      alignItems: 'center',
+    },
     detailsWrapper: {
       flexDirection: 'row',
       width: '100%',

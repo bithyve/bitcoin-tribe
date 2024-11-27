@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Code } from 'react-native-vision-camera';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -9,6 +10,10 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useRoute } from '@react-navigation/native';
+import Toast from 'src/components/Toast';
+import config from 'src/utils/config';
+import { PaymentInfoKind } from 'src/services/wallets/enums';
+import WalletUtilities from 'src/services/wallets/operations/utils';
 
 function ScanAssetScreen({ route, navigation }) {
   const { assetId, wallet, rgbInvoice, item } = useRoute().params;
@@ -16,6 +21,27 @@ function ScanAssetScreen({ route, navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
+
+  const onCodeScanned = useCallback((codes: Code[]) => {
+    const value = codes[0]?.value;
+    if (value == null) {
+      return;
+    }
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let { type: paymentInfoKind } = WalletUtilities.addressDiff(value, network);
+    switch (paymentInfoKind) {
+      case PaymentInfoKind.RGB_INVOICE:
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          assetId: assetId,
+          wallet: wallet,
+          rgbInvoice: value,
+          item: item,
+        });
+        break;
+      default:
+        Toast(sendScreen.invalidRGBInvoiceAddress, true);
+    }
+  }, []);
 
   return (
     <ScreenContainer>
@@ -25,13 +51,13 @@ function ScanAssetScreen({ route, navigation }) {
         enableBack={true}
       />
       <View style={styles.scannerWrapper}>
-        <QRScanner />
+        <QRScanner onCodeScanned={onCodeScanned} />
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.optionCardSubTitle}
+        subTitle={sendScreen.sendAssetOptionCardSubTitle}
         onPress={() => {
-          navigation.navigate(NavigationRoutes.SENDASSET, {
+          navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
             wallet: wallet,
             rgbInvoice: rgbInvoice,

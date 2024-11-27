@@ -12,6 +12,8 @@ import Toolbar from './Toolbar';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { AppContext } from 'src/contexts/AppContext';
+import AppType from 'src/models/enums/AppType';
 
 type CollectibleDetailsHeaderProps = {
   collectible: Collectible;
@@ -27,20 +29,16 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   const { collectible, onPressSetting, wallet } = props;
+  const { appType } = useContext(AppContext);
 
   return (
     <View style={styles.container}>
-      <Toolbar
-        onPress={onPressSetting}
-        ticker={Platform.OS === 'ios' ? collectible.name : collectible.details}
-      />
+      <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
           uri: Platform.select({
             android: `file://${collectible.media?.filePath}`,
-            ios: `${collectible.media?.filePath}.${
-              collectible.media?.mime.split('/')[1]
-            }`,
+            ios: collectible.media?.filePath,
           }),
         }}
         style={styles.imageStyle}

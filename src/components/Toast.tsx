@@ -8,7 +8,7 @@ import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 import LottieView from 'lottie-react-native';
 
-// Need to work
+
 export default (message, error = false) => {
   return Toast.show(
     <View style={styles.container}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     width: wp(300),
   },
   toastMessageStyle: {
-    marginLeft: wp(8),
+    marginHorizontal: wp(8),
     fontSize: 14,
     fontFamily: Fonts.LufgaSemiBold,
     flex: 1,

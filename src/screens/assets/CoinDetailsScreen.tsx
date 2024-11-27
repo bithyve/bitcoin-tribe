@@ -23,10 +23,15 @@ const CoinDetailsScreen = () => {
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
 
   useEffect(() => {
-    mutate({ assetId, schema: RealmSchema.Coin });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshRgbWallet.mutate();
+      mutate({ assetId, schema: RealmSchema.Coin });
+    });
+    return unsubscribe;
+  }, [navigation, assetId]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -44,10 +49,13 @@ const CoinDetailsScreen = () => {
         <TransactionsList
           transactions={coin?.transactions}
           isLoading={isLoading}
-          refresh={() => mutate({ assetId, schema: RealmSchema.Coin })}
+          refresh={() => {
+            refreshRgbWallet.mutate();
+            mutate({ assetId, schema: RealmSchema.Coin });
+          }}
           navigation={navigation}
           wallet={wallet}
-          coin={coin.ticker}
+          coin={coin.name}
           assetId={assetId}
         />
       </View>

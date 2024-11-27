@@ -54,10 +54,12 @@ export const getAmt = (
     return getAmount(amountInSats, satsEnabled);
   }
   if (exchangeRates && exchangeRates[currencyCode] && !satsEnabled) {
-    return (
-      (exchangeRates[currencyCode].last / SATOSHIS_IN_BTC) *
-      amountInSats
-    ).toFixed(2);
+    const result =
+      (exchangeRates[currencyCode].last / SATOSHIS_IN_BTC) * amountInSats;
+    return result.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   }
   return numberWithCommas(amountInSats);
 };

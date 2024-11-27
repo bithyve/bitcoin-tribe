@@ -31,6 +31,11 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSAppTransportSecurity</key>
+		<dict>
+        	<key>NSAllowsArbitraryLoads</key>
+        <true/>
+		</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes, Bitcoin addresses and RGB invoices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

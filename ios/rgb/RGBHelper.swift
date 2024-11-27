@@ -18,12 +18,9 @@ import CloudKit
     self.rgbManager = RgbManager.shared
   }
   
-  func getRgbNetwork(network: String)->BitcoinNetwork{
-    return network == "TESTNET" ? BitcoinNetwork.testnet : BitcoinNetwork.mainnet
-  }
   
   @objc func generate_keys(btcNetwotk: String, callback: @escaping ((String) -> Void)){
-    let network = getRgbNetwork(network: btcNetwotk)
+    let network = RgbManager.getRgbNetwork(network: btcNetwotk)
     let keys = generateKeys(bitcoinNetwork: network)
     if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
       let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
@@ -40,7 +37,7 @@ import CloudKit
   }
   
   @objc func restore_keys(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)){
-    let network = getRgbNetwork(network: btcNetwotk)
+    let network = RgbManager.getRgbNetwork(network: btcNetwotk)
     do{
       let keys = try restoreKeys(bitcoinNetwork: network, mnemonic: mnemonic)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
@@ -109,7 +106,7 @@ import CloudKit
               RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
           ], skipSync: false)
           
-          let transfers = try wallet.listTransfers(assetId: assetId)
+        let transfers = try wallet.listTransfers(assetId: assetId).reversed()
           var jsonArray = [[String: Any]]()
           
           for transfer in transfers {
@@ -613,7 +610,7 @@ import CloudKit
   
   @objc func backup(path: String, password: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
-      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: password)
+      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: password)
 
       let filePath = Utility.getBackupPath(fileName: keys.accountXpubFingerprint)
       print("filePath \(String(describing: filePath))")
@@ -666,7 +663,7 @@ import CloudKit
   
   @objc func restore(mnemonic: String,callback: @escaping ((String) -> Void)) -> Void{
     do{
-      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet, mnemonic: mnemonic)
+      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: mnemonic)
       let fileManager = FileManager.default
       let iCloudFolderURL = getICloudFolder()
       let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)

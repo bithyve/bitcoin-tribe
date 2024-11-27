@@ -20,6 +20,7 @@ export interface RGBWallet {
     vanilla: Balance;
     colored: Balance;
   };
+  peerDNS?: string;
 }
 
 // Define the structure of an object in the rgbAllocations array
@@ -52,6 +53,8 @@ interface Balance {
   future: number;
   settled: number;
   spendable: number;
+  offchainOutbound?: number;
+  offchainInbound?: number;
 }
 
 export interface Transaction {
@@ -80,7 +83,7 @@ export interface MetaData {
 export interface Coin {
   addedAt: number;
   assetId: string;
-  assetIface: string;
+  assetIface: AssetFace;
   balance: Balance;
   issuedSupply: number;
   name: string;
@@ -94,6 +97,7 @@ export interface Coin {
 interface Media {
   filePath: string;
   mime: string;
+  digest?: string;
 }
 export interface Collectible {
   addedAt: number;
@@ -144,4 +148,22 @@ export interface RgbNodeConnectParams {
   nodeUrl: string;
   nodeId: string;
   authentication: string;
+  peerDNS?: string;
+  mnemonic?: string
+}
+
+export interface NodeInfo {
+  pubkey?: string;
+  numChannels?: number;
+  numUsableChannels?: number;
+  localBalanceMsat?: number;
+  numPeers?: number;
+  onchainPubkey?: string;
+  maxMediaUploadSizeMb?: number;
+  rgbHtlcMinMsat?: number;
+  rgbChannelCapacityMinSat?: number;
+  channelCapacityMinSat?: number;
+  channelCapacityMaxSat?: number;
+  channelAssetMinAmount?: number;
+  channelAssetMaxAmount?: number;
 }

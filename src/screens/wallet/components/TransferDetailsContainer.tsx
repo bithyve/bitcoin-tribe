@@ -19,13 +19,13 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
   const { transAmount, transaction } = props;
   const { translations } = useContext(LocalizationContext);
-  const { wallet } = translations;
+  const { wallet, settings } = translations;
 
   return (
     <View>
       <LabeledContent
         label={wallet.status}
-        content={Capitalize(transaction.status)}
+        content={settings[transaction.status.toLowerCase().replace(/_/g, '')]}
       />
       <LabeledContent
         label={wallet.amount}

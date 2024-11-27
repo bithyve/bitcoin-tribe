@@ -81,8 +81,8 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 42
-        versionName "0.2.2"
+        versionCode 62
+        versionName "0.2.4"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {

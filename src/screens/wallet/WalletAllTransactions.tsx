@@ -6,6 +6,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import WalletTransactionList from './components/WalletTransactionList';
+import ReservedSatsView from './components/ReservedSatsView';
 
 function WalletAllTransactions({ route }) {
   const { translations } = useContext(LocalizationContext);
@@ -16,6 +17,7 @@ function WalletAllTransactions({ route }) {
   return (
     <ScreenContainer>
       <AppHeader title={walletTranslations.allTransactionsTitle} />
+      <ReservedSatsView />
       <WalletTransactionList
         transactions={transactions}
         wallet={wallet}

@@ -1,9 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
+import { useMutation } from 'react-query';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
-import FooterNote from 'src/components/FooterNote';
 import ModalContainer from 'src/components/ModalContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
@@ -13,24 +16,21 @@ import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletOperations from 'src/services/wallets/operations';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
-import RefreshControlView from 'src/components/RefreshControlView';
+import { wp } from 'src/constants/responsive';
+// import Toast from 'src/components/Toast';
+import ModalLoading from 'src/components/ModalLoading';
 
 function ReceiveScreen({ route }) {
+  const theme = useTheme();
   const navigation = useNavigation();
-  // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
-
   const [visible, setVisible] = useState(false);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -39,6 +39,7 @@ function ReceiveScreen({ route }) {
       balances: { confirmed: 0, unconfirmed: 0 },
     },
   } = wallet || {};
+  // const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
 
   const [address, setAddress] = useState('');
   const getNodeOnchainBtcAddress = useMutation(
@@ -75,8 +76,13 @@ function ReceiveScreen({ route }) {
     }
   }, [amount, address]);
 
+  const qrValue = useMemo(() => {
+    return paymentURI || address || 'address';
+  }, [address, paymentURI]);
+
   return (
     <ScreenContainer>
+      <ModalLoading visible={getNodeOnchainBtcAddress.isLoading} />
       <AppHeader
         title={common.receive}
         subTitle={receciveScreen.headerSubTitle}
@@ -90,13 +96,15 @@ function ReceiveScreen({ route }) {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         {getNodeOnchainBtcAddress.isLoading ? (
-          <RefreshControlView refreshing={true} onRefresh={() => {}} />
+          <View />
         ) : (
-          <ReceiveQrDetails
-            addMountModalVisible={() => setVisible(true)}
-            receivingAddress={paymentURI || address || 'address'}
-            qrTitle={receciveScreen.bitcoinAddress}
-          />
+          <View>
+            <ReceiveQrDetails
+              addMountModalVisible={() => setVisible(true)}
+              receivingAddress={qrValue}
+              qrTitle={receciveScreen.bitcoinAddress}
+            />
+          </View>
         )}
       </ScrollView>
       {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
@@ -122,6 +130,11 @@ const styles = StyleSheet.create({
   addAmountModalContainerStyle: {
     width: '96%',
     alignSelf: 'center',
+  },
+  footerView: {
+    height: '8%',
+    marginHorizontal: wp(16),
+    marginVertical: wp(20),
   },
 });
 

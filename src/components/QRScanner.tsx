@@ -1,52 +1,32 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
   Platform,
-  Linking,
   PermissionsAndroid,
-  Alert,
+  AppState,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import { wp } from 'src/constants/responsive';
-import QRBorderCard from './QRBorderCard';
 import {
   Camera,
-  Code,
   useCameraDevice,
   useCodeScanner,
 } from 'react-native-vision-camera';
-import { AppTheme } from 'src/theme';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { PaymentInfoKind } from 'src/services/wallets/enums';
-import WalletUtilities from 'src/services/wallets/operations/utils';
-import { useNavigation } from '@react-navigation/native';
-import config from 'src/utils/config';
-import Toast from './Toast';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import useWallets from 'src/hooks/useWallets';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useTheme } from 'react-native-paper';
 
-const QRScanner = () => {
+import { wp } from 'src/constants/responsive';
+import QRBorderCard from './QRBorderCard';
+import { AppTheme } from 'src/theme';
+import CameraUnauthorized from './CameraUnauthorized';
+
+type QRScannerProps = {
+  onCodeScanned: (codes: string) => void;
+};
+const QRScanner = (props: QRScannerProps) => {
+  const { onCodeScanned } = props;
   const device = useCameraDevice('back');
   const [cameraPermission, setCameraPermission] = useState(null);
-  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const wallet: Wallet = useWallets({}).wallets[0];
-  const { translations } = useContext(LocalizationContext);
-  const { sendScreen } = translations;
-
-  const showPermissionDeniedAlert = () => {
-    Alert.alert(
-      'Camera Permission Required',
-      'This app needs access to your camera to function properly. Please allow camera access in your device settings.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: () => openSettings() },
-      ],
-    );
-  };
 
   const requestCameraPermission = async () => {
     try {
@@ -54,18 +34,11 @@ const QRScanner = () => {
         // Request permission for Android
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'This app needs access to your camera.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           setCameraPermission('granted');
         } else {
-          openSettings();
+          // openSettings();
         }
       } else if (Platform.OS === 'ios') {
         // Request permission for iOS
@@ -80,7 +53,7 @@ const QRScanner = () => {
           );
         } else {
           // openSettings();
-          showPermissionDeniedAlert();
+          // showPermissionDeniedAlert();
         }
       }
     } catch (err) {
@@ -88,48 +61,19 @@ const QRScanner = () => {
     }
   };
 
-  const openSettings = () => {
-    Linking.openURL('app-settings:');
-  };
-
   useEffect(() => {
     requestCameraPermission();
-  }, []);
+    // Listen to AppState changes
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        requestCameraPermission(); // Re-check permissions when app returns to foreground
+      }
+    });
 
-  const onCodeScanned = useCallback((codes: Code[]) => {
-    const value = codes[0]?.value;
-    if (value == null) {
-      return;
-    }
-    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(value, network);
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
-    switch (paymentInfoKind) {
-      case PaymentInfoKind.ADDRESS:
-        navigation.replace(NavigationRoutes.SENDTO, { wallet, address });
-        break;
-      case PaymentInfoKind.PAYMENT_URI:
-        navigation.replace(NavigationRoutes.SENDTO, {
-          wallet,
-          address,
-          paymentURIAmount: amount,
-        });
-        break;
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-        });
-        break;
-      default:
-        Toast(sendScreen.invalidBtcAddress, true);
-    }
+    // Cleanup the AppState listener
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const codeScanner = useCodeScanner({
@@ -138,31 +82,35 @@ const QRScanner = () => {
   });
 
   return (
-    <View style={styles.qrCodeContainer}>
-      {cameraPermission != null && device != null && (
-        <>
-          <Camera
-            device={device}
-            isActive={true}
-            style={styles.visionCameraContainer}
-            codeScanner={codeScanner}
-            enableZoomGesture={true}
-          />
-          <View style={[styles.visionCameraContainer, styles.outSideBorder]}>
-            <View style={styles.scannerInnerBorderWrapper}>
-              <View style={styles.qrScannerRowStyle}>
-                <QRBorderCard style={styles.borderLeftTopWidth} />
-                <QRBorderCard style={styles.borderRightTopWidth} />
-              </View>
-              <View style={styles.qrScannerRowStyle}>
-                <QRBorderCard style={styles.borderLeftBottomWidth} />
-                <QRBorderCard style={styles.borderRightBottomWidth} />
+    <>
+      {cameraPermission != null && device != null ? (
+        <View style={styles.qrCodeContainer}>
+          <>
+            <Camera
+              device={device}
+              isActive={true}
+              style={styles.visionCameraContainer}
+              codeScanner={codeScanner}
+              enableZoomGesture={true}
+            />
+            <View style={[styles.visionCameraContainer, styles.outSideBorder]}>
+              <View style={styles.scannerInnerBorderWrapper}>
+                <View style={styles.qrScannerRowStyle}>
+                  <QRBorderCard style={styles.borderLeftTopWidth} />
+                  <QRBorderCard style={styles.borderRightTopWidth} />
+                </View>
+                <View style={styles.qrScannerRowStyle}>
+                  <QRBorderCard style={styles.borderLeftBottomWidth} />
+                  <QRBorderCard style={styles.borderRightBottomWidth} />
+                </View>
               </View>
             </View>
-          </View>
-        </>
+          </>
+        </View>
+      ) : (
+        <CameraUnauthorized />
       )}
-    </View>
+    </>
   );
 };
 

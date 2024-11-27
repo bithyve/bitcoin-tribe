@@ -12,6 +12,8 @@ export const predefinedTestnetNodes: NodeDetail[] = [
   },
 ];
 
+export const predefinedRegtestNodes: NodeDetail[] = [];
+
 export const predefinedMainnetNodes: NodeDetail[] = [
   {
     id: 444, // sequence 4-x-x; avoids collision w/ own node

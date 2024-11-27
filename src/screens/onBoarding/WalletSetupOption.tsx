@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -15,6 +15,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import UseRGBAssetPopupContainer from './components/UseRGBAssetPopupContainer';
 
 function WalletSetupOption({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -23,6 +25,7 @@ function WalletSetupOption({ navigation }) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [visible, setVisible] = useState(false);
 
   return (
     <ScreenContainer>
@@ -33,14 +36,32 @@ function WalletSetupOption({ navigation }) {
         icon={!isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
-        onPress={() => navigation.navigate(NavigationRoutes.SELECTWALLET)}
+        showRightArrow={true}
+        onPress={() => {
+          setVisible(true);
+        }}
       />
       <OptionCard
         icon={!isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
+        showRightArrow={true}
         onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
       />
+      <ResponsePopupContainer
+        visible={visible}
+        enableClose={true}
+        backColor={theme.colors.modalBackColor}
+        borderColor={theme.colors.modalBackColor}>
+        <UseRGBAssetPopupContainer
+          title={onBoarding.useRGBAssetTitle}
+          subTitle={onBoarding.useRGBAssetSubTitle}
+          onPress={() => {
+            setVisible(false);
+            navigation.navigate(NavigationRoutes.SELECTWALLET);
+          }}
+        />
+      </ResponsePopupContainer>
     </ScreenContainer>
   );
 }
@@ -54,7 +75,7 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(25),
+      marginTop: hp(35),
       marginBottom: hp(20),
     },
   });

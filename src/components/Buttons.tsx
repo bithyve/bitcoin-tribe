@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import PrimaryCTA from './PrimaryCTA';
 import SecondaryCTA from './SecondaryCTA';
 import { AppTheme } from 'src/theme';
@@ -17,6 +17,7 @@ type PrimaryCTAProps = {
   primaryLoading?: boolean;
   disabled?: boolean;
   secondaryCTAWidth?: number;
+  height?: number;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -29,6 +30,7 @@ function Buttons(props: PrimaryCTAProps) {
     secondaryOnPress,
     primaryLoading,
     disabled,
+    height = hp(20),
   } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -39,6 +41,7 @@ function Buttons(props: PrimaryCTAProps) {
           onPress={secondaryOnPress}
           title={secondaryTitle}
           width={secondaryCTAWidth}
+          height={height}
         />
       )}
       <PrimaryCTA
@@ -47,6 +50,7 @@ function Buttons(props: PrimaryCTAProps) {
         width={width}
         loading={primaryLoading}
         disabled={disabled}
+        height={height}
       />
     </View>
   );

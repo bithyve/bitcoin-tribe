@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
+import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
@@ -29,6 +30,12 @@ import {
 } from 'src/services/wallets/interfaces';
 import SendSuccessContainer from './SendSuccessContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import { formatNumber } from 'src/utils/numberWithCommas';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmSchema } from 'src/storage/enum';
+import ModalLoading from 'src/components/ModalLoading';
+import AppType from 'src/models/enums/AppType';
+
 
 function SendToContainer({
   wallet,
@@ -51,6 +58,7 @@ function SendToContainer({
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
@@ -59,6 +67,7 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+ 
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -67,7 +76,7 @@ function SendToContainer({
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
       const averageTxFee: AverageTxFees =
-        averageTxFeeByNetwork[wallet.networkType];
+        averageTxFeeByNetwork[app.networkType];
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -82,10 +91,20 @@ function SendToContainer({
 
   const successTransaction = () => {
     setVisible(false);
+    sendTransactionMutation.reset();
     setTimeout(() => {
-      navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-        autoRefresh: true,
-      });
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: NavigationRoutes.HOME },
+            {
+              name: NavigationRoutes.WALLETDETAILS,
+              params: { autoRefresh: true },
+            },
+          ],
+        }),
+      );
     }, 400);
   };
 
@@ -94,7 +113,7 @@ function SendToContainer({
       sender: wallet,
       recipient: {
         address,
-        amount: Number(amount),
+        amount: Number(amount.replace(/,/g, '')),
       },
       averageTxFee,
       selectedPriority,
@@ -103,7 +122,7 @@ function SendToContainer({
 
   useEffect(() => {
     const balance = idx(wallet, _ => _.specs.balances);
-    const availableToSpend = balance.confirmed + balance.unconfirmed;
+    const availableToSpend = balance?.confirmed + balance?.unconfirmed;
     if (availableToSpend < Number(amount)) {
       setInsufficientBalance(true);
     } else {
@@ -134,12 +153,16 @@ function SendToContainer({
   };
 
   const transferFee =
-    idx(
-      sendTransactionMutation,
-      _ => _.data.txPrerequisites[selectedPriority].fee,
-    ) || 0;
+  app.appType === AppType.NODE_CONNECT
+    ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
+    : idx(
+        sendTransactionMutation,
+        _ => _.data.txPrerequisites[selectedPriority]?.fee,
+      ) || 0; 
 
-  return (
+  return sendTransactionMutation.status === 'loading' ? (
+    <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
+  ) : (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
@@ -160,7 +183,7 @@ function SendToContainer({
           </View>
         </View>
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
           placeholder={sendScreen.enterAmount}
           keyboardType={'numeric'}
@@ -172,17 +195,17 @@ function SendToContainer({
         />
         <View style={styles.totalFeeWrapper}>
           <AppText variant="heading1" style={styles.feeTitleText}>
-            Total Fee:
+            {sendScreen.totalFee}
           </AppText>
           {initialCurrencyMode !== CurrencyKind.SATS
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="heading1" style={styles.amountText}>
-            &nbsp;{getBalance(2000)}
+            &nbsp; {getFeeRateByPriority(selectedPriority)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
-              sats
+              sats/vbyte
             </AppText>
           )}
         </View>
@@ -285,9 +308,9 @@ function SendToContainer({
           conatinerModalStyle={styles.containerModalStyle}>
           <SendSuccessContainer
             transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            amount={amount}
+            amount={amount.replace(/,/g, '')}
             transFee={transferFee}
-            total={Number(amount) + Number(transferFee)}
+            total={app.appType === AppType.NODE_CONNECT? Number(amount) : Number(amount) + Number(transferFee)}
             onPress={() => successTransaction()}
           />
         </ResponsePopupContainer>

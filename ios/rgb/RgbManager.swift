@@ -20,11 +20,11 @@ class RgbManager {
   }
   
   func initialize(bitcoinNetwork: String, pubkey: String, mnemonic: String)-> String{
-    let network = getRgbNetwork(network: bitcoinNetwork)
+    let network = RgbManager.getRgbNetwork(network: bitcoinNetwork)
     let walletData = WalletData(dataDir: Utility.getRgbDir()?.path ?? "", bitcoinNetwork: network, databaseType: DatabaseType.sqlite,maxAllocationsPerUtxo: 1, pubkey: pubkey, mnemonic: mnemonic,vanillaKeychain: 1)
     do{
       self.rgbWallet = try Wallet(walletData: walletData)
-      self.online = try rgbWallet?.goOnline(skipConsistencyCheck: true, indexerUrl: Constants.testnetElectrumUrl)
+      self.online = try rgbWallet?.goOnline(skipConsistencyCheck: true, indexerUrl: Constants.getElectrumUrl(network: bitcoinNetwork))
       self.rgbNetwork = network
       return "true"
     }catch{
@@ -34,8 +34,17 @@ class RgbManager {
     }
   }
   
-  func getRgbNetwork(network: String)->BitcoinNetwork{
-    return network == "TESTNET" ? BitcoinNetwork.testnet : BitcoinNetwork.mainnet
+  public static func getRgbNetwork(network: String) -> BitcoinNetwork {
+      switch network {
+      case "TESTNET":
+        return .testnet
+      case "REGTEST":
+        return .regtest
+      case "MAINNET":
+        return .mainnet
+      default:
+        return .testnet
+      }
   }
   
 }

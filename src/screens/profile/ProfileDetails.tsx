@@ -81,11 +81,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
           ios: windowHeight > 670 ? 0 : 5,
           android: 0,
         })}>
-        <View>
-          <ModalLoading
-            visible={primaryStatus === 'loading' || primaryCtaLoader}
-          />
-        </View>
         <ScrollView
           contentContainerStyle={styles.scrollView}
           keyboardShouldPersistTaps="handled"
@@ -104,7 +99,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
               keyboardType={'default'}
               returnKeyType={'done'}
               onSubmitEditing={primaryOnPress}
-              autoFocus={true}
+              //autoFocus={true}
               maxLength={15}
             />
           </View>
@@ -113,8 +108,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            primaryLoading={primaryCtaLoader}
-            disabled={disabled}
           />
         </ScrollView>
       </KeyboardAvoidingView>

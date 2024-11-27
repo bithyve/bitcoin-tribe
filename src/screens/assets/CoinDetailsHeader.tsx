@@ -47,7 +47,9 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
               fontSize: coin.balance.spendable.toString().length > 10 ? 24 : 39,
             },
           ]}>
-          {numberWithCommas(coin.balance.spendable)}
+          {numberWithCommas(
+            coin.balance.spendable + coin.balance?.offchainOutbound,
+          )}
         </AppText>
       </View>
       <TransactionButtons

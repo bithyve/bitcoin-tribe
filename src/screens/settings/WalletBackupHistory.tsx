@@ -9,6 +9,7 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackupHistoryList from './components/BackupHistoryList';
 import SettingIcon from 'src/assets/images/icon_settings.svg';
+import SettingIconLight from 'src/assets/images/icon_settings_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
@@ -26,6 +27,7 @@ function WalletBackupHistory({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [words, setWords] = useState(app && app.primaryMnemonic.split(' '));
@@ -37,7 +39,7 @@ function WalletBackupHistory({ navigation }) {
       <AppHeader
         title={settings.walletBackupHistory}
         subTitle={settings.walletBackupHistorySubTitle}
-        rightIcon={<SettingIcon />}
+        rightIcon={!isThemeDark ? <SettingIcon /> : <SettingIconLight />}
         onBackNavigation={() =>
           navigation.navigate(NavigationRoutes.APPBACKUPMENU)
         }

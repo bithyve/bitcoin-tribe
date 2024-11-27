@@ -12,6 +12,10 @@ import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 
 import { AppTheme } from 'src/theme';
+import AppType from 'src/models/enums/AppType';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 type sendSuccessProps = {
   transID: string;
   amount: string;
@@ -24,6 +28,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -75,11 +80,11 @@ function SendSuccessContainer(props: sendSuccessProps) {
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="body1" style={styles.valueText}>
-            &nbsp;{getBalance(transFee)}
+            &nbsp;{app.appType === AppType.NODE_CONNECT? transFee : getBalance(transFee)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
-              sats
+              {app.appType === AppType.NODE_CONNECT ? 'sats/vbyte' : 'sats'}
             </AppText>
           )}
         </View>
@@ -109,6 +114,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           width={hp(200)}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
+          height={hp(14)}
         />
       </View>
     </View>

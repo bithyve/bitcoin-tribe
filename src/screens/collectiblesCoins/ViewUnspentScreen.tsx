@@ -3,6 +3,7 @@ import { StyleSheet, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation, UseMutationResult } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -22,12 +23,15 @@ import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_ligh
 import { RealmSchema } from 'src/storage/enum';
 import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
 const ViewUnspentScreen = () => {
   const { mutate, data, isLoading }: UseMutationResult<RgbUnspent[]> =
     useMutation(ApiHandler.viewUtxos);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -39,7 +43,6 @@ const ViewUnspentScreen = () => {
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
   );
-
   useEffect(() => {
     mutate();
   }, []);
@@ -68,7 +71,11 @@ const ViewUnspentScreen = () => {
           <AppTouchable
             onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
-              transID={`${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`}
+              transID={
+                app.appType === AppType.NODE_CONNECT
+                  ? `${item.utxo.outpoint}`
+                  : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
+              }
               satsAmount={`${item.utxo.btcAmount}`}
               assetID={item.rgbAllocations && item.rgbAllocations}
             />
