@@ -180,6 +180,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: 'Initially installed',
             });
+            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
