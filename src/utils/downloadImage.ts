@@ -1,5 +1,6 @@
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
+import mime from 'mime';
 
 const openSettings = () => {
   Linking.openSettings();
@@ -39,8 +40,13 @@ export const copyImageToPhotoLibrary = async imagePath => {
     return;
   }
   try {
-    const originalFileName = imagePath.split('/').pop();
+    let originalFileName = imagePath.split('/').pop();
     let targetPath;
+    if (!originalFileName.includes('.')) {
+      const mimeType = mime.getType(imagePath);
+      const extension = mime.getExtension(mimeType) || 'jpg';
+      originalFileName = `${originalFileName}.${extension}`;
+    }
     if (Platform.OS === 'android') {
       targetPath = `${RNFS.DownloadDirectoryPath}/${originalFileName}`;
       await RNFS.copyFile(imagePath, targetPath);
