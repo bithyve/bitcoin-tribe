@@ -398,6 +398,7 @@
     "nodeUrlCopyMsg": "节点 URL 复制成功",
     "onChainPubKeyCopyMsg": "链上公钥复制成功",
     "channelCreatedMsg": "频道创建成功",
-    "channelCloseMsg": "频道已关闭"
+    "channelCloseMsg": "频道已关闭",
+    "takeTimeMsg": "此步骤将花费几秒钟。"
   }
 }

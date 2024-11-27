@@ -398,6 +398,7 @@
     "nodeUrlCopyMsg": "URL del nodo copiato con successo",
     "onChainPubKeyCopyMsg": "Chiave Pub OnChain copiata con successo",
     "channelCreatedMsg": "Canale creato con successo",
-    "channelCloseMsg": "Canale chiuso"
+    "channelCloseMsg": "Canale chiuso",
+    "takeTimeMsg": "Questo passaggio richiederà alcuni secondi."
   }
 }
