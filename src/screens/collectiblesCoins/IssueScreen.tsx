@@ -129,7 +129,10 @@ function IssueScreen() {
         name: assetName.trim(),
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
-        filePath: image.replace('file://', ''),
+        filePath: Platform.select({
+          android: image.startsWith('file://') ? image : `file://${path}`,
+          ios: image.replace('file://', ''),
+        }),
       });
       if (response?.assetId) {
         setLoading(false);
