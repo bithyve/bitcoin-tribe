@@ -788,14 +788,12 @@ export class ApiHandler {
         if(ApiHandler.appType === AppType.NODE_CONNECT) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
-            const ext = collectible.media.mime.split('/')[1];
+            const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
+            const {base64, fileType} = hexToBase64(mediaByte.bytes_hex);
+            const ext = assets.cfa[i].media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
-            const isFileExists = await RNFS.exists(path);
-            if(!isFileExists) {
-              const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
-              await RNFS.writeFile(path, hexToBase64(mediaByte.bytes_hex, collectible.media.mime), 'base64');
-              assets.cfa[i].media.filePath = path;
-            }
+            await RNFS.writeFile(path,base64 , 'base64');
+            assets.cfa[i].media.filePath = path;
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
