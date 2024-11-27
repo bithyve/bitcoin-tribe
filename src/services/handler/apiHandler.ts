@@ -807,8 +807,8 @@ export class ApiHandler {
                 element.media.filePath,
                 `${element.media.filePath}.${ext}`,
               );
-              assets.cfa[i].media.filePath = destination;
             }
+            assets.cfa[i].media.filePath = destination;
           }
         }
         dbManager.createObjectBulk(
