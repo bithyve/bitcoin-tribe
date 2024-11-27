@@ -37,18 +37,6 @@ function EditWalletProfile({ navigation }) {
       setLoading('');
       Toast(wallet.profileUpdateMsg);
       navigation.goBack()
-      // navigation.dispatch(
-      //   CommonActions.reset({
-      //     index: 1,
-      //     routes: [
-      //       { name: NavigationRoutes.HOME },
-      //       {
-      //         name: NavigationRoutes.WALLETDETAILS,
-      //         params: { autoRefresh: true },
-      //       },
-      //     ],
-      //   }),
-      // );
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, true);
