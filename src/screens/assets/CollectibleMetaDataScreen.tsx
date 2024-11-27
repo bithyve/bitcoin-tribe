@@ -95,14 +95,10 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.imageWrapper}>
             <Image
               source={{
-                uri: appType === AppType.ON_CHAIN
-                ? Platform.select({
-                    android: `file://${collectible.media?.filePath}`,
-                    ios: `${collectible.media?.filePath}.${
-                      collectible.media?.mime.split('/')[1]
-                    }`,
-                  })
-                : collectible.media?.base64Image,
+                uri: Platform.select({
+                  android: `file://${collectible.media?.filePath}`,
+                  ios: collectible.media?.filePath,
+                }),
               }}
               resizeMode="contain"
               style={styles.imageStyle}

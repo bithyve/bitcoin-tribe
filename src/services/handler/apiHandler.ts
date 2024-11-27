@@ -790,18 +790,14 @@ export class ApiHandler {
             const collectible: Collectible = assets.cfa[i];
             const ext = collectible.media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
-            if(!await RNFS.exists(path)) {
+            const isFileExists = await RNFS.exists(path);
+            if(!isFileExists) {
               const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
               await RNFS.writeFile(path, hexToBase64(mediaByte.bytes_hex, collectible.media.mime), 'base64');
               assets.cfa[i].media.filePath = path;
             }
           }
         }
-        dbManager.createObjectBulk(
-          RealmSchema.Collectible,
-          assets.cfa,
-          Realm.UpdateMode.Modified,
-        );
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
@@ -813,9 +809,15 @@ export class ApiHandler {
                 element.media.filePath,
                 `${element.media.filePath}.${ext}`,
               );
+              assets.cfa[i].media.filePath = destination;
             }
           }
         }
+        dbManager.createObjectBulk(
+          RealmSchema.Collectible,
+          assets.cfa,
+          Realm.UpdateMode.Modified,
+        );
       }
     } catch (error) {
       console.log('error', error);
