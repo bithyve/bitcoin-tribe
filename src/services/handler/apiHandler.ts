@@ -180,6 +180,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: 'Initially installed',
             });
+            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
@@ -807,8 +808,8 @@ export class ApiHandler {
                 element.media.filePath,
                 `${element.media.filePath}.${ext}`,
               );
-              assets.cfa[i].media.filePath = destination;
             }
+            assets.cfa[i].media.filePath = destination;
           }
         }
         dbManager.createObjectBulk(
