@@ -36,18 +36,7 @@ function EditWalletProfile({ navigation }) {
     if (updated) {
       setLoading('');
       Toast(wallet.profileUpdateMsg);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            { name: NavigationRoutes.HOME },
-            {
-              name: NavigationRoutes.WALLETDETAILS,
-              params: { autoRefresh: true },
-            },
-          ],
-        }),
-      );
+      navigation.goBack()
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, true);

@@ -59,7 +59,7 @@ import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 
-var RNFS = require('react-native-fs');
+import * as RNFS from '@dr.pogodin/react-native-fs';
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -787,19 +787,15 @@ export class ApiHandler {
       if (assets.cfa) {
         if(ApiHandler.appType === AppType.NODE_CONNECT) {
           for (let i = 0; i < assets.cfa.length; i++) {
-            const dbRecord = dbManager.getObjectByPrimaryId(RealmSchema.Collectible,'assetId', assets.cfa[i].assetId)?.toJSON();
-            if(!dbRecord || !dbRecord.media?.base64Image) {
-              const collectible: Collectible = assets.cfa[i];
-              const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
-              assets.cfa[i].media.base64Image = hexToBase64(mediaByte.bytes_hex, collectible.media.mime)
-            }
+            const collectible: Collectible = assets.cfa[i];
+            const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
+            const {base64, fileType} = hexToBase64(mediaByte.bytes_hex);
+            const ext = assets.cfa[i].media.mime.split('/')[1];
+            const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
+            await RNFS.writeFile(path,base64 , 'base64');
+            assets.cfa[i].media.filePath = path;
           }
         }
-        dbManager.createObjectBulk(
-          RealmSchema.Collectible,
-          assets.cfa,
-          Realm.UpdateMode.Modified,
-        );
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
@@ -811,9 +807,15 @@ export class ApiHandler {
                 element.media.filePath,
                 `${element.media.filePath}.${ext}`,
               );
+              assets.cfa[i].media.filePath = destination;
             }
           }
         }
+        dbManager.createObjectBulk(
+          RealmSchema.Collectible,
+          assets.cfa,
+          Realm.UpdateMode.Modified,
+        );
       }
     } catch (error) {
       console.log('error', error);

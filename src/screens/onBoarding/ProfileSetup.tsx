@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import { Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -18,10 +18,7 @@ import config from 'src/utils/config';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { AppTheme } from 'src/theme';
-import { Keys, Storage } from 'src/storage';
-import BitcoinBackedAssetContainer from './components/BitcoinBackedAssetContainer';
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -84,7 +81,7 @@ function ProfileSetup() {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={isLoading} />
+      <ModalLoading visible={isLoading || setupNewAppMutation.status === 'loading'} />
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}

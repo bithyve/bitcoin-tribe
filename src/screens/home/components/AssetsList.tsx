@@ -98,12 +98,11 @@ function AssetsList(props: AssetsListProps) {
               <View style={styles.alternateSpace}>
                 <AssetCard
                   name={item.name}
-                  image={app.appType === AppType.ON_CHAIN ?
-                     Platform.select({
+                  image={Platform.select({
                     android: `file://${item.media?.filePath}`,
-                    ios: `${item.media?.filePath}.${item.media?.mime.split('/')[1]}`,
+                    ios: item.media?.filePath,
                     }
-                  ) : item.media?.base64Image}
+                  )}
                   details={item.details}
                   amount={item.balance.spendable + item.balance.offchainOutbound}
                   tag={isCoin ? 'COIN' : 'COLLECTIBLE'}

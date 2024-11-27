@@ -36,15 +36,10 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
       <Toolbar onPress={onPressSetting} ticker={collectible.name} />
       <Image
         source={{
-          uri:
-            appType === AppType.ON_CHAIN
-              ? Platform.select({
-                  android: `file://${collectible.media?.filePath}`,
-                  ios: `${collectible.media?.filePath}.${
-                    collectible.media?.mime.split('/')[1]
-                  }`,
-                })
-              : collectible.media?.base64Image,
+          uri: Platform.select({
+            android: `file://${collectible.media?.filePath}`,
+            ios: collectible.media?.filePath,
+          }),
         }}
         style={styles.imageStyle}
       />
