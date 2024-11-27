@@ -5,7 +5,6 @@ import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Share from 'react-native-share';
-import mime from 'mime';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
@@ -52,11 +51,8 @@ export const Item = ({ title, value }) => {
 
 const onShare = async (filePath) => {
   try {
-    const detectedMimeType = mime.getType(filePath) || 'image/jpeg';
     const options = {
       url: filePath,
-      type: detectedMimeType,
-     
     };
     await Share.open(options);
   } catch (error) {
