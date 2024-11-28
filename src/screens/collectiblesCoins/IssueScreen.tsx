@@ -40,6 +40,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 function IssueScreen() {
   const { appType } = useContext(AppContext);
@@ -203,7 +204,20 @@ function IssueScreen() {
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading || createUtxos.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.sendAssetLoadingTitle}
+            subTitle={assets.sendAssetLoadingSubTitle}
+            illustrationPath={require('src/assets/images/BackupandRecovery.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
+      {/* <ModalLoading visible={loading || createUtxos.isLoading} /> */}
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
