@@ -222,7 +222,9 @@
     "removed": "已移除",
     "expired": "已过期",
     "viewNodeInfo": "查看节点信息",
-    "channelManagement": "渠道管理"
+    "channelManagement": "渠道管理",
+    "cloudBackupLoadingTitle": "云备份",
+    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

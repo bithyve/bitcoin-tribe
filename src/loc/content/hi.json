@@ -222,7 +222,9 @@
     "removed": "हटा दिया गया",
     "expired": "समाप्त हो गया",
     "viewNodeInfo": "नोड जानकारी देखें",
-    "channelManagement": "चैनल प्रबंधन"
+    "channelManagement": "चैनल प्रबंधन",
+    "cloudBackupLoadingTitle": "क्लाउड बैकअप",
+    "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

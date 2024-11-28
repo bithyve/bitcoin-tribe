@@ -222,7 +222,9 @@
     "removed": "Rimosso",
     "expired": "Scaduto",
     "viewNodeInfo": "Visualizza informazioni sul nodo",
-    "channelManagement": "Gestione del canale"
+    "channelManagement": "Gestione del canale",
+    "cloudBackupLoadingTitle": "Backup su cloud",
+    "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
