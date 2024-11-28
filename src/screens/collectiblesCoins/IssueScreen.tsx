@@ -217,7 +217,6 @@ function IssueScreen() {
           />
         </ResponsePopupContainer>
       </View>
-      {/* <ModalLoading visible={loading || createUtxos.isLoading} /> */}
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
