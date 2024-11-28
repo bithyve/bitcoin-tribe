@@ -20,6 +20,8 @@ type popupContainerProps = {
   backColor: string;
   borderColor: string;
   width?: string;
+  animationIn?:"fadeIn" | "fadeOut" | "bounce" | "flash" | "jello" | "pulse" | "rotate" | "rubberBand" | "shake" | "swing" | "tada" | "wobble" | "bounceIn" | "bounceInDown" | "bounceInUp" | "bounceInLeft" ;
+  animationOut?:"fadeIn" | "fadeOut" | "bounce" | "flash" | "jello" | "pulse" | "rotate" | "rubberBand" | "shake" | "swing" | "tada" | "wobble" | "bounceIn" | "bounceInDown" | "bounceInUp" | "bounceInLeft";
 };
 
 const ResponsePopupContainer = (props: popupContainerProps) => {
@@ -35,6 +37,8 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     backColor,
     borderColor,
     width = '95%',
+    animationIn='fadeIn',
+    animationOut='fadeOut'
   } = props;
 
   const styles = getStyles(theme, backColor, borderColor, width);
@@ -44,8 +48,8 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
       <Modal
         isVisible={visible}
         onBackdropPress={onDismiss}
-        animationIn={'fadeIn'}
-        animationOut={'fadeOut'}
+        animationIn={animationIn}
+        animationOut={animationOut}
         backdropColor={Colors.Black}
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>

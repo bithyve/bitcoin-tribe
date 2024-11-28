@@ -205,14 +205,16 @@ function EnterSeedContainer() {
       }
       const mnemonic = seedWord.trim();
       if (bip39.validateMnemonic(mnemonic)) {
-        mutate({
-          appName: '',
-          walletImage: '',
-          passcode: '',
-          pinMethod: PinMethod.DEFAULT,
-          mnemonic,
-          appType: AppType.ON_CHAIN,
-        });
+        setTimeout(()=>{
+          mutate({
+            appName: '',
+            walletImage: '',
+            passcode: '',
+            pinMethod: PinMethod.DEFAULT,
+            mnemonic,
+            appType: AppType.ON_CHAIN,
+          });
+        }, 500)
       } else {
         setLoading(false);
         Toast(onBoarding.invalidMnemonic, true);
