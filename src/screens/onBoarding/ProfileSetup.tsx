@@ -113,7 +113,7 @@ function ProfileSetup() {
             illustrationPath={require('src/assets/images/appCreation.json')}
           />
         </ResponsePopupContainer>
-        </View>
+      </View>
     </ScreenContainer>
   );
 }
