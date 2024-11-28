@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "Enter a Bitcoin Address",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Enter Send Address or Paste",
+    "enterSendAddressInvoice": "Enter Send Address or RGB Invoice",
+    "enterSendAdrsInvoiceSubTitle": "Enter or Paste Send Address or RGB Invoice",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
     "enterAmount": "Enter Amount",
@@ -383,9 +385,9 @@
     "peerPubAndAddress": "Peer Pubkey and Address",
     "peerPubAndAddressNote": "Public key and address of the peer you want to connect to(pubkey@address)",
     "capacity": "Capacity",
-    "capacityNote": "Total amount of sats that a payment channel on the Lightning Network can hold(in msats).",
+    "capacityNote": "Total amount of sats that a payment channel on the Lightning Network can hold",
     "pushMsats": "Push msats",
-    "pushMsatsNote": "Transfer initial sats to peer when opening a channel.(in msats).",
+    "pushMsatsNote": "Transfer initial sats to peer when opening a channel",
     "assetID": "Asset ID",
     "assetIDNote": "RGB Asset ID",
     "assetAmount": "Asset Amount",
@@ -394,6 +396,9 @@
     "unlockNode": "Unlock Node",
     "pubKeyCopyMsg": "Pub Key copied successfully",
     "nodeUrlCopyMsg": "Node URL copied successfully",
-    "onChainPubKeyCopyMsg": "OnChain Pub Key copied successfully"
+    "onChainPubKeyCopyMsg": "OnChain Pub Key copied successfully",
+    "channelCreatedMsg": "Channel created successfully",
+    "channelCloseMsg": "Channel closed.",
+    "takeTimeMsg": "This step will take a few seconds."
   }
 }

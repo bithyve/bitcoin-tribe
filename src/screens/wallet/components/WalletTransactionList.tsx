@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlatList,
   Platform,
@@ -6,11 +6,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
+import LottieView from 'lottie-react-native';
 
 import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -47,18 +48,23 @@ function WalletTransactionList({
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
+  const [refreshing, setRefreshing] = useState(false);
 
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
+    setRefreshing(true);
     walletRefreshMutation.mutate({
       wallets: [wallet],
     });
+    setTimeout(() => setRefreshing(false), 2000);
   };
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      pullDownToRefresh();
+      walletRefreshMutation.mutate({
+        wallets: [wallet],
+      });
     }
   }, [autoRefresh && isFocused]);
 
@@ -77,19 +83,34 @@ function WalletTransactionList({
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
-  return (
+  return walletRefreshMutation.isLoading && !refreshing ? (
+    Platform.OS === 'ios' ? (
+      <LottieView
+        source={require('src/assets/images/loader.json')}
+        style={styles.loaderStyle}
+        autoPlay
+        loop
+      />
+    ) : (
+      <ActivityIndicator
+        size="small"
+        color={theme.colors.accent1}
+        style={styles.activityIndicatorWrapper}
+      />
+    )
+  ) : (
     <FlatList
       style={styles.container}
       data={transactions}
       refreshControl={
         Platform.OS === 'ios' ? (
           <RefreshControlView
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
           />
         ) : (
           <RefreshControl
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
             colors={[theme.colors.accent1]} // You can customize this part
             progressBackgroundColor={theme.colors.inputBackground}
@@ -147,6 +168,14 @@ const getStyles = (theme: AppTheme) =>
     },
     footer: {
       height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
+    },
+    activityIndicatorWrapper: {
+      marginTop: hp(20),
     },
   });
 export default WalletTransactionList;

@@ -44,11 +44,23 @@ function ReceiveAssetScreen() {
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const [activeTab, setActiveTab] = useState('bitcoin');
+  const [activeTab, setActiveTab] = useState((app.appType !== AppType.ON_CHAIN && assetId !== '') ? 'lightning' : 'bitcoin');
   const [lightningInvoice, setLightningInvoice] = useState('');
+  const [rgbInvoice, setRgbInvoice] = useState('')
 
   useEffect(() => {
-    mutate(assetId, amount);
+    if(app.appType !== AppType.ON_CHAIN) {
+      if(assetId === '') {
+        mutate(assetId, amount);
+      } else {
+        generateLNInvoiceMutation.mutate({
+          amount: Number(amount),
+          assetId,
+        });
+      }
+    } else {
+      mutate(assetId, amount);
+    }
   }, []);
 
   useEffect(() => {
@@ -61,9 +73,19 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (generateLNInvoiceMutation.error) {
-      Toast(generateLNInvoiceMutation.error, true);
+      let errorMessage;
+      // Check if the error is an instance of Error and extract the message
+      if (generateLNInvoiceMutation.error instanceof Error) {
+        errorMessage = generateLNInvoiceMutation.error.message;
+      } else if (typeof generateLNInvoiceMutation.error === 'string') {
+        errorMessage = generateLNInvoiceMutation.error;
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+      Toast(`${errorMessage}`, true);
+      // Toast(generateLNInvoiceMutation.error, true);
     } else if (generateLNInvoiceMutation.data) {
-      setLightningInvoice(generateLNInvoiceMutation.data.invoice);
+      setLightningInvoice(generateLNInvoiceMutation?.data?.invoice);
       setActiveTab('lightning');
     }
   }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
@@ -90,11 +112,15 @@ function ReceiveAssetScreen() {
       }
     } else {
       setActiveTab(tab);
+      if(rgbInvoice === '') {
+        mutate(assetId, amount);
+      }
     }
   };
 
   const qrValue = useMemo(() => {
     if (activeTab === 'bitcoin') {
+      setRgbInvoice(rgbWallet?.receiveData?.invoice)
       return rgbWallet?.receiveData?.invoice;
     } else {
       return lightningInvoice;
@@ -133,12 +159,15 @@ function ReceiveAssetScreen() {
         <View />
       ) : (
         <View>
-          {app.appType !== AppType.ON_CHAIN && (
+          {(app.appType !== AppType.ON_CHAIN && assetId !== '') && (
             <View style={styles.footerView}>
               <WalletFooter activeTab={activeTab} setActiveTab={onTabChange} />
             </View>
           )}
-          <ShowQRCode value={qrValue} title={receciveScreen.invoiceAddress} />
+          <ShowQRCode
+            value={qrValue || 'address'}
+            title={receciveScreen.invoiceAddress}
+          />
           <ReceiveQrClipBoard
             qrCodeValue={qrValue}
             icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}

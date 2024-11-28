@@ -83,7 +83,7 @@ export interface MetaData {
 export interface Coin {
   addedAt: number;
   assetId: string;
-  assetIface: string;
+  assetIface: AssetFace;
   balance: Balance;
   issuedSupply: number;
   name: string;
@@ -97,6 +97,7 @@ export interface Coin {
 interface Media {
   filePath: string;
   mime: string;
+  digest?: string;
 }
 export interface Collectible {
   addedAt: number;
@@ -148,6 +149,7 @@ export interface RgbNodeConnectParams {
   nodeId: string;
   authentication: string;
   peerDNS?: string;
+  mnemonic?: string
 }
 
 export interface NodeInfo {

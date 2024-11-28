@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Share from 'react-native-share';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
@@ -18,8 +19,6 @@ import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
-import copyImageToDestination from 'src/utils/downloadImage';
-import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
 import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -49,6 +48,17 @@ export const Item = ({ title, value }) => {
   );
 };
 
+const onShare = async (filePath) => {
+  try {
+    const options = {
+      url: filePath,
+    };
+    await Share.open(options);
+  } catch (error) {
+    console.log('Error sharing file:', error);
+  }
+};
+
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -75,14 +85,9 @@ const CoinsMetaDataScreen = () => {
         onSettingsPress={() => {
           const filePath = Platform.select({
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
-            ios: `${collectible.media?.filePath}.${
-              collectible.media?.mime.split('/')[1]
-            }`, // Add file extension
+            ios: `${collectible.media?.filePath}`, // Add file extension
           });
-
-          copyImageToDestination(filePath)
-            .then(path => Toast(assets.saveAssetSuccess))
-            .catch(err => Toast(assets.saveAssetFailed, true));
+          onShare(filePath)
         }}
         style={styles.headerWrapper}
       />
@@ -95,9 +100,7 @@ const CoinsMetaDataScreen = () => {
               source={{
                 uri: Platform.select({
                   android: `file://${collectible.media?.filePath}`,
-                  ios: `${collectible.media?.filePath}.${
-                    collectible.media?.mime.split('/')[1]
-                  }`,
+                  ios: collectible.media?.filePath,
                 }),
               }}
               resizeMode="contain"
@@ -107,21 +110,10 @@ const CoinsMetaDataScreen = () => {
           <ScrollView
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
-            <Item
-              title={assets.name}
-              value={
-                Platform.OS === 'ios'
-                  ? collectible && collectible.name
-                  : collectible && collectible.details
-              }
-            />
+            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={assets.details}
-              value={
-                Platform.OS === 'ios'
-                  ? collectible && collectible.details
-                  : collectible && collectible.name
-              }
+              value={collectible && collectible.details}
             />
             <AssetIDContainer assetId={assetId} />
             <Item

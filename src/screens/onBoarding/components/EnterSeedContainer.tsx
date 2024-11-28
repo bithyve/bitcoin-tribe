@@ -34,6 +34,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Fonts from 'src/constants/Fonts';
+import AppType from 'src/models/enums/AppType';
 
 type seedWordItem = {
   id: number;
@@ -208,6 +209,7 @@ function EnterSeedContainer() {
           passcode: '',
           pinMethod: PinMethod.DEFAULT,
           mnemonic,
+          appType: AppType.ON_CHAIN,
         });
       } else {
         setLoading(false);

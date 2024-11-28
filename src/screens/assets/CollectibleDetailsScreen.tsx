@@ -1,13 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { windowHeight, wp } from 'src/constants/responsive';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
+import { useMutation } from 'react-query';
+
+import { windowHeight, wp } from 'src/constants/responsive';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -79,7 +80,7 @@ const CollectibleDetailsScreen = () => {
           }}
           navigation={navigation}
           wallet={wallet}
-          coin={collectible.details}
+          coin={collectible.name}
           assetId={assetId}
         />
       </View>

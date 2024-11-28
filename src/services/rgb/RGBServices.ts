@@ -17,6 +17,7 @@ export default class RGBServices {
 
   static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
     const keys = await RGB.restoreKeys(this.NETWORK, mnemonic);
+    console.log('keys', keys);
     return JSON.parse(keys);
   };
 
@@ -215,7 +216,7 @@ export default class RGBServices {
         });
         if (response) {
           const data = snakeCaseToCamelCaseCase(response);
-          return data.asset;
+          return data.asset ? data.asset : data;
         } else {
           return response;
         }

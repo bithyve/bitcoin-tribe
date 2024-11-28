@@ -57,8 +57,9 @@ import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
+import { hexToBase64 } from 'src/utils/hexToBase64';
 
-var RNFS = require('react-native-fs');
+import * as RNFS from '@dr.pogodin/react-native-fs';
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -104,15 +105,28 @@ export class ApiHandler {
     rgbNodeConnectParams?: RgbNodeConnectParams;
     rgbNodeInfo?: NodeInfo;
   }) {
+    Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
-    const AES_KEY = generateEncryptionKey();
     const hash = hash512(
       pinMethod !== PinMethod.DEFAULT
         ? passcode
         : config.ENC_KEY_STORAGE_IDENTIFIER,
     );
-    const encryptedKey = encrypt(hash, AES_KEY);
-    SecureStore.store(hash, encryptedKey);
+    // Check if the encrypted key already exists
+    let AES_KEY: string;
+    const existingEncryptedKey = await SecureStore.fetch(hash);
+    if (!existingEncryptedKey) {
+      // Generate a new AES key
+      AES_KEY = generateEncryptionKey();
+      // Encrypt the key using the hash
+      const encryptedKey = encrypt(hash, AES_KEY);
+      // Store the encrypted key securely
+      await SecureStore.store(hash, encryptedKey);
+    } else {
+      console.log('Encryption key already exists. Skipping encryption step.');
+      // Decrypt the existing key to get AES_KEY
+      AES_KEY = decrypt(hash, existingEncryptedKey);
+    }
     const uint8array = stringToArrayBuffer(AES_KEY);
 
     const isRealmInit = await dbManager.initializeRealm(uint8array);
@@ -166,10 +180,11 @@ export class ApiHandler {
               date: new Date().toString(),
               title: 'Initially installed',
             });
+            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
-            mnemonic: '',
+            mnemonic: rgbNodeConnectParams.mnemonic,
             xpub: '',
             rgbDir: '',
             accountXpub: '',
@@ -178,25 +193,17 @@ export class ApiHandler {
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
           };
-          console.log('rgbWallet', rgbWallet);
           const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT);
-          const resInitNode = await ApiHandler.api.init({
-            password: 'tribe@2024',
-          });
-          console.log('resInitNode', JSON.stringify(resInitNode));
-          if (resInitNode && resInitNode.mnemonic) {
-            rgbWallet.mnemonic = resInitNode.mnemonic;
-            const resUnlockNode = await ApiHandler.api.unlock('tribe@2024');
-            const resNodeInfo = await ApiHandler.api.nodeinfo();
-            rgbWallet.xpub = resNodeInfo.pubkey;
-            rgbWallet.accountXpub = resNodeInfo.pubkey;
-            rgbWallet.accountXpubFingerprint = resNodeInfo.pubkey;
+
+            rgbWallet.xpub = rgbNodeConnectParams.nodeId;
+            rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
+            rgbWallet.accountXpubFingerprint = rgbNodeConnectParams.nodeId;
             const newAPP: TribeApp = {
               id: rgbNodeConnectParams.nodeId,
-              publicId: resNodeInfo.pubkey || rgbNodeConnectParams.nodeId,
+              publicId: rgbNodeConnectParams.nodeId,
               appName,
               walletImage,
-              primaryMnemonic: resInitNode.mnemonic,
+              primaryMnemonic: rgbNodeConnectParams.mnemonic,
               primarySeed: rgbNodeConnectParams.nodeId,
               imageEncryptionKey: '',
               version: DeviceInfo.getVersion(),
@@ -214,7 +221,7 @@ export class ApiHandler {
             );
             if (created) {
               dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-              Storage.set(Keys.APPID, resNodeInfo.pubkey);
+              Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
               dbManager.createObject(RealmSchema.VersionHistory, {
                 version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
                 releaseNote: '',
@@ -222,11 +229,6 @@ export class ApiHandler {
                 title: 'Initially installed',
               });
             }
-          } else {
-            throw new Error(
-              resInitNode.message || resInitNode.error || 'Failed to init node',
-            );
-          }
         } else {
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
@@ -266,11 +268,14 @@ export class ApiHandler {
             });
           }
         }
+        Storage.set(Keys.SETUPAPP, false);
       } catch (error) {
+        Storage.set(Keys.SETUPAPP, false);
         console.log(error);
-        throw new Error(error);
+        throw error;
       }
     } else {
+      Storage.set(Keys.SETUPAPP, false);
       throw new Error('Realm initialisation failed');
     }
   }
@@ -558,27 +563,50 @@ export class ApiHandler {
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
-    const txPrerequisites = await ApiHandler.sendPhaseOne({
-      sender,
-      recipient,
-      averageTxFee,
-      selectedPriority,
-    });
+    try {
+      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        const response = await ApiHandler.api.sendBTCTransaction({
+          amount: recipient.amount,
+          address: recipient.address,
+          fee_rate: averageTxFee[selectedPriority].averageTxFee,
+          skip_sync: false,
+        });
+        if (response) {
+          const feeEstimate = await ApiHandler.api.estimateFee({ blocks: 7 });
+          return {
+            txid: response.txid,
+            txPrerequisites:  feeEstimate
+          };
+        } else {
+          throw new Error('Failed to connect to node');
+        }
+      } else {
+        const txPrerequisites = await ApiHandler.sendPhaseOne({
+          sender,
+          recipient,
+          averageTxFee,
+          selectedPriority,
+        });
 
-    if (!txPrerequisites) {
-      throw new Error('Failed to generate txPrerequisites');
+        if (!txPrerequisites) {
+          throw new Error('Failed to generate txPrerequisites');
+        }
+        const { txid } = await ApiHandler.sendPhaseTwo({
+          sender,
+          recipient,
+          txPrerequisites,
+          txPriority: selectedPriority,
+        });
+
+        return {
+          txid,
+          txPrerequisites,
+        };
+      }
+    } catch (error) {
+      console.log({ error });
+      throw new Error('Failed to send txn');
     }
-    const { txid } = await ApiHandler.sendPhaseTwo({
-      sender,
-      recipient,
-      txPrerequisites,
-      txPriority: selectedPriority,
-    });
-
-    return {
-      txid,
-      txPrerequisites,
-    };
   }
 
   static async receiveTestSats() {
@@ -644,7 +672,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log({ error });
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -672,7 +700,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -697,7 +725,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -712,7 +740,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -726,7 +754,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('errors', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -740,13 +768,13 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('payments', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
   static async refreshRgbWallet() {
     try {
-      const assets = await RGBServices.syncRgbAssets(
+      let assets = await RGBServices.syncRgbAssets(
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -758,11 +786,17 @@ export class ApiHandler {
         );
       }
       if (assets.cfa) {
-        dbManager.createObjectBulk(
-          RealmSchema.Collectible,
-          assets.cfa,
-          Realm.UpdateMode.Modified,
-        );
+        if(ApiHandler.appType === AppType.NODE_CONNECT) {
+          for (let i = 0; i < assets.cfa.length; i++) {
+            const collectible: Collectible = assets.cfa[i];
+            const mediaByte = await ApiHandler.api.getassetmedia({digest: collectible.media.digest});
+            const {base64, fileType} = hexToBase64(mediaByte.bytes_hex);
+            const ext = assets.cfa[i].media.mime.split('/')[1];
+            const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
+            await RNFS.writeFile(path,base64 , 'base64');
+            assets.cfa[i].media.filePath = path;
+          }
+        }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const element: Collectible = assets.cfa[i];
@@ -775,11 +809,17 @@ export class ApiHandler {
                 `${element.media.filePath}.${ext}`,
               );
             }
+            assets.cfa[i].media.filePath = destination;
           }
         }
+        dbManager.createObjectBulk(
+          RealmSchema.Collectible,
+          assets.cfa,
+          Realm.UpdateMode.Modified,
+        );
       }
     } catch (error) {
-      console.log('refreshRgbWallet', error);
+      console.log('error', error);
     }
   }
 
@@ -835,7 +875,7 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -870,7 +910,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -900,7 +940,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('sendAsset', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -926,7 +966,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -939,7 +979,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('Update Profile', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -954,7 +994,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('check Version', error);
-      throw new Error(error);
+      throw error;
     }
   }
   static async viewUtxos() {
@@ -983,7 +1023,7 @@ export class ApiHandler {
       return response;
     } catch (error) {
       console.log('utxos', error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1008,7 +1048,7 @@ export class ApiHandler {
         console.log(restore);
       }
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1066,7 +1106,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1083,7 +1123,7 @@ export class ApiHandler {
       return true;
     } catch (error) {
       console.log('backup', error);
-      throw new Error(error);
+      throw error;
     }
   }
   static async getFeeAndExchangeRates() {
@@ -1111,7 +1151,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1260,7 +1300,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1279,14 +1319,11 @@ export class ApiHandler {
       });
       if (response.error) {
         throw new Error(response.error);
-      } else if (response) {
-        return response;
-      } else {
-        throw new Error('Failed to create node');
       }
+      return response;
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1300,7 +1337,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1314,7 +1351,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1330,7 +1367,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1347,7 +1384,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1366,7 +1403,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -1395,7 +1432,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(error);
+      throw error;
     }
   }
 }

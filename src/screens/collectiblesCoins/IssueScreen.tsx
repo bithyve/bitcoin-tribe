@@ -38,8 +38,11 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import AppType from 'src/models/enums/AppType';
+import { AppContext } from 'src/contexts/AppContext';
 
 function IssueScreen() {
+  const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -124,28 +127,36 @@ function IssueScreen() {
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
-    const response = await ApiHandler.issueNewCollectible({
-      name: assetName.trim(),
-      description: description,
-      supply: totalSupplyAmt.replace(/,/g, ''),
-      filePath: image.replace('file://', ''),
-    });
-    if (response?.assetId) {
+    try {
+      const response = await ApiHandler.issueNewCollectible({
+        name: assetName.trim(),
+        description: description,
+        supply: totalSupplyAmt.replace(/,/g, ''),
+        filePath: Platform.select({
+          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}` : image.replace('file://', ''),
+          ios: image.replace('file://', ''),
+        }),
+      });
+      if (response?.assetId) {
+        setLoading(false);
+        Toast(assets.assetCreateMsg);
+        viewUtxos.mutate();
+        navigation.dispatch(popAction);
+      } else if (
+        response?.error === 'Insufficient sats for RGB' ||
+        response?.name === 'NoAvailableUtxos'
+      ) {
+        setLoading(false);
+        setTimeout(() => {
+          createUtxos.mutate();
+        }, 500);
+      } else if (response?.error) {
+        setLoading(false);
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
       setLoading(false);
-      Toast(assets.assetCreateMsg);
-      viewUtxos.mutate();
-      navigation.dispatch(popAction);
-    } else if (
-      response?.error === 'Insufficient sats for RGB' ||
-      response?.name === 'NoAvailableUtxos'
-    ) {
-      setLoading(false);
-      setTimeout(() => {
-        createUtxos.mutate();
-      }, 500);
-    } else if (response?.error) {
-      setLoading(false);
-      Toast(`Failed: ${response?.error}`, true);
+      Toast(`Unexpected error: ${error.message}`, true);
     }
   }, [
     assetName,
@@ -181,6 +192,14 @@ function IssueScreen() {
     }
   };
 
+  const handleTabChange = () => {
+    setDescription('');
+    setAssetTicker('');
+    setAssetName('');
+    setTotalSupplyAmt('');
+    setImage('');
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
@@ -188,10 +207,12 @@ function IssueScreen() {
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
-          if (value === AssetType.Coin) {
-            setDescription('');
+          if (value !== assetType) {
+            // Switching to a different tab, reset all states
+            handleTabChange();
+            setAssetType(value);
+          } else {
           }
-          setAssetType(value);
         }}
         buttons={[
           {

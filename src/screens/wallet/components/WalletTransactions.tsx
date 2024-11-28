@@ -128,7 +128,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
                   fontSize: transAmount.toString().length > 10 ? 11 : 16,
                 },
               ]}>
-              &nbsp;{getBalance(transAmount)}
+              &nbsp;{isNaN(transAmount) ? 0 : getBalance(transAmount)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>

@@ -14,6 +14,7 @@ export enum Keys {
   APP_CURRENCY = 'APP_CURRENCY',
   CURRENCY_MODE = 'CURRENCY_MODE',
   BACKUPALERT = 'BACKUPALERT',
+  SETUPAPP = 'SETUPAPP',
 }
 
 export class Storage {

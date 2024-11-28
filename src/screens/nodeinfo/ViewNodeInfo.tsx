@@ -19,6 +19,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import NodeInfoItem from './components/NodeInfoItem';
 import { hp } from 'src/constants/responsive';
+import { AppContext } from 'src/contexts/AppContext';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -29,6 +30,7 @@ const ViewNodeInfo = () => {
   const { mutate, isLoading, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
+  const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);
   const initNodeMutation = useMutation(ApiHandler.initNode);
   const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
@@ -62,6 +64,7 @@ const ViewNodeInfo = () => {
 
   useEffect(() => {
     if (unlockNodeMutation.isSuccess) {
+      setIsWalletOnline(true)
       Toast('Node unlocked', false);
       unlockNodeMutation.reset();
     } else if (unlockNodeMutation.isError) {

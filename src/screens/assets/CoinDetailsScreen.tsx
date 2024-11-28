@@ -55,7 +55,7 @@ const CoinDetailsScreen = () => {
           }}
           navigation={navigation}
           wallet={wallet}
-          coin={coin.ticker}
+          coin={coin.name}
           assetId={assetId}
         />
       </View>

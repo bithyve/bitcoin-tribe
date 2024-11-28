@@ -62,6 +62,7 @@ import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
 import RGBWalletStatus from 'src/components/RGBWalletOffline';
+import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -97,6 +98,11 @@ function LoginStack() {
         name={NavigationRoutes.SUPPORTTERMANDCONDITION}
         component={SupportTermAndCondition}
       />
+      <Stack.Screen
+        name={NavigationRoutes.ONBOARDINGSCREEN}
+        component={OnboardingSlides}
+      />
+      
     </Stack.Navigator>
   );
 }

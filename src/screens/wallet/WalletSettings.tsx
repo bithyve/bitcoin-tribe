@@ -27,6 +27,15 @@ function WalletSettings() {
     ApiHandler.viewUtxos,
   );
 
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     Toast(strings.testSatsRecived);
+  //     fetchUTXOs();
+  //   } else if (isError) {
+  //     Toast(strings.failedTestSatsRecived, true);
+  //   }
+  // }, [isError, isSuccess]);
+
   useEffect(() => {
     fetchUTXOs();
   }, []);

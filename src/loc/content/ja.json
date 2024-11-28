@@ -241,6 +241,8 @@
     "sendBtcOptionCardSubTitle": "ビットコインアドレスを入力",
     "enterSendAddress": "送信アドレスを入力",
     "enterSendAdrsSubTitle": "送信アドレスを入力または貼り付け",
+    "enterSendAddressInvoice": "送信先住所またはRGB請求書を入力してください",
+    "enterSendAdrsInvoiceSubTitle": "送信先住所またはRGB請求書を入力または貼り付けてください",
     "enterAddress": "アドレスを入力",
     "sendToTitle": "送信先",
     "enterAmount": "金額を入力",
@@ -394,6 +396,9 @@
     "unlockNode": "ノードを解除する",
     "pubKeyCopyMsg": "公開鍵が正常にコピーされました",
     "nodeUrlCopyMsg": "ノード URL が正常にコピーされました",
-    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました"
+    "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました",
+    "channelCreatedMsg": "チャンネルが正常に作成されました",
+    "channelCloseMsg": "チャンネルが閉じました",
+    "takeTimeMsg": "このステップには数秒かかります。"
   }
 }

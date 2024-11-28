@@ -34,7 +34,7 @@ export const fetch = async (hash_current: string) => {
         return password.enc_key;
       }
     } else {
-      throw new Error('Password not found');
+      return false;
     }
   } catch (err) {
     console.log(err);
