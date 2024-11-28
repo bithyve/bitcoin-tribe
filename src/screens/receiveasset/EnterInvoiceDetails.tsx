@@ -153,7 +153,7 @@ const EnterInvoiceDetails = () => {
             />
             <View style={styles.typeViewWrapper}>
               <AppText variant="body2" style={styles.feePriorityText}>
-                On-chain
+               {receciveScreen.onchain}
               </AppText>
             </View>
           </View>
@@ -167,7 +167,7 @@ const EnterInvoiceDetails = () => {
             />
             <View style={styles.typeViewWrapper}>
               <AppText variant="body2" style={styles.feePriorityText}>
-                Lightning
+                {receciveScreen.lightning}
               </AppText>
             </View>
           </View>

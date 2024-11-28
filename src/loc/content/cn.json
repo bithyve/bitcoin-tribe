@@ -235,7 +235,9 @@
     "bitcoinAddress": "比特币地址",
     "noteSubTitle": "此发票中的盲UTXO将在创建后24小时内过期。",
     "lightningAddress": "闪电地址",
-    "chooseInvoiceType": "选择发票类型"
+    "chooseInvoiceType": "选择发票类型",
+    "onchain": "链上",
+    "lightning": "闪电网络"
   },
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
