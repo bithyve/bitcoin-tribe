@@ -234,7 +234,8 @@
     "invoiceAddress": "आरजीबी इनवॉइस",
     "bitcoinAddress": "बिटकॉइन पता",
     "noteSubTitle": "इस इनवॉइस में ब्लाइंडेड यूटीएक्सओ इसके निर्माण के 24 घंटों बाद समाप्त हो जाएगा।",
-    "lightningAddress": "लाइटनिंग पता"
+    "lightningAddress": "लाइटनिंग पता",
+    "chooseInvoiceType": "चुनें इनवॉइस प्रकार"
   },
   "sendScreen": {
     "headerSubTitle": "नीचे बिटकॉइन पता या आरजीबी इनवॉइस स्कैन करें",

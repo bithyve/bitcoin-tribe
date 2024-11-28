@@ -234,7 +234,8 @@
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
     "noteSubTitle": "The blinded UTXO in this invoice will expire in 24 hours after its creation.",
-    "lightningAddress": "Lightning Address"
+    "lightningAddress": "Lightning Address",
+    "chooseInvoiceType": "Choose Invoice Type"
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",

@@ -234,7 +234,8 @@
     "invoiceAddress": "Fattura RGB",
     "bitcoinAddress": "Indirizzo Bitcoin",
     "noteSubTitle": "L'UTXO cieco in questa fattura scadrà 24 ore dopo la sua creazione.",
-    "lightningAddress": "Indirizzo Lightning"
+    "lightningAddress": "Indirizzo Lightning",
+    "chooseInvoiceType": "Scegli il tipo di fattura"
   },
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",

@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
@@ -18,6 +18,9 @@ import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import AppText from 'src/components/AppText';
+import AppType from 'src/models/enums/AppType';
+import { useQuery } from '@realm/react';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
   StyleSheet.create({
@@ -56,6 +59,24 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
     reservedSatsText: {
       color: theme.colors.secondaryHeadingColor,
     },
+    radioBtnWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(10),
+      width: '50%',
+    },
+    typeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    wrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    chooseInvoiceType:{
+      marginTop: hp(20)
+    }
   });
 
 const EnterInvoiceDetails = () => {
@@ -68,10 +89,16 @@ const EnterInvoiceDetails = () => {
   } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [assetId, setAssetId] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
+  const [selectedType, setSelectedType] = React.useState(
+    app.appType !== AppType.ON_CHAIN && assetId !== ''
+      ? 'lightning'
+      : 'bitcoin',
+  );
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -83,7 +110,6 @@ const EnterInvoiceDetails = () => {
   }, [UnspentUTXOData]);
 
   const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
-
   return (
     <ScreenContainer>
       <AppHeader
@@ -113,8 +139,40 @@ const EnterInvoiceDetails = () => {
           style={styles.input}
           keyboardType="numeric"
         />
+        <View>
+          <AppText variant='heading3' style={styles.chooseInvoiceType}>{receciveScreen.chooseInvoiceType}</AppText>
+        </View>
+        <View style={styles.wrapper}>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={'bitcoin'}
+              status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+              onPress={() => setSelectedType('bitcoin')}
+            />
+            <View style={styles.typeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                On-chain
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.radioBtnWrapper}>
+            <RadioButton.Android
+              color={theme.colors.accent1}
+              uncheckedColor={theme.colors.headingColor}
+              value={'lightning'}
+              status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
+              onPress={() => setSelectedType('lightning')}
+            />
+            <View style={styles.typeViewWrapper}>
+              <AppText variant="body2" style={styles.feePriorityText}>
+                Lightning
+              </AppText>
+            </View>
+          </View>
+        </View>
       </View>
-
       <View style={styles.footerWrapper}>
         {totalReserveSatsAmount === 0 ? (
           <View style={styles.reservedSatsWrapper}>
@@ -135,14 +193,16 @@ const EnterInvoiceDetails = () => {
               refresh: true,
               assetId,
               amount,
+              selectedType 
             });
           }}
-          secondaryTitle={common.skip}
+          secondaryTitle={selectedType=== 'bitcoin' && common.skip}
           secondaryOnPress={() =>
             navigation.replace(NavigationRoutes.RECEIVEASSET, {
               refresh: true,
               assetId,
               amount,
+              selectedType
             })
           }
           disabled={assetId === '' || amount === ''}

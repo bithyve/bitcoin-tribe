@@ -234,7 +234,8 @@
     "invoiceAddress": "Factura RGB",
     "bitcoinAddress": "Dirección de Bitcoin",
     "noteSubTitle": "El UTXO cegado en esta factura caducará en 24 horas después de su creación.",
-    "lightningAddress": "Dirección Lightning"
+    "lightningAddress": "Dirección Lightning",
+    "chooseInvoiceType": "Elige el tipo de factura"
   },
   "sendScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",

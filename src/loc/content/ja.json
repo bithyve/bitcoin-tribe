@@ -234,7 +234,8 @@
     "invoiceAddress": "RGB請求書",
     "bitcoinAddress": "ビットコインアドレス",
     "noteSubTitle": "この請求書のブラインドUTXOは作成後24時間で失効します。",
-    "lightningAddress": "ライトニングアドレス"
+    "lightningAddress": "ライトニングアドレス",
+    "chooseInvoiceType": "請求書の種類を選択"
   },
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
