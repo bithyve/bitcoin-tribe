@@ -39,7 +39,7 @@ export default class WalletUtilities {
       return NetworkType.MAINNET;
     } catch (err) {
       try {
-        bitcoinJS.address.toOutputScript(address, bitcoinJS.networks.testnet);
+        bitcoinJS.address.toOutputScript(address, bitcoinJS.networks.regtest);
         return NetworkType.TESTNET;
       } catch (err) {
         return null;
@@ -48,10 +48,12 @@ export default class WalletUtilities {
   };
 
   static getNetworkByType = (type: NetworkType) => {
-    if (type === NetworkType.TESTNET) {
-      return bitcoinJS.networks.testnet;
+    if (type === NetworkType.MAINNET) {
+      return bitcoinJS.networks.bitcoin;
+    } else if (type === NetworkType.REGTEST) {
+      return bitcoinJS.networks.regtest;
     }
-    return bitcoinJS.networks.bitcoin;
+    return bitcoinJS.networks.testnet;
   };
 
   static getFingerprintFromNode = node => {
@@ -96,7 +98,8 @@ export default class WalletUtilities {
     purpose: DerivationPurpose = DerivationPurpose.BIP84,
     scriptType: BIP48ScriptTypes = BIP48ScriptTypes.NATIVE_SEGWIT,
   ): string => {
-    const isTestnet = type === NetworkType.TESTNET ? 1 : 0;
+    const isTestnet =
+      type === NetworkType.TESTNET || type === NetworkType.REGTEST ? 1 : 0;
     if (entity === EntityKind.VAULT) {
       const scriptNum = scriptType === BIP48ScriptTypes.NATIVE_SEGWIT ? 2 : 1;
       return `m/${DerivationPurpose.BIP48}'/${isTestnet}'/${accountNumber}'/${scriptNum}'`;
@@ -734,6 +737,11 @@ export default class WalletUtilities {
     } else if (WalletUtilities.isValidRGBAddress(scannedStr)) {
       return {
         type: PaymentInfoKind.RGB_INVOICE,
+        address: scannedStr,
+      };
+    } else if (scannedStr.startsWith('lnbc')) {
+      return {
+        type: PaymentInfoKind.RLN_INVOICE,
         address: scannedStr,
       };
     }

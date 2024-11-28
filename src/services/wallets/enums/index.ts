@@ -55,6 +55,7 @@ export enum TxPriority {
 export enum NetworkType {
   TESTNET = 'TESTNET',
   MAINNET = 'MAINNET',
+  REGTEST = 'REGTEST',
 }
 
 export enum NodeType {
@@ -119,6 +120,7 @@ export enum PaymentInfoKind {
   ADDRESS = 'address',
   PAYMENT_URI = 'paymentURI',
   RGB_INVOICE = 'rgbInvoice',
+  RLN_INVOICE = 'rlninvoice',
 }
 
 export enum SignerStorage {

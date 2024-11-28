@@ -10,13 +10,17 @@ import Colors from 'src/theme/Colors';
 type ShowQRCodeProps = {
   value: string;
   title: string;
+  qrTitleColor?: string;
 };
 
 const ShowQRCode = (props: ShowQRCodeProps) => {
   const theme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { value, title } = props;
+  const { value, title, qrTitleColor = theme.colors.accent1 } = props;
   const qrSize = (windowWidth * 65) / 100;
+  const styles = React.useMemo(
+    () => getStyles(theme, qrTitleColor),
+    [theme, qrTitleColor],
+  );
   return (
     <>
       <View style={styles.qrViewWrapper}>
@@ -31,14 +35,14 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
   );
 };
 
-const getStyles = theme =>
+const getStyles = (theme, qrTitleColor) =>
   StyleSheet.create({
     qrViewWrapper: {
       alignSelf: 'center',
       backgroundColor: Colors.White,
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: wp(35),
+      // marginTop: wp(35),
       padding: 10,
       borderRadius: 15,
       borderColor: theme.colors.borderColor,
@@ -54,7 +58,7 @@ const getStyles = theme =>
     },
     qrFooterText: {
       textAlign: 'center',
-      color: theme.colors.accent1,
+      color: qrTitleColor,
       paddingVertical: wp(10),
       fontFamily: Fonts.LufgaRegular,
     },

@@ -27,6 +27,7 @@ import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
 import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
+import EnterInvoiceDetails from 'src/screens/receiveasset/EnterInvoiceDetails';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
@@ -50,10 +51,18 @@ import RGBCreateUtxo from 'src/screens/collectiblesCoins/RGBCreateUtxo';
 import BackupPhraseSetting from 'src/screens/settings/BackupPhraseSetting';
 import EnterSeedScreen from 'src/screens/onBoarding/EnterSeedScreen';
 import SelectAssetToSend from 'src/screens/assets/SelectAssetToSend';
-import OnBoardingScreen from 'src/screens/onBoarding/OnBoardingScreen';
 import SelectWallet from 'src/screens/onBoarding/SelectWallet';
 import RgbLightningNodeConnect from 'src/screens/onBoarding/RgbLightningNodeConnect';
 import LightningReceiveScreen from 'src/screens/receive/LightningReceiveScreen';
+import ViewNodeInfo from 'src/screens/nodeinfo/ViewNodeInfo';
+import SupportTermAndCondition from 'src/screens/onBoarding/SupportTermAndCondition';
+import RgbChannels from 'src/screens/channels/RgbChannels';
+import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
+import SendBTCScreen from 'src/screens/send/SendBTCScreen';
+import LightningSend from 'src/screens/send/LightningSend';
+import ChannelDetails from 'src/screens/channels/ChannelDetails';
+import RGBWalletStatus from 'src/components/RGBWalletOffline';
+import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -78,10 +87,6 @@ function LoginStack() {
         component={EnterSeedScreen}
       />
       <Stack.Screen
-        name={NavigationRoutes.ONBOARDINGSCREEN}
-        component={OnBoardingScreen}
-      />
-      <Stack.Screen
         name={NavigationRoutes.SELECTWALLET}
         component={SelectWallet}
       />
@@ -89,6 +94,15 @@ function LoginStack() {
         name={NavigationRoutes.RGBLIGHTNINGNODECONNECT}
         component={RgbLightningNodeConnect}
       />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORTTERMANDCONDITION}
+        component={SupportTermAndCondition}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ONBOARDINGSCREEN}
+        component={OnboardingSlides}
+      />
+      
     </Stack.Navigator>
   );
 }
@@ -158,6 +172,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}
           component={ReceiveAsset}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ENTERINVOICEDETAILS}
+          component={EnterInvoiceDetails}
         />
         <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
         <Stack.Screen
@@ -234,6 +252,30 @@ function AppStack() {
           name={NavigationRoutes.LIGHTNINGRECEIVE}
           component={LightningReceiveScreen}
         />
+        <Stack.Screen
+          name={NavigationRoutes.VIEWNODEINFO}
+          component={ViewNodeInfo}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RGBCHANNELS}
+          component={RgbChannels}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CHANNELDETAILS}
+          component={ChannelDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.OPENRGBCHANNEL}
+          component={OpenRgbChannel}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.SENDBTCSCREEN}
+          component={SendBTCScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.LIGHTNINGSEND}
+          component={LightningSend}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );
@@ -242,6 +284,8 @@ function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
     <NavigationContainer>
+      <RGBWalletStatus />
+
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

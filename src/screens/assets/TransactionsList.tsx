@@ -5,8 +5,10 @@ import {
   FlatList,
   Platform,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -18,6 +20,7 @@ import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
+
 
 function TransactionsList({
   transactions,
@@ -37,7 +40,7 @@ function TransactionsList({
   assetId: string;
 }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations } = translations;
+  const { wallet: walletTranslations, settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
@@ -60,6 +63,22 @@ function TransactionsList({
         </AppTouchable>
       </View>
 
+     {isLoading ?
+     Platform.OS === 'ios' ? (
+      <LottieView
+        source={require('src/assets/images/loader.json')}
+        style={styles.loaderStyle}
+        autoPlay
+        loop
+      />
+    ) : (
+      <ActivityIndicator
+        size="small"
+        color={theme.colors.accent1}
+        style={styles.activityIndicatorWrapper}
+      />
+    )
+   :
       <FlatList
         style={styles.container2}
         data={transactions}
@@ -80,7 +99,7 @@ function TransactionsList({
         }
         renderItem={({ item }) => (
           <AssetTransaction
-            transId={item.status.toUpperCase()}
+            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
             transDate={item.createdAt}
             transAmount={`${item.amount}`}
             transType={item.kind}
@@ -91,7 +110,7 @@ function TransactionsList({
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyStateView title={''} subTitle={''} />}
-      />
+      />}
     </View>
   );
 }
@@ -117,6 +136,14 @@ const getStyles = (theme: AppTheme) =>
     },
     viewAllText: {
       color: theme.colors.accent1,
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
+    },
+    activityIndicatorWrapper: {
+      marginTop: hp(20),
     },
   });
 export default TransactionsList;

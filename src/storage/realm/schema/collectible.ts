@@ -7,6 +7,7 @@ export const CollectibleMediaSchema: ObjectSchema = {
   properties: {
     filePath: 'string',
     mime: 'string',
+    base64Image: 'string?',
   },
 };
 

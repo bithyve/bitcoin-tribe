@@ -1,13 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { windowHeight, wp } from 'src/constants/responsive';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
+import { useMutation } from 'react-query';
+
+import { windowHeight, wp } from 'src/constants/responsive';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -45,10 +46,15 @@ const CollectibleDetailsScreen = () => {
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
 
   useEffect(() => {
-    mutate({ assetId, schema: RealmSchema.Collectible });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshRgbWallet.mutate();
+      mutate({ assetId, schema: RealmSchema.Collectible });
+    });
+    return unsubscribe;
+  }, [navigation, assetId]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -68,10 +74,13 @@ const CollectibleDetailsScreen = () => {
         <TransactionsList
           transactions={collectible?.transactions}
           isLoading={isLoading}
-          refresh={() => mutate({ assetId, schema: RealmSchema.Collectible })}
+          refresh={() => {
+            refreshRgbWallet.mutate();
+            mutate({ assetId, schema: RealmSchema.Collectible });
+          }}
           navigation={navigation}
           wallet={wallet}
-          coin={collectible.details}
+          coin={collectible.name}
           assetId={assetId}
         />
       </View>

@@ -1,11 +1,19 @@
-import React, { useContext, useEffect } from 'react';
-import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery as realmUseQuery } from '@realm/react';
+import LottieView from 'lottie-react-native';
 
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
@@ -18,6 +26,9 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys } from 'src/storage';
+import AppType from 'src/models/enums/AppType';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function WalletTransactionList({
   transactions,
@@ -32,22 +43,28 @@ function WalletTransactionList({
 }) {
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
+  const [refreshing, setRefreshing] = useState(false);
 
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
+    setRefreshing(true);
     walletRefreshMutation.mutate({
       wallets: [wallet],
     });
+    setTimeout(() => setRefreshing(false), 2000);
   };
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      pullDownToRefresh();
+      walletRefreshMutation.mutate({
+        wallets: [wallet],
+      });
     }
   }, [autoRefresh && isFocused]);
 
@@ -63,31 +80,54 @@ function WalletTransactionList({
     }
   }, [walletRefreshMutation]);
 
-  return (
+  const FooterComponent = () => {
+    return <View style={styles.footer} />;
+  };
+  return walletRefreshMutation.isLoading && !refreshing ? (
+    Platform.OS === 'ios' ? (
+      <LottieView
+        source={require('src/assets/images/loader.json')}
+        style={styles.loaderStyle}
+        autoPlay
+        loop
+      />
+    ) : (
+      <ActivityIndicator
+        size="small"
+        color={theme.colors.accent1}
+        style={styles.activityIndicatorWrapper}
+      />
+    )
+  ) : (
     <FlatList
       style={styles.container}
       data={transactions}
       refreshControl={
         Platform.OS === 'ios' ? (
           <RefreshControlView
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
           />
         ) : (
           <RefreshControl
-            refreshing={walletRefreshMutation.isLoading}
+            refreshing={refreshing}
             onRefresh={() => pullDownToRefresh()}
             colors={[theme.colors.accent1]} // You can customize this part
             progressBackgroundColor={theme.colors.inputBackground}
           />
         )
       }
+      ListFooterComponent={FooterComponent}
       renderItem={({ item }) => (
         <WalletTransactions
           transId={item.txid}
           tranStatus={item.status}
           transDate={item.date}
-          transAmount={`${item.amount}`}
+          transAmount={
+            app.appType === AppType.NODE_CONNECT
+              ? `${item.received || item?.amtMsat / 1000}`
+              : `${item.amount}`
+          }
           transType={item.transactionType}
           transaction={item}
           coin={coin}
@@ -119,12 +159,23 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     emptyStateContainer: {
-      marginTop: '30%',
+      marginTop: '20%',
     },
     refreshLoader: {
       alignSelf: 'center',
       width: 100,
       height: 100,
+    },
+    footer: {
+      height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: 100,
+      height: 100,
+    },
+    activityIndicatorWrapper: {
+      marginTop: hp(20),
     },
   });
 export default WalletTransactionList;

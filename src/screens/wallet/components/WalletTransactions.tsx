@@ -128,7 +128,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
                   fontSize: transAmount.toString().length > 10 ? 11 : 16,
                 },
               ]}>
-              &nbsp;{getBalance(transAmount)}
+              &nbsp;{isNaN(transAmount) ? 0 : getBalance(transAmount)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>
@@ -162,7 +162,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '58%',
+      width: '50%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -177,7 +177,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '42%',
+      width: '50%',
       alignItems: 'center',
       justifyContent: 'space-between',
     },

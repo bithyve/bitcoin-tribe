@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LangCurrencyOption from './components/LangCurrencyOption';
-import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
-import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
+import IconLangCurrency from 'src/assets/images/langIcon.svg';
+import IconLangCurrencyLight from 'src/assets/images/langIcon_light.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
 import { Platform, StyleSheet, View } from 'react-native';
-import { hp } from 'src/constants/responsive';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
 import CurrencyDropDownListView from './components/CurrencyDropDownListView';
@@ -21,6 +21,8 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
+import CloseIcon from 'src/assets/images/closeIcon.svg';
+import CloseIconLight from 'src/assets/images/closeIcon_light.svg';
 
 function LanguageAndCurrency() {
   const { translations } = useContext(LocalizationContext);
@@ -30,8 +32,8 @@ function LanguageAndCurrency() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [language, setLanguage] = useMMKVString(Keys.APP_LANGUAGE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
-  const [langDropdown, setLangDropdown] = React.useState(false);
-  const [currencyDropDown, setCurrencyDropDown] = React.useState(false);
+  const [langDropdown, setLangDropdown] = useState(false);
+  const [currencyDropDown, setCurrencyDropDown] = useState(false);
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
   );
@@ -60,6 +62,27 @@ function LanguageAndCurrency() {
       <AppHeader
         title={settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
+        rightIcon={
+          currencyDropDown || langDropdown ? (
+            !isThemeDark ? (
+              <CloseIcon />
+            ) : (
+              <CloseIconLight />
+            )
+          ) : null
+        }
+        onSettingsPress={() => {
+          setLangDropdown(false);
+          setCurrencyDropDown(false);
+        }}
+      />
+      <SelectOption
+        title={settings.satsModeTitle}
+        subTitle={settings.satsModeSubTitle}
+        onPress={() => toggleDisplayMode()}
+        enableSwitch={true}
+        onValueChange={() => toggleDisplayMode()}
+        toggleValue={initialCurrencyMode === CurrencyKind.SATS}
       />
       <SelectOption
         title={settings.satsModeTitle}
@@ -74,9 +97,6 @@ function LanguageAndCurrency() {
           title={settings.language}
           subTitle={settings.languageSubTitle}
           icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
-          // langCurrency={'English'}
-          // langCurrencyVariant={'English UK'}
-          //We disabled for now because app crash (Blocker)
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
@@ -103,7 +123,15 @@ function LanguageAndCurrency() {
             setLangDropdown(false);
             setLanguage(item.iso);
           }}
+          onDissmiss={() => setLangDropdown(false)}
           selectedLanguage={selectedLanguage && selectedLanguage.iso}
+          langCurrency={selectedLanguage && selectedLanguage.language}
+          langCurrencyVariant={
+            selectedLanguage &&
+            selectedLanguage.displayTitle +
+              ' ' +
+              selectedLanguage.iso.toUpperCase()
+          }
         />
       )}
       {currencyDropDown && (
@@ -112,9 +140,15 @@ function LanguageAndCurrency() {
           callback={item => {
             setCurrencyDropDown(false);
             setCurrency(item.code);
+            setCurrencyMode(CurrencyKind.FIAT);
           }}
+          onDissmiss={() => setCurrencyDropDown(false)}
           selectedCurrency={selectedCurrency && selectedCurrency.code}
           style={styles.currencyDropdownContainer}
+          langCurrency={selectedCurrency && selectedCurrency.currency}
+          langCurrencyVariant={
+            selectedCurrency && selectedCurrency.displayTitle
+          }
         />
       )}
       <FooterNote
@@ -129,13 +163,13 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     languageDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '55%' : '42%',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },
     currencyDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? '72%' : '62%',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
       borderRadius: 20,
       marginHorizontal: hp(15),
     },

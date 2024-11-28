@@ -28,12 +28,11 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Keys, Storage } from 'src/storage';
+import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import BackupAlert from './components/BackupAlert';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
+import { AppContext } from 'src/contexts/AppContext';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -43,15 +42,11 @@ function HomeScreen() {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [BackupAlertStatus] = useMMKVBoolean(Keys.BACKUPALERT);
-  const intialBackupAlertStatus = BackupAlertStatus || false;
   const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
   const initialCurrency = currency || 'USD';
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const [image, setImage] = useState(null);
-  const [visibleBackupAlert, setVisibleBackupAlert] = useState(
-    intialBackupAlertStatus,
-  );
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -59,14 +54,15 @@ function HomeScreen() {
     ApiHandler.viewUtxos,
   );
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-
+  const { setAppType } = useContext(AppContext);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+
   const assets: Asset[] = useMemo(() => {
     const combiled: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
-    return combiled.sort((a, b) => a.timestamp - b.timestamp);
+    return combiled.sort((a, b) => b.timestamp - a.timestamp);
   }, [coins, collectibles]);
 
   const balances = useMemo(() => {
@@ -77,11 +73,16 @@ function HomeScreen() {
         wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
       );
     }
-  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
+  }, [
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
+  ]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
     fetchUTXOs();
+    setAppType(app.appType);
     refreshWallet.mutate({
       wallets: [wallet],
     });
@@ -151,6 +152,13 @@ function HomeScreen() {
       </AppText>
       <AssetsList
         listData={assets}
+        loading={refreshRgbWallet.isLoading}
+        onRefresh={() => {
+          refreshRgbWallet.mutate();
+          refreshWallet.mutate({
+            wallets: [wallet],
+          });
+        }}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={(asset: Asset) => {
           if (asset.assetIface === AssetFace.RGB20) {
@@ -164,26 +172,7 @@ function HomeScreen() {
           }
         }}
       />
-      <ResponsePopupContainer
-        visible={visibleBackupAlert}
-        enableClose={true}
-        onDismiss={() => setVisibleBackupAlert(false)}
-        backColor={theme.colors.primaryBackground}
-        borderColor={theme.colors.borderColor}>
-        <BackupAlert
-          onPrimaryPress={() => {
-            setVisibleBackupAlert(false);
-            Storage.set(Keys.BACKUPALERT, false);
-            setTimeout(() => {
-              navigation.navigate(NavigationRoutes.APPBACKUPMENU);
-            }, 400);
-          }}
-          onSkipPress={() => {
-            setVisibleBackupAlert(false);
-            Storage.set(Keys.BACKUPALERT, false);
-          }}
-        />
-      </ResponsePopupContainer>
+      
     </ScreenContainer>
   );
 }

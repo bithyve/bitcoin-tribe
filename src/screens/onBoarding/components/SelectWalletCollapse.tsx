@@ -16,14 +16,19 @@ import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
-
-function SelectWalletCollapse() {
+type SelectWalletCollapseProps = {
+  // callBack: () => void
+  isCollapsed: boolean;
+  setIsCollapsed: (status: boolean) => void;
+};
+function SelectWalletCollapse(props: SelectWalletCollapseProps) {
+  const { isCollapsed, setIsCollapsed } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
   const styles = getStyles(theme);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View>
