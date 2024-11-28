@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "设置您的支持模式",
     "supportNodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
     "nodeconnectSuccessfulTitle": "连接成功",
-    "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。"
+    "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "添加资产",

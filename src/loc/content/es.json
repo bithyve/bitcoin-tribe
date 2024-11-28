@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "Configurando tu modo de soporte",
     "supportNodeConnectingSubTitle": "Conectando a tu nodo. Mantén la aplicación abierta y la pantalla desbloqueada.",
     "nodeconnectSuccessfulTitle": "Conexión exitosa",
-    "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso."
+    "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso.",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "Agregar activos",

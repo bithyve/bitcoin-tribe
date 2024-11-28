@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "आपका समर्थित मोड सेट किया जा रहा है",
     "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
-    "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।"
+    "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",

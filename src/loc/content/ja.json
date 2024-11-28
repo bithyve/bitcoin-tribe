@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "サポートモードの設定",
     "supportNodeConnectingSubTitle": "ノードに接続中です。アプリを開き、画面をロック解除したままにしてください。",
     "nodeconnectSuccessfulTitle": "接続成功",
-    "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。"
+    "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "アセットを追加",

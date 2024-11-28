@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "Setting Up Your \nSupported Mode",
     "supportNodeConnectingSubTitle": "Connecting to your node. Keep the app open and screen unlocked.",
     "nodeconnectSuccessfulTitle": "Connection Successful",
-    "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step."
+    "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step.",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "Add Assets",

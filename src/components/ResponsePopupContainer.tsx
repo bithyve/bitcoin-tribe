@@ -44,8 +44,8 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
       <Modal
         isVisible={visible}
         onBackdropPress={onDismiss}
-        animationIn={'slideInUp'}
-        animationOut={'slideOutDown'}
+        animationIn={'fadeIn'}
+        animationOut={'fadeOut'}
         backdropColor={Colors.Black}
         backdropOpacity={0.8}
         style={[styles.modalBackground, conatinerModalStyle]}>

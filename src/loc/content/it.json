@@ -119,7 +119,9 @@
     "supportNodeConnectingTitle": "Configurazione della modalità supportata",
     "supportNodeConnectingSubTitle": "Connessione al tuo nodo. Tieni l'app aperta e lo schermo sbloccato.",
     "nodeconnectSuccessfulTitle": "Connessione riuscita",
-    "nodeconnectSuccessfulSubTitle": "Ora sei connesso. Procedi al prossimo passaggio."
+    "nodeconnectSuccessfulSubTitle": "Ora sei connesso. Procedi al prossimo passaggio.",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
   },
   "home": {
     "addAssets": "Aggiungi risorse",
