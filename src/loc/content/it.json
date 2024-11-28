@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "Connessione riuscita",
     "nodeconnectSuccessfulSubTitle": "Ora sei connesso. Procedi al prossimo passaggio.",
     "profileSetupLoadingTitle": "Stiamo configurando il tuo profilo",
-    "profileSetupLoadingSubTitle": "Rilassati mentre prepariamo tutto per te. La tua app sarà pronta tra poco."
+    "profileSetupLoadingSubTitle": "Rilassati mentre prepariamo tutto per te. La tua app sarà pronta tra poco.",
+    "recoverLoadingTitle": "Recupero dei tuoi dati",
+    "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo."
   },
   "home": {
     "addAssets": "Aggiungi risorse",

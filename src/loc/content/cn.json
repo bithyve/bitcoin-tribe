@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "连接成功",
     "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。",
     "profileSetupLoadingTitle": "正在设置您的个人资料",
-    "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。"
+    "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。",
+    "recoverLoadingTitle": "正在恢复您的数据",
+    "recoverLoadingSubTitle": "我们正在恢复您的数据，请稍等！放松一下，我们很快就会让您恢复使用。"
   },
   "home": {
     "addAssets": "添加资产",

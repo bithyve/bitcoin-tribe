@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "Connection Successful",
     "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step.",
     "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
-    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
+    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment.",
+    "recoverLoadingTitle": "Recovering Your Data",
+    "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time."
   },
   "home": {
     "addAssets": "Add Assets",

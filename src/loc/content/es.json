@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "Conexión exitosa",
     "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso.",
     "profileSetupLoadingTitle": "Estamos configurando tu perfil",
-    "profileSetupLoadingSubTitle": "Relájate mientras preparamos todo para ti. Tu aplicación estará lista en un momento."
+    "profileSetupLoadingSubTitle": "Relájate mientras preparamos todo para ti. Tu aplicación estará lista en un momento.",
+    "recoverLoadingTitle": "Recuperando tus datos",
+    "recoverLoadingSubTitle": "Estamos restaurando tus datos—¡espera un momento! Relájate y pronto estarás listo."
   },
   "home": {
     "addAssets": "Agregar activos",

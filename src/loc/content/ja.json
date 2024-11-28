@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "接続成功",
     "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。",
     "profileSetupLoadingTitle": "プロフィールを設定中です",
-    "profileSetupLoadingSubTitle": "準備が整うまでリラックスしてお待ちください。アプリはもうすぐ準備完了です。"
+    "profileSetupLoadingSubTitle": "準備が整うまでリラックスしてお待ちください。アプリはもうすぐ準備完了です。",
+    "recoverLoadingTitle": "データを復元しています",
+    "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。"
   },
   "home": {
     "addAssets": "アセットを追加",

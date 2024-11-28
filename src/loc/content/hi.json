@@ -121,7 +121,9 @@
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
     "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
     "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
-    "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।"
+    "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।",
+    "recoverLoadingTitle": "आपका डेटा पुनर्प्राप्त किया जा रहा है",
+    "recoverLoadingSubTitle": "हम आपका डेटा पुनः प्राप्त कर रहे हैं—थोड़ा धैर्य रखें! आराम करें, और हम आपको तुरंत वापस चालू कर देंगे।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
