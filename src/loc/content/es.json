@@ -120,8 +120,8 @@
     "supportNodeConnectingSubTitle": "Conectando a tu nodo. Mantén la aplicación abierta y la pantalla desbloqueada.",
     "nodeconnectSuccessfulTitle": "Conexión exitosa",
     "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso.",
-    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
-    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
+    "profileSetupLoadingTitle": "Estamos configurando tu perfil",
+    "profileSetupLoadingSubTitle": "Relájate mientras preparamos todo para ti. Tu aplicación estará lista en un momento."
   },
   "home": {
     "addAssets": "Agregar activos",
@@ -259,7 +259,9 @@
     "paste": "Pegar",
     "sendAssetTitle": "Enviar activo",
     "sendAssetSubtitle": "Escanea la factura RGB",
-    "totalFee": "Tarifa total："
+    "totalFee": "Tarifa total：",
+    "sendBtcLoadingTitle": "Enviando Bitcoin",
+    "sendBtcLoadingSubTitle": "Tu transacción está siendo procesada—¡por favor espera! Relájate, tu Bitcoin será enviado de forma segura."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -364,7 +366,9 @@
     "failedToCreateUTXOTitle": "Saldo insuficiente para la transacción",
     "failedToCreateUTXOSubTitle": "El saldo de tu billetera es demasiado bajo para cubrir las tarifas de transacción actuales debido a la alta congestión de la red. Aumenta tu saldo o intenta de nuevo cuando las tarifas sean más bajas.",
     "unexpectedErrorTitle": "Error inesperado",
-    "unexpectedErrorSubTitle": "Hemos encontrado un problema al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde"
+    "unexpectedErrorSubTitle": "Hemos encontrado un problema al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde",
+     "sendAssetLoadingTitle": "Enviando activos RGB",
+    "sendAssetLoadingSubTitle": "Tu transacción está siendo procesada—por favor espera. Relájate, y tus activos RGB serán enviados de forma segura."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

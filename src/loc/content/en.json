@@ -259,7 +259,9 @@
     "paste": "Paste",
     "sendAssetTitle": "Send Asset",
     "sendAssetSubtitle": "Scan the RGB invoice",
-    "totalFee": "Total Fee:"
+    "totalFee": "Total Fee:",
+    "sendBtcLoadingTitle": "Sending Bitcoin",
+    "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -364,7 +366,9 @@
     "failedToCreateUTXOTitle": "Insufficient Balance for Transaction",
     "failedToCreateUTXOSubTitle": "Your wallet balance is too low to cover the current transaction fees due to high network congestion. Please increase your balance or try again when the fees are lower.",
     "unexpectedErrorTitle": "Unexpected Error",
-    "unexpectedErrorSubTitle": "We encountered an issue processing your request. Please try again later"
+    "unexpectedErrorSubTitle": "We encountered an issue processing your request. Please try again later",
+    "sendAssetLoadingTitle": "Sending RGB Assets",
+    "sendAssetLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your RGB assets will be sent securely."
   },
   "community": {
     "fnfTitle": "Friends & Family",

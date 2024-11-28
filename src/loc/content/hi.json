@@ -120,8 +120,8 @@
     "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
     "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
-    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
-    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
+    "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
+    "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
@@ -259,7 +259,9 @@
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
     "sendAssetSubtitle": "RGB इनवॉइस को स्कैन करें",
-    "totalFee": "कुल शुल्क："
+    "totalFee": "कुल शुल्क：",
+    "sendBtcLoadingTitle": "बिटकॉइन भेजा जा रहा है",
+    "sendBtcLoadingSubTitle": "आपका लेनदेन संसाधित हो रहा है—कृपया प्रतीक्षा करें! आराम करें, बिटकॉइन सुरक्षित रूप से भेजा जाएगा।"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -364,7 +366,9 @@
     "failedToCreateUTXOTitle": "लेनदेन के लिए अपर्याप्त शेष राशि",
     "failedToCreateUTXOSubTitle": " उच्च नेटवर्क जाम के कारण वर्तमान लेनदेन शुल्क को कवर करने के लिए आपके वॉलेट का बैलेंस बहुत कम है। कृपया अपने बैलेंस को बढ़ाएँ या कम शुल्क होने पर पुनः प्रयास करें।",
     "unexpectedErrorTitle": "अप्रत्याशित त्रुटि",
-    "unexpectedErrorSubTitle": "आपके अनुरोध को संसाधित करने में हमें एक समस्या का सामना करना पड़ा। कृपया बाद में पुनः प्रयास करें"
+    "unexpectedErrorSubTitle": "आपके अनुरोध को संसाधित करने में हमें एक समस्या का सामना करना पड़ा। कृपया बाद में पुनः प्रयास करें",
+     "sendAssetLoadingTitle": "RGB संपत्ति भेजी जा रही हैं",
+    "sendAssetLoadingSubTitle": "आपका लेन-देन प्रोसेस हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपकी RGB संपत्ति सुरक्षित रूप से भेज दी जाएगी।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

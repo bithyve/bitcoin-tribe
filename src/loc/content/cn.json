@@ -120,8 +120,8 @@
     "supportNodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
     "nodeconnectSuccessfulTitle": "连接成功",
     "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。",
-    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
-    "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment."
+    "profileSetupLoadingTitle": "正在设置您的个人资料",
+    "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。"
   },
   "home": {
     "addAssets": "添加资产",
@@ -259,7 +259,9 @@
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
     "sendAssetSubtitle": "扫描RGB发票",
-    "totalFee": "总费用："
+    "totalFee": "总费用：",
+     "sendBtcLoadingTitle": "正在发送比特币",
+    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -364,7 +366,9 @@
     "failedToCreateUTXOTitle": "交易余额不足",
     "failedToCreateUTXOSubTitle": " 由于网络拥堵，当前交易费用较高，您的钱包余额不足以支付。请增加余额或在费用较低时重试。",
     "unexpectedErrorTitle": "意外错误",
-    "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试"
+    "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试",
+     "sendAssetLoadingTitle": "正在发送 RGB 资产",
+    "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
