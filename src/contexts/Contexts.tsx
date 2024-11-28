@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LocalizationProvider } from './LocalizationContext';
 import { CombinedDarkTheme, CombinedDefaultTheme } from 'src/theme/index';
 import { PaperProvider } from 'react-native-paper';
@@ -9,22 +9,30 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { useColorScheme } from 'react-native';
 
 function Contexts({ children }: any) {
-  // const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  // let theme = isThemeDark ? CombinedDefaultTheme : CombinedDarkTheme;
-
   const systemColorScheme = useColorScheme();
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const systemTheme = systemColorScheme === 'dark' ? true : false;
 
-  // If isThemeDark is not set, fall back to system color scheme
-  const theme =
-    isThemeDark !== null
-      ? isThemeDark
-        ? CombinedDarkTheme
-        : CombinedDefaultTheme
-      : systemColorScheme === 'dark'
-      ? CombinedDarkTheme
-      : CombinedDefaultTheme;
+  const [isThemeDark, setIsThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const storedTheme = isThemeDark !== undefined ? isThemeDark : systemTheme;
+  // if (isThemeDark !== systemTheme) {
+  //   setIsThemeDark(storedTheme);
+  // }
 
+  let theme = storedTheme ? CombinedDarkTheme : CombinedDefaultTheme;
+
+
+//   const systemColorScheme = useColorScheme();
+//   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+//   console.log('systemColorScheme',systemColorScheme=== 'dark')
+// console.log('isThemeDark', isThemeDark)
+// const theme =
+// isThemeDark !== null && isThemeDark !== undefined
+//   ? isThemeDark
+//     ? CombinedDarkTheme
+//     : CombinedDefaultTheme
+//   : systemColorScheme === 'dark'
+//   ? CombinedDarkTheme
+//   : CombinedDefaultTheme;
   return (
     <LocalizationProvider>
       <PaperProvider theme={theme}>
