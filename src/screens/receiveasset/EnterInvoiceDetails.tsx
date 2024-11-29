@@ -9,7 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -28,7 +28,14 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: totalReserveSatsAmount === 0 ? '58%' : '67%',
+      height:
+        totalReserveSatsAmount === 0
+          ? windowHeight > 670
+            ? '58%'
+            : '50%'
+          : windowHeight > 670
+          ? '67%'
+          : '60%',
     },
     footerWrapper: {
       marginVertical: hp(10),
@@ -73,11 +80,11 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       flexDirection: 'row',
       alignItems: 'center',
       width: '100%',
-      marginBottom: hp(10)
+      marginBottom: hp(10),
     },
-    chooseInvoiceType:{
-      color: theme.colors.headingColor
-    }
+    chooseInvoiceType: {
+      color: theme.colors.headingColor,
+    },
   });
 
 const EnterInvoiceDetails = () => {
@@ -119,38 +126,40 @@ const EnterInvoiceDetails = () => {
         enableBack={true}
       />
       <View>
-          <AppText variant='heading3' style={styles.chooseInvoiceType}>{receciveScreen.chooseInvoiceType}</AppText>
-        </View>
-        <View style={styles.wrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={'bitcoin'}
-              status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
-              onPress={() => setSelectedType('bitcoin')}
-            />
-            <View style={styles.typeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-               {receciveScreen.onchain}
-              </AppText>
-            </View>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={'lightning'}
-              status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
-              onPress={() => setSelectedType('lightning')}
-            />
-            <View style={styles.typeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {receciveScreen.lightning}
-              </AppText>
-            </View>
+        <AppText variant="heading3" style={styles.chooseInvoiceType}>
+          {receciveScreen.chooseInvoiceType}
+        </AppText>
+      </View>
+      <View style={styles.wrapper}>
+        <View style={styles.radioBtnWrapper}>
+          <RadioButton.Android
+            color={theme.colors.accent1}
+            uncheckedColor={theme.colors.headingColor}
+            value={'bitcoin'}
+            status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+            onPress={() => setSelectedType('bitcoin')}
+          />
+          <View style={styles.typeViewWrapper}>
+            <AppText variant="body2" style={styles.feePriorityText}>
+              {receciveScreen.onchain}
+            </AppText>
           </View>
         </View>
+        <View style={styles.radioBtnWrapper}>
+          <RadioButton.Android
+            color={theme.colors.accent1}
+            uncheckedColor={theme.colors.headingColor}
+            value={'lightning'}
+            status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
+            onPress={() => setSelectedType('lightning')}
+          />
+          <View style={styles.typeViewWrapper}>
+            <AppText variant="body2" style={styles.feePriorityText}>
+              {receciveScreen.lightning}
+            </AppText>
+          </View>
+        </View>
+      </View>
       <View style={styles.bodyWrapper}>
         <TextField
           value={assetId}
@@ -173,7 +182,6 @@ const EnterInvoiceDetails = () => {
           style={styles.input}
           keyboardType="numeric"
         />
-        
       </View>
       <View style={styles.footerWrapper}>
         {totalReserveSatsAmount === 0 ? (
@@ -195,16 +203,16 @@ const EnterInvoiceDetails = () => {
               refresh: true,
               assetId,
               amount,
-              selectedType 
+              selectedType,
             });
           }}
-          secondaryTitle={selectedType=== 'bitcoin' && common.skip}
+          secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
             navigation.replace(NavigationRoutes.RECEIVEASSET, {
               refresh: true,
               assetId,
               amount,
-              selectedType
+              selectedType,
             })
           }
           disabled={assetId === '' || amount === ''}
