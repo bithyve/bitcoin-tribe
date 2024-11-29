@@ -29,7 +29,7 @@ export const fetch = async (hash_current: string) => {
         return password.enc_key;
       }
       if (hash_current !== password.hash) {
-        throw new Error('Incorrect Passcode');
+        return false
       } else {
         return password.enc_key;
       }
