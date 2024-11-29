@@ -413,5 +413,26 @@
     "channelCreatedMsg": "Channel created successfully",
     "channelCloseMsg": "Channel closed.",
     "takeTimeMsg": "This step will take a few seconds."
+  },
+  "channel":{
+    "status": "Status :",
+    "assetLocalAmt": "Asset Local Amount:",
+    "shortChannelld": "Short Channel Id:",
+    "capacitySat": "Capacity Sat:",
+    "localBalanceMsat": "Local Balance Msat:",
+    "outboundBalanceMsat": "Outbound Balance Msat:",
+    "inboundBalanceMsat": "Inbound Balance Msat:",
+    "nxtOutboundHtclLmtMsat": "Next Outbound Htlc Limit Msat:",
+    "nxtOutboundHtclMinMsat": "Next Outbound Htlc Minimum Msat:",
+    "peerAlias": "PeerAlias:",
+    "ready": "Ready:",
+    "isUsable": "Is Usable:",
+    "public": "Public:",
+    "channelID": "Channel ID:",
+    "fundingTXID": "Funding TXID:",
+    "peerPubKey": "Peer PubKey:",
+    "shortChannelID": "Short Channel ID:",
+    "assetID": "Asset ID:",
+    "closeChannel": "Close Channel"
   }
 }

@@ -413,5 +413,26 @@
     "channelCreatedMsg": "频道创建成功",
     "channelCloseMsg": "频道已关闭",
     "takeTimeMsg": "此步骤将花费几秒钟。"
+  },
+  "channel":{
+    "status": "状态：",
+    "assetLocalAmt": "资产本地金额：",
+    "shortChannelld": "短通道 ID：",
+    "capacitySat": "容量 (Sat)：",
+    "localBalanceMsat": "本地余额 (Msat)：",
+    "outboundBalanceMsat": "出站余额 (Msat)：",
+    "inboundBalanceMsat": "入站余额 (Msat)：",
+    "nxtOutboundHtclLmtMsat": "下一个出站 HTLC 限制 (Msat)：",
+    "nxtOutboundHtclMinMsat": "下一个出站 HTLC 最小值 (Msat)：",
+    "peerAlias": "对等别名：",
+    "ready": "准备好：",
+    "isUsable": "可用：",
+    "public": "公开：",
+    "channelID": "通道 ID：",
+    "fundingTXID": "资金 TXID：",
+    "peerPubKey": "对等公钥：",
+    "shortChannelID": "短通道 ID：",
+    "assetID": "资产 ID：",
+    "closeChannel": "关闭通道"
   }
 }

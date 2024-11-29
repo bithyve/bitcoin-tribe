@@ -413,5 +413,26 @@
     "channelCreatedMsg": "Canale creato con successo",
     "channelCloseMsg": "Canale chiuso",
     "takeTimeMsg": "Questo passaggio richiederà alcuni secondi."
+  },
+  "channel":{
+    "status": "Stato :",
+    "assetLocalAmt": "Importo Locale dell'Asset:",
+    "shortChannelld": "ID Canale Breve:",
+    "capacitySat": "Capacità (Sat):",
+    "localBalanceMsat": "Saldo Locale (Msat):",
+    "outboundBalanceMsat": "Saldo in Uscita (Msat):",
+    "inboundBalanceMsat": "Saldo in Entrata (Msat):",
+    "nxtOutboundHtclLmtMsat": "Prossimo Limite HTLC in Uscita (Msat):",
+    "nxtOutboundHtclMinMsat": "Prossimo Minimo HTLC in Uscita (Msat):",
+    "peerAlias": "Alias Peer:",
+    "ready": "Pronto:",
+    "isUsable": "È utilizzabile:",
+    "public": "Pubblico:",
+    "channelID": "ID Canale:",
+    "fundingTXID": "TXID di Finanziamento:",
+    "peerPubKey": "Chiave Pubblica Peer:",
+    "shortChannelID": "ID Canale Breve:",
+    "assetID": "ID Asset:",
+    "closeChannel": "Chiudi Canale"
   }
 }

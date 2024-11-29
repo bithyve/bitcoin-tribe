@@ -413,5 +413,26 @@
     "channelCreatedMsg": "チャンネルが正常に作成されました",
     "channelCloseMsg": "チャンネルが閉じました",
     "takeTimeMsg": "このステップには数秒かかります。"
+  },
+  "channel":{
+    "status": "ステータス：",
+    "assetLocalAmt": "資産のローカル額：",
+    "shortChannelld": "ショートチャネル ID：",
+    "capacitySat": "容量 (Sat)：",
+    "localBalanceMsat": "ローカル残高 (Msat)：",
+    "outboundBalanceMsat": "送信残高 (Msat)：",
+    "inboundBalanceMsat": "受信残高 (Msat)：",
+    "nxtOutboundHtclLmtMsat": "次の送信 HTLC 制限 (Msat)：",
+    "nxtOutboundHtclMinMsat": "次の送信 HTLC 最小値 (Msat)：",
+    "peerAlias": "ピア別名：",
+    "ready": "準備完了：",
+    "isUsable": "使用可能：",
+    "public": "公開：",
+    "channelID": "チャネル ID：",
+    "fundingTXID": "資金 TXID：",
+    "peerPubKey": "ピア公開鍵：",
+    "shortChannelID": "ショートチャネル ID：",
+    "assetID": "アセット ID：",
+    "closeChannel": "チャネルを閉じる"
   }
 }

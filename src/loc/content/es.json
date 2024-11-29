@@ -413,5 +413,26 @@
     "channelCreatedMsg": "Canal creado con éxito",
     "channelCloseMsg": "Canal cerrado",
     "takeTimeMsg": "Este paso tomará unos segundos."
+  },
+  "channel":{
+    "status": "Estado :",
+    "assetLocalAmt": "Cantidad Local del Activo:",
+    "shortChannelld": "ID de Canal Corto:",
+    "capacitySat": "Capacidad (Sat):",
+    "localBalanceMsat": "Saldo Local (Msat):",
+    "outboundBalanceMsat": "Saldo Saliente (Msat):",
+    "inboundBalanceMsat": "Saldo Entrante (Msat):",
+    "nxtOutboundHtclLmtMsat": "Límite HTLC Saliente Próximo (Msat):",
+    "nxtOutboundHtclMinMsat": "Mínimo HTLC Saliente Próximo (Msat):",
+    "peerAlias": "Alias del Par:",
+    "ready": "Listo:",
+    "isUsable": "Es Utilizable:",
+    "public": "Público:",
+    "channelID": "ID de Canal:",
+    "fundingTXID": "TXID de Financiación:",
+    "peerPubKey": "Clave Pública del Par:",
+    "shortChannelID": "ID de Canal Corto:",
+    "assetID": "ID del Activo:",
+    "closeChannel": "Cerrar Canal"
   }
 }

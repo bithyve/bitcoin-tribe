@@ -1,9 +1,11 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
-import ScreenContainer from 'src/components/ScreenContainer';
-import AppHeader from 'src/components/AppHeader';
+import { ProgressBar, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
+
+import ScreenContainer from 'src/components/ScreenContainer';
+import AppHeader from 'src/components/AppHeader';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -11,9 +13,7 @@ import { Keys } from 'src/storage';
 import GradientView from 'src/components/GradientView';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
-import { ProgressBar, useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
-import Buttons from 'src/components/Buttons';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import PrimaryCTA from 'src/components/PrimaryCTA';
@@ -87,18 +87,18 @@ const ChannelDetails = () => {
   const closeChannelMutation = useMutation(ApiHandler.closeChannel);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { node } = translations;
+  const { node, channel: channelTranslations } = translations;
   const { channel } = route.params;
 
   const statusColors = {
-    Open: Colors.GOGreen,
+    Opened: Colors.GOGreen,
     Opening: Colors.BrandeisBlue,
     Close: Colors.FireOpal,
     Closing: Colors.ChineseOrange,
     Pending: Colors.SelectiveYellow,
     Offline: Colors.ChineseWhite,
   };
-  const getStatusColor = (status) => statusColors[status] || Colors.ChineseWhite;
+  const getStatusColor = (status) => statusColors[status] || Colors.White;
 
   useEffect(() => {
     if (closeChannelMutation.isSuccess) {
@@ -122,7 +122,7 @@ const ChannelDetails = () => {
             theme.colors.cardGradient3,
           ]}>
           <AppText variant="body1" style={styles.titleText}>
-            Status :
+            {channelTranslations.status}
           </AppText>
           <AppText variant="body1" style={{ color: getStatusColor(channel.status) }}>
             {channel.status}
@@ -131,7 +131,7 @@ const ChannelDetails = () => {
         <View style={styles.contentWrapper}>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Asset Local Amount:
+            {channelTranslations.assetLocalAmt}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.assetLocalAmount}
@@ -139,7 +139,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              ShortChannelld:
+            {channelTranslations.shortChannelld}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.shortChannelId ? channel.shortChannelId : 'null'}
@@ -150,7 +150,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                CapacitySat:
+              {channelTranslations.capacitySat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.capacitySat}
@@ -166,7 +166,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                Local Balance Mast:
+              {channelTranslations.localBalanceMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.localBalanceMsat}
@@ -182,7 +182,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                Outbound Balance Mast:
+                {channelTranslations.outboundBalanceMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.outboundBalanceMsat}
@@ -198,7 +198,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                Inbound Balance Msat:
+                {channelTranslations.inboundBalanceMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.inboundBalanceMsat}
@@ -214,7 +214,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                Next Outbound Htlc Limit Msat:
+                {channelTranslations.nxtOutboundHtclLmtMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.nextOutboundHtlcLimitMsat}
@@ -230,7 +230,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-                Next Outbound Htlc Minimum Msat:
+                {channelTranslations.nxtOutboundHtclMinMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.nextOutboundHtlcMinimumMsat}
@@ -247,7 +247,7 @@ const ChannelDetails = () => {
         <View style={styles.contentWrapper}>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              PeerAlias:
+              {channelTranslations.peerAlias}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.peerAlias}
@@ -255,7 +255,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Ready:
+              {channelTranslations.ready}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.ready ? 'True' : 'False'}
@@ -263,7 +263,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Is Usable:
+              {channelTranslations.isUsable}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.isUsable ? 'True' : 'False'}
@@ -271,7 +271,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Public:
+              {channelTranslations.public}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.public ? 'True' : 'False'}
@@ -281,7 +281,7 @@ const ChannelDetails = () => {
         <View style={styles.contentWrapper}>
           <View style={styles.channelIDsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Channel ID:
+              {channelTranslations.channelID}
             </AppText>
             <AppText variant="body2" style={styles.idValueText}>
               {channel.channelId}
@@ -289,7 +289,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelIDsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Funding TXID:
+              {channelTranslations.fundingTXID}
             </AppText>
             <AppText variant="body2" style={styles.idValueText}>
               {channel.fundingTxid}
@@ -297,7 +297,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelIDsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Peer PubKey:
+              {channelTranslations.peerPubKey}
             </AppText>
             <AppText variant="body2" style={styles.idValueText}>
               {channel.peerPubkey}
@@ -305,7 +305,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelIDsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Short Channel ID:
+              {channelTranslations.shortChannelID}
             </AppText>
             <AppText variant="body2" style={styles.idValueText}>
               {channel.shortChannelId ? channel.shortChannelId : 'null'}
@@ -313,7 +313,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelIDsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-              Asset ID:
+              {channelTranslations.assetID}
             </AppText>
             <AppText variant="body2" style={styles.idValueText}>
               {channel.assetId}
@@ -322,17 +322,17 @@ const ChannelDetails = () => {
         </View>
         <View style={styles.buttonWrapper}>
           <PrimaryCTA
-            title={'Close Channel'}
+            title={channelTranslations.closeChannel}
             onPress={() =>
               closeChannelMutation.mutate({
                 channelId: channel.channelId,
                 peerPubKey: channel.peerPubkey,
               })
             }
-            width={wp(150)}
+            width={wp(160)}
             loading={false}
             disabled={false}
-            height={hp(16)}
+            height={hp(18)}
             textColor={theme.colors.closeChannelCTATitle}
             buttonColor={theme.colors.closeChannelCTA}
           />

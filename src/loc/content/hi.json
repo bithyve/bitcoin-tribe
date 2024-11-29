@@ -413,5 +413,26 @@
     "channelCreatedMsg": "चैनल सफलतापूर्वक बनाया गया",
     "channelCloseMsg": "चैनल बंद कर दिया गया",
     "takeTimeMsg": "इस चरण में कुछ सेकंड लगेंगे।"
+  },
+  "channel":{
+    "status": "स्थिति :",
+    "assetLocalAmt": "स्थानीय संपत्ति राशि:",
+    "shortChannelld": "शॉर्ट चैनल आईडी:",
+    "capacitySat": "क्षमता (सैट):",
+    "localBalanceMsat": "स्थानीय बैलेंस (Msat):",
+    "outboundBalanceMsat": "आउटबाउंड बैलेंस (Msat):",
+    "inboundBalanceMsat": "इनबाउंड बैलेंस (Msat):",
+    "nxtOutboundHtclLmtMsat": "अगली आउटबाउंड HTLC सीमा (Msat):",
+    "nxtOutboundHtclMinMsat": "अगली आउटबाउंड HTLC न्यूनतम (Msat):",
+    "peerAlias": "सहकर्मी उपनाम:",
+    "ready": "तैयार:",
+    "isUsable": "उपयोगी है:",
+    "public": "सार्वजनिक:",
+    "channelID": "चैनल आईडी:",
+    "fundingTXID": "फंडिंग TXID:",
+    "peerPubKey": "सहकर्मी पब्लिक की:",
+    "shortChannelID": "शॉर्ट चैनल आईडी:",
+    "assetID": "संपत्ति आईडी:",
+    "closeChannel": "चैनल बंद करें"
   }
 }
