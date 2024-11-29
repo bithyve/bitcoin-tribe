@@ -31,10 +31,10 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       height:
         totalReserveSatsAmount === 0
           ? windowHeight > 670
-            ? '58%'
+            ? '56%'
             : '50%'
           : windowHeight > 670
-          ? '67%'
+          ? '65%'
           : '60%',
     },
     footerWrapper: {
