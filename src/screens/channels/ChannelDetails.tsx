@@ -157,10 +157,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.capacitySat && <ProgressBar
                 progress={channel.capacitySat / channel.capacitySat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
           <>
@@ -173,10 +173,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.localBalanceMsat && <ProgressBar
                 progress={channel.localBalanceMsat / channel.localBalanceMsat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
           <>
@@ -189,10 +189,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.outboundBalanceMsat && <ProgressBar
                 progress={channel.outboundBalanceMsat / channel.outboundBalanceMsat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
           <>
@@ -205,10 +205,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.inboundBalanceMsat && <ProgressBar
                 progress={channel.inboundBalanceMsat / channel.inboundBalanceMsat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
           <>
@@ -221,10 +221,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.nextOutboundHtlcLimitMsat && <ProgressBar
                 progress={channel.nextOutboundHtlcLimitMsat / channel.nextOutboundHtlcLimitMsat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
           <>
@@ -237,10 +237,10 @@ const ChannelDetails = () => {
               </AppText>
             </View>
             <View style={styles.progressbarWrapper}>
-              <ProgressBar
+              {channel.nextOutboundHtlcMinimumMsat &&<ProgressBar
                 progress={channel.nextOutboundHtlcMinimumMsat / channel.nextOutboundHtlcMinimumMsat}
                 color={theme.colors.accent1}
-              />
+              />}
             </View>
           </>
         </View>
