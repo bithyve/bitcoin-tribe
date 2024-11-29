@@ -78,7 +78,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     illustrationWrapper: {
-      marginVertical: hp(5),
+      marginVertical: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
     },
