@@ -73,9 +73,10 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       flexDirection: 'row',
       alignItems: 'center',
       width: '100%',
+      marginBottom: hp(10)
     },
     chooseInvoiceType:{
-      marginTop: hp(20)
+      color: theme.colors.headingColor
     }
   });
 
@@ -117,29 +118,7 @@ const EnterInvoiceDetails = () => {
         subTitle={''}
         enableBack={true}
       />
-      <View style={styles.bodyWrapper}>
-        <TextField
-          value={assetId}
-          onChangeText={text => setAssetId(text.trim())}
-          placeholder={assets.assetId}
-          style={styles.input}
-          multiline={true}
-          returnKeyType={'Enter'}
-          onContentSizeChange={event => {
-            setInputHeight(event.nativeEvent.contentSize.height);
-          }}
-          numberOfLines={3}
-          contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
-        />
-
-        <TextField
-          value={amount}
-          onChangeText={text => setAmount(text.trim())}
-          placeholder={assets.amount}
-          style={styles.input}
-          keyboardType="numeric"
-        />
-        <View>
+      <View>
           <AppText variant='heading3' style={styles.chooseInvoiceType}>{receciveScreen.chooseInvoiceType}</AppText>
         </View>
         <View style={styles.wrapper}>
@@ -172,6 +151,29 @@ const EnterInvoiceDetails = () => {
             </View>
           </View>
         </View>
+      <View style={styles.bodyWrapper}>
+        <TextField
+          value={assetId}
+          onChangeText={text => setAssetId(text.trim())}
+          placeholder={assets.assetId}
+          style={styles.input}
+          multiline={true}
+          returnKeyType={'Enter'}
+          onContentSizeChange={event => {
+            setInputHeight(event.nativeEvent.contentSize.height);
+          }}
+          numberOfLines={3}
+          contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
+        />
+
+        <TextField
+          value={amount}
+          onChangeText={text => setAmount(text.trim())}
+          placeholder={assets.amount}
+          style={styles.input}
+          keyboardType="numeric"
+        />
+        
       </View>
       <View style={styles.footerWrapper}>
         {totalReserveSatsAmount === 0 ? (
