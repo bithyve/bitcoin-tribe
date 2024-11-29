@@ -47,6 +47,7 @@ function HomeScreen() {
   const initialCurrency = currency || 'USD';
   const initialCurrencyMode = currencyMode || CurrencyKind.SATS;
   const [image, setImage] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [walletName, setWalletName] = useState(null);
   const navigation = useNavigation();
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -154,11 +155,14 @@ function HomeScreen() {
         listData={assets}
         loading={refreshRgbWallet.isLoading}
         onRefresh={() => {
+          setRefreshing(true);
           refreshRgbWallet.mutate();
           refreshWallet.mutate({
             wallets: [wallet],
           });
+          setTimeout(() => setRefreshing(false), 2000);
         }}
+        refreshingStatus={refreshing}
         onPressAddNew={() => handleScreenNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={(asset: Asset) => {
           if (asset.assetIface === AssetFace.RGB20) {
