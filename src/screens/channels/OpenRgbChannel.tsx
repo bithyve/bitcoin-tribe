@@ -1,9 +1,11 @@
 import { Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -17,6 +19,14 @@ import Toast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import { formatNumber } from 'src/utils/numberWithCommas';
+import SelectAssetIDView from './components/SelectAssetIDView';
+import RGBAssetDropdownList from './components/RGBAssetDropdownList';
+import { Keys } from 'src/storage';
+import CloseIcon from 'src/assets/images/closeIcon.svg';
+import CloseIconLight from 'src/assets/images/closeIcon_light.svg';
+import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { RealmSchema } from 'src/storage/enum';
+
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -31,19 +41,20 @@ const OpenRgbChannel = () => {
   const [tmpChannelId, setTmpChannelId] = useState('');
   const [inputHeight, setInputHeight] = useState(100);
   const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
+  const [assetsDropdown, setAssetsDropdown] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(null)
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  // useEffect(() => {
-  //   console.log('openChannelMutation', openChannelMutation);
-  //   if (openChannelMutation.isSuccess) {
-  //     navigation.goBack();
-  //     Toast(node.channelCreatedMsg);
-  //   } else if (openChannelMutation.isError) {
-  //     Toast(`${openChannelMutation.error}`, true);
-  //   }
-  // }, [openChannelMutation.isError, openChannelMutation.isSuccess]);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+  const assetsData: Asset[] = useMemo(() => {
+    const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
+    return combined.sort((a, b) => a.timestamp - b.timestamp);
+  }, [coins, collectibles]);
+
   useEffect(() => {
     const { isSuccess, isError, error } = openChannelMutation;
     if (isSuccess) {
@@ -56,7 +67,21 @@ const OpenRgbChannel = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={node.openChannelTitle} />
+      <AppHeader 
+      title={node.openChannelTitle} 
+      rightIcon={
+        assetsDropdown ? (
+          !isThemeDark ? (
+            <CloseIcon />
+          ) : (
+            <CloseIconLight />
+          )
+        ) : null
+      }
+      onSettingsPress={() => {
+        setAssetsDropdown(false);
+      }}
+      />
       <ModalLoading visible={openChannelMutation.isLoading} />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
@@ -106,22 +131,7 @@ const OpenRgbChannel = () => {
         <AppText variant="caption" style={styles.textHint}>
           {node.pushMsatsNote}
         </AppText>
-        <TextField
-          value={assetId}
-          onChangeText={text => {
-            const trimmedText = text.trim();
-            setAssetId(trimmedText);
-          }}
-          placeholder={node.assetID}
-          style={[styles.input, assetId && styles.multilineAssetIDInput]}
-          onContentSizeChange={event => {
-            setInputAssetIDHeight(event.nativeEvent.contentSize.height);
-          }}
-          keyboardType={'default'}
-          returnKeyType={'Enter'}
-          multiline={true}
-          numberOfLines={2}
-        />
+        <SelectAssetIDView selectedAsset={selectedAsset} onPress={()=> setAssetsDropdown(true)}/>
         <AppText variant="caption" style={styles.textHint}>
           {node.assetIDNote}
         </AppText>
@@ -175,6 +185,18 @@ const OpenRgbChannel = () => {
           />
         </View>
       </KeyboardAwareScrollView>
+      {assetsDropdown && (
+        <RGBAssetDropdownList
+          style={styles.assetsDropdownContainer}
+          assets={assetsData}
+          callback={item => {
+            setSelectedAsset(item)
+            setAssetsDropdown(false);
+            setAssetId(item?.assetId);
+          }}
+          onDissmiss={() => setAssetsDropdown(false)}
+        />
+      )}
     </ScreenContainer>
   );
 };
@@ -194,14 +216,20 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
       borderRadius: hp(20),
       height: Math.max(100, inputAssetIDHeight),
     },
-
     buttonWrapper: {
       marginTop: hp(20),
+      marginRight: hp(5)
     },
     textHint: {
       marginTop: hp(5),
       marginBottom: hp(20),
       marginHorizontal: wp(20),
       color: theme.colors.secondaryHeadingColor,
+    },
+    assetsDropdownContainer: {
+      position: 'absolute',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
+      borderRadius: 20,
+      marginHorizontal: hp(15),
     },
   });
