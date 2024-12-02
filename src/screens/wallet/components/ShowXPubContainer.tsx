@@ -22,7 +22,7 @@ function ShowXPubContainer({ xpub }) {
         <ShowQRCode value={xpub} title={wallet.xPubDetails} />
         <ReceiveQrClipBoard
           qrCodeValue={xpub}
-          icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+          icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
         />
       </ScrollView>
       <FooterNote

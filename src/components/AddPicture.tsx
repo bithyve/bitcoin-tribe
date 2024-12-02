@@ -29,7 +29,7 @@ function AddPicture(props: addPictureProps) {
       {!imageSource ? (
         <View style={styles.container}>
           <View style={styles.iconImageWrapper}>
-            {!isThemeDark ? <IconImage /> : <IconImageLight />}
+            {isThemeDark ? <IconImage /> : <IconImageLight />}
           </View>
           <View>
             <AppText variant="heading3" style={styles.addPictureText}>

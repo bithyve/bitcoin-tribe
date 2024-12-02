@@ -26,13 +26,13 @@ function AppInfoContainer({ navigation, walletId, version }) {
         title={common.walletID}
         subTitle={settings.walletIDSubTitle}
         value={walletId}
-        icon={!isThemeDark ? <IconInfo /> : <IconInfoLight />}
+        icon={isThemeDark ? <IconInfo /> : <IconInfoLight />}
       />
       <AppInfoCard
         title={common.versionHistory}
         subTitle={settings.versionHistorySubTitle}
         value={version}
-        icon={!isThemeDark ? <IconCalendar /> : <IconCalendarLight />}
+        icon={isThemeDark ? <IconCalendar /> : <IconCalendarLight />}
         navigation={() =>
           navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
         }

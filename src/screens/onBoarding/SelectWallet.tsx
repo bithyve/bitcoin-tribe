@@ -11,6 +11,7 @@ import AppHeader from 'src/components/AppHeader';
 import SelectWalletCollapse from './components/SelectWalletCollapse';
 import SelectWalletTypeOption from './components/SelectWalletTypeOption';
 import SupportIcon from 'src/assets/images/supportIcon.svg';
+import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
 import { hp, wp } from 'src/constants/responsive';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
@@ -23,6 +24,8 @@ import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
 import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -33,6 +36,7 @@ function SelectWallet() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
 
@@ -69,7 +73,7 @@ function SelectWallet() {
         />
         <SelectWalletTypeOption
           title={onBoarding.supported}
-          icon={<SupportIcon />}
+          icon={isThemeDark ? <SupportIcon /> : <SupportIconLight />}
           onPress={() => {
             setIsCollapsed(false);
             SetSupportedMode(!supportedMode);

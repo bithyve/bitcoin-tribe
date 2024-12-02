@@ -63,8 +63,8 @@ function HomeHeader(props: HomeHeaderProps) {
               <View style={styles.balanceWrapper}>
                 {initialCurrencyMode !== CurrencyKind.SATS &&
                   getCurrencyIcon(
-                    !isThemeDark ? IconBitcoin : IconBitcoinLight,
-                    !isThemeDark ? 'dark' : 'light',
+                    isThemeDark ? IconBitcoin : IconBitcoinLight,
+                    isThemeDark ? 'dark' : 'light',
                     15,
                   )}
                 <AppText variant="body2" style={styles.balanceText}>
@@ -81,7 +81,7 @@ function HomeHeader(props: HomeHeaderProps) {
         </AppTouchable>
         <View style={styles.iconWrapper}>
           <IconWrapper onPress={onPressScanner}>
-            {isThemeDark ? <IconScannerLight /> : <IconScanner />}
+            {isThemeDark ? <IconScanner /> : <IconScannerLight />}
           </IconWrapper>
           {/* To Do */}
           {/* <IconWrapper onPress={onPressNotification}>

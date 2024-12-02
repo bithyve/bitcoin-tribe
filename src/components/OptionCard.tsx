@@ -60,12 +60,12 @@ function OptionCard(props: OptionCardProps) {
           </View>
           <View style={styles.iconWrapper}>
             {showRightArrow ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <IconRightArrow />
               ) : (
                 <IconRightArrowLight />
               )
-            ) : !isThemeDark ? (
+            ) : isThemeDark ? (
               <IconArrow />
             ) : (
               <IconArrowLight />

@@ -50,7 +50,7 @@ function AppHeader(props: AppHeaderProps) {
           {enableBack && (
             <AppTouchable
               onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
-              {!isThemeDark ? <GoBack /> : <GoBackLight />}
+              {isThemeDark ? <GoBack /> : <GoBackLight />}
             </AppTouchable>
           )}
         </View>

@@ -48,7 +48,7 @@ function ReservedSatsView() {
         theme.colors.cardGradient3,
       ]}>
       <View style={styles.titleWrapper}>
-        {!isThemeDark ? <ReserveAmtIcon /> : <ReserveAmtIconLight />}
+        {isThemeDark ? <ReserveAmtIcon /> : <ReserveAmtIconLight />}
         <AppText variant="caption" style={styles.titleText}>
           {walletTranslations.reserveAmtText}
         </AppText>
@@ -57,8 +57,8 @@ function ReservedSatsView() {
         <View style={styles.amtIconWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
             getCurrencyIcon(
-              !isThemeDark ? IconBitcoin : IconBitcoinLight,
-              !isThemeDark ? 'dark' : 'light',
+              isThemeDark ? IconBitcoin : IconBitcoinLight,
+              isThemeDark ? 'dark' : 'light',
             )}
           <AppText variant="body1" style={[styles.amountText]}>
             &nbsp;{getBalance(totalReserveSatsAmount)}

@@ -58,7 +58,7 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
             {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>
-            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>

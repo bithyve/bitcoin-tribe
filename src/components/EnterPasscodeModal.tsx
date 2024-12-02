@@ -103,7 +103,7 @@ const EnterPasscodeModal: React.FC<Props> = ({
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
+        ClearIcon={isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
     </ModalContainer>
   );

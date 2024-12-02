@@ -64,7 +64,7 @@ const NodeInfoItem = ({
           <AppTouchable
             style={styles.copyIconWrapper}
             onPress={() => handleCopyText(value)}>
-            {!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            {isThemeDark ? <IconCopy /> : <IconCopyLight />}
           </AppTouchable>
         )}
       </GradientView>

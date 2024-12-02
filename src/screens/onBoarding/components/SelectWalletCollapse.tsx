@@ -7,8 +7,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SelectWalletTypeOption from './SelectWalletTypeOption';
 import SelfCustodyIcon from 'src/assets/images/selfcustodyIcon.svg';
+import SelfCustodyIconLight from 'src/assets/images/selfcustodyIcon_light.svg';
 import MainnetIcon from 'src/assets/images/mainnetIcon.svg';
+import MainnetIconLight from 'src/assets/images/mainnetIcon_light.svg';
 import LightningIcon from 'src/assets/images/lightningIcon.svg';
+import LightningIconLight from 'src/assets/images/lightningIcon_light.svg';
 import DownArrowIcon from 'src/assets/images/icon_chevron_down.svg';
 import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconSettingArrowLight from 'src/assets/images/icon_arrowr2light.svg';
@@ -34,7 +37,7 @@ function SelectWalletCollapse(props: SelectWalletCollapseProps) {
     <View>
       <View>
         <SelectWalletTypeOption
-          icon={<SelfCustodyIcon />}
+          icon={isThemeDark ? <SelfCustodyIcon /> : <SelfCustodyIconLight />}
           title={onBoarding.selfCustody}
           onPress={() => setIsCollapsed(!isCollapsed)}
           rightIcon={<DownArrowIcon />}
@@ -49,17 +52,17 @@ function SelectWalletCollapse(props: SelectWalletCollapseProps) {
         <View style={styles.collapseViewWrapper}>
           <SelectWalletTypeOption
             title={onBoarding.mainnet}
-            icon={<MainnetIcon />}
+            icon={isThemeDark ? <MainnetIcon /> : <MainnetIconLight />}
             rightIcon={
-              !isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
+              isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
             }
             onPress={() => navigation.navigate(NavigationRoutes.PROFILESETUP)}
           />
           <SelectWalletTypeOption
             title={onBoarding.mainnetAndLightning}
-            icon={<LightningIcon />}
+            icon={isThemeDark ? <LightningIcon /> : <LightningIconLight />}
             rightIcon={
-              !isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
+              isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
             }
             onPress={() =>
               navigation.navigate(NavigationRoutes.RGBLIGHTNINGNODECONNECT)

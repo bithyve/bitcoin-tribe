@@ -42,7 +42,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
         return isFocused ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <AssetsActive />
           ) : (
             <AssetsActiveLight />
@@ -52,7 +52,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         );
       case NavigationRoutes.COMMUNITY:
         return isFocused ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <CommunityActive />
           ) : (
             <CommunityActiveLight />
@@ -62,7 +62,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <SettingsActive />
           ) : (
             <SettingsActiveLight />

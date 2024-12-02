@@ -61,18 +61,18 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {props.transaction.confirmations === 0 ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <TransPendingIcon />
               ) : (
                 TransPendingIconLight
               )
             ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <SendTXNIcon />
               ) : (
                 <SendTXNIconLight />
               )
-            ) : !isThemeDark ? (
+            ) : isThemeDark ? (
               <RecieveTXNIcon />
             ) : (
               <RecieveTXNIconLight />

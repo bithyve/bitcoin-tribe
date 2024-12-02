@@ -33,7 +33,7 @@ function WalletSetupOption({ navigation }) {
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
-        icon={!isThemeDark ? <IconWallet /> : <IconWalletLight />}
+        icon={isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
@@ -42,7 +42,7 @@ function WalletSetupOption({ navigation }) {
         }}
       />
       <OptionCard
-        icon={!isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
+        icon={isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
         showRightArrow={true}

@@ -54,7 +54,7 @@ function CurrencyDropDownListView(props: DropdownProps) {
             {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>
-            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>
