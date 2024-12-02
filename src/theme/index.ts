@@ -77,6 +77,10 @@ type CustomColors = {
   backupDoneBorder: string;
   closeChannelCTA: string;
   closeChannelCTATitle: string;
+  assetsProgressFill: string;
+  assetsProgressRemaining: string;
+  satsProgressFill: string;
+  satsProgressRemaining: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -161,7 +165,11 @@ const CombinedDefaultTheme: AppTheme = {
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
     closeChannelCTA: Colors.FireOpal,
-    closeChannelCTATitle: Colors.White
+    closeChannelCTATitle: Colors.White,
+    assetsProgressFill: Colors.Turquoise,
+    assetsProgressRemaining: Colors.Cyclamen,
+    satsProgressFill: Colors.VioletsAreBlue,
+    satsProgressRemaining: Colors.DeepSaffron,
   },
   fonts: {
     regular: {
@@ -254,7 +262,11 @@ const CombinedDarkTheme: AppTheme = {
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
     closeChannelCTA: Colors.FireOpal,
-    closeChannelCTATitle: Colors.White
+    closeChannelCTATitle: Colors.White,
+    assetsProgressFill: Colors.Turquoise,
+    assetsProgressRemaining: Colors.Cyclamen,
+    satsProgressFill: Colors.VioletsAreBlue,
+    satsProgressRemaining: Colors.DeepSaffron,
   },
   fonts: {
     regular: {

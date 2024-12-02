@@ -43,5 +43,9 @@ const Colors = {
   UFOGreen2: 'rgba(76, 217, 100, 0.1)',
   TennesseeOrange: 'rgba(245, 124, 0, 1)',
   BrandeisBlue2: 'rgba(1, 102, 255,0.1)',
+  Cyclamen: 'rgba(241, 106, 166,1)',
+  DeepSaffron: 'rgba(255, 158, 62, 1)',
+  VioletsAreBlue: 'rgba(161, 110, 255, 1)',
+  Turquoise: 'rgba(71, 230, 212, 1)'
 };
 export default Colors;
