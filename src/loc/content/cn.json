@@ -433,6 +433,7 @@
     "peerPubKey": "对等公钥：",
     "shortChannelID": "短通道 ID：",
     "assetID": "资产 ID：",
-    "closeChannel": "关闭通道"
+    "closeChannel": "关闭通道",
+    "selectYourAsset": "选择您的资产"
   }
 }

@@ -433,6 +433,7 @@
     "peerPubKey": "ピア公開鍵：",
     "shortChannelID": "ショートチャネル ID：",
     "assetID": "アセット ID：",
-    "closeChannel": "チャネルを閉じる"
+    "closeChannel": "チャネルを閉じる",
+    "selectYourAsset": "資産を選択"
   }
 }

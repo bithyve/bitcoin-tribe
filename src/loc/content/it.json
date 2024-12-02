@@ -433,6 +433,7 @@
     "peerPubKey": "Chiave Pubblica Peer:",
     "shortChannelID": "ID Canale Breve:",
     "assetID": "ID Asset:",
-    "closeChannel": "Chiudi Canale"
+    "closeChannel": "Chiudi Canale",
+    "selectYourAsset": "Seleziona il tuo Asset"
   }
 }

@@ -13,6 +13,7 @@ import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
 import Identicon from 'react-native-identicon';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type DropdownProps = {
   style;
@@ -24,6 +25,8 @@ type DropdownProps = {
 function RGBAssetDropdownList(props: DropdownProps) {
   const { style, assets, callback, onDissmiss } = props;
   const theme: AppTheme = useTheme();
+  const { translations } = React.useContext(LocalizationContext);
+  const { channel} = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
@@ -39,7 +42,7 @@ function RGBAssetDropdownList(props: DropdownProps) {
           ]}>
           <View style={styles.inputWrapper2}>
             <AppText variant="body1" style={styles.titleStyle}>
-              Select Your Asset
+              {channel.selectYourAsset}
             </AppText>
           </View>
           <View style={styles.iconArrowWrapper}>

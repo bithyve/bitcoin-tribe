@@ -13,6 +13,7 @@ import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type Props = {
   selectedAsset: Asset;
@@ -22,6 +23,8 @@ type Props = {
 const SelectAssetIDView = (props: Props) => {
   const { selectedAsset, onPress } = props;
   const theme: AppTheme = useTheme();
+  const { translations } = React.useContext(LocalizationContext);
+  const { channel} = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, theme.colors.ctaBackColor);
 
@@ -55,7 +58,7 @@ const SelectAssetIDView = (props: Props) => {
             <AppText variant="body1" style={styles.titleText}>{selectedAsset?.name}</AppText>
           </View>:
           <AppText variant="body1" style={styles.titleText}>
-            Select Your Asset
+             {channel.selectYourAsset}
           </AppText>}
         </View>
         <View>{!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}</View>

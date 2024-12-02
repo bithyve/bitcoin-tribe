@@ -433,6 +433,7 @@
     "peerPubKey": "सहकर्मी पब्लिक की:",
     "shortChannelID": "शॉर्ट चैनल आईडी:",
     "assetID": "संपत्ति आईडी:",
-    "closeChannel": "चैनल बंद करें"
+    "closeChannel": "चैनल बंद करें",
+     "selectYourAsset": "अपनी संपत्ति चुनें" 
   }
 }
