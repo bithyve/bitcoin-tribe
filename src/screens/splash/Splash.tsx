@@ -91,9 +91,9 @@ function Splash({ navigation }) {
         resizeMode="cover"
         style={styles.backImage}>
         <LottieView
-          source={require('src/assets/images/logoAnimation.json')} // Update with the path to your Lottie JSON file
+          source={isThemeDark ? require('src/assets/images/logoAnimation.json') : require('src/assets/images/logoAnimationLight.json')}
           autoPlay
-          loop={false} // Ensures the animation doesn't loop
+          loop={false}
           style={styles.splashImageStyle}
           onAnimationFinish={() => setAnimationFinished(true)}
         />
