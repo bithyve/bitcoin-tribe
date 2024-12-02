@@ -75,6 +75,8 @@ type CustomColors = {
   roundBuyCTAGradient3: string;
   buyCtaBorderColor: string;
   backupDoneBorder: string;
+  closeChannelCTA: string;
+  closeChannelCTATitle: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -158,6 +160,8 @@ const CombinedDefaultTheme: AppTheme = {
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
+    closeChannelCTA: Colors.FireOpal,
+    closeChannelCTATitle: Colors.White
   },
   fonts: {
     regular: {
@@ -249,6 +253,8 @@ const CombinedDarkTheme: AppTheme = {
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
+    closeChannelCTA: Colors.FireOpal,
+    closeChannelCTATitle: Colors.White
   },
   fonts: {
     regular: {

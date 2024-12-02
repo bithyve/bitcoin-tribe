@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
@@ -16,27 +16,6 @@ import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import CollectibleDetailsHeader from './CollectibleDetailsHeader';
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    height: '100%',
-    paddingHorizontal: 0,
-    paddingTop: 0,
-  },
-  walletHeaderWrapper: {
-    height: windowHeight < 670 ? '42%' : '35%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: wp(25),
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'gray',
-  },
-  TransactionWrapper: {
-    height: windowHeight < 670 ? '53%' : '60%',
-    marginHorizontal: wp(25),
-  },
-});
-
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -47,6 +26,7 @@ const CollectibleDetailsScreen = () => {
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -75,9 +55,12 @@ const CollectibleDetailsScreen = () => {
           transactions={collectible?.transactions}
           isLoading={isLoading}
           refresh={() => {
+            setRefreshing(true);
             refreshRgbWallet.mutate();
             mutate({ assetId, schema: RealmSchema.Collectible });
+            setTimeout(() => setRefreshing(false), 2000);
           }}
+          refreshingStatus={refreshing}
           navigation={navigation}
           wallet={wallet}
           coin={collectible.name}

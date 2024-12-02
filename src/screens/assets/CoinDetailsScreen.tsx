@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -24,6 +24,7 @@ const CoinDetailsScreen = () => {
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -50,9 +51,12 @@ const CoinDetailsScreen = () => {
           transactions={coin?.transactions}
           isLoading={isLoading}
           refresh={() => {
+            setRefreshing(true);
             refreshRgbWallet.mutate();
             mutate({ assetId, schema: RealmSchema.Coin });
+            setTimeout(() => setRefreshing(false), 2000);
           }}
+          refreshingStatus={refreshing}
           navigation={navigation}
           wallet={wallet}
           coin={coin.name}

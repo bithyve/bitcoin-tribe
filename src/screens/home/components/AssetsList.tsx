@@ -26,7 +26,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
 import RefreshControlView from 'src/components/RefreshControlView';
-import AppType from 'src/models/enums/AppType';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -34,10 +34,11 @@ type AssetsListProps = {
   onPressAddNew?: () => void;
   onRefresh?: () => void;
   loading?: boolean;
+  refreshingStatus?: boolean;
 };
 
 function AssetsList(props: AssetsListProps) {
-  const { listData, onPressAsset, onPressAddNew } = props;
+  const { listData, onPressAsset, onPressAddNew, refreshingStatus } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -51,6 +52,9 @@ function AssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
+      {props.loading && !refreshingStatus ? (
+        <LoadingSpinner/>
+      ) : null}
       <FlatList
         showsVerticalScrollIndicator={false}
         numColumns={2}
@@ -61,12 +65,12 @@ function AssetsList(props: AssetsListProps) {
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView
-              refreshing={props.loading}
+              refreshing={refreshingStatus}
               onRefresh={props.onRefresh}
             />
           ) : (
             <RefreshControl
-              refreshing={props.loading}
+              refreshing={refreshingStatus}
               onRefresh={props.onRefresh}
               colors={[theme.colors.accent1]} // You can customize this part
               progressBackgroundColor={theme.colors.inputBackground}
@@ -101,10 +105,11 @@ function AssetsList(props: AssetsListProps) {
                   image={Platform.select({
                     android: `file://${item.media?.filePath}`,
                     ios: item.media?.filePath,
-                    }
-                  )}
+                  })}
                   details={item.details}
-                  amount={item.balance.spendable + item.balance.offchainOutbound}
+                  amount={
+                    item.balance.spendable + item.balance.offchainOutbound
+                  }
                   tag={isCoin ? 'COIN' : 'COLLECTIBLE'}
                   onPress={() =>
                     navigation.navigate(navigateTo, { assetId: item.assetId })

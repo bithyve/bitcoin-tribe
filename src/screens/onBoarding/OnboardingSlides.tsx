@@ -48,13 +48,15 @@ function OnboardingSlides() {
   return (
     <ScreenContainer>
       <View style={styles.skipWrapperView}>
-        {currentPosition === 0 &&<AppTouchable
-          onPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
-          style={styles.skipTextWrapper}>
-          <AppText variant="heading3" style={styles.skipText}>
-            {common.skip}
-          </AppText>
-        </AppTouchable>}
+        {currentPosition === 0 && (
+          <AppTouchable
+            onPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
+            style={styles.skipTextWrapper}>
+            <AppText variant="heading3" style={styles.skipText}>
+              {common.skip}
+            </AppText>
+          </AppTouchable>
+        )}
       </View>
       <View style={styles.wrapper}>
         <FlatList
@@ -85,8 +87,8 @@ function OnboardingSlides() {
         />
       </View>
       <View style={styles.footerBtnView}>
-        {currentPosition < items.length - 1 ? (
-          items.map((item, index) => (
+        <View style={styles.pageIndicatorWrapper}>
+          {items.map((item, index) => (
             <View
               key={item.id.toString()}
               style={
@@ -95,23 +97,22 @@ function OnboardingSlides() {
                   : styles.unSelectedDot
               }
             />
-          ))
-        ) : (
-          <Buttons
-            primaryTitle={common.proceed}
-            primaryOnPress={() => {
-              if (currentPosition < items.length - 1) {
-                onboardingSlideRef.current.scrollToIndex({
-                  animated: true,
-                  index: currentPosition + 1,
-                });
-              } else {
-                navigation.replace(NavigationRoutes.APPSTACK);
-              }
-            }}
-            width={wp(150)}
-          />
-        )}
+          ))}
+        </View>
+        <Buttons
+          primaryTitle={common.next}
+          primaryOnPress={() => {
+            if (currentPosition < items.length - 1) {
+              onboardingSlideRef.current.scrollToIndex({
+                animated: true,
+                index: currentPosition + 1,
+              });
+            } else {
+              navigation.replace(NavigationRoutes.APPSTACK);
+            }
+          }}
+          width={wp(120)}
+        />
       </View>
     </ScreenContainer>
   );
@@ -134,8 +135,14 @@ const getStyles = (theme: AppTheme) =>
     footerBtnView: {
       flexDirection: 'row',
       height: '10%',
+      width: '100%',
       alignItems: 'center',
-      justifyContent: 'flex-end'
+      justifyContent: 'space-between',
+    },
+    pageIndicatorWrapper: {
+      flexDirection: 'row',
+      paddingLeft: hp(10),
+      marginTop: hp(10)
     },
     skipTextWrapper: {
       flexDirection: 'row',
@@ -145,7 +152,7 @@ const getStyles = (theme: AppTheme) =>
     skipText: {
       letterSpacing: 0.42,
       textAlign: 'center',
-      color: theme.colors.accent1
+      color: theme.colors.accent1,
     },
     selectedDot: {
       width: 25,

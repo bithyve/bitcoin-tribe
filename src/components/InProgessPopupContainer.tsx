@@ -13,10 +13,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type UseRGBAssetProps = {
   title: string;
   subTitle: string;
+  illustrationPath: string;
 };
 
-function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
-  const { title, subTitle } = props;
+function InProgessPopupContainer(props: UseRGBAssetProps) {
+  const { title, subTitle, illustrationPath } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
@@ -34,7 +35,7 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={require('src/assets/images/nodeConnecting.json')}
+          source={illustrationPath}
           style={styles.loaderStyle}
           autoPlay
           loop
@@ -77,14 +78,14 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     illustrationWrapper: {
-      marginVertical: hp(5),
+      marginVertical: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(300),
-      height: hp(300),
+      width: hp(200),
+      height: hp(200),
     },
     loaderWrapper: {
       flexDirection: 'row',
@@ -108,4 +109,4 @@ const getStyles = (theme: AppTheme) =>
       width: '45%',
     }
   });
-export default NodeConnectingPopupContainer;
+export default InProgessPopupContainer;
