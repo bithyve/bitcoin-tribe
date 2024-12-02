@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
-import { ProgressBar, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 
@@ -36,9 +36,6 @@ const getStyles = (theme: AppTheme, backColor) =>
     titleText: {
       color: theme.colors.headingColor,
     },
-    statusValueText: {
-      color: theme.colors.greenText,
-    },
     valueText: {
       color: theme.colors.headingColor,
     },
@@ -67,9 +64,6 @@ const getStyles = (theme: AppTheme, backColor) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginVertical: hp(10),
-    },
-    progressbarWrapper: {
       marginVertical: hp(10),
     },
     channelIDsWrapper: {
@@ -156,12 +150,6 @@ const ChannelDetails = () => {
                 {channel.capacitySat}
               </AppText>
             </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.capacitySat && <ProgressBar
-                progress={channel.capacitySat / channel.capacitySat}
-                color={theme.colors.accent1}
-              />}
-            </View>
           </>
           <>
             <View style={styles.channelDetailsWrapper}>
@@ -171,12 +159,6 @@ const ChannelDetails = () => {
               <AppText variant="body2" style={styles.valueText}>
                 {channel.localBalanceMsat}
               </AppText>
-            </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.localBalanceMsat && <ProgressBar
-                progress={channel.localBalanceMsat / channel.localBalanceMsat}
-                color={theme.colors.accent1}
-              />}
             </View>
           </>
           <>
@@ -188,12 +170,6 @@ const ChannelDetails = () => {
                 {channel.outboundBalanceMsat}
               </AppText>
             </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.outboundBalanceMsat && <ProgressBar
-                progress={channel.outboundBalanceMsat / channel.outboundBalanceMsat}
-                color={theme.colors.accent1}
-              />}
-            </View>
           </>
           <>
             <View style={styles.channelDetailsWrapper}>
@@ -203,12 +179,6 @@ const ChannelDetails = () => {
               <AppText variant="body2" style={styles.valueText}>
                 {channel.inboundBalanceMsat}
               </AppText>
-            </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.inboundBalanceMsat && <ProgressBar
-                progress={channel.inboundBalanceMsat / channel.inboundBalanceMsat}
-                color={theme.colors.accent1}
-              />}
             </View>
           </>
           <>
@@ -220,12 +190,6 @@ const ChannelDetails = () => {
                 {channel.nextOutboundHtlcLimitMsat}
               </AppText>
             </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.nextOutboundHtlcLimitMsat && <ProgressBar
-                progress={channel.nextOutboundHtlcLimitMsat / channel.nextOutboundHtlcLimitMsat}
-                color={theme.colors.accent1}
-              />}
-            </View>
           </>
           <>
             <View style={styles.channelDetailsWrapper}>
@@ -235,12 +199,6 @@ const ChannelDetails = () => {
               <AppText variant="body2" style={styles.valueText}>
                 {channel.nextOutboundHtlcMinimumMsat}
               </AppText>
-            </View>
-            <View style={styles.progressbarWrapper}>
-              {channel.nextOutboundHtlcMinimumMsat &&<ProgressBar
-                progress={channel.nextOutboundHtlcMinimumMsat / channel.nextOutboundHtlcMinimumMsat}
-                color={theme.colors.accent1}
-              />}
             </View>
           </>
         </View>
