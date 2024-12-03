@@ -84,14 +84,6 @@ function LanguageAndCurrency() {
         onValueChange={() => toggleDisplayMode()}
         toggleValue={initialCurrencyMode === CurrencyKind.SATS}
       />
-      <SelectOption
-        title={settings.satsModeTitle}
-        subTitle={settings.satsModeSubTitle}
-        onPress={() => toggleDisplayMode()}
-        enableSwitch={true}
-        onValueChange={() => toggleDisplayMode()}
-        toggleValue={initialCurrencyMode === CurrencyKind.SATS}
-      />
       <View style={{ position: 'relative' }}>
         <LangCurrencyOption
           title={settings.language}
