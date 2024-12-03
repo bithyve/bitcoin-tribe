@@ -27,14 +27,14 @@ function WalletSectionHeader(props: WalletSectionHeaderProps) {
   return (
     <View style={styles.headerWrapper}>
       <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
-        {!isThemeDark ? <GoBack /> : <GoBackLight />}
+        {isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
         <UserAvatar size={80} imageSource={profile} />
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>
-          {/* {!isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />} */}
+          {/* {isThemeDark ? <ReciveTestSatsIcon /> : <ReciveTestSatsLightIcon />} */}
         </View>
       </IconWrapper>
     </View>

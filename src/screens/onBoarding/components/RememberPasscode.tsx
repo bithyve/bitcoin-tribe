@@ -34,7 +34,7 @@ function RememberPasscode(props: sendSuccessProps) {
       </View>
       <View>
         <LottieView
-          source={require('src/assets/images/rememberPasscode.json')}
+          source={require('src/assets/images/jsons/rememberPasscode.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

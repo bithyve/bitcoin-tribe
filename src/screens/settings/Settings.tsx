@@ -122,31 +122,31 @@ function SettingsScreen({ navigation }) {
     {
       id: 1,
       title: walletTranslation.nameAndPic,
-      icon: !isThemeDark ? <IconNamePic /> : <IconNamePicLight />,
+      icon: isThemeDark ? <IconNamePic /> : <IconNamePicLight />,
       onPress: () => navigation.navigate(NavigationRoutes.EDITWALLETPROFILE),
     },
     {
       id: 2,
       title: walletTranslation.walletSettings,
-      icon: !isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
+      icon: isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
       onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
     },
     {
       id: 3,
       title: settings.appBackup,
-      icon: !isThemeDark ? <IconBackup /> : <IconBackupLight />,
+      icon: isThemeDark ? <IconBackup /> : <IconBackupLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
     },
     {
       id: 4,
       title: settings.langAndCurrency,
-      icon: !isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />,
+      icon: isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
     {
       id: 5,
       title: settings.setPasscodeTitle,
-      icon: !isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
+      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
@@ -154,9 +154,11 @@ function SettingsScreen({ navigation }) {
     {
       id: 6,
       title: settings.darkMode,
-      icon: !isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
-      onValueChange: () => setDarkTheme(!darkTheme),
-      toggleValue: !darkTheme,
+      icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
+      onValueChange: () => {
+        setDarkTheme(!darkTheme)
+      },
+      toggleValue: darkTheme,
       enableSwitch: true,
       testID: 'dark_mode',
       onPress: () => setDarkTheme(!darkTheme),
@@ -164,7 +166,7 @@ function SettingsScreen({ navigation }) {
     {
       id: 7,
       title: settings.biometricUnlock,
-      icon: !isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
+      icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
       toggleValue: biometrics,
       enableSwitch: true,
@@ -176,27 +178,27 @@ function SettingsScreen({ navigation }) {
     // {
     //   id: 5,
     //   title: settings.nodeSettings,
-    //   icon: !isThemeDark ? <IconNodes /> : <IconNodesLight/>,
+    //   icon: isThemeDark ? <IconNodes /> : <IconNodesLight/>,
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
       id: 8,
       title: settings.appInfo,
-      icon: !isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
+      icon: isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
 
     {
       id: 9,
       title: settings.viewNodeInfo,
-      icon: !isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
+      icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },
     {
       id: 10,
       title: settings.channelManagement,
-      icon: !isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
       hideMenu: app.appType === AppType.ON_CHAIN,
     },

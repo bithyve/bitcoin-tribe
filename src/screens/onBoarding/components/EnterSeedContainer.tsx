@@ -35,6 +35,8 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Fonts from 'src/constants/Fonts';
 import AppType from 'src/models/enums/AppType';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 type seedWordItem = {
   id: number;
@@ -203,14 +205,16 @@ function EnterSeedContainer() {
       }
       const mnemonic = seedWord.trim();
       if (bip39.validateMnemonic(mnemonic)) {
-        mutate({
-          appName: '',
-          walletImage: '',
-          passcode: '',
-          pinMethod: PinMethod.DEFAULT,
-          mnemonic,
-          appType: AppType.ON_CHAIN,
-        });
+        setTimeout(()=>{
+          mutate({
+            appName: '',
+            walletImage: '',
+            passcode: '',
+            pinMethod: PinMethod.DEFAULT,
+            mnemonic,
+            appType: AppType.ON_CHAIN,
+          });
+        }, 500)
       } else {
         setLoading(false);
         Toast(onBoarding.invalidMnemonic, true);
@@ -234,7 +238,19 @@ function EnterSeedContainer() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ModalLoading visible={loading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={onBoarding.recoverLoadingTitle}
+            subTitle={onBoarding.recoverLoadingSubTitle}
+            illustrationPath={require('src/assets/images/BackupandRecovery.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <KeyboardAwareScrollView
         style={{ flex: 1 }}
         enableOnAndroid={true}

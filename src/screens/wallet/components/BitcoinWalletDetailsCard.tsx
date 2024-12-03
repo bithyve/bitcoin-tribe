@@ -58,8 +58,8 @@ function BitcoinWalletDetailsCard(props: BtcWalletDetailsProps) {
         {initialCurrencyMode !== CurrencyKind.SATS && (
           <View style={styles.currencyIconWrapper}>
             {getCurrencyIcon(
-              !isThemeDark ? IconBitcoin : IconBitcoinLight,
-              !isThemeDark ? 'dark' : 'light',
+              isThemeDark ? IconBitcoin : IconBitcoinLight,
+              isThemeDark ? 'dark' : 'light',
               30,
             )}
           </View>

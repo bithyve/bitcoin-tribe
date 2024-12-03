@@ -24,6 +24,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import WalletFooter from '../wallet/components/WalletFooter';
 import { wp } from 'src/constants/responsive';
 import AppType from 'src/models/enums/AppType';
+import { useTheme } from 'react-native-paper';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -33,10 +34,11 @@ function ReceiveAssetScreen() {
     assets,
     wallet: walletTranslation,
   } = translations;
-  const navigation = useNavigation();
+  const theme = useTheme();
   const route = useRoute();
   const assetId = route.params.assetId || '';
   const amount = route.params.amount || '';
+  const selectedType = route.params.selectedType || 'bitcoin'
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -44,7 +46,6 @@ function ReceiveAssetScreen() {
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const [activeTab, setActiveTab] = useState((app.appType !== AppType.ON_CHAIN && assetId !== '') ? 'lightning' : 'bitcoin');
   const [lightningInvoice, setLightningInvoice] = useState('');
   const [rgbInvoice, setRgbInvoice] = useState('')
 
@@ -86,7 +87,6 @@ function ReceiveAssetScreen() {
       // Toast(generateLNInvoiceMutation.error, true);
     } else if (generateLNInvoiceMutation.data) {
       setLightningInvoice(generateLNInvoiceMutation?.data?.invoice);
-      setActiveTab('lightning');
     }
   }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
 
@@ -100,32 +100,29 @@ function ReceiveAssetScreen() {
     }
   }, [createUtxos.data]);
 
-  const onTabChange = (tab: string) => {
-    if (tab === 'lightning') {
+  useEffect(()=>{
+    if (selectedType === 'lightning') {
       if (lightningInvoice === '') {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
           assetId,
         });
-      } else {
-        setActiveTab(tab);
       }
     } else {
-      setActiveTab(tab);
       if(rgbInvoice === '') {
         mutate(assetId, amount);
       }
     }
-  };
-
+  },[selectedType])
+    
   const qrValue = useMemo(() => {
-    if (activeTab === 'bitcoin') {
+    if (selectedType === 'bitcoin') {
       setRgbInvoice(rgbWallet?.receiveData?.invoice)
       return rgbWallet?.receiveData?.invoice;
     } else {
       return lightningInvoice;
     }
-  }, [activeTab, rgbWallet?.receiveData?.invoice, lightningInvoice]);
+  }, [selectedType, rgbWallet?.receiveData?.invoice, lightningInvoice]);
 
   return (
     <ScreenContainer>
@@ -159,18 +156,14 @@ function ReceiveAssetScreen() {
         <View />
       ) : (
         <View>
-          {(app.appType !== AppType.ON_CHAIN && assetId !== '') && (
-            <View style={styles.footerView}>
-              <WalletFooter activeTab={activeTab} setActiveTab={onTabChange} />
-            </View>
-          )}
           <ShowQRCode
             value={qrValue || 'address'}
-            title={receciveScreen.invoiceAddress}
+            title={selectedType === 'bitcoin' ? receciveScreen.invoiceAddress: receciveScreen.lightningAddress}
+            qrTitleColor = {selectedType === 'bitcoin' ? theme.colors.btcCtaBackColor : theme.colors.accent1}
           />
           <ReceiveQrClipBoard
             qrCodeValue={qrValue}
-            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
             title={common.note}

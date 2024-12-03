@@ -15,6 +15,7 @@
     "connect": "CONNETTI",
     "delete": "CANCELLA",
     "confirmAndProceed": "Conferma e procedi",
+    "confirmAndClose": "Conferma e Chiudi",
     "sendMax": "INVIA MASSIMO",
     "broadcast": "Trasmetti",
     "walletID": "ID portafoglio",
@@ -119,7 +120,11 @@
     "supportNodeConnectingTitle": "Configurazione della modalità supportata",
     "supportNodeConnectingSubTitle": "Connessione al tuo nodo. Tieni l'app aperta e lo schermo sbloccato.",
     "nodeconnectSuccessfulTitle": "Connessione riuscita",
-    "nodeconnectSuccessfulSubTitle": "Ora sei connesso. Procedi al prossimo passaggio."
+    "nodeconnectSuccessfulSubTitle": "Ora sei connesso. Procedi al prossimo passaggio.",
+    "profileSetupLoadingTitle": "Stiamo configurando il tuo profilo",
+    "profileSetupLoadingSubTitle": "Rilassati mentre prepariamo tutto per te. La tua app sarà pronta tra poco.",
+    "recoverLoadingTitle": "Recupero dei tuoi dati",
+    "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo."
   },
   "home": {
     "addAssets": "Aggiungi risorse",
@@ -220,7 +225,9 @@
     "removed": "Rimosso",
     "expired": "Scaduto",
     "viewNodeInfo": "Visualizza informazioni sul nodo",
-    "channelManagement": "Gestione del canale"
+    "channelManagement": "Gestione del canale",
+    "cloudBackupLoadingTitle": "Backup su cloud",
+    "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -230,7 +237,10 @@
     "invoiceAddress": "Fattura RGB",
     "bitcoinAddress": "Indirizzo Bitcoin",
     "noteSubTitle": "L'UTXO cieco in questa fattura scadrà 24 ore dopo la sua creazione.",
-    "lightningAddress": "Indirizzo Lightning"
+    "lightningAddress": "Indirizzo Lightning",
+    "chooseInvoiceType": "Scegli il tipo di fattura",
+    "onchain": "On-chain",
+    "lightning": "Fulmine"
   },
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
@@ -257,7 +267,9 @@
     "paste": "Incolla",
     "sendAssetTitle": "Invia asset",
     "sendAssetSubtitle": "Scansiona la fattura RGB",
-    "totalFee": "Costo totale："
+    "totalFee": "Costo totale：",
+    "sendBtcLoadingTitle": "Invio di Bitcoin",
+    "sendBtcLoadingSubTitle": "La tua transazione è in elaborazione—attendi un momento! Rilassati e il tuo Bitcoin sarà inviato in sicurezza."
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
@@ -362,7 +374,11 @@
     "failedToCreateUTXOTitle": "Saldo insufficiente per la transazione",
     "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse.",
     "unexpectedErrorTitle": "Errore imprevisto",
-    "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi"
+    "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi",
+    "sendAssetLoadingTitle": "Invio di asset RGB",
+    "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro.",
+    "issueAssetLoadingTitle": "Emissione dell'Asset",
+    "issueAssetLoadingSubTitle": "Il tuo asset è in fase di creazione—attendi un momento! Rilassati, il tuo nuovo asset sarà emesso a breve."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
@@ -400,5 +416,31 @@
     "channelCreatedMsg": "Canale creato con successo",
     "channelCloseMsg": "Canale chiuso",
     "takeTimeMsg": "Questo passaggio richiederà alcuni secondi."
+  },
+  "channel": {
+    "status": "Stato :",
+    "assetLocalAmt": "Importo Locale dell'Asset:",
+    "shortChannelld": "ID Canale Breve:",
+    "capacitySat": "Capacità (Sat):",
+    "localBalanceMsat": "Saldo Locale (Msat):",
+    "outboundBalanceMsat": "Saldo in Uscita (Msat):",
+    "inboundBalanceMsat": "Saldo in Entrata (Msat):",
+    "nxtOutboundHtclLmtMsat": "Prossimo Limite HTLC in Uscita (Msat):",
+    "nxtOutboundHtclMinMsat": "Prossimo Minimo HTLC in Uscita (Msat):",
+    "peerAlias": "Alias Peer:",
+    "ready": "Pronto:",
+    "isUsable": "È utilizzabile:",
+    "public": "Pubblico:",
+    "channelID": "ID Canale:",
+    "fundingTXID": "TXID di Finanziamento:",
+    "peerPubKey": "Chiave Pubblica Peer:",
+    "shortChannelID": "ID Canale Breve:",
+    "assetID": "ID Asset:",
+    "closeChannel": "Chiudi Canale",
+    "selectYourAsset": "Seleziona il tuo Asset",
+    "selectYourAssetErrMsg": "Seleziona il tuo asset",
+    "availableBalanceText": "Saldo Disp.: ",
+    "closeChannelPopupTitle": "Chiudere il Canale?",
+    "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata."
   }
 }

@@ -40,6 +40,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 function IssueScreen() {
   const { appType } = useContext(AppContext);
@@ -203,7 +204,19 @@ function IssueScreen() {
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading || createUtxos.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.issueAssetLoadingTitle}
+            subTitle={assets.issueAssetLoadingSubTitle}
+            illustrationPath={require('src/assets/images/issuingAsset.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
@@ -289,7 +302,7 @@ function IssueScreen() {
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
-              icon={!isThemeDark ? <UploadFile /> : <UploadFileLight />}
+              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
             />
             {image && (
               <View style={styles.imageWrapper}>
@@ -305,7 +318,7 @@ function IssueScreen() {
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
+                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}

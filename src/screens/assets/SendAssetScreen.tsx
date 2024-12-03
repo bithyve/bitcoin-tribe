@@ -47,6 +47,7 @@ import {
 } from 'src/services/wallets/interfaces';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 type ItemProps = {
   name: string;
@@ -222,7 +223,7 @@ const SendAssetScreen = () => {
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
-          setShowErrorModal(true);
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         Toast(`Failed: ${response?.error}`, true);
@@ -232,19 +233,22 @@ const SendAssetScreen = () => {
     }
   }, [invoice, amount, navigation]);
 
-  // const handleAmtChangeText = text => {
-  //   const positiveNumberRegex = /^\d*[1-9]\d*$/;
-  //   if (positiveNumberRegex.test(text)) {
-  //     setAmount(text);
-  //   } else {
-  //     setAmount('');
-  //   }
-  // };
-
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading || createUtxos.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.sendAssetLoadingTitle}
+            subTitle={assets.sendAssetLoadingSubTitle}
+            illustrationPath={require('src/assets/images/sendingBTCorAsset.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {

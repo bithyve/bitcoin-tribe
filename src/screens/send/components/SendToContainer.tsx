@@ -35,7 +35,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
 import AppType from 'src/models/enums/AppType';
-
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 function SendToContainer({
   wallet,
@@ -67,7 +67,6 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
- 
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -83,7 +82,9 @@ function SendToContainer({
 
   useEffect(() => {
     if (sendTransactionMutation.status === 'success') {
-      setVisible(true);
+      setTimeout(()=>{
+        setVisible(true);
+      },500)
     } else if (sendTransactionMutation.status === 'error') {
       Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
     }
@@ -153,21 +154,31 @@ function SendToContainer({
   };
 
   const transferFee =
-  app.appType === AppType.NODE_CONNECT
-    ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
-    : idx(
-        sendTransactionMutation,
-        _ => _.data.txPrerequisites[selectedPriority]?.fee,
-      ) || 0; 
+    app.appType === AppType.NODE_CONNECT
+      ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
+      : idx(
+          sendTransactionMutation,
+          _ => _.data.txPrerequisites[selectedPriority]?.fee,
+        ) || 0;
 
   return sendTransactionMutation.status === 'loading' ? (
-    <ModalLoading visible={sendTransactionMutation.status === 'loading'} />
+    <ResponsePopupContainer
+      visible={sendTransactionMutation.status === 'loading'}
+      enableClose={true}
+      backColor={theme.colors.modalBackColor}
+      borderColor={theme.colors.modalBackColor}>
+      <InProgessPopupContainer
+        title={sendScreen.sendBtcLoadingTitle}
+        subTitle={sendScreen.sendBtcLoadingSubTitle}
+        illustrationPath={require('src/assets/images/sendingBTCorAsset.json')}
+      />
+    </ResponsePopupContainer>
   ) : (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            {!isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
+            {isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>
@@ -310,7 +321,11 @@ function SendToContainer({
             transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             amount={amount.replace(/,/g, '')}
             transFee={transferFee}
-            total={app.appType === AppType.NODE_CONNECT? Number(amount) : Number(amount) + Number(transferFee)}
+            total={
+              app.appType === AppType.NODE_CONNECT
+                ? Number(amount)
+                : Number(amount) + Number(transferFee)
+            }
             onPress={() => successTransaction()}
           />
         </ResponsePopupContainer>

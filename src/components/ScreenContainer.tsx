@@ -15,7 +15,7 @@ const ScreenContainer = props => {
   return (
     <SafeAreaView style={{ ...styles.container, ...props.style }}>
       <StatusBar
-        barStyle={!isThemeDark ? 'light-content' : 'dark-content'}
+        barStyle={isThemeDark ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.primaryBackground}
       />
       {props.children}

@@ -83,18 +83,18 @@ function WalletTransactions(props: WalletTransactionsProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {props.transaction.confirmations === 0 ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <TransPendingIcon />
               ) : (
                 <TransPendingIconLight />
               )
             ) : transType === TransactionType.SENT ? (
-              !isThemeDark ? (
+              isThemeDark ? (
                 <SendTXNIcon />
               ) : (
                 <SendTXNIconLight />
               )
-            ) : !isThemeDark ? (
+            ) : isThemeDark ? (
               <RecieveTXNIcon />
             ) : (
               <RecieveTXNIconLight />
@@ -117,8 +117,8 @@ function WalletTransactions(props: WalletTransactionsProps) {
           <View style={styles.amtIconWrapper}>
             {initialCurrencyMode !== CurrencyKind.SATS &&
               getCurrencyIcon(
-                !isThemeDark ? IconBitcoin : IconBitcoinLight,
-                !isThemeDark ? 'dark' : 'light',
+                isThemeDark ? IconBitcoin : IconBitcoinLight,
+                isThemeDark ? 'dark' : 'light',
               )}
             <AppText
               variant="body1"
