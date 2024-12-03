@@ -110,7 +110,7 @@ function ProfileSetup() {
           <InProgessPopupContainer
             title={onBoarding.profileSetupLoadingTitle}
             subTitle={onBoarding.profileSetupLoadingSubTitle}
-            illustrationPath={require('src/assets/images/appCreation.json')}
+            illustrationPath={require('src/assets/images/jsons/appCreation.json')}
           />
         </ResponsePopupContainer>
       </View>

@@ -57,7 +57,7 @@ const CloudBackup = ({ navigation }) => {
           <InProgessPopupContainer
             title={settings.cloudBackupLoadingTitle}
             subTitle={settings.cloudBackupLoadingSubTitle}
-            illustrationPath={require('src/assets/images/sendingBTCorAsset.json')}
+            illustrationPath={require('src/assets/images/jsons/sendingBTCorAsset.json')}
           />
         </ResponsePopupContainer>
       </View>

@@ -47,7 +47,7 @@ function RGBAssetDropdownList(props: DropdownProps) {
             </AppText>
           </View>
           <View style={styles.iconArrowWrapper}>
-            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>

@@ -61,7 +61,7 @@ const SelectAssetIDView = (props: Props) => {
              {channel.selectYourAsset}
           </AppText>}
         </View>
-        <View>{!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}</View>
+        <View>{isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}</View>
       </GradientView>
     </AppTouchable>
   );
