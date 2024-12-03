@@ -376,7 +376,9 @@
     "unexpectedErrorTitle": "Unexpected Error",
     "unexpectedErrorSubTitle": "We encountered an issue processing your request. Please try again later",
     "sendAssetLoadingTitle": "Sending RGB Assets",
-    "sendAssetLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your RGB assets will be sent securely."
+    "sendAssetLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your RGB assets will be sent securely.",
+    "issueAssetLoadingTitle": "Issuing Asset",
+    "issueAssetLoadingSubTitle": "Your asset is being created—please hold on! Sit back, relax, and your new asset will be issued shortly."
   },
   "community": {
     "fnfTitle": "Friends & Family",

@@ -376,7 +376,9 @@
     "unexpectedErrorTitle": "意外错误",
     "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试",
      "sendAssetLoadingTitle": "正在发送 RGB 资产",
-    "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。"
+    "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
+    "issueAssetLoadingTitle": "发行资产",
+    "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

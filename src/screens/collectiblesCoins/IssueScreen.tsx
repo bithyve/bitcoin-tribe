@@ -211,8 +211,8 @@ function IssueScreen() {
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
           <InProgessPopupContainer
-            title={assets.sendAssetLoadingTitle}
-            subTitle={assets.sendAssetLoadingSubTitle}
+            title={assets.issueAssetLoadingTitle}
+            subTitle={assets.issueAssetLoadingSubTitle}
             illustrationPath={require('src/assets/images/issuingAsset.json')}
           />
         </ResponsePopupContainer>

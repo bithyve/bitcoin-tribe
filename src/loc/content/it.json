@@ -376,7 +376,9 @@
     "unexpectedErrorTitle": "Errore imprevisto",
     "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi",
     "sendAssetLoadingTitle": "Invio di asset RGB",
-    "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro."
+    "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro.",
+    "issueAssetLoadingTitle": "Emissione dell'Asset",
+    "issueAssetLoadingSubTitle": "Il tuo asset è in fase di creazione—attendi un momento! Rilassati, il tuo nuovo asset sarà emesso a breve."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
