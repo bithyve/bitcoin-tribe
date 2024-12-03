@@ -77,7 +77,7 @@ const OpenRgbChannel = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={node.openChannelTitle}
+        title={assetsDropdown? '' : node.openChannelTitle}
         onBackNavigation={() => {
           if (assetsDropdown) {
             setAssetsDropdown(false);
