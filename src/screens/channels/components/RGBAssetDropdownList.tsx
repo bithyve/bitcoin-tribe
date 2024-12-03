@@ -30,7 +30,7 @@ function RGBAssetDropdownList(props: DropdownProps) {
   const { channel } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-console.log('selectedAsset', selectedAsset)
+
   return (
     <View style={[style, styles.container]}>
       <AppTouchable onPress={onDissmiss}>
