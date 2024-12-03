@@ -66,7 +66,6 @@ const OpenRgbChannel = () => {
   useEffect(() => {
     const amount = parseFloat(assetAmt.replace(/,/g, ''));
     if (selectedAsset?.balance?.spendable < amount) {
-      Keyboard.dismiss();
       CustomToast(assets.checkSpendableAmt + selectedAsset?.balance?.spendable, true, Toast.positions.TOP);
     } 
     if(assetAmt && !selectedAsset){
