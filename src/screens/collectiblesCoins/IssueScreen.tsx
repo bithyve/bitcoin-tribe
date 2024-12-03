@@ -289,7 +289,7 @@ function IssueScreen() {
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
-              icon={!isThemeDark ? <UploadFile /> : <UploadFileLight />}
+              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
             />
             {image && (
               <View style={styles.imageWrapper}>
@@ -305,7 +305,7 @@ function IssueScreen() {
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
+                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}

@@ -34,25 +34,27 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={require('src/assets/images/nodeConnecting.json')}
+          source={require('src/assets/images/jsons/nodeConnecting.json')}
           style={styles.loaderStyle}
           autoPlay
           loop
         />
       </View>
-     <View style={styles.loaderWrapper}>
+      <View style={styles.loaderWrapper}>
         <View style={styles.loaderContentWrapper}>
-          <AppText variant='body2' style={styles.loaderMsgText}>{node.takeTimeMsg}</AppText>
+          <AppText variant="body2" style={styles.loaderMsgText}>
+            {node.takeTimeMsg}
+          </AppText>
         </View>
         <View style={styles.dotLoaderWrapper}>
-           <LottieView
-           source={require('src/assets/images/DotsLoader.json')}
+          <LottieView
+            source={require('src/assets/images/jsons/dotsLoader.json')}
             style={styles.dotLoaderStyle}
             autoPlay
             loop
-           />
+          />
         </View>
-      </View> 
+      </View>
     </View>
   );
 }
@@ -91,21 +93,21 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       justifyContent: 'space-between',
       marginVertical: hp(10),
-      alignItems: 'center'
+      alignItems: 'center',
     },
     dotLoaderStyle: {
       alignSelf: 'center',
       width: hp(150),
       height: hp(120),
     },
-    loaderMsgText:{
-      color: theme.colors.headingColor
+    loaderMsgText: {
+      color: theme.colors.headingColor,
     },
-    loaderContentWrapper:{
-      width: '55%'
+    loaderContentWrapper: {
+      width: '55%',
     },
-    dotLoaderWrapper:{
+    dotLoaderWrapper: {
       width: '45%',
-    }
+    },
   });
 export default NodeConnectingPopupContainer;

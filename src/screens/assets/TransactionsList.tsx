@@ -66,7 +66,7 @@ function TransactionsList({
      {isLoading ?
      Platform.OS === 'ios' ? (
       <LottieView
-        source={require('src/assets/images/loader.json')}
+        source={require('src/assets/images/jsons/loader.json')}
         style={styles.loaderStyle}
         autoPlay
         loop

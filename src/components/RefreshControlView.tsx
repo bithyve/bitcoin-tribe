@@ -20,7 +20,7 @@ const RefreshControlView = ({
       tintColor={'transparent'}>
       {refreshing && (
         <LottieView
-          source={require('src/assets/images/loader.json')}
+          source={require('src/assets/images/jsons/loader.json')}
           autoPlay
           loop
           style={styles.refreshLoader} // Adjust the size as needed
