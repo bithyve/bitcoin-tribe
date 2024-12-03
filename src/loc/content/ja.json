@@ -15,6 +15,7 @@
     "connect": "接続",
     "delete": "削除",
     "confirmAndProceed": "確認して続行",
+    "confirmAndClose": "確認して閉じる",
     "sendMax": "最大送信",
     "broadcast": "ブロードキャスト",
     "walletID": "ウォレットID",
@@ -436,6 +437,8 @@
     "closeChannel": "チャネルを閉じる",
     "selectYourAsset": "資産を選択",
     "selectYourAssetErrMsg": "資産を選択してください",
-    "availableBalanceText": "利用可能残高: "
+    "availableBalanceText": "利用可能残高: ",
+    "closeChannelPopupTitle": "チャネルを閉じますか？",
+    "closeChannelPopupSubTitle": "この操作は取引を停止し、元に戻すことはできません。"
   }
 }

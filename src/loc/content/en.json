@@ -15,6 +15,7 @@
     "connect": "CONNECT",
     "delete": "DELETE",
     "confirmAndProceed": "Confirm & Proceed",
+    "confirmAndClose": "Confirm & Close",
     "sendMax": "SEND MAX",
     "broadcast": "Broadcast",
     "walletID": "Wallet ID",
@@ -436,6 +437,8 @@
     "closeChannel": "Close Channel",
     "selectYourAsset": "Select Your Asset",
     "selectYourAssetErrMsg": "Please select your asset",
-    "availableBalanceText": "Avail. Bal: "
+    "availableBalanceText": "Avail. Bal: ",
+    "closeChannelPopupTitle": "Close Channel?",
+    "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone."
   }
 }

@@ -46,6 +46,7 @@ const Colors = {
   Cyclamen: 'rgba(241, 106, 166,1)',
   DeepSaffron: 'rgba(255, 158, 62, 1)',
   VioletsAreBlue: 'rgba(161, 110, 255, 1)',
-  Turquoise: 'rgba(71, 230, 212, 1)'
+  Turquoise: 'rgba(71, 230, 212, 1)',
+  FireOpal2: 'rgba(28, 9, 9, 1)'
 };
 export default Colors;

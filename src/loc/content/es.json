@@ -15,6 +15,7 @@
     "connect": "CONECTAR",
     "delete": "ELIMINAR",
     "confirmAndProceed": "Confirmar y proceder",
+    "confirmAndClose": "Confirmar y Cerrar",
     "sendMax": "ENVIAR MÁXIMO",
     "broadcast": "Transmitir",
     "walletID": "ID de la billetera",
@@ -436,6 +437,8 @@
     "closeChannel": "Cerrar Canal",
     "selectYourAsset": "Selecciona tu Activo",
     "selectYourAssetErrMsg": "Por favor selecciona tu activo",
-    "availableBalanceText": "Saldo Disp.: "
+    "availableBalanceText": "Saldo Disp.: ",
+    "closeChannelPopupTitle": "¿Cerrar Canal?",
+    "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer."
   }
 }

@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
@@ -18,6 +18,8 @@ import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import Colors from 'src/theme/Colors';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import CloseChannelPopupContainer from './components/CloseChannelPopupContainer';
 
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
@@ -48,7 +50,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
-      alignItems: 'flex-end'
+      alignItems: 'flex-end',
     },
     contentWrapper: {
       width: '100%',
@@ -83,6 +85,7 @@ const ChannelDetails = () => {
   const { translations } = useContext(LocalizationContext);
   const { node, channel: channelTranslations } = translations;
   const { channel } = route.params;
+  const [visible, setVisible] = useState(false);
 
   const statusColors = {
     Opened: Colors.GOGreen,
@@ -92,7 +95,7 @@ const ChannelDetails = () => {
     Pending: Colors.SelectiveYellow,
     Offline: Colors.ChineseWhite,
   };
-  const getStatusColor = (status) => statusColors[status] || Colors.White;
+  const getStatusColor = status => statusColors[status] || Colors.White;
 
   useEffect(() => {
     if (closeChannelMutation.isSuccess) {
@@ -118,14 +121,16 @@ const ChannelDetails = () => {
           <AppText variant="body1" style={styles.titleText}>
             {channelTranslations.status}
           </AppText>
-          <AppText variant="body1" style={{ color: getStatusColor(channel.status) }}>
+          <AppText
+            variant="body1"
+            style={{ color: getStatusColor(channel.status) }}>
             {channel.status}
           </AppText>
         </GradientView>
         <View style={styles.contentWrapper}>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-            {channelTranslations.assetLocalAmt}
+              {channelTranslations.assetLocalAmt}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.assetLocalAmount}
@@ -133,7 +138,7 @@ const ChannelDetails = () => {
           </View>
           <View style={styles.channelDetailsWrapper}>
             <AppText variant="body2" style={styles.titleText}>
-            {channelTranslations.shortChannelld}
+              {channelTranslations.shortChannelld}
             </AppText>
             <AppText variant="body2" style={styles.valueText}>
               {channel.shortChannelId ? channel.shortChannelId : 'null'}
@@ -144,7 +149,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-              {channelTranslations.capacitySat}
+                {channelTranslations.capacitySat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.capacitySat}
@@ -154,7 +159,7 @@ const ChannelDetails = () => {
           <>
             <View style={styles.channelDetailsWrapper}>
               <AppText variant="body2" style={styles.titleText}>
-              {channelTranslations.localBalanceMsat}
+                {channelTranslations.localBalanceMsat}
               </AppText>
               <AppText variant="body2" style={styles.valueText}>
                 {channel.localBalanceMsat}
@@ -281,12 +286,7 @@ const ChannelDetails = () => {
         <View style={styles.buttonWrapper}>
           <PrimaryCTA
             title={channelTranslations.closeChannel}
-            onPress={() =>
-              closeChannelMutation.mutate({
-                channelId: channel.channelId,
-                peerPubKey: channel.peerPubkey,
-              })
-            }
+            onPress={() => setVisible(true)}
             width={wp(160)}
             loading={false}
             disabled={false}
@@ -296,6 +296,28 @@ const ChannelDetails = () => {
           />
         </View>
       </ScrollView>
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          backColor={theme.colors.errorPopupBackColor}
+          borderColor={theme.colors.errorPopupBorderColor}
+          onDismiss={() => setVisible(false)}>
+          <CloseChannelPopupContainer
+            title={channelTranslations.closeChannelPopupTitle}
+            subTitle={channelTranslations.closeChannelPopupSubTitle}
+            onPress={() => {
+              setVisible(false);
+              setTimeout(()=>{
+                closeChannelMutation.mutate({
+                  channelId: channel.channelId,
+                  peerPubKey: channel.peerPubkey,
+                });
+              }, 400)
+            }}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 };

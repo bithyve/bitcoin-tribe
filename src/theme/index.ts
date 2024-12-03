@@ -81,6 +81,8 @@ type CustomColors = {
   assetsProgressRemaining: string;
   satsProgressFill: string;
   satsProgressRemaining: string;
+  errorPopupBackColor: string;
+  errorPopupBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -170,6 +172,8 @@ const CombinedDefaultTheme: AppTheme = {
     assetsProgressRemaining: Colors.Cyclamen,
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
+    errorPopupBackColor: Colors.FireOpal2,
+    errorPopupBorderColor: Colors.FireOpal
   },
   fonts: {
     regular: {
@@ -267,6 +271,8 @@ const CombinedDarkTheme: AppTheme = {
     assetsProgressRemaining: Colors.Cyclamen,
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
+    errorPopupBackColor: Colors.FireOpal2,
+    errorPopupBorderColor: Colors.FireOpal
   },
   fonts: {
     regular: {

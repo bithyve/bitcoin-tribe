@@ -15,6 +15,7 @@
     "connect": "CONNETTI",
     "delete": "CANCELLA",
     "confirmAndProceed": "Conferma e procedi",
+    "confirmAndClose": "Conferma e Chiudi",
     "sendMax": "INVIA MASSIMO",
     "broadcast": "Trasmetti",
     "walletID": "ID portafoglio",
@@ -436,6 +437,8 @@
     "closeChannel": "Chiudi Canale",
     "selectYourAsset": "Seleziona il tuo Asset",
     "selectYourAssetErrMsg": "Seleziona il tuo asset",
-    "availableBalanceText": "Saldo Disp.: "
+    "availableBalanceText": "Saldo Disp.: ",
+    "closeChannelPopupTitle": "Chiudere il Canale?",
+    "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata."
   }
 }
