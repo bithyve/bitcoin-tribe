@@ -91,7 +91,7 @@ function Splash({ navigation }) {
         resizeMode="cover"
         style={styles.backImage}>
         <LottieView
-          source={isThemeDark ? require('src/assets/images/logoAnimation.json') : require('src/assets/images/logoAnimation_light.json')}
+          source={isThemeDark ? require('src/assets/images/jsons/logoAnimation.json') : require('src/assets/images/jsons/logoAnimation_light.json')}
           autoPlay
           loop={false}
           style={styles.splashImageStyle}

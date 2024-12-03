@@ -31,8 +31,8 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
         <LottieView
           source={
             isThemeDark
-              ? require('src/assets/images/successPopup.json')
-              : require('src/assets/images/successPopup_light.json')
+              ? require('src/assets/images/jsons/successPopup.json')
+              : require('src/assets/images/jsons/successPopup_light.json')
           }
           style={styles.loaderStyle}
           autoPlay
