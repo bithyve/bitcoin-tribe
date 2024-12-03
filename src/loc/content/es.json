@@ -374,7 +374,7 @@
     "failedToCreateUTXOSubTitle": "El saldo de tu billetera es demasiado bajo para cubrir las tarifas de transacción actuales debido a la alta congestión de la red. Aumenta tu saldo o intenta de nuevo cuando las tarifas sean más bajas.",
     "unexpectedErrorTitle": "Error inesperado",
     "unexpectedErrorSubTitle": "Hemos encontrado un problema al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde",
-     "sendAssetLoadingTitle": "Enviando activos RGB",
+    "sendAssetLoadingTitle": "Enviando activos RGB",
     "sendAssetLoadingSubTitle": "Tu transacción está siendo procesada—por favor espera. Relájate, y tus activos RGB serán enviados de forma segura."
   },
   "community": {
@@ -414,7 +414,7 @@
     "channelCloseMsg": "Canal cerrado",
     "takeTimeMsg": "Este paso tomará unos segundos."
   },
-  "channel":{
+  "channel": {
     "status": "Estado :",
     "assetLocalAmt": "Cantidad Local del Activo:",
     "shortChannelld": "ID de Canal Corto:",
@@ -434,6 +434,8 @@
     "shortChannelID": "ID de Canal Corto:",
     "assetID": "ID del Activo:",
     "closeChannel": "Cerrar Canal",
-    "selectYourAsset": "Selecciona tu Activo"
+    "selectYourAsset": "Selecciona tu Activo",
+    "selectYourAssetErrMsg": "Por favor selecciona tu activo",
+    "availableBalanceText": "Saldo Disp.: "
   }
 }

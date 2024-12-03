@@ -374,7 +374,7 @@
     "failedToCreateUTXOSubTitle": "Il saldo del tuo portafoglio è troppo basso per coprire le attuali commissioni di transazione a causa della congestione della rete. Aumenta il tuo saldo o riprova quando le commissioni saranno più basse.",
     "unexpectedErrorTitle": "Errore imprevisto",
     "unexpectedErrorSubTitle": "Abbiamo riscontrato un problema nell'elaborare la tua richiesta. Per favore riprova più tardi",
-     "sendAssetLoadingTitle": "Invio di asset RGB",
+    "sendAssetLoadingTitle": "Invio di asset RGB",
     "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro."
   },
   "community": {
@@ -414,7 +414,7 @@
     "channelCloseMsg": "Canale chiuso",
     "takeTimeMsg": "Questo passaggio richiederà alcuni secondi."
   },
-  "channel":{
+  "channel": {
     "status": "Stato :",
     "assetLocalAmt": "Importo Locale dell'Asset:",
     "shortChannelld": "ID Canale Breve:",
@@ -434,6 +434,8 @@
     "shortChannelID": "ID Canale Breve:",
     "assetID": "ID Asset:",
     "closeChannel": "Chiudi Canale",
-    "selectYourAsset": "Seleziona il tuo Asset"
+    "selectYourAsset": "Seleziona il tuo Asset",
+    "selectYourAssetErrMsg": "Seleziona il tuo asset",
+    "availableBalanceText": "Saldo Disp.: "
   }
 }

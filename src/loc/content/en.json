@@ -414,7 +414,7 @@
     "channelCloseMsg": "Channel closed.",
     "takeTimeMsg": "This step will take a few seconds."
   },
-  "channel":{
+  "channel": {
     "status": "Status :",
     "assetLocalAmt": "Asset Local Amount:",
     "shortChannelld": "Short Channel Id:",
@@ -434,6 +434,8 @@
     "shortChannelID": "Short Channel ID:",
     "assetID": "Asset ID:",
     "closeChannel": "Close Channel",
-    "selectYourAsset": "Select Your Asset"
+    "selectYourAsset": "Select Your Asset",
+    "selectYourAssetErrMsg": "Please select your asset",
+    "availableBalanceText": "Avail. Bal: "
   }
 }

@@ -374,7 +374,7 @@
     "failedToCreateUTXOSubTitle": " उच्च नेटवर्क जाम के कारण वर्तमान लेनदेन शुल्क को कवर करने के लिए आपके वॉलेट का बैलेंस बहुत कम है। कृपया अपने बैलेंस को बढ़ाएँ या कम शुल्क होने पर पुनः प्रयास करें।",
     "unexpectedErrorTitle": "अप्रत्याशित त्रुटि",
     "unexpectedErrorSubTitle": "आपके अनुरोध को संसाधित करने में हमें एक समस्या का सामना करना पड़ा। कृपया बाद में पुनः प्रयास करें",
-     "sendAssetLoadingTitle": "RGB संपत्ति भेजी जा रही हैं",
+    "sendAssetLoadingTitle": "RGB संपत्ति भेजी जा रही हैं",
     "sendAssetLoadingSubTitle": "आपका लेन-देन प्रोसेस हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपकी RGB संपत्ति सुरक्षित रूप से भेज दी जाएगी।"
   },
   "community": {
@@ -414,7 +414,7 @@
     "channelCloseMsg": "चैनल बंद कर दिया गया",
     "takeTimeMsg": "इस चरण में कुछ सेकंड लगेंगे।"
   },
-  "channel":{
+  "channel": {
     "status": "स्थिति :",
     "assetLocalAmt": "स्थानीय संपत्ति राशि:",
     "shortChannelld": "शॉर्ट चैनल आईडी:",
@@ -434,6 +434,8 @@
     "shortChannelID": "शॉर्ट चैनल आईडी:",
     "assetID": "संपत्ति आईडी:",
     "closeChannel": "चैनल बंद करें",
-     "selectYourAsset": "अपनी संपत्ति चुनें" 
+    "selectYourAsset": "अपनी संपत्ति चुनें",
+    "selectYourAssetErrMsg": "कृपया अपनी संपत्ति चुनें",
+    "availableBalanceText": "उपलब्ध शेष: "
   }
 }

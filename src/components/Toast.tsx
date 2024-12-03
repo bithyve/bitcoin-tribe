@@ -9,7 +9,7 @@ import Fonts from 'src/constants/Fonts';
 import LottieView from 'lottie-react-native';
 
 
-export default (message, error = false) => {
+export default (message, error = false, position= Toast.positions.BOTTOM) => {
   return Toast.show(
     <View style={styles.container}>
       {error ? (
@@ -39,7 +39,7 @@ export default (message, error = false) => {
     </View>,
     {
       duration: Toast.durations.SHORT,
-      position: Toast.positions.BOTTOM,
+      position: position,
       shadow: true,
       animation: true,
       hideOnPress: true,

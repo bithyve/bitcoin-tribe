@@ -374,7 +374,7 @@
     "failedToCreateUTXOSubTitle": "ネットワークの混雑により、現在のトランザクション手数料をカバーするにはウォレットの残高が不足しています。残高を増やすか、手数料が低いときにもう一度お試しください。",
     "unexpectedErrorTitle": "予期しないエラー",
     "unexpectedErrorSubTitle": "リクエストの処理中に問題が発生しました。後でもう一度お試しください",
-     "sendAssetLoadingTitle": "RGB資産を送信中",
+    "sendAssetLoadingTitle": "RGB資産を送信中",
     "sendAssetLoadingSubTitle": "取引が処理されています—しばらくお待ちください！リラックスして、RGB資産が安全に送信されるのをお待ちください。"
   },
   "community": {
@@ -414,7 +414,7 @@
     "channelCloseMsg": "チャンネルが閉じました",
     "takeTimeMsg": "このステップには数秒かかります。"
   },
-  "channel":{
+  "channel": {
     "status": "ステータス：",
     "assetLocalAmt": "資産のローカル額：",
     "shortChannelld": "ショートチャネル ID：",
@@ -434,6 +434,8 @@
     "shortChannelID": "ショートチャネル ID：",
     "assetID": "アセット ID：",
     "closeChannel": "チャネルを閉じる",
-    "selectYourAsset": "資産を選択"
+    "selectYourAsset": "資産を選択",
+    "selectYourAssetErrMsg": "資産を選択してください",
+    "availableBalanceText": "利用可能残高: "
   }
 }

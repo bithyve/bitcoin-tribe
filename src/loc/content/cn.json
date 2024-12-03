@@ -434,6 +434,8 @@
     "shortChannelID": "短通道 ID：",
     "assetID": "资产 ID：",
     "closeChannel": "关闭通道",
-    "selectYourAsset": "选择您的资产"
+    "selectYourAsset": "选择您的资产",
+    "selectYourAssetErrMsg": "请选择您的资产",
+    "availableBalanceText": "可用余额: "
   }
 }
