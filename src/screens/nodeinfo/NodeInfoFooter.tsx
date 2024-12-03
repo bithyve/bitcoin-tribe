@@ -34,12 +34,12 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
     <View style={styles.container}>
       <AppTouchable onPress={props.onPressRefresh}>
         {nodeStatus === 'refresh' ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <IconRefreshActive />
           ) : (
             <IconRefreshActiveLight />
           )
-        ) : !isThemeDark ? (
+        ) : isThemeDark ? (
           <IconRefreshInActive />
         ) : (
           <IconRefreshInActiveLight />
@@ -47,12 +47,12 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
       </AppTouchable>
       <AppTouchable onPress={() => setNodeStatus('stop')}>
         {nodeStatus === 'stop' ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <IconPauseActive />
           ) : (
             <IconPauseActiveLight />
           )
-        ) : !isThemeDark ? (
+        ) : isThemeDark ? (
           <IconPauseInActive />
         ) : (
           <IconPauseInActiveLight />
@@ -60,12 +60,12 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
       </AppTouchable>
       <AppTouchable onPress={() => setNodeStatus('run')}>
         {nodeStatus === 'run' ? (
-          !isThemeDark ? (
+          isThemeDark ? (
             <IconPlayActive />
           ) : (
             <IconPlayActiveLight />
           )
-        ) : !isThemeDark ? (
+        ) : isThemeDark ? (
           <IconPlayInActive />
         ) : (
           <IconPlayInActiveLight />

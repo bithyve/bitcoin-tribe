@@ -5,7 +5,6 @@ import { useTheme } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 
 import AppText from 'src/components/AppText';
-import NodeConnectSuccessIllustration from 'src/assets/images/nodeConnectSuccess.svg';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
@@ -37,7 +36,7 @@ function NodeConnectSuccessPopupContainer(props: nodeConnectSuccessProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={require('src/assets/images/nodeConnectSuccess.json')}
+          source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

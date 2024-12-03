@@ -178,7 +178,7 @@ function SendToContainer({
       <View style={styles.wrapper}>
         <View style={styles.txnDetailsContainer}>
           <View style={styles.txnLeftWrapper}>
-            {!isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
+            {isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
           </View>
           <View style={styles.txnRightWrapper}>
             <AppText variant="body1" style={styles.sendToAddress}>

@@ -89,7 +89,7 @@ const CloudBackup = ({ navigation }) => {
             title={settings.noBackHistory}
             subTitle={''}
             IllustartionImage={
-              !isThemeDark ? (
+              isThemeDark ? (
                 <NoBackupIllustration />
               ) : (
                 <NoBackupIllustrationLight />

@@ -1,27 +1,26 @@
 import * as React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
+import LottieView from 'lottie-react-native';
 
 import Colors from 'src/theme/Colors';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
-import LottieView from 'lottie-react-native';
-
 
 export default (message, error = false, position= Toast.positions.BOTTOM) => {
   return Toast.show(
     <View style={styles.container}>
       {error ? (
         <LottieView
-          source={require('src/assets/images/errorToast.json')}
+          source={require('src/assets/images/jsons/errorToast.json')}
           style={styles.loaderStyle}
           autoPlay
           loop
         />
       ) : (
         <LottieView
-          source={require('src/assets/images/successToast.json')}
+          source={require('src/assets/images/jsons/successToast.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

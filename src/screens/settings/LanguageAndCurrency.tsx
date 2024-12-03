@@ -84,7 +84,7 @@ function LanguageAndCurrency() {
         <LangCurrencyOption
           title={settings.language}
           subTitle={settings.languageSubTitle}
-          icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
+          icon={isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
@@ -98,7 +98,7 @@ function LanguageAndCurrency() {
       <LangCurrencyOption
         title={settings.currency}
         subTitle={settings.currencySubTitle}
-        icon={!isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
+        icon={isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
         langCurrency={selectedCurrency && selectedCurrency.currency}
         langCurrencyVariant={selectedCurrency && selectedCurrency.displayTitle}
         onPress={() => setCurrencyDropDown(!currencyDropDown)}

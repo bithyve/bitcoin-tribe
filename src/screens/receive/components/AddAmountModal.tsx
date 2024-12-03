@@ -77,7 +77,7 @@ function AddAmountModal(props: AddAmountModalProps) {
         onPressNumber={onPressNumber}
         onDeletePressed={onDeletePressed}
         keyColor={theme.colors.accent1}
-        ClearIcon={!isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
+        ClearIcon={isThemeDark ? <DeleteIcon /> : <DeleteIconLight />}
       />
     </View>
   );

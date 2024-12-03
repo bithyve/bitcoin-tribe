@@ -55,7 +55,7 @@ function AppInfoCard(props: AppInfoCardProps) {
           </View>
           {navigation && (
             <View>
-              {!isThemeDark ? <IconArrow /> : <IconSettingArrowLight />}
+              {isThemeDark ? <IconArrow /> : <IconSettingArrowLight />}
             </View>
           )}
         </View>

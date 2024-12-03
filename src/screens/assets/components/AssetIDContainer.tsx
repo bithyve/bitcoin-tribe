@@ -65,12 +65,12 @@ const AssetIDContainer = ({ assetId }: AssetIDContainerProps) => {
           </AppText>
         </GradientView>
         <AppTouchable style={styles.shareIconWrapper} onPress={onShare}>
-          {!isThemeDark ? <IconShare /> : <IconShareLight />}
+          {isThemeDark ? <IconShare /> : <IconShareLight />}
         </AppTouchable>
         <AppTouchable
           style={styles.copyIconWrapper}
           onPress={() => handleCopyText(assetId)}>
-          {!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+          {isThemeDark ? <IconCopy /> : <IconCopyLight />}
         </AppTouchable>
       </View>
     </View>

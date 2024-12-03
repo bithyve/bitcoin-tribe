@@ -64,7 +64,7 @@ const RgbChannels = () => {
     <ScreenContainer>
       <AppHeader
         title={`${node.channelsTitle}  ${data ? `(${data.length})` : ''}`}
-        rightIcon={!isThemeDark ? <PlusIcon /> : <PlusLightIcon />}
+        rightIcon={isThemeDark ? <PlusIcon /> : <PlusLightIcon />}
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)
         }
@@ -72,7 +72,7 @@ const RgbChannels = () => {
       {isLoading ? (
         <View style={styles.loadingWrapper}>
           <LottieView
-            source={require('src/assets/images/loader.json')}
+            source={require('src/assets/images/jsons/loader.json')}
             autoPlay
             loop
             style={styles.refreshLoader}

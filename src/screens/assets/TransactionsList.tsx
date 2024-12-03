@@ -62,10 +62,7 @@ function TransactionsList({
           </AppText>
         </AppTouchable>
       </View>
-
-      {isLoading && !refreshingStatus ? (
-         <LoadingSpinner/>
-      ) : null}
+      {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
         style={styles.container2}
         data={transactions}

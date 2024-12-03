@@ -163,7 +163,7 @@ function ReceiveAssetScreen() {
           />
           <ReceiveQrClipBoard
             qrCodeValue={qrValue}
-            icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
           />
           <FooterNote
             title={common.note}

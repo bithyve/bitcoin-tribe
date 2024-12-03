@@ -27,7 +27,7 @@ function Toolbar(props: ToolbarProps) {
   return (
     <View style={styles.headerWrapper}>
       <IconWrapper onPress={navigation.goBack} style={styles.leftIconWrapper}>
-        {!isThemeDark ? <GoBack /> : <GoBackLight />}
+        {isThemeDark ? <GoBack /> : <GoBackLight />}
       </IconWrapper>
       <View style={styles.profileWrapper}>
         <AppText style={styles.text} variant="heading1">
@@ -36,7 +36,7 @@ function Toolbar(props: ToolbarProps) {
       </View>
       <IconWrapper onPress={onPress} style={styles.rightIconWrapper}>
         <View style={styles.rightIconWrapper1}>
-          {!isThemeDark ? <SettingIcon /> : <SettingIconLight />}
+          {isThemeDark ? <SettingIcon /> : <SettingIconLight />}
         </View>
       </IconWrapper>
     </View>

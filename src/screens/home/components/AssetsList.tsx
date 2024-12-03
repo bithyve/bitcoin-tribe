@@ -82,7 +82,7 @@ function AssetsList(props: AssetsListProps) {
             title={home.noAssetTitle}
             subTitle={home.noAssetSubTitle}
             IllustartionImage={
-              !isThemeDark ? (
+              isThemeDark ? (
                 <NoAssetsIllustration />
               ) : (
                 <NoAssetsIllustrationLight />
@@ -125,12 +125,10 @@ function AssetsList(props: AssetsListProps) {
       />
       <AppTouchable
         style={
-          !isThemeDark
-            ? styles.addNewIconWrapper
-            : styles.addNewIconWrapperLight
+          isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
         }
         onPress={onPressAddNew}>
-        {!isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+        {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
       </AppTouchable>
     </View>
   );

@@ -41,7 +41,7 @@ const TransactionButtons = (props: transButtonProps) => {
             theme.colors.roundSendCTAGradient3,
           ]}
           textColor={theme.colors.roundSendCTATitle}
-          icon={!isThemeDark ? <IconSend /> : <IconSendLight />}
+          icon={isThemeDark ? <IconSend /> : <IconSendLight />}
           buttonColor={theme.colors.sendCtaBorderColor}
           title={common.send}
           width={wp(105)}
@@ -59,12 +59,12 @@ const TransactionButtons = (props: transButtonProps) => {
             icon={
               config.NETWORK_TYPE === NetworkType.TESTNET ||
               config.NETWORK_TYPE === NetworkType.REGTEST ? (
-                !isThemeDark ? (
+                isThemeDark ? (
                   <IconRequest />
                 ) : (
                   <IconRequestLight />
                 )
-              ) : !isThemeDark ? (
+              ) : isThemeDark ? (
                 <IconBuy />
               ) : (
                 <IconBuyLight />
@@ -91,7 +91,7 @@ const TransactionButtons = (props: transButtonProps) => {
             theme.colors.roundReceiveCTAGradient3,
           ]}
           textColor={theme.colors.roundReceiveCTATitle}
-          icon={!isThemeDark ? <IconReceive /> : <IconReceiveLight />}
+          icon={isThemeDark ? <IconReceive /> : <IconReceiveLight />}
           buttonColor={theme.colors.recieveCtaBorderColor}
           title={common.receive}
           width={wp(105)}
