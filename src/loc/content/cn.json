@@ -15,6 +15,7 @@
     "connect": "连接",
     "delete": "删除",
     "confirmAndProceed": "确认并继续",
+    "confirmAndClose": "确认并关闭",
     "sendMax": "发送最大金额",
     "broadcast": "广播",
     "walletID": "钱包ID",
@@ -119,7 +120,11 @@
     "supportNodeConnectingTitle": "设置您的支持模式",
     "supportNodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
     "nodeconnectSuccessfulTitle": "连接成功",
-    "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。"
+    "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。",
+    "profileSetupLoadingTitle": "正在设置您的个人资料",
+    "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。",
+    "recoverLoadingTitle": "正在恢复您的数据",
+    "recoverLoadingSubTitle": "我们正在恢复您的数据，请稍等！放松一下，我们很快就会让您恢复使用。"
   },
   "home": {
     "addAssets": "添加资产",
@@ -220,7 +225,9 @@
     "removed": "已移除",
     "expired": "已过期",
     "viewNodeInfo": "查看节点信息",
-    "channelManagement": "渠道管理"
+    "channelManagement": "渠道管理",
+    "cloudBackupLoadingTitle": "云备份",
+    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -230,7 +237,10 @@
     "invoiceAddress": "RGB发票",
     "bitcoinAddress": "比特币地址",
     "noteSubTitle": "此发票中的盲UTXO将在创建后24小时内过期。",
-    "lightningAddress": "闪电地址"
+    "lightningAddress": "闪电地址",
+    "chooseInvoiceType": "选择发票类型",
+    "onchain": "链上",
+    "lightning": "闪电网络"
   },
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
@@ -257,7 +267,9 @@
     "paste": "粘贴",
     "sendAssetTitle": "发送资产",
     "sendAssetSubtitle": "扫描RGB发票",
-    "totalFee": "总费用："
+    "totalFee": "总费用：",
+     "sendBtcLoadingTitle": "正在发送比特币",
+    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -362,7 +374,11 @@
     "failedToCreateUTXOTitle": "交易余额不足",
     "failedToCreateUTXOSubTitle": " 由于网络拥堵，当前交易费用较高，您的钱包余额不足以支付。请增加余额或在费用较低时重试。",
     "unexpectedErrorTitle": "意外错误",
-    "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试"
+    "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试",
+     "sendAssetLoadingTitle": "正在发送 RGB 资产",
+    "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
+    "issueAssetLoadingTitle": "发行资产",
+    "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -400,5 +416,31 @@
     "channelCreatedMsg": "频道创建成功",
     "channelCloseMsg": "频道已关闭",
     "takeTimeMsg": "此步骤将花费几秒钟。"
+  },
+  "channel":{
+    "status": "状态：",
+    "assetLocalAmt": "资产本地金额：",
+    "shortChannelld": "短通道 ID：",
+    "capacitySat": "容量 (Sat)：",
+    "localBalanceMsat": "本地余额 (Msat)：",
+    "outboundBalanceMsat": "出站余额 (Msat)：",
+    "inboundBalanceMsat": "入站余额 (Msat)：",
+    "nxtOutboundHtclLmtMsat": "下一个出站 HTLC 限制 (Msat)：",
+    "nxtOutboundHtclMinMsat": "下一个出站 HTLC 最小值 (Msat)：",
+    "peerAlias": "对等别名：",
+    "ready": "准备好：",
+    "isUsable": "可用：",
+    "public": "公开：",
+    "channelID": "通道 ID：",
+    "fundingTXID": "资金 TXID：",
+    "peerPubKey": "对等公钥：",
+    "shortChannelID": "短通道 ID：",
+    "assetID": "资产 ID：",
+    "closeChannel": "关闭通道",
+    "selectYourAsset": "选择您的资产",
+    "selectYourAssetErrMsg": "请选择您的资产",
+    "availableBalanceText": "可用余额: ",
+    "closeChannelPopupTitle": "关闭通道？",
+    "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。"
   }
 }

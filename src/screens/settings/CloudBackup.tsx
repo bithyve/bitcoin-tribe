@@ -21,6 +21,8 @@ import NoBackupIllustration from 'src/assets/images/backupHistory.svg';
 import NoBackupIllustrationLight from 'src/assets/images/backupHistoryLight.svg';
 import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 const CloudBackup = ({ navigation }) => {
   const { translations } = useContext(LocalizationContext);
@@ -46,7 +48,19 @@ const CloudBackup = ({ navigation }) => {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={backup.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={backup.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={settings.cloudBackupLoadingTitle}
+            subTitle={settings.cloudBackupLoadingSubTitle}
+            illustrationPath={require('src/assets/images/sendingBTCorAsset.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <AppHeader
         title={settings.cloudBackupTitle}
         subTitle={

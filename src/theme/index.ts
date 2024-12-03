@@ -75,6 +75,14 @@ type CustomColors = {
   roundBuyCTAGradient3: string;
   buyCtaBorderColor: string;
   backupDoneBorder: string;
+  closeChannelCTA: string;
+  closeChannelCTATitle: string;
+  assetsProgressFill: string;
+  assetsProgressRemaining: string;
+  satsProgressFill: string;
+  satsProgressRemaining: string;
+  errorPopupBackColor: string;
+  errorPopupBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -158,6 +166,14 @@ const CombinedDefaultTheme: AppTheme = {
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
+    closeChannelCTA: Colors.FireOpal,
+    closeChannelCTATitle: Colors.White,
+    assetsProgressFill: Colors.Turquoise,
+    assetsProgressRemaining: Colors.Cyclamen,
+    satsProgressFill: Colors.VioletsAreBlue,
+    satsProgressRemaining: Colors.DeepSaffron,
+    errorPopupBackColor: Colors.FireOpal2,
+    errorPopupBorderColor: Colors.FireOpal
   },
   fonts: {
     regular: {
@@ -249,6 +265,14 @@ const CombinedDarkTheme: AppTheme = {
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
     backupDoneBorder: Colors.GOGreen,
+    closeChannelCTA: Colors.FireOpal,
+    closeChannelCTATitle: Colors.White,
+    assetsProgressFill: Colors.Turquoise,
+    assetsProgressRemaining: Colors.Cyclamen,
+    satsProgressFill: Colors.VioletsAreBlue,
+    satsProgressRemaining: Colors.DeepSaffron,
+    errorPopupBackColor: Colors.FireOpal2,
+    errorPopupBorderColor: Colors.FireOpal
   },
   fonts: {
     regular: {

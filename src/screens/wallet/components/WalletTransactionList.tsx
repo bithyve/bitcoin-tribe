@@ -6,12 +6,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
-import LottieView from 'lottie-react-native';
 
 import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
@@ -29,6 +28,7 @@ import { Keys } from 'src/storage';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 function WalletTransactionList({
   transactions,
@@ -83,73 +83,63 @@ function WalletTransactionList({
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
-  return walletRefreshMutation.isLoading && !refreshing ? (
-    Platform.OS === 'ios' ? (
-      <LottieView
-        source={require('src/assets/images/jsons/loader.json')}
-        style={styles.loaderStyle}
-        autoPlay
-        loop
-      />
-    ) : (
-      <ActivityIndicator
-        size="small"
-        color={theme.colors.accent1}
-        style={styles.activityIndicatorWrapper}
-      />
-    )
-  ) : (
-    <FlatList
-      style={styles.container}
-      data={transactions}
-      refreshControl={
-        Platform.OS === 'ios' ? (
-          <RefreshControlView
-            refreshing={refreshing}
-            onRefresh={() => pullDownToRefresh()}
+  return (
+    <View>
+      {walletRefreshMutation.isLoading && !refreshing ? (
+        <LoadingSpinner />
+      ) : null}
+      <FlatList
+        style={styles.container}
+        data={transactions}
+        refreshControl={
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
+        }
+        ListFooterComponent={FooterComponent}
+        renderItem={({ item }) => (
+          <WalletTransactions
+            transId={item.txid}
+            tranStatus={item.status}
+            transDate={item.date}
+            transAmount={
+              app.appType === AppType.NODE_CONNECT
+                ? `${item.received || item?.amtMsat / 1000}`
+                : `${item.amount}`
+            }
+            transType={item.transactionType}
+            transaction={item}
+            coin={coin}
           />
-        ) : (
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => pullDownToRefresh()}
-            colors={[theme.colors.accent1]} // You can customize this part
-            progressBackgroundColor={theme.colors.inputBackground}
+        )}
+        keyExtractor={item => item.txid}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <EmptyStateView
+            style={styles.emptyStateContainer}
+            IllustartionImage={
+              !isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
+            title={walletStrings.noUTXOYet}
+            subTitle={walletStrings.noUTXOYetSubTitle}
           />
-        )
-      }
-      ListFooterComponent={FooterComponent}
-      renderItem={({ item }) => (
-        <WalletTransactions
-          transId={item.txid}
-          tranStatus={item.status}
-          transDate={item.date}
-          transAmount={
-            app.appType === AppType.NODE_CONNECT
-              ? `${item.received || item?.amtMsat / 1000}`
-              : `${item.amount}`
-          }
-          transType={item.transactionType}
-          transaction={item}
-          coin={coin}
-        />
-      )}
-      keyExtractor={item => item.txid}
-      showsVerticalScrollIndicator={false}
-      ListEmptyComponent={
-        <EmptyStateView
-          style={styles.emptyStateContainer}
-          IllustartionImage={
-            isThemeDark ? (
-              <NoTransactionIllustration />
-            ) : (
-              <NoTransactionIllustrationLight />
-            )
-          }
-          title={walletStrings.noUTXOYet}
-          subTitle={walletStrings.noUTXOYetSubTitle}
-        />
-      }
-    />
+        }
+      />
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -168,14 +158,6 @@ const getStyles = (theme: AppTheme) =>
     },
     footer: {
       height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
-    },
-    loaderStyle: {
-      alignSelf: 'center',
-      width: 100,
-      height: 100,
-    },
-    activityIndicatorWrapper: {
-      marginTop: hp(20),
     },
   });
 export default WalletTransactionList;

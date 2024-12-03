@@ -13,10 +13,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type UseRGBAssetProps = {
   title: string;
   subTitle: string;
+  illustrationPath: string;
 };
 
-function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
-  const { title, subTitle } = props;
+function InProgessPopupContainer(props: UseRGBAssetProps) {
+  const { title, subTitle, illustrationPath } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
@@ -34,27 +35,25 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={require('src/assets/images/jsons/nodeConnecting.json')}
+          source={illustrationPath}
           style={styles.loaderStyle}
           autoPlay
           loop
         />
       </View>
-      <View style={styles.loaderWrapper}>
+     <View style={styles.loaderWrapper}>
         <View style={styles.loaderContentWrapper}>
-          <AppText variant="body2" style={styles.loaderMsgText}>
-            {node.takeTimeMsg}
-          </AppText>
+          <AppText variant='body2' style={styles.loaderMsgText}>{node.takeTimeMsg}</AppText>
         </View>
         <View style={styles.dotLoaderWrapper}>
-          <LottieView
-            source={require('src/assets/images/jsons/dotsLoader.json')}
+           <LottieView
+           source={require('src/assets/images/DotsLoader.json')}
             style={styles.dotLoaderStyle}
             autoPlay
             loop
-          />
+           />
         </View>
-      </View>
+      </View> 
     </View>
   );
 }
@@ -79,35 +78,35 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
     },
     illustrationWrapper: {
-      marginVertical: hp(5),
+      marginVertical: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(300),
-      height: hp(300),
+      width: hp(200),
+      height: hp(200),
     },
     loaderWrapper: {
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
       marginVertical: hp(10),
-      alignItems: 'center',
+      alignItems: 'center'
     },
     dotLoaderStyle: {
       alignSelf: 'center',
       width: hp(150),
       height: hp(120),
     },
-    loaderMsgText: {
-      color: theme.colors.headingColor,
+    loaderMsgText:{
+      color: theme.colors.headingColor
     },
-    loaderContentWrapper: {
-      width: '55%',
+    loaderContentWrapper:{
+      width: '55%'
     },
-    dotLoaderWrapper: {
+    dotLoaderWrapper:{
       width: '45%',
-    },
+    }
   });
-export default NodeConnectingPopupContainer;
+export default InProgessPopupContainer;

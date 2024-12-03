@@ -15,6 +15,7 @@
     "connect": "कनेक्ट करें",
     "delete": "हटाएं",
     "confirmAndProceed": "पुष्टि करें और आगे बढ़ें",
+    "confirmAndClose": "पुष्टि करें और बंद करें",
     "sendMax": "अधिकतम भेजें",
     "broadcast": "प्रसारित करें",
     "walletID": "वॉलेट आईडी",
@@ -119,7 +120,11 @@
     "supportNodeConnectingTitle": "आपका समर्थित मोड सेट किया जा रहा है",
     "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
-    "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।"
+    "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
+    "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
+    "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।",
+    "recoverLoadingTitle": "आपका डेटा पुनर्प्राप्त किया जा रहा है",
+    "recoverLoadingSubTitle": "हम आपका डेटा पुनः प्राप्त कर रहे हैं—थोड़ा धैर्य रखें! आराम करें, और हम आपको तुरंत वापस चालू कर देंगे।"
   },
   "home": {
     "addAssets": "संपत्ति जोड़ें",
@@ -220,7 +225,9 @@
     "removed": "हटा दिया गया",
     "expired": "समाप्त हो गया",
     "viewNodeInfo": "नोड जानकारी देखें",
-    "channelManagement": "चैनल प्रबंधन"
+    "channelManagement": "चैनल प्रबंधन",
+    "cloudBackupLoadingTitle": "क्लाउड बैकअप",
+    "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -230,7 +237,10 @@
     "invoiceAddress": "आरजीबी इनवॉइस",
     "bitcoinAddress": "बिटकॉइन पता",
     "noteSubTitle": "इस इनवॉइस में ब्लाइंडेड यूटीएक्सओ इसके निर्माण के 24 घंटों बाद समाप्त हो जाएगा।",
-    "lightningAddress": "लाइटनिंग पता"
+    "lightningAddress": "लाइटनिंग पता",
+    "chooseInvoiceType": "चुनें इनवॉइस प्रकार",
+    "onchain": "ऑन-चेन",
+    "lightning": "लाइटनिंग"
   },
   "sendScreen": {
     "headerSubTitle": "नीचे बिटकॉइन पता या आरजीबी इनवॉइस स्कैन करें",
@@ -257,7 +267,9 @@
     "paste": "पेस्ट करें",
     "sendAssetTitle": "एसेट भेजें",
     "sendAssetSubtitle": "RGB इनवॉइस को स्कैन करें",
-    "totalFee": "कुल शुल्क："
+    "totalFee": "कुल शुल्क：",
+    "sendBtcLoadingTitle": "बिटकॉइन भेजा जा रहा है",
+    "sendBtcLoadingSubTitle": "आपका लेनदेन संसाधित हो रहा है—कृपया प्रतीक्षा करें! आराम करें, बिटकॉइन सुरक्षित रूप से भेजा जाएगा।"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -362,7 +374,11 @@
     "failedToCreateUTXOTitle": "लेनदेन के लिए अपर्याप्त शेष राशि",
     "failedToCreateUTXOSubTitle": " उच्च नेटवर्क जाम के कारण वर्तमान लेनदेन शुल्क को कवर करने के लिए आपके वॉलेट का बैलेंस बहुत कम है। कृपया अपने बैलेंस को बढ़ाएँ या कम शुल्क होने पर पुनः प्रयास करें।",
     "unexpectedErrorTitle": "अप्रत्याशित त्रुटि",
-    "unexpectedErrorSubTitle": "आपके अनुरोध को संसाधित करने में हमें एक समस्या का सामना करना पड़ा। कृपया बाद में पुनः प्रयास करें"
+    "unexpectedErrorSubTitle": "आपके अनुरोध को संसाधित करने में हमें एक समस्या का सामना करना पड़ा। कृपया बाद में पुनः प्रयास करें",
+    "sendAssetLoadingTitle": "RGB संपत्ति भेजी जा रही हैं",
+    "sendAssetLoadingSubTitle": "आपका लेन-देन प्रोसेस हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपकी RGB संपत्ति सुरक्षित रूप से भेज दी जाएगी।",
+    "issueAssetLoadingTitle": "संपत्ति जारी हो रही है",
+    "issueAssetLoadingSubTitle": "आपकी संपत्ति बनाई जा रही है—कृपया प्रतीक्षा करें! आराम करें और आपकी नई संपत्ति जल्द ही जारी की जाएगी।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
@@ -400,5 +416,31 @@
     "channelCreatedMsg": "चैनल सफलतापूर्वक बनाया गया",
     "channelCloseMsg": "चैनल बंद कर दिया गया",
     "takeTimeMsg": "इस चरण में कुछ सेकंड लगेंगे।"
+  },
+  "channel": {
+    "status": "स्थिति :",
+    "assetLocalAmt": "स्थानीय संपत्ति राशि:",
+    "shortChannelld": "शॉर्ट चैनल आईडी:",
+    "capacitySat": "क्षमता (सैट):",
+    "localBalanceMsat": "स्थानीय बैलेंस (Msat):",
+    "outboundBalanceMsat": "आउटबाउंड बैलेंस (Msat):",
+    "inboundBalanceMsat": "इनबाउंड बैलेंस (Msat):",
+    "nxtOutboundHtclLmtMsat": "अगली आउटबाउंड HTLC सीमा (Msat):",
+    "nxtOutboundHtclMinMsat": "अगली आउटबाउंड HTLC न्यूनतम (Msat):",
+    "peerAlias": "सहकर्मी उपनाम:",
+    "ready": "तैयार:",
+    "isUsable": "उपयोगी है:",
+    "public": "सार्वजनिक:",
+    "channelID": "चैनल आईडी:",
+    "fundingTXID": "फंडिंग TXID:",
+    "peerPubKey": "सहकर्मी पब्लिक की:",
+    "shortChannelID": "शॉर्ट चैनल आईडी:",
+    "assetID": "संपत्ति आईडी:",
+    "closeChannel": "चैनल बंद करें",
+    "selectYourAsset": "अपनी संपत्ति चुनें",
+    "selectYourAssetErrMsg": "कृपया अपनी संपत्ति चुनें",
+    "availableBalanceText": "उपलब्ध शेष: ",
+    "closeChannelPopupTitle": "चैनल बंद करें?",
+    "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।"
   }
 }
