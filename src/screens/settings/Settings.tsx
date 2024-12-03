@@ -65,7 +65,6 @@ function SettingsScreen({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
-  const [isUserThemeSelected, setUsersTheme] = useMMKVBoolean(Keys.IS_USER_SELECT_THEME)
   const [biometrics, setBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
@@ -157,7 +156,6 @@ function SettingsScreen({ navigation }) {
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
-        setUsersTheme(true);
         setDarkTheme(!darkTheme)
       },
       toggleValue: darkTheme,
