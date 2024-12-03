@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet, FlatList, Image } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { AppTheme } from 'src/theme';
@@ -20,16 +20,17 @@ type DropdownProps = {
   assets: Asset[];
   callback: (item) => void;
   onDissmiss?: () => void;
+  selectedAsset: Asset[]; 
 };
 
 function RGBAssetDropdownList(props: DropdownProps) {
-  const { style, assets, callback, onDissmiss } = props;
+  const { style, assets, callback, onDissmiss, selectedAsset } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
-  const { channel} = translations;
+  const { channel } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
+console.log('selectedAsset', selectedAsset)
   return (
     <View style={[style, styles.container]}>
       <AppTouchable onPress={onDissmiss}>
@@ -55,29 +56,38 @@ function RGBAssetDropdownList(props: DropdownProps) {
         style={styles.container2}
         data={assets}
         renderItem={({ item }) => (
-          <AppTouchable
-            onPress={() => callback(item)}
-            style={styles.assetWrapper}>
-            <View style={styles.assetImageWrapper}>
-              {item?.assetIface === AssetFace.RGB25 ? (
-                <Image
-                  source={{
-                    uri: item?.media?.filePath,
-                  }}
-                  style={styles.imageStyle}
-                />
-              ) : (
-                <Identicon
-                  value={item?.assetId}
-                  style={styles.identiconView}
-                  size={windowHeight > 670 ? 50 : 30}
-                />
-              )}
+          <AppTouchable onPress={() => callback(item)} style={styles.assetContainer}>
+            <View style={styles.assetWrapper}>
+              <View style={styles.assetImageWrapper}>
+                {item?.assetIface === AssetFace.RGB25 ? (
+                  <Image
+                    source={{
+                      uri: item?.media?.filePath,
+                    }}
+                    style={styles.imageStyle}
+                  />
+                ) : (
+                  <Identicon
+                    value={item?.assetId}
+                    style={styles.identiconView}
+                    size={windowHeight > 670 ? 50 : 30}
+                  />
+                )}
+              </View>
+              <View>
+                <AppText variant="body" style={styles.assetnameText}>
+                  {item?.name}
+                </AppText>
+              </View>
             </View>
-            <View>
-              <AppText variant="body" style={styles.assetnameText}>
-                {item?.name}
-              </AppText>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={item.assetId}
+                status={selectedAsset?.assetId === item.assetId ? 'checked' : 'unchecked'}
+                onPress={() => callback(item)}
+              />
             </View>
           </AppTouchable>
         )}
@@ -129,7 +139,7 @@ const getStyles = (theme: AppTheme) =>
       width: windowHeight > 670 ? 50 : 30,
       borderRadius: windowHeight > 670 ? 50 : 30,
     },
-    assetWrapper: {
+    assetContainer:{
       flexDirection: 'row',
       padding: hp(10),
       margin: hp(10),
@@ -138,8 +148,16 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
       borderRadius: 10,
     },
+    assetWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '90%'
+    },
     assetImageWrapper: {
       width: '20%',
+    },
+    radioBtnWrapper:{
+      width: '10%',
     },
     assetnameText: {
       color: theme.colors.headingColor,

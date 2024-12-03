@@ -27,7 +27,6 @@ import CloseIconLight from 'src/assets/images/closeIcon_light.svg';
 import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 
-
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -42,7 +41,7 @@ const OpenRgbChannel = () => {
   const [inputHeight, setInputHeight] = useState(100);
   const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState(null)
+  const [selectedAsset, setSelectedAsset] = useState(null);
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
@@ -67,21 +66,7 @@ const OpenRgbChannel = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader 
-      title={node.openChannelTitle} 
-      rightIcon={
-        assetsDropdown ? (
-          !isThemeDark ? (
-            <CloseIcon />
-          ) : (
-            <CloseIconLight />
-          )
-        ) : null
-      }
-      onSettingsPress={() => {
-        setAssetsDropdown(false);
-      }}
-      />
+      <AppHeader title={node.openChannelTitle} />
       <ModalLoading visible={openChannelMutation.isLoading} />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
@@ -131,7 +116,14 @@ const OpenRgbChannel = () => {
         <AppText variant="caption" style={styles.textHint}>
           {node.pushMsatsNote}
         </AppText>
-        <SelectAssetIDView selectedAsset={selectedAsset} onPress={()=> setAssetsDropdown(true)}/>
+        <SelectAssetIDView
+          selectedAsset={selectedAsset}
+          onPress={() => {
+            if (assetsData.length) {
+              setAssetsDropdown(true);
+            }
+          }}
+        />
         <AppText variant="caption" style={styles.textHint}>
           {node.assetIDNote}
         </AppText>
@@ -190,10 +182,11 @@ const OpenRgbChannel = () => {
           style={styles.assetsDropdownContainer}
           assets={assetsData}
           callback={item => {
-            setSelectedAsset(item)
+            setSelectedAsset(item);
             setAssetsDropdown(false);
             setAssetId(item?.assetId);
           }}
+          selectedAsset={selectedAsset}
           onDissmiss={() => setAssetsDropdown(false)}
         />
       )}
@@ -218,7 +211,7 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
-      marginRight: hp(5)
+      marginRight: hp(5),
     },
     textHint: {
       marginTop: hp(5),
