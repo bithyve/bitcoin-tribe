@@ -124,7 +124,7 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     titleStyle: {
-      color: theme.colors.accent2,
+      color: theme.colors.headingColor,
     },
     iconArrowWrapper: {
       width: '10%',

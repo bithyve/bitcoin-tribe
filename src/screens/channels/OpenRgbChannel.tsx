@@ -66,7 +66,17 @@ const OpenRgbChannel = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={node.openChannelTitle} />
+      <AppHeader 
+      title={node.openChannelTitle} 
+      onBackNavigation={()=>{
+        if(assetsDropdown){
+          setAssetsDropdown(false);
+        }else{
+          navigation.goBack()
+        }
+      }}
+      
+      />
       <ModalLoading visible={openChannelMutation.isLoading} />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
