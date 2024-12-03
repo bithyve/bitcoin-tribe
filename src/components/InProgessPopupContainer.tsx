@@ -47,7 +47,7 @@ function InProgessPopupContainer(props: UseRGBAssetProps) {
         </View>
         <View style={styles.dotLoaderWrapper}>
            <LottieView
-           source={require('src/assets/images/DotsLoader.json')}
+           source={require('src/assets/images/dotsLoader.json')}
             style={styles.dotLoaderStyle}
             autoPlay
             loop
