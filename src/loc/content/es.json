@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "Dirección del par y clave pública",
     "createChannelBulletPoint2": "ID del activo y detalles del monto",
     "createChannelBulletPoint3": "Fondos disponibles en satoshis"
+  },
+  "lightning": {
+    "sendTitle": "Enviar",
+    "invoice": "Factura",
+    "assetId": "ID del activo",
+    "amount": "Monto",
+    "paymentHash": "Hash de pago"
   }
 }

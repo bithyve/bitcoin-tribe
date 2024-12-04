@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "पीयर पता और सार्वजनिक कुंजी",
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
     "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि"
+  },
+  "lightning": {
+    "sendTitle": "भेजें",
+    "invoice": "इनवॉइस",
+    "assetId": "संपत्ति आईडी",
+    "amount": "राशि",
+    "paymentHash": "भुगतान हैश"
   }
 }

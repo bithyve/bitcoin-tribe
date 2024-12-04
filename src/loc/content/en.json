@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "Peer Address and Public Key",
     "createChannelBulletPoint2": "Asset ID and Amount details",
     "createChannelBulletPoint3": "Funds available in satoshis"
+  },
+  "lightning": {
+    "sendTitle" : "Send",
+    "invoice": "Invoice",
+    "assetId": "Asset ID",
+    "amount": "Amount",
+    "paymentHash": "Payment Hash"
   }
 }

@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "Indirizzo peer e chiave pubblica",
     "createChannelBulletPoint2": "Dettagli ID e importo dell'asset",
     "createChannelBulletPoint3": "Fondi disponibili in satoshi"
+  },
+  "lightning": {
+    "sendTitle": "Invia",
+    "invoice": "Fattura",
+    "assetId": "ID Asset",
+    "amount": "Importo",
+    "paymentHash": "Hash di Pagamento"
   }
 }

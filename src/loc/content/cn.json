@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "对等地址和公钥",
     "createChannelBulletPoint2": "资产ID和金额详情",
     "createChannelBulletPoint3": "可用资金（以聪为单位）"
+  },
+  "lightning": {
+    "sendTitle": "发送",
+    "invoice": "发票",
+    "assetId": "资产ID",
+    "amount": "金额",
+    "paymentHash": "支付哈希"
   }
 }

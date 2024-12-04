@@ -446,5 +446,12 @@
     "createChannelBulletPoint1": "ピアアドレスと公開鍵",
     "createChannelBulletPoint2": "アセットIDと金額の詳細",
     "createChannelBulletPoint3": "利用可能な資金（サトシ単位）"
+  },
+  "lightning": {
+    "sendTitle": "送信",
+    "invoice": "請求書",
+    "assetId": "アセットID",
+    "amount": "金額",
+    "paymentHash": "支払いハッシュ"
   }
 }
