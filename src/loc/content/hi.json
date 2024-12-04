@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "सेटिंग्स खोलें",
     "later": "बाद में",
     "joinGroup": "समूह में शामिल हों",
-    "understood": "समझ गया"
+    "understood": "समझ गया",
+    "createChannel": "चैनल बनाएं"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -395,7 +396,7 @@
     "nodeStatusLock": "नोड स्थिति: लॉक",
     "initNode": "नोड प्रारंभ करें",
     "channelsTitle": "चैनल्स",
-    "channelEmptyTitle": "चैनल सूची खाली है",
+    "channelEmptyTitle": "आपके पास कोई चैनल नहीं है",
     "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!",
     "openChannelTitle": "चैनल खोलें",
     "peerPubAndAddress": "पीयर पब्लिक की और पता",
@@ -441,6 +442,9 @@
     "selectYourAssetErrMsg": "कृपया अपनी संपत्ति चुनें",
     "availableBalanceText": "उपलब्ध शेष: ",
     "closeChannelPopupTitle": "चैनल बंद करें?",
-    "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।"
+    "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।",
+    "createChannelBulletPoint1": "पीयर पता और सार्वजनिक कुंजी",
+    "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
+    "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि"
   }
 }

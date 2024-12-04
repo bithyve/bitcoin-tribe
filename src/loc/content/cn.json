@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "打开设置",
     "later": "稍后",
     "joinGroup": "加入群组",
-    "understood": "明白了"
+    "understood": "明白了",
+    "createChannel": "创建通道"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -395,7 +396,7 @@
     "nodeStatusLock": "节点状态：锁定",
     "initNode": "初始化节点",
     "channelsTitle": "通道",
-    "channelEmptyTitle": "通道列表为空",
+    "channelEmptyTitle": "您没有任何通道",
     "channelEmptySubTitle": "开始添加通道以增强您的比特币体验！",
     "openChannelTitle": "打开通道",
     "peerPubAndAddress": "对等公钥和地址",
@@ -441,6 +442,9 @@
     "selectYourAssetErrMsg": "请选择您的资产",
     "availableBalanceText": "可用余额: ",
     "closeChannelPopupTitle": "关闭通道？",
-    "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。"
+    "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。",
+    "createChannelBulletPoint1": "对等地址和公钥",
+    "createChannelBulletPoint2": "资产ID和金额详情",
+    "createChannelBulletPoint3": "可用资金（以聪为单位）"
   }
 }

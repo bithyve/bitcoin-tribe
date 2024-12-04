@@ -14,11 +14,10 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import ChannelItem from './ChannelItem';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import RGBChannelIllustration from 'src/assets/images/RGBChannelIllustration.svg';
-import EmptyStateView from 'src/components/EmptyStateView';
 import { Keys } from 'src/storage';
 import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
+import EmptyChannelsStateView from './components/EmptyChannelsStateView';
 
 const styles = StyleSheet.create({
   loadingWrapper: {
@@ -64,7 +63,7 @@ const RgbChannels = () => {
     <ScreenContainer>
       <AppHeader
         title={`${node.channelsTitle}  ${data ? `(${data.length})` : ''}`}
-        rightIcon={isThemeDark ? <PlusIcon /> : <PlusLightIcon />}
+        rightIcon={data && data.length ? isThemeDark ? <PlusIcon /> : <PlusLightIcon /> : null}
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)
         }
@@ -94,11 +93,7 @@ const RgbChannels = () => {
             />
           )}
           ListEmptyComponent={
-            <EmptyStateView
-              IllustartionImage={<RGBChannelIllustration />}
-              title={node.channelEmptyTitle}
-              subTitle={node.channelEmptySubTitle}
-            />
+            <EmptyChannelsStateView onPress={()=> navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)}/>
           }
         />
       )}

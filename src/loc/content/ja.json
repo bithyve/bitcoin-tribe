@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "設定を開く",
     "later": "後で",
     "joinGroup": "グループに参加する",
-    "understood": "理解しました"
+    "understood": "理解しました",
+    "createChannel": "チャンネルを作成"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -395,7 +396,7 @@
     "nodeStatusLock": "ノードステータス：ロック",
     "initNode": "ノードを初期化",
     "channelsTitle": "チャンネル",
-    "channelEmptyTitle": "チャンネルリストは空です",
+    "channelEmptyTitle": "チャンネルがありません",
     "channelEmptySubTitle": "ビットコイン体験を向上させるためにチャンネルを追加しましょう！",
     "openChannelTitle": "チャネルを開く",
     "peerPubAndAddress": "ピアの公開鍵とアドレス",
@@ -441,6 +442,9 @@
     "selectYourAssetErrMsg": "資産を選択してください",
     "availableBalanceText": "利用可能残高: ",
     "closeChannelPopupTitle": "チャネルを閉じますか？",
-    "closeChannelPopupSubTitle": "この操作は取引を停止し、元に戻すことはできません。"
+    "closeChannelPopupSubTitle": "この操作は取引を停止し、元に戻すことはできません。",
+    "createChannelBulletPoint1": "ピアアドレスと公開鍵",
+    "createChannelBulletPoint2": "アセットIDと金額の詳細",
+    "createChannelBulletPoint3": "利用可能な資金（サトシ単位）"
   }
 }
