@@ -224,7 +224,7 @@
     "Failed": "失敗",
     "removed": "削除されました",
     "expired": "有効期限が切れました",
-    "viewNodeInfo": "ノード情報を表示",
+    "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
     "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。"
