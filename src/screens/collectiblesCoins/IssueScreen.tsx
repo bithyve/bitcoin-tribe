@@ -213,7 +213,7 @@ function IssueScreen() {
           <InProgessPopupContainer
             title={assets.issueAssetLoadingTitle}
             subTitle={assets.issueAssetLoadingSubTitle}
-            illustrationPath={require('src/assets/images/issuingAsset.json')}
+            illustrationPath={require('src/assets/images/jsons/issuingAsset.json')}
           />
         </ResponsePopupContainer>
       </View>

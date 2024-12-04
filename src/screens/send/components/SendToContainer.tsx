@@ -170,7 +170,7 @@ function SendToContainer({
       <InProgessPopupContainer
         title={sendScreen.sendBtcLoadingTitle}
         subTitle={sendScreen.sendBtcLoadingSubTitle}
-        illustrationPath={require('src/assets/images/sendingBTCorAsset.json')}
+        illustrationPath={require('src/assets/images/jsons/sendingBTCorAsset.json')}
       />
     </ResponsePopupContainer>
   ) : (
