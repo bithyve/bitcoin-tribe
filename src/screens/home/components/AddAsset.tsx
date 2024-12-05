@@ -19,14 +19,14 @@ function AddAsset() {
   const navigation = useNavigation();
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
-  const { home, common } = translations;
+  const { home, assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.addAssets} subTitle={home.addAssetSubTitle} />
+      <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
       <View style={styles.container}>
         <SelectOption
           title={home.issueNew}

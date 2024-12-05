@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "我们正在恢复您的数据，请稍等！放松一下，我们很快就会让您恢复使用。"
   },
   "home": {
-    "addAssets": "添加资产",
-    "addAssetSubTitle": "发行新资产或添加资产",
+    "addAssets": "添加接收资产",
+    "addAssetSubTitle": "发行新资产或添加接收资产",
+    "createAssets": "创建资产",
     "issueNew": "发行新资产",
     "myAssets": "你的资产",
     "issue": "发行",
