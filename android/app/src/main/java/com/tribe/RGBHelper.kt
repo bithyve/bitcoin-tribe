@@ -282,39 +282,46 @@ object RGBHelper {
 
     fun backup(backupPath: String, password: String, context: ReactApplicationContext): String {
         try {
-            val gAccount = GoogleSignIn.getLastSignedInAccount(context)
-            val credential =
-                GoogleAccountCredential.usingOAuth2(
-                    context,
-                    listOf(DriveScopes.DRIVE_FILE)
-                )
-
-            if (gAccount != null) {
-                credential.selectedAccount = gAccount.account!!
-            }
-            driveClient =
-                Drive.Builder(NetHttpTransport(), GsonFactory.getDefaultInstance(), credential)
-                    .setApplicationName("tribe")
-                    .build()
             val backupFile = getBackupFile(password, context)
             backupFile.delete()
             RGBWalletRepository.wallet?.backup(backupFile.absolutePath, password)
 
-            val gFile = com.google.api.services.drive.model.File()
-            gFile.name = backupFile.name
-            val newBackupID =
-                driveClient.files().create(gFile, FileContent(ZIP_MIME_TYPE, backupFile)).execute().id
-            Log.d(TAG, "Backup uploaded. Backup file ID: $newBackupID")
-            val oldBackups = driveClient.files().list().setQ("name='${gFile.name}'").execute()
-            Log.d(TAG, "oldBackups='$oldBackups")
-//            if (oldBackups != null) {
-//                for (file in oldBackups.files) {
-//                    Log.d(TAG, "Deleting old backup file ${file.id} ...")
-//                    driveClient.files().delete(file.id).execute()
-//                }
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("file", backupFile.absolutePath)
+            return jsonObject.toString()
+//            val gAccount = GoogleSignIn.getLastSignedInAccount(context)
+//            val credential =
+//                GoogleAccountCredential.usingOAuth2(
+//                    context,
+//                    listOf(DriveScopes.DRIVE_FILE)
+//                )
+//
+//            if (gAccount != null) {
+//                credential.selectedAccount = gAccount.account!!
 //            }
-            Log.d(TAG, "Backup operation completed")
-            return "{}"
+//            driveClient =
+//                Drive.Builder(NetHttpTransport(), GsonFactory.getDefaultInstance(), credential)
+//                    .setApplicationName("tribe")
+//                    .build()
+//            val backupFile = getBackupFile(password, context)
+//            backupFile.delete()
+//
+//
+//            val gFile = com.google.api.services.drive.model.File()
+//            gFile.name = backupFile.name
+//            val newBackupID =
+//                driveClient.files().create(gFile, FileContent(ZIP_MIME_TYPE, backupFile)).execute().id
+//            Log.d(TAG, "Backup uploaded. Backup file ID: $newBackupID")
+//            val oldBackups = driveClient.files().list().setQ("name='${gFile.name}'").execute()
+//            Log.d(TAG, "oldBackups='$oldBackups")
+////            if (oldBackups != null) {
+////                for (file in oldBackups.files) {
+////                    Log.d(TAG, "Deleting old backup file ${file.id} ...")
+////                    driveClient.files().delete(file.id).execute()
+////                }
+////            }
+//            Log.d(TAG, "Backup operation completed")
+//            return "{}"
         }catch (e: Exception){
             Log.d(TAG, "Exception: ${e}")
 

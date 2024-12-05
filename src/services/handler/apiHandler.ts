@@ -29,7 +29,6 @@ import crypto from 'crypto';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
-import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
@@ -483,7 +482,7 @@ export class ApiHandler {
         const network = WalletUtilities.getNetworkByType(
           wallets[0].networkType,
         );
-        const { synchedWallets }: { synchedWallets: (Wallet | Vault)[] } =
+        const { synchedWallets }: { synchedWallets: (Wallet)[] } =
           await WalletOperations.syncWalletsViaElectrumClient(wallets, network);
 
         for (const synchedWallet of synchedWallets) {

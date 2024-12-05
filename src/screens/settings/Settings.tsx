@@ -145,14 +145,27 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 5,
+      title: settings.viewNodeInfo,
+      icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+    {
+      id: 6,
       title: settings.setPasscodeTitle,
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
-    // TO DO - will implement theme functionality.  This commented temporarily
     {
-      id: 6,
+      id: 7,
+      title: settings.channelManagement,
+      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+    {
+      id: 8,
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
@@ -164,7 +177,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 7,
+      id: 9,
       title: settings.biometricUnlock,
       icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -182,25 +195,10 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 8,
+      id: 10,
       title: settings.appInfo,
       icon: isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
-    },
-
-    {
-      id: 9,
-      title: settings.viewNodeInfo,
-      icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
-      hideMenu: app.appType === AppType.ON_CHAIN,
-    },
-    {
-      id: 10,
-      title: settings.channelManagement,
-      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
-      hideMenu: app.appType === AppType.ON_CHAIN,
     },
   ];
   return (

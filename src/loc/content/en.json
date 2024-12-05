@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "Open Settings",
     "later": "Later",
     "joinGroup": "Join Group",
-    "understood": "Understood"
+    "understood": "Understood",
+    "createChannel": "Create Channel"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -224,7 +225,7 @@
     "failed": "Failed",
     "removed": "Removed",
     "expired": "Expired",
-    "viewNodeInfo": "View Node Info",
+    "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
     "cloudBackupLoadingTitle": "Cloud Backup",
     "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon."
@@ -395,7 +396,7 @@
     "nodeStatusLock": "Node Status: Lock",
     "initNode": "Init Node",
     "channelsTitle": "Channels",
-    "channelEmptyTitle": "Channel List is Empty",
+    "channelEmptyTitle": "You have no channel",
     "channelEmptySubTitle": "Start adding channels to enhance your Bitcoin experience!",
     "openChannelTitle": "Open Channel",
     "peerPubAndAddress": "Peer Pubkey and Address",
@@ -441,6 +442,16 @@
     "selectYourAssetErrMsg": "Please select your asset",
     "availableBalanceText": "Avail. Bal: ",
     "closeChannelPopupTitle": "Close Channel?",
-    "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone."
+    "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone.",
+    "createChannelBulletPoint1": "Peer Address and Public Key",
+    "createChannelBulletPoint2": "Asset ID and Amount details",
+    "createChannelBulletPoint3": "Funds available in satoshis"
+  },
+  "lightning": {
+    "sendTitle" : "Send",
+    "invoice": "Invoice",
+    "assetId": "Asset ID",
+    "amount": "Amount",
+    "paymentHash": "Payment Hash"
   }
 }

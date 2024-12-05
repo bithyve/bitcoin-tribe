@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "Abrir configuración",
     "later": "Más tarde",
     "joinGroup": "Unirse al grupo",
-    "understood": "Entendido"
+    "understood": "Entendido",
+    "createChannel": "Crear Canal"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -224,7 +225,7 @@
     "Failed": "Fallido",
     "removed": "Eliminado",
     "expired": "Expirado",
-    "viewNodeInfo": "Ver información del nodo",
+    "viewNodeInfo": "Información del Nodo",
     "channelManagement": "Gestión de canales",
     "cloudBackupLoadingTitle": "Copia de seguridad en la nube",
     "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto."
@@ -395,7 +396,7 @@
     "nodeStatusLock": "Estado del nodo: Bloqueado",
     "initNode": "Iniciar nodo",
     "channelsTitle": "Canales",
-    "channelEmptyTitle": "La lista de canales está vacía",
+    "channelEmptyTitle": "No tienes ningún canal",
     "channelEmptySubTitle": "¡Comienza a agregar canales para mejorar tu experiencia con Bitcoin!",
     "openChannelTitle": "Abrir Canal",
     "peerPubAndAddress": "Clave Pública y Dirección del Par",
@@ -441,6 +442,16 @@
     "selectYourAssetErrMsg": "Por favor selecciona tu activo",
     "availableBalanceText": "Saldo Disp.: ",
     "closeChannelPopupTitle": "¿Cerrar Canal?",
-    "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer."
+    "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer.",
+    "createChannelBulletPoint1": "Dirección del par y clave pública",
+    "createChannelBulletPoint2": "ID del activo y detalles del monto",
+    "createChannelBulletPoint3": "Fondos disponibles en satoshis"
+  },
+  "lightning": {
+    "sendTitle": "Enviar",
+    "invoice": "Factura",
+    "assetId": "ID del activo",
+    "amount": "Monto",
+    "paymentHash": "Hash de pago"
   }
 }

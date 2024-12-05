@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "सेटिंग्स खोलें",
     "later": "बाद में",
     "joinGroup": "समूह में शामिल हों",
-    "understood": "समझ गया"
+    "understood": "समझ गया",
+    "createChannel": "चैनल बनाएं"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -224,7 +225,7 @@
     "Failed": "असफल",
     "removed": "हटा दिया गया",
     "expired": "समाप्त हो गया",
-    "viewNodeInfo": "नोड जानकारी देखें",
+    "viewNodeInfo": "नोड जानकारी",
     "channelManagement": "चैनल प्रबंधन",
     "cloudBackupLoadingTitle": "क्लाउड बैकअप",
     "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।"
@@ -395,7 +396,7 @@
     "nodeStatusLock": "नोड स्थिति: लॉक",
     "initNode": "नोड प्रारंभ करें",
     "channelsTitle": "चैनल्स",
-    "channelEmptyTitle": "चैनल सूची खाली है",
+    "channelEmptyTitle": "आपके पास कोई चैनल नहीं है",
     "channelEmptySubTitle": "अपने बिटकॉइन अनुभव को बेहतर बनाने के लिए चैनल जोड़ना शुरू करें!",
     "openChannelTitle": "चैनल खोलें",
     "peerPubAndAddress": "पीयर पब्लिक की और पता",
@@ -441,6 +442,16 @@
     "selectYourAssetErrMsg": "कृपया अपनी संपत्ति चुनें",
     "availableBalanceText": "उपलब्ध शेष: ",
     "closeChannelPopupTitle": "चैनल बंद करें?",
-    "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।"
+    "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।",
+    "createChannelBulletPoint1": "पीयर पता और सार्वजनिक कुंजी",
+    "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
+    "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि"
+  },
+  "lightning": {
+    "sendTitle": "भेजें",
+    "invoice": "इनवॉइस",
+    "assetId": "संपत्ति आईडी",
+    "amount": "राशि",
+    "paymentHash": "भुगतान हैश"
   }
 }
