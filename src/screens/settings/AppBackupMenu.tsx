@@ -60,7 +60,10 @@ function AppBackupMenu({ navigation }) {
           if (shareResult.success) {
             setAssetBackup(true);
           }
-          const response = await Relay.rgbFileBackup(backup.file, app.id, '');
+          const response = await Relay.rgbFileBackup(Platform.select({
+            android: `file://${backup.file}`,
+            ios: backup.file,
+          }), app.id, '');
           if(response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
           }
