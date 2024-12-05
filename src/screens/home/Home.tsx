@@ -33,6 +33,7 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
+import dbManager from 'src/storage/realm/dbManager';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -40,7 +41,6 @@ function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen, home } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
   const [BackupAlertStatus] = useMMKVBoolean(Keys.BACKUPALERT);
   const [currencyMode, setCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
@@ -87,8 +87,9 @@ function HomeScreen() {
     refreshWallet.mutate({
       wallets: [wallet],
     });
+    const version: VersionHistory = dbManager.getObjectByIndex<VersionHistory>(RealmSchema.VersionHistory) as VersionHistory;
     if (
-      version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
+      version && version.version !== `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`
     ) {
       ApiHandler.checkVersion(
         version,
