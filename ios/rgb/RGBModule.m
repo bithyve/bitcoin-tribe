@@ -175,10 +175,12 @@ RCT_EXPORT_METHOD(backup:(NSString*)path
 }
 
 RCT_EXPORT_METHOD(restore:(NSString*)mnemonic
+                  backupPath:(NSString *)backupPath
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
-  [helper restoreWithMnemonic:mnemonic callback:^(NSString * _Nonnull response) {
+  
+  [helper restoreWithMnemonic:mnemonic backupPath:backupPath callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVNumber, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import Share from 'react-native-share';
 import AppHeader from 'src/components/AppHeader';
@@ -11,7 +11,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { hp } from 'src/constants/responsive';
-import { Keys } from 'src/storage';
+import { Keys, Storage } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
@@ -23,6 +23,8 @@ import RGBServices from 'src/services/rgb/RGBServices';
 import ModalLoading from 'src/components/ModalLoading';
 import SelectOption from 'src/components/SelectOption';
 import AppText from 'src/components/AppText';
+import moment from 'moment';
+import Relay from 'src/services/relay';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -30,6 +32,7 @@ function AppBackupMenu({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
@@ -48,11 +51,18 @@ function AppBackupMenu({ navigation }) {
       if (backup.file) {
         setTimeout(async () => {
           const shareResult = await Share.open({
-            url: backup.file,
+            url: Platform.select({
+              android: `file://${backup.file}`,
+              ios: backup.file,
+            }),
             title: 'RGB Asset Backup File',
           });
           if (shareResult.success) {
             setAssetBackup(true);
+          }
+          const response = await Relay.rgbFileBackup(backup.file, app.id, '');
+          if(response.uploaded) {
+            Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
           }
         }, 1000);
       }
@@ -148,6 +158,7 @@ function AppBackupMenu({ navigation }) {
             onPress={rgbAssetsbackup}
             backup={assetBackup}
           />
+          <AppText style={styles.textStepTime}>{`Last relay backup: ${moment(lastRelayBackup).format('DD MMM YY  •  hh:mm a')}`}</AppText>
           <AppText variant="caption" style={styles.textSubtext}>
             Backup your RGB assets and states is necessary to restore them
             later.
@@ -205,6 +216,11 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'justify',
       marginTop: hp(5),
       marginHorizontal: hp(15),
+    },
+    textStepTime: {
+      color: theme.colors.greenText,
+      marginHorizontal: hp(15),
+      marginBottom: hp(5),
     },
   });
 export default AppBackupMenu;

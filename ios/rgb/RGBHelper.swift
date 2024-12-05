@@ -669,47 +669,28 @@ import CloudKit
     }
   }
   
-  @objc func restore(mnemonic: String,callback: @escaping ((String) -> Void)) -> Void{
+  @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void{
     do{
-      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: mnemonic)
-      let fileManager = FileManager.default
-      let iCloudFolderURL = getICloudFolder()
-      let filesURLs = try fileManager.contentsOfDirectory(at: iCloudFolderURL!, includingPropertiesForKeys: nil)
-      if filesURLs.isEmpty {
-          print("No files found in folder: \(filesURLs)")
-          callback("false")
-        } else {
-          print("Files in folder \(filesURLs):")
-          guard let rgbDirectoryPath = Utility.getRgbDir()?.path else {
-              print("Failed to get RGB directory path.")
-              return
-          }
-          try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
-//          if fileManager.fileExists(atPath: rgbDirectoryPath) {
-//              do {
-//                  //try fileManager.removeItem(atPath: rgbDirectoryPath)
-//                  print("RGB directory removed successfully.")
-//                let newPath = Utility.getRgbDir()?.path
-//                try restoreBackup(backupPath: filesURLs[0].path, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
-//              } catch {
-//                  print("Failed to remove RGB directory: \(error)")
-//              }
-//          } else {
-//              print("RGB directory does not exist.")
-//          }
-            callback("true")
-        }
+      print(backupPath)
+      if FileManager.default.fileExists(atPath: backupPath) {
+          print("The file exists at the specified path.")
+      } else {
+          print("The file does not exist at the specified path.")
+      }
+      NSString(string: backupPath).expandingTildeInPath
+      try restoreBackup(backupPath: backupPath, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
     }
     catch let error{
       print("error \(error):")
       print("error \(error.localizedDescription):")
-
+      
       let data: [String: Any] = [
         "error": error.localizedDescription,
       ]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-    }}
+    }
+  }
   
   @objc func isValidBlindedUtxo(invoiceData: String,callback: @escaping ((Bool) -> Void)) -> Void{
     do{
