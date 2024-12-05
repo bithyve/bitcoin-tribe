@@ -58,7 +58,7 @@ function EnterSeedContainer() {
   const [visible, setVisible] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
-  const { isLoading, mutate, status } = useMutation(ApiHandler.setupNewApp);
+  const { isLoading, mutate, status, error } = useMutation(ApiHandler.restoreApp);
   const restoreFromCloudMutation = useMutation(ApiHandler.restoreRgbFromCloud);
 
   useEffect(() => {
@@ -73,11 +73,12 @@ function EnterSeedContainer() {
   useEffect(() => {
     if (status === 'success') {
       setLoading(false);
-      setTimeout(() => {
-        setVisible(true);
-      }, 400);
+      onSuccess();
+    } else if(error) {
+      setLoading(false);
+      Toast(`${error}`, true);
     }
-  }, [status]);
+  }, [status, error]);
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
@@ -85,7 +86,7 @@ function EnterSeedContainer() {
       seedArray.push({
         id: i,
         name: '',
-        invalid: true,
+        invalid: false,
       });
     }
     return seedArray;
@@ -206,14 +207,7 @@ function EnterSeedContainer() {
       const mnemonic = seedWord.trim();
       if (bip39.validateMnemonic(mnemonic)) {
         setTimeout(()=>{
-          mutate({
-            appName: '',
-            walletImage: '',
-            passcode: '',
-            pinMethod: PinMethod.DEFAULT,
-            mnemonic,
-            appType: AppType.ON_CHAIN,
-          });
+          mutate(mnemonic);
         }, 500)
       } else {
         setLoading(false);
@@ -238,6 +232,7 @@ function EnterSeedContainer() {
 
   return (
     <View style={{ flex: 1 }}>
+      {/* <ModalLoading visible={isLoading} /> */}
       <View>
         <ResponsePopupContainer
           visible={loading}

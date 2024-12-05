@@ -333,40 +333,9 @@ object RGBHelper {
         return RGBWalletRepository.wallet?.backupInfo()
     }
 
-    fun restore(password: String, context: ReactApplicationContext): String {
+    fun restore(password: String, filePath: String, context: ReactApplicationContext): String {
         try {
-            val gAccount = GoogleSignIn.getLastSignedInAccount(context)
-            val credential =
-                GoogleAccountCredential.usingOAuth2(
-                    context,
-                    listOf(DriveScopes.DRIVE_FILE)
-                )
-            if (gAccount != null) {
-                credential.selectedAccount = gAccount.account!!
-            }
-            driveClient =
-                Drive.Builder(NetHttpTransport(), GsonFactory.getDefaultInstance(), credential)
-                    .setApplicationName("tribe")
-                    .build()
-            val backupFile = getBackupFile(password, context)
-            val lastBackups =
-                driveClient
-                    .files()
-                    .list()
-                    .setQ("name='${backupFile.name}'")
-                    .setOrderBy("createdTime")
-                    .execute()
-            val oldBackups = driveClient.files().list().setQ("name='${backupFile.name}'").execute()
-            Log.d(TAG, "oldBackups='$oldBackups")
-            if (lastBackups.files.isNullOrEmpty()){
-                return "No backup"
-            }
-            val lastBackup = lastBackups.files.last()
-
-
-            val outputStream: OutputStream = FileOutputStream(backupFile)
-            driveClient.files().get(lastBackup.id).executeMediaAndDownloadTo(outputStream)
-            return restoreBackup(backupFile.absolutePath, password, AppConstants.rgbDir.absolutePath).toString()
+            return restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath).toString()
         }catch (e: Exception){
             Log.d(TAG, "Exception: $e")
             return ""
