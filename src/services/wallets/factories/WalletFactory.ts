@@ -1,7 +1,6 @@
 import * as bip39 from 'bip39';
 import * as bitcoinJS from 'bitcoinjs-lib';
 import { DerivationConfig } from '../interfaces/wallet';
-import { hash256 } from 'src/utils/encryption';
 import config from 'src/utils/config';
 import {
   EntityKind,
@@ -10,10 +9,8 @@ import {
   ScriptTypes,
   VisibilityType,
   WalletType,
-  XpubTypes,
 } from '../enums';
 import {
-  TransferPolicy,
   Wallet,
   WalletDerivationDetails,
   WalletImportDetails,
@@ -25,13 +22,6 @@ import BIP85 from '../operations/BIP85';
 import { BIP85Config } from '../interfaces';
 import WalletUtilities from '../operations/utils';
 import WalletOperations from '../operations';
-import { XpubDetailsType } from '../interfaces/wallet';
-
-export const whirlPoolWalletTypes = [
-  WalletType.PRE_MIX,
-  WalletType.POST_MIX,
-  WalletType.BAD_BANK,
-];
 
 export const generateWalletSpecsFromMnemonic = (
   mnemonic: string,
@@ -355,94 +345,4 @@ export const generateBIP85Wallet = async ({
   };
   wallet.specs.receivingAddress = WalletOperations.getNextFreeAddress(wallet);
   return wallet;
-};
-
-export const generateExtendedKeysForCosigner = (
-  mnemonic: string,
-  entityKind: EntityKind = EntityKind.VAULT,
-) => {
-  const seed = bip39.mnemonicToSeedSync(mnemonic).toString('hex');
-  const xDerivationPath = WalletUtilities.getDerivationPath(
-    entityKind,
-    config.NETWORK_TYPE,
-  );
-
-  const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-  const extendedKeys = WalletUtilities.generateExtendedKeyPairFromSeed(
-    seed,
-    network,
-    xDerivationPath,
-  );
-  return { extendedKeys, xDerivationPath };
-};
-
-export const getCosignerDetails = async (
-  primaryMnemonic: string,
-  instanceNum: number,
-  singleSig: boolean = false,
-) => {
-  const bip85Config = BIP85.generateBIP85Configuration(
-    WalletType.DEFAULT,
-    instanceNum,
-  );
-  const entropy = await BIP85.bip39MnemonicToEntropy(
-    bip85Config.derivationPath,
-    primaryMnemonic,
-  );
-  const mnemonic = BIP85.entropyToBIP39(entropy, bip85Config.words);
-
-  const { extendedKeys, xDerivationPath } = generateExtendedKeysForCosigner(
-    mnemonic,
-    singleSig ? EntityKind.WALLET : EntityKind.VAULT,
-  );
-
-  const xpubDetails: XpubDetailsType = {};
-  if (singleSig) {
-    xpubDetails[XpubTypes.P2WPKH] = {
-      xpub: extendedKeys.xpub,
-      derivationPath: xDerivationPath,
-      xpriv: extendedKeys.xpriv,
-    };
-  } else {
-    xpubDetails[XpubTypes.P2WSH] = {
-      xpub: extendedKeys.xpub,
-      derivationPath: xDerivationPath,
-      xpriv: extendedKeys.xpriv,
-    };
-  }
-
-  return {
-    mfp: WalletUtilities.getMasterFingerprintFromMnemonic(mnemonic),
-    xpubDetails,
-  };
-};
-
-export const signCosignerPSBT = (xpriv: string, serializedPSBT: string) => {
-  const PSBT = bitcoinJS.Psbt.fromBase64(serializedPSBT, {
-    network: config.NETWORK,
-  });
-  let vin = 0;
-
-  PSBT.data.inputs.forEach(input => {
-    if (!input.bip32Derivation) {
-      return 'signing failed: bip32Derivation missing';
-    }
-
-    const { path } = input.bip32Derivation[0];
-    const pathLevels = path.split('/');
-
-    const internal = parseInt(pathLevels[pathLevels.length - 2], 10) === 1;
-    const childIndex = parseInt(pathLevels[pathLevels.length - 1], 10);
-
-    const keyPair = WalletUtilities.getKeyPairByIndex(
-      xpriv,
-      internal,
-      childIndex,
-      config.NETWORK,
-    );
-    PSBT.signInput(vin, keyPair);
-    vin += 1;
-  });
-
-  return PSBT.toBase64();
 };

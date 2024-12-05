@@ -247,7 +247,7 @@ function EnterSeedContainer() {
           <InProgessPopupContainer
             title={onBoarding.recoverLoadingTitle}
             subTitle={onBoarding.recoverLoadingSubTitle}
-            illustrationPath={require('src/assets/images/jsons/BackupandRecovery.json')}
+            illustrationPath={require('src/assets/images/jsons/backupAndRecovery.json')}
           />
         </ResponsePopupContainer>
       </View>

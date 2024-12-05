@@ -72,48 +72,11 @@ export enum VisibilityType {
 
 export enum EntityKind {
   WALLET = 'WALLET',
-  VAULT = 'VAULT',
 }
 
 export enum WalletType {
   DEFAULT = 'DEFAULT',
   IMPORTED = 'IMPORTED',
-  PRE_MIX = 'PRE_MIX',
-  POST_MIX = 'POST_MIX',
-  BAD_BANK = 'BAD_BANK',
-}
-
-export enum VaultType {
-  DEFAULT = 'DEFAULT',
-  COLLABORATIVE = 'COLLABORATIVE',
-  CANARY = 'CANARY',
-}
-
-export enum VaultMigrationType {
-  UPGRADE = 'UPGRADE',
-  DOWNGRADE = 'DOWNGRADE',
-  CHANGE = 'CHANGE',
-}
-
-export enum SignerType {
-  TAPSIGNER = 'TAPSIGNER',
-  KEEPER = 'KEEPER',
-  MY_KEEPER = 'MY_KEEPER',
-  TREZOR = 'TREZOR',
-  LEDGER = 'LEDGER',
-  COLDCARD = 'COLDCARD',
-  PASSPORT = 'PASSPORT',
-  JADE = 'JADE',
-  KEYSTONE = 'KEYSTONE',
-  POLICY_SERVER = 'POLICY_SERVER',
-  MOBILE_KEY = 'MOBILE_KEY',
-  SEED_WORDS = 'SEED_WORDS',
-  SEEDSIGNER = 'SEEDSIGNER',
-  BITBOX02 = 'BITBOX02',
-  OTHER_SD = 'OTHER_SD',
-  INHERITANCEKEY = 'INHERITANCEKEY',
-  UNKOWN_SIGNER = 'UNKNOWN_SIGNER',
-  SPECTER = 'SPECTER',
 }
 
 export enum PaymentInfoKind {
@@ -121,12 +84,6 @@ export enum PaymentInfoKind {
   PAYMENT_URI = 'paymentURI',
   RGB_INVOICE = 'rgbInvoice',
   RLN_INVOICE = 'rlninvoice',
-}
-
-export enum SignerStorage {
-  HOT = 'HOT',
-  COLD = 'COLD',
-  WARM = 'WARM',
 }
 
 export enum ScriptTypes {
@@ -148,19 +105,6 @@ export enum XpubTypes {
   'AMF' = 'AMF',
 }
 
-export enum LabelType {
-  SYSTEM = 'SYSTEM',
-  USER = 'USER',
-}
-
-export enum LabelRefType {
-  INPUT = 'INPUT',
-  OUTPUT = 'OUTPUT',
-  TXN = 'TXN',
-  ADDR = 'ADDR',
-  PUBKEY = 'PUBKEY',
-  XPUB = 'XPUB',
-}
 
 export enum ImportedKeyType {
   MNEMONIC = 'mnemonic',
@@ -186,18 +130,3 @@ export enum ImportedKeyType {
   VPRV = 'vprv',
 }
 
-export enum KeyGenerationMode {
-  NEW = 'NEW',
-  RECOVER = 'RECOVER',
-  IMPORT = 'IMPORT',
-  CREATE = 'CREATE',
-  NFC = 'NFC',
-  FILE = 'FILE',
-  QR = 'QR',
-}
-
-export enum SigningMode {
-  NFC = 'NFC',
-  FILE = 'FILE',
-  QR = 'QR',
-}

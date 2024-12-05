@@ -47,7 +47,8 @@
     "cameraPermissionCTA": "Apri impostazioni",
     "later": "Più tardi",
     "joinGroup": "Unisciti al gruppo",
-    "understood": "Capito"
+    "understood": "Capito",
+    "createChannel": "Crea Canale"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -224,7 +225,7 @@
     "Failed": "Fallito",
     "removed": "Rimosso",
     "expired": "Scaduto",
-    "viewNodeInfo": "Visualizza informazioni sul nodo",
+    "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve."
@@ -395,7 +396,7 @@
     "nodeStatusLock": "Stato del nodo: Bloccato",
     "initNode": "Inizializza Nodo",
     "channelsTitle": "Canali",
-    "channelEmptyTitle": "La lista dei canali è vuota",
+    "channelEmptyTitle": "Non hai alcun canale",
     "channelEmptySubTitle": "Inizia ad aggiungere canali per migliorare la tua esperienza Bitcoin!",
     "openChannelTitle": "Apri Canale",
     "peerPubAndAddress": "Pubkey e Indirizzo del Peer",
@@ -441,6 +442,16 @@
     "selectYourAssetErrMsg": "Seleziona il tuo asset",
     "availableBalanceText": "Saldo Disp.: ",
     "closeChannelPopupTitle": "Chiudere il Canale?",
-    "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata."
+    "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata.",
+    "createChannelBulletPoint1": "Indirizzo peer e chiave pubblica",
+    "createChannelBulletPoint2": "Dettagli ID e importo dell'asset",
+    "createChannelBulletPoint3": "Fondi disponibili in satoshi"
+  },
+  "lightning": {
+    "sendTitle": "Invia",
+    "invoice": "Fattura",
+    "assetId": "ID Asset",
+    "amount": "Importo",
+    "paymentHash": "Hash di Pagamento"
   }
 }
