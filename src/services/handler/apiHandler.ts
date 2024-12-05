@@ -315,7 +315,15 @@ export class ApiHandler {
         const restore = await RGBServices.restore(mnemonic, path);
         console.log('restore', restore);
 
-        throw new Error('failed');
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.ON_CHAIN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          mnemonic: mnemonic,
+        });
+
       } else {
         throw new Error(backup.error);
 
