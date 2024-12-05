@@ -1484,7 +1484,10 @@ export class ApiHandler {
       if(isBackupRequired) {
         const backupFile = await RGBServices.backup('', app.primaryMnemonic);
         if(backupFile.file) {
-          const response = await Relay.rgbFileBackup(backupFile.file, app.id, wallet.accountXpubFingerprint);
+          const response = await Relay.rgbFileBackup(Platform.select({
+            android: `file://${backupFile.file}`,
+            ios: backupFile.file,
+          }), app.id, wallet.accountXpubFingerprint);
           if(response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
           }
