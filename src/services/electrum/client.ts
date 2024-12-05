@@ -6,7 +6,6 @@ import { NodeDetail } from 'src/services/wallets/interfaces';
 import { NetworkType } from 'src/services/wallets/enums';
 import { ElectrumTransaction, ElectrumUTXO } from './interface';
 import torrific from './torrific';
-import RestClient, { TorStatus } from '../rest/RestClient';
 import { cryptoRandom } from '../../utils/encryption';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 
@@ -72,9 +71,7 @@ export default class ElectrumClient {
         };
       }
 
-      ElectrumClient.connectOverTor =
-        ELECTRUM_CLIENT.activePeer?.host?.endsWith('.onion') &&
-        RestClient?.getTorStatus() === TorStatus.CONNECTED;
+      ElectrumClient.connectOverTor = false;
 
       ELECTRUM_CLIENT.electrumClient = new ElectrumCli(
         ElectrumClient.connectOverTor ? torrific : global.net,
@@ -465,9 +462,7 @@ export default class ElectrumClient {
   }
 
   public static async testConnection(node: NodeDetail) {
-    const connectOverTor =
-      node.host?.endsWith('.onion') &&
-      RestClient?.getTorStatus() === TorStatus.CONNECTED;
+    const connectOverTor = false;
     const client = new ElectrumCli(
       connectOverTor ? torrific : global.net,
       global.tls,
