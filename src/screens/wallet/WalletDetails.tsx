@@ -1,20 +1,14 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  View,
   StyleSheet,
   Animated,
-  FlatList,
-  Platform,
-  RefreshControl,
 } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
 import { useMutation, UseMutationResult } from 'react-query';
 import { useTheme } from 'react-native-paper';
-import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { windowHeight } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
@@ -22,18 +16,11 @@ import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import RefreshControlView from 'src/components/RefreshControlView';
-import WalletTransactions from './components/WalletTransactions';
 import { AppTheme } from 'src/theme';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
-import EmptyStateView from 'src/components/EmptyStateView';
-import { Keys } from 'src/storage';
-import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AppTouchable from 'src/components/AppTouchable';
-import ReservedSatsView from './components/ReservedSatsView';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import useRgbWallets from 'src/hooks/useRgbWallets';

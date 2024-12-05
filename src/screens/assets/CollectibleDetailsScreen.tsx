@@ -1,12 +1,14 @@
-import { StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { Animated, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
-import { windowHeight, wp } from 'src/constants/responsive';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -14,12 +16,11 @@ import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import CollectibleDetailsHeader from './CollectibleDetailsHeader';
+import AssetDetailsHeader from './components/AssetDetailsHeader';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
-  const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId } = useRoute().params;
   const styles = getStyles();
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -36,59 +37,65 @@ const CollectibleDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const largeHeaderHeight = scrollY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [350, 0],
+    extrapolate: 'clamp',
+  });
+
+  const smallHeaderOpacity = scrollY.interpolate({
+    inputRange: [100, 150],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
   return (
-    <ScreenContainer style={styles.container}>
-      <View style={styles.walletHeaderWrapper}>
-        <CollectibleDetailsHeader
-          collectible={collectible}
-          wallet={wallet}
-          onPressSetting={() =>
-            navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-              assetId,
-            })
-          }
-          onPressBuy={() => {}}
-        />
-      </View>
-      <View style={styles.TransactionWrapper}>
-        <TransactionsList
-          transactions={collectible?.transactions}
-          isLoading={isLoading}
-          refresh={() => {
-            setRefreshing(true);
-            refreshRgbWallet.mutate();
-            mutate({ assetId, schema: RealmSchema.Collectible });
-            setTimeout(() => setRefreshing(false), 2000);
-          }}
-          refreshingStatus={refreshing}
-          navigation={navigation}
-          wallet={wallet}
-          coin={collectible.name}
-          assetId={assetId}
-        />
-      </View>
+    <ScreenContainer>
+      <AssetDetailsHeader
+        asset={collectible}
+        assetName={collectible.name}
+        assetTicker={collectible.details}
+        assetImage={collectible?.media?.filePath}
+        smallHeaderOpacity={smallHeaderOpacity}
+        largeHeaderHeight={largeHeaderHeight}
+        onPressSend={() =>
+          navigation.navigate(NavigationRoutes.SCANASSET, {
+            assetId: assetId,
+            item: collectible,
+            rgbInvoice: '',
+            wallet: wallet,
+          })
+        }
+        onPressSetting={() =>
+          navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+            assetId,
+          })
+        }
+        onPressRecieve={() =>
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
+          )
+        }
+      />
+
+      <TransactionsList
+        transactions={collectible?.transactions}
+        isLoading={isLoading}
+        refresh={() => {
+          setRefreshing(true);
+          refreshRgbWallet.mutate();
+          mutate({ assetId, schema: RealmSchema.Collectible });
+          setTimeout(() => setRefreshing(false), 2000);
+        }}
+        refreshingStatus={refreshing}
+        navigation={navigation}
+        wallet={wallet}
+        coin={collectible.name}
+        assetId={assetId}
+        scrollY={scrollY}
+      />
     </ScreenContainer>
   );
 };
-const getStyles = () =>
-  StyleSheet.create({
-    container: {
-      flexDirection: 'column',
-      height: '100%',
-      paddingHorizontal: 0,
-      paddingTop: 0,
-    },
-    walletHeaderWrapper: {
-      height: windowHeight < 670 ? '45%' : '40%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: wp(16),
-      borderBottomWidth: 0.5,
-      borderBottomColor: 'gray',
-    },
-    TransactionWrapper: {
-      height: windowHeight < 670 ? '50%' : '60%',
-      marginHorizontal: wp(16),
-    },
-  });
+const getStyles = () => StyleSheet.create({});
 export default CollectibleDetailsScreen;

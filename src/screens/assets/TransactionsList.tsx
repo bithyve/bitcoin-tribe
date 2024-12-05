@@ -5,6 +5,7 @@ import {
   FlatList,
   Platform,
   RefreshControl,
+  Animated,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -29,6 +30,7 @@ function TransactionsList({
   wallet,
   coin,
   assetId = '',
+  scrollY
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -38,6 +40,7 @@ function TransactionsList({
   wallet;
   coin: string;
   assetId: string;
+  scrollY: any;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations, settings } = translations;
@@ -64,6 +67,10 @@ function TransactionsList({
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
+       onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: false },
+      )}
         style={styles.container2}
         data={transactions}
         refreshControl={
