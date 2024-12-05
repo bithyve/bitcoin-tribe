@@ -82,11 +82,10 @@ function EnterSeedContainer() {
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
-    const s = 'strike rhythm stick response game train bridge bag remind horse history sadness'.split(' ')
     for (let i = 1; i <= 12; i++) {
       seedArray.push({
         id: i,
-        name: s[i-1],
+        name: '',
         invalid: false,
       });
     }
@@ -233,7 +232,7 @@ function EnterSeedContainer() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ModalLoading visible={isLoading} />
+      {/* <ModalLoading visible={isLoading} /> */}
       <View>
         <ResponsePopupContainer
           visible={loading}
