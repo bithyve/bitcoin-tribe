@@ -619,28 +619,36 @@ import CloudKit
             print("backup \(TAG) \(String(describing: response))")
       
       var data: [String: Any] = [:]
-      uploadToIcloud(url: filePath!, completion: {
-        (error, isError) in
-        if isError {
-          print("Error: \(error ?? "Unknown error")")
-          data = [
-            "message": "Backup successful",
-            "file": filePath?.path ?? "",
-            "error": error ?? "Unknown error"
-          ]
-          let json = Utility.convertToJSONString(params: data)
-          callback(json)
-        } else {
-          print("Upload successful")
-          data = [
-            "message": "Backup successful",
-            "file": filePath?.path ?? "",
-            "error": ""
-          ]
-          let json = Utility.convertToJSONString(params: data)
-          callback(json)
-        }
-      })
+      data = [
+        "message": "Backup successful",
+        "file": filePath?.path ?? "",
+        "error": ""
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+      return
+//      uploadToIcloud(url: filePath!, completion: {
+//        (error, isError) in
+//        if isError {
+//          print("Error: \(error ?? "Unknown error")")
+//          data = [
+//            "message": "Backup successful",
+//            "file": filePath?.path ?? "",
+//            "error": error ?? "Unknown error"
+//          ]
+//          let json = Utility.convertToJSONString(params: data)
+//          callback(json)
+//        } else {
+//          print("Upload successful")
+//          data = [
+//            "message": "Backup successful",
+//            "file": filePath?.path ?? "",
+//            "error": ""
+//          ]
+//          let json = Utility.convertToJSONString(params: data)
+//          callback(json)
+//        }
+//      })
     }catch let error{
       print(error)
       let data: [String: Any] = [
