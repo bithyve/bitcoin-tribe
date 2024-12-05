@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo."
   },
   "home": {
-    "addAssets": "Aggiungi risorse",
-    "addAssetSubTitle": "Emissione nuovo asset o aggiungi asset",
+    "addAssets": "Aggiungi Risorsa Ricevuta",
+    "addAssetSubTitle": "Emetti nuova risorsa o aggiungi risorse ricevute",
+    "createAssets": "Crea beni",
     "issueNew": "Emetti nuovo",
     "myAssets": "I tuoi beni",
     "issue": "Emetti",

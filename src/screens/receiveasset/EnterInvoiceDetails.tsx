@@ -93,6 +93,7 @@ const EnterInvoiceDetails = () => {
     receciveScreen,
     common,
     assets,
+    home,
     wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
@@ -121,7 +122,7 @@ const EnterInvoiceDetails = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={assets.receiveAssetTitle}
+        title={home.addAssets}
         subTitle={''}
         enableBack={true}
       />
