@@ -145,41 +145,45 @@ const EnterInvoiceDetails = () => {
         subTitle={''}
         enableBack={true}
       />
-      <View>
-        <AppText variant="heading3" style={styles.chooseInvoiceType}>
-          {receciveScreen.chooseInvoiceType}
-        </AppText>
-      </View>
-      <View style={styles.wrapper}>
-        <View style={styles.radioBtnWrapper}>
-          <RadioButton.Android
-            color={theme.colors.accent1}
-            uncheckedColor={theme.colors.headingColor}
-            value={'bitcoin'}
-            status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
-            onPress={() => setSelectedType('bitcoin')}
-          />
-          <View style={styles.typeViewWrapper}>
-            <AppText variant="body2" style={styles.feePriorityText}>
-              {receciveScreen.onchain}
+      {app.appType !== AppType.ON_CHAIN && (
+        <View>
+          <View>
+            <AppText variant="heading3" style={styles.chooseInvoiceType}>
+              {receciveScreen.chooseInvoiceType}
             </AppText>
           </View>
-        </View>
-        <View style={styles.radioBtnWrapper}>
-          <RadioButton.Android
-            color={theme.colors.accent1}
-            uncheckedColor={theme.colors.headingColor}
-            value={'lightning'}
-            status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
-            onPress={() => setSelectedType('lightning')}
-          />
-          <View style={styles.typeViewWrapper}>
-            <AppText variant="body2" style={styles.feePriorityText}>
-              {receciveScreen.lightning}
-            </AppText>
+          <View style={styles.wrapper}>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'bitcoin'}
+                status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('bitcoin')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.onchain}
+                </AppText>
+              </View>
+            </View>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'lightning'}
+                status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('lightning')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.lightning}
+                </AppText>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      )}
       <View style={styles.bodyWrapper}>
         <TextField
           value={assetId}

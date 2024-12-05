@@ -7,7 +7,6 @@ import {
   ScriptTypes,
   ImportedKeyType,
   DerivationPurpose,
-  XpubTypes,
 } from '../enums';
 
 export interface DerivationConfig {
@@ -38,20 +37,6 @@ export interface WalletPresentationData {
   visibility: VisibilityType; // visibility of the wallet
   shell: number; // shell id
 }
-
-export interface TransferPolicy {
-  id: string;
-  threshold: number;
-}
-
-export interface WhirlpoolWalletDetails {
-  walletId: string; // wallet id for the premix|postmix|badbank
-  walletType: WalletType;
-}
-export interface WhirlpoolConfig {
-  whirlpoolWalletDetails: WhirlpoolWalletDetails[]; // deatils for whirlpool wallets
-}
-
 export interface AddressCache {
   external: {}; // maps index to external address
   internal: {}; // maps index to internal address
@@ -80,7 +65,7 @@ export interface WalletSpecs {
 
 export interface Wallet {
   id: string; // wallet identifier(derived from xpub)
-  entityKind: EntityKind; // Wallet vs Vault identifier
+  entityKind: EntityKind; // Wallet identifier
   type: WalletType; // type of wallet
   networkType: NetworkType; // testnet/mainnet
   isUsable: boolean; // true if wallet is usable
@@ -90,18 +75,3 @@ export interface Wallet {
   scriptType: ScriptTypes;
   receivingAddress?: string;
 }
-
-export interface TriggerPolicy {
-  id: string;
-  date: string;
-  specifications: {};
-  version: string;
-}
-
-export type XpubDetailsType = {
-  [key in XpubTypes as string]: {
-    xpub: string;
-    derivationPath: string;
-    xpriv?: string;
-  };
-};

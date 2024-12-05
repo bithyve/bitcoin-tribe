@@ -29,7 +29,6 @@ import crypto from 'crypto';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
-import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
@@ -280,6 +279,60 @@ export class ApiHandler {
     }
   }
 
+  static async restoreApp(mnemonic: string) {
+    try {
+      const seed = bip39.mnemonicToSeedSync(mnemonic);
+      const appID = crypto
+        .createHash('sha256')
+        .update(seed)
+        .digest('hex');
+      const backup = await Relay.getBackup(appID);
+      if(backup.node) {
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.SUPPORTED_RLN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          rgbNodeConnectParams: {
+            authentication: backup.token,
+            nodeUrl: backup.apiUrl,
+            mnemonic: backup.node.mnemonic,
+            nodeId: backup.node.nodeId,
+            peerDNS: backup.peerDNS,
+          },
+          mnemonic: backup.node.mnemonic,
+          rgbNodeInfo: backup.nodeInfo,
+        });
+      } else if(backup.file) {
+        var path = RNFS.DocumentDirectoryPath + `/${appID}.rgb_backup`;
+        const file = await ApiHandler.downloadFile({
+          fromUrl: backup.file,
+          toFile: path,
+        });
+        console.log('file', file.statusCode);
+
+        const restore = await RGBServices.restore(mnemonic, path);
+        console.log('restore', restore);
+
+        throw new Error('failed');
+      } else {
+        throw new Error(backup.error);
+
+      }
+    } catch (error) {
+      throw error;    }
+  }
+
+  static async downloadFile ({ ...obj }: RNFS.DownloadFileOptionsT) {
+    const { promise } = RNFS.downloadFile({
+      progressDivider: 100,
+      progressInterval: 5000,
+      ...obj,
+    });
+    return promise;
+  };
+
   static async biometricLogin(signature: string) {
     const appId = await Storage.get(Keys.APPID);
     const res = await SecureStore.verifyBiometricAuth(signature, appId);
@@ -483,7 +536,7 @@ export class ApiHandler {
         const network = WalletUtilities.getNetworkByType(
           wallets[0].networkType,
         );
-        const { synchedWallets }: { synchedWallets: (Wallet | Vault)[] } =
+        const { synchedWallets }: { synchedWallets: (Wallet)[] } =
           await WalletOperations.syncWalletsViaElectrumClient(wallets, network);
 
         for (const synchedWallet of synchedWallets) {
@@ -664,8 +717,13 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
+        console.log('utxos', utxos)
+        await ApiHandler.refreshRgbWallet();
+        ApiHandler.refreshWallets({ wallets: wallet.toJSON() });
         if (utxos.created) {
           return utxos.created;
+        } if(utxos.error){
+          throw new Error(`${utxos.error}`);
         } else {
           return false;
         }
@@ -817,6 +875,9 @@ export class ApiHandler {
           assets.cfa,
           Realm.UpdateMode.Modified,
         );
+      }
+      if(ApiHandler.appType === AppType.ON_CHAIN) {
+        ApiHandler.backup();
       }
     } catch (error) {
       console.log('error', error);
@@ -1404,6 +1465,25 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  }
+
+  static async backup() {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex<TribeApp>(RealmSchema.TribeApp) as TribeApp;
+      const wallet: RGBWallet = dbManager.getObjectByIndex<RGBWallet>(RealmSchema.RgbWallet) as RGBWallet;
+      const isBackupRequired = await RGBServices.isBackupRequired();
+      if(isBackupRequired) {
+        const backupFile = await RGBServices.backup('', app.primaryMnemonic);
+        if(backupFile.file) {
+          const response = await Relay.rgbFileBackup(backupFile.file, app.id, wallet.accountXpubFingerprint);
+          if(response.uploaded) {
+            Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

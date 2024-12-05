@@ -288,7 +288,10 @@ export default class RGBServices {
     return response;
   };
 
-  static backup = async (path: string, password: string): Promise<string> => {
+  static backup = async (path: string, password: string): Promise<{
+    file: string,
+    error?: string
+  }> => {
     const data = await RGB.backup(path, password);
     return JSON.parse(data);
   };
@@ -298,8 +301,8 @@ export default class RGBServices {
     return data;
   };
 
-  static restore = async (mnemonic: string): Promise<{}> => {
-    const data = await RGB.restore(mnemonic);
+  static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
+    const data = await RGB.restore(mnemonic, filePath);
     return data;
   };
 
