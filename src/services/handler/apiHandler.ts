@@ -122,7 +122,6 @@ export class ApiHandler {
       // Store the encrypted key securely
       await SecureStore.store(hash, encryptedKey);
     } else {
-      console.log('Encryption key already exists. Skipping encryption step.');
       // Decrypt the existing key to get AES_KEY
       AES_KEY = decrypt(hash, existingEncryptedKey);
     }
@@ -311,10 +310,8 @@ export class ApiHandler {
           toFile: path,
         });
         console.log('file', file.statusCode);
-
         const restore = await RGBServices.restore(mnemonic, path);
         console.log('restore', restore);
-
         ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
@@ -322,6 +319,12 @@ export class ApiHandler {
           passcode: '',
           walletImage: '',
           mnemonic: mnemonic,
+        });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
         });
 
       } else {
@@ -1494,7 +1497,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log('backup error', error)
     }
   }
 

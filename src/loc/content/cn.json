@@ -260,7 +260,7 @@
     "enterAmount": "输入金额",
     "sendingToAddress": "发送至地址",
     "sendSuccessTitle": "发送\n成功",
-    "sendSuccessSubTitle": "交易已成功。",
+    "sendSuccessSubTitle": "交易已成功广播",
     "invalidBtcAddress": "无效的比特币地址",
     "invalidRGBInvoiceAddress": "无效的 RGB 发票",
     "sentSuccessfully": "发送成功",
@@ -361,7 +361,7 @@
     "medium": "中 -",
     "high": "高 -",
     "success": "成功！",
-    "operationSuccess": "操作成功！",
+    "operationSuccess": "资产已成功广播",
     "operationSuccessSubTitle": "您的更改已保存。",
     "noRGBUTXOsTitle": "未找到RGB UTXO",
     "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。",
@@ -453,6 +453,7 @@
     "invoice": "发票",
     "assetId": "资产ID",
     "amount": "金额",
-    "paymentHash": "支付哈希"
+    "paymentHash": "支付哈希",
+    "lightningSendTxnSubtitle": "交易已成功广播"
   }
 }

@@ -170,8 +170,7 @@ const LightningSend = () => {
         conatinerModalStyle={{}}>
         <SendSuccessPopupContainer
           title={assets.success}
-          subTitle={assets.operationSuccess}
-          description={assets.operationSuccessSubTitle}
+          subTitle={lightning.lightningSendTxnSubtitle}
           onPress={() => {
             navigation.goBack();
           }}

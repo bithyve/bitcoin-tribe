@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 type sendSuccessProps = {
   title: string;
   subTitle: string;
-  description: string;
+  description?: string;
   onPress: () => void;
 };
 

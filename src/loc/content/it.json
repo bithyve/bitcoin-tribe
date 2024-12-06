@@ -260,7 +260,7 @@
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",
-    "sendSuccessSubTitle": "La transazione è stata eseguita correttamente.",
+    "sendSuccessSubTitle": "La transazione è stata trasmessa con successo",
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "invalidRGBInvoiceAddress": "Fattura RGB non valida",
     "sentSuccessfully": "Inviato con successo",
@@ -361,7 +361,7 @@
     "medium": "Medio -",
     "high": "Alto -",
     "success": "Successo!",
-    "operationSuccess": "Operazione riuscita!",
+    "operationSuccess": "L'asset è stato trasmesso con successo",
     "operationSuccessSubTitle": "Le tue modifiche sono state salvate.",
     "noRGBUTXOsTitle": "Nessun UTXO RGB trovato",
     "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB.",
@@ -453,6 +453,7 @@
     "invoice": "Fattura",
     "assetId": "ID Asset",
     "amount": "Importo",
-    "paymentHash": "Hash di Pagamento"
+    "paymentHash": "Hash di Pagamento",
+    "lightningSendTxnSubtitle": "La transazione è stata trasmessa con successo"
   }
 }
