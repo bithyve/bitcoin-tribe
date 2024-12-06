@@ -76,7 +76,8 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
         onChangeText={text => setSeedWord(text?.toLocaleLowerCase())}
         placeholder={`Enter the ${getSeedNumber(index)} word`}
         keyboardType={'default'}
-        autoFocus={true}
+        autoFocus={false}
+        autoCapitalize="none"
       />
       {invalid && (
         <AppText style={styles.invalidTextStyle}>Invalid word</AppText>
