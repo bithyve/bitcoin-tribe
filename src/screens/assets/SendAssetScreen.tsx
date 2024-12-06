@@ -291,9 +291,7 @@ const SendAssetScreen = () => {
             item.media?.filePath
               ? Platform.select({
                   android: `file://${item.media?.filePath}`,
-                  ios: `${item.media?.filePath}.${
-                    item.media?.mime.split('/')[1]
-                  }`,
+                  ios: item.media?.filePath,
                 })
               : null
           }
