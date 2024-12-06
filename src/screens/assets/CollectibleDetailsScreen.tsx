@@ -1,5 +1,5 @@
 import { Animated, StyleSheet } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   CommonActions,
@@ -17,14 +17,18 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
+import { AppContext } from 'src/contexts/AppContext';
+import AppType from 'src/models/enums/AppType';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId } = useRoute().params;
   const styles = getStyles();
+  const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
+  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
@@ -33,9 +37,24 @@ const CollectibleDetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.Collectible });
+      if (appType === AppType.NODE_CONNECT) {
+        listPaymentshMutation.mutate();
+      }
     });
     return unsubscribe;
   }, [navigation, assetId]);
+
+  const transactionsData =
+    appType === AppType.NODE_CONNECT
+      ? Object.values({
+          ...listPaymentshMutation.data,
+          ...collectible?.transactions,
+        }).sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime() || 0;
+          const dateB = new Date(b.createdAt).getTime() || 0;
+          return dateA - dateB;
+        })
+      : collectible?.transactions;
 
   const largeHeaderHeight = scrollY.interpolate({
     inputRange: [0, 300],
@@ -79,7 +98,7 @@ const CollectibleDetailsScreen = () => {
       />
 
       <TransactionsList
-        transactions={collectible?.transactions}
+        transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
           setRefreshing(true);

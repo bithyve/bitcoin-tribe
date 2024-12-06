@@ -1,5 +1,5 @@
 import { Animated, StyleSheet } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   CommonActions,
@@ -17,13 +17,17 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
+import AppType from 'src/models/enums/AppType';
+import { AppContext } from 'src/contexts/AppContext';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId } = useRoute().params;
+  const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
+  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
@@ -32,9 +36,24 @@ const CoinDetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.Coin });
+      if (appType === AppType.NODE_CONNECT) {
+        listPaymentshMutation.mutate();
+      }
     });
     return unsubscribe;
   }, [navigation, assetId]);
+
+  const transactionsData =
+    appType === AppType.NODE_CONNECT
+      ? Object.values({
+          ...listPaymentshMutation.data,
+          ...coin?.transactions,
+        }).sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime() || 0;
+          const dateB = new Date(b.createdAt).getTime() || 0;
+          return dateA - dateB;
+        })
+      : coin?.transactions;
 
   const largeHeaderHeight = scrollY.interpolate({
     inputRange: [0, 300],
@@ -74,7 +93,7 @@ const CoinDetailsScreen = () => {
         }
       />
       <TransactionsList
-        transactions={coin?.transactions}
+        transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
           setRefreshing(true);
