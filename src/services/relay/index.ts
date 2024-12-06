@@ -88,4 +88,86 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static rgbFileBackup = async (
+    filePath: string,
+    appID: string,
+    fingerprint: string,
+  ): Promise<{ uploaded: boolean }> => {
+    try {
+      let res;
+      try {
+        const formData = new FormData();
+        formData.append('appID', appID);
+        formData.append('fingerprint', fingerprint);
+        formData.append('file', {
+          uri: filePath,
+          name: filePath.split('/').pop(),
+          type: 'application/zip',
+        });
+        res = await RestClient.post(
+          'https://bhrelay.appspot.com/rgbbackup',
+          formData,
+          {
+            'Content-Type': 'multipart/form-data',
+          },
+        );
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getBackup = async (
+    appID: string,
+  ): Promise<{
+    error?: string;
+    node?: {
+      mnemonic: string;
+      hash: string;
+      isAllocated: boolean;
+      _id: string;
+      nodeId: string;
+      invoke_url: string;
+      status: string;
+      initialized: boolean;
+      name: string;
+      network: string;
+      port: number;
+      peerDNS: string;
+      peerPort: number;
+    };
+    nodeInfo?: {};
+    token?: string;
+    apiUrl?: string;
+    peerDNS?: string;
+    file?: string;
+  }> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.post('https://bhrelay.appspot.com/getbackup', {
+          appID,
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }

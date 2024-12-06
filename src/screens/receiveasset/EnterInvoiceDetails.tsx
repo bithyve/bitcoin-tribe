@@ -21,6 +21,7 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
   StyleSheet.create({
@@ -85,6 +86,18 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
     chooseInvoiceType: {
       color: theme.colors.headingColor,
     },
+    rightCTAStyle: {
+      backgroundColor: theme.colors.ctaBackColor,
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+      marginHorizontal: hp(5),
+    },
+    inputStyle: {
+      width: '80%',
+    },
   });
 
 const EnterInvoiceDetails = () => {
@@ -93,6 +106,8 @@ const EnterInvoiceDetails = () => {
     receciveScreen,
     common,
     assets,
+    home,
+    sendScreen,
     wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
@@ -108,6 +123,11 @@ const EnterInvoiceDetails = () => {
       : 'bitcoin',
   );
 
+  const handlePasteAddress = async () => {
+    const getClipboardValue = await Clipboard.getString();
+    setAssetId(getClipboardValue)
+  }
+
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -121,45 +141,49 @@ const EnterInvoiceDetails = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={assets.receiveAssetTitle}
+        title={home.addAssets}
         subTitle={''}
         enableBack={true}
       />
-      <View>
-        <AppText variant="heading3" style={styles.chooseInvoiceType}>
-          {receciveScreen.chooseInvoiceType}
-        </AppText>
-      </View>
-      <View style={styles.wrapper}>
-        <View style={styles.radioBtnWrapper}>
-          <RadioButton.Android
-            color={theme.colors.accent1}
-            uncheckedColor={theme.colors.headingColor}
-            value={'bitcoin'}
-            status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
-            onPress={() => setSelectedType('bitcoin')}
-          />
-          <View style={styles.typeViewWrapper}>
-            <AppText variant="body2" style={styles.feePriorityText}>
-              {receciveScreen.onchain}
+      {app.appType !== AppType.ON_CHAIN && (
+        <View>
+          <View>
+            <AppText variant="heading3" style={styles.chooseInvoiceType}>
+              {receciveScreen.chooseInvoiceType}
             </AppText>
           </View>
-        </View>
-        <View style={styles.radioBtnWrapper}>
-          <RadioButton.Android
-            color={theme.colors.accent1}
-            uncheckedColor={theme.colors.headingColor}
-            value={'lightning'}
-            status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
-            onPress={() => setSelectedType('lightning')}
-          />
-          <View style={styles.typeViewWrapper}>
-            <AppText variant="body2" style={styles.feePriorityText}>
-              {receciveScreen.lightning}
-            </AppText>
+          <View style={styles.wrapper}>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'bitcoin'}
+                status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('bitcoin')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.onchain}
+                </AppText>
+              </View>
+            </View>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'lightning'}
+                status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('lightning')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.lightning}
+                </AppText>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      )}
       <View style={styles.bodyWrapper}>
         <TextField
           value={assetId}
@@ -173,6 +197,11 @@ const EnterInvoiceDetails = () => {
           }}
           numberOfLines={3}
           contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
+          inputStyle={styles.inputStyle}
+          rightText={sendScreen.paste}
+        onRightTextPress={() => handlePasteAddress()}
+        rightCTAStyle={styles.rightCTAStyle}
+        rightCTATextColor={theme.colors.primaryCTAText}
         />
 
         <TextField

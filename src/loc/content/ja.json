@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。"
   },
   "home": {
-    "addAssets": "アセットを追加",
-    "addAssetSubTitle": "新しいアセットを発行するかアセットを追加する",
+    "addAssets": "受信資産を追加",
+    "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
+    "createAssets": "資産を作成",
     "issueNew": "新規発行",
     "myAssets": "あなたの資産",
     "issue": "発行",

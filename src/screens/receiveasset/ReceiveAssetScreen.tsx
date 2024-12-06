@@ -21,7 +21,6 @@ import { Keys } from 'src/storage';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import WalletFooter from '../wallet/components/WalletFooter';
 import { wp } from 'src/constants/responsive';
 import AppType from 'src/models/enums/AppType';
 import { useTheme } from 'react-native-paper';
@@ -36,6 +35,7 @@ function ReceiveAssetScreen() {
   } = translations;
   const theme = useTheme();
   const route = useRoute();
+  const navigation = useNavigation();
   const assetId = route.params.assetId || '';
   const amount = route.params.amount || '';
   const selectedType = route.params.selectedType || 'bitcoin'
@@ -95,6 +95,9 @@ function ReceiveAssetScreen() {
       setTimeout(() => {
         mutate();
       }, 400);
+    }  else if (createUtxos.error) {
+      navigation.goBack();
+      Toast(`${createUtxos.error}`, true);
     } else if (createUtxos.data === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
     }

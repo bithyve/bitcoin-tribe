@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time."
   },
   "home": {
-    "addAssets": "Add Assets",
-    "addAssetSubTitle": "Issue new asset or add asset",
+    "addAssets": "Add Receive Assets",
+    "addAssetSubTitle": "Issue new asset or add receive assets",
+    "createAssets": "Create Assets",
     "issueNew": "Issue new",
     "myAssets": "Your Assets",
     "issue": "Issue",
