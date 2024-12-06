@@ -272,7 +272,6 @@ const SendAssetScreen = () => {
           <SendSuccessPopupContainer
             title={assets.success}
             subTitle={assets.operationSuccess}
-            description={assets.operationSuccessSubTitle}
             onPress={() => {
               navigation.goBack();
             }}

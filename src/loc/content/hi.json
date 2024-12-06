@@ -260,7 +260,7 @@
     "enterAmount": "राशि दर्ज करें",
     "sendingToAddress": "पते पर भेज रहा है",
     "sendSuccessTitle": "भेजें\nसफल",
-    "sendSuccessSubTitle": "लेनदेन सफलतापूर्वक हो गया है।",
+    "sendSuccessSubTitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है",
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
     "invalidRGBInvoiceAddress": "अमान्य RGB इनवॉइस",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
@@ -361,7 +361,7 @@
     "medium": "मध्यम -",
     "high": "उच्च -",
     "success": "सफलता!",
-    "operationSuccess": "ऑपरेशन सफल!",
+    "operationSuccess": "संपत्ति को सफलतापूर्वक प्रसारित कर दिया गया है",
     "operationSuccessSubTitle": "आपके परिवर्तन सहेजे गए हैं।",
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
     "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
@@ -453,6 +453,7 @@
     "invoice": "इनवॉइस",
     "assetId": "संपत्ति आईडी",
     "amount": "राशि",
-    "paymentHash": "भुगतान हैश"
+    "paymentHash": "भुगतान हैश",
+    "lightningSendTxnSubtitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है"
   }
 }

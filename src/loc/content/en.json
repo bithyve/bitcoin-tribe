@@ -260,7 +260,7 @@
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send\nSuccessful",
-    "sendSuccessSubTitle": "The transaction has been successfully.",
+    "sendSuccessSubTitle": "The transaction has been broadcasted successfully",
     "invalidBtcAddress": "Invalid Bitcoin address",
     "invalidRGBInvoiceAddress": "Invalid RGB invoice",
     "sentSuccessfully": "Sent successfully",
@@ -361,7 +361,7 @@
     "medium": "Medium -",
     "high": "High -",
     "success": "Success!",
-    "operationSuccess": "Operation successful!",
+    "operationSuccess": "The Asset has been broadcasted successfully",
     "operationSuccessSubTitle": "Your changes have been saved.",
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
     "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
@@ -453,6 +453,7 @@
     "invoice": "Invoice",
     "assetId": "Asset ID",
     "amount": "Amount",
-    "paymentHash": "Payment Hash"
+    "paymentHash": "Payment Hash",
+    "lightningSendTxnSubtitle": "The transaction has been broadcasted successfully"
   }
 }
