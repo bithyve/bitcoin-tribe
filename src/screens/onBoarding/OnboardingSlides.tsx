@@ -8,17 +8,21 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import BtcBackedAsset from 'src/assets/images/BtcBackedAsset.svg';
 import BackupAlertIllustration from 'src/assets/images/backupAlertIllustration.svg';
+import BackupAlertIllustrationLight from 'src/assets/images/backupAlertIllustration_light.svg';
 import { useNavigation } from '@react-navigation/native';
 import OnboardingSlideComponent from './components/OnboardingSlideComponent';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 function OnboardingSlides() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const onboardingSlideRef = useRef(null);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding, home } = translations;
   const styles = getStyles(theme);
@@ -41,7 +45,7 @@ function OnboardingSlides() {
       title: home.backupAlertTitle,
       subTitle: home.backupAlertSubTitle,
       paragraph: '',
-      illustration: <BackupAlertIllustration />,
+      illustration: isThemeDark ? <BackupAlertIllustration /> : <BackupAlertIllustrationLight/>,
     },
   ]);
 
