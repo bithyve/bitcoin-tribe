@@ -73,7 +73,7 @@
     "createPinFirst": "Create a Passcode first",
     "invalidPin": "Invalid Passcode",
     "enterYourPin": "Enter your Passcode",
-    "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
+    "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase",

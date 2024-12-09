@@ -309,9 +309,7 @@ export class ApiHandler {
           fromUrl: backup.file,
           toFile: path,
         });
-        console.log('file', file.statusCode);
         const restore = await RGBServices.restore(mnemonic, path);
-        console.log('restore', restore);
         ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
@@ -329,10 +327,12 @@ export class ApiHandler {
 
       } else {
         throw new Error(backup.error);
-
       }
     } catch (error) {
-      throw error;    }
+      if (error ! instanceof Error) {
+        throw error;
+      }
+    }
   }
 
   static async downloadFile ({ ...obj }: RNFS.DownloadFileOptionsT) {

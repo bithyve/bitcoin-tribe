@@ -73,7 +73,7 @@
     "createPinFirst": "最初にPINを作成してください",
     "invalidPin": "無効なPIN",
     "enterYourPin": "パスコードを入力してください",
-    "recoverRGBState": "クラウドからビットコインで裏打ちされた資産の状態を復元しますか？",
+    "recoverRGBState": "バックアップが見つかりませんでした。新しいオンチェーンウォレットを作成しますか？",
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
