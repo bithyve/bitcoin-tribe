@@ -260,7 +260,7 @@
     "enterAmount": "金額を入力",
     "sendingToAddress": "アドレスに送信中",
     "sendSuccessTitle": "送信\n成功",
-    "sendSuccessSubTitle": "取引が正常に完了しました。",
+    "sendSuccessSubTitle": "取引が正常にブロードキャストされました",
     "invalidBtcAddress": "無効なビットコインアドレス",
     "invalidRGBInvoiceAddress": "無効なRGBインボイス",
     "sentSuccessfully": "正常に送信されました",
@@ -361,7 +361,7 @@
     "medium": "中 -",
     "high": "高 -",
     "success": "成功！",
-    "operationSuccess": "操作が成功しました！",
+    "operationSuccess": "資産が正常にブロードキャストされました",
     "operationSuccessSubTitle": "変更が保存されました。",
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
     "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。",
@@ -453,6 +453,7 @@
     "invoice": "請求書",
     "assetId": "アセットID",
     "amount": "金額",
-    "paymentHash": "支払いハッシュ"
+    "paymentHash": "支払いハッシュ",
+    "lightningSendTxnSubtitle": "取引が正常にブロードキャストされました"
   }
 }

@@ -181,9 +181,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 ticker={item.ticker}
                 image={Platform.select({
                   android: `file://${item.media?.filePath}`,
-                  ios: `${item.media?.filePath}.${
-                    item.media?.mime.split('/')[1]
-                  }`,
+                  ios: item.media?.filePath,
                 })}
               />
             )}

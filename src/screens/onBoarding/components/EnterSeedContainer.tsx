@@ -12,9 +12,7 @@ import { TextInput as RNTextInput } from 'react-native';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import {
-  getPlaceholderSuperScripted,
-} from 'src/utils/placeholderUtils';
+import { getPlaceholderSuperScripted } from 'src/utils/placeholderUtils';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -53,13 +51,16 @@ function EnterSeedContainer() {
   const [seedData, setSeedData] = useState<seedWordItem[]>();
   const [suggestedWords, setSuggestedWords] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [visibleLoader, setVisibleLoader] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
   const { mutateAsync, status, isLoading } = useMutation(ApiHandler.restoreApp);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
 
   useEffect(() => {
     if (status === 'success') {
-      onSuccess();
+      setTimeout(() => {
+        onSuccess();
+      }, 200);
     }
   }, [status]);
 
@@ -135,9 +136,7 @@ function EnterSeedContainer() {
           activeOutlineColor={theme.colors.accent1}
           contextMenuHidden
           outlineStyle={styles.outlineStyle}
-          style={[
-            styles.input,
-          ]}
+          style={[styles.input]}
           underlineStyle={styles.underlineStyle}
           contentStyle={[
             styles.textStyles,
@@ -194,22 +193,27 @@ function EnterSeedContainer() {
           await mutateAsync(mnemonic);
         } catch (error) {
           if (error instanceof Error && error.message === 'No backup found') {
+            setVisibleLoader(false);
             setTimeout(() => {
               setVisible(true);
             }, 400);
           } else {
+            setVisibleLoader(false);
             Toast(`${error.message}`, true);
           }
         }
       } else {
+        setVisibleLoader(false);
         Toast(onBoarding.invalidMnemonic, true);
       }
     } else {
+      setVisibleLoader(false);
       Toast(onBoarding.enterRecoveryPhrase, true);
     }
   };
 
   const onSuccess = async () => {
+    setVisibleLoader(false);
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
@@ -219,29 +223,32 @@ function EnterSeedContainer() {
     }, 400);
   };
 
-  const createNewOnchainApp = ()=>{
+  const createNewOnchainApp = () => {
+    setVisibleLoader(true);
     let seedWord = '';
     for (let i = 0; i < seedData.length; i++) {
       seedWord += `${seedData[i].name} `;
     }
     const mnemonic = seedWord.trim();
-    setupNewAppMutation.mutate({
-      appName: '',
-      pinMethod: PinMethod.DEFAULT,
-      passcode: '',
-      walletImage: '',
-      appType: AppType.ON_CHAIN,
-      rgbNodeConnectParams: null,
-      rgbNodeInfo:null,
-      mnemonic,
-    });
+    setTimeout(() => {
+      setupNewAppMutation.mutate({
+        appName: '',
+        pinMethod: PinMethod.DEFAULT,
+        passcode: '',
+        walletImage: '',
+        appType: AppType.ON_CHAIN,
+        rgbNodeConnectParams: null,
+        rgbNodeInfo: null,
+        mnemonic,
+      });
+    }, 200);
   };
 
   return (
     <View style={{ flex: 1 }}>
       <View>
         <ResponsePopupContainer
-          visible={isLoading || setupNewAppMutation.isLoading}
+          visible={visibleLoader}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
@@ -309,9 +316,10 @@ function EnterSeedContainer() {
       ) : null}
       <Buttons
         primaryOnPress={() => {
+          setVisibleLoader(true);
           setTimeout(() => {
             onPressHandleNext();
-          }, 0);
+          },500)
         }}
         primaryTitle={common.next}
         primaryLoading={isLoading || setupNewAppMutation.isLoading}
@@ -321,8 +329,8 @@ function EnterSeedContainer() {
         primaryOnPress={() => {
           setVisible(false);
           setTimeout(() => {
-          createNewOnchainApp();
-          }, 300);
+            createNewOnchainApp();
+          }, 400);
         }}
         secondaryOnPress={() => {
           setVisible(false);

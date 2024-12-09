@@ -272,7 +272,6 @@ const SendAssetScreen = () => {
           <SendSuccessPopupContainer
             title={assets.success}
             subTitle={assets.operationSuccess}
-            description={assets.operationSuccessSubTitle}
             onPress={() => {
               navigation.goBack();
             }}
@@ -291,9 +290,7 @@ const SendAssetScreen = () => {
             item.media?.filePath
               ? Platform.select({
                   android: `file://${item.media?.filePath}`,
-                  ios: `${item.media?.filePath}.${
-                    item.media?.mime.split('/')[1]
-                  }`,
+                  ios: item.media?.filePath,
                 })
               : null
           }

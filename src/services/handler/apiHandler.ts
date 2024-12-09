@@ -122,7 +122,6 @@ export class ApiHandler {
       // Store the encrypted key securely
       await SecureStore.store(hash, encryptedKey);
     } else {
-      console.log('Encryption key already exists. Skipping encryption step.');
       // Decrypt the existing key to get AES_KEY
       AES_KEY = decrypt(hash, existingEncryptedKey);
     }
@@ -319,6 +318,13 @@ export class ApiHandler {
           walletImage: '',
           mnemonic: mnemonic,
         });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
+
       } else {
         throw new Error(backup.error);
       }
@@ -1491,7 +1497,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log('backup error', error)
     }
   }
 
