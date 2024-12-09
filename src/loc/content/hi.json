@@ -73,7 +73,7 @@
     "createPinFirst": "पहले पिन बनाएँ",
     "invalidPin": "अमान्य पिन",
     "enterYourPin": "अपना पासकोड दर्ज करें",
-    "recoverRGBState": "क्या आप क्लाउड से अपने बिटकॉइन-समर्थित संपत्ति राज्य को पुनर्प्राप्त करना चाहते हैं?",
+    "recoverRGBState": "कोई बैकअप नहीं मिला। क्या आप नई ऑन-चेन वॉलेट बनाने के लिए आगे बढ़ना चाहते हैं?",
     "appRecoveryMsg": "ऐप पुनर्प्राप्ति सफल। आप सभी सेट हैं!",
     "invalidMnemonic": "अमान्य मोनिक",
     "enterRecoveryPhrase": "कृपया 12-शब्द रिकवरी वाक्यांश दर्ज करें",
@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "हम आपका डेटा पुनः प्राप्त कर रहे हैं—थोड़ा धैर्य रखें! आराम करें, और हम आपको तुरंत वापस चालू कर देंगे।"
   },
   "home": {
-    "addAssets": "संपत्ति जोड़ें",
-    "addAssetSubTitle": "नया एसेट जारी करें या एसेट जोड़ें",
+    "addAssets": "प्राप्त संपत्ति जोड़ें",
+    "addAssetSubTitle": "नया संपत्ति जारी करें या प्राप्त संपत्तियां जोड़ें",
+    "createAssets": "संपत्तियां बनाएं",
     "issueNew": "नया जारी करें",
     "myAssets": "आपकी संपत्तियां",
     "issue": "जारी करें",
@@ -259,7 +260,7 @@
     "enterAmount": "राशि दर्ज करें",
     "sendingToAddress": "पते पर भेज रहा है",
     "sendSuccessTitle": "भेजें\nसफल",
-    "sendSuccessSubTitle": "लेनदेन सफलतापूर्वक हो गया है।",
+    "sendSuccessSubTitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है",
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
     "invalidRGBInvoiceAddress": "अमान्य RGB इनवॉइस",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
@@ -360,7 +361,7 @@
     "medium": "मध्यम -",
     "high": "उच्च -",
     "success": "सफलता!",
-    "operationSuccess": "ऑपरेशन सफल!",
+    "operationSuccess": "संपत्ति को सफलतापूर्वक प्रसारित कर दिया गया है",
     "operationSuccessSubTitle": "आपके परिवर्तन सहेजे गए हैं।",
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
     "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
@@ -452,6 +453,7 @@
     "invoice": "इनवॉइस",
     "assetId": "संपत्ति आईडी",
     "amount": "राशि",
-    "paymentHash": "भुगतान हैश"
+    "paymentHash": "भुगतान हैश",
+    "lightningSendTxnSubtitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है"
   }
 }

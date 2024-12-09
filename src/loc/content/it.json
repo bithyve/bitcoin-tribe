@@ -73,7 +73,7 @@
     "createPinFirst": "Crea prima un PIN",
     "invalidPin": "PIN non valido",
     "enterYourPin": "Inserisci il tuo codice di accesso",
-    "recoverRGBState": "Vuoi recuperare lo stato delle tue risorse supportate da Bitcoin dal cloud?",
+    "recoverRGBState": "Nessun backup trovato. Vuoi procedere con la creazione di un nuovo wallet on-chain?",
     "appRecoveryMsg": "Recupero dell'app riuscito. Sei tutto pronto!",
     "invalidMnemonic": "Mnemonic non valido",
     "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole",
@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo."
   },
   "home": {
-    "addAssets": "Aggiungi risorse",
-    "addAssetSubTitle": "Emissione nuovo asset o aggiungi asset",
+    "addAssets": "Aggiungi Risorsa Ricevuta",
+    "addAssetSubTitle": "Emetti nuova risorsa o aggiungi risorse ricevute",
+    "createAssets": "Crea beni",
     "issueNew": "Emetti nuovo",
     "myAssets": "I tuoi beni",
     "issue": "Emetti",
@@ -259,7 +260,7 @@
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",
-    "sendSuccessSubTitle": "La transazione è stata eseguita correttamente.",
+    "sendSuccessSubTitle": "La transazione è stata trasmessa con successo",
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "invalidRGBInvoiceAddress": "Fattura RGB non valida",
     "sentSuccessfully": "Inviato con successo",
@@ -360,7 +361,7 @@
     "medium": "Medio -",
     "high": "Alto -",
     "success": "Successo!",
-    "operationSuccess": "Operazione riuscita!",
+    "operationSuccess": "L'asset è stato trasmesso con successo",
     "operationSuccessSubTitle": "Le tue modifiche sono state salvate.",
     "noRGBUTXOsTitle": "Nessun UTXO RGB trovato",
     "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB.",
@@ -452,6 +453,7 @@
     "invoice": "Fattura",
     "assetId": "ID Asset",
     "amount": "Importo",
-    "paymentHash": "Hash di Pagamento"
+    "paymentHash": "Hash di Pagamento",
+    "lightningSendTxnSubtitle": "La transazione è stata trasmessa con successo"
   }
 }

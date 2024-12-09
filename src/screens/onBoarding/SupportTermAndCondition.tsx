@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, wp } from 'src/constants/responsive';
@@ -13,8 +14,10 @@ import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import TermAndConditionView from './components/TermAndConditionView';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
-import Buttons from 'src/components/Buttons';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
+import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -23,6 +26,7 @@ import NodeConnectingPopupContainer from './components/NodeConnectingPopupContai
 import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppType from 'src/models/enums/AppType';
+import { Keys } from 'src/storage';
 
 function SupportTermAndCondition() {
   const navigation = useNavigation();
@@ -30,6 +34,7 @@ function SupportTermAndCondition() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const [visible, setVisible] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
@@ -97,7 +102,7 @@ function SupportTermAndCondition() {
           <AppTouchable
             onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}
             style={styles.checkIconWrapper}>
-            {checkedTermsCondition ? <CheckIcon /> : <UnCheckIcon />}
+            {checkedTermsCondition ? isThemeDark? <CheckIcon /> : <CheckIconLight/> : isThemeDark? <UnCheckIcon /> : <UnCheckIconLight/>}
           </AppTouchable>
           <View style={styles.termConditionWrapper1}>
             <Text style={styles.termConditionText}>

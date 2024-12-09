@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -14,7 +15,9 @@ import SupportIcon from 'src/assets/images/supportIcon.svg';
 import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
 import { hp, wp } from 'src/constants/responsive';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
@@ -24,7 +27,6 @@ import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
 import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 
 function SelectWallet() {
@@ -89,7 +91,7 @@ function SelectWallet() {
             <AppTouchable
               style={styles.checkIconWrapper}
               onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}>
-              {checkedTermsCondition ? <CheckIcon /> : <UnCheckIcon />}
+              {checkedTermsCondition ? isThemeDark? <CheckIcon /> : <CheckIconLight/> : isThemeDark? <UnCheckIcon /> : <UnCheckIconLight/>}
             </AppTouchable>
             <View style={styles.termConditionWrapper1}>
               <Text style={styles.termConditionText}>

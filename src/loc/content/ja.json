@@ -73,7 +73,7 @@
     "createPinFirst": "最初にPINを作成してください",
     "invalidPin": "無効なPIN",
     "enterYourPin": "パスコードを入力してください",
-    "recoverRGBState": "クラウドからビットコインで裏打ちされた資産の状態を復元しますか？",
+    "recoverRGBState": "バックアップが見つかりませんでした。新しいオンチェーンウォレットを作成しますか？",
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。"
   },
   "home": {
-    "addAssets": "アセットを追加",
-    "addAssetSubTitle": "新しいアセットを発行するかアセットを追加する",
+    "addAssets": "受信資産を追加",
+    "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
+    "createAssets": "資産を作成",
     "issueNew": "新規発行",
     "myAssets": "あなたの資産",
     "issue": "発行",
@@ -259,7 +260,7 @@
     "enterAmount": "金額を入力",
     "sendingToAddress": "アドレスに送信中",
     "sendSuccessTitle": "送信\n成功",
-    "sendSuccessSubTitle": "取引が正常に完了しました。",
+    "sendSuccessSubTitle": "取引が正常にブロードキャストされました",
     "invalidBtcAddress": "無効なビットコインアドレス",
     "invalidRGBInvoiceAddress": "無効なRGBインボイス",
     "sentSuccessfully": "正常に送信されました",
@@ -360,7 +361,7 @@
     "medium": "中 -",
     "high": "高 -",
     "success": "成功！",
-    "operationSuccess": "操作が成功しました！",
+    "operationSuccess": "資産が正常にブロードキャストされました",
     "operationSuccessSubTitle": "変更が保存されました。",
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
     "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。",
@@ -452,6 +453,7 @@
     "invoice": "請求書",
     "assetId": "アセットID",
     "amount": "金額",
-    "paymentHash": "支払いハッシュ"
+    "paymentHash": "支払いハッシュ",
+    "lightningSendTxnSubtitle": "取引が正常にブロードキャストされました"
   }
 }

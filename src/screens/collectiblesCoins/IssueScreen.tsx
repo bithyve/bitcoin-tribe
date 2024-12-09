@@ -11,6 +11,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -18,13 +19,13 @@ import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
@@ -112,7 +113,6 @@ function IssueScreen() {
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
-        setLoading(false);
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -147,7 +147,6 @@ function IssueScreen() {
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
-        setLoading(false);
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -328,7 +327,7 @@ function IssueScreen() {
       {totalReserveSatsAmount === 0 && (
         <View style={styles.reservedSatsWrapper}>
           <View style={styles.checkIconWrapper}>
-            <CheckIcon />
+            {isThemeDark? <CheckIcon /> : <CheckIconLight/>}
           </View>
           <View style={styles.reservedSatsWrapper1}>
             <AppText variant="body2" style={styles.reservedSatsText}>

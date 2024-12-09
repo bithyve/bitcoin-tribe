@@ -73,7 +73,7 @@
     "createPinFirst": "Create a Passcode first",
     "invalidPin": "Invalid Passcode",
     "enterYourPin": "Enter your Passcode",
-    "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
+    "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase",
@@ -128,8 +128,9 @@
     "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time."
   },
   "home": {
-    "addAssets": "Add Assets",
-    "addAssetSubTitle": "Issue new asset or add asset",
+    "addAssets": "Add Receive Assets",
+    "addAssetSubTitle": "Issue new asset or add receive assets",
+    "createAssets": "Create Assets",
     "issueNew": "Issue new",
     "myAssets": "Your Assets",
     "issue": "Issue",
@@ -259,7 +260,7 @@
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send\nSuccessful",
-    "sendSuccessSubTitle": "The transaction has been successfully.",
+    "sendSuccessSubTitle": "The transaction has been broadcasted successfully",
     "invalidBtcAddress": "Invalid Bitcoin address",
     "invalidRGBInvoiceAddress": "Invalid RGB invoice",
     "sentSuccessfully": "Sent successfully",
@@ -360,7 +361,7 @@
     "medium": "Medium -",
     "high": "High -",
     "success": "Success!",
-    "operationSuccess": "Operation successful!",
+    "operationSuccess": "The Asset has been broadcasted successfully",
     "operationSuccessSubTitle": "Your changes have been saved.",
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
     "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
@@ -452,6 +453,7 @@
     "invoice": "Invoice",
     "assetId": "Asset ID",
     "amount": "Amount",
-    "paymentHash": "Payment Hash"
+    "paymentHash": "Payment Hash",
+    "lightningSendTxnSubtitle": "The transaction has been broadcasted successfully"
   }
 }
