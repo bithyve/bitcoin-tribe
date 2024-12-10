@@ -136,7 +136,7 @@ function AppBackupMenu({ navigation }) {
       {app.primaryMnemonic !== '' && (
         <View style={styles.itemContainer}>
           <AppText style={styles.textStep} variant="body1">
-            Step 1
+            {settings.step1}
           </AppText>
           <SelectOption
             title={settings.walletBackup}
@@ -161,7 +161,7 @@ function AppBackupMenu({ navigation }) {
       {app.appType === AppType.ON_CHAIN && (
         <View style={styles.itemContainer}>
           <AppText style={styles.textStep} variant="body1">
-            Step 2
+            {settings.step2}
           </AppText>
           <SelectOption
             title={settings.rgbAssetsbackup}

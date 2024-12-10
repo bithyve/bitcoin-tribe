@@ -235,7 +235,9 @@
     "assetBackupInfo2": "Hacemos una copia de seguridad automáticamente en servidores de retransmisión seguros.",
     "assetBackupInfo3": "El archivo de respaldo está cifrado usando tu frase semilla.",
     "assetBackupInfo4": "Descarga y guarda el archivo de respaldo para mayor seguridad.",
-    "relayBackupTime": "Última copia de seguridad del relé: "
+    "relayBackupTime": "Última copia de seguridad del relé: ",
+    "step1": "Paso 1",
+    "step2": "Paso 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

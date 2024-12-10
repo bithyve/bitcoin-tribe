@@ -235,7 +235,9 @@
     "assetBackupInfo2": "Eseguiamo automaticamente il backup su server di relay sicuri.",
     "assetBackupInfo3": "Il file di backup è crittografato utilizzando la tua frase seed.",
     "assetBackupInfo4": "Scarica e conserva il file di backup per maggiore sicurezza.",
-    "relayBackupTime": "Ultimo backup del relay: "
+    "relayBackupTime": "Ultimo backup del relay: ",
+    "step1": "Passo 1",
+    "step2": "Passo 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

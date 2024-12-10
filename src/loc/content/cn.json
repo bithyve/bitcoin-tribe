@@ -235,7 +235,9 @@
     "assetBackupInfo2": "我们会在安全的中继服务器上自动备份。",
     "assetBackupInfo3": "备份文件使用您的种子短语进行加密。",
     "assetBackupInfo4": "下载并保存备份文件，以提高安全性。",
-    "relayBackupTime": "最后的中继备份时间："
+    "relayBackupTime": "最后的中继备份时间：",
+    "step1": "步骤 1",
+    "step2": "步骤 2"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
