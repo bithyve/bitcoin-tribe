@@ -160,6 +160,8 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
           };
+          console.log('newAPP', newAPP)
+
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -453,6 +455,7 @@ export class ApiHandler {
         accountNumber,
         purpose,
       );
+      console.log('create new (WalletUtilities)path', path)
       const derivationConfig: DerivationConfig = {
         path,
         purpose,
@@ -466,6 +469,7 @@ export class ApiHandler {
         primaryMnemonic,
         networkType: config.NETWORK_TYPE,
       });
+      console.log('create new wallet', wallet)
       if (wallet) {
         dbManager.createObject(RealmSchema.Wallet, wallet);
         return wallet;
@@ -675,7 +679,7 @@ export class ApiHandler {
 
   static async receiveTestSats() {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (ApiHandler.appType === AppType.NODE_CONNECT || ApiHandler.appType === AppType.SUPPORTED_RLN) {
         const response = await ApiHandler.getNodeOnchainBtcAddress();
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
