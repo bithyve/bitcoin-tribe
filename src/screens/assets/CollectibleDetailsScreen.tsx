@@ -44,10 +44,14 @@ const CollectibleDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const filteredPayments = (listPaymentshMutation.data?.payments || []).filter(
+    (payment) => payment.asset_id === assetId
+  );
+
   const transactionsData =
     appType === AppType.NODE_CONNECT
       ? Object.values({
-          ...listPaymentshMutation.data,
+          ...filteredPayments,
           ...collectible?.transactions,
         }).sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime() || 0;
