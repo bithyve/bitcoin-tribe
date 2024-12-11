@@ -229,7 +229,15 @@
     "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
-    "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。"
+    "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。",
+    "walletBackupInfo": "シードフレーズを書き留め、アプリの外で安全に保管してください。",
+    "assetBackupInfo1": "RGB資産と状態をバックアップすることは、後で復元するために必要です。",
+    "assetBackupInfo2": "安全なリレイサーバーに自動的にバックアップします。",
+    "assetBackupInfo3": "バックアップファイルはシードフレーズを使用して暗号化されています。",
+    "assetBackupInfo4": "バックアップファイルをダウンロードして、追加のセキュリティのために保管してください。",
+    "relayBackupTime": "最後のリレーバックアップ: ",
+    "step1": "ステップ 1",
+    "step2": "ステップ 2"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

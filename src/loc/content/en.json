@@ -229,7 +229,15 @@
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
     "cloudBackupLoadingTitle": "Cloud Backup",
-    "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon."
+    "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
+    "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",
+    "assetBackupInfo1": "Backup your RGB assets and states is necessary to restore them later.",
+    "assetBackupInfo2": "We automatically backup on secure relay servers.",
+    "assetBackupInfo3": "The backup file is encrypted using your seed phrase.",
+    "assetBackupInfo4": "Download and keep the backup file with you for additional security.",
+    "relayBackupTime": "Last relay backup: ",
+    "step1": "Step 1",
+    "step2": "Step 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
