@@ -12,20 +12,15 @@ import { TextInput as RNTextInput } from 'react-native';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import {
-  getPlaceholder,
-  getPlaceholderSuperScripted,
-} from 'src/utils/placeholderUtils';
+import { getPlaceholderSuperScripted } from 'src/utils/placeholderUtils';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import Toast from 'src/components/Toast';
 import RecoverRGBStatModal from './RecoverRGBStatModal';
-import CommonStyles from 'src/common/styles/CommonStyles';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
-import ModalLoading from 'src/components/ModalLoading';
 import { decrypt, hash512 } from 'src/utils/encryption';
 import config from 'src/utils/config';
 import * as SecureStore from 'src/storage/secure-store';
@@ -56,29 +51,26 @@ function EnterSeedContainer() {
   const [seedData, setSeedData] = useState<seedWordItem[]>();
   const [suggestedWords, setSuggestedWords] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [visibleLoader, setVisibleLoader] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
-  const [loading, setLoading] = useState(false);
-  const { isLoading, mutate, status, error } = useMutation(ApiHandler.restoreApp);
-  const restoreFromCloudMutation = useMutation(ApiHandler.restoreRgbFromCloud);
-
-  useEffect(() => {
-    setLoading(false);
-    if (restoreFromCloudMutation.isSuccess) {
-      setTimeout(() => {
-        onSuccess();
-      }, 400);
-    }
-  }, [restoreFromCloudMutation.isSuccess]);
+  const { mutateAsync, status, isLoading } = useMutation(ApiHandler.restoreApp);
+  const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
 
   useEffect(() => {
     if (status === 'success') {
-      setLoading(false);
-      onSuccess();
-    } else if(error) {
-      setLoading(false);
-      Toast(`${error}`, true);
+      setTimeout(() => {
+        onSuccess();
+      }, 200);
     }
-  }, [status, error]);
+  }, [status]);
+
+  useEffect(() => {
+    if (setupNewAppMutation.isSuccess) {
+      onSuccess();
+    } else if (setupNewAppMutation.isError) {
+      Toast(`${setupNewAppMutation.error}`, true);
+    }
+  }, [setupNewAppMutation.isError, setupNewAppMutation.isSuccess]);
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
@@ -144,14 +136,7 @@ function EnterSeedContainer() {
           activeOutlineColor={theme.colors.accent1}
           contextMenuHidden
           outlineStyle={styles.outlineStyle}
-          style={[
-            styles.input,
-            // {
-            //   borderColor:
-            //     item.invalid && item.name !== '' ? 'transparent' : 'red',
-            //   borderWidth: 1,
-            // },
-          ]}
+          style={[styles.input]}
           underlineStyle={styles.underlineStyle}
           contentStyle={[
             styles.textStyles,
@@ -161,7 +146,6 @@ function EnterSeedContainer() {
           value={item?.name}
           returnKeyType={isSeedFilled(12) ? 'done' : 'next'}
           autoCapitalize="none"
-          //             blurOnSubmit={false}
           keyboardType={'default'}
           onChangeText={text => {
             const data = [...seedData];
@@ -192,50 +176,79 @@ function EnterSeedContainer() {
             setSuggestedWords([]);
             Keyboard.dismiss();
           }}
-          //             testID={`input_seedWord${getPlaceholder(index)}`}
         />
       </View>
     );
   };
-  const onPressHandleNext = () => {
+
+  const onPressHandleNext = async () => {
     if (isSeedFilled(12)) {
-      setLoading(true);
       let seedWord = '';
       for (let i = 0; i < seedData.length; i++) {
         seedWord += `${seedData[i].name} `;
       }
       const mnemonic = seedWord.trim();
       if (bip39.validateMnemonic(mnemonic)) {
-        setTimeout(()=>{
-          mutate(mnemonic);
-        }, 500)
+        try {
+          await mutateAsync(mnemonic);
+        } catch (error) {
+          if (error instanceof Error && error.message === 'No backup found') {
+            setVisibleLoader(false);
+            setTimeout(() => {
+              setVisible(true);
+            }, 400);
+          } else {
+            setVisibleLoader(false);
+            Toast(`${error.message}`, true);
+          }
+        }
       } else {
-        setLoading(false);
+        setVisibleLoader(false);
         Toast(onBoarding.invalidMnemonic, true);
       }
     } else {
-      setLoading(false);
+      setVisibleLoader(false);
       Toast(onBoarding.enterRecoveryPhrase, true);
     }
   };
 
   const onSuccess = async () => {
+    setVisibleLoader(false);
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
-    setLoading(false);
     Toast(onBoarding.appRecoveryMsg);
     setTimeout(() => {
       navigation.replace(NavigationRoutes.APPSTACK);
     }, 400);
   };
 
+  const createNewOnchainApp = () => {
+    setVisibleLoader(true);
+    let seedWord = '';
+    for (let i = 0; i < seedData.length; i++) {
+      seedWord += `${seedData[i].name} `;
+    }
+    const mnemonic = seedWord.trim();
+    setTimeout(() => {
+      setupNewAppMutation.mutate({
+        appName: '',
+        pinMethod: PinMethod.DEFAULT,
+        passcode: '',
+        walletImage: '',
+        appType: AppType.ON_CHAIN,
+        rgbNodeConnectParams: null,
+        rgbNodeInfo: null,
+        mnemonic,
+      });
+    }, 200);
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      {/* <ModalLoading visible={isLoading} /> */}
       <View>
         <ResponsePopupContainer
-          visible={loading}
+          visible={visibleLoader}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
@@ -303,26 +316,24 @@ function EnterSeedContainer() {
       ) : null}
       <Buttons
         primaryOnPress={() => {
-          setLoading(true);
+          setVisibleLoader(true);
           setTimeout(() => {
             onPressHandleNext();
-          }, 0);
+          },500)
         }}
         primaryTitle={common.next}
-        primaryLoading={loading}
+        primaryLoading={isLoading || setupNewAppMutation.isLoading}
       />
       <RecoverRGBStatModal
         visible={visible}
         primaryOnPress={() => {
-          setLoading(true);
-          restoreFromCloudMutation.mutate();
           setVisible(false);
+          setTimeout(() => {
+            createNewOnchainApp();
+          }, 400);
         }}
         secondaryOnPress={() => {
           setVisible(false);
-          setTimeout(() => {
-            onSuccess();
-          }, 400);
         }}
       />
     </View>

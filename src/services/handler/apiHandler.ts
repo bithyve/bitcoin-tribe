@@ -122,7 +122,6 @@ export class ApiHandler {
       // Store the encrypted key securely
       await SecureStore.store(hash, encryptedKey);
     } else {
-      console.log('Encryption key already exists. Skipping encryption step.');
       // Decrypt the existing key to get AES_KEY
       AES_KEY = decrypt(hash, existingEncryptedKey);
     }
@@ -161,6 +160,7 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
           };
+
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -310,11 +310,7 @@ export class ApiHandler {
           fromUrl: backup.file,
           toFile: path,
         });
-        console.log('file', file.statusCode);
-
         const restore = await RGBServices.restore(mnemonic, path);
-        console.log('restore', restore);
-
         ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
@@ -323,13 +319,21 @@ export class ApiHandler {
           walletImage: '',
           mnemonic: mnemonic,
         });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
 
       } else {
         throw new Error(backup.error);
-
       }
     } catch (error) {
-      throw error;    }
+      if (error ! instanceof Error) {
+        throw error;
+      }
+    }
   }
 
   static async downloadFile ({ ...obj }: RNFS.DownloadFileOptionsT) {
@@ -672,7 +676,7 @@ export class ApiHandler {
 
   static async receiveTestSats() {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (ApiHandler.appType === AppType.NODE_CONNECT || ApiHandler.appType === AppType.SUPPORTED_RLN) {
         const response = await ApiHandler.getNodeOnchainBtcAddress();
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
@@ -725,7 +729,6 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        console.log('utxos', utxos)
         await ApiHandler.refreshRgbWallet();
         ApiHandler.refreshWallets({ wallets: wallet.toJSON() });
         if (utxos.created) {
@@ -798,7 +801,6 @@ export class ApiHandler {
   static async decodeLnInvoice({ invoice }: { invoice: string }) {
     try {
       const response = await ApiHandler.api.decodelninvoice({ invoice });
-      console.log('response', response);
       if (response.payment_hash) {
         return snakeCaseToCamelCaseCase(response);
       } else {
@@ -1031,7 +1033,6 @@ export class ApiHandler {
           metaData: response,
         });
       }
-      console.log(response);
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
@@ -1244,7 +1245,6 @@ export class ApiHandler {
         skip_sync: false,
       });
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
@@ -1494,7 +1494,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log('backup error', error)
     }
   }
 

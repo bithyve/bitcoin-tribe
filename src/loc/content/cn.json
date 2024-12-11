@@ -73,7 +73,7 @@
     "createPinFirst": "请先创建密码",
     "invalidPin": "无效的密码",
     "enterYourPin": "输入您的密码",
-    "recoverRGBState": "您是否想从云端恢复您的比特币支持的资产状态？",
+    "recoverRGBState": "未找到备份。您是否要继续创建新的链上钱包？",
     "appRecoveryMsg": "应用恢复成功。您已准备好！",
     "invalidMnemonic": "无效的助记词",
     "enterRecoveryPhrase": "请输入12词恢复短语",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "节点信息",
     "channelManagement": "渠道管理",
     "cloudBackupLoadingTitle": "云备份",
-    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。"
+    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。",
+    "walletBackupInfo": "请写下您的种子短语，并将其安全地保存在应用程序外部。",
+    "assetBackupInfo1": "备份您的RGB资产和状态，以便日后恢复。",
+    "assetBackupInfo2": "我们会在安全的中继服务器上自动备份。",
+    "assetBackupInfo3": "备份文件使用您的种子短语进行加密。",
+    "assetBackupInfo4": "下载并保存备份文件，以提高安全性。",
+    "relayBackupTime": "最后的中继备份时间：",
+    "step1": "步骤 1",
+    "step2": "步骤 2"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -260,7 +268,7 @@
     "enterAmount": "输入金额",
     "sendingToAddress": "发送至地址",
     "sendSuccessTitle": "发送\n成功",
-    "sendSuccessSubTitle": "交易已成功。",
+    "sendSuccessSubTitle": "交易已成功广播",
     "invalidBtcAddress": "无效的比特币地址",
     "invalidRGBInvoiceAddress": "无效的 RGB 发票",
     "sentSuccessfully": "发送成功",
@@ -361,7 +369,7 @@
     "medium": "中 -",
     "high": "高 -",
     "success": "成功！",
-    "operationSuccess": "操作成功！",
+    "operationSuccess": "资产已成功广播",
     "operationSuccessSubTitle": "您的更改已保存。",
     "noRGBUTXOsTitle": "未找到RGB UTXO",
     "noRGBUTXOSubTitle": "您当前没有任何RGB UTXO。",
@@ -453,6 +461,7 @@
     "invoice": "发票",
     "assetId": "资产ID",
     "amount": "金额",
-    "paymentHash": "支付哈希"
+    "paymentHash": "支付哈希",
+    "lightningSendTxnSubtitle": "交易已成功广播"
   }
 }

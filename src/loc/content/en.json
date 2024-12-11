@@ -73,7 +73,7 @@
     "createPinFirst": "Create a Passcode first",
     "invalidPin": "Invalid Passcode",
     "enterYourPin": "Enter your Passcode",
-    "recoverRGBState": "Would you like to recover your Bitcoin-backed asset state from the cloud?",
+    "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
     "cloudBackupLoadingTitle": "Cloud Backup",
-    "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon."
+    "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
+    "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",
+    "assetBackupInfo1": "Backup your RGB assets and states is necessary to restore them later.",
+    "assetBackupInfo2": "We automatically backup on secure relay servers.",
+    "assetBackupInfo3": "The backup file is encrypted using your seed phrase.",
+    "assetBackupInfo4": "Download and keep the backup file with you for additional security.",
+    "relayBackupTime": "Last relay backup: ",
+    "step1": "Step 1",
+    "step2": "Step 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -260,7 +268,7 @@
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send\nSuccessful",
-    "sendSuccessSubTitle": "The transaction has been successfully.",
+    "sendSuccessSubTitle": "The transaction has been broadcasted successfully",
     "invalidBtcAddress": "Invalid Bitcoin address",
     "invalidRGBInvoiceAddress": "Invalid RGB invoice",
     "sentSuccessfully": "Sent successfully",
@@ -361,7 +369,7 @@
     "medium": "Medium -",
     "high": "High -",
     "success": "Success!",
-    "operationSuccess": "Operation successful!",
+    "operationSuccess": "The Asset has been broadcasted successfully",
     "operationSuccessSubTitle": "Your changes have been saved.",
     "noRGBUTXOsTitle": "No RGB UTXOs Found",
     "noRGBUTXOSubTitle": "You currently don't have any RGB UTXOs.",
@@ -453,6 +461,7 @@
     "invoice": "Invoice",
     "assetId": "Asset ID",
     "amount": "Amount",
-    "paymentHash": "Payment Hash"
+    "paymentHash": "Payment Hash",
+    "lightningSendTxnSubtitle": "The transaction has been broadcasted successfully"
   }
 }

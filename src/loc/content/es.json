@@ -73,7 +73,7 @@
     "createPinFirst": "Primero crea un PIN",
     "invalidPin": "PIN no válido",
     "enterYourPin": "Introduce tu código de acceso",
-    "recoverRGBState": "¿Le gustaría recuperar el estado de sus activos respaldados por Bitcoin desde la nube?",
+    "recoverRGBState": "No se encontró una copia de seguridad. ¿Desea continuar creando una nueva billetera en cadena?",
     "appRecoveryMsg": "La recuperación de la aplicación fue exitosa. ¡Estás listo!",
     "invalidMnemonic": "Mnemónico no válido",
     "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "Información del Nodo",
     "channelManagement": "Gestión de canales",
     "cloudBackupLoadingTitle": "Copia de seguridad en la nube",
-    "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto."
+    "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto.",
+    "walletBackupInfo": "Escribe tu frase semilla y guárdala de forma segura fuera de la aplicación.",
+    "assetBackupInfo1": "Realizar una copia de seguridad de tus activos y estados RGB es necesario para restaurarlos más tarde.",
+    "assetBackupInfo2": "Hacemos una copia de seguridad automáticamente en servidores de retransmisión seguros.",
+    "assetBackupInfo3": "El archivo de respaldo está cifrado usando tu frase semilla.",
+    "assetBackupInfo4": "Descarga y guarda el archivo de respaldo para mayor seguridad.",
+    "relayBackupTime": "Última copia de seguridad del relé: ",
+    "step1": "Paso 1",
+    "step2": "Paso 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -260,7 +268,7 @@
     "enterAmount": "Introduce la cantidad",
     "sendingToAddress": "Enviando a la dirección",
     "sendSuccessTitle": "Enviar\nexitosa",
-    "sendSuccessSubTitle": "La transacción ha sido exitosa.",
+    "sendSuccessSubTitle": "La transacción se ha transmitido con éxito",
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "invalidRGBInvoiceAddress": "Factura RGB no válida",
     "sentSuccessfully": "Enviado exitosamente",
@@ -361,7 +369,7 @@
     "medium": "Medio -",
     "high": "Alto -",
     "success": "¡Éxito!",
-    "operationSuccess": "¡Operación exitosa!",
+    "operationSuccess": "El activo se ha transmitido con éxito",
     "operationSuccessSubTitle": "Tus cambios se han guardado.",
     "noRGBUTXOsTitle": "No se encontraron UTXO RGB",
     "noRGBUTXOSubTitle": "Actualmente no tienes ningún UTXO RGB.",
@@ -453,6 +461,7 @@
     "invoice": "Factura",
     "assetId": "ID del activo",
     "amount": "Monto",
-    "paymentHash": "Hash de pago"
+    "paymentHash": "Hash de pago",
+    "lightningSendTxnSubtitle": "La transacción se ha transmitido con éxito"
   }
 }

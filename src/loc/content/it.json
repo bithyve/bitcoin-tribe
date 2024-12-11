@@ -73,7 +73,7 @@
     "createPinFirst": "Crea prima un PIN",
     "invalidPin": "PIN non valido",
     "enterYourPin": "Inserisci il tuo codice di accesso",
-    "recoverRGBState": "Vuoi recuperare lo stato delle tue risorse supportate da Bitcoin dal cloud?",
+    "recoverRGBState": "Nessun backup trovato. Vuoi procedere con la creazione di un nuovo wallet on-chain?",
     "appRecoveryMsg": "Recupero dell'app riuscito. Sei tutto pronto!",
     "invalidMnemonic": "Mnemonic non valido",
     "enterRecoveryPhrase": "Si prega di inserire la frase di recupero di 12 parole",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
     "cloudBackupLoadingTitle": "Backup su cloud",
-    "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve."
+    "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
+    "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
+    "assetBackupInfo1": "Eseguire il backup dei tuoi asset RGB e stati è necessario per ripristinarli successivamente.",
+    "assetBackupInfo2": "Eseguiamo automaticamente il backup su server di relay sicuri.",
+    "assetBackupInfo3": "Il file di backup è crittografato utilizzando la tua frase seed.",
+    "assetBackupInfo4": "Scarica e conserva il file di backup per maggiore sicurezza.",
+    "relayBackupTime": "Ultimo backup del relay: ",
+    "step1": "Passo 1",
+    "step2": "Passo 2"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -260,7 +268,7 @@
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",
-    "sendSuccessSubTitle": "La transazione è stata eseguita correttamente.",
+    "sendSuccessSubTitle": "La transazione è stata trasmessa con successo",
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "invalidRGBInvoiceAddress": "Fattura RGB non valida",
     "sentSuccessfully": "Inviato con successo",
@@ -361,7 +369,7 @@
     "medium": "Medio -",
     "high": "Alto -",
     "success": "Successo!",
-    "operationSuccess": "Operazione riuscita!",
+    "operationSuccess": "L'asset è stato trasmesso con successo",
     "operationSuccessSubTitle": "Le tue modifiche sono state salvate.",
     "noRGBUTXOsTitle": "Nessun UTXO RGB trovato",
     "noRGBUTXOSubTitle": "Attualmente non hai alcun UTXO RGB.",
@@ -453,6 +461,7 @@
     "invoice": "Fattura",
     "assetId": "ID Asset",
     "amount": "Importo",
-    "paymentHash": "Hash di Pagamento"
+    "paymentHash": "Hash di Pagamento",
+    "lightningSendTxnSubtitle": "La transazione è stata trasmessa con successo"
   }
 }

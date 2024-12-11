@@ -73,7 +73,7 @@
     "createPinFirst": "पहले पिन बनाएँ",
     "invalidPin": "अमान्य पिन",
     "enterYourPin": "अपना पासकोड दर्ज करें",
-    "recoverRGBState": "क्या आप क्लाउड से अपने बिटकॉइन-समर्थित संपत्ति राज्य को पुनर्प्राप्त करना चाहते हैं?",
+    "recoverRGBState": "कोई बैकअप नहीं मिला। क्या आप नई ऑन-चेन वॉलेट बनाने के लिए आगे बढ़ना चाहते हैं?",
     "appRecoveryMsg": "ऐप पुनर्प्राप्ति सफल। आप सभी सेट हैं!",
     "invalidMnemonic": "अमान्य मोनिक",
     "enterRecoveryPhrase": "कृपया 12-शब्द रिकवरी वाक्यांश दर्ज करें",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "नोड जानकारी",
     "channelManagement": "चैनल प्रबंधन",
     "cloudBackupLoadingTitle": "क्लाउड बैकअप",
-    "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।"
+    "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।",
+    "walletBackupInfo": "अपना सीड वाक्यांश लिखें और इसे ऐप के बाहर सुरक्षित रूप से स्टोर करें।",
+    "assetBackupInfo1": "अपने RGB एसेट्स और स्टेट्स का बैकअप लेना उन्हें बाद में पुनर्स्थापित करने के लिए आवश्यक है।",
+    "assetBackupInfo2": "हम सुरक्षित रिले सर्वर पर स्वचालित रूप से बैकअप करते हैं।",
+    "assetBackupInfo3": "बैकअप फ़ाइल को आपके सीड वाक्यांश का उपयोग करके एन्क्रिप्ट किया जाता है।",
+    "assetBackupInfo4": "बैकअप फ़ाइल डाउनलोड करें और अतिरिक्त सुरक्षा के लिए इसे अपने पास रखें।",
+    "relayBackupTime": "अंतिम रिले बैकअप: ",
+    "step1": "चरण 1",
+    "step2": "चरण 2"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -260,7 +268,7 @@
     "enterAmount": "राशि दर्ज करें",
     "sendingToAddress": "पते पर भेज रहा है",
     "sendSuccessTitle": "भेजें\nसफल",
-    "sendSuccessSubTitle": "लेनदेन सफलतापूर्वक हो गया है।",
+    "sendSuccessSubTitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है",
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
     "invalidRGBInvoiceAddress": "अमान्य RGB इनवॉइस",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
@@ -361,7 +369,7 @@
     "medium": "मध्यम -",
     "high": "उच्च -",
     "success": "सफलता!",
-    "operationSuccess": "ऑपरेशन सफल!",
+    "operationSuccess": "संपत्ति को सफलतापूर्वक प्रसारित कर दिया गया है",
     "operationSuccessSubTitle": "आपके परिवर्तन सहेजे गए हैं।",
     "noRGBUTXOsTitle": "कोई आरजीबी यूटीएक्सओ नहीं मिला",
     "noRGBUTXOSubTitle": "आपके पास वर्तमान में कोई आरजीबी यूटीएक्सओ नहीं है।",
@@ -453,6 +461,7 @@
     "invoice": "इनवॉइस",
     "assetId": "संपत्ति आईडी",
     "amount": "राशि",
-    "paymentHash": "भुगतान हैश"
+    "paymentHash": "भुगतान हैश",
+    "lightningSendTxnSubtitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है"
   }
 }

@@ -73,7 +73,7 @@
     "createPinFirst": "最初にPINを作成してください",
     "invalidPin": "無効なPIN",
     "enterYourPin": "パスコードを入力してください",
-    "recoverRGBState": "クラウドからビットコインで裏打ちされた資産の状態を復元しますか？",
+    "recoverRGBState": "バックアップが見つかりませんでした。新しいオンチェーンウォレットを作成しますか？",
     "appRecoveryMsg": "アプリの復元が成功しました。準備完了です！",
     "invalidMnemonic": "無効なニーモニック",
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
@@ -229,7 +229,15 @@
     "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
-    "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。"
+    "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。",
+    "walletBackupInfo": "シードフレーズを書き留め、アプリの外で安全に保管してください。",
+    "assetBackupInfo1": "RGB資産と状態をバックアップすることは、後で復元するために必要です。",
+    "assetBackupInfo2": "安全なリレイサーバーに自動的にバックアップします。",
+    "assetBackupInfo3": "バックアップファイルはシードフレーズを使用して暗号化されています。",
+    "assetBackupInfo4": "バックアップファイルをダウンロードして、追加のセキュリティのために保管してください。",
+    "relayBackupTime": "最後のリレーバックアップ: ",
+    "step1": "ステップ 1",
+    "step2": "ステップ 2"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -260,7 +268,7 @@
     "enterAmount": "金額を入力",
     "sendingToAddress": "アドレスに送信中",
     "sendSuccessTitle": "送信\n成功",
-    "sendSuccessSubTitle": "取引が正常に完了しました。",
+    "sendSuccessSubTitle": "取引が正常にブロードキャストされました",
     "invalidBtcAddress": "無効なビットコインアドレス",
     "invalidRGBInvoiceAddress": "無効なRGBインボイス",
     "sentSuccessfully": "正常に送信されました",
@@ -361,7 +369,7 @@
     "medium": "中 -",
     "high": "高 -",
     "success": "成功！",
-    "operationSuccess": "操作が成功しました！",
+    "operationSuccess": "資産が正常にブロードキャストされました",
     "operationSuccessSubTitle": "変更が保存されました。",
     "noRGBUTXOsTitle": "RGB UTXOが見つかりません",
     "noRGBUTXOSubTitle": "現在、RGB UTXOはありません。",
@@ -453,6 +461,7 @@
     "invoice": "請求書",
     "assetId": "アセットID",
     "amount": "金額",
-    "paymentHash": "支払いハッシュ"
+    "paymentHash": "支払いハッシュ",
+    "lightningSendTxnSubtitle": "取引が正常にブロードキャストされました"
   }
 }
