@@ -160,7 +160,6 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
           };
-          console.log('newAPP', newAPP)
 
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -455,7 +454,6 @@ export class ApiHandler {
         accountNumber,
         purpose,
       );
-      console.log('create new (WalletUtilities)path', path)
       const derivationConfig: DerivationConfig = {
         path,
         purpose,
@@ -469,7 +467,6 @@ export class ApiHandler {
         primaryMnemonic,
         networkType: config.NETWORK_TYPE,
       });
-      console.log('create new wallet', wallet)
       if (wallet) {
         dbManager.createObject(RealmSchema.Wallet, wallet);
         return wallet;
@@ -732,7 +729,6 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        console.log('utxos', utxos)
         await ApiHandler.refreshRgbWallet();
         ApiHandler.refreshWallets({ wallets: wallet.toJSON() });
         if (utxos.created) {
@@ -805,7 +801,6 @@ export class ApiHandler {
   static async decodeLnInvoice({ invoice }: { invoice: string }) {
     try {
       const response = await ApiHandler.api.decodelninvoice({ invoice });
-      console.log('response', response);
       if (response.payment_hash) {
         return snakeCaseToCamelCaseCase(response);
       } else {
@@ -1038,7 +1033,6 @@ export class ApiHandler {
           metaData: response,
         });
       }
-      console.log(response);
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
@@ -1251,7 +1245,6 @@ export class ApiHandler {
         skip_sync: false,
       });
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
