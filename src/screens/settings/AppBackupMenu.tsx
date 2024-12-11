@@ -2,7 +2,11 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
-import { useMMKVBoolean, useMMKVNumber, useMMKVString } from 'react-native-mmkv';
+import {
+  useMMKVBoolean,
+  useMMKVNumber,
+  useMMKVString,
+} from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import Share from 'react-native-share';
 import AppHeader from 'src/components/AppHeader';
@@ -60,11 +64,15 @@ function AppBackupMenu({ navigation }) {
           if (shareResult.success) {
             setAssetBackup(true);
           }
-          const response = await Relay.rgbFileBackup(Platform.select({
-            android: `file://${backup.file}`,
-            ios: backup.file,
-          }), app.id, '');
-          if(response.uploaded) {
+          const response = await Relay.rgbFileBackup(
+            Platform.select({
+              android: `file://${backup.file}`,
+              ios: backup.file,
+            }),
+            app.id,
+            '',
+          );
+          if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
           }
         }, 1000);
@@ -128,7 +136,7 @@ function AppBackupMenu({ navigation }) {
       {app.primaryMnemonic !== '' && (
         <View style={styles.itemContainer}>
           <AppText style={styles.textStep} variant="body1">
-            Step 1
+            {settings.step1}
           </AppText>
           <SelectOption
             title={settings.walletBackup}
@@ -142,10 +150,10 @@ function AppBackupMenu({ navigation }) {
                     viewOnly: false,
                   })
             }
-            backup={false}
+            backup={backup}
           />
           <AppText variant="caption" style={styles.textSubtext}>
-            Write down your seed phrase and store it securely outside the app.
+            {settings.walletBackupInfo}
           </AppText>
         </View>
       )}
@@ -153,7 +161,7 @@ function AppBackupMenu({ navigation }) {
       {app.appType === AppType.ON_CHAIN && (
         <View style={styles.itemContainer}>
           <AppText style={styles.textStep} variant="body1">
-            Step 2
+            {settings.step2}
           </AppText>
           <SelectOption
             title={settings.rgbAssetsbackup}
@@ -161,19 +169,21 @@ function AppBackupMenu({ navigation }) {
             onPress={rgbAssetsbackup}
             backup={assetBackup}
           />
-          <AppText style={styles.textStepTime}>{`Last relay backup: ${moment(lastRelayBackup).format('DD MMM YY  •  hh:mm a')}`}</AppText>
+          <AppText style={styles.textStepTime}>
+            {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
+            'DD MMM YY  •  hh:mm a',
+          )}`}</AppText>
           <AppText variant="caption" style={styles.textSubtext}>
-            Backup your RGB assets and states is necessary to restore them
-            later.
+            {settings.assetBackupInfo1}
           </AppText>
           <AppText variant="caption" style={styles.textSubtext}>
-            We automatically backup on secure relay servers.
+            {settings.assetBackupInfo2}
           </AppText>
           <AppText variant="caption" style={styles.textSubtext}>
-            The backup file is encrypted using your seed phrase.
+            {settings.assetBackupInfo3}
           </AppText>
           <AppText variant="caption" style={styles.textSubtext}>
-            Download and keep the backup file with you for additional security.
+            {settings.assetBackupInfo4}
           </AppText>
         </View>
       )}
@@ -211,7 +221,7 @@ const getStyles = (theme: AppTheme) =>
     textStep: {
       color: theme.colors.accent4,
       textAlign: 'left',
-      lineHeight: 20,
+      lineHeight: 30,
       marginLeft: hp(10),
     },
     textSubtext: {

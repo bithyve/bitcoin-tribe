@@ -229,7 +229,15 @@
     "viewNodeInfo": "节点信息",
     "channelManagement": "渠道管理",
     "cloudBackupLoadingTitle": "云备份",
-    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。"
+    "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。",
+    "walletBackupInfo": "请写下您的种子短语，并将其安全地保存在应用程序外部。",
+    "assetBackupInfo1": "备份您的RGB资产和状态，以便日后恢复。",
+    "assetBackupInfo2": "我们会在安全的中继服务器上自动备份。",
+    "assetBackupInfo3": "备份文件使用您的种子短语进行加密。",
+    "assetBackupInfo4": "下载并保存备份文件，以提高安全性。",
+    "relayBackupTime": "最后的中继备份时间：",
+    "step1": "步骤 1",
+    "step2": "步骤 2"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

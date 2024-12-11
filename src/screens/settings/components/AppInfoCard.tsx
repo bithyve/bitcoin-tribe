@@ -5,8 +5,8 @@ import { View, StyleSheet } from 'react-native';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
-import IconArrow from 'src/assets/images/icon_arrowr2.svg';
-import IconSettingArrowLight from 'src/assets/images/icon_arrowr2light.svg';
+import IconArrow from 'src/assets/images/icon_right_arrow.svg';
+import IconSettingArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -89,7 +89,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper2: {
       flexDirection: 'row',
-      width: '92%',
+      width: '88%',
       alignItems: 'center',
     },
     valueText: {
