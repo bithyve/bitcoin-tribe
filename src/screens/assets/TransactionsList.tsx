@@ -30,7 +30,7 @@ function TransactionsList({
   wallet,
   coin,
   assetId = '',
-  scrollY
+  scrollY,
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -67,10 +67,10 @@ function TransactionsList({
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
-       onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        { useNativeDriver: false },
-      )}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false },
+        )}
         style={styles.container2}
         data={transactions}
         refreshControl={

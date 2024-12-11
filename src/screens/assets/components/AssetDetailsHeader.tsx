@@ -3,10 +3,11 @@ import { View, StyleSheet, Animated, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Identicon from 'react-native-identicon';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import GradientView from 'src/components/GradientView';
@@ -16,7 +17,7 @@ import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
-import Identicon from 'react-native-identicon';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -49,7 +50,6 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     smallHeaderOpacity,
     largeHeaderHeight,
   } = props;
-
   return (
     <>
       <Animated.View
@@ -58,74 +58,80 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
       </Animated.View>
       <Animated.View
         style={[styles.largeHeader, { height: largeHeaderHeight }]}>
-        <AppHeader title={assetTicker} />
-        <GradientView
-          style={styles.largeHeaderContentWrapper}
-          colors={[
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
-          ]}>
-          <View style={styles.assetImageWrapper}>
-            {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
-              <Image
-                source={{
-                  uri: Platform.select({
-                    android: `file://${assetImage}`,
-                    ios: assetImage,
-                  }),
-                }}
-                style={styles.imageStyle}
-              />
-            ) : (
-              <View style={styles.identiconWrapper}>
-                <View style={styles.identiconWrapper2}>
-                  <Identicon
-                    value={asset.assetId}
-                    style={styles.identiconView}
-                    size={windowHeight > 670 ? 110 : 90}
-                  />
+        <AppHeader
+          title={assetTicker}
+          rightIcon={<InfoIcon />}
+          onSettingsPress={onPressSetting}
+        />
+        <View style={styles.largeHeaderContainer}>
+          <GradientView
+            style={styles.largeHeaderContentWrapper}
+            colors={[
+              theme.colors.cardGradient2,
+              theme.colors.cardGradient2,
+              theme.colors.cardGradient2,
+            ]}>
+            <View style={styles.assetImageWrapper}>
+              {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
+                <Image
+                  source={{
+                    uri: Platform.select({
+                      android: `file://${assetImage}`,
+                      ios: assetImage,
+                    }),
+                  }}
+                  style={styles.imageStyle}
+                />
+              ) : (
+                <View style={styles.identiconWrapper}>
+                  <View style={styles.identiconWrapper2}>
+                    <Identicon
+                      value={asset.assetId}
+                      style={styles.identiconView}
+                      size={60}
+                    />
+                  </View>
+                </View>
+              )}
+            </View>
+            <AppText variant="body2" style={styles.assetNameText}>
+              {assetName}
+            </AppText>
+            <View style={styles.balanceContainer}>
+              <View style={styles.totalBalanceWrapper}>
+                <AppText variant="heading2" style={styles.totalBalance}>
+                  {numberWithCommas(
+                    asset.balance.spendable + asset.balance?.offchainOutbound,
+                  )}
+                </AppText>
+                <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  {home.totalBalance}
+                </AppText>
+              </View>
+              <View style={styles.modeBalanceWrapper}>
+                <View style={styles.balanceWrapper}>
+                  <IconBTC />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.0000
+                  </AppText>
+                </View>
+                <View style={styles.balanceWrapper}>
+                  <IconLightning />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.0000
+                  </AppText>
                 </View>
               </View>
-            )}
-          </View>
-          <AppText variant="body2" style={styles.assetNameText}>
-            {assetName}
-          </AppText>
-          <View style={styles.balanceContainer}>
-            <View style={styles.totalBalanceWrapper}>
-              <AppText variant="heading2" style={styles.totalBalance}>
-                {numberWithCommas(
-                  asset.balance.spendable + asset.balance?.offchainOutbound,
-                )}
-              </AppText>
-              <AppText variant="body1" style={styles.totalBalanceLabel}>
-                {home.totalBalance}
-              </AppText>
             </View>
-            <View style={styles.modeBalanceWrapper}>
-              <View style={styles.balanceWrapper}>
-                <IconBTC />
-                <AppText variant="heading3" style={styles.balanceText}>
-                  0.7000
-                </AppText>
-              </View>
-              <View style={styles.balanceWrapper}>
-                <IconLightning />
-                <AppText variant="heading3" style={styles.balanceText}>
-                  0.1345
-                </AppText>
-              </View>
+            <View style={styles.transCtaWrapper}>
+              <TransactionButtons
+                onPressSend={onPressSend}
+                onPressRecieve={onPressRecieve}
+                onPressBuy={onPressBuy}
+              />
             </View>
-          </View>
-          <View style={styles.transCtaWrapper}>
-            <TransactionButtons
-              onPressSend={onPressSend}
-              onPressRecieve={onPressRecieve}
-              onPressBuy={onPressBuy}
-            />
-          </View>
-        </GradientView>
+          </GradientView>
+        </View>
       </Animated.View>
     </>
   );
@@ -146,15 +152,19 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
       overflow: 'hidden',
     },
-    largeHeaderContentWrapper: {
-      paddingHorizontal: hp(10),
-      paddingVertical: hp(20),
+    largeHeaderContainer: {
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
+      borderRadius: hp(20),
+      padding: hp(5),
+    },
+    largeHeaderContentWrapper: {
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(15),
       width: '100%',
       borderRadius: hp(20),
       overflow: 'visible',
-      position: 'relative'
+      position: 'relative',
     },
     totalBalance: {
       color: theme.colors.headingColor,
