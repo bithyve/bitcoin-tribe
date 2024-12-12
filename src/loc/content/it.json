@@ -193,7 +193,7 @@
     "appInfoScreenSubTitle": "Dettagli dell'app Tribe RGB e cronologia delle versioni",
     "walletBackup": "Backup del portafoglio",
     "rgbAssetsbackup": "Backup delle risorse",
-    "appBackupMenuSubTitle": "Per proteggere i tuoi dati sono necessari sia il backup del portafoglio che delle risorse.",
+    "appBackupMenuSubTitle": "Il backup del portafoglio e il backup degli asset sono obbligatori. Completa il Passaggio 1 prima di procedere al Passaggio 2.",
     "nodeAppBackupMenuSubTitle": "È necessario il backup degli asset per proteggere i tuoi dati.",
     "walletBackupHistory": "Cronologia del backup del portafoglio",
     "walletBackupHistorySubTitle": "Proteggi il tuo passato, salvaguarda il tuo futuro.",
