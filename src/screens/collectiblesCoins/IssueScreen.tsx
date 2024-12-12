@@ -43,6 +43,8 @@ import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
+const MAX_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
+
 function IssueScreen() {
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
@@ -200,6 +202,19 @@ function IssueScreen() {
     setImage('');
   };
 
+  const handleTotalSupplyChange = (text) => {
+    try {
+      const sanitizedText = text.replace(/[^0-9]/g, '');
+      if (sanitizedText && BigInt(sanitizedText) <= MAX_VALUE) {
+        setTotalSupplyAmt(sanitizedText);
+      } else if (!sanitizedText) {
+        setTotalSupplyAmt('');
+      }
+    } catch {
+      setTotalSupplyAmt('');
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
@@ -261,7 +276,7 @@ function IssueScreen() {
 
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
@@ -293,7 +308,7 @@ function IssueScreen() {
             />
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={(text) => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
