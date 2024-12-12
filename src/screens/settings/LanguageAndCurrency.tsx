@@ -57,7 +57,7 @@ function LanguageAndCurrency() {
       setCurrencyMode(CurrencyKind.SATS);
     }
   };
-
+console.log('selectedLanguage',selectedLanguage)
   return (
     <ScreenContainer>
       <AppHeader
@@ -90,8 +90,9 @@ function LanguageAndCurrency() {
             selectedLanguage &&
             selectedLanguage.displayTitle +
               ' ' +
-              selectedLanguage.iso.toUpperCase()
+              selectedLanguage.country_code
           }
+          flag={selectedLanguage.flag}
           onPress={() => setLangDropdown(!langDropdown)}
         />
       </View>
@@ -118,8 +119,9 @@ function LanguageAndCurrency() {
             selectedLanguage &&
             selectedLanguage.displayTitle +
               ' ' +
-              selectedLanguage.iso.toUpperCase()
+              selectedLanguage.country_code
           }
+          flag={selectedLanguage.flag}
         />
       )}
       {currencyDropDown && (
