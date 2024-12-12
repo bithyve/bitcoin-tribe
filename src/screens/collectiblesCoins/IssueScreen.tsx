@@ -109,7 +109,7 @@ function IssueScreen() {
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
-        // refreshRgbWalletMutation.mutate();
+        refreshRgbWalletMutation.mutate();
         navigation.dispatch(popAction);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

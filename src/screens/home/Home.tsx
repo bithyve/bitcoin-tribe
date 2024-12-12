@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation, UseMutationResult } from 'react-query';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
@@ -80,13 +80,8 @@ function HomeScreen() {
     wallet?.specs.balances.unconfirmed,
   ]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      refreshRgbWallet.mutate();
-    }, [])
-  );
-
   useEffect(() => {
+    refreshRgbWallet.mutate();
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({
