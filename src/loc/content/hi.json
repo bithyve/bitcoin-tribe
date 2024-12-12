@@ -195,6 +195,7 @@
     "rgbAssetsbackup": "संपत्ति बैकअप",
     "appBackupMenuSubTitle": "वॉलेट बैकअप और एसेट बैकअप अनिवार्य हैं। चरण 2 पर जाने से पहले चरण 1 पूरा करें।",
     "nodeAppBackupMenuSubTitle": "आपके डेटा की सुरक्षा के लिए एसेट बैकअप आवश्यक है।",
+    "appBackupStepCheck": "चरण 2 पर जाने से पहले चरण 1 पूरा करें।",
     "walletBackupHistory": "वॉलेट बैकअप इतिहास",
     "walletBackupHistorySubTitle": "अपने अतीत को सुरक्षित करें, अपने भविष्य की रक्षा करें।",
     "SEED_BACKUP_CREATED": "सीड बैकअप बनाया गया है",

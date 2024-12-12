@@ -195,6 +195,7 @@
     "rgbAssetsbackup": "Copia de seguridad de activos",
     "appBackupMenuSubTitle": "La copia de seguridad de la billetera y de los activos es obligatoria. Complete el Paso 1 antes de continuar con el Paso 2.",
     "nodeAppBackupMenuSubTitle": "Se requiere una copia de seguridad de los activos para proteger sus datos.",
+    "appBackupStepCheck": "Complete el Paso 1 antes de continuar con el Paso 2.",
     "walletBackupHistory": "Historial de respaldos de la billetera",
     "walletBackupHistorySubTitle": "Asegura tu pasado, protege tu futuro.",
     "SEED_BACKUP_CREATED": "Respaldo de semilla creado",

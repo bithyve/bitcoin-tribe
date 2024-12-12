@@ -106,7 +106,9 @@ function AppBackupMenu({ navigation }) {
 
   const subtitle = useMemo(() => {
     if (backup && !assetBackup) {
-      return app.appType === AppType.ON_CHAIN ? settings.walletBackupDone : settings.nodeWalletBackupDone;
+      return app.appType === AppType.ON_CHAIN
+        ? settings.walletBackupDone
+        : settings.nodeWalletBackupDone;
     } else if (assetBackup && !backup) {
       return (
         `${Platform.select({
@@ -167,18 +169,18 @@ function AppBackupMenu({ navigation }) {
           <SelectOption
             title={settings.rgbAssetsbackup}
             subTitle={''}
-            onPress={()=> {
-              !backup ? 
-              Toast('Complete Step 1 before proceeding to Step 2.', true)
-              :
-              rgbAssetsbackup()
+            onPress={() => {
+              !backup
+                ? Toast(settings.appBackupStepCheck, true)
+                : rgbAssetsbackup();
             }}
             backup={assetBackup}
           />
           <AppText style={styles.textStepTime}>
             {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm a',
-          )}`}</AppText>
+              'DD MMM YY  •  hh:mm a',
+            )}`}
+          </AppText>
           <AppText variant="caption" style={styles.textSubtext}>
             {settings.assetBackupInfo1}
           </AppText>

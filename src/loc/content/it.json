@@ -195,6 +195,7 @@
     "rgbAssetsbackup": "Backup delle risorse",
     "appBackupMenuSubTitle": "Il backup del portafoglio e il backup degli asset sono obbligatori. Completa il Passaggio 1 prima di procedere al Passaggio 2.",
     "nodeAppBackupMenuSubTitle": "È necessario il backup degli asset per proteggere i tuoi dati.",
+    "appBackupStepCheck": "Completa il Passaggio 1 prima di procedere al Passaggio 2.",
     "walletBackupHistory": "Cronologia del backup del portafoglio",
     "walletBackupHistorySubTitle": "Proteggi il tuo passato, salvaguarda il tuo futuro.",
     "SEED_BACKUP_CREATED": "Il backup del seme è stato creato",

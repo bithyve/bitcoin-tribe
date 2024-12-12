@@ -195,6 +195,7 @@
     "rgbAssetsbackup": "资产备份",
     "appBackupMenuSubTitle": "钱包备份和资产备份是必须的。在继续到步骤 2 之前完成步骤 1。",
     "nodeAppBackupMenuSubTitle": " 资产备份是保障您数据安全的必要措施。",
+    "appBackupStepCheck": "在继续到步骤 2 之前完成步骤 1。",
     "walletBackupHistory": "钱包备份历史",
     "walletBackupHistorySubTitle": "保护您的过去，保障您的未来。",
     "SEED_BACKUP_CREATED": "种子备份已创建",

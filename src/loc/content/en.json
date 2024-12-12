@@ -195,6 +195,7 @@
     "rgbAssetsbackup": "Asset backup",
     "appBackupMenuSubTitle": "Wallet Backup and Asset Backup are mandatory. Complete Step 1 before proceeding to Step 2.",
     "nodeAppBackupMenuSubTitle": "Wallet Backup is required. Please complete the backup to ensure your data is secure.",
+    "appBackupStepCheck": "Complete Step 1 before proceeding to Step 2.",
     "walletBackupHistory": "Wallet backup history",
     "walletBackupHistorySubTitle": "Secure Your Past, Safeguard Your Future.",
     "SEED_BACKUP_CREATED": "Seed backup is created",
