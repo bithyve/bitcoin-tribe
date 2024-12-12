@@ -57,7 +57,7 @@ function LanguageAndCurrency() {
       setCurrencyMode(CurrencyKind.SATS);
     }
   };
-console.log('selectedLanguage',selectedLanguage)
+
   return (
     <ScreenContainer>
       <AppHeader
