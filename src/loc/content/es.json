@@ -207,7 +207,7 @@
     "walletBackupDone": "¡Copia de seguridad completa! Guarda tu frase de recuperación en un lugar seguro para el futuro.",
     "nodeWalletBackupDone": "¡La copia de seguridad de la billetera está completa! Sus datos están respaldados de forma segura.",
     "assetBackupDone": "¡Copia de seguridad exitosa! Tus datos están guardados de forma segura.",
-    "walletAssetBackupDone": "¡Copia de seguridad completa! Tu billetera está asegurada con la frase de recuperación y el almacenamiento en la nube.",
+    "walletAssetBackupDone": "¡La copia de seguridad de la billetera y de los activos está completa! Sus datos están respaldados de forma segura.",
     "healthCheck": "Control de salud",
     "backupPhraseSettingTitle": "Configuración de frase de respaldo",
     "backupPhraseSettingSubTitle": "Ver frase de respaldo",

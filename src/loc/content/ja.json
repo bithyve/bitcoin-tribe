@@ -207,7 +207,7 @@
     "walletBackupDone": "バックアップ完了！将来のアクセスのためにリカバリフレーズを安全に保管してください。",
     "nodeWalletBackupDone": "ウォレットのバックアップが完了しました。データは安全にバックアップされています！",
     "assetBackupDone": "バックアップ成功！データは安全に保存されました。",
-    "walletAssetBackupDone": "バックアップ完了！ウォレットはリカバリフレーズとクラウドストレージで安全にバックアップされました。",
+    "walletAssetBackupDone": "ウォレットのバックアップと資産のバックアップが完了しました。データは安全にバックアップされています！",
     "healthCheck": "ヘルスチェック",
     "backupPhraseSettingTitle": "バックアップフレーズ設定",
     "backupPhraseSettingSubTitle": "バックアップフレーズを表示",

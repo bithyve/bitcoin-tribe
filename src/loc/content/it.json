@@ -207,7 +207,7 @@
     "walletBackupDone": "Backup completato! Conserva al sicuro la tua frase di recupero per accessi futuri.",
     "nodeWalletBackupDone": "Il backup del portafoglio è stato completato. I tuoi dati sono stati salvati in modo sicuro!",
     "assetBackupDone": "Backup riuscito! I tuoi dati sono archiviati in modo sicuro.",
-    "walletAssetBackupDone": "Backup completato! Il tuo wallet è stato messo in sicurezza con frase di recupero e archiviazione su cloud.",
+    "walletAssetBackupDone": "Il backup del portafoglio e il backup degli asset sono stati completati. I tuoi dati sono stati salvati in modo sicuro!",
     "healthCheck": "Controllo di integrità",
     "backupPhraseSettingTitle": "Impostazioni frase di backup",
     "backupPhraseSettingSubTitle": "Visualizza frase di backup",
