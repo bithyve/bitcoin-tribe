@@ -22,16 +22,28 @@ type AssetCardProps = {
   assetId?: string;
   amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
-  assetIface?: AssetFace
+  assetIface?: AssetFace;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, ticker, tag, onPress, assetId, amount, details, assetIface } = props;
+  const {
+    image,
+    name,
+    ticker,
+    tag,
+    onPress,
+    assetId,
+    amount,
+    details,
+    assetIface,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, amount.toString().length),
     [theme, amount],
   );
+
+  // React.useEffect(() => {}, [assetId]);
 
   return (
     <AppTouchable onPress={onPress}>

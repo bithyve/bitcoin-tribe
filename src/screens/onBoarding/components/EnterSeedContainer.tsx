@@ -9,6 +9,11 @@ import { FlatList, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
 import * as bip39 from 'bip39';
 import { TextInput as RNTextInput } from 'react-native';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -18,7 +23,6 @@ import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import Toast from 'src/components/Toast';
 import RecoverRGBStatModal from './RecoverRGBStatModal';
-import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
 import { decrypt, hash512 } from 'src/utils/encryption';
@@ -26,12 +30,12 @@ import config from 'src/utils/config';
 import * as SecureStore from 'src/storage/secure-store';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useNavigation } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Fonts from 'src/constants/Fonts';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { Keys } from 'src/storage';
+
 
 type seedWordItem = {
   id: number;
@@ -44,6 +48,7 @@ function EnterSeedContainer() {
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding } = translations;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const ref = useRef<FlatList>(null);
   const { setKey } = useContext(AppContext);
@@ -255,7 +260,7 @@ function EnterSeedContainer() {
           <InProgessPopupContainer
             title={onBoarding.recoverLoadingTitle}
             subTitle={onBoarding.recoverLoadingSubTitle}
-            illustrationPath={require('src/assets/images/jsons/backupAndRecovery.json')}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/backupAndRecovery.json') : require('src/assets/images/jsons/backupAndRecovery_light.json')}
           />
         </ResponsePopupContainer>
       </View>

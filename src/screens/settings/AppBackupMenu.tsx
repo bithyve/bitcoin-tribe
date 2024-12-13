@@ -29,6 +29,7 @@ import SelectOption from 'src/components/SelectOption';
 import AppText from 'src/components/AppText';
 import moment from 'moment';
 import Relay from 'src/services/relay';
+import Toast from 'src/components/Toast';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -105,7 +106,9 @@ function AppBackupMenu({ navigation }) {
 
   const subtitle = useMemo(() => {
     if (backup && !assetBackup) {
-      return settings.walletBackupDone;
+      return app.appType === AppType.ON_CHAIN
+        ? settings.walletBackupDone
+        : settings.nodeWalletBackupDone;
     } else if (assetBackup && !backup) {
       return (
         `${Platform.select({
@@ -166,13 +169,18 @@ function AppBackupMenu({ navigation }) {
           <SelectOption
             title={settings.rgbAssetsbackup}
             subTitle={''}
-            onPress={rgbAssetsbackup}
+            onPress={() => {
+              !backup
+                ? Toast(settings.appBackupStepCheck, true)
+                : rgbAssetsbackup();
+            }}
             backup={assetBackup}
           />
           <AppText style={styles.textStepTime}>
             {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm a',
-          )}`}</AppText>
+              'DD MMM YY  •  hh:mm a',
+            )}`}
+          </AppText>
           <AppText variant="caption" style={styles.textSubtext}>
             {settings.assetBackupInfo1}
           </AppText>

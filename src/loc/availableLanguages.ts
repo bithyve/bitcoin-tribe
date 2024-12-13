@@ -5,7 +5,7 @@ export default [
     iso: 'en',
     flag: '🇺🇸',
     country: 'United States',
-    country_code: 'us',
+    country_code: 'US',
   },
   {
     language: 'Spanish',
@@ -13,7 +13,7 @@ export default [
     iso: 'es',
     flag: '🇪🇸',
     country: 'Spain',
-    country_code: 'es',
+    country_code: 'ES',
   },
   {
     language: 'Hindi',
@@ -21,7 +21,7 @@ export default [
     iso: 'hi',
     flag: '🇮🇳',
     country: 'India',
-    country_code: 'in',
+    country_code: 'IN',
   },
   {
     language: 'Italian',
@@ -29,7 +29,7 @@ export default [
     iso: 'it',
     flag: '🇮🇹',
     country: 'Italy',
-    country_code: 'it',
+    country_code: 'IT',
   },
   {
     language: 'Japanese',
@@ -37,7 +37,7 @@ export default [
     iso: 'ja',
     flag: '🇯🇵',
     country: 'Japan',
-    country_code: 'ja',
+    country_code: 'JA',
   },
   {
     language: 'Chinese',
@@ -45,7 +45,7 @@ export default [
     iso: 'cn',
     flag: '🇨🇳',
     country: 'China',
-    country_code: 'cn',
+    country_code: 'zh-CN',
   },
   /*{
     language: 'German',

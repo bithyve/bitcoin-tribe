@@ -112,7 +112,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
         ? theme.colors.backupDoneBorder
         : theme.colors.borderColor,
       borderWidth: 1,
-      marginVertical: hp(5),
+      marginVertical: hp(10),
     },
     iconWrapper: {
       flexDirection: 'row',

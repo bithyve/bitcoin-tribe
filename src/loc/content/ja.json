@@ -193,20 +193,22 @@
     "appInfoScreenSubTitle": "Tribe RGBアプリの詳細とビルドバージョン履歴",
     "walletBackup": "ウォレットバックアップ",
     "rgbAssetsbackup": "アセットバックアップ",
-    "appBackupMenuSubTitle": "データを保護するためにウォレットとアセットの両方のバックアップが必要です。",
+    "appBackupMenuSubTitle": "ウォレットのバックアップと資産のバックアップは必須です。ステップ 2 に進む前にステップ 1 を完了してください。",
     "nodeAppBackupMenuSubTitle": "データを保護するために資産のバックアップが必要です。",
+    "appBackupStepCheck": "ステップ 2 に進む前にステップ 1 を完了してください。",
     "walletBackupHistory": "ウォレットバックアップ履歴",
     "walletBackupHistorySubTitle": "過去を守り、未来を安全に。",
-    "SEED_BACKUP_CREATED": "シードバックアップが作成されました",
-    "SEED_BACKUP_CONFIRMED": "シードバックアップが確認されました",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "シードバックアップ確認がスキップされました",
+    "SEED_BACKUP_CREATED": "ウォレットバックアップが作成されました",
+    "SEED_BACKUP_CONFIRMED": "ウォレットバックアップが確認されました",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "ウォレットバックアップの確認がスキップされました",
     "CLOUD_BACKUP_CREATED": "クラウドバックアップが作成されました",
     "CLOUD_BACKUP_FAILED": "クラウドバックアップが失敗しました",
     "CLOUD_BACKUP_HEALTH": "クラウドバックアップの状態",
     "CLOUD_BACKUP_HEALTH_FAILED": "クラウドバックアップの状態が失敗しました",
     "walletBackupDone": "バックアップ完了！将来のアクセスのためにリカバリフレーズを安全に保管してください。",
+    "nodeWalletBackupDone": "ウォレットのバックアップが完了しました。データは安全にバックアップされています！",
     "assetBackupDone": "バックアップ成功！データは安全に保存されました。",
-    "walletAssetBackupDone": "バックアップ完了！ウォレットはリカバリフレーズとクラウドストレージで安全にバックアップされました。",
+    "walletAssetBackupDone": "ウォレットのバックアップと資産のバックアップが完了しました。データは安全にバックアップされています！",
     "healthCheck": "ヘルスチェック",
     "backupPhraseSettingTitle": "バックアップフレーズ設定",
     "backupPhraseSettingSubTitle": "バックアップフレーズを表示",
@@ -388,7 +390,8 @@
     "sendAssetLoadingTitle": "RGB資産を送信中",
     "sendAssetLoadingSubTitle": "取引が処理されています—しばらくお待ちください！リラックスして、RGB資産が安全に送信されるのをお待ちください。",
     "issueAssetLoadingTitle": "資産を発行中",
-    "issueAssetLoadingSubTitle": "資産を作成しています。少々お待ちください！リラックスして、新しい資産がまもなく発行されます。"
+    "issueAssetLoadingSubTitle": "資産を作成しています。少々お待ちください！リラックスして、新しい資産がまもなく発行されます。",
+    "totalSupplyAmountErrMsg": "入力した値が大きすぎます。18,446,744,073,709,551,615 より小さい数値を入力してください。"
   },
   "community": {
     "fnfTitle": "友達と家族",
@@ -454,7 +457,9 @@
     "closeChannelPopupSubTitle": "この操作は取引を停止し、元に戻すことはできません。",
     "createChannelBulletPoint1": "ピアアドレスと公開鍵",
     "createChannelBulletPoint2": "アセットIDと金額の詳細",
-    "createChannelBulletPoint3": "利用可能な資金（サトシ単位）"
+    "createChannelBulletPoint3": "利用可能な資金（サトシ単位）",
+    "createChannelTitle": "チャネル作成",
+    "createChannelSubTitle": "準備が整うまでお待ちください。チャネルはすぐに開きます。"
   },
   "lightning": {
     "sendTitle": "送信",
