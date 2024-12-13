@@ -154,7 +154,7 @@ function HomeScreen() {
       </AppText>
       <AssetsList
         listData={assets}
-        loading={refreshRgbWallet.isLoading}
+        loading={refreshing}
         onRefresh={() => {
           setRefreshing(true);
           refreshRgbWallet.mutate();

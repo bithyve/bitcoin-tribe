@@ -43,6 +43,8 @@ import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
+const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
+
 function IssueScreen() {
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
@@ -134,7 +136,12 @@ function IssueScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         filePath: Platform.select({
-          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}` : image.replace('file://', ''),
+          android:
+            appType === AppType.NODE_CONNECT
+              ? image.startsWith('file://')
+                ? image
+                : `file://${path}`
+              : image.replace('file://', ''),
           ios: image.replace('file://', ''),
         }),
       });
@@ -142,6 +149,7 @@ function IssueScreen() {
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
+        refreshRgbWalletMutation.mutate();
         navigation.dispatch(popAction);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -198,6 +206,24 @@ function IssueScreen() {
     setAssetName('');
     setTotalSupplyAmt('');
     setImage('');
+  };
+
+  const handleTotalSupplyChange = text => {
+    try {
+      const sanitizedText = text.replace(/[^0-9]/g, '');
+      if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
+        setTotalSupplyAmt(sanitizedText);
+      } else if (!sanitizedText) {
+        setTotalSupplyAmt('');
+      } else if (
+        sanitizedText &&
+        BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
+      ) {
+        Toast(assets.totalSupplyAmountErrMsg, true);
+      }
+    } catch {
+      setTotalSupplyAmt('');
+    }
   };
 
   return (
@@ -261,7 +287,7 @@ function IssueScreen() {
 
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
@@ -293,7 +319,7 @@ function IssueScreen() {
             />
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
@@ -327,7 +353,7 @@ function IssueScreen() {
       {totalReserveSatsAmount === 0 && (
         <View style={styles.reservedSatsWrapper}>
           <View style={styles.checkIconWrapper}>
-            {isThemeDark? <CheckIcon /> : <CheckIconLight/>}
+            {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
           </View>
           <View style={styles.reservedSatsWrapper1}>
             <AppText variant="body2" style={styles.reservedSatsText}>
