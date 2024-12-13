@@ -34,7 +34,7 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={require('src/assets/images/jsons/nodeConnecting.json')}
+          source={isThemeDark ? require('src/assets/images/jsons/nodeConnecting.json') : require('src/assets/images/jsons/nodeConnecting_light.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

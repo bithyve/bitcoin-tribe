@@ -457,7 +457,9 @@
     "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata.",
     "createChannelBulletPoint1": "Indirizzo peer e chiave pubblica",
     "createChannelBulletPoint2": "Dettagli ID e importo dell'asset",
-    "createChannelBulletPoint3": "Fondi disponibili in satoshi"
+    "createChannelBulletPoint3": "Fondi disponibili in satoshi",
+    "createChannelTitle": "Creazione del Canale",
+    "createChannelSubTitle": "Rilassati mentre prepariamo tutto per te. Il tuo canale sarà aperto tra un momento."
   },
   "lightning": {
     "sendTitle": "Invia",

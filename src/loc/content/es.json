@@ -457,7 +457,9 @@
     "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer.",
     "createChannelBulletPoint1": "Dirección del par y clave pública",
     "createChannelBulletPoint2": "ID del activo y detalles del monto",
-    "createChannelBulletPoint3": "Fondos disponibles en satoshis"
+    "createChannelBulletPoint3": "Fondos disponibles en satoshis",
+    "createChannelTitle": "Creación de Canal",
+    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento."
   },
   "lightning": {
     "sendTitle": "Enviar",

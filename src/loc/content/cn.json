@@ -457,7 +457,9 @@
     "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。",
     "createChannelBulletPoint1": "对等地址和公钥",
     "createChannelBulletPoint2": "资产ID和金额详情",
-    "createChannelBulletPoint3": "可用资金（以聪为单位）"
+    "createChannelBulletPoint3": "可用资金（以聪为单位）",
+    "createChannelTitle": "通道创建",
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
   },
   "lightning": {
     "sendTitle": "发送",

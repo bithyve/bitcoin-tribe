@@ -57,7 +57,7 @@ const CloudBackup = ({ navigation }) => {
           <InProgessPopupContainer
             title={settings.cloudBackupLoadingTitle}
             subTitle={settings.cloudBackupLoadingSubTitle}
-            illustrationPath={require('src/assets/images/jsons/sendingBTCorAsset.json')}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/cloudBackup.json') : require('src/assets/images/jsons/cloudBackup.json_light.json')}
           />
         </ResponsePopupContainer>
       </View>

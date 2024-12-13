@@ -238,7 +238,7 @@ function IssueScreen() {
           <InProgessPopupContainer
             title={assets.issueAssetLoadingTitle}
             subTitle={assets.issueAssetLoadingSubTitle}
-            illustrationPath={require('src/assets/images/jsons/issuingAsset.json')}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/issuingAsset.json') : require('src/assets/images/jsons/issuingAsset_light.json')}
           />
         </ResponsePopupContainer>
       </View>

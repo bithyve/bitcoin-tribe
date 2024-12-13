@@ -457,7 +457,9 @@
     "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone.",
     "createChannelBulletPoint1": "Peer Address and Public Key",
     "createChannelBulletPoint2": "Asset ID and Amount details",
-    "createChannelBulletPoint3": "Funds available in satoshis"
+    "createChannelBulletPoint3": "Funds available in satoshis",
+    "createChannelTitle": "Channel Creation",
+    "createChannelSubTitle": "Sit back and relax as we get everything ready for you. Your channel will be open in just a moment."
   },
   "lightning": {
     "sendTitle" : "Send",
