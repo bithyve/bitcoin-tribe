@@ -15,7 +15,6 @@ import { hp, windowHeight, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import ModalLoading from 'src/components/ModalLoading';
 import CustomToast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
@@ -25,6 +24,8 @@ import RGBAssetDropdownList from './components/RGBAssetDropdownList';
 import { Keys } from 'src/storage';
 import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -86,7 +87,19 @@ const OpenRgbChannel = () => {
           }
         }}
       />
-      <ModalLoading visible={openChannelMutation.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={openChannelMutation.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={channelTranslation.createChannelTitle}
+            subTitle={channelTranslation.createChannelSubTitle}
+            illustrationPath={require('src/assets/images/jsons/channelCreation.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
