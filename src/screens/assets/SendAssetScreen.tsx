@@ -16,7 +16,7 @@ import React, {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import Identicon from 'react-native-identicon';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -26,7 +26,6 @@ import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
@@ -153,6 +152,7 @@ const SendAssetScreen = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
@@ -245,7 +245,7 @@ const SendAssetScreen = () => {
           <InProgessPopupContainer
             title={assets.sendAssetLoadingTitle}
             subTitle={assets.sendAssetLoadingSubTitle}
-            illustrationPath={require('src/assets/images/jsons/sendingBTCorAsset.json')}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/sendingBTCorAsset.json') : require('src/assets/images/jsons/sendingBTCorAsset_light.json')}
           />
         </ResponsePopupContainer>
       </View>
