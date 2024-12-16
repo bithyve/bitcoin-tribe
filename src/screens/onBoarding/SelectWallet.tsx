@@ -89,7 +89,10 @@ function SelectWallet() {
             <WalletAdvanceUpIconLight />
           )
         }
-        onSettingsPress={() => setOpenAdvanceOptions(!openAdvanceOptions)}
+        onSettingsPress={() => {
+          SetSupportedMode(false)
+          setOpenAdvanceOptions(!openAdvanceOptions)
+        }}
       />
       <View style={styles.bodyWrapper}>
         <SelectWalletTypeOption
