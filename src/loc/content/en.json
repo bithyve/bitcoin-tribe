@@ -85,6 +85,8 @@
     "rememberPasscodeSubTitle": "Please remember your passcode and backup your app by writing down the 12-word recovery key",
     "rememberPasscodeDesc": "You would be locked out of the app if you forget your passcode and will have to recover it.",
     "selectWalletType": "Select wallet type",
+    "createWallet": "Create Wallet",
+    "advanceOptionTitle": "Advance Options",
     "selfCustody": "Self-Custody",
     "mainnet": "On-Chain",
     "mainnetAndLightning": "On-Chain & Lightning",
@@ -100,6 +102,7 @@
     "enterBearerToken": "Enter Bearer Token",
     "supportTermAndConditionTitle": "By checking this box, you agree to the terms and conditions.",
     "readMore": "Read More",
+    "learnMore": "Learn More",
     "termAndConditionTitle": "Terms and Conditions",
     "termAndConditionBrief": "Tribe RGB provides an option to connect external nodes; however, support for this feature is managed by an external service provider. Please review the following terms:",
     "termAndConditionTitle1": "Scope of Tribe RGB's Role",
@@ -125,7 +128,10 @@
     "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
     "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment.",
     "recoverLoadingTitle": "Recovering Your Data",
-    "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time."
+    "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time.",
+    "onchainLearMoreInfo": "A secure wallet for all your Bitcoin transactions. ",
+    "lightningLearnMoreInfo": "Fast and low-cost transactions for small amounts. ",
+    "supportLearnMoreInfo": "A wallet compatible with other Bitcoin applications. "
   },
   "home": {
     "addAssets": "Add Receive Assets",
