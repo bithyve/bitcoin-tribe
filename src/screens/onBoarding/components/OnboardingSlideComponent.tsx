@@ -26,6 +26,7 @@ function OnboardingSlideComponent(props: OnboardingSlidesProps) {
   const styles = getStyles(theme);
   return (
     <View style={styles.wrapper}>
+      <View style={styles.illustrationWrapper}>{illustration}</View>
       <View style={styles.contentWrapper1}>
         <AppText variant="heading1" style={styles.titleText}>
           {title}
@@ -34,7 +35,6 @@ function OnboardingSlideComponent(props: OnboardingSlidesProps) {
           {subTitle}
         </AppText>
       </View>
-      <View style={styles.illustrationWrapper}>{illustration}</View>
       <View style={styles.contentWrapper2}>
         <AppText variant="heading3" style={styles.infoText}>
           {paragraph}
@@ -49,14 +49,13 @@ const getStyles = (theme: AppTheme) =>
       width: windowWidth,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingBottom: 5,
+      // paddingBottom: 5,
       flex: 1,
       paddingHorizontal: hp(10),
     },
     contentWrapper1: {
-      height: '30%',
       width: '100%',
-      marginVertical: hp(20),
+      marginVertical: hp(5),
       alignItems: 'center',
     },
     illustrationWrapper: {
@@ -66,9 +65,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     contentWrapper2: {
-      height: '10%',
       width: '100%',
-      marginVertical: hp(20),
       alignItems: 'center',
       justifyContent: 'center',
     },
