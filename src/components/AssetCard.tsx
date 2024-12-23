@@ -43,8 +43,6 @@ const AssetCard = (props: AssetCardProps) => {
     [theme, amount],
   );
 
-  // React.useEffect(() => {}, [assetId]);
-
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -84,19 +82,17 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
         </View>
         <View style={styles.contentWrapper}>
-          <View style={styles.contentWrapper2}>
-            <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
-              {name}
-            </AppText>
-            <AppText
-              variant="caption"
-              style={styles.amountText}
-              numberOfLines={1}>
-              {numberWithCommas(amount)}
-            </AppText>
-          </View>
           <AppText variant="caption" style={styles.titleText}>
             {ticker}
+          </AppText>
+          <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
+            {name}
+          </AppText>
+          <AppText
+            variant="caption"
+            style={styles.amountText}
+            numberOfLines={1}>
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </GradientView>
@@ -143,29 +139,15 @@ const getStyles = (theme: AppTheme, amtLength) =>
       height: '30%',
       justifyContent: 'center',
     },
-    contentWrapper2: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
     titleText: {
       lineHeight: hp(18),
-      fontWeight: '400',
-      color: theme.colors.secondaryHeadingColor,
-    },
-    textTicker: {
-      // color: theme.colors.accent1,
-      width: '100%',
-      height: '100%',
-      // textAlign: 'center',
-      // marginTop: '40%',
-      // fontSize: 35,
+      fontWeight: '600',
+      color: theme.colors.accent1,
     },
     nameText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-      width: amtLength > 10 ? '25%' : '45%',
     },
     amountText: {
       fontWeight: '300',
@@ -176,9 +158,6 @@ const getStyles = (theme: AppTheme, amtLength) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-    },
-    tagTextStyle: {
-      lineHeight: hp(20),
     },
     assetImageWrapper: {
       width: '100%',
