@@ -911,9 +911,8 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (response?.asset) {
+      if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
-        return response.asset;
       }
       return response;
     } catch (error) {

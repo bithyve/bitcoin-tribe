@@ -193,20 +193,22 @@
     "appInfoScreenSubTitle": "ट्राइब आरजीबी ऐप विवरण और बिल्ड संस्करण इतिहास",
     "walletBackup": "वॉलेट बैकअप",
     "rgbAssetsbackup": "संपत्ति बैकअप",
-    "appBackupMenuSubTitle": "अपना डेटा सुरक्षित करने के लिए वॉलेट और संपत्ति बैकअप दोनों आवश्यक हैं।",
+    "appBackupMenuSubTitle": "वॉलेट बैकअप और एसेट बैकअप अनिवार्य हैं। चरण 2 पर जाने से पहले चरण 1 पूरा करें।",
     "nodeAppBackupMenuSubTitle": "आपके डेटा की सुरक्षा के लिए एसेट बैकअप आवश्यक है।",
+    "appBackupStepCheck": "चरण 2 पर जाने से पहले चरण 1 पूरा करें।",
     "walletBackupHistory": "वॉलेट बैकअप इतिहास",
     "walletBackupHistorySubTitle": "अपने अतीत को सुरक्षित करें, अपने भविष्य की रक्षा करें।",
-    "SEED_BACKUP_CREATED": "सीड बैकअप बनाया गया है",
-    "SEED_BACKUP_CONFIRMED": "सीड बैकअप की पुष्टि की गई है",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "सीड बैकअप पुष्टिकरण छोड़ दिया गया है",
+    "SEED_BACKUP_CREATED": "वॉलेट बैकअप बनाया गया है",
+    "SEED_BACKUP_CONFIRMED": "वॉलेट बैकअप की पुष्टि हो गई है",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "वॉलेट बैकअप पुष्टि को छोड़ दिया गया है",
     "CLOUD_BACKUP_CREATED": "क्लाउड बैकअप बनाया गया है",
     "CLOUD_BACKUP_FAILED": "क्लाउड बैकअप विफल हो गया है",
     "CLOUD_BACKUP_HEALTH": "क्लाउड बैकअप स्वास्थ्य",
     "CLOUD_BACKUP_HEALTH_FAILED": "क्लाउड बैकअप स्वास्थ्य विफल हो गया है",
     "walletBackupDone": "बैकअप पूरा! भविष्य के उपयोग के लिए अपने पुनर्प्राप्ति वाक्यांश को सुरक्षित रखें।",
+    "nodeWalletBackupDone": "वॉलेट बैकअप पूरा हो गया है। आपका डेटा सुरक्षित रूप से बैकअप कर लिया गया है!",
     "assetBackupDone": "बैकअप सफल! आपका डेटा सुरक्षित रूप से संग्रहीत है।",
-    "walletAssetBackupDone": "बैकअप पूरा! आपकी वॉलेट को पुनर्प्राप्ति वाक्यांश और क्लाउड स्टोरेज के साथ सुरक्षित रूप से बैकअप किया गया है।",
+    "walletAssetBackupDone": "वॉलेट बैकअप और एसेट बैकअप पूरा हो गया है। आपका डेटा सुरक्षित रूप से बैकअप कर लिया गया है!",
     "healthCheck": "स्वास्थ्य जांच",
     "backupPhraseSettingTitle": "बैकअप वाक्यांश सेटिंग्स",
     "backupPhraseSettingSubTitle": "बैकअप वाक्यांश देखें",
@@ -388,7 +390,8 @@
     "sendAssetLoadingTitle": "RGB संपत्ति भेजी जा रही हैं",
     "sendAssetLoadingSubTitle": "आपका लेन-देन प्रोसेस हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपकी RGB संपत्ति सुरक्षित रूप से भेज दी जाएगी।",
     "issueAssetLoadingTitle": "संपत्ति जारी हो रही है",
-    "issueAssetLoadingSubTitle": "आपकी संपत्ति बनाई जा रही है—कृपया प्रतीक्षा करें! आराम करें और आपकी नई संपत्ति जल्द ही जारी की जाएगी।"
+    "issueAssetLoadingSubTitle": "आपकी संपत्ति बनाई जा रही है—कृपया प्रतीक्षा करें! आराम करें और आपकी नई संपत्ति जल्द ही जारी की जाएगी।",
+    "totalSupplyAmountErrMsg": "आपने जो मान दर्ज किया है वह बहुत बड़ा है। कृपया 18,446,744,073,709,551,615 से छोटा नंबर दर्ज करें।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
@@ -454,7 +457,9 @@
     "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।",
     "createChannelBulletPoint1": "पीयर पता और सार्वजनिक कुंजी",
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
-    "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि"
+    "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि",
+    "createChannelTitle": "चैनल निर्माण",
+    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।"
   },
   "lightning": {
     "sendTitle": "भेजें",

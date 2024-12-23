@@ -60,7 +60,7 @@ function AssetsList(props: AssetsListProps) {
         numColumns={2}
         data={listData}
         extraData={[listData]}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.assetId} 
         ListFooterComponent={FooterComponent}
         refreshControl={
           Platform.OS === 'ios' ? (

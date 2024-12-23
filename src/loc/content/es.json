@@ -193,20 +193,22 @@
     "appInfoScreenSubTitle": "Detalles de la aplicación Tribe RGB e historial de versiones de compilación",
     "walletBackup": "Respaldo de la billetera",
     "rgbAssetsbackup": "Copia de seguridad de activos",
-    "appBackupMenuSubTitle": "Se requieren copias de seguridad de billetera y activos para proteger sus datos.",
+    "appBackupMenuSubTitle": "La copia de seguridad de la billetera y de los activos es obligatoria. Complete el Paso 1 antes de continuar con el Paso 2.",
     "nodeAppBackupMenuSubTitle": "Se requiere una copia de seguridad de los activos para proteger sus datos.",
+    "appBackupStepCheck": "Complete el Paso 1 antes de continuar con el Paso 2.",
     "walletBackupHistory": "Historial de respaldos de la billetera",
     "walletBackupHistorySubTitle": "Asegura tu pasado, protege tu futuro.",
-    "SEED_BACKUP_CREATED": "Respaldo de semilla creado",
-    "SEED_BACKUP_CONFIRMED": "Respaldo de semilla confirmado",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Confirmación de respaldo de semilla omitida",
+    "SEED_BACKUP_CREATED": "Se ha creado el respaldo de la billetera",
+    "SEED_BACKUP_CONFIRMED": "Se ha confirmado el respaldo de la billetera",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "Se ha omitido la confirmación del respaldo de la billetera",
     "CLOUD_BACKUP_CREATED": "Se crea la copia de seguridad en la nube",
     "CLOUD_BACKUP_FAILED": "La copia de seguridad en la nube falló",
     "CLOUD_BACKUP_HEALTH": "salud de la copia de seguridad en la nube",
     "CLOUD_BACKUP_HEALTH_FAILED": "Falló el estado de la copia de seguridad en la nube",
     "walletBackupDone": "¡Copia de seguridad completa! Guarda tu frase de recuperación en un lugar seguro para el futuro.",
+    "nodeWalletBackupDone": "¡La copia de seguridad de la billetera está completa! Sus datos están respaldados de forma segura.",
     "assetBackupDone": "¡Copia de seguridad exitosa! Tus datos están guardados de forma segura.",
-    "walletAssetBackupDone": "¡Copia de seguridad completa! Tu billetera está asegurada con la frase de recuperación y el almacenamiento en la nube.",
+    "walletAssetBackupDone": "¡La copia de seguridad de la billetera y de los activos está completa! Sus datos están respaldados de forma segura.",
     "healthCheck": "Control de salud",
     "backupPhraseSettingTitle": "Configuración de frase de respaldo",
     "backupPhraseSettingSubTitle": "Ver frase de respaldo",
@@ -388,7 +390,8 @@
     "sendAssetLoadingTitle": "Enviando activos RGB",
     "sendAssetLoadingSubTitle": "Tu transacción está siendo procesada—por favor espera. Relájate, y tus activos RGB serán enviados de forma segura.",
     "issueAssetLoadingTitle": "Emitiendo Activo",
-    "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto."
+    "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
+     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615."
   },
   "community": {
     "fnfTitle": "Amigas y familia",
@@ -454,7 +457,9 @@
     "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer.",
     "createChannelBulletPoint1": "Dirección del par y clave pública",
     "createChannelBulletPoint2": "ID del activo y detalles del monto",
-    "createChannelBulletPoint3": "Fondos disponibles en satoshis"
+    "createChannelBulletPoint3": "Fondos disponibles en satoshis",
+    "createChannelTitle": "Creación de Canal",
+    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento."
   },
   "lightning": {
     "sendTitle": "Enviar",

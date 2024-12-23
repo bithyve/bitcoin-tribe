@@ -193,20 +193,22 @@
     "appInfoScreenSubTitle": "Tribe RGB应用详细信息和构建版本历史",
     "walletBackup": "钱包备份",
     "rgbAssetsbackup": "资产备份",
-    "appBackupMenuSubTitle": "钱包和资产备份都是确保您数据安全所必需的。",
+    "appBackupMenuSubTitle": "钱包备份和资产备份是必须的。在继续到步骤 2 之前完成步骤 1。",
     "nodeAppBackupMenuSubTitle": " 资产备份是保障您数据安全的必要措施。",
+    "appBackupStepCheck": "在继续到步骤 2 之前完成步骤 1。",
     "walletBackupHistory": "钱包备份历史",
     "walletBackupHistorySubTitle": "保护您的过去，保障您的未来。",
-    "SEED_BACKUP_CREATED": "种子备份已创建",
-    "SEED_BACKUP_CONFIRMED": "种子备份已确认",
-    "SEED_BACKUP_CONFIRMATION_SKIPPED": "跳过了种子备份确认",
+    "SEED_BACKUP_CREATED": "钱包备份已创建",
+    "SEED_BACKUP_CONFIRMED": "钱包备份已确认",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED": "跳过钱包备份确认",
     "CLOUD_BACKUP_CREATED": "云备份已创建",
     "CLOUD_BACKUP_FAILED": "云备份失败",
     "CLOUD_BACKUP_HEALTH": "云备份状态",
     "CLOUD_BACKUP_HEALTH_FAILED": "云备份状态检查失败",
     "walletBackupDone": "备份完成！请妥善保管您的恢复短语以便将来使用。",
+    "nodeWalletBackupDone": "钱包备份已完成。您的数据已安全备份！",
     "assetBackupDone": " 备份成功！您的数据已安全存储。",
-    "walletAssetBackupDone": "备份完成！您的钱包已通过恢复短语和云存储进行安全备份。",
+    "walletAssetBackupDone": "钱包备份和资产备份已完成。您的数据已安全备份！",
     "healthCheck": "健康检查",
     "backupPhraseSettingTitle": "备份短语设置",
     "backupPhraseSettingSubTitle": "查看备份短语",
@@ -388,7 +390,8 @@
      "sendAssetLoadingTitle": "正在发送 RGB 资产",
     "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
     "issueAssetLoadingTitle": "发行资产",
-    "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。"
+    "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
+    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -454,7 +457,9 @@
     "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。",
     "createChannelBulletPoint1": "对等地址和公钥",
     "createChannelBulletPoint2": "资产ID和金额详情",
-    "createChannelBulletPoint3": "可用资金（以聪为单位）"
+    "createChannelBulletPoint3": "可用资金（以聪为单位）",
+    "createChannelTitle": "通道创建",
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
   },
   "lightning": {
     "sendTitle": "发送",
