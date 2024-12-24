@@ -1,4 +1,4 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, Image, Platform, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -19,6 +19,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
+import { hp } from 'src/constants/responsive';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -81,6 +82,17 @@ const CollectibleDetailsScreen = () => {
         assetImage={collectible?.media?.filePath}
         smallHeaderOpacity={smallHeaderOpacity}
         largeHeaderHeight={largeHeaderHeight}
+        headerRightIcon={
+          <Image
+                  source={{
+                    uri: Platform.select({
+                      android: `file://${collectible?.media?.filePath}`,
+                      ios: collectible?.media?.filePath,
+                    }),
+                  }}
+                  style={styles.imageStyle}
+                />
+        }
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: assetId,
@@ -120,5 +132,11 @@ const CollectibleDetailsScreen = () => {
     </ScreenContainer>
   );
 };
-const getStyles = () => StyleSheet.create({});
+const getStyles = () => StyleSheet.create({
+  imageStyle:{
+    height: hp(40),
+    width: hp(40),
+    borderRadius: 10
+  }
+});
 export default CollectibleDetailsScreen;

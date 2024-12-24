@@ -19,6 +19,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -79,6 +80,7 @@ const CoinDetailsScreen = () => {
         assetTicker={coin.ticker}
         smallHeaderOpacity={smallHeaderOpacity}
         largeHeaderHeight={largeHeaderHeight}
+        headerRightIcon={<InfoIcon />}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
