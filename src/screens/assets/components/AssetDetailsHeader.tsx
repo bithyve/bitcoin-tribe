@@ -30,14 +30,9 @@ type assetDetailsHeaderProps = {
   onPressBuy?: () => void;
   smallHeaderOpacity: any;
   largeHeaderHeight: any;
+  headerRightIcon?: React.ReactNode;
 };
 function AssetDetailsHeader(props: assetDetailsHeaderProps) {
-  const insets = useSafeAreaInsets();
-  const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const theme: AppTheme = useTheme();
-  const styles = getStyles(theme, insets);
   const {
     assetName,
     asset,
@@ -49,18 +44,28 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
+    headerRightIcon
   } = props;
+  const insets = useSafeAreaInsets();
+  const { translations } = useContext(LocalizationContext);
+  const { home } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const theme: AppTheme = useTheme();
+  const combinedBalance = asset.balance.spendable + asset.balance?.offchainOutbound || 0;
+  const lengthOfTotalBalance = combinedBalance.toString().length;
+  const styles = getStyles(theme, insets,lengthOfTotalBalance);
+  
   return (
     <>
       <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={assetTicker} />
+        <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
       </Animated.View>
       <Animated.View
         style={[styles.largeHeader, { height: largeHeaderHeight }]}>
         <AppHeader
           title={assetTicker}
-          rightIcon={<InfoIcon />}
+          rightIcon={<InfoIcon/>}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
@@ -136,7 +141,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     </>
   );
 }
-const getStyles = (theme: AppTheme, insets) =>
+const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
   StyleSheet.create({
     smallHeader: {
       position: 'absolute',
@@ -168,6 +173,7 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     totalBalance: {
       color: theme.colors.headingColor,
+      fontSize: lengthOfTotalBalance > 15 ? 13 : 20
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
