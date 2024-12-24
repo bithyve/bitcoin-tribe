@@ -91,7 +91,7 @@ const getStyles = (theme: AppTheme, showRightArrow) =>
       width: '100%',
     },
     contentWrapper: {
-      width: showRightArrow ? '85%' : '90%',
+      width: showRightArrow ? '80%' : '85%',
       marginVertical: hp(5),
     },
     menuCardTitle: {
