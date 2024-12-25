@@ -46,7 +46,7 @@ const CollectibleDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const filteredPayments = (listPaymentshMutation.data?.payments || []).filter(
-    (payment) => payment.asset_id === assetId
+    payment => payment.asset_id === assetId,
   );
 
   const transactionsData =
@@ -61,17 +61,17 @@ const CollectibleDetailsScreen = () => {
         })
       : collectible?.transactions;
 
-  const largeHeaderHeight = scrollY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [350, 0],
-    extrapolate: 'clamp',
-  });
+  // const largeHeaderHeight = scrollY.interpolate({
+  //   inputRange: [0, 300],
+  //   outputRange: [350, 0],
+  //   extrapolate: 'clamp',
+  // });
 
-  const smallHeaderOpacity = scrollY.interpolate({
-    inputRange: [100, 150],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
+  // const smallHeaderOpacity = scrollY.interpolate({
+  //   inputRange: [100, 150],
+  //   outputRange: [0, 1],
+  //   extrapolate: 'clamp',
+  // });
 
   return (
     <ScreenContainer>
@@ -80,18 +80,18 @@ const CollectibleDetailsScreen = () => {
         assetName={collectible.name}
         assetTicker={collectible.details}
         assetImage={collectible?.media?.filePath}
-        smallHeaderOpacity={smallHeaderOpacity}
-        largeHeaderHeight={largeHeaderHeight}
+        // smallHeaderOpacity={smallHeaderOpacity}
+        // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={
           <Image
-                  source={{
-                    uri: Platform.select({
-                      android: `file://${collectible?.media?.filePath}`,
-                      ios: collectible?.media?.filePath,
-                    }),
-                  }}
-                  style={styles.imageStyle}
-                />
+            source={{
+              uri: Platform.select({
+                android: `file://${collectible?.media?.filePath}`,
+                ios: collectible?.media?.filePath,
+              }),
+            }}
+            style={styles.imageStyle}
+          />
         }
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
@@ -132,11 +132,12 @@ const CollectibleDetailsScreen = () => {
     </ScreenContainer>
   );
 };
-const getStyles = () => StyleSheet.create({
-  imageStyle:{
-    height: hp(40),
-    width: hp(40),
-    borderRadius: 10
-  }
-});
+const getStyles = () =>
+  StyleSheet.create({
+    imageStyle: {
+      height: hp(40),
+      width: hp(40),
+      borderRadius: 10,
+    },
+  });
 export default CollectibleDetailsScreen;

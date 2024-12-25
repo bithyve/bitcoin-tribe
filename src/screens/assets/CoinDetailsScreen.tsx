@@ -45,7 +45,7 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const filteredPayments = (listPaymentshMutation.data?.payments || []).filter(
-    (payment) => payment.asset_id === assetId
+    payment => payment.asset_id === assetId,
   );
 
   const transactionsData =
@@ -78,8 +78,8 @@ const CoinDetailsScreen = () => {
         asset={coin}
         assetName={coin.name}
         assetTicker={coin.ticker}
-        smallHeaderOpacity={smallHeaderOpacity}
-        largeHeaderHeight={largeHeaderHeight}
+        // smallHeaderOpacity={smallHeaderOpacity}
+        // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={<InfoIcon />}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {

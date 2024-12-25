@@ -67,10 +67,10 @@ function TransactionsList({
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false },
-        )}
+        // onScroll={Animated.event(
+        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        //   { useNativeDriver: false },
+        // )}
         style={styles.container2}
         data={transactions}
         refreshControl={
@@ -113,7 +113,8 @@ const getStyles = (theme: AppTheme) =>
       height: '100%',
     },
     container2: {
-      height: '100%',
+      marginTop: hp(15),
+      height: '60%',
     },
     contentWrapper: {
       flexDirection: 'row',

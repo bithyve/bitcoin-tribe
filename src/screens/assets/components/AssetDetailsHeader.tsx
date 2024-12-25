@@ -28,8 +28,8 @@ type assetDetailsHeaderProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
   onPressBuy?: () => void;
-  smallHeaderOpacity: any;
-  largeHeaderHeight: any;
+  smallHeaderOpacity?: any;
+  largeHeaderHeight?: any;
   headerRightIcon?: React.ReactNode;
 };
 function AssetDetailsHeader(props: assetDetailsHeaderProps) {
@@ -57,12 +57,13 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   
   return (
     <>
-      <Animated.View
+      {/* <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
-      </Animated.View>
-      <Animated.View
-        style={[styles.largeHeader, { height: largeHeaderHeight }]}>
+      </Animated.View> */}
+      <View
+        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
+        style={styles.largeHeader}>
         <AppHeader
           title={assetTicker}
           rightIcon={<InfoIcon/>}
@@ -137,7 +138,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             </View>
           </GradientView>
         </View>
-      </Animated.View>
+      </View>
     </>
   );
 }
