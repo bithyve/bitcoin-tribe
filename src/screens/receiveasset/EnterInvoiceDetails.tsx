@@ -3,6 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -19,9 +21,8 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
-import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import Clipboard from '@react-native-clipboard/clipboard';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 
 const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
   StyleSheet.create({
@@ -125,8 +126,8 @@ const EnterInvoiceDetails = () => {
 
   const handlePasteAddress = async () => {
     const getClipboardValue = await Clipboard.getString();
-    setAssetId(getClipboardValue)
-  }
+    setAssetId(getClipboardValue);
+  };
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -140,11 +141,7 @@ const EnterInvoiceDetails = () => {
   const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
   return (
     <ScreenContainer>
-      <AppHeader
-        title={home.addAssets}
-        subTitle={''}
-        enableBack={true}
-      />
+      <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
       {app.appType !== AppType.ON_CHAIN && (
         <View>
           <View>
@@ -199,9 +196,9 @@ const EnterInvoiceDetails = () => {
           contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
           inputStyle={styles.inputStyle}
           rightText={sendScreen.paste}
-        onRightTextPress={() => handlePasteAddress()}
-        rightCTAStyle={styles.rightCTAStyle}
-        rightCTATextColor={theme.colors.primaryCTAText}
+          onRightTextPress={() => handlePasteAddress()}
+          rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.primaryCTAText}
         />
 
         <TextField
@@ -216,7 +213,7 @@ const EnterInvoiceDetails = () => {
         {totalReserveSatsAmount === 0 ? (
           <View style={styles.reservedSatsWrapper}>
             <View style={styles.checkIconWrapper}>
-              <CheckIcon />
+              {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
             </View>
             <View style={styles.reservedSatsWrapper1}>
               <AppText variant="body2" style={styles.reservedSatsText}>

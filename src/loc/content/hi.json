@@ -85,6 +85,8 @@
     "rememberPasscodeSubTitle": "कृपया अपना पासकोड याद रखें और 12-शब्दों की रिकवरी कुंजी लिखकर अपने ऐप का बैकअप लें",
     "rememberPasscodeDesc": "यदि आप अपना पासकोड भूल जाते हैं, तो आप ऐप से बाहर हो जाएंगे और इसे पुनः प्राप्त करना होगा",
     "selectWalletType": "वॉलेट प्रकार चुनें",
+    "createWallet": "वॉलेट बनाएं",
+    "advanceOptionTitle": "उन्नत विकल्प",
     "selfCustody": "स्व-निगरानी",
     "mainnet": "On-Chain",
     "mainnetAndLightning": "On-Chain & Lightning",
@@ -100,6 +102,7 @@
     "enterBearerToken": " बियरर टोकन दर्ज करें",
     "supportTermAndConditionTitle": "इस बॉक्स पर टिक करने से, आप नियम और शर्तों से सहमत होते हैं।",
     "readMore": "और पढ़ें",
+    "learnMore": "और जानें",
     "termAndConditionTitle": "नियम और शर्तें",
     "termAndConditionBrief": "बाहरी नोड्स को कनेक्ट करने का विकल्प प्रदान करता है; हालाँकि, इस सुविधा का समर्थन एक बाहरी सेवा प्रदाता द्वारा प्रबंधित किया जाता है। कृपया निम्नलिखित शर्तों की समीक्षा करें:",
     "termAndConditionTitle1": "Tribe RGB की भूमिका का क्षेत्र",
@@ -125,7 +128,10 @@
     "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
     "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।",
     "recoverLoadingTitle": "आपका डेटा पुनर्प्राप्त किया जा रहा है",
-    "recoverLoadingSubTitle": "हम आपका डेटा पुनः प्राप्त कर रहे हैं—थोड़ा धैर्य रखें! आराम करें, और हम आपको तुरंत वापस चालू कर देंगे।"
+    "recoverLoadingSubTitle": "हम आपका डेटा पुनः प्राप्त कर रहे हैं—थोड़ा धैर्य रखें! आराम करें, और हम आपको तुरंत वापस चालू कर देंगे।",
+    "onchainLearMoreInfo": "आपके सभी बिटकॉइन लेनदेन के लिए एक सुरक्षित वॉलेट।",
+    "lightningLearnMoreInfo": "छोटी राशियों के लिए तेज़ और कम लागत वाले लेनदेन।",
+    "supportLearnMoreInfo": "अन्य बिटकॉइन एप्लिकेशन के साथ संगत वॉलेट।"
   },
   "home": {
     "addAssets": "प्राप्त संपत्ति जोड़ें",
