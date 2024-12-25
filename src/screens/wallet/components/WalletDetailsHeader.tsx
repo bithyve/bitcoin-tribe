@@ -103,49 +103,81 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             theme.colors.cardGradient2,
             theme.colors.cardGradient2,
           ]}>
-          <View style={styles.balanceContainer}>
-            <AppTouchable style={styles.totalBalanceWrapper}  onPress={() => toggleDisplayMode()}>
-              <View
-                style={styles.totalBalanceWrapper1}
-               >
-                {initialCurrencyMode !== CurrencyKind.SATS && (
-                  <View style={styles.currencyIconWrapper}>
-                    {getCurrencyIcon(
-                      isThemeDark ? IconBitcoin : IconBitcoinLight,
-                      isThemeDark ? 'dark' : 'light',
-                      10,
-                    )}
-                  </View>
-                )}
+          {app.appType === AppType.NODE_CONNECT ? (
+            <View style={styles.balanceContainer}>
+              <AppTouchable
+                style={styles.totalBalanceWrapper}
+                onPress={() => toggleDisplayMode()}>
+                <View style={styles.totalBalanceWrapper1}>
+                  {initialCurrencyMode !== CurrencyKind.SATS && (
+                    <View style={styles.currencyIconWrapper}>
+                      {getCurrencyIcon(
+                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark ? 'dark' : 'light',
+                        10,
+                      )}
+                    </View>
+                  )}
 
-                <AppText variant="heading2" style={styles.totalBalance}>
-                  {getBalance(balances)}
-                </AppText>
-                {initialCurrencyMode === CurrencyKind.SATS && (
-                  <AppText variant="caption" style={styles.satsText}>
-                    sats
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {getBalance(balances)}
                   </AppText>
-                )}
-              </View>
-              <AppText variant="body1" style={styles.totalBalanceLabel}>
-                {home.totalBalance}
-              </AppText>
-            </AppTouchable>
-            <View style={styles.modeBalanceWrapper}>
-              <View style={styles.balanceWrapper}>
-                <IconBTC />
-                <AppText variant="heading3" style={styles.balanceText}>
-                  0.7000
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
+                <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  {home.totalBalance}
                 </AppText>
-              </View>
-              <View style={styles.balanceWrapper}>
-                <IconLightning />
-                <AppText variant="heading3" style={styles.balanceText}>
-                  0.1345
-                </AppText>
+              </AppTouchable>
+              <View style={styles.modeBalanceWrapper}>
+                <View style={styles.balanceWrapper}>
+                  <IconBTC />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.7000
+                  </AppText>
+                </View>
+                <View style={styles.balanceWrapper}>
+                  <IconLightning />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.1345
+                  </AppText>
+                </View>
               </View>
             </View>
-          </View>
+          ) : (
+            <View>
+              <AppTouchable
+                style={styles.onChainTotalBalanceWrapper}
+                onPress={() => toggleDisplayMode()}>
+                <View style={styles.totalBalanceWrapper1}>
+                  {initialCurrencyMode !== CurrencyKind.SATS && (
+                    <View style={styles.currencyIconWrapper}>
+                      {getCurrencyIcon(
+                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark ? 'dark' : 'light',
+                        20,
+                      )}
+                    </View>
+                  )}
+
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {getBalance(balances)}
+                  </AppText>
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
+                <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  {home.totalBalance}
+                </AppText>
+              </AppTouchable>
+            </View>
+          )}
           <View style={styles.transCtaWrapper}>
             <TransactionButtons
               onPressSend={onPressSend}
@@ -204,6 +236,9 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     totalBalanceWrapper1: {
       flexDirection: 'row',
+      alignItems: 'center',
+    },
+    onChainTotalBalanceWrapper: {
       alignItems: 'center',
     },
     modeBalanceWrapper: {
