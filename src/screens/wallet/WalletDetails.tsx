@@ -48,17 +48,17 @@ function WalletDetails({ navigation, route }) {
   const [visible, setVisible] = useState(false);
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
 
-  const largeHeaderHeight = scrollY.interpolate({
-    inputRange: [0, 250],
-    outputRange: [300, 0],
-    extrapolate: 'clamp',
-  });
+  // const largeHeaderHeight = scrollY.interpolate({
+  //   inputRange: [0, 250],
+  //   outputRange: [300, 0],
+  //   extrapolate: 'clamp',
+  // });
 
-  const smallHeaderOpacity = scrollY.interpolate({
-    inputRange: [100, 150],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
+  // const smallHeaderOpacity = scrollY.interpolate({
+  //   inputRange: [100, 150],
+  //   outputRange: [0, 1],
+  //   extrapolate: 'clamp',
+  // });
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -120,8 +120,8 @@ function WalletDetails({ navigation, route }) {
         wallet={wallet}
         rgbWallet={rgbWallet}
         username={app.appName}
-        smallHeaderOpacity={smallHeaderOpacity}
-        largeHeaderHeight={largeHeaderHeight}
+        // smallHeaderOpacity={smallHeaderOpacity}
+        // largeHeaderHeight={largeHeaderHeight}
         onPressSend={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.SENDBTCSCREEN, {

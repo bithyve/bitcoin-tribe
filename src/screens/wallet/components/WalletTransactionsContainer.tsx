@@ -1,5 +1,12 @@
 import React, { useContext } from 'react';
-import { Animated, FlatList, Platform, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 
@@ -15,7 +22,7 @@ import ReservedSatsView from './ReservedSatsView';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import RefreshControlView from 'src/components/RefreshControlView';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import EmptyStateView from 'src/components/EmptyStateView';
@@ -29,7 +36,7 @@ function WalletTransactionsContainer({
   wallet,
   pullDownToRefresh,
   autoRefresh,
-  scrollY
+  scrollY,
 }) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -43,82 +50,80 @@ function WalletTransactionsContainer({
   };
   return (
     <View>
-    <View style={styles.contentWrapper}>
-      <AppText variant="body1" style={styles.recentTransText}>
-        {walletStrings.recentTransaction}
-      </AppText>
-      <AppTouchable
-        onPress={() =>
-          navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
-            transactions: transactions
-             ,
-            wallet,
-          })
-        }>
-        <AppText variant="body1" style={styles.viewAllText}>
-          {walletStrings.viewAll}
+      <View style={styles.contentWrapper}>
+        <AppText variant="body1" style={styles.recentTransText}>
+          {walletStrings.recentTransaction}
         </AppText>
-      </AppTouchable>
+        <AppTouchable
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
+              transactions: transactions,
+              wallet,
+            })
+          }>
+          <AppText variant="body1" style={styles.viewAllText}>
+            {walletStrings.viewAll}
+          </AppText>
+        </AppTouchable>
+      </View>
+      <ReservedSatsView />
+      {autoRefresh && !refreshing ? <LoadingSpinner /> : null}
+      <FlatList
+        style={styles.listContainer}
+        data={transactions}
+        // onScroll={Animated.event(
+        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        //   { useNativeDriver: false },
+        // )}
+        refreshControl={
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={refreshing}
+              onRefresh={pullDownToRefresh}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={pullDownToRefresh}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
+        }
+        ListFooterComponent={FooterComponent}
+        renderItem={({ item }) => (
+          <WalletTransactions
+            transId={item.txid}
+            tranStatus={item.status}
+            transDate={item.date}
+            transAmount={
+              app.appType === AppType.NODE_CONNECT
+                ? `${item.received || item?.amtMsat / 1000}`
+                : `${item.amount}`
+            }
+            transType={item.transactionType}
+            transaction={item}
+            coin={null}
+          />
+        )}
+        keyExtractor={item => item.txid}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <EmptyStateView
+            style={styles.emptyStateContainer}
+            IllustartionImage={
+              isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
+            title={walletStrings.noUTXOYet}
+            subTitle={walletStrings.noUTXOYetSubTitle}
+          />
+        }
+      />
     </View>
-    <ReservedSatsView />
-    {autoRefresh && !refreshing ? (
-      <LoadingSpinner />
-    ) : null}
-    <FlatList
-      data={transactions}
-      onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        { useNativeDriver: false },
-      )}
-      refreshControl={
-        Platform.OS === 'ios' ? (
-          <RefreshControlView
-            refreshing={refreshing}
-            onRefresh={pullDownToRefresh}
-          />
-        ) : (
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={ pullDownToRefresh}
-            colors={[theme.colors.accent1]} // You can customize this part
-            progressBackgroundColor={theme.colors.inputBackground}
-          />
-        )
-      }
-      ListFooterComponent={FooterComponent}
-      renderItem={({ item }) => (
-        <WalletTransactions
-          transId={item.txid}
-          tranStatus={item.status}
-          transDate={item.date}
-          transAmount={
-            app.appType === AppType.NODE_CONNECT
-              ? `${item.received || item?.amtMsat / 1000}`
-              : `${item.amount}`
-          }
-          transType={item.transactionType}
-          transaction={item}
-          coin={null}
-        />
-      )}
-      keyExtractor={item => item.txid}
-      showsVerticalScrollIndicator={false}
-      ListEmptyComponent={
-        <EmptyStateView
-          style={styles.emptyStateContainer}
-          IllustartionImage={
-            isThemeDark ? (
-              <NoTransactionIllustration />
-            ) : (
-              <NoTransactionIllustrationLight />
-            )
-          }
-          title={walletStrings.noUTXOYet}
-          subTitle={walletStrings.noUTXOYetSubTitle}
-        />
-      }
-    />
-  </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -140,6 +145,10 @@ const getStyles = (theme: AppTheme) =>
     },
     emptyStateContainer: {
       marginTop: '20%',
+    },
+    listContainer: {
+      marginTop: hp(15),
+      height: '60%',
     },
   });
 export default WalletTransactionsContainer;

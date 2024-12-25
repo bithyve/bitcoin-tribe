@@ -34,8 +34,8 @@ type walletDetailsHeaderProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
   onPressBuy?: () => void;
-  smallHeaderOpacity: any;
-  largeHeaderHeight: any;
+  smallHeaderOpacity?: any;
+  largeHeaderHeight?: any;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const insets = useSafeAreaInsets();
@@ -89,12 +89,13 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
 
   return (
     <>
-      <Animated.View
+      {/* <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader title={username} />
-      </Animated.View>
-      <Animated.View
-        style={[styles.largeHeader, { height: largeHeaderHeight }]}>
+      </Animated.View> */}
+      <View
+        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
+        style={styles.largeHeader}>
         <AppHeader title={app.appName} />
         <GradientView
           style={styles.largeHeaderContentWrapper}
@@ -186,7 +187,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             />
           </View>
         </GradientView>
-      </Animated.View>
+      </View>
     </>
   );
 }
@@ -205,6 +206,7 @@ const getStyles = (theme: AppTheme, insets) =>
     largeHeader: {
       alignItems: 'center',
       overflow: 'hidden',
+      marginBottom: hp(15)
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
