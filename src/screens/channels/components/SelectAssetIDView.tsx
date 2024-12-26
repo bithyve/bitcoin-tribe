@@ -2,7 +2,6 @@ import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import Identicon from 'react-native-identicon';
 
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
@@ -14,6 +13,7 @@ import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Identicon from 'src/components/Identicon';
 
 type Props = {
   selectedAsset: Asset;
