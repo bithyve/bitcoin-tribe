@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
@@ -11,8 +11,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import ModalContainer from 'src/components/ModalContainer';
-import SendEnterAddress from './components/SendEnterAddress';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
@@ -20,6 +18,7 @@ import config from 'src/utils/config';
 import TextField from 'src/components/TextField';
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
+
 
 function SendBTCScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -104,7 +103,7 @@ function SendBTCScreen({ route, navigation }) {
         enableOnAndroid={true}
         keyboardOpeningTime={0}>
         <View style={styles.scannerWrapper}>
-          {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
+          <QRScanner onCodeScanned={onCodeScanned} />
         </View>
         <View style={styles.inputWrapper}>
           <AppText variant="body2" style={styles.recipientAddressLabel}>
@@ -127,7 +126,7 @@ function SendBTCScreen({ route, navigation }) {
           />
         </View>
       </KeyboardAwareScrollView>
-      <ModalContainer
+      {/* <ModalContainer
         title={sendScreen.enterSendAddress}
         subTitle={sendScreen.enterSendAdrsSubTitle}
         visible={visible}
@@ -135,7 +134,7 @@ function SendBTCScreen({ route, navigation }) {
         height={Platform.OS == 'ios' && '85%'}
         onDismiss={() => setVisible(false)}>
         <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />
-      </ModalContainer>
+      </ModalContainer> */}
     </ScreenContainer>
   );
 }

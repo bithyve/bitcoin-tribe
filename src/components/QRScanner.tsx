@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,6 +17,9 @@ import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
 import { AppTheme } from 'src/theme';
 import CameraUnauthorized from './CameraUnauthorized';
+import UploadImageCta from 'src/components/UploadImageCta';
+import UploadIcon from 'src/assets/images/upload.svg';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type QRScannerProps = {
   onCodeScanned: (codes: string) => void;
@@ -24,6 +27,8 @@ type QRScannerProps = {
 const QRScanner = (props: QRScannerProps) => {
   const { onCodeScanned } = props;
   const device = useCameraDevice('back');
+  const { translations } = useContext(LocalizationContext);
+  const { sendScreen } = translations;
   const [cameraPermission, setCameraPermission] = useState(null);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -84,29 +89,39 @@ const QRScanner = (props: QRScannerProps) => {
   return (
     <>
       {cameraPermission != null && device != null ? (
-        <View style={styles.qrCodeContainer}>
-          <>
-            <Camera
-              device={device}
-              isActive={true}
-              style={styles.visionCameraContainer}
-              codeScanner={codeScanner}
-              enableZoomGesture={true}
-            />
-            <View style={[styles.visionCameraContainer, styles.outSideBorder]}>
-              <View style={styles.scannerInnerBorderWrapper}>
-                <View style={styles.qrScannerRowStyle}>
-                  <QRBorderCard style={styles.borderLeftTopWidth} />
-                  <QRBorderCard style={styles.borderRightTopWidth} />
-                </View>
-                <View style={styles.qrScannerRowStyle}>
-                  <QRBorderCard style={styles.borderLeftBottomWidth} />
-                  <QRBorderCard style={styles.borderRightBottomWidth} />
+        <>
+          <View style={styles.qrCodeContainer}>
+            <>
+              <Camera
+                device={device}
+                isActive={true}
+                style={styles.visionCameraContainer}
+                codeScanner={codeScanner}
+                enableZoomGesture={true}
+              />
+              <View
+                style={[styles.visionCameraContainer, styles.outSideBorder]}>
+                <View style={styles.scannerInnerBorderWrapper}>
+                  <View style={styles.qrScannerRowStyle}>
+                    <QRBorderCard style={styles.borderLeftTopWidth} />
+                    <QRBorderCard style={styles.borderRightTopWidth} />
+                  </View>
+                  <View style={styles.qrScannerRowStyle}>
+                    <QRBorderCard style={styles.borderLeftBottomWidth} />
+                    <QRBorderCard style={styles.borderRightBottomWidth} />
+                  </View>
                 </View>
               </View>
-            </View>
-          </>
-        </View>
+            </>
+          </View>
+          <View style={styles.uploadImageCtaWrapper}>
+            <UploadImageCta
+              title={sendScreen.uploadFromGallery}
+              onPress={() => {}}
+              icon={<UploadIcon />}
+            />
+          </View>
+        </>
       ) : (
         <CameraUnauthorized />
       )}
@@ -156,6 +171,9 @@ const getStyles = (theme: AppTheme) =>
     borderRightTopWidth: {
       borderTopWidth: 1,
       borderRightWidth: 1,
+    },
+    uploadImageCtaWrapper: {
+      alignItems: 'center',
     },
   });
 

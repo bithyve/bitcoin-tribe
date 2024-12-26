@@ -288,7 +288,8 @@
     "totalFee": "Total Fee:",
     "sendBtcLoadingTitle": "Sending Bitcoin",
     "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely.",
-    "recipientAddress": "Recipient's address"
+    "recipientAddress": "Recipient's address",
+    "uploadFromGallery": "Upload from Gallery"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

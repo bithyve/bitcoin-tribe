@@ -288,7 +288,8 @@
     "totalFee": "Tarifa total：",
     "sendBtcLoadingTitle": "Enviando Bitcoin",
     "sendBtcLoadingSubTitle": "Tu transacción está siendo procesada—¡por favor espera! Relájate, tu Bitcoin será enviado de forma segura.",
-    "recipientAddress": "Dirección del destinatario"
+    "recipientAddress": "Dirección del destinatario",
+    "uploadFromGallery": "Subir desde la galería"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
