@@ -287,7 +287,8 @@
     "sendAssetSubtitle": "RGB請求書をスキャン",
     "totalFee": "合計料金：",
     "sendBtcLoadingTitle": "ビットコインを送信中",
-    "sendBtcLoadingSubTitle": "トランザクションを処理中です—少々お待ちください！リラックスしてお待ちください、ビットコインは安全に送信されます。"
+    "sendBtcLoadingSubTitle": "トランザクションを処理中です—少々お待ちください！リラックスしてお待ちください、ビットコインは安全に送信されます。",
+    "recipientAddress": "受取人の住所"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

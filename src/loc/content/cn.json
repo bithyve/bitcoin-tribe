@@ -287,7 +287,8 @@
     "sendAssetSubtitle": "扫描RGB发票",
     "totalFee": "总费用：",
      "sendBtcLoadingTitle": "正在发送比特币",
-    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。"
+    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。",
+    "recipientAddress": "收件人地址"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

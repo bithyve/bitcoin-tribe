@@ -287,7 +287,8 @@
     "sendAssetSubtitle": "Escanea la factura RGB",
     "totalFee": "Tarifa total：",
     "sendBtcLoadingTitle": "Enviando Bitcoin",
-    "sendBtcLoadingSubTitle": "Tu transacción está siendo procesada—¡por favor espera! Relájate, tu Bitcoin será enviado de forma segura."
+    "sendBtcLoadingSubTitle": "Tu transacción está siendo procesada—¡por favor espera! Relájate, tu Bitcoin será enviado de forma segura.",
+    "recipientAddress": "Dirección del destinatario"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

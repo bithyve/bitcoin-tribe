@@ -287,7 +287,8 @@
     "sendAssetSubtitle": "Scan the RGB invoice",
     "totalFee": "Total Fee:",
     "sendBtcLoadingTitle": "Sending Bitcoin",
-    "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely."
+    "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely.",
+    "recipientAddress": "Recipient's address"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
