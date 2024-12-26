@@ -59,7 +59,7 @@ const onShare = async (filePath) => {
   }
 };
 
-const CoinsMetaDataScreen = () => {
+const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -191,4 +191,4 @@ const getStyles = (theme: AppTheme) =>
     },
   });
 
-export default CoinsMetaDataScreen;
+export default CollectibleMetaDataScreen;
