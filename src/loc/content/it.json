@@ -17,6 +17,7 @@
     "confirmAndProceed": "Conferma e procedi",
     "confirmAndClose": "Conferma e Chiudi",
     "sendMax": "INVIA MASSIMO",
+    "max": "MASSIMO",
     "broadcast": "Trasmetti",
     "walletID": "ID portafoglio",
     "versionHistory": "Cronologia delle versioni",
@@ -289,7 +290,14 @@
     "sendBtcLoadingTitle": "Invio di Bitcoin",
     "sendBtcLoadingSubTitle": "La tua transazione è in elaborazione—attendi un momento! Rilassati e il tuo Bitcoin sarà inviato in sicurezza.",
     "recipientAddress": "Indirizzo del destinatario",
-    "uploadFromGallery": "Carica dalla galleria"
+    "uploadFromGallery": "Carica dalla galleria",
+    "enterSats": "Inserisci sats",
+    "availableBalance": "Saldo Disponibile",
+    "fee": "Commissione",
+    "low": "Basso",
+    "medium": "Medio",
+    "high": "Alto",
+    "custom": "Personalizzato"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

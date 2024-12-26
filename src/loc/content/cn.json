@@ -17,6 +17,7 @@
     "confirmAndProceed": "确认并继续",
     "confirmAndClose": "确认并关闭",
     "sendMax": "发送最大金额",
+    "max": "最大",
     "broadcast": "广播",
     "walletID": "钱包ID",
     "versionHistory": "版本历史",
@@ -289,7 +290,14 @@
      "sendBtcLoadingTitle": "正在发送比特币",
     "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。",
     "recipientAddress": "收件人地址",
-    "uploadFromGallery": "从图库上传"
+    "uploadFromGallery": "从图库上传",
+    "enterSats": "输入比特",
+    "availableBalance": "可用余额",
+    "fee": "费用",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "custom": "自定义"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

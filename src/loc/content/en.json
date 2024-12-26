@@ -17,6 +17,7 @@
     "confirmAndProceed": "Confirm & Proceed",
     "confirmAndClose": "Confirm & Close",
     "sendMax": "SEND MAX",
+    "max": "MAX",
     "broadcast": "Broadcast",
     "walletID": "Wallet ID",
     "versionHistory": "Version History",
@@ -289,7 +290,14 @@
     "sendBtcLoadingTitle": "Sending Bitcoin",
     "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely.",
     "recipientAddress": "Recipient's address",
-    "uploadFromGallery": "Upload from Gallery"
+    "uploadFromGallery": "Upload from Gallery",
+    "enterSats": "Enter sats",
+    "availableBalance": "Available Balance",
+    "fee": "Fee",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "custom": "Custom"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

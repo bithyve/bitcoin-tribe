@@ -17,6 +17,7 @@
     "confirmAndProceed": "確認して続行",
     "confirmAndClose": "確認して閉じる",
     "sendMax": "最大送信",
+    "max": "最大",
     "broadcast": "ブロードキャスト",
     "walletID": "ウォレットID",
     "versionHistory": "バージョン履歴",
@@ -289,7 +290,14 @@
     "sendBtcLoadingTitle": "ビットコインを送信中",
     "sendBtcLoadingSubTitle": "トランザクションを処理中です—少々お待ちください！リラックスしてお待ちください、ビットコインは安全に送信されます。",
     "recipientAddress": "受取人の住所",
-    "uploadFromGallery": "ギャラリーからアップロード"
+    "uploadFromGallery": "ギャラリーからアップロード",
+    "enterSats": "サトシを入力",
+    "availableBalance": "利用可能残高",
+    "fee": "手数料",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "custom": "カスタム"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

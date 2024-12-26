@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { RadioButton, useTheme } from 'react-native-paper';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
@@ -8,18 +8,14 @@ import idx from 'idx';
 import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
-import Buttons from 'src/components/Buttons';
+import { hp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import Toast from 'src/components/Toast';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import SendAddressIcon from 'src/assets/images/sendAddress.svg';
-import SendAddressIconLight from 'src/assets/images/sendAddress_light.svg';
 import { Keys, Storage } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
@@ -33,9 +29,16 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
-import ModalLoading from 'src/components/ModalLoading';
 import AppType from 'src/models/enums/AppType';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import RemoveIcon from 'src/assets/images/removeIcon.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import Colors from 'src/theme/Colors';
+import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import useRgbWallets from 'src/hooks/useRgbWallets';
+import IconBitcoin from 'src/assets/images/icon_btc3.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
 function SendToContainer({
   wallet,
@@ -67,6 +70,7 @@ function SendToContainer({
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -82,9 +86,9 @@ function SendToContainer({
 
   useEffect(() => {
     if (sendTransactionMutation.status === 'success') {
-      setTimeout(()=>{
+      setTimeout(() => {
         setVisible(true);
-      },500)
+      }, 500);
     } else if (sendTransactionMutation.status === 'error') {
       Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
     }
@@ -121,6 +125,20 @@ function SendToContainer({
     });
   };
 
+  const balances = useMemo(() => {
+    if (app.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+    } else {
+      return (
+        wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed
+      );
+    }
+  }, [
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
+  ]);
+
   useEffect(() => {
     const balance = idx(wallet, _ => _.specs.balances);
     const availableToSpend = balance?.confirmed + balance?.unconfirmed;
@@ -130,20 +148,6 @@ function SendToContainer({
       setInsufficientBalance(false);
     }
   }, [amount, wallet]);
-
-  function onPressNumber(text) {
-    let tmpPasscode = amount;
-    if (text !== 'x') {
-      tmpPasscode += text;
-      setAmount(tmpPasscode);
-    } else {
-      setAmount(amount);
-    }
-  }
-
-  const onDeletePressed = text => {
-    setAmount(amount.slice(0, -1));
-  };
 
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
@@ -170,144 +174,303 @@ function SendToContainer({
       <InProgessPopupContainer
         title={sendScreen.sendBtcLoadingTitle}
         subTitle={sendScreen.sendBtcLoadingSubTitle}
-        illustrationPath={isThemeDark ? require('src/assets/images/jsons/sendingBTCorAsset.json') : require('src/assets/images/jsons/sendingBTCorAsset_light.json')}
+        illustrationPath={
+          isThemeDark
+            ? require('src/assets/images/jsons/sendingBTCorAsset.json')
+            : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
+        }
       />
     </ResponsePopupContainer>
   ) : (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <View style={styles.txnDetailsContainer}>
-          <View style={styles.txnLeftWrapper}>
-            {isThemeDark ? <SendAddressIcon /> : <SendAddressIconLight />}
+        <View style={styles.inputWrapper}>
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {sendScreen.recipientAddress}
+          </AppText>
+          <TextField
+            value={address}
+            onChangeText={() => {}}
+            // onChangeText={text => setAddress(text)}
+            placeholder={sendScreen.enterAddress}
+            keyboardType={'default'}
+            returnKeyType={'Enter'}
+            multiline={true}
+            numberOfLines={2}
+            inputStyle={styles.inputRecipientStyle}
+            contentStyle={styles.contentStyle}
+            rightIcon={<RemoveIcon />}
+            onRightTextPress={() => {}}
+            rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {sendScreen.enterSats}
+          </AppText>
+          <TextField
+            value={formatNumber(amount)}
+            onChangeText={text => setAmount(text)}
+            placeholder={sendScreen.enterAmount}
+            keyboardType={'numeric'}
+            inputStyle={styles.inputStyle}
+            contentStyle={styles.contentStyle}
+            // disabled={true}
+            // icon={<IconBitcoin />}
+            rightText={common.max}
+            onRightTextPress={() => {}}
+            rightCTATextColor={theme.colors.accent1}
+          />
+        </View>
+        <View style={styles.availableBalanceWrapper}>
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {sendScreen.availableBalance}
+          </AppText>
+          <View style={styles.balanceWrapper}>
+            {initialCurrencyMode !== CurrencyKind.SATS && (
+              <View style={styles.currencyIconWrapper}>
+                {getCurrencyIcon(
+                  isThemeDark ? IconBitcoin : IconBitcoinLight,
+                  isThemeDark ? 'dark' : 'light',
+                  10,
+                )}
+              </View>
+            )}
+            <AppText variant="body2" style={styles.availableBalanceText}>
+              {getBalance(balances)}
+            </AppText>
+            {initialCurrencyMode === CurrencyKind.SATS && (
+              <AppText variant="caption" style={styles.satsText}>
+                sats
+              </AppText>
+            )}
           </View>
-          <View style={styles.txnRightWrapper}>
-            <AppText variant="body1" style={styles.sendToAddress}>
-              {sendScreen.sendingToAddress}
+        </View>
+        <AppText variant="body2" style={styles.recipientAddressLabel}>
+          {sendScreen.fee}
+        </AppText>
+        <View style={styles.feeContainer}>
+          <AppTouchable
+            onPress={() => setSelectedPriority(TxPriority.LOW)}
+            style={[
+              styles.feeWrapper,
+              {
+                borderColor:
+                  selectedPriority === TxPriority.LOW
+                    ? 'transparent'
+                    : theme.colors.borderColor,
+                backgroundColor:
+                  selectedPriority === TxPriority.LOW
+                    ? theme.colors.accent1
+                    : 'transparent',
+              },
+            ]}>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.LOW
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {sendScreen.low}
             </AppText>
             <AppText
               variant="body2"
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.txnID}>
-              {address}
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.LOW
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {getFeeRateByPriority(TxPriority.LOW)} sat/vB
             </AppText>
-          </View>
-        </View>
-        <TextField
-          value={formatNumber(amount)}
-          onChangeText={text => setAmount(text)}
-          placeholder={sendScreen.enterAmount}
-          keyboardType={'numeric'}
-          // disabled={true}
-          icon={<IconBitcoin />}
-          // rightText={common.sendMax}
-          // onRightTextPress={() => {}}
-          // rightCTATextColor={theme.colors.accent1}
-        />
-        <View style={styles.totalFeeWrapper}>
-          <AppText variant="heading1" style={styles.feeTitleText}>
-            {sendScreen.totalFee}
-          </AppText>
-          {initialCurrencyMode !== CurrencyKind.SATS
-            ? getCurrencyIcon(IconBitcoin, 'dark')
-            : null}
-          <AppText variant="heading1" style={styles.amountText}>
-            &nbsp; {getFeeRateByPriority(selectedPriority)}
-          </AppText>
-          {initialCurrencyMode === CurrencyKind.SATS && (
-            <AppText variant="caption" style={styles.satsText}>
-              sats/vbyte
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityTimeValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.LOW
+                      ? Colors.Black
+                      : theme.colors.secondaryHeadingColor,
+                },
+              ]}>
+              ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
             </AppText>
-          )}
-        </View>
-        <View style={styles.feeWrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.LOW}
-              status={
-                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
-              }
-              onPress={() => setSelectedPriority(TxPriority.LOW)}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                Low -
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp; {getFeeRateByPriority(TxPriority.LOW)} sats/vbyte
-              </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
-                ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
-              </AppText>
-            </View>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.MEDIUM}
-              status={
-                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
-              }
-              onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                Medium -
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{getFeeRateByPriority(TxPriority.MEDIUM)} sat/vbyte
-              </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
-                ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
-              </AppText>
-            </View>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.HIGH}
-              status={
-                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
-              }
-              onPress={() => setSelectedPriority(TxPriority.HIGH)}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                High -
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{getFeeRateByPriority(TxPriority.HIGH)} sat/vbyte
-              </AppText>
-              <AppText variant="caption" style={styles.feeSatsText}>
-                ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
-              </AppText>
-            </View>
-          </View>
+          </AppTouchable>
+          <AppTouchable
+            onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
+            style={[
+              styles.feeWrapper,
+              {
+                borderColor:
+                  selectedPriority === TxPriority.MEDIUM
+                    ? 'transparent'
+                    : theme.colors.borderColor,
+                backgroundColor:
+                  selectedPriority === TxPriority.MEDIUM
+                    ? theme.colors.accent1
+                    : 'transparent',
+              },
+            ]}>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.MEDIUM
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {sendScreen.medium}
+            </AppText>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.MEDIUM
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {getFeeRateByPriority(TxPriority.MEDIUM)} sat/vB
+            </AppText>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityTimeValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.MEDIUM
+                      ? Colors.Black
+                      : theme.colors.secondaryHeadingColor,
+                },
+              ]}>
+              ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
+            </AppText>
+          </AppTouchable>
+          <AppTouchable
+            onPress={() => setSelectedPriority(TxPriority.HIGH)}
+            style={[
+              styles.feeWrapper,
+              {
+                borderColor:
+                  selectedPriority === TxPriority.HIGH
+                    ? 'transparent'
+                    : theme.colors.borderColor,
+                backgroundColor:
+                  selectedPriority === TxPriority.HIGH
+                    ? theme.colors.accent1
+                    : 'transparent',
+              },
+            ]}>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.HIGH
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {sendScreen.high}
+            </AppText>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.HIGH
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {getFeeRateByPriority(TxPriority.HIGH)} sat/vB
+            </AppText>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityTimeValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.HIGH
+                      ? Colors.Black
+                      : theme.colors.secondaryHeadingColor,
+                },
+              ]}>
+              ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
+            </AppText>
+          </AppTouchable>
+          <AppTouchable
+            onPress={() => setSelectedPriority(TxPriority.CUSTOM)}
+            style={[
+              styles.feeWrapper,
+              {
+                borderColor:
+                  selectedPriority === TxPriority.CUSTOM
+                    ? 'transparent'
+                    : theme.colors.borderColor,
+                backgroundColor:
+                  selectedPriority === TxPriority.CUSTOM
+                    ? theme.colors.accent1
+                    : 'transparent',
+              },
+            ]}>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.CUSTOM
+                      ? Colors.Black
+                      : theme.colors.headingColor,
+                },
+              ]}>
+              {sendScreen.custom}
+            </AppText>
+            <AppText
+              variant="body2"
+              style={[
+                styles.priorityTimeValue,
+                {
+                  color:
+                    selectedPriority === TxPriority.CUSTOM
+                      ? Colors.Black
+                      : theme.colors.secondaryHeadingColor,
+                },
+              ]}>
+              ~ 10 min
+            </AppText>
+          </AppTouchable>
         </View>
       </View>
-
       <View style={styles.primaryCTAContainer}>
-        <Buttons
+        <PrimaryCTA disabled={!amount} title={common.next} onPress={initiateSend} width={'100%'} />
+        {/* <Buttons
           disabled={!amount}
           primaryTitle={common.broadcast}
           secondaryTitle={common.cancel}
           primaryOnPress={initiateSend}
           secondaryOnPress={navigation.goBack}
           width={wp(160)}
-        />
+        /> */}
       </View>
-      {/* <View style={styles.keyPadWrapper}>
-        <KeyPadView
-          onPressNumber={onPressNumber}
-          onDeletePressed={onDeletePressed}
-          keyColor={theme.colors.accent1}
-          ClearIcon={<DeleteIcon />}
-        />
-      </View> */}
       <View>
         <ResponsePopupContainer
           visible={visible}
@@ -340,77 +503,73 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       marginTop: hp(5),
     },
-    primaryCTAContainer: {
-      marginVertical: hp(10),
-    },
+    primaryCTAContainer: {},
     wrapper: {
       flex: 1,
     },
-    keyPadWrapper: {
-      marginTop: hp(10),
-      flex: 1,
-      justifyContent: 'flex-end',
-      marginBottom: hp(10),
-    },
-    txnDetailsContainer: {
-      flexDirection: 'row',
-      width: '100%',
-      marginBottom: hp(20),
-      alignItems: 'center',
-    },
-    txnLeftWrapper: {
-      width: '20%',
-    },
-    txnRightWrapper: {
-      width: '80%',
-    },
-    sendToAddress: {
-      color: theme.colors.headingColor,
-    },
-    txnID: {
-      color: theme.colors.secondaryHeadingColor,
-    },
-    totalFeeWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: hp(20),
-    },
-    feeTitleText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
-    amountText: {
-      // marginLeft: hp(5),
-      color: theme.colors.headingColor,
-    },
     satsText: {
-      color: theme.colors.headingColor,
-      marginTop: hp(5),
-      marginLeft: hp(5),
-    },
-    radioBtnWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: hp(10),
-    },
-    feeViewWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    feePriorityText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
-    feeText: {
-      color: theme.colors.headingColor,
-    },
-    feeSatsText: {
       color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
     containerModalStyle: {
       margin: 0,
       padding: 10,
+    },
+    inputWrapper: {
+      paddingBottom: 16,
+    },
+    recipientAddressLabel: {
+      marginVertical: hp(10),
+      color: theme.colors.secondaryHeadingColor,
+    },
+    inputRecipientStyle: {
+      width: '82%',
+    },
+    inputStyle: {
+      width: '80%',
+    },
+    contentStyle: {
+      marginTop: 0,
+    },
+    rightCTAStyle: {
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: hp(5),
+    },
+    feeContainer: {
+      flexDirection: 'row',
+    },
+    feeWrapper: {
+      padding: 15,
+      borderWidth: 1,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: hp(5),
+    },
+    priorityValue: {
+      color: theme.colors.headingColor,
+    },
+    priorityTimeValue: {
+      marginTop: hp(10),
+      color: theme.colors.secondaryHeadingColor,
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    availableBalanceText: {
+      color: theme.colors.headingColor,
+    },
+    availableBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    currencyIconWrapper: {
+      marginRight: hp(5),
     },
   });
 export default SendToContainer;

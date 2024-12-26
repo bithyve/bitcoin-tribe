@@ -17,6 +17,7 @@
     "confirmAndProceed": "Confirmar y proceder",
     "confirmAndClose": "Confirmar y Cerrar",
     "sendMax": "ENVIAR MÁXIMO",
+    "max": "MÁXIMO",
     "broadcast": "Transmitir",
     "walletID": "ID de la billetera",
     "versionHistory": "Historial de versiones",
@@ -289,7 +290,14 @@
     "sendBtcLoadingTitle": "Enviando Bitcoin",
     "sendBtcLoadingSubTitle": "Tu transacción está siendo procesada—¡por favor espera! Relájate, tu Bitcoin será enviado de forma segura.",
     "recipientAddress": "Dirección del destinatario",
-    "uploadFromGallery": "Subir desde la galería"
+    "uploadFromGallery": "Subir desde la galería",
+    "enterSats": "Ingrese sats",
+    "availableBalance": "Saldo Disponible",
+    "fee": "Tarifa",
+    "low": "Bajo",
+    "medium": "Medio",
+    "high": "Alto",
+    "custom": "Personalizado"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

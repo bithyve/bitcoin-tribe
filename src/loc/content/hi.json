@@ -17,6 +17,7 @@
     "confirmAndProceed": "पुष्टि करें और आगे बढ़ें",
     "confirmAndClose": "पुष्टि करें और बंद करें",
     "sendMax": "अधिकतम भेजें",
+    "max": "अधिकतम",
     "broadcast": "प्रसारित करें",
     "walletID": "वॉलेट आईडी",
     "versionHistory": "संस्करण इतिहास",
@@ -289,7 +290,14 @@
     "sendBtcLoadingTitle": "बिटकॉइन भेजा जा रहा है",
     "sendBtcLoadingSubTitle": "आपका लेनदेन संसाधित हो रहा है—कृपया प्रतीक्षा करें! आराम करें, बिटकॉइन सुरक्षित रूप से भेजा जाएगा।",
     "recipientAddress": "प्राप्तकर्ता का पता",
-    "uploadFromGallery": "गैलरी से अपलोड करें"
+    "uploadFromGallery": "गैलरी से अपलोड करें",
+    "enterSats": "सैट्स दर्ज करें",
+    "availableBalance": "उपलब्ध शेष राशि",
+    "fee": "शुल्क",
+    "low": "निम्न",
+    "medium": "मध्यम",
+    "high": "उच्च",
+    "custom": "कस्टम"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
