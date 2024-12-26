@@ -85,6 +85,8 @@
     "rememberPasscodeSubTitle": "パスコードを覚え、12単語のリカバリーキーを書き留めてアプリをバックアップしてください",
     "rememberPasscodeDesc": "パスコードを忘れた場合、アプリにアクセスできなくなり、リカバリーが必要です",
     "selectWalletType": "ウォレットタイプを選択",
+    "createWallet": "ウォレットを作成",
+    "advanceOptionTitle": "詳細オプション",
     "selfCustody": "セルフカストディ",
     "mainnet": "On-Chain",
     "mainnetAndLightning": "On-Chain & Lightning",
@@ -100,6 +102,7 @@
     "enterBearerToken": "ベアラートークンを入力してください",
     "supportTermAndConditionTitle": "このボックスにチェックを入れることで、利用規約に同意したことになります。",
     "readMore": "詳しく読む",
+    "learnMore": "もっと詳しく知る",
     "termAndConditionTitle": "利用規約",
     "termAndConditionBrief": "Tribe RGB は外部ノードを接続するオプションを提供しますが、この機能のサポートは外部サービスプロバイダーによって管理されます。以下の条件をご確認ください。",
     "termAndConditionTitle1": "Tribe RGBの役割の範囲",
@@ -125,7 +128,10 @@
     "profileSetupLoadingTitle": "プロフィールを設定中です",
     "profileSetupLoadingSubTitle": "準備が整うまでリラックスしてお待ちください。アプリはもうすぐ準備完了です。",
     "recoverLoadingTitle": "データを復元しています",
-    "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。"
+    "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。",
+    "onchainLearMoreInfo": "すべてのビットコイン取引に対応する安全なウォレット。",
+    "lightningLearnMoreInfo": "少額の取引に最適な高速で低コストなソリューション。",
+    "supportLearnMoreInfo": "他のビットコインアプリケーションと互換性のあるウォレット。"
   },
   "home": {
     "addAssets": "受信資産を追加",

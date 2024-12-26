@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -13,7 +14,6 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { AppContext } from 'src/contexts/AppContext';
-import AppType from 'src/models/enums/AppType';
 
 type CollectibleDetailsHeaderProps = {
   collectible: Collectible;
@@ -49,7 +49,15 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
         </AppText>
       </View>
       <View style={styles.balanceWrapper}>
-        <AppText variant="walletBalance" style={styles.balanceText}>
+        <AppText
+          variant="walletBalance"
+          style={[
+            styles.balanceText,
+            {
+              fontSize:
+                collectible.balance.spendable.toString().length > 10 ? 24 : 39,
+            },
+          ]}>
           {numberWithCommas(collectible.balance.spendable)}
         </AppText>
       </View>
