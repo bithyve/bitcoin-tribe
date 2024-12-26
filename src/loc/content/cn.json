@@ -85,6 +85,8 @@
     "rememberPasscodeSubTitle": "请记住您的密码，并通过写下12个字的恢复密钥备份您的应用程序",
     "rememberPasscodeDesc": "如果您忘记了密码，您将被锁定在应用程序之外，必须通过恢复来找回它",
     "selectWalletType": "选择钱包类型",
+    "createWallet": "创建钱包",
+    "advanceOptionTitle": "高级选项",
     "selfCustody": "自主管理",
     "mainnet": "On-Chain",
     "mainnetAndLightning": "On-Chain & Lightning",
@@ -100,6 +102,7 @@
     "enterBearerToken": "输入承载令牌",
     "supportTermAndConditionTitle": "勾选此框，即表示您同意条款和条件。",
     "readMore": "阅读更多",
+    "learnMore": "了解更多",
     "termAndConditionTitle": "条款和条件",
     "termAndConditionBrief": "提供连接外部节点的选项；然而，此功能的支持由外部服务提供商管理。请查看以下条款：",
     "termAndConditionTitle1": "Tribe RGB的角色范围",
@@ -125,7 +128,10 @@
     "profileSetupLoadingTitle": "正在设置您的个人资料",
     "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。",
     "recoverLoadingTitle": "正在恢复您的数据",
-    "recoverLoadingSubTitle": "我们正在恢复您的数据，请稍等！放松一下，我们很快就会让您恢复使用。"
+    "recoverLoadingSubTitle": "我们正在恢复您的数据，请稍等！放松一下，我们很快就会让您恢复使用。",
+    "onchainLearMoreInfo": "适用于所有比特币交易的安全钱包。",
+    "lightningLearnMoreInfo": "适用于小额交易的快速低成本解决方案。",
+    "supportLearnMoreInfo": "兼容其他比特币应用程序的钱包。"
   },
   "home": {
     "addAssets": "添加接收资产",

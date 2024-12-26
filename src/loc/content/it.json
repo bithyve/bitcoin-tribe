@@ -85,6 +85,8 @@
     "rememberPasscodeSubTitle": "Ricorda il tuo codice e fai il backup dell'app scrivendo la chiave di recupero di 12 parole",
     "rememberPasscodeDesc": "Se dimentichi il codice, verrai bloccato dall'app e dovrai recuperarlo",
     "selectWalletType": "Seleziona il tipo di wallet",
+    "createWallet": "Crea Portafoglio",
+    "advanceOptionTitle": "Opzioni Avanzate",
     "selfCustody": "Auto-custodia",
     "mainnet": "On-Chain",
     "mainnetAndLightning": "On-Chain & Lightning",
@@ -100,6 +102,7 @@
     "enterBearerToken": "Inserisci il Bearer Token",
     "supportTermAndConditionTitle": "Selezionando questa casella, accetti i termini e condizioni.",
     "readMore": "Leggi di più",
+    "learnMore": "Scopri di più",
     "termAndConditionTitle": "Termini e Condizioni",
     "termAndConditionBrief": "Tribe RGB fornisce un'opzione per connettere nodi esterni; tuttavia, il supporto per questa funzione è gestito da un fornitore di servizi esterno. Si prega di esaminare i seguenti termini:",
     "termAndConditionTitle1": "Ambito del Ruolo di Tribe RGB",
@@ -125,7 +128,10 @@
     "profileSetupLoadingTitle": "Stiamo configurando il tuo profilo",
     "profileSetupLoadingSubTitle": "Rilassati mentre prepariamo tutto per te. La tua app sarà pronta tra poco.",
     "recoverLoadingTitle": "Recupero dei tuoi dati",
-    "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo."
+    "recoverLoadingSubTitle": "Stiamo ripristinando i tuoi dati—resisti! Rilassati e tornerai operativo in un attimo.",
+    "onchainLearMoreInfo": "Un portafoglio sicuro per tutte le tue transazioni Bitcoin.",
+    "lightningLearnMoreInfo": "Transazioni veloci e a basso costo per importi ridotti.",
+    "supportLearnMoreInfo": "Un portafoglio compatibile con altre applicazioni Bitcoin."
   },
   "home": {
     "addAssets": "Aggiungi Risorsa Ricevuta",

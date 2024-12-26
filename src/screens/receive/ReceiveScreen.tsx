@@ -23,6 +23,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { wp } from 'src/constants/responsive';
 // import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
+import Toast from 'src/components/Toast';
 
 function ReceiveScreen({ route }) {
   const theme = useTheme();
@@ -55,12 +56,14 @@ function ReceiveScreen({ route }) {
       setAddress(receivingAddress);
     }
   }, []);
-
+console.log('getNodeOnchainBtcAddress.data.address', getNodeOnchainBtcAddress)
   useEffect(() => {
     if (getNodeOnchainBtcAddress.isError) {
     } else if (getNodeOnchainBtcAddress.data) {
       if (getNodeOnchainBtcAddress.data.address) {
         setAddress(getNodeOnchainBtcAddress.data.address);
+      }else if(getNodeOnchainBtcAddress?.data?.message){
+        Toast(getNodeOnchainBtcAddress?.data?.message, true)
       }
     }
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);
