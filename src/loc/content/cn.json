@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "输入或粘贴发送地址或RGB发票",
     "enterAddress": "输入地址",
     "sendToTitle": "发送至",
+    "sendTitle": "发送",
     "enterAmount": "输入金额",
     "sendingToAddress": "发送至地址",
     "sendSuccessTitle": "发送\n成功",
@@ -301,7 +302,9 @@
     "sendConfirmation": "发送确认",
     "feeRate": "费率",
     "feeAmount": "费用金额",
-    "total": "总计"
+    "total": "总计",
+    "customFee": "自定义费用",
+    "enterCustomFee": "输入自定义费用"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

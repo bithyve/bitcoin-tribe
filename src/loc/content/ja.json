@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "送信先住所またはRGB請求書を入力または貼り付けてください",
     "enterAddress": "アドレスを入力",
     "sendToTitle": "送信先",
+    "sendTitle": "送信",
     "enterAmount": "金額を入力",
     "sendingToAddress": "アドレスに送信中",
     "sendSuccessTitle": "送信\n成功",
@@ -301,7 +302,9 @@
     "sendConfirmation": "送信確認",
     "feeRate": "手数料率",
     "feeAmount": "手数料金額",
-    "total": "合計"
+    "total": "合計",
+    "customFee": "カスタム料金",
+    "enterCustomFee": "カスタム料金を入力"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

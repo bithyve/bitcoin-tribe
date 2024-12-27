@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "Enter or Paste Send Address or RGB Invoice",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
+    "sendTitle": "Send",
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send\nSuccessful",
@@ -301,7 +302,9 @@
     "sendConfirmation": "Send Confirmation",
     "feeRate": "Fee Rate",
     "feeAmount": "Fee Amount",
-    "total": "Total"
+    "total": "Total",
+    "customFee": "Custom fee",
+    "enterCustomFee": "Enter custom fee"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

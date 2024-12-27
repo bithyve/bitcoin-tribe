@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "Enter Send Address/Invoice or Paste",
     "enterAddress": "Introduce la dirección",
     "sendToTitle": "Enviar a",
+    "sendTitle": "Enviar",
     "enterAmount": "Introduce la cantidad",
     "sendingToAddress": "Enviando a la dirección",
     "sendSuccessTitle": "Enviar\nexitosa",
@@ -301,7 +302,9 @@
     "sendConfirmation": "Confirmación de Envío",
     "feeRate": "Tasa de Tarifa",
     "feeAmount": "Monto de la Tarifa",
-    "total": "Total"
+    "total": "Total",
+    "customFee": "Tarifa personalizada",
+    "enterCustomFee": "Introduce una tarifa personalizada"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें या पेस्ट करें",
     "enterAddress": "पता दर्ज करें",
     "sendToTitle": "भेजें",
+     "sendTitle": "भेजें",
     "enterAmount": "राशि दर्ज करें",
     "sendingToAddress": "पते पर भेज रहा है",
     "sendSuccessTitle": "भेजें\nसफल",
@@ -301,7 +302,9 @@
     "sendConfirmation": "भेजने की पुष्टि",
     "feeRate": "शुल्क दर",
     "feeAmount": "शुल्क राशि",
-    "total": "कुल"
+    "total": "कुल",
+    "customFee": "कस्टम शुल्क",
+    "enterCustomFee": "कस्टम शुल्क दर्ज करें"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

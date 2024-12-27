@@ -274,6 +274,7 @@
     "enterSendAdrsInvoiceSubTitle": "Inserisci o incolla l'indirizzo di invio o la fattura RGB",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
+     "sendTitle": "Invia",
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",
@@ -301,7 +302,9 @@
     "sendConfirmation": "Conferma Invio",
     "feeRate": "Tasso di Commissione",
     "feeAmount": "Importo della Commissione",
-    "total": "Totale"
+    "total": "Totale",
+    "customFee": "Commissione personalizzata",
+    "enterCustomFee": "Inserisci la commissione personalizzata"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
