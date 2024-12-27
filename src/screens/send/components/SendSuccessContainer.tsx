@@ -180,17 +180,17 @@ const getStyles = (theme: AppTheme) =>
       width: '55%',
     },
     labelText: {
-      color: theme.colors.popupText,
+      color: theme.colors.headingColor,
     },
     valueText: {
-      color: theme.colors.popupText,
+      color: theme.colors.headingColor,
     },
     primaryCtaStyle: {
       marginTop: hp(30),
       // alignSelf: 'center',
     },
     satsText: {
-      color: theme.colors.popupText,
+      color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
     borderStyle: {

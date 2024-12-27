@@ -365,7 +365,7 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(5),
     },
     primaryCTAContainer: {
-      bottom: 0,
+      bottom: 5,
     },
     wrapper: {
       flex: 1,

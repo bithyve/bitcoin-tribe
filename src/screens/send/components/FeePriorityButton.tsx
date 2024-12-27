@@ -71,7 +71,9 @@ const FeePriorityButton = ({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     feeWrapper: {
-      padding: 15,
+      height: hp(85),
+      width: '24%',
+      padding: 5,
       borderWidth: 1,
       borderRadius: 10,
       alignItems: 'center',
