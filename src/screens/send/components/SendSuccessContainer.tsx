@@ -152,8 +152,8 @@ function SendSuccessContainer(props: sendSuccessProps) {
         title={common.done}
         onPress={onSuccessPress}
         width={'100%'}
-        textColor={theme.colors.popupCTATitleColor}
-        buttonColor={theme.colors.popupCTABackColor}
+        textColor={theme.colors.popupSentCTATitleColor}
+        buttonColor={theme.colors.popupSentCTABackColor}
         height={hp(18)}
       />
     </>
