@@ -6,6 +6,7 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
+import { TxPriority } from 'src/services/wallets/enums';
 
 const FeePriorityButton = ({
   title,
@@ -18,7 +19,6 @@ const FeePriorityButton = ({
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const isSelected = selectedPriority === priority;
-
   return (
     <AppTouchable
       onPress={setSelectedPriority}
@@ -39,16 +39,18 @@ const FeePriorityButton = ({
         ]}>
         {title}
       </AppText>
-      <AppText
-        variant="body2"
-        style={[
-          styles.priorityValue,
-          {
-            color: isSelected ? Colors.Black : theme.colors.headingColor,
-          },
-        ]}>
-        {getFeeRateByPriority} sat/vB
-      </AppText>
+      {getFeeRateByPriority ? (
+        <AppText
+          variant="body2"
+          style={[
+            styles.priorityValue,
+            {
+              color: isSelected ? Colors.Black : theme.colors.headingColor,
+            },
+          ]}>
+          {getFeeRateByPriority} sat/vB
+        </AppText>
+      ) : null}
       <AppText
         variant="body2"
         style={[
@@ -59,7 +61,8 @@ const FeePriorityButton = ({
               : theme.colors.secondaryHeadingColor,
           },
         ]}>
-        ~{getEstimatedBlocksByPriority} hr
+        ~{getEstimatedBlocksByPriority}{' '}
+        {priority === TxPriority.CUSTOM ? 'min' : 'hr'}
       </AppText>
     </AppTouchable>
   );
