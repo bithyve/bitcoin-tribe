@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -39,6 +39,7 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
 import PrimaryCTA from 'src/components/PrimaryCTA';
+import ModalContainer from 'src/components/ModalContainer';
 
 function SendToContainer({
   wallet,
@@ -61,6 +62,7 @@ function SendToContainer({
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
+  const [recipientAddress, setRecipientAddress] = useState(address || '');
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -189,18 +191,19 @@ function SendToContainer({
             {sendScreen.recipientAddress}
           </AppText>
           <TextField
-            value={address}
+            value={recipientAddress}
             onChangeText={() => {}}
-            // onChangeText={text => setAddress(text)}
+            onChangeText={text => setRecipientAddress(text)}
             placeholder={sendScreen.enterAddress}
             keyboardType={'default'}
-            returnKeyType={'Enter'}
+            returnKeyType={'done'}
+            onSubmitEditing={() => Keyboard.dismiss()}
             multiline={true}
             numberOfLines={2}
             inputStyle={styles.inputRecipientStyle}
             contentStyle={styles.contentStyle}
             rightIcon={<RemoveIcon />}
-            onRightTextPress={() => {}}
+            onRightTextPress={() => setRecipientAddress('')}
             rightCTAStyle={styles.rightCTAStyle}
             rightCTATextColor={theme.colors.accent1}
           />
@@ -247,231 +250,234 @@ function SendToContainer({
             )}
           </View>
         </View>
-        <AppText variant="body2" style={styles.recipientAddressLabel}>
-          {sendScreen.fee}
-        </AppText>
-        <View style={styles.feeContainer}>
-          <AppTouchable
-            onPress={() => setSelectedPriority(TxPriority.LOW)}
-            style={[
-              styles.feeWrapper,
-              {
-                borderColor:
-                  selectedPriority === TxPriority.LOW
-                    ? 'transparent'
-                    : theme.colors.borderColor,
-                backgroundColor:
-                  selectedPriority === TxPriority.LOW
-                    ? theme.colors.accent1
-                    : 'transparent',
-              },
-            ]}>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.LOW
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {sendScreen.low}
+        {amount && (
+          <>
+            <AppText variant="body2" style={styles.recipientAddressLabel}>
+              {sendScreen.fee}
             </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.LOW
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {getFeeRateByPriority(TxPriority.LOW)} sat/vB
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityTimeValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.LOW
-                      ? Colors.Black
-                      : theme.colors.secondaryHeadingColor,
-                },
-              ]}>
-              ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
-            </AppText>
-          </AppTouchable>
-          <AppTouchable
-            onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
-            style={[
-              styles.feeWrapper,
-              {
-                borderColor:
-                  selectedPriority === TxPriority.MEDIUM
-                    ? 'transparent'
-                    : theme.colors.borderColor,
-                backgroundColor:
-                  selectedPriority === TxPriority.MEDIUM
-                    ? theme.colors.accent1
-                    : 'transparent',
-              },
-            ]}>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.MEDIUM
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {sendScreen.medium}
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.MEDIUM
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {getFeeRateByPriority(TxPriority.MEDIUM)} sat/vB
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityTimeValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.MEDIUM
-                      ? Colors.Black
-                      : theme.colors.secondaryHeadingColor,
-                },
-              ]}>
-              ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
-            </AppText>
-          </AppTouchable>
-          <AppTouchable
-            onPress={() => setSelectedPriority(TxPriority.HIGH)}
-            style={[
-              styles.feeWrapper,
-              {
-                borderColor:
-                  selectedPriority === TxPriority.HIGH
-                    ? 'transparent'
-                    : theme.colors.borderColor,
-                backgroundColor:
-                  selectedPriority === TxPriority.HIGH
-                    ? theme.colors.accent1
-                    : 'transparent',
-              },
-            ]}>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.HIGH
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {sendScreen.high}
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.HIGH
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {getFeeRateByPriority(TxPriority.HIGH)} sat/vB
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityTimeValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.HIGH
-                      ? Colors.Black
-                      : theme.colors.secondaryHeadingColor,
-                },
-              ]}>
-              ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
-            </AppText>
-          </AppTouchable>
-          <AppTouchable
-            onPress={() => setSelectedPriority(TxPriority.CUSTOM)}
-            style={[
-              styles.feeWrapper,
-              {
-                borderColor:
-                  selectedPriority === TxPriority.CUSTOM
-                    ? 'transparent'
-                    : theme.colors.borderColor,
-                backgroundColor:
-                  selectedPriority === TxPriority.CUSTOM
-                    ? theme.colors.accent1
-                    : 'transparent',
-              },
-            ]}>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.CUSTOM
-                      ? Colors.Black
-                      : theme.colors.headingColor,
-                },
-              ]}>
-              {sendScreen.custom}
-            </AppText>
-            <AppText
-              variant="body2"
-              style={[
-                styles.priorityTimeValue,
-                {
-                  color:
-                    selectedPriority === TxPriority.CUSTOM
-                      ? Colors.Black
-                      : theme.colors.secondaryHeadingColor,
-                },
-              ]}>
-              ~ 10 min
-            </AppText>
-          </AppTouchable>
+            <View style={styles.feeContainer}>
+              <AppTouchable
+                onPress={() => setSelectedPriority(TxPriority.LOW)}
+                style={[
+                  styles.feeWrapper,
+                  {
+                    borderColor:
+                      selectedPriority === TxPriority.LOW
+                        ? 'transparent'
+                        : theme.colors.borderColor,
+                    backgroundColor:
+                      selectedPriority === TxPriority.LOW
+                        ? theme.colors.accent1
+                        : 'transparent',
+                  },
+                ]}>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.LOW
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {sendScreen.low}
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.LOW
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {getFeeRateByPriority(TxPriority.LOW)} sat/vB
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityTimeValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.LOW
+                          ? Colors.Black
+                          : theme.colors.secondaryHeadingColor,
+                    },
+                  ]}>
+                  ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
+                </AppText>
+              </AppTouchable>
+              <AppTouchable
+                onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
+                style={[
+                  styles.feeWrapper,
+                  {
+                    borderColor:
+                      selectedPriority === TxPriority.MEDIUM
+                        ? 'transparent'
+                        : theme.colors.borderColor,
+                    backgroundColor:
+                      selectedPriority === TxPriority.MEDIUM
+                        ? theme.colors.accent1
+                        : 'transparent',
+                  },
+                ]}>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.MEDIUM
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {sendScreen.medium}
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.MEDIUM
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {getFeeRateByPriority(TxPriority.MEDIUM)} sat/vB
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityTimeValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.MEDIUM
+                          ? Colors.Black
+                          : theme.colors.secondaryHeadingColor,
+                    },
+                  ]}>
+                  ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
+                </AppText>
+              </AppTouchable>
+              <AppTouchable
+                onPress={() => setSelectedPriority(TxPriority.HIGH)}
+                style={[
+                  styles.feeWrapper,
+                  {
+                    borderColor:
+                      selectedPriority === TxPriority.HIGH
+                        ? 'transparent'
+                        : theme.colors.borderColor,
+                    backgroundColor:
+                      selectedPriority === TxPriority.HIGH
+                        ? theme.colors.accent1
+                        : 'transparent',
+                  },
+                ]}>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.HIGH
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {sendScreen.high}
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.HIGH
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {getFeeRateByPriority(TxPriority.HIGH)} sat/vB
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityTimeValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.HIGH
+                          ? Colors.Black
+                          : theme.colors.secondaryHeadingColor,
+                    },
+                  ]}>
+                  ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
+                </AppText>
+              </AppTouchable>
+              <AppTouchable
+                onPress={() => setSelectedPriority(TxPriority.CUSTOM)}
+                style={[
+                  styles.feeWrapper,
+                  {
+                    borderColor:
+                      selectedPriority === TxPriority.CUSTOM
+                        ? 'transparent'
+                        : theme.colors.borderColor,
+                    backgroundColor:
+                      selectedPriority === TxPriority.CUSTOM
+                        ? theme.colors.accent1
+                        : 'transparent',
+                  },
+                ]}>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.CUSTOM
+                          ? Colors.Black
+                          : theme.colors.headingColor,
+                    },
+                  ]}>
+                  {sendScreen.custom}
+                </AppText>
+                <AppText
+                  variant="body2"
+                  style={[
+                    styles.priorityTimeValue,
+                    {
+                      color:
+                        selectedPriority === TxPriority.CUSTOM
+                          ? Colors.Black
+                          : theme.colors.secondaryHeadingColor,
+                    },
+                  ]}>
+                  ~ 10 min
+                </AppText>
+              </AppTouchable>
+            </View>
+          </>
+        )}
+      </View>
+      {amount && (
+        <View style={styles.primaryCTAContainer}>
+          <PrimaryCTA
+            disabled={!amount || !recipientAddress}
+            title={common.next}
+            onPress={() => setVisible(true)}
+            width={'100%'}
+          />
         </View>
-      </View>
-      <View style={styles.primaryCTAContainer}>
-        <PrimaryCTA disabled={!amount} title={common.next} onPress={initiateSend} width={'100%'} />
-        {/* <Buttons
-          disabled={!amount}
-          primaryTitle={common.broadcast}
-          secondaryTitle={common.cancel}
-          primaryOnPress={initiateSend}
-          secondaryOnPress={navigation.goBack}
-          width={wp(160)}
-        /> */}
-      </View>
-      <View>
+      )}
+      {/* <View>
         <ResponsePopupContainer
           visible={visible}
           title={sendScreen.sendSuccessTitle}
@@ -492,7 +498,27 @@ function SendToContainer({
             onPress={() => successTransaction()}
           />
         </ResponsePopupContainer>
-      </View>
+      </View> */}
+      <ModalContainer
+        title={sendScreen.sendConfirmation}
+        subTitle={'Lorem Ipsum is simply dummy text of the printing.'}
+        visible={visible}
+        enableCloseIcon={false}
+        onDismiss={() => setVisible(false)}>
+        <SendSuccessContainer
+            // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
+            recipientAddress={recipientAddress}
+            amount={amount.replace(/,/g, '')}
+            transFee={transferFee}
+            feeRate={getFeeRateByPriority(selectedPriority)}
+            total={
+              app.appType === AppType.NODE_CONNECT
+                ? Number(amount)
+                : Number(amount) + Number(transferFee)
+            }
+            onPress={() => successTransaction()}
+          />
+      </ModalContainer>
     </View>
   );
 }

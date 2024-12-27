@@ -17,14 +17,15 @@ import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 type sendSuccessProps = {
-  transID: string;
+  recipientAddress: string;
   amount: string;
   transFee: number;
   total: number;
+  feeRate: string;
   onPress: () => void;
 };
 function SendSuccessContainer(props: sendSuccessProps) {
-  const { transID, amount, transFee, total, onPress } = props;
+  const { recipientAddress, amount, transFee, total, onPress, feeRate } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -33,26 +34,26 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { common, wallet: walletTranslations } = translations;
+  const { common, wallet: walletTranslations, sendScreen } = translations;
 
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>
-            {walletTranslations.transactionID}
+            {sendScreen.recipientAddress}:
           </AppText>
         </View>
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText} numberOfLines={1}>
-            {transID}
+          <AppText style={styles.labelText}>
+            {recipientAddress}
           </AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>
-            {walletTranslations.amount}
+            {walletTranslations.amount}:
           </AppText>
         </View>
         <View style={styles.valueWrapper}>
@@ -72,7 +73,19 @@ function SendSuccessContainer(props: sendSuccessProps) {
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>
-            {walletTranslations.transactionFee}
+            {sendScreen.feeRate}:
+          </AppText>
+        </View>
+        <View style={styles.valueWrapper}>
+          <AppText style={styles.labelText}>
+            {feeRate} sat/vB
+          </AppText>
+        </View>
+      </View>
+      <View style={styles.contentWrapper}>
+        <View style={styles.labelWrapper}>
+          <AppText style={styles.labelText}>
+            {sendScreen.feeAmount}:
           </AppText>
         </View>
         <View style={styles.valueWrapper}>
@@ -89,9 +102,9 @@ function SendSuccessContainer(props: sendSuccessProps) {
           )}
         </View>
       </View>
-      <View style={styles.contentWrapper}>
+      <View style={[styles.contentWrapper, styles.borderStyle]}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>Total</AppText>
+          <AppText style={styles.labelText}>{sendScreen.total}:</AppText>
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
@@ -111,7 +124,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         <PrimaryCTA
           title={common.viewWallets}
           onPress={onPress}
-          width={hp(200)}
+          width={'100%'}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.popupCTABackColor}
           height={hp(14)}
@@ -122,7 +135,11 @@ function SendSuccessContainer(props: sendSuccessProps) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {},
+    container: {
+      borderTopColor: theme.colors.borderColor,
+      borderTopWidth: 1,
+      paddingTop: 15,
+    },
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',
@@ -144,12 +161,16 @@ const getStyles = (theme: AppTheme) =>
     },
     primaryCtaStyle: {
       marginTop: hp(30),
-      alignSelf: 'center',
+      // alignSelf: 'center',
     },
     satsText: {
       color: theme.colors.popupText,
-      marginTop: hp(5),
       marginLeft: hp(5),
     },
+    borderStyle:{
+      borderTopColor: theme.colors.borderColor,
+      borderTopWidth: 1,
+      paddingTop: 15
+    }
   });
 export default SendSuccessContainer;

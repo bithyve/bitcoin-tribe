@@ -297,7 +297,11 @@
     "low": "低",
     "medium": "中",
     "high": "高",
-    "custom": "カスタム"
+    "custom": "カスタム",
+    "sendConfirmation": "送信確認",
+    "feeRate": "手数料率",
+    "feeAmount": "手数料金額",
+    "total": "合計"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

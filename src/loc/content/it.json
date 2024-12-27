@@ -297,7 +297,11 @@
     "low": "Basso",
     "medium": "Medio",
     "high": "Alto",
-    "custom": "Personalizzato"
+    "custom": "Personalizzato",
+    "sendConfirmation": "Conferma Invio",
+    "feeRate": "Tasso di Commissione",
+    "feeAmount": "Importo della Commissione",
+    "total": "Totale"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

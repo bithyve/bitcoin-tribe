@@ -297,7 +297,11 @@
     "low": "Low",
     "medium": "Medium",
     "high": "High",
-    "custom": "Custom"
+    "custom": "Custom",
+    "sendConfirmation": "Send Confirmation",
+    "feeRate": "Fee Rate",
+    "feeAmount": "Fee Amount",
+    "total": "Total"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -478,7 +482,7 @@
     "createChannelSubTitle": "Sit back and relax as we get everything ready for you. Your channel will be open in just a moment."
   },
   "lightning": {
-    "sendTitle" : "Send",
+    "sendTitle": "Send",
     "invoice": "Invoice",
     "assetId": "Asset ID",
     "amount": "Amount",

@@ -297,7 +297,11 @@
     "low": "Bajo",
     "medium": "Medio",
     "high": "Alto",
-    "custom": "Personalizado"
+    "custom": "Personalizado",
+    "sendConfirmation": "Confirmación de Envío",
+    "feeRate": "Tasa de Tarifa",
+    "feeAmount": "Monto de la Tarifa",
+    "total": "Total"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

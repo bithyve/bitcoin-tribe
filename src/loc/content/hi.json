@@ -297,7 +297,11 @@
     "low": "निम्न",
     "medium": "मध्यम",
     "high": "उच्च",
-    "custom": "कस्टम"
+    "custom": "कस्टम",
+    "sendConfirmation": "भेजने की पुष्टि",
+    "feeRate": "शुल्क दर",
+    "feeAmount": "शुल्क राशि",
+    "total": "कुल"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

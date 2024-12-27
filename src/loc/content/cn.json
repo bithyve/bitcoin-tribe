@@ -297,7 +297,11 @@
     "low": "低",
     "medium": "中",
     "high": "高",
-    "custom": "自定义"
+    "custom": "自定义",
+    "sendConfirmation": "发送确认",
+    "feeRate": "费率",
+    "feeAmount": "费用金额",
+    "total": "总计"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
