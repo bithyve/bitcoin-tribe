@@ -81,7 +81,7 @@ function SendToContainer({
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
       const averageTxFee: AverageTxFees =
-        averageTxFeeByNetwork[app.networkType];
+        averageTxFeeByNetwork[app.networkType]; 
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -151,7 +151,9 @@ function SendToContainer({
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
   };
-
+  const getAvgTxnFeeByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].averageTxFee) || 0;
+  };
   const getEstimatedBlocksByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
   };
@@ -298,7 +300,7 @@ function SendToContainer({
                 {sendScreen.customFee}
               </AppText>
               <TextField
-                value={formatNumber(customFee)}
+                value={customFee}
                 onChangeText={text => setCustomFee(text)}
                 placeholder={sendScreen.enterCustomFee}
                 keyboardType={'numeric'}
@@ -338,13 +340,14 @@ function SendToContainer({
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
-          transFee={transferFee}
-          feeRate={getFeeRateByPriority(selectedPriority)}
-          estimateBlockTime={getEstimatedBlocksByPriority(selectedPriority)}
+          transFee={getAvgTxnFeeByPriority(selectedPriority)}
+          feeRate={selectedPriority === TxPriority.CUSTOM ? customFee : getFeeRateByPriority(selectedPriority)}
+          estimateBlockTime={selectedPriority === TxPriority.CUSTOM ? 10 : getEstimatedBlocksByPriority(selectedPriority)}
+          selectedPriority={selectedPriority}
           total={
             app.appType === AppType.NODE_CONNECT
               ? Number(amount)
-              : Number(amount) + Number(transferFee)
+              : Number(amount) + Number(getAvgTxnFeeByPriority(selectedPriority))
           }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}

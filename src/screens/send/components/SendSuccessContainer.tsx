@@ -19,6 +19,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import SwipeToAction from 'src/components/SwipeToAction';
 import PrimaryCTA from 'src/components/PrimaryCTA';
+import { TxPriority } from 'src/services/wallets/enums';
 
 type sendSuccessProps = {
   recipientAddress: string;
@@ -30,6 +31,7 @@ type sendSuccessProps = {
   onPress: () => void;
   onSuccessStatus: boolean;
   onSuccessPress: () => void;
+  selectedPriority: string;
 };
 function SendSuccessContainer(props: sendSuccessProps) {
   const {
@@ -42,6 +44,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
     estimateBlockTime,
     onSuccessStatus,
     onSuccessPress,
+    selectedPriority
   } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
@@ -91,7 +94,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ {estimateBlockTime} hr
+            {feeRate} sat/vB ~ {estimateBlockTime} {selectedPriority === TxPriority.CUSTOM ? 'min' : 'hr'}
           </AppText>
         </View>
       </View>
