@@ -50,7 +50,7 @@
     "joinGroup": "Unirse al grupo",
     "understood": "Entendido",
     "createChannel": "Crear Canal",
-    "done": "Done"
+    "done": "Hecho"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -308,7 +308,8 @@
     "customFee": "Tarifa personalizada",
     "enterCustomFee": "Introduce una tarifa personalizada",
     "swipeToBroadcast": "Desliza para transmitir",
-    "broadcastingTXN": "Transmitiendo transacción..."
+    "broadcastingTXN": "Transmitiendo transacción...",
+    "successTitle": "¡Éxito!"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

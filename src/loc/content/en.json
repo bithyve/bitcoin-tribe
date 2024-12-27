@@ -308,7 +308,8 @@
     "customFee": "Custom fee",
     "enterCustomFee": "Enter custom fee",
     "swipeToBroadcast": "Swipe to broadcast",
-    "broadcastingTXN": "Broadcasting transaction..."
+    "broadcastingTXN": "Broadcasting transaction...",
+    "successTitle": "Successful!"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

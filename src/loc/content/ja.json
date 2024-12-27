@@ -50,7 +50,7 @@
     "joinGroup": "グループに参加する",
     "understood": "理解しました",
     "createChannel": "チャンネルを作成",
-    "done": "Done"
+    "done": "完了"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -308,7 +308,8 @@
     "customFee": "カスタム料金",
     "enterCustomFee": "カスタム料金を入力",
     "swipeToBroadcast": "スワイプしてブロードキャスト",
-    "broadcastingTXN": "トランザクションをブロードキャスト中..."
+    "broadcastingTXN": "トランザクションをブロードキャスト中...",
+    "successTitle": "成功！"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

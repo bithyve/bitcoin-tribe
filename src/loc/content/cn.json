@@ -50,7 +50,7 @@
     "joinGroup": "加入群组",
     "understood": "明白了",
     "createChannel": "创建通道",
-    "done": "Done"
+    "done": "完成"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -308,7 +308,8 @@
     "customFee": "自定义费用",
     "enterCustomFee": "输入自定义费用",
     "swipeToBroadcast": "滑动以广播",
-    "broadcastingTXN": "正在广播交易..."
+    "broadcastingTXN": "正在广播交易...",
+    "successTitle": "成功！"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

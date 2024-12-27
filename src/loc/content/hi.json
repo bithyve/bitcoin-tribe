@@ -50,7 +50,7 @@
     "joinGroup": "समूह में शामिल हों",
     "understood": "समझ गया",
     "createChannel": "चैनल बनाएं",
-    "done": "Done"
+    "done": "हो गया"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -308,7 +308,8 @@
     "customFee": "कस्टम शुल्क",
     "enterCustomFee": "कस्टम शुल्क दर्ज करें",
     "swipeToBroadcast": "प्रसारित करने के लिए स्वाइप करें",
-    "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है..."
+    "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है...",
+    "successTitle": "सफल!"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
