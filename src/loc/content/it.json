@@ -49,7 +49,8 @@
     "later": "Più tardi",
     "joinGroup": "Unisciti al gruppo",
     "understood": "Capito",
-    "createChannel": "Crea Canale"
+    "createChannel": "Crea Canale",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -300,11 +301,14 @@
     "high": "Alto",
     "custom": "Personalizzato",
     "sendConfirmation": "Conferma Invio",
+    "sendConfirmationSubTitle": "Rivedi e conferma la tua transazione",
     "feeRate": "Tasso di Commissione",
     "feeAmount": "Importo della Commissione",
     "total": "Totale",
     "customFee": "Commissione personalizzata",
-    "enterCustomFee": "Inserisci la commissione personalizzata"
+    "enterCustomFee": "Inserisci la commissione personalizzata",
+    "swipeToBroadcast": "Scorri per trasmettere",
+    "broadcastingTXN": "Trasmissione della transazione in corso..."
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

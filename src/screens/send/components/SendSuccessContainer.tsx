@@ -2,30 +2,47 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
+import { useQuery } from '@realm/react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import LottieView from 'lottie-react-native';
+
 import AppText from 'src/components/AppText';
-import PrimaryCTA from 'src/components/PrimaryCTA';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
-
 import { AppTheme } from 'src/theme';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
-import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import SwipeToAction from 'src/components/SwipeToAction';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+
 type sendSuccessProps = {
   recipientAddress: string;
   amount: string;
   transFee: number;
   total: number;
   feeRate: string;
+  estimateBlockTime: string;
   onPress: () => void;
+  onSuccessStatus: boolean;
+  onSuccessPress: () => void;
 };
 function SendSuccessContainer(props: sendSuccessProps) {
-  const { recipientAddress, amount, transFee, total, onPress, feeRate } = props;
+  const {
+    recipientAddress,
+    amount,
+    transFee,
+    total,
+    onPress,
+    feeRate,
+    estimateBlockTime,
+    onSuccessStatus,
+    onSuccessPress,
+  } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -36,7 +53,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const { translations } = useContext(LocalizationContext);
   const { common, wallet: walletTranslations, sendScreen } = translations;
 
-  return (
+  return !onSuccessStatus ? (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
@@ -45,9 +62,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           </AppText>
         </View>
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText}>
-            {recipientAddress}
-          </AppText>
+          <AppText style={styles.labelText}>{recipientAddress}</AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
@@ -72,28 +87,27 @@ function SendSuccessContainer(props: sendSuccessProps) {
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>
-            {sendScreen.feeRate}:
-          </AppText>
+          <AppText style={styles.labelText}>{sendScreen.feeRate}:</AppText>
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB
+            {feeRate} sat/vB ~ {estimateBlockTime} hr
           </AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>
-            {sendScreen.feeAmount}:
-          </AppText>
+          <AppText style={styles.labelText}>{sendScreen.feeAmount}:</AppText>
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="body1" style={styles.valueText}>
-            &nbsp;{app.appType === AppType.NODE_CONNECT? transFee : getBalance(transFee)}
+            &nbsp;
+            {app.appType === AppType.NODE_CONNECT
+              ? transFee
+              : getBalance(transFee)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
@@ -121,16 +135,28 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
       </View>
       <View style={styles.primaryCtaStyle}>
-        <PrimaryCTA
-          title={common.viewWallets}
-          onPress={onPress}
-          width={'100%'}
-          textColor={theme.colors.popupCTATitleColor}
-          buttonColor={theme.colors.popupCTABackColor}
-          height={hp(14)}
-        />
+        <GestureHandlerRootView style={styles.gestureRootView}>
+          <SwipeToAction onSwipeComplete={onPress} />
+        </GestureHandlerRootView>
       </View>
     </View>
+  ) : (
+    <>
+      <LottieView
+        source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
+        style={styles.loaderStyle}
+        autoPlay
+        loop
+      />
+      <PrimaryCTA
+        title={common.done}
+        onPress={onSuccessPress}
+        width={'100%'}
+        textColor={theme.colors.popupCTATitleColor}
+        buttonColor={theme.colors.popupCTABackColor}
+        height={hp(18)}
+      />
+    </>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -167,10 +193,19 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.popupText,
       marginLeft: hp(5),
     },
-    borderStyle:{
+    borderStyle: {
       borderTopColor: theme.colors.borderColor,
       borderTopWidth: 1,
-      paddingTop: 15
+      paddingTop: 15,
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(200),
+      height: hp(200),
+      marginVertical: hp(20),
+    },
+    gestureRootView:{
+      flex: 1 
     }
   });
 export default SendSuccessContainer;

@@ -49,7 +49,8 @@
     "later": "稍后",
     "joinGroup": "加入群组",
     "understood": "明白了",
-    "createChannel": "创建通道"
+    "createChannel": "创建通道",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -300,11 +301,14 @@
     "high": "高",
     "custom": "自定义",
     "sendConfirmation": "发送确认",
+    "sendConfirmationSubTitle": "审核并确认您的交易",
     "feeRate": "费率",
     "feeAmount": "费用金额",
     "total": "总计",
     "customFee": "自定义费用",
-    "enterCustomFee": "输入自定义费用"
+    "enterCustomFee": "输入自定义费用",
+    "swipeToBroadcast": "滑动以广播",
+    "broadcastingTXN": "正在广播交易..."
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

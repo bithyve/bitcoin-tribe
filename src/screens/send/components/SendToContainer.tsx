@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -25,12 +25,11 @@ import {
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import SendSuccessContainer from './SendSuccessContainer';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
-import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import AppTouchable from 'src/components/AppTouchable';
 import Colors from 'src/theme/Colors';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
@@ -88,9 +87,6 @@ function SendToContainer({
 
   useEffect(() => {
     if (sendTransactionMutation.status === 'success') {
-      setTimeout(() => {
-        setVisible(true);
-      }, 500);
     } else if (sendTransactionMutation.status === 'error') {
       Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
     }
@@ -167,23 +163,24 @@ function SendToContainer({
           _ => _.data.txPrerequisites[selectedPriority]?.fee,
         ) || 0;
 
-  return sendTransactionMutation.status === 'loading' ? (
-    <ResponsePopupContainer
-      visible={sendTransactionMutation.status === 'loading'}
-      enableClose={true}
-      backColor={theme.colors.modalBackColor}
-      borderColor={theme.colors.modalBackColor}>
-      <InProgessPopupContainer
-        title={sendScreen.sendBtcLoadingTitle}
-        subTitle={sendScreen.sendBtcLoadingSubTitle}
-        illustrationPath={
-          isThemeDark
-            ? require('src/assets/images/jsons/sendingBTCorAsset.json')
-            : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
-        }
-      />
-    </ResponsePopupContainer>
-  ) : (
+  return (
+    // sendTransactionMutation.status === 'loading' ? (
+    //   <ResponsePopupContainer
+    //     visible={sendTransactionMutation.status === 'loading'}
+    //     enableClose={true}
+    //     backColor={theme.colors.modalBackColor}
+    //     borderColor={theme.colors.modalBackColor}>
+    //     <InProgessPopupContainer
+    //       title={sendScreen.sendBtcLoadingTitle}
+    //       subTitle={sendScreen.sendBtcLoadingSubTitle}
+    //       illustrationPath={
+    //         isThemeDark
+    //           ? require('src/assets/images/jsons/sendingBTCorAsset.json')
+    //           : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
+    //       }
+    //     />
+    //   </ResponsePopupContainer>
+    // ) : (
     <View style={styles.container}>
       <View style={styles.container1}>
         <View style={styles.wrapper}>
@@ -191,19 +188,11 @@ function SendToContainer({
             <AppText variant="body2" style={styles.recipientAddressLabel}>
               {sendScreen.recipientAddress}
             </AppText>
-            <TextField
-              value={recipientAddress}
-              onChangeText={() => {}}
-              onChangeText={text => setRecipientAddress(text)}
-              placeholder={sendScreen.enterAddress}
-              keyboardType={'default'}
-              returnKeyType={'done'}
-              onSubmitEditing={() => Keyboard.dismiss()}
-              multiline={true}
-              numberOfLines={2}
-              inputStyle={styles.inputRecipientStyle}
-              contentStyle={styles.contentStyle}
-            />
+            <View style={styles.recipientAddressWrapper}>
+              <AppText variant="body1" style={styles.recipientAddressText}>
+                {recipientAddress}
+              </AppText>
+            </View>
           </View>
           <View style={styles.inputWrapper}>
             <AppText variant="body2" style={styles.recipientAddressLabel}>
@@ -305,7 +294,7 @@ function SendToContainer({
                             : theme.colors.secondaryHeadingColor,
                       },
                     ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hours
+                    ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hr
                   </AppText>
                 </AppTouchable>
                 <AppTouchable
@@ -360,7 +349,7 @@ function SendToContainer({
                             : theme.colors.secondaryHeadingColor,
                       },
                     ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hours
+                    ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hr
                   </AppText>
                 </AppTouchable>
                 <AppTouchable
@@ -415,7 +404,7 @@ function SendToContainer({
                             : theme.colors.secondaryHeadingColor,
                       },
                     ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hours
+                    ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hr
                   </AppText>
                 </AppTouchable>
                 <AppTouchable
@@ -477,36 +466,13 @@ function SendToContainer({
                 contentStyle={styles.contentStyle}
                 // disabled={true}
                 // icon={<IconBitcoin />}
-                rightText={'sat/vByte'}
+                rightText={'sat/vB'}
                 onRightTextPress={() => {}}
                 rightCTATextColor={theme.colors.headingColor}
               />
             </View>
           )}
         </View>
-
-        {/* <View>
-        <ResponsePopupContainer
-          visible={visible}
-          title={sendScreen.sendSuccessTitle}
-          subTitle={sendScreen.sendSuccessSubTitle}
-          onDismiss={() => setVisible(false)}
-          backColor={theme.colors.successPopupBackColor}
-          borderColor={theme.colors.successPopupBorderColor}
-          conatinerModalStyle={styles.containerModalStyle}>
-          <SendSuccessContainer
-            transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            amount={amount.replace(/,/g, '')}
-            transFee={transferFee}
-            total={
-              app.appType === AppType.NODE_CONNECT
-                ? Number(amount)
-                : Number(amount) + Number(transferFee)
-            }
-            onPress={() => successTransaction()}
-          />
-        </ResponsePopupContainer>
-      </View> */}
       </View>
       {amount && (
         <View style={styles.primaryCTAContainer}>
@@ -519,23 +485,30 @@ function SendToContainer({
         </View>
       )}
       <ModalContainer
-        title={sendScreen.sendConfirmation}
-        subTitle={'Review and Confirm Your Transaction'}
+        title={
+          sendTransactionMutation.status === 'success'
+            ? 'Successful!'
+            : sendScreen.sendConfirmation
+        }
+        subTitle={sendScreen.sendConfirmationSubTitle}
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => setVisible(false)}>
+        onDismiss={() => {}}>
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
           transFee={transferFee}
           feeRate={getFeeRateByPriority(selectedPriority)}
+          estimateBlockTime={getEstimatedBlocksByPriority(selectedPriority)}
           total={
             app.appType === AppType.NODE_CONNECT
               ? Number(amount)
               : Number(amount) + Number(transferFee)
           }
-          onPress={() => successTransaction()}
+          onSuccessStatus={sendTransactionMutation.status === 'success'}
+          onSuccessPress={() => successTransaction()}
+          onPress={() => initiateSend()}
         />
       </ModalContainer>
     </View>
@@ -561,10 +534,6 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
-    containerModalStyle: {
-      margin: 0,
-      padding: 10,
-    },
     inputWrapper: {
       paddingBottom: 16,
     },
@@ -572,8 +541,16 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
-    inputRecipientStyle: {
+    recipientAddressWrapper: {
+      backgroundColor: theme.colors.inputBackground,
       width: '100%',
+      height: hp(65),
+      padding: 10,
+      borderRadius: 10,
+      justifyContent: 'center',
+    },
+    recipientAddressText: {
+      color: theme.colors.headingColor,
     },
     inputStyle: {
       width: '80%',
@@ -581,13 +558,6 @@ const getStyles = (theme: AppTheme) =>
     contentStyle: {
       marginTop: 0,
     },
-    // rightCTAStyle: {
-    //   height: hp(40),
-    //   width: hp(55),
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   marginHorizontal: hp(5),
-    // },
     feeContainer: {
       flexDirection: 'row',
     },

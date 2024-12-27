@@ -49,7 +49,8 @@
     "later": "後で",
     "joinGroup": "グループに参加する",
     "understood": "理解しました",
-    "createChannel": "チャンネルを作成"
+    "createChannel": "チャンネルを作成",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -300,11 +301,14 @@
     "high": "高",
     "custom": "カスタム",
     "sendConfirmation": "送信確認",
+    "sendConfirmationSubTitle": "取引内容を確認して承認",
     "feeRate": "手数料率",
     "feeAmount": "手数料金額",
     "total": "合計",
     "customFee": "カスタム料金",
-    "enterCustomFee": "カスタム料金を入力"
+    "enterCustomFee": "カスタム料金を入力",
+    "swipeToBroadcast": "スワイプしてブロードキャスト",
+    "broadcastingTXN": "トランザクションをブロードキャスト中..."
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

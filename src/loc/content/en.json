@@ -49,7 +49,8 @@
     "later": "Later",
     "joinGroup": "Join Group",
     "understood": "Understood",
-    "createChannel": "Create Channel"
+    "createChannel": "Create Channel",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -300,11 +301,14 @@
     "high": "High",
     "custom": "Custom",
     "sendConfirmation": "Send Confirmation",
+    "sendConfirmationSubTitle": "Review and Confirm Your Transaction",
     "feeRate": "Fee Rate",
     "feeAmount": "Fee Amount",
     "total": "Total",
     "customFee": "Custom fee",
-    "enterCustomFee": "Enter custom fee"
+    "enterCustomFee": "Enter custom fee",
+    "swipeToBroadcast": "Swipe to broadcast",
+    "broadcastingTXN": "Broadcasting transaction..."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

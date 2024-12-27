@@ -49,7 +49,8 @@
     "later": "Más tarde",
     "joinGroup": "Unirse al grupo",
     "understood": "Entendido",
-    "createChannel": "Crear Canal"
+    "createChannel": "Crear Canal",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -300,11 +301,14 @@
     "high": "Alto",
     "custom": "Personalizado",
     "sendConfirmation": "Confirmación de Envío",
+    "sendConfirmationSubTitle": "Revisa y confirma tu transacción",
     "feeRate": "Tasa de Tarifa",
     "feeAmount": "Monto de la Tarifa",
     "total": "Total",
     "customFee": "Tarifa personalizada",
-    "enterCustomFee": "Introduce una tarifa personalizada"
+    "enterCustomFee": "Introduce una tarifa personalizada",
+    "swipeToBroadcast": "Desliza para transmitir",
+    "broadcastingTXN": "Transmitiendo transacción..."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

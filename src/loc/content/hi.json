@@ -49,7 +49,8 @@
     "later": "बाद में",
     "joinGroup": "समूह में शामिल हों",
     "understood": "समझ गया",
-    "createChannel": "चैनल बनाएं"
+    "createChannel": "चैनल बनाएं",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -300,11 +301,14 @@
     "high": "उच्च",
     "custom": "कस्टम",
     "sendConfirmation": "भेजने की पुष्टि",
+     "sendConfirmationSubTitle": "अपने लेन-देन की समीक्षा करें और पुष्टि करें",
     "feeRate": "शुल्क दर",
     "feeAmount": "शुल्क राशि",
     "total": "कुल",
     "customFee": "कस्टम शुल्क",
-    "enterCustomFee": "कस्टम शुल्क दर्ज करें"
+    "enterCustomFee": "कस्टम शुल्क दर्ज करें",
+    "swipeToBroadcast": "प्रसारित करने के लिए स्वाइप करें",
+    "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है..."
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
