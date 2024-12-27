@@ -487,7 +487,7 @@ function SendToContainer({
       <ModalContainer
         title={
           sendTransactionMutation.status === 'success'
-            ? 'Successful!'
+            ? sendScreen.successTitle
             : sendScreen.sendConfirmation
         }
         subTitle={sendScreen.sendConfirmationSubTitle}
