@@ -279,48 +279,16 @@ function SendToContainer({
                     TxPriority.HIGH,
                   )}
                 />
-                <AppTouchable
-                  onPress={() => setSelectedPriority(TxPriority.CUSTOM)}
-                  style={[
-                    styles.feeWrapper,
-                    {
-                      borderColor:
-                        selectedPriority === TxPriority.CUSTOM
-                          ? 'transparent'
-                          : theme.colors.borderColor,
-                      backgroundColor:
-                        selectedPriority === TxPriority.CUSTOM
-                          ? theme.colors.accent1
-                          : 'transparent',
-                    },
-                  ]}>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.CUSTOM
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {sendScreen.custom}
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityTimeValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.CUSTOM
-                            ? Colors.Black
-                            : theme.colors.secondaryHeadingColor,
-                      },
-                    ]}>
-                    ~ 10 min
-                  </AppText>
-                </AppTouchable>
+                <FeePriorityButton
+                  title={sendScreen.custom}
+                  priority={TxPriority.CUSTOM}
+                  selectedPriority={selectedPriority}
+                  setSelectedPriority={() =>
+                    setSelectedPriority(TxPriority.CUSTOM)
+                  }
+                  getFeeRateByPriority={''}
+                  getEstimatedBlocksByPriority={10}
+                />
               </View>
             </>
           )}
