@@ -11,9 +11,9 @@ import AppTouchable from '../../../components/AppTouchable';
 import { Keys } from 'src/storage';
 import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
-import Identicon from 'react-native-identicon';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Identicon from 'src/components/Identicon';
 
 type DropdownProps = {
   style;
