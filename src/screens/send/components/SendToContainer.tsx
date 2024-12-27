@@ -38,6 +38,7 @@ import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import ModalContainer from 'src/components/ModalContainer';
+import FeePriorityButton from './FeePriorityButton';
 
 function SendToContainer({
   wallet,
@@ -242,171 +243,42 @@ function SendToContainer({
                 {sendScreen.fee}
               </AppText>
               <View style={styles.feeContainer}>
-                <AppTouchable
-                  onPress={() => setSelectedPriority(TxPriority.LOW)}
-                  style={[
-                    styles.feeWrapper,
-                    {
-                      borderColor:
-                        selectedPriority === TxPriority.LOW
-                          ? 'transparent'
-                          : theme.colors.borderColor,
-                      backgroundColor:
-                        selectedPriority === TxPriority.LOW
-                          ? theme.colors.accent1
-                          : 'transparent',
-                    },
-                  ]}>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.LOW
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {sendScreen.low}
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.LOW
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {getFeeRateByPriority(TxPriority.LOW)} sat/vB
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityTimeValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.LOW
-                            ? Colors.Black
-                            : theme.colors.secondaryHeadingColor,
-                      },
-                    ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.LOW)} hr
-                  </AppText>
-                </AppTouchable>
-                <AppTouchable
-                  onPress={() => setSelectedPriority(TxPriority.MEDIUM)}
-                  style={[
-                    styles.feeWrapper,
-                    {
-                      borderColor:
-                        selectedPriority === TxPriority.MEDIUM
-                          ? 'transparent'
-                          : theme.colors.borderColor,
-                      backgroundColor:
-                        selectedPriority === TxPriority.MEDIUM
-                          ? theme.colors.accent1
-                          : 'transparent',
-                    },
-                  ]}>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.MEDIUM
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {sendScreen.medium}
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.MEDIUM
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {getFeeRateByPriority(TxPriority.MEDIUM)} sat/vB
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityTimeValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.MEDIUM
-                            ? Colors.Black
-                            : theme.colors.secondaryHeadingColor,
-                      },
-                    ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.MEDIUM)} hr
-                  </AppText>
-                </AppTouchable>
-                <AppTouchable
-                  onPress={() => setSelectedPriority(TxPriority.HIGH)}
-                  style={[
-                    styles.feeWrapper,
-                    {
-                      borderColor:
-                        selectedPriority === TxPriority.HIGH
-                          ? 'transparent'
-                          : theme.colors.borderColor,
-                      backgroundColor:
-                        selectedPriority === TxPriority.HIGH
-                          ? theme.colors.accent1
-                          : 'transparent',
-                    },
-                  ]}>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.HIGH
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {sendScreen.high}
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.HIGH
-                            ? Colors.Black
-                            : theme.colors.headingColor,
-                      },
-                    ]}>
-                    {getFeeRateByPriority(TxPriority.HIGH)} sat/vB
-                  </AppText>
-                  <AppText
-                    variant="body2"
-                    style={[
-                      styles.priorityTimeValue,
-                      {
-                        color:
-                          selectedPriority === TxPriority.HIGH
-                            ? Colors.Black
-                            : theme.colors.secondaryHeadingColor,
-                      },
-                    ]}>
-                    ~{getEstimatedBlocksByPriority(TxPriority.HIGH)} hr
-                  </AppText>
-                </AppTouchable>
+                <FeePriorityButton
+                  title={sendScreen.low}
+                  priority={TxPriority.LOW}
+                  selectedPriority={selectedPriority}
+                  setSelectedPriority={() =>
+                    setSelectedPriority(TxPriority.LOW)
+                  }
+                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                    TxPriority.LOW,
+                  )}
+                />
+                <FeePriorityButton
+                  title={sendScreen.medium}
+                  priority={TxPriority.MEDIUM}
+                  selectedPriority={selectedPriority}
+                  setSelectedPriority={() =>
+                    setSelectedPriority(TxPriority.MEDIUM)
+                  }
+                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                    TxPriority.MEDIUM,
+                  )}
+                />
+                <FeePriorityButton
+                  title={sendScreen.high}
+                  priority={TxPriority.HIGH}
+                  selectedPriority={selectedPriority}
+                  setSelectedPriority={() =>
+                    setSelectedPriority(TxPriority.HIGH)
+                  }
+                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                    TxPriority.HIGH,
+                  )}
+                />
                 <AppTouchable
                   onPress={() => setSelectedPriority(TxPriority.CUSTOM)}
                   style={[
