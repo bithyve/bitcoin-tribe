@@ -44,7 +44,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
     estimateBlockTime,
     onSuccessStatus,
     onSuccessPress,
-    selectedPriority
+    selectedPriority,
   } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
@@ -94,7 +94,8 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ {estimateBlockTime} {selectedPriority === TxPriority.CUSTOM ? 'min' : 'hr'}
+            {feeRate} sat/vB ~ {estimateBlockTime}{' '}
+            {selectedPriority === TxPriority.CUSTOM ? 'min' : 'hr'}
           </AppText>
         </View>
       </View>
@@ -207,8 +208,8 @@ const getStyles = (theme: AppTheme) =>
       height: hp(200),
       marginVertical: hp(20),
     },
-    gestureRootView:{
-      flex: 1 
-    }
+    gestureRootView: {
+      flex: 1,
+    },
   });
 export default SendSuccessContainer;

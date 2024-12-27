@@ -30,8 +30,6 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 // import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import AppTouchable from 'src/components/AppTouchable';
-import Colors from 'src/theme/Colors';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import IconBitcoin from 'src/assets/images/icon_btc3.svg';
@@ -81,7 +79,7 @@ function SendToContainer({
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
       const averageTxFee: AverageTxFees =
-        averageTxFeeByNetwork[app.networkType]; 
+        averageTxFeeByNetwork[app.networkType];
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -341,13 +339,22 @@ function SendToContainer({
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
           transFee={getAvgTxnFeeByPriority(selectedPriority)}
-          feeRate={selectedPriority === TxPriority.CUSTOM ? customFee : getFeeRateByPriority(selectedPriority)}
-          estimateBlockTime={selectedPriority === TxPriority.CUSTOM ? 10 : getEstimatedBlocksByPriority(selectedPriority)}
+          feeRate={
+            selectedPriority === TxPriority.CUSTOM
+              ? customFee
+              : getFeeRateByPriority(selectedPriority)
+          }
+          estimateBlockTime={
+            selectedPriority === TxPriority.CUSTOM
+              ? 10
+              : getEstimatedBlocksByPriority(selectedPriority)
+          }
           selectedPriority={selectedPriority}
           total={
             app.appType === AppType.NODE_CONNECT
               ? Number(amount)
-              : Number(amount) + Number(getAvgTxnFeeByPriority(selectedPriority))
+              : Number(amount) +
+                Number(getAvgTxnFeeByPriority(selectedPriority))
           }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
