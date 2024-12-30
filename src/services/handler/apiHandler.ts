@@ -643,7 +643,6 @@ export class ApiHandler {
           sender,
           recipient,
           averageTxFee,
-          // averageTxFee:
           selectedPriority,
         });
 
