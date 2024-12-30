@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Switch, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -10,7 +10,7 @@ import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import CurrencySwitch from 'src/components/CurrencySwitch';
+// import CurrencySwitch from 'src/components/CurrencySwitch';
 
 function SendToScreen({ route }) {
   const { wallet, address, paymentURIAmount } = route.params;
@@ -27,13 +27,13 @@ function SendToScreen({ route }) {
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
-
-  const toggleDisplayMode = () => {
-    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
-      setCurrencyMode(CurrencyKind.BITCOIN);
-    } else {
+ 
+  const toggleCurrencyMode = () => {
+    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS || initialCurrencyMode === CurrencyKind.BITCOIN ) {
+      setCurrencyMode(CurrencyKind.FIAT);
+    } else if (initialCurrencyMode === CurrencyKind.FIAT) {
       setCurrencyMode(CurrencyKind.SATS);
-    }
+    } 
   };
 
   return (
@@ -41,12 +41,7 @@ function SendToScreen({ route }) {
       <AppHeader
         title={sendScreen.sendTitle}
         // rightIcon={
-          // <CurrencySwitch/>
-          // <Switch
-          //   value={initialCurrencyMode === CurrencyKind.SATS}
-          //   onValueChange={() => toggleDisplayMode()}
-          //   color={theme.colors.accent1}
-          // />
+        //   <CurrencySwitch onPress={()=> toggleCurrencyMode()} selectedCurrency={selectedCurrency} currentCurrencyMode={currentCurrencyMode}/>
         // }
       />
       <SendToContainer
