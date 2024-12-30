@@ -48,14 +48,14 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
     asset.balance.spendable + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
-
+  
   return (
     <>
       {/* <Animated.View
@@ -66,7 +66,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <AppHeader
-          title={assetTicker}
+          title={asset.assetIface.toUpperCase() === AssetFace.RGB25 ? assets.collectibles: assetTicker}
           rightIcon={<InfoIcon />}
           onSettingsPress={onPressSetting}
         />
