@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, Platform } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { useTheme } from 'react-native-paper';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
@@ -17,6 +18,15 @@ const SwipeToAction = ({ onSwipeComplete }) => {
   const [swiped, setSwiped] = useState(false);
   const translateX = new Animated.Value(0);
 
+  const options = {
+    enableVibrateFallback: true, 
+    ignoreAndroidSystemSettings: false, 
+  };
+
+  const triggerHapticFeedback = () => {
+    ReactNativeHapticFeedback.trigger("effectDoubleClick", options);
+  };
+
   const onGestureEvent = Animated.event(
     [{ nativeEvent: { translationX: translateX } }],
     { useNativeDriver: true },
@@ -26,6 +36,7 @@ const SwipeToAction = ({ onSwipeComplete }) => {
     if (event.nativeEvent.state === State.END) {
       if (event.nativeEvent.translationX > 180) {
         setSwiped(true);
+        triggerHapticFeedback();
         onSwipeComplete();
       } else {
         Animated.spring(translateX, {
@@ -39,7 +50,7 @@ const SwipeToAction = ({ onSwipeComplete }) => {
   return (
     <View style={styles.container}>
       {!swiped ? (
-        <View style={styles.track}>
+        <Animated.View style={styles.track}>
           <AppText variant="body1" style={styles.trackText}>
             {sendScreen.swipeToBroadcast}
           </AppText>
@@ -49,18 +60,28 @@ const SwipeToAction = ({ onSwipeComplete }) => {
             <Animated.View
               style={[
                 styles.thumb,
-                { transform: [{ translateX: translateX }] },
+                {
+                  transform: [
+                    {
+                      translateX: translateX.interpolate({
+                        inputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
+                        outputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
+                        extrapolate: 'clamp',
+                      }),
+                    },
+                  ],
+                },
               ]}>
               <AppText variant="body1" style={styles.thumbText}>
                 »
               </AppText>
             </Animated.View>
           </PanGestureHandler>
-        </View>
+        </Animated.View>
       ) : (
         <PrimaryCTA
           title={sendScreen.broadcastingTXN}
-          onPress={()=> {}}
+          onPress={() => {}}
           width={'100%'}
           textColor={theme.colors.popupCTATitleColor}
           buttonColor={theme.colors.accent1}
