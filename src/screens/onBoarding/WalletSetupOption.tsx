@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -33,7 +33,7 @@ function WalletSetupOption({ navigation }) {
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
-        icon={!isThemeDark ? <IconWallet /> : <IconWalletLight />}
+        icon={isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
@@ -42,7 +42,7 @@ function WalletSetupOption({ navigation }) {
         }}
       />
       <OptionCard
-        icon={!isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
+        icon={isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
         showRightArrow={true}
@@ -75,7 +75,7 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       color: theme.colors.headingColor,
-      marginTop: hp(35),
+      marginTop: Platform.OS === 'ios' ? hp(35) : hp(50),
       marginBottom: hp(20),
     },
   });

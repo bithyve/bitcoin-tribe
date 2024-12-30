@@ -25,6 +25,9 @@ const getStyles = (theme: AppTheme) =>
     valueText: {
       color: theme.colors.headingColor,
     },
+    bodyWrapper: {
+      height: '74%',
+    },
     buttonWrapper: {
       marginTop: hp(20),
     },
@@ -33,7 +36,7 @@ const getStyles = (theme: AppTheme) =>
 const LightningSend = () => {
   const { invoice } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { assets, common, wallet: walletTranslation } = translations;
+  const { assets, common, lightning } = translations;
   const navigation = useNavigation();
   const decodeInvoiceMutation = useMutation(ApiHandler.decodeLnInvoice);
   const sendLnPaymentMutation = useMutation(ApiHandler.sendLNPayment);
@@ -71,7 +74,7 @@ const LightningSend = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'Send'} subTitle={''} />
+      <AppHeader title={lightning.sendTitle} subTitle={''} />
       <ModalLoading
         visible={!invoiceDetails || sendLnPaymentMutation.isLoading}
       />
@@ -79,10 +82,10 @@ const LightningSend = () => {
       {!invoiceDetails ? (
         <View />
       ) : (
-        <View>
+        <View style={styles.bodyWrapper}>
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
-              Invoice
+              {lightning.invoice}
             </AppText>
             <CardBox>
               <AppText
@@ -99,7 +102,7 @@ const LightningSend = () => {
                 numberOfLines={1}
                 variant="body1"
                 style={styles.headerTitle}>
-                Asset ID
+                {lightning.assetId}
               </AppText>
               <CardBox>
                 <AppText variant="body2" style={styles.valueText}>
@@ -110,7 +113,7 @@ const LightningSend = () => {
           )}
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
-              Amount
+              {lightning.amount}
             </AppText>
             <CardBox>
               <AppText variant="body2" style={styles.valueText}>
@@ -121,7 +124,7 @@ const LightningSend = () => {
 
           <View>
             <AppText variant="body1" style={styles.headerTitle}>
-              Payment Hash
+              {lightning.paymentHash}
             </AppText>
             <CardBox>
               <AppText
@@ -143,17 +146,18 @@ const LightningSend = () => {
               </AppText>
             </CardBox>
           </View> */}
-
-          <View style={styles.buttonWrapper}>
-            <Buttons
-              primaryTitle={common.send}
-              primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
-              secondaryTitle={common.cancel}
-              secondaryOnPress={() => navigation.goBack()}
-              width={wp(120)}
-              disabled={false}
-            />
-          </View>
+        </View>
+      )}
+      {invoiceDetails && (
+        <View style={styles.buttonWrapper}>
+          <Buttons
+            primaryTitle={common.send}
+            primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={() => navigation.goBack()}
+            width={wp(120)}
+            disabled={false}
+          />
         </View>
       )}
 
@@ -166,8 +170,7 @@ const LightningSend = () => {
         conatinerModalStyle={{}}>
         <SendSuccessPopupContainer
           title={assets.success}
-          subTitle={assets.operationSuccess}
-          description={assets.operationSuccessSubTitle}
+          subTitle={lightning.lightningSendTxnSubtitle}
           onPress={() => {
             navigation.goBack();
           }}

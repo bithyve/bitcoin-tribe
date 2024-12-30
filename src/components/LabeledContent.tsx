@@ -39,8 +39,8 @@ function LabeledContent(props: labelContentProps) {
         <View style={styles.balanceWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS &&
             getCurrencyIcon(
-              !isThemeDark ? IconBitcoin : IconBitcoinLight,
-              !isThemeDark ? 'dark' : 'light',
+              isThemeDark ? IconBitcoin : IconBitcoinLight,
+              isThemeDark ? 'dark' : 'light',
             )}
           <AppText variant="body2" style={styles.textStyle}>
             &nbsp;{getBalance(content)}

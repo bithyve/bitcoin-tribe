@@ -20,6 +20,7 @@ type DropdownProps = {
   langCurrency: string;
   langCurrencyVariant: string;
   onDissmiss?: () => void;
+  flag?
 };
 
 function LangDropDownListView(props: DropdownProps) {
@@ -31,6 +32,7 @@ function LangDropDownListView(props: DropdownProps) {
     langCurrency,
     langCurrencyVariant,
     onDissmiss,
+    flag
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -51,10 +53,10 @@ function LangDropDownListView(props: DropdownProps) {
             </AppText>
           </View>
           <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
-            {langCurrencyVariant}
+          {flag} {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>
-            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>
@@ -67,7 +69,7 @@ function LangDropDownListView(props: DropdownProps) {
             <View style={styles.wrapper}>
               <View style={styles.radioBtnWrapper}>
                 <AppText variant="body2" style={styles.languageText}>
-                  {item.language + ' ' + item.iso.toUpperCase()}
+                  {item.flag}&nbsp; {item.language + ' ' + item.country_code}
                 </AppText>
                 <RadioButton.Android
                   color={theme.colors.accent1}

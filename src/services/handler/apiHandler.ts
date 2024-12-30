@@ -29,7 +29,6 @@ import crypto from 'crypto';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
-import { Vault } from '../wallets/interfaces/vault';
 import ElectrumClient, { ELECTRUM_CLIENT } from '../electrum/client';
 import {
   predefinedMainnetNodes,
@@ -123,7 +122,6 @@ export class ApiHandler {
       // Store the encrypted key securely
       await SecureStore.store(hash, encryptedKey);
     } else {
-      console.log('Encryption key already exists. Skipping encryption step.');
       // Decrypt the existing key to get AES_KEY
       AES_KEY = decrypt(hash, existingEncryptedKey);
     }
@@ -162,6 +160,7 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
           };
+
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -279,6 +278,72 @@ export class ApiHandler {
       throw new Error('Realm initialisation failed');
     }
   }
+
+  static async restoreApp(mnemonic: string) {
+    try {
+      const seed = bip39.mnemonicToSeedSync(mnemonic);
+      const appID = crypto
+        .createHash('sha256')
+        .update(seed)
+        .digest('hex');
+      const backup = await Relay.getBackup(appID);
+      if(backup.node) {
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.SUPPORTED_RLN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          rgbNodeConnectParams: {
+            authentication: backup.token,
+            nodeUrl: backup.apiUrl,
+            mnemonic: backup.node.mnemonic,
+            nodeId: backup.node.nodeId,
+            peerDNS: backup.peerDNS,
+          },
+          mnemonic: backup.node.mnemonic,
+          rgbNodeInfo: backup.nodeInfo,
+        });
+      } else if(backup.file) {
+        var path = RNFS.DocumentDirectoryPath + `/${appID}.rgb_backup`;
+        const file = await ApiHandler.downloadFile({
+          fromUrl: backup.file,
+          toFile: path,
+        });
+        const restore = await RGBServices.restore(mnemonic, path);
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.ON_CHAIN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          mnemonic: mnemonic,
+        });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
+
+      } else {
+        throw new Error(backup.error);
+      }
+    } catch (error) {
+      if (error ! instanceof Error) {
+        throw error;
+      }
+    }
+  }
+
+  static async downloadFile ({ ...obj }: RNFS.DownloadFileOptionsT) {
+    const { promise } = RNFS.downloadFile({
+      progressDivider: 100,
+      progressInterval: 5000,
+      ...obj,
+    });
+    return promise;
+  };
 
   static async biometricLogin(signature: string) {
     const appId = await Storage.get(Keys.APPID);
@@ -483,7 +548,7 @@ export class ApiHandler {
         const network = WalletUtilities.getNetworkByType(
           wallets[0].networkType,
         );
-        const { synchedWallets }: { synchedWallets: (Wallet | Vault)[] } =
+        const { synchedWallets }: { synchedWallets: (Wallet)[] } =
           await WalletOperations.syncWalletsViaElectrumClient(wallets, network);
 
         for (const synchedWallet of synchedWallets) {
@@ -611,7 +676,7 @@ export class ApiHandler {
 
   static async receiveTestSats() {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (ApiHandler.appType === AppType.NODE_CONNECT || ApiHandler.appType === AppType.SUPPORTED_RLN) {
         const response = await ApiHandler.getNodeOnchainBtcAddress();
         if (response.address) {
           const { funded } = await Relay.getTestcoins(
@@ -664,8 +729,12 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
+        await ApiHandler.refreshRgbWallet();
+        ApiHandler.refreshWallets({ wallets: wallet.toJSON() });
         if (utxos.created) {
           return utxos.created;
+        } if(utxos.error){
+          throw new Error(`${utxos.error}`);
         } else {
           return false;
         }
@@ -732,7 +801,6 @@ export class ApiHandler {
   static async decodeLnInvoice({ invoice }: { invoice: string }) {
     try {
       const response = await ApiHandler.api.decodelninvoice({ invoice });
-      console.log('response', response);
       if (response.payment_hash) {
         return snakeCaseToCamelCaseCase(response);
       } else {
@@ -818,6 +886,9 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
+      if(ApiHandler.appType === AppType.ON_CHAIN) {
+        ApiHandler.backup();
+      }
     } catch (error) {
       console.log('error', error);
     }
@@ -840,9 +911,8 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (response?.asset) {
+      if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
-        return response.asset;
       }
       return response;
     } catch (error) {
@@ -962,7 +1032,6 @@ export class ApiHandler {
           metaData: response,
         });
       }
-      console.log(response);
       return response;
     } catch (error) {
       console.log('refreshRgbWallet', error);
@@ -1175,7 +1244,6 @@ export class ApiHandler {
         skip_sync: false,
       });
       if (response) {
-        console.log(response);
         return response;
       } else {
         throw new Error('Failed to connect to node');
@@ -1404,6 +1472,28 @@ export class ApiHandler {
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  }
+
+  static async backup() {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex<TribeApp>(RealmSchema.TribeApp) as TribeApp;
+      const wallet: RGBWallet = dbManager.getObjectByIndex<RGBWallet>(RealmSchema.RgbWallet) as RGBWallet;
+      const isBackupRequired = await RGBServices.isBackupRequired();
+      if(isBackupRequired) {
+        const backupFile = await RGBServices.backup('', app.primaryMnemonic);
+        if(backupFile.file) {
+          const response = await Relay.rgbFileBackup(Platform.select({
+            android: `file://${backupFile.file}`,
+            ios: backupFile.file,
+          }), app.id, wallet.accountXpubFingerprint);
+          if(response.uploaded) {
+            Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
+          }
+        }
+      }
+    } catch (error) {
+      console.log('backup error', error)
     }
   }
 

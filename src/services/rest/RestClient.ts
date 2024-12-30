@@ -1,49 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
-// import Tor, { RequestResponse } from 'react-native-tor';
-
 import DeviceInfo from 'react-native-device-info';
 import { Platform } from 'react-native';
 import config from 'src/utils/config';
 
 const { HEXA_ID } = config;
-// const tor = Tor({                        // disabled tor
-//   stopDaemonOnBackground: true,
-// });
-const tor: any = {};
-
-enum TorStatus {
-  OFF = 'OFF',
-  CONNECTING = 'CONNECTING',
-  CHECKING = 'CHECKING',
-  ERROR = 'ERROR',
-  CONNECTED = 'CONNECTED',
-  CHECK_STATUS = 'CHECK_STATUS',
-}
 
 class RestClient {
-  public static useTor: boolean;
-
   public static headers: object;
 
-  public static torStatus: TorStatus = TorStatus.OFF;
-
-  public static torPort: number | null = null;
-
-  public static whirlpoolTorPort: number = 19032;
-
   subscribers = [];
-
-  subToTorStatus(observer) {
-    this.subscribers.push(observer);
-  }
-
-  unsubscribe(observer) {
-    this.subscribers = this.subscribers.filter(ob => ob !== observer);
-  }
-
-  notify(status: TorStatus, message) {
-    this.subscribers.forEach(observer => observer(status, message));
-  }
 
   constructor() {
     RestClient.headers = {
@@ -55,63 +20,8 @@ class RestClient {
     };
   }
 
-  // async setUseTor(useTor: boolean) {   // disabled tor
-  //   try {
-  //     RestClient.useTor = useTor;
-  //     if (useTor) {
-  //       this.initTor();
-  //     } else {
-  //       await tor.stopIfRunning();
-  //       this.updateTorStatus(TorStatus.OFF);
-  //     }
-  //   } catch (error) {
-  //     this.updateTorStatus(TorStatus.ERROR);
-  //   }
-  // }
-
-  private updateTorStatus(status: TorStatus, message = '') {
-    RestClient.torStatus = status;
-    this.notify(status, message);
-  }
-
   getCommonHeaders(): object {
     return RestClient.headers;
-  }
-
-  getTorStatus(): TorStatus {
-    return RestClient.torStatus;
-  }
-
-  getTorPort(): number | null {
-    return RestClient.torPort;
-  }
-
-  getWhirlpoolTorPort(): number | null {
-    return RestClient.whirlpoolTorPort || RestClient.torPort;
-  }
-
-  private async initTor() {
-    try {
-      this.updateTorStatus(TorStatus.CONNECTING);
-      const port = await tor.startIfNotStarted();
-      if (port) {
-        console.log('Tor started on PORT: ', port);
-        RestClient.torPort = port;
-        this.updateTorStatus(
-          TorStatus.CONNECTED,
-          `Tor started on PORT: ${port}`,
-        );
-      } else {
-        this.updateTorStatus(
-          TorStatus.ERROR,
-          'Failed to connect to tor daemon',
-        );
-      }
-    } catch (error) {
-      console.log('tor connect error', error);
-      await tor.stopIfRunning();
-      this.updateTorStatus(TorStatus.ERROR, error.message);
-    }
   }
 
   getCircularReplacer() {
@@ -132,17 +42,6 @@ class RestClient {
     body: object,
     headers?: object,
   ): Promise<AxiosResponse> {
-    if (RestClient.useTor && RestClient.torStatus === TorStatus.CONNECTED) {
-      return tor.post(
-        path,
-        JSON.stringify(body, this.getCircularReplacer()),
-        {
-          ...RestClient.headers,
-          ...headers,
-        },
-        true,
-      );
-    }
     return axios.post(path, body, {
       headers: {
         ...RestClient.headers,
@@ -152,16 +51,6 @@ class RestClient {
   }
 
   async get(path: string, headers?: object): Promise<AxiosResponse> {
-    if (RestClient.useTor && RestClient.torStatus === TorStatus.CONNECTED) {
-      return tor.get(
-        path,
-        {
-          ...RestClient.headers,
-          ...headers,
-        },
-        true,
-      );
-    }
     return axios.get(path, {
       headers: {
         ...RestClient.headers,
@@ -172,4 +61,3 @@ class RestClient {
 }
 
 export default new RestClient();
-export { tor, TorStatus };

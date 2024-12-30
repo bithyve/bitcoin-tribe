@@ -19,11 +19,19 @@ type LangCurrencyOptionProps = {
   langCurrency: string;
   langCurrencyVariant: string;
   onPress?: () => void;
+  flag?: any;
 };
 
 function LangCurrencyOption(props: LangCurrencyOptionProps) {
-  const { icon, title, subTitle, langCurrency, langCurrencyVariant, onPress } =
-    props;
+  const {
+    icon,
+    title,
+    subTitle,
+    langCurrency,
+    langCurrencyVariant,
+    onPress,
+    flag,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -55,10 +63,10 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
             </AppText>
           </View>
           <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
-            {langCurrencyVariant}
+            {flag} {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>
-            {!isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
           </View>
         </GradientView>
       </AppTouchable>

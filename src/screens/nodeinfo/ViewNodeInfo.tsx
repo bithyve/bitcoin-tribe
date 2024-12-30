@@ -101,7 +101,7 @@ const ViewNodeInfo = () => {
       {isLoading ? (
         <View style={styles.loadingWrapper}>
           <LottieView
-            source={require('src/assets/images/loader.json')}
+            source={require('src/assets/images/jsons/loader.json')}
             autoPlay
             loop
             style={styles.refreshLoader}

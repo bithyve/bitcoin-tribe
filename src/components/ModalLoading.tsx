@@ -35,7 +35,7 @@ const ModalLoading = (props: ModalProps) => {
       style={styles.container}>
       <View style={styles.loaderWrapper}>
         <LottieView
-          source={require('src/assets/images/loader.json')}
+          source={require('src/assets/images/jsons/loader.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

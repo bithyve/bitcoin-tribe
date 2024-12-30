@@ -36,7 +36,7 @@ const ReceiveQrDetails = ({
 
       <ReceiveQrClipBoard
         qrCodeValue={receivingAddress}
-        icon={!isThemeDark ? <IconCopy /> : <IconCopyLight />}
+        icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
       />
       <OptionCard
         title={receciveScreen.addAmountTitle}

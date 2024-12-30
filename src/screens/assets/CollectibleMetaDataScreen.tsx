@@ -59,7 +59,7 @@ const onShare = async (filePath) => {
   }
 };
 
-const CoinsMetaDataScreen = () => {
+const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -81,7 +81,7 @@ const CoinsMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        rightIcon={!isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
+        rightIcon={isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
         onSettingsPress={() => {
           const filePath = Platform.select({
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
@@ -191,4 +191,4 @@ const getStyles = (theme: AppTheme) =>
     },
   });
 
-export default CoinsMetaDataScreen;
+export default CollectibleMetaDataScreen;

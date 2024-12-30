@@ -15,8 +15,7 @@ import React, {
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
-import Identicon from 'react-native-identicon';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -26,7 +25,6 @@ import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import CreateUtxosModal from 'src/components/CreateUtxosModal';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
@@ -47,6 +45,8 @@ import {
 } from 'src/services/wallets/interfaces';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import Identicon from 'src/components/Identicon';
 
 type ItemProps = {
   name: string;
@@ -152,6 +152,7 @@ const SendAssetScreen = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
   );
@@ -222,7 +223,7 @@ const SendAssetScreen = () => {
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
-          setShowErrorModal(true);
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         Toast(`Failed: ${response?.error}`, true);
@@ -232,19 +233,22 @@ const SendAssetScreen = () => {
     }
   }, [invoice, amount, navigation]);
 
-  // const handleAmtChangeText = text => {
-  //   const positiveNumberRegex = /^\d*[1-9]\d*$/;
-  //   if (positiveNumberRegex.test(text)) {
-  //     setAmount(text);
-  //   } else {
-  //     setAmount('');
-  //   }
-  // };
-
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading || createUtxos.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.sendAssetLoadingTitle}
+            subTitle={assets.sendAssetLoadingSubTitle}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/sendingBTCorAsset.json') : require('src/assets/images/jsons/sendingBTCorAsset_light.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <CreateUtxosModal
         visible={showErrorModal}
         primaryOnPress={() => {
@@ -268,7 +272,6 @@ const SendAssetScreen = () => {
           <SendSuccessPopupContainer
             title={assets.success}
             subTitle={assets.operationSuccess}
-            description={assets.operationSuccessSubTitle}
             onPress={() => {
               navigation.goBack();
             }}
@@ -287,9 +290,7 @@ const SendAssetScreen = () => {
             item.media?.filePath
               ? Platform.select({
                   android: `file://${item.media?.filePath}`,
-                  ios: `${item.media?.filePath}.${
-                    item.media?.mime.split('/')[1]
-                  }`,
+                  ios: item.media?.filePath,
                 })
               : null
           }

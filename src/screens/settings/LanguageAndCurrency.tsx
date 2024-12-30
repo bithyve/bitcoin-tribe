@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useNavigation } from '@react-navigation/native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,7 +14,6 @@ import IconLangCurrencyLight from 'src/assets/images/langIcon_light.svg';
 import IconCurrency from 'src/assets/images/icon_coins.svg';
 import IconCurrencyLight from 'src/assets/images/icon_coins_light.svg';
 import LangDropDownListView from './components/LangDropDownListView';
-import { Platform, StyleSheet, View } from 'react-native';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import availableLanguages from 'src/loc/availableLanguages';
@@ -21,10 +22,10 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
-import CloseIcon from 'src/assets/images/closeIcon.svg';
-import CloseIconLight from 'src/assets/images/closeIcon_light.svg';
+
 
 function LanguageAndCurrency() {
+  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { settings, common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -60,29 +61,16 @@ function LanguageAndCurrency() {
   return (
     <ScreenContainer>
       <AppHeader
-        title={settings.langAndCurrency}
+        title={currencyDropDown || langDropdown ? '' : settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
-        rightIcon={
-          currencyDropDown || langDropdown ? (
-            !isThemeDark ? (
-              <CloseIcon />
-            ) : (
-              <CloseIconLight />
-            )
-          ) : null
-        }
-        onSettingsPress={() => {
-          setLangDropdown(false);
-          setCurrencyDropDown(false);
+        onBackNavigation={()=>{
+          if(currencyDropDown || langDropdown){
+            setLangDropdown(false);
+            setCurrencyDropDown(false);
+          }else{
+            navigation.goBack()
+          }
         }}
-      />
-      <SelectOption
-        title={settings.satsModeTitle}
-        subTitle={settings.satsModeSubTitle}
-        onPress={() => toggleDisplayMode()}
-        enableSwitch={true}
-        onValueChange={() => toggleDisplayMode()}
-        toggleValue={initialCurrencyMode === CurrencyKind.SATS}
       />
       <SelectOption
         title={settings.satsModeTitle}
@@ -96,21 +84,22 @@ function LanguageAndCurrency() {
         <LangCurrencyOption
           title={settings.language}
           subTitle={settings.languageSubTitle}
-          icon={!isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
+          icon={isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />}
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
             selectedLanguage.displayTitle +
               ' ' +
-              selectedLanguage.iso.toUpperCase()
+              selectedLanguage.country_code
           }
+          flag={selectedLanguage.flag}
           onPress={() => setLangDropdown(!langDropdown)}
         />
       </View>
       <LangCurrencyOption
         title={settings.currency}
         subTitle={settings.currencySubTitle}
-        icon={!isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
+        icon={isThemeDark ? <IconCurrency /> : <IconCurrencyLight />}
         langCurrency={selectedCurrency && selectedCurrency.currency}
         langCurrencyVariant={selectedCurrency && selectedCurrency.displayTitle}
         onPress={() => setCurrencyDropDown(!currencyDropDown)}
@@ -130,8 +119,9 @@ function LanguageAndCurrency() {
             selectedLanguage &&
             selectedLanguage.displayTitle +
               ' ' +
-              selectedLanguage.iso.toUpperCase()
+              selectedLanguage.country_code
           }
+          flag={selectedLanguage.flag}
         />
       )}
       {currencyDropDown && (

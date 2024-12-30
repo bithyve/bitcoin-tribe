@@ -1,15 +1,17 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -18,6 +20,9 @@ import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import AppText from 'src/components/AppText';
+import AppType from 'src/models/enums/AppType';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 
 const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
   StyleSheet.create({
@@ -25,7 +30,14 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: totalReserveSatsAmount === 0 ? '64%' : '74%',
+      height:
+        totalReserveSatsAmount === 0
+          ? windowHeight > 670
+            ? '56%'
+            : '50%'
+          : windowHeight > 670
+          ? '65%'
+          : '60%',
     },
     footerWrapper: {
       marginVertical: hp(10),
@@ -56,6 +68,37 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
     reservedSatsText: {
       color: theme.colors.secondaryHeadingColor,
     },
+    radioBtnWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(10),
+      width: '50%',
+    },
+    typeViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    wrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: hp(10),
+    },
+    chooseInvoiceType: {
+      color: theme.colors.headingColor,
+    },
+    rightCTAStyle: {
+      backgroundColor: theme.colors.ctaBackColor,
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+      marginHorizontal: hp(5),
+    },
+    inputStyle: {
+      width: '80%',
+    },
   });
 
 const EnterInvoiceDetails = () => {
@@ -64,14 +107,27 @@ const EnterInvoiceDetails = () => {
     receciveScreen,
     common,
     assets,
+    home,
+    sendScreen,
     wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [assetId, setAssetId] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
+  const [selectedType, setSelectedType] = React.useState(
+    app.appType !== AppType.ON_CHAIN && assetId !== ''
+      ? 'lightning'
+      : 'bitcoin',
+  );
+
+  const handlePasteAddress = async () => {
+    const getClipboardValue = await Clipboard.getString();
+    setAssetId(getClipboardValue);
+  };
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -83,14 +139,48 @@ const EnterInvoiceDetails = () => {
   }, [UnspentUTXOData]);
 
   const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
-
   return (
     <ScreenContainer>
-      <AppHeader
-        title={assets.receiveAssetTitle}
-        subTitle={''}
-        enableBack={true}
-      />
+      <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
+      {app.appType !== AppType.ON_CHAIN && (
+        <View>
+          <View>
+            <AppText variant="heading3" style={styles.chooseInvoiceType}>
+              {receciveScreen.chooseInvoiceType}
+            </AppText>
+          </View>
+          <View style={styles.wrapper}>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'bitcoin'}
+                status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('bitcoin')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.onchain}
+                </AppText>
+              </View>
+            </View>
+            <View style={styles.radioBtnWrapper}>
+              <RadioButton.Android
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+                value={'lightning'}
+                status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
+                onPress={() => setSelectedType('lightning')}
+              />
+              <View style={styles.typeViewWrapper}>
+                <AppText variant="body2" style={styles.feePriorityText}>
+                  {receciveScreen.lightning}
+                </AppText>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
       <View style={styles.bodyWrapper}>
         <TextField
           value={assetId}
@@ -104,6 +194,11 @@ const EnterInvoiceDetails = () => {
           }}
           numberOfLines={3}
           contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
+          inputStyle={styles.inputStyle}
+          rightText={sendScreen.paste}
+          onRightTextPress={() => handlePasteAddress()}
+          rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.primaryCTAText}
         />
 
         <TextField
@@ -114,12 +209,11 @@ const EnterInvoiceDetails = () => {
           keyboardType="numeric"
         />
       </View>
-
       <View style={styles.footerWrapper}>
         {totalReserveSatsAmount === 0 ? (
           <View style={styles.reservedSatsWrapper}>
             <View style={styles.checkIconWrapper}>
-              <CheckIcon />
+              {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
             </View>
             <View style={styles.reservedSatsWrapper1}>
               <AppText variant="body2" style={styles.reservedSatsText}>
@@ -135,14 +229,16 @@ const EnterInvoiceDetails = () => {
               refresh: true,
               assetId,
               amount,
+              selectedType,
             });
           }}
-          secondaryTitle={common.skip}
+          secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
             navigation.replace(NavigationRoutes.RECEIVEASSET, {
               refresh: true,
               assetId,
               amount,
+              selectedType,
             })
           }
           disabled={assetId === '' || amount === ''}

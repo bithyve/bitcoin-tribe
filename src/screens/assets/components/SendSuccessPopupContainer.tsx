@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 type sendSuccessProps = {
   title: string;
   subTitle: string;
-  description: string;
+  description?: string;
   onPress: () => void;
 };
 
@@ -30,9 +30,9 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
       <View>
         <LottieView
           source={
-            !isThemeDark
-              ? require('src/assets/images/successPopup.json')
-              : require('src/assets/images/successPopup_light.json')
+            isThemeDark
+              ? require('src/assets/images/jsons/successPopup.json')
+              : require('src/assets/images/jsons/successPopup_light.json')
           }
           style={styles.loaderStyle}
           autoPlay

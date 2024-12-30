@@ -1,8 +1,5 @@
 import {
-  LabelRefType,
-  LabelType,
   NetworkType,
-  SignerType,
   TransactionType,
   TxPriorityDefault,
 } from '../enums';
@@ -130,22 +127,7 @@ export interface UTXO {
   height: number;
 }
 
-export interface UTXOInfo {
-  id: string;
-  txId: string;
-  vout: number;
-  walletId: string;
-  labels?: Array<{ name: string; type: LabelType }>;
-}
 
-export interface BIP329Label {
-  id: string;
-  ref: string;
-  type: LabelRefType;
-  label: string;
-  origin?: string;
-  isSystem: boolean;
-}
 
 export interface BIP85Config {
   index: number;
@@ -155,7 +137,6 @@ export interface BIP85Config {
 }
 
 export interface SigningPayload {
-  payloadTarget: SignerType;
   inputs?: InputUTXOs[];
   outputs?: OutputUTXOs[];
   change?: string;
@@ -180,7 +161,6 @@ export interface SigningPayload {
 
 export interface SerializedPSBTEnvelop {
   xfp: string;
-  signerType: SignerType;
   serializedPSBT: string;
   signingPayload?: SigningPayload[];
   isSigned: boolean;

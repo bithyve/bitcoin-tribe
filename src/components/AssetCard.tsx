@@ -9,9 +9,9 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
-import Identicon from 'react-native-identicon';
 import AssetChip from './AssetChip';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import Identicon from './Identicon';
 
 type AssetCardProps = {
   image?: string;
@@ -22,11 +22,21 @@ type AssetCardProps = {
   assetId?: string;
   amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
-  assetIface?: AssetFace
+  assetIface?: AssetFace;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { image, name, ticker, tag, onPress, assetId, amount, details, assetIface } = props;
+  const {
+    image,
+    name,
+    ticker,
+    tag,
+    onPress,
+    assetId,
+    amount,
+    details,
+    assetIface,
+  } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, amount.toString().length),
@@ -72,19 +82,17 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
         </View>
         <View style={styles.contentWrapper}>
-          <View style={styles.contentWrapper2}>
-            <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
-              {name}
-            </AppText>
-            <AppText
-              variant="caption"
-              style={styles.amountText}
-              numberOfLines={1}>
-              {numberWithCommas(amount)}
-            </AppText>
-          </View>
           <AppText variant="caption" style={styles.titleText}>
             {ticker}
+          </AppText>
+          <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
+            {name}
+          </AppText>
+          <AppText
+            variant="caption"
+            style={styles.amountText}
+            numberOfLines={1}>
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </GradientView>
@@ -131,29 +139,15 @@ const getStyles = (theme: AppTheme, amtLength) =>
       height: '30%',
       justifyContent: 'center',
     },
-    contentWrapper2: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
     titleText: {
       lineHeight: hp(18),
-      fontWeight: '400',
-      color: theme.colors.secondaryHeadingColor,
-    },
-    textTicker: {
-      // color: theme.colors.accent1,
-      width: '100%',
-      height: '100%',
-      // textAlign: 'center',
-      // marginTop: '40%',
-      // fontSize: 35,
+      fontWeight: '600',
+      color: theme.colors.accent1,
     },
     nameText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-      width: amtLength > 10 ? '25%' : '45%',
     },
     amountText: {
       fontWeight: '300',
@@ -164,9 +158,6 @@ const getStyles = (theme: AppTheme, amtLength) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
-    },
-    tagTextStyle: {
-      lineHeight: hp(20),
     },
     assetImageWrapper: {
       width: '100%',

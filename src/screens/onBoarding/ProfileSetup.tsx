@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -17,8 +17,9 @@ import * as SecureStore from 'src/storage/secure-store';
 import config from 'src/utils/config';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
-import ModalLoading from 'src/components/ModalLoading';
 import { AppTheme } from 'src/theme';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -27,7 +28,6 @@ function ProfileSetup() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
-  const [visibleBackAssetAlert, setVisibleBackAssetAlert] = useState(false);
 
   const [profileImage, setProfileImage] = useState('');
   const { setKey } = useContext(AppContext);
@@ -78,10 +78,8 @@ function ProfileSetup() {
       });
     }, 200);
   };
-
   return (
     <ScreenContainer>
-      <ModalLoading visible={isLoading || setupNewAppMutation.status === 'loading'} />
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}
@@ -103,6 +101,19 @@ function ProfileSetup() {
         disabled={false}
         // secondaryCTATitle={common.skip}
       />
+      <View>
+        <ResponsePopupContainer
+          visible={isLoading || setupNewAppMutation.status === 'loading'}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={onBoarding.profileSetupLoadingTitle}
+            subTitle={onBoarding.profileSetupLoadingSubTitle}
+            illustrationPath={require('src/assets/images/jsons/appCreation.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }

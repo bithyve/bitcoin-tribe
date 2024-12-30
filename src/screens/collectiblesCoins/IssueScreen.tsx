@@ -11,6 +11,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -18,13 +19,13 @@ import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
@@ -40,6 +41,9 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+
+const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
   const { appType } = useContext(AppContext);
@@ -111,7 +115,6 @@ function IssueScreen() {
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
-        setLoading(false);
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -133,7 +136,12 @@ function IssueScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         filePath: Platform.select({
-          android: appType === AppType.NODE_CONNECT ? image.startsWith('file://') ? image : `file://${path}` : image.replace('file://', ''),
+          android:
+            appType === AppType.NODE_CONNECT
+              ? image.startsWith('file://')
+                ? image
+                : `file://${path}`
+              : image.replace('file://', ''),
           ios: image.replace('file://', ''),
         }),
       });
@@ -141,12 +149,12 @@ function IssueScreen() {
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
+        refreshRgbWalletMutation.mutate();
         navigation.dispatch(popAction);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
-        setLoading(false);
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -200,10 +208,40 @@ function IssueScreen() {
     setImage('');
   };
 
+  const handleTotalSupplyChange = text => {
+    try {
+      const sanitizedText = text.replace(/[^0-9]/g, '');
+      if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
+        setTotalSupplyAmt(sanitizedText);
+      } else if (!sanitizedText) {
+        setTotalSupplyAmt('');
+      } else if (
+        sanitizedText &&
+        BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
+      ) {
+        Toast(assets.totalSupplyAmountErrMsg, true);
+      }
+    } catch {
+      setTotalSupplyAmt('');
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.issueNew} />
-      <ModalLoading visible={loading || createUtxos.isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={loading || createUtxos.isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.issueAssetLoadingTitle}
+            subTitle={assets.issueAssetLoadingSubTitle}
+            illustrationPath={isThemeDark ? require('src/assets/images/jsons/issuingAsset.json') : require('src/assets/images/jsons/issuingAsset_light.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
       <SegmentedButtons
         value={assetType}
         onValueChange={value => {
@@ -249,7 +287,7 @@ function IssueScreen() {
 
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
@@ -281,7 +319,7 @@ function IssueScreen() {
             />
             <TextField
               value={formatNumber(totalSupplyAmt)}
-              onChangeText={text => setTotalSupplyAmt(text)}
+              onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
               keyboardType="numeric"
               style={styles.input}
@@ -289,7 +327,7 @@ function IssueScreen() {
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
-              icon={!isThemeDark ? <UploadFile /> : <UploadFileLight />}
+              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
             />
             {image && (
               <View style={styles.imageWrapper}>
@@ -305,7 +343,7 @@ function IssueScreen() {
                 <AppTouchable
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
-                  {!isThemeDark ? <IconClose /> : <IconCloseLight />}
+                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
             )}
@@ -315,7 +353,7 @@ function IssueScreen() {
       {totalReserveSatsAmount === 0 && (
         <View style={styles.reservedSatsWrapper}>
           <View style={styles.checkIconWrapper}>
-            <CheckIcon />
+            {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
           </View>
           <View style={styles.reservedSatsWrapper1}>
             <AppText variant="body2" style={styles.reservedSatsText}>

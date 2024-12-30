@@ -3,17 +3,20 @@ import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
-import SelectWalletCollapse from './components/SelectWalletCollapse';
 import SelectWalletTypeOption from './components/SelectWalletTypeOption';
 import SupportIcon from 'src/assets/images/supportIcon.svg';
+import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
 import { hp, wp } from 'src/constants/responsive';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
@@ -23,6 +26,19 @@ import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';
 import NodeConnectSuccessPopupContainer from './components/NodeConnectSuccessPopupContainer';
+import { Keys } from 'src/storage';
+import MainnetIcon from 'src/assets/images/mainnetIcon.svg';
+import MainnetIconLight from 'src/assets/images/mainnetIcon_light.svg';
+import IconSettingArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconSettingArrowLight from 'src/assets/images/icon_arrowr2light.svg';
+import LightningIcon from 'src/assets/images/lightningIcon.svg';
+import LightningIconLight from 'src/assets/images/lightningIcon_light.svg';
+import WalletAdvanceDownIcon from 'src/assets/images/walletAdvanceDownIcon.svg';
+import WalletAdvanceDownIconLight from 'src/assets/images/walletAdvanceDownIcon_light.svg';
+import WalletAdvanceUpIcon from 'src/assets/images/walletAdvanceUpIcon.svg';
+import WalletAdvanceUpIconLight from 'src/assets/images/walletAdvanceUpIcon_light.svg';
+import AppText from 'src/components/AppText';
+import LearnMoreTextView from './components/LearnMoreTextView';
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -30,9 +46,10 @@ function SelectWallet() {
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding, assets } = translations;
   const styles = getStyles(theme);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [openAdvanceOptions, setOpenAdvanceOptions] = useState(false);
   const [supportedMode, SetSupportedMode] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
 
@@ -57,27 +74,84 @@ function SelectWallet() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={onBoarding.selectWalletType} />
-      {/* <ModalLoading visible={createNodeMutation.isLoading} /> */}
+      <AppHeader
+        title={onBoarding.createWallet}
+        rightIcon={
+          !openAdvanceOptions ? (
+            isThemeDark ? (
+              <WalletAdvanceDownIcon />
+            ) : (
+              <WalletAdvanceDownIconLight />
+            )
+          ) : isThemeDark ? (
+            <WalletAdvanceUpIcon />
+          ) : (
+            <WalletAdvanceUpIconLight />
+          )
+        }
+        onSettingsPress={() => {
+          SetSupportedMode(false)
+          setOpenAdvanceOptions(!openAdvanceOptions)
+        }}
+      />
       <View style={styles.bodyWrapper}>
-        <SelectWalletCollapse
-          isCollapsed={isCollapsed}
-          setIsCollapsed={status => {
-            SetSupportedMode(false);
-            setIsCollapsed(status);
-          }}
-        />
         <SelectWalletTypeOption
-          title={onBoarding.supported}
-          icon={<SupportIcon />}
-          onPress={() => {
-            setIsCollapsed(false);
-            SetSupportedMode(!supportedMode);
-          }}
-          borderColor={
-            supportedMode ? theme.colors.accent1 : theme.colors.borderColor
+          title={onBoarding.mainnet}
+          icon={isThemeDark ? <MainnetIcon /> : <MainnetIconLight />}
+          rightIcon={
+            isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
           }
+          onPress={() => {
+            SetSupportedMode(false);
+            navigation.navigate(NavigationRoutes.PROFILESETUP);
+          }}
         />
+        <LearnMoreTextView
+          title={onBoarding.onchainLearMoreInfo}
+          onPress={() => {}}
+        />
+        {openAdvanceOptions && (
+          <>
+            <View>
+              <AppText variant="heading3" style={styles.advanceOptText}>
+                {onBoarding.advanceOptionTitle}
+              </AppText>
+            </View>
+            <View>
+              <SelectWalletTypeOption
+                title={onBoarding.mainnetAndLightning}
+                icon={isThemeDark ? <LightningIcon /> : <LightningIconLight />}
+                rightIcon={
+                  isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />
+                }
+                onPress={() => {
+                  SetSupportedMode(false);
+                  navigation.navigate(NavigationRoutes.RGBLIGHTNINGNODECONNECT);
+                }}
+              />
+              <LearnMoreTextView
+                title={onBoarding.lightningLearnMoreInfo}
+                onPress={() => {}}
+              />
+              <SelectWalletTypeOption
+                title={onBoarding.supported}
+                icon={isThemeDark ? <SupportIcon /> : <SupportIconLight />}
+                onPress={() => {
+                  SetSupportedMode(!supportedMode);
+                }}
+                borderColor={
+                  supportedMode
+                    ? theme.colors.accent1
+                    : theme.colors.borderColor
+                }
+              />
+              <LearnMoreTextView
+                title={onBoarding.supportLearnMoreInfo}
+                onPress={() => {}}
+              />
+            </View>
+          </>
+        )}
       </View>
       {supportedMode && (
         <View>
@@ -85,7 +159,17 @@ function SelectWallet() {
             <AppTouchable
               style={styles.checkIconWrapper}
               onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}>
-              {checkedTermsCondition ? <CheckIcon /> : <UnCheckIcon />}
+              {checkedTermsCondition ? (
+                isThemeDark ? (
+                  <CheckIcon />
+                ) : (
+                  <CheckIconLight />
+                )
+              ) : isThemeDark ? (
+                <UnCheckIcon />
+              ) : (
+                <UnCheckIconLight />
+              )}
             </AppTouchable>
             <View style={styles.termConditionWrapper1}>
               <Text style={styles.termConditionText}>
@@ -162,6 +246,11 @@ const getStyles = (theme: AppTheme) =>
     },
     bodyWrapper: {
       height: '67%',
+    },
+    advanceOptText: {
+      color: theme.colors.headingColor,
+      marginTop: hp(20),
+      marginBottom: hp(5),
     },
     textStyle: {
       color: theme.colors.headingColor,

@@ -20,10 +20,10 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { hp } from 'src/constants/responsive';
 import GradientView from 'src/components/GradientView';
 import AppTouchable from 'src/components/AppTouchable';
-import Identicon from 'react-native-identicon';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
+import Identicon from 'src/components/Identicon';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -181,9 +181,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 ticker={item.ticker}
                 image={Platform.select({
                   android: `file://${item.media?.filePath}`,
-                  ios: `${item.media?.filePath}.${
-                    item.media?.mime.split('/')[1]
-                  }`,
+                  ios: item.media?.filePath,
                 })}
               />
             )}

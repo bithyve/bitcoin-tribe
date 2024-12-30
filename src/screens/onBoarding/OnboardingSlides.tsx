@@ -1,6 +1,8 @@
 import React, { useContext, useRef, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
@@ -8,17 +10,17 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import BtcBackedAsset from 'src/assets/images/BtcBackedAsset.svg';
 import BackupAlertIllustration from 'src/assets/images/backupAlertIllustration.svg';
-import { useNavigation } from '@react-navigation/native';
+import BackupAlertIllustrationLight from 'src/assets/images/backupAlertIllustration_light.svg';
 import OnboardingSlideComponent from './components/OnboardingSlideComponent';
-import Buttons from 'src/components/Buttons';
-import AppTouchable from 'src/components/AppTouchable';
-import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Keys } from 'src/storage';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
 function OnboardingSlides() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const onboardingSlideRef = useRef(null);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common, onBoarding, home } = translations;
   const styles = getStyles(theme);
@@ -41,21 +43,27 @@ function OnboardingSlides() {
       title: home.backupAlertTitle,
       subTitle: home.backupAlertSubTitle,
       paragraph: '',
-      illustration: <BackupAlertIllustration />,
+      illustration: isThemeDark ? (
+        <BackupAlertIllustration />
+      ) : (
+        <BackupAlertIllustrationLight />
+      ),
     },
   ]);
 
   return (
     <ScreenContainer>
-      <View style={styles.skipWrapperView}>
-        {currentPosition === 0 &&<AppTouchable
-          onPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
-          style={styles.skipTextWrapper}>
-          <AppText variant="heading3" style={styles.skipText}>
-            {common.skip}
-          </AppText>
-        </AppTouchable>}
-      </View>
+      {/* <View style={styles.skipWrapperView}>
+        {currentPosition === 0 && (
+          <AppTouchable
+            onPress={() => navigation.replace(NavigationRoutes.APPSTACK)}
+            style={styles.skipTextWrapper}>
+            <AppText variant="heading3" style={styles.skipText}>
+              {common.skip}
+            </AppText>
+          </AppTouchable>
+        )}
+      </View> */}
       <View style={styles.wrapper}>
         <FlatList
           style={{
@@ -83,10 +91,8 @@ function OnboardingSlides() {
             />
           )}
         />
-      </View>
-      <View style={styles.footerBtnView}>
-        {currentPosition < items.length - 1 ? (
-          items.map((item, index) => (
+        <View style={styles.pageIndicatorWrapper}>
+          {items.map((item, index) => (
             <View
               key={item.id.toString()}
               style={
@@ -95,23 +101,24 @@ function OnboardingSlides() {
                   : styles.unSelectedDot
               }
             />
-          ))
-        ) : (
-          <Buttons
-            primaryTitle={common.proceed}
-            primaryOnPress={() => {
-              if (currentPosition < items.length - 1) {
-                onboardingSlideRef.current.scrollToIndex({
-                  animated: true,
-                  index: currentPosition + 1,
-                });
-              } else {
-                navigation.replace(NavigationRoutes.APPSTACK);
-              }
-            }}
-            width={wp(150)}
-          />
-        )}
+          ))}
+        </View>
+      </View>
+      <View style={styles.footerBtnView}>
+        <PrimaryCTA
+          title={common.next}
+          onPress={() => {
+            if (currentPosition < items.length - 1) {
+              onboardingSlideRef.current.scrollToIndex({
+                animated: true,
+                index: currentPosition + 1,
+              });
+            } else {
+              navigation.replace(NavigationRoutes.APPSTACK);
+            }
+          }}
+          width={hp(120)}
+        />
       </View>
     </ScreenContainer>
   );
@@ -132,10 +139,13 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     footerBtnView: {
-      flexDirection: 'row',
-      height: '10%',
+      height: '15%',
+      width: '100%',
       alignItems: 'center',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+    },
+    pageIndicatorWrapper: {
+      flexDirection: 'row',
     },
     skipTextWrapper: {
       flexDirection: 'row',
@@ -145,18 +155,18 @@ const getStyles = (theme: AppTheme) =>
     skipText: {
       letterSpacing: 0.42,
       textAlign: 'center',
-      color: theme.colors.accent1
+      color: theme.colors.accent1,
     },
     selectedDot: {
-      width: 25,
-      height: 5,
+      width: 10,
+      height: 10,
       borderRadius: 5,
       backgroundColor: theme.colors.accent1,
       marginEnd: 5,
     },
     unSelectedDot: {
-      width: 6,
-      height: 5,
+      width: 10,
+      height: 10,
       borderRadius: 5,
       backgroundColor: theme.colors.accent3,
       marginEnd: 5,

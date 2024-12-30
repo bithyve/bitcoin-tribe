@@ -59,12 +59,12 @@ const getStyles = (theme: AppTheme) =>
     },
     titleText: {
       color: theme.colors.headingColor,
-      textAlign: 'center',
+      textAlign: 'left',
       lineHeight: 30,
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
-      textAlign: 'center',
+      textAlign: 'left',
       lineHeight: 20,
       marginVertical: hp(5),
     },
