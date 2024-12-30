@@ -111,11 +111,11 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     middleTitleWrapper: {
-      width: '70%',
+      width: '65%',
       alignItems: 'center',
     },
     rightIconWrapper: {
-      width: '15%',
+      width: '20%',
       alignItems: 'center',
     },
     detailsWrapper: {
