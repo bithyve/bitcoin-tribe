@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Animated, Image, Platform } from 'react-native';
+import { View, StyleSheet, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Identicon from 'react-native-identicon';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,6 +17,7 @@ import AppText from 'src/components/AppText';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
+import Identicon from 'src/components/Identicon';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -44,17 +44,18 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
-    headerRightIcon
+    headerRightIcon,
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
-  const combinedBalance = asset.balance.spendable + asset.balance?.offchainOutbound || 0;
+  const combinedBalance =
+    asset.balance.spendable + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
-  const styles = getStyles(theme, insets,lengthOfTotalBalance);
-  
+  const styles = getStyles(theme, insets, lengthOfTotalBalance);
+
   return (
     <>
       {/* <Animated.View
@@ -66,7 +67,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         style={styles.largeHeader}>
         <AppHeader
           title={assetTicker}
-          rightIcon={<InfoIcon/>}
+          rightIcon={<InfoIcon />}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
@@ -174,7 +175,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     totalBalance: {
       color: theme.colors.headingColor,
-      fontSize: lengthOfTotalBalance > 15 ? 13 : 20
+      fontSize: lengthOfTotalBalance > 15 ? 13 : 20,
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
