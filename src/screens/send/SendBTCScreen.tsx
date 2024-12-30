@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
@@ -101,6 +101,7 @@ function SendBTCScreen({ route, navigation }) {
         style={styles.keyboardAwareContainer}
         contentContainerStyle={styles.keyboardAwareContent}
         enableOnAndroid={true}
+        extraScrollHeight={Platform.OS === 'android' ?  200 : 0}
         keyboardOpeningTime={0}>
         <View style={styles.scannerWrapper}>
           <QRScanner onCodeScanned={onCodeScanned} />
