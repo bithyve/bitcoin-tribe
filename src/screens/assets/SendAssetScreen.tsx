@@ -15,7 +15,6 @@ import React, {
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton, useTheme } from 'react-native-paper';
-import Identicon from 'react-native-identicon';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 
@@ -47,6 +46,7 @@ import {
 import { formatNumber } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import Identicon from 'src/components/Identicon';
 
 type ItemProps = {
   name: string;

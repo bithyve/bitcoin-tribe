@@ -9,9 +9,9 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
-import Identicon from 'react-native-identicon';
 import AssetChip from './AssetChip';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import Identicon from './Identicon';
 
 type AssetCardProps = {
   image?: string;
