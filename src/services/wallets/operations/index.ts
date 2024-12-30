@@ -1037,7 +1037,7 @@ export default class WalletOperations {
       outgoingAmount += recipient.amount;
       return recipient;
     });
-
+console.log('transferST1 averageTxFees', averageTxFees)
     let { fee, balance, txPrerequisites } =
       WalletOperations.prepareTransactionPrerequisites(
         wallet,
@@ -1046,7 +1046,7 @@ export default class WalletOperations {
         selectedPriority,
         selectedUTXOs,
       );
-
+console.log('transferST1 txPrerequisites', txPrerequisites)
     if (balance < outgoingAmount + fee) {
       throw new Error('Insufficient balance');
     }

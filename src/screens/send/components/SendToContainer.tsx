@@ -32,8 +32,8 @@ import AppType from 'src/models/enums/AppType';
 // import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
-import IconBitcoin from 'src/assets/images/icon_btc3.svg';
-import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
@@ -59,7 +59,7 @@ function SendToContainer({
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
-  const [customFee, setCustomFee] = useState('');
+  const [customFee, setCustomFee] = useState(0);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
@@ -87,6 +87,8 @@ function SendToContainer({
   useEffect(() => {
     if (sendTransactionMutation.status === 'success') {
     } else if (sendTransactionMutation.status === 'error') {
+      setVisible(false);
+      sendTransactionMutation.reset();
       Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
     }
   }, [sendTransactionMutation]);
@@ -119,6 +121,7 @@ function SendToContainer({
       },
       averageTxFee,
       selectedPriority,
+      customFeePerByte: customFee
     });
   };
 
@@ -206,7 +209,6 @@ function SendToContainer({
               keyboardType={'numeric'}
               inputStyle={styles.inputStyle}
               contentStyle={styles.contentStyle}
-              // disabled={true}
               // icon={<IconBitcoin />}
               rightText={common.max}
               onRightTextPress={() => {}}
@@ -302,10 +304,8 @@ function SendToContainer({
                 onChangeText={text => setCustomFee(text)}
                 placeholder={sendScreen.enterCustomFee}
                 keyboardType={'numeric'}
-                inputStyle={styles.inputStyle}
+                inputStyle={styles.customFeeInputStyle}
                 contentStyle={styles.contentStyle}
-                // disabled={true}
-                // icon={<IconBitcoin />}
                 rightText={'sat/vB'}
                 onRightTextPress={() => {}}
                 rightCTATextColor={theme.colors.headingColor}
@@ -403,6 +403,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     inputStyle: {
+      width: '80%',
+    },
+    customFeeInputStyle:{
       width: '80%',
     },
     contentStyle: {
