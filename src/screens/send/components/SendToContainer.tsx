@@ -113,6 +113,13 @@ function SendToContainer({
   };
 
   const initiateSend = () => {
+    if (selectedPriority === TxPriority.CUSTOM) {
+      averageTxFee.custom = {
+        averageTxFee: Number(customFee),
+        estimatedBlocks: 1,
+        feePerByte: Number(customFee),
+      };
+    }
     sendTransactionMutation.mutate({
       sender: wallet,
       recipient: {
@@ -121,7 +128,7 @@ function SendToContainer({
       },
       averageTxFee,
       selectedPriority,
-      customFeePerByte: customFee
+      customFeePerByte: customFee,
     });
   };
 
@@ -405,7 +412,7 @@ const getStyles = (theme: AppTheme) =>
     inputStyle: {
       width: '80%',
     },
-    customFeeInputStyle:{
+    customFeeInputStyle: {
       width: '80%',
     },
     contentStyle: {

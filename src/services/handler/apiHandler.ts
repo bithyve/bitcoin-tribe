@@ -572,7 +572,6 @@ export class ApiHandler {
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
   }): Promise<TransactionPrerequisite> {
-    console.log('averageTxFee', averageTxFee)
     const recipients = [recipient];
     const { txPrerequisites } = await WalletOperations.transferST1(
       sender,
@@ -616,13 +615,11 @@ export class ApiHandler {
     recipient,
     averageTxFee,
     selectedPriority,
-    customFeePerByte,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
-    customFeePerByte;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
       if (ApiHandler.appType === AppType.NODE_CONNECT) {
@@ -642,11 +639,10 @@ export class ApiHandler {
           throw new Error('Failed to connect to node');
         }
       } else {
-        const customFee = { "custom" : {averageTxFee: customFeePerByte, estimatedBlocks: 1, feePerByte: customFeePerByte }}
         const txPrerequisites = await ApiHandler.sendPhaseOne({
           sender,
           recipient,
-          averageTxFee : selectedPriority === TxPriority.CUSTOM ? customFee : averageTxFee,
+          averageTxFee,
           // averageTxFee:
           selectedPriority,
         });

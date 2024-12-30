@@ -883,11 +883,11 @@ export default class WalletOperations {
       let inputs;
       let outputs;
       if (txnPriority === TxPriority.CUSTOM) {
-        if (!customTxPrerequisites) {
-          throw new Error('Tx-prerequisites missing for custom fee');
-        }
-        inputs = customTxPrerequisites[txnPriority].inputs;
-        outputs = customTxPrerequisites[txnPriority].outputs;
+        // if (!customTxPrerequisites) {
+        //   throw new Error('Tx-prerequisites missing for custom fee');
+        // }
+        inputs = txPrerequisites[txnPriority].inputs;
+        outputs = txPrerequisites[txnPriority].outputs;
       } else {
         inputs = txPrerequisites[txnPriority].inputs;
         outputs = txPrerequisites[txnPriority].outputs;
@@ -1037,7 +1037,6 @@ export default class WalletOperations {
       outgoingAmount += recipient.amount;
       return recipient;
     });
-console.log('transferST1 averageTxFees', averageTxFees)
     let { fee, balance, txPrerequisites } =
       WalletOperations.prepareTransactionPrerequisites(
         wallet,
@@ -1046,7 +1045,6 @@ console.log('transferST1 averageTxFees', averageTxFees)
         selectedPriority,
         selectedUTXOs,
       );
-console.log('transferST1 txPrerequisites', txPrerequisites)
     if (balance < outgoingAmount + fee) {
       throw new Error('Insufficient balance');
     }
