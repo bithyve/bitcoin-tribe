@@ -7,16 +7,16 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
-import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
-import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
-import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
+// import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
+// import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
+// import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
+// import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { TransactionType } from 'src/services/wallets/enums';
+// import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
 import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
 import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
@@ -25,6 +25,11 @@ import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
+import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
+import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
+import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -55,6 +60,64 @@ function WalletTransactions(props: WalletTransactionsProps) {
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  const getStatusIcon = (status, type, isThemeDark, confirmations) => {
+    const icons = {
+      Sent: {
+        bitcoin: {
+          dark: <SentBtcIcon />,
+          light: <SentBtcIcon />,
+        },
+        lightning: {
+          dark: <SentLightningIcon />,
+          light: <SentLightningIcon />,
+        },
+      },
+      Received: {
+        bitcoin: {
+          dark: <RecieveBtcIcon />,
+          light: <RecieveBtcIcon />,
+        },
+        lightning: {
+          dark: <RecieveLightningIcon />,
+          light: <RecieveLightningIcon />,
+        },
+      },
+      TransPending: {
+        bitcoin: {
+          dark: <TransPendingIcon />,
+          light: <TransPendingIconLight />,
+        },
+        lightning: {
+          dark: <LightningPendingIcon />,
+          light: <LightningPendingIcon />,
+        },
+      },
+      default: {
+        bitcoin: {
+          dark: <RecieveBtcIcon />,
+          light: <RecieveBtcIcon />,
+        },
+        lightning: {
+          dark: <RecieveLightningIcon />,
+          light: <RecieveLightningIcon />,
+        },
+      },
+    };
+
+    const theme = isThemeDark ? 'dark' : 'light';
+    const transactionType = type;
+
+    if (confirmations === 0) {
+      return icons.TransPending[transactionType]?.[theme];
+    }
+
+    return (
+      icons[status]?.[transactionType]?.[theme] ||
+      icons.default[transactionType]?.[theme]
+    );
+  };
+
   return (
     <AppTouchable
       disabled={disabled}
@@ -82,23 +145,23 @@ function WalletTransactions(props: WalletTransactionsProps) {
         }>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {props.transaction.confirmations === 0 ? (
-              isThemeDark ? (
-                <TransPendingIcon />
-              ) : (
-                <TransPendingIconLight />
+            {
+              // props.transaction.confirmations === 0 ? (
+              //   isThemeDark ? (
+              //     <TransPendingIcon />
+              //   ) : (
+              //     <TransPendingIconLight />
+              //   )
+              // ) :
+              // (
+              getStatusIcon(
+                transType,
+                'bitcoin',
+                isThemeDark,
+                props.transaction.confirmations,
               )
-            ) : transType === TransactionType.SENT ? (
-              isThemeDark ? (
-                <SendTXNIcon />
-              ) : (
-                <SendTXNIconLight />
-              )
-            ) : isThemeDark ? (
-              <RecieveTXNIcon />
-            ) : (
-              <RecieveTXNIconLight />
-            )}
+              // )
+            }
           </View>
           <View style={styles.contentWrapper}>
             <AppText
