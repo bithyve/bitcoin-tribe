@@ -96,6 +96,7 @@ function TransactionsList({
             transType={item.kind}
             transaction={item}
             coin={coin}
+            tranStatus={item.status}
           />
         )}
         keyExtractor={item => item.txid}
