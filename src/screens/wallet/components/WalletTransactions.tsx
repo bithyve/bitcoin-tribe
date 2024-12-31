@@ -18,8 +18,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 // import { TransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
-import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
-import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
+// import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
+// import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
@@ -30,6 +30,7 @@ import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
+import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg'
 
 type WalletTransactionsProps = {
   transId: string;
@@ -87,8 +88,8 @@ function WalletTransactions(props: WalletTransactionsProps) {
       },
       TransPending: {
         bitcoin: {
-          dark: <TransPendingIcon />,
-          light: <TransPendingIconLight />,
+          dark: <BitcoinPendingIcon />,
+          light: <BitcoinPendingIcon />,
         },
         lightning: {
           dark: <LightningPendingIcon />,
