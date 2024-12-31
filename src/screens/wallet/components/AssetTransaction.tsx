@@ -7,17 +7,10 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
-// import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
-// import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
-// import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-// import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-// import { RGBTransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
-// import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
-// import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
