@@ -72,7 +72,6 @@ const CollectibleDetailsScreen = () => {
   //   outputRange: [0, 1],
   //   extrapolate: 'clamp',
   // });
-
   return (
     <ScreenContainer>
       <AssetDetailsHeader

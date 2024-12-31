@@ -58,7 +58,6 @@ function AssetTransaction(props: AssetTransactionProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const getStatusIcon = (kind, status, type, isThemeDark) => {
-    console.log('status', status)
     const icons = {
       send: {
         bitcoin: {
