@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -20,6 +21,8 @@ import AssetDetailsHeader from './components/AssetDetailsHeader';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import { Keys } from 'src/storage';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -32,6 +35,7 @@ const CoinDetailsScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -80,7 +84,7 @@ const CoinDetailsScreen = () => {
         assetTicker={coin.ticker}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
-        headerRightIcon={<InfoIcon />}
+        headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,

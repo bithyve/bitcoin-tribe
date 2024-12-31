@@ -18,6 +18,7 @@ import AppText from 'src/components/AppText';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import Identicon from 'src/components/Identicon';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
@@ -86,7 +87,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               ? assets.collectibles
               : assetTicker
           }
-          rightIcon={<InfoIcon />}
+          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
@@ -221,7 +222,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       paddingHorizontal: hp(10),
       paddingVertical: hp(15),
       width: '100%',
-      borderRadius: hp(20),
+      borderRadius: hp(40),
       overflow: 'visible',
       position: 'relative',
     },
