@@ -94,9 +94,9 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
           <GradientView
             style={styles.largeHeaderContentWrapper}
             colors={[
-              theme.colors.cardGradient2,
-              theme.colors.cardGradient2,
-              theme.colors.cardGradient2,
+              theme.colors.headerCardGradientColor,
+              theme.colors.headerCardGradientColor,
+              theme.colors.headerCardGradientColor,
             ]}>
             <View style={styles.assetImageWrapper}>
               {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
