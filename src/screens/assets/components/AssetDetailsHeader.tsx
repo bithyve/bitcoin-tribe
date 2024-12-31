@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Image, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery as realmUseQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,6 +19,14 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import Identicon from 'src/components/Identicon';
+import AppType from 'src/models/enums/AppType';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppTouchable from 'src/components/AppTouchable';
+import useBalance from 'src/hooks/useBalance';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -54,8 +63,14 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const combinedBalance =
     asset.balance.spendable + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
+  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
+  const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
-  
+
   return (
     <>
       {/* <Animated.View
@@ -66,7 +81,11 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <AppHeader
-          title={asset.assetIface.toUpperCase() === AssetFace.RGB25 ? assets.collectibles: assetTicker}
+          title={
+            asset.assetIface.toUpperCase() === AssetFace.RGB25
+              ? assets.collectibles
+              : assetTicker
+          }
           rightIcon={<InfoIcon />}
           onSettingsPress={onPressSetting}
         />
@@ -104,32 +123,64 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             <AppText variant="body2" style={styles.assetNameText}>
               {assetName}
             </AppText>
-            <View style={styles.balanceContainer}>
-              <View style={styles.totalBalanceWrapper}>
-                <AppText variant="heading2" style={styles.totalBalance}>
-                  {numberWithCommas(
-                    asset.balance.spendable + asset.balance?.offchainOutbound,
+            {app.appType === AppType.NODE_CONNECT ? (
+              <View style={styles.balanceContainer}>
+                <View style={styles.totalBalanceWrapper}>
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {numberWithCommas(
+                      asset.balance.spendable + asset.balance?.offchainOutbound,
+                    )}
+                  </AppText>
+                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                    {home.totalBalance}
+                  </AppText>
+                </View>
+                <View style={styles.modeBalanceWrapper}>
+                  <View style={styles.balanceWrapper}>
+                    <IconBTC />
+                    <AppText variant="heading3" style={styles.balanceText}>
+                      0.0000
+                    </AppText>
+                  </View>
+                  <View style={styles.balanceWrapper}>
+                    <IconLightning />
+                    <AppText variant="heading3" style={styles.balanceText}>
+                      0.0000
+                    </AppText>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <AppTouchable
+                style={styles.onChainTotalBalanceWrapper}
+                onPress={() => {}}>
+                <View style={styles.totalBalanceWrapper1}>
+                  {initialCurrencyMode !== CurrencyKind.SATS && (
+                    <View style={styles.currencyIconWrapper}>
+                      {getCurrencyIcon(
+                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark ? 'dark' : 'light',
+                        20,
+                      )}
+                    </View>
                   )}
-                </AppText>
+
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {getBalance(
+                      asset.balance.spendable + asset.balance?.offchainOutbound,
+                    )}
+                  </AppText>
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
                 <AppText variant="body1" style={styles.totalBalanceLabel}>
                   {home.totalBalance}
                 </AppText>
-              </View>
-              <View style={styles.modeBalanceWrapper}>
-                <View style={styles.balanceWrapper}>
-                  <IconBTC />
-                  <AppText variant="heading3" style={styles.balanceText}>
-                    0.0000
-                  </AppText>
-                </View>
-                <View style={styles.balanceWrapper}>
-                  <IconLightning />
-                  <AppText variant="heading3" style={styles.balanceText}>
-                    0.0000
-                  </AppText>
-                </View>
-              </View>
-            </View>
+              </AppTouchable>
+            )}
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
                 onPressSend={onPressSend}
@@ -164,6 +215,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderWidth: 1,
       borderRadius: hp(20),
       padding: hp(5),
+      width: '100%',
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
@@ -251,6 +303,9 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     assetNameText: {
       textAlign: 'center',
       top: -30,
+    },
+    onChainTotalBalanceWrapper: {
+      alignItems: 'center',
     },
   });
 export default AssetDetailsHeader;
