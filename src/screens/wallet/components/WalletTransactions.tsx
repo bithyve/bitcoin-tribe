@@ -41,6 +41,7 @@ type WalletTransactionsProps = {
   transaction: Transaction;
   tranStatus?: string;
   coin?: string;
+  networkType?: string; 
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
@@ -53,6 +54,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     disabled,
     tranStatus,
     coin,
+    networkType
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
@@ -145,23 +147,12 @@ function WalletTransactions(props: WalletTransactionsProps) {
         }>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {
-              // props.transaction.confirmations === 0 ? (
-              //   isThemeDark ? (
-              //     <TransPendingIcon />
-              //   ) : (
-              //     <TransPendingIconLight />
-              //   )
-              // ) :
-              // (
-              getStatusIcon(
-                transType,
-                'bitcoin',
-                isThemeDark,
-                props.transaction.confirmations,
-              )
-              // )
-            }
+            {getStatusIcon(
+              transType,
+              networkType,
+              isThemeDark,
+              props.transaction.confirmations,
+            )}
           </View>
           <View style={styles.contentWrapper}>
             <AppText

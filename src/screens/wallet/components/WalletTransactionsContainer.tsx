@@ -104,6 +104,7 @@ function WalletTransactionsContainer({
             transType={item.transactionType}
             transaction={item}
             coin={null}
+            networkType={ item.txid ? 'bitcoin' : 'lightning'}
           />
         )}
         keyExtractor={item => item.txid}
