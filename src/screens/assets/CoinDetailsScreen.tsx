@@ -97,9 +97,9 @@ const CoinDetailsScreen = () => {
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
         onPressRecieve={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
-          )
+          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+            refresh: true,
+          })
         }
       />
       <TransactionsList
