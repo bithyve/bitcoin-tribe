@@ -19,11 +19,14 @@ import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
 import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg'
+import BitcoinPendingIconLight from 'src/assets/images/bitcoinPendingTxnIcon_light.svg';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -62,7 +65,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Sent: {
         bitcoin: {
           dark: <SentBtcIcon />,
-          light: <SentBtcIcon />,
+          light: <SentBtcIconLight />,
         },
         lightning: {
           dark: <SentLightningIcon />,
@@ -72,7 +75,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Received: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
@@ -82,7 +85,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       TransPending: {
         bitcoin: {
           dark: <BitcoinPendingIcon />,
-          light: <BitcoinPendingIcon />,
+          light: <BitcoinPendingIconLight />,
         },
         lightning: {
           dark: <LightningPendingIcon />,
@@ -92,7 +95,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       default: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,

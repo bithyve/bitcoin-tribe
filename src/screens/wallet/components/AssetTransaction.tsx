@@ -14,7 +14,9 @@ import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
@@ -57,7 +59,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIcon />,
+            light: <SentBtcIconLight />,
           },
           waitingcounterparty: {
             dark: <WaitingCounterPartyIcon />,
@@ -95,7 +97,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <RecieveBtcIcon />,
-            light: <RecieveBtcIcon />,
+            light: <RecieveBtcIconLight />,
           },
           waitingcounterparty: {
             dark: <WaitingCounterPartyBtcIcon />,
@@ -133,7 +135,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIcon />,
+            light: <SentBtcIconLight />,
           },
           waitingcounterparty: {
             dark: <WaitingCounterPartyBtcIcon />,
@@ -170,7 +172,7 @@ function AssetTransaction(props: AssetTransactionProps) {
       default: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
