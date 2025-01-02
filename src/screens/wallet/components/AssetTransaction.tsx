@@ -20,6 +20,7 @@ import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
+import FailedTxnIconLight from 'src/assets/images/failedTxnIcon_light.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/lightningWaitingCounterPartyIcon.svg';
 import WaitingCounterPartyBtcIcon from 'src/assets/images/BtcWaitingCounterPartyIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/lightningWaitingConfirmationIcon.svg';
@@ -71,7 +72,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
         lightning: {
@@ -89,7 +90,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
       },
@@ -109,7 +110,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
         lightning: {
@@ -127,7 +128,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
       },
@@ -147,7 +148,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
         lightning: {
@@ -165,7 +166,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIcon />,
+            light: <FailedTxnIconLight />,
           },
         },
       },
