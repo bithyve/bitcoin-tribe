@@ -34,7 +34,8 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       backgroundColor: theme.colors.popupCTABackColor,
-      padding: hp(15),
+      paddingVertical: hp(15),
+      paddingHorizontal: hp(20),
       borderRadius: 15,
       alignItems: 'center',
       justifyContent: 'center',

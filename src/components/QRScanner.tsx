@@ -12,6 +12,7 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 import { useTheme } from 'react-native-paper';
+import RNQRGenerator from 'rn-qr-generator';
 
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
@@ -20,10 +21,13 @@ import CameraUnauthorized from './CameraUnauthorized';
 import UploadImageCta from 'src/components/UploadImageCta';
 import UploadIcon from 'src/assets/images/upload.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import pickImage from 'src/utils/imagePicker';
+import Toast from './Toast';
 
 type QRScannerProps = {
   onCodeScanned: (codes: string) => void;
 };
+
 const QRScanner = (props: QRScannerProps) => {
   const { onCodeScanned } = props;
   const device = useCameraDevice('back');
@@ -86,6 +90,32 @@ const QRScanner = (props: QRScannerProps) => {
     onCodeScanned: onCodeScanned,
   });
 
+  const handlePickImage = async () => {
+    try {
+      const result = await pickImage(false);
+      if (!result) {
+        return;
+      }
+      RNQRGenerator.detect({
+        uri: result,
+      })
+        .then(response => {
+          if (response?.values?.[0]) {
+            onCodeScanned([
+              {
+                value: response.values[0],
+              },
+            ] as any);
+          } else {
+            Toast('Error in scanning Qr code', true);
+          }
+        })
+        .catch(error => console.log('Cannot detect QR code in image', error));
+    } catch (error) {
+      console.error('QRreader failed:', error.message || error);
+    }
+  };
+
   return (
     <>
       {cameraPermission != null && device != null ? (
@@ -117,13 +147,22 @@ const QRScanner = (props: QRScannerProps) => {
           <View style={styles.uploadImageCtaWrapper}>
             <UploadImageCta
               title={sendScreen.uploadFromGallery}
-              onPress={() => {}}
+              onPress={() => handlePickImage()}
               icon={<UploadIcon />}
             />
           </View>
         </>
       ) : (
-        <CameraUnauthorized />
+        <>
+          <CameraUnauthorized />
+          <View style={styles.uploadImageCtaWrapper}>
+            <UploadImageCta
+              title={sendScreen.uploadFromGallery}
+              onPress={() => handlePickImage()}
+              icon={<UploadIcon />}
+            />
+          </View>
+        </>
       )}
     </>
   );

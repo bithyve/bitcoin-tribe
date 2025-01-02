@@ -90,6 +90,7 @@
     "readable-stream": "1.0.33",
     "realm": "12.11.0",
     "rn-nodeify": "github:tradle/rn-nodeify",
+    "rn-qr-generator": "^1.4.3",
     "stream-browserify": "^1.0.0",
     "uuid": "^10.0.0"
   },
