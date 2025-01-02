@@ -59,7 +59,7 @@ function AppInfoContainer({ navigation, walletId, version }) {
   return (
     <View style={styles.container}>
        <AppInfoCard
-        title={'Activated Wallet Type'}
+        title={settings.activateWalletTypeLabel}
         value={getActivateWalletType(appType)}
         icon={getActivateWalletIcon(appType)}
       />
