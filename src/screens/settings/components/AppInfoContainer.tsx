@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { AppTheme } from 'src/theme';
 import AppInfoCard from './AppInfoCard';
@@ -11,17 +12,57 @@ import IconInfo from 'src/assets/images/icon_info1.svg';
 import IconInfoLight from 'src/assets/images/icon_info1_light.svg';
 import { hp } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import AppType from 'src/models/enums/AppType';
+import { AppContext } from 'src/contexts/AppContext';
+import MainnetIcon from 'src/assets/images/mainnetIcon.svg';
+import MainnetIconLight from 'src/assets/images/mainnetIcon_light.svg';
+import LightningIcon from 'src/assets/images/lightningIcon.svg';
+import LightningIconLight from 'src/assets/images/lightningIcon_light.svg';
+import SupportIcon from 'src/assets/images/supportIcon.svg';
+import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
 
 function AppInfoContainer({ navigation, walletId, version }) {
   const { translations } = useContext(LocalizationContext);
-  const { common, settings } = translations;
+  const { common, settings, onBoarding } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { appType } = useContext(AppContext);
+
+  const getActivateWalletType = (appType: AppType): string => {
+    switch (appType) {
+      case AppType.ON_CHAIN:
+        return onBoarding.mainnet;
+      case AppType.NODE_CONNECT:
+        return onBoarding.mainnetAndLightning;
+      case AppType.SUPPORTED_RLN:
+        return onBoarding.supported;
+      default:
+        return ''
+    }
+  };
+
+  const getActivateWalletIcon = (appType: AppType) => {
+    switch (appType) {
+      case AppType.ON_CHAIN:
+        return isThemeDark ? <MainnetIcon /> : <MainnetIconLight />;
+      case AppType.NODE_CONNECT:
+        return isThemeDark ? <LightningIcon /> : <LightningIconLight />;
+      case AppType.SUPPORTED_RLN:
+        return isThemeDark ? <SupportIcon /> : <SupportIconLight />;
+      default:
+        return null
+    }
+  };
+
   return (
     <View style={styles.container}>
+       <AppInfoCard
+        title={'Activated Wallet Type'}
+        value={getActivateWalletType(appType)}
+        icon={getActivateWalletIcon(appType)}
+      />
       <AppInfoCard
         title={common.walletID}
         subTitle={settings.walletIDSubTitle}
