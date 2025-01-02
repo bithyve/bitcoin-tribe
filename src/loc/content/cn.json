@@ -245,7 +245,8 @@
     "assetBackupInfo4": "下载并保存备份文件，以提高安全性。",
     "relayBackupTime": "最后的中继备份时间：",
     "step1": "步骤 1",
-    "step2": "步骤 2"
+    "step2": "步骤 2",
+    "activateWalletTypeLabel": "已激活的钱包类型"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

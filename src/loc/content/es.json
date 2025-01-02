@@ -245,7 +245,8 @@
     "assetBackupInfo4": "Descarga y guarda el archivo de respaldo para mayor seguridad.",
     "relayBackupTime": "Última copia de seguridad del relé: ",
     "step1": "Paso 1",
-    "step2": "Paso 2"
+    "step2": "Paso 2",
+    "activateWalletTypeLabel": "Tipo de Billetera Activada"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
