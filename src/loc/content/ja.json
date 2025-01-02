@@ -246,7 +246,7 @@
     "relayBackupTime": "最後のリレーバックアップ: ",
     "step1": "ステップ 1",
     "step2": "ステップ 2",
-    "activateWalletTypeLabel": "アクティブなウォレットタイプ"
+    "activateWalletTypeLabel": "ウォレットタイプ"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

@@ -246,7 +246,7 @@
     "relayBackupTime": "अंतिम रिले बैकअप: ",
     "step1": "चरण 1",
     "step2": "चरण 2",
-    "activateWalletTypeLabel": "सक्रिय वॉलेट प्रकार"
+    "activateWalletTypeLabel": "वॉलेट प्रकार"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
