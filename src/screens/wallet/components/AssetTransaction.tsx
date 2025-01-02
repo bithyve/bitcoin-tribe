@@ -17,10 +17,11 @@ import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
-// import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/lightningWaitingCounterPartyIcon.svg';
+import WaitingCounterPartyBtcIcon from 'src/assets/images/BtcWaitingCounterPartyIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/lightningWaitingConfirmationIcon.svg';
+import WaitingConfirmationBtcIcon from 'src/assets/images/BtcWaitingConfirmationIcon.svg';
 
 type AssetTransactionProps = {
   transId: string;
@@ -60,10 +61,10 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           waitingcounterparty: {
             dark: <WaitingCounterPartyIcon />,
-            light: <WaitingCounterPartyIcon />,
+            light: <WaitingCounterPartyBtcIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationIcon />,
+            dark: <WaitingConfirmationBtcIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
@@ -97,11 +98,11 @@ function AssetTransaction(props: AssetTransactionProps) {
             light: <RecieveBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyIcon />,
+            dark: <WaitingCounterPartyBtcIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationIcon />,
+            dark: <WaitingConfirmationBtcIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
@@ -135,11 +136,11 @@ function AssetTransaction(props: AssetTransactionProps) {
             light: <SentBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyIcon />,
+            dark: <WaitingCounterPartyBtcIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationIcon />,
+            dark: <WaitingConfirmationBtcIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
