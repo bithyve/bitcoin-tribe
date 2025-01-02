@@ -246,61 +246,50 @@ function SendToContainer({
               )}
             </View>
           </View>
-          {amount && (
-            <>
-              <AppText variant="body2" style={styles.recipientAddressLabel}>
-                {sendScreen.fee}
-              </AppText>
-              <View style={styles.feeContainer}>
-                <FeePriorityButton
-                  title={sendScreen.low}
-                  priority={TxPriority.LOW}
-                  selectedPriority={selectedPriority}
-                  setSelectedPriority={() =>
-                    setSelectedPriority(TxPriority.LOW)
-                  }
-                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
-                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                    TxPriority.LOW,
-                  )}
-                />
-                <FeePriorityButton
-                  title={sendScreen.medium}
-                  priority={TxPriority.MEDIUM}
-                  selectedPriority={selectedPriority}
-                  setSelectedPriority={() =>
-                    setSelectedPriority(TxPriority.MEDIUM)
-                  }
-                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
-                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                    TxPriority.MEDIUM,
-                  )}
-                />
-                <FeePriorityButton
-                  title={sendScreen.high}
-                  priority={TxPriority.HIGH}
-                  selectedPriority={selectedPriority}
-                  setSelectedPriority={() =>
-                    setSelectedPriority(TxPriority.HIGH)
-                  }
-                  getFeeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
-                  getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                    TxPriority.HIGH,
-                  )}
-                />
-                <FeePriorityButton
-                  title={sendScreen.custom}
-                  priority={TxPriority.CUSTOM}
-                  selectedPriority={selectedPriority}
-                  setSelectedPriority={() =>
-                    setSelectedPriority(TxPriority.CUSTOM)
-                  }
-                  getFeeRateByPriority={''}
-                  getEstimatedBlocksByPriority={10}
-                />
-              </View>
-            </>
-          )}
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {sendScreen.fee}
+          </AppText>
+          <View style={styles.feeContainer}>
+            <FeePriorityButton
+              title={sendScreen.low}
+              priority={TxPriority.LOW}
+              selectedPriority={selectedPriority}
+              setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+              getFeeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                TxPriority.LOW,
+              )}
+            />
+            <FeePriorityButton
+              title={sendScreen.medium}
+              priority={TxPriority.MEDIUM}
+              selectedPriority={selectedPriority}
+              setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+              getFeeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                TxPriority.MEDIUM,
+              )}
+            />
+            <FeePriorityButton
+              title={sendScreen.high}
+              priority={TxPriority.HIGH}
+              selectedPriority={selectedPriority}
+              setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+              getFeeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                TxPriority.HIGH,
+              )}
+            />
+            <FeePriorityButton
+              title={sendScreen.custom}
+              priority={TxPriority.CUSTOM}
+              selectedPriority={selectedPriority}
+              setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
+              getFeeRateByPriority={''}
+              getEstimatedBlocksByPriority={10}
+            />
+          </View>
+
           {selectedPriority === TxPriority.CUSTOM && (
             <View style={styles.inputWrapper}>
               <AppText variant="body2" style={styles.recipientAddressLabel}>

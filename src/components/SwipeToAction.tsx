@@ -1,30 +1,73 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, Animated, Platform, Dimensions } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { useTheme } from 'react-native-paper';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
-import PrimaryCTA from './PrimaryCTA';
 import { hp } from 'src/constants/responsive';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Fonts from 'src/constants/Fonts';
 
-const SwipeToAction = ({ onSwipeComplete }) => {
+const { width } = Dimensions.get('window');
+const SWIPE_LENGTH = width - hp(50) - 70;
+
+interface Props {
+  title: string;
+  loadingTitle: string;
+  onSwipeComplete: () => void;
+}
+
+const SwipeToAction :React.FC<Props> = ({
+  onSwipeComplete,
+  title,
+  loadingTitle,
+}) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
   const [swiped, setSwiped] = useState(false);
   const translateX = new Animated.Value(0);
+  const autoSwipe = new Animated.Value(0);
+  const autoSwipeAnimation = useRef(null);
 
-  const options = {
-    enableVibrateFallback: true, 
-    ignoreAndroidSystemSettings: false, 
+  useEffect(() => {
+    startSwipeIndicator();
+    return () => stopSwipeIndicator();
+  }, []);
+
+  const startSwipeIndicator = () => {
+    if (!autoSwipeAnimation.current) {
+      autoSwipeAnimation.current = Animated.loop(
+        Animated.sequence([
+          Animated.timing(autoSwipe, {
+            toValue: 0.15,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          Animated.timing(autoSwipe, {
+            toValue: 0,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+      autoSwipeAnimation.current.start();
+    }
+  };
+
+  const stopSwipeIndicator = () => {
+    if (autoSwipeAnimation.current) {
+      autoSwipeAnimation.current.stop();
+      autoSwipeAnimation.current = null;
+      autoSwipe.setValue(0);
+    }
   };
 
   const triggerHapticFeedback = () => {
-    ReactNativeHapticFeedback.trigger("effectDoubleClick", options);
+    const options = {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false,
+  };
+    ReactNativeHapticFeedback.trigger('impactHeavy', options);
   };
 
   const onGestureEvent = Animated.event(
@@ -33,6 +76,9 @@ const SwipeToAction = ({ onSwipeComplete }) => {
   );
 
   const onHandlerStateChange = event => {
+    if (event.nativeEvent.state === State.BEGAN) {
+      stopSwipeIndicator();
+    }
     if (event.nativeEvent.state === State.END) {
       if (event.nativeEvent.translationX > 180) {
         setSwiped(true);
@@ -43,6 +89,7 @@ const SwipeToAction = ({ onSwipeComplete }) => {
           toValue: 0,
           useNativeDriver: true,
         }).start();
+        //startSwipeIndicator();
       }
     }
   };
@@ -50,10 +97,56 @@ const SwipeToAction = ({ onSwipeComplete }) => {
   return (
     <View style={styles.container}>
       {!swiped ? (
-        <Animated.View style={styles.track}>
-          <AppText variant="body1" style={styles.trackText}>
-            {sendScreen.swipeToBroadcast}
-          </AppText>
+        <Animated.View style={[styles.track]}>
+          <View style={styles.dynamicBackgroundContainer}>
+            <Animated.View
+              style={[
+                styles.dynamicBackground,
+                {
+                  transform: [
+                    {
+                      scaleX:Animated.add( translateX.interpolate({
+                        inputRange: [0, SWIPE_LENGTH],
+                        outputRange: [0.2, 1],
+                        extrapolate: 'clamp',
+                      }),
+                      autoSwipe.interpolate({
+                        inputRange: [0, SWIPE_LENGTH],
+                        outputRange: [0, 70],
+                      })
+                    ),
+                    },
+                  ],
+                },
+              ]}
+            />
+          </View>
+          <Animated.Text
+            style={[
+              styles.trackText,
+              {
+                transform: [
+                  {
+                    translateX: Animated.add(translateX.interpolate({
+                      inputRange: [0, SWIPE_LENGTH / 2],
+                      outputRange: [0, SWIPE_LENGTH / 3],
+                      extrapolate: 'clamp',
+                    }),
+                    autoSwipe.interpolate({
+                      inputRange: [0, 0.2],
+                      outputRange: [0, 10],
+                    })),
+                  },
+                ],
+                opacity: translateX.interpolate({
+                  inputRange: [0, SWIPE_LENGTH - 200],
+                  outputRange: [1, 0],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ]}>
+            {title}
+          </Animated.Text>
           <PanGestureHandler
             onGestureEvent={onGestureEvent}
             onHandlerStateChange={onHandlerStateChange}>
@@ -63,11 +156,23 @@ const SwipeToAction = ({ onSwipeComplete }) => {
                 {
                   transform: [
                     {
-                      translateX: translateX.interpolate({
-                        inputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
-                        outputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
-                        extrapolate: 'clamp',
-                      }),
+                      translateX: Animated.add(
+                        translateX.interpolate({
+                          inputRange:
+                            Platform.OS === 'ios'
+                              ? [0, SWIPE_LENGTH]
+                              : [0, SWIPE_LENGTH],
+                          outputRange:
+                            Platform.OS === 'ios'
+                              ? [0, SWIPE_LENGTH]
+                              : [0, SWIPE_LENGTH],
+                          extrapolate: 'clamp',
+                        }),
+                        autoSwipe.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [0, 100],
+                        })
+                      ),
                     },
                   ],
                 },
@@ -79,14 +184,11 @@ const SwipeToAction = ({ onSwipeComplete }) => {
           </PanGestureHandler>
         </Animated.View>
       ) : (
-        <PrimaryCTA
-          title={sendScreen.broadcastingTXN}
-          onPress={() => {}}
-          width={'100%'}
-          textColor={theme.colors.popupCTATitleColor}
-          buttonColor={theme.colors.accent1}
-          height={hp(18)}
-        />
+        <View style={styles.containerLoading}>
+          <Animated.Text style={styles.textLoading}>
+            {loadingTitle}
+          </Animated.Text>
+        </View>
       )}
     </View>
   );
@@ -101,7 +203,7 @@ const getStyles = (theme: AppTheme) =>
     },
     track: {
       width: '100%',
-      height: 70,
+      height: 60,
       backgroundColor: '#fff',
       borderRadius: 18,
       justifyContent: 'center',
@@ -116,16 +218,19 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       alignSelf: 'center',
       color: theme.colors.popupCTATitleColor,
+      fontSize: 16,
+      fontWeight: '400',
+      fontFamily: Fonts.LufgaRegular,
     },
     thumb: {
       width: 60,
-      height: 60,
-      backgroundColor: theme.colors.accent1,
+      height: 45,
+      backgroundColor: '#FFFFFF',
       borderRadius: 15,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      left: 5,
+      left: 7,
     },
     thumbText: {
       color: '#000',
@@ -136,6 +241,36 @@ const getStyles = (theme: AppTheme) =>
       fontSize: 24,
       color: '#FFD700',
       fontWeight: 'bold',
+    },
+    dynamicBackground: {
+      position: 'absolute',
+      height: '100%',
+      width: '100%',
+      left: 0,
+      top: 0,
+      backgroundColor: '#FFD700',
+      transformOrigin: 'left',
+      borderRadius: 18,
+    },
+    dynamicBackgroundContainer: {
+      position: 'absolute',
+      height: '100%',
+      width: '100%',
+      borderRadius: 18,
+      overflow: 'hidden',
+    },
+    containerLoading: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#FFD700',
+      width: '100%',
+      height: 60,
+      borderRadius: 18,
+    },
+    textLoading: {
+      fontSize: 16,
+      fontFamily: Fonts.LufgaRegular,
     },
   });
 
