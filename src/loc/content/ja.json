@@ -245,7 +245,8 @@
     "assetBackupInfo4": "バックアップファイルをダウンロードして、追加のセキュリティのために保管してください。",
     "relayBackupTime": "最後のリレーバックアップ: ",
     "step1": "ステップ 1",
-    "step2": "ステップ 2"
+    "step2": "ステップ 2",
+    "activateWalletTypeLabel": "ウォレットタイプ"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

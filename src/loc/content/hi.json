@@ -245,7 +245,8 @@
     "assetBackupInfo4": "बैकअप फ़ाइल डाउनलोड करें और अतिरिक्त सुरक्षा के लिए इसे अपने पास रखें।",
     "relayBackupTime": "अंतिम रिले बैकअप: ",
     "step1": "चरण 1",
-    "step2": "चरण 2"
+    "step2": "चरण 2",
+    "activateWalletTypeLabel": "वॉलेट प्रकार"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
