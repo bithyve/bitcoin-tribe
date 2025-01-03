@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 import LottieView from 'lottie-react-native';
@@ -45,9 +45,11 @@ function SendSuccessContainer(props: sendSuccessProps) {
     selectedPriority,
   } = props;
   const { getBalance, getCurrencyIcon } = useBalance();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+
 
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -74,7 +76,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
-            ? getCurrencyIcon(IconBitcoin, 'dark')
+            ? getCurrencyIcon(IconBitcoin, isThemeDark ? 'dark' : 'light')
             : null}
           <AppText variant="body1" style={styles.valueText}>
             &nbsp;{getBalance(amount)}
@@ -103,7 +105,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           {initialCurrencyMode !== CurrencyKind.SATS
-            ? getCurrencyIcon(IconBitcoin, 'dark')
+            ? getCurrencyIcon(IconBitcoin, isThemeDark ? 'dark' : 'light')
             : null}
           <AppText variant="body1" style={styles.valueText}>
             &nbsp;
