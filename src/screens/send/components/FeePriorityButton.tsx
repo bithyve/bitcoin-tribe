@@ -15,12 +15,14 @@ const FeePriorityButton = ({
   setSelectedPriority,
   getFeeRateByPriority,
   getEstimatedBlocksByPriority,
+  disabled,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const isSelected = selectedPriority === priority;
   return (
     <AppTouchable
+      disabled={disabled}
       onPress={setSelectedPriority}
       style={[
         styles.feeWrapper,

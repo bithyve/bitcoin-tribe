@@ -37,6 +37,7 @@ import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
+import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 
 function SendToContainer({
   wallet,
@@ -48,6 +49,8 @@ function SendToContainer({
   paymentURIAmount: Number;
 }) {
   const navigation = useNavigation();
+  const [exchangeRates] = useMMKVString(Keys.EXCHANGE_RATES);
+  const [currencyCode] = useMMKVString(Keys.APP_CURRENCY);
   const { getBalance, getCurrencyIcon } = useBalance();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
@@ -60,6 +63,7 @@ function SendToContainer({
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
   const [customFee, setCustomFee] = useState(0);
+  const [isSendMax, setIsSendMax] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
@@ -174,6 +178,35 @@ function SendToContainer({
           _ => _.data.txPrerequisites[selectedPriority]?.fee,
         ) || 0;
 
+  const onSendMax = () => {
+    setIsSendMax(true);
+    const availableToSpend = balances;
+    const txnFee = getAvgTxnFeeByPriority(TxPriority.LOW);
+    if (
+      initialCurrencyMode === CurrencyKind.SATS ||
+      initialCurrencyMode === CurrencyKind.BITCOIN
+    ) {
+      const sendMaxBalance = Number(availableToSpend) - Number(txnFee);
+      setAmount(sendMaxBalance.toFixed(0));
+      // } else {
+      //   setAmount(Number(SatsToBtc(amountToSet)).toFixed(8));
+      // }
+    } else {
+      const feeAmount = ConvertSatsToFiat(
+        Number(txnFee),
+        JSON.parse(exchangeRates),
+        currencyCode,
+      );
+      const amountToSend = ConvertSatsToFiat(
+        Number(availableToSpend),
+        JSON.parse(exchangeRates),
+        currencyCode,
+      );
+      const amount = amountToSend - feeAmount;
+      setAmount(amount.toFixed(2));
+    }
+  };
+
   return (
     // sendTransactionMutation.status === 'loading' ? (
     //   <ResponsePopupContainer
@@ -207,18 +240,24 @@ function SendToContainer({
           </View>
           <View style={styles.inputWrapper}>
             <AppText variant="body2" style={styles.recipientAddressLabel}>
-              {sendScreen.enterSats}
+              {initialCurrencyMode === CurrencyKind.SATS ||
+              initialCurrencyMode === CurrencyKind.BITCOIN
+                ? sendScreen.enterSats
+                : sendScreen.enterFiat}
             </AppText>
             <TextField
               value={formatNumber(amount)}
-              onChangeText={text => setAmount(text)}
+              onChangeText={text => {
+                setIsSendMax(false)
+                setAmount(text)
+              }}
               placeholder={sendScreen.enterAmount}
               keyboardType={'numeric'}
               inputStyle={styles.inputStyle}
               contentStyle={styles.contentStyle}
               // icon={<IconBitcoin />}
               rightText={common.max}
-              onRightTextPress={() => {}}
+              onRightTextPress={() => onSendMax()}
               rightCTATextColor={theme.colors.accent1}
             />
           </View>
@@ -263,6 +302,7 @@ function SendToContainer({
                   getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                     TxPriority.LOW,
                   )}
+                  disabled={isSendMax}
                 />
                 <FeePriorityButton
                   title={sendScreen.medium}
@@ -275,6 +315,7 @@ function SendToContainer({
                   getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                     TxPriority.MEDIUM,
                   )}
+                  disabled={isSendMax}
                 />
                 <FeePriorityButton
                   title={sendScreen.high}
@@ -287,6 +328,7 @@ function SendToContainer({
                   getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                     TxPriority.HIGH,
                   )}
+                  disabled={isSendMax}
                 />
                 <FeePriorityButton
                   title={sendScreen.custom}
@@ -297,6 +339,7 @@ function SendToContainer({
                   }
                   getFeeRateByPriority={''}
                   getEstimatedBlocksByPriority={10}
+                  disabled={isSendMax}
                 />
               </View>
             </>
@@ -340,7 +383,7 @@ function SendToContainer({
         subTitle={sendScreen.sendConfirmationSubTitle}
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => {}}>
+        onDismiss={() => setVisible(false)}>
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
