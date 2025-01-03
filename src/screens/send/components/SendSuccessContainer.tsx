@@ -3,9 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LottieView from 'lottie-react-native';
-
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -139,9 +137,11 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
       </View>
       <View style={styles.primaryCtaStyle}>
-        <GestureHandlerRootView style={styles.gestureRootView}>
-          <SwipeToAction onSwipeComplete={onPress} />
-        </GestureHandlerRootView>
+        <SwipeToAction
+          title={sendScreen.swipeToBroadcast}
+          loadingTitle={sendScreen.broadcastingTXN}
+          onSwipeComplete={onPress}
+        />
       </View>
     </View>
   ) : (
