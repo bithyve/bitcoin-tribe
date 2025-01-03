@@ -204,9 +204,9 @@ const getStyles = (theme: AppTheme) =>
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(200),
-      height: hp(200),
-      marginVertical: hp(20),
+      width: hp(150),
+      height: hp(150),
+      // marginVertical: hp(20),
     },
     gestureRootView: {
       flex: 1,

@@ -82,8 +82,10 @@ function SendToContainer({
     } else {
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
+        console.log('averageTxFeeByNetwork', averageTxFeeByNetwork)
       const averageTxFee: AverageTxFees =
         averageTxFeeByNetwork[app.networkType];
+        console.log('averageTxFee', {averageTxFee})
       setAverageTxFee(averageTxFee);
     }
   }, [averageTxFeeJSON]);
@@ -163,6 +165,7 @@ function SendToContainer({
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
   };
+  // console.log('getFeeRateByPriority', getFeeRateByPriority)
   const getAvgTxnFeeByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].averageTxFee) || 0;
   };
@@ -180,8 +183,10 @@ function SendToContainer({
 
   const onSendMax = () => {
     setIsSendMax(true);
+    setSelectedPriority(TxPriority.LOW)
     const availableToSpend = balances;
-    const txnFee = getAvgTxnFeeByPriority(TxPriority.LOW);
+    const txnFee = getFeeRateByPriority(TxPriority.LOW);
+    // console.log('txnFee', txnFee)
     if (
       initialCurrencyMode === CurrencyKind.SATS ||
       initialCurrencyMode === CurrencyKind.BITCOIN
@@ -369,7 +374,8 @@ function SendToContainer({
             ? sendScreen.successTitle
             : sendScreen.sendConfirmation
         }
-        subTitle={sendScreen.sendConfirmationSubTitle}
+        subTitle={sendTransactionMutation.status !== 'success' ? sendScreen.sendConfirmationSubTitle : ''} 
+        height={sendTransactionMutation.status === 'success' ? '35%' : '' }
         visible={visible}
         enableCloseIcon={false}
         onDismiss={() => setVisible(false)}>
