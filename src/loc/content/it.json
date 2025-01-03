@@ -247,7 +247,8 @@
     "assetBackupInfo4": "Scarica e conserva il file di backup per maggiore sicurezza.",
     "relayBackupTime": "Ultimo backup del relay: ",
     "step1": "Passo 1",
-    "step2": "Passo 2"
+    "step2": "Passo 2",
+    "activateWalletTypeLabel": "Tipo di Wallet"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

@@ -247,7 +247,8 @@
     "assetBackupInfo4": "Download and keep the backup file with you for additional security.",
     "relayBackupTime": "Last relay backup: ",
     "step1": "Step 1",
-    "step2": "Step 2"
+    "step2": "Step 2",
+    "activateWalletTypeLabel": "Wallet Type"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
