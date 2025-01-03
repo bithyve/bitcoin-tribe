@@ -9,6 +9,8 @@ import AppText from './AppText';
 import PrimaryCTA from './PrimaryCTA';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import SwipeIcon from 'src/assets/images/swipeIcon.svg';
+import Colors from 'src/theme/Colors';
 
 const SwipeToAction = ({ onSwipeComplete }) => {
   const theme: AppTheme = useTheme();
@@ -19,12 +21,12 @@ const SwipeToAction = ({ onSwipeComplete }) => {
   const translateX = new Animated.Value(0);
 
   const options = {
-    enableVibrateFallback: true, 
-    ignoreAndroidSystemSettings: false, 
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false,
   };
 
   const triggerHapticFeedback = () => {
-    ReactNativeHapticFeedback.trigger("effectDoubleClick", options);
+    ReactNativeHapticFeedback.trigger('effectDoubleClick', options);
   };
 
   const onGestureEvent = Animated.event(
@@ -65,16 +67,15 @@ const SwipeToAction = ({ onSwipeComplete }) => {
                     {
                       translateX: translateX.interpolate({
                         inputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
-                        outputRange: Platform.OS === 'ios' ? [0, 255] : [0, 280],
+                        outputRange:
+                          Platform.OS === 'ios' ? [0, 255] : [0, 280],
                         extrapolate: 'clamp',
                       }),
                     },
                   ],
                 },
               ]}>
-              <AppText variant="body1" style={styles.thumbText}>
-                »
-              </AppText>
+              <SwipeIcon />
             </Animated.View>
           </PanGestureHandler>
         </Animated.View>
@@ -102,11 +103,11 @@ const getStyles = (theme: AppTheme) =>
     track: {
       width: '100%',
       height: 70,
-      backgroundColor: '#fff',
+      backgroundColor: Colors.White,
       borderRadius: 18,
       justifyContent: 'center',
       position: 'relative',
-      shadowColor: '#000',
+      shadowColor: Colors.Black,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 5,
@@ -127,14 +128,9 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       left: 5,
     },
-    thumbText: {
-      color: '#000',
-      fontWeight: 'bold',
-      fontSize: 16,
-    },
     successText: {
       fontSize: 24,
-      color: '#FFD700',
+      color: Colors.Golden,
       fontWeight: 'bold',
     },
   });
