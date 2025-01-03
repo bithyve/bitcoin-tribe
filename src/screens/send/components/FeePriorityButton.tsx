@@ -14,7 +14,7 @@ const FeePriorityButton = ({
   selectedPriority,
   setSelectedPriority,
   feeRateByPriority,
-  getEstimatedBlocksByPriority,
+  estimatedBlocksByPriority,
   disabled,
 }) => {
   const theme: AppTheme = useTheme();
@@ -63,7 +63,7 @@ const FeePriorityButton = ({
               : theme.colors.secondaryHeadingColor,
           },
         ]}>
-        ~{getEstimatedBlocksByPriority}{' '}
+        ~{estimatedBlocksByPriority}{' '}
         {priority === TxPriority.CUSTOM ? 'min' : 'hr'}
       </AppText>
     </AppTouchable>

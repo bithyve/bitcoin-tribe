@@ -185,10 +185,12 @@ function SendToContainer({
         ) || 0;
 
   const calculatedFee = useCallback(() => {
+    const sanitizedAmount = amount.replace(/,/g, '')
+    const numericAmount = Number(sanitizedAmount);
     const recipients = [
       {
         address,
-        amount: isSendMax ? balances : Number(amount.replace(/,/g, '')),
+        amount: numericAmount,
       },
     ];
     const feePerByte =
@@ -312,7 +314,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
               feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
-              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.LOW,
               )}
               disabled={isSendMax}
@@ -323,7 +325,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
               feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
-              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.MEDIUM,
               )}
               disabled={isSendMax}
@@ -334,7 +336,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
               feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
-              getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.HIGH,
               )}
               disabled={isSendMax}
@@ -345,7 +347,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
               feeRateByPriority={''}
-              getEstimatedBlocksByPriority={10}
+              estimatedBlocksByPriority={10}
               disabled={isSendMax}
             />
           </View>
