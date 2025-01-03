@@ -185,8 +185,16 @@ function SendToContainer({
         ) || 0;
 
   const calculatedFee = useCallback(() => {
-    const recipients = [{ address, amount: isSendMax ? balances : Number(amount.replace(/,/g, '')) }];
-    const feePerByte = getFeeRateByPriority(selectedPriority);
+    const recipients = [
+      {
+        address,
+        amount: isSendMax ? balances : Number(amount.replace(/,/g, '')),
+      },
+    ];
+    const feePerByte =
+      selectedPriority === TxPriority.CUSTOM
+        ? Number(customFee)
+        : getFeeRateByPriority(selectedPriority);
     const inputUTXOs = [
       ...wallet.specs.confirmedUTXOs,
       ...wallet.specs.unconfirmedUTXOs,
@@ -204,9 +212,9 @@ function SendToContainer({
     }
     const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
     return fee.fee;
-  }, [amount, selectedPriority]);
+  }, [amount, selectedPriority, customFee]);
 
-  const onSendMax = async() => {
+  const onSendMax = async () => {
     setIsSendMax(true);
     setSelectedPriority(TxPriority.LOW);
     const availableToSpend = balances;
