@@ -13,7 +13,7 @@ const FeePriorityButton = ({
   priority,
   selectedPriority,
   setSelectedPriority,
-  getFeeRateByPriority,
+  feeRateByPriority,
   getEstimatedBlocksByPriority,
   disabled,
 }) => {
@@ -41,7 +41,7 @@ const FeePriorityButton = ({
         ]}>
         {title}
       </AppText>
-      {getFeeRateByPriority ? (
+      {feeRateByPriority ? (
         <AppText
           variant="body2"
           style={[
@@ -50,7 +50,7 @@ const FeePriorityButton = ({
               color: isSelected ? Colors.Black : theme.colors.headingColor,
             },
           ]}>
-          {getFeeRateByPriority} sat/vB
+          {feeRateByPriority} sat/vB
         </AppText>
       ) : null}
       <AppText

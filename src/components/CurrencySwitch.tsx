@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Surface, Text, TouchableRipple, useTheme } from 'react-native-paper';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
@@ -12,19 +12,16 @@ type currencySwitchProps = {
     displayTitle: string;
     symbol: string;
   };
-  currentCurrencyMode: string;
+  currentCurrencyMode: CurrencyKind.SATS | CurrencyKind.BITCOIN | CurrencyKind.FIAT;
 };
 const CurrencySwitch = (props: currencySwitchProps) => {
   const { onPress, selectedCurrency, currentCurrencyMode } = props;
-  // console.log('selectedCurrency', selectedCurrency);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const [selected, setSelected] = useState(currentCurrencyMode === CurrencyKind.SATS || currentCurrencyMode === CurrencyKind.BITCOIN);
-
-  // useEffect(() => {
-  //   console.log('selectedCurrency', selectedCurrency)
-  //   setSelected(selectedCurrency);
-  // }, [selectedCurrency]);
+  const [selected, setSelected] = useState(
+    currentCurrencyMode === CurrencyKind.SATS ||
+      currentCurrencyMode === CurrencyKind.BITCOIN,
+  );
 
   const handleToggle = () => {
     setSelected(!selected);

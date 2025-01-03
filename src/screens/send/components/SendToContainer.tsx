@@ -209,23 +209,6 @@ function SendToContainer({
   };
 
   return (
-    // sendTransactionMutation.status === 'loading' ? (
-    //   <ResponsePopupContainer
-    //     visible={sendTransactionMutation.status === 'loading'}
-    //     enableClose={true}
-    //     backColor={theme.colors.modalBackColor}
-    //     borderColor={theme.colors.modalBackColor}>
-    //     <InProgessPopupContainer
-    //       title={sendScreen.sendBtcLoadingTitle}
-    //       subTitle={sendScreen.sendBtcLoadingSubTitle}
-    //       illustrationPath={
-    //         isThemeDark
-    //           ? require('src/assets/images/jsons/sendingBTCorAsset.json')
-    //           : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
-    //       }
-    //     />
-    //   </ResponsePopupContainer>
-    // ) : (
     <View style={styles.container}>
       <View style={styles.container1}>
         <View style={styles.wrapper}>
@@ -295,7 +278,7 @@ function SendToContainer({
               priority={TxPriority.LOW}
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
-              getFeeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+              feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
               getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.LOW,
               )}
@@ -306,7 +289,7 @@ function SendToContainer({
               priority={TxPriority.MEDIUM}
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
-              getFeeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+              feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
               getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.MEDIUM,
               )}
@@ -317,7 +300,7 @@ function SendToContainer({
               priority={TxPriority.HIGH}
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
-              getFeeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+              feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
               getEstimatedBlocksByPriority={getEstimatedBlocksByPriority(
                 TxPriority.HIGH,
               )}
@@ -328,7 +311,7 @@ function SendToContainer({
               priority={TxPriority.CUSTOM}
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
-              getFeeRateByPriority={''}
+              feeRateByPriority={''}
               getEstimatedBlocksByPriority={10}
               disabled={isSendMax}
             />
