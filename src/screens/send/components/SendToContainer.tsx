@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -6,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
+import coinselect from 'coinselect';
 
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -29,7 +36,6 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
-// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
@@ -178,20 +184,39 @@ function SendToContainer({
           _ => _.data.txPrerequisites[selectedPriority]?.fee,
         ) || 0;
 
-  const onSendMax = () => {
+  const calculatedFee = useCallback(() => {
+    const recipients = [{ address, amount: isSendMax ? balances : Number(amount.replace(/,/g, '')) }];
+    const feePerByte = getFeeRateByPriority(selectedPriority);
+    const inputUTXOs = [
+      ...wallet.specs.confirmedUTXOs,
+      ...wallet.specs.unconfirmedUTXOs,
+    ];
+    let confirmedBalance = 0;
+    inputUTXOs.forEach(utxo => {
+      confirmedBalance += utxo.value;
+    });
+    const outputUTXOs = [];
+    for (const recipient of recipients) {
+      outputUTXOs.push({
+        address: recipient.address,
+        value: recipient.amount,
+      });
+    }
+    const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
+    return fee.fee;
+  }, [amount, selectedPriority]);
+
+  const onSendMax = async() => {
     setIsSendMax(true);
-    setSelectedPriority(TxPriority.LOW)
+    setSelectedPriority(TxPriority.LOW);
     const availableToSpend = balances;
-    const txnFee = getAvgTxnFeeByPriority(TxPriority.LOW);
+    const txnFee = await calculatedFee();
     if (
       initialCurrencyMode === CurrencyKind.SATS ||
       initialCurrencyMode === CurrencyKind.BITCOIN
     ) {
       const sendMaxBalance = Number(availableToSpend) - Number(txnFee);
       setAmount(sendMaxBalance.toFixed(0));
-      // } else {
-      //   setAmount(Number(SatsToBtc(amountToSet)).toFixed(8));
-      // }
     } else {
       const feeAmount = ConvertSatsToFiat(
         Number(txnFee),
@@ -353,8 +378,12 @@ function SendToContainer({
             ? sendScreen.successTitle
             : sendScreen.sendConfirmation
         }
-        subTitle={sendTransactionMutation.status !== 'success' ? sendScreen.sendConfirmationSubTitle : ''} 
-        height={sendTransactionMutation.status === 'success' ? '35%' : '' }
+        subTitle={
+          sendTransactionMutation.status !== 'success'
+            ? sendScreen.sendConfirmationSubTitle
+            : ''
+        }
+        height={sendTransactionMutation.status === 'success' ? '35%' : ''}
         visible={visible}
         enableCloseIcon={false}
         onDismiss={() => setVisible(false)}>
@@ -362,7 +391,7 @@ function SendToContainer({
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
-          transFee={getAvgTxnFeeByPriority(selectedPriority)}
+          transFee={calculatedFee()}
           feeRate={
             selectedPriority === TxPriority.CUSTOM
               ? customFee
@@ -377,8 +406,7 @@ function SendToContainer({
           total={
             app.appType === AppType.NODE_CONNECT
               ? Number(amount)
-              : Number(amount) +
-                Number(getAvgTxnFeeByPriority(selectedPriority))
+              : Number(amount) + Number(calculatedFee())
           }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
