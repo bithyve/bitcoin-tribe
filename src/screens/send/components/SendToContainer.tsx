@@ -82,7 +82,6 @@ function SendToContainer({
     } else {
       const averageTxFeeByNetwork: AverageTxFeesByNetwork =
         JSON.parse(averageTxFeeJSON);
-        console.log('averageTxFeeByNetwork', averageTxFeeByNetwork)
       const averageTxFee: AverageTxFees =
         averageTxFeeByNetwork[app.networkType];
       setAverageTxFee(averageTxFee);
