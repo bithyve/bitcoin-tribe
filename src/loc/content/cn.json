@@ -294,6 +294,7 @@
     "recipientAddress": "收件人地址",
     "uploadFromGallery": "从图库上传",
     "enterSats": "输入比特",
+    "enterFiat": "输入法定金额",
     "availableBalance": "可用余额",
     "fee": "费用",
     "low": "低",

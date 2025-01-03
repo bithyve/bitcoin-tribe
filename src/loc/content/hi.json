@@ -294,6 +294,7 @@
     "recipientAddress": "प्राप्तकर्ता का पता",
     "uploadFromGallery": "गैलरी से अपलोड करें",
     "enterSats": "सैट्स दर्ज करें",
+    "enterFiat": "फिएट राशि दर्ज करें",
     "availableBalance": "उपलब्ध शेष राशि",
     "fee": "शुल्क",
     "low": "निम्न",

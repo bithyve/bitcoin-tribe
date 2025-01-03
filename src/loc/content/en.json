@@ -294,6 +294,7 @@
     "recipientAddress": "Recipient's address",
     "uploadFromGallery": "Upload from Gallery",
     "enterSats": "Enter sats",
+    "enterFiat": "Enter fiat amount",
     "availableBalance": "Available Balance",
     "fee": "Fee",
     "low": "Low",

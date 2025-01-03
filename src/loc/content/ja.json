@@ -294,6 +294,7 @@
     "recipientAddress": "受取人の住所",
     "uploadFromGallery": "ギャラリーからアップロード",
     "enterSats": "サトシを入力",
+    "enterFiat": "法定通貨の金額を入力してください",
     "availableBalance": "利用可能残高",
     "fee": "手数料",
     "low": "低",

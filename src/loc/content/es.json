@@ -294,6 +294,7 @@
     "recipientAddress": "Dirección del destinatario",
     "uploadFromGallery": "Subir desde la galería",
     "enterSats": "Ingrese sats",
+    "enterFiat": "Ingrese la cantidad en moneda fiat",
     "availableBalance": "Saldo Disponible",
     "fee": "Tarifa",
     "low": "Bajo",
