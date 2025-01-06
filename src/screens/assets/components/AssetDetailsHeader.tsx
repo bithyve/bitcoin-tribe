@@ -62,7 +62,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
-    asset.balance.spendable + asset.balance?.offchainOutbound || 0;
+    asset.balance.future + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
@@ -123,7 +123,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.totalBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
-                      asset.balance.spendable + asset.balance?.offchainOutbound,
+                      asset.balance.future + asset.balance?.offchainOutbound,
                     )}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
@@ -151,7 +151,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
                   <AppText variant="pageTitle2" style={styles.totalBalance}>
-                    {asset.balance.spendable + asset.balance?.offchainOutbound}
+                    {numberWithCommas(asset.balance.future + asset.balance?.offchainOutbound)}
                   </AppText>
                 </View>
                 <AppText variant="body1" style={styles.totalBalanceLabel}>

@@ -100,6 +100,7 @@ function ReceiveAssetScreen() {
       Toast(`${createUtxos.error}`, true);
     } else if (createUtxos.data === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
+      navigation.goBack();
     }
   }, [createUtxos.data]);
 

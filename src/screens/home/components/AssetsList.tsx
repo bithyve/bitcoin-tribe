@@ -101,22 +101,11 @@ function AssetsList(props: AssetsListProps) {
             <View style={styles.assetWrapper}>
               <View style={styles.alternateSpace}>
                 <AssetCard
-                  name={item.name}
-                  image={Platform.select({
-                    android: `file://${item.media?.filePath}`,
-                    ios: item.media?.filePath,
-                  })}
-                  details={item.details}
-                  amount={
-                    item.balance.spendable + item.balance.offchainOutbound
-                  }
+                  asset={item}
                   tag={isCoin ? 'COIN' : 'COLLECTIBLE'}
                   onPress={() =>
                     navigation.navigate(navigateTo, { assetId: item.assetId })
                   }
-                  ticker={item.ticker}
-                  assetId={item.assetId}
-                  assetIface={item.assetIface.toUpperCase()}
                 />
               </View>
             </View>
