@@ -179,7 +179,7 @@ const CombinedDefaultTheme: AppTheme = {
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
     errorPopupBackColor: Colors.FireOpal2,
-    errorPopupBorderColor: Colors.FireOpal
+    errorPopupBorderColor: Colors.FireOpal,
   },
   fonts: {
     regular: {
@@ -207,7 +207,7 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient1: Colors.EerieBlack,
     cardGradient2: Colors.VampireBlack,
     cardGradient3: Colors.ChineseBlack,
-    headerCardGradientColor: Colors.VampireBlack,
+    headerCardGradientColor: Colors.Black,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -281,7 +281,7 @@ const CombinedDarkTheme: AppTheme = {
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
     errorPopupBackColor: Colors.FireOpal2,
-    errorPopupBorderColor: Colors.FireOpal
+    errorPopupBorderColor: Colors.FireOpal,
   },
   fonts: {
     regular: {
