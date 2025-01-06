@@ -1,6 +1,6 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Keyboard, StyleSheet, View } from 'react-native';
+// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -15,10 +15,10 @@ import { PaymentInfoKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
-import TextField from 'src/components/TextField';
+// import TextField from 'src/components/TextField';
 import { hp } from 'src/constants/responsive';
-import AppText from 'src/components/AppText';
-
+// import AppText from 'src/components/AppText';
+import OptionCard from 'src/components/OptionCard';
 
 function SendBTCScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -96,46 +96,18 @@ function SendBTCScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} enableBack={true} />
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.keyboardAwareContainer}
-        contentContainerStyle={styles.keyboardAwareContent}
-        enableOnAndroid={true}
-        extraScrollHeight={Platform.OS === 'android' ?  200 : 0}
-        keyboardOpeningTime={0}>
-        <View style={styles.scannerWrapper}>
-          <QRScanner onCodeScanned={onCodeScanned} />
-        </View>
-        <View style={styles.inputWrapper}>
-          <AppText variant="body2" style={styles.recipientAddressLabel}>
-            {sendScreen.recipientAddress}
-          </AppText>
-          <TextField
-            value={address}
-            onChangeText={text => setAddress(text)}
-            placeholder={sendScreen.enterAddress}
-            keyboardType={'default'}
-            returnKeyType={'Enter'}
-            multiline={true}
-            numberOfLines={2}
-            inputStyle={styles.inputStyle}
-            contentStyle={styles.contentStyle}
-            rightText={sendScreen.paste}
-            onRightTextPress={() => handlePasteAddress()}
-            rightCTAStyle={styles.rightCTAStyle}
-            rightCTATextColor={theme.colors.accent1}
-          />
-        </View>
-      </KeyboardAwareScrollView>
-      {/* <ModalContainer
-        title={sendScreen.enterSendAddress}
-        subTitle={sendScreen.enterSendAdrsSubTitle}
-        visible={visible}
-        enableCloseIcon={false}
-        height={Platform.OS == 'ios' && '85%'}
-        onDismiss={() => setVisible(false)}>
-        <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />
-      </ModalContainer> */}
+      <View style={styles.scannerWrapper}>
+        <QRScanner onCodeScanned={onCodeScanned} />
+      </View>
+      <OptionCard
+        title={sendScreen.optionCardTitle}
+        onPress={() => {
+          receiveData === 'send'
+            ? navigation.replace(NavigationRoutes.SENDTO, { wallet, address })
+            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
+        }}
+      />
+     
     </ScreenContainer>
   );
 }

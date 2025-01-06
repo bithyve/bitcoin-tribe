@@ -64,7 +64,7 @@ function SendToContainer({
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+
   const [amount, setAmount] = useState(
     paymentURIAmount ? `${paymentURIAmount}` : '',
   );
@@ -77,10 +77,15 @@ function SendToContainer({
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [inputHeight, setInputHeight] = React.useState(100);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
+  const styles = React.useMemo(
+    () => getStyles(theme, inputHeight),
+    [theme, inputHeight],
+  );
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -185,7 +190,7 @@ function SendToContainer({
         ) || 0;
 
   const calculatedFee = useCallback(() => {
-    const sanitizedAmount = amount.replace(/,/g, '')
+    const sanitizedAmount = amount.replace(/,/g, '');
     const numericAmount = Number(sanitizedAmount);
     const recipients = [
       {
@@ -251,11 +256,26 @@ function SendToContainer({
             <AppText variant="body2" style={styles.recipientAddressLabel}>
               {sendScreen.recipientAddress}
             </AppText>
-            <View style={styles.recipientAddressWrapper}>
-              <AppText variant="body1" style={styles.recipientAddressText}>
-                {recipientAddress}
-              </AppText>
-            </View>
+            <TextField
+              value={recipientAddress}
+              onChangeText={text => setRecipientAddress(text)}
+              placeholder={sendScreen.recipientAddress}
+              style={[
+                styles.input,
+                recipientAddress && styles.addressInputStyle,
+              ]}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              multiline={true}
+              returnKeyType={'Enter'}
+              numberOfLines={5}
+              contentStyle={
+                recipientAddress
+                  ? styles.inputContentStyle
+                  : styles.contentStyle1
+              }
+            />
           </View>
           <View style={styles.inputWrapper}>
             <AppText variant="body2" style={styles.recipientAddressLabel}>
@@ -426,7 +446,7 @@ function SendToContainer({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     container: {
       height: '100%',
@@ -453,17 +473,6 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
-    recipientAddressWrapper: {
-      backgroundColor: theme.colors.inputBackground,
-      width: '100%',
-      height: hp(65),
-      padding: 10,
-      borderRadius: 10,
-      justifyContent: 'center',
-    },
-    recipientAddressText: {
-      color: theme.colors.headingColor,
-    },
     inputStyle: {
       width: '80%',
     },
@@ -471,6 +480,13 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     contentStyle: {
+      marginTop: 0,
+    },
+    inputContentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
       marginTop: 0,
     },
     feeContainer: {
@@ -505,6 +521,16 @@ const getStyles = (theme: AppTheme) =>
     },
     currencyIconWrapper: {
       marginRight: hp(5),
+    },
+    input: {
+      marginVertical: hp(10),
+    },
+    addressInputStyle: {
+      borderRadius: hp(20),
+      height: Math.max(100, inputHeight),
+    },
+    contentStyle1: {
+      height: hp(50),
     },
   });
 export default SendToContainer;
