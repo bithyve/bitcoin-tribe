@@ -265,7 +265,6 @@ function SendToContainer({
               multiline={true}
               numberOfLines={1}
               placeholder={sendScreen.recipientAddress}
-              keyboardType={'default'}
               inputStyle={styles.inputStyle}
               contentStyle={styles.contentStyle}
               rightIcon={<ClearIcon />}

@@ -102,12 +102,9 @@ function SendBTCScreen({ route, navigation }) {
       <OptionCard
         title={sendScreen.optionCardTitle}
         onPress={() => {
-          receiveData === 'send'
-            ? navigation.replace(NavigationRoutes.SENDTO, { wallet, address })
-            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
+          navigation.replace(NavigationRoutes.SENDTO, { wallet, address: '' });
         }}
       />
-     
     </ScreenContainer>
   );
 }
