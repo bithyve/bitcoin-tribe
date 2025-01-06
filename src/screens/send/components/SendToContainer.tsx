@@ -203,7 +203,6 @@ function SendToContainer({
     app.appType === AppType.NODE_CONNECT
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
       : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
-  console.log('transferFee', transferFee);
 
   const onSendMax = async () => {
     setIsSendMax(true);
