@@ -78,7 +78,7 @@ function SendToContainer({
     mutate: executePhaseOneTransaction,
     isLoading,
     error,
-    data,
+    data: phaseOneTxPrerequisites,
   } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -128,6 +128,13 @@ function SendToContainer({
   };
   const initiaTransaction = () => {
     setVisible(true);
+    if (selectedPriority === TxPriority.CUSTOM) {
+      averageTxFee.custom = {
+        averageTxFee: Number(customFee),
+        estimatedBlocks: 1,
+        feePerByte: Number(customFee),
+      };
+    }
     const transactionDetails = {
       sender: wallet,
       recipient: {
@@ -156,6 +163,7 @@ function SendToContainer({
         amount: Number(amount.replace(/,/g, '')),
       },
       averageTxFee,
+      txPrerequisites: phaseOneTxPrerequisites,
       selectedPriority,
       customFeePerByte: customFee,
     });
@@ -198,42 +206,8 @@ function SendToContainer({
   const transferFee =
     app.appType === AppType.NODE_CONNECT
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
-      : idx(
-          sendTransactionMutation,
-          _ => _.data.txPrerequisites[selectedPriority]?.fee,
-        ) || 0;
-  // console.log('data', data[selectedPriority].fee);
-  // const calculatedFee = useCallback(() => {
-  //   const sanitizedAmount = amount.replace(/,/g, '');
-  //   const numericAmount = Number(sanitizedAmount);
-  //   const recipients = [
-  //     {
-  //       address,
-  //       amount: numericAmount,
-  //     },
-  //   ];
-  //   const feePerByte =
-  //     selectedPriority === TxPriority.CUSTOM
-  //       ? Number(customFee)
-  //       : getFeeRateByPriority(selectedPriority);
-  //   const inputUTXOs = [
-  //     ...wallet.specs.confirmedUTXOs,
-  //     ...wallet.specs.unconfirmedUTXOs,
-  //   ];
-  //   let confirmedBalance = 0;
-  //   inputUTXOs.forEach(utxo => {
-  //     confirmedBalance += utxo.value;
-  //   });
-  //   const outputUTXOs = [];
-  //   for (const recipient of recipients) {
-  //     outputUTXOs.push({
-  //       address: recipient.address,
-  //       value: recipient.amount,
-  //     });
-  //   }
-  //   const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
-  //   return fee.fee;
-  // }, [amount, selectedPriority, customFee]);
+      : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
+  console.log('transferFee', transferFee);
 
   const onSendMax = async () => {
     setIsSendMax(true);
@@ -430,7 +404,7 @@ function SendToContainer({
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
-          transFee={''}
+          transFee={transferFee}
           feeRate={
             selectedPriority === TxPriority.CUSTOM
               ? customFee
@@ -442,11 +416,7 @@ function SendToContainer({
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
-          total={
-            app.appType === AppType.NODE_CONNECT
-              ? Number(amount)
-              : Number(amount) + Number('')
-          }
+          total={Number(amount) }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
           onPress={() => broadcastTransaction()}

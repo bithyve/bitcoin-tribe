@@ -615,11 +615,13 @@ export class ApiHandler {
     recipient,
     averageTxFee,
     selectedPriority,
+    txPrerequisites
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
+    txPrerequisites: TransactionPrerequisite
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
       if (ApiHandler.appType === AppType.NODE_CONNECT) {
@@ -639,16 +641,16 @@ export class ApiHandler {
           throw new Error('Failed to connect to node');
         }
       } else {
-        const txPrerequisites = await ApiHandler.sendPhaseOne({
-          sender,
-          recipient,
-          averageTxFee,
-          selectedPriority,
-        });
+        // const txPrerequisites = await ApiHandler.sendPhaseOne({
+        //   sender,
+        //   recipient,
+        //   averageTxFee,
+        //   selectedPriority,
+        // });
 
-        if (!txPrerequisites) {
-          throw new Error('Failed to generate txPrerequisites');
-        }
+        // if (!txPrerequisites) {
+        //   throw new Error('Failed to generate txPrerequisites');
+        // }
         const { txid } = await ApiHandler.sendPhaseTwo({
           sender,
           recipient,
