@@ -61,7 +61,6 @@ function WalletTransactions(props: WalletTransactionsProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const getStatusIcon = (status, type, isThemeDark, confirmations) => {
-    console.log('status, type', status, type);
     const icons = {
       Sent: {
         bitcoin: {
