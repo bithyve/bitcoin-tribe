@@ -14,9 +14,10 @@ import React, {
   useEffect,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
+import idx from 'idx';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -38,7 +39,6 @@ import { Keys } from 'src/storage';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -47,6 +47,9 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
+import FeePriorityButton from '../send/components/FeePriorityButton';
+import ModalContainer from 'src/components/ModalContainer';
+import SendAssetSuccess from './components/SendAssetSuccess';
 
 type ItemProps = {
   name: string;
@@ -152,6 +155,8 @@ const SendAssetScreen = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [customFee, setCustomFee] = useState(0);
+  const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -182,6 +187,13 @@ const SendAssetScreen = () => {
     }
   }, [amount]);
 
+  const getFeeRateByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
+  };
+  const getEstimatedBlocksByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
+  };
+
   const decodeInvoice = (_invoice: string) => {
     const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
     const assetIdPattern = /(?:^|\s)([a-zA-Z0-9\-$]{20,})(?=\/|$)/;
@@ -205,7 +217,6 @@ const SendAssetScreen = () => {
 
   const sendAsset = useCallback(async () => {
     try {
-      Keyboard.dismiss();
       const { utxo, endpoints } = decodeInvoice(invoice);
       setLoading(true);
       const response = await ApiHandler.sendAsset({
@@ -218,7 +229,7 @@ const SendAssetScreen = () => {
       setLoading(false);
       if (response?.txid) {
         setTimeout(() => {
-          setVisible(true);
+          setSuccessStatus(true);
         }, 500);
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
@@ -245,7 +256,11 @@ const SendAssetScreen = () => {
           <InProgessPopupContainer
             title={assets.sendAssetLoadingTitle}
             subTitle={assets.sendAssetLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/sendingBTCorAsset.json') : require('src/assets/images/jsons/sendingBTCorAsset_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/sendingBTCorAsset.json')
+                : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
+            }
           />
         </ResponsePopupContainer>
       </View>
@@ -261,23 +276,6 @@ const SendAssetScreen = () => {
           // });
         }}
       />
-      <View>
-        <ResponsePopupContainer
-          visible={visible}
-          enableClose={true}
-          onDismiss={() => setVisible(false)}
-          backColor={theme.colors.successPopupBackColor}
-          borderColor={theme.colors.successPopupBorderColor}
-          conatinerModalStyle={styles.containerModalStyle}>
-          <SendSuccessPopupContainer
-            title={assets.success}
-            subTitle={assets.operationSuccess}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </ResponsePopupContainer>
-      </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <AssetItem
           name={item.name}
@@ -323,93 +321,106 @@ const SendAssetScreen = () => {
           keyboardType="numeric"
           style={styles.input}
         />
-        <View style={styles.totalFeeWrapper}>
-          <AppText variant="heading1" style={styles.feeTitleText}>
-            {assets.feeRate}
-          </AppText>
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.fee}
+        </AppText>
+        <View style={styles.feeContainer}>
+          <FeePriorityButton
+            title={sendScreen.low}
+            priority={TxPriority.LOW}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.LOW,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.medium}
+            priority={TxPriority.MEDIUM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.MEDIUM,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.high}
+            priority={TxPriority.HIGH}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.HIGH,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.custom}
+            priority={TxPriority.CUSTOM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
+            feeRateByPriority={''}
+            estimatedBlocksByPriority={10}
+            disabled={false}
+          />
         </View>
-        <View style={styles.feeWrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.LOW}
-              status={
-                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.LOW);
-                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-              }}
+        {selectedPriority === TxPriority.CUSTOM && (
+          <View style={styles.inputWrapper}>
+            <AppText variant="body2" style={styles.labelstyle}>
+              {sendScreen.customFee}
+            </AppText>
+            <TextField
+              value={customFee}
+              onChangeText={text => setCustomFee(text)}
+              placeholder={sendScreen.enterCustomFee}
+              keyboardType={'numeric'}
+              inputStyle={styles.customFeeInputStyle}
+              contentStyle={styles.feeInputContentStyle}
+              rightText={'sat/vB'}
+              onRightTextPress={() => {}}
+              rightCTATextColor={theme.colors.headingColor}
             />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.low}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                {averageTxFee[TxPriority.LOW].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
           </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.MEDIUM}
-              status={
-                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.MEDIUM);
-                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-              }}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.medium}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.MEDIUM].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.HIGH}
-              status={
-                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.HIGH);
-                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-              }}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.high}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.HIGH].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
-          </View>
-        </View>
+        )}
+
+        <ModalContainer
+          title={
+            successStatus
+              ? sendScreen.successTitle
+              : sendScreen.sendConfirmation
+          }
+          subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
+          height={successStatus ? '35%' : ''}
+          visible={visible}
+          enableCloseIcon={false}
+          onDismiss={() => setVisible(false)}>
+          <SendAssetSuccess
+            // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
+            assetName={item.name}
+            amount={amount.replace(/,/g, '')}
+            feeRate={
+              selectedPriority === TxPriority.CUSTOM
+                ? customFee
+                : getFeeRateByPriority(selectedPriority)
+            }
+            selectedPriority={selectedPriority}
+            onSuccessStatus={successStatus}
+            onSuccessPress={() => navigation.goBack()}
+            onPress={sendAsset}
+          />
+        </ModalContainer>
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.send}
-          primaryOnPress={sendAsset}
+          primaryOnPress={() => {
+            Keyboard.dismiss();
+            setVisible(true);
+          }}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled || createUtxos.isLoading || loading}
@@ -486,51 +497,25 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     nameText: {
       color: theme.colors.secondaryHeadingColor,
     },
-    totalFeeWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: hp(10),
-    },
-    feeWrapper: {
-      width: '100%',
-      marginVertical: hp(10),
-    },
-    radioBtnWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: hp(8),
-    },
-    feeViewWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    feePriorityText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
-    feeText: {
-      color: theme.colors.headingColor,
-    },
-    feeSatsText: {
-      color: theme.colors.headingColor,
-      marginLeft: hp(5),
-    },
-    satsText: {
-      color: theme.colors.headingColor,
-      marginTop: hp(5),
-      marginLeft: hp(5),
-    },
-    feeTitleText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
     tagWrapper: {
       width: '28%',
       alignItems: 'flex-end',
     },
-    containerModalStyle: {
-      // margin: 0,
-      // padding: 10,
+    labelstyle: {
+      marginVertical: hp(10),
+      color: theme.colors.secondaryHeadingColor,
+    },
+    inputWrapper: {
+      paddingBottom: 16,
+    },
+    feeContainer: {
+      flexDirection: 'row',
+    },
+    customFeeInputStyle: {
+      width: '80%',
+    },
+    feeInputContentStyle: {
+      marginTop: 0,
     },
   });
 
