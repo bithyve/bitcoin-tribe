@@ -55,6 +55,7 @@ function CoinAllTransaction() {
             transType={item.kind}
             transaction={item}
             coin={coin && coin.ticker}
+            tranStatus={item.status}
           />
         )}
         keyExtractor={item => item.txid}
