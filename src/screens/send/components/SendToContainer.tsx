@@ -139,7 +139,7 @@ function SendToContainer({
     sendTransactionMutation.mutate({
       sender: wallet,
       recipient: {
-        address,
+        address: recipientAddress,
         amount: Number(amount.replace(/,/g, '')),
       },
       averageTxFee,
