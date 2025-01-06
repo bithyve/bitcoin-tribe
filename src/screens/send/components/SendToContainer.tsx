@@ -412,7 +412,7 @@ function SendToContainer({
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
-          total={Number(amount)}
+          total={amount.replace(/,/g, '')}
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
           onPress={() => broadcastTransaction()}
