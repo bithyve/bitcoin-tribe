@@ -55,10 +55,10 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
             styles.balanceText,
             {
               fontSize:
-                collectible.balance.spendable.toString().length > 10 ? 24 : 39,
+                collectible.balance.future.toString().length > 10 ? 24 : 39,
             },
           ]}>
-          {numberWithCommas(collectible.balance.spendable)}
+          {numberWithCommas(collectible.balance.future)}
         </AppText>
       </View>
       <TransactionButtons
