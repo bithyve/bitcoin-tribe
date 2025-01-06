@@ -27,8 +27,6 @@ const AssetCard = (props: AssetCardProps) => {
   } = props;
   const theme: AppTheme = useTheme();
 
-  console.log('asset', asset.balance);
-
   const balance = useMemo(() => {
     return asset.balance.future;
   }, [asset.balance.future]);
