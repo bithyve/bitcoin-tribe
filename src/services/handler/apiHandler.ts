@@ -276,6 +276,38 @@ export class ApiHandler {
     }
   }
 
+  static async restoreWithBackupFile({
+    mnemonic,
+    filePath,
+  }: {
+    mnemonic: string;
+    filePath: string;
+  }) {
+    try {
+      const restore = await RGBServices.restore(mnemonic, filePath);
+      if (restore.error) {
+        throw new Error(restore.error);
+      } else {
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.ON_CHAIN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          mnemonic: mnemonic,
+        });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async restoreApp(mnemonic: string) {
     try {
       const seed = bip39.mnemonicToSeedSync(mnemonic);

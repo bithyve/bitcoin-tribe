@@ -84,6 +84,7 @@ type CustomColors = {
   satsProgressRemaining: string;
   errorPopupBackColor: string;
   errorPopupBorderColor: string;
+  headerCardGradientColor: string;
   popupSentCTABackColor: string;
 };
 
@@ -104,6 +105,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
+    headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -205,6 +207,7 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient1: Colors.EerieBlack,
     cardGradient2: Colors.VampireBlack,
     cardGradient3: Colors.ChineseBlack,
+    headerCardGradientColor: Colors.VampireBlack,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
     secondaryHeadingColor: Colors.SonicSilver,

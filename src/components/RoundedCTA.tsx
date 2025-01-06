@@ -39,7 +39,7 @@ function RoundedCTA(props: RoundedCTAProps) {
     <GradientView style={styles.ctaContainerStyle} colors={colors}>
       <Button
         icon={() => icon}
-        mode="outlined"
+        // mode="outlined"
         uppercase={false}
         labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}
@@ -59,11 +59,11 @@ const getStyles = (width, buttonColor) =>
       borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      borderColor: buttonColor,
-      borderWidth: 0.5,
+      // borderColor: buttonColor,
+      // borderWidth: 0.5,
     },
     contentStyle: {
-      height: hp(48),
+      height: hp(40),
       width: width,
     },
     labelStyle: {

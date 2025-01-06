@@ -335,10 +335,14 @@ object RGBHelper {
 
     fun restore(password: String, filePath: String, context: ReactApplicationContext): String {
         try {
-            return restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath).toString()
+            restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath)
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("restore", true)
+            return jsonObject.toString()
         }catch (e: Exception){
-            Log.d(TAG, "Exception: $e")
-            return ""
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", "$e")
+            return jsonObject.toString()
         }
     }
 

@@ -100,6 +100,7 @@ const AssetItem = ({
         )}
         <View style={styles.assetDetailsWrapper}>
           <AppText
+          numberOfLines={1}
             variant="body2"
             style={{
               color:
@@ -107,7 +108,7 @@ const AssetItem = ({
             }}>
             {name}
           </AppText>
-          <AppText variant="body2" style={styles.nameText}>
+          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
             {details}
           </AppText>
         </View>
