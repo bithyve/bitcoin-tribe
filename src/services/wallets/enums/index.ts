@@ -43,6 +43,7 @@ export enum TxPriorityDefault {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
+  CUSTOM = 'custom'
 }
 
 export enum TxPriority {

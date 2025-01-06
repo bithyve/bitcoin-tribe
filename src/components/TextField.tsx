@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -26,6 +26,7 @@ type TextFieldProps = {
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
   rightText?: string;
+  rightIcon?: ReactNode;
   onRightTextPress?: () => void;
   rightCTAStyle?: StyleProp<TextStyle>;
   rightCTATextColor?: string;
@@ -52,6 +53,7 @@ const TextField = (props: TextFieldProps) => {
     onSubmitEditing,
     autoFocus = false,
     rightText,
+    rightIcon,
     onRightTextPress,
     rightCTAStyle,
     rightCTATextColor,
@@ -116,6 +118,13 @@ const TextField = (props: TextFieldProps) => {
           <AppText variant="smallCTA" style={styles.rightTextStyle}>
             {rightText}
           </AppText>
+        </AppTouchable>
+      )}
+      {rightIcon && (
+        <AppTouchable
+          style={[styles.rightTextWrapper, rightCTAStyle]}
+          onPress={onRightTextPress}>
+          {rightIcon}
         </AppTouchable>
       )}
     </View>

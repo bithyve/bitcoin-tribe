@@ -18,7 +18,7 @@ import { Keys } from 'src/storage';
 type OptionCardProps = {
   icon?: React.ReactNode;
   title: string;
-  subTitle: string;
+  subTitle?: string;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
   showRightArrow?: React.ReactNode;
@@ -54,9 +54,9 @@ function OptionCard(props: OptionCardProps) {
             <AppText variant="heading3" style={styles.menuCardTitle}>
               {title}
             </AppText>
-            <AppText variant="body1" style={styles.menuCardSubTitle}>
+            {subTitle &&<AppText variant="body1" style={styles.menuCardSubTitle}>
               {subTitle}
-            </AppText>
+            </AppText>}
           </View>
           <View style={styles.iconWrapper}>
             {showRightArrow ? (
@@ -104,6 +104,7 @@ const getStyles = (theme: AppTheme, showRightArrow) =>
     iconWrapper: {
       width: '15%',
       justifyContent: 'center',
+      alignItems: 'center'
     },
     iconContainer: {
       marginVertical: hp(10),
