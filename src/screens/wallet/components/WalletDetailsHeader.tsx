@@ -101,9 +101,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         <GradientView
           style={styles.largeHeaderContentWrapper}
           colors={[
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
+            theme.colors.headerCardGradientColor,
+            theme.colors.headerCardGradientColor,
+            theme.colors.headerCardGradientColor,
           ]}>
           {app.appType === AppType.NODE_CONNECT ? (
             <View style={styles.balanceContainer}>
