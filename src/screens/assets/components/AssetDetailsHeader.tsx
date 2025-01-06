@@ -91,13 +91,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
-          <GradientView
-            style={styles.largeHeaderContentWrapper}
-            colors={[
-              theme.colors.headerCardGradientColor,
-              theme.colors.headerCardGradientColor,
-              theme.colors.headerCardGradientColor,
-            ]}>
+          <View style={styles.largeHeaderContentWrapper}>
             <View style={styles.assetImageWrapper}>
               {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
                 <Image
@@ -172,7 +166,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 onPressBuy={onPressBuy}
               />
             </View>
-          </GradientView>
+          </View>
         </View>
       </View>
     </>
