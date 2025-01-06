@@ -88,8 +88,8 @@ private_lane :upload_to_slack do |options|
 end
 
 after_all do |lane|
-  versionCode = android_get_version_code()
-  slack(message: "Build success :rocket:\nVersion Code: " + versionCode.to_s)
+  # versionCode = android_get_version_code()
+  slack(message: "Build success :rocket:\nVersion Code: ")
   end
 
   error do |lane, exception|
