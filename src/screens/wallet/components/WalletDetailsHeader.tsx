@@ -98,13 +98,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <AppHeader title={app.appName} />
-        <GradientView
-          style={styles.largeHeaderContentWrapper}
-          colors={[
-            theme.colors.headerCardGradientColor,
-            theme.colors.headerCardGradientColor,
-            theme.colors.headerCardGradientColor,
-          ]}>
+        <View style={styles.largeHeaderContentWrapper}>
           {app.appType === AppType.NODE_CONNECT ? (
             <View style={styles.balanceContainer}>
               <AppTouchable
@@ -189,7 +183,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
               onPressBuy={onPressBuy}
             />
           </View>
-        </GradientView>
+        </View>
       </View>
     </>
   );
