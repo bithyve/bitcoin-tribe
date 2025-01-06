@@ -98,7 +98,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           </AppText>
         </View>
       </View>
-      <View style={styles.contentWrapper}>
+      {app.appType === AppType.ON_CHAIN && <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>{sendScreen.feeAmount}:</AppText>
         </View>
@@ -108,17 +108,15 @@ function SendSuccessContainer(props: sendSuccessProps) {
             : null}
           <AppText variant="body1" style={styles.valueText}>
             &nbsp;
-            {app.appType === AppType.NODE_CONNECT
-              ? transFee
-              : getBalance(transFee)}
+            {getBalance(transFee)}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
-              {app.appType === AppType.NODE_CONNECT ? 'sats/vbyte' : 'sats'}
+              {'sats'}
             </AppText>
           )}
         </View>
-      </View>
+      </View>}
       <View style={[styles.contentWrapper, styles.borderStyle]}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>{sendScreen.total}:</AppText>
@@ -128,7 +126,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="body1" style={styles.valueText}>
-            &nbsp;{getBalance(total)}
+            &nbsp;{getBalance(app.appType === AppType.NODE_CONNECT ? total : Number(total) + Number(transFee))}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
