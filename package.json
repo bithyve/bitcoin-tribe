@@ -1,6 +1,6 @@
 {
   "name": "tribe",
-  "version": "0.0.1",
+  "version": "0.2.6",
   "private": true,
   "scripts": {
     "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
