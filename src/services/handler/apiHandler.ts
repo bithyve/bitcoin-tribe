@@ -639,6 +639,10 @@ export class ApiHandler {
           throw new Error('Failed to connect to node');
         }
       } else {
+        console.log('send---', sender,
+          recipient,
+          averageTxFee,
+          selectedPriority,)
         const txPrerequisites = await ApiHandler.sendPhaseOne({
           sender,
           recipient,
