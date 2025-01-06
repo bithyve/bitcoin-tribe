@@ -46,7 +46,6 @@ function TransactionsList({
   const { wallet: walletTranslations, settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  console.log('transactions', transactions);
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
