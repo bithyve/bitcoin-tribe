@@ -238,9 +238,16 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
-        Toast(`Failed: ${response?.error}`, true);
+        setVisible(false);
+        setTimeout(() => {
+          Toast(`Failed: ${response?.error}`, true);
+        }, 500);
       }
     } catch (error) {
+      setVisible(false);
+      setTimeout(() => {
+        Toast(`Failed: ${error}`, true);
+      }, 500);
       console.log(error);
     }
   }, [invoice, amount, navigation]);
