@@ -71,7 +71,6 @@ function SendToContainer({
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [inputHeight, setInputHeight] = React.useState(50);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const {
@@ -82,10 +81,7 @@ function SendToContainer({
   } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const styles = React.useMemo(
-    () => getStyles(theme, inputHeight),
-    [theme, inputHeight],
-  );
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -416,7 +412,7 @@ function SendToContainer({
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
-          total={Number(amount) }
+          total={Number(amount)}
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
           onPress={() => broadcastTransaction()}
@@ -425,7 +421,7 @@ function SendToContainer({
     </View>
   );
 }
-const getStyles = (theme: AppTheme, inputHeight) =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       height: '100%',
