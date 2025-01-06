@@ -219,8 +219,6 @@ function SendToContainer({
       });
     }
     const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
-    console.log('fee', fee)
-    console.log('fee.fee', fee.fee)
     return fee.fee;
   }, [amount, selectedPriority, customFee]);
 
@@ -419,7 +417,7 @@ function SendToContainer({
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
           amount={amount.replace(/,/g, '')}
-          transFee={calculatedFee()}
+          transFee={''}
           feeRate={
             selectedPriority === TxPriority.CUSTOM
               ? customFee
@@ -434,7 +432,7 @@ function SendToContainer({
           total={
             app.appType === AppType.NODE_CONNECT
               ? Number(amount)
-              : Number(amount) + Number(calculatedFee())
+              : Number(amount) + Number('')
           }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
