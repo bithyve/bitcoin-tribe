@@ -87,7 +87,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               ? assets.collectibles
               : assetTicker
           }
-          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
+          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
@@ -156,26 +156,9 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 style={styles.onChainTotalBalanceWrapper}
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
-                  {initialCurrencyMode !== CurrencyKind.SATS && (
-                    <View style={styles.currencyIconWrapper}>
-                      {getCurrencyIcon(
-                        isThemeDark ? IconBitcoin : IconBitcoinLight,
-                        isThemeDark ? 'dark' : 'light',
-                        20,
-                      )}
-                    </View>
-                  )}
-
-                  <AppText variant="heading2" style={styles.totalBalance}>
-                    {getBalance(
-                      asset.balance.spendable + asset.balance?.offchainOutbound,
-                    )}
+                  <AppText variant="pageTitle2" style={styles.totalBalance}>
+                    {asset.balance.spendable + asset.balance?.offchainOutbound}
                   </AppText>
-                  {initialCurrencyMode === CurrencyKind.SATS && (
-                    <AppText variant="caption" style={styles.satsText}>
-                      sats
-                    </AppText>
-                  )}
                 </View>
                 <AppText variant="body1" style={styles.totalBalanceLabel}>
                   {home.totalBalance}
@@ -228,7 +211,6 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     totalBalance: {
       color: theme.colors.headingColor,
-      fontSize: lengthOfTotalBalance > 15 ? 13 : 20,
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
