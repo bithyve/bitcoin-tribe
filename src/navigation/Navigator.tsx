@@ -62,6 +62,7 @@ import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
 import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
+import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -100,6 +101,10 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.ONBOARDINGSCREEN}
         component={OnboardingSlides}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.IMPORTRGBBACKUP}
+        component={ImportRgbBackup}
       />
       
     </Stack.Navigator>

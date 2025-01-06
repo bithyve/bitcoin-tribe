@@ -303,7 +303,7 @@ export default class RGBServices {
 
   static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
     const data = await RGB.restore(mnemonic, filePath);
-    return data;
+    return JSON.parse(data);
   };
 
   static isValidBlindedUtxo = async (invoiceData: string): Promise<{}> => {
