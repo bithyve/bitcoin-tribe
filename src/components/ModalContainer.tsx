@@ -129,7 +129,7 @@ const getStyles = (
       flexDirection: 'row',
       width: '100%',
       // alignItems: 'center',
-      marginBottom: hp(50),
+      marginBottom: hp(20),
     },
     contentWrapper: {
       width: enableCloseIcon ? '80%' : '100%',
@@ -140,11 +140,12 @@ const getStyles = (
     },
     titleText: {
       color: theme.colors.headingColor,
-      textAlign: 'center'
+      textAlign: 'center',
+      marginBottom: hp(3),
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
-      textAlign: 'center'
+      textAlign: 'center',
     },
     dashViewWrapper: {
       alignItems: 'center',

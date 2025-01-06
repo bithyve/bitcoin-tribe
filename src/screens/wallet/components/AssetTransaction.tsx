@@ -63,7 +63,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             light: <SentBtcIconLight />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyIcon />,
+            dark: <WaitingCounterPartyBtcIcon />,
             light: <WaitingCounterPartyBtcIcon />,
           },
           waitingconfirmations: {
@@ -203,7 +203,12 @@ function AssetTransaction(props: AssetTransactionProps) {
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {getStatusIcon(transType, tranStatus.toLowerCase().replace(/_/g, ''), 'bitcoin', isThemeDark)}
+            {getStatusIcon(
+              transType,
+              tranStatus.toLowerCase().replace(/_/g, ''),
+              'bitcoin',
+              isThemeDark,
+            )}
           </View>
           <View style={styles.contentWrapper}>
             <AppText

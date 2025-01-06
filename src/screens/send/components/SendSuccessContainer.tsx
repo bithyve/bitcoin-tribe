@@ -50,7 +50,6 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
-
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -206,7 +205,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: hp(150),
       height: hp(150),
-      // marginVertical: hp(20),
+      marginVertical: hp(20),
     },
     gestureRootView: {
       flex: 1,

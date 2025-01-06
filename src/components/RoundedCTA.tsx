@@ -65,9 +65,11 @@ const getStyles = (width, buttonColor) =>
     contentStyle: {
       height: hp(40),
       width: width,
+      alignItems: 'center',
     },
     labelStyle: {
       marginLeft: 8,
+      textAlign: 'center',
     },
     roundedCTATitle: {
       fontSize: 16,
