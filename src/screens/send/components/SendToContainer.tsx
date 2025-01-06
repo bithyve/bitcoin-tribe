@@ -122,26 +122,27 @@ function SendToContainer({
       );
     }, 400);
   };
-  const initiaTransaction = () => {
+  const initiateSend = () => {
     setVisible(true);
-    if (selectedPriority === TxPriority.CUSTOM) {
-      averageTxFee.custom = {
-        averageTxFee: Number(customFee),
-        estimatedBlocks: 1,
-        feePerByte: Number(customFee),
-      };
+    if (app.appType === AppType.ON_CHAIN) {
+      if (selectedPriority === TxPriority.CUSTOM) {
+        averageTxFee.custom = {
+          averageTxFee: Number(customFee),
+          estimatedBlocks: 1,
+          feePerByte: Number(customFee),
+        };
+      }
+      executePhaseOneTransaction({
+        sender: wallet,
+        recipient: {
+          address: recipientAddress,
+          amount: parseFloat(amount.replace(/,/g, '')),
+        },
+        averageTxFee,
+        selectedPriority,
+        customFeePerByte: customFee,
+      });
     }
-    const transactionDetails = {
-      sender: wallet,
-      recipient: {
-        address: recipientAddress,
-        amount: parseFloat(amount.replace(/,/g, '')),
-      },
-      averageTxFee,
-      selectedPriority,
-      customFeePerByte: customFee,
-    };
-    executePhaseOneTransaction(transactionDetails);
   };
 
   const broadcastTransaction = () => {
@@ -375,7 +376,7 @@ function SendToContainer({
           <PrimaryCTA
             disabled={!amount || !recipientAddress}
             title={common.next}
-            onPress={() => initiaTransaction()}
+            onPress={() => initiateSend()}
             width={'100%'}
           />
         </View>
