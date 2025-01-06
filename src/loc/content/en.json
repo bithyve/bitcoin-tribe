@@ -17,6 +17,7 @@
     "confirmAndProceed": "Confirm & Proceed",
     "confirmAndClose": "Confirm & Close",
     "sendMax": "SEND MAX",
+    "max": "MAX",
     "broadcast": "Broadcast",
     "walletID": "Wallet ID",
     "versionHistory": "Version History",
@@ -48,7 +49,8 @@
     "later": "Later",
     "joinGroup": "Join Group",
     "understood": "Understood",
-    "createChannel": "Create Channel"
+    "createChannel": "Create Channel",
+    "done": "Done"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -274,6 +276,7 @@
     "enterSendAdrsInvoiceSubTitle": "Enter or Paste Send Address or RGB Invoice",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
+    "sendTitle": "Send",
     "enterAmount": "Enter Amount",
     "sendingToAddress": "Sending to address",
     "sendSuccessTitle": "Send\nSuccessful",
@@ -288,7 +291,27 @@
     "sendAssetSubtitle": "Scan the RGB invoice",
     "totalFee": "Total Fee:",
     "sendBtcLoadingTitle": "Sending Bitcoin",
-    "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely."
+    "sendBtcLoadingSubTitle": "Your transaction is being processed—please hold on! Sit back, relax, and your Bitcoin will be sent securely.",
+    "recipientAddress": "Recipient's address",
+    "uploadFromGallery": "Upload from Gallery",
+    "enterSats": "Enter sats",
+    "enterFiat": "Enter fiat amount",
+    "availableBalance": "Available Balance",
+    "fee": "Fee",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "custom": "Custom",
+    "sendConfirmation": "Send Confirmation",
+    "sendConfirmationSubTitle": "Review and Confirm Your Transaction",
+    "feeRate": "Fee Rate",
+    "feeAmount": "Fee Amount",
+    "total": "Total",
+    "customFee": "Custom fee",
+    "enterCustomFee": "Enter custom fee",
+    "swipeToBroadcast": "Swipe to broadcast",
+    "broadcastingTXN": "Broadcasting transaction...",
+    "successTitle": "Successful!"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -469,7 +492,7 @@
     "createChannelSubTitle": "Sit back and relax as we get everything ready for you. Your channel will be open in just a moment."
   },
   "lightning": {
-    "sendTitle" : "Send",
+    "sendTitle": "Send",
     "invoice": "Invoice",
     "assetId": "Asset ID",
     "amount": "Amount",

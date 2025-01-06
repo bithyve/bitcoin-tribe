@@ -56,7 +56,7 @@ function ReceiveScreen({ route }) {
       setAddress(receivingAddress);
     }
   }, []);
-console.log('getNodeOnchainBtcAddress.data.address', getNodeOnchainBtcAddress)
+
   useEffect(() => {
     if (getNodeOnchainBtcAddress.isError) {
     } else if (getNodeOnchainBtcAddress.data) {
