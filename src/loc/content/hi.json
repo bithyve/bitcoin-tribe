@@ -17,6 +17,7 @@
     "confirmAndProceed": "पुष्टि करें और आगे बढ़ें",
     "confirmAndClose": "पुष्टि करें और बंद करें",
     "sendMax": "अधिकतम भेजें",
+    "max": "अधिकतम",
     "broadcast": "प्रसारित करें",
     "walletID": "वॉलेट आईडी",
     "versionHistory": "संस्करण इतिहास",
@@ -48,7 +49,8 @@
     "later": "बाद में",
     "joinGroup": "समूह में शामिल हों",
     "understood": "समझ गया",
-    "createChannel": "चैनल बनाएं"
+    "createChannel": "चैनल बनाएं",
+    "done": "हो गया"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -245,7 +247,8 @@
     "assetBackupInfo4": "बैकअप फ़ाइल डाउनलोड करें और अतिरिक्त सुरक्षा के लिए इसे अपने पास रखें।",
     "relayBackupTime": "अंतिम रिले बैकअप: ",
     "step1": "चरण 1",
-    "step2": "चरण 2"
+    "step2": "चरण 2",
+    "activateWalletTypeLabel": "वॉलेट प्रकार"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -273,6 +276,7 @@
     "enterSendAdrsInvoiceSubTitle": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें या पेस्ट करें",
     "enterAddress": "पता दर्ज करें",
     "sendToTitle": "भेजें",
+     "sendTitle": "भेजें",
     "enterAmount": "राशि दर्ज करें",
     "sendingToAddress": "पते पर भेज रहा है",
     "sendSuccessTitle": "भेजें\nसफल",
@@ -287,7 +291,27 @@
     "sendAssetSubtitle": "RGB इनवॉइस को स्कैन करें",
     "totalFee": "कुल शुल्क：",
     "sendBtcLoadingTitle": "बिटकॉइन भेजा जा रहा है",
-    "sendBtcLoadingSubTitle": "आपका लेनदेन संसाधित हो रहा है—कृपया प्रतीक्षा करें! आराम करें, बिटकॉइन सुरक्षित रूप से भेजा जाएगा।"
+    "sendBtcLoadingSubTitle": "आपका लेनदेन संसाधित हो रहा है—कृपया प्रतीक्षा करें! आराम करें, बिटकॉइन सुरक्षित रूप से भेजा जाएगा।",
+    "recipientAddress": "प्राप्तकर्ता का पता",
+    "uploadFromGallery": "गैलरी से अपलोड करें",
+    "enterSats": "सैट्स दर्ज करें",
+    "enterFiat": "फिएट राशि दर्ज करें",
+    "availableBalance": "उपलब्ध शेष राशि",
+    "fee": "शुल्क",
+    "low": "निम्न",
+    "medium": "मध्यम",
+    "high": "उच्च",
+    "custom": "कस्टम",
+    "sendConfirmation": "भेजने की पुष्टि",
+     "sendConfirmationSubTitle": "अपने लेन-देन की समीक्षा करें और पुष्टि करें",
+    "feeRate": "शुल्क दर",
+    "feeAmount": "शुल्क राशि",
+    "total": "कुल",
+    "customFee": "कस्टम शुल्क",
+    "enterCustomFee": "कस्टम शुल्क दर्ज करें",
+    "swipeToBroadcast": "प्रसारित करने के लिए स्वाइप करें",
+    "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है...",
+    "successTitle": "सफल!"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

@@ -82,9 +82,9 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
         </View>
         <View style={styles.contentWrapper}>
-          <AppText variant="caption" style={styles.titleText}>
+          {ticker && <AppText variant="caption" style={styles.titleText}>
             {ticker}
-          </AppText>
+          </AppText>}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {name}
           </AppText>

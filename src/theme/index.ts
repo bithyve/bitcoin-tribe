@@ -66,6 +66,7 @@ type CustomColors = {
   successPopupTitleColor: string;
   popupCTABackColor: string;
   popupCTATitleColor: string;
+  popupSentCTATitleColor: string;
   popupText: string;
   suggestedText: string;
   btcCtaBackColor: string;
@@ -84,6 +85,7 @@ type CustomColors = {
   errorPopupBackColor: string;
   errorPopupBorderColor: string;
   headerCardGradientColor: string;
+  popupSentCTABackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -111,7 +113,9 @@ const CombinedDefaultTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.BrandeisBlue,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
@@ -211,7 +215,9 @@ const CombinedDarkTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.White,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.Black,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
