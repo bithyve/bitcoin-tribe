@@ -33,7 +33,7 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       height:
         totalReserveSatsAmount === 0
           ? windowHeight > 670
-            ? '56%'
+            ? '60%'
             : '50%'
           : windowHeight > 670
           ? '65%'

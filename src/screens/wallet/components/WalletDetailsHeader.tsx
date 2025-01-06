@@ -1,40 +1,65 @@
 import React, { useContext, useMemo } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery as realmUseQuery } from '@realm/react';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import TransactionButtons from './TransactionButtons';
-import WalletSectionHeader from './WalletSectionHeader';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import BitcoinWalletDetailsCard from './BitcoinWalletDetailsCard';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import AppHeader from 'src/components/AppHeader';
+import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
+import GradientView from 'src/components/GradientView';
+import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconLightning from 'src/assets/images/icon_lightning_new.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { Keys } from 'src/storage';
+import useBalance from 'src/hooks/useBalance';
+import AppText from 'src/components/AppText';
 
 type walletDetailsHeaderProps = {
-  profile: string;
   username: string;
   wallet?: Wallet;
   rgbWallet?: RGBWallet;
-  activeTab: string;
   onPressSetting?: () => void;
-  onPressBuy: () => void;
+  onPressSend: () => void;
+  onPressRecieve: () => void;
+  onPressBuy?: () => void;
+  smallHeaderOpacity?: any;
+  largeHeaderHeight?: any;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
-  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
+  const { home } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
-
-  const styles = getStyles(theme);
-  const { profile, username, wallet, rgbWallet, onPressSetting, onPressBuy } =
-    props;
+  const { getBalance, getCurrencyIcon } = useBalance();
+  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
+    Keys.CURRENCY_MODE,
+  );
+  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const styles = getStyles(theme, insets);
+  const {
+    username,
+    wallet,
+    rgbWallet,
+    onPressSetting,
+    onPressSend,
+    onPressRecieve,
+    onPressBuy,
+    smallHeaderOpacity,
+    largeHeaderHeight,
+  } = props;
 
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const balances = useMemo(() => {
@@ -51,42 +76,192 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     wallet?.specs.balances.unconfirmed,
   ]);
 
+  const toggleDisplayMode = () => {
+    console.log('pres');
+    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
+      setCurrencyMode(CurrencyKind.BITCOIN);
+    } else if (initialCurrencyMode === CurrencyKind.BITCOIN) {
+      setCurrencyMode(CurrencyKind.FIAT);
+    } else {
+      setCurrencyMode(CurrencyKind.SATS);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <WalletSectionHeader profile={profile} onPress={onPressSetting} />
-      <BitcoinWalletDetailsCard balances={balances} username={username} />
-      <TransactionButtons
-        onPressSend={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SENDBTCSCREEN, {
-              receiveData: 'send',
-              title: common.send,
-              subTitle: sendScreen.btcHeaderSubTitle,
-              wallet: wallet,
-            }),
-          )
-        }
-        onPressBuy={onPressBuy}
-        onPressRecieve={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
-          )
-        }
-      />
-    </View>
+    <>
+      {/* <Animated.View
+        style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
+        <AppHeader title={username} />
+      </Animated.View> */}
+      <View
+        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
+        style={styles.largeHeader}>
+        <AppHeader title={app.appName} />
+        <GradientView
+          style={styles.largeHeaderContentWrapper}
+          colors={[
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient2,
+          ]}>
+          {app.appType === AppType.NODE_CONNECT ? (
+            <View style={styles.balanceContainer}>
+              <AppTouchable
+                style={styles.totalBalanceWrapper}
+                onPress={() => toggleDisplayMode()}>
+                <View style={styles.totalBalanceWrapper1}>
+                  {initialCurrencyMode !== CurrencyKind.SATS && (
+                    <View style={styles.currencyIconWrapper}>
+                      {getCurrencyIcon(
+                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark ? 'dark' : 'light',
+                        10,
+                      )}
+                    </View>
+                  )}
+
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {getBalance(balances)}
+                  </AppText>
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
+                <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  {home.totalBalance}
+                </AppText>
+              </AppTouchable>
+              <View style={styles.modeBalanceWrapper}>
+                <View style={styles.balanceWrapper}>
+                  <IconBTC />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.7000
+                  </AppText>
+                </View>
+                <View style={styles.balanceWrapper}>
+                  <IconLightning />
+                  <AppText variant="heading3" style={styles.balanceText}>
+                    0.1345
+                  </AppText>
+                </View>
+              </View>
+            </View>
+          ) : (
+            <View>
+              <AppTouchable
+                style={styles.onChainTotalBalanceWrapper}
+                onPress={() => toggleDisplayMode()}>
+                <View style={styles.totalBalanceWrapper1}>
+                  {initialCurrencyMode !== CurrencyKind.SATS && (
+                    <View style={styles.currencyIconWrapper}>
+                      {getCurrencyIcon(
+                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark ? 'dark' : 'light',
+                        20,
+                      )}
+                    </View>
+                  )}
+
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {getBalance(balances)}
+                  </AppText>
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
+                <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  {home.totalBalance}
+                </AppText>
+              </AppTouchable>
+            </View>
+          )}
+          <View style={styles.transCtaWrapper}>
+            <TransactionButtons
+              onPressSend={onPressSend}
+              onPressRecieve={onPressRecieve}
+              onPressBuy={onPressBuy}
+            />
+          </View>
+        </GradientView>
+      </View>
+    </>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, insets) =>
   StyleSheet.create({
-    container: {
+    smallHeader: {
+      position: 'absolute',
+      top: insets.top,
+      left: 0,
+      right: 0,
       alignItems: 'center',
+      zIndex: 10,
+      paddingHorizontal: hp(16),
+      backgroundColor: theme.colors.primaryBackground,
+    },
+    largeHeader: {
+      alignItems: 'center',
+      overflow: 'hidden',
+      marginBottom: hp(15)
+    },
+    largeHeaderContentWrapper: {
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(20),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
       width: '100%',
-      paddingBottom: Platform.OS === 'android' ? 0 : 10,
+      borderRadius: 15,
+    },
+    totalBalance: {
+      color: theme.colors.headingColor,
+    },
+    totalBalanceLabel: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    balanceText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    balanceContainer: {
+      flexDirection: 'row',
+      width: '100%',
+    },
+    totalBalanceWrapper: {
+      width: '50%',
+      borderRightWidth: 2,
+      borderRightColor: theme.colors.borderColor,
+      alignItems: 'center',
+    },
+    totalBalanceWrapper1: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    onChainTotalBalanceWrapper: {
+      alignItems: 'center',
+    },
+    modeBalanceWrapper: {
+      width: '50%',
+      alignItems: 'center',
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    currencyIconWrapper: {
+      marginRight: hp(5),
     },
     satsText: {
       color: theme.colors.headingColor,
-      marginTop: hp(10),
+      // marginTop: hp(10),
       marginLeft: hp(5),
+    },
+    transCtaWrapper: {
+      marginTop: hp(15),
+      alignItems: 'center',
     },
   });
 export default WalletDetailsHeader;
