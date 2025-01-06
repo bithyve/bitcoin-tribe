@@ -17,6 +17,7 @@
     "confirmAndProceed": "确认并继续",
     "confirmAndClose": "确认并关闭",
     "sendMax": "发送最大金额",
+    "max": "最大",
     "broadcast": "广播",
     "walletID": "钱包ID",
     "versionHistory": "版本历史",
@@ -48,7 +49,8 @@
     "later": "稍后",
     "joinGroup": "加入群组",
     "understood": "明白了",
-    "createChannel": "创建通道"
+    "createChannel": "创建通道",
+    "done": "完成"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -245,7 +247,8 @@
     "assetBackupInfo4": "下载并保存备份文件，以提高安全性。",
     "relayBackupTime": "最后的中继备份时间：",
     "step1": "步骤 1",
-    "step2": "步骤 2"
+    "step2": "步骤 2",
+    "activateWalletTypeLabel": "钱包类型"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -273,6 +276,7 @@
     "enterSendAdrsInvoiceSubTitle": "输入或粘贴发送地址或RGB发票",
     "enterAddress": "输入地址",
     "sendToTitle": "发送至",
+    "sendTitle": "发送",
     "enterAmount": "输入金额",
     "sendingToAddress": "发送至地址",
     "sendSuccessTitle": "发送\n成功",
@@ -287,7 +291,27 @@
     "sendAssetSubtitle": "扫描RGB发票",
     "totalFee": "总费用：",
      "sendBtcLoadingTitle": "正在发送比特币",
-    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。"
+    "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。",
+    "recipientAddress": "收件人地址",
+    "uploadFromGallery": "从图库上传",
+    "enterSats": "输入比特",
+    "enterFiat": "输入法定金额",
+    "availableBalance": "可用余额",
+    "fee": "费用",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "custom": "自定义",
+    "sendConfirmation": "发送确认",
+    "sendConfirmationSubTitle": "审核并确认您的交易",
+    "feeRate": "费率",
+    "feeAmount": "费用金额",
+    "total": "总计",
+    "customFee": "自定义费用",
+    "enterCustomFee": "输入自定义费用",
+    "swipeToBroadcast": "滑动以广播",
+    "broadcastingTXN": "正在广播交易...",
+    "successTitle": "成功！"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

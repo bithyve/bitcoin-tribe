@@ -14,7 +14,7 @@ import { Keys } from 'src/storage';
 
 type AppInfoCardProps = {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   icon?: ReactNode;
   value: string;
   navigation?: undefined;
@@ -38,9 +38,9 @@ function AppInfoCard(props: AppInfoCardProps) {
           <AppText variant="body1" style={styles.titleText}>
             {title}
           </AppText>
-          <AppText variant="body2" style={styles.subTitleText}>
+          {subTitle && <AppText variant="body2" style={styles.subTitleText}>
             {subTitle}
-          </AppText>
+          </AppText>}
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.contentWrapper2}>

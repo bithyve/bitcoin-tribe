@@ -28,6 +28,15 @@ export const SatsToBtc = (amountInSats: number) => {
   return amountInSats;
 };
 
+export const ConvertSatsToFiat = (
+  satsAmount: number,
+  exchangeRates,
+  currencyCode,
+) => {
+  const exchangeRate = exchangeRates[currencyCode]?.last;
+  return (satsAmount / SATOSHIS_IN_BTC) * exchangeRate;
+};
+
 export const getAmount = (amountInSats: number, satsEnabled = false) => {
   // config.NETWORK_TYPE === NetworkType.MAINNET    disable sats mode
 

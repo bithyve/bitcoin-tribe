@@ -671,12 +671,11 @@ import CloudKit
   
   @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void{
     do{
-      print(backupPath)
-      if FileManager.default.fileExists(atPath: backupPath) {
-          print("The file exists at the specified path.")
-      } else {
-          print("The file does not exist at the specified path.")
-      }
+//      if FileManager.default.fileExists(atPath: backupPath) {
+//          print("The file exists at the specified path.")
+//      } else {
+//          print("The file does not exist at the specified path.")
+//      }
       NSString(string: backupPath).expandingTildeInPath
       try restoreBackup(backupPath: backupPath, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
     }

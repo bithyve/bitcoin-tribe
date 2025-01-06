@@ -66,6 +66,7 @@ type CustomColors = {
   successPopupTitleColor: string;
   popupCTABackColor: string;
   popupCTATitleColor: string;
+  popupSentCTATitleColor: string;
   popupText: string;
   suggestedText: string;
   btcCtaBackColor: string;
@@ -83,6 +84,8 @@ type CustomColors = {
   satsProgressRemaining: string;
   errorPopupBackColor: string;
   errorPopupBorderColor: string;
+  headerCardGradientColor: string;
+  popupSentCTABackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -102,6 +105,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
+    headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -109,7 +113,9 @@ const CombinedDefaultTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.BrandeisBlue,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
@@ -201,6 +207,7 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient1: Colors.EerieBlack,
     cardGradient2: Colors.VampireBlack,
     cardGradient3: Colors.ChineseBlack,
+    headerCardGradientColor: Colors.VampireBlack,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -208,7 +215,9 @@ const CombinedDarkTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.White,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.Black,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,

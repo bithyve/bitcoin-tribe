@@ -9,7 +9,6 @@ import Settings from 'src/screens/settings/Settings';
 import SendScreen from 'src/screens/send/SendScreen';
 import ReceiveScreen from 'src/screens/receive/ReceiveScreen';
 import WalletDetails from 'src/screens/wallet/WalletDetails';
-import AssetDetails from 'src/screens/home/AssetDetails';
 import WalletAllTransactions from 'src/screens/wallet/WalletAllTransactions';
 import TransactionDetails from 'src/screens/wallet/TransactionDetails';
 import LanguageAndCurrency from 'src/screens/settings/LanguageAndCurrency';
@@ -63,6 +62,7 @@ import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
 import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
+import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -102,6 +102,10 @@ function LoginStack() {
         name={NavigationRoutes.ONBOARDINGSCREEN}
         component={OnboardingSlides}
       />
+      <Stack.Screen
+        name={NavigationRoutes.IMPORTRGBBACKUP}
+        component={ImportRgbBackup}
+      />
       
     </Stack.Navigator>
   );
@@ -127,10 +131,6 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.WALLETDETAILS}
           component={WalletDetails}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.ASSETDETAILS}
-          component={AssetDetails}
         />
         <Stack.Screen
           name={NavigationRoutes.WALLETALLTRANSACTION}

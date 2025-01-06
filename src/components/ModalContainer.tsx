@@ -140,9 +140,11 @@ const getStyles = (
     },
     titleText: {
       color: theme.colors.headingColor,
+      textAlign: 'center'
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
+      textAlign: 'center'
     },
     dashViewWrapper: {
       alignItems: 'center',
