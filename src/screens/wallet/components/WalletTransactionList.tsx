@@ -120,6 +120,7 @@ function WalletTransactionList({
             transType={item.transactionType}
             transaction={item}
             coin={coin}
+            networkType={item.txid ? 'bitcoin' : 'lightning'}
           />
         )}
         keyExtractor={item => item.txid}
