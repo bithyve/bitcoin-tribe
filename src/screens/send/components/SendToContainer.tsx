@@ -44,6 +44,7 @@ import PrimaryCTA from 'src/components/PrimaryCTA';
 import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
 
 function SendToContainer({
   wallet,
@@ -77,7 +78,7 @@ function SendToContainer({
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [inputHeight, setInputHeight] = React.useState(100);
+  const [inputHeight, setInputHeight] = React.useState(50);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
@@ -218,6 +219,8 @@ function SendToContainer({
       });
     }
     const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
+    console.log('fee', fee)
+    console.log('fee.fee', fee.fee)
     return fee.fee;
   }, [amount, selectedPriority, customFee]);
 
@@ -258,23 +261,18 @@ function SendToContainer({
             </AppText>
             <TextField
               value={recipientAddress}
-              onChangeText={text => setRecipientAddress(text)}
-              placeholder={sendScreen.recipientAddress}
-              style={[
-                styles.input,
-                recipientAddress && styles.addressInputStyle,
-              ]}
-              onContentSizeChange={event => {
-                setInputHeight(event.nativeEvent.contentSize.height);
+              onChangeText={text => {
+                setRecipientAddress(text);
               }}
               multiline={true}
-              returnKeyType={'Enter'}
-              numberOfLines={5}
-              contentStyle={
-                recipientAddress
-                  ? styles.inputContentStyle
-                  : styles.contentStyle1
-              }
+              numberOfLines={1}
+              placeholder={sendScreen.recipientAddress}
+              keyboardType={'default'}
+              inputStyle={styles.inputStyle}
+              contentStyle={styles.contentStyle}
+              rightIcon={<ClearIcon />}
+              onRightTextPress={() => setRecipientAddress('')}
+              rightCTAStyle={styles.rightCTAStyle}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -482,13 +480,6 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     contentStyle: {
       marginTop: 0,
     },
-    inputContentStyle: {
-      borderRadius: 0,
-      marginVertical: hp(25),
-      marginBottom: 0,
-      height: Math.max(95, inputHeight),
-      marginTop: 0,
-    },
     feeContainer: {
       flexDirection: 'row',
     },
@@ -523,14 +514,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginRight: hp(5),
     },
     input: {
-      marginVertical: hp(10),
+      width: '85%',
     },
-    addressInputStyle: {
-      borderRadius: hp(20),
-      height: Math.max(100, inputHeight),
-    },
-    contentStyle1: {
-      height: hp(50),
+    rightCTAStyle: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default SendToContainer;
