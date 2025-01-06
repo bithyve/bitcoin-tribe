@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -12,7 +6,6 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
-import coinselect from 'coinselect';
 
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -81,6 +74,12 @@ function SendToContainer({
   const [inputHeight, setInputHeight] = React.useState(50);
   const [averageTxFee, setAverageTxFee] = useState({});
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const {
+    mutate: executePhaseOneTransaction,
+    isLoading,
+    error,
+    data,
+  } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const styles = React.useMemo(
@@ -127,8 +126,22 @@ function SendToContainer({
       );
     }, 400);
   };
+  const initiaTransaction = () => {
+    setVisible(true);
+    const transactionDetails = {
+      sender: wallet,
+      recipient: {
+        address: recipientAddress,
+        amount: parseFloat(amount.replace(/,/g, '')),
+      },
+      averageTxFee,
+      selectedPriority,
+      customFeePerByte: customFee,
+    };
+    executePhaseOneTransaction(transactionDetails);
+  };
 
-  const initiateSend = () => {
+  const broadcastTransaction = () => {
     if (selectedPriority === TxPriority.CUSTOM) {
       averageTxFee.custom = {
         averageTxFee: Number(customFee),
@@ -189,44 +202,45 @@ function SendToContainer({
           sendTransactionMutation,
           _ => _.data.txPrerequisites[selectedPriority]?.fee,
         ) || 0;
-
-  const calculatedFee = useCallback(() => {
-    const sanitizedAmount = amount.replace(/,/g, '');
-    const numericAmount = Number(sanitizedAmount);
-    const recipients = [
-      {
-        address,
-        amount: numericAmount,
-      },
-    ];
-    const feePerByte =
-      selectedPriority === TxPriority.CUSTOM
-        ? Number(customFee)
-        : getFeeRateByPriority(selectedPriority);
-    const inputUTXOs = [
-      ...wallet.specs.confirmedUTXOs,
-      ...wallet.specs.unconfirmedUTXOs,
-    ];
-    let confirmedBalance = 0;
-    inputUTXOs.forEach(utxo => {
-      confirmedBalance += utxo.value;
-    });
-    const outputUTXOs = [];
-    for (const recipient of recipients) {
-      outputUTXOs.push({
-        address: recipient.address,
-        value: recipient.amount,
-      });
-    }
-    const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
-    return fee.fee;
-  }, [amount, selectedPriority, customFee]);
+  // console.log('data', data[selectedPriority].fee);
+  // const calculatedFee = useCallback(() => {
+  //   const sanitizedAmount = amount.replace(/,/g, '');
+  //   const numericAmount = Number(sanitizedAmount);
+  //   const recipients = [
+  //     {
+  //       address,
+  //       amount: numericAmount,
+  //     },
+  //   ];
+  //   const feePerByte =
+  //     selectedPriority === TxPriority.CUSTOM
+  //       ? Number(customFee)
+  //       : getFeeRateByPriority(selectedPriority);
+  //   const inputUTXOs = [
+  //     ...wallet.specs.confirmedUTXOs,
+  //     ...wallet.specs.unconfirmedUTXOs,
+  //   ];
+  //   let confirmedBalance = 0;
+  //   inputUTXOs.forEach(utxo => {
+  //     confirmedBalance += utxo.value;
+  //   });
+  //   const outputUTXOs = [];
+  //   for (const recipient of recipients) {
+  //     outputUTXOs.push({
+  //       address: recipient.address,
+  //       value: recipient.amount,
+  //     });
+  //   }
+  //   const fee = coinselect(inputUTXOs, outputUTXOs, feePerByte);
+  //   return fee.fee;
+  // }, [amount, selectedPriority, customFee]);
 
   const onSendMax = async () => {
     setIsSendMax(true);
     setSelectedPriority(TxPriority.LOW);
     const availableToSpend = balances;
-    const txnFee = await calculatedFee();
+    const txnFee = 226;
+    // const txnFee = await calculatedFee();
     if (
       initialCurrencyMode === CurrencyKind.SATS ||
       initialCurrencyMode === CurrencyKind.BITCOIN
@@ -392,7 +406,7 @@ function SendToContainer({
           <PrimaryCTA
             disabled={!amount || !recipientAddress}
             title={common.next}
-            onPress={() => setVisible(true)}
+            onPress={() => initiaTransaction()}
             width={'100%'}
           />
         </View>
@@ -435,7 +449,7 @@ function SendToContainer({
           }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
-          onPress={() => initiateSend()}
+          onPress={() => broadcastTransaction()}
         />
       </ModalContainer>
     </View>
