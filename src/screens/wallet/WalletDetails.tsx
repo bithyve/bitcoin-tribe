@@ -125,7 +125,7 @@ function WalletDetails({ navigation, route }) {
       <WalletDetailsHeader
         wallet={wallet}
         rgbWallet={rgbWallet}
-        username={walletName ? walletName : 'Hi!'}
+        username={walletName ? walletName : 'Satoshi’s Palette'}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         onPressSend={() =>
