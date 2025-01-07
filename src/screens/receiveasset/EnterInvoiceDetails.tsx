@@ -30,7 +30,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: appType !== AppType.ON_CHAIN ? '55%' : '69%',
+      height: appType !== AppType.ON_CHAIN ? '54%' : '66%',
     },
     footerWrapper: {
       height: '25%',

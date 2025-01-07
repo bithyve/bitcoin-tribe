@@ -249,7 +249,7 @@ function SendToContainer({
               multiline={true}
               numberOfLines={1}
               placeholder={sendScreen.recipientAddress}
-              inputStyle={styles.inputStyle}
+              inputStyle={styles.recipientInputStyle}
               contentStyle={styles.contentStyle}
               rightIcon={<ClearIcon />}
               onRightTextPress={() => setRecipientAddress('')}
@@ -446,6 +446,9 @@ const getStyles = (theme: AppTheme) =>
     recipientAddressLabel: {
       marginVertical: hp(10),
       color: theme.colors.secondaryHeadingColor,
+    },
+    recipientInputStyle: {
+      width: '80%',
     },
     inputStyle: {
       // width: '80%',
