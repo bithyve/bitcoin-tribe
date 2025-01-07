@@ -206,6 +206,8 @@ export default class WalletOperations {
       recipientAddresses,
       senderAddresses,
       blockTime: tx.blocktime,
+      inputs: inputs,
+      outputs: outputs,
     };
     return transaction;
   };

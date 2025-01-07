@@ -113,6 +113,33 @@ export interface Transaction {
   senderAddresses?: string[];
   blockTime?: number;
   tags?: string[];
+  inputs: Input[];
+  outputs: Output[];
+}
+
+interface Input {
+  addresses: string[];
+  scriptSig:{
+    asm: string;
+    hex: string;
+  };
+  sequence: number;
+  txid: string;
+  value: number;
+  vout: number;
+}
+
+interface Output {
+  n: number;
+  scriptPubKey: {
+    address: string;
+    addresses: string[];
+    asm: string;
+    desc: string;
+    hex: string;
+    type: string;
+  };
+  value: number;
 }
 
 export interface Balances {
