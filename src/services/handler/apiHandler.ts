@@ -982,6 +982,38 @@ export class ApiHandler {
     }
   }
 
+  static async issueAssetUda({
+    name,
+    ticker,
+    details,
+    mediaFilePath,
+    attachmentsFilePaths,
+  }: {
+    name: string;
+    ticker: string;
+    details: string;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+  }) {
+    try {
+      const response = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getAssetTransactions({
     assetId,
     schema,

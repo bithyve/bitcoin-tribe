@@ -11,6 +11,7 @@ import android.os.HandlerThread
 import com.bithyve.tribe.AppConstants
 import com.bithyve.tribe.RGBHelper
 import com.bithyve.tribe.RGBWalletRepository
+import com.facebook.react.bridge.ReadableArray
 import org.rgbtools.BitcoinNetwork
 
 
@@ -148,6 +149,26 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: ReadableArray, promise: Promise){
+        backgroundHandler.post{
+            try {
+                val attachments = mutableListOf<String>()
+                for (i in 0 until attachmentsFilePaths.size()) {
+                    attachments.add(attachmentsFilePaths.getString(i))
+                }
+                val response = RGBHelper.issueAssetUda(name,ticker, details, mediaFilePath, attachments)
+                promise.resolve(response)
+            }catch (e: Exception) {
+                Log.d(TAG, "issueAssetUda:e.message ${e.message}")
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
     fun getRgbAssetMetaData( assetId: String, promise: Promise){
         promise.resolve(RGBHelper.getMetadata(assetId))
     }
@@ -213,7 +234,6 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     @ReactMethod
     fun restore(mnemonic: String,filePath: String, promise: Promise){
         val response = RGBHelper.restore(mnemonic, filePath, reactApplicationContext)
-        Log.d(TAG, "restore: $response")
         promise.resolve(response)
     }
 
