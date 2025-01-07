@@ -224,10 +224,17 @@ import CloudKit
                 try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
               }
           }
+        
+        if let udaAssets = assets.cfa {
+          try udaAssets.forEach { assetUda in
+              try wallet.refresh(online: online, assetId: assetUda.assetId, filter: [], skipSync: false)
+            }
+        }
 
           var jsonArray = [[String: Any]]()
           var jsonRgb121Array = [[String: Any]]()
-          
+        var udaArray = [[String: Any]]()
+
           if let niaAssets = assets.nia {
               for asset in niaAssets {
                   var jsonObject = [String: Any]()
@@ -273,10 +280,57 @@ import CloudKit
                   jsonRgb121Array.append(jsonRgb121Object)
               }
           }
+        
+        if let udaAssets = assets.uda {
+          for asset in udaAssets {
+                var udaObject = [String: Any]()
+                udaObject["assetId"] = asset.assetId
+                udaObject["balance"] = [
+                    "future": asset.balance.future,
+                    "settled": asset.balance.settled,
+                    "spendable": asset.balance.spendable,
+                ]
+            var media = [
+              "filePath": asset.token?.media?.filePath,
+              "mime": asset.token?.media?.mime,
+              "digest": asset.token?.media?.digest,
+            ]
+            var attachmentsArray = [String: [String: Any]]()
+            if let attachments = asset.token?.attachments {
+                for (key, value) in attachments {
+                    attachmentsArray["\(key)"] = [
+                        "filePath": value.filePath,
+                        "mime": value.mime,
+                        "digest": value.digest
+                    ]
+                }
+            }
+                udaObject["ticker"] = asset.ticker
+                udaObject["details"] = asset.details
+                udaObject["name"] = asset.name
+                udaObject["precision"] = asset.precision
+                udaObject["issuedSupply"] = asset.issuedSupply
+                udaObject["timestamp"] = asset.timestamp
+                udaObject["addedAt"] = asset.addedAt
+                udaObject["token"] = [
+                  "index": asset.token?.index,
+                  "ticker": asset.token?.ticker,
+                  "name": asset.token?.name,
+                  "details": asset.token?.details,
+                  "embeddedMedia": asset.token?.embeddedMedia,
+                  "reserves": asset.token?.reserves,
+                  "attachments": attachmentsArray,
+                  "media": media
+                ]
+                udaObject["assetIface"] = "\(asset.assetIface)"
+                udaArray.append(udaObject)
+            }
+        }
           
           let data: [String: Any] = [
               "nia": jsonArray,
-              "cfa": jsonRgb121Array
+              "cfa": jsonRgb121Array,
+              "uda": udaArray
           ]
           
           let json = Utility.convertToJSONString(params: data)
@@ -499,6 +553,35 @@ import CloudKit
           "assetId": asset?.assetId,
           "name": asset?.name,
           "description": asset?.details,
+          "precision": asset?.precision,
+          "futureBalance": asset?.balance.future,
+          "settledBalance": asset?.balance.settled,
+          "spendableBalance": asset?.balance.spendable,
+          "dataPaths": dataPaths
+        ]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      }
+    } catch{
+      print(error)
+      let data: [String: Any] = [
+        "error": error.localizedDescription,
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func issueAssetUda(name: String,ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: [String], callback: @escaping ((String) -> Void)) -> Void{
+    do{
+      return try handleMissingFunds {
+        let asset = try self.rgbManager.rgbWallet?.issueAssetUda(online: self.rgbManager.online!, ticker: ticker, name: name, details: details, precision: 0, mediaFilePath: mediaFilePath, attachmentsFilePaths: attachmentsFilePaths)
+        var dataPaths: [[String: Any]] = []
+        let data: [String: Any] = [
+          "assetId": asset?.assetId,
+          "name": asset?.name,
+          "ticker": asset?.ticker,
+          "details": asset?.details,
           "precision": asset?.precision,
           "futureBalance": asset?.balance.future,
           "settledBalance": asset?.balance.settled,

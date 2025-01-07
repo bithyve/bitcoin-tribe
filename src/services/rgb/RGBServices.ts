@@ -232,6 +232,29 @@ export default class RGBServices {
     }
   };
 
+  static issueAssetUda = async (
+    name: string,
+    ticker: string,
+    details: string,
+    mediaFilePath: string,
+    attachmentsFilePaths: string[],
+    appType: AppType,
+    api: RLNNodeApiServices,
+  ): Promise<{}> => {
+    if (appType === AppType.NODE_CONNECT) {
+      // todo
+    } else {
+      const data = await RGB.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+      );
+      return JSON.parse(data);
+    }
+  };
+
   static sendAsset = async (
     assetId: string,
     blindedUTXO: string,

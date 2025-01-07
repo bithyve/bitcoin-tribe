@@ -137,6 +137,7 @@ export interface RgbUnspent {
 export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
+  UDA = 'UDA'
 }
 
 export enum AssetFace {
