@@ -273,10 +273,9 @@ function SendToContainer({
               keyboardType={'numeric'}
               inputStyle={styles.inputStyle}
               contentStyle={styles.contentStyle}
-              // icon={<IconBitcoin />}
-              rightText={common.max}
-              onRightTextPress={() => {}}
-              rightCTATextColor={theme.colors.accent1}
+              // rightText={common.max}
+              // onRightTextPress={() => {}}
+              // rightCTATextColor={theme.colors.accent1}
             />
           </View>
           <View style={styles.availableBalanceWrapper}>
@@ -449,7 +448,8 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     inputStyle: {
-      width: '80%',
+      // width: '80%',
+      width: '100%',
     },
     customFeeInputStyle: {
       width: '80%',
