@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { StyleSheet, View, Image, GestureResponderEvent } from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Image, GestureResponderEvent, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp, windowHeight } from 'src/constants/responsive';
@@ -10,37 +10,30 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import Capitalize from 'src/utils/capitalizeUtils';
 import AssetChip from './AssetChip';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import Identicon from './Identicon';
 
 type AssetCardProps = {
-  image?: string;
-  name?: string;
-  ticker?: string;
-  details?: string;
+  asset: Asset;
   tag?: string;
-  assetId?: string;
-  amount?: string;
   onPress?: (event: GestureResponderEvent) => void;
-  assetIface?: AssetFace;
 };
 
 const AssetCard = (props: AssetCardProps) => {
   const {
-    image,
-    name,
-    ticker,
     tag,
     onPress,
-    assetId,
-    amount,
-    details,
-    assetIface,
+    asset,
   } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(
-    () => getStyles(theme, amount.toString().length),
-    [theme, amount],
+
+  const balance = useMemo(() => {
+    return asset.balance.future;
+  }, [asset.balance.future]);
+
+  const styles = useMemo(
+    () => getStyles(theme),
+    [theme],
   );
 
   return (
@@ -53,10 +46,13 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient3,
         ]}>
         <View style={styles.assetImageWrapper}>
-          {assetIface === AssetFace.RGB25 ? (
+          {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
             <Image
               source={{
-                uri: image,
+                uri: Platform.select({
+                  android: `file://${asset.media?.filePath}`,
+                  ios: asset.media?.filePath,
+                }),
               }}
               style={styles.imageStyle}
             />
@@ -64,7 +60,7 @@ const AssetCard = (props: AssetCardProps) => {
             <View style={styles.identiconWrapper}>
               <View style={styles.identiconWrapper2}>
                 <Identicon
-                  value={assetId}
+                  value={asset.assetId}
                   style={styles.identiconView}
                   size={windowHeight > 670 ? 110 : 90}
                 />
@@ -82,24 +78,24 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
         </View>
         <View style={styles.contentWrapper}>
-          {ticker && <AppText variant="caption" style={styles.titleText}>
-            {ticker}
+          {asset.ticker && <AppText variant="caption" style={styles.titleText}>
+            {asset.ticker}
           </AppText>}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
-            {name}
+            {asset.name}
           </AppText>
           <AppText
             variant="caption"
             style={styles.amountText}
             numberOfLines={1}>
-            {numberWithCommas(amount)}
+            {numberWithCommas(balance)}
           </AppText>
         </View>
       </GradientView>
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme, amtLength) =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       height: hp(205),

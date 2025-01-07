@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import openLink from 'src/utils/OpenLink';
@@ -16,7 +16,6 @@ import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
 import UnspentUTXOElement from './UnspentUTXOElement';
-// import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
@@ -29,29 +28,30 @@ import AppType from 'src/models/enums/AppType';
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
 const ViewUnspentScreen = () => {
-  const { mutate, data, isLoading }: UseMutationResult<RgbUnspent[]> =
-    useMutation(ApiHandler.viewUtxos);
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { wallet, assets } = translations;
+  const { wallet, assets } = translations || { wallet: {}, assets: {} };
+  const styles = useMemo(() => getStyles(theme), [theme]);
+
+  const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const combined: Asset[] = useMemo(() => [...coins, ...collectibles], [coins, collectibles]);
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
-  // Deserialize each UTXO string back into an object
-  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
-  );
+  const UnspentUTXOData = useMemo(() => {
+    if (!storedWallet || !storedWallet.utxos) return [];
+    return storedWallet.utxos.map(utxoStr => JSON.parse(utxoStr));
+  }, [storedWallet]);
+
+  const { mutate, isLoading } = useMutation(ApiHandler.viewUtxos);
+
   useEffect(() => {
     mutate();
-  }, []);
+  }, [mutate]);
 
-  // useEffect(() => {
-  //   console.log('data', JSON.stringify(data));
-  // }, [data]);
-
-  const redirectToBlockExplorer = txid => {
+  const redirectToBlockExplorer = (txid: string) => {
     openLink(
       `https://mempool.space${
         config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
@@ -61,23 +61,20 @@ const ViewUnspentScreen = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={wallet.unspentTitle} subTitle={''} enableBack={true} />
-      {/* {isLoading ? (
-        <ModalLoading visible={isLoading} />
-      ) : ( */}
+      <AppHeader title={wallet.unspentTitle || 'Unspent Outputs'} enableBack={true} />
       <FlatList
         data={UnspentUTXOData}
         renderItem={({ item }) => (
-          <AppTouchable
-            onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
+          <AppTouchable onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
               transID={
-                app.appType === AppType.NODE_CONNECT
+                app?.appType === AppType.NODE_CONNECT
                   ? `${item.utxo.outpoint}`
                   : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
               }
               satsAmount={`${item.utxo.btcAmount}`}
-              assetID={item.rgbAllocations && item.rgbAllocations}
+              rgbAllocations={item.rgbAllocations || []}
+              assets={combined || []}
             />
           </AppTouchable>
         )}
@@ -96,7 +93,6 @@ const ViewUnspentScreen = () => {
           />
         }
       />
-      {/* )} */}
     </ScreenContainer>
   );
 };
