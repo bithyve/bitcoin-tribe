@@ -266,7 +266,8 @@
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
     "btcHeaderSubTitle": "Scansiona un indirizzo Bitcoin",
-    "optionCardTitle": "oppure inserisci i dettagli manualmente",
+    "optionCardTitle": "Inserisci i dettagli manualmente",
+    "enterInvoiceManually": "Inserisci la fattura manualmente",
     "optionCardSubTitle": "Inserisci un indirizzo Bitcoin o una fattura RGB",
     "sendAssetOptionCardSubTitle": "Inserisci una fattura RGB",
     "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
@@ -276,7 +277,7 @@
     "enterSendAdrsInvoiceSubTitle": "Inserisci o incolla l'indirizzo di invio o la fattura RGB",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
-     "sendTitle": "Invia",
+    "sendTitle": "Invia",
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",

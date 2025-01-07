@@ -266,7 +266,8 @@
   "sendScreen": {
     "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
     "btcHeaderSubTitle": "ビットコインアドレスをスキャンする",
-    "optionCardTitle": "または手動で詳細を入力",
+    "optionCardTitle": "詳細を手動で入力する",
+    "enterInvoiceManually": "請求書を手動で入力する",
     "optionCardSubTitle": "ビットコインアドレスまたはRGB請求書を入力",
     "sendAssetOptionCardSubTitle": "RGB請求書を入力",
     "sendBtcOptionCardSubTitle": "ビットコインアドレスを入力",

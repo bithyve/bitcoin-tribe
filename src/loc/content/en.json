@@ -266,7 +266,8 @@
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
     "btcHeaderSubTitle": "Scan a Bitcoin Address",
-    "optionCardTitle": "or Enter details manually",
+    "optionCardTitle": "Enter details manually",
+    "enterInvoiceManually": "Enter invoice manually",
     "optionCardSubTitle": "Enter a Bitcoin Address or RGB invoice",
     "sendAssetOptionCardSubTitle": "Enter a RGB invoice",
     "sendBtcOptionCardSubTitle": "Enter a Bitcoin Address",
