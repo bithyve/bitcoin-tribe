@@ -97,7 +97,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
-        <AppHeader title={app.appName} />
+        <AppHeader title={username} />
         <View style={styles.largeHeaderContentWrapper}>
           {app.appType === AppType.NODE_CONNECT ? (
             <View style={styles.balanceContainer}>
