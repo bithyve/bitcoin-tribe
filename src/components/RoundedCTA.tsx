@@ -66,16 +66,17 @@ const getStyles = (width, buttonColor) =>
       height: hp(40),
       width: width,
       alignItems: 'center',
+      justifyContent: 'center',
     },
     labelStyle: {
       marginLeft: 8,
       textAlign: 'center',
+      textAlignVertical: 'center',
     },
     roundedCTATitle: {
       fontSize: 16,
       fontFamily: Fonts.LufgaRegular,
-      lineHeight: 16 * 1.5,
-      height: 25,
+      lineHeight: 16 * 1.6,
       marginLeft: 10,
     },
   });
