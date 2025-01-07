@@ -34,7 +34,7 @@ function RoundedCTA(props: RoundedCTAProps) {
     ],
     textColor = theme.colors.headingColor,
   } = props;
-  const styles = getStyles(width, buttonColor);
+  const styles = getStyles(width, buttonColor, height);
   return (
     <GradientView style={styles.ctaContainerStyle} colors={colors}>
       <Button
@@ -53,7 +53,7 @@ function RoundedCTA(props: RoundedCTAProps) {
     </GradientView>
   );
 }
-const getStyles = (width, buttonColor) =>
+const getStyles = (width, buttonColor, height) =>
   StyleSheet.create({
     ctaContainerStyle: {
       borderRadius: 30,
@@ -72,6 +72,7 @@ const getStyles = (width, buttonColor) =>
       marginLeft: 8,
       textAlign: 'center',
       textAlignVertical: 'center',
+      marginVertical: height,
     },
     roundedCTATitle: {
       fontSize: 16,

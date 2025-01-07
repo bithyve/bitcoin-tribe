@@ -94,7 +94,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginBottom: hp(15),
+      // marginBottom: hp(15),
       marginTop: Platform.OS === 'android' ? hp(15) : 0,
       alignItems: 'center',
     },

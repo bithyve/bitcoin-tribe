@@ -87,6 +87,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         backColor={theme.colors.cardBackground}
         disabled={true}
         transaction={transaction}
+        networkType={transaction.txid ? 'bitcoin' : 'lightning'}
       />
       {/* {transaction.transactionType === TransactionType.SENT && (
         <LabeledContent

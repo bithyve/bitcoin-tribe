@@ -9,7 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
 import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
@@ -57,6 +57,7 @@ function AppBackup({ navigation }) {
           />
         )}
         keyExtractor={item => item}
+        style={styles.container}
       />
       {!viewOnly && (
         <Buttons
@@ -104,5 +105,10 @@ function AppBackup({ navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) => StyleSheet.create({});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      marginTop: hp(20),
+    },
+  });
 export default AppBackup;
