@@ -23,14 +23,11 @@ function TransactionDetails({ route }) {
     <ScreenContainer>
       <AppHeader title={wallet.transactionDetailTitle} />
       <TransactionDetailsContainer
-        transId={transaction.txid}
-        transDate={transaction.date}
         transAmount={
           app.appType === AppType.NODE_CONNECT
             ? `${transaction.received}`
-            : `${transaction.amount}`
+            : `${transaction.amount - transaction.fee}`
         }
-        transType={transaction.transactionType}
         transaction={transaction}
       />
     </ScreenContainer>

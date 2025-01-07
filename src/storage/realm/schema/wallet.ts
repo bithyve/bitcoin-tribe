@@ -89,6 +89,53 @@ export const TransactionSchema: ObjectSchema = {
     senderAddresses: 'string[]',
     blockTime: 'int?',
     tags: 'string[]',
+    inputs: `${RealmSchema.Input}[]`,
+    outputs: `${RealmSchema.Output}[]`,
+  },
+};
+
+export const ScriptSigSchema = {
+  name: 'ScriptSig',
+  embedded: true,
+  properties: {
+    asm: 'string?',
+    hex: 'string?',
+  },
+};
+
+export const ScriptPubKeySchema = {
+  name: 'ScriptPubKey',
+  embedded: true,
+  properties: {
+    address: 'string?',
+    addresses: 'string?[]',
+    asm: 'string?',
+    desc: 'string?',
+    hex: 'string?',
+    type: 'string?',
+  }
+};
+
+export const InputSchema = {
+  name: RealmSchema.Input,
+  embedded: true,
+  properties: {
+    addresses: 'string[]',
+    scriptSig: 'ScriptSig?',
+    sequence: 'int?',
+    txid: 'string?',
+    value: 'float?',
+    vout: 'int?',
+  },
+};
+
+export const OutputSchema = {
+  name: RealmSchema.Output,
+  embedded: true,
+  properties: {
+    n: 'int',
+    scriptPubKey: 'ScriptPubKey?',
+    value: 'float?',
   },
 };
 
@@ -97,7 +144,7 @@ export const TransactionToAddressMappingSchema: ObjectSchema = {
   embedded: true,
   properties: {
     txid: 'string',
-    addresses: 'string[]',
+    addresses: 'string?[]',
   },
 };
 
