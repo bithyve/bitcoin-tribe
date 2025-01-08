@@ -81,7 +81,7 @@
     "enterRecoveryPhrase": "12語のリカバリーフレーズを入力してください",
     "mismatchPasscode": "パスコードが一致しません。もう一度お試しください",
     "btcBackedAssetTitle": "ビットコイン担保資産",
-    "btcBackedAssetSubTitle": "RGBプロトコルは、誰でも最も安全なブロックチェーン上で資産を発行、送信、または受信できるようにします",
+    "btcBackedAssetSubTitle": "RGBプロトコルは、最も安全なブロックチェーン上で資産を発行、送信、または受信することを誰にでも許可し、ウォレットからのサトシをこれらの資産の燃料として使用します。",
     "btcBackedAssetInfo": "ウォレットのSatsは、これらの資産の燃料として使用されます。",
     "rememberPasscodeTitle": "パスコードを覚えておいてください",
     "rememberPasscodeSubTitle": "パスコードを覚え、12単語のリカバリーキーを書き留めてアプリをバックアップしてください",

@@ -16,22 +16,17 @@ type OnboardingSlidesProps = {
 };
 
 function OnboardingSlideComponent(props: OnboardingSlidesProps) {
-  const {
-    title,
-    subTitle,
-    illustration,
-    paragraph,
-  } = props;
+  const { title, subTitle, illustration, paragraph } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
     <View style={styles.wrapper}>
       <View style={styles.illustrationWrapper}>{illustration}</View>
       <View style={styles.contentWrapper1}>
-        <AppText variant="heading1" style={styles.titleText}>
+        <AppText variant="heading2" style={styles.titleText}>
           {title}
         </AppText>
-        <AppText variant="heading3" style={styles.subTitleText}>
+        <AppText variant="body2" style={styles.subTitleText}>
           {subTitle}
         </AppText>
       </View>
@@ -70,15 +65,16 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     titleText: {
-      fontSize: 30,
       color: theme.colors.headingColor,
       textAlign: 'center',
       flexWrap: 'wrap',
+      marginBottom: hp(5),
     },
     subTitleText: {
       textAlign: 'center',
       color: theme.colors.secondaryHeadingColor,
       flexWrap: 'wrap',
+      width: '80%',
     },
     infoText: {
       textAlign: 'center',

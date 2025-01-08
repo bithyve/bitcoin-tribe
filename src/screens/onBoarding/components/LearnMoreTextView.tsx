@@ -33,7 +33,6 @@ const getStyles = (theme: AppTheme) =>
     learnMoreWrapper1: {
       width: '90%',
       flexDirection: 'row',
-      marginHorizontal: hp(20),
       marginVertical: hp(5),
     },
     learnMoreTitleText: {
