@@ -83,12 +83,10 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       color: theme.colors.headingColor,
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     inputStyle: {
@@ -193,7 +191,7 @@ const EnterInvoiceDetails = () => {
           rightText={sendScreen.paste}
           onRightTextPress={() => handlePasteAddress()}
           rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.primaryCTAText}
+          rightCTATextColor={theme.colors.accent1}
         />
 
         <TextField

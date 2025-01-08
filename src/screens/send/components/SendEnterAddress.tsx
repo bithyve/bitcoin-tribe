@@ -42,9 +42,7 @@ function SendEnterAddress({
       return;
     }
     paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(
-      app.networkType,
-    );
+    const network = WalletUtilities.getNetworkByType(app.networkType);
 
     let {
       type: paymentInfoKind,
@@ -113,7 +111,7 @@ function SendEnterAddress({
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
-        rightCTATextColor={theme.colors.primaryCTAText}
+        rightCTATextColor={theme.colors.accent1}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -146,12 +144,10 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     contentStyle: {
