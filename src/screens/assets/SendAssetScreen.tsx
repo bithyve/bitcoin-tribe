@@ -371,7 +371,7 @@ const SendAssetScreen = () => {
             selectedPriority={selectedPriority}
             setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
             feeRateByPriority={''}
-            estimatedBlocksByPriority={10}
+            estimatedBlocksByPriority={1}
             disabled={false}
           />
         </View>
@@ -418,6 +418,11 @@ const SendAssetScreen = () => {
             onSuccessStatus={successStatus}
             onSuccessPress={() => navigation.goBack()}
             onPress={sendAsset}
+            estimateBlockTime={
+              selectedPriority === TxPriority.CUSTOM
+                ? 1
+                : getEstimatedBlocksByPriority(selectedPriority)
+            }
           />
         </ModalContainer>
       </ScrollView>

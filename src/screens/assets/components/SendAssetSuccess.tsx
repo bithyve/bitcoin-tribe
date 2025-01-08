@@ -18,6 +18,7 @@ type sendAssetSuccessProps = {
   onSuccessStatus: boolean;
   onSuccessPress: () => void;
   selectedPriority: string;
+  estimateBlockTime: number;
 };
 function SendAssetSuccess(props: sendAssetSuccessProps) {
   const {
@@ -28,6 +29,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     onSuccessStatus,
     onSuccessPress,
     selectedPriority,
+    estimateBlockTime,
   } = props;
 
   const theme: AppTheme = useTheme();
@@ -56,7 +58,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ 10 {'min'}
+            {feeRate} sat/vB ~ {estimateBlockTime * 10} {'min'}
           </AppText>
         </View>
       </View>
