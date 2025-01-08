@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -19,7 +20,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Keys, Storage } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
-import { TxPriority } from 'src/services/wallets/enums';
+import { PaymentInfoKind, TxPriority } from 'src/services/wallets/enums';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -38,6 +39,8 @@ import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import WalletUtilities from 'src/services/wallets/operations/utils';
+import config from 'src/utils/config';
 
 function SendToContainer({
   wallet,
@@ -122,6 +125,7 @@ function SendToContainer({
       );
     }, 400);
   };
+
   const initiateSend = () => {
     setVisible(true);
     if (app.appType === AppType.ON_CHAIN) {
@@ -233,6 +237,35 @@ function SendToContainer({
     }
   };
 
+  const handlePasteAddress = async () => {
+    const getClipboardValue = await Clipboard.getString();
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let {
+      type: paymentInfoKind,
+      address,
+      amount,
+    } = WalletUtilities.addressDiff(getClipboardValue, network);
+    if (amount) {
+      amount = Math.trunc(amount * 1e8);
+    }
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      switch (paymentInfoKind) {
+        case PaymentInfoKind.ADDRESS:
+          setRecipientAddress(address);
+          break;
+        case PaymentInfoKind.PAYMENT_URI:
+          setRecipientAddress(address);
+          break;
+        default:
+          Toast(sendScreen.invalidBtcAddress, true);
+      }
+    } else {
+      Keyboard.dismiss();
+      Toast(sendScreen.invalidBtcAddress, true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
@@ -251,8 +284,13 @@ function SendToContainer({
               placeholder={sendScreen.recipientAddress}
               inputStyle={styles.recipientInputStyle}
               contentStyle={styles.contentStyle}
-              rightIcon={<ClearIcon />}
-              onRightTextPress={() => setRecipientAddress('')}
+              rightText={!recipientAddress && sendScreen.paste}
+              rightIcon={recipientAddress && <ClearIcon />}
+              onRightTextPress={() =>
+                recipientAddress
+                  ? setRecipientAddress('')
+                  : handlePasteAddress()
+              }
               rightCTAStyle={styles.rightCTAStyle}
             />
           </View>
