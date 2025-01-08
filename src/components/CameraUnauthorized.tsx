@@ -45,6 +45,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: wp(8),
+      marginTop: hp(20),
     },
     titleText: {
       color: theme.colors.headingColor,

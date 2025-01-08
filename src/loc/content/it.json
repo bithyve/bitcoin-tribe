@@ -266,7 +266,8 @@
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
     "btcHeaderSubTitle": "Scansiona un indirizzo Bitcoin",
-    "optionCardTitle": "oppure inserisci i dettagli manualmente",
+    "optionCardTitle": "Inserisci i dettagli manualmente",
+    "enterInvoiceManually": "Inserisci la fattura manualmente",
     "optionCardSubTitle": "Inserisci un indirizzo Bitcoin o una fattura RGB",
     "sendAssetOptionCardSubTitle": "Inserisci una fattura RGB",
     "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
@@ -276,7 +277,7 @@
     "enterSendAdrsInvoiceSubTitle": "Inserisci o incolla l'indirizzo di invio o la fattura RGB",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
-     "sendTitle": "Invia",
+    "sendTitle": "Invia",
     "enterAmount": "Inserisci importo",
     "sendingToAddress": "Invio all'indirizzo",
     "sendSuccessTitle": "Invia\nRiuscito",
@@ -421,7 +422,8 @@
     "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro.",
     "issueAssetLoadingTitle": "Emissione dell'Asset",
     "issueAssetLoadingSubTitle": "Il tuo asset è in fase di creazione—attendi un momento! Rilassati, il tuo nuovo asset sarà emesso a breve.",
-    "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615."
+    "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615.",
+    "swipeToSend": "Scorri per inviare"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

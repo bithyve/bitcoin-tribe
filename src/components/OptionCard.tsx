@@ -5,10 +5,9 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppText from 'src/components/AppText';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
-import IconArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
+import IconArrowLight from 'src/assets/images/icon_arrowr2light.svg';
 import IconRightArrow from 'src/assets/images/icon_right_arrow.svg';
 import IconRightArrowLight from 'src/assets/images/icon_right_arrow_light.svg';
-
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -54,9 +53,11 @@ function OptionCard(props: OptionCardProps) {
             <AppText variant="heading3" style={styles.menuCardTitle}>
               {title}
             </AppText>
-            {subTitle &&<AppText variant="body1" style={styles.menuCardSubTitle}>
-              {subTitle}
-            </AppText>}
+            {subTitle && (
+              <AppText variant="body1" style={styles.menuCardSubTitle}>
+                {subTitle}
+              </AppText>
+            )}
           </View>
           <View style={styles.iconWrapper}>
             {showRightArrow ? (
@@ -80,9 +81,9 @@ const getStyles = (theme: AppTheme, showRightArrow) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      padding: hp(16),
+      padding: hp(15),
       marginVertical: hp(10),
-      borderRadius: 30,
+      borderRadius: 16,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
     },
@@ -91,7 +92,7 @@ const getStyles = (theme: AppTheme, showRightArrow) =>
       width: '100%',
     },
     contentWrapper: {
-      width: showRightArrow ? '80%' : '85%',
+      width: '90%',
       marginVertical: hp(5),
     },
     menuCardTitle: {
@@ -102,9 +103,9 @@ const getStyles = (theme: AppTheme, showRightArrow) =>
       color: theme.colors.secondaryHeadingColor,
     },
     iconWrapper: {
-      width: '15%',
+      width: '10%',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     iconContainer: {
       marginVertical: hp(10),

@@ -15,6 +15,7 @@ import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import { Code } from 'react-native-vision-camera';
+import { hp } from 'src/constants/responsive';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -63,7 +64,7 @@ function SendScreen({ route, navigation }) {
           Toast(sendScreen.invalidRGBInvoiceAddress, true);
         } else {
           Toast(sendScreen.invalidBtcAddress, true);
-        } 
+        }
     }
   }, []);
 
@@ -75,7 +76,7 @@ function SendScreen({ route, navigation }) {
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.optionCardSubTitle}
+        // subTitle={sendScreen.optionCardSubTitle}
         onPress={() => {
           receiveData === 'send'
             ? setVisible(true)
@@ -98,6 +99,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scannerWrapper: {
       flex: 1,
+      marginTop: hp(20),
     },
   });
 export default SendScreen;

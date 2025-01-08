@@ -22,6 +22,7 @@ const SegmentedButtons = ({ value, onValueChange, buttons }) => {
                 borderBottomColor: isSelected
                   ? theme.colors.segmentSelectTitle
                   : theme.colors.secondaryHeadingColor,
+                borderBottomWidth: isSelected ? 1 : 0.4,
               },
             ]}>
             <AppText

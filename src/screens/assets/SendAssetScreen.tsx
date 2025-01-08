@@ -72,7 +72,6 @@ const AssetItem = ({
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
-  console.log('tag', tag);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -424,7 +423,7 @@ const SendAssetScreen = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.send}
+          primaryTitle={common.next}
           primaryOnPress={() => {
             Keyboard.dismiss();
             setVisible(true);

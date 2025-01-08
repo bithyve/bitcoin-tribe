@@ -89,12 +89,11 @@ function AddAsset() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: hp(25),
+      paddingTop: hp(20),
     },
     optionStyle: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
       paddingHorizontal: 20,
-      paddingVertical: windowHeight > 650 ? 25 : 20,
     },
   });
 export default AddAsset;
