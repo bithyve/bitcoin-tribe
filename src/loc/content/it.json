@@ -422,7 +422,8 @@
     "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro.",
     "issueAssetLoadingTitle": "Emissione dell'Asset",
     "issueAssetLoadingSubTitle": "Il tuo asset è in fase di creazione—attendi un momento! Rilassati, il tuo nuovo asset sarà emesso a breve.",
-    "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615."
+    "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615.",
+    "swipeToSend": "Scorri per inviare"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

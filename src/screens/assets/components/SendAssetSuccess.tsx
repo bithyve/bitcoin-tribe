@@ -29,11 +29,16 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     onSuccessPress,
     selectedPriority,
   } = props;
-  
+
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { common, wallet: walletTranslations, sendScreen } = translations;
+  const {
+    common,
+    wallet: walletTranslations,
+    sendScreen,
+    assets,
+  } = translations;
 
   return !onSuccessStatus ? (
     <View style={styles.container}>
@@ -51,8 +56,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ 10{' '}
-            {'min'}
+            {feeRate} sat/vB ~ 10 {'min'}
           </AppText>
         </View>
       </View>
@@ -66,12 +70,11 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
           <AppText variant="body1" style={styles.valueText}>
             {amount}
           </AppText>
-          
         </View>
       </View>
       <View style={styles.primaryCtaStyle}>
         <SwipeToAction
-          title={sendScreen.swipeToBroadcast}
+          title={assets.swipeToSend}
           loadingTitle={sendScreen.broadcastingTXN}
           onSwipeComplete={onPress}
         />

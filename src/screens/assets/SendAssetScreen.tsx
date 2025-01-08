@@ -423,7 +423,7 @@ const SendAssetScreen = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.send}
+          primaryTitle={common.next}
           primaryOnPress={() => {
             Keyboard.dismiss();
             setVisible(true);
