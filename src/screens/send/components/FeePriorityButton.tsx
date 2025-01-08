@@ -6,7 +6,6 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
-import { TxPriority } from 'src/services/wallets/enums';
 
 const FeePriorityButton = ({
   title,
@@ -63,8 +62,7 @@ const FeePriorityButton = ({
               : theme.colors.secondaryHeadingColor,
           },
         ]}>
-        ~{estimatedBlocksByPriority}{' '}
-        {priority === TxPriority.CUSTOM ? 'min' : 'hr'}
+        ~ {estimatedBlocksByPriority * 10} {'min'}
       </AppText>
     </AppTouchable>
   );

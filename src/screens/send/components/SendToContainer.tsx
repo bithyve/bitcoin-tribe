@@ -383,7 +383,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
               feeRateByPriority={''}
-              estimatedBlocksByPriority={10}
+              estimatedBlocksByPriority={1}
               disabled={isSendMax}
             />
           </View>
@@ -445,7 +445,7 @@ function SendToContainer({
           }
           estimateBlockTime={
             selectedPriority === TxPriority.CUSTOM
-              ? 10
+              ? 1
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
