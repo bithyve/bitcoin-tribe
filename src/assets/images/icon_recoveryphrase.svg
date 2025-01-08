@@ -3,15 +3,7 @@
 <circle cx="22.5" cy="22.5" r="22.5" fill="url(#paint0_radial_246_1642)" fill-opacity="0.1"/>
 <circle cx="22.5" cy="22.5" r="22.25" stroke="#2D2D2D" stroke-width="0.5"/>
 </g>
-<mask id="mask0_246_1642" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="45" height="45">
-<circle cx="22.5" cy="22.5" r="22.25" fill="url(#paint1_radial_246_1642)" fill-opacity="0.1" stroke="#2D2D2D" stroke-width="0.5"/>
-</mask>
-<g mask="url(#mask0_246_1642)">
-<g filter="url(#filter1_f_246_1642)">
-<circle cx="23" cy="45" r="4" fill="white"/>
-</g>
-</g>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5083 13.6667H26.4925C29.0667 13.6667 30.5 15.1501 30.5 17.6917V26.3001C30.5 28.8834 29.0667 30.3334 26.4925 30.3334H19.5083C16.975 30.3334 15.5 28.8834 15.5 26.3001V17.6917C15.5 15.1501 16.975 13.6667 19.5083 13.6667ZM19.7333 17.5501V17.5417H22.2242C22.5833 17.5417 22.875 17.8334 22.875 18.1909C22.875 18.5584 22.5833 18.8501 22.2242 18.8501H19.7333C19.3742 18.8501 19.0833 18.5584 19.0833 18.2001C19.0833 17.8417 19.3742 17.5501 19.7333 17.5501ZM19.7333 22.6167H26.2667C26.625 22.6167 26.9167 22.3251 26.9167 21.9667C26.9167 21.6084 26.625 21.3159 26.2667 21.3159H19.7333C19.3742 21.3159 19.0833 21.6084 19.0833 21.9667C19.0833 22.3251 19.3742 22.6167 19.7333 22.6167ZM19.7333 26.4251H26.2667C26.5992 26.3917 26.85 26.1076 26.85 25.7751C26.85 25.4334 26.5992 25.1501 26.2667 25.1167H19.7333C19.4833 25.0917 19.2417 25.2084 19.1083 25.4251C18.975 25.6334 18.975 25.9084 19.1083 26.1251C19.2417 26.3334 19.4833 26.4584 19.7333 26.4251Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5083 13.666H26.4925C29.0667 13.666 30.5 15.1493 30.5 17.691V26.2993C30.5 28.8827 29.0667 30.3327 26.4925 30.3327H19.5083C16.975 30.3327 15.5 28.8827 15.5 26.2993V17.691C15.5 15.1493 16.975 13.666 19.5083 13.666ZM19.7333 17.5493V17.541H22.2242C22.5833 17.541 22.875 17.8327 22.875 18.1902C22.875 18.5577 22.5833 18.8493 22.2242 18.8493H19.7333C19.3742 18.8493 19.0833 18.5577 19.0833 18.1993C19.0833 17.841 19.3742 17.5493 19.7333 17.5493ZM19.7333 22.616H26.2667C26.625 22.616 26.9167 22.3243 26.9167 21.966C26.9167 21.6077 26.625 21.3152 26.2667 21.3152H19.7333C19.3742 21.3152 19.0833 21.6077 19.0833 21.966C19.0833 22.3243 19.3742 22.616 19.7333 22.616ZM19.7333 26.4243H26.2667C26.5992 26.391 26.85 26.1068 26.85 25.7743C26.85 25.4327 26.5992 25.1493 26.2667 25.116H19.7333C19.4833 25.091 19.2417 25.2077 19.1083 25.4243C18.975 25.6327 18.975 25.9077 19.1083 26.1243C19.2417 26.3327 19.4833 26.4577 19.7333 26.4243Z" fill="white"/>
 <defs>
 <filter id="filter0_b_246_1642" x="-100" y="-100" width="245" height="245" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -19,16 +11,7 @@
 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_246_1642"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_246_1642" result="shape"/>
 </filter>
-<filter id="filter1_f_246_1642" x="7" y="29" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur_246_1642"/>
-</filter>
 <radialGradient id="paint0_radial_246_1642" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5 22.5) rotate(90) scale(22.5)">
-<stop stop-color="#D9D9D9"/>
-<stop offset="1" stop-color="#1C1C1C"/>
-</radialGradient>
-<radialGradient id="paint1_radial_246_1642" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5 22.5) rotate(90) scale(22.5)">
 <stop stop-color="#D9D9D9"/>
 <stop offset="1" stop-color="#1C1C1C"/>
 </radialGradient>

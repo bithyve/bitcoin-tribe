@@ -3,15 +3,7 @@
 <circle cx="22.5" cy="22.5" r="22.5" fill="url(#paint0_radial_224_1878)" fill-opacity="0.1"/>
 <circle cx="22.5" cy="22.5" r="22.25" stroke="#2D2D2D" stroke-width="0.5"/>
 </g>
-<mask id="mask0_224_1878" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="45" height="45">
-<circle cx="22.5" cy="22.5" r="22.25" fill="url(#paint1_radial_224_1878)" fill-opacity="0.1" stroke="#2D2D2D" stroke-width="0.5"/>
-</mask>
-<g mask="url(#mask0_224_1878)">
-<g filter="url(#filter1_f_224_1878)">
-<circle cx="23" cy="45" r="4" fill="white"/>
-</g>
-</g>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M27.8072 18.9848H31.3332C31.3332 16.1538 29.6369 14.5 26.7628 14.5H19.2369C16.3628 14.5 14.6665 16.1538 14.6665 18.9487V25.0513C14.6665 27.8462 16.3628 29.5 19.2369 29.5H26.7628C29.6369 29.5 31.3332 27.8462 31.3332 25.0513V24.7913H27.8072C26.1708 24.7913 24.8443 23.4979 24.8443 21.9025C24.8443 20.3071 26.1708 19.0137 27.8072 19.0137V18.9848ZM27.8072 20.227H30.7109C31.0546 20.227 31.3332 20.4986 31.3332 20.8337V22.9425C31.3292 23.2759 31.0529 23.5452 30.7109 23.5491H27.8739C27.0455 23.56 26.3211 23.007 26.1332 22.2203C26.0391 21.7319 26.1712 21.228 26.4941 20.8435C26.817 20.4591 27.2976 20.2334 27.8072 20.227ZM27.9332 22.4441H28.2072C28.5591 22.4441 28.8443 22.1661 28.8443 21.8231C28.8443 21.48 28.5591 21.202 28.2072 21.202H27.9332C27.7649 21.2 27.6028 21.2639 27.4832 21.3792C27.3635 21.4945 27.2961 21.6518 27.2961 21.8158C27.2961 22.16 27.5801 22.4402 27.9332 22.4441ZM18.6147 18.9848H23.3184C23.6702 18.9848 23.9554 18.7068 23.9554 18.3637C23.9554 18.0207 23.6702 17.7427 23.3184 17.7427H18.6147C18.2657 17.7426 17.9817 18.0163 17.9776 18.3565C17.9776 18.7007 18.2616 18.9809 18.6147 18.9848Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M27.8077 18.9848H31.3337C31.3337 16.1538 29.6374 14.5 26.7633 14.5H19.2374C16.3633 14.5 14.667 16.1538 14.667 18.9487V25.0513C14.667 27.8462 16.3633 29.5 19.2374 29.5H26.7633C29.6374 29.5 31.3337 27.8462 31.3337 25.0513V24.7913H27.8077C26.1713 24.7913 24.8448 23.4979 24.8448 21.9025C24.8448 20.3071 26.1713 19.0137 27.8077 19.0137V18.9848ZM27.8077 20.227H30.7114C31.0551 20.227 31.3337 20.4986 31.3337 20.8337V22.9425C31.3297 23.2759 31.0534 23.5452 30.7114 23.5491H27.8744C27.046 23.56 26.3216 23.007 26.1337 22.2203C26.0396 21.7319 26.1717 21.228 26.4946 20.8435C26.8174 20.4591 27.2981 20.2334 27.8077 20.227ZM27.9337 22.4441H28.2077C28.5596 22.4441 28.8448 22.1661 28.8448 21.8231C28.8448 21.48 28.5596 21.202 28.2077 21.202H27.9337C27.7654 21.2 27.6033 21.2639 27.4836 21.3792C27.364 21.4945 27.2966 21.6518 27.2966 21.8158C27.2966 22.16 27.5806 22.4402 27.9337 22.4441ZM18.6151 18.9848H23.3188C23.6707 18.9848 23.9559 18.7068 23.9559 18.3637C23.9559 18.0207 23.6707 17.7427 23.3188 17.7427H18.6151C18.2662 17.7426 17.9822 18.0163 17.9781 18.3565C17.9781 18.7007 18.2621 18.9809 18.6151 18.9848Z" fill="white"/>
 <defs>
 <filter id="filter0_b_224_1878" x="-100" y="-100" width="245" height="245" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -19,16 +11,7 @@
 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_224_1878"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_224_1878" result="shape"/>
 </filter>
-<filter id="filter1_f_224_1878" x="7" y="29" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur_224_1878"/>
-</filter>
 <radialGradient id="paint0_radial_224_1878" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5 22.5) rotate(90) scale(22.5)">
-<stop stop-color="#D9D9D9"/>
-<stop offset="1" stop-color="#1C1C1C"/>
-</radialGradient>
-<radialGradient id="paint1_radial_224_1878" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5 22.5) rotate(90) scale(22.5)">
 <stop stop-color="#D9D9D9"/>
 <stop offset="1" stop-color="#1C1C1C"/>
 </radialGradient>
