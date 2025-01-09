@@ -312,7 +312,8 @@
     "enterCustomFee": "Inserisci la commissione personalizzata",
     "swipeToBroadcast": "Scorri per trasmettere",
     "broadcastingTXN": "Trasmissione della transazione in corso...",
-    "successTitle": "Successo!"
+    "successTitle": "Successo!",
+    "recipientInvoice": "Fattura del destinatario"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

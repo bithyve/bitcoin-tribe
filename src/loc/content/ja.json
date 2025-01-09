@@ -312,7 +312,8 @@
     "enterCustomFee": "カスタム料金を入力",
     "swipeToBroadcast": "スワイプしてブロードキャスト",
     "broadcastingTXN": "トランザクションをブロードキャスト中...",
-    "successTitle": "成功！"
+    "successTitle": "成功！",
+    "recipientInvoice": "受取人の請求書"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

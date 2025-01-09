@@ -312,7 +312,8 @@
     "enterCustomFee": "输入自定义费用",
     "swipeToBroadcast": "滑动以广播",
     "broadcastingTXN": "正在广播交易...",
-    "successTitle": "成功！"
+    "successTitle": "成功！",
+    "recipientInvoice": "收件人的发票"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

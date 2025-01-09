@@ -18,6 +18,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -36,20 +37,20 @@ import GradientView from 'src/components/GradientView';
 import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
-import AssetChip from 'src/components/AssetChip';
-import Capitalize from 'src/utils/capitalizeUtils';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
-import { formatNumber } from 'src/utils/numberWithCommas';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
+import Colors from 'src/theme/Colors';
 
 type ItemProps = {
   name: string;
@@ -111,19 +112,19 @@ const AssetItem = ({
             {details}
           </AppText>
         </View>
-        <View style={styles.tagWrapper}>
-          <AssetChip
-            tagText={Capitalize(tag)}
-            backColor={
-              tag === 'Coin' ? theme.colors.accent : theme.colors.accent4
-            }
-            tagColor={theme.colors.tagText}
-          />
-        </View>
         <View style={styles.amountWrapper}>
-          <AppText variant="smallCTA" style={styles.amountText}>
-            {amount}
-          </AppText>
+          <View
+            style={[
+              styles.amountTextWrapper,
+              {
+                backgroundColor:
+                  tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
+              },
+            ]}>
+            <AppText variant="smallCTA" style={styles.amountText}>
+              {numberWithCommas(amount)}
+            </AppText>
+          </View>
         </View>
       </GradientView>
     </AppTouchable>
@@ -251,6 +252,17 @@ const SendAssetScreen = () => {
     }
   }, [invoice, amount, navigation]);
 
+  const handlePasteAddress = async () => {
+    const invoicePattern =
+      /^rgb:(~|~\/~|bcrt:[a-zA-Z0-9\-:$!]+)((\/[a-zA-Z0-9\-:$!]+)*)(\?[a-zA-Z0-9=&:\/\-._]+)?$/;
+    const getClipboardValue = await Clipboard.getString();
+    if (invoicePattern.test(getClipboardValue)) {
+      setInvoice(getClipboardValue);
+    } else {
+      Toast('Invalid invoice', true);
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -307,6 +319,9 @@ const SendAssetScreen = () => {
           assetId={assetId}
           amount={item.balance.spendable}
         />
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.recipientInvoice}
+        </AppText>
         <TextField
           value={invoice}
           onChangeText={text => setInvoice(text)}
@@ -319,8 +334,16 @@ const SendAssetScreen = () => {
           returnKeyType={'Enter'}
           numberOfLines={5}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
+          // rightText={!invoice && sendScreen.paste}
+          // rightIcon={invoice && <ClearIcon />}
+          // onRightTextPress={() =>
+          //   invoice ? setInvoice('') : handlePasteAddress()
+          // }
+          // rightCTAStyle={styles.rightCTAStyle}
         />
-
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.enterAmount}
+        </AppText>
         <TextField
           value={formatNumber(amount)}
           onChangeText={text => setAmount(text)}
@@ -449,7 +472,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       flex: 1,
     },
     input: {
-      marginVertical: hp(10),
+      // marginVertical: hp(10),
     },
     invoiceInputStyle: {
       borderRadius: hp(20),
@@ -479,6 +502,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       alignItems: 'center',
       borderRadius: 15,
       height: hp(70),
+      marginBottom: hp(10),
     },
     imageStyle: {
       height: hp(50),
@@ -490,7 +514,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       paddingLeft: hp(20),
     },
     amountWrapper: {
-      width: '20%',
+      width: '48%',
       alignItems: 'flex-end',
     },
     identiconWrapper: {
@@ -503,15 +527,17 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: 50,
       borderRadius: 50,
     },
+    amountTextWrapper: {
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(3),
+      borderRadius: 10,
+    },
     amountText: {
-      color: theme.colors.headingColor,
+      // color: theme.colors.headingColor,
+      color: Colors.Black,
     },
     nameText: {
       color: theme.colors.secondaryHeadingColor,
-    },
-    tagWrapper: {
-      width: '28%',
-      alignItems: 'flex-end',
     },
     labelstyle: {
       marginVertical: hp(10),
@@ -528,6 +554,11 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     feeInputContentStyle: {
       marginTop: 0,
+    },
+    rightCTAStyle: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 

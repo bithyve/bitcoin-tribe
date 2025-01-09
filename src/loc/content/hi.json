@@ -312,7 +312,8 @@
     "enterCustomFee": "कस्टम शुल्क दर्ज करें",
     "swipeToBroadcast": "प्रसारित करने के लिए स्वाइप करें",
     "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है...",
-    "successTitle": "सफल!"
+    "successTitle": "सफल!",
+    "recipientInvoice": "प्राप्तकर्ता का चालान"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

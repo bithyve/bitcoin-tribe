@@ -312,7 +312,8 @@
     "enterCustomFee": "Introduce una tarifa personalizada",
     "swipeToBroadcast": "Desliza para transmitir",
     "broadcastingTXN": "Transmitiendo transacción...",
-    "successTitle": "¡Éxito!"
+    "successTitle": "¡Éxito!",
+    "recipientInvoice": "Factura del destinatario"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
