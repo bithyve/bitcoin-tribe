@@ -26,7 +26,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
@@ -153,7 +152,6 @@ const SendAssetScreen = () => {
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [customFee, setCustomFee] = useState(0);
@@ -287,28 +285,16 @@ const SendAssetScreen = () => {
           />
         </ResponsePopupContainer>
       </View>
-      <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 500);
-          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-          //   refresh: () => sendAsset(),
-          // });
-        }}
-      />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <AssetItem
-          name={item.name}
+          name={item?.name}
           details={
-            item.assetIface.toUpperCase() === AssetFace.RGB20
-              ? item.ticker
-              : item.details
+            item?.assetIface.toUpperCase() === AssetFace.RGB20
+              ? item?.ticker
+              : item?.details
           }
           image={
-            item.media?.filePath
+            item?.media?.filePath
               ? Platform.select({
                   android: `file://${item.media?.filePath}`,
                   ios: item.media?.filePath,
@@ -316,12 +302,12 @@ const SendAssetScreen = () => {
               : null
           }
           tag={
-            item.assetIface.toUpperCase() === AssetFace.RGB20
+            item?.assetIface.toUpperCase() === AssetFace.RGB20
               ? assets.coin
               : assets.collectible
           }
           assetId={assetId}
-          amount={item.balance.spendable}
+          amount={item?.balance.spendable}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -330,20 +316,21 @@ const SendAssetScreen = () => {
           value={invoice}
           onChangeText={text => setInvoice(text)}
           placeholder={assets.invoice}
-          style={[styles.input, invoice && styles.invoiceInputStyle]}
+          style={styles.input}
+          multiline={true}
+          returnKeyType={'Enter'}
           onContentSizeChange={event => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
-          multiline={true}
-          returnKeyType={'Enter'}
-          numberOfLines={5}
+          numberOfLines={3}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
-          // rightText={!invoice && sendScreen.paste}
-          // rightIcon={invoice && <ClearIcon />}
-          // onRightTextPress={() =>
-          //   invoice ? setInvoice('') : handlePasteAddress()
-          // }
-          // rightCTAStyle={styles.rightCTAStyle}
+          inputStyle={styles.inputStyle}
+          rightText={!invoice && sendScreen.paste}
+          rightIcon={invoice && <ClearIcon />}
+          onRightTextPress={() =>
+            invoice ? setInvoice('') : handlePasteAddress()
+          }
+          rightCTAStyle={styles.rightCTAStyle}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.enterAmount}
@@ -434,7 +421,7 @@ const SendAssetScreen = () => {
           onDismiss={() => setVisible(false)}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            assetName={item.name}
+            assetName={item?.name}
             amount={amount.replace(/,/g, '')}
             feeRate={
               selectedPriority === TxPriority.CUSTOM
@@ -477,6 +464,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     input: {
       // marginVertical: hp(10),
+    },
+    inputStyle: {
+      width: '80%',
     },
     invoiceInputStyle: {
       borderRadius: hp(20),
@@ -544,7 +534,8 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       color: theme.colors.secondaryHeadingColor,
     },
     labelstyle: {
-      marginVertical: hp(10),
+      marginTop: hp(15),
+      marginBottom: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
     inputWrapper: {
