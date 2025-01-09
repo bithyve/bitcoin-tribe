@@ -9,6 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SwipeToAction from 'src/components/SwipeToAction';
 import PrimaryCTA from 'src/components/PrimaryCTA';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type sendAssetSuccessProps = {
   assetName: string;
@@ -70,7 +71,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText variant="body1" style={styles.valueText}>
-            {amount}
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </View>

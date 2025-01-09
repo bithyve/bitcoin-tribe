@@ -182,11 +182,15 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
-  useEffect(() => {
-    if (item.balance.spendable < amount) {
+  const handleAmountInputChange = text => {
+    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
+    if (numericValue <= item.balance.spendable) {
+      setAmount(text);
+    } else {
+      Keyboard.dismiss();
       Toast(assets.checkSpendableAmt + item.balance.spendable, true);
     }
-  }, [amount]);
+  };
 
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
@@ -223,7 +227,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: utxo,
-        amount,
+        amount: amount.replace(/,/g, ''),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
@@ -346,7 +350,7 @@ const SendAssetScreen = () => {
         </AppText>
         <TextField
           value={formatNumber(amount)}
-          onChangeText={text => setAmount(text)}
+          onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
           style={styles.input}
