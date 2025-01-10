@@ -110,11 +110,11 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(30),
-      height: '100%',
+      height: '50%',
     },
     container2: {
       marginTop: hp(15),
-      height: '60%',
+      height: '100%',
     },
     contentWrapper: {
       flexDirection: 'row',
