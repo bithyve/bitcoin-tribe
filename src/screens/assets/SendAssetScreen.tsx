@@ -131,7 +131,8 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, wallet, item } = useRoute().params;
+  const { assetId, rgbInvoice, wallet, item, transactionAmount } =
+    useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -150,7 +151,7 @@ const SendAssetScreen = () => {
   const createUtxos = useMutation(ApiHandler.createUtxos);
 
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(transactionAmount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);

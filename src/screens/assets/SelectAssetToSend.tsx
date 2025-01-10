@@ -13,7 +13,7 @@ import { useRoute } from '@react-navigation/native';
 
 function SelectAssetToSend() {
   const theme: AppTheme = useTheme();
-  const { wallet, rgbInvoice } = useRoute().params;
+  const { wallet, rgbInvoice, assetID, transactionAmount } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -23,13 +23,18 @@ function SelectAssetToSend() {
     return combined.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
+  const filteredData = assetID
+    ? assetsData.filter(item => item.assetId === assetID)
+    : assetsData;
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.selectAssetTitle} />
       <SelectAssetToSendContainer
-        assetsData={assetsData}
+        assetsData={filteredData}
         wallet={wallet}
         rgbInvoice={rgbInvoice}
+        transactionAmount={transactionAmount}
       />
     </ScreenContainer>
   );

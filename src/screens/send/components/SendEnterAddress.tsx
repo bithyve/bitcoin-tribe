@@ -69,10 +69,20 @@ function SendEnterAddress({
         navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
           wallet,
           rgbInvoice: address,
+          assetID: '',
+          amount: '',
         });
         break;
       case PaymentInfoKind.RLN_INVOICE:
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
+        break;
+      case PaymentInfoKind.RGB_INVOICE_URL:
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+          wallet,
+          rgbInvoice: address,
+          assetID: address.match(/rgb:[^\/]+/)?.[0],
+          transactionAmount: address.match(/\/(\d+)\//)?.[1],
+        });
         break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
