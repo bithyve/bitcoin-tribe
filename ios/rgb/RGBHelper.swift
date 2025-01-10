@@ -456,6 +456,24 @@ import CloudKit
           return json
       }
   }
+  
+  @objc func failTransfer(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
+    do{
+      let status = try self.rgbManager.rgbWallet!.failTransfers(online: self.rgbManager.online!, batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly, skipSync: false)
+      let data: [String: Any] = [
+          "status": status
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
 
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
