@@ -62,7 +62,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
-    asset.balance.spendable + asset.balance?.offchainOutbound || 0;
+    asset.balance.future + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
@@ -87,17 +87,11 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               ? assets.collectibles
               : assetTicker
           }
-          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
+          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
-          <GradientView
-            style={styles.largeHeaderContentWrapper}
-            colors={[
-              theme.colors.headerCardGradientColor,
-              theme.colors.headerCardGradientColor,
-              theme.colors.headerCardGradientColor,
-            ]}>
+          <View style={styles.largeHeaderContentWrapper}>
             <View style={styles.assetImageWrapper}>
               {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
                 <Image
@@ -129,7 +123,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.totalBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
-                      asset.balance.spendable + asset.balance?.offchainOutbound,
+                      asset.balance.future + asset.balance?.offchainOutbound,
                     )}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
@@ -156,26 +150,11 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 style={styles.onChainTotalBalanceWrapper}
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
-                  {initialCurrencyMode !== CurrencyKind.SATS && (
-                    <View style={styles.currencyIconWrapper}>
-                      {getCurrencyIcon(
-                        isThemeDark ? IconBitcoin : IconBitcoinLight,
-                        isThemeDark ? 'dark' : 'light',
-                        20,
-                      )}
-                    </View>
-                  )}
-
-                  <AppText variant="heading2" style={styles.totalBalance}>
-                    {getBalance(
-                      asset.balance.spendable + asset.balance?.offchainOutbound,
+                  <AppText variant="pageTitle2" style={styles.totalBalance}>
+                    {numberWithCommas(
+                      asset.balance.future + asset.balance?.offchainOutbound,
                     )}
                   </AppText>
-                  {initialCurrencyMode === CurrencyKind.SATS && (
-                    <AppText variant="caption" style={styles.satsText}>
-                      sats
-                    </AppText>
-                  )}
                 </View>
                 <AppText variant="body1" style={styles.totalBalanceLabel}>
                   {home.totalBalance}
@@ -189,7 +168,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 onPressBuy={onPressBuy}
               />
             </View>
-          </GradientView>
+          </View>
         </View>
       </View>
     </>
@@ -217,6 +196,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: hp(20),
       padding: hp(5),
       width: '100%',
+      marginTop: hp(20),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
@@ -228,7 +208,6 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     totalBalance: {
       color: theme.colors.headingColor,
-      fontSize: lengthOfTotalBalance > 15 ? 13 : 20,
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,

@@ -17,6 +17,8 @@ import AppType from 'src/models/enums/AppType';
 import AppHeader from 'src/components/AppHeader';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
+import IconBitcoinOnChain from 'src/assets/images/icon_btc3.svg';
+import IconBitcoinOnChainLight from 'src/assets/images/icon_btc3_light.svg';
 import GradientView from 'src/components/GradientView';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
@@ -77,7 +79,6 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   ]);
 
   const toggleDisplayMode = () => {
-    console.log('pres');
     if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
       setCurrencyMode(CurrencyKind.BITCOIN);
     } else if (initialCurrencyMode === CurrencyKind.BITCOIN) {
@@ -96,14 +97,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
       <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
-        <AppHeader title={app.appName} />
-        <GradientView
-          style={styles.largeHeaderContentWrapper}
-          colors={[
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
-            theme.colors.cardGradient2,
-          ]}>
+        <AppHeader title={username} />
+        <View style={styles.largeHeaderContentWrapper}>
           {app.appType === AppType.NODE_CONNECT ? (
             <View style={styles.balanceContainer}>
               <AppTouchable
@@ -157,14 +152,16 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                   {initialCurrencyMode !== CurrencyKind.SATS && (
                     <View style={styles.currencyIconWrapper}>
                       {getCurrencyIcon(
-                        isThemeDark ? IconBitcoin : IconBitcoinLight,
+                        isThemeDark
+                          ? IconBitcoinOnChain
+                          : IconBitcoinOnChainLight,
                         isThemeDark ? 'dark' : 'light',
-                        20,
+                        25,
                       )}
                     </View>
                   )}
 
-                  <AppText variant="heading2" style={styles.totalBalance}>
+                  <AppText variant="pageTitle2" style={styles.totalBalance}>
                     {getBalance(balances)}
                   </AppText>
                   {initialCurrencyMode === CurrencyKind.SATS && (
@@ -186,7 +183,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
               onPressBuy={onPressBuy}
             />
           </View>
-        </GradientView>
+        </View>
       </View>
     </>
   );
@@ -206,7 +203,7 @@ const getStyles = (theme: AppTheme, insets) =>
     largeHeader: {
       alignItems: 'center',
       overflow: 'hidden',
-      marginBottom: hp(15)
+      marginBottom: hp(15),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),

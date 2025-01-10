@@ -10,6 +10,7 @@ import ReceiveQrClipBoard from 'src/screens/receive/components/ReceiveQrClipBoar
 import FooterNote from 'src/components/FooterNote';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import { hp } from 'src/constants/responsive';
 
 function ShowXPubContainer({ xpub }) {
   const { translations } = useContext(LocalizationContext);
@@ -37,6 +38,7 @@ function ShowXPubContainer({ xpub }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: hp(20),
   },
   advanceOptionStyle: {
     backgroundColor: 'transparent',

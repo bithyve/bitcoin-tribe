@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -8,6 +9,7 @@ import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -17,6 +19,8 @@ import { AppTheme } from 'src/theme';
 
 function BackupPhraseSetting() {
   const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
+
   const { translations } = useContext(LocalizationContext);
   const { settings, onBoarding } = translations;
   const navigation = useNavigation();
@@ -67,6 +71,7 @@ function BackupPhraseSetting() {
           //   viewOnly: true,
           // })
         }
+        style={styles.container}
       />
       <EnterPasscodeModal
         title={settings.EnterPasscode}
@@ -90,4 +95,10 @@ function BackupPhraseSetting() {
     </ScreenContainer>
   );
 }
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      marginTop: hp(20),
+    },
+  });
 export default BackupPhraseSetting;

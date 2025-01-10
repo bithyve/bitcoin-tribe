@@ -21,7 +21,7 @@ import { Keys } from 'src/storage';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import AppType from 'src/models/enums/AppType';
 import { useTheme } from 'react-native-paper';
 
@@ -38,7 +38,7 @@ function ReceiveAssetScreen() {
   const navigation = useNavigation();
   const assetId = route.params.assetId || '';
   const amount = route.params.amount || '';
-  const selectedType = route.params.selectedType || 'bitcoin'
+  const selectedType = route.params.selectedType || 'bitcoin';
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -47,11 +47,11 @@ function ReceiveAssetScreen() {
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [lightningInvoice, setLightningInvoice] = useState('');
-  const [rgbInvoice, setRgbInvoice] = useState('')
+  const [rgbInvoice, setRgbInvoice] = useState('');
 
   useEffect(() => {
-    if(app.appType !== AppType.ON_CHAIN) {
-      if(assetId === '') {
+    if (app.appType !== AppType.ON_CHAIN) {
+      if (assetId === '') {
         mutate(assetId, amount);
       } else {
         generateLNInvoiceMutation.mutate({
@@ -95,15 +95,16 @@ function ReceiveAssetScreen() {
       setTimeout(() => {
         mutate();
       }, 400);
-    }  else if (createUtxos.error) {
+    } else if (createUtxos.error) {
       navigation.goBack();
       Toast(`${createUtxos.error}`, true);
     } else if (createUtxos.data === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
+      navigation.goBack();
     }
   }, [createUtxos.data]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (selectedType === 'lightning') {
       if (lightningInvoice === '') {
         generateLNInvoiceMutation.mutate({
@@ -112,15 +113,15 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      if(rgbInvoice === '') {
+      if (rgbInvoice === '') {
         mutate(assetId, amount);
       }
     }
-  },[selectedType])
-    
+  }, [selectedType]);
+
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
-      setRgbInvoice(rgbWallet?.receiveData?.invoice)
+      setRgbInvoice(rgbWallet?.receiveData?.invoice);
       return rgbWallet?.receiveData?.invoice;
     } else {
       return lightningInvoice;
@@ -159,15 +160,25 @@ function ReceiveAssetScreen() {
         <View />
       ) : (
         <View>
-          <ShowQRCode
-            value={qrValue || 'address'}
-            title={selectedType === 'bitcoin' ? receciveScreen.invoiceAddress: receciveScreen.lightningAddress}
-            qrTitleColor = {selectedType === 'bitcoin' ? theme.colors.btcCtaBackColor : theme.colors.accent1}
-          />
-          <ReceiveQrClipBoard
-            qrCodeValue={qrValue}
-            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-          />
+          <View style={styles.detailsContainer}>
+            <ShowQRCode
+              value={qrValue || 'address'}
+              title={
+                selectedType === 'bitcoin'
+                  ? receciveScreen.invoiceAddress
+                  : receciveScreen.lightningAddress
+              }
+              qrTitleColor={
+                selectedType === 'bitcoin'
+                  ? theme.colors.btcCtaBackColor
+                  : theme.colors.accent1
+              }
+            />
+            <ReceiveQrClipBoard
+              qrCodeValue={qrValue}
+              icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            />
+          </View>
           <FooterNote
             title={common.note}
             subTitle={receciveScreen.noteSubTitle}
@@ -182,6 +193,10 @@ function ReceiveAssetScreen() {
 const styles = StyleSheet.create({
   advanceOptionStyle: {
     backgroundColor: 'transparent',
+  },
+  detailsContainer: {
+    height: '74%',
+    marginTop: hp(20),
   },
   addAmountModalContainerStyle: {
     width: '96%',

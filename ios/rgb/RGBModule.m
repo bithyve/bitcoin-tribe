@@ -164,6 +164,19 @@ RCT_EXPORT_METHOD(issueRgb25Asset:(NSString*) name
   }];
 }
 
+RCT_EXPORT_METHOD(issueAssetUda:(NSString*) name
+                  ticker:(NSString *)ticker
+                  details:(NSString *)details
+                  mediaFilePath:(NSString *)mediaFilePath
+                  attachmentsFilePaths:(NSArray<NSString *> *)attachmentsFilePaths
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [helper issueAssetUdaWithName:name ticker:ticker details:details mediaFilePath:mediaFilePath attachmentsFilePaths:attachmentsFilePaths callback:^(NSString * _Nonnull response) {
+    resolve(response);
+  }];
+}
+
 RCT_EXPORT_METHOD(backup:(NSString*)path
                   password:(NSString *)password
                   resolver:(RCTPromiseResolveBlock)resolve

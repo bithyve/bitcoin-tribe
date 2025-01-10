@@ -24,23 +24,18 @@ import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 
-const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
+const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height:
-        totalReserveSatsAmount === 0
-          ? windowHeight > 670
-            ? '60%'
-            : '50%'
-          : windowHeight > 670
-          ? '65%'
-          : '60%',
+      height: appType !== AppType.ON_CHAIN ? '54%' : '66%',
     },
     footerWrapper: {
-      marginVertical: hp(10),
+      height: '25%',
+      justifyContent: 'flex-end',
+      paddingBottom: hp(20),
     },
     contentStyle: {
       borderRadius: 0,
@@ -138,7 +133,7 @@ const EnterInvoiceDetails = () => {
     return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
   }, [UnspentUTXOData]);
 
-  const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
+  const styles = getStyles(theme, inputHeight, app.appType);
   return (
     <ScreenContainer>
       <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />

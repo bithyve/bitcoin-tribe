@@ -276,6 +276,38 @@ export class ApiHandler {
     }
   }
 
+  static async restoreWithBackupFile({
+    mnemonic,
+    filePath,
+  }: {
+    mnemonic: string;
+    filePath: string;
+  }) {
+    try {
+      const restore = await RGBServices.restore(mnemonic, filePath);
+      if (restore.error) {
+        throw new Error(restore.error);
+      } else {
+        ApiHandler.setupNewApp({
+          appName: '',
+          appType: AppType.ON_CHAIN,
+          pinMethod: PinMethod.DEFAULT,
+          passcode: '',
+          walletImage: '',
+          mnemonic: mnemonic,
+        });
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: 'Initially installed',
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async restoreApp(mnemonic: string) {
     try {
       const seed = bip39.mnemonicToSeedSync(mnemonic);
@@ -615,11 +647,13 @@ export class ApiHandler {
     recipient,
     averageTxFee,
     selectedPriority,
+    txPrerequisites
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
+    txPrerequisites: TransactionPrerequisite
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
       if (ApiHandler.appType === AppType.NODE_CONNECT) {
@@ -639,16 +673,16 @@ export class ApiHandler {
           throw new Error('Failed to connect to node');
         }
       } else {
-        const txPrerequisites = await ApiHandler.sendPhaseOne({
-          sender,
-          recipient,
-          averageTxFee,
-          selectedPriority,
-        });
+        // const txPrerequisites = await ApiHandler.sendPhaseOne({
+        //   sender,
+        //   recipient,
+        //   averageTxFee,
+        //   selectedPriority,
+        // });
 
-        if (!txPrerequisites) {
-          throw new Error('Failed to generate txPrerequisites');
-        }
+        // if (!txPrerequisites) {
+        //   throw new Error('Failed to generate txPrerequisites');
+        // }
         const { txid } = await ApiHandler.sendPhaseTwo({
           sender,
           recipient,
@@ -936,6 +970,38 @@ export class ApiHandler {
         description,
         `${supply}`,
         filePath,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async issueAssetUda({
+    name,
+    ticker,
+    details,
+    mediaFilePath,
+    attachmentsFilePaths,
+  }: {
+    name: string;
+    ticker: string;
+    details: string;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+  }) {
+    try {
+      const response = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
         ApiHandler.appType,
         ApiHandler.api,
       );

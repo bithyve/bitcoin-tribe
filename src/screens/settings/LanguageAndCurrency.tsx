@@ -23,7 +23,6 @@ import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
 
-
 function LanguageAndCurrency() {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -63,12 +62,12 @@ function LanguageAndCurrency() {
       <AppHeader
         title={currencyDropDown || langDropdown ? '' : settings.langAndCurrency}
         subTitle={settings.langAndCurrencySubTitle}
-        onBackNavigation={()=>{
-          if(currencyDropDown || langDropdown){
+        onBackNavigation={() => {
+          if (currencyDropDown || langDropdown) {
             setLangDropdown(false);
             setCurrencyDropDown(false);
-          }else{
-            navigation.goBack()
+          } else {
+            navigation.goBack();
           }
         }}
       />
@@ -79,6 +78,7 @@ function LanguageAndCurrency() {
         enableSwitch={true}
         onValueChange={() => toggleDisplayMode()}
         toggleValue={initialCurrencyMode === CurrencyKind.SATS}
+        style={styles.satsModeWrapper}
       />
       <View style={{ position: 'relative' }}>
         <LangCurrencyOption
@@ -88,9 +88,7 @@ function LanguageAndCurrency() {
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
-            selectedLanguage.displayTitle +
-              ' ' +
-              selectedLanguage.country_code
+            selectedLanguage.displayTitle + ' ' + selectedLanguage.country_code
           }
           flag={selectedLanguage.flag}
           onPress={() => setLangDropdown(!langDropdown)}
@@ -117,9 +115,7 @@ function LanguageAndCurrency() {
           langCurrency={selectedLanguage && selectedLanguage.language}
           langCurrencyVariant={
             selectedLanguage &&
-            selectedLanguage.displayTitle +
-              ' ' +
-              selectedLanguage.country_code
+            selectedLanguage.displayTitle + ' ' + selectedLanguage.country_code
           }
           flag={selectedLanguage.flag}
         />
@@ -167,6 +163,9 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       bottom: Platform.OS === 'android' ? 50 : 20,
       alignSelf: 'center',
+    },
+    satsModeWrapper: {
+      marginTop: hp(20),
     },
   });
 export default LanguageAndCurrency;

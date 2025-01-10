@@ -72,7 +72,6 @@ const AssetItem = ({
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
-
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -100,11 +99,11 @@ const AssetItem = ({
         )}
         <View style={styles.assetDetailsWrapper}>
           <AppText
-          numberOfLines={1}
+            numberOfLines={1}
             variant="body2"
             style={{
               color:
-                tag === 'COIN' ? theme.colors.accent : theme.colors.accent2,
+                tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
             }}>
             {name}
           </AppText>
@@ -116,7 +115,7 @@ const AssetItem = ({
           <AssetChip
             tagText={Capitalize(tag)}
             backColor={
-              tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
+              tag === 'Coin' ? theme.colors.accent : theme.colors.accent4
             }
             tagColor={theme.colors.tagText}
           />
@@ -238,9 +237,16 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
-        Toast(`Failed: ${response?.error}`, true);
+        setVisible(false);
+        setTimeout(() => {
+          Toast(`Failed: ${response?.error}`, true);
+        }, 500);
       }
     } catch (error) {
+      setVisible(false);
+      setTimeout(() => {
+        Toast(`Failed: ${error}`, true);
+      }, 500);
       console.log(error);
     }
   }, [invoice, amount, navigation]);
@@ -417,7 +423,7 @@ const SendAssetScreen = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.send}
+          primaryTitle={common.next}
           primaryOnPress={() => {
             Keyboard.dismiss();
             setVisible(true);

@@ -50,7 +50,6 @@ function SendSuccessContainer(props: sendSuccessProps) {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
-
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -99,27 +98,27 @@ function SendSuccessContainer(props: sendSuccessProps) {
           </AppText>
         </View>
       </View>
-      <View style={styles.contentWrapper}>
-        <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>{sendScreen.feeAmount}:</AppText>
-        </View>
-        <View style={styles.valueWrapper}>
-          {initialCurrencyMode !== CurrencyKind.SATS
-            ? getCurrencyIcon(IconBitcoin, isThemeDark ? 'dark' : 'light')
-            : null}
-          <AppText variant="body1" style={styles.valueText}>
-            &nbsp;
-            {app.appType === AppType.NODE_CONNECT
-              ? transFee
-              : getBalance(transFee)}
-          </AppText>
-          {initialCurrencyMode === CurrencyKind.SATS && (
-            <AppText variant="caption" style={styles.satsText}>
-              {app.appType === AppType.NODE_CONNECT ? 'sats/vbyte' : 'sats'}
+      {app.appType === AppType.ON_CHAIN && (
+        <View style={styles.contentWrapper}>
+          <View style={styles.labelWrapper}>
+            <AppText style={styles.labelText}>{sendScreen.feeAmount}:</AppText>
+          </View>
+          <View style={styles.valueWrapper}>
+            {initialCurrencyMode !== CurrencyKind.SATS
+              ? getCurrencyIcon(IconBitcoin, isThemeDark ? 'dark' : 'light')
+              : null}
+            <AppText variant="body1" style={styles.valueText}>
+              &nbsp;
+              {getBalance(transFee)}
             </AppText>
-          )}
+            {initialCurrencyMode === CurrencyKind.SATS && (
+              <AppText variant="caption" style={styles.satsText}>
+                {'sats'}
+              </AppText>
+            )}
+          </View>
         </View>
-      </View>
+      )}
       <View style={[styles.contentWrapper, styles.borderStyle]}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>{sendScreen.total}:</AppText>
@@ -129,7 +128,12 @@ function SendSuccessContainer(props: sendSuccessProps) {
             ? getCurrencyIcon(IconBitcoin, 'dark')
             : null}
           <AppText variant="body1" style={styles.valueText}>
-            &nbsp;{getBalance(total)}
+            &nbsp;
+            {getBalance(
+              app.appType === AppType.NODE_CONNECT
+                ? total
+                : Number(total) + Number(transFee),
+            )}
           </AppText>
           {initialCurrencyMode === CurrencyKind.SATS && (
             <AppText variant="caption" style={styles.satsText}>
@@ -208,7 +212,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: hp(150),
       height: hp(150),
-      // marginVertical: hp(20),
+      marginVertical: hp(20),
     },
     gestureRootView: {
       flex: 1,

@@ -11,6 +11,10 @@ import {
   UTXOInfoSchema,
   Tags,
   AddressCacheSchema,
+  InputSchema,
+  OutputSchema,
+  ScriptPubKeySchema,
+  ScriptSigSchema,
 } from './wallet';
 import { TribeAppSchema } from './app';
 import { VersionHistorySchema } from './versionHistory';
@@ -60,4 +64,8 @@ export default [
   CloudBackupHistorySchema,
   NodeInfoSchema,
   NodeBtcBalanceSchema,
+  InputSchema,
+  OutputSchema,
+  ScriptPubKeySchema,
+  ScriptSigSchema,
 ];

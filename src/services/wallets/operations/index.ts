@@ -206,6 +206,8 @@ export default class WalletOperations {
       recipientAddresses,
       senderAddresses,
       blockTime: tx.blocktime,
+      inputs: inputs,
+      outputs: outputs,
     };
     return transaction;
   };
@@ -524,25 +526,25 @@ export default class WalletOperations {
     // high fee: 10 minutes
     const highFeeBlockEstimate = 1;
     const high = {
-      feePerByte: 3,
+      feePerByte: 20,
       estimatedBlocks: highFeeBlockEstimate,
-      averageTxFee: 3,
+      averageTxFee: 20,
     };
 
     // medium fee: 30 mins
     const mediumFeeBlockEstimate = 1;
     const medium = {
-      feePerByte: 2,
+      feePerByte: 9,
       estimatedBlocks: mediumFeeBlockEstimate,
-      averageTxFee: 2,
+      averageTxFee: 9,
     };
 
     // low fee: 60 mins
     const lowFeeBlockEstimate = 1;
     const low = {
-      feePerByte: 1,
+      feePerByte: 6,
       estimatedBlocks: lowFeeBlockEstimate,
-      averageTxFee: 1,
+      averageTxFee: 6,
     };
     const feeRatesByPriority = { high, medium, low };
     return feeRatesByPriority;

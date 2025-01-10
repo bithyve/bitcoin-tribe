@@ -25,7 +25,7 @@ import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
-import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg'
+import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import BitcoinPendingIconLight from 'src/assets/images/bitcoinPendingTxnIcon_light.svg';
 
 type WalletTransactionsProps = {
@@ -38,7 +38,7 @@ type WalletTransactionsProps = {
   transaction: Transaction;
   tranStatus?: string;
   coin?: string;
-  networkType?: string; 
+  networkType?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
@@ -51,7 +51,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     disabled,
     tranStatus,
     coin,
-    networkType
+    networkType,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
