@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
+import org.rgbtools.AssetUda
 import org.rgbtools.Balance
 import org.rgbtools.Invoice
 import org.rgbtools.Utxo
@@ -45,6 +46,7 @@ object RGBHelper {
             var assets = RGBWalletRepository.wallet?.listAssets(listOf())
             val rgb25Assets = assets?.cfa
             val rgb20Assets = assets?.nia
+            val udaAssets = assets?.uda
             if (rgb20Assets != null) {
                 for (rgb20Asset in rgb20Assets) {
                     val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb20Asset.assetId, listOf(), false)
@@ -55,8 +57,12 @@ object RGBHelper {
                     val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb25Asset.assetId, listOf(), false)
                 }
             }
+            if (udaAssets != null) {
+                for (udaAsset in udaAssets) {
+                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, udaAsset.assetId, listOf(), false)
+                }
+            }
             assets = RGBWalletRepository.wallet?.listAssets(listOf())
-            Log.d(TAG, "syncRgbAssets: ${assets.toString()}")
             val gson = Gson()
             val json = gson.toJson(assets)
             json.toString()
@@ -230,6 +236,29 @@ object RGBHelper {
         )
         Log.d(TAG, "issueAssetRgb25: New asset = ${asset?.assetId}")
         return  asset
+    }
+
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): AssetUda? {
+        val asset = RGBWalletRepository.wallet?.issueAssetUda(
+            RGBWalletRepository.online!!,
+            name,
+            ticker,
+            details,
+            AppConstants.rgbDefaultPrecision,
+            mediaFilePath,
+            attachmentsFilePaths,
+        )
+        return  asset
+    }
+
+    fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.failTransfers(
+            RGBWalletRepository.online!!,
+            batchTransferIdx,
+            noAssetOnly,
+            skipSync
+        )
+        return  status
     }
 
     private fun createUTXOs(feeRate: Float): UByte? {

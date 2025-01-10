@@ -249,7 +249,7 @@ function SendToContainer({
               multiline={true}
               numberOfLines={1}
               placeholder={sendScreen.recipientAddress}
-              inputStyle={styles.inputStyle}
+              inputStyle={styles.recipientInputStyle}
               contentStyle={styles.contentStyle}
               rightIcon={<ClearIcon />}
               onRightTextPress={() => setRecipientAddress('')}
@@ -273,10 +273,9 @@ function SendToContainer({
               keyboardType={'numeric'}
               inputStyle={styles.inputStyle}
               contentStyle={styles.contentStyle}
-              // icon={<IconBitcoin />}
-              rightText={common.max}
-              onRightTextPress={() => {}}
-              rightCTATextColor={theme.colors.accent1}
+              // rightText={common.max}
+              // onRightTextPress={() => {}}
+              // rightCTATextColor={theme.colors.accent1}
             />
           </View>
           <View style={styles.availableBalanceWrapper}>
@@ -448,8 +447,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
-    inputStyle: {
+    recipientInputStyle: {
       width: '80%',
+    },
+    inputStyle: {
+      // width: '80%',
+      width: '100%',
     },
     customFeeInputStyle: {
       width: '80%',

@@ -266,7 +266,8 @@
   "sendScreen": {
     "headerSubTitle": "扫描下方的比特币地址或RGB发票",
     "btcHeaderSubTitle": "扫描比特币地址",
-    "optionCardTitle": "或手动输入详细信息",
+    "optionCardTitle": "Enter details manually",
+    "enterInvoiceManually": "Enter invoice manually",
     "optionCardSubTitle": "输入比特币地址或RGB发票",
     "sendAssetOptionCardSubTitle": "输入RGB发票",
     "sendBtcOptionCardSubTitle": "输入比特币地址",
@@ -290,7 +291,7 @@
     "sendAssetTitle": "发送资产",
     "sendAssetSubtitle": "扫描RGB发票",
     "totalFee": "总费用：",
-     "sendBtcLoadingTitle": "正在发送比特币",
+    "sendBtcLoadingTitle": "正在发送比特币",
     "sendBtcLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，比特币将安全发送。",
     "recipientAddress": "收件人地址",
     "uploadFromGallery": "从图库上传",
@@ -417,11 +418,12 @@
     "failedToCreateUTXOSubTitle": " 由于网络拥堵，当前交易费用较高，您的钱包余额不足以支付。请增加余额或在费用较低时重试。",
     "unexpectedErrorTitle": "意外错误",
     "unexpectedErrorSubTitle": "我们在处理您的请求时遇到了问题。请稍后再试",
-     "sendAssetLoadingTitle": "正在发送 RGB 资产",
+    "sendAssetLoadingTitle": "正在发送 RGB 资产",
     "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
-    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。"
+    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
+    "swipeToSend": "滑动发送"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -460,7 +462,7 @@
     "channelCloseMsg": "频道已关闭",
     "takeTimeMsg": "此步骤将花费几秒钟。"
   },
-  "channel":{
+  "channel": {
     "status": "状态：",
     "assetLocalAmt": "资产本地金额：",
     "shortChannelld": "短通道 ID：",

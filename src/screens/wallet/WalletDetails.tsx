@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
 import { useMutation, UseMutationResult } from 'react-query';
@@ -47,6 +44,7 @@ function WalletDetails({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
+  const [walletName, setWalletName] = useState(null);
 
   // const largeHeaderHeight = scrollY.interpolate({
   //   inputRange: [0, 250],
@@ -104,22 +102,30 @@ function WalletDetails({ navigation, route }) {
       listPaymentshMutation.mutate();
     }
   }, []);
-  
+  useEffect(() => {
+    if (app?.appName) {
+      setWalletName(app.appName);
+    }
+  }, [app]);
+
   const transactionsData =
-  app.appType === AppType.NODE_CONNECT
-    ? Object.values({ ...listPaymentshMutation.data, ...data?.transactions }).sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime() || 0; 
-        const dateB = new Date(b.createdAt).getTime() || 0; 
-        return dateA - dateB;
-      })
-    : wallet?.specs.transactions;
+    app.appType === AppType.NODE_CONNECT
+      ? Object.values({
+          ...listPaymentshMutation.data,
+          ...data?.transactions,
+        }).sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime() || 0;
+          const dateB = new Date(b.createdAt).getTime() || 0;
+          return dateA - dateB;
+        })
+      : wallet?.specs.transactions;
 
   return (
     <ScreenContainer>
       <WalletDetailsHeader
         wallet={wallet}
         rgbWallet={rgbWallet}
-        username={app.appName}
+        username={walletName ? walletName : 'Satoshi’s Palette'}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         onPressSend={() =>

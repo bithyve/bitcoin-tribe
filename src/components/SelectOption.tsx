@@ -105,7 +105,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: windowHeight > 670 ? hp(20) : hp(10),
+      padding: windowHeight > 670 ? hp(16) : hp(10),
       backgroundColor: backColor,
       borderRadius: 20,
       borderColor: backup

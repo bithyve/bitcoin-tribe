@@ -54,8 +54,8 @@ function ScanAssetScreen({ route, navigation }) {
         <QRScanner onCodeScanned={onCodeScanned} />
       </View>
       <OptionCard
-        title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.sendAssetOptionCardSubTitle}
+        title={sendScreen.enterInvoiceManually}
+        // subTitle={sendScreen.sendAssetOptionCardSubTitle}
         onPress={() => {
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,

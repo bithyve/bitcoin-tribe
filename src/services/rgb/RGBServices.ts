@@ -232,6 +232,29 @@ export default class RGBServices {
     }
   };
 
+  static issueAssetUda = async (
+    name: string,
+    ticker: string,
+    details: string,
+    mediaFilePath: string,
+    attachmentsFilePaths: string[],
+    appType: AppType,
+    api: RLNNodeApiServices,
+  ): Promise<{}> => {
+    if (appType === AppType.NODE_CONNECT) {
+      // todo
+    } else {
+      const data = await RGB.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+      );
+      return JSON.parse(data);
+    }
+  };
+
   static sendAsset = async (
     assetId: string,
     blindedUTXO: string,
@@ -281,6 +304,11 @@ export default class RGBServices {
       const data = await RGB.getUnspents();
       return JSON.parse(data);
     }
+  };
+
+  static failTransfer = async (batchTransferIdx: Number, noAssetOnly: boolean): Promise<{status: boolean, error?:string}> => {
+    const keys = await RGB.noAssetOnly(this.NETWORK, batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
   };
 
   static getBtcBalance = async (api: RLNNodeApiServices) => {

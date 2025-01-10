@@ -151,7 +151,9 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
                   <AppText variant="pageTitle2" style={styles.totalBalance}>
-                    {numberWithCommas(asset.balance.future + asset.balance?.offchainOutbound)}
+                    {numberWithCommas(
+                      asset.balance.future + asset.balance?.offchainOutbound,
+                    )}
                   </AppText>
                 </View>
                 <AppText variant="body1" style={styles.totalBalanceLabel}>
@@ -194,6 +196,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: hp(20),
       padding: hp(5),
       width: '100%',
+      marginTop: hp(20),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
