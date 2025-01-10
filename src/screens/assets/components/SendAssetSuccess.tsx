@@ -135,6 +135,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: hp(150),
       height: hp(150),
+      marginVertical: hp(20),
     },
   });
 export default SendAssetSuccess;

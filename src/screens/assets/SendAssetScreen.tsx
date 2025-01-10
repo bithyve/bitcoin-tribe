@@ -265,6 +265,13 @@ const SendAssetScreen = () => {
     }
   };
 
+  const setMaxAmount = () => {
+    if (item?.balance?.spendable) {
+      const spendableAmount = item.balance.spendable.toString();
+      setAmount(spendableAmount);
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -341,6 +348,10 @@ const SendAssetScreen = () => {
           placeholder={assets.amount}
           keyboardType="numeric"
           style={styles.input}
+          inputStyle={styles.inputStyle}
+          rightText={common.max}
+          onRightTextPress={setMaxAmount}
+          rightCTAStyle={styles.rightCTAStyle}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
@@ -415,7 +426,7 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={successStatus ? '35%' : ''}
+          height={successStatus ? '50%' : ''}
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => setVisible(false)}>
