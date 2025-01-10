@@ -195,6 +195,25 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun failTransfer( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val status = RGBHelper.failTransfer(batchTransferIdx, noAssetOnly, true)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("status", status)
+                promise.resolve(jsonObject.toString())
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
     fun getUnspents(promise: Promise){
         val rgbUtxo = RGBHelper.getUnspents()
         promise.resolve(Gson().toJson(rgbUtxo))
