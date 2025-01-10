@@ -222,7 +222,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: utxo,
-        amount,
+        amount: amount.replace(/,/g, ''),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
