@@ -177,6 +177,19 @@ RCT_EXPORT_METHOD(issueAssetUda:(NSString*) name
   }];
 }
 
+
+RCT_EXPORT_METHOD(failTransfer:(NSInteger)batchTransferIdx
+                  noAssetOnly:(BOOL *)noAssetOnly
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper failTransferWithBatchTransferIdx:batchTransferIdx noAssetOnly:noAssetOnly callback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
+}
+
 RCT_EXPORT_METHOD(backup:(NSString*)path
                   password:(NSString *)password
                   resolver:(RCTPromiseResolveBlock)resolve

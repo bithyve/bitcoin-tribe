@@ -306,6 +306,11 @@ export default class RGBServices {
     }
   };
 
+  static failTransfer = async (batchTransferIdx: Number, noAssetOnly: boolean): Promise<{status: boolean, error?:string}> => {
+    const keys = await RGB.noAssetOnly(this.NETWORK, batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
+  };
+
   static getBtcBalance = async (api: RLNNodeApiServices) => {
     const response = await api.getBtcBalance({ skip_sync: false });
     return response;

@@ -251,6 +251,16 @@ object RGBHelper {
         return  asset
     }
 
+    fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.failTransfers(
+            RGBWalletRepository.online!!,
+            batchTransferIdx,
+            noAssetOnly,
+            skipSync
+        )
+        return  status
+    }
+
     private fun createUTXOs(feeRate: Float): UByte? {
         Log.d(TAG, "createUTXOs: tribe")
         return RGBWalletRepository.wallet?.createUtxos(
