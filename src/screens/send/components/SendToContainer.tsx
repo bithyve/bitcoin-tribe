@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -19,7 +20,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Keys, Storage } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
-import { TxPriority } from 'src/services/wallets/enums';
+import { PaymentInfoKind, TxPriority } from 'src/services/wallets/enums';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -38,6 +39,8 @@ import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import WalletUtilities from 'src/services/wallets/operations/utils';
+import config from 'src/utils/config';
 
 function SendToContainer({
   wallet,
@@ -65,6 +68,7 @@ function SendToContainer({
   const [customFee, setCustomFee] = useState(0);
   const [isSendMax, setIsSendMax] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
+  const [inputHeight, setInputHeight] = React.useState(100);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -81,7 +85,10 @@ function SendToContainer({
   } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, inputHeight),
+    [theme, inputHeight],
+  );
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -122,6 +129,7 @@ function SendToContainer({
       );
     }, 400);
   };
+
   const initiateSend = () => {
     setVisible(true);
     if (app.appType === AppType.ON_CHAIN) {
@@ -233,6 +241,35 @@ function SendToContainer({
     }
   };
 
+  const handlePasteAddress = async () => {
+    const getClipboardValue = await Clipboard.getString();
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let {
+      type: paymentInfoKind,
+      address,
+      amount,
+    } = WalletUtilities.addressDiff(getClipboardValue, network);
+    if (amount) {
+      amount = Math.trunc(amount * 1e8);
+    }
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      switch (paymentInfoKind) {
+        case PaymentInfoKind.ADDRESS:
+          setRecipientAddress(address);
+          break;
+        case PaymentInfoKind.PAYMENT_URI:
+          setRecipientAddress(address);
+          break;
+        default:
+          Toast(sendScreen.invalidBtcAddress, true);
+      }
+    } else {
+      Keyboard.dismiss();
+      Toast(sendScreen.invalidBtcAddress, true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
@@ -243,16 +280,28 @@ function SendToContainer({
             </AppText>
             <TextField
               value={recipientAddress}
-              onChangeText={text => {
-                setRecipientAddress(text);
-              }}
-              multiline={true}
-              numberOfLines={1}
+              onChangeText={text => setRecipientAddress(text)}
               placeholder={sendScreen.recipientAddress}
+              // style={styles.input}
+              multiline={true}
+              returnKeyType={'Enter'}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              numberOfLines={3}
+              contentStyle={
+                recipientAddress
+                  ? styles.recipientContentStyle
+                  : styles.contentStyle1
+              }
               inputStyle={styles.recipientInputStyle}
-              contentStyle={styles.contentStyle}
-              rightIcon={<ClearIcon />}
-              onRightTextPress={() => setRecipientAddress('')}
+              rightText={!recipientAddress && sendScreen.paste}
+              rightIcon={recipientAddress && <ClearIcon />}
+              onRightTextPress={() =>
+                recipientAddress
+                  ? setRecipientAddress('')
+                  : handlePasteAddress()
+              }
               rightCTAStyle={styles.rightCTAStyle}
             />
           </View>
@@ -345,7 +394,7 @@ function SendToContainer({
               selectedPriority={selectedPriority}
               setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
               feeRateByPriority={''}
-              estimatedBlocksByPriority={10}
+              estimatedBlocksByPriority={1}
               disabled={isSendMax}
             />
           </View>
@@ -407,7 +456,7 @@ function SendToContainer({
           }
           estimateBlockTime={
             selectedPriority === TxPriority.CUSTOM
-              ? 10
+              ? 1
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
@@ -420,7 +469,7 @@ function SendToContainer({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     container: {
       height: '100%',
@@ -500,6 +549,17 @@ const getStyles = (theme: AppTheme) =>
       width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    recipientContentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
+      marginTop: 0,
+    },
+    contentStyle1: {
+      height: hp(50),
+      // marginTop: hp(5),
     },
   });
 export default SendToContainer;

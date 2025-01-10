@@ -25,7 +25,7 @@ type sendSuccessProps = {
   transFee: number;
   total: number;
   feeRate: string;
-  estimateBlockTime: string;
+  estimateBlockTime: number;
   onPress: () => void;
   onSuccessStatus: boolean;
   onSuccessPress: () => void;
@@ -93,8 +93,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ {estimateBlockTime}{' '}
-            {selectedPriority === TxPriority.CUSTOM ? 'min' : 'hr'}
+            {feeRate} sat/vB ~ {estimateBlockTime * 10} {'min'}
           </AppText>
         </View>
       </View>

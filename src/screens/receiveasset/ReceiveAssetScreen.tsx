@@ -121,6 +121,13 @@ function ReceiveAssetScreen() {
 
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
+      if (assetId && amount) {
+        const invoice = rgbWallet?.receiveData?.invoice
+          .replace('rgb:~', `${assetId}`)
+          .replace('~', amount);
+        setRgbInvoice(invoice);
+        return invoice;
+      }
       setRgbInvoice(rgbWallet?.receiveData?.invoice);
       return rgbWallet?.receiveData?.invoice;
     } else {

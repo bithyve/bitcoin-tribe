@@ -81,7 +81,7 @@
     "enterRecoveryPhrase": "请输入12词恢复短语",
     "mismatchPasscode": "密码不匹配。请再试一次",
     "btcBackedAssetTitle": "比特币支持的资产",
-    "btcBackedAssetSubTitle": "RGB 协议允许任何人在最安全的区块链上发行、发送或接收资产。",
+    "btcBackedAssetSubTitle": "RGB协议允许任何人在最安全的区块链上发行、发送或接收资产，使用您钱包中的比特币作为这些资产的燃料。",
     "btcBackedAssetInfo": "您钱包中的 Sats 将作为这些资产的燃料使用。",
     "rememberPasscodeTitle": "记住您的密码",
     "rememberPasscodeSubTitle": "请记住您的密码，并通过写下12个字的恢复密钥备份您的应用程序",
@@ -312,7 +312,8 @@
     "enterCustomFee": "输入自定义费用",
     "swipeToBroadcast": "滑动以广播",
     "broadcastingTXN": "正在广播交易...",
-    "successTitle": "成功！"
+    "successTitle": "成功！",
+    "recipientInvoice": "收件人的发票"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -423,7 +424,9 @@
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
-    "swipeToSend": "滑动发送"
+    "swipeToSend": "滑动发送",
+    "cancelTransferMsg": "取消转账！",
+    "cancelTransaction": "取消交易"
   },
   "community": {
     "fnfTitle": "朋友和家人",

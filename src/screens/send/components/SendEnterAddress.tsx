@@ -42,9 +42,7 @@ function SendEnterAddress({
       return;
     }
     paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(
-      app.networkType,
-    );
+    const network = WalletUtilities.getNetworkByType(app.networkType);
 
     let {
       type: paymentInfoKind,
@@ -71,10 +69,20 @@ function SendEnterAddress({
         navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
           wallet,
           rgbInvoice: address,
+          assetID: '',
+          amount: '',
         });
         break;
       case PaymentInfoKind.RLN_INVOICE:
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
+        break;
+      case PaymentInfoKind.RGB_INVOICE_URL:
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+          wallet,
+          rgbInvoice: address,
+          assetID: address.match(/rgb:[^\/]+/)?.[0],
+          transactionAmount: address.match(/\/(\d+)\//)?.[1],
+        });
         break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
@@ -113,7 +121,7 @@ function SendEnterAddress({
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
-        rightCTATextColor={theme.colors.primaryCTAText}
+        rightCTATextColor={theme.colors.accent1}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -146,12 +154,10 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     contentStyle: {

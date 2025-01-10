@@ -23,6 +23,7 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
+import Toast from 'src/components/Toast';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -83,12 +84,10 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       color: theme.colors.headingColor,
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     inputStyle: {
@@ -120,9 +119,28 @@ const EnterInvoiceDetails = () => {
   );
 
   const handlePasteAddress = async () => {
+    const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
     const getClipboardValue = await Clipboard.getString();
-    setAssetId(getClipboardValue);
+    if (assetIdPattern.test(getClipboardValue)) {
+      setAssetId(getClipboardValue);
+    } else {
+      Toast('Invalid asset ID', true);
+    }
   };
+
+  function validateAndNavigateToReceiveAsset() {
+    const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
+    if (assetIdPattern.test(assetId)) {
+      navigation.replace(NavigationRoutes.RECEIVEASSET, {
+        refresh: true,
+        assetId,
+        amount,
+        selectedType,
+      });
+    } else {
+      Toast('Invalid asset ID', true);
+    }
+  }
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -193,7 +211,7 @@ const EnterInvoiceDetails = () => {
           rightText={sendScreen.paste}
           onRightTextPress={() => handlePasteAddress()}
           rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.primaryCTAText}
+          rightCTATextColor={theme.colors.accent1}
         />
 
         <TextField
@@ -219,14 +237,7 @@ const EnterInvoiceDetails = () => {
         ) : null}
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => {
-            navigation.replace(NavigationRoutes.RECEIVEASSET, {
-              refresh: true,
-              assetId,
-              amount,
-              selectedType,
-            });
-          }}
+          primaryOnPress={() => validateAndNavigateToReceiveAsset()}
           secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
             navigation.replace(NavigationRoutes.RECEIVEASSET, {

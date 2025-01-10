@@ -81,7 +81,7 @@
     "enterRecoveryPhrase": "Ingrese una frase de recuperación de 12 palabras",
     "mismatchPasscode": "Los códigos de acceso no coinciden. \nPor favor, inténtalo de nuevo",
     "btcBackedAssetTitle": "Activos respaldados por Bitcoin",
-    "btcBackedAssetSubTitle": "El protocolo RGB permite a cualquiera emitir, enviar o recibir activos sobre la cadena de bloques más segura.",
+    "btcBackedAssetSubTitle": "El protocolo RGB permite a cualquiera emitir, enviar o recibir activos en la blockchain más segura, utilizando sats de tu cartera como combustible para estos activos.",
     "btcBackedAssetInfo": "Los sats de tu cartera se utilizarán como combustible para estos activos.",
     "rememberPasscodeTitle": "Recuerda tu código",
     "rememberPasscodeSubTitle": "Recuerda tu código y haz una copia de seguridad de la aplicación escribiendo la clave de recuperación de 12 palabras",
@@ -312,7 +312,8 @@
     "enterCustomFee": "Introduce una tarifa personalizada",
     "swipeToBroadcast": "Desliza para transmitir",
     "broadcastingTXN": "Transmitiendo transacción...",
-    "successTitle": "¡Éxito!"
+    "successTitle": "¡Éxito!",
+    "recipientInvoice": "Factura del destinatario"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -423,7 +424,9 @@
     "issueAssetLoadingTitle": "Emitiendo Activo",
     "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
-    "swipeToSend": "Deslizar para enviar"
+    "swipeToSend": "Deslizar para enviar",
+    "cancelTransferMsg": "¡Transferencia cancelada!",
+    "cancelTransaction": "Cancelar transacción"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

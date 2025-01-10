@@ -35,7 +35,7 @@ function OnboardingSlides() {
       id: 1,
       title: onBoarding.btcBackedAssetTitle,
       subTitle: onBoarding.btcBackedAssetSubTitle,
-      paragraph: onBoarding.btcBackedAssetInfo,
+      paragraph: '',
       illustration: <BtcBackedAsset />,
     },
     {
@@ -168,7 +168,7 @@ const getStyles = (theme: AppTheme) =>
       width: 10,
       height: 10,
       borderRadius: 5,
-      backgroundColor: theme.colors.accent3,
+      backgroundColor: theme.colors.inputBackground,
       marginEnd: 5,
     },
   });

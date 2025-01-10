@@ -9,6 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SwipeToAction from 'src/components/SwipeToAction';
 import PrimaryCTA from 'src/components/PrimaryCTA';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type sendAssetSuccessProps = {
   assetName: string;
@@ -18,6 +19,7 @@ type sendAssetSuccessProps = {
   onSuccessStatus: boolean;
   onSuccessPress: () => void;
   selectedPriority: string;
+  estimateBlockTime: number;
 };
 function SendAssetSuccess(props: sendAssetSuccessProps) {
   const {
@@ -28,6 +30,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     onSuccessStatus,
     onSuccessPress,
     selectedPriority,
+    estimateBlockTime,
   } = props;
 
   const theme: AppTheme = useTheme();
@@ -56,7 +59,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ 10 {'min'}
+            {feeRate} sat/vB ~ {estimateBlockTime * 10} {'min'}
           </AppText>
         </View>
       </View>
@@ -68,7 +71,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText variant="body1" style={styles.valueText}>
-            {amount}
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </View>
@@ -132,6 +135,7 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
       width: hp(150),
       height: hp(150),
+      marginVertical: hp(20),
     },
   });
 export default SendAssetSuccess;

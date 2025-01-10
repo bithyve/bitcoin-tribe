@@ -36,7 +36,6 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
 
-
 type seedWordItem = {
   id: number;
   name: string;
@@ -199,7 +198,7 @@ function EnterSeedContainer() {
         } catch (error) {
           if (error instanceof Error && error.message === 'No backup found') {
             setVisibleLoader(false);
-            navigation.navigate(NavigationRoutes.IMPORTRGBBACKUP, {mnemonic});
+            navigation.navigate(NavigationRoutes.IMPORTRGBBACKUP, { mnemonic });
           } else {
             setVisibleLoader(false);
             Toast(`${error.message}`, true);
@@ -248,7 +247,7 @@ function EnterSeedContainer() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View>
         <ResponsePopupContainer
           visible={visibleLoader}
@@ -258,7 +257,11 @@ function EnterSeedContainer() {
           <InProgessPopupContainer
             title={onBoarding.recoverLoadingTitle}
             subTitle={onBoarding.recoverLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/backupAndRecovery.json') : require('src/assets/images/jsons/backupAndRecovery_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/backupAndRecovery.json')
+                : require('src/assets/images/jsons/backupAndRecovery_light.json')
+            }
           />
         </ResponsePopupContainer>
       </View>
@@ -322,7 +325,7 @@ function EnterSeedContainer() {
           setVisibleLoader(true);
           setTimeout(() => {
             onPressHandleNext();
-          },500)
+          }, 500);
         }}
         primaryTitle={common.next}
         primaryLoading={isLoading || setupNewAppMutation.isLoading}
@@ -344,6 +347,10 @@ function EnterSeedContainer() {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: hp(20),
+    },
     input: {
       borderRadius: 15,
       fontSize: 13,

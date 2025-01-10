@@ -1,9 +1,7 @@
-import React, { useState, useContext, useCallback } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useContext, useCallback } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
-import Clipboard from '@react-native-clipboard/clipboard';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -15,9 +13,7 @@ import { PaymentInfoKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
-// import TextField from 'src/components/TextField';
 import { hp } from 'src/constants/responsive';
-// import AppText from 'src/components/AppText';
 import OptionCard from 'src/components/OptionCard';
 
 function SendBTCScreen({ route, navigation }) {
@@ -25,9 +21,7 @@ function SendBTCScreen({ route, navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
-  const [visible, setVisible] = useState(false);
-  const [address, setAddress] = useState('');
-  const { receiveData, title, subTitle, wallet } = route.params;
+  const { title, subTitle, wallet } = route.params;
 
   const onCodeScanned = useCallback((codes: Code[]) => {
     const value = codes[0]?.value;
@@ -58,40 +52,6 @@ function SendBTCScreen({ route, navigation }) {
         Toast(sendScreen.invalidBtcAddress, true);
     }
   }, []);
-
-  const handlePasteAddress = async () => {
-    const getClipboardValue = await Clipboard.getString();
-    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(getClipboardValue, network);
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
-    if (paymentInfoKind) {
-      Keyboard.dismiss();
-      setAddress(address);
-      switch (paymentInfoKind) {
-        case PaymentInfoKind.ADDRESS:
-          navigation.replace(NavigationRoutes.SENDTO, { wallet, address });
-          break;
-        case PaymentInfoKind.PAYMENT_URI:
-          navigation.replace(NavigationRoutes.SENDTO, {
-            wallet,
-            address,
-            paymentURIAmount: amount,
-          });
-          break;
-        default:
-          Toast(sendScreen.invalidBtcAddress, true);
-      }
-    } else {
-      Keyboard.dismiss();
-      Toast(sendScreen.invalidBtcAddress, true);
-    }
-  };
 
   return (
     <ScreenContainer>
