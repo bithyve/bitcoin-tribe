@@ -18,7 +18,6 @@ import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
-import FailedTxnIconLight from 'src/assets/images/failedTxnIcon_light.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
 
@@ -124,7 +123,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
