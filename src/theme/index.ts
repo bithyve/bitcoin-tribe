@@ -90,6 +90,7 @@ type CustomColors = {
   assetCardGradient2: string;
   assetCardGradient3: string;
   assetCardVerticalBorder: string;
+  assetBalanceBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -188,6 +189,7 @@ const CombinedDefaultTheme: AppTheme = {
     assetCardGradient2: Colors.White,
     assetCardGradient3: Colors.White,
     assetCardVerticalBorder: Colors.Platinum,
+    assetBalanceBackColor: Colors.BrandeisBlue,
   },
   fonts: {
     regular: {
@@ -294,6 +296,7 @@ const CombinedDarkTheme: AppTheme = {
     assetCardGradient2: Colors.VampireBlack,
     assetCardGradient3: Colors.SacramentoStateGreen,
     assetCardVerticalBorder: Colors.Arsenic,
+    assetBalanceBackColor: Colors.Golden,
   },
   fonts: {
     regular: {

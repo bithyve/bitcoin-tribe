@@ -94,7 +94,7 @@ const getStyles = (theme: AppTheme) =>
     },
     amountText: {
       fontWeight: '500',
-      color: Colors.Black,
+      color: theme.colors.popupSentCTATitleColor,
       flexWrap: 'wrap',
     },
     tagWrapper: {
@@ -105,7 +105,7 @@ const getStyles = (theme: AppTheme) =>
     tagWrapper1: {
       paddingVertical: hp(3),
       paddingHorizontal: hp(10),
-      backgroundColor: theme.colors.accent4,
+      backgroundColor: theme.colors.assetBalanceBackColor,
       borderRadius: 15,
     },
     identiconWrapper: {
