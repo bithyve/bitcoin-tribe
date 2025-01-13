@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Platform, Dimensions } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 import { useTheme } from 'react-native-paper';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { AppTheme } from 'src/theme';
@@ -18,7 +22,7 @@ interface Props {
   onSwipeComplete: () => void;
 }
 
-const SwipeToAction :React.FC<Props> = ({
+const SwipeToAction: React.FC<Props> = ({
   onSwipeComplete,
   title,
   loadingTitle,
@@ -49,7 +53,7 @@ const SwipeToAction :React.FC<Props> = ({
             duration: 600,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       );
       autoSwipeAnimation.current.start();
     }
@@ -65,9 +69,9 @@ const SwipeToAction :React.FC<Props> = ({
 
   const triggerHapticFeedback = () => {
     const options = {
-    enableVibrateFallback: true,
-    ignoreAndroidSystemSettings: false,
-  };
+      enableVibrateFallback: true,
+      ignoreAndroidSystemSettings: false,
+    };
     ReactNativeHapticFeedback.trigger('impactHeavy', options);
   };
 
@@ -96,7 +100,7 @@ const SwipeToAction :React.FC<Props> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       {!swiped ? (
         <Animated.View style={[styles.track]}>
           <View style={styles.dynamicBackgroundContainer}>
@@ -106,16 +110,17 @@ const SwipeToAction :React.FC<Props> = ({
                 {
                   transform: [
                     {
-                      scaleX:Animated.add( translateX.interpolate({
-                        inputRange: [0, SWIPE_LENGTH],
-                        outputRange: [0.2, 1],
-                        extrapolate: 'clamp',
-                      }),
-                      autoSwipe.interpolate({
-                        inputRange: [0, SWIPE_LENGTH],
-                        outputRange: [0, 70],
-                      })
-                    ),
+                      scaleX: Animated.add(
+                        translateX.interpolate({
+                          inputRange: [0, SWIPE_LENGTH],
+                          outputRange: [0.2, 1],
+                          extrapolate: 'clamp',
+                        }),
+                        autoSwipe.interpolate({
+                          inputRange: [0, SWIPE_LENGTH],
+                          outputRange: [0, 70],
+                        }),
+                      ),
                     },
                   ],
                 },
@@ -128,15 +133,17 @@ const SwipeToAction :React.FC<Props> = ({
               {
                 transform: [
                   {
-                    translateX: Animated.add(translateX.interpolate({
-                      inputRange: [0, SWIPE_LENGTH / 2],
-                      outputRange: [0, SWIPE_LENGTH / 3],
-                      extrapolate: 'clamp',
-                    }),
-                    autoSwipe.interpolate({
-                      inputRange: [0, 0.2],
-                      outputRange: [0, 10],
-                    })),
+                    translateX: Animated.add(
+                      translateX.interpolate({
+                        inputRange: [0, SWIPE_LENGTH / 2],
+                        outputRange: [0, SWIPE_LENGTH / 3],
+                        extrapolate: 'clamp',
+                      }),
+                      autoSwipe.interpolate({
+                        inputRange: [0, 0.2],
+                        outputRange: [0, 10],
+                      }),
+                    ),
                   },
                 ],
                 opacity: translateX.interpolate({
@@ -172,7 +179,7 @@ const SwipeToAction :React.FC<Props> = ({
                         autoSwipe.interpolate({
                           inputRange: [0, 1],
                           outputRange: [0, 100],
-                        })
+                        }),
                       ),
                     },
                   ],
@@ -189,7 +196,7 @@ const SwipeToAction :React.FC<Props> = ({
           </Animated.Text>
         </View>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -440,7 +440,13 @@ function SendToContainer({
             ? sendScreen.sendConfirmationSubTitle
             : ''
         }
-        height={sendTransactionMutation.status === 'success' ? '35%' : ''}
+        height={
+          sendTransactionMutation.status === 'success'
+            ? Platform.OS === 'android'
+              ? '100%'
+              : '35%'
+            : ''
+        }
         visible={visible}
         enableCloseIcon={false}
         onDismiss={() => setVisible(false)}>
