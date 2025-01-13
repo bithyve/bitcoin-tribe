@@ -1,5 +1,11 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Image, GestureResponderEvent, Platform } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  GestureResponderEvent,
+  Platform,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import { wp, hp, windowHeight } from 'src/constants/responsive';
@@ -8,10 +14,8 @@ import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
-import Capitalize from 'src/utils/capitalizeUtils';
 import AssetChip from './AssetChip';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
-import Identicon from './Identicon';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 
 type AssetCardProps = {
   asset: Asset;
@@ -20,21 +24,14 @@ type AssetCardProps = {
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const {
-    tag,
-    onPress,
-    asset,
-  } = props;
+  const { tag, onPress, asset } = props;
   const theme: AppTheme = useTheme();
 
   const balance = useMemo(() => {
     return asset.balance.future;
   }, [asset.balance.future]);
 
-  const styles = useMemo(
-    () => getStyles(theme),
-    [theme],
-  );
+  const styles = useMemo(() => getStyles(theme), [theme]);
 
   return (
     <AppTouchable onPress={onPress}>
@@ -46,30 +43,18 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient3,
         ]}>
         <View style={styles.assetImageWrapper}>
-          {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
-            <Image
-              source={{
-                uri: Platform.select({
-                  android: `file://${asset.media?.filePath}`,
-                  ios: asset.media?.filePath,
-                }),
-              }}
-              style={styles.imageStyle}
-            />
-          ) : (
-            <View style={styles.identiconWrapper}>
-              <View style={styles.identiconWrapper2}>
-                <Identicon
-                  value={asset.assetId}
-                  style={styles.identiconView}
-                  size={windowHeight > 670 ? 110 : 90}
-                />
-              </View>
-            </View>
-          )}
+          <Image
+            source={{
+              uri: Platform.select({
+                android: `file://${asset.media?.filePath}`,
+                ios: asset.media?.filePath,
+              }),
+            }}
+            style={styles.imageStyle}
+          />
           <View style={styles.tagWrapper}>
             <AssetChip
-              tagText={Capitalize(tag)}
+              tagText={numberWithCommas(balance)}
               backColor={
                 tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
               }
@@ -78,17 +63,8 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
         </View>
         <View style={styles.contentWrapper}>
-          {asset.ticker && <AppText variant="caption" style={styles.titleText}>
-            {asset.ticker}
-          </AppText>}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
-          </AppText>
-          <AppText
-            variant="caption"
-            style={styles.amountText}
-            numberOfLines={1}>
-            {numberWithCommas(balance)}
           </AppText>
         </View>
       </GradientView>
@@ -108,26 +84,13 @@ const getStyles = (theme: AppTheme) =>
     imageStyle: {
       width: '100%',
       height: '100%',
-      // borderRadius: 10,
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
+      borderRadius: 15,
     },
     identiconWrapper: {
       width: '100%',
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    identiconWrapper2: {
-      borderColor: theme.colors.coinsBorderColor,
-      borderWidth: 2,
-      padding: 5,
-      borderRadius: 110,
-    },
-    identiconView: {
-      height: windowHeight > 670 ? 110 : 90,
-      width: windowHeight > 670 ? 110 : 90,
-      borderRadius: windowHeight > 670 ? 110 : 90,
     },
     contentWrapper: {
       paddingHorizontal: 10,
@@ -144,13 +107,9 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
+      textAlign: 'center',
     },
     amountText: {
-      fontWeight: '300',
-      color: theme.colors.headingColor,
-      flexWrap: 'wrap',
-    },
-    detailsText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
@@ -158,13 +117,11 @@ const getStyles = (theme: AppTheme) =>
     assetImageWrapper: {
       width: '100%',
       height: '70%',
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 0.8,
     },
     tagWrapper: {
       position: 'absolute',
-      left: 15,
-      bottom: 10,
+      alignSelf: 'center',
+      bottom: -10,
     },
   });
 export default AssetCard;

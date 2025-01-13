@@ -18,8 +18,8 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
-import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
+import NoAssetsIllustration from 'src/assets/images/noCollectibeAssets.svg';
+import NoAssetsIllustrationLight from 'src/assets/images/noCollectibeAssets_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import { RealmSchema } from 'src/storage/enum';
@@ -37,7 +37,7 @@ type AssetsListProps = {
   refreshingStatus?: boolean;
 };
 
-function AssetsList(props: AssetsListProps) {
+function CollectibleAssetsList(props: AssetsListProps) {
   const { listData, onPressAsset, onPressAddNew, refreshingStatus } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
@@ -52,15 +52,13 @@ function AssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
-      {props.loading && !refreshingStatus ? (
-        <LoadingSpinner/>
-      ) : null}
+      {props.loading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
         showsVerticalScrollIndicator={false}
         numColumns={2}
         data={listData}
         extraData={[listData]}
-        keyExtractor={(item) => item.assetId} 
+        keyExtractor={item => item.assetId}
         ListFooterComponent={FooterComponent}
         refreshControl={
           Platform.OS === 'ios' ? (
@@ -79,8 +77,8 @@ function AssetsList(props: AssetsListProps) {
         }
         ListEmptyComponent={
           <EmptyStateView
-            title={home.noAssetTitle}
-            subTitle={home.noAssetSubTitle}
+            title={home.noCollectibleAssetTitle}
+            subTitle={home.noCollectibleAssetSubTitle}
             IllustartionImage={
               isThemeDark ? (
                 <NoAssetsIllustration />
@@ -88,6 +86,8 @@ function AssetsList(props: AssetsListProps) {
                 <NoAssetsIllustrationLight />
               )
             }
+            ctaTitle={home.createCollectibleTitle}
+            onPressCTA={() => onPressAddNew()}
           />
         }
         renderItem={({ item, index }) => {
@@ -102,7 +102,7 @@ function AssetsList(props: AssetsListProps) {
               <View style={styles.alternateSpace}>
                 <AssetCard
                   asset={item}
-                  tag={isCoin ? 'COIN' : 'COLLECTIBLE'}
+                  tag={'COLLECTIBLE'}
                   onPress={() =>
                     navigation.navigate(navigateTo, { assetId: item.assetId })
                   }
@@ -112,13 +112,17 @@ function AssetsList(props: AssetsListProps) {
           );
         }}
       />
-      <AppTouchable
-        style={
-          isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
-        }
-        onPress={onPressAddNew}>
-        {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
-      </AppTouchable>
+      {listData.length > 0 && (
+        <AppTouchable
+          style={
+            isThemeDark
+              ? styles.addNewIconWrapper
+              : styles.addNewIconWrapperLight
+          }
+          onPress={onPressAddNew}>
+          {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+        </AppTouchable>
+      )}
     </View>
   );
 }
@@ -149,4 +153,4 @@ const getStyles = (theme: AppTheme, index = null) =>
       top: index % 2 === 0 ? 0 : hp(50),
     },
   });
-export default AssetsList;
+export default CollectibleAssetsList;
