@@ -1,17 +1,10 @@
 import React, { useContext } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
-
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
 import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
@@ -31,8 +24,6 @@ import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-
-const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
