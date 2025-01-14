@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { hp } from 'src/constants/responsive';
 import SwipeToAction from 'src/components/SwipeToAction';
@@ -13,6 +12,7 @@ import Colors from 'src/theme/Colors';
 import TransferLabelContent from './TransferLabelContent';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
+import { Transaction } from 'src/models/interfaces/RGBWallet';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -41,7 +41,9 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           {wallet.status}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
-          {settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+          {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
+            ? 'Issued'
+            : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
         </AppText>
       </GradientView>
       <View style={styles.wrapper}>
@@ -51,6 +53,18 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
             label={wallet.amount}
             content={numberWithCommas(transAmount)}
           />
+          {transaction.txid && (
+            <TransferLabelContent
+              label={'Transaction ID'}
+              content={transaction.txid}
+            />
+          )}
+          {transaction.batchTransferIdx && (
+            <TransferLabelContent
+              label={'Batch Transfer IDX'}
+              content={`${transaction.batchTransferIdx}`}
+            />
+          )}
           <TransferLabelContent
             label={wallet.date}
             content={moment

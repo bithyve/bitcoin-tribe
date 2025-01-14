@@ -199,7 +199,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {getStatusIcon(
-              transType,
+              transType.toLowerCase().replace(/_/g, ''),
               tranStatus.toLowerCase().replace(/_/g, ''),
               'bitcoin',
               isThemeDark,
@@ -211,7 +211,9 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {transType.toLowerCase().replace(/_/g, '') === 'issuance'
+                ? 'Issued'
+                : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
