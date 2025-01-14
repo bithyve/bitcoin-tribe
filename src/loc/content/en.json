@@ -81,7 +81,7 @@
     "enterRecoveryPhrase": "Please enter 12-word recovery phrase",
     "mismatchPasscode": "Passcodes do not match. \nPlease try again",
     "btcBackedAssetTitle": "Bitcoin Backed Assets",
-    "btcBackedAssetSubTitle": "RGB protocol enables anyone to issue, send or receive assets on top of the most secure blockchain.",
+    "btcBackedAssetSubTitle": "RGB protocol allows anyone to issue, send, or receive assets on the most secure blockchain, using sats from your wallet as fuel for these assets.",
     "btcBackedAssetInfo": "Sats from your wallet will be used as fuel for these assets.",
     "rememberPasscodeTitle": "Remember your passcode",
     "rememberPasscodeSubTitle": "Please remember your passcode and backup your app by writing down the 12-word recovery key",
@@ -153,7 +153,7 @@
     "select": "Select",
     "noAssetTitle": "No assets yet.",
     "noAssetSubTitle": "Tap the plus icon below to issue your first asset.",
-    "backupAlertTitle": "Secure Your Funds with a Backup",
+    "backupAlertTitle": "Secure Your Funds \nwith a Backup",
     "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now."
   },
   "settings": {
@@ -312,7 +312,8 @@
     "enterCustomFee": "Enter custom fee",
     "swipeToBroadcast": "Swipe to broadcast",
     "broadcastingTXN": "Broadcasting transaction...",
-    "successTitle": "Successful!"
+    "successTitle": "Successful!",
+    "recipientInvoice": "Recipient's Invoice"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

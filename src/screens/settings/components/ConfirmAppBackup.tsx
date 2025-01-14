@@ -73,11 +73,15 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
     <View>
       <TextField
         value={seedWord}
-        onChangeText={text => setSeedWord(text?.toLocaleLowerCase())}
+        onChangeText={text => {
+          const filteredText = text?.toLocaleLowerCase().replace(/\s/g, '');
+          setSeedWord(filteredText);
+        }}
         placeholder={`Enter the ${getSeedNumber(index)} word`}
         keyboardType={'default'}
         autoFocus={false}
         autoCapitalize="none"
+        autoCorrect={true}
       />
       {invalid && (
         <AppText style={styles.invalidTextStyle}>Invalid word</AppText>

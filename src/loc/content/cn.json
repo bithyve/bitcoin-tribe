@@ -81,7 +81,7 @@
     "enterRecoveryPhrase": "请输入12词恢复短语",
     "mismatchPasscode": "密码不匹配。请再试一次",
     "btcBackedAssetTitle": "比特币支持的资产",
-    "btcBackedAssetSubTitle": "RGB 协议允许任何人在最安全的区块链上发行、发送或接收资产。",
+    "btcBackedAssetSubTitle": "RGB协议允许任何人在最安全的区块链上发行、发送或接收资产，使用您钱包中的比特币作为这些资产的燃料。",
     "btcBackedAssetInfo": "您钱包中的 Sats 将作为这些资产的燃料使用。",
     "rememberPasscodeTitle": "记住您的密码",
     "rememberPasscodeSubTitle": "请记住您的密码，并通过写下12个字的恢复密钥备份您的应用程序",
@@ -312,7 +312,8 @@
     "enterCustomFee": "输入自定义费用",
     "swipeToBroadcast": "滑动以广播",
     "broadcastingTXN": "正在广播交易...",
-    "successTitle": "成功！"
+    "successTitle": "成功！",
+    "recipientInvoice": "收件人的发票"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

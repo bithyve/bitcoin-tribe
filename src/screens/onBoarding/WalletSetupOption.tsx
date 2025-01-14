@@ -40,6 +40,7 @@ function WalletSetupOption({ navigation }) {
         onPress={() => {
           setVisible(true);
         }}
+        style={styles.optionCardStyle}
       />
       <OptionCard
         icon={isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
@@ -47,6 +48,7 @@ function WalletSetupOption({ navigation }) {
         subTitle={onBoarding.recoveryPhraseSubTitle}
         showRightArrow={true}
         onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
+        style={styles.optionCardStyle}
       />
       <ResponsePopupContainer
         visible={visible}
@@ -67,16 +69,14 @@ function WalletSetupOption({ navigation }) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    advanceOptionStyle: {
-      flex: 1,
-      position: 'absolute',
-      bottom: 10,
-      margin: hp(20),
-    },
     title: {
       color: theme.colors.headingColor,
       marginTop: Platform.OS === 'ios' ? hp(35) : hp(50),
       marginBottom: hp(20),
+    },
+    optionCardStyle: {
+      paddingHorizontal: hp(20),
+      borderRadius: 30,
     },
   });
 export default WalletSetupOption;
