@@ -70,7 +70,7 @@ function TransferDetails({ route, navigation }) {
             title={assets.backToHome}
             onPress={() => {
               setVisible(false);
-              navigation.navigate(NavigationRoutes.HOME);
+              navigation.goBack();
             }}
             width={'100%'}
             textColor={theme.colors.popupSentCTATitleColor}
