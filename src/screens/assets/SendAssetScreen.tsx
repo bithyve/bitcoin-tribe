@@ -432,7 +432,7 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => setVisible(false)}>
+          onDismiss={() => {}}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={item?.name}

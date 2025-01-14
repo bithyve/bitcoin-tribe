@@ -59,7 +59,7 @@ function TransferDetails({ route, navigation }) {
         height={Platform.OS === 'android' ? '100%' : '45%'}
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => setVisible(false)}>
+        onDismiss={() => {}}>
         <View style={styles.modalBodyContainer}>
           <View style={styles.illustrationWrapper}>
             <CancelIllustration />
