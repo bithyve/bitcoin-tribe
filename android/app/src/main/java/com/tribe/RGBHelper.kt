@@ -259,7 +259,15 @@ object RGBHelper {
             noAssetOnly,
             skipSync
         )
-        return  status
+        return status
+    }
+
+    fun deleteTransfers(batchTransferIdx: Int, noAssetOnly: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.deleteTransfers(
+            batchTransferIdx,
+            noAssetOnly,
+        )
+        return status
     }
 
     private fun createUTXOs(feeRate: Float): UByte? {
@@ -299,6 +307,7 @@ object RGBHelper {
     }
 
     fun getUnspents(): List<Unspent>? {
+        RGBWalletRepository.wallet?.
         return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
     }
 

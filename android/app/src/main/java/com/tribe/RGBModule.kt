@@ -214,6 +214,25 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun deleteTransfers( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val status = RGBHelper.deleteTransfers(batchTransferIdx, noAssetOnly)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("status", status)
+                promise.resolve(jsonObject.toString())
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
     fun decodeInvoice(invoiceString: String, promise: Promise){
         try {
             val invoice = RGBHelper.decodeInvoice(invoiceString)
