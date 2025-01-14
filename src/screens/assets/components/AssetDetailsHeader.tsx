@@ -10,7 +10,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
-import GradientView from 'src/components/GradientView';
+// import GradientView from 'src/components/GradientView';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
@@ -26,8 +26,8 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
-import IconBitcoin from 'src/assets/images/icon_btc2.svg';
-import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
+// import IconBitcoin from 'src/assets/images/icon_btc2.svg';
+// import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -82,42 +82,40 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <AppHeader
-          title={
-            asset.assetIface.toUpperCase() === AssetFace.RGB25
-              ? assets.collectibles
-              : assetTicker
-          }
           rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
         />
+        <View>
+          <View style={styles.assetImageWrapper}>
+            {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
+              <Image
+                source={{
+                  uri: Platform.select({
+                    android: `file://${assetImage}`,
+                    ios: assetImage,
+                  }),
+                }}
+                resizeMode="contain"
+                style={styles.imageStyle}
+              />
+            ) : (
+              <View style={styles.identiconWrapper}>
+                <View style={styles.identiconWrapper2}>
+                  <Identicon
+                    value={asset.assetId}
+                    style={styles.identiconView}
+                    size={120}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
+          <AppText variant="body2" style={styles.assetNameText}>
+            {assetName}
+          </AppText>
+        </View>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
-            <View style={styles.assetImageWrapper}>
-              {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
-                <Image
-                  source={{
-                    uri: Platform.select({
-                      android: `file://${assetImage}`,
-                      ios: assetImage,
-                    }),
-                  }}
-                  style={styles.imageStyle}
-                />
-              ) : (
-                <View style={styles.identiconWrapper}>
-                  <View style={styles.identiconWrapper2}>
-                    <Identicon
-                      value={asset.assetId}
-                      style={styles.identiconView}
-                      size={60}
-                    />
-                  </View>
-                </View>
-              )}
-            </View>
-            <AppText variant="body2" style={styles.assetNameText}>
-              {assetName}
-            </AppText>
             {app.appType === AppType.NODE_CONNECT ? (
               <View style={styles.balanceContainer}>
                 <View style={styles.totalBalanceWrapper}>
@@ -188,22 +186,20 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     largeHeader: {
       alignItems: 'center',
-      overflow: 'hidden',
     },
     largeHeaderContainer: {
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: hp(20),
-      padding: hp(5),
       width: '100%',
-      marginTop: hp(20),
+      top: -30,
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
       paddingVertical: hp(15),
       width: '100%',
       borderRadius: hp(40),
-      overflow: 'visible',
+      // overflow: 'visible',
       position: 'relative',
     },
     totalBalance: {
@@ -252,15 +248,15 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     imageStyle: {
       alignSelf: 'center',
-      top: -50,
+      top: -65,
       zIndex: 999,
-      width: 60,
-      height: 60,
-      borderRadius: 60,
+      width: 120,
+      height: 120,
+      borderRadius: 120,
       backgroundColor: theme.colors.inputBackground,
     },
     identiconWrapper: {
-      top: -50,
+      top: -65,
       zIndex: 999,
       alignSelf: 'center',
     },
@@ -271,9 +267,9 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: 110,
     },
     identiconView: {
-      height: 60,
-      width: 60,
-      borderRadius: 60,
+      height: 120,
+      width: 120,
+      borderRadius: 120,
     },
     assetImageWrapper: {
       // top: -50,
@@ -282,7 +278,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     assetNameText: {
       textAlign: 'center',
-      top: -30,
+      top: -50,
     },
     onChainTotalBalanceWrapper: {
       alignItems: 'center',
