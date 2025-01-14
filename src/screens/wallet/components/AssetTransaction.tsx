@@ -13,18 +13,13 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
-import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
-import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
-import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
-import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
+import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
+import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
-import FailedTxnIconLight from 'src/assets/images/failedTxnIcon_light.svg';
-import WaitingCounterPartyIcon from 'src/assets/images/lightningWaitingCounterPartyIcon.svg';
-import WaitingCounterPartyBtcIcon from 'src/assets/images/BtcWaitingCounterPartyIcon.svg';
-import WaitingConfirmationIcon from 'src/assets/images/lightningWaitingConfirmationIcon.svg';
-import WaitingConfirmationBtcIcon from 'src/assets/images/BtcWaitingConfirmationIcon.svg';
+import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
+import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
 
 type AssetTransactionProps = {
   transId: string;
@@ -60,19 +55,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIconLight />,
+            light: <SentBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
-            light: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
+            light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -90,7 +85,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
@@ -98,19 +93,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <RecieveBtcIcon />,
-            light: <RecieveBtcIconLight />,
+            light: <RecieveBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -128,7 +123,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
@@ -136,19 +131,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIconLight />,
+            light: <SentBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -166,14 +161,14 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
       default: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIconLight />,
+          light: <RecieveBtcIcon />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
