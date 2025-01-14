@@ -32,7 +32,7 @@ function TransferDetails({ route, navigation }) {
     isError,
     error,
   } = useMutation(() =>
-    ApiHandler.handleTransferFailure(transaction.batchTransferIdx, true),
+    ApiHandler.handleTransferFailure(transaction.batchTransferIdx, false),
   );
 
   useEffect(() => {
