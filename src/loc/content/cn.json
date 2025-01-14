@@ -440,7 +440,10 @@
     "cancelTransactionCtaTitle": " 滑动以取消转账",
     "cancelTransactionCtaMsg": "正在取消交易...",
     "txnCancelSuccessMsg": "交易已成功取消。",
-    "backToHome": "返回首页"
+    "backToHome": "返回首页",
+    "batchTxnIdx": "批量转账索引",
+    "issued": "已发行",
+    "copiedTxIDMsg": "成功复制交易 ID！"
   },
   "community": {
     "fnfTitle": "朋友和家人",

@@ -13,6 +13,9 @@ import TransferLabelContent from './TransferLabelContent';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import { Transaction } from 'src/models/interfaces/RGBWallet';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'src/components/Toast';
+import AppTouchable from 'src/components/AppTouchable';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -28,6 +31,11 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const { wallet, settings, assets } = translations;
   const styles = getStyles(theme);
 
+  const handleCopyText = async (text: string) => {
+    await Clipboard.setString(text);
+    Toast(assets.copiedTxIDMsg);
+  };
+
   return (
     <View style={styles.container}>
       <GradientView
@@ -42,7 +50,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
           {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
-            ? 'Issued'
+            ? assets.issued
             : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
         </AppText>
       </GradientView>
@@ -54,14 +62,16 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
             content={numberWithCommas(transAmount)}
           />
           {transaction.txid && (
-            <TransferLabelContent
-              label={'Transaction ID'}
-              content={transaction.txid}
-            />
+            <AppTouchable onPress={() => handleCopyText(transaction.txid)}>
+              <TransferLabelContent
+                label={wallet.transactionID}
+                content={transaction.txid}
+              />
+            </AppTouchable>
           )}
           {transaction.batchTransferIdx && (
             <TransferLabelContent
-              label={'Batch Transfer IDX'}
+              label={assets.batchTxnIdx}
               content={`${transaction.batchTransferIdx}`}
             />
           )}

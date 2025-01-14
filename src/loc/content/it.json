@@ -440,7 +440,10 @@
     "cancelTransactionCtaTitle": "Scorri per annullare il trasferimento",
     "cancelTransactionCtaMsg": "Annullamento della transazione...",
     "txnCancelSuccessMsg": "Transazione annullata con successo.",
-    "backToHome": "Torna alla home"
+    "backToHome": "Torna alla home",
+    "batchTxnIdx": "Indice di trasferimento batch",
+    "issued": "Emesso",
+    "copiedTxIDMsg": "ID di transazione copiato con successo!"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

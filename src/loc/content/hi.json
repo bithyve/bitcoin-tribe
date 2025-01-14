@@ -440,7 +440,10 @@
     "cancelTransactionCtaTitle": "स्थानांतरण रद्द करने के लिए स्वाइप करें",
     "cancelTransactionCtaMsg": "लेन-देन रद्द किया जा रहा है...",
     "txnCancelSuccessMsg": "लेन-देन सफलतापूर्वक रद्द कर दिया गया।",
-    "backToHome": "मुख्य पृष्ठ पर वापस जाएं"
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
+    "batchTxnIdx": "बैच स्थानांतरण सूचकांक",
+    "issued": "जारी किया गया",
+    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -440,7 +440,10 @@
     "cancelTransactionCtaTitle": "Swipe to cancel transfer",
     "cancelTransactionCtaMsg": "Canceling Transaction...",
     "txnCancelSuccessMsg": "Transaction \nsuccessfully canceled.",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "batchTxnIdx": "Batch Transfer IDX",
+    "issued": "Issued",
+    "copiedTxIDMsg": "Copied Transaction ID successfully!"
   },
   "community": {
     "fnfTitle": "Friends & Family",
