@@ -306,11 +306,25 @@ export default class RGBServices {
     }
   };
 
+  /**
+   * Set the status for eligible transfers to [`TransferStatus::Failed`]
+  */
   static failTransfer = async (
     batchTransferIdx: Number,
     noAssetOnly: boolean,
   ): Promise<{ status: boolean; error?: string }> => {
     const keys = await RGB.failTransfer(batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
+  };
+
+  /**
+   * Delete eligible transfers from the database
+  */
+  static deleteransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.deleteransfer(batchTransferIdx, noAssetOnly);
     return JSON.parse(keys);
   };
 

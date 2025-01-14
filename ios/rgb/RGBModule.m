@@ -177,6 +177,27 @@ RCT_EXPORT_METHOD(issueAssetUda:(NSString*) name
   }];
 }
 
+RCT_EXPORT_METHOD(decodeInvoice:(NSString*)invoiceString
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [helper decodeInvoiceWithInvoiceString:invoiceString callback:^(NSString * _Nonnull response) {
+    resolve(response);
+  }];
+}
+
+RCT_EXPORT_METHOD(deleteTransfers:(NSInteger)batchTransferIdx
+                  noAssetOnly:(BOOL *)noAssetOnly
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper deleteTransfersWithBatchTransferIdx:batchTransferIdx noAssetOnly:noAssetOnly callback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
+}
+
 
 RCT_EXPORT_METHOD(failTransfer:(NSInteger)batchTransferIdx
                   noAssetOnly:(BOOL *)noAssetOnly
