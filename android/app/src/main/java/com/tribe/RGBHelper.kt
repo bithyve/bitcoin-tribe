@@ -16,6 +16,7 @@ import org.rgbtools.AssetNia
 import org.rgbtools.AssetUda
 import org.rgbtools.Balance
 import org.rgbtools.Invoice
+import org.rgbtools.InvoiceData
 import org.rgbtools.Utxo
 import org.rgbtools.ReceiveData
 import org.rgbtools.Recipient
@@ -271,6 +272,10 @@ object RGBHelper {
             feeRate,
             false
         )
+    }
+
+    fun decodeInvoice(invoiceString: String): InvoiceData {
+        return Invoice(invoiceString).invoiceData()
     }
 
     fun createNewUTXOs(feeRate: Float): Boolean {
