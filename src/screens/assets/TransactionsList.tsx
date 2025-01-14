@@ -109,10 +109,11 @@ function TransactionsList({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
+      marginTop: hp(30),
       height: '50%',
     },
     container2: {
-      marginTop: hp(5),
+      marginTop: hp(15),
       height: '100%',
     },
     contentWrapper: {
