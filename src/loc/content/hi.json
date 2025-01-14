@@ -426,7 +426,12 @@
     "totalSupplyAmountErrMsg": "आपने जो मान दर्ज किया है वह बहुत बड़ा है। कृपया 18,446,744,073,709,551,615 से छोटा नंबर दर्ज करें।",
     "swipeToSend": "भेजने के लिए स्वाइप करें",
     "cancelTransferMsg": "ट्रांसफर रद्द कर दिया गया!",
-    "cancelTransaction": "लेन-देन रद्द करें"
+    "cancelTransaction": "लेन-देन रद्द करें",
+    "assetName": "संपत्ति का नाम",
+    "cancelTransactionCtaTitle": "स्थानांतरण रद्द करने के लिए स्वाइप करें",
+    "cancelTransactionCtaMsg": "लेन-देन रद्द किया जा रहा है...",
+    "txnCancelSuccessMsg": "लेन-देन सफलतापूर्वक रद्द कर दिया गया।",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएं"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

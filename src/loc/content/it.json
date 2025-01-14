@@ -426,7 +426,12 @@
     "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615.",
     "swipeToSend": "Scorri per inviare",
     "cancelTransferMsg": "Trasferimento annullato!",
-    "cancelTransaction": "Annulla transazione"
+    "cancelTransaction": "Annulla transazione",
+    "assetName": "Nome dell'asset",
+    "cancelTransactionCtaTitle": "Scorri per annullare il trasferimento",
+    "cancelTransactionCtaMsg": "Annullamento della transazione...",
+    "txnCancelSuccessMsg": "Transazione annullata con successo.",
+    "backToHome": "Torna alla home"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

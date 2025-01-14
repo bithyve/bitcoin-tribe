@@ -426,7 +426,12 @@
     "totalSupplyAmountErrMsg": "入力した値が大きすぎます。18,446,744,073,709,551,615 より小さい数値を入力してください。",
     "swipeToSend": "スワイプして送信",
     "cancelTransferMsg": "転送がキャンセルされました！",
-    "cancelTransaction": "取引をキャンセル"
+    "cancelTransaction": "取引をキャンセル",
+    "assetName": "資産名",
+    "cancelTransactionCtaTitle": "転送をキャンセルするにはスワイプしてください",
+    "cancelTransactionCtaMsg": "取引をキャンセルしています...",
+    "txnCancelSuccessMsg": "取引が正常にキャンセルされました。",
+    "backToHome": "ホームに戻る"
   },
   "community": {
     "fnfTitle": "友達と家族",

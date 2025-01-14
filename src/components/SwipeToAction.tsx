@@ -20,15 +20,20 @@ interface Props {
   title: string;
   loadingTitle: string;
   onSwipeComplete: () => void;
+  backColor?: string;
 }
 
 const SwipeToAction: React.FC<Props> = ({
   onSwipeComplete,
   title,
   loadingTitle,
+  backColor = Colors.Golden,
 }) => {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, backColor),
+    [theme, backColor],
+  );
   const [swiped, setSwiped] = useState(false);
   const translateX = new Animated.Value(0);
   const autoSwipe = new Animated.Value(0);
@@ -200,7 +205,7 @@ const SwipeToAction: React.FC<Props> = ({
   );
 };
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -249,7 +254,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       left: 0,
       top: 0,
-      backgroundColor: Colors.Golden,
+      backgroundColor: backColor,
       transformOrigin: 'left',
       borderRadius: 18,
     },
@@ -264,7 +269,7 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#FFD700',
+      backgroundColor: backColor,
       width: '100%',
       height: 60,
       borderRadius: 18,
