@@ -17,8 +17,8 @@ function GradientView(props: GradientViewProps) {
   return (
     <LinearGradient
       colors={colors}
-      start={{ x: 0.1, y: 0 }}
-      end={{ x: 0.8, y: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0.8, y: 2 }}
       style={style}>
       {children}
     </LinearGradient>
