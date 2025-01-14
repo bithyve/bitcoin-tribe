@@ -113,5 +113,16 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
       borderStyle: 'dashed',
     },
+    labelStyle: {
+      color: theme.colors.headingColor,
+      width: '50%',
+    },
+    textStyle: {
+      lineHeight: 20,
+      color: theme.colors.secondaryHeadingColor,
+      flexWrap: 'wrap',
+      width: '50%',
+      textAlign: 'right',
+    },
   });
 export default TransferDetailsContainer;
