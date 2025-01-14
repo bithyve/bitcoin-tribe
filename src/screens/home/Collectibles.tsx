@@ -18,7 +18,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from 'src/components/AppText';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import { AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
@@ -136,7 +136,13 @@ function Collectibles() {
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
+        onPressAddNew={() =>
+          assets.length > 0
+            ? handleNavigation(NavigationRoutes.ADDASSET)
+            : handleNavigation(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType: AssetType.Collectible,
+              })
+        }
         onPressAsset={asset =>
           handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
             assetId: asset.assetId,

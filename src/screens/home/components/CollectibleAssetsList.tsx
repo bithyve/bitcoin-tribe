@@ -91,10 +91,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
           />
         }
         renderItem={({ item, index }) => {
-          const isCoin = item.assetIface.toUpperCase() === AssetFace.RGB20;
-          const navigateTo = isCoin
-            ? NavigationRoutes.COINDETAILS
-            : NavigationRoutes.COLLECTIBLEDETAILS;
+          const navigateTo = NavigationRoutes.COLLECTIBLEDETAILS;
           const styles = getStyles(theme, index);
 
           return (

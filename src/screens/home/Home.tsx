@@ -21,6 +21,7 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
+import { AssetType } from 'src/models/interfaces/RGBWallet';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -135,7 +136,13 @@ function HomeScreen() {
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
+        onPressAddNew={() =>
+          assets.length > 0
+            ? handleNavigation(NavigationRoutes.ADDASSET)
+            : handleNavigation(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType: AssetType.Coin,
+              })
+        }
         onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
       />
     </ScreenContainer>
