@@ -344,4 +344,14 @@ export default class RGBServices {
     const data = await RGB.isValidBlindedUtxo(invoiceData);
     return data;
   };
+
+  static decodeInvoice = async (
+    invoiceString: string,
+  ): Promise<{
+    file: string;
+    error?: string;
+  }> => {
+    const data = await RGB.decodeInvoice(invoiceString);
+    return JSON.parse(data);
+  };
 }

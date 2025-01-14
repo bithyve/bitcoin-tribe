@@ -214,6 +214,19 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun decodeInvoice(invoiceString: String, promise: Promise){
+        try {
+            val invoice = RGBHelper.decodeInvoice(invoiceString)
+            promise.resolve(Gson().toJson(invoice))
+        } catch (e: Exception) {
+            val message = e.message
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", message)
+            promise.resolve(jsonObject.toString())
+        }
+    }
+
+    @ReactMethod
     fun getUnspents(promise: Promise){
         val rgbUtxo = RGBHelper.getUnspents()
         promise.resolve(Gson().toJson(rgbUtxo))
