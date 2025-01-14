@@ -307,7 +307,6 @@ object RGBHelper {
     }
 
     fun getUnspents(): List<Unspent>? {
-        RGBWalletRepository.wallet?.
         return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
     }
 
