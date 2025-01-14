@@ -348,7 +348,12 @@ export default class RGBServices {
   static decodeInvoice = async (
     invoiceString: string,
   ): Promise<{
-    file: string;
+    recipientId?: string;
+    expirationTimestamp?: number;
+    assetId?: string;
+    assetIface?: string;
+    network?: string;
+    transportEndpoints?: string;
     error?: string;
   }> => {
     const data = await RGB.decodeInvoice(invoiceString);
