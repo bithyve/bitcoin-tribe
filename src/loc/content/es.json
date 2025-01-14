@@ -435,7 +435,12 @@
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
     "swipeToSend": "Deslizar para enviar",
     "cancelTransferMsg": "¡Transferencia cancelada!",
-    "cancelTransaction": "Cancelar transacción"
+    "cancelTransaction": "Cancelar transacción",
+    "assetName": "Nombre del activo",
+    "cancelTransactionCtaTitle": "Desliza para cancelar la transferencia",
+    "cancelTransactionCtaMsg": "Cancelando transacción...",
+    "txnCancelSuccessMsg": "Transacción cancelada con éxito.",
+    "backToHome": "Volver a inicio"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

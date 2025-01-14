@@ -276,7 +276,7 @@ const SendAssetScreen = () => {
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <View>
+      {/* <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
           enableClose={true}
@@ -292,7 +292,7 @@ const SendAssetScreen = () => {
             }
           />
         </ResponsePopupContainer>
-      </View>
+      </View> */}
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <AssetItem
           name={item?.name}
@@ -427,10 +427,12 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={successStatus ? '50%' : ''}
+          height={
+            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
+          }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => setVisible(false)}>
+          onDismiss={() => {}}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={item?.name}

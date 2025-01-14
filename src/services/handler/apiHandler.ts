@@ -1605,8 +1605,6 @@ export class ApiHandler {
     noAssetOnly: boolean,
   ) {
     try {
-      console.log('batchTransferIdx', batchTransferIdx);
-      console.log('noAssetOnly', noAssetOnly);
       const response = await RGBServices.failTransfer(
         batchTransferIdx,
         noAssetOnly,
