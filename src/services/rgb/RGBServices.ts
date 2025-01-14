@@ -306,8 +306,11 @@ export default class RGBServices {
     }
   };
 
-  static failTransfer = async (batchTransferIdx: Number, noAssetOnly: boolean): Promise<{status: boolean, error?:string}> => {
-    const keys = await RGB.noAssetOnly(this.NETWORK, batchTransferIdx, noAssetOnly);
+  static failTransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.failTransfer(batchTransferIdx, noAssetOnly);
     return JSON.parse(keys);
   };
 
@@ -316,9 +319,12 @@ export default class RGBServices {
     return response;
   };
 
-  static backup = async (path: string, password: string): Promise<{
-    file: string,
-    error?: string
+  static backup = async (
+    path: string,
+    password: string,
+  ): Promise<{
+    file: string;
+    error?: string;
   }> => {
     const data = await RGB.backup(path, password);
     return JSON.parse(data);

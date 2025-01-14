@@ -424,7 +424,14 @@
     "issueAssetLoadingTitle": "Emitiendo Activo",
     "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
-    "swipeToSend": "Deslizar para enviar"
+    "swipeToSend": "Deslizar para enviar",
+    "cancelTransferMsg": "¡Transferencia cancelada!",
+    "cancelTransaction": "Cancelar transacción",
+    "assetName": "Nombre del activo",
+    "cancelTransactionCtaTitle": "Desliza para cancelar la transferencia",
+    "cancelTransactionCtaMsg": "Cancelando transacción...",
+    "txnCancelSuccessMsg": "Transacción cancelada con éxito.",
+    "backToHome": "Volver a inicio"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

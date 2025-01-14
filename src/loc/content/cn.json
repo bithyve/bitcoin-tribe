@@ -424,7 +424,14 @@
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
-    "swipeToSend": "滑动发送"
+    "swipeToSend": "滑动发送",
+    "cancelTransferMsg": "取消转账！",
+    "cancelTransaction": "取消交易",
+    "assetName": "资产名称",
+    "cancelTransactionCtaTitle": " 滑动以取消转账",
+    "cancelTransactionCtaMsg": "正在取消交易...",
+    "txnCancelSuccessMsg": "交易已成功取消。",
+    "backToHome": "返回首页"
   },
   "community": {
     "fnfTitle": "朋友和家人",

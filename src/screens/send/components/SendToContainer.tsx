@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -68,6 +68,7 @@ function SendToContainer({
   const [customFee, setCustomFee] = useState(0);
   const [isSendMax, setIsSendMax] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
+  const [inputHeight, setInputHeight] = React.useState(100);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -84,7 +85,10 @@ function SendToContainer({
   } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, inputHeight),
+    [theme, inputHeight],
+  );
 
   useEffect(() => {
     if (!averageTxFeeJSON) {
@@ -276,14 +280,21 @@ function SendToContainer({
             </AppText>
             <TextField
               value={recipientAddress}
-              onChangeText={text => {
-                setRecipientAddress(text);
-              }}
-              multiline={true}
-              numberOfLines={1}
+              onChangeText={text => setRecipientAddress(text)}
               placeholder={sendScreen.recipientAddress}
+              // style={styles.input}
+              multiline={true}
+              returnKeyType={'Enter'}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              numberOfLines={3}
+              contentStyle={
+                recipientAddress
+                  ? styles.recipientContentStyle
+                  : styles.contentStyle1
+              }
               inputStyle={styles.recipientInputStyle}
-              contentStyle={styles.contentStyle}
               rightText={!recipientAddress && sendScreen.paste}
               rightIcon={recipientAddress && <ClearIcon />}
               onRightTextPress={() =>
@@ -429,10 +440,16 @@ function SendToContainer({
             ? sendScreen.sendConfirmationSubTitle
             : ''
         }
-        height={sendTransactionMutation.status === 'success' ? '35%' : ''}
+        height={
+          sendTransactionMutation.status === 'success'
+            ? Platform.OS === 'android'
+              ? '100%'
+              : '35%'
+            : ''
+        }
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => setVisible(false)}>
+        onDismiss={() => {}}>
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
@@ -458,7 +475,7 @@ function SendToContainer({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     container: {
       height: '100%',
@@ -538,6 +555,17 @@ const getStyles = (theme: AppTheme) =>
       width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    recipientContentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
+      marginTop: 0,
+    },
+    contentStyle1: {
+      height: hp(50),
+      // marginTop: hp(5),
     },
   });
 export default SendToContainer;

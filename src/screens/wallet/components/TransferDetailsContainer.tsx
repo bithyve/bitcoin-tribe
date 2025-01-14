@@ -1,43 +1,73 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+import moment from 'moment';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import LabeledContent from 'src/components/LabeledContent';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import moment from 'moment';
-import Capitalize from 'src/utils/capitalizeUtils';
 import { hp } from 'src/constants/responsive';
+import SwipeToAction from 'src/components/SwipeToAction';
+import Colors from 'src/theme/Colors';
+import TransferLabelContent from './TransferLabelContent';
+import GradientView from 'src/components/GradientView';
+import AppText from 'src/components/AppText';
 
 type WalletTransactionsProps = {
+  assetName: string;
   transAmount: string;
   transaction: Transaction;
+  onPress: () => void;
 };
 
 function TransferDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
-  const { transAmount, transaction } = props;
+  const { assetName, transAmount, transaction, onPress } = props;
   const { translations } = useContext(LocalizationContext);
-  const { wallet, settings } = translations;
+  const { wallet, settings, assets } = translations;
   const styles = getStyles(theme);
+
   return (
     <View style={styles.container}>
-      <LabeledContent
-        label={wallet.status}
-        content={settings[transaction.status.toLowerCase().replace(/_/g, '')]}
-      />
-      <LabeledContent
-        label={wallet.amount}
-        content={numberWithCommas(`${transAmount}`)}
-      />
-      <LabeledContent
-        label={wallet.date}
-        content={moment
-          .unix(transaction.updatedAt)
-          .format('DD MMM YY  •  hh:mm a')}
-      />
+      <GradientView
+        style={styles.statusContainer}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
+        <AppText variant="body1" style={styles.labelStyle}>
+          {wallet.status}
+        </AppText>
+        <AppText variant="body2" style={styles.textStyle}>
+          {settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+        </AppText>
+      </GradientView>
+      <View style={styles.wrapper}>
+        <View style={styles.bodyWrapper}>
+          <TransferLabelContent label={assets.assetName} content={assetName} />
+          <TransferLabelContent
+            label={wallet.amount}
+            content={numberWithCommas(transAmount)}
+          />
+          <TransferLabelContent
+            label={wallet.date}
+            content={moment
+              .unix(transaction.updatedAt)
+              .format('DD MMM YY  •  hh:mm a')}
+          />
+        </View>
+      </View>
+      {transaction.status.toLowerCase().replace(/_/g, '') ===
+        'waitingcounterparty' && (
+        <SwipeToAction
+          title={assets.cancelTransactionCtaTitle}
+          loadingTitle={assets.cancelTransactionCtaMsg}
+          onSwipeComplete={onPress}
+          backColor={Colors.FireOpal}
+        />
+      )}
     </View>
   );
 }
@@ -45,6 +75,29 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(20),
+      flex: 1,
+    },
+    statusContainer: {
+      paddingHorizontal: hp(15),
+      paddingVertical: hp(20),
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      marginVertical: hp(10),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: 10,
+    },
+    wrapper: {
+      height: '75%',
+    },
+    bodyWrapper: {
+      marginTop: hp(15),
+      padding: hp(15),
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      borderRadius: 10,
+      borderStyle: 'dashed',
     },
   });
 export default TransferDetailsContainer;
