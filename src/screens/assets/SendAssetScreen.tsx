@@ -183,7 +183,10 @@ const SendAssetScreen = () => {
 
   const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (numericValue <= item.balance.spendable) {
+    if (Number(item.balance.spendable) === 0) {
+      Keyboard.dismiss();
+      Toast(sendScreen.availableBalanceMsg + item.balance.spendable, true);
+    } else if (numericValue <= item.balance.spendable) {
       setAmount(text);
     } else {
       Keyboard.dismiss();
