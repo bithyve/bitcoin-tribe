@@ -365,7 +365,10 @@ const SendAssetScreen = () => {
             title={sendScreen.low}
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+              setSelectedPriority(TxPriority.LOW);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
@@ -376,7 +379,10 @@ const SendAssetScreen = () => {
             title={sendScreen.medium}
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+              setSelectedPriority(TxPriority.MEDIUM);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
@@ -387,7 +393,10 @@ const SendAssetScreen = () => {
             title={sendScreen.high}
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+              setSelectedPriority(TxPriority.HIGH);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
@@ -398,7 +407,9 @@ const SendAssetScreen = () => {
             title={sendScreen.custom}
             priority={TxPriority.CUSTOM}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.CUSTOM);
+            }}
             feeRateByPriority={''}
             estimatedBlocksByPriority={1}
             disabled={false}
@@ -411,7 +422,10 @@ const SendAssetScreen = () => {
             </AppText>
             <TextField
               value={customFee}
-              onChangeText={text => setCustomFee(text)}
+              onChangeText={text => {
+                setSelectedFeeRate(Number(text));
+                setCustomFee(text);
+              }}
               placeholder={sendScreen.enterCustomFee}
               keyboardType={'numeric'}
               inputStyle={styles.customFeeInputStyle}
