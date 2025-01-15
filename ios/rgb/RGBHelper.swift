@@ -410,7 +410,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData() -> String {
+  func genReceiveData(assetID: String, amount: Float) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -429,10 +429,9 @@ import CloudKit
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
                   ], skipSync: false
               )
-              print("\(TAG) refresh_\(refresh_)")
               let bindData = try wallet.blindReceive(
-                  assetId: nil,
-                  amount: nil,
+                assetId: assetID != "" ? assetID : nil,
+                amount: amount != 0 ? UInt64(amount) : nil,
                   durationSeconds: Constants.rgbBlindDuration,
                   transportEndpoints: [Constants.proxyConsignmentEndpoint],
                   minConfirmations: 0
@@ -562,8 +561,8 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(callback: @escaping ((String) -> Void)){
-    let response = genReceiveData()
+  @objc func receiveAsset(assetID: String, amount: Float,callback: @escaping ((String) -> Void)){
+    let response = genReceiveData(assetID: assetID, amount: amount)
     callback(response)
   }
   

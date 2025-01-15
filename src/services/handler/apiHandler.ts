@@ -785,6 +785,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
         assetId,
+        amount
       );
       if (response.error) {
         throw new Error(response.error);
