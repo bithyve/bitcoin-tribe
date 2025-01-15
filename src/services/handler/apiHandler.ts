@@ -776,8 +776,10 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset(assetId, amount) {
+  static async receiveAsset({ assetId, amount }) {
     try {
+      assetId = assetId ?? '';
+      amount = parseFloat(amount) ?? 0.0;
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
@@ -785,7 +787,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
         assetId,
-        amount
+        amount,
       );
       if (response.error) {
         throw new Error(response.error);
@@ -1610,6 +1612,22 @@ export class ApiHandler {
         noAssetOnly,
       );
       if (response.status) {
+        return response;
+      } else if (response.error) {
+        throw new Error(response.error);
+      } else {
+        throw new Error('Error - Canceling transfer ');
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  static async decodeInvoice(invoiceString: string) {
+    try {
+      const response = await RGBServices.decodeInvoice(invoiceString);
+      console.log('response', response);
+      if (response) {
         return response;
       } else if (response.error) {
         throw new Error(response.error);
