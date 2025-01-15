@@ -219,11 +219,6 @@ const getStyles = (theme: AppTheme, backColor) =>
       borderRadius: 18,
       justifyContent: 'center',
       position: 'relative',
-      shadowColor: Colors.Black,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
     },
     trackText: {
       position: 'absolute',
