@@ -58,7 +58,7 @@ function TransferDetails({ route, navigation }) {
       <ModalContainer
         title={assets.txnCancelSuccessMsg}
         subTitle={''}
-        height={Platform.OS === 'android' ? '100%' : '45%'}
+        height={Platform.OS === 'ios' ? '45%' : ''}
         visible={visible}
         enableCloseIcon={false}
         onDismiss={() => {}}>
