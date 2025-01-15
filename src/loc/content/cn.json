@@ -323,7 +323,8 @@
     "broadcastingTXN": "正在广播交易...",
     "successTitle": "成功！",
     "recipientInvoice": "收件人的发票",
-    "availableBalanceMsg": "可用余额为 "
+    "availableBalanceMsg": "可用余额为 ",
+    "spendableBalanceMsg": "可支配余额为 "
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

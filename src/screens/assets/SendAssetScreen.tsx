@@ -185,7 +185,7 @@ const SendAssetScreen = () => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
     if (Number(item.balance.spendable) === 0) {
       Keyboard.dismiss();
-      Toast(sendScreen.availableBalanceMsg + item.balance.spendable, true);
+      Toast(sendScreen.spendableBalanceMsg + item.balance.spendable, true);
     } else if (numericValue <= item.balance.spendable) {
       setAmount(text);
     } else {

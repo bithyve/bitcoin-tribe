@@ -323,7 +323,8 @@
     "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है...",
     "successTitle": "सफल!",
     "recipientInvoice": "प्राप्तकर्ता का चालान",
-    "availableBalanceMsg": " उपलब्ध शेष राशि है "
+    "availableBalanceMsg": " उपलब्ध शेष राशि है ",
+    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है "
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

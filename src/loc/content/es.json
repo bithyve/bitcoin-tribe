@@ -323,7 +323,8 @@
     "broadcastingTXN": "Transmitiendo transacción...",
     "successTitle": "¡Éxito!",
     "recipientInvoice": "Factura del destinatario",
-    "availableBalanceMsg": "El saldo disponible es"
+    "availableBalanceMsg": "El saldo disponible es",
+    "spendableBalanceMsg": "El saldo disponible para gastar es "
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
