@@ -80,10 +80,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun receiveAsset(promise: Promise){
+    fun receiveAsset(assetID: String, amount: Float, promise: Promise){
         backgroundHandler.post{
             try {
-                promise.resolve(RGBHelper.receiveAsset())
+                promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong()))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
