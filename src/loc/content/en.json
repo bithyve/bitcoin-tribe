@@ -23,7 +23,7 @@
     "versionHistory": "Version History",
     "confirm": "Confirm",
     "skip": "Skip",
-    "assets": "Coin",
+    "assets": "Coins",
     "collectibles": "Collectibles",
     "settings": "Settings",
     "community": "Community",
@@ -157,9 +157,9 @@
     "noAssetTitle": "No assets yet.",
     "noAssetSubTitle": "Tap the plus icon below to issue your first asset.",
     "noCollectibleAssetTitle": "No Collectibles yet?",
-    "noCollectibleAssetSubTitle": "Let’s change that—create your first masterpiece now!",
-    "noCoinAssetTitle": "No Coin yet?",
-    "noCoinAssetSubTitle": "Let’s change that—create your first masterpiece now!",
+    "noCollectibleAssetSubTitle": "Ready to create your masterpiece? Tap the \"+\" icon below to issue your first RGB collectible and start managing your digital assets today. Create, manage, and send collectibles seamlessly.",
+    "noCoinAssetTitle": "No Coins yet?",
+    "noCoinAssetSubTitle": "Ready to create your masterpiece? Tap the \"+\" icon below to issue your first RGB coin and start managing your digital assets today. Create, manage, and send coins seamlessly.",
     "backupAlertTitle": "Secure Your Funds \nwith a Backup",
     "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now.",
     "createCoinTitle": "Create coin",
@@ -322,7 +322,8 @@
     "swipeToBroadcast": "Swipe to broadcast",
     "broadcastingTXN": "Broadcasting transaction...",
     "successTitle": "Successful!",
-    "recipientInvoice": "Recipient's Invoice"
+    "recipientInvoice": "Recipient's Invoice",
+    "availableBalanceMsg": "Available balance is "
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

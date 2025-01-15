@@ -128,21 +128,12 @@ function Collectibles() {
           onPressTotalAmt={toggleDisplayMode}
         />
       </View>
-      <AppText variant="pageTitle2" style={styles.assetsTitleStyle}>
-        {home.collectibles}
-      </AppText>
       <CollectibleAssetsList
         listData={assets}
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() =>
-          assets.length > 0
-            ? handleNavigation(NavigationRoutes.ADDASSET)
-            : handleNavigation(NavigationRoutes.ISSUESCREEN, {
-                issueAssetType: AssetType.Collectible,
-              })
-        }
+        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
         onPressAsset={asset =>
           handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
             assetId: asset.assetId,
@@ -161,12 +152,6 @@ const getStyles = (theme: AppTheme) =>
     },
     headerWrapper: {
       margin: hp(16),
-    },
-    assetsTitleStyle: {
-      fontSize: 30,
-      color: theme.colors.headingColor,
-      marginHorizontal: hp(16),
-      marginVertical: hp(15),
     },
   });
 

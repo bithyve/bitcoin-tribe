@@ -373,4 +373,17 @@ export default class RGBServices {
     const data = await RGB.decodeInvoice(invoiceString);
     return JSON.parse(data);
   };
+
+  static getWalletData = async (): Promise<{
+    dataDir?: string;
+    bitcoinNetwork?: string;
+    databaseType?: string;
+    maxAllocationsPerUtxo?: string;
+    mnemonic?: string;
+    pubkey?: string;
+    vanillaKeychain?: string;
+  }> => {
+    const data = await RGB.getWalletData();
+    return JSON.parse(data);
+  };
 }
