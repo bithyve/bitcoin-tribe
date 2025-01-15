@@ -157,9 +157,9 @@
     "noAssetTitle": "まだアセットがありません。",
     "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。",
     "noCollectibleAssetTitle": "まだコレクティブルはありませんか？",
-    "noCollectibleAssetSubTitle": "それを変えましょう—今すぐあなたの最初の傑作を作りましょう！",
+    "noCollectibleAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコレクティブルを発行し、今日からデジタル資産を管理しましょう。コレクティブルを簡単に作成、管理、送信できます。",
     "noCoinAssetTitle": "まだコインはありませんか？",
-    "noCoinAssetSubTitle": "それを変えましょう—今すぐあなたの最初の傑作を作りましょう！",
+    "noCoinAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコインを発行し、今日からデジタル資産を管理しましょう。コインを簡単に作成、管理、送信できます。",
     "backupAlertTitle": "バックアップで資金を保護する",
     "backupAlertSubTitle": "ウォレットをバックアップすることで、デバイスを紛失した場合でも資金を安全に保てます。今すぐバックアップを作成しましょう。",
     "createCoinTitle": "コインを作成",
@@ -322,7 +322,8 @@
     "swipeToBroadcast": "スワイプしてブロードキャスト",
     "broadcastingTXN": "トランザクションをブロードキャスト中...",
     "successTitle": "成功！",
-    "recipientInvoice": "受取人の請求書"
+    "recipientInvoice": "受取人の請求書",
+    "availableBalanceMsg": "利用可能な残高は "
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
