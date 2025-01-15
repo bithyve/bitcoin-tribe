@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Platform, Dimensions } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 import { useTheme } from 'react-native-paper';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { AppTheme } from 'src/theme';
@@ -16,15 +20,20 @@ interface Props {
   title: string;
   loadingTitle: string;
   onSwipeComplete: () => void;
+  backColor?: string;
 }
 
-const SwipeToAction :React.FC<Props> = ({
+const SwipeToAction: React.FC<Props> = ({
   onSwipeComplete,
   title,
   loadingTitle,
+  backColor = Colors.Golden,
 }) => {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, backColor),
+    [theme, backColor],
+  );
   const [swiped, setSwiped] = useState(false);
   const translateX = new Animated.Value(0);
   const autoSwipe = new Animated.Value(0);
@@ -49,7 +58,7 @@ const SwipeToAction :React.FC<Props> = ({
             duration: 600,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       );
       autoSwipeAnimation.current.start();
     }
@@ -65,9 +74,9 @@ const SwipeToAction :React.FC<Props> = ({
 
   const triggerHapticFeedback = () => {
     const options = {
-    enableVibrateFallback: true,
-    ignoreAndroidSystemSettings: false,
-  };
+      enableVibrateFallback: true,
+      ignoreAndroidSystemSettings: false,
+    };
     ReactNativeHapticFeedback.trigger('impactHeavy', options);
   };
 
@@ -96,7 +105,7 @@ const SwipeToAction :React.FC<Props> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       {!swiped ? (
         <Animated.View style={[styles.track]}>
           <View style={styles.dynamicBackgroundContainer}>
@@ -106,16 +115,17 @@ const SwipeToAction :React.FC<Props> = ({
                 {
                   transform: [
                     {
-                      scaleX:Animated.add( translateX.interpolate({
-                        inputRange: [0, SWIPE_LENGTH],
-                        outputRange: [0.2, 1],
-                        extrapolate: 'clamp',
-                      }),
-                      autoSwipe.interpolate({
-                        inputRange: [0, SWIPE_LENGTH],
-                        outputRange: [0, 70],
-                      })
-                    ),
+                      scaleX: Animated.add(
+                        translateX.interpolate({
+                          inputRange: [0, SWIPE_LENGTH],
+                          outputRange: [0.2, 1],
+                          extrapolate: 'clamp',
+                        }),
+                        autoSwipe.interpolate({
+                          inputRange: [0, SWIPE_LENGTH],
+                          outputRange: [0, 70],
+                        }),
+                      ),
                     },
                   ],
                 },
@@ -128,15 +138,17 @@ const SwipeToAction :React.FC<Props> = ({
               {
                 transform: [
                   {
-                    translateX: Animated.add(translateX.interpolate({
-                      inputRange: [0, SWIPE_LENGTH / 2],
-                      outputRange: [0, SWIPE_LENGTH / 3],
-                      extrapolate: 'clamp',
-                    }),
-                    autoSwipe.interpolate({
-                      inputRange: [0, 0.2],
-                      outputRange: [0, 10],
-                    })),
+                    translateX: Animated.add(
+                      translateX.interpolate({
+                        inputRange: [0, SWIPE_LENGTH / 2],
+                        outputRange: [0, SWIPE_LENGTH / 3],
+                        extrapolate: 'clamp',
+                      }),
+                      autoSwipe.interpolate({
+                        inputRange: [0, 0.2],
+                        outputRange: [0, 10],
+                      }),
+                    ),
                   },
                 ],
                 opacity: translateX.interpolate({
@@ -172,7 +184,7 @@ const SwipeToAction :React.FC<Props> = ({
                         autoSwipe.interpolate({
                           inputRange: [0, 1],
                           outputRange: [0, 100],
-                        })
+                        }),
                       ),
                     },
                   ],
@@ -189,11 +201,11 @@ const SwipeToAction :React.FC<Props> = ({
           </Animated.Text>
         </View>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 };
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -242,7 +254,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       left: 0,
       top: 0,
-      backgroundColor: Colors.Golden,
+      backgroundColor: backColor,
       transformOrigin: 'left',
       borderRadius: 18,
     },
@@ -257,7 +269,7 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#FFD700',
+      backgroundColor: backColor,
       width: '100%',
       height: 60,
       borderRadius: 18,

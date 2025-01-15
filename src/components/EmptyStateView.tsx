@@ -5,15 +5,19 @@ import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
 import { hp } from 'src/constants/responsive';
+import PrimaryCTA from './PrimaryCTA';
 
 type emptyStateViewProps = {
   title: string;
   subTitle: string;
   IllustartionImage?: ReactNode;
   style?: StyleProp<ViewStyle>;
+  ctaTitle?: string;
+  onPressCTA?: () => void;
 };
 function EmptyStateView(props: emptyStateViewProps) {
-  const { title, subTitle, IllustartionImage, style } = props;
+  const { title, subTitle, IllustartionImage, style, ctaTitle, onPressCTA } =
+    props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
@@ -25,6 +29,18 @@ function EmptyStateView(props: emptyStateViewProps) {
       <AppText variant="body2" style={styles.subTitleText}>
         {subTitle}
       </AppText>
+      {ctaTitle && (
+        <View style={styles.ctaWrapper}>
+          <PrimaryCTA
+            title={ctaTitle}
+            onPress={onPressCTA}
+            width={'80%'}
+            textColor={theme.colors.popupSentCTATitleColor}
+            buttonColor={theme.colors.popupSentCTABackColor}
+            height={hp(16)}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -46,7 +62,12 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     illustrationWrapper: {
-      marginBottom: hp(10),
+      marginBottom: hp(20),
+    },
+    ctaWrapper: {
+      marginTop: hp(20),
+      width: '100%',
+      alignItems: 'center',
     },
   });
 export default EmptyStateView;

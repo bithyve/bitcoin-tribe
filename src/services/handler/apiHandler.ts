@@ -647,13 +647,13 @@ export class ApiHandler {
     recipient,
     averageTxFee,
     selectedPriority,
-    txPrerequisites
+    txPrerequisites,
   }: {
     sender: Wallet;
     recipient: { address: string; amount: number };
     averageTxFee: AverageTxFees;
     selectedPriority: TxPriority;
-    txPrerequisites: TransactionPrerequisite
+    txPrerequisites: TransactionPrerequisite;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
       if (ApiHandler.appType === AppType.NODE_CONNECT) {
@@ -1592,6 +1592,28 @@ export class ApiHandler {
         throw new Error(response.error);
       } else {
         throw new Error('Failed to init node');
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async handleTransferFailure(
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ) {
+    try {
+      const response = await RGBServices.failTransfer(
+        batchTransferIdx,
+        noAssetOnly,
+      );
+      if (response.status) {
+        return response;
+      } else if (response.error) {
+        throw new Error(response.error);
+      } else {
+        throw new Error('Error - Canceling transfer ');
       }
     } catch (error) {
       console.log(error);

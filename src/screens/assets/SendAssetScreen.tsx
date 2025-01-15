@@ -131,7 +131,8 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, wallet, item } = useRoute().params;
+  const { assetId, rgbInvoice, wallet, item, transactionAmount } =
+    useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -150,7 +151,7 @@ const SendAssetScreen = () => {
   const createUtxos = useMutation(ApiHandler.createUtxos);
 
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(transactionAmount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -275,7 +276,7 @@ const SendAssetScreen = () => {
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <View>
+      {/* <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
           enableClose={true}
@@ -291,7 +292,7 @@ const SendAssetScreen = () => {
             }
           />
         </ResponsePopupContainer>
-      </View>
+      </View> */}
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <AssetItem
           name={item?.name}
@@ -426,10 +427,12 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={successStatus ? '50%' : ''}
+          height={
+            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
+          }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => setVisible(false)}>
+          onDismiss={() => {}}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={item?.name}

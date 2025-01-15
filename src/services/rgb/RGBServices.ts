@@ -306,8 +306,25 @@ export default class RGBServices {
     }
   };
 
-  static failTransfer = async (batchTransferIdx: Number, noAssetOnly: boolean): Promise<{status: boolean, error?:string}> => {
-    const keys = await RGB.noAssetOnly(this.NETWORK, batchTransferIdx, noAssetOnly);
+  /**
+   * Set the status for eligible transfers to [`TransferStatus::Failed`]
+  */
+  static failTransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.failTransfer(batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
+  };
+
+  /**
+   * Delete eligible transfers from the database
+  */
+  static deleteransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.deleteransfer(batchTransferIdx, noAssetOnly);
     return JSON.parse(keys);
   };
 
@@ -316,9 +333,12 @@ export default class RGBServices {
     return response;
   };
 
-  static backup = async (path: string, password: string): Promise<{
-    file: string,
-    error?: string
+  static backup = async (
+    path: string,
+    password: string,
+  ): Promise<{
+    file: string;
+    error?: string;
   }> => {
     const data = await RGB.backup(path, password);
     return JSON.parse(data);
@@ -337,5 +357,33 @@ export default class RGBServices {
   static isValidBlindedUtxo = async (invoiceData: string): Promise<{}> => {
     const data = await RGB.isValidBlindedUtxo(invoiceData);
     return data;
+  };
+
+  static decodeInvoice = async (
+    invoiceString: string,
+  ): Promise<{
+    recipientId?: string;
+    expirationTimestamp?: number;
+    assetId?: string;
+    assetIface?: string;
+    network?: string;
+    transportEndpoints?: string;
+    error?: string;
+  }> => {
+    const data = await RGB.decodeInvoice(invoiceString);
+    return JSON.parse(data);
+  };
+
+  static getWalletData = async (): Promise<{
+    dataDir?: string;
+    bitcoinNetwork?: string;
+    databaseType?: string;
+    maxAllocationsPerUtxo?: string;
+    mnemonic?: string;
+    pubkey?: string;
+    vanillaKeychain?: string;
+  }> => {
+    const data = await RGB.getWalletData();
+    return JSON.parse(data);
   };
 }

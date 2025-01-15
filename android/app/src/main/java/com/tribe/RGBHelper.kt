@@ -16,6 +16,7 @@ import org.rgbtools.AssetNia
 import org.rgbtools.AssetUda
 import org.rgbtools.Balance
 import org.rgbtools.Invoice
+import org.rgbtools.InvoiceData
 import org.rgbtools.Utxo
 import org.rgbtools.ReceiveData
 import org.rgbtools.Recipient
@@ -23,6 +24,7 @@ import org.rgbtools.RefreshFilter
 import org.rgbtools.RefreshTransferStatus
 import org.rgbtools.RgbLibException
 import org.rgbtools.Unspent
+import org.rgbtools.WalletData
 import org.rgbtools.restoreBackup
 import org.rgbtools.restoreKeys
 import java.io.File
@@ -258,7 +260,15 @@ object RGBHelper {
             noAssetOnly,
             skipSync
         )
-        return  status
+        return status
+    }
+
+    fun deleteTransfers(batchTransferIdx: Int, noAssetOnly: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.deleteTransfers(
+            batchTransferIdx,
+            noAssetOnly,
+        )
+        return status
     }
 
     private fun createUTXOs(feeRate: Float): UByte? {
@@ -271,6 +281,10 @@ object RGBHelper {
             feeRate,
             false
         )
+    }
+
+    fun decodeInvoice(invoiceString: String): InvoiceData {
+        return Invoice(invoiceString).invoiceData()
     }
 
     fun createNewUTXOs(feeRate: Float): Boolean {
@@ -295,6 +309,10 @@ object RGBHelper {
 
     fun getUnspents(): List<Unspent>? {
         return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
+    }
+
+    fun getWalletData(): WalletData? {
+        return RGBWalletRepository.wallet?.getWalletData()
     }
 
     fun refreshAsset(assetID: String) {

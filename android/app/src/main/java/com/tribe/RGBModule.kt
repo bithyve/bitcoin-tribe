@@ -202,6 +202,23 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("status", status)
                 promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun deleteTransfers( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val status = RGBHelper.deleteTransfers(batchTransferIdx, noAssetOnly)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("status", status)
                 promise.resolve(jsonObject.toString())
             }catch (e: Exception) {
                 val message = e.message
@@ -210,6 +227,35 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 jsonObject.addProperty("status", false)
                 promise.resolve(jsonObject.toString())
             }
+        }
+    }
+
+    @ReactMethod
+    fun getWalletData(promise: Promise){
+        backgroundHandler.post {
+            try {
+                val walletData = RGBHelper.getWalletData()
+                promise.resolve(walletData)
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun decodeInvoice(invoiceString: String, promise: Promise){
+        try {
+            val invoice = RGBHelper.decodeInvoice(invoiceString)
+            promise.resolve(Gson().toJson(invoice))
+        } catch (e: Exception) {
+            val message = e.message
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", message)
+            promise.resolve(jsonObject.toString())
         }
     }
 

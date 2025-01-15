@@ -474,7 +474,70 @@ import CloudKit
       callback(json)
     }
   }
-
+  
+  @objc func getWalletData(callback: @escaping ((String) -> Void)) {
+    do{
+      let walletData = self.rgbManager.rgbWallet!.getWalletData()
+      let data: [String: Any] = [
+        "dataDir": walletData.dataDir,
+//        "bitcoinNetwork": walletData.bitcoinNetwork,
+//        "databaseType": walletData.databaseType,
+        "maxAllocationsPerUtxo": walletData.maxAllocationsPerUtxo,
+        "mnemonic": walletData.mnemonic,
+        "pubkey": walletData.pubkey,
+        "vanillaKeychain": walletData.vanillaKeychain,
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func deleteTransfers(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
+    do{
+      let status = try self.rgbManager.rgbWallet!.deleteTransfers( batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
+      let data: [String: Any] = [
+          "status": status
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
+    do{
+      let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
+      let data: [String: Any] = [
+        "recipientId": invoice.recipientId,
+        "expirationTimestamp": invoice.expirationTimestamp ?? 0,
+        "assetId": invoice.assetId,
+        "assetIface": invoice.assetIface,
+        "network": invoice.network,
+        "transportEndpoints": invoice.transportEndpoints
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let data: [String: Any] = [
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
     do{

@@ -8,7 +8,7 @@ import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AssetsList from './components/AssetsList';
+import CoinAssetsList from './components/CoinAssetsList';
 import HomeHeader from './components/HomeHeader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -18,10 +18,10 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from 'src/components/AppText';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
+import { AssetType } from 'src/models/interfaces/RGBWallet';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -42,25 +42,20 @@ function HomeScreen() {
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
   const coins = useQuery(RealmSchema.Coin);
-  const collectibles = useQuery(RealmSchema.Collectible);
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
   const assets = useMemo(() => {
-    return [...coins.toJSON(), ...collectibles.toJSON()].sort(
-      (a, b) => b.timestamp - a.timestamp
-    );
-  }, [coins, collectibles]);
+    return [...coins.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
+  }, [coins]);
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     }
-    return (
-      wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed
-    );
+    return wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed;
   }, [
     app.appType,
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
@@ -98,7 +93,7 @@ function HomeScreen() {
         ? CurrencyKind.BITCOIN
         : app.currencyMode === CurrencyKind.BITCOIN
         ? CurrencyKind.FIAT
-        : CurrencyKind.SATS
+        : CurrencyKind.SATS,
     );
   };
 
@@ -134,22 +129,21 @@ function HomeScreen() {
         />
       </View>
       <AppText variant="pageTitle2" style={styles.assetsTitleStyle}>
-        {home.myAssets}
+        {home.coin}
       </AppText>
-      <AssetsList
+      <CoinAssetsList
         listData={assets}
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
-        onPressAsset={(asset) =>
-          handleNavigation(
-            asset.assetIface === AssetFace.RGB20
-              ? NavigationRoutes.COINDETAILS
-              : NavigationRoutes.COLLECTIBLEDETAILS,
-            { assetId: asset.assetId }
-          )
+        onPressAddNew={() =>
+          assets.length > 0
+            ? handleNavigation(NavigationRoutes.ADDASSET)
+            : handleNavigation(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType: AssetType.Coin,
+              })
         }
+        onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
       />
     </ScreenContainer>
   );

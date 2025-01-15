@@ -23,7 +23,8 @@
     "versionHistory": "版本历史",
     "confirm": "确认",
     "skip": "跳过",
-    "assets": "资产",
+    "assets": "硬币",
+    "collectibles": "收藏品",
     "settings": "设置",
     "community": "社区",
     "viewWallets": "查看钱包",
@@ -141,6 +142,8 @@
     "createAssets": "创建资产",
     "issueNew": "发行新资产",
     "myAssets": "你的资产",
+    "coin": "硬币",
+    "collectibles": "收藏品",
     "issue": "发行",
     "assetName": "资产名称",
     "assetTicker": "资产代码",
@@ -153,8 +156,14 @@
     "select": "选择",
     "noAssetTitle": "还没有资产。",
     "noAssetSubTitle": "点击下面的加号图标以发行您的第一个资产。",
+    "noCollectibleAssetTitle": "还没有收藏品吗？",
+    "noCollectibleAssetSubTitle": "让我们改变这一点——立即创建您的第一个杰作！",
+    "noCoinAssetTitle": "还没有硬币吗？",
+    "noCoinAssetSubTitle": "让我们改变这一点——立即创建您的第一个杰作！",
     "backupAlertTitle": "使用备份保护您的资金",
-    "backupAlertSubTitle": "备份您的钱包可以确保您的资金安全，即使您丢失设备。请花点时间立即创建备份。"
+    "backupAlertSubTitle": "备份您的钱包可以确保您的资金安全，即使您丢失设备。请花点时间立即创建备份。",
+    "createCoinTitle": "创建硬币",
+    "createCollectibleTitle": "创建收藏品"
   },
   "settings": {
     "setting": "设置",
@@ -425,7 +434,17 @@
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
-    "swipeToSend": "滑动发送"
+    "swipeToSend": "滑动发送",
+    "cancelTransferMsg": "取消转账！",
+    "cancelTransaction": "取消交易",
+    "assetName": "资产名称",
+    "cancelTransactionCtaTitle": " 滑动以取消转账",
+    "cancelTransactionCtaMsg": "正在取消转账...",
+    "txnCancelSuccessMsg": "转账已成功取消。",
+    "backToHome": "返回首页",
+    "batchTxnIdx": "批量转账索引",
+    "issued": "已发行",
+    "copiedTxIDMsg": "成功复制交易 ID！"
   },
   "community": {
     "fnfTitle": "朋友和家人",

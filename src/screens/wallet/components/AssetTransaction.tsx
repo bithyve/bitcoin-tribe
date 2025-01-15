@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -13,18 +13,14 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
-import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
-import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
-import RecieveBtcIcon from 'src/assets/images/btcRecieveTxnIcon.svg';
-import RecieveBtcIconLight from 'src/assets/images/btcRecieveTxnIcon_light.svg';
+import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
+import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
-import FailedTxnIconLight from 'src/assets/images/failedTxnIcon_light.svg';
-import WaitingCounterPartyIcon from 'src/assets/images/lightningWaitingCounterPartyIcon.svg';
-import WaitingCounterPartyBtcIcon from 'src/assets/images/BtcWaitingCounterPartyIcon.svg';
-import WaitingConfirmationIcon from 'src/assets/images/lightningWaitingConfirmationIcon.svg';
-import WaitingConfirmationBtcIcon from 'src/assets/images/BtcWaitingConfirmationIcon.svg';
+import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
+import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type AssetTransactionProps = {
   transId: string;
@@ -39,6 +35,8 @@ type AssetTransactionProps = {
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const navigation = useNavigation();
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const {
     transId,
     transDate,
@@ -60,19 +58,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIconLight />,
+            light: <SentBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
-            light: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
+            light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -90,7 +88,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
@@ -98,19 +96,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <RecieveBtcIcon />,
-            light: <RecieveBtcIconLight />,
+            light: <RecieveBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -128,7 +126,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
@@ -136,19 +134,19 @@ function AssetTransaction(props: AssetTransactionProps) {
         bitcoin: {
           settled: {
             dark: <SentBtcIcon />,
-            light: <SentBtcIconLight />,
+            light: <SentBtcIcon />,
           },
           waitingcounterparty: {
-            dark: <WaitingCounterPartyBtcIcon />,
+            dark: <WaitingCounterPartyIcon />,
             light: <WaitingCounterPartyIcon />,
           },
           waitingconfirmations: {
-            dark: <WaitingConfirmationBtcIcon />,
+            dark: <WaitingConfirmationIcon />,
             light: <WaitingConfirmationIcon />,
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
         lightning: {
@@ -166,14 +164,14 @@ function AssetTransaction(props: AssetTransactionProps) {
           },
           failed: {
             dark: <FailedTxnIcon />,
-            light: <FailedTxnIconLight />,
+            light: <FailedTxnIcon />,
           },
         },
       },
       default: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIconLight />,
+          light: <RecieveBtcIcon />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
@@ -204,7 +202,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {getStatusIcon(
-              transType,
+              transType.toLowerCase().replace(/_/g, ''),
               tranStatus.toLowerCase().replace(/_/g, ''),
               'bitcoin',
               isThemeDark,
@@ -216,7 +214,9 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {transType.toLowerCase().replace(/_/g, '') === 'issuance'
+                ? assets.issued
+                : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}

@@ -23,7 +23,8 @@
     "versionHistory": "Historial de versiones",
     "confirm": "Confirmar",
     "skip": "Omitir",
-    "assets": "Activos",
+    "assets": "Moneda",
+    "collectibles": "Coleccionables",
     "settings": "Ajustes",
     "community": "Comunidad",
     "viewWallets": "Ver carteras",
@@ -141,6 +142,8 @@
     "createAssets": "Crear activos",
     "issueNew": "Emitir nuevo",
     "myAssets": "Tus activos",
+    "coin": "Moneda",
+    "collectibles": "Coleccionables",
     "issue": "Emitir",
     "assetName": "Nombre del activo",
     "assetTicker": "Ticker del activo",
@@ -153,8 +156,14 @@
     "select": "Seleccionar",
     "noAssetTitle": "Aún no hay activos.",
     "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo.",
+    "noCollectibleAssetTitle": "¿Aún no tienes coleccionables?",
+    "noCollectibleAssetSubTitle": "¡Cambiemos eso! Crea tu primera obra maestra ahora mismo.",
+    "noCoinAssetTitle": "¿Aún no tienes monedas?",
+    "noCoinAssetSubTitle": "¡Cambiemos eso! Crea tu primera obra maestra ahora mismo.",
     "backupAlertTitle": "Asegura tus fondos con un respaldo",
-    "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora."
+    "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora.",
+    "createCoinTitle": "Crear moneda",
+    "createCollectibleTitle": "Crear coleccionables"
   },
   "settings": {
     "setting": "Configuraciones",
@@ -425,7 +434,17 @@
     "issueAssetLoadingTitle": "Emitiendo Activo",
     "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
-    "swipeToSend": "Deslizar para enviar"
+    "swipeToSend": "Deslizar para enviar",
+    "cancelTransferMsg": "¡Transferencia cancelada!",
+    "cancelTransaction": "Cancelar transacción",
+    "assetName": "Nombre del activo",
+    "cancelTransactionCtaTitle": "Desliza para cancelar la transferencia",
+    "cancelTransactionCtaMsg": "Cancelando transferencia...",
+    "txnCancelSuccessMsg": "Transferencia cancelada con éxito.",
+    "backToHome": "Volver a inicio",
+    "batchTxnIdx": "Índice de transferencia por lotes",
+    "issued": "Emitido",
+    "copiedTxIDMsg": "¡ID de transacción copiado con éxito!"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
