@@ -57,7 +57,7 @@ function SendToContainer({
   const { getBalance, getCurrencyIcon } = useBalance();
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen } = translations;
+  const { common, sendScreen, assets } = translations;
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -265,6 +265,19 @@ function SendToContainer({
       Toast(sendScreen.invalidBtcAddress, true);
     }
   };
+  const handleAmountInputChange = text => {
+    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
+    if (Number(balances) === 0) {
+      Keyboard.dismiss();
+      Toast(sendScreen.availableBalanceMsg + balances, true);
+    } else if (numericValue <= Number(balances)) {
+      setAmount(text);
+      setIsSendMax(false);
+    } else {
+      Keyboard.dismiss();
+      Toast(assets.checkSpendableAmt + balances, true);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -303,10 +316,7 @@ function SendToContainer({
             </AppText>
             <TextField
               value={formatNumber(amount)}
-              onChangeText={text => {
-                setIsSendMax(false);
-                setAmount(text);
-              }}
+              onChangeText={handleAmountInputChange}
               placeholder={sendScreen.enterAmount}
               keyboardType={'numeric'}
               inputStyle={styles.inputStyle}

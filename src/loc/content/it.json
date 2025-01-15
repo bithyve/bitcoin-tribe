@@ -313,7 +313,8 @@
     "swipeToBroadcast": "Scorri per trasmettere",
     "broadcastingTXN": "Trasmissione della transazione in corso...",
     "successTitle": "Successo!",
-    "recipientInvoice": "Fattura del destinatario"
+    "recipientInvoice": "Fattura del destinatario",
+    "availableBalanceMsg": "Il saldo disponibile è "
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

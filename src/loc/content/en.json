@@ -313,7 +313,8 @@
     "swipeToBroadcast": "Swipe to broadcast",
     "broadcastingTXN": "Broadcasting transaction...",
     "successTitle": "Successful!",
-    "recipientInvoice": "Recipient's Invoice"
+    "recipientInvoice": "Recipient's Invoice",
+    "availableBalanceMsg": "Available balance is "
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
