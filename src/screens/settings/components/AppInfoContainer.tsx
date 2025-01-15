@@ -30,6 +30,10 @@ function AppInfoContainer({ navigation, walletId, version }) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { appType } = useContext(AppContext);
 
+  const readRgbLogs = async () => {
+    navigation.navigate(NavigationRoutes.VIEWLOGS);
+  };
+
   const getActivateWalletType = (appType: AppType): string => {
     switch (appType) {
       case AppType.ON_CHAIN:
@@ -39,7 +43,7 @@ function AppInfoContainer({ navigation, walletId, version }) {
       case AppType.SUPPORTED_RLN:
         return onBoarding.supported;
       default:
-        return ''
+        return '';
     }
   };
 
@@ -52,13 +56,13 @@ function AppInfoContainer({ navigation, walletId, version }) {
       case AppType.SUPPORTED_RLN:
         return isThemeDark ? <SupportIcon /> : <SupportIconLight />;
       default:
-        return null
+        return null;
     }
   };
 
   return (
     <View style={styles.container}>
-       <AppInfoCard
+      <AppInfoCard
         title={settings.activateWalletTypeLabel}
         value={getActivateWalletType(appType)}
         icon={getActivateWalletIcon(appType)}
@@ -78,10 +82,18 @@ function AppInfoContainer({ navigation, walletId, version }) {
           navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
         }
       />
+
+      <AppInfoCard
+        title={'RGB Logs'}
+        subTitle={'Read RGB Logs'}
+        value={'Logs'}
+        icon={isThemeDark ? <IconInfo /> : <IconInfoLight />}
+        navigation={() => readRgbLogs()}
+      />
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = () =>
   StyleSheet.create({
     container: {
       marginTop: hp(20),

@@ -475,6 +475,30 @@ import CloudKit
     }
   }
   
+  @objc func getWalletData(callback: @escaping ((String) -> Void)) {
+    do{
+      let walletData = self.rgbManager.rgbWallet!.getWalletData()
+      let data: [String: Any] = [
+        "dataDir": walletData.dataDir,
+//        "bitcoinNetwork": walletData.bitcoinNetwork,
+//        "databaseType": walletData.databaseType,
+        "maxAllocationsPerUtxo": walletData.maxAllocationsPerUtxo,
+        "mnemonic": walletData.mnemonic,
+        "pubkey": walletData.pubkey,
+        "vanillaKeychain": walletData.vanillaKeychain,
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
   @objc func deleteTransfers(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
     do{
       let status = try self.rgbManager.rgbWallet!.deleteTransfers( batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
