@@ -85,8 +85,7 @@ function CoinAssetsList(props: AssetsListProps) {
                 <NoAssetsIllustrationLight />
               )
             }
-            ctaTitle={home.createCoinTitle}
-            onPressCTA={() => onPressAddNew()}
+            style={styles.emptyStateWrapper}
           />
         }
         renderItem={({ item, index }) => {
@@ -106,17 +105,13 @@ function CoinAssetsList(props: AssetsListProps) {
           );
         }}
       />
-      {listData.length > 0 && (
-        <AppTouchable
-          style={
-            isThemeDark
-              ? styles.addNewIconWrapper
-              : styles.addNewIconWrapperLight
-          }
-          onPress={onPressAddNew}>
-          {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
-        </AppTouchable>
-      )}
+      <AppTouchable
+        style={
+          isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
+        }
+        onPress={onPressAddNew}>
+        {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+      </AppTouchable>
     </View>
   );
 }
@@ -124,7 +119,7 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '80%',
+      height: '86%',
       marginHorizontal: wp(10),
     },
     assetWrapper: {
@@ -142,6 +137,9 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     footer: {
       height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
+    },
+    emptyStateWrapper: {
+      marginTop: '40%',
     },
   });
 export default CoinAssetsList;

@@ -86,8 +86,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
                 <NoAssetsIllustrationLight />
               )
             }
-            ctaTitle={home.createCollectibleTitle}
-            onPressCTA={() => onPressAddNew()}
+            style={styles.emptyStateWrapper}
           />
         }
         renderItem={({ item, index }) => {
@@ -109,17 +108,13 @@ function CollectibleAssetsList(props: AssetsListProps) {
           );
         }}
       />
-      {listData.length > 0 && (
-        <AppTouchable
-          style={
-            isThemeDark
-              ? styles.addNewIconWrapper
-              : styles.addNewIconWrapperLight
-          }
-          onPress={onPressAddNew}>
-          {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
-        </AppTouchable>
-      )}
+      <AppTouchable
+        style={
+          isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
+        }
+        onPress={onPressAddNew}>
+        {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+      </AppTouchable>
     </View>
   );
 }
@@ -127,7 +122,7 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '80%',
+      height: '86%',
       marginHorizontal: wp(10),
     },
     assetWrapper: {
@@ -148,6 +143,9 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     alternateSpace: {
       top: index % 2 === 0 ? 0 : hp(50),
+    },
+    emptyStateWrapper: {
+      marginTop: '40%',
     },
   });
 export default CollectibleAssetsList;
