@@ -23,7 +23,8 @@
     "versionHistory": "संस्करण इतिहास",
     "confirm": "पुष्टि करें",
     "skip": "छोड़ें",
-    "assets": "संपत्ति",
+    "assets": "सिक्का",
+    "collectibles": "संग्रहणीय वस्तुएं",
     "settings": "सेटिंग्स",
     "community": "समुदाय",
     "viewWallets": "वॉलेट देखें",
@@ -141,6 +142,8 @@
     "createAssets": "संपत्तियां बनाएं",
     "issueNew": "नया जारी करें",
     "myAssets": "आपकी संपत्तियां",
+    "coin": "सिक्का",
+    "collectibles": "संग्रहणीय वस्तुएं",
     "issue": "जारी करें",
     "assetName": "संपत्ति का नाम",
     "assetTicker": "संपत्ति टिकर",
@@ -153,8 +156,14 @@
     "select": "चुनें",
     "noAssetTitle": "अभी तक कोई संपत्ति नहीं है।",
     "noAssetSubTitle": "नीचे दिए गए प्लस आइकन पर टैप करके अपनी पहली संपत्ति जारी करें।",
+    "noCollectibleAssetTitle": "अभी तक कोई संग्रहणीय वस्तु नहीं है?",
+    "noCollectibleAssetSubTitle": "आइए इसे बदलें—अपनी पहली कृति अभी बनाएं!",
+    "noCoinAssetTitle": "अभी तक कोई सिक्का नहीं है?",
+    "noCoinAssetSubTitle": "आइए इसे बदलें—अपनी पहली कृति अभी बनाएं!",
     "backupAlertTitle": "बैकअप के साथ अपने फंड सुरक्षित करें",
-    "backupAlertSubTitle": "अपने वॉलेट का बैकअप लेना सुनिश्चित करता है कि आपके फंड सुरक्षित हैं, भले ही आप अपना डिवाइस खो दें। अभी बैकअप बनाने के लिए कुछ समय निकालें।"
+    "backupAlertSubTitle": "अपने वॉलेट का बैकअप लेना सुनिश्चित करता है कि आपके फंड सुरक्षित हैं, भले ही आप अपना डिवाइस खो दें। अभी बैकअप बनाने के लिए कुछ समय निकालें।",
+    "createCoinTitle": "सिक्का बनाएं",
+    "createCollectibleTitle": "संग्रहणीय वस्तुएं बनाएं"
   },
   "settings": {
     "setting": "सेटिंग्स",
@@ -429,9 +438,12 @@
     "cancelTransaction": "लेन-देन रद्द करें",
     "assetName": "संपत्ति का नाम",
     "cancelTransactionCtaTitle": "स्थानांतरण रद्द करने के लिए स्वाइप करें",
-    "cancelTransactionCtaMsg": "लेन-देन रद्द किया जा रहा है...",
-    "txnCancelSuccessMsg": "लेन-देन सफलतापूर्वक रद्द कर दिया गया।",
-    "backToHome": "मुख्य पृष्ठ पर वापस जाएं"
+    "cancelTransactionCtaMsg": "स्थानांतरण रद्द किया जा रहा है...",
+    "txnCancelSuccessMsg": "स्थानांतरण सफलतापूर्वक रद्द कर दिया गया।",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
+    "batchTxnIdx": "बैच स्थानांतरण सूचकांक",
+    "issued": "जारी किया गया",
+    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

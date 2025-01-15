@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { hp } from 'src/constants/responsive';
 import SwipeToAction from 'src/components/SwipeToAction';
@@ -13,6 +12,10 @@ import Colors from 'src/theme/Colors';
 import TransferLabelContent from './TransferLabelContent';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
+import { Transaction } from 'src/models/interfaces/RGBWallet';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'src/components/Toast';
+import AppTouchable from 'src/components/AppTouchable';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -28,6 +31,11 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const { wallet, settings, assets } = translations;
   const styles = getStyles(theme);
 
+  const handleCopyText = async (text: string) => {
+    await Clipboard.setString(text);
+    Toast(assets.copiedTxIDMsg);
+  };
+
   return (
     <View style={styles.container}>
       <GradientView
@@ -41,7 +49,9 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           {wallet.status}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
-          {settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+          {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
+            ? assets.issued
+            : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
         </AppText>
       </GradientView>
       <View style={styles.wrapper}>
@@ -51,6 +61,20 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
             label={wallet.amount}
             content={numberWithCommas(transAmount)}
           />
+          {transaction.txid && (
+            <AppTouchable onPress={() => handleCopyText(transaction.txid)}>
+              <TransferLabelContent
+                label={wallet.transactionID}
+                content={transaction.txid}
+              />
+            </AppTouchable>
+          )}
+          {transaction.batchTransferIdx && (
+            <TransferLabelContent
+              label={assets.batchTxnIdx}
+              content={`${transaction.batchTransferIdx}`}
+            />
+          )}
           <TransferLabelContent
             label={wallet.date}
             content={moment
@@ -98,6 +122,17 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderRadius: 10,
       borderStyle: 'dashed',
+    },
+    labelStyle: {
+      color: theme.colors.headingColor,
+      width: '50%',
+    },
+    textStyle: {
+      lineHeight: 20,
+      color: theme.colors.secondaryHeadingColor,
+      flexWrap: 'wrap',
+      width: '50%',
+      textAlign: 'right',
     },
   });
 export default TransferDetailsContainer;

@@ -6,10 +6,10 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { Transaction } from 'src/services/wallets/interfaces';
+import { Transaction } from 'src/models/interfaces/RGBWallet';
 import TransferDetailsContainer from './components/TransferDetailsContainer';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-// import Toast from 'src/components/Toast';
+import Toast from 'src/components/Toast';
 import ModalContainer from 'src/components/ModalContainer';
 import { Platform, StyleSheet, View } from 'react-native';
 import PrimaryCTA from 'src/components/PrimaryCTA';
@@ -30,6 +30,7 @@ function TransferDetails({ route, navigation }) {
     isLoading,
     isSuccess,
     isError,
+    error,
   } = useMutation(() =>
     ApiHandler.handleTransferFailure(transaction.batchTransferIdx, false),
   );
@@ -37,10 +38,11 @@ function TransferDetails({ route, navigation }) {
   useEffect(() => {
     if (isSuccess) {
       setVisible(true);
-      // Toast(assets.cancelTransferMsg);
-      // navigation.goBack();
     } else if (isError) {
+      setVisible(false);
+      Toast(`${error}`, true);
     } else {
+      setVisible(false);
     }
   }, [isSuccess, isError]);
 
@@ -68,7 +70,7 @@ function TransferDetails({ route, navigation }) {
             title={assets.backToHome}
             onPress={() => {
               setVisible(false);
-              navigation.navigate(NavigationRoutes.HOME);
+              navigation.goBack();
             }}
             width={'100%'}
             textColor={theme.colors.popupSentCTATitleColor}

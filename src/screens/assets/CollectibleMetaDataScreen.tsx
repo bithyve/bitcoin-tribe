@@ -48,7 +48,7 @@ export const Item = ({ title, value }) => {
   );
 };
 
-const onShare = async (filePath) => {
+const onShare = async filePath => {
   try {
     const options = {
       url: filePath,
@@ -87,7 +87,7 @@ const CollectibleMetaDataScreen = () => {
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
             ios: `${collectible.media?.filePath}`, // Add file extension
           });
-          onShare(filePath)
+          onShare(filePath);
         }}
         style={styles.headerWrapper}
       />

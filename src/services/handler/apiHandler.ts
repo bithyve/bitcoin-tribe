@@ -1599,7 +1599,6 @@ export class ApiHandler {
     }
   }
 
-  //
   static async handleTransferFailure(
     batchTransferIdx: Number,
     noAssetOnly: boolean,
@@ -1609,7 +1608,13 @@ export class ApiHandler {
         batchTransferIdx,
         noAssetOnly,
       );
-      return response;
+      if (response.status) {
+        return response;
+      } else if (response.error) {
+        throw new Error(response.error);
+      } else {
+        throw new Error('Error - Canceling transfer ');
+      }
     } catch (error) {
       console.log(error);
       throw error;

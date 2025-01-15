@@ -7,7 +7,7 @@ import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -40,7 +40,9 @@ function AddAsset() {
             ) {
               setVisible(true);
             } else {
-              navigation.navigate(NavigationRoutes.ISSUESCREEN);
+              navigation.navigate(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType: '',
+              });
             }
           }}
           testID="issue_new"

@@ -8,7 +8,7 @@ import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import CoinAssetsList from './components/CoinAssetsList';
+import CollectibleAssetsList from './components/CollectibleAssetsList';
 import HomeHeader from './components/HomeHeader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -18,12 +18,12 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from 'src/components/AppText';
+import { AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
-import { AssetType } from 'src/models/interfaces/RGBWallet';
 
-function HomeScreen() {
+function Collectibles() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
@@ -41,15 +41,15 @@ function HomeScreen() {
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
-  const coins = useQuery(RealmSchema.Coin);
+  const collectibles = useQuery(RealmSchema.Collectible);
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
   const assets = useMemo(() => {
-    return [...coins.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
-  }, [coins]);
+    return [...collectibles.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
+  }, [collectibles]);
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
@@ -129,9 +129,9 @@ function HomeScreen() {
         />
       </View>
       <AppText variant="pageTitle2" style={styles.assetsTitleStyle}>
-        {home.coin}
+        {home.collectibles}
       </AppText>
-      <CoinAssetsList
+      <CollectibleAssetsList
         listData={assets}
         loading={refreshing}
         onRefresh={handleRefresh}
@@ -140,10 +140,14 @@ function HomeScreen() {
           assets.length > 0
             ? handleNavigation(NavigationRoutes.ADDASSET)
             : handleNavigation(NavigationRoutes.ISSUESCREEN, {
-                issueAssetType: AssetType.Coin,
+                issueAssetType: AssetType.Collectible,
               })
         }
-        onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
+        onPressAsset={asset =>
+          handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
+            assetId: asset.assetId,
+          })
+        }
       />
     </ScreenContainer>
   );
@@ -166,4 +170,4 @@ const getStyles = (theme: AppTheme) =>
     },
   });
 
-export default HomeScreen;
+export default Collectibles;

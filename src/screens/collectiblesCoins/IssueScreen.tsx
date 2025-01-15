@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -46,6 +50,7 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
+  const { issueAssetType } = useRoute().params;
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -63,7 +68,9 @@ function IssueScreen() {
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
-  const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
+  const [assetType, setAssetType] = useState<AssetType>(
+    issueAssetType || AssetType.Coin,
+  );
   const [image, setImage] = useState('');
 
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -238,7 +245,11 @@ function IssueScreen() {
           <InProgessPopupContainer
             title={assets.issueAssetLoadingTitle}
             subTitle={assets.issueAssetLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/issuingAsset.json') : require('src/assets/images/jsons/issuingAsset_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/issuingAsset.json')
+                : require('src/assets/images/jsons/issuingAsset_light.json')
+            }
           />
         </ResponsePopupContainer>
       </View>

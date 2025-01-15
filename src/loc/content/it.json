@@ -23,7 +23,8 @@
     "versionHistory": "Cronologia delle versioni",
     "confirm": "Conferma",
     "skip": "Salta",
-    "assets": "Asset",
+    "assets": "Moneta",
+    "collectibles": "Collezionabili",
     "settings": "Impostazioni",
     "community": "Comunità",
     "viewWallets": "Visualizza portafogli",
@@ -141,6 +142,8 @@
     "createAssets": "Crea beni",
     "issueNew": "Emetti nuovo",
     "myAssets": "I tuoi beni",
+    "coin": "Moneta",
+    "collectibles": "Collezionabili",
     "issue": "Emetti",
     "assetName": "Nome della risorsa",
     "assetTicker": "Ticker della risorsa",
@@ -153,8 +156,14 @@
     "select": "Seleziona",
     "noAssetTitle": "Ancora nessuna risorsa.",
     "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto.",
+    "noCollectibleAssetTitle": "Ancora nessun collezionabile?",
+    "noCollectibleAssetSubTitle": "Cambiamo le cose—crea subito il tuo primo capolavoro!",
+    "noCoinAssetTitle": "Ancora nessuna moneta?",
+    "noCoinAssetSubTitle": "Cambiamo le cose—crea subito il tuo primo capolavoro!",
     "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
-    "backupAlertSubTitle": "Eseguire il backup del tuo wallet garantisce che i tuoi fondi siano al sicuro, anche se perdi il dispositivo. Prenditi un momento per creare un backup ora."
+    "backupAlertSubTitle": "Eseguire il backup del tuo wallet garantisce che i tuoi fondi siano al sicuro, anche se perdi il dispositivo. Prenditi un momento per creare un backup ora.",
+    "createCoinTitle": "Crea moneta",
+    "createCollectibleTitle": "Crea collezionabili"
   },
   "settings": {
     "setting": "Impostazioni",
@@ -429,9 +438,12 @@
     "cancelTransaction": "Annulla transazione",
     "assetName": "Nome dell'asset",
     "cancelTransactionCtaTitle": "Scorri per annullare il trasferimento",
-    "cancelTransactionCtaMsg": "Annullamento della transazione...",
-    "txnCancelSuccessMsg": "Transazione annullata con successo.",
-    "backToHome": "Torna alla home"
+    "cancelTransactionCtaMsg": "Annullamento del trasferimento in corso...",
+    "txnCancelSuccessMsg": "Trasferimento annullato con successo.",
+    "backToHome": "Torna alla home",
+    "batchTxnIdx": "Indice di trasferimento batch",
+    "issued": "Emesso",
+    "copiedTxIDMsg": "ID di transazione copiato con successo!"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

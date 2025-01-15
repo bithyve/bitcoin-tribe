@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +20,7 @@ import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg'
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type AssetTransactionProps = {
   transId: string;
@@ -34,6 +35,8 @@ type AssetTransactionProps = {
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const navigation = useNavigation();
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const {
     transId,
     transDate,
@@ -199,7 +202,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {getStatusIcon(
-              transType,
+              transType.toLowerCase().replace(/_/g, ''),
               tranStatus.toLowerCase().replace(/_/g, ''),
               'bitcoin',
               isThemeDark,
@@ -211,7 +214,9 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {transType.toLowerCase().replace(/_/g, '') === 'issuance'
+                ? assets.issued
+                : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
