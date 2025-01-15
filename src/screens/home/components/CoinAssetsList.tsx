@@ -119,8 +119,9 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '86%',
+      height: '85%',
       marginHorizontal: wp(10),
+      marginTop: hp(20),
     },
     assetWrapper: {
       flexWrap: 'wrap',
@@ -139,7 +140,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
     },
     emptyStateWrapper: {
-      marginTop: '40%',
+      marginTop: '38%',
     },
   });
 export default CoinAssetsList;

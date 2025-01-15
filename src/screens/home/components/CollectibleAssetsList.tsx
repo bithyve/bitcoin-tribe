@@ -122,8 +122,9 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '86%',
+      height: '85%',
       marginHorizontal: wp(10),
+      marginTop: hp(20),
     },
     assetWrapper: {
       flexWrap: 'wrap',
@@ -145,7 +146,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       top: index % 2 === 0 ? 0 : hp(50),
     },
     emptyStateWrapper: {
-      marginTop: '40%',
+      marginTop: '38%',
     },
   });
 export default CollectibleAssetsList;
