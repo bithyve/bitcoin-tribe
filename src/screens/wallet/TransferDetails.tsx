@@ -40,11 +40,12 @@ function TransferDetails({ route, navigation }) {
       setVisible(true);
     } else if (isError) {
       setVisible(false);
-      Toast(`${error}`, true);
+      Toast(`${error}` || 'An error occurred', true);
+      navigation.goBack();
     } else {
       setVisible(false);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, error, navigation]);
 
   return (
     <ScreenContainer>
