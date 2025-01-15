@@ -101,6 +101,16 @@ RCT_EXPORT_METHOD(receiveAsset:(RCTPromiseResolveBlock)resolve
    ];
 }
 
+RCT_EXPORT_METHOD(getWalletData:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper getWalletDataWithCallback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
+}
+
 
 RCT_EXPORT_METHOD(getRgbAssetMetaData:(NSString*)assetId
                   resolver:(RCTPromiseResolveBlock)resolve

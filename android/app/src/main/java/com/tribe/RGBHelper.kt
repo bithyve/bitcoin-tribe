@@ -24,6 +24,7 @@ import org.rgbtools.RefreshFilter
 import org.rgbtools.RefreshTransferStatus
 import org.rgbtools.RgbLibException
 import org.rgbtools.Unspent
+import org.rgbtools.WalletData
 import org.rgbtools.restoreBackup
 import org.rgbtools.restoreKeys
 import java.io.File
@@ -308,6 +309,10 @@ object RGBHelper {
 
     fun getUnspents(): List<Unspent>? {
         return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
+    }
+
+    fun getWalletData(): WalletData? {
+        return RGBWalletRepository.wallet?.getWalletData()
     }
 
     fun refreshAsset(assetID: String) {

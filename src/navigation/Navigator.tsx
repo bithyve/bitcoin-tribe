@@ -63,6 +63,7 @@ import ChannelDetails from 'src/screens/channels/ChannelDetails';
 import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
+import ViewLogs from 'src/screens/settings/ViewLogs';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -106,7 +107,6 @@ function LoginStack() {
         name={NavigationRoutes.IMPORTRGBBACKUP}
         component={ImportRgbBackup}
       />
-      
     </Stack.Navigator>
   );
 }
@@ -276,6 +276,7 @@ function AppStack() {
           name={NavigationRoutes.LIGHTNINGSEND}
           component={LightningSend}
         />
+        <Stack.Screen name={NavigationRoutes.VIEWLOGS} component={ViewLogs} />
       </Stack.Navigator>
     </RealmProvider>
   );

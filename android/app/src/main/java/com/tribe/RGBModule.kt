@@ -202,7 +202,6 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("status", status)
                 promise.resolve(jsonObject.toString())
-                promise.resolve(jsonObject.toString())
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
@@ -221,7 +220,22 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("status", status)
                 promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
                 promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun getWalletData(promise: Promise){
+        backgroundHandler.post {
+            try {
+                val walletData = RGBHelper.getWalletData()
+                promise.resolve(walletData)
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
