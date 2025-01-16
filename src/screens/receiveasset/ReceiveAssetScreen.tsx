@@ -58,7 +58,7 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
-        mutate(assetId, amount);
+        mutate({ assetId, amount });
       } else {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
@@ -66,7 +66,7 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      mutate(assetId, amount);
+      mutate({ assetId, amount });
     }
   }, []);
 
@@ -111,7 +111,7 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (createUtxoData) {
       setTimeout(() => {
-        mutate();
+        mutate({ assetId, amount });
       }, 400);
     } else if (createUtxoError) {
       createUtxoReset();
@@ -138,20 +138,20 @@ function ReceiveAssetScreen() {
       }
     } else {
       if (rgbInvoice === '') {
-        mutate(assetId, amount);
+        mutate({ assetId, amount });
       }
     }
   }, [selectedType]);
 
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
-      if (assetId && amount) {
-        const invoice = rgbWallet?.receiveData?.invoice
-          .replace('rgb:~', `${assetId}`)
-          .replace('~', amount);
-        setRgbInvoice(invoice);
-        return invoice;
-      }
+      // if (assetId && amount) {
+      //   const invoice = rgbWallet?.receiveData?.invoice
+      //     .replace('rgb:~', `${assetId}`)
+      //     .replace('~', amount);
+      //   setRgbInvoice(invoice);
+      //   return invoice;
+      // }
       setRgbInvoice(rgbWallet?.receiveData?.invoice);
       return rgbWallet?.receiveData?.invoice;
     } else {
