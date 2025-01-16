@@ -37,19 +37,20 @@ import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 type ItemProps = {
   name: string;
@@ -276,6 +277,14 @@ const SendAssetScreen = () => {
     }
   };
 
+  const handleCustomFeeInput = text => {
+    const reg = /^\d*\.?\d*$/;
+    setSelectedFeeRate(Number(text));
+    if (reg.test(text)) {
+      setCustomFee(text);
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -296,7 +305,8 @@ const SendAssetScreen = () => {
           />
         </ResponsePopupContainer>
       </View> */}
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidView style={styles.container}>
+        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <AssetItem
           name={item?.name}
           details={
@@ -422,10 +432,7 @@ const SendAssetScreen = () => {
             </AppText>
             <TextField
               value={customFee}
-              onChangeText={text => {
-                setSelectedFeeRate(Number(text));
-                setCustomFee(text);
-              }}
+              onChangeText={handleCustomFeeInput}
               placeholder={sendScreen.enterCustomFee}
               keyboardType={'numeric'}
               inputStyle={styles.customFeeInputStyle}
@@ -470,7 +477,8 @@ const SendAssetScreen = () => {
             }
           />
         </ModalContainer>
-      </ScrollView>
+        {/* </ScrollView> */}
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.next}
