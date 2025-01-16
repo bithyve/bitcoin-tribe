@@ -167,8 +167,12 @@ const SendAssetScreen = () => {
   );
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
-    return !invoice || !amount;
-  }, [invoice, amount]);
+    return (
+      !invoice ||
+      !amount ||
+      (selectedPriority === TxPriority.CUSTOM && !customFee)
+    );
+  }, [invoice, amount, customFee, selectedPriority]);
 
   useEffect(() => {
     if (createUtxos.data) {

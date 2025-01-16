@@ -432,7 +432,11 @@ function SendToContainer({
       {amount && (
         <View style={styles.primaryCTAContainer}>
           <PrimaryCTA
-            disabled={!amount || !recipientAddress}
+            disabled={
+              !amount ||
+              !recipientAddress ||
+              (selectedPriority === TxPriority.CUSTOM && !customFee)
+            }
             title={common.next}
             onPress={() => initiateSend()}
             width={'100%'}
