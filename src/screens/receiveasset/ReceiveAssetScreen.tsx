@@ -42,7 +42,13 @@ function ReceiveAssetScreen() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const {
+    mutate: createUtxos,
+    error: createUtxoError,
+    data: createUtxoData,
+    reset: createUtxoReset,
+  } = useMutation(ApiHandler.createUtxos);
+  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -64,11 +70,33 @@ function ReceiveAssetScreen() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (error) {
+  //     setTimeout(() => {
+  //       createUtxos.mutate();
+  //     }, 500);
+  //   }
+  // }, [error]);
+
   useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        createUtxos.mutate();
-      }, 500);
+    if (!error) return;
+    const getErrorMessage = err =>
+      err?.message || err?.toString() || 'An unknown error occurred';
+
+    const errorMessage = getErrorMessage(error);
+    // console.log('useEffect errorMessage', errorMessage);
+    const handleSpecificError = message => {
+      if (message === 'Insufficient sats for RGB') {
+        setTimeout(() => {
+          console.log('call utxo');
+          createUtxos();
+        }, 500);
+        return true;
+      }
+      return false;
+    };
+    if (!handleSpecificError(errorMessage)) {
+      Toast(errorMessage, true);
     }
   }, [error]);
 
@@ -91,18 +119,24 @@ function ReceiveAssetScreen() {
   }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
 
   useEffect(() => {
-    if (createUtxos.data) {
+    if (createUtxoData) {
       setTimeout(() => {
         mutate();
       }, 400);
-    } else if (createUtxos.error) {
+    } else if (createUtxoError) {
+      createUtxoReset();
+      fetchUTXOs();
       navigation.goBack();
-      Toast(`${createUtxos.error}`, true);
-    } else if (createUtxos.data === false) {
+      Toast(
+        'An issue occurred while processing your request. Please try again.',
+        true,
+      );
+      // Toast(`${createUtxoError}`, true);
+    } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
       navigation.goBack();
     }
-  }, [createUtxos.data]);
+  }, [createUtxoData, createUtxoError]);
 
   useEffect(() => {
     if (selectedType === 'lightning') {
