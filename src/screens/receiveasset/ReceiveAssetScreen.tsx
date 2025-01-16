@@ -70,25 +70,15 @@ function ReceiveAssetScreen() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     setTimeout(() => {
-  //       createUtxos.mutate();
-  //     }, 500);
-  //   }
-  // }, [error]);
-
   useEffect(() => {
     if (!error) return;
     const getErrorMessage = err =>
       err?.message || err?.toString() || 'An unknown error occurred';
 
     const errorMessage = getErrorMessage(error);
-    // console.log('useEffect errorMessage', errorMessage);
     const handleSpecificError = message => {
       if (message === 'Insufficient sats for RGB') {
         setTimeout(() => {
-          console.log('call utxo');
           createUtxos();
         }, 500);
         return true;
