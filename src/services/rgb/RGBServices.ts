@@ -98,6 +98,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
     asset_id?: string,
+    amount?: number,
   ): Promise<{
     batchTransferIdx?: number;
     expirationTimestamp?: number;
@@ -120,7 +121,7 @@ export default class RGBServices {
           return response;
         }
       } else {
-        const data = await RGB.receiveAsset();
+        const data = await RGB.receiveAsset(asset_id, amount);
         return JSON.parse(data);
       }
     } catch (error) {

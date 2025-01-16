@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useTheme } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { AppTheme } from 'src/theme';
 import AppInfoCard from './AppInfoCard';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -29,9 +28,21 @@ function AppInfoContainer({ navigation, walletId, version }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { appType } = useContext(AppContext);
+  const tapCount = useRef(0);
+  const timer = useRef(null);
 
-  const readRgbLogs = async () => {
-    navigation.navigate(NavigationRoutes.VIEWLOGS);
+  const handleTripleTap = () => {
+    tapCount.current += 1;
+    if (tapCount.current === 1) {
+      timer.current = setTimeout(() => {
+        tapCount.current = 0;
+      }, 500);
+    }
+    if (tapCount.current === 3) {
+      clearTimeout(timer.current);
+      tapCount.current = 0;
+      navigation.navigate(NavigationRoutes.VIEWLOGS);
+    }
   };
 
   const getActivateWalletType = (appType: AppType): string => {
@@ -61,7 +72,8 @@ function AppInfoContainer({ navigation, walletId, version }) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity activeOpacity={1} style={{flex: 1}}  onPress={handleTripleTap}>
+      <View style={styles.container}>
       <AppInfoCard
         title={settings.activateWalletTypeLabel}
         value={getActivateWalletType(appType)}
@@ -82,15 +94,8 @@ function AppInfoContainer({ navigation, walletId, version }) {
           navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
         }
       />
-
-      <AppInfoCard
-        title={'RGB Logs'}
-        subTitle={'Read RGB Logs'}
-        value={'Logs'}
-        icon={isThemeDark ? <IconInfo /> : <IconInfoLight />}
-        navigation={() => readRgbLogs()}
-      />
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 const getStyles = () =>

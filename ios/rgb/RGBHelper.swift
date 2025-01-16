@@ -410,7 +410,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData() -> String {
+  func genReceiveData(assetID: String, amount: Float) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -429,10 +429,9 @@ import CloudKit
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
                   ], skipSync: false
               )
-              print("\(TAG) refresh_\(refresh_)")
               let bindData = try wallet.blindReceive(
-                  assetId: nil,
-                  amount: nil,
+                assetId: assetID != "" ? assetID : nil,
+                amount: amount != 0 ? UInt64(amount) : nil,
                   durationSeconds: Constants.rgbBlindDuration,
                   transportEndpoints: [Constants.proxyConsignmentEndpoint],
                   minConfirmations: 0
@@ -520,14 +519,18 @@ import CloudKit
   @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
     do{
       let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
-      let data: [String: Any] = [
+      var data: [String: Any] = [
         "recipientId": invoice.recipientId,
         "expirationTimestamp": invoice.expirationTimestamp ?? 0,
-        "assetId": invoice.assetId,
-        "assetIface": invoice.assetIface,
-        "network": invoice.network,
-        "transportEndpoints": invoice.transportEndpoints
+        "assetId": invoice.assetId ?? "",
+        "assetIface": invoice.assetIface.map { "\($0)" } ?? "",
+        "network": String(describing: invoice.network),
+        "amount": invoice.amount ?? 0,
+        "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
+          return endpoint
+        }
       ]
+      print(data)
       let json = Utility.convertToJSONString(params: data)
       callback(json)
     } catch {
@@ -562,8 +565,8 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(callback: @escaping ((String) -> Void)){
-    let response = genReceiveData()
+  @objc func receiveAsset(assetID: String, amount: Float,callback: @escaping ((String) -> Void)){
+    let response = genReceiveData(assetID: assetID, amount: amount)
     callback(response)
   }
   
