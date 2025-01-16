@@ -519,14 +519,18 @@ import CloudKit
   @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
     do{
       let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
-      let data: [String: Any] = [
+      var data: [String: Any] = [
         "recipientId": invoice.recipientId,
         "expirationTimestamp": invoice.expirationTimestamp ?? 0,
-        "assetId": invoice.assetId,
-        "assetIface": invoice.assetIface,
-        "network": invoice.network,
-        "transportEndpoints": invoice.transportEndpoints
+        "assetId": invoice.assetId ?? "",
+        "assetIface": invoice.assetIface.map { "\($0)" } ?? "",
+        "network": String(describing: invoice.network),
+        "amount": invoice.amount ?? 0,
+        "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
+          return endpoint
+        }
       ]
+      print(data)
       let json = Utility.convertToJSONString(params: data)
       callback(json)
     } catch {
