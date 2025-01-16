@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Code } from 'react-native-vision-camera';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -35,7 +36,6 @@ function ScanAssetScreen({ route, navigation }) {
           assetId: assetId,
           wallet: wallet,
           rgbInvoice: value,
-          item: item,
         });
         break;
       default:
@@ -61,7 +61,6 @@ function ScanAssetScreen({ route, navigation }) {
             assetId: assetId,
             wallet: wallet,
             rgbInvoice: rgbInvoice,
-            item: item,
           });
         }}
       />

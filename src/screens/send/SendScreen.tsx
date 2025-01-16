@@ -16,6 +16,8 @@ import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import { Code } from 'react-native-vision-camera';
 import { hp } from 'src/constants/responsive';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { formatNumber } from 'src/utils/numberWithCommas';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -25,9 +27,31 @@ function SendScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
 
-  const onCodeScanned = useCallback((codes: Code[]) => {
+  const onCodeScanned = useCallback(async (codes: Code[]) => {
     const value = codes[0]?.value;
     if (value == null) {
+      return;
+    }
+    if (value.startsWith('rgb:')) {
+      const res = await ApiHandler.decodeInvoice(value);
+      console.log('res', res);
+      if (res.assetId) {
+        console.log('res.assetId', res.assetId);
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          assetId: res.assetId,
+          wallet: wallet,
+          rgbInvoice: value,
+          amount: res.amount.toString(),
+        });
+      } else {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+          wallet,
+          rgbInvoice: value,
+          assetID: '',
+          amount: '',
+        });
+      }
+
       return;
     }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
@@ -50,25 +74,25 @@ function SendScreen({ route, navigation }) {
           paymentURIAmount: amount,
         });
         break;
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-          assetID: '',
-          amount: '',
-        });
-        break;
+      // case PaymentInfoKind.RGB_INVOICE:
+      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+      //     wallet,
+      //     rgbInvoice: address,
+      //     assetID: '',
+      //     amount: '',
+      //   });
+      //   break;
       case PaymentInfoKind.RLN_INVOICE:
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
         break;
-      case PaymentInfoKind.RGB_INVOICE_URL:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-          assetID: address.match(/rgb:[^\/]+/)?.[0],
-          transactionAmount: address.match(/\/(\d+)\//)?.[1],
-        });
-        break;
+      // case PaymentInfoKind.RGB_INVOICE_URL:
+      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+      //     wallet,
+      //     rgbInvoice: address,
+      //     assetID: address.match(/rgb:[^\/]+/)?.[0],
+      //     transactionAmount: address.match(/\/(\d+)\//)?.[1],
+      //   });
+      //   break;
       default:
         if (value.startsWith('rgb:')) {
           Toast(sendScreen.invalidRGBInvoiceAddress, true);

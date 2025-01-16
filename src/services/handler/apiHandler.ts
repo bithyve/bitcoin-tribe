@@ -1626,8 +1626,7 @@ export class ApiHandler {
   static async decodeInvoice(invoiceString: string) {
     try {
       const response = await RGBServices.decodeInvoice(invoiceString);
-      console.log('response', response);
-      if (response) {
+      if (response.recipientId) {
         return response;
       } else if (response.error) {
         throw new Error(response.error);

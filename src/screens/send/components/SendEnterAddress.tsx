@@ -11,6 +11,7 @@ import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
@@ -34,11 +35,31 @@ function SendEnterAddress({
   const [address, setAddress] = useState('');
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
-  const onProceed = (paymentInfo: string) => {
+  const onProceed = async (paymentInfo: string) => {
     if (paymentInfo.startsWith('lnbc')) {
       navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
         invoice: paymentInfo,
       });
+      return;
+    }
+    if (paymentInfo.startsWith('rgb:')) {
+      const res = await ApiHandler.decodeInvoice(paymentInfo);
+      if (res.assetId) {
+        navigation.replace(NavigationRoutes.SENDASSET, {
+          assetId: res.assetId,
+          wallet: wallet,
+          rgbInvoice: paymentInfo,
+          amount: res.amount.toString(),
+        });
+      } else {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+          wallet,
+          rgbInvoice: paymentInfo,
+          assetID: '',
+          amount: '',
+        });
+      }
+
       return;
     }
     paymentInfo = paymentInfo.trim();
@@ -65,25 +86,25 @@ function SendEnterAddress({
           paymentURIAmount: amount,
         });
         break;
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-          assetID: '',
-          amount: '',
-        });
-        break;
+      // case PaymentInfoKind.RGB_INVOICE:
+      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+      //     wallet,
+      //     rgbInvoice: address,
+      //     assetID: '',
+      //     amount: '',
+      //   });
+      //   break;
       case PaymentInfoKind.RLN_INVOICE:
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
         break;
-      case PaymentInfoKind.RGB_INVOICE_URL:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-          assetID: address.match(/rgb:[^\/]+/)?.[0],
-          transactionAmount: address.match(/\/(\d+)\//)?.[1],
-        });
-        break;
+      // case PaymentInfoKind.RGB_INVOICE_URL:
+      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+      //     wallet,
+      //     rgbInvoice: address,
+      //     assetID: address.match(/rgb:[^\/]+/)?.[0],
+      //     transactionAmount: address.match(/\/(\d+)\//)?.[1],
+      //   });
+      //   break;
       default:
         Toast(sendScreen.invalidBtcAddress, true);
     }
