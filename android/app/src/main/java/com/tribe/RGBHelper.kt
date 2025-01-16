@@ -15,6 +15,7 @@ import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
 import org.rgbtools.AssetUda
 import org.rgbtools.Balance
+import org.rgbtools.BtcBalance
 import org.rgbtools.Invoice
 import org.rgbtools.InvoiceData
 import org.rgbtools.Utxo
@@ -74,6 +75,7 @@ object RGBHelper {
     }
 
     private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null): String {
+        Log.d(TAG, "startRGBReceiving: assetID=$assetID, amount=$amount")
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
@@ -311,6 +313,10 @@ object RGBHelper {
 
     fun getWalletData(): WalletData? {
         return RGBWalletRepository.wallet?.getWalletData()
+    }
+
+    fun getBtcBalance(): BtcBalance? {
+        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,true)
     }
 
     fun refreshAsset(assetID: String) {
