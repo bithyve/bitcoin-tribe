@@ -265,7 +265,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       alignItems: 'center',
       backgroundColor: backColor,
       width: '100%',
-      height: Platform.OS === 'ios' ? 55 : 48,
+      height: 56,
       borderRadius: 18,
     },
     textLoading: {
