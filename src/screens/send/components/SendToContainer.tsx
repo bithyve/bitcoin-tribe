@@ -472,7 +472,12 @@ function SendToContainer({
         }
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => {}}>
+        onDismiss={() =>
+          sendTransactionMutation.status === 'loading' ||
+          sendTransactionMutation.status === 'success'
+            ? {}
+            : setVisible(false)
+        }>
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}

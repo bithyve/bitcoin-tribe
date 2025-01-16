@@ -288,7 +288,6 @@ const SendAssetScreen = () => {
       setCustomFee(text);
     }
   };
-
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -459,7 +458,7 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => {}}>
+          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={item?.name}
