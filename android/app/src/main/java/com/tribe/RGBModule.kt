@@ -235,7 +235,9 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
         backgroundHandler.post {
             try {
                 val walletData = RGBHelper.getWalletData()
-                promise.resolve(walletData)
+                val gson = Gson()
+                val json = gson.toJson(walletData)
+                promise.resolve(json)
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
@@ -247,10 +249,36 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun getBtcBalance(promise: Promise){
+        backgroundHandler.post {
+            try {
+                val balance = RGBHelper.getBtcBalance()
+                val gson = Gson()
+                val json = gson.toJson(balance)
+                promise.resolve(json)
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
     fun decodeInvoice(invoiceString: String, promise: Promise){
         try {
             val invoice = RGBHelper.decodeInvoice(invoiceString)
-            promise.resolve(Gson().toJson(invoice))
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("assetId", invoice.assetId)
+            jsonObject.addProperty("recipientId", invoice.recipientId)
+            jsonObject.addProperty("network", invoice.network.name)
+            jsonObject.addProperty("amount", invoice.amount?.toFloat() ?: 0)
+            jsonObject.addProperty("transportEndpoints", invoice.transportEndpoints.toString())
+            jsonObject.addProperty("assetIface", invoice.assetIface?.name ?: "")
+            jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
+            jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
+            promise.resolve(jsonObject.toString())
         } catch (e: Exception) {
             val message = e.message
             val jsonObject = JsonObject()
