@@ -101,7 +101,7 @@ const CoinDetailsScreen = () => {
             refresh: true,
             assetId: coin.assetId,
             amount: 0,
-            selectedType: 'Bitcoin',
+            selectedType: 'bitcoin',
           })
         }
       />

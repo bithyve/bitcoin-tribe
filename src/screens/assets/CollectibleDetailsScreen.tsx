@@ -110,7 +110,7 @@ const CollectibleDetailsScreen = () => {
             refresh: true,
             assetId: assetId,
             amount: 0,
-            selectedType: 'Bitcoin',
+            selectedType: 'bitcoin',
           })
         }
       />
