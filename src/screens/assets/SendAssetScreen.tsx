@@ -310,7 +310,6 @@ const SendAssetScreen = () => {
         </ResponsePopupContainer>
       </View> */}
       <KeyboardAvoidView style={styles.container}>
-        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <AssetItem
           name={item?.name}
           details={
@@ -481,7 +480,6 @@ const SendAssetScreen = () => {
             }
           />
         </ModalContainer>
-        {/* </ScrollView> */}
       </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
@@ -524,11 +522,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      // marginTop: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(5),
-      bottom: 10,
+      marginVertical: hp(5),
     },
     assetItemWrapper: {
       flexDirection: 'row',
