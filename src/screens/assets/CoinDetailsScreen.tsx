@@ -84,7 +84,7 @@ const CoinDetailsScreen = () => {
         assetTicker={coin.ticker}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
-        headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
+        headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
@@ -97,8 +97,11 @@ const CoinDetailsScreen = () => {
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
         onPressRecieve={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+          navigation.replace(NavigationRoutes.RECEIVEASSET, {
             refresh: true,
+            assetId: coin.assetId,
+            amount: 0,
+            selectedType: 'Bitcoin',
           })
         }
       />
