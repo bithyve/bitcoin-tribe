@@ -445,7 +445,8 @@
     "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
     "batchTxnIdx": "बैच स्थानांतरण सूचकांक",
     "issued": "जारी किया गया",
-    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!"
+    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!",
+    "assetProcessErrorMsg": "आपकी अनुरोध को संसाधित करते समय एक समस्या हुई। कृपया पुनः प्रयास करें।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -445,7 +445,8 @@
     "backToHome": "Back to home",
     "batchTxnIdx": "Batch Transfer IDX",
     "issued": "Issued",
-    "copiedTxIDMsg": "Copied Transaction ID successfully!"
+    "copiedTxIDMsg": "Copied Transaction ID successfully!",
+    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again."
   },
   "community": {
     "fnfTitle": "Friends & Family",

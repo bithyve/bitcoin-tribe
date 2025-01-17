@@ -445,7 +445,8 @@
     "backToHome": "ホームに戻る",
     "batchTxnIdx": "バッチ転送インデックス",
     "issued": "発行済み",
-    "copiedTxIDMsg": "トランザクション ID を正常にコピーしました！"
+    "copiedTxIDMsg": "トランザクション ID を正常にコピーしました！",
+    "assetProcessErrorMsg": "リクエストを処理中に問題が発生しました。もう一度お試しください。"
   },
   "community": {
     "fnfTitle": "友達と家族",

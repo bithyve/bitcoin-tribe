@@ -445,7 +445,8 @@
     "backToHome": "返回首页",
     "batchTxnIdx": "批量转账索引",
     "issued": "已发行",
-    "copiedTxIDMsg": "成功复制交易 ID！"
+    "copiedTxIDMsg": "成功复制交易 ID！",
+    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again."
   },
   "community": {
     "fnfTitle": "朋友和家人",

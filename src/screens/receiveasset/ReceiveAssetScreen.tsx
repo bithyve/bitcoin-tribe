@@ -47,6 +47,7 @@ function ReceiveAssetScreen() {
     error: createUtxoError,
     data: createUtxoData,
     reset: createUtxoReset,
+    isLoading: createUtxosLoading,
   } = useMutation(ApiHandler.createUtxos);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -119,10 +120,7 @@ function ReceiveAssetScreen() {
       fetchUTXOs();
       refreshRgbWallet.mutate();
       navigation.goBack();
-      Toast(
-        'An issue occurred while processing your request. Please try again.',
-        true,
-      );
+      Toast(assets.assetProcessErrorMsg, true);
       // Toast(`${createUtxoError}`, true);
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
@@ -147,13 +145,6 @@ function ReceiveAssetScreen() {
 
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
-      // if (assetId && amount) {
-      //   const invoice = rgbWallet?.receiveData?.invoice
-      //     .replace('rgb:~', `${assetId}`)
-      //     .replace('~', amount);
-      //   setRgbInvoice(invoice);
-      //   return invoice;
-      // }
       setRgbInvoice(rgbWallet?.receiveData?.invoice);
       return rgbWallet?.receiveData?.invoice;
     } else {
@@ -168,24 +159,13 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
       />
-
-      {/* <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 400);
-        }}
-      /> */}
-
       {isLoading ||
-      createUtxos.isLoading ||
+      createUtxosLoading ||
       generateLNInvoiceMutation.isLoading ? (
         <ModalLoading
           visible={
             isLoading ||
-            createUtxos.isLoading ||
+            createUtxosLoading ||
             generateLNInvoiceMutation.isLoading
           }
         />
