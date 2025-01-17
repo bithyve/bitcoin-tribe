@@ -323,7 +323,8 @@
     "broadcastingTXN": "लेन-देन प्रसारित किया जा रहा है...",
     "successTitle": "सफल!",
     "recipientInvoice": "प्राप्तकर्ता का चालान",
-    "availableBalanceMsg": " उपलब्ध शेष राशि है "
+    "availableBalanceMsg": " उपलब्ध शेष राशि है ",
+    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है "
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -444,7 +445,8 @@
     "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
     "batchTxnIdx": "बैच स्थानांतरण सूचकांक",
     "issued": "जारी किया गया",
-    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!"
+    "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!",
+    "assetProcessErrorMsg": "आपकी अनुरोध को संसाधित करते समय एक समस्या हुई। कृपया पुनः प्रयास करें।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

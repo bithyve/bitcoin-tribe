@@ -10,6 +10,7 @@ import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 // import CurrencySwitch from 'src/components/CurrencySwitch';
 
 function SendToScreen({ route }) {
@@ -27,23 +28,23 @@ function SendToScreen({ route }) {
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
- 
+
   const toggleCurrencyMode = () => {
-    if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS || initialCurrencyMode === CurrencyKind.BITCOIN ) {
+    if (
+      !initialCurrencyMode ||
+      initialCurrencyMode === CurrencyKind.SATS ||
+      initialCurrencyMode === CurrencyKind.BITCOIN
+    ) {
       setCurrencyMode(CurrencyKind.FIAT);
     } else if (initialCurrencyMode === CurrencyKind.FIAT) {
       setCurrencyMode(CurrencyKind.SATS);
-    } 
+    }
   };
 
   return (
     <ScreenContainer>
-      <AppHeader
-        title={sendScreen.sendTitle}
-        // rightIcon={
-        //   <CurrencySwitch onPress={()=> toggleCurrencyMode()} selectedCurrency={selectedCurrency} currentCurrencyMode={currentCurrencyMode}/>
-        // }
-      />
+      <AppHeader title={sendScreen.sendTitle} />
+
       <SendToContainer
         wallet={wallet}
         address={address}

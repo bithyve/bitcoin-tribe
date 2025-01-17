@@ -1,6 +1,13 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -9,7 +16,7 @@ import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import { AppTheme } from 'src/theme';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
@@ -41,6 +48,7 @@ import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 function SendToContainer({
   wallet,
@@ -282,163 +290,168 @@ function SendToContainer({
       Toast(assets.checkSpendableAmt + balances, true);
     }
   };
-
+  const handleCustomFeeInput = text => {
+    const reg = /^\d*\.?\d*$/;
+    if (reg.test(text)) {
+      setCustomFee(text);
+    }
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.container1}>
-        <View style={styles.wrapper}>
-          <View style={styles.inputWrapper}>
-            <AppText variant="body2" style={styles.recipientAddressLabel}>
-              {sendScreen.recipientAddress}
-            </AppText>
-            <TextField
-              value={recipientAddress}
-              onChangeText={text => setRecipientAddress(text)}
-              placeholder={sendScreen.recipientAddress}
-              // style={styles.input}
-              multiline={true}
-              returnKeyType={'Enter'}
-              onContentSizeChange={event => {
-                setInputHeight(event.nativeEvent.contentSize.height);
-              }}
-              numberOfLines={3}
-              contentStyle={
-                recipientAddress
-                  ? styles.recipientContentStyle
-                  : styles.contentStyle1
-              }
-              inputStyle={styles.recipientInputStyle}
-              rightText={!recipientAddress && sendScreen.paste}
-              rightIcon={recipientAddress && <ClearIcon />}
-              onRightTextPress={() =>
-                recipientAddress
-                  ? setRecipientAddress('')
-                  : handlePasteAddress()
-              }
-              rightCTAStyle={styles.rightCTAStyle}
-            />
-          </View>
-          <View style={styles.inputWrapper}>
-            <AppText variant="body2" style={styles.recipientAddressLabel}>
-              {initialCurrencyMode === CurrencyKind.SATS ||
-              initialCurrencyMode === CurrencyKind.BITCOIN
-                ? sendScreen.enterSats
-                : sendScreen.enterFiat}
-            </AppText>
-            <TextField
-              value={formatNumber(amount)}
-              onChangeText={handleAmountInputChange}
-              placeholder={sendScreen.enterAmount}
-              keyboardType={'numeric'}
-              inputStyle={styles.inputStyle}
-              contentStyle={styles.contentStyle}
-              // rightText={common.max}
-              // onRightTextPress={() => {}}
-              // rightCTATextColor={theme.colors.accent1}
-            />
-          </View>
-          <View style={styles.availableBalanceWrapper}>
-            <AppText variant="body2" style={styles.recipientAddressLabel}>
-              {sendScreen.availableBalance}
-            </AppText>
-            <View style={styles.balanceWrapper}>
-              {initialCurrencyMode !== CurrencyKind.SATS && (
-                <View style={styles.currencyIconWrapper}>
-                  {getCurrencyIcon(
-                    isThemeDark ? IconBitcoin : IconBitcoinLight,
-                    isThemeDark ? 'dark' : 'light',
-                    10,
-                  )}
-                </View>
-              )}
-              <AppText variant="body2" style={styles.availableBalanceText}>
-                {getBalance(balances)}
-              </AppText>
-              {initialCurrencyMode === CurrencyKind.SATS && (
-                <AppText variant="caption" style={styles.satsText}>
-                  sats
-                </AppText>
-              )}
-            </View>
-          </View>
+    <>
+      <KeyboardAvoidView style={styles.container}>
+        <View style={styles.inputWrapper}>
           <AppText variant="body2" style={styles.recipientAddressLabel}>
-            {sendScreen.fee}
+            {sendScreen.recipientAddress}
           </AppText>
-          <View style={styles.feeContainer}>
-            <FeePriorityButton
-              title={sendScreen.low}
-              priority={TxPriority.LOW}
-              selectedPriority={selectedPriority}
-              setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
-              feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
-              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                TxPriority.LOW,
-              )}
-              disabled={isSendMax}
-            />
-            <FeePriorityButton
-              title={sendScreen.medium}
-              priority={TxPriority.MEDIUM}
-              selectedPriority={selectedPriority}
-              setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
-              feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
-              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                TxPriority.MEDIUM,
-              )}
-              disabled={isSendMax}
-            />
-            <FeePriorityButton
-              title={sendScreen.high}
-              priority={TxPriority.HIGH}
-              selectedPriority={selectedPriority}
-              setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
-              feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
-              estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-                TxPriority.HIGH,
-              )}
-              disabled={isSendMax}
-            />
-            <FeePriorityButton
-              title={sendScreen.custom}
-              priority={TxPriority.CUSTOM}
-              selectedPriority={selectedPriority}
-              setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
-              feeRateByPriority={''}
-              estimatedBlocksByPriority={1}
-              disabled={isSendMax}
+          <TextField
+            value={recipientAddress}
+            onChangeText={text => setRecipientAddress(text)}
+            placeholder={sendScreen.recipientAddress}
+            // style={styles.input}
+            multiline={true}
+            returnKeyType={'Enter'}
+            onContentSizeChange={event => {
+              setInputHeight(event.nativeEvent.contentSize.height);
+            }}
+            numberOfLines={3}
+            contentStyle={
+              recipientAddress
+                ? styles.recipientContentStyle
+                : styles.contentStyle1
+            }
+            inputStyle={styles.recipientInputStyle}
+            rightText={!recipientAddress && sendScreen.paste}
+            rightIcon={recipientAddress && <ClearIcon />}
+            onRightTextPress={() =>
+              recipientAddress ? setRecipientAddress('') : handlePasteAddress()
+            }
+            rightCTAStyle={styles.rightCTAStyle}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {initialCurrencyMode === CurrencyKind.SATS ||
+            initialCurrencyMode === CurrencyKind.BITCOIN
+              ? sendScreen.enterSats
+              : sendScreen.enterFiat}
+          </AppText>
+          <TextField
+            value={formatNumber(amount)}
+            onChangeText={handleAmountInputChange}
+            placeholder={sendScreen.enterAmount}
+            keyboardType={'numeric'}
+            inputStyle={styles.inputStyle}
+            contentStyle={styles.contentStyle}
+            // rightText={common.max}
+            // onRightTextPress={() => {}}
+            // rightCTATextColor={theme.colors.accent1}
+          />
+        </View>
+        <View style={styles.availableBalanceWrapper}>
+          <AppText variant="body2" style={styles.recipientAddressLabel}>
+            {sendScreen.availableBalance}
+          </AppText>
+          <View style={styles.balanceWrapper}>
+            {initialCurrencyMode !== CurrencyKind.SATS && (
+              <View style={styles.currencyIconWrapper}>
+                {getCurrencyIcon(
+                  isThemeDark ? IconBitcoin : IconBitcoinLight,
+                  isThemeDark ? 'dark' : 'light',
+                  10,
+                )}
+              </View>
+            )}
+            <AppText variant="body2" style={styles.availableBalanceText}>
+              {getBalance(balances)}
+            </AppText>
+            {initialCurrencyMode === CurrencyKind.SATS && (
+              <AppText variant="caption" style={styles.satsText}>
+                sats
+              </AppText>
+            )}
+          </View>
+        </View>
+        <AppText variant="body2" style={styles.recipientAddressLabel}>
+          {sendScreen.fee}
+        </AppText>
+        <View style={styles.feeContainer}>
+          <FeePriorityButton
+            title={sendScreen.low}
+            priority={TxPriority.LOW}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.LOW,
+            )}
+            disabled={isSendMax}
+          />
+          <FeePriorityButton
+            title={sendScreen.medium}
+            priority={TxPriority.MEDIUM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.MEDIUM,
+            )}
+            disabled={isSendMax}
+          />
+          <FeePriorityButton
+            title={sendScreen.high}
+            priority={TxPriority.HIGH}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.HIGH,
+            )}
+            disabled={isSendMax}
+          />
+          <FeePriorityButton
+            title={sendScreen.custom}
+            priority={TxPriority.CUSTOM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
+            feeRateByPriority={''}
+            estimatedBlocksByPriority={1}
+            disabled={isSendMax}
+          />
+        </View>
+        {selectedPriority === TxPriority.CUSTOM && (
+          <View style={styles.inputWrapper}>
+            <AppText variant="body2" style={styles.recipientAddressLabel}>
+              {sendScreen.customFee}
+            </AppText>
+            <TextField
+              value={customFee}
+              onChangeText={handleCustomFeeInput}
+              placeholder={sendScreen.enterCustomFee}
+              keyboardType={'numeric'}
+              inputStyle={styles.customFeeInputStyle}
+              contentStyle={styles.contentStyle}
+              rightText={'sat/vB'}
+              onRightTextPress={() => {}}
+              rightCTATextColor={theme.colors.headingColor}
             />
           </View>
-
-          {selectedPriority === TxPriority.CUSTOM && (
-            <View style={styles.inputWrapper}>
-              <AppText variant="body2" style={styles.recipientAddressLabel}>
-                {sendScreen.customFee}
-              </AppText>
-              <TextField
-                value={customFee}
-                onChangeText={text => setCustomFee(text)}
-                placeholder={sendScreen.enterCustomFee}
-                keyboardType={'numeric'}
-                inputStyle={styles.customFeeInputStyle}
-                contentStyle={styles.contentStyle}
-                rightText={'sat/vB'}
-                onRightTextPress={() => {}}
-                rightCTATextColor={theme.colors.headingColor}
-              />
-            </View>
-          )}
-        </View>
-      </View>
-      {amount && (
-        <View style={styles.primaryCTAContainer}>
+        )}
+      </KeyboardAvoidView>
+      <View style={styles.primaryCTAContainer}>
+        {amount && (
           <PrimaryCTA
-            disabled={!amount || !recipientAddress}
+            disabled={
+              !amount ||
+              !recipientAddress ||
+              (selectedPriority === TxPriority.CUSTOM && !customFee)
+            }
             title={common.next}
             onPress={() => initiateSend()}
             width={'100%'}
           />
-        </View>
-      )}
+        )}
+      </View>
+
       <ModalContainer
         title={
           sendTransactionMutation.status === 'success'
@@ -459,7 +472,12 @@ function SendToContainer({
         }
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => {}}>
+        onDismiss={() =>
+          sendTransactionMutation.status === 'loading' ||
+          sendTransactionMutation.status === 'success'
+            ? {}
+            : setVisible(false)
+        }>
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
@@ -482,18 +500,13 @@ function SendToContainer({
           onPress={() => broadcastTransaction()}
         />
       </ModalContainer>
-    </View>
+    </>
   );
 }
 const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     container: {
-      height: '100%',
-    },
-    container1: {
-      height: '80%',
-      width: '100%',
-      marginTop: hp(5),
+      flex: 1,
     },
     primaryCTAContainer: {
       bottom: 5,

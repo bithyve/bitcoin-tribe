@@ -261,12 +261,11 @@ const getStyles = (theme: AppTheme, backColor) =>
       overflow: 'hidden',
     },
     containerLoading: {
-      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: backColor,
       width: '100%',
-      height: 60,
+      height: 56,
       borderRadius: 18,
     },
     textLoading: {
