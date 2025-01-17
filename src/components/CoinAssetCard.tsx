@@ -105,7 +105,7 @@ const getStyles = (theme: AppTheme) =>
     tagWrapper1: {
       paddingVertical: hp(3),
       paddingHorizontal: hp(10),
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: theme.colors.accent,
       borderRadius: 15,
     },
     identiconWrapper: {
