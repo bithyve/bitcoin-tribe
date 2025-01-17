@@ -115,7 +115,7 @@ function SendToContainer({
     } else if (sendTransactionMutation.status === 'error') {
       setVisible(false);
       sendTransactionMutation.reset();
-      Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
+      Toast(`${sendTransactionMutation.error}`, true);
     }
   }, [sendTransactionMutation]);
 

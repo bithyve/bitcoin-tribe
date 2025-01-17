@@ -697,7 +697,7 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log({ error });
-      throw new Error('Failed to send txn');
+      throw new Error('Failed to send ' + error.message);
     }
   }
 
