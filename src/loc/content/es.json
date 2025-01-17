@@ -130,8 +130,8 @@
     "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso.",
     "profileSetupLoadingTitle": "Estamos configurando tu perfil",
     "profileSetupLoadingSubTitle": "Relájate mientras preparamos todo para ti. Tu aplicación estará lista en un momento.",
-    "recoverLoadingTitle": "Recuperando tus datos",
-    "recoverLoadingSubTitle": "Estamos restaurando tus datos—¡espera un momento! Relájate y pronto estarás listo.",
+    "recoverLoadingTitle": "Recuperando tu billetera",
+    "recoverLoadingSubTitle": "Por favor, espera un momento mientras completamos el proceso de recuperación. Evita cerrar la aplicación para asegurar que todo funcione sin problemas. ¡Gracias por tu paciencia!",
     "onchainLearMoreInfo": "Una billetera segura para todas tus transacciones de Bitcoin.",
     "lightningLearnMoreInfo": "Transacciones rápidas y de bajo costo para montos pequeños.",
     "supportLearnMoreInfo": "Una billetera compatible con otras aplicaciones de Bitcoin."

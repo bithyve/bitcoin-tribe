@@ -130,8 +130,8 @@
     "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step.",
     "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
     "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment.",
-    "recoverLoadingTitle": "Recovering Your Data",
-    "recoverLoadingSubTitle": "We’re restoring your data—hang tight! Sit back, relax, and we’ll have you back up in no time.",
+    "recoverLoadingTitle": "Recovering Your Wallet",
+    "recoverLoadingSubTitle": "Please hold on for a moment while we complete the recovery process. Avoid closing the app to ensure everything runs smoothly. Thank you for your patience!",
     "onchainLearMoreInfo": "A secure wallet for all your Bitcoin transactions. ",
     "lightningLearnMoreInfo": "Fast and low-cost transactions for small amounts. ",
     "supportLearnMoreInfo": "A wallet compatible with other Bitcoin applications. "
