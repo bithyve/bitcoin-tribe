@@ -17,7 +17,6 @@ export default class RGBServices {
 
   static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
     const keys = await RGB.restoreKeys(this.NETWORK, mnemonic);
-    console.log('keys', keys);
     return JSON.parse(keys);
   };
 
