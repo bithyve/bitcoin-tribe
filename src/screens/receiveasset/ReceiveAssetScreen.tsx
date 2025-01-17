@@ -49,6 +49,7 @@ function ReceiveAssetScreen() {
     reset: createUtxoReset,
   } = useMutation(ApiHandler.createUtxos);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -116,6 +117,7 @@ function ReceiveAssetScreen() {
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
+      refreshRgbWallet.mutate();
       navigation.goBack();
       Toast(
         'An issue occurred while processing your request. Please try again.',
