@@ -1,6 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -10,19 +9,15 @@ import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
-import { RealmSchema } from 'src/storage/enum';
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
 
 function SendEnterAddress({
   onDismiss,
-  wallet,
   onProceed,
 }: {
   onDismiss: any;
-  wallet: Wallet;
   onProceed: (text: string) => void;
 }) {
   const navigation = useNavigation();
@@ -31,9 +26,6 @@ function SendEnterAddress({
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
-  const coins = useQuery(RealmSchema.Coin);
-  const collectibles = useQuery(RealmSchema.Collectible);
-  const combinedData = [...coins, ...collectibles];
   const styles = React.useMemo(
     () => getStyles(theme, inputHeight),
     [theme, inputHeight],

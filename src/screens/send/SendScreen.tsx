@@ -149,7 +149,6 @@ function SendScreen({ route, navigation }) {
         onDismiss={() => setVisible(false)}>
         <SendEnterAddress
           onDismiss={() => setVisible(false)}
-          wallet={wallet}
           onProceed={address => onProceed(address)}
         />
       </ModalContainer>
