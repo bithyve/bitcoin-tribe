@@ -447,7 +447,7 @@
     "issued": "Issued",
     "copiedTxIDMsg": "Copied Transaction ID successfully!",
     "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again.",
-    "invoiceMisamatchMsg": "This Invoice not for this asset. Please check and try again.",
+    "invoiceMisamatchMsg": "This invoice is not for this asset. Please check and try again.",
     "assetNotFoundMsg": "Asset not found. Please check and try again.",
     "invoiceCopiedMsg": "Invoice Copied successfully!"
   },
