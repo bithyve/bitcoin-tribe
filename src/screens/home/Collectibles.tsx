@@ -133,7 +133,11 @@ function Collectibles() {
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
+        onPressAddNew={() =>
+          handleNavigation(NavigationRoutes.ADDASSET, {
+            issueAssetType: AssetType.Collectible,
+          })
+        }
         onPressAsset={asset =>
           handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
             assetId: asset.assetId,

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -17,6 +17,7 @@ import { AppTheme } from 'src/theme';
 
 function AddAsset() {
   const navigation = useNavigation();
+  const { issueAssetType } = useRoute().params;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -41,7 +42,7 @@ function AddAsset() {
               setVisible(true);
             } else {
               navigation.navigate(NavigationRoutes.ISSUESCREEN, {
-                issueAssetType: '',
+                issueAssetType: issueAssetType,
               });
             }
           }}
