@@ -73,10 +73,9 @@ function ReceiveAssetScreen() {
   }, []);
 
   useEffect(() => {
-    if (!error) return;
+    if (error) {
     const getErrorMessage = err =>
       err?.message || err?.toString() || 'An unknown error occurred';
-
     const errorMessage = getErrorMessage(error);
     const handleSpecificError = message => {
       if (message === 'Insufficient sats for RGB') {
@@ -84,12 +83,16 @@ function ReceiveAssetScreen() {
           createUtxos();
         }, 500);
         return true;
+      } else {
+        Toast(errorMessage, true);
+        navigation.goBack();
       }
       return false;
     };
     if (!handleSpecificError(errorMessage)) {
       Toast(errorMessage, true);
     }
+  }
   }, [error]);
 
   useEffect(() => {
