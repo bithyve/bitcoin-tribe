@@ -74,9 +74,9 @@ const ModalContainer = (props: ModalContainerProps) => {
       backdropOpacity={0.8}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
-        <View style={styles.dashViewWrapper}>
+        <AppTouchable onPress={onDismiss} style={styles.dashViewWrapper}>
           <View style={styles.dashView} />
-        </View>
+        </AppTouchable>
         <View style={styles.headingWrapper}>
           <View style={styles.contentWrapper}>
             <AppText

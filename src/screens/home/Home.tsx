@@ -133,7 +133,11 @@ function HomeScreen() {
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
-        onPressAddNew={() => handleNavigation(NavigationRoutes.ADDASSET)}
+        onPressAddNew={() =>
+          handleNavigation(NavigationRoutes.ADDASSET, {
+            issueAssetType: AssetType.Coin,
+          })
+        }
         onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
       />
     </ScreenContainer>

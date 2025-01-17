@@ -72,8 +72,14 @@ function IssueScreen() {
     issueAssetType || AssetType.Coin,
   );
   const [image, setImage] = useState('');
-
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const {
+    mutate: createUtxos,
+    error: createUtxoError,
+    data: createUtxoData,
+    reset: createUtxoReset,
+  } = useMutation(ApiHandler.createUtxos);
+  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  // const createUtxos = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
@@ -86,18 +92,24 @@ function IssueScreen() {
   }, [UnspentUTXOData]);
 
   useEffect(() => {
-    if (createUtxos.data) {
+    if (createUtxoData) {
       setLoading(true);
       setTimeout(onPressIssue, 500);
-    } else if (createUtxos.data === false) {
+    } else if (createUtxoError) {
       setLoading(false);
-      setTimeout(() => {
-        setVisibleFailedToCreatePopup(true);
-      }, 500);
-
+      createUtxoReset();
+      refreshRgbWalletMutation.mutate();
+      fetchUTXOs();
+      navigation.goBack();
+      Toast(
+        'An issue occurred while processing your request. Please try again.',
+        true,
+      );
+    } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
+      navigation.goBack();
     }
-  }, [createUtxos.data]);
+  }, [createUtxoData, createUtxoError]);
 
   useEffect(() => {
     viewUtxos.mutate();
@@ -123,7 +135,7 @@ function IssueScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos.mutate();
+          createUtxos();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
@@ -163,7 +175,7 @@ function IssueScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos.mutate();
+          createUtxos();
         }, 500);
       } else if (response?.error) {
         setLoading(false);

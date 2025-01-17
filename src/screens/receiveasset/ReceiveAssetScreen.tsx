@@ -37,12 +37,20 @@ function ReceiveAssetScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const assetId = route.params.assetId || '';
-  const amount = route.params.amount || '';
+  const amount = route.params.amount || 0;
   const selectedType = route.params.selectedType || 'bitcoin';
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const {
+    mutate: createUtxos,
+    error: createUtxoError,
+    data: createUtxoData,
+    reset: createUtxoReset,
+    isLoading: createUtxosLoading,
+  } = useMutation(ApiHandler.createUtxos);
+  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   // const [showErrorModal, setShowErrorModal] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -52,7 +60,7 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
-        mutate(assetId, amount);
+        mutate({ assetId, amount });
       } else {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
@@ -60,15 +68,27 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      mutate(assetId, amount);
+      mutate({ assetId, amount });
     }
   }, []);
 
   useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        createUtxos.mutate();
-      }, 500);
+    if (!error) return;
+    const getErrorMessage = err =>
+      err?.message || err?.toString() || 'An unknown error occurred';
+
+    const errorMessage = getErrorMessage(error);
+    const handleSpecificError = message => {
+      if (message === 'Insufficient sats for RGB') {
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+        return true;
+      }
+      return false;
+    };
+    if (!handleSpecificError(errorMessage)) {
+      Toast(errorMessage, true);
     }
   }, [error]);
 
@@ -91,18 +111,22 @@ function ReceiveAssetScreen() {
   }, [generateLNInvoiceMutation.data, generateLNInvoiceMutation.error]);
 
   useEffect(() => {
-    if (createUtxos.data) {
+    if (createUtxoData) {
       setTimeout(() => {
-        mutate();
+        mutate({ assetId, amount });
       }, 400);
-    } else if (createUtxos.error) {
+    } else if (createUtxoError) {
+      createUtxoReset();
+      fetchUTXOs();
+      refreshRgbWallet.mutate();
       navigation.goBack();
-      Toast(`${createUtxos.error}`, true);
-    } else if (createUtxos.data === false) {
+      Toast(assets.assetProcessErrorMsg, true);
+      // Toast(`${createUtxoError}`, true);
+    } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
       navigation.goBack();
     }
-  }, [createUtxos.data]);
+  }, [createUtxoData, createUtxoError]);
 
   useEffect(() => {
     if (selectedType === 'lightning') {
@@ -114,20 +138,13 @@ function ReceiveAssetScreen() {
       }
     } else {
       if (rgbInvoice === '') {
-        mutate(assetId, amount);
+        mutate({ assetId, amount });
       }
     }
   }, [selectedType]);
 
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
-      if (assetId && amount) {
-        const invoice = rgbWallet?.receiveData?.invoice
-          .replace('rgb:~', `${assetId}`)
-          .replace('~', amount);
-        setRgbInvoice(invoice);
-        return invoice;
-      }
       setRgbInvoice(rgbWallet?.receiveData?.invoice);
       return rgbWallet?.receiveData?.invoice;
     } else {
@@ -142,24 +159,13 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
       />
-
-      {/* <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 400);
-        }}
-      /> */}
-
       {isLoading ||
-      createUtxos.isLoading ||
+      createUtxosLoading ||
       generateLNInvoiceMutation.isLoading ? (
         <ModalLoading
           visible={
             isLoading ||
-            createUtxos.isLoading ||
+            createUtxosLoading ||
             generateLNInvoiceMutation.isLoading
           }
         />

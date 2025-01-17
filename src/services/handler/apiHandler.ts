@@ -776,7 +776,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset(assetId, amount) {
+  static async receiveAsset({ assetId, amount }) {
     try {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
@@ -785,7 +785,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
         assetId,
-        amount
+        amount,
       );
       if (response.error) {
         throw new Error(response.error);

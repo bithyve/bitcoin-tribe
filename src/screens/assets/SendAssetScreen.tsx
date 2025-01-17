@@ -37,19 +37,20 @@ import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 type ItemProps = {
   name: string;
@@ -166,8 +167,12 @@ const SendAssetScreen = () => {
   );
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
-    return !invoice || !amount;
-  }, [invoice, amount]);
+    return (
+      !invoice ||
+      !amount ||
+      (selectedPriority === TxPriority.CUSTOM && !customFee)
+    );
+  }, [invoice, amount, customFee, selectedPriority]);
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -183,7 +188,10 @@ const SendAssetScreen = () => {
 
   const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (numericValue <= item.balance.spendable) {
+    if (Number(item.balance.spendable) === 0) {
+      Keyboard.dismiss();
+      Toast(sendScreen.spendableBalanceMsg + item.balance.spendable, true);
+    } else if (numericValue <= item.balance.spendable) {
       setAmount(text);
     } else {
       Keyboard.dismiss();
@@ -273,6 +281,13 @@ const SendAssetScreen = () => {
     }
   };
 
+  const handleCustomFeeInput = text => {
+    const reg = /^\d*\.?\d*$/;
+    setSelectedFeeRate(Number(text));
+    if (reg.test(text)) {
+      setCustomFee(text);
+    }
+  };
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -293,7 +308,7 @@ const SendAssetScreen = () => {
           />
         </ResponsePopupContainer>
       </View> */}
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidView style={styles.container}>
         <AssetItem
           name={item?.name}
           details={
@@ -362,7 +377,10 @@ const SendAssetScreen = () => {
             title={sendScreen.low}
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+              setSelectedPriority(TxPriority.LOW);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
@@ -373,7 +391,10 @@ const SendAssetScreen = () => {
             title={sendScreen.medium}
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+              setSelectedPriority(TxPriority.MEDIUM);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
@@ -384,7 +405,10 @@ const SendAssetScreen = () => {
             title={sendScreen.high}
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+              setSelectedPriority(TxPriority.HIGH);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
@@ -395,7 +419,9 @@ const SendAssetScreen = () => {
             title={sendScreen.custom}
             priority={TxPriority.CUSTOM}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.CUSTOM);
+            }}
             feeRateByPriority={''}
             estimatedBlocksByPriority={1}
             disabled={false}
@@ -408,7 +434,7 @@ const SendAssetScreen = () => {
             </AppText>
             <TextField
               value={customFee}
-              onChangeText={text => setCustomFee(text)}
+              onChangeText={handleCustomFeeInput}
               placeholder={sendScreen.enterCustomFee}
               keyboardType={'numeric'}
               inputStyle={styles.customFeeInputStyle}
@@ -432,7 +458,7 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => {}}>
+          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={item?.name}
@@ -453,7 +479,7 @@ const SendAssetScreen = () => {
             }
           />
         </ModalContainer>
-      </ScrollView>
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.next}
@@ -495,11 +521,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      // marginTop: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(5),
-      bottom: 10,
+      marginVertical: hp(5),
     },
     assetItemWrapper: {
       flexDirection: 'row',

@@ -67,9 +67,7 @@ function WalletDetails({ navigation, route }) {
   const { mutate: fetchOnChainTransaction, data } = useMutation(
     ApiHandler.getNodeOnchainBtcTransactions,
   );
-  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
-    ApiHandler.viewUtxos,
-  );
+  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);

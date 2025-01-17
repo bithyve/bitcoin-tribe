@@ -323,7 +323,8 @@
     "broadcastingTXN": "Broadcasting transaction...",
     "successTitle": "Successful!",
     "recipientInvoice": "Recipient's Invoice",
-    "availableBalanceMsg": "Available balance is "
+    "availableBalanceMsg": "Available balance is ",
+    "spendableBalanceMsg": "Spendable balance is "
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -444,7 +445,8 @@
     "backToHome": "Back to home",
     "batchTxnIdx": "Batch Transfer IDX",
     "issued": "Issued",
-    "copiedTxIDMsg": "Copied Transaction ID successfully!"
+    "copiedTxIDMsg": "Copied Transaction ID successfully!",
+    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again."
   },
   "community": {
     "fnfTitle": "Friends & Family",

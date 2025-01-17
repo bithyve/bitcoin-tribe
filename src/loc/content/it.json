@@ -323,7 +323,8 @@
     "broadcastingTXN": "Trasmissione della transazione in corso...",
     "successTitle": "Successo!",
     "recipientInvoice": "Fattura del destinatario",
-    "availableBalanceMsg": "Il saldo disponibile è "
+    "availableBalanceMsg": "Il saldo disponibile è ",
+    "spendableBalanceMsg": "Il saldo disponibile è "
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
@@ -444,7 +445,8 @@
     "backToHome": "Torna alla home",
     "batchTxnIdx": "Indice di trasferimento batch",
     "issued": "Emesso",
-    "copiedTxIDMsg": "ID di transazione copiato con successo!"
+    "copiedTxIDMsg": "ID di transazione copiato con successo!",
+    "assetProcessErrorMsg": "Si è verificato un problema durante l'elaborazione della tua richiesta. Per favore riprova."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
