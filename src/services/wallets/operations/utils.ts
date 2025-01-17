@@ -566,25 +566,12 @@ export default class WalletUtilities {
         type: PaymentInfoKind.ADDRESS,
         address: scannedStr,
       };
-    }
-    // else if (WalletUtilities.isValidRGBAddress(scannedStr)) {
-    //   return {
-    //     type: PaymentInfoKind.RGB_INVOICE,
-    //     address: scannedStr,
-    //   };
-    // }
-    else if (scannedStr.startsWith('lnbc')) {
+    } else if (scannedStr.startsWith('lnbc')) {
       return {
         type: PaymentInfoKind.RLN_INVOICE,
         address: scannedStr,
       };
     }
-    // else if (WalletUtilities.validateRgbUrLFormat(scannedStr)) {
-    //   return {
-    //     type: PaymentInfoKind.RGB_INVOICE_URL,
-    //     address: scannedStr,
-    //   };
-    // }
     return {
       type: null,
     };

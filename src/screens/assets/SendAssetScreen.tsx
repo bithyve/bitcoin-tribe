@@ -1,11 +1,4 @@
-import {
-  Image,
-  Keyboard,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -181,10 +174,11 @@ const SendAssetScreen = () => {
   const isButtonDisabled = useMemo(() => {
     return (
       !invoice ||
-      !amount ||
+      assetAmount === '' ||
+      assetAmount === '0' ||
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
-  }, [invoice, amount, customFee, selectedPriority]);
+  }, [invoice, assetAmount, customFee, selectedPriority]);
 
   useEffect(() => {
     if (createUtxos.data) {

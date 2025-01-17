@@ -1,5 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@realm/react';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -9,8 +10,11 @@ import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
+import { RealmSchema } from 'src/storage/enum';
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
 
@@ -29,13 +33,45 @@ function SendEnterAddress({
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
+  const coins = useQuery(RealmSchema.Coin);
+  const collectibles = useQuery(RealmSchema.Collectible);
+  const combinedData = [...coins, ...collectibles];
   const styles = React.useMemo(
     () => getStyles(theme, inputHeight),
     [theme, inputHeight],
   );
 
   const handlePasteAddress = async () => {
-    const getClipboardValue = await Clipboard.getString();
+    Keyboard.dismiss();
+    onDismiss();
+    const clipboardValue = await Clipboard.getString();
+    if (clipboardValue.startsWith('rgb:')) {
+      const res = await ApiHandler.decodeInvoice(clipboardValue);
+      if (res.assetId) {
+        const assetData = combinedData.filter(
+          item => item.assetId === res.assetId,
+        );
+        if (assetData.length === 0) {
+          Toast('Asset ID not found. Please check and try again.', true);
+          navigation.goBack();
+        } else {
+          navigation.replace(NavigationRoutes.SENDASSET, {
+            assetId: res.assetId,
+            wallet: wallet,
+            rgbInvoice: clipboardValue,
+            amount: res.amount.toString(),
+          });
+        }
+      } else {
+        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+          wallet,
+          rgbInvoice: clipboardValue,
+          assetID: '',
+          amount: '',
+        });
+      }
+      return;
+    }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
     let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
       getClipboardValue,
