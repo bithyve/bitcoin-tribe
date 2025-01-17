@@ -446,7 +446,10 @@
     "batchTxnIdx": "批量转账索引",
     "issued": "已发行",
     "copiedTxIDMsg": "成功复制交易 ID！",
-    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again."
+    "assetProcessErrorMsg": "处理您的请求时出现问题。请再试一次。",
+    "invoiceMisamatchMsg": "此发票不适用于此资产。请检查并重试。",
+    "assetNotFoundMsg": "未找到资产。请检查并重试。",
+    "invoiceCopiedMsg": "发票已成功复制"
   },
   "community": {
     "fnfTitle": "朋友和家人",

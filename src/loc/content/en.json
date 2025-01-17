@@ -446,7 +446,10 @@
     "batchTxnIdx": "Batch Transfer IDX",
     "issued": "Issued",
     "copiedTxIDMsg": "Copied Transaction ID successfully!",
-    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again."
+    "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again.",
+    "invoiceMisamatchMsg": "This Invoice not for this asset. Please check and try again.",
+    "assetNotFoundMsg": "Asset not found. Please check and try again.",
+    "invoiceCopiedMsg": "Invoice Copied successfully!"
   },
   "community": {
     "fnfTitle": "Friends & Family",

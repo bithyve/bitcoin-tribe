@@ -1,11 +1,4 @@
-import {
-  Image,
-  Keyboard,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -19,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -33,7 +27,12 @@ import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  Coin,
+  Collectible,
+} from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
@@ -50,6 +49,8 @@ import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
+import { RealmSchema } from 'src/storage/enum';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
 type ItemProps = {
@@ -60,6 +61,13 @@ type ItemProps = {
   onPressAsset?: (item: any) => void;
   assetId?: string;
   amount?: string;
+};
+
+type routeParamsProps = {
+  assetId: string;
+  rgbInvoice: string;
+  wallet: Wallet;
+  amount: string;
 };
 
 const AssetItem = ({
@@ -132,8 +140,7 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, wallet, item, transactionAmount } =
-    useRoute().params;
+  const { assetId, rgbInvoice, wallet, amount } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -150,9 +157,12 @@ const SendAssetScreen = () => {
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
-
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const allAssets: Asset[] = [...coins, ...collectibles];
+  const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [amount, setAmount] = useState(transactionAmount || '');
+  const [assetAmount, setAssetAmount] = useState(amount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -169,10 +179,11 @@ const SendAssetScreen = () => {
   const isButtonDisabled = useMemo(() => {
     return (
       !invoice ||
-      !amount ||
+      assetAmount === '' ||
+      assetAmount === '0' ||
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
-  }, [invoice, amount, customFee, selectedPriority]);
+  }, [invoice, assetAmount, customFee, selectedPriority]);
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -188,14 +199,17 @@ const SendAssetScreen = () => {
 
   const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (Number(item.balance.spendable) === 0) {
+    if (Number(assetData?.balance.spendable) === 0) {
       Keyboard.dismiss();
-      Toast(sendScreen.spendableBalanceMsg + item.balance.spendable, true);
-    } else if (numericValue <= item.balance.spendable) {
-      setAmount(text);
+      Toast(
+        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+        true,
+      );
+    } else if (numericValue <= assetData?.balance.spendable) {
+      setAssetAmount(text);
     } else {
       Keyboard.dismiss();
-      Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+      Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
     }
   };
 
@@ -234,7 +248,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: utxo,
-        amount: amount.replace(/,/g, ''),
+        amount: assetAmount && assetAmount.replace(/,/g, ''),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
@@ -261,23 +275,35 @@ const SendAssetScreen = () => {
       }, 500);
       console.log(error);
     }
-  }, [invoice, amount, navigation]);
+  }, [invoice, assetAmount, navigation]);
 
   const handlePasteAddress = async () => {
-    const invoicePattern =
-      /^rgb:(~|~\/~|bcrt:[a-zA-Z0-9\-:$!]+)((\/[a-zA-Z0-9\-:$!]+)*)(\?[a-zA-Z0-9=&:\/\-._]+)?$/;
-    const getClipboardValue = await Clipboard.getString();
-    if (invoicePattern.test(getClipboardValue)) {
-      setInvoice(getClipboardValue);
-    } else {
+    try {
+      const clipboardValue = await Clipboard.getString();
+      if (!clipboardValue) {
+        Toast('Clipboard is empty. Please copy a valid invoice.', true);
+        return;
+      }
+      const res = await ApiHandler.decodeInvoice(clipboardValue);
+      if (res.assetId) {
+        const assetData = allAssets.find(item => item.assetId === res.assetId);
+        if (!assetData || res.assetId !== assetId) {
+          Toast(assets.invoiceMisamatchMsg, true);
+        } else {
+          setInvoice(clipboardValue);
+        }
+      } else if (res.recipientId) {
+        setInvoice(clipboardValue);
+      }
+    } catch (error) {
       Toast('Invalid invoice', true);
     }
   };
 
   const setMaxAmount = () => {
-    if (item?.balance?.spendable) {
-      const spendableAmount = item.balance.spendable.toString();
-      setAmount(spendableAmount);
+    if (assetData?.balance?.spendable) {
+      const spendableAmount = assetData.balance.spendable.toString();
+      setAssetAmount(spendableAmount);
     }
   };
 
@@ -310,27 +336,27 @@ const SendAssetScreen = () => {
       </View> */}
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
-          name={item?.name}
+          name={assetData?.name}
           details={
-            item?.assetIface.toUpperCase() === AssetFace.RGB20
-              ? item?.ticker
-              : item?.details
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+              ? assetData?.ticker
+              : assetData?.details
           }
           image={
-            item?.media?.filePath
+            assetData?.media?.filePath
               ? Platform.select({
-                  android: `file://${item.media?.filePath}`,
-                  ios: item.media?.filePath,
+                  android: `file://${assetData.media?.filePath}`,
+                  ios: assetData.media?.filePath,
                 })
               : null
           }
           tag={
-            item?.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
               ? assets.coin
               : assets.collectible
           }
           assetId={assetId}
-          amount={item?.balance.spendable}
+          amount={assetData?.balance.spendable}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -359,7 +385,7 @@ const SendAssetScreen = () => {
           {sendScreen.enterAmount}
         </AppText>
         <TextField
-          value={formatNumber(amount)}
+          value={formatNumber(assetAmount)}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
@@ -461,8 +487,8 @@ const SendAssetScreen = () => {
           onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            assetName={item?.name}
-            amount={amount.replace(/,/g, '')}
+            assetName={assetData?.name}
+            amount={assetAmount && assetAmount.replace(/,/g, '')}
             feeRate={
               selectedPriority === TxPriority.CUSTOM
                 ? customFee

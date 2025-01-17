@@ -95,7 +95,6 @@ const CollectibleDetailsScreen = () => {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: assetId,
-            item: collectible,
             rgbInvoice: '',
             wallet: wallet,
           })
@@ -106,8 +105,11 @@ const CollectibleDetailsScreen = () => {
           })
         }
         onPressRecieve={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+          navigation.replace(NavigationRoutes.RECEIVEASSET, {
             refresh: true,
+            assetId: assetId,
+            amount: 0,
+            selectedType: 'bitcoin',
           })
         }
       />

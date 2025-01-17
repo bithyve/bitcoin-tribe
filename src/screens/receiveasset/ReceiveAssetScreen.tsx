@@ -190,6 +190,7 @@ function ReceiveAssetScreen() {
             <ReceiveQrClipBoard
               qrCodeValue={qrValue}
               icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
+              message={assets.invoiceCopiedMsg}
             />
           </View>
           <FooterNote
