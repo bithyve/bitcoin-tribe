@@ -27,7 +27,12 @@ import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  Coin,
+  Collectible,
+} from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
@@ -152,10 +157,10 @@ const SendAssetScreen = () => {
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
-  const coins = useQuery(RealmSchema.Coin);
-  const collectibles = useQuery(RealmSchema.Collectible);
-  const combinedData = [...coins, ...collectibles];
-  const assetData = combinedData.find(item => item.assetId === assetId);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const allAssets: Asset[] = [...coins, ...collectibles];
+  const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(amount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
@@ -281,9 +286,7 @@ const SendAssetScreen = () => {
       }
       const res = await ApiHandler.decodeInvoice(clipboardValue);
       if (res.assetId) {
-        const assetData = combinedData.find(
-          item => item.assetId === res.assetId,
-        );
+        const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           Toast(assets.invoiceMisamatchMsg, true);
         } else {

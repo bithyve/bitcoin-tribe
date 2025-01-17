@@ -21,6 +21,7 @@ import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
+import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -30,9 +31,9 @@ function SendScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const coins = useQuery(RealmSchema.Coin);
-  const collectibles = useQuery(RealmSchema.Collectible);
-  const combinedData = [...coins, ...collectibles];
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const allAssets: Asset[] = [...coins, ...collectibles];
 
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
@@ -46,7 +47,7 @@ function SendScreen({ route, navigation }) {
       if (value.startsWith('rgb:')) {
         const res = await ApiHandler.decodeInvoice(value);
         if (res.assetId) {
-          const assetData = combinedData.find(
+          const assetData = allAssets.find(
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
