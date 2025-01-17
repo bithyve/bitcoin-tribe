@@ -152,6 +152,13 @@ const EnterInvoiceDetails = () => {
   }, [UnspentUTXOData]);
 
   const styles = getStyles(theme, inputHeight, app.appType);
+
+  const handleAmountInputChange = text => {
+    const reg = /^\d*$/;
+    if (reg.test(text)) {
+      setAmount(text);
+    }
+  };
   return (
     <ScreenContainer>
       <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
@@ -216,7 +223,7 @@ const EnterInvoiceDetails = () => {
 
         <TextField
           value={amount}
-          onChangeText={text => setAmount(text.trim())}
+          onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
           keyboardType="numeric"
