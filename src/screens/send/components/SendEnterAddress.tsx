@@ -1,114 +1,39 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
+
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import { PaymentInfoKind } from 'src/services/wallets/enums';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
-import { RealmSchema } from 'src/storage/enum';
-
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
 
 function SendEnterAddress({
   onDismiss,
   wallet,
+  onProceed,
 }: {
   onDismiss: any;
   wallet: Wallet;
+  onProceed: (text: string) => void;
 }) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const [inputHeight, setInputHeight] = React.useState(100);
+  const styles = React.useMemo(
+    () => getStyles(theme, inputHeight),
+    [theme, inputHeight],
+  );
 
-  const onProceed = async (paymentInfo: string) => {
-    if (paymentInfo.startsWith('lnbc')) {
-      navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
-        invoice: paymentInfo,
-      });
-      return;
-    }
-    if (paymentInfo.startsWith('rgb:')) {
-      const res = await ApiHandler.decodeInvoice(paymentInfo);
-      if (res.assetId) {
-        navigation.replace(NavigationRoutes.SENDASSET, {
-          assetId: res.assetId,
-          wallet: wallet,
-          rgbInvoice: paymentInfo,
-          amount: res.amount.toString(),
-        });
-      } else {
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: paymentInfo,
-          assetID: '',
-          amount: '',
-        });
-      }
-
-      return;
-    }
-    paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(app.networkType);
-
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(paymentInfo, network);
-
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
-
-    switch (paymentInfoKind) {
-      case PaymentInfoKind.ADDRESS:
-        navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
-        break;
-      case PaymentInfoKind.PAYMENT_URI:
-        navigation.navigate(NavigationRoutes.SENDTO, {
-          wallet,
-          address,
-          paymentURIAmount: amount,
-        });
-        break;
-      // case PaymentInfoKind.RGB_INVOICE:
-      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-      //     wallet,
-      //     rgbInvoice: address,
-      //     assetID: '',
-      //     amount: '',
-      //   });
-      //   break;
-      case PaymentInfoKind.RLN_INVOICE:
-        navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
-        break;
-      // case PaymentInfoKind.RGB_INVOICE_URL:
-      //   navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-      //     wallet,
-      //     rgbInvoice: address,
-      //     assetID: address.match(/rgb:[^\/]+/)?.[0],
-      //     transactionAmount: address.match(/\/(\d+)\//)?.[1],
-      //   });
-      //   break;
-      default:
-        Toast(sendScreen.invalidBtcAddress, true);
-    }
-  };
   const handlePasteAddress = async () => {
     const getClipboardValue = await Clipboard.getString();
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
@@ -136,9 +61,12 @@ function SendEnterAddress({
         returnKeyType={'Enter'}
         autoFocus={true}
         multiline={true}
-        numberOfLines={2}
+        onContentSizeChange={event => {
+          setInputHeight(event.nativeEvent.contentSize.height);
+        }}
+        numberOfLines={3}
         inputStyle={styles.inputStyle}
-        contentStyle={styles.contentStyle}
+        contentStyle={address ? styles.contentStyle : styles.contentStyle1}
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
@@ -162,7 +90,7 @@ function SendEnterAddress({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     primaryCTAContainer: {
       marginTop: hp(65),
@@ -182,7 +110,14 @@ const getStyles = (theme: AppTheme) =>
       marginHorizontal: hp(5),
     },
     contentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
       marginTop: 0,
+    },
+    contentStyle1: {
+      height: hp(50),
     },
   });
 export default SendEnterAddress;

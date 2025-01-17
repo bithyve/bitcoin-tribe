@@ -65,7 +65,6 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: collectible.assetId,
-            item: collectible,
             rgbInvoice: '',
             wallet: wallet,
           })

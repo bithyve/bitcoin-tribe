@@ -38,14 +38,14 @@ import { AssetFace } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -162,7 +162,6 @@ const SendAssetScreen = () => {
   const collectibles = useQuery(RealmSchema.Collectible);
   const combinedData = [...coins, ...collectibles];
   const assetData = combinedData.filter(item => item.assetId === assetId);
-  console.log('amount', amount);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(amount || '');
   const [inputHeight, setInputHeight] = React.useState(100);

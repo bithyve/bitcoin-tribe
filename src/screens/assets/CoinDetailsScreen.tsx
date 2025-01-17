@@ -88,7 +88,6 @@ const CoinDetailsScreen = () => {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
-            item: coin,
             rgbInvoice: '',
             wallet: wallet,
           })

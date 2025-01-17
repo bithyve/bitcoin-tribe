@@ -95,7 +95,6 @@ const CollectibleDetailsScreen = () => {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: assetId,
-            item: collectible,
             rgbInvoice: '',
             wallet: wallet,
           })
