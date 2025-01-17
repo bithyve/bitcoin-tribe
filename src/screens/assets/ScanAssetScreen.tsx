@@ -43,10 +43,10 @@ function ScanAssetScreen({ route, navigation }) {
       if (value.startsWith('rgb:')) {
         const res = await ApiHandler.decodeInvoice(value);
         if (res.assetId) {
-          const assetData = combinedData.filter(
+          const assetData = combinedData.find(
             item => item.assetId === res.assetId,
           );
-          if (assetData.length === 0) {
+          if (!assetData) {
             Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {

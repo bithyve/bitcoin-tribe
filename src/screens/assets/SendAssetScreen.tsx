@@ -155,7 +155,7 @@ const SendAssetScreen = () => {
   const coins = useQuery(RealmSchema.Coin);
   const collectibles = useQuery(RealmSchema.Collectible);
   const combinedData = [...coins, ...collectibles];
-  const assetData = combinedData.filter(item => item.assetId === assetId);
+  const assetData = combinedData.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(amount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
@@ -194,17 +194,17 @@ const SendAssetScreen = () => {
 
   const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (Number(assetData[0].balance.spendable) === 0) {
+    if (Number(assetData?.balance.spendable) === 0) {
       Keyboard.dismiss();
       Toast(
-        sendScreen.spendableBalanceMsg + assetData[0].balance.spendable,
+        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
         true,
       );
-    } else if (numericValue <= assetData[0].balance.spendable) {
+    } else if (numericValue <= assetData?.balance.spendable) {
       setAssetAmount(text);
     } else {
       Keyboard.dismiss();
-      Toast(assets.checkSpendableAmt + assetData[0].balance.spendable, true);
+      Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
     }
   };
 
@@ -281,10 +281,10 @@ const SendAssetScreen = () => {
       }
       const res = await ApiHandler.decodeInvoice(clipboardValue);
       if (res.assetId) {
-        const assetData = combinedData.filter(
+        const assetData = combinedData.find(
           item => item.assetId === res.assetId,
         );
-        if (assetData.length === 0 || res.assetId !== assetId) {
+        if (!assetData || res.assetId !== assetId) {
           Toast(assets.invoiceMisamatchMsg, true);
         } else {
           setInvoice(clipboardValue);
@@ -298,8 +298,8 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    if (assetData[0]?.balance?.spendable) {
-      const spendableAmount = assetData[0].balance.spendable.toString();
+    if (assetData?.balance?.spendable) {
+      const spendableAmount = assetData.balance.spendable.toString();
       setAssetAmount(spendableAmount);
     }
   };
@@ -333,27 +333,27 @@ const SendAssetScreen = () => {
       </View> */}
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
-          name={assetData[0]?.name}
+          name={assetData?.name}
           details={
-            assetData[0]?.assetIface.toUpperCase() === AssetFace.RGB20
-              ? assetData[0]?.ticker
-              : assetData[0]?.details
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+              ? assetData?.ticker
+              : assetData?.details
           }
           image={
-            assetData[0]?.media?.filePath
+            assetData?.media?.filePath
               ? Platform.select({
-                  android: `file://${assetData[0].media?.filePath}`,
-                  ios: assetData[0].media?.filePath,
+                  android: `file://${assetData.media?.filePath}`,
+                  ios: assetData.media?.filePath,
                 })
               : null
           }
           tag={
-            assetData[0]?.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
               ? assets.coin
               : assets.collectible
           }
           assetId={assetId}
-          amount={assetData[0]?.balance.spendable}
+          amount={assetData?.balance.spendable}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -484,7 +484,7 @@ const SendAssetScreen = () => {
           onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            assetName={assetData[0]?.name}
+            assetName={assetData?.name}
             amount={assetAmount && assetAmount.replace(/,/g, '')}
             feeRate={
               selectedPriority === TxPriority.CUSTOM
