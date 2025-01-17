@@ -37,7 +37,7 @@ function ReceiveAssetScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const assetId = route.params.assetId || '';
-  const amount = route.params.amount || '';
+  const amount = route.params.amount || 0;
   const selectedType = route.params.selectedType || 'bitcoin';
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
