@@ -75,7 +75,7 @@ const CoinDetailsScreen = () => {
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
-
+  console.log('transactionsData', transactionsData);
   return (
     <ScreenContainer>
       <AssetDetailsHeader
@@ -84,7 +84,7 @@ const CoinDetailsScreen = () => {
         assetTicker={coin.ticker}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
-        headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight/>}
+        headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,

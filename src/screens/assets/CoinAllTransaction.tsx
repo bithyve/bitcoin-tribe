@@ -23,8 +23,7 @@ function CoinAllTransaction() {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations, settings } = translations;
-  const { assetId, transactions } = useRoute().params;
-  const coin = useObject<Coin>(RealmSchema.Coin, assetId);
+  const { assetId, transactions, assetName } = useRoute().params;
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   return (
     <ScreenContainer>
@@ -48,15 +47,7 @@ function CoinAllTransaction() {
           )
         }
         renderItem={({ item }) => (
-          <AssetTransaction
-            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
-            transDate={item.createdAt}
-            transAmount={`${item.amount}`}
-            transType={item.kind}
-            transaction={item}
-            coin={coin && coin.ticker}
-            tranStatus={item.status}
-          />
+          <AssetTransaction transaction={item} coin={assetName} />
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
