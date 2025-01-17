@@ -280,10 +280,17 @@ const SendAssetScreen = () => {
         return;
       }
       const res = await ApiHandler.decodeInvoice(clipboardValue);
-      if (res.recipientId) {
+      if (res.assetId) {
+        const assetData = combinedData.filter(
+          item => item.assetId === res.assetId,
+        );
+        if (assetData.length === 0 || res.assetId !== assetId) {
+          Toast(assets.invoiceMisamatchMsg, true);
+        } else {
+          setInvoice(clipboardValue);
+        }
+      } else if (res.recipientId) {
         setInvoice(clipboardValue);
-      } else {
-        Toast('Unable to decode the invoice. Please check the format.', true);
       }
     } catch (error) {
       Toast('Invalid invoice', true);

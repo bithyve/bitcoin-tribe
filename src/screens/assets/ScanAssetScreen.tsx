@@ -24,7 +24,7 @@ function ScanAssetScreen({ route, navigation }) {
   const { assetId, wallet, rgbInvoice } = useRoute().params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { sendScreen } = translations;
+  const { sendScreen, assets } = translations;
   const styles = getStyles(theme);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery(RealmSchema.Coin);
@@ -47,7 +47,7 @@ function ScanAssetScreen({ route, navigation }) {
             item => item.assetId === res.assetId,
           );
           if (assetData.length === 0) {
-            Toast('Asset ID not found. Please check and try again.', true);
+            Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {
             navigation.replace(NavigationRoutes.SENDASSET, {

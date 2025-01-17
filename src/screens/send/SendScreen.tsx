@@ -25,7 +25,7 @@ import { RealmSchema } from 'src/storage/enum';
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { sendScreen } = translations;
+  const { sendScreen, assets } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
@@ -50,7 +50,7 @@ function SendScreen({ route, navigation }) {
             item => item.assetId === res.assetId,
           );
           if (assetData.length === 0) {
-            Toast('Asset ID not found. Please check and try again.', true);
+            Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {
             navigation.replace(NavigationRoutes.SENDASSET, {
