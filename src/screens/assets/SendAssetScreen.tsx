@@ -273,12 +273,19 @@ const SendAssetScreen = () => {
   }, [invoice, assetAmount, navigation]);
 
   const handlePasteAddress = async () => {
-    const invoicePattern =
-      /^rgb:(~|~\/~|bcrt:[a-zA-Z0-9\-:$!]+)((\/[a-zA-Z0-9\-:$!]+)*)(\?[a-zA-Z0-9=&:\/\-._]+)?$/;
-    const getClipboardValue = await Clipboard.getString();
-    if (invoicePattern.test(getClipboardValue)) {
-      setInvoice(getClipboardValue);
-    } else {
+    try {
+      const clipboardValue = await Clipboard.getString();
+      if (!clipboardValue) {
+        Toast('Clipboard is empty. Please copy a valid invoice.', true);
+        return;
+      }
+      const res = await ApiHandler.decodeInvoice(clipboardValue);
+      if (res.recipientId) {
+        setInvoice(clipboardValue);
+      } else {
+        Toast('Unable to decode the invoice. Please check the format.', true);
+      }
+    } catch (error) {
       Toast('Invalid invoice', true);
     }
   };
