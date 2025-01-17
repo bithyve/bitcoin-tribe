@@ -446,7 +446,10 @@
     "batchTxnIdx": "Índice de transferencia por lotes",
     "issued": "Emitido",
     "copiedTxIDMsg": "¡ID de transacción copiado con éxito!",
-    "assetProcessErrorMsg": "Ocurrió un problema al procesar su solicitud. Por favor, inténtelo de nuevo."
+    "assetProcessErrorMsg": "Ocurrió un problema al procesar su solicitud. Por favor, inténtelo de nuevo.",
+    "invoiceMisamatchMsg": "Esta factura no corresponde a este activo. Por favor, verifique e intente nuevamente.",
+    "assetNotFoundMsg": "Activo no encontrado. Por favor, verifique e intente nuevamente.",
+    "invoiceCopiedMsg": "Factura copiada con éxito"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

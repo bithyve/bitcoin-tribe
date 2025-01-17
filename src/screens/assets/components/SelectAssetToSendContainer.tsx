@@ -116,7 +116,7 @@ const Item = ({
 };
 
 function SelectAssetToSendContainer(props: selectAssetsProps) {
-  const { assetsData, wallet, rgbInvoice, transactionAmount } = props;
+  const { assetsData, wallet, rgbInvoice, amount } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -156,8 +156,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                     wallet: wallet,
                     rgbInvoice: rgbInvoice,
                     assetId: item.assetId,
-                    item: item,
-                    transactionAmount: transactionAmount,
+                    amount: amount,
                   })
                 }
                 index={index}
@@ -176,8 +175,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                     wallet: wallet,
                     rgbInvoice: rgbInvoice,
                     assetId: item.assetId,
-                    item: item,
-                    transactionAmount: transactionAmount,
+                    amount: amount,
                   })
                 }
                 index={index}

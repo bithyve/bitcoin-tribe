@@ -17,6 +17,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
 import AssetIDContainer from './components/AssetIDContainer';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -93,7 +94,7 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.rowWrapper}>
             <Item
               title={assets.issuedSupply}
-              value={coin.metaData && coin.metaData.issuedSupply}
+              value={coin.metaData && numberWithCommas(coin.metaData.issuedSupply)}
               width={'45%'}
             />
             <Item

@@ -86,6 +86,7 @@ function TransferDetails({ route, navigation }) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     modalBodyContainer: {
+      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
     },

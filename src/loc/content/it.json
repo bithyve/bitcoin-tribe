@@ -446,7 +446,10 @@
     "batchTxnIdx": "Indice di trasferimento batch",
     "issued": "Emesso",
     "copiedTxIDMsg": "ID di transazione copiato con successo!",
-    "assetProcessErrorMsg": "Si è verificato un problema durante l'elaborazione della tua richiesta. Per favore riprova."
+    "assetProcessErrorMsg": "Si è verificato un problema durante l'elaborazione della tua richiesta. Per favore riprova.",
+    "invoiceMisamatchMsg": "Questa fattura non è per questo bene. Si prega di controllare e riprovare.",
+    "assetNotFoundMsg": "Bene non trovato. Si prega di controllare e riprovare.",
+    "invoiceCopiedMsg": "Fattura copiata con successo"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

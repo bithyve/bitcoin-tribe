@@ -24,6 +24,7 @@ import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -120,10 +121,10 @@ const CollectibleMetaDataScreen = () => {
               title={assets.issuedSupply}
               value={
                 app.appType === AppType.NODE_CONNECT
-                  ? collectible.issuedSupply
+                  ? numberWithCommas(collectible.issuedSupply)
                   : collectible &&
                     collectible.metaData &&
-                    collectible.metaData.issuedSupply
+                    numberWithCommas(collectible.metaData.issuedSupply)
               }
             />
           </ScrollView>
