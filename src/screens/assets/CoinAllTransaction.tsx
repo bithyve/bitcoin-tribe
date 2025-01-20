@@ -1,25 +1,26 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
-import AppHeader from 'src/components/AppHeader';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
+import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
+import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { useRoute } from '@react-navigation/native';
-import { useObject } from '@realm/react';
-import { useMutation } from 'react-query';
-import { Coin } from 'src/models/interfaces/RGBWallet';
-import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import AssetTransaction from '../wallet/components/AssetTransaction';
-import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { hp } from 'src/constants/responsive';
 import RefreshControlView from 'src/components/RefreshControlView';
+import { Keys } from 'src/storage';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations, settings } = translations;
@@ -53,7 +54,13 @@ function CoinAllTransaction() {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <EmptyStateView
-            IllustartionImage={<NoTransactionIllustration />}
+            IllustartionImage={
+              isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
             title={walletTranslations.noUTXOYet}
             subTitle={walletTranslations.noUTXOYetSubTitle}
           />
