@@ -78,7 +78,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
       <View style={styles.primaryCtaStyle}>
         <SwipeToAction
           title={assets.swipeToSend}
-          loadingTitle={sendScreen.broadcastingTXN}
+          loadingTitle={assets.sendingAsset}
           onSwipeComplete={onPress}
         />
       </View>

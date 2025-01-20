@@ -436,6 +436,7 @@
     "issueAssetLoadingSubTitle": "Your asset is being created—please hold on! Sit back, relax, and your new asset will be issued shortly.",
     "totalSupplyAmountErrMsg": "The value you entered is too large. Please enter a number smaller than 18,446,744,073,709,551,615.",
     "swipeToSend": "Swipe to send",
+    "sendingAsset": "Sending assets...",
     "cancelTransferMsg": "Canceled transfer!",
     "cancelTransaction": "Cancel Transaction",
     "assetName": "Asset Name",

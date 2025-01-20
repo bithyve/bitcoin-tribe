@@ -436,6 +436,7 @@
     "issueAssetLoadingSubTitle": "資産を作成しています。少々お待ちください！リラックスして、新しい資産がまもなく発行されます。",
     "totalSupplyAmountErrMsg": "入力した値が大きすぎます。18,446,744,073,709,551,615 より小さい数値を入力してください。",
     "swipeToSend": "スワイプして送信",
+    "sendingAsset": "資産を送信しています...",
     "cancelTransferMsg": "転送がキャンセルされました！",
     "cancelTransaction": "取引をキャンセル",
     "assetName": "資産名",
