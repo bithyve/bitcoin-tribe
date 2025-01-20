@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "A wallet compatible with other Bitcoin applications. "
   },
   "home": {
-    "addAssets": "Add Receive Assets",
+    "addAssets": "Receive Asset",
     "addAssetSubTitle": "Issue new asset or add receive assets",
     "createAssets": "Create Assets",
-    "issueNew": "Issue new",
+    "issueNew": "Issue New",
     "myAssets": "Your Assets",
     "coin": "Coin",
     "collectibles": "Collectibles",

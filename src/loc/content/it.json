@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "Un portafoglio compatibile con altre applicazioni Bitcoin."
   },
   "home": {
-    "addAssets": "Aggiungi Risorsa Ricevuta",
+    "addAssets": "Ricevi asset",
     "addAssetSubTitle": "Emetti nuova risorsa o aggiungi risorse ricevute",
     "createAssets": "Crea beni",
-    "issueNew": "Emetti nuovo",
+    "issueNew": "Emissione nuova",
     "myAssets": "I tuoi beni",
     "coin": "Moneta",
     "collectibles": "Collezionabili",

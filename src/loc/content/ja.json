@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "他のビットコインアプリケーションと互換性のあるウォレット。"
   },
   "home": {
-    "addAssets": "受信資産を追加",
+    "addAssets": "資産を受け取る",
     "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
     "createAssets": "資産を作成",
-    "issueNew": "新規発行",
+    "issueNew": "新しい資産を発行する",
     "myAssets": "あなたの資産",
     "coin": "コイン",
     "collectibles": "コレクターズアイテム",

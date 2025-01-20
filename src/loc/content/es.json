@@ -137,7 +137,7 @@
     "supportLearnMoreInfo": "Una billetera compatible con otras aplicaciones de Bitcoin."
   },
   "home": {
-    "addAssets": "Agregar activo recibido",
+    "addAssets": "Recibir activo",
     "addAssetSubTitle": "Emitir nuevo activo o agregar activos recibidos",
     "createAssets": "Crear activos",
     "issueNew": "Emitir nuevo",
