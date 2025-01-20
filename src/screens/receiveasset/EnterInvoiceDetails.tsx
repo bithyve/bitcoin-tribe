@@ -120,13 +120,8 @@ const EnterInvoiceDetails = () => {
   );
 
   const handlePasteAddress = async () => {
-    const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
-    const getClipboardValue = await Clipboard.getString();
-    if (assetIdPattern.test(getClipboardValue)) {
-      setAssetId(getClipboardValue);
-    } else {
-      Toast('Invalid asset ID', true);
-    }
+    const clipboardValue = await Clipboard.getString();
+    setAssetId(clipboardValue);
   };
 
   function validateAndNavigateToReceiveAsset() {

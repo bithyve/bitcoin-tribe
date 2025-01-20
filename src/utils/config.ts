@@ -29,7 +29,9 @@ class Configuration {
   public GAP_LIMIT: number = 5;
   public HEXA_ID: string =
     'b01623f1065ba45d68b516efe2873f59bfc9b9b2d8b194f94f989d87d711830a';
-  public RELAY: string = 'https://bithyve-dev-relay.el.r.appspot.com/';
+  public RELAY_URL: string = 'https://bhrelay.appspot.com';
+  public RELAY_VERSION: string = 'v1';
+  public RELAY: string = `${this.RELAY_URL}/api/${this.RELAY_VERSION}`;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
