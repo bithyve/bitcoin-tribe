@@ -524,6 +524,14 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
+            if (assetAmount > assetData?.balance.spendable) {
+              Keyboard.dismiss();
+              Toast(
+                assets.checkSpendableAmt + assetData?.balance.spendable,
+                true,
+              );
+              return;
+            }
             Keyboard.dismiss();
             setVisible(true);
           }}
