@@ -257,7 +257,8 @@
     "relayBackupTime": "Última copia de seguridad del relé: ",
     "step1": "Paso 1",
     "step2": "Paso 2",
-    "activateWalletTypeLabel": "Tipo de Billetera"
+    "activateWalletTypeLabel": "Tipo de Billetera",
+    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

@@ -257,7 +257,8 @@
     "relayBackupTime": "最后的中继备份时间：",
     "step1": "步骤 1",
     "step2": "步骤 2",
-    "activateWalletTypeLabel": "钱包类型"
+    "activateWalletTypeLabel": "钱包类型",
+    "copyWalletIDMsg": "钱包 ID 已成功复制！"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

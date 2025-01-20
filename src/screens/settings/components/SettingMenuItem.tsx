@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 
 function SettingMenuItem({ SettingsMenu }) {
   const theme: AppTheme = useTheme();
@@ -41,6 +41,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
       flex: 1,
+      paddingTop: hp(20),
     },
     footer: {
       height: windowHeight > 670 ? 80 : 40, // Adjust the height as needed

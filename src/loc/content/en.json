@@ -257,7 +257,8 @@
     "relayBackupTime": "Last relay backup: ",
     "step1": "Step 1",
     "step2": "Step 2",
-    "activateWalletTypeLabel": "Wallet Type"
+    "activateWalletTypeLabel": "Wallet Type",
+    "copyWalletIDMsg": "Wallet ID copied successfully!"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
