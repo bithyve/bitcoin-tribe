@@ -24,6 +24,7 @@ import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import Toast from 'src/components/Toast';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -154,11 +155,14 @@ const EnterInvoiceDetails = () => {
   const styles = getStyles(theme, inputHeight, app.appType);
 
   const handleAmountInputChange = text => {
+    const cleanText = text.replace(/,/g, '');
     const reg = /^\d*$/;
-    if (reg.test(text)) {
-      setAmount(text);
+    if (reg.test(cleanText)) {
+      const formattedText = numberWithCommas(cleanText);
+      setAmount(formattedText);
     }
   };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
