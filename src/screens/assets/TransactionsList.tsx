@@ -46,6 +46,7 @@ function TransactionsList({
   const { wallet: walletTranslations, settings } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -57,6 +58,7 @@ function TransactionsList({
             navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
               assetId: assetId,
               transactions: transactions,
+              assetName: coin,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>
@@ -88,15 +90,7 @@ function TransactionsList({
           )
         }
         renderItem={({ item }) => (
-          <AssetTransaction
-            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
-            transDate={item.createdAt}
-            transAmount={`${item.amount}`}
-            transType={item.kind}
-            transaction={item}
-            coin={coin}
-            tranStatus={item.status}
-          />
+          <AssetTransaction transaction={item} coin={coin} />
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}

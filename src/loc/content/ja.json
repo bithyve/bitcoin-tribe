@@ -130,8 +130,8 @@
     "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。",
     "profileSetupLoadingTitle": "プロフィールを設定中です",
     "profileSetupLoadingSubTitle": "準備が整うまでリラックスしてお待ちください。アプリはもうすぐ準備完了です。",
-    "recoverLoadingTitle": "データを復元しています",
-    "recoverLoadingSubTitle": "データを復元しています。少々お待ちください！リラックスして、すぐに復元を完了します。",
+    "recoverLoadingTitle": "ウォレットを復元中",
+    "recoverLoadingSubTitle": "復元プロセスを完了するまでしばらくお待ちください。すべてがスムーズに進むよう、アプリを閉じないでください。ご理解とご協力に感謝いたします！",
     "onchainLearMoreInfo": "すべてのビットコイン取引に対応する安全なウォレット。",
     "lightningLearnMoreInfo": "少額の取引に最適な高速で低コストなソリューション。",
     "supportLearnMoreInfo": "他のビットコインアプリケーションと互換性のあるウォレット。"

@@ -289,6 +289,9 @@ const SendAssetScreen = () => {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           Toast(assets.invoiceMisamatchMsg, true);
+        } else if (res.assetId && res.assetId === assetId) {
+          setInvoice(clipboardValue);
+          setAssetAmount(res.amount.toString() || 0);
         } else {
           setInvoice(clipboardValue);
         }

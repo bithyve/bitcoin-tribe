@@ -115,7 +115,7 @@ function SendToContainer({
     } else if (sendTransactionMutation.status === 'error') {
       setVisible(false);
       sendTransactionMutation.reset();
-      Toast(`Error while sending: ${sendTransactionMutation.error}`, true);
+      Toast(`${sendTransactionMutation.error}`, true);
     }
   }, [sendTransactionMutation]);
 
@@ -138,7 +138,35 @@ function SendToContainer({
     }, 400);
   };
 
+  const validateAddressOrInput = (input: string) => {
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let { type: paymentInfoKind, amount } = WalletUtilities.addressDiff(
+      input.trim(),
+      network,
+    );
+    if (amount) {
+      amount = Math.trunc(amount * 1e8);
+    }
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      switch (paymentInfoKind) {
+        case PaymentInfoKind.ADDRESS:
+        case PaymentInfoKind.PAYMENT_URI:
+          return true;
+        default:
+          return false;
+      }
+    } else {
+      Keyboard.dismiss();
+      Toast(sendScreen.invalidBtcAddress, true); // Invalid input
+    }
+  };
+
   const initiateSend = () => {
+    if (!validateAddressOrInput(recipientAddress)) {
+      Toast(sendScreen.invalidBtcAddress, true);
+      return;
+    }
     setVisible(true);
     if (app.appType === AppType.ON_CHAIN) {
       if (selectedPriority === TxPriority.CUSTOM) {
@@ -250,30 +278,10 @@ function SendToContainer({
   };
 
   const handlePasteAddress = async () => {
-    const getClipboardValue = await Clipboard.getString();
-    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(getClipboardValue, network);
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    }
-    if (paymentInfoKind) {
-      Keyboard.dismiss();
-      switch (paymentInfoKind) {
-        case PaymentInfoKind.ADDRESS:
-          setRecipientAddress(address);
-          break;
-        case PaymentInfoKind.PAYMENT_URI:
-          setRecipientAddress(address);
-          break;
-        default:
-          Toast(sendScreen.invalidBtcAddress, true);
-      }
+    const clipboardValue = await Clipboard.getString();
+    if (validateAddressOrInput(clipboardValue)) {
+      setRecipientAddress(clipboardValue);
     } else {
-      Keyboard.dismiss();
       Toast(sendScreen.invalidBtcAddress, true);
     }
   };
