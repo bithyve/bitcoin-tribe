@@ -325,7 +325,8 @@
     "successTitle": "成功！",
     "recipientInvoice": "受取人の請求書",
     "availableBalanceMsg": "利用可能な残高は ",
-    "spendableBalanceMsg": "使用可能な残高は "
+    "spendableBalanceMsg": "使用可能な残高は ",
+    "dustAmountMsg": "金額が少なすぎます"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

@@ -325,7 +325,8 @@
     "successTitle": "Successo!",
     "recipientInvoice": "Fattura del destinatario",
     "availableBalanceMsg": "Il saldo disponibile è ",
-    "spendableBalanceMsg": "Il saldo disponibile è "
+    "spendableBalanceMsg": "Il saldo disponibile è ",
+    "dustAmountMsg": "Importo troppo basso"
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

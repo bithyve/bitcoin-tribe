@@ -325,7 +325,8 @@
     "successTitle": "सफल!",
     "recipientInvoice": "प्राप्तकर्ता का चालान",
     "availableBalanceMsg": " उपलब्ध शेष राशि है ",
-    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है "
+    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है ",
+    "dustAmountMsg": "राशि बहुत कम है"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

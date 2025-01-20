@@ -325,7 +325,8 @@
     "successTitle": "Successful!",
     "recipientInvoice": "Recipient's Invoice",
     "availableBalanceMsg": "Available balance is ",
-    "spendableBalanceMsg": "Spendable balance is "
+    "spendableBalanceMsg": "Spendable balance is ",
+    "dustAmountMsg": "Amount too low"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
