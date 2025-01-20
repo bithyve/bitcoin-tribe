@@ -948,6 +948,13 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response?.assetId) {
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const metadata = await RGBServices.getRgbAssetMetaData(
+          response?.assetId,
+          ApiHandler.appType,
+          ApiHandler.api,
+        );
+        await Relay.registerAsset(app.id, {...metadata, ...response});
         await ApiHandler.refreshRgbWallet();
       }
       return response;
@@ -977,7 +984,10 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response?.assetId) {
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         await ApiHandler.refreshRgbWallet();
+        const collectible = dbManager.getObjectByPrimaryId(RealmSchema.Collectible, 'assetId', response?.assetId) as unknown as Collectible;
+        await Relay.registerAsset(app.id, {...collectible});
       }
       return response;
     } catch (error) {
