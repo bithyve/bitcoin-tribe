@@ -52,6 +52,7 @@ import Colors from 'src/theme/Colors';
 import { RealmSchema } from 'src/storage/enum';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ItemProps = {
   name: string;
@@ -166,6 +167,7 @@ const SendAssetScreen = () => {
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -279,6 +281,7 @@ const SendAssetScreen = () => {
 
   const handlePasteAddress = async () => {
     try {
+      setValidatingInvoiceLoader(true);
       const clipboardValue = await Clipboard.getString();
       if (!clipboardValue) {
         Toast('Clipboard is empty. Please copy a valid invoice.', true);
@@ -288,18 +291,23 @@ const SendAssetScreen = () => {
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
+          setValidatingInvoiceLoader(false);
           Toast(assets.invoiceMisamatchMsg, true);
         } else if (res.assetId && res.assetId === assetId) {
           setInvoice(clipboardValue);
           setAssetAmount(res.amount.toString() || 0);
+          setValidatingInvoiceLoader(false);
         } else {
           setInvoice(clipboardValue);
+          setValidatingInvoiceLoader(false);
         }
       } else if (res.recipientId) {
         setInvoice(clipboardValue);
+        setValidatingInvoiceLoader(false);
       }
     } catch (error) {
       Toast('Invalid invoice', true);
+      setValidatingInvoiceLoader(false);
     }
   };
 
@@ -337,6 +345,9 @@ const SendAssetScreen = () => {
           />
         </ResponsePopupContainer>
       </View> */}
+      <View>
+        <ModalLoading visible={validatingInvoiceLoader} />
+      </View>
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
           name={assetData?.name}
