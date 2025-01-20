@@ -6,7 +6,10 @@ import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import {
+  formatLargeNumber,
+  numberWithCommas,
+} from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import Identicon from './Identicon';
@@ -50,7 +53,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
         <View style={styles.tagWrapper}>
           <View style={styles.tagWrapper1}>
             <AppText variant="body2" style={styles.amountText}>
-              {numberWithCommas(balance)}
+              {formatLargeNumber(balance)}
             </AppText>
           </View>
         </View>
@@ -78,7 +81,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     contentWrapper: {
-      width: '42%',
+      width: '40%',
       paddingVertical: hp(10),
       paddingLeft: hp(16),
     },
@@ -98,7 +101,7 @@ const getStyles = (theme: AppTheme) =>
       flexWrap: 'wrap',
     },
     tagWrapper: {
-      width: '27%',
+      width: '29%',
       alignItems: 'flex-end',
       paddingRight: hp(10),
     },
