@@ -17,11 +17,11 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
-import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
-import { AssetType } from 'src/models/interfaces/RGBWallet';
+import { AssetType, Coin } from 'src/models/interfaces/RGBWallet';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -30,7 +30,7 @@ function HomeScreen() {
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen, home } = translations;
 
-  const app = useQuery(RealmSchema.TribeApp)[0];
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const navigation = useNavigation();
 
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -41,7 +41,7 @@ function HomeScreen() {
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
-  const coins = useQuery(RealmSchema.Coin);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
