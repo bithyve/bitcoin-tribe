@@ -106,6 +106,8 @@ object RGBHelper {
                     throw Exception("Invalid invoice")
                 is RgbLibException.InvalidRecipientId ->
                     throw Exception("Invalid recipient ID")
+                is RgbLibException.AssetNotFound ->
+                    throw Exception("Asset not found")
                 else -> throw Exception(e.message)
             }
         }

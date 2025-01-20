@@ -358,6 +358,8 @@ import CloudKit
         } else if details == "Blinded utxo already used" {
           throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Blinded utxo already used"])
         }
+      case .AssetNotFound(assetId: _):
+          throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Asset not found"])
       default:
         throw error
       }
