@@ -954,7 +954,7 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        await Relay.registerAsset(app.id, {...metadata, ...response});
+        await Relay.registerAsset(app.id, { ...metadata, ...response });
         await ApiHandler.refreshRgbWallet();
       }
       return response;
@@ -986,8 +986,12 @@ export class ApiHandler {
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         await ApiHandler.refreshRgbWallet();
-        const collectible = dbManager.getObjectByPrimaryId(RealmSchema.Collectible, 'assetId', response?.assetId) as unknown as Collectible;
-        await Relay.registerAsset(app.id, {...collectible});
+        const collectible = dbManager.getObjectByPrimaryId(
+          RealmSchema.Collectible,
+          'assetId',
+          response?.assetId,
+        ) as unknown as Collectible;
+        await Relay.registerAsset(app.id, { ...collectible });
       }
       return response;
     } catch (error) {
@@ -1131,12 +1135,13 @@ export class ApiHandler {
   }
 
   static async checkVersion(previousVersion, currentVerion) {
+    console.log('previousVersion', previousVersion.version);
     try {
       dbManager.createObject(RealmSchema.VersionHistory, {
         version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
         releaseNote: '',
         date: new Date().toString(),
-        title: `Upgraded from ${previousVersion} to ${currentVerion}`,
+        title: `Upgraded from ${previousVersion.version} to ${currentVerion}`,
       });
       return true;
     } catch (error) {
