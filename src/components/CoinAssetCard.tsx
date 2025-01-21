@@ -86,7 +86,7 @@ const getStyles = (theme: AppTheme) =>
       paddingLeft: hp(16),
     },
     titleText: {
-      lineHeight: hp(18),
+      lineHeight: hp(25),
       fontWeight: '600',
       color: theme.colors.headingColor,
     },

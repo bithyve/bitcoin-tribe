@@ -156,7 +156,7 @@ const getStyles = (theme: AppTheme) =>
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
       width: '89%',
-      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(30),
+      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(35),
       marginHorizontal: hp(16),
       // alignSelf: 'center',
       // marginHorizontal: windowWidth * 0.1,
