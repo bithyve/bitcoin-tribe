@@ -3,6 +3,7 @@ import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import { Asset } from 'src/models/interfaces/RGBWallet';
+import { Platform } from 'react-native';
 
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
@@ -103,7 +104,10 @@ export default class Relay {
         formData.append('asset', JSON.stringify(asset));
         if(asset.media){
           formData.append('media', {
-          uri: asset.media.filePath,
+          uri: Platform.select({
+            android: `file://${asset.media.filePath}`,
+            ios: asset.media.filePath,
+          }),
           name: asset.media.filePath.split('/').pop(),
           type: asset.media.mime,
         });
