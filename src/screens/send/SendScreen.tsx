@@ -55,24 +55,30 @@ function SendScreen({ route, navigation }) {
           if (!assetData) {
             setValidatingInvoiceLoader(false);
             Toast(assets.assetNotFoundMsg, true);
-            navigation.goBack();
+            setTimeout(() => {
+              navigation.goBack();
+            }, 1000);
           } else {
             setValidatingInvoiceLoader(false);
-            navigation.replace(NavigationRoutes.SENDASSET, {
-              assetId: res.assetId,
-              wallet: wallet,
-              rgbInvoice: value,
-              amount: res.amount.toString(),
-            });
+            setTimeout(() => {
+              navigation.replace(NavigationRoutes.SENDASSET, {
+                assetId: res.assetId,
+                wallet: wallet,
+                rgbInvoice: value,
+                amount: res.amount.toString(),
+              });
+            }, 1000);
           }
         } else {
           setValidatingInvoiceLoader(false);
-          navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-            wallet,
-            rgbInvoice: value,
-            assetID: '',
-            amount: '',
-          });
+          setTimeout(() => {
+            navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+              wallet,
+              rgbInvoice: value,
+              assetID: '',
+              amount: '',
+            });
+          }, 1000);
         }
         return;
       }
