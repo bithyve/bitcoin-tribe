@@ -73,7 +73,6 @@
     "errorSettingPin": "Error setting pin",
     "newPinCreated": "New Passcode created",
     "failToVerify": "Failed to verify",
-    "createPinFirst": "Create a Passcode first",
     "invalidPin": "Invalid Passcode",
     "enterYourPin": "Enter your Passcode",
     "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",

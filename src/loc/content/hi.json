@@ -73,7 +73,6 @@
     "errorSettingPin": "पिन सेट करने में त्रुटि",
     "newPinCreated": "नया पिन बनाया गया",
     "failToVerify": "सत्यापित करने में विफल",
-    "createPinFirst": "पहले पिन बनाएँ",
     "invalidPin": "अमान्य पिन",
     "enterYourPin": "अपना पासकोड दर्ज करें",
     "recoverRGBState": "कोई बैकअप नहीं मिला। क्या आप नई ऑन-चेन वॉलेट बनाने के लिए आगे बढ़ना चाहते हैं?",

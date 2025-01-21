@@ -73,7 +73,6 @@
     "errorSettingPin": "Error al configurar el pin",
     "newPinCreated": "Nuevo PIN creado",
     "failToVerify": "No se pudo verificar",
-    "createPinFirst": "Primero crea un PIN",
     "invalidPin": "PIN no válido",
     "enterYourPin": "Introduce tu código de acceso",
     "recoverRGBState": "No se encontró una copia de seguridad. ¿Desea continuar creando una nueva billetera en cadena?",

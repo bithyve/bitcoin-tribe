@@ -73,7 +73,6 @@
     "errorSettingPin": "Errore nell'impostazione del PIN",
     "newPinCreated": "Nuovo PIN creato",
     "failToVerify": "Verifica fallita",
-    "createPinFirst": "Crea prima un PIN",
     "invalidPin": "PIN non valido",
     "enterYourPin": "Inserisci il tuo codice di accesso",
     "recoverRGBState": "Nessun backup trovato. Vuoi procedere con la creazione di un nuovo wallet on-chain?",

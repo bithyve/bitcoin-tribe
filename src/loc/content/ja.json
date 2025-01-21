@@ -73,7 +73,6 @@
     "errorSettingPin": "PINの設定エラー",
     "newPinCreated": "新しいPINを作成しました",
     "failToVerify": "検証に失敗しました",
-    "createPinFirst": "最初にPINを作成してください",
     "invalidPin": "無効なPIN",
     "enterYourPin": "パスコードを入力してください",
     "recoverRGBState": "バックアップが見つかりませんでした。新しいオンチェーンウォレットを作成しますか？",

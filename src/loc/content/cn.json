@@ -73,7 +73,6 @@
     "errorSettingPin": "设置密码时出错",
     "newPinCreated": "新密码已创建",
     "failToVerify": "验证失败",
-    "createPinFirst": "请先创建密码",
     "invalidPin": "无效的密码",
     "enterYourPin": "输入您的密码",
     "recoverRGBState": "未找到备份。您是否要继续创建新的链上钱包？",
