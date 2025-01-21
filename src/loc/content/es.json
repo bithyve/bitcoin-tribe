@@ -138,7 +138,7 @@
   },
   "home": {
     "addAssets": "Recibir activo",
-    "addAssetSubTitle": "Emitir nuevo activo o agregar activos recibidos",
+    "addAssetSubTitle": "Emitir un nuevo activo o recibir activos",
     "createAssets": "Crear activos",
     "issueNew": "Emitir nuevo",
     "myAssets": "Tus activos",

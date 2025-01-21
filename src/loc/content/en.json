@@ -138,7 +138,7 @@
   },
   "home": {
     "addAssets": "Receive Asset",
-    "addAssetSubTitle": "Issue new asset or add receive assets",
+    "addAssetSubTitle": "Issue new asset or receive assets",
     "createAssets": "Create Assets",
     "issueNew": "Issue New",
     "myAssets": "Your Assets",

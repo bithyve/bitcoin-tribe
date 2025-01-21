@@ -138,7 +138,7 @@
   },
   "home": {
     "addAssets": "資産を受け取る",
-    "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
+    "addAssetSubTitle": "新しい資産を発行するか、資産を受け取る",
     "createAssets": "資産を作成",
     "issueNew": "新しい資産を発行する",
     "myAssets": "あなたの資産",
