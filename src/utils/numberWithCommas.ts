@@ -14,11 +14,14 @@ export const formatNumber = text => {
 };
 
 export const formatLargeNumber = num => {
+  if (typeof num !== 'number' || isNaN(num)) {
+    return 'Invalid number';
+  }
   if (num >= 1e9) {
-    return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'; // Format as billions
+    return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
   } else if (num >= 1e6) {
-    return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'; // Format as millions
+    return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
   } else {
-    return num.toLocaleString(); // Show normal number with commas
+    return num.toLocaleString();
   }
 };
