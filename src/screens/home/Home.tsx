@@ -69,7 +69,6 @@ function HomeScreen() {
     refreshWallet.mutate({ wallets: [wallet] });
     const version = dbManager.getObjectByIndex(RealmSchema.VersionHistory);
     const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
-
     if (version?.version !== currentVersion) {
       ApiHandler.checkVersion(version, currentVersion);
     }

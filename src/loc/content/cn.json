@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "兼容其他比特币应用程序的钱包。"
   },
   "home": {
-    "addAssets": "添加接收资产",
+    "addAssets": "接收资产",
     "addAssetSubTitle": "发行新资产或添加接收资产",
     "createAssets": "创建资产",
-    "issueNew": "发行新资产",
+    "issueNew": "发布新资产",
     "myAssets": "你的资产",
     "coin": "硬币",
     "collectibles": "收藏品",
@@ -257,7 +257,8 @@
     "relayBackupTime": "最后的中继备份时间：",
     "step1": "步骤 1",
     "step2": "步骤 2",
-    "activateWalletTypeLabel": "钱包类型"
+    "activateWalletTypeLabel": "钱包类型",
+    "copyWalletIDMsg": "钱包 ID 已成功复制！"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -324,7 +325,8 @@
     "successTitle": "成功！",
     "recipientInvoice": "收件人的发票",
     "availableBalanceMsg": "可用余额为 ",
-    "spendableBalanceMsg": "可支配余额为 "
+    "spendableBalanceMsg": "可支配余额为 ",
+    "dustAmountMsg": "金额过低"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -436,6 +438,7 @@
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
     "swipeToSend": "滑动发送",
+    "sendingAsset": "正在发送资产...",
     "cancelTransferMsg": "取消转账！",
     "cancelTransaction": "取消交易",
     "assetName": "资产名称",

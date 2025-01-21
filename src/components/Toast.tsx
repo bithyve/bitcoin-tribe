@@ -8,7 +8,7 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 
-export default (message, error = false, position= Toast.positions.BOTTOM) => {
+export default (message, error = false, position = Toast.positions.BOTTOM) => {
   return Toast.show(
     <View style={styles.container}>
       {error ? (
@@ -39,7 +39,7 @@ export default (message, error = false, position= Toast.positions.BOTTOM) => {
     {
       duration: Toast.durations.SHORT,
       position: position,
-      shadow: true,
+      // shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,

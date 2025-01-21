@@ -12,7 +12,10 @@ import { wp, hp, windowHeight } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import {
+  formatLargeNumber,
+  numberWithCommas,
+} from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import AssetChip from './AssetChip';
 import { Asset } from 'src/models/interfaces/RGBWallet';
@@ -54,7 +57,7 @@ const AssetCard = (props: AssetCardProps) => {
           />
           <View style={styles.tagWrapper}>
             <AssetChip
-              tagText={numberWithCommas(balance)}
+              tagText={formatLargeNumber(balance)}
               backColor={
                 tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
               }

@@ -111,11 +111,17 @@ function SendToContainer({
   }, [averageTxFeeJSON]);
 
   useEffect(() => {
-    if (sendTransactionMutation.status === 'success') {
-    } else if (sendTransactionMutation.status === 'error') {
+    const { status, error, reset } = sendTransactionMutation;
+    if (status === 'success') {
+    } else if (status === 'error') {
       setVisible(false);
-      sendTransactionMutation.reset();
-      Toast(`${sendTransactionMutation.error}`, true);
+      reset();
+      const errorMessage = error?.message || error?.toString();
+      if (errorMessage.includes('dust')) {
+        Toast(sendScreen.dustAmountMsg, true);
+      } else {
+        Toast(errorMessage, true);
+      }
     }
   }, [sendTransactionMutation]);
 

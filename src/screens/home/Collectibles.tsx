@@ -67,12 +67,6 @@ function Collectibles() {
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
-    const version = dbManager.getObjectByIndex(RealmSchema.VersionHistory);
-    const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
-
-    if (version?.version !== currentVersion) {
-      ApiHandler.checkVersion(version, currentVersion);
-    }
     ApiHandler.getFeeAndExchangeRates();
   }, [app.appType]);
 

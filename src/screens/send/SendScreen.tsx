@@ -22,6 +22,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import ModalLoading from 'src/components/ModalLoading';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -29,6 +30,7 @@ function SendScreen({ route, navigation }) {
   const { sendScreen, assets } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
+  const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const { receiveData, title, subTitle, wallet } = route.params;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -43,17 +45,19 @@ function SendScreen({ route, navigation }) {
       if (!value) {
         return;
       }
-
       if (value.startsWith('rgb:')) {
+        setValidatingInvoiceLoader(true);
         const res = await ApiHandler.decodeInvoice(value);
         if (res.assetId) {
           const assetData = allAssets.find(
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
+            setValidatingInvoiceLoader(false);
             Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {
+            setValidatingInvoiceLoader(false);
             navigation.replace(NavigationRoutes.SENDASSET, {
               assetId: res.assetId,
               wallet: wallet,
@@ -62,6 +66,7 @@ function SendScreen({ route, navigation }) {
             });
           }
         } else {
+          setValidatingInvoiceLoader(false);
           navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
             wallet,
             rgbInvoice: value,
@@ -129,6 +134,9 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
+      <View>
+        <ModalLoading visible={validatingInvoiceLoader} />
+      </View>
       <View style={styles.scannerWrapper}>
         {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
       </View>

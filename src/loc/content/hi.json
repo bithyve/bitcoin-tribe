@@ -137,7 +137,7 @@
     "supportLearnMoreInfo": "अन्य बिटकॉइन एप्लिकेशन के साथ संगत वॉलेट।"
   },
   "home": {
-    "addAssets": "प्राप्त संपत्ति जोड़ें",
+    "addAssets": "संपत्ति प्राप्त करें",
     "addAssetSubTitle": "नया संपत्ति जारी करें या प्राप्त संपत्तियां जोड़ें",
     "createAssets": "संपत्तियां बनाएं",
     "issueNew": "नया जारी करें",
@@ -257,7 +257,8 @@
     "relayBackupTime": "अंतिम रिले बैकअप: ",
     "step1": "चरण 1",
     "step2": "चरण 2",
-    "activateWalletTypeLabel": "वॉलेट प्रकार"
+    "activateWalletTypeLabel": "वॉलेट प्रकार",
+    "copyWalletIDMsg": "वॉलेट ID सफलतापूर्वक कॉपी किया गया!"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -324,7 +325,8 @@
     "successTitle": "सफल!",
     "recipientInvoice": "प्राप्तकर्ता का चालान",
     "availableBalanceMsg": " उपलब्ध शेष राशि है ",
-    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है "
+    "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है ",
+    "dustAmountMsg": "राशि बहुत कम है"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -436,6 +438,7 @@
     "issueAssetLoadingSubTitle": "आपकी संपत्ति बनाई जा रही है—कृपया प्रतीक्षा करें! आराम करें और आपकी नई संपत्ति जल्द ही जारी की जाएगी।",
     "totalSupplyAmountErrMsg": "आपने जो मान दर्ज किया है वह बहुत बड़ा है। कृपया 18,446,744,073,709,551,615 से छोटा नंबर दर्ज करें।",
     "swipeToSend": "भेजने के लिए स्वाइप करें",
+    "sendingAsset": "संपत्ति भेजी जा रही है...",
     "cancelTransferMsg": "ट्रांसफर रद्द कर दिया गया!",
     "cancelTransaction": "लेन-देन रद्द करें",
     "assetName": "संपत्ति का नाम",

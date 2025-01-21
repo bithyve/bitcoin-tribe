@@ -2,6 +2,8 @@ import React, { useContext, useRef } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Clipboard from '@react-native-clipboard/clipboard';
+
 import { AppTheme } from 'src/theme';
 import AppInfoCard from './AppInfoCard';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -20,6 +22,7 @@ import LightningIcon from 'src/assets/images/lightningIcon.svg';
 import LightningIconLight from 'src/assets/images/lightningIcon_light.svg';
 import SupportIcon from 'src/assets/images/supportIcon.svg';
 import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
+import Toast from 'src/components/Toast';
 
 function AppInfoContainer({ navigation, walletId, version }) {
   const { translations } = useContext(LocalizationContext);
@@ -70,30 +73,38 @@ function AppInfoContainer({ navigation, walletId, version }) {
         return null;
     }
   };
-
+  const handleCopyText = async (text: string) => {
+    await Clipboard.setString(text);
+    Toast(settings.copyWalletIDMsg);
+  };
   return (
-    <TouchableOpacity activeOpacity={1} style={{flex: 1}}  onPress={handleTripleTap}>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={{ flex: 1 }}
+      onPress={handleTripleTap}>
       <View style={styles.container}>
-      <AppInfoCard
-        title={settings.activateWalletTypeLabel}
-        value={getActivateWalletType(appType)}
-        icon={getActivateWalletIcon(appType)}
-      />
-      <AppInfoCard
-        title={common.walletID}
-        subTitle={settings.walletIDSubTitle}
-        value={walletId}
-        icon={isThemeDark ? <IconInfo /> : <IconInfoLight />}
-      />
-      <AppInfoCard
-        title={common.versionHistory}
-        subTitle={settings.versionHistorySubTitle}
-        value={version}
-        icon={isThemeDark ? <IconCalendar /> : <IconCalendarLight />}
-        navigation={() =>
-          navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
-        }
-      />
+        <AppInfoCard
+          title={settings.activateWalletTypeLabel}
+          value={getActivateWalletType(appType)}
+          icon={getActivateWalletIcon(appType)}
+        />
+        <AppInfoCard
+          title={common.walletID}
+          subTitle={settings.walletIDSubTitle}
+          value={walletId}
+          icon={isThemeDark ? <IconInfo /> : <IconInfoLight />}
+          onPress={() => handleCopyText(walletId)}
+        />
+        <AppInfoCard
+          title={common.versionHistory}
+          subTitle={settings.versionHistorySubTitle}
+          value={version}
+          icon={isThemeDark ? <IconCalendar /> : <IconCalendarLight />}
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.APPVERSIONHISTORY)
+          }
+          navigation={navigation}
+        />
       </View>
     </TouchableOpacity>
   );

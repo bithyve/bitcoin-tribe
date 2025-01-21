@@ -137,7 +137,7 @@
     "supportLearnMoreInfo": "Una billetera compatible con otras aplicaciones de Bitcoin."
   },
   "home": {
-    "addAssets": "Agregar activo recibido",
+    "addAssets": "Recibir activo",
     "addAssetSubTitle": "Emitir nuevo activo o agregar activos recibidos",
     "createAssets": "Crear activos",
     "issueNew": "Emitir nuevo",
@@ -257,7 +257,8 @@
     "relayBackupTime": "Última copia de seguridad del relé: ",
     "step1": "Paso 1",
     "step2": "Paso 2",
-    "activateWalletTypeLabel": "Tipo de Billetera"
+    "activateWalletTypeLabel": "Tipo de Billetera",
+    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -324,7 +325,8 @@
     "successTitle": "¡Éxito!",
     "recipientInvoice": "Factura del destinatario",
     "availableBalanceMsg": "El saldo disponible es",
-    "spendableBalanceMsg": "El saldo disponible para gastar es "
+    "spendableBalanceMsg": "El saldo disponible para gastar es ",
+    "dustAmountMsg": "Cantidad demasiado baja"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -436,6 +438,7 @@
     "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
     "swipeToSend": "Deslizar para enviar",
+    "sendingAsset": "Enviando activos...",
     "cancelTransferMsg": "¡Transferencia cancelada!",
     "cancelTransaction": "Cancelar transacción",
     "assetName": "Nombre del activo",

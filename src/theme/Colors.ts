@@ -50,5 +50,6 @@ const Colors = {
   FireOpal2: 'rgba(28, 9, 9, 1)',
   ZinnwalditeBrown: 'rgba(41, 34, 0, 1)',
   SacramentoStateGreen: 'rgba(0, 49, 43, 1)',
+  BrightGray: 'rgba(233, 238, 239, 1)',
 };
 export default Colors;

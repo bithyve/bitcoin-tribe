@@ -18,15 +18,16 @@ type AppInfoCardProps = {
   icon?: ReactNode;
   value: string;
   navigation?: undefined;
+  onPress?: () => void;
 };
 
 function AppInfoCard(props: AppInfoCardProps) {
-  const { title, subTitle, icon, value, navigation } = props;
+  const { title, subTitle, icon, value, navigation, onPress } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable onPress={navigation} disabled={!navigation}>
+    <AppTouchable onPress={onPress} disabled={!onPress}>
       <GradientView
         style={styles.container}
         colors={[
@@ -38,9 +39,11 @@ function AppInfoCard(props: AppInfoCardProps) {
           <AppText variant="body1" style={styles.titleText}>
             {title}
           </AppText>
-          {subTitle && <AppText variant="body2" style={styles.subTitleText}>
-            {subTitle}
-          </AppText>}
+          {subTitle && (
+            <AppText variant="body2" style={styles.subTitleText}>
+              {subTitle}
+            </AppText>
+          )}
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.contentWrapper2}>

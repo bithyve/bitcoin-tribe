@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "他のビットコインアプリケーションと互換性のあるウォレット。"
   },
   "home": {
-    "addAssets": "受信資産を追加",
+    "addAssets": "資産を受け取る",
     "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
     "createAssets": "資産を作成",
-    "issueNew": "新規発行",
+    "issueNew": "新しい資産を発行する",
     "myAssets": "あなたの資産",
     "coin": "コイン",
     "collectibles": "コレクターズアイテム",
@@ -257,7 +257,8 @@
     "relayBackupTime": "最後のリレーバックアップ: ",
     "step1": "ステップ 1",
     "step2": "ステップ 2",
-    "activateWalletTypeLabel": "ウォレットタイプ"
+    "activateWalletTypeLabel": "ウォレットタイプ",
+    "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -324,7 +325,8 @@
     "successTitle": "成功！",
     "recipientInvoice": "受取人の請求書",
     "availableBalanceMsg": "利用可能な残高は ",
-    "spendableBalanceMsg": "使用可能な残高は "
+    "spendableBalanceMsg": "使用可能な残高は ",
+    "dustAmountMsg": "金額が少なすぎます"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
@@ -436,6 +438,7 @@
     "issueAssetLoadingSubTitle": "資産を作成しています。少々お待ちください！リラックスして、新しい資産がまもなく発行されます。",
     "totalSupplyAmountErrMsg": "入力した値が大きすぎます。18,446,744,073,709,551,615 より小さい数値を入力してください。",
     "swipeToSend": "スワイプして送信",
+    "sendingAsset": "資産を送信しています...",
     "cancelTransferMsg": "転送がキャンセルされました！",
     "cancelTransaction": "取引をキャンセル",
     "assetName": "資産名",

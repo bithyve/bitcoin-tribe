@@ -137,10 +137,10 @@
     "supportLearnMoreInfo": "A wallet compatible with other Bitcoin applications. "
   },
   "home": {
-    "addAssets": "Add Receive Assets",
+    "addAssets": "Receive Asset",
     "addAssetSubTitle": "Issue new asset or add receive assets",
     "createAssets": "Create Assets",
-    "issueNew": "Issue new",
+    "issueNew": "Issue New",
     "myAssets": "Your Assets",
     "coin": "Coin",
     "collectibles": "Collectibles",
@@ -257,7 +257,8 @@
     "relayBackupTime": "Last relay backup: ",
     "step1": "Step 1",
     "step2": "Step 2",
-    "activateWalletTypeLabel": "Wallet Type"
+    "activateWalletTypeLabel": "Wallet Type",
+    "copyWalletIDMsg": "Wallet ID copied successfully!"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -324,7 +325,8 @@
     "successTitle": "Successful!",
     "recipientInvoice": "Recipient's Invoice",
     "availableBalanceMsg": "Available balance is ",
-    "spendableBalanceMsg": "Spendable balance is "
+    "spendableBalanceMsg": "Spendable balance is ",
+    "dustAmountMsg": "Amount too low"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -436,6 +438,7 @@
     "issueAssetLoadingSubTitle": "Your asset is being created—please hold on! Sit back, relax, and your new asset will be issued shortly.",
     "totalSupplyAmountErrMsg": "The value you entered is too large. Please enter a number smaller than 18,446,744,073,709,551,615.",
     "swipeToSend": "Swipe to send",
+    "sendingAsset": "Sending assets...",
     "cancelTransferMsg": "Canceled transfer!",
     "cancelTransaction": "Cancel Transaction",
     "assetName": "Asset Name",
