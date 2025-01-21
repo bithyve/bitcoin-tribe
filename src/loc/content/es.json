@@ -325,7 +325,8 @@
     "recipientInvoice": "Factura del destinatario",
     "availableBalanceMsg": "El saldo disponible es",
     "spendableBalanceMsg": "El saldo disponible para gastar es ",
-    "dustAmountMsg": "Cantidad demasiado baja"
+    "dustAmountMsg": "Cantidad demasiado baja",
+    "validationZeroNotAllowed": "¡0 no está permitido!"
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",

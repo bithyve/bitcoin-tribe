@@ -325,7 +325,8 @@
     "recipientInvoice": "收件人的发票",
     "availableBalanceMsg": "可用余额为 ",
     "spendableBalanceMsg": "可支配余额为 ",
-    "dustAmountMsg": "金额过低"
+    "dustAmountMsg": "金额过低",
+    "validationZeroNotAllowed": "不允许输入0！"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

@@ -325,7 +325,8 @@
     "recipientInvoice": "受取人の請求書",
     "availableBalanceMsg": "利用可能な残高は ",
     "spendableBalanceMsg": "使用可能な残高は ",
-    "dustAmountMsg": "金額が少なすぎます"
+    "dustAmountMsg": "金額が少なすぎます",
+    "validationZeroNotAllowed": "0は許可されていません！"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
