@@ -1135,7 +1135,6 @@ export class ApiHandler {
   }
 
   static async checkVersion(previousVersion, currentVerion) {
-    console.log('previousVersion', previousVersion.version);
     try {
       dbManager.createObject(RealmSchema.VersionHistory, {
         version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
