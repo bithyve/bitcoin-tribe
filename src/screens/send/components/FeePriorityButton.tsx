@@ -35,7 +35,9 @@ const FeePriorityButton = ({
         style={[
           styles.priorityValue,
           {
-            color: isSelected ? Colors.Black : theme.colors.headingColor,
+            color: isSelected
+              ? theme.colors.popupSentCTATitleColor
+              : theme.colors.headingColor,
           },
         ]}>
         {title}
@@ -46,7 +48,9 @@ const FeePriorityButton = ({
           style={[
             styles.priorityValue,
             {
-              color: isSelected ? Colors.Black : theme.colors.headingColor,
+              color: isSelected
+                ? theme.colors.popupSentCTATitleColor
+                : theme.colors.headingColor,
             },
           ]}>
           {feeRateByPriority} sat/vB
@@ -58,7 +62,7 @@ const FeePriorityButton = ({
           styles.priorityTimeValue,
           {
             color: isSelected
-              ? Colors.Black
+              ? theme.colors.popupSentCTATitleColor
               : theme.colors.secondaryHeadingColor,
           },
         ]}>
