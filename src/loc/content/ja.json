@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": "転送をキャンセルするにはスワイプしてください",
     "cancelTransactionCtaMsg": "転送をキャンセルしています...",
     "txnCancelSuccessMsg": "転送が正常にキャンセルされました。",
-    "backToHome": "ホームに戻る",
+    "backToTransaction": "トランザクションに戻る",
     "batchTxnIdx": "バッチ転送インデックス",
     "issued": "発行済み",
     "copiedTxIDMsg": "トランザクション ID を正常にコピーしました！",

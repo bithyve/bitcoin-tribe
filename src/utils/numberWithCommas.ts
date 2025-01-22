@@ -22,6 +22,6 @@ export const formatLargeNumber = num => {
   } else if (num >= 1e6) {
     return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
   } else {
-    return num.toLocaleString();
+    return numberWithCommas(num);
   }
 };

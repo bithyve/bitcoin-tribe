@@ -324,12 +324,20 @@ const SendAssetScreen = () => {
   };
 
   const handleCustomFeeInput = text => {
-    const reg = /^\d*\.?\d*$/;
-    setSelectedFeeRate(Number(text));
-    if (reg.test(text)) {
-      setCustomFee(text);
+    const isValidNumber = /^\d*\.?\d*$/.test(text);
+    if (text.startsWith('0') && !text.startsWith('0.')) {
+      setCustomFee(text.replace(/^0+/, ''));
+      return;
     }
+    const numericValue = parseFloat(text);
+    if (!isValidNumber || isNaN(numericValue) || numericValue < 1) {
+      setCustomFee(0);
+      return;
+    }
+    setSelectedFeeRate(Number(text));
+    setCustomFee(text);
   };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />

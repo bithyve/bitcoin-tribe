@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": "Scorri per annullare il trasferimento",
     "cancelTransactionCtaMsg": "Annullamento del trasferimento in corso...",
     "txnCancelSuccessMsg": "Trasferimento annullato con successo.",
-    "backToHome": "Torna alla home",
+    "backToTransaction": "Torna alla transazione",
     "batchTxnIdx": "Indice di trasferimento batch",
     "issued": "Emesso",
     "copiedTxIDMsg": "ID di transazione copiato con successo!",

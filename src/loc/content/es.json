@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": "Desliza para cancelar la transferencia",
     "cancelTransactionCtaMsg": "Cancelando transferencia...",
     "txnCancelSuccessMsg": "Transferencia cancelada con éxito.",
-    "backToHome": "Volver a inicio",
+    "backToTransaction": "Volver a la transacción",
     "batchTxnIdx": "Índice de transferencia por lotes",
     "issued": "Emitido",
     "copiedTxIDMsg": "¡ID de transacción copiado con éxito!",

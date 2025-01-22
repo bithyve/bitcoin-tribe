@@ -309,11 +309,19 @@ function SendToContainer({
     }
   };
   const handleCustomFeeInput = text => {
-    const reg = /^\d*\.?\d*$/;
-    if (reg.test(text)) {
-      setCustomFee(text);
+    const isValidNumber = /^\d*\.?\d*$/.test(text);
+    if (text.startsWith('0') && !text.startsWith('0.')) {
+      setCustomFee(text.replace(/^0+/, ''));
+      return;
     }
+    const numericValue = parseFloat(text);
+    if (!isValidNumber || isNaN(numericValue) || numericValue < 1) {
+      setCustomFee(0);
+      return;
+    }
+    setCustomFee(text);
   };
+
   return (
     <>
       <KeyboardAvoidView style={styles.container}>

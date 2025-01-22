@@ -96,11 +96,8 @@ const CoinDetailsScreen = () => {
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
         onPressRecieve={() =>
-          navigation.replace(NavigationRoutes.RECEIVEASSET, {
-            refresh: true,
-            assetId: coin.assetId,
-            amount: 0,
-            selectedType: 'bitcoin',
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            invoiceAssetId: coin.assetId,
           })
         }
       />

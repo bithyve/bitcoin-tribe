@@ -68,7 +68,7 @@ function TransferDetails({ route, navigation }) {
             <CancelIllustration />
           </View>
           <PrimaryCTA
-            title={assets.backToHome}
+            title={assets.backToTransaction}
             onPress={() => {
               setVisible(false);
               navigation.goBack();

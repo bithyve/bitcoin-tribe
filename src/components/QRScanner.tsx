@@ -34,6 +34,7 @@ const QRScanner = (props: QRScannerProps) => {
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const [cameraPermission, setCameraPermission] = useState(null);
+  const [isScanning, setIsScanning] = useState(true);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
@@ -87,7 +88,12 @@ const QRScanner = (props: QRScannerProps) => {
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
-    onCodeScanned: onCodeScanned,
+    onCodeScanned: codes => {
+      if (isScanning) {
+        setIsScanning(false); // Stop scanning after detecting a QR code
+        onCodeScanned(codes); // Pass the detected codes
+      }
+    },
   });
 
   const handlePickImage = async () => {
@@ -122,13 +128,15 @@ const QRScanner = (props: QRScannerProps) => {
         <>
           <View style={styles.qrCodeContainer}>
             <>
-              <Camera
-                device={device}
-                isActive={true}
-                style={styles.visionCameraContainer}
-                codeScanner={codeScanner}
-                enableZoomGesture={true}
-              />
+              {isScanning && (
+                <Camera
+                  device={device}
+                  isActive={true}
+                  style={styles.visionCameraContainer}
+                  codeScanner={codeScanner}
+                  enableZoomGesture={true}
+                />
+              )}
               <View
                 style={[styles.visionCameraContainer, styles.outSideBorder]}>
                 <View style={styles.scannerInnerBorderWrapper}>

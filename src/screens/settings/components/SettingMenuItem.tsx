@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
@@ -41,7 +41,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
       flex: 1,
-      paddingTop: hp(20),
+      paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
     },
     footer: {
       height: windowHeight > 670 ? 80 : 40, // Adjust the height as needed

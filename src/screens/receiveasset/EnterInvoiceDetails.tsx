@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
@@ -98,6 +98,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
+  const { invoiceAssetId } = useRoute().params;
   const {
     receciveScreen,
     common,
@@ -110,7 +111,7 @@ const EnterInvoiceDetails = () => {
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [assetId, setAssetId] = useState('');
+  const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
   const [selectedType, setSelectedType] = React.useState(

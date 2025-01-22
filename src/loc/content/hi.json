@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": "स्थानांतरण रद्द करने के लिए स्वाइप करें",
     "cancelTransactionCtaMsg": "स्थानांतरण रद्द किया जा रहा है...",
     "txnCancelSuccessMsg": "स्थानांतरण सफलतापूर्वक रद्द कर दिया गया।",
-    "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
+    "backToTransaction": "लेन-देन पर वापस जाएं",
     "batchTxnIdx": "बैच स्थानांतरण सूचकांक",
     "issued": "जारी किया गया",
     "copiedTxIDMsg": "Transaction ID सफलतापूर्वक कॉपी किया गया!",
