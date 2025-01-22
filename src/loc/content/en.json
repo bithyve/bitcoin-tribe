@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": "Swipe to cancel transfer",
     "cancelTransactionCtaMsg": "Canceling Transfer...",
     "txnCancelSuccessMsg": "Transfer \nsuccessfully canceled.",
-    "backToHome": "Back to home",
+    "backToTransaction": "Back to transaction",
     "batchTxnIdx": "Batch Transfer IDX",
     "issued": "Issued",
     "copiedTxIDMsg": "Copied Transaction ID successfully!",

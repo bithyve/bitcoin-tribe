@@ -445,7 +445,7 @@
     "cancelTransactionCtaTitle": " 滑动以取消转账",
     "cancelTransactionCtaMsg": "正在取消转账...",
     "txnCancelSuccessMsg": "转账已成功取消。",
-    "backToHome": "返回首页",
+    "backToTransaction": "返回交易",
     "batchTxnIdx": "批量转账索引",
     "issued": "已发行",
     "copiedTxIDMsg": "成功复制交易 ID！",
