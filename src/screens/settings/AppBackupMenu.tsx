@@ -227,7 +227,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
     },
     textStep: {
-      color: theme.colors.accent4,
+      color: theme.colors.appBackupStepLabel,
       textAlign: 'left',
       lineHeight: 30,
       marginLeft: hp(10),
