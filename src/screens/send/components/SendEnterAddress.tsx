@@ -49,7 +49,11 @@ function SendEnterAddress({
     } else {
       Keyboard.dismiss();
       onDismiss();
-      Toast(sendScreen.invalidBtcAddress, true);
+      if (clipboardValue.startsWith('rgb:')) {
+        Toast(sendScreen.invalidRGBInvoiceAddress, true);
+      } else {
+        Toast(sendScreen.invalidBtcAddress, true);
+      }
     }
   };
 
