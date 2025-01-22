@@ -73,7 +73,6 @@
     "errorSettingPin": "Error setting pin",
     "newPinCreated": "New Passcode created",
     "failToVerify": "Failed to verify",
-    "createPinFirst": "Create a Passcode first",
     "invalidPin": "Invalid Passcode",
     "enterYourPin": "Enter your Passcode",
     "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",
@@ -138,7 +137,7 @@
   },
   "home": {
     "addAssets": "Receive Asset",
-    "addAssetSubTitle": "Issue new asset or add receive assets",
+    "addAssetSubTitle": "Issue new asset or receive assets",
     "createAssets": "Create Assets",
     "issueNew": "Issue New",
     "myAssets": "Your Assets",
@@ -326,7 +325,8 @@
     "recipientInvoice": "Recipient's Invoice",
     "availableBalanceMsg": "Available balance is ",
     "spendableBalanceMsg": "Spendable balance is ",
-    "dustAmountMsg": "Amount too low"
+    "dustAmountMsg": "Amount too low",
+    "validationZeroNotAllowed": "0 is not allowed!"
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

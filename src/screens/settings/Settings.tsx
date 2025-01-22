@@ -64,6 +64,7 @@ function SettingsScreen({ navigation }) {
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
+  const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -100,11 +101,17 @@ function SettingsScreen({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    if (isEnableBiometrics && pinMethod === PinMethod.PIN) {
+      enableBiometrics();
+    }
+  }, [isEnableBiometrics, pinMethod]);
+
   const toggleBiometrics = () => {
     if (pinMethod === PinMethod.DEFAULT) {
-      Toast(onBoarding.createPinFirst, true);
+      setIsEnableBiometrics(true);
       navigation.navigate(NavigationRoutes.CREATEPIN, {
-        OnBoarding: false,
+        biometricProcess: true,
       });
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
@@ -152,7 +159,10 @@ function SettingsScreen({ navigation }) {
       id: 6,
       title: settings.setPasscodeTitle,
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
+      onPress: () =>
+        navigation.navigate(NavigationRoutes.CREATEPIN, {
+          biometricProcess: false,
+        }),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     {

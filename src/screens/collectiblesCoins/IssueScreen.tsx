@@ -46,6 +46,7 @@ import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -129,7 +130,8 @@ function IssueScreen() {
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
-        navigation.dispatch(popAction);
+        // navigation.dispatch(popAction);
+        navigation.navigate(NavigationRoutes.ASSETS);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -169,7 +171,8 @@ function IssueScreen() {
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
-        navigation.dispatch(popAction);
+        // navigation.dispatch(popAction);
+        navigation.navigate(NavigationRoutes.COLLECTIBLE);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'

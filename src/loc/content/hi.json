@@ -73,7 +73,6 @@
     "errorSettingPin": "पिन सेट करने में त्रुटि",
     "newPinCreated": "नया पिन बनाया गया",
     "failToVerify": "सत्यापित करने में विफल",
-    "createPinFirst": "पहले पिन बनाएँ",
     "invalidPin": "अमान्य पिन",
     "enterYourPin": "अपना पासकोड दर्ज करें",
     "recoverRGBState": "कोई बैकअप नहीं मिला। क्या आप नई ऑन-चेन वॉलेट बनाने के लिए आगे बढ़ना चाहते हैं?",
@@ -138,7 +137,7 @@
   },
   "home": {
     "addAssets": "संपत्ति प्राप्त करें",
-    "addAssetSubTitle": "नया संपत्ति जारी करें या प्राप्त संपत्तियां जोड़ें",
+    "addAssetSubTitle": "नया संपत्ति जारी करें या संपत्तियां प्राप्त करें",
     "createAssets": "संपत्तियां बनाएं",
     "issueNew": "नया जारी करें",
     "myAssets": "आपकी संपत्तियां",
@@ -326,7 +325,8 @@
     "recipientInvoice": "प्राप्तकर्ता का चालान",
     "availableBalanceMsg": " उपलब्ध शेष राशि है ",
     "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है ",
-    "dustAmountMsg": "राशि बहुत कम है"
+    "dustAmountMsg": "राशि बहुत कम है",
+    "validationZeroNotAllowed": "0 की अनुमति नहीं है!"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

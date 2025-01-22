@@ -73,7 +73,6 @@
     "errorSettingPin": "设置密码时出错",
     "newPinCreated": "新密码已创建",
     "failToVerify": "验证失败",
-    "createPinFirst": "请先创建密码",
     "invalidPin": "无效的密码",
     "enterYourPin": "输入您的密码",
     "recoverRGBState": "未找到备份。您是否要继续创建新的链上钱包？",
@@ -138,7 +137,7 @@
   },
   "home": {
     "addAssets": "接收资产",
-    "addAssetSubTitle": "发行新资产或添加接收资产",
+    "addAssetSubTitle": "发布新资产或接收资产",
     "createAssets": "创建资产",
     "issueNew": "发布新资产",
     "myAssets": "你的资产",
@@ -326,7 +325,8 @@
     "recipientInvoice": "收件人的发票",
     "availableBalanceMsg": "可用余额为 ",
     "spendableBalanceMsg": "可支配余额为 ",
-    "dustAmountMsg": "金额过低"
+    "dustAmountMsg": "金额过低",
+    "validationZeroNotAllowed": "不允许输入0！"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",

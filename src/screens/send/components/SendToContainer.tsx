@@ -293,7 +293,11 @@ function SendToContainer({
   };
   const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (Number(balances) === 0) {
+    if (numericValue === 0) {
+      Keyboard.dismiss();
+      setAmount('');
+      Toast(sendScreen.validationZeroNotAllowed, true);
+    } else if (Number(balances) === 0) {
       Keyboard.dismiss();
       Toast(sendScreen.availableBalanceMsg + balances, true);
     } else if (numericValue <= Number(balances)) {

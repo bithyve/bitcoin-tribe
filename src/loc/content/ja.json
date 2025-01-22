@@ -73,7 +73,6 @@
     "errorSettingPin": "PINの設定エラー",
     "newPinCreated": "新しいPINを作成しました",
     "failToVerify": "検証に失敗しました",
-    "createPinFirst": "最初にPINを作成してください",
     "invalidPin": "無効なPIN",
     "enterYourPin": "パスコードを入力してください",
     "recoverRGBState": "バックアップが見つかりませんでした。新しいオンチェーンウォレットを作成しますか？",
@@ -138,7 +137,7 @@
   },
   "home": {
     "addAssets": "資産を受け取る",
-    "addAssetSubTitle": "新しい資産を発行するか、受信資産を追加する",
+    "addAssetSubTitle": "新しい資産を発行するか、資産を受け取る",
     "createAssets": "資産を作成",
     "issueNew": "新しい資産を発行する",
     "myAssets": "あなたの資産",
@@ -326,7 +325,8 @@
     "recipientInvoice": "受取人の請求書",
     "availableBalanceMsg": "利用可能な残高は ",
     "spendableBalanceMsg": "使用可能な残高は ",
-    "dustAmountMsg": "金額が少なすぎます"
+    "dustAmountMsg": "金額が少なすぎます",
+    "validationZeroNotAllowed": "0は許可されていません！"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

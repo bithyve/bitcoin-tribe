@@ -76,7 +76,7 @@ export default class Relay {
     try {
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/supported/new`,);
+        res = await RestClient.get(`${RELAY}/supported/new`);
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
@@ -102,23 +102,19 @@ export default class Relay {
         formData.append('appID', appID);
         formData.append('network', 'regtest');
         formData.append('asset', JSON.stringify(asset));
-        if(asset.media){
+        if (asset.media) {
           formData.append('media', {
-          uri: Platform.select({
-            android: `file://${asset.media.filePath}`,
-            ios: asset.media.filePath,
-          }),
-          name: asset.media.filePath.split('/').pop(),
-          type: asset.media.mime,
-        });
+            uri: Platform.select({
+              android: `file://${asset.media.filePath}`,
+              ios: asset.media.filePath,
+            }),
+            name: asset.media.filePath.split('/').pop(),
+            type: asset.media.mime,
+          });
         }
-        res = await RestClient.post(
-          `${RELAY}/registry/add`,
-          formData,
-          {
-            'Content-Type': 'multipart/form-data',
-          },
-        );
+        res = await RestClient.post(`${RELAY}/registry/add`, formData, {
+          'Content-Type': 'multipart/form-data',
+        });
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
@@ -149,13 +145,9 @@ export default class Relay {
           name: filePath.split('/').pop(),
           type: 'application/zip',
         });
-        res = await RestClient.post(
-          `${RELAY}/backup/rgbbackup`,
-          formData,
-          {
-            'Content-Type': 'multipart/form-data',
-          },
-        );
+        res = await RestClient.post(`${RELAY}/backup/rgbbackup`, formData, {
+          'Content-Type': 'multipart/form-data',
+        });
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
