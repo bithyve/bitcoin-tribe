@@ -76,7 +76,7 @@ export default class Relay {
     try {
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/supported/new`);
+        res = await RestClient.post(`${RELAY}/supported/new`, {});
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
