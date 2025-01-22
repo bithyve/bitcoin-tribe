@@ -46,20 +46,20 @@ function SendScreen({ route, navigation }) {
         return;
       }
       if (value.startsWith('rgb:')) {
-        setValidatingInvoiceLoader(true);
+        // setValidatingInvoiceLoader(true);
         const res = await ApiHandler.decodeInvoice(value);
         if (res.assetId) {
           const assetData = allAssets.find(
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
-            setValidatingInvoiceLoader(false);
+            // setValidatingInvoiceLoader(false);
             Toast(assets.assetNotFoundMsg, true);
             setTimeout(() => {
               navigation.goBack();
             }, 1000);
           } else {
-            setValidatingInvoiceLoader(false);
+            // setValidatingInvoiceLoader(false);
             setTimeout(() => {
               navigation.replace(NavigationRoutes.SENDASSET, {
                 assetId: res.assetId,
@@ -70,7 +70,7 @@ function SendScreen({ route, navigation }) {
             }, 1000);
           }
         } else {
-          setValidatingInvoiceLoader(false);
+          // setValidatingInvoiceLoader(false);
           setTimeout(() => {
             navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
               wallet,
@@ -140,9 +140,9 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      <View>
+      {/* <View>
         <ModalLoading visible={validatingInvoiceLoader} />
-      </View>
+      </View> */}
       <View style={styles.scannerWrapper}>
         {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
       </View>
