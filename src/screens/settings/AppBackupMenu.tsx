@@ -267,7 +267,7 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'center',
     },
     bodyWrapper: {
-      height: '75%',
+      height: Platform.OS === 'android' ? '70%' : '74%',
     },
   });
 export default AppBackupMenu;
