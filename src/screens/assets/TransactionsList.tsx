@@ -5,6 +5,7 @@ import {
   FlatList,
   Platform,
   RefreshControl,
+  Animated,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -29,6 +30,7 @@ function TransactionsList({
   wallet,
   coin,
   assetId = '',
+  scrollY,
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -38,6 +40,7 @@ function TransactionsList({
   wallet;
   coin: string;
   assetId: string;
+  scrollY: any;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations, settings } = translations;
@@ -55,6 +58,7 @@ function TransactionsList({
             navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
               assetId: assetId,
               transactions: transactions,
+              assetName: coin,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>
@@ -64,6 +68,10 @@ function TransactionsList({
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
+        // onScroll={Animated.event(
+        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        //   { useNativeDriver: false },
+        // )}
         style={styles.container2}
         data={transactions}
         refreshControl={
@@ -82,14 +90,7 @@ function TransactionsList({
           )
         }
         renderItem={({ item }) => (
-          <AssetTransaction
-            transId={settings[item.status.toLowerCase().replace(/_/g, '')]}
-            transDate={item.createdAt}
-            transAmount={`${item.amount}`}
-            transType={item.kind}
-            transaction={item}
-            coin={coin}
-          />
+          <AssetTransaction transaction={item} coin={coin} />
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
@@ -102,10 +103,10 @@ function TransactionsList({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      marginTop: hp(30),
-      height: '100%',
+      height: '50%',
     },
     container2: {
+      marginTop: hp(15),
       height: '100%',
     },
     contentWrapper: {

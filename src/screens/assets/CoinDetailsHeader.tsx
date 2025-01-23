@@ -44,11 +44,11 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
           style={[
             styles.balanceText,
             {
-              fontSize: coin.balance.spendable.toString().length > 10 ? 24 : 39,
+              fontSize: coin.balance.future.toString().length > 10 ? 24 : 39,
             },
           ]}>
           {numberWithCommas(
-            coin.balance.spendable + coin.balance?.offchainOutbound,
+            coin.balance.future + coin.balance?.offchainOutbound,
           )}
         </AppText>
       </View>
@@ -56,7 +56,6 @@ function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
-            item: coin,
             rgbInvoice: '',
             wallet: wallet,
           })

@@ -1,11 +1,4 @@
-import {
-  Image,
-  Keyboard,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -14,9 +7,12 @@ import React, {
   useEffect,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
+import idx from 'idx';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useQuery } from '@realm/react';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -24,7 +20,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import CreateUtxosModal from 'src/components/CreateUtxosModal';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
@@ -32,21 +27,32 @@ import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
-import { AssetFace } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  Coin,
+  Collectible,
+} from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
-import AssetChip from 'src/components/AssetChip';
-import Capitalize from 'src/utils/capitalizeUtils';
-import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
+// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
-import { formatNumber } from 'src/utils/numberWithCommas';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
+import FeePriorityButton from '../send/components/FeePriorityButton';
+import ModalContainer from 'src/components/ModalContainer';
+import SendAssetSuccess from './components/SendAssetSuccess';
+import Colors from 'src/theme/Colors';
+import { RealmSchema } from 'src/storage/enum';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ItemProps = {
   name: string;
@@ -56,6 +62,13 @@ type ItemProps = {
   onPressAsset?: (item: any) => void;
   assetId?: string;
   amount?: string;
+};
+
+type routeParamsProps = {
+  assetId: string;
+  rgbInvoice: string;
+  wallet: Wallet;
+  amount: string;
 };
 
 const AssetItem = ({
@@ -69,7 +82,6 @@ const AssetItem = ({
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
-
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -97,30 +109,31 @@ const AssetItem = ({
         )}
         <View style={styles.assetDetailsWrapper}>
           <AppText
+            numberOfLines={1}
             variant="body2"
             style={{
               color:
-                tag === 'COIN' ? theme.colors.accent : theme.colors.accent2,
+                tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
             }}>
             {name}
           </AppText>
-          <AppText variant="body2" style={styles.nameText}>
+          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
             {details}
           </AppText>
         </View>
-        <View style={styles.tagWrapper}>
-          <AssetChip
-            tagText={Capitalize(tag)}
-            backColor={
-              tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
-            }
-            tagColor={theme.colors.tagText}
-          />
-        </View>
         <View style={styles.amountWrapper}>
-          <AppText variant="smallCTA" style={styles.amountText}>
-            {amount}
-          </AppText>
+          <View
+            style={[
+              styles.amountTextWrapper,
+              {
+                backgroundColor:
+                  tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
+              },
+            ]}>
+            <AppText variant="smallCTA" style={styles.amountText}>
+              {numberWithCommas(amount)}
+            </AppText>
+          </View>
         </View>
       </GradientView>
     </AppTouchable>
@@ -128,7 +141,7 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, wallet, item } = useRoute().params;
+  const { assetId, rgbInvoice, wallet, amount } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -145,13 +158,18 @@ const SendAssetScreen = () => {
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
-
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const allAssets: Asset[] = [...coins, ...collectibles];
+  const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [amount, setAmount] = useState('');
+  const [assetAmount, setAssetAmount] = useState(amount || '');
   const [inputHeight, setInputHeight] = React.useState(100);
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
+  const [customFee, setCustomFee] = useState(0);
+  const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -161,8 +179,13 @@ const SendAssetScreen = () => {
   );
   const styles = getStyles(theme, inputHeight);
   const isButtonDisabled = useMemo(() => {
-    return !invoice || !amount;
-  }, [invoice, amount]);
+    return (
+      !invoice ||
+      assetAmount === '' ||
+      assetAmount === '0' ||
+      (selectedPriority === TxPriority.CUSTOM && !customFee)
+    );
+  }, [invoice, assetAmount, customFee, selectedPriority]);
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -176,11 +199,32 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
-  useEffect(() => {
-    if (item.balance.spendable < amount) {
-      Toast(assets.checkSpendableAmt + item.balance.spendable, true);
+  const handleAmountInputChange = text => {
+    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
+    if (numericValue === 0) {
+      Keyboard.dismiss();
+      setAssetAmount('');
+      Toast(sendScreen.validationZeroNotAllowed, true);
+    } else if (Number(assetData?.balance.spendable) === 0) {
+      Keyboard.dismiss();
+      Toast(
+        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+        true,
+      );
+    } else if (numericValue <= assetData?.balance.spendable) {
+      setAssetAmount(text);
+    } else {
+      Keyboard.dismiss();
+      Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
     }
-  }, [amount]);
+  };
+
+  const getFeeRateByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
+  };
+  const getEstimatedBlocksByPriority = (priority: TxPriority) => {
+    return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
+  };
 
   const decodeInvoice = (_invoice: string) => {
     const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
@@ -205,20 +249,19 @@ const SendAssetScreen = () => {
 
   const sendAsset = useCallback(async () => {
     try {
-      Keyboard.dismiss();
       const { utxo, endpoints } = decodeInvoice(invoice);
       setLoading(true);
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: utxo,
-        amount,
+        amount: assetAmount && assetAmount.replace(/,/g, ''),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
       setLoading(false);
       if (response?.txid) {
         setTimeout(() => {
-          setVisible(true);
+          setSuccessStatus(true);
         }, 500);
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
@@ -226,17 +269,79 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
-        Toast(`Failed: ${response?.error}`, true);
+        setVisible(false);
+        setTimeout(() => {
+          Toast(`Failed: ${response?.error}`, true);
+        }, 500);
       }
     } catch (error) {
+      setVisible(false);
+      setTimeout(() => {
+        Toast(`Failed: ${error}`, true);
+      }, 500);
       console.log(error);
     }
-  }, [invoice, amount, navigation]);
+  }, [invoice, assetAmount, navigation]);
+
+  const handlePasteAddress = async () => {
+    try {
+      setValidatingInvoiceLoader(true);
+      const clipboardValue = await Clipboard.getString();
+      if (!clipboardValue) {
+        Toast('Clipboard is empty. Please copy a valid invoice.', true);
+        setValidatingInvoiceLoader(false);
+        return;
+      }
+      const res = await ApiHandler.decodeInvoice(clipboardValue);
+      if (res.assetId) {
+        const assetData = allAssets.find(item => item.assetId === res.assetId);
+        if (!assetData || res.assetId !== assetId) {
+          setValidatingInvoiceLoader(false);
+          Toast(assets.invoiceMisamatchMsg, true);
+        } else if (res.assetId && res.assetId === assetId) {
+          setInvoice(clipboardValue);
+          setAssetAmount(res.amount.toString() || 0);
+          setValidatingInvoiceLoader(false);
+        } else {
+          setInvoice(clipboardValue);
+          setValidatingInvoiceLoader(false);
+        }
+      } else if (res.recipientId) {
+        setInvoice(clipboardValue);
+        setValidatingInvoiceLoader(false);
+      }
+    } catch (error) {
+      Toast('Invalid invoice', true);
+      setValidatingInvoiceLoader(false);
+    }
+  };
+
+  const setMaxAmount = () => {
+    if (assetData?.balance?.spendable) {
+      const spendableAmount = assetData.balance.spendable.toString();
+      setAssetAmount(spendableAmount);
+    }
+  };
+
+  const handleCustomFeeInput = text => {
+    const isValidNumber = /^\d*\.?\d*$/.test(text);
+    if (text.startsWith('0') && !text.startsWith('0.')) {
+      setCustomFee(text.replace(/^0+/, ''));
+      return;
+    }
+    const numericValue = parseFloat(text);
+    if (!isValidNumber || isNaN(numericValue) || numericValue < 1) {
+      setCustomFee(0);
+      return;
+    }
+    setSelectedFeeRate(Number(text));
+    setCustomFee(text);
+  };
 
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
-      <View>
+      {/* <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
           enableClose={true}
@@ -245,171 +350,204 @@ const SendAssetScreen = () => {
           <InProgessPopupContainer
             title={assets.sendAssetLoadingTitle}
             subTitle={assets.sendAssetLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/sendingBTCorAsset.json') : require('src/assets/images/jsons/sendingBTCorAsset_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/sendingBTCorAsset.json')
+                : require('src/assets/images/jsons/sendingBTCorAsset_light.json')
+            }
           />
         </ResponsePopupContainer>
-      </View>
-      <CreateUtxosModal
-        visible={showErrorModal}
-        primaryOnPress={() => {
-          setShowErrorModal(false);
-          setTimeout(() => {
-            createUtxos.mutate();
-          }, 500);
-          // navigation.navigate(NavigationRoutes.RGBCREATEUTXO, {
-          //   refresh: () => sendAsset(),
-          // });
-        }}
-      />
+      </View> */}
       <View>
-        <ResponsePopupContainer
-          visible={visible}
-          enableClose={true}
-          onDismiss={() => setVisible(false)}
-          backColor={theme.colors.successPopupBackColor}
-          borderColor={theme.colors.successPopupBorderColor}
-          conatinerModalStyle={styles.containerModalStyle}>
-          <SendSuccessPopupContainer
-            title={assets.success}
-            subTitle={assets.operationSuccess}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </ResponsePopupContainer>
+        <ModalLoading visible={validatingInvoiceLoader} />
       </View>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidView style={styles.container}>
         <AssetItem
-          name={item.name}
+          name={assetData?.name}
           details={
-            item.assetIface.toUpperCase() === AssetFace.RGB20
-              ? item.ticker
-              : item.details
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+              ? assetData?.ticker
+              : assetData?.details
           }
           image={
-            item.media?.filePath
+            assetData?.media?.filePath
               ? Platform.select({
-                  android: `file://${item.media?.filePath}`,
-                  ios: item.media?.filePath,
+                  android: `file://${assetData.media?.filePath}`,
+                  ios: assetData.media?.filePath,
                 })
               : null
           }
           tag={
-            item.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
               ? assets.coin
               : assets.collectible
           }
           assetId={assetId}
-          amount={item.balance.spendable}
+          amount={assetData?.balance.spendable}
         />
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.recipientInvoice}
+        </AppText>
         <TextField
           value={invoice}
           onChangeText={text => setInvoice(text)}
           placeholder={assets.invoice}
-          style={[styles.input, invoice && styles.invoiceInputStyle]}
+          style={styles.input}
+          multiline={true}
+          returnKeyType={'Enter'}
           onContentSizeChange={event => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
-          multiline={true}
-          returnKeyType={'Enter'}
-          numberOfLines={5}
+          numberOfLines={3}
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
+          inputStyle={styles.inputStyle}
+          rightText={!invoice && sendScreen.paste}
+          rightIcon={invoice && <ClearIcon />}
+          onRightTextPress={() =>
+            invoice ? setInvoice('') : handlePasteAddress()
+          }
+          rightCTAStyle={styles.rightCTAStyle}
         />
-
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.enterAmount}
+        </AppText>
         <TextField
-          value={formatNumber(amount)}
-          onChangeText={text => setAmount(text)}
+          value={formatNumber(assetAmount)}
+          onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
           style={styles.input}
+          inputStyle={styles.inputStyle}
+          rightText={common.max}
+          onRightTextPress={setMaxAmount}
+          rightCTAStyle={styles.rightCTAStyle}
         />
-        <View style={styles.totalFeeWrapper}>
-          <AppText variant="heading1" style={styles.feeTitleText}>
-            {assets.feeRate}
-          </AppText>
+        <AppText variant="body2" style={styles.labelstyle}>
+          {sendScreen.fee}
+        </AppText>
+        <View style={styles.feeContainer}>
+          <FeePriorityButton
+            title={sendScreen.low}
+            priority={TxPriority.LOW}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+              setSelectedPriority(TxPriority.LOW);
+            }}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.LOW,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.medium}
+            priority={TxPriority.MEDIUM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+              setSelectedPriority(TxPriority.MEDIUM);
+            }}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.MEDIUM,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.high}
+            priority={TxPriority.HIGH}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => {
+              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+              setSelectedPriority(TxPriority.HIGH);
+            }}
+            feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+              TxPriority.HIGH,
+            )}
+            disabled={false}
+          />
+          <FeePriorityButton
+            title={sendScreen.custom}
+            priority={TxPriority.CUSTOM}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.CUSTOM);
+            }}
+            feeRateByPriority={''}
+            estimatedBlocksByPriority={1}
+            disabled={false}
+          />
         </View>
-        <View style={styles.feeWrapper}>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.LOW}
-              status={
-                selectedPriority === TxPriority.LOW ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.LOW);
-                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-              }}
+        {selectedPriority === TxPriority.CUSTOM && (
+          <View style={styles.inputWrapper}>
+            <AppText variant="body2" style={styles.labelstyle}>
+              {sendScreen.customFee}
+            </AppText>
+            <TextField
+              value={customFee}
+              onChangeText={handleCustomFeeInput}
+              placeholder={sendScreen.enterCustomFee}
+              keyboardType={'numeric'}
+              inputStyle={styles.customFeeInputStyle}
+              contentStyle={styles.feeInputContentStyle}
+              rightText={'sat/vB'}
+              onRightTextPress={() => {}}
+              rightCTATextColor={theme.colors.headingColor}
             />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.low}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                {averageTxFee[TxPriority.LOW].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
           </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.MEDIUM}
-              status={
-                selectedPriority === TxPriority.MEDIUM ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.MEDIUM);
-                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-              }}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.medium}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.MEDIUM].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
-          </View>
-          <View style={styles.radioBtnWrapper}>
-            <RadioButton.Android
-              color={theme.colors.accent1}
-              uncheckedColor={theme.colors.headingColor}
-              value={TxPriority.HIGH}
-              status={
-                selectedPriority === TxPriority.HIGH ? 'checked' : 'unchecked'
-              }
-              onPress={() => {
-                setSelectedPriority(TxPriority.HIGH);
-                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-              }}
-            />
-            <View style={styles.feeViewWrapper}>
-              <AppText variant="body2" style={styles.feePriorityText}>
-                {assets.high}
-              </AppText>
-              <AppText variant="body2" style={styles.feeText}>
-                &nbsp;{averageTxFee[TxPriority.HIGH].feePerByte} sat/vB
-              </AppText>
-              {/* <AppText variant="caption" style={styles.feeSatsText}>
-                ~10 min
-              </AppText> */}
-            </View>
-          </View>
-        </View>
-      </ScrollView>
+        )}
+
+        <ModalContainer
+          title={
+            successStatus
+              ? sendScreen.successTitle
+              : sendScreen.sendConfirmation
+          }
+          subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
+          height={
+            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
+          }
+          visible={visible}
+          enableCloseIcon={false}
+          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
+          <SendAssetSuccess
+            // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
+            assetName={assetData?.name}
+            amount={assetAmount && assetAmount.replace(/,/g, '')}
+            feeRate={
+              selectedPriority === TxPriority.CUSTOM
+                ? customFee
+                : getFeeRateByPriority(selectedPriority)
+            }
+            selectedPriority={selectedPriority}
+            onSuccessStatus={successStatus}
+            onSuccessPress={() => navigation.goBack()}
+            onPress={sendAsset}
+            estimateBlockTime={
+              selectedPriority === TxPriority.CUSTOM
+                ? 1
+                : getEstimatedBlocksByPriority(selectedPriority)
+            }
+          />
+        </ModalContainer>
+      </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.send}
-          primaryOnPress={sendAsset}
+          primaryTitle={common.next}
+          primaryOnPress={() => {
+            if (assetAmount > assetData?.balance.spendable) {
+              Keyboard.dismiss();
+              Toast(
+                assets.checkSpendableAmt + assetData?.balance.spendable,
+                true,
+              );
+              return;
+            }
+            Keyboard.dismiss();
+            setVisible(true);
+          }}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled || createUtxos.isLoading || loading}
@@ -426,7 +564,10 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       flex: 1,
     },
     input: {
-      marginVertical: hp(10),
+      // marginVertical: hp(10),
+    },
+    inputStyle: {
+      width: '80%',
     },
     invoiceInputStyle: {
       borderRadius: hp(20),
@@ -441,11 +582,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     contentStyle1: {
       height: hp(50),
-      // marginTop: hp(5),
     },
     buttonWrapper: {
-      marginTop: hp(5),
-      bottom: 10,
+      marginVertical: hp(5),
     },
     assetItemWrapper: {
       flexDirection: 'row',
@@ -456,6 +595,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       alignItems: 'center',
       borderRadius: 15,
       height: hp(70),
+      marginBottom: hp(10),
     },
     imageStyle: {
       height: hp(50),
@@ -467,7 +607,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       paddingLeft: hp(20),
     },
     amountWrapper: {
-      width: '20%',
+      width: '48%',
       alignItems: 'flex-end',
     },
     identiconWrapper: {
@@ -480,57 +620,39 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: 50,
       borderRadius: 50,
     },
+    amountTextWrapper: {
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(3),
+      borderRadius: 10,
+    },
     amountText: {
-      color: theme.colors.headingColor,
+      // color: theme.colors.headingColor,
+      color: Colors.Black,
     },
     nameText: {
       color: theme.colors.secondaryHeadingColor,
     },
-    totalFeeWrapper: {
+    labelstyle: {
+      marginTop: hp(15),
+      marginBottom: hp(10),
+      color: theme.colors.secondaryHeadingColor,
+    },
+    inputWrapper: {
+      paddingBottom: 16,
+    },
+    feeContainer: {
       flexDirection: 'row',
+    },
+    customFeeInputStyle: {
+      width: '80%',
+    },
+    feeInputContentStyle: {
+      marginTop: 0,
+    },
+    rightCTAStyle: {
+      width: '20%',
       alignItems: 'center',
-      marginTop: hp(10),
-    },
-    feeWrapper: {
-      width: '100%',
-      marginVertical: hp(10),
-    },
-    radioBtnWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: hp(8),
-    },
-    feeViewWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    feePriorityText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
-    feeText: {
-      color: theme.colors.headingColor,
-    },
-    feeSatsText: {
-      color: theme.colors.headingColor,
-      marginLeft: hp(5),
-    },
-    satsText: {
-      color: theme.colors.headingColor,
-      marginTop: hp(5),
-      marginLeft: hp(5),
-    },
-    feeTitleText: {
-      color: theme.colors.headingColor,
-      marginRight: hp(10),
-    },
-    tagWrapper: {
-      width: '28%',
-      alignItems: 'flex-end',
-    },
-    containerModalStyle: {
-      // margin: 0,
-      // padding: 10,
+      justifyContent: 'center',
     },
   });
 

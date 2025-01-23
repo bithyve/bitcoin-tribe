@@ -11,6 +11,7 @@ import android.os.HandlerThread
 import com.bithyve.tribe.AppConstants
 import com.bithyve.tribe.RGBHelper
 import com.bithyve.tribe.RGBWalletRepository
+import com.facebook.react.bridge.ReadableArray
 import org.rgbtools.BitcoinNetwork
 
 
@@ -79,10 +80,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun receiveAsset(promise: Promise){
+    fun receiveAsset(assetID: String, amount: Float, promise: Promise){
         backgroundHandler.post{
             try {
-                promise.resolve(RGBHelper.receiveAsset())
+                promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong()))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
@@ -148,6 +149,26 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: ReadableArray, promise: Promise){
+        backgroundHandler.post{
+            try {
+                val attachments = mutableListOf<String>()
+                for (i in 0 until attachmentsFilePaths.size()) {
+                    attachments.add(attachmentsFilePaths.getString(i))
+                }
+                val response = RGBHelper.issueAssetUda(name,ticker, details, mediaFilePath, attachments)
+                promise.resolve(response)
+            }catch (e: Exception) {
+                Log.d(TAG, "issueAssetUda:e.message ${e.message}")
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
     fun getRgbAssetMetaData( assetId: String, promise: Promise){
         promise.resolve(RGBHelper.getMetadata(assetId))
     }
@@ -170,6 +191,99 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 jsonObject.addProperty("error", message)
                 promise.resolve(jsonObject.toString())
             }
+        }
+    }
+
+    @ReactMethod
+    fun failTransfer( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val status = RGBHelper.failTransfer(batchTransferIdx, noAssetOnly, true)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("status", status)
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun deleteTransfers( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val status = RGBHelper.deleteTransfers(batchTransferIdx, noAssetOnly)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("status", status)
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun getWalletData(promise: Promise){
+        backgroundHandler.post {
+            try {
+                val walletData = RGBHelper.getWalletData()
+                val gson = Gson()
+                val json = gson.toJson(walletData)
+                promise.resolve(json)
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                jsonObject.addProperty("status", false)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun getBtcBalance(promise: Promise){
+        backgroundHandler.post {
+            try {
+                val balance = RGBHelper.getBtcBalance()
+                val gson = Gson()
+                val json = gson.toJson(balance)
+                promise.resolve(json)
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun decodeInvoice(invoiceString: String, promise: Promise){
+        try {
+            val invoice = RGBHelper.decodeInvoice(invoiceString)
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("assetId", invoice.assetId)
+            jsonObject.addProperty("recipientId", invoice.recipientId)
+            jsonObject.addProperty("network", invoice.network.name)
+            jsonObject.addProperty("amount", invoice.amount?.toFloat() ?: 0)
+            jsonObject.addProperty("transportEndpoints", invoice.transportEndpoints.toString())
+            jsonObject.addProperty("assetIface", invoice.assetIface?.name ?: "")
+            jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
+            jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
+            promise.resolve(jsonObject.toString())
+        } catch (e: Exception) {
+            val message = e.message
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", message)
+            promise.resolve(jsonObject.toString())
         }
     }
 
@@ -213,7 +327,6 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     @ReactMethod
     fun restore(mnemonic: String,filePath: String, promise: Promise){
         val response = RGBHelper.restore(mnemonic, filePath, reactApplicationContext)
-        Log.d(TAG, "restore: $response")
         promise.resolve(response)
     }
 

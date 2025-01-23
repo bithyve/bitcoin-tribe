@@ -224,10 +224,17 @@ import CloudKit
                 try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
               }
           }
+        
+        if let udaAssets = assets.cfa {
+          try udaAssets.forEach { assetUda in
+              try wallet.refresh(online: online, assetId: assetUda.assetId, filter: [], skipSync: false)
+            }
+        }
 
           var jsonArray = [[String: Any]]()
           var jsonRgb121Array = [[String: Any]]()
-          
+        var udaArray = [[String: Any]]()
+
           if let niaAssets = assets.nia {
               for asset in niaAssets {
                   var jsonObject = [String: Any]()
@@ -273,10 +280,57 @@ import CloudKit
                   jsonRgb121Array.append(jsonRgb121Object)
               }
           }
+        
+        if let udaAssets = assets.uda {
+          for asset in udaAssets {
+                var udaObject = [String: Any]()
+                udaObject["assetId"] = asset.assetId
+                udaObject["balance"] = [
+                    "future": asset.balance.future,
+                    "settled": asset.balance.settled,
+                    "spendable": asset.balance.spendable,
+                ]
+            var media = [
+              "filePath": asset.token?.media?.filePath,
+              "mime": asset.token?.media?.mime,
+              "digest": asset.token?.media?.digest,
+            ]
+            var attachmentsArray = [String: [String: Any]]()
+            if let attachments = asset.token?.attachments {
+                for (key, value) in attachments {
+                    attachmentsArray["\(key)"] = [
+                        "filePath": value.filePath,
+                        "mime": value.mime,
+                        "digest": value.digest
+                    ]
+                }
+            }
+                udaObject["ticker"] = asset.ticker
+                udaObject["details"] = asset.details
+                udaObject["name"] = asset.name
+                udaObject["precision"] = asset.precision
+                udaObject["issuedSupply"] = asset.issuedSupply
+                udaObject["timestamp"] = asset.timestamp
+                udaObject["addedAt"] = asset.addedAt
+                udaObject["token"] = [
+                  "index": asset.token?.index,
+                  "ticker": asset.token?.ticker,
+                  "name": asset.token?.name,
+                  "details": asset.token?.details,
+                  "embeddedMedia": asset.token?.embeddedMedia,
+                  "reserves": asset.token?.reserves,
+                  "attachments": attachmentsArray,
+                  "media": media
+                ]
+                udaObject["assetIface"] = "\(asset.assetIface)"
+                udaArray.append(udaObject)
+            }
+        }
           
           let data: [String: Any] = [
               "nia": jsonArray,
-              "cfa": jsonRgb121Array
+              "cfa": jsonRgb121Array,
+              "uda": udaArray
           ]
           
           let json = Utility.convertToJSONString(params: data)
@@ -304,6 +358,8 @@ import CloudKit
         } else if details == "Blinded utxo already used" {
           throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Blinded utxo already used"])
         }
+      case .AssetNotFound(assetId: _):
+          throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Asset not found"])
       default:
         throw error
       }
@@ -330,7 +386,7 @@ import CloudKit
               var newUTXOs: UInt8 = 0
                             while newUTXOs == 0 && attempts > 0 {
                   print("Attempting to create UTXOs, attempts left: \(attempts)")
-                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: Float(feeRate), skipSync: true)
+                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: Float(feeRate), skipSync: false)
                   print("newUTXOs=\(newUTXOs)")
                   attempts -= 1
               }
@@ -356,7 +412,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData() -> String {
+  func genReceiveData(assetID: String, amount: Float) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -375,10 +431,9 @@ import CloudKit
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
                   ], skipSync: false
               )
-              print("\(TAG) refresh_\(refresh_)")
               let bindData = try wallet.blindReceive(
-                  assetId: nil,
-                  amount: nil,
+                assetId: assetID != "" ? assetID : nil,
+                amount: amount != 0 ? UInt64(amount) : nil,
                   durationSeconds: Constants.rgbBlindDuration,
                   transportEndpoints: [Constants.proxyConsignmentEndpoint],
                   minConfirmations: 0
@@ -402,7 +457,92 @@ import CloudKit
           return json
       }
   }
-
+  
+  @objc func failTransfer(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
+    do{
+      let status = try self.rgbManager.rgbWallet!.failTransfers(online: self.rgbManager.online!, batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly, skipSync: false)
+      let data: [String: Any] = [
+          "status": status
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func getWalletData(callback: @escaping ((String) -> Void)) {
+    do{
+      let walletData = self.rgbManager.rgbWallet!.getWalletData()
+      let data: [String: Any] = [
+        "dataDir": walletData.dataDir,
+//        "bitcoinNetwork": walletData.bitcoinNetwork,
+//        "databaseType": walletData.databaseType,
+        "maxAllocationsPerUtxo": walletData.maxAllocationsPerUtxo,
+        "mnemonic": walletData.mnemonic,
+        "pubkey": walletData.pubkey,
+        "vanillaKeychain": walletData.vanillaKeychain,
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func deleteTransfers(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
+    do{
+      let status = try self.rgbManager.rgbWallet!.deleteTransfers( batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
+      let data: [String: Any] = [
+          "status": status
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch{
+      let data: [String: Any] = [
+          "status": false,
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
+    do{
+      let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
+      var data: [String: Any] = [
+        "recipientId": invoice.recipientId,
+        "expirationTimestamp": invoice.expirationTimestamp ?? 0,
+        "assetId": invoice.assetId ?? "",
+        "assetIface": invoice.assetIface.map { "\($0)" } ?? "",
+        "network": String(describing: invoice.network),
+        "amount": invoice.amount ?? 0,
+        "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
+          return endpoint
+        }
+      ]
+      print(data)
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let data: [String: Any] = [
+          "error": error.localizedDescription
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
     do{
@@ -427,8 +567,8 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(callback: @escaping ((String) -> Void)){
-    let response = genReceiveData()
+  @objc func receiveAsset(assetID: String, amount: Float,callback: @escaping ((String) -> Void)){
+    let response = genReceiveData(assetID: assetID, amount: amount)
     callback(response)
   }
   
@@ -499,6 +639,35 @@ import CloudKit
           "assetId": asset?.assetId,
           "name": asset?.name,
           "description": asset?.details,
+          "precision": asset?.precision,
+          "futureBalance": asset?.balance.future,
+          "settledBalance": asset?.balance.settled,
+          "spendableBalance": asset?.balance.spendable,
+          "dataPaths": dataPaths
+        ]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      }
+    } catch{
+      print(error)
+      let data: [String: Any] = [
+        "error": error.localizedDescription,
+      ]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    }
+  }
+  
+  @objc func issueAssetUda(name: String,ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: [String], callback: @escaping ((String) -> Void)) -> Void{
+    do{
+      return try handleMissingFunds {
+        let asset = try self.rgbManager.rgbWallet?.issueAssetUda(online: self.rgbManager.online!, ticker: ticker, name: name, details: details, precision: 0, mediaFilePath: mediaFilePath, attachmentsFilePaths: attachmentsFilePaths)
+        var dataPaths: [[String: Any]] = []
+        let data: [String: Any] = [
+          "assetId": asset?.assetId,
+          "name": asset?.name,
+          "ticker": asset?.ticker,
+          "details": asset?.details,
           "precision": asset?.precision,
           "futureBalance": asset?.balance.future,
           "settledBalance": asset?.balance.settled,
@@ -671,12 +840,11 @@ import CloudKit
   
   @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void{
     do{
-      print(backupPath)
-      if FileManager.default.fileExists(atPath: backupPath) {
-          print("The file exists at the specified path.")
-      } else {
-          print("The file does not exist at the specified path.")
-      }
+//      if FileManager.default.fileExists(atPath: backupPath) {
+//          print("The file exists at the specified path.")
+//      } else {
+//          print("The file does not exist at the specified path.")
+//      }
       NSString(string: backupPath).expandingTildeInPath
       try restoreBackup(backupPath: backupPath, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
     }

@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
+import { Keys } from 'src/storage';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -20,15 +21,21 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 // import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import ReceiveQrClipBoard from './components/ReceiveQrClipBoard';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import OptionCard from 'src/components/OptionCard';
+import IconCopy from 'src/assets/images/icon_copy.svg';
+import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 
 function ReceiveScreen({ route }) {
   const theme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { receciveScreen, common } = translations;
   const [visible, setVisible] = useState(false);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -56,14 +63,14 @@ function ReceiveScreen({ route }) {
       setAddress(receivingAddress);
     }
   }, []);
-console.log('getNodeOnchainBtcAddress.data.address', getNodeOnchainBtcAddress)
+
   useEffect(() => {
     if (getNodeOnchainBtcAddress.isError) {
     } else if (getNodeOnchainBtcAddress.data) {
       if (getNodeOnchainBtcAddress.data.address) {
         setAddress(getNodeOnchainBtcAddress.data.address);
-      }else if(getNodeOnchainBtcAddress?.data?.message){
-        Toast(getNodeOnchainBtcAddress?.data?.message, true)
+      } else if (getNodeOnchainBtcAddress?.data?.message) {
+        Toast(getNodeOnchainBtcAddress?.data?.message, true);
       }
     }
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);
@@ -97,19 +104,28 @@ console.log('getNodeOnchainBtcAddress.data.address', getNodeOnchainBtcAddress)
               : navigation.replace(NavigationRoutes.HOME) // Fallback if goBack is not possible
         }
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {getNodeOnchainBtcAddress.isLoading ? (
-          <View />
-        ) : (
-          <View>
+      {getNodeOnchainBtcAddress.isLoading ? (
+        <View />
+      ) : (
+        <View style={styles.bodyWrapper}>
+          <View style={styles.qrWrapper}>
             <ReceiveQrDetails
-              addMountModalVisible={() => setVisible(true)}
               receivingAddress={qrValue}
               qrTitle={receciveScreen.bitcoinAddress}
             />
           </View>
-        )}
-      </ScrollView>
+          <ReceiveQrClipBoard
+            qrCodeValue={qrValue}
+            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
+          />
+          <OptionCard
+            title={receciveScreen.addAmountTitle}
+            // subTitle={receciveScreen.addAmountSubTitle}
+            onPress={() => setVisible(true)}
+          />
+        </View>
+      )}
+
       {/* <FooterNote title={common.note} subTitle={receciveScreen.noteSubTitle} /> */}
 
       <ModalContainer
@@ -133,6 +149,14 @@ const styles = StyleSheet.create({
   addAmountModalContainerStyle: {
     width: '96%',
     alignSelf: 'center',
+  },
+  bodyWrapper: {
+    flex: 1,
+  },
+  qrWrapper: {
+    paddingTop: hp(25),
+    height: windowHeight < 670 ? '65%' : '73%',
+    // justifyContent: 'center',
   },
   footerView: {
     height: '8%',

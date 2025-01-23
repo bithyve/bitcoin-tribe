@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
@@ -23,24 +23,21 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
+import Toast from 'src/components/Toast';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 
-const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
+const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
     input: {
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height:
-        totalReserveSatsAmount === 0
-          ? windowHeight > 670
-            ? '56%'
-            : '50%'
-          : windowHeight > 670
-          ? '65%'
-          : '60%',
+      height: appType !== AppType.ON_CHAIN ? '54%' : '66%',
     },
     footerWrapper: {
-      marginVertical: hp(10),
+      height: '25%',
+      justifyContent: 'flex-end',
+      paddingBottom: hp(20),
     },
     contentStyle: {
       borderRadius: 0,
@@ -88,12 +85,10 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
       color: theme.colors.headingColor,
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     inputStyle: {
@@ -103,6 +98,7 @@ const getStyles = (theme: AppTheme, inputHeight, totalReserveSatsAmount) =>
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
+  const { invoiceAssetId } = useRoute().params;
   const {
     receciveScreen,
     common,
@@ -115,7 +111,7 @@ const EnterInvoiceDetails = () => {
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [assetId, setAssetId] = useState('');
+  const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
   const [selectedType, setSelectedType] = React.useState(
@@ -125,9 +121,23 @@ const EnterInvoiceDetails = () => {
   );
 
   const handlePasteAddress = async () => {
-    const getClipboardValue = await Clipboard.getString();
-    setAssetId(getClipboardValue);
+    const clipboardValue = await Clipboard.getString();
+    setAssetId(clipboardValue);
   };
+
+  function validateAndNavigateToReceiveAsset() {
+    const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
+    if (assetIdPattern.test(assetId)) {
+      navigation.replace(NavigationRoutes.RECEIVEASSET, {
+        refresh: true,
+        assetId,
+        amount,
+        selectedType,
+      });
+    } else {
+      Toast('Invalid asset ID', true);
+    }
+  }
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
@@ -138,7 +148,17 @@ const EnterInvoiceDetails = () => {
     return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
   }, [UnspentUTXOData]);
 
-  const styles = getStyles(theme, inputHeight, totalReserveSatsAmount);
+  const styles = getStyles(theme, inputHeight, app.appType);
+
+  const handleAmountInputChange = text => {
+    const cleanText = text.replace(/,/g, '');
+    const reg = /^\d*$/;
+    if (reg.test(cleanText)) {
+      const formattedText = numberWithCommas(cleanText);
+      setAmount(formattedText);
+    }
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
@@ -198,12 +218,12 @@ const EnterInvoiceDetails = () => {
           rightText={sendScreen.paste}
           onRightTextPress={() => handlePasteAddress()}
           rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.primaryCTAText}
+          rightCTATextColor={theme.colors.accent1}
         />
 
         <TextField
           value={amount}
-          onChangeText={text => setAmount(text.trim())}
+          onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
           keyboardType="numeric"
@@ -224,14 +244,7 @@ const EnterInvoiceDetails = () => {
         ) : null}
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => {
-            navigation.replace(NavigationRoutes.RECEIVEASSET, {
-              refresh: true,
-              assetId,
-              amount,
-              selectedType,
-            });
-          }}
+          primaryOnPress={() => validateAndNavigateToReceiveAsset()}
           secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
             navigation.replace(NavigationRoutes.RECEIVEASSET, {

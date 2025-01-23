@@ -198,6 +198,13 @@ export default class WalletUtilities {
     }
   };
 
+  static validateRgbUrLFormat = scannedStr => {
+    const rgbUriRegex =
+      /^rgb:[A-Za-z0-9$!@#%^&*-]+\/[0-9]+\/bcrt:utxob:[A-Za-z0-9$!@#%^&*-]+\?expiry=[0-9]+&endpoints=rpc:\/\/[A-Za-z0-9.-]+:[0-9]+\/[A-Za-z-]+$/;
+    // Validate the string against the regex
+    return rgbUriRegex.test(scannedStr);
+  };
+
   static getKeyPairByIndex = (
     xpriv: string,
     internal: boolean,
@@ -557,11 +564,6 @@ export default class WalletUtilities {
     } else if (WalletUtilities.isValidAddress(scannedStr, network)) {
       return {
         type: PaymentInfoKind.ADDRESS,
-        address: scannedStr,
-      };
-    } else if (WalletUtilities.isValidRGBAddress(scannedStr)) {
-      return {
-        type: PaymentInfoKind.RGB_INVOICE,
         address: scannedStr,
       };
     } else if (scannedStr.startsWith('lnbc')) {

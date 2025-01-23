@@ -74,9 +74,9 @@ const ModalContainer = (props: ModalContainerProps) => {
       backdropOpacity={0.8}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
-        <View style={styles.dashViewWrapper}>
+        <AppTouchable onPress={onDismiss} style={styles.dashViewWrapper}>
           <View style={styles.dashView} />
-        </View>
+        </AppTouchable>
         <View style={styles.headingWrapper}>
           <View style={styles.contentWrapper}>
             <AppText
@@ -129,7 +129,7 @@ const getStyles = (
       flexDirection: 'row',
       width: '100%',
       // alignItems: 'center',
-      marginBottom: hp(50),
+      marginBottom: hp(20),
     },
     contentWrapper: {
       width: enableCloseIcon ? '80%' : '100%',
@@ -140,9 +140,12 @@ const getStyles = (
     },
     titleText: {
       color: theme.colors.headingColor,
+      textAlign: 'center',
+      marginBottom: hp(3),
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
+      textAlign: 'center',
     },
     dashViewWrapper: {
       alignItems: 'center',

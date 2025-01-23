@@ -1,90 +1,46 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
+
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
 import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { PaymentInfoKind } from 'src/services/wallets/enums';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import WalletUtilities from 'src/services/wallets/operations/utils';
-import { RealmSchema } from 'src/storage/enum';
-
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
 
 function SendEnterAddress({
   onDismiss,
-  wallet,
+  onProceed,
 }: {
   onDismiss: any;
-  wallet: Wallet;
+  onProceed: (text: string) => void;
 }) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
   const [address, setAddress] = useState('');
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const [inputHeight, setInputHeight] = React.useState(100);
+  const styles = React.useMemo(
+    () => getStyles(theme, inputHeight),
+    [theme, inputHeight],
+  );
 
-  const onProceed = (paymentInfo: string) => {
-    if (paymentInfo.startsWith('lnbc')) {
-      navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
-        invoice: paymentInfo,
-      });
+  const handlePasteAddress = async () => {
+    const clipboardValue = await Clipboard.getString();
+    if (clipboardValue.startsWith('rgb:')) {
+      Keyboard.dismiss();
+      setAddress(clipboardValue);
       return;
     }
-    paymentInfo = paymentInfo.trim();
-    const network = WalletUtilities.getNetworkByType(
-      app.networkType,
-    );
-
-    let {
-      type: paymentInfoKind,
-      address,
-      amount,
-    } = WalletUtilities.addressDiff(paymentInfo, network);
-
-    if (amount) {
-      amount = Math.trunc(amount * 1e8);
-    } // convert from bitcoins to sats
-
-    switch (paymentInfoKind) {
-      case PaymentInfoKind.ADDRESS:
-        navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
-        break;
-      case PaymentInfoKind.PAYMENT_URI:
-        navigation.navigate(NavigationRoutes.SENDTO, {
-          wallet,
-          address,
-          paymentURIAmount: amount,
-        });
-        break;
-      case PaymentInfoKind.RGB_INVOICE:
-        navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-          wallet,
-          rgbInvoice: address,
-        });
-        break;
-      case PaymentInfoKind.RLN_INVOICE:
-        navigation.replace(NavigationRoutes.LIGHTNINGSEND, { invoice: value });
-        break;
-      default:
-        Toast(sendScreen.invalidBtcAddress, true);
-    }
-  };
-  const handlePasteAddress = async () => {
-    const getClipboardValue = await Clipboard.getString();
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
     let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
-      getClipboardValue,
+      clipboardValue,
       network,
     );
     if (paymentInfoKind) {
@@ -93,7 +49,11 @@ function SendEnterAddress({
     } else {
       Keyboard.dismiss();
       onDismiss();
-      Toast(sendScreen.invalidBtcAddress, true);
+      if (clipboardValue.startsWith('rgb:')) {
+        Toast(sendScreen.invalidRGBInvoiceAddress, true);
+      } else {
+        Toast(sendScreen.invalidBtcAddress, true);
+      }
     }
   };
 
@@ -107,13 +67,16 @@ function SendEnterAddress({
         returnKeyType={'Enter'}
         autoFocus={true}
         multiline={true}
-        numberOfLines={2}
+        onContentSizeChange={event => {
+          setInputHeight(event.nativeEvent.contentSize.height);
+        }}
+        numberOfLines={3}
         inputStyle={styles.inputStyle}
-        contentStyle={styles.contentStyle}
+        contentStyle={address ? styles.contentStyle : styles.contentStyle1}
         rightText={sendScreen.paste}
         onRightTextPress={() => handlePasteAddress()}
         rightCTAStyle={styles.rightCTAStyle}
-        rightCTATextColor={theme.colors.primaryCTAText}
+        rightCTATextColor={theme.colors.accent1}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -133,7 +96,7 @@ function SendEnterAddress({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, inputHeight) =>
   StyleSheet.create({
     primaryCTAContainer: {
       marginTop: hp(65),
@@ -146,16 +109,21 @@ const getStyles = (theme: AppTheme) =>
       width: '80%',
     },
     rightCTAStyle: {
-      backgroundColor: theme.colors.ctaBackColor,
       height: hp(40),
       width: hp(55),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
       marginHorizontal: hp(5),
     },
     contentStyle: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
       marginTop: 0,
+    },
+    contentStyle1: {
+      height: hp(50),
     },
   });
 export default SendEnterAddress;

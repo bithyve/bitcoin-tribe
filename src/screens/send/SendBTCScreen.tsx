@@ -1,28 +1,28 @@
-import React, { useState, useContext, useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import React, { useContext, useCallback } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { Code } from 'react-native-vision-camera';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
-import OptionCard from 'src/components/OptionCard';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import QRScanner from 'src/components/QRScanner';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import ModalContainer from 'src/components/ModalContainer';
-import SendEnterAddress from './components/SendEnterAddress';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
-import { Code } from 'react-native-vision-camera';
+import { hp } from 'src/constants/responsive';
+import OptionCard from 'src/components/OptionCard';
 
 function SendBTCScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const styles = getStyles(theme);
-  const [visible, setVisible] = useState(false);
-  const { receiveData, title, subTitle, wallet } = route.params;
+  const { title, subTitle, wallet } = route.params;
+
   const onCodeScanned = useCallback((codes: Code[]) => {
     const value = codes[0]?.value;
     if (value == null) {
@@ -52,37 +52,52 @@ function SendBTCScreen({ route, navigation }) {
         Toast(sendScreen.invalidBtcAddress, true);
     }
   }, []);
+
   return (
     <ScreenContainer>
-      <AppHeader title={title} subTitle={subTitle} enableBack={true} />
+      <AppHeader title={title} enableBack={true} />
       <View style={styles.scannerWrapper}>
-        {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
+        <QRScanner onCodeScanned={onCodeScanned} />
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}
-        subTitle={sendScreen.sendBtcOptionCardSubTitle}
         onPress={() => {
-          receiveData === 'send'
-            ? setVisible(true)
-            : navigation.navigate(NavigationRoutes.CONNECTNODEMANUALLY);
+          navigation.replace(NavigationRoutes.SENDTO, { wallet, address: '' });
         }}
       />
-      <ModalContainer
-        title={sendScreen.enterSendAddress}
-        subTitle={sendScreen.enterSendAdrsSubTitle}
-        visible={visible}
-        enableCloseIcon={false}
-        height={Platform.OS == 'ios' && '85%'}
-        onDismiss={() => setVisible(false)}>
-        <SendEnterAddress onDismiss={() => setVisible(false)} wallet={wallet} />
-      </ModalContainer>
     </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    keyboardAwareContainer: {
+      flex: 1,
+    },
+    keyboardAwareContent: {
+      flexGrow: 1,
+    },
     scannerWrapper: {
       flex: 1,
+    },
+    inputWrapper: {
+      paddingVertical: 16,
+    },
+    recipientAddressLabel: {
+      marginVertical: hp(10),
+      color: theme.colors.secondaryHeadingColor,
+    },
+    inputStyle: {
+      width: '80%',
+    },
+    contentStyle: {
+      marginTop: 0,
+    },
+    rightCTAStyle: {
+      height: hp(40),
+      width: hp(55),
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: hp(5),
     },
   });
 export default SendBTCScreen;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -7,25 +7,22 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
-import SendTXNIcon from 'src/assets/images/icon_senttxn.svg';
-import SendTXNIconLight from 'src/assets/images/icon_senttxn_light.svg';
-import RecieveTXNIcon from 'src/assets/images/icon_recievedtxn.svg';
-import RecieveTXNIconLight from 'src/assets/images/icon_recievedtxn_light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { RGBTransactionType } from 'src/services/wallets/enums';
 import { Transaction } from 'src/services/wallets/interfaces';
-import TransPendingIcon from 'src/assets/images/transaction_pending.svg';
-import TransPendingIconLight from 'src/assets/images/transaction_pending_light.svg';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
+import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
+import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
+import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
+import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
+import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
+import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
+import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type AssetTransactionProps = {
-  transId: string;
-  transDate: number;
-  transAmount: string;
-  transType: string;
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
@@ -33,19 +30,57 @@ type AssetTransactionProps = {
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const navigation = useNavigation();
-  const {
-    transId,
-    transDate,
-    transAmount,
-    transType,
-    backColor,
-    disabled,
-    transaction,
-    coin,
-  } = props;
+  const { translations } = useContext(LocalizationContext);
+  const { assets, settings } = translations;
+  const { backColor, disabled, transaction, coin } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  const getStatusIcon = (kind, status, type) => {
+    const icons = {
+      bitcoin: {
+        settled: {
+          send: <SentBtcIcon />,
+          receiveblind: <RecieveBtcIcon />,
+          issuance: <RecieveBtcIcon />,
+        },
+        waitingcounterparty: {
+          send: <WaitingCounterPartyIcon />,
+          receiveblind: <WaitingCounterPartyIcon />,
+        },
+        waitingconfirmations: {
+          send: <WaitingConfirmationIcon />,
+          receiveblind: <WaitingConfirmationIcon />,
+        },
+        failed: {
+          send: <FailedTxnIcon />,
+          receiveblind: <FailedTxnIcon />,
+          issuance: <FailedTxnIcon />,
+        },
+      },
+      lightning: {
+        settled: {
+          send: <SentLightningIcon />,
+          receiveblind: <RecieveLightningIcon />,
+          issuance: <RecieveLightningIcon />,
+        },
+        failed: {
+          send: <FailedTxnIcon />,
+          receiveblind: <FailedTxnIcon />,
+          issuance: <FailedTxnIcon />,
+        },
+      },
+    };
+
+    // Add a fallback for the default icons for Bitcoin and Lightning
+    const defaultIcons = {
+      bitcoin: <RecieveBtcIcon />,
+      lightning: <RecieveLightningIcon />,
+    };
+    // Return the icon based on kind, status, and type, or fall back to the default icon
+    return icons[type]?.[status]?.[kind] || defaultIcons[type];
+  };
 
   return (
     <AppTouchable
@@ -60,22 +95,10 @@ function AssetTransaction(props: AssetTransactionProps) {
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {props.transaction.confirmations === 0 ? (
-              isThemeDark ? (
-                <TransPendingIcon />
-              ) : (
-                TransPendingIconLight
-              )
-            ) : transType.toUpperCase() === RGBTransactionType.SEND ? (
-              isThemeDark ? (
-                <SendTXNIcon />
-              ) : (
-                <SendTXNIconLight />
-              )
-            ) : isThemeDark ? (
-              <RecieveTXNIcon />
-            ) : (
-              <RecieveTXNIconLight />
+            {getStatusIcon(
+              transaction.kind.toLowerCase().replace(/_/g, ''),
+              transaction.status.toLowerCase().replace(/_/g, ''),
+              'bitcoin',
             )}
           </View>
           <View style={styles.contentWrapper}>
@@ -84,10 +107,14 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transId}
+              {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
+                ? assets.issued
+                : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
-              {moment.unix(transDate).format('DD MMM YY  •  hh:mm a')}
+              {moment
+                .unix(transaction.createdAt)
+                .format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>
         </View>
@@ -98,10 +125,10 @@ function AssetTransaction(props: AssetTransactionProps) {
               style={[
                 styles.amountText,
                 {
-                  fontSize: transAmount.toString().length > 10 ? 11 : 16,
+                  fontSize: transaction.amount.toString().length > 10 ? 11 : 16,
                 },
               ]}>
-              &nbsp;{numberWithCommas(transAmount)}
+              &nbsp;{numberWithCommas(transaction.amount)}
             </AppText>
           </View>
           {/* {!disabled ? <IconArrow /> : null} */}

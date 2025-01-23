@@ -13,9 +13,14 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 interface ReceiveQrClipBoardProps {
   qrCodeValue: string;
   icon: React.ReactNode;
+  message?: string;
 }
 
-const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
+const ReceiveQrClipBoard = ({
+  qrCodeValue,
+  icon,
+  message,
+}: ReceiveQrClipBoardProps) => {
   const { translations } = React.useContext(LocalizationContext);
   const { common } = translations;
 
@@ -24,7 +29,7 @@ const ReceiveQrClipBoard = ({ qrCodeValue, icon }: ReceiveQrClipBoardProps) => {
 
   const handleCopyText = async (text: string) => {
     await Clipboard.setString(text);
-    Toast(common.addressCopiedSuccessfully);
+    Toast(message || common.addressCopiedSuccessfully);
   };
 
   return (

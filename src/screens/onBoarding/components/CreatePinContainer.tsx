@@ -19,8 +19,11 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RememberPasscode from './RememberPasscode';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-
-function CreatePinContainer() {
+type createPinProps = {
+  biometricProcess: boolean;
+};
+function CreatePinContainer(props: createPinProps) {
+  const { biometricProcess } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
@@ -38,7 +41,11 @@ function CreatePinContainer() {
     if (createPin.error) {
       Toast(onBoarding.errorSettingPin, true);
     } else if (createPin.isSuccess) {
-      setVisible(true);
+      if (!biometricProcess) {
+        setVisible(true);
+      } else {
+        navigation.goBack();
+      }
     }
   }, [createPin.error, createPin.isSuccess, createPin.data]);
 

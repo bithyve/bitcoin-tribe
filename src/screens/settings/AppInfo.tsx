@@ -17,7 +17,7 @@ function AppInfo({ navigation }) {
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   // const { version }: VersionHistory = useQuery(RealmSchema.VersionHistory)[0];
-  const { id } = app;
+  const { publicId } = app;
 
   return (
     <ScreenContainer>
@@ -27,7 +27,7 @@ function AppInfo({ navigation }) {
       />
       <AppInfoContainer
         navigation={navigation}
-        walletId={id}
+        walletId={publicId}
         version={`Tribe App ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`}
       />
     </ScreenContainer>

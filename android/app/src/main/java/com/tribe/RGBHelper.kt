@@ -13,8 +13,11 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
+import org.rgbtools.AssetUda
 import org.rgbtools.Balance
+import org.rgbtools.BtcBalance
 import org.rgbtools.Invoice
+import org.rgbtools.InvoiceData
 import org.rgbtools.Utxo
 import org.rgbtools.ReceiveData
 import org.rgbtools.Recipient
@@ -22,6 +25,7 @@ import org.rgbtools.RefreshFilter
 import org.rgbtools.RefreshTransferStatus
 import org.rgbtools.RgbLibException
 import org.rgbtools.Unspent
+import org.rgbtools.WalletData
 import org.rgbtools.restoreBackup
 import org.rgbtools.restoreKeys
 import java.io.File
@@ -45,6 +49,7 @@ object RGBHelper {
             var assets = RGBWalletRepository.wallet?.listAssets(listOf())
             val rgb25Assets = assets?.cfa
             val rgb20Assets = assets?.nia
+            val udaAssets = assets?.uda
             if (rgb20Assets != null) {
                 for (rgb20Asset in rgb20Assets) {
                     val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb20Asset.assetId, listOf(), false)
@@ -55,8 +60,12 @@ object RGBHelper {
                     val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, rgb25Asset.assetId, listOf(), false)
                 }
             }
+            if (udaAssets != null) {
+                for (udaAsset in udaAssets) {
+                    val assetRefresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, udaAsset.assetId, listOf(), false)
+                }
+            }
             assets = RGBWalletRepository.wallet?.listAssets(listOf())
-            Log.d(TAG, "syncRgbAssets: ${assets.toString()}")
             val gson = Gson()
             val json = gson.toJson(assets)
             json.toString()
@@ -65,22 +74,21 @@ object RGBHelper {
         }
     }
 
-    private fun startRGBReceiving(): String {
-
+    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null): String {
+        Log.d(TAG, "startRGBReceiving: assetID=$assetID, amount=$amount")
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
-        val blindedData = getBlindedUTXO(null, AppConstants.rgbBlindDuration)
+        val blindedData = getBlindedUTXO(if (assetID == "") null else assetID,if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
         val gson = Gson()
         val json = gson.toJson(blindedData)
         return json.toString()
-
     }
 
-    fun receiveAsset(): String {
-        return handleMissingFunds{ startRGBReceiving() }
+    fun receiveAsset(assetID: String, amount: ULong?): String {
+        return handleMissingFunds{ startRGBReceiving(assetID, amount) }
     }
 
     private fun <T> handleMissingFunds(callback: () -> T): T {
@@ -98,6 +106,8 @@ object RGBHelper {
                     throw Exception("Invalid invoice")
                 is RgbLibException.InvalidRecipientId ->
                     throw Exception("Invalid recipient ID")
+                is RgbLibException.AssetNotFound ->
+                    throw Exception("Asset not found")
                 else -> throw Exception(e.message)
             }
         }
@@ -111,11 +121,11 @@ object RGBHelper {
         return RGBWalletRepository.wallet?.getAssetBalance(assetID)
     }
 
-    private fun getBlindedUTXO(assetID: String? = null, expirationSeconds: UInt): ReceiveData? {
+    private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         Log.d(TAG, "getBlindedUTXO: assetID"+assetID)
         return RGBWalletRepository.wallet?.blindReceive(
             assetID,
-            null,
+            amount,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             0u
@@ -232,6 +242,37 @@ object RGBHelper {
         return  asset
     }
 
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): AssetUda? {
+        val asset = RGBWalletRepository.wallet?.issueAssetUda(
+            RGBWalletRepository.online!!,
+            name,
+            ticker,
+            details,
+            AppConstants.rgbDefaultPrecision,
+            mediaFilePath,
+            attachmentsFilePaths,
+        )
+        return  asset
+    }
+
+    fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.failTransfers(
+            RGBWalletRepository.online!!,
+            batchTransferIdx,
+            noAssetOnly,
+            skipSync
+        )
+        return status
+    }
+
+    fun deleteTransfers(batchTransferIdx: Int, noAssetOnly: Boolean): Boolean? {
+        val status = RGBWalletRepository.wallet?.deleteTransfers(
+            batchTransferIdx,
+            noAssetOnly,
+        )
+        return status
+    }
+
     private fun createUTXOs(feeRate: Float): UByte? {
         Log.d(TAG, "createUTXOs: tribe")
         return RGBWalletRepository.wallet?.createUtxos(
@@ -242,6 +283,10 @@ object RGBHelper {
             feeRate,
             false
         )
+    }
+
+    fun decodeInvoice(invoiceString: String): InvoiceData {
+        return Invoice(invoiceString).invoiceData()
     }
 
     fun createNewUTXOs(feeRate: Float): Boolean {
@@ -266,6 +311,14 @@ object RGBHelper {
 
     fun getUnspents(): List<Unspent>? {
         return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
+    }
+
+    fun getWalletData(): WalletData? {
+        return RGBWalletRepository.wallet?.getWalletData()
+    }
+
+    fun getBtcBalance(): BtcBalance? {
+        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,true)
     }
 
     fun refreshAsset(assetID: String) {
@@ -335,10 +388,14 @@ object RGBHelper {
 
     fun restore(password: String, filePath: String, context: ReactApplicationContext): String {
         try {
-            return restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath).toString()
+            restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath)
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("restore", true)
+            return jsonObject.toString()
         }catch (e: Exception){
-            Log.d(TAG, "Exception: $e")
-            return ""
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", "$e")
+            return jsonObject.toString()
         }
     }
 

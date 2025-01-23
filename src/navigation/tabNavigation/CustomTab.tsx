@@ -1,23 +1,19 @@
 import React, { useContext } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { wp, hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
-
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
 import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
-import CommunityActive from 'src/assets/images/icon_community_active.svg';
-import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
-import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
+import CollectiblesActive from 'src/assets/images/icon_collectibles_active.svg';
+import CollectiblesActiveLight from 'src/assets/images/icon_collectibles_active_light.svg';
+import CollectiblesInActive from 'src/assets/images/icon_collectibles_inactive.svg';
+// import CommunityActive from 'src/assets/images/icon_community_active.svg';
+// import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
+// import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
@@ -28,8 +24,6 @@ import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-
-const windowWidth = Dimensions.get('window').width;
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
@@ -50,15 +44,15 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         ) : (
           <AssetsInActive />
         );
-      case NavigationRoutes.COMMUNITY:
+      case NavigationRoutes.COLLECTIBLE:
         return isFocused ? (
           isThemeDark ? (
-            <CommunityActive />
+            <CollectiblesActive />
           ) : (
-            <CommunityActiveLight />
+            <CollectiblesActiveLight />
           )
         ) : (
-          <CommunityInActive />
+          <CollectiblesInActive />
         );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
@@ -78,8 +72,8 @@ const CustomTab = ({ state, descriptors, navigation }) => {
     switch (label) {
       case NavigationRoutes.ASSETS:
         return isFocused ? `${common.assets}` : '';
-      case NavigationRoutes.COMMUNITY:
-        return isFocused ? `${common.community}` : '';
+      case NavigationRoutes.COLLECTIBLE:
+        return isFocused ? `${common.collectibles}` : '';
       case NavigationRoutes.SETTINGS:
         return isFocused ? `${common.settings}` : '';
       default:
@@ -162,7 +156,7 @@ const getStyles = (theme: AppTheme) =>
       bottom: windowHeight > 670 ? hp(15) : hp(5),
       height: hp(68),
       width: '89%',
-      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(30),
+      marginBottom: Platform.OS === 'ios' ? hp(15) : hp(35),
       marginHorizontal: hp(16),
       // alignSelf: 'center',
       // marginHorizontal: windowWidth * 0.1,

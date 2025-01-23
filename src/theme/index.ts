@@ -66,6 +66,7 @@ type CustomColors = {
   successPopupTitleColor: string;
   popupCTABackColor: string;
   popupCTATitleColor: string;
+  popupSentCTATitleColor: string;
   popupText: string;
   suggestedText: string;
   btcCtaBackColor: string;
@@ -83,6 +84,14 @@ type CustomColors = {
   satsProgressRemaining: string;
   errorPopupBackColor: string;
   errorPopupBorderColor: string;
+  headerCardGradientColor: string;
+  popupSentCTABackColor: string;
+  assetCardGradient1: string;
+  assetCardGradient2: string;
+  assetCardGradient3: string;
+  assetCardVerticalBorder: string;
+  assetBalanceBackColor: string;
+  appBackupStepLabel: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -102,6 +111,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
+    headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -109,10 +119,12 @@ const CombinedDefaultTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.BrandeisBlue,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
-    inputBackground: Colors.White,
+    inputBackground: Colors.BrightGray,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
@@ -173,7 +185,13 @@ const CombinedDefaultTheme: AppTheme = {
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
     errorPopupBackColor: Colors.FireOpal2,
-    errorPopupBorderColor: Colors.FireOpal
+    errorPopupBorderColor: Colors.FireOpal,
+    assetCardGradient1: Colors.White,
+    assetCardGradient2: Colors.White,
+    assetCardGradient3: Colors.White,
+    assetCardVerticalBorder: Colors.Platinum,
+    assetBalanceBackColor: Colors.BrandeisBlue,
+    appBackupStepLabel: Colors.BrandeisBlue,
   },
   fonts: {
     regular: {
@@ -201,6 +219,7 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient1: Colors.EerieBlack,
     cardGradient2: Colors.VampireBlack,
     cardGradient3: Colors.ChineseBlack,
+    headerCardGradientColor: Colors.Black,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
     secondaryHeadingColor: Colors.SonicSilver,
@@ -208,7 +227,9 @@ const CombinedDarkTheme: AppTheme = {
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     popupCTABackColor: Colors.White,
+    popupSentCTABackColor: Colors.White,
     popupCTATitleColor: Colors.Black,
+    popupSentCTATitleColor: Colors.Black,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
@@ -272,7 +293,13 @@ const CombinedDarkTheme: AppTheme = {
     satsProgressFill: Colors.VioletsAreBlue,
     satsProgressRemaining: Colors.DeepSaffron,
     errorPopupBackColor: Colors.FireOpal2,
-    errorPopupBorderColor: Colors.FireOpal
+    errorPopupBorderColor: Colors.FireOpal,
+    assetCardGradient1: Colors.ZinnwalditeBrown,
+    assetCardGradient2: Colors.VampireBlack,
+    assetCardGradient3: Colors.SacramentoStateGreen,
+    assetCardVerticalBorder: Colors.Arsenic,
+    assetBalanceBackColor: Colors.Golden,
+    appBackupStepLabel: Colors.Golden,
   },
   fonts: {
     regular: {

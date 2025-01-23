@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -22,10 +22,11 @@ type TextFieldProps = {
   onChangeText: (text: string) => void;
   maxLength?: number;
   disabled?: boolean;
-  returnKeyType?: 'done' | 'Enter';
+  returnKeyType?: 'done' | 'Enter' | 'next';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
   rightText?: string;
+  rightIcon?: ReactNode;
   onRightTextPress?: () => void;
   rightCTAStyle?: StyleProp<TextStyle>;
   rightCTATextColor?: string;
@@ -37,6 +38,7 @@ type TextFieldProps = {
   numberOfLines?: number;
   onContentSizeChange?: (event) => void;
   secureTextEntry?: boolean;
+  autoCorrect?: boolean;
 };
 
 const TextField = (props: TextFieldProps) => {
@@ -52,6 +54,7 @@ const TextField = (props: TextFieldProps) => {
     onSubmitEditing,
     autoFocus = false,
     rightText,
+    rightIcon,
     onRightTextPress,
     rightCTAStyle,
     rightCTATextColor,
@@ -63,6 +66,7 @@ const TextField = (props: TextFieldProps) => {
     onContentSizeChange,
     contentStyle,
     secureTextEntry = false,
+    autoCorrect = false,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const theme: AppTheme = useTheme();
@@ -108,6 +112,7 @@ const TextField = (props: TextFieldProps) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         secureTextEntry={secureTextEntry}
+        autoCorrect={autoCorrect}
       />
       {rightText && (
         <AppTouchable
@@ -116,6 +121,13 @@ const TextField = (props: TextFieldProps) => {
           <AppText variant="smallCTA" style={styles.rightTextStyle}>
             {rightText}
           </AppText>
+        </AppTouchable>
+      )}
+      {rightIcon && (
+        <AppTouchable
+          style={[styles.rightTextWrapper, rightCTAStyle]}
+          onPress={onRightTextPress}>
+          {rightIcon}
         </AppTouchable>
       )}
     </View>

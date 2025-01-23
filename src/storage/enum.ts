@@ -9,6 +9,8 @@ export enum RealmSchema {
   Label = 'Label',
   Tags = 'Tags',
   Transaction = 'Transaction',
+  Input = 'Input',
+  Output = 'Output',
   TransactionToAddressMapping = 'TransactionToAddressMapping',
   WalletSpecs = 'WalletSpecs',
   DefaultNodeConnect = 'DefaultNodeConnect',

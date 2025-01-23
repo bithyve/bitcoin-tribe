@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -42,10 +46,12 @@ import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
+  const { issueAssetType } = useRoute().params;
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -63,10 +69,18 @@ function IssueScreen() {
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
-  const [assetType, setAssetType] = useState<AssetType>(AssetType.Coin);
+  const [assetType, setAssetType] = useState<AssetType>(
+    issueAssetType || AssetType.Coin,
+  );
   const [image, setImage] = useState('');
-
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const {
+    mutate: createUtxos,
+    error: createUtxoError,
+    data: createUtxoData,
+    reset: createUtxoReset,
+  } = useMutation(ApiHandler.createUtxos);
+  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  // const createUtxos = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
@@ -79,18 +93,24 @@ function IssueScreen() {
   }, [UnspentUTXOData]);
 
   useEffect(() => {
-    if (createUtxos.data) {
+    if (createUtxoData) {
       setLoading(true);
       setTimeout(onPressIssue, 500);
-    } else if (createUtxos.data === false) {
+    } else if (createUtxoError) {
       setLoading(false);
-      setTimeout(() => {
-        setVisibleFailedToCreatePopup(true);
-      }, 500);
-
+      createUtxoReset();
+      refreshRgbWalletMutation.mutate();
+      fetchUTXOs();
+      navigation.goBack();
+      Toast(
+        'An issue occurred while processing your request. Please try again.',
+        true,
+      );
+    } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
+      navigation.goBack();
     }
-  }, [createUtxos.data]);
+  }, [createUtxoData, createUtxoError]);
 
   useEffect(() => {
     viewUtxos.mutate();
@@ -110,13 +130,14 @@ function IssueScreen() {
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
-        navigation.dispatch(popAction);
+        // navigation.dispatch(popAction);
+        navigation.navigate(NavigationRoutes.ASSETS);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos.mutate();
+          createUtxos();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
@@ -150,13 +171,14 @@ function IssueScreen() {
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
-        navigation.dispatch(popAction);
+        // navigation.dispatch(popAction);
+        navigation.navigate(NavigationRoutes.COLLECTIBLE);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos.mutate();
+          createUtxos();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
@@ -238,7 +260,11 @@ function IssueScreen() {
           <InProgessPopupContainer
             title={assets.issueAssetLoadingTitle}
             subTitle={assets.issueAssetLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/issuingAsset.json') : require('src/assets/images/jsons/issuingAsset_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/issuingAsset.json')
+                : require('src/assets/images/jsons/issuingAsset_light.json')
+            }
           />
         </ResponsePopupContainer>
       </View>

@@ -24,6 +24,7 @@ import GradientView from 'src/components/GradientView';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -48,7 +49,7 @@ export const Item = ({ title, value }) => {
   );
 };
 
-const onShare = async (filePath) => {
+const onShare = async filePath => {
   try {
     const options = {
       url: filePath,
@@ -87,7 +88,7 @@ const CollectibleMetaDataScreen = () => {
             android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
             ios: `${collectible.media?.filePath}`, // Add file extension
           });
-          onShare(filePath)
+          onShare(filePath);
         }}
         style={styles.headerWrapper}
       />
@@ -120,10 +121,10 @@ const CollectibleMetaDataScreen = () => {
               title={assets.issuedSupply}
               value={
                 app.appType === AppType.NODE_CONNECT
-                  ? collectible.issuedSupply
+                  ? numberWithCommas(collectible.issuedSupply)
                   : collectible &&
                     collectible.metaData &&
-                    collectible.metaData.issuedSupply
+                    numberWithCommas(collectible.metaData.issuedSupply)
               }
             />
           </ScrollView>

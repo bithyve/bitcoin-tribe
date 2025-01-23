@@ -90,8 +90,8 @@ function SelectWallet() {
           )
         }
         onSettingsPress={() => {
-          SetSupportedMode(false)
-          setOpenAdvanceOptions(!openAdvanceOptions)
+          SetSupportedMode(false);
+          setOpenAdvanceOptions(!openAdvanceOptions);
         }}
       />
       <View style={styles.bodyWrapper}>
@@ -128,6 +128,7 @@ function SelectWallet() {
                   SetSupportedMode(false);
                   navigation.navigate(NavigationRoutes.RGBLIGHTNINGNODECONNECT);
                 }}
+                style={styles.selectTypeOptionWrapper}
               />
               <LearnMoreTextView
                 title={onBoarding.lightningLearnMoreInfo}
@@ -144,6 +145,7 @@ function SelectWallet() {
                     ? theme.colors.accent1
                     : theme.colors.borderColor
                 }
+                style={styles.selectTypeOptionWrapper}
               />
               <LearnMoreTextView
                 title={onBoarding.supportLearnMoreInfo}
@@ -285,6 +287,9 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '400',
       color: theme.colors.accent1,
       textDecorationLine: 'underline',
+    },
+    selectTypeOptionWrapper: {
+      marginTop: hp(15),
     },
   });
 export default SelectWallet;

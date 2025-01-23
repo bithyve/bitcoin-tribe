@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -7,7 +7,7 @@ import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -17,6 +17,7 @@ import { AppTheme } from 'src/theme';
 
 function AddAsset() {
   const navigation = useNavigation();
+  const { issueAssetType } = useRoute().params;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -40,7 +41,9 @@ function AddAsset() {
             ) {
               setVisible(true);
             } else {
-              navigation.navigate(NavigationRoutes.ISSUESCREEN);
+              navigation.navigate(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType: issueAssetType,
+              });
             }
           }}
           testID="issue_new"
@@ -89,12 +92,11 @@ function AddAsset() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: hp(25),
+      paddingTop: hp(20),
     },
     optionStyle: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
       paddingHorizontal: 20,
-      paddingVertical: windowHeight > 650 ? 25 : 20,
     },
   });
 export default AddAsset;

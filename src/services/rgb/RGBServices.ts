@@ -17,7 +17,6 @@ export default class RGBServices {
 
   static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
     const keys = await RGB.restoreKeys(this.NETWORK, mnemonic);
-    console.log('keys', keys);
     return JSON.parse(keys);
   };
 
@@ -98,6 +97,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
     asset_id?: string,
+    amount?: number,
   ): Promise<{
     batchTransferIdx?: number;
     expirationTimestamp?: number;
@@ -120,7 +120,7 @@ export default class RGBServices {
           return response;
         }
       } else {
-        const data = await RGB.receiveAsset();
+        const data = await RGB.receiveAsset(asset_id, amount);
         return JSON.parse(data);
       }
     } catch (error) {
@@ -232,6 +232,29 @@ export default class RGBServices {
     }
   };
 
+  static issueAssetUda = async (
+    name: string,
+    ticker: string,
+    details: string,
+    mediaFilePath: string,
+    attachmentsFilePaths: string[],
+    appType: AppType,
+    api: RLNNodeApiServices,
+  ): Promise<{}> => {
+    if (appType === AppType.NODE_CONNECT) {
+      // todo
+    } else {
+      const data = await RGB.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+      );
+      return JSON.parse(data);
+    }
+  };
+
   static sendAsset = async (
     assetId: string,
     blindedUTXO: string,
@@ -283,14 +306,39 @@ export default class RGBServices {
     }
   };
 
+  /**
+   * Set the status for eligible transfers to [`TransferStatus::Failed`]
+  */
+  static failTransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.failTransfer(batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
+  };
+
+  /**
+   * Delete eligible transfers from the database
+  */
+  static deleteransfer = async (
+    batchTransferIdx: Number,
+    noAssetOnly: boolean,
+  ): Promise<{ status: boolean; error?: string }> => {
+    const keys = await RGB.deleteransfer(batchTransferIdx, noAssetOnly);
+    return JSON.parse(keys);
+  };
+
   static getBtcBalance = async (api: RLNNodeApiServices) => {
     const response = await api.getBtcBalance({ skip_sync: false });
     return response;
   };
 
-  static backup = async (path: string, password: string): Promise<{
-    file: string,
-    error?: string
+  static backup = async (
+    path: string,
+    password: string,
+  ): Promise<{
+    file: string;
+    error?: string;
   }> => {
     const data = await RGB.backup(path, password);
     return JSON.parse(data);
@@ -303,11 +351,39 @@ export default class RGBServices {
 
   static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
     const data = await RGB.restore(mnemonic, filePath);
-    return data;
+    return JSON.parse(data);
   };
 
   static isValidBlindedUtxo = async (invoiceData: string): Promise<{}> => {
     const data = await RGB.isValidBlindedUtxo(invoiceData);
     return data;
+  };
+
+  static decodeInvoice = async (
+    invoiceString: string,
+  ): Promise<{
+    recipientId?: string;
+    expirationTimestamp?: number;
+    assetId?: string;
+    assetIface?: string;
+    network?: string;
+    transportEndpoints?: string;
+    error?: string;
+  }> => {
+    const data = await RGB.decodeInvoice(invoiceString);
+    return JSON.parse(data);
+  };
+
+  static getWalletData = async (): Promise<{
+    dataDir?: string;
+    bitcoinNetwork?: string;
+    databaseType?: string;
+    maxAllocationsPerUtxo?: string;
+    mnemonic?: string;
+    pubkey?: string;
+    vanillaKeychain?: string;
+  }> => {
+    const data = await RGB.getWalletData();
+    return JSON.parse(data);
   };
 }

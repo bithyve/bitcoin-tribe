@@ -94,8 +94,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      marginBottom: hp(15),
-      marginTop: Platform.OS === 'android' ? hp(15) : 0,
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
       alignItems: 'center',
     },
     iconContainer: {
@@ -111,11 +110,11 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     middleTitleWrapper: {
-      width: '70%',
+      width: '65%',
       alignItems: 'center',
     },
     rightIconWrapper: {
-      width: '15%',
+      width: '20%',
       alignItems: 'center',
     },
     detailsWrapper: {

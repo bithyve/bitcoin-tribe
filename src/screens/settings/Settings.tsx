@@ -1,8 +1,7 @@
 import React, { useContext, ReactNode, useState, useEffect } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import ReactNativeBiometrics from 'react-native-biometrics';
@@ -29,7 +28,6 @@ import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AppText from 'src/components/AppText';
 import SettingMenuItem from './components/SettingMenuItem';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys, Storage } from 'src/storage';
@@ -66,6 +64,7 @@ function SettingsScreen({ navigation }) {
   const styles = getStyles(theme);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
+  const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -102,11 +101,17 @@ function SettingsScreen({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    if (isEnableBiometrics && pinMethod === PinMethod.PIN) {
+      enableBiometrics();
+    }
+  }, [isEnableBiometrics, pinMethod]);
+
   const toggleBiometrics = () => {
     if (pinMethod === PinMethod.DEFAULT) {
-      Toast(onBoarding.createPinFirst, true);
+      setIsEnableBiometrics(true);
       navigation.navigate(NavigationRoutes.CREATEPIN, {
-        OnBoarding: false,
+        biometricProcess: true,
       });
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
@@ -154,7 +159,10 @@ function SettingsScreen({ navigation }) {
       id: 6,
       title: settings.setPasscodeTitle,
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.CREATEPIN),
+      onPress: () =>
+        navigation.navigate(NavigationRoutes.CREATEPIN, {
+          biometricProcess: false,
+        }),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     {
@@ -169,7 +177,7 @@ function SettingsScreen({ navigation }) {
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
-        setDarkTheme(!darkTheme)
+        setDarkTheme(!darkTheme);
       },
       toggleValue: darkTheme,
       enableSwitch: true,
@@ -203,19 +211,9 @@ function SettingsScreen({ navigation }) {
   ];
   return (
     <ScreenContainer>
-      <AppText variant="pageTitle2" style={styles.title}>
-        {settings.setting}
-      </AppText>
       <SettingMenuItem SettingsMenu={SettingsMenu} />
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    title: {
-      color: theme.colors.headingColor,
-      marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
-      marginBottom: hp(20),
-    },
-  });
+const getStyles = (theme: AppTheme) => StyleSheet.create({});
 export default SettingsScreen;

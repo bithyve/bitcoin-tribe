@@ -34,12 +34,12 @@ function RoundedCTA(props: RoundedCTAProps) {
     ],
     textColor = theme.colors.headingColor,
   } = props;
-  const styles = getStyles(width, buttonColor);
+  const styles = getStyles(width, buttonColor, height);
   return (
     <GradientView style={styles.ctaContainerStyle} colors={colors}>
       <Button
         icon={() => icon}
-        mode="outlined"
+        // mode="outlined"
         uppercase={false}
         labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}
@@ -53,27 +53,31 @@ function RoundedCTA(props: RoundedCTAProps) {
     </GradientView>
   );
 }
-const getStyles = (width, buttonColor) =>
+const getStyles = (width, buttonColor, height) =>
   StyleSheet.create({
     ctaContainerStyle: {
       borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      borderColor: buttonColor,
-      borderWidth: 0.5,
+      // borderColor: buttonColor,
+      // borderWidth: 0.5,
     },
     contentStyle: {
-      height: hp(48),
+      height: hp(40),
       width: width,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     labelStyle: {
       marginLeft: 8,
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      marginVertical: height,
     },
     roundedCTATitle: {
       fontSize: 16,
       fontFamily: Fonts.LufgaRegular,
-      lineHeight: 16 * 1.5,
-      height: 25,
+      lineHeight: 16 * 1.6,
       marginLeft: 10,
     },
   });

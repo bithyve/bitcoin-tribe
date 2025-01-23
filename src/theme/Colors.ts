@@ -47,6 +47,9 @@ const Colors = {
   DeepSaffron: 'rgba(255, 158, 62, 1)',
   VioletsAreBlue: 'rgba(161, 110, 255, 1)',
   Turquoise: 'rgba(71, 230, 212, 1)',
-  FireOpal2: 'rgba(28, 9, 9, 1)'
+  FireOpal2: 'rgba(28, 9, 9, 1)',
+  ZinnwalditeBrown: 'rgba(41, 34, 0, 1)',
+  SacramentoStateGreen: 'rgba(0, 49, 43, 1)',
+  BrightGray: 'rgba(233, 238, 239, 1)',
 };
 export default Colors;

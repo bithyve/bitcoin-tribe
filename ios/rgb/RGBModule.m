@@ -91,11 +91,23 @@ RCT_EXPORT_METHOD(syncRgbAssets:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
    ];
 }
 
-RCT_EXPORT_METHOD(receiveAsset:(RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(receiveAsset:(NSString*)assetID
+                  amount:(float)amount
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [
-    helper receiveAssetWithCallback:^(NSString * _Nonnull response) {
+    helper receiveAssetWithAssetID:assetID amount:amount callback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
+}
+
+RCT_EXPORT_METHOD(getWalletData:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper getWalletDataWithCallback:^(NSString * _Nonnull response) {
       resolve(response);
     }
    ];
@@ -162,6 +174,53 @@ RCT_EXPORT_METHOD(issueRgb25Asset:(NSString*) name
   [helper issueRgb121AssetWithName:name description:description supply:supply filePath:filePath callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
+}
+
+RCT_EXPORT_METHOD(issueAssetUda:(NSString*) name
+                  ticker:(NSString *)ticker
+                  details:(NSString *)details
+                  mediaFilePath:(NSString *)mediaFilePath
+                  attachmentsFilePaths:(NSArray<NSString *> *)attachmentsFilePaths
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [helper issueAssetUdaWithName:name ticker:ticker details:details mediaFilePath:mediaFilePath attachmentsFilePaths:attachmentsFilePaths callback:^(NSString * _Nonnull response) {
+    resolve(response);
+  }];
+}
+
+RCT_EXPORT_METHOD(decodeInvoice:(NSString*)invoiceString
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [helper decodeInvoiceWithInvoiceString:invoiceString callback:^(NSString * _Nonnull response) {
+    resolve(response);
+  }];
+}
+
+RCT_EXPORT_METHOD(deleteTransfers:(NSInteger)batchTransferIdx
+                  noAssetOnly:(BOOL *)noAssetOnly
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper deleteTransfersWithBatchTransferIdx:batchTransferIdx noAssetOnly:noAssetOnly callback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
+}
+
+
+RCT_EXPORT_METHOD(failTransfer:(NSInteger)batchTransferIdx
+                  noAssetOnly:(BOOL *)noAssetOnly
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+  RGBHelper *helper = [[RGBHelper alloc]init];
+  [
+    helper failTransferWithBatchTransferIdx:batchTransferIdx noAssetOnly:noAssetOnly callback:^(NSString * _Nonnull response) {
+      resolve(response);
+    }
+   ];
 }
 
 RCT_EXPORT_METHOD(backup:(NSString*)path

@@ -43,6 +43,7 @@ export enum TxPriorityDefault {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
+  CUSTOM = 'custom',
 }
 
 export enum TxPriority {
@@ -84,6 +85,7 @@ export enum PaymentInfoKind {
   PAYMENT_URI = 'paymentURI',
   RGB_INVOICE = 'rgbInvoice',
   RLN_INVOICE = 'rlninvoice',
+  RGB_INVOICE_URL = 'rgbInvoiceUrl',
 }
 
 export enum ScriptTypes {
@@ -104,7 +106,6 @@ export enum XpubTypes {
   'P2TR' = 'P2TR',
   'AMF' = 'AMF',
 }
-
 
 export enum ImportedKeyType {
   MNEMONIC = 'mnemonic',
@@ -129,4 +130,3 @@ export enum ImportedKeyType {
   UPRV = 'uprv',
   VPRV = 'vprv',
 }
-
