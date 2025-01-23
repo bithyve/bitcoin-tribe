@@ -7,7 +7,7 @@ import { useQuery as realmUseQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 // import GradientView from 'src/components/GradientView';
@@ -156,6 +156,8 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 onPressSend={onPressSend}
                 onPressRecieve={onPressRecieve}
                 onPressBuy={onPressBuy}
+                sendCtaWidth={wp(150)}
+                receiveCtaWidth={wp(150)}
               />
             </View>
           </View>
