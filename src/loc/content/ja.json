@@ -257,7 +257,9 @@
     "step1": "ステップ 1",
     "step2": "ステップ 2",
     "activateWalletTypeLabel": "ウォレットタイプ",
-    "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！"
+    "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！",
+    "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
+    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

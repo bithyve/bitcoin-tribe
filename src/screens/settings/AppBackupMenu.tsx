@@ -135,66 +135,83 @@ function AppBackupMenu({ navigation }) {
         enableBack={true}
         style={styles.headerWrapper}
       />
+      <View style={styles.bodyWrapper}>
+        {app.primaryMnemonic !== '' && (
+          <View style={styles.itemContainer}>
+            <AppText style={styles.textStep} variant="body1">
+              {settings.step1}
+            </AppText>
+            <SelectOption
+              title={settings.walletBackup}
+              subTitle={''}
+              onPress={() =>
+                backup
+                  ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
+                  : pinMethod !== PinMethod.DEFAULT
+                  ? setVisible(true)
+                  : navigation.navigate(NavigationRoutes.APPBACKUP, {
+                      viewOnly: false,
+                    })
+              }
+              backup={backup}
+            />
+            {backup ? (
+              <AppText style={styles.textSuccessMsg} variant="caption">
+                {settings.walletBackupSuccessMsg}
+              </AppText>
+            ) : (
+              <AppText variant="caption" style={styles.textSubtext}>
+                {settings.walletBackupInfo}
+              </AppText>
+            )}
+          </View>
+        )}
 
-      {app.primaryMnemonic !== '' && (
-        <View style={styles.itemContainer}>
-          <AppText style={styles.textStep} variant="body1">
-            {settings.step1}
-          </AppText>
-          <SelectOption
-            title={settings.walletBackup}
-            subTitle={''}
-            onPress={() =>
-              backup
-                ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
-                : pinMethod !== PinMethod.DEFAULT
-                ? setVisible(true)
-                : navigation.navigate(NavigationRoutes.APPBACKUP, {
-                    viewOnly: false,
-                  })
-            }
-            backup={backup}
-          />
-          <AppText variant="caption" style={styles.textSubtext}>
-            {settings.walletBackupInfo}
-          </AppText>
-        </View>
-      )}
-
-      {app.appType === AppType.ON_CHAIN && (
-        <View style={styles.itemContainer}>
-          <AppText style={styles.textStep} variant="body1">
-            {settings.step2}
-          </AppText>
-          <SelectOption
-            title={settings.rgbAssetsbackup}
-            subTitle={''}
-            onPress={() => {
-              !backup
-                ? Toast(settings.appBackupStepCheck, true)
-                : rgbAssetsbackup();
-            }}
-            backup={assetBackup}
-          />
-          <AppText style={styles.textStepTime}>
-            {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
-              'DD MMM YY  •  hh:mm a',
-            )}`}
-          </AppText>
-          <AppText variant="caption" style={styles.textSubtext}>
-            {settings.assetBackupInfo1}
-          </AppText>
-          <AppText variant="caption" style={styles.textSubtext}>
-            {settings.assetBackupInfo2}
-          </AppText>
-          <AppText variant="caption" style={styles.textSubtext}>
-            {settings.assetBackupInfo3}
-          </AppText>
-          <AppText variant="caption" style={styles.textSubtext}>
-            {settings.assetBackupInfo4}
-          </AppText>
-        </View>
-      )}
+        {app.appType === AppType.ON_CHAIN && (
+          <View style={styles.itemContainer}>
+            <AppText style={styles.textStep} variant="body1">
+              {settings.step2}
+            </AppText>
+            <SelectOption
+              title={settings.rgbAssetsbackup}
+              subTitle={''}
+              onPress={() => {
+                !backup
+                  ? Toast(settings.appBackupStepCheck, true)
+                  : rgbAssetsbackup();
+              }}
+              backup={assetBackup}
+            />
+            {assetBackup ? (
+              <AppText style={styles.textSuccessMsg} variant="caption">
+                {settings.assetBackupSuccessMsg}
+              </AppText>
+            ) : (
+              <>
+                <AppText variant="caption" style={styles.textSubtext}>
+                  {settings.assetBackupInfo1}
+                </AppText>
+                <AppText variant="caption" style={styles.textSubtext}>
+                  {settings.assetBackupInfo2}
+                </AppText>
+                <AppText variant="caption" style={styles.textSubtext}>
+                  {settings.assetBackupInfo3}
+                </AppText>
+                <AppText variant="caption" style={styles.textSubtext}>
+                  {settings.assetBackupInfo4}
+                </AppText>
+              </>
+            )}
+          </View>
+        )}
+      </View>
+      <View>
+        <AppText style={styles.textStepTime} variant="caption">
+          {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
+            'DD MMM YY  •  hh:mm a',
+          )}`}
+        </AppText>
+      </View>
       <ModalLoading visible={isLoading} />
       <EnterPasscodeModal
         title={settings.EnterPasscode}
@@ -238,10 +255,19 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(5),
       marginHorizontal: hp(15),
     },
+    textSuccessMsg: {
+      color: theme.colors.greenText,
+      textAlign: 'justify',
+      marginTop: hp(5),
+      marginHorizontal: hp(15),
+    },
     textStepTime: {
       color: theme.colors.greenText,
-      marginHorizontal: hp(15),
       marginBottom: hp(5),
+      textAlign: 'center',
+    },
+    bodyWrapper: {
+      height: '75%',
     },
   });
 export default AppBackupMenu;

@@ -257,7 +257,9 @@
     "step1": "Paso 1",
     "step2": "Paso 2",
     "activateWalletTypeLabel": "Tipo de Billetera",
-    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!"
+    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!",
+    "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
+    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

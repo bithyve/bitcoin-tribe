@@ -257,7 +257,9 @@
     "step1": "Passo 1",
     "step2": "Passo 2",
     "activateWalletTypeLabel": "Tipo di Wallet",
-    "copyWalletIDMsg": "ID del portafoglio copiato con successo!"
+    "copyWalletIDMsg": "ID del portafoglio copiato con successo!",
+    "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
+    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
