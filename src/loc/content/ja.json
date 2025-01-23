@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "取引が正常にブロードキャストされました",
     "invalidBtcAddress": "無効なビットコインアドレス",
     "invalidRGBInvoiceAddress": "無効なRGBインボイス",
+    "invalidBtcAndRgbInput": "無効なビットコインアドレスまたはRGB請求書です。",
     "sentSuccessfully": "正常に送信されました",
     "amountMoreThanSpend": "入力された金額が利用可能な金額を超えています",
     "transFeeErrMsg": "エラー: 取引手数料の情報が不足しています",

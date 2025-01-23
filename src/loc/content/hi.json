@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है",
     "invalidBtcAddress": "अमान्य बिटकॉइन पता",
     "invalidRGBInvoiceAddress": "अमान्य RGB इनवॉइस",
+    "invalidBtcAndRgbInput": "अमान्य बिटकॉइन पता या आरजीबी चालान।",
     "sentSuccessfully": "सफलतापूर्वक भेजा गया",
     "amountMoreThanSpend": "दर्ज की गई राशि खर्च करने के लिए उपलब्ध राशि से अधिक है",
     "transFeeErrMsg": "त्रुटि: लेनदेन शुल्क इंटेल गायब है",

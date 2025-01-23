@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "交易已成功广播",
     "invalidBtcAddress": "无效的比特币地址",
     "invalidRGBInvoiceAddress": "无效的 RGB 发票",
+    "invalidBtcAndRgbInput": "无效的比特币地址或 RGB 发票。",
     "sentSuccessfully": "发送成功",
     "amountMoreThanSpend": "输入的金额超过了可支配金额",
     "transFeeErrMsg": "错误：交易费用信息缺失",

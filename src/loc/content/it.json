@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "La transazione è stata trasmessa con successo",
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "invalidRGBInvoiceAddress": "Fattura RGB non valida",
+    "invalidBtcAndRgbInput": "Indirizzo Bitcoin o fattura RGB non valido.",
     "sentSuccessfully": "Inviato con successo",
     "amountMoreThanSpend": "L'importo inserito è superiore a quello disponibile per la spesa",
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",

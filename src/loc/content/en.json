@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "The transaction has been broadcasted successfully",
     "invalidBtcAddress": "Invalid Bitcoin address",
     "invalidRGBInvoiceAddress": "Invalid RGB invoice",
+    "invalidBtcAndRgbInput": "Invalid Bitcoin address or RGB invoice.",
     "sentSuccessfully": "Sent successfully",
     "amountMoreThanSpend": "Amount entered is more than available to spend",
     "transFeeErrMsg": "Error: Transaction Fee intel missing",

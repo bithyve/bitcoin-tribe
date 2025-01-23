@@ -120,11 +120,7 @@ function SendScreen({ route, navigation }) {
           });
           break;
         default:
-          if (value.startsWith('rgb:')) {
-            Toast(sendScreen.invalidRGBInvoiceAddress, true);
-          } else {
-            Toast(sendScreen.invalidBtcAddress, true);
-          }
+          Toast(sendScreen.invalidBtcAndRgbInput, true);
       }
     },
     [wallet, navigation],

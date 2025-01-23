@@ -293,6 +293,7 @@
     "sendSuccessSubTitle": "La transacción se ha transmitido con éxito",
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "invalidRGBInvoiceAddress": "Factura RGB no válida",
+    "invalidBtcAndRgbInput": "Dirección de Bitcoin o factura RGB no válida.",
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
