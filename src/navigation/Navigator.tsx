@@ -64,6 +64,10 @@ import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 import ViewLogs from 'src/screens/settings/ViewLogs';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useTheme } from 'react-native-paper';
+import { AppTheme } from 'src/theme';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -283,8 +287,22 @@ function AppStack() {
 }
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const theme: AppTheme = useTheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        dark: isThemeDark,
+        colors: {
+          background: theme.colors.primaryBackground,
+          border: theme.colors.primaryBackground,
+          card: theme.colors.primaryBackground,
+          notification: '',
+          primary: '',
+          text: '',
+        },
+      }}>
       <RGBWalletStatus />
 
       <Stack.Navigator screenOptions={{ headerShown: false }}>
