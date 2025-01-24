@@ -5,11 +5,13 @@ import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import UseRGBAssetIllustration from 'src/assets/images/useRGBAsset.svg';
+import UseRGBAssetIllustrationLight from 'src/assets/images/useRGBAsset_light.svg';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 import SecondaryCTA from 'src/components/SecondaryCTA';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
 type UseRGBAssetProps = {
   title: string;
@@ -35,10 +37,14 @@ function UseRGBAssetPopupContainer(props: UseRGBAssetProps) {
         </AppText>
       </View>
       <View style={styles.illustrationWrapper}>
-        <UseRGBAssetIllustration />
+        {isThemeDark ? (
+          <UseRGBAssetIllustration />
+        ) : (
+          <UseRGBAssetIllustrationLight />
+        )}
       </View>
       <View>
-        <SecondaryCTA
+        <PrimaryCTA
           onPress={onPress}
           title={common.understood}
           width={hp(200)}
