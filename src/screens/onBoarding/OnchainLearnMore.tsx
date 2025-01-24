@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,13 +9,16 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import OnchainLearnMoreIllustration from 'src/assets/images/onchainLearnMoreIllustration.svg';
+import OnchainLearnMoreIllustrationLight from 'src/assets/images/onchainLearnMoreIllustration_light.svg';
 import AppText from 'src/components/AppText';
+import { Keys } from 'src/storage';
 
 function OnchainLearnMore() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { onBoarding } = translations;
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.mainnet} />
@@ -25,7 +29,11 @@ function OnchainLearnMore() {
           </AppText>
         </View>
         <View style={styles.illustrationWrapper}>
-          <OnchainLearnMoreIllustration />
+          {isThemeDark ? (
+            <OnchainLearnMoreIllustration />
+          ) : (
+            <OnchainLearnMoreIllustrationLight />
+          )}
         </View>
         <View>
           <View style={styles.contentWrapper}>
