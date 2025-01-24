@@ -37,7 +37,6 @@ function SendScreen({ route, navigation }) {
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const allAssets: Asset[] = [...coins, ...collectibles];
-
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
       setIsScanning(false);

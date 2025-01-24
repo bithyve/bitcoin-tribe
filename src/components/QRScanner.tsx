@@ -32,7 +32,6 @@ type QRScannerProps = {
 
 const QRScanner = (props: QRScannerProps) => {
   const { onCodeScanned, isScanning = true } = props;
-  console.log('isScanning', isScanning);
   const device = useCameraDevice('back');
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
