@@ -15,6 +15,7 @@ import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import AllocatedAssets from './components/AllocatedAssets';
 
 type UnspentUTXOElementProps = {
   transID: string;
@@ -55,6 +56,7 @@ function UnspentUTXOElement({
         theme.colors.cardGradient2,
         theme.colors.cardGradient3,
       ]}>
+      <View></View>
       <View>
         {rgbAllocations?.map(allocation => {
           const assetName = allocation.assetId
@@ -63,9 +65,15 @@ function UnspentUTXOElement({
           return (
             allocation.assetId && (
               <View key={allocation.assetId} style={styles.allocationWrapper}>
-                <AppText variant="heading3" style={styles.assetNameText}>
-                  {assetName}
-                </AppText>
+                <View style={styles.allocationWrapper1}>
+                  <AllocatedAssets
+                    assets={assets}
+                    assetId={allocation.assetId}
+                  />
+                  <AppText variant="heading3" style={styles.assetNameText}>
+                    {assetName}
+                  </AppText>
+                </View>
                 <AppText variant="body2" style={styles.assetAmountText}>
                   {numberWithCommas(allocation.amount)}
                 </AppText>
@@ -173,6 +181,7 @@ const getStyles = (theme: AppTheme) =>
     },
     assetNameText: {
       color: theme.colors.headingColor,
+      marginLeft: hp(10),
     },
     labelTextStyle: {
       color: theme.colors.secondaryHeadingColor,
@@ -184,6 +193,10 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginBottom: hp(12),
+    },
+    allocationWrapper1: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     amtIconWrapper: {
       flex: 1,
