@@ -137,7 +137,7 @@ export interface RgbUnspent {
 export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
-  UDA = 'UDA'
+  UDA = 'UDA',
 }
 
 export enum AssetFace {
@@ -145,12 +145,17 @@ export enum AssetFace {
   RGB20 = 'RGB20',
 }
 
+export enum UtxoType {
+  Coloured = 'Coloured',
+  Uncoloured = 'Uncoloured',
+}
+
 export interface RgbNodeConnectParams {
   nodeUrl: string;
   nodeId: string;
   authentication: string;
   peerDNS?: string;
-  mnemonic?: string
+  mnemonic?: string;
 }
 
 export interface NodeInfo {

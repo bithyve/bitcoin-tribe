@@ -375,7 +375,7 @@
     "transferDetails": "转账详情",
     "viewUnspent": "查看未花费的UTXO",
     "walletRefreshMsg": "钱包更新成功",
-    "unspentTitle": "RGB UTXO列表",
+    "unspentTitle": "未使用交易输出概览",
     "satsAmount": "Sats金额",
     "rgbAssetID": "RGB资产ID",
     "testSatsRecived": "接收测试Sats",
@@ -387,7 +387,11 @@
     "bitcoin": "比特币",
     "reserveAmtText": "为资产交易保留",
     "requestTSatsTitle": "请求测试 Sats",
-    "requestTSatSubTitle": "请加入我们的Telegram群组以接收测试Sats，体验RGB的乐趣。"
+    "requestTSatSubTitle": "请加入我们的Telegram群组以接收测试Sats，体验RGB的乐趣。",
+    "coloured": "彩色",
+    "unColoured": "非彩色",
+    "availableTxnFee": "可用交易费",
+    "output": "输出"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

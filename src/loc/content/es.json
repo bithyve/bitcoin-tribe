@@ -375,7 +375,7 @@
     "transferDetails": "Detalles de la transferencia",
     "viewUnspent": "Ver UTXOs no gastados",
     "walletRefreshMsg": "Billetera actualizada con éxito",
-    "unspentTitle": "Lista de UTXO RGB",
+    "unspentTitle": "Descripción general de UTXOs",
     "satsAmount": "Cantidad de sats",
     "rgbAssetID": "ID de activo RGB",
     "testSatsRecived": "Pruebas recibidas",
@@ -387,7 +387,11 @@
     "bitcoin": "Bitcoin",
     "reserveAmtText": "Reservado para transacciones de activos",
     "requestTSatsTitle": "Solicitar Sats de Prueba",
-    "requestTSatSubTitle": "Únete a nuestro grupo de Telegram para recibir sats de prueba y disfrutar experimentando con RGB."
+    "requestTSatSubTitle": "Únete a nuestro grupo de Telegram para recibir sats de prueba y disfrutar experimentando con RGB.",
+    "coloured": "Coloreado",
+    "unColoured": "Sin color",
+    "availableTxnFee": "Tarifa de transacción disponible",
+    "output": "Salida"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

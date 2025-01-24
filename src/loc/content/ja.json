@@ -375,7 +375,7 @@
     "transferDetails": "転送の詳細",
     "viewUnspent": "未使用UTXOを表示",
     "walletRefreshMsg": "ウォレットが正常に更新されました",
-    "unspentTitle": "RGB UTXOの一覧",
+    "unspentTitle": "未使用トランザクション出力（UTXO）の概要",
     "satsAmount": "サットの金額",
     "rgbAssetID": "RGBアセットID",
     "testSatsRecived": "テストサットを受信しました",
@@ -387,7 +387,11 @@
     "bitcoin": "ビットコイン",
     "reserveAmtText": "資産取引のために予約済み",
     "requestTSatsTitle": "テストサッツをリクエスト",
-    "requestTSatSubTitle": "テストサッツを受け取り、RGBを楽しむために、私たちのTelegramグループに参加してください。"
+    "requestTSatSubTitle": "テストサッツを受け取り、RGBを楽しむために、私たちのTelegramグループに参加してください。",
+    "coloured": "カラード",
+    "unColoured": "無色",
+    "availableTxnFee": "利用可能な取引手数料",
+    "output": "出力"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

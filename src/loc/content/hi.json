@@ -375,7 +375,7 @@
     "transferDetails": "स्थानांतरण विवरण",
     "viewUnspent": "अनस्पेंट UTXOs देखें",
     "walletRefreshMsg": "वॉलेट सफलतापूर्वक अपडेट किया गया",
-    "unspentTitle": "आरजीबी यूटीएक्सओ की सूची",
+    "unspentTitle": "UTXOs का अवलोकन",
     "satsAmount": "सैट्स राशि",
     "rgbAssetID": "आरजीबी एसेट आईडी",
     "testSatsRecived": "टेस्ट-सैट्स प्राप्त हुए",
@@ -387,7 +387,11 @@
     "bitcoin": "बिटकॉइन",
     "reserveAmtText": "संपत्ति लेनदेन के लिए आरक्षित",
     "requestTSatsTitle": "टेस्ट सैट्स का अनुरोध करें",
-    "requestTSatSubTitle": "कृपया टेस्ट सैट्स प्राप्त करने और RGB के साथ खेलने का आनंद लेने के लिए हमारे टेलीग्राम समूह में शामिल हों।"
+    "requestTSatSubTitle": "कृपया टेस्ट सैट्स प्राप्त करने और RGB के साथ खेलने का आनंद लेने के लिए हमारे टेलीग्राम समूह में शामिल हों।",
+    "coloured": "रंगीन",
+    "unColoured": "बिना रंग का",
+    "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
+    "output": "आउटपुट"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
