@@ -21,9 +21,9 @@ function LearnMoreTextView(props: LearnMoreTextViewProps) {
     <View style={styles.learnMoreWrapper1}>
       <Text style={styles.learnMoreTitleText}>
         {title}&nbsp;
-        {/* <Text style={styles.learnMoreText} onPress={onPress}>
+        <Text style={styles.learnMoreText} onPress={onPress}>
           {onBoarding.learnMore}
-        </Text> */}
+        </Text>
       </Text>
     </View>
   );

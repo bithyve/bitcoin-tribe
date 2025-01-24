@@ -64,6 +64,9 @@ import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 import ViewLogs from 'src/screens/settings/ViewLogs';
+import OnchainLearnMore from 'src/screens/onBoarding/OnchainLearnMore';
+import LNLearnMore from 'src/screens/onBoarding/LNLearnMore';
+import SupportLearnMore from 'src/screens/onBoarding/SupportLearnMore';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -106,6 +109,18 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.IMPORTRGBBACKUP}
         component={ImportRgbBackup}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ONCHAINLEARNMORE}
+        component={OnchainLearnMore}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.LNLEARNMORE}
+        component={LNLearnMore}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORTLEARNMORE}
+        component={SupportLearnMore}
       />
     </Stack.Navigator>
   );
