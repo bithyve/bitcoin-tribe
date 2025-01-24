@@ -31,6 +31,7 @@ function SendScreen({ route, navigation }) {
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
+  const [isScanning, setIsScanning] = useState(true);
   const { receiveData, title, subTitle, wallet } = route.params;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -39,10 +40,12 @@ function SendScreen({ route, navigation }) {
 
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
+      setIsScanning(false);
       const { codes, paymentInfo } = input;
       const value = paymentInfo || codes?.[0]?.value;
 
       if (!value) {
+        setIsScanning(true);
         return;
       }
       if (value.startsWith('rgb:')) {
@@ -54,42 +57,38 @@ function SendScreen({ route, navigation }) {
           );
           if (!assetData) {
             // setValidatingInvoiceLoader(false);
+            setIsScanning(true);
             Toast(assets.assetNotFoundMsg, true);
-            setTimeout(() => {
-              navigation.goBack();
-            }, 1000);
+            navigation.goBack();
           } else {
             // setValidatingInvoiceLoader(false);
-            setTimeout(() => {
-              navigation.replace(NavigationRoutes.SENDASSET, {
-                assetId: res.assetId,
-                wallet: wallet,
-                rgbInvoice: value,
-                amount: res.amount.toString(),
-              });
-            }, 1000);
+            setIsScanning(true);
+            navigation.replace(NavigationRoutes.SENDASSET, {
+              assetId: res.assetId,
+              wallet: wallet,
+              rgbInvoice: value,
+              amount: res.amount.toString(),
+            });
           }
         } else {
           // setValidatingInvoiceLoader(false);
-          setTimeout(() => {
-            navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-              wallet,
-              rgbInvoice: value,
-              assetID: '',
-              amount: '',
-            });
-          }, 1000);
+          setIsScanning(true);
+          navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+            wallet,
+            rgbInvoice: value,
+            assetID: '',
+            amount: '',
+          });
         }
         return;
       }
-
       if (value.startsWith('lnbc')) {
+        setIsScanning(true);
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
           invoice: value,
         });
         return;
       }
-
       const network = WalletUtilities.getNetworkByType(
         paymentInfo ? app.networkType : config.NETWORK_TYPE,
       );
@@ -105,9 +104,11 @@ function SendScreen({ route, navigation }) {
 
       switch (paymentInfoKind) {
         case PaymentInfoKind.ADDRESS:
+          setIsScanning(true);
           navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
           break;
         case PaymentInfoKind.PAYMENT_URI:
+          setIsScanning(true);
           navigation.navigate(NavigationRoutes.SENDTO, {
             wallet,
             address,
@@ -115,11 +116,13 @@ function SendScreen({ route, navigation }) {
           });
           break;
         case PaymentInfoKind.RLN_INVOICE:
+          setIsScanning(true);
           navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
             invoice: value,
           });
           break;
         default:
+          setIsScanning(true);
           Toast(sendScreen.invalidBtcAndRgbInput, true);
       }
     },
@@ -140,7 +143,9 @@ function SendScreen({ route, navigation }) {
         <ModalLoading visible={validatingInvoiceLoader} />
       </View> */}
       <View style={styles.scannerWrapper}>
-        {!visible && <QRScanner onCodeScanned={onCodeScanned} />}
+        {!visible && (
+          <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />
+        )}
       </View>
       <OptionCard
         title={sendScreen.optionCardTitle}

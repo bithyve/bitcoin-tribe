@@ -27,15 +27,16 @@ import Toast from './Toast';
 
 type QRScannerProps = {
   onCodeScanned: (codes: Code[]) => void;
+  isScanning: boolean;
 };
 
 const QRScanner = (props: QRScannerProps) => {
-  const { onCodeScanned } = props;
+  const { onCodeScanned, isScanning = true } = props;
+  console.log('isScanning', isScanning);
   const device = useCameraDevice('back');
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const [cameraPermission, setCameraPermission] = useState(null);
-  // const [isScanning, setIsScanning] = useState(true);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
@@ -130,15 +131,15 @@ const QRScanner = (props: QRScannerProps) => {
         <>
           <View style={styles.qrCodeContainer}>
             <>
-              {/* {isScanning && ( */}
-              <Camera
-                device={device}
-                isActive={true}
-                style={styles.visionCameraContainer}
-                codeScanner={codeScanner}
-                enableZoomGesture={true}
-              />
-              {/* )} */}
+              {isScanning && (
+                <Camera
+                  device={device}
+                  isActive={true}
+                  style={styles.visionCameraContainer}
+                  codeScanner={codeScanner}
+                  enableZoomGesture={true}
+                />
+              )}
               <View
                 style={[styles.visionCameraContainer, styles.outSideBorder]}>
                 <View style={styles.scannerInnerBorderWrapper}>
