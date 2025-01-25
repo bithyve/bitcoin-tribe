@@ -43,9 +43,13 @@ function UnspentUTXOElement({
   const assetMap = React.useMemo(() => {
     if (!assets) return {};
     return assets.reduce((map, asset) => {
-      map[asset.assetId] = asset.name;
+      map[asset.assetId] = {
+        assetId: asset.assetId, // Include assetId
+        name: asset.name, // Include the name
+        ...asset, // Include the full asset object if needed
+      };
       return map;
-    }, {} as Record<string, string>);
+    }, {} as Record<string, { assetId: string; name: string } & (typeof assets)[0]>);
   }, [assets]);
 
   return (
@@ -60,16 +64,13 @@ function UnspentUTXOElement({
       <View>
         {rgbAllocations?.map(allocation => {
           const assetName = allocation.assetId
-            ? assetMap[allocation.assetId]
+            ? assetMap[allocation.assetId]?.name
             : null;
           return (
             allocation.assetId && (
               <View key={allocation.assetId} style={styles.allocationWrapper}>
                 <View style={styles.allocationWrapper1}>
-                  <AllocatedAssets
-                    assets={assets}
-                    assetId={allocation.assetId}
-                  />
+                  <AllocatedAssets assets={assetMap[allocation.assetId]} />
                   <AppText variant="heading3" style={styles.assetNameText}>
                     {assetName}
                   </AppText>

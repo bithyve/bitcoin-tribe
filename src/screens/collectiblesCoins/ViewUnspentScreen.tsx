@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -30,6 +30,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import ModalLoading from 'src/components/ModalLoading';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -100,8 +101,10 @@ const ViewUnspentScreen = () => {
             label: wallet.unColoured,
           },
         ]}
-        // style={styles.segmentedButtonsStyle}
       />
+      <View>
+        <ModalLoading visible={isLoading} />
+      </View>
       <FlatList
         data={
           utxoType === UtxoType.Coloured

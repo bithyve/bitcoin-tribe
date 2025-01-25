@@ -3,32 +3,29 @@ import { View, Image, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import Identicon from 'src/components/Identicon';
+import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 
-const AllocatedAssets = ({ assets, assetId }) => {
+type allocatedAssetsProps = {
+  assets: Coin | Collectible;
+};
+const AllocatedAssets = ({ assets }: allocatedAssetsProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
-  const filteredAssets = assets.filter(asset => asset.assetId === assetId);
-
+  const { assetId, media } = assets;
   return (
     <View style={styles.container}>
-      {filteredAssets.map(asset => (
-        <View key={asset.assetId}>
-          {asset.media && asset.media.filePath ? (
-            <Image
-              source={{ uri: asset.media?.filePath }}
-              style={styles.assetImage}
-              resizeMode="contain"
-            />
-          ) : (
-            <Identicon
-              value={asset?.assetId}
-              style={styles.identiconView}
-              size={30}
-            />
-          )}
-        </View>
-      ))}
+      <View key={assetId}>
+        {media && media.filePath ? (
+          <Image
+            source={{ uri: media?.filePath }}
+            style={styles.assetImage}
+            resizeMode="contain"
+          />
+        ) : (
+          <Identicon value={assetId} style={styles.identiconView} size={30} />
+        )}
+      </View>
     </View>
   );
 };
