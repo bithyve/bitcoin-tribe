@@ -12,6 +12,7 @@ import OnchainLearnMoreIllustration from 'src/assets/images/onchainLearnMoreIllu
 import OnchainLearnMoreIllustrationLight from 'src/assets/images/onchainLearnMoreIllustration_light.svg';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
+import LearnMoreContentSection from './components/learnMoreContentSection';
 
 function OnchainLearnMore() {
   const theme: AppTheme = useTheme();
@@ -28,44 +29,26 @@ function OnchainLearnMore() {
             {onBoarding.onChainLearnMoreSubTitle}
           </AppText>
         </View>
-        <View style={styles.illustrationWrapper}>
-          {isThemeDark ? (
-            <OnchainLearnMoreIllustration />
-          ) : (
-            <OnchainLearnMoreIllustrationLight />
-          )}
-        </View>
-        <View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.onchainLearnMoreLabel1}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.onchainLearnMoreContent1}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.onchainLearnMoreLabel2}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.onchainLearnMoreContent2}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.onchainLearnMoreLabel3}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.onchainLearnMoreContent3}
-            </AppText>
-          </View>
-          <View>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.onchainLearnMoreContent4}
-            </AppText>
-          </View>
-        </View>
+        <LearnMoreContentSection
+          title={onBoarding.onchainLearnMoreLabel1}
+          subtitle={onBoarding.onchainLearnMoreContent1}
+          illustration={
+            isThemeDark ? (
+              <OnchainLearnMoreIllustration />
+            ) : (
+              <OnchainLearnMoreIllustrationLight />
+            )
+          }
+        />
+        <LearnMoreContentSection
+          title={onBoarding.onchainLearnMoreLabel2}
+          subtitle={onBoarding.onchainLearnMoreContent2}
+        />
+        <LearnMoreContentSection
+          title={onBoarding.onchainLearnMoreLabel3}
+          subtitle={onBoarding.onchainLearnMoreContent3}
+        />
+        <LearnMoreContentSection title={onBoarding.onchainLearnMoreContent4} />
       </ScrollView>
     </ScreenContainer>
   );
@@ -73,20 +56,9 @@ function OnchainLearnMore() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {},
-    illustrationWrapper: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: hp(30),
-    },
-    contentWrapper: {
-      marginVertical: hp(10),
-    },
     titleText: {
       color: theme.colors.headingColor,
       marginBottom: hp(3),
-    },
-    subTitleText: {
-      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default OnchainLearnMore;

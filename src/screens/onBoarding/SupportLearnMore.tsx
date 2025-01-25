@@ -9,6 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SupportIllustration from 'src/assets/images/supportLearnMoreIllustration.svg';
 import AppText from 'src/components/AppText';
+import LearnMoreContentSection from './components/learnMoreContentSection';
 
 function SupportLearnMore() {
   const theme: AppTheme = useTheme();
@@ -24,40 +25,20 @@ function SupportLearnMore() {
             {onBoarding.supportLearnMoreSubtitle}
           </AppText>
         </View>
-        <View style={styles.illustrationWrapper}>
-          <SupportIllustration />
-        </View>
-        <View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.supportLearnMoreLabel1}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.supportLearnMoreContent1}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.supportLearnMoreLabel2}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.supportLearnMoreContent2}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.supportLearnMoreLabel3}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.supportLearnMoreContent3}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.supportLearnMoreContent4}
-            </AppText>
-          </View>
-        </View>
+        <LearnMoreContentSection
+          title={onBoarding.supportLearnMoreLabel1}
+          subtitle={onBoarding.supportLearnMoreContent1}
+          illustration={<SupportIllustration />}
+        />
+        <LearnMoreContentSection
+          title={onBoarding.supportLearnMoreLabel2}
+          subtitle={onBoarding.supportLearnMoreContent2}
+        />
+        <LearnMoreContentSection
+          title={onBoarding.supportLearnMoreLabel3}
+          subtitle={onBoarding.supportLearnMoreContent3}
+        />
+        <LearnMoreContentSection title={onBoarding.supportLearnMoreContent4} />
       </ScrollView>
     </ScreenContainer>
   );

@@ -9,6 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import LNLearnMoreIllustration from 'src/assets/images/lnLearnMoreIllustration.svg';
 import AppText from 'src/components/AppText';
+import LearnMoreContentSection from './components/learnMoreContentSection';
 
 function LNLearnMore() {
   const theme: AppTheme = useTheme();
@@ -24,40 +25,20 @@ function LNLearnMore() {
             {onBoarding.lnLearnMoreSubtitle}
           </AppText>
         </View>
-        <View style={styles.illustrationWrapper}>
-          <LNLearnMoreIllustration />
-        </View>
-        <View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.lnLearnMoreLabel1}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.lnLearnMoreContent1}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.lnLearnMoreLabel2}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.lnLearnMoreContent2}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.lnLearnMoreLabel3}
-            </AppText>
-            <AppText variant="body1" style={styles.subTitleText}>
-              {onBoarding.lnLearnMoreContent3}
-            </AppText>
-          </View>
-          <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleText}>
-              {onBoarding.lnLearnMoreContent4}
-            </AppText>
-          </View>
-        </View>
+        <LearnMoreContentSection
+          title={onBoarding.lnLearnMoreLabel1}
+          subtitle={onBoarding.lnLearnMoreContent1}
+          illustration={<LNLearnMoreIllustration />}
+        />
+        <LearnMoreContentSection
+          title={onBoarding.lnLearnMoreLabel2}
+          subtitle={onBoarding.lnLearnMoreContent2}
+        />
+        <LearnMoreContentSection
+          title={onBoarding.lnLearnMoreLabel3}
+          subtitle={onBoarding.lnLearnMoreContent3}
+        />
+        <LearnMoreContentSection title={onBoarding.lnLearnMoreContent4} />
       </ScrollView>
     </ScreenContainer>
   );
