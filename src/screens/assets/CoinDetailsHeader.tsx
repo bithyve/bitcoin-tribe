@@ -1,16 +1,15 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Image, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
-import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
-// import GradientView from 'src/components/GradientView';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
@@ -21,19 +20,12 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import Identicon from 'src/components/Identicon';
 import AppType from 'src/models/enums/AppType';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
-import useBalance from 'src/hooks/useBalance';
-// import IconBitcoin from 'src/assets/images/icon_btc2.svg';
-// import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 
 type assetDetailsHeaderProps = {
-  assetName: string;
   asset?: Coin | Collectible;
-  assetImage?: string;
-  assetTicker?: string;
   onPressSetting?: () => void;
   onPressSend: () => void;
   onPressRecieve: () => void;
@@ -44,10 +36,7 @@ type assetDetailsHeaderProps = {
 };
 function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const {
-    assetName,
     asset,
-    assetTicker,
-    assetImage,
     onPressSetting,
     onPressSend,
     onPressRecieve,
@@ -58,25 +47,20 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
-  const { home, assets } = translations;
+  const { home } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
     asset.balance.future + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
-  const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
-    Keys.CURRENCY_MODE,
-  );
-  const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
-  const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
 
   return (
     <>
       {/* <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
+        <AppHeader title={asset.ticker} rightIcon={headerRightIcon}/>
       </Animated.View> */}
       <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
@@ -128,10 +112,10 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   </View>
                   <View>
                     <AppText variant="body1" style={styles.assetTickerText}>
-                      {assetTicker}
+                      {asset.ticker}
                     </AppText>
                     <AppText variant="body2" style={styles.assetNameText}>
-                      {assetName}
+                      {asset.name}
                     </AppText>
                   </View>
                 </View>

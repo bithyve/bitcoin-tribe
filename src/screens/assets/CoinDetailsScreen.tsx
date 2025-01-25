@@ -76,8 +76,6 @@ const CoinDetailsScreen = () => {
     <ScreenContainer>
       <CoinDetailsHeader
         asset={coin}
-        assetName={coin.name}
-        assetTicker={coin.ticker}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
