@@ -9,7 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SupportIllustration from 'src/assets/images/supportLearnMoreIllustration.svg';
 import AppText from 'src/components/AppText';
-import LearnMoreContentSection from './components/learnMoreContentSection';
+import LearnMoreContentSection from './components/LearnMoreContentSection';
 
 function SupportLearnMore() {
   const theme: AppTheme = useTheme();

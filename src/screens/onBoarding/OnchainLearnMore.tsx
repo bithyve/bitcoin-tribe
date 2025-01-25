@@ -12,7 +12,7 @@ import OnchainLearnMoreIllustration from 'src/assets/images/onchainLearnMoreIllu
 import OnchainLearnMoreIllustrationLight from 'src/assets/images/onchainLearnMoreIllustration_light.svg';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
-import LearnMoreContentSection from './components/learnMoreContentSection';
+import LearnMoreContentSection from './components/LearnMoreContentSection';
 
 function OnchainLearnMore() {
   const theme: AppTheme = useTheme();
