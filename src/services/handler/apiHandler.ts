@@ -177,7 +177,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
             const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
           }
@@ -222,7 +222,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
           }
         } else {
@@ -260,7 +260,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
           }
         }
@@ -300,7 +300,7 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: '',
           date: new Date().toString(),
-          title: 'Initially installed',
+          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
         });
       }
     } catch (error) {
@@ -349,7 +349,7 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: '',
           date: new Date().toString(),
-          title: 'Initially installed',
+          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
         });
       } else {
         throw new Error(backup.error);

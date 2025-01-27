@@ -22,6 +22,7 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
 import { AssetType, Coin } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -47,6 +48,11 @@ function HomeScreen() {
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
+  const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
+    getJSONFromRealmObject,
+  );
+  const lastIndex = VersionHistoryData.length - 1;
+
   const assets = useMemo(() => {
     return [...coins.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
   }, [coins]);
@@ -67,7 +73,10 @@ function HomeScreen() {
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
-    const version = dbManager.getObjectByIndex(RealmSchema.VersionHistory);
+    const version = dbManager.getObjectByIndex(
+      RealmSchema.VersionHistory,
+      lastIndex,
+    );
     const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
     if (version?.version !== currentVersion) {
       ApiHandler.checkVersion(version, currentVersion);
