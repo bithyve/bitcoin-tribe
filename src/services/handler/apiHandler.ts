@@ -934,16 +934,19 @@ export class ApiHandler {
     name,
     ticker,
     supply,
+    precision,
   }: {
     name: string;
     ticker: string;
     supply: string;
+    precision: number;
   }) {
     try {
-      const response = await RGBServices.issueRgb20Asset(
+      const response = await RGBServices.issueAssetNia(
         ticker,
         name,
         `${supply}`,
+        precision,
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -968,17 +971,20 @@ export class ApiHandler {
     description,
     supply,
     filePath,
+    precision,
   }: {
     name: string;
     description: string;
     supply: string;
     filePath: string;
+    precision: number,
   }) {
     try {
-      const response = await RGBServices.issueRgb25Asset(
+      const response = await RGBServices.issueAssetCfa(
         name,
         description,
         `${supply}`,
+        precision,
         filePath,
         ApiHandler.appType,
         ApiHandler.api,
@@ -1075,11 +1081,12 @@ export class ApiHandler {
   }: {
     assetId: string;
     blindedUTXO: string;
-    amount: string;
+    amount: number;
     consignmentEndpoints: string;
     feeRate: number;
   }) {
     try {
+
       const response = await RGBServices.sendAsset(
         assetId,
         blindedUTXO,

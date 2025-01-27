@@ -219,6 +219,32 @@ const SendAssetScreen = () => {
     }
   };
 
+  /* todo send asset with precision
+  const handleAmountInputChange = text => {
+    let regex;
+    if (assetData.precision === 0) {
+      regex = /^[1-9]\d*$/;
+    } else {
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${assetData.precision}})?$`);
+    }    if (text === '' || regex.test(text)) {
+      setAssetAmount(text);
+      const numericValue = parseFloat(text || '0');
+      if (Number(assetData?.balance.spendable) === 0) {
+        Keyboard.dismiss();
+        Toast(
+          sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+          true,
+        );
+      } else if (numericValue <= assetData?.balance.spendable) {
+        setAssetAmount(text);
+      } else {
+        Keyboard.dismiss();
+        Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+      }
+    }
+  };
+  */
+
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
   };
@@ -254,7 +280,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: utxo,
-        amount: assetAmount && assetAmount.replace(/,/g, ''),
+        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
