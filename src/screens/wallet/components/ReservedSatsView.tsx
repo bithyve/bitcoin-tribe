@@ -42,7 +42,7 @@ function ReservedSatsView() {
 
   const totalReserveSatsAmount = useMemo(() => {
     const colorable = unspent.filter(
-      utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+      utxo => utxo.utxo.colorable === true,
     );
     const total = colorable.reduce((sum, utxo) => sum + utxo.utxo.btcAmount, 0);
     return total;
