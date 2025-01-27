@@ -107,10 +107,10 @@ const ViewUnspentScreen = () => {
             value: UtxoType.Colorable,
             label: UtxoType.Colorable,
           },
-          {
-            value: UtxoType.Uncolored,
-            label: UtxoType.Uncolored,
-          },
+          // {
+          //   value: UtxoType.Uncolored,
+          //   label: UtxoType.Uncolored,
+          // },
         ]}
       />
       <FlatList
