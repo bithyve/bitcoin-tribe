@@ -138,7 +138,7 @@ RCT_EXPORT_METHOD(getRgbAssetTransactions:(NSString*)assetId
 
 RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId
                   blindedUTXO:(NSString *)blindedUTXO
-                  amount:(NSString *)amount
+                  amount:(nonnull NSNumber *)amount
                   consignmentEndpoints:(NSString *)consignmentEndpoints
                   fee:(nonnull NSNumber *)fee
                   resolver:(RCTPromiseResolveBlock)resolve
@@ -151,27 +151,29 @@ RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId
    ];
 }
 
-RCT_EXPORT_METHOD(issueRgb20Asset:(NSString*)ticker
+RCT_EXPORT_METHOD(issueAssetNia:(NSString*)ticker
                   name:(NSString *)name
                   supply:(NSString *)supply
+                  precision:(nonnull NSNumber *)precision
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
 
-  [helper issueRgb20AssetWithTicker:ticker name:name supply:supply callback:^(NSString * _Nonnull response) {
+  [helper issueAssetNiaWithTicker:ticker name:name supply:supply precision: precision callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }
 
-RCT_EXPORT_METHOD(issueRgb25Asset:(NSString*) name
+RCT_EXPORT_METHOD(issueAssetCfa:(NSString*) name
                   description:(NSString *)description
                   supply:(NSString *)supply
+                  precision:(nonnull NSNumber *)precision
                   filePath:(NSString *)filePath
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   
-  [helper issueRgb121AssetWithName:name description:description supply:supply filePath:filePath callback:^(NSString * _Nonnull response) {
+  [helper issueAssetCfaWithName:name description:description supply:supply precision: precision filePath:filePath callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }
