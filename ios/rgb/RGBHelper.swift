@@ -604,10 +604,10 @@ import CloudKit
     callback(result)
   }
   
-  @objc func issueRgb20Asset(ticker: String, name: String, supply: String,callback: @escaping ((String) -> Void)) -> Void{
+  @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do{
       return try handleMissingFunds {
-        let asset = try self.rgbManager.rgbWallet?.issueAssetNia(online: self.rgbManager.online!, ticker: ticker, name: name, precision: 0, amounts: [UInt64(UInt64(supply)!)])
+        let asset = try self.rgbManager.rgbWallet?.issueAssetNia(online: self.rgbManager.online!, ticker: ticker, name: name, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)])
         let data: [String: Any] = [
           "assetId": asset?.assetId,
           "name": asset?.name,
@@ -630,10 +630,10 @@ import CloudKit
     }
   }
   
-  @objc func issueRgb121Asset(name: String, description: String, supply: String, filePath: String, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func issueAssetCfa(name: String, description: String, supply: String, precision: NSNumber, filePath: String, callback: @escaping ((String) -> Void)) -> Void{
     do{
       return try handleMissingFunds {
-        let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(online: self.rgbManager.online!, name: name, details: description, precision: 0, amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
+        let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(online: self.rgbManager.online!, name: name, details: description, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
         var dataPaths: [[String: Any]] = []
         let data: [String: Any] = [
           "assetId": asset?.assetId,
@@ -687,10 +687,10 @@ import CloudKit
     }
   }
   
-  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, fee: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do{
       var recipientMap: [String: [Recipient]] = [:]
-      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount)!, transportEndpoints: [consignmentEndpoints])
+      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount), transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
         return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0, skipSync: true)

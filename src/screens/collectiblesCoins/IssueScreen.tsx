@@ -65,6 +65,7 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
+  const [precision, setPrecision] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
@@ -124,6 +125,7 @@ function IssueScreen() {
         name: assetName.trim(),
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, ''),
+        precision: Number(precision),
       });
       if (response?.assetId) {
         setLoading(false);
@@ -146,7 +148,7 @@ function IssueScreen() {
     } catch (error) {
       setLoading(false);
     }
-  }, [assetName, assetTicker, navigation, totalSupplyAmt]);
+  }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
 
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
@@ -156,6 +158,7 @@ function IssueScreen() {
         name: assetName.trim(),
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
+        precision: Number(precision),
         filePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT
@@ -195,6 +198,7 @@ function IssueScreen() {
     image,
     navigation,
     totalSupplyAmt,
+    precision,
   ]);
 
   const isButtonDisabled = useMemo(() => {
@@ -318,6 +322,22 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
+
+            <TextField
+              value={precision}
+              maxLength={2}
+              onChangeText={text => {
+                const num = parseInt(text, 10);
+                if (!isNaN(num) && num >= 0 && num <= 10) {
+                  setPrecision(text);
+                } else if (text === '') {
+                  setPrecision('');
+                }
+              }}
+              placeholder={'Precision'}
+              keyboardType="numeric"
+              style={styles.input}
+            />
           </View>
         ) : (
           <View>
@@ -347,6 +367,21 @@ function IssueScreen() {
               value={formatNumber(totalSupplyAmt)}
               onChangeText={text => handleTotalSupplyChange(text)}
               placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <TextField
+              value={precision}
+              onChangeText={text => {
+                const num = parseInt(text, 10);
+                if (!isNaN(num) && num >= 0 && num <= 10) {
+                  setPrecision(text);
+                } else if (text === '') {
+                  setPrecision('');
+                }
+              }}
+              maxLength={2}
+              placeholder={'Precision'}
               keyboardType="numeric"
               style={styles.input}
             />
