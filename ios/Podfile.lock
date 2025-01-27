@@ -1480,6 +1480,29 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSentry (6.5.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Sentry/HybridSDK (= 8.43.0)
+    - Yoga
   - RNShare (11.1.0):
     - DoubleConversion
     - glog
@@ -1503,6 +1526,7 @@ PODS:
     - Yoga
   - RNSVG (15.10.1):
     - React-Core
+  - Sentry/HybridSDK (8.43.0)
   - SocketRocket (0.7.0)
   - VisionCamera (4.3.2):
     - VisionCamera/Core (= 4.3.2)
@@ -1595,6 +1619,7 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
@@ -1606,6 +1631,7 @@ SPEC REPOS:
     - lottie-ios
     - MMKV
     - MMKVCore
+    - Sentry
     - SocketRocket
     - ZXingObjC
 
@@ -1765,6 +1791,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
@@ -1856,8 +1884,10 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
   RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: 8a3ba045e7e8b5dd1b9a7764496430e17d00dfed
+  RNSentry: 3a8684dcad4c164cbe7dbc3743c053583808bcba
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
   RNSVG: 3421710ac15f4f2dc47e5c122f2c2e4282116830
+  Sentry: 532b281a53b1b45a523fd592f608956fb36e577c
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: 6ad4b86176f6fea45e90e380d3d530bc5e1abff9
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
