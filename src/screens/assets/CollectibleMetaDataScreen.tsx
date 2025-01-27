@@ -127,6 +127,11 @@ const CollectibleMetaDataScreen = () => {
                     numberWithCommas(collectible.metaData.issuedSupply)
               }
             />
+
+            <Item
+              title={assets.precision}
+              value={collectible && collectible.precision}
+            />
           </ScrollView>
         </>
       )}
