@@ -415,7 +415,8 @@
     "coloured": "Colorato",
     "unColoured": "Non colorato",
     "availableTxnFee": "Commissione di transazione disponibile",
-    "output": "Uscita"
+    "output": "Uscita",
+    "utxoValue": "Valore UTXO"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

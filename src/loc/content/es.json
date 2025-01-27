@@ -415,7 +415,8 @@
     "coloured": "Coloreado",
     "unColoured": "Sin color",
     "availableTxnFee": "Tarifa de transacción disponible",
-    "output": "Salida"
+    "output": "Salida",
+    "utxoValue": "Valor UTXO"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

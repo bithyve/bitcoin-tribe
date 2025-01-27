@@ -23,6 +23,7 @@ type UnspentUTXOElementProps = {
   rgbAllocations: any;
   style?: StyleProp<ViewStyle>;
   assets: Asset[];
+  colourable?: boolean;
 };
 function UnspentUTXOElement({
   transID,
@@ -30,6 +31,7 @@ function UnspentUTXOElement({
   rgbAllocations,
   style,
   assets,
+  colourable,
 }: UnspentUTXOElementProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -99,7 +101,9 @@ function UnspentUTXOElement({
       <View style={styles.contentWrapper}>
         <View style={styles.transIDWrapper}>
           <AppText variant="body2" style={styles.labelTextStyle}>
-            {walletTranslations.availableTxnFee}
+            {colourable
+              ? walletTranslations.availableTxnFee
+              : walletTranslations.utxoValue}
           </AppText>
         </View>
         <View style={styles.amtWrapper}>
@@ -161,14 +165,15 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(3),
     },
     transIDWrapper: {
-      width: '70%',
+      width: '65%',
     },
     amtWrapper: {
-      width: '30%',
+      width: '35%',
       alignItems: 'flex-end',
     },
     transIDText: {
       color: theme.colors.headingColor,
+      textAlign: 'right',
     },
     amountText: {
       color: theme.colors.headingColor,
@@ -177,7 +182,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     labelWrapper: {
-      width: '30%',
+      width: '35%',
       alignItems: 'flex-start',
     },
     assetNameText: {
