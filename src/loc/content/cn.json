@@ -467,7 +467,7 @@
     "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
-    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
+    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 9,007,199,254,740,992 的数字。",
     "swipeToSend": "滑动发送",
     "sendingAsset": "正在发送资产...",
     "cancelTransferMsg": "取消转账！",
