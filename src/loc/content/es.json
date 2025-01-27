@@ -133,7 +133,31 @@
     "recoverLoadingSubTitle": "Por favor, espera un momento mientras completamos el proceso de recuperación. Evita cerrar la aplicación para asegurar que todo funcione sin problemas. ¡Gracias por tu paciencia!",
     "onchainLearMoreInfo": "Una billetera segura para todas tus transacciones de Bitcoin.",
     "lightningLearnMoreInfo": "Transacciones rápidas y de bajo costo para montos pequeños.",
-    "supportLearnMoreInfo": "Una billetera compatible con otras aplicaciones de Bitcoin."
+    "supportLearnMoreInfo": "Una billetera compatible con otras aplicaciones de Bitcoin.",
+    "onChainLearnMoreSubTitle": "Una billetera On-Chain garantiza el control total de tu Bitcoin almacenándolo de forma segura en la blockchain de Bitcoin.",
+    "onchainLearnMoreLabel1": "Auto-custodia",
+    "onchainLearnMoreContent1": "Tú posees tus claves privadas para máxima seguridad.",
+    "onchainLearnMoreLabel2": "Transparencia",
+    "onchainLearnMoreContent2": "Las transacciones se registran completamente en la blockchain.",
+    "onchainLearnMoreLabel3": "Mejor para",
+    "onchainLearnMoreContent3": "Almacenamiento a largo plazo y transacciones grandes y seguras.",
+    "onchainLearnMoreContent4": "Toma el control total de tu Bitcoin con la autocustodia en cadena.",
+    "lnLearnMoreSubtitle": "Una billetera Lightning ofrece transacciones rápidas y rentables de Bitcoin mientras mantienes el control total sobre tus fondos.",
+    "lnLearnMoreLabel1": "Auto-custodia",
+    "lnLearnMoreContent1": "Tú tienes tus claves privadas, asegurando propiedad y seguridad completas.",
+    "lnLearnMoreLabel2": "Transacciones instantáneas",
+    "lnLearnMoreContent2": "Perfecto para pagos rápidos con tarifas mínimas.",
+    "lnLearnMoreLabel3": "Mejor para",
+    "lnLearnMoreContent3": "Micropagos diarios y transferencias rápidas.",
+    "lnLearnMoreContent4": "Disfruta de la velocidad y eficiencia de Bitcoin con autocustodia en la Lightning Network.",
+    "supportLearnMoreSubtitle": "Una billetera compatible ofrece un equilibrio entre comodidad y seguridad al utilizar servicios de retransmisión para la gestión de activos.",
+    "supportLearnMoreLabel1": "Custodia compartida",
+    "supportLearnMoreContent1": "La custodia se gestiona con la ayuda de un relé confiable, simplificando la gestión de la billetera.",
+    "supportLearnMoreLabel2": "Facilidad de uso",
+    "supportLearnMoreContent2": "Ideal para usuarios que prefieren una configuración sencilla y mínima complejidad.",
+    "supportLearnMoreLabel3": "Soporte de respaldo",
+    "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
+    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible."
   },
   "home": {
     "addAssets": "Recibir activo",
@@ -257,7 +281,9 @@
     "step1": "Paso 1",
     "step2": "Paso 2",
     "activateWalletTypeLabel": "Tipo de Billetera",
-    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!"
+    "copyWalletIDMsg": "¡ID de billetera copiado con éxito!",
+    "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
+    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -293,6 +319,7 @@
     "sendSuccessSubTitle": "La transacción se ha transmitido con éxito",
     "invalidBtcAddress": "Dirección Bitcoin no válida",
     "invalidRGBInvoiceAddress": "Factura RGB no válida",
+    "invalidBtcAndRgbInput": "Dirección de Bitcoin o factura RGB no válida.",
     "sentSuccessfully": "Enviado exitosamente",
     "amountMoreThanSpend": "El monto ingresado es más que disponible para gastar",
     "transFeeErrMsg": "Error: falta información sobre la tarifa de transacción",
@@ -372,7 +399,7 @@
     "transferDetails": "Detalles de la transferencia",
     "viewUnspent": "Ver UTXOs no gastados",
     "walletRefreshMsg": "Billetera actualizada con éxito",
-    "unspentTitle": "Lista de UTXO RGB",
+    "unspentTitle": "Descripción general de UTXOs",
     "satsAmount": "Cantidad de sats",
     "rgbAssetID": "ID de activo RGB",
     "testSatsRecived": "Pruebas recibidas",
@@ -384,7 +411,11 @@
     "bitcoin": "Bitcoin",
     "reserveAmtText": "Reservado para transacciones de activos",
     "requestTSatsTitle": "Solicitar Sats de Prueba",
-    "requestTSatSubTitle": "Únete a nuestro grupo de Telegram para recibir sats de prueba y disfrutar experimentando con RGB."
+    "requestTSatSubTitle": "Únete a nuestro grupo de Telegram para recibir sats de prueba y disfrutar experimentando con RGB.",
+    "coloured": "Coloreado",
+    "unColoured": "Sin color",
+    "availableTxnFee": "Tarifa de transacción disponible",
+    "output": "Salida"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

@@ -161,9 +161,9 @@ const CombinedDefaultTheme: AppTheme = {
     roundBuyCTAGradient1: Colors.BrandeisBlue2,
     roundBuyCTAGradient2: Colors.BrandeisBlue2,
     roundBuyCTAGradient3: Colors.BrandeisBlue2,
-    roundSendCTATitle: Colors.CandyAppleRed,
-    roundBuyCTATitle: Colors.BrandeisBlue,
-    roundReceiveCTATitle: Colors.UFOGreen1,
+    roundSendCTATitle: Colors.ChineseBlack,
+    roundBuyCTATitle: Colors.ChineseBlack,
+    roundReceiveCTATitle: Colors.ChineseBlack,
     segmentSelectTitle: Colors.BrandeisBlue,
     suggestedText: Colors.White,
     //

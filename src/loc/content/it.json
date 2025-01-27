@@ -133,7 +133,31 @@
     "recoverLoadingSubTitle": "Attendi un momento mentre completiamo il processo di recupero. Evita di chiudere l'app per garantire che tutto funzioni correttamente. Grazie per la tua pazienza!",
     "onchainLearMoreInfo": "Un portafoglio sicuro per tutte le tue transazioni Bitcoin.",
     "lightningLearnMoreInfo": "Transazioni veloci e a basso costo per importi ridotti.",
-    "supportLearnMoreInfo": "Un portafoglio compatibile con altre applicazioni Bitcoin."
+    "supportLearnMoreInfo": "Un portafoglio compatibile con altre applicazioni Bitcoin.",
+    "onChainLearnMoreSubTitle": "Un wallet On-Chain garantisce il pieno controllo dei tuoi Bitcoin conservandoli in modo sicuro sulla blockchain di Bitcoin.",
+    "onchainLearnMoreLabel1": "Auto-custodia",
+    "onchainLearnMoreContent1": "Possiedi le tue chiavi private per la massima sicurezza.",
+    "onchainLearnMoreLabel2": "Trasparenza",
+    "onchainLearnMoreContent2": "Le transazioni sono completamente registrate sulla blockchain.",
+    "onchainLearnMoreLabel3": "Ideale per",
+    "onchainLearnMoreContent3": "Conservazione a lungo termine e transazioni sicure di grandi importi.",
+    "onchainLearnMoreContent4": "Prendi il pieno controllo dei tuoi Bitcoin con l'auto-custodia on-chain.",
+    "lnLearnMoreSubtitle": "Un portafoglio Lightning offre transazioni Bitcoin veloci ed economiche, mantenendo il pieno controllo sui tuoi fondi.",
+    "lnLearnMoreLabel1": "Auto-custodia",
+    "lnLearnMoreContent1": "Tieni le tue chiavi private, garantendo proprietà e sicurezza complete.",
+    "lnLearnMoreLabel2": "Transazioni istantanee",
+    "lnLearnMoreContent2": "Perfetto per pagamenti rapidi con commissioni minime.",
+    "lnLearnMoreLabel3": "Ideale per",
+    "lnLearnMoreContent3": "Microtransazioni quotidiane e trasferimenti rapidi.",
+    "lnLearnMoreContent4": "Goditi la velocità e l'efficienza di Bitcoin con l'auto-custodia sulla rete Lightning.",
+    "supportLearnMoreSubtitle": "Un wallet supportato offre un equilibrio tra comodità e sicurezza sfruttando i servizi di relay per la gestione degli asset.",
+    "supportLearnMoreLabel1": "Custodia condivisa",
+    "supportLearnMoreContent1": "La custodia è gestita con l'aiuto di un relay affidabile, semplificando la gestione del wallet.",
+    "supportLearnMoreLabel2": "Facilità d'uso",
+    "supportLearnMoreContent2": "Ideale per utenti che preferiscono una configurazione semplice e una complessità minima.",
+    "supportLearnMoreLabel3": "Supporto di backup",
+    "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
+    "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata."
   },
   "home": {
     "addAssets": "Ricevi asset",
@@ -257,7 +281,9 @@
     "step1": "Passo 1",
     "step2": "Passo 2",
     "activateWalletTypeLabel": "Tipo di Wallet",
-    "copyWalletIDMsg": "ID del portafoglio copiato con successo!"
+    "copyWalletIDMsg": "ID del portafoglio copiato con successo!",
+    "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
+    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -293,6 +319,7 @@
     "sendSuccessSubTitle": "La transazione è stata trasmessa con successo",
     "invalidBtcAddress": "Indirizzo Bitcoin non valido",
     "invalidRGBInvoiceAddress": "Fattura RGB non valida",
+    "invalidBtcAndRgbInput": "Indirizzo Bitcoin o fattura RGB non valido.",
     "sentSuccessfully": "Inviato con successo",
     "amountMoreThanSpend": "L'importo inserito è superiore a quello disponibile per la spesa",
     "transFeeErrMsg": "Errore: Intel mancante per la tassa di transazione",
@@ -372,7 +399,7 @@
     "transferDetails": "Dettagli trasferimento",
     "viewUnspent": "Visualizza UTXO non spesi",
     "walletRefreshMsg": "Portafoglio aggiornato con successo",
-    "unspentTitle": "Elenco di RGB UTXO",
+    "unspentTitle": "Panoramica UTXOs",
     "satsAmount": "Importo Sats",
     "rgbAssetID": "ID risorsa RGB",
     "testSatsRecived": "Test-sats ricevuti",
@@ -384,7 +411,11 @@
     "bitcoin": "Bitcoin",
     "reserveAmtText": "Riservato per le transazioni di asset",
     "requestTSatsTitle": "Richiedi Test Sats",
-    "requestTSatSubTitle": "Unisciti al nostro gruppo Telegram per ricevere test sats e divertirti con RGB."
+    "requestTSatSubTitle": "Unisciti al nostro gruppo Telegram per ricevere test sats e divertirti con RGB.",
+    "coloured": "Colorato",
+    "unColoured": "Non colorato",
+    "availableTxnFee": "Commissione di transazione disponibile",
+    "output": "Uscita"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

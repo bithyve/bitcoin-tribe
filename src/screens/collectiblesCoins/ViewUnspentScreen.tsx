@@ -1,14 +1,20 @@
-import React, { useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { StyleSheet, FlatList, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 
+import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collectible,
+  UtxoType,
+} from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import openLink from 'src/utils/OpenLink';
@@ -24,6 +30,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import ModalLoading from 'src/components/ModalLoading';
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({});
 
@@ -33,17 +40,28 @@ const ViewUnspentScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations || { wallet: {}, assets: {} };
   const styles = useMemo(() => getStyles(theme), [theme]);
+  const [utxoType, setUtxoType] = useState<UtxoType>(UtxoType.Coloured);
 
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
-  const combined: Asset[] = useMemo(() => [...coins, ...collectibles], [coins, collectibles]);
+  const combined: Asset[] = useMemo(
+    () => [...coins, ...collectibles],
+    [coins, collectibles],
+  );
 
   const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
   const UnspentUTXOData = useMemo(() => {
     if (!storedWallet || !storedWallet.utxos) return [];
     return storedWallet.utxos.map(utxoStr => JSON.parse(utxoStr));
   }, [storedWallet]);
+
+  const filteredColorableUTXOs = UnspentUTXOData.filter(
+    utxo => utxo.utxo.colorable === true,
+  );
+  const filteredUnColorableUTXOs = UnspentUTXOData.filter(
+    utxo => utxo.utxo.colorable === false,
+  );
 
   const { mutate, isLoading } = useMutation(ApiHandler.viewUtxos);
 
@@ -61,11 +79,41 @@ const ViewUnspentScreen = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={wallet.unspentTitle || 'Unspent Outputs'} enableBack={true} />
+      <AppHeader
+        title={wallet.unspentTitle || 'Unspent Outputs'}
+        enableBack={true}
+      />
+      <SegmentedButtons
+        value={utxoType}
+        onValueChange={value => {
+          if (value !== utxoType) {
+            setUtxoType(value);
+          } else {
+          }
+        }}
+        buttons={[
+          {
+            value: UtxoType.Coloured,
+            label: wallet.coloured,
+          },
+          {
+            value: UtxoType.Uncoloured,
+            label: wallet.unColoured,
+          },
+        ]}
+      />
+      <View>
+        <ModalLoading visible={isLoading} />
+      </View>
       <FlatList
-        data={UnspentUTXOData}
+        data={
+          utxoType === UtxoType.Coloured
+            ? filteredColorableUTXOs
+            : filteredUnColorableUTXOs
+        }
         renderItem={({ item }) => (
-          <AppTouchable onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
+          <AppTouchable
+            onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
               transID={
                 app?.appType === AppType.NODE_CONNECT

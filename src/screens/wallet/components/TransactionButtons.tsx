@@ -23,9 +23,19 @@ type transButtonProps = {
   onPressSend: () => void;
   onPressRecieve: () => void;
   onPressBuy?: () => void;
+  sendCtaWidth?: number;
+  receiveCtaWidth?: number;
+  buyCtaWidth?: number;
 };
 const TransactionButtons = (props: transButtonProps) => {
-  const { onPressSend, onPressRecieve, onPressBuy } = props;
+  const {
+    onPressSend,
+    onPressRecieve,
+    onPressBuy,
+    sendCtaWidth = wp(105),
+    receiveCtaWidth = wp(105),
+    buyCtaWidth = wp(105),
+  } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -44,7 +54,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={isThemeDark ? <IconSend /> : <IconSendLight />}
           buttonColor={theme.colors.sendCtaBorderColor}
           title={common.send}
-          width={wp(105)}
+          width={sendCtaWidth}
           onPress={onPressSend}
         />
       </View>
@@ -78,7 +88,7 @@ const TransactionButtons = (props: transButtonProps) => {
                 ? common.request
                 : common.buy
             }
-            width={wp(105)}
+            width={buyCtaWidth}
             onPress={onPressBuy}
           />
         </View>
@@ -94,7 +104,7 @@ const TransactionButtons = (props: transButtonProps) => {
           icon={isThemeDark ? <IconReceive /> : <IconReceiveLight />}
           buttonColor={theme.colors.recieveCtaBorderColor}
           title={common.receive}
-          width={wp(105)}
+          width={receiveCtaWidth}
           onPress={onPressRecieve}
         />
       </View>

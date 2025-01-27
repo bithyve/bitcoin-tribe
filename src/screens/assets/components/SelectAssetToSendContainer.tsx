@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import {
   FlatList,
   Image,
@@ -8,14 +8,16 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useNavigation } from '@react-navigation/native';
 
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { hp } from 'src/constants/responsive';
 import GradientView from 'src/components/GradientView';
@@ -24,6 +26,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'src/components/Identicon';
+import { Keys } from 'src/storage';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -119,6 +122,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
   const { assetsData, wallet, rgbInvoice, amount } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { assets, home } = translations;
@@ -138,7 +142,13 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
           <EmptyStateView
             title={home.noAssetTitle}
             subTitle={home.noAssetSubTitle}
-            IllustartionImage={<NoAssetsIllustration />}
+            IllustartionImage={
+              isThemeDark ? (
+                <NoAssetsIllustration />
+              ) : (
+                <NoAssetsIllustrationLight />
+              )
+            }
           />
         }
         renderItem={({ item, index }) => (

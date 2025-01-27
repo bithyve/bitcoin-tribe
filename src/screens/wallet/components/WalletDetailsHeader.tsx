@@ -132,13 +132,13 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                 <View style={styles.balanceWrapper}>
                   <IconBTC />
                   <AppText variant="heading3" style={styles.balanceText}>
-                    0.7000
+                    0.000
                   </AppText>
                 </View>
                 <View style={styles.balanceWrapper}>
                   <IconLightning />
                   <AppText variant="heading3" style={styles.balanceText}>
-                    0.1345
+                    0.000
                   </AppText>
                 </View>
               </View>
