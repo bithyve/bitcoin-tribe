@@ -415,7 +415,8 @@
     "coloured": "カラード",
     "unColoured": "無色",
     "availableTxnFee": "利用可能な取引手数料",
-    "output": "出力"
+    "output": "出力",
+    "utxoValue": "UTXO 値"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
