@@ -24,6 +24,8 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
+import LottieView from 'lottie-react-native';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -32,34 +34,92 @@ type ServiceFeeProps = {
     includeTxFee: string;
   };
   onPay: () => void;
+  hideModal: () => void;
+  status: 'error' | 'idle' | 'loading' | 'success';
+  issueAssetType: string
 };
 
-const ServiceFee = ({ feeDetails, onPay }: ServiceFeeProps) => {
+const ServiceFee = ({ feeDetails, onPay, status, issueAssetType, hideModal }: ServiceFeeProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const navigation = useNavigation();
+  const { translations } = useContext(LocalizationContext);
+  const { common } = translations;
 
-  if (!feeDetails) return null;
+  if (!feeDetails) {
+    return null;
+  }
 
   return (
     <View style={styles.containerFee}>
-      <View style={styles.amtContainer}>
-        <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+      {status === 'success' ? (
+        <View>
+          <LottieView
+            source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
+            style={styles.loaderStyle}
+            autoPlay
+            loop
+          />
+          <PrimaryCTA
+            title={common.proceed}
+            onPress={() => {
+              hideModal();
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.ISSUESCREEN, {
+                  issueAssetType,
+                  addToRegistry: true,
+                });
+              }, 400);
+            }}
+            width={'100%'}
+            textColor={theme.colors.popupSentCTATitleColor}
+            buttonColor={theme.colors.popupSentCTABackColor}
+            height={hp(18)}
+          />
         </View>
-        <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText}>{`${numberWithCommas(
-            feeDetails.fee,
-          )} sats`}</AppText>
-        </View>
-      </View>
+      ) : (
+        <View>
+          <View style={styles.amtContainer}>
+            <View style={styles.labelWrapper}>
+              <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+            </View>
+            <View style={styles.valueWrapper}>
+              <AppText style={styles.labelText}>{`${numberWithCommas(
+                feeDetails.fee,
+              )} sats`}</AppText>
+            </View>
+          </View>
 
-      <View style={styles.primaryCtaStyle}>
-        <SwipeToAction
-          title={'Swipe to Pay'}
-          loadingTitle={'Paying...'}
-          onSwipeComplete={onPay}
-        />
-      </View>
+            {
+              status !== 'loading' && (
+                <PrimaryCTA
+                title={common.skip}
+                onPress={() => {
+                  hideModal();
+                  setTimeout(() => {
+                    navigation.replace(NavigationRoutes.ISSUESCREEN, {
+                      issueAssetType,
+                      addToRegistry: false,
+                    });
+                  }, 400);
+                }}
+                width={'100%'}
+                textColor={theme.colors.popupSentCTATitleColor}
+                buttonColor={theme.colors.popupSentCTABackColor}
+                height={hp(18)}
+              />
+              )
+            }
+
+          <View style={styles.primaryCtaStyle}>
+            <SwipeToAction
+              title={'Swipe to Pay'}
+              loadingTitle={'Paying...'}
+              onSwipeComplete={onPay}
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -73,11 +133,15 @@ function AddAsset() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+    RealmSchema.RgbWallet,
+  );
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
 
-  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr => JSON.parse(utxoStr));
+  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
@@ -102,6 +166,7 @@ function AddAsset() {
           });
         } else {
           setShowFeeModal(true);
+          getAssetIssuanceFeeMutation.reset();
         }
       } else {
         navigation.replace(NavigationRoutes.ISSUESCREEN, {
@@ -113,19 +178,18 @@ function AddAsset() {
       Toast('Failed to fetch asset issuance fee.');
       getAssetIssuanceFeeMutation.reset();
     }
-  }, [getAssetIssuanceFeeMutation, navigation, issueAssetType, wallet.specs.transactions]);
+  }, [
+    getAssetIssuanceFeeMutation,
+    navigation,
+    issueAssetType,
+    wallet.specs.transactions,
+  ]);
 
   useEffect(() => {
     if (payServiceFeeFeeMutation.isSuccess) {
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
-      setTimeout(() => {
-        navigation.replace(NavigationRoutes.ISSUESCREEN, {
-          issueAssetType,
-          addToRegistry: true,
-        });
-      }, 700);
     } else if (payServiceFeeFeeMutation.error) {
       Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
       payServiceFeeFeeMutation.reset();
@@ -138,7 +202,11 @@ function AddAsset() {
       wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
         0 || colorable.length > 0
     );
-  }, [colorable.length, wallet?.specs.balances.confirmed, wallet?.specs.balances.unconfirmed]);
+  }, [
+    colorable.length,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
+  ]);
 
   return (
     <ScreenContainer>
@@ -146,21 +214,26 @@ function AddAsset() {
 
       <View>
         <ModalContainer
-          title={'Service Fee Information'}
+          title={'List Your Asset In Registry'}
           subTitle={
             'Please note that the service fee for this transaction is used exclusively for covering service charges on Tribe RGB. This fee will not be added to your reserve sats.'
           }
-          height={Platform.OS === 'ios' ? '50%' : ''}
+          height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
-          }}
-        >
+          }}>
           <ServiceFee
             onPay={() => payServiceFeeFeeMutation.mutate({ feeDetails })}
             feeDetails={feeDetails}
+            status={payServiceFeeFeeMutation.status}
+            issueAssetType={issueAssetType}
+            hideModal={() => {
+              setShowFeeModal(false);
+              getAssetIssuanceFeeMutation.reset();
+            }}
           />
         </ModalContainer>
       </View>
@@ -202,8 +275,7 @@ function AddAsset() {
           enableClose={true}
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}
-        >
+          borderColor={theme.colors.borderColor}>
           <AppText>{'Insufficient Balance'}</AppText>
         </ResponsePopupContainer>
       </View>
@@ -237,7 +309,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     primaryCtaStyle: {
-      marginTop: hp(30),
+      marginVertical: hp(15),
     },
     amtContainer: {
       marginVertical: hp(20),
@@ -248,6 +320,12 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
       borderStyle: 'dashed',
       flexDirection: 'row',
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(150),
+      height: hp(150),
+      marginVertical: hp(20),
     },
   });
 
