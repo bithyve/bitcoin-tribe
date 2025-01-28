@@ -13,7 +13,7 @@ import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
@@ -22,9 +22,6 @@ import NoAssetsIllustration from 'src/assets/images/noCollectibeAssets.svg';
 import NoAssetsIllustrationLight from 'src/assets/images/noCollectibeAssets_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-import { RealmSchema } from 'src/storage/enum';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from '@realm/react';
 import RefreshControlView from 'src/components/RefreshControlView';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 
@@ -45,7 +42,6 @@ function CollectibleAssetsList(props: AssetsListProps) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const FooterComponent = () => {
     return <View style={styles.footer} />;
