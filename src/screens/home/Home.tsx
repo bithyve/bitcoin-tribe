@@ -73,14 +73,7 @@ function HomeScreen() {
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
-    const version = dbManager.getObjectByIndex(
-      RealmSchema.VersionHistory,
-      lastIndex,
-    );
-    const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
-    if (version?.version !== currentVersion) {
-      ApiHandler.checkVersion(version, currentVersion);
-    }
+    ApiHandler.checkVersion(lastIndex);
     ApiHandler.getFeeAndExchangeRates();
   }, [app.appType]);
 

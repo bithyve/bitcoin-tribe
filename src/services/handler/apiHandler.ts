@@ -977,7 +977,7 @@ export class ApiHandler {
     description: string;
     supply: string;
     filePath: string;
-    precision: number,
+    precision: number;
   }) {
     try {
       const response = await RGBServices.issueAssetCfa(
@@ -1086,7 +1086,6 @@ export class ApiHandler {
     feeRate: number;
   }) {
     try {
-
       const response = await RGBServices.sendAsset(
         assetId,
         blindedUTXO,
@@ -1141,15 +1140,23 @@ export class ApiHandler {
     }
   }
 
-  static async checkVersion(previousVersion, currentVerion) {
+  static async checkVersion(lastIndex) {
     try {
-      dbManager.createObject(RealmSchema.VersionHistory, {
-        version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-        releaseNote: '',
-        date: new Date().toString(),
-        title: `Upgraded from ${previousVersion.version} to ${currentVerion}`,
-      });
-      return true;
+      const version = dbManager.getObjectByIndex(
+        RealmSchema.VersionHistory,
+        lastIndex,
+      );
+      const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
+      if (version?.version !== currentVersion) {
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: `Upgraded from ${version.version} to ${currentVersion}`,
+        });
+        return true;
+      }
+      return false;
     } catch (error) {
       console.log('check Version', error);
       throw error;
