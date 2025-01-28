@@ -4,8 +4,9 @@ import React, {
   useMemo,
   useCallback,
   useEffect,
+  useRef,
 } from 'react';
-import { useTheme } from 'react-native-paper';
+import { Switch, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import {
   StackActions,
@@ -14,7 +15,14 @@ import {
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
-import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -33,7 +41,6 @@ import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
-import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import UploadAssetFileButton from './components/UploadAssetFileButton';
 import UploadFile from 'src/assets/images/uploadFile.svg';
@@ -74,10 +81,9 @@ function IssueCollectibleScreen() {
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
-  const [assetType, setAssetType] = useState<AssetType>(
-    issueAssetType || AssetType.Coin,
-  );
+  const [assetType, setAssetType] = useState<AssetType>(issueAssetType);
   const [image, setImage] = useState('');
+  const [attachments, setAttachments] = useState([]);
   const {
     mutate: createUtxos,
     error: createUtxoError,
@@ -91,6 +97,9 @@ function IssueCollectibleScreen() {
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
+  const assetTickerInputRef = useRef(null);
+  const totalSupplyInputRef = useRef(null);
+  const descriptionInputRef = useRef(null);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -174,12 +183,88 @@ function IssueCollectibleScreen() {
     precision,
   ]);
 
-  const isButtonDisabled = useMemo(() => {
-    if (assetType === AssetType.Coin) {
-      return !assetName || !assetTicker || !totalSupplyAmt;
+  const issueUda = useCallback(async () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    try {
+      const response = await ApiHandler.issueAssetUda({
+        name: assetName.trim(),
+        details: description,
+        ticker: assetTicker,
+        mediaFilePath: Platform.select({
+          android:
+            appType === AppType.NODE_CONNECT
+              ? image.startsWith('file://')
+                ? image
+                : `file://${path}`
+              : image.replace('file://', ''),
+          ios: image.replace('file://', ''),
+        }),
+        attachmentsFilePaths: attachments.map(attachment =>
+          Platform.select({
+            android:
+              appType === AppType.NODE_CONNECT
+                ? attachment.startsWith('file://')
+                  ? attachment
+                  : `file://${path}`
+                : attachment.replace('file://', ''),
+            ios: attachment.replace('file://', ''),
+          }),
+        ),
+      });
+      if (response?.assetId) {
+        setLoading(false);
+        Toast(assets.assetCreateMsg);
+        viewUtxos.mutate();
+        refreshRgbWalletMutation.mutate();
+        // navigation.dispatch(popAction);
+        navigation.navigate(NavigationRoutes.COLLECTIBLE);
+      } else if (
+        response?.error === 'Insufficient sats for RGB' ||
+        response?.name === 'NoAvailableUtxos'
+      ) {
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+      } else if (response?.error) {
+        setLoading(false);
+        Toast(`Failed: ${response?.error}`, true);
+      }
+    } catch (error) {
+      setLoading(false);
+      Toast(`Unexpected error: ${error.message}`, true);
     }
-    return !assetName || !description || !totalSupplyAmt || !image;
-  }, [assetName, assetTicker, totalSupplyAmt, image, description, assetType]);
+  }, [
+    assetName,
+    assets.assetCreateMsg,
+    description,
+    image,
+    navigation,
+    totalSupplyAmt,
+    precision,
+    attachments
+  ]);
+
+  const isButtonDisabled = useMemo(() => {
+    if (assetType === AssetType.Collectible) {
+      return !assetName || !image || !totalSupplyAmt || !description;
+    }
+    return (
+      !assetName ||
+      !assetTicker ||
+      !description ||
+      !attachments.length ||
+      !image
+    );
+  }, [
+    assetType,
+    assetName,
+    assetTicker,
+    description,
+    attachments.length,
+    image,
+    totalSupplyAmt,
+  ]);
 
   const handlePickImage = async () => {
     Keyboard.dismiss();
@@ -191,11 +276,21 @@ function IssueCollectibleScreen() {
     }
   };
 
+  const selectAttchments = async () => {
+    Keyboard.dismiss();
+    try {
+      const result = await pickImage(false, 5);
+      setAttachments(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onPressIssue = () => {
-    if (assetType === AssetType.Coin) {
-      issueCoin();
-    } else {
+    if (assetType === AssetType.Collectible) {
       issueCollectible();
+    } else {
+      issueUda();
     }
   };
 
@@ -205,6 +300,8 @@ function IssueCollectibleScreen() {
     setAssetName('');
     setTotalSupplyAmt('');
     setImage('');
+    setAttachments([]);
+    setPrecision(0);
   };
 
   const handleTotalSupplyChange = text => {
@@ -227,7 +324,7 @@ function IssueCollectibleScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.issueNew} />
+      <AppHeader title={'Issue Collectible'} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -247,45 +344,89 @@ function IssueCollectibleScreen() {
       </View>
 
       <KeyboardAvoidView style={styles.contentWrapper}>
-        {assetType === AssetType.Coin ? (
+        <View style={styles.containerTop}>
+          <AppText variant="heading3">Make this collectible unique</AppText>
+
+          <Switch
+            value={assetType === AssetType.UDA}
+            onValueChange={value => {
+              setAssetType(value ? AssetType.UDA : AssetType.Collectible);
+              handleTabChange();
+            }}
+            color={theme.colors.accent1}
+          />
+        </View>
+
+        {assetType === AssetType.Collectible ? (
           <View>
-<TextField
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.assetName}
+            </AppText>
+            <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
-              placeholder={home.assetName}
+              placeholder={'Enter a name for your asset'}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
+              onSubmitEditing={() => descriptionInputRef.current?.focus()}
+              blurOnSubmit={false}
+              returnKeyType="next"
             />
+
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.assetDescription}
+            </AppText>
             <TextField
+              ref={descriptionInputRef}
               value={description}
               onChangeText={text => setDescription(text)}
-              placeholder={home.assetDescription}
+              placeholder={'Describe your asset'}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
               keyboardType={'default'}
-              returnKeyType={'Enter'}
+              returnKeyType="next"
               maxLength={100}
               multiline={true}
               numberOfLines={2}
               style={[styles.input, description && styles.descInput]}
+              onSubmitEditing={() => totalSupplyInputRef.current?.focus()}
+              blurOnSubmit={false}
             />
+
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.totalSupplyAmount}
+            </AppText>
+
             <TextField
+              ref={totalSupplyInputRef}
               value={formatNumber(totalSupplyAmt)}
               onChangeText={text => handleTotalSupplyChange(text)}
-              placeholder={home.totalSupplyAmount}
+              placeholder={'Enter the maximum number of units'}
               keyboardType="numeric"
               style={styles.input}
+              returnKeyType="done"
             />
+
             <Slider
               title="Precision"
               value={precision}
-              onValueChange={(value)=> setPrecision(value)}
+              onValueChange={value => setPrecision(value)}
               minimumValue={0}
               maximumValue={10}
               step={1}
             />
+            <AppText variant="caption" style={styles.textInputTitle}>
+              Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)
+            </AppText>
+
+            <AppText
+              variant="secondaryCta"
+              style={[styles.textInputTitle, { marginTop: 10 }]}>
+              Media File
+            </AppText>
+
             <UploadAssetFileButton
               onPress={handlePickImage}
               title={home.uploadFile}
@@ -309,57 +450,170 @@ function IssueCollectibleScreen() {
                 </AppTouchable>
               </View>
             )}
+
+            <AppText variant="caption" style={[styles.textInputTitle]}>
+              Add an image to represent your asset (e.g., logo or artwork)
+            </AppText>
           </View>
         ) : (
           <View>
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.assetName}
+            </AppText>
             <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
-              placeholder={home.assetName}
+              placeholder={'Enter a name for your asset'}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
+              onSubmitEditing={() => assetTickerInputRef.current?.focus()}
+              blurOnSubmit={false}
+              returnKeyType="next"
             />
+
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.assetTicker}
+            </AppText>
+
             <TextField
+              ref={assetTickerInputRef}
+              value={assetTicker}
+              onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+              placeholder={'Enter a short ticker symbol (e.g., BTC)'}
+              maxLength={8}
+              style={styles.input}
+              autoCapitalize="characters"
+              returnKeyType="next"
+              onSubmitEditing={() => descriptionInputRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+
+            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+              {home.assetDescription}
+            </AppText>
+            <TextField
+              ref={descriptionInputRef}
               value={description}
               onChangeText={text => setDescription(text)}
-              placeholder={home.assetDescription}
+              placeholder={'Describe your asset'}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
               keyboardType={'default'}
-              returnKeyType={'Enter'}
+              returnKeyType="done"
               maxLength={100}
               multiline={true}
               numberOfLines={2}
               style={[styles.input, description && styles.descInput]}
+              onSubmitEditing={() => Keyboard.dismiss()}
+              blurOnSubmit={false}
             />
-          </View>
-        )}
-      </KeyboardAvoidView>
-      {colorable.length === 0 && (
-        <View style={styles.reservedSatsWrapper}>
-          <View style={styles.checkIconWrapper}>
-            {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
-          </View>
-          <View style={styles.reservedSatsWrapper1}>
-            <AppText variant="body2" style={styles.reservedSatsText}>
-              {assets.reservedSats}
+
+            <AppText
+              variant="secondaryCta"
+              style={[styles.textInputTitle, { marginTop: 10 }]}>
+              Media File
+            </AppText>
+
+            <UploadAssetFileButton
+              onPress={handlePickImage}
+              title={home.uploadFile}
+              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
+            />
+            {image && (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{
+                    uri:
+                      Platform.OS === 'ios'
+                        ? image.replace('file://', '')
+                        : image,
+                  }}
+                  style={styles.imageStyle}
+                />
+                <AppTouchable
+                  style={styles.closeIconWrapper}
+                  onPress={() => setImage('')}>
+                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
+                </AppTouchable>
+              </View>
+            )}
+
+            <AppText variant="caption" style={[styles.textInputTitle]}>
+              Add an image to represent your asset (e.g., logo or artwork)
+            </AppText>
+
+            <AppText
+              variant="secondaryCta"
+              style={[styles.textInputTitle, { marginTop: 10 }]}>
+              Attachments
+            </AppText>
+
+            <FlatList
+              data={attachments}
+              extraData={[attachments]}
+              horizontal
+              renderItem={({ item, index }) => (
+                <View style={styles.imageWrapper}>
+                  <Image
+                    source={{
+                      uri:
+                        Platform.OS === 'ios'
+                          ? item.replace('file://', '')
+                          : item,
+                    }}
+                    style={styles.imageStyle}
+                  />
+                  <AppTouchable
+                    style={styles.closeIconWrapper}
+                    onPress={() => {
+                      setAttachments(attachments.filter((_, i) => i !== index));
+                    }}>
+                    {isThemeDark ? <IconClose /> : <IconCloseLight />}
+                  </AppTouchable>
+                </View>
+              )}
+              ListFooterComponent={() => (
+                <AppTouchable
+                  style={[styles.imageStyle]}
+                  onPress={selectAttchments}>
+                  <AppText style={{ fontSize: 70 }}>+</AppText>
+                </AppTouchable>
+              )}
+            />
+
+            <AppText variant="caption" style={[styles.textInputTitle]}>
+              Attach any supporting images or files (max 16MB)
             </AppText>
           </View>
+        )}
+
+        {colorable.length === 0 && (
+          <View style={styles.reservedSatsWrapper}>
+            <View style={styles.checkIconWrapper}>
+              {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
+            </View>
+            <View style={styles.reservedSatsWrapper1}>
+              <AppText variant="body2" style={styles.reservedSatsText}>
+                {assets.reservedSats}
+              </AppText>
+            </View>
+          </View>
+        )}
+        <View style={styles.buttonWrapper}>
+          <Buttons
+            primaryTitle={common.proceed}
+            primaryOnPress={onPressIssue}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={() => navigation.goBack()}
+            disabled={isButtonDisabled || createUtxos.isLoading || loading}
+            width={wp(120)}
+            primaryLoading={createUtxos.isLoading || loading}
+          />
         </View>
-      )}
-      <View style={styles.buttonWrapper}>
-        <Buttons
-          primaryTitle={common.proceed}
-          primaryOnPress={onPressIssue}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled || createUtxos.isLoading || loading}
-          width={wp(120)}
-          primaryLoading={createUtxos.isLoading || loading}
-        />
-      </View>
+      </KeyboardAvoidView>
+
       <View>
         <ResponsePopupContainer
           visible={visibleFailedToCreatePopup}
@@ -389,7 +643,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       height: Math.max(100, inputHeight),
     },
     buttonWrapper: {
-      // marginTop: hp(20),
+      marginTop: hp(30),
     },
     contentWrapper: {
       flex: 1,
@@ -400,10 +654,13 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderBottomWidth: 1,
     },
     imageStyle: {
-      height: hp(110),
-      width: hp(110),
+      height: hp(80),
+      width: hp(80),
       borderRadius: hp(15),
       marginVertical: hp(10),
+      marginHorizontal: hp(5),
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     imageWrapper: {
       flex: 1,
@@ -412,7 +669,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     closeIconWrapper: {
       position: 'absolute',
       bottom: 0,
-      left: Platform.OS === 'ios' ? 100 : 112,
+      left: Platform.OS === 'ios' ? 80 : 85,
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
@@ -428,6 +685,15 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     reservedSatsText: {
       color: theme.colors.secondaryHeadingColor,
+    },
+    textInputTitle: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    containerTop: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: hp(20),
     },
   });
 export default IssueCollectibleScreen;

@@ -235,17 +235,19 @@ object RGBHelper {
         return  asset
     }
 
-    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): AssetUda? {
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): String? {
         val asset = RGBWalletRepository.wallet?.issueAssetUda(
             RGBWalletRepository.online!!,
-            name,
             ticker,
+            name,
             details,
             AppConstants.rgbDefaultPrecision,
             mediaFilePath,
             attachmentsFilePaths,
         )
-        return  asset
+        val gson = Gson()
+        val json = gson.toJson(asset)
+        return  json
     }
 
     fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
