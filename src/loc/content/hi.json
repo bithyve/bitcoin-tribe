@@ -397,7 +397,7 @@
     "date": "तिथि",
     "numOfUtxo": "UTXO की संख्या",
     "transferDetails": "स्थानांतरण विवरण",
-    "viewUnspent": "अनस्पेंट UTXOs देखें",
+    "viewUnspent": "UTXO देखें",
     "walletRefreshMsg": "वॉलेट सफलतापूर्वक अपडेट किया गया",
     "unspentTitle": "UTXOs का अवलोकन",
     "satsAmount": "सैट्स राशि",

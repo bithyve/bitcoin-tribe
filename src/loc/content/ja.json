@@ -397,7 +397,7 @@
     "date": "日付",
     "numOfUtxo": "UTXOの数",
     "transferDetails": "転送の詳細",
-    "viewUnspent": "未使用UTXOを表示",
+    "viewUnspent": "UTXO を表示",
     "walletRefreshMsg": "ウォレットが正常に更新されました",
     "unspentTitle": "未使用トランザクション出力（UTXO）の概要",
     "satsAmount": "サットの金額",

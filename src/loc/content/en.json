@@ -397,7 +397,7 @@
     "date": "Date",
     "numOfUtxo": "Number of UTXOs",
     "transferDetails": "Transfer Details",
-    "viewUnspent": "View Unspent UTXOs",
+    "viewUnspent": "View UTXOs",
     "walletRefreshMsg": "Wallet successfully updated",
     "unspentTitle": "UTXOs Overview",
     "satsAmount": "Sats Amount",

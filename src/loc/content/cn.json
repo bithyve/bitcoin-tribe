@@ -397,7 +397,7 @@
     "date": "日期",
     "numOfUtxo": "UTXO数量",
     "transferDetails": "转账详情",
-    "viewUnspent": "查看未花费的UTXO",
+    "viewUnspent": "查看UTXO",
     "walletRefreshMsg": "钱包更新成功",
     "unspentTitle": "未使用交易输出概览",
     "satsAmount": "Sats金额",
