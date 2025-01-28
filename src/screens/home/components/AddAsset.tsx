@@ -132,7 +132,7 @@ function AddAsset() {
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length < 0) {
+        if (feesPaid.length > 0) {
           navigation.replace(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry: true,
