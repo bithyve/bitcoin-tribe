@@ -108,9 +108,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
       padding: windowHeight > 670 ? hp(16) : hp(10),
       backgroundColor: backColor,
       borderRadius: 20,
-      borderColor: backup
-        ? theme.colors.backupDoneBorder
-        : theme.colors.borderColor,
+      borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(10),
     },
