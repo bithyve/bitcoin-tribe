@@ -4,14 +4,17 @@ import React, {
   useMemo,
   useCallback,
   useEffect,
-  useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -20,25 +23,41 @@ import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
+import pickImage from 'src/utils/imagePicker';
+import IconClose from 'src/assets/images/image_icon_close.svg';
+import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
+import SegmentedButtons from 'src/components/SegmentedButtons';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import UploadAssetFileButton from './components/UploadAssetFileButton';
+import UploadFile from 'src/assets/images/uploadFile.svg';
+import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
+import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import AppType from 'src/models/enums/AppType';
+import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
-function IssueScreen() {
+function IssueCollectibleScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
+  const { appType } = useContext(AppContext);
+  const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -48,13 +67,17 @@ function IssueScreen() {
   const styles = getStyles(theme, inputHeight);
   const [assetName, setAssetName] = useState('');
   const [assetTicker, setAssetTicker] = useState('');
+  const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [precision, setPrecision] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
-
+  const [assetType, setAssetType] = useState<AssetType>(
+    issueAssetType || AssetType.Coin,
+  );
+  const [image, setImage] = useState('');
   const {
     mutate: createUtxos,
     error: createUtxoError,
@@ -62,13 +85,12 @@ function IssueScreen() {
     reset: createUtxoReset,
   } = useMutation(ApiHandler.createUtxos);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  // const createUtxos = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
-  const assetTickerInputRef = useRef(null);
-  const totalSupplyInputRef = useRef(null);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -101,16 +123,24 @@ function IssueScreen() {
     viewUtxos.mutate();
   }, []);
 
-  const issueCoin = useCallback(async () => {
+  const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
     try {
-      const response = await ApiHandler.issueNewCoin({
+      const response = await ApiHandler.issueNewCollectible({
         name: assetName.trim(),
-        ticker: assetTicker,
+        description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         precision: Number(precision),
-        addToRegistry,
+        filePath: Platform.select({
+          android:
+            appType === AppType.NODE_CONNECT
+              ? image.startsWith('file://')
+                ? image
+                : `file://${path}`
+              : image.replace('file://', ''),
+          ios: image.replace('file://', ''),
+        }),
       });
       if (response?.assetId) {
         setLoading(false);
@@ -118,7 +148,7 @@ function IssueScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.ASSETS);
+        navigation.navigate(NavigationRoutes.COLLECTIBLE);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -132,15 +162,49 @@ function IssueScreen() {
       }
     } catch (error) {
       setLoading(false);
+      Toast(`Unexpected error: ${error.message}`, true);
     }
-  }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
+  }, [
+    assetName,
+    assets.assetCreateMsg,
+    description,
+    image,
+    navigation,
+    totalSupplyAmt,
+    precision,
+  ]);
 
   const isButtonDisabled = useMemo(() => {
-    return !assetName || !assetTicker || !totalSupplyAmt;
-  }, [assetName, assetTicker, totalSupplyAmt]);
+    if (assetType === AssetType.Coin) {
+      return !assetName || !assetTicker || !totalSupplyAmt;
+    }
+    return !assetName || !description || !totalSupplyAmt || !image;
+  }, [assetName, assetTicker, totalSupplyAmt, image, description, assetType]);
+
+  const handlePickImage = async () => {
+    Keyboard.dismiss();
+    try {
+      const result = await pickImage(false);
+      setImage(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onPressIssue = () => {
-    issueCoin();
+    if (assetType === AssetType.Coin) {
+      issueCoin();
+    } else {
+      issueCollectible();
+    }
+  };
+
+  const handleTabChange = () => {
+    setDescription('');
+    setAssetTicker('');
+    setAssetName('');
+    setTotalSupplyAmt('');
+    setImage('');
   };
 
   const handleTotalSupplyChange = text => {
@@ -163,7 +227,7 @@ function IssueScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'Issue New Coin'} />
+      <AppHeader title={home.issueNew} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -183,64 +247,95 @@ function IssueScreen() {
       </View>
 
       <KeyboardAvoidView style={styles.contentWrapper}>
-        <View>
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
-            {home.assetName}
-          </AppText>
-          <TextField
-            value={assetName}
-            onChangeText={text => setAssetName(text)}
-            placeholder={'Enter a name for your asset'}
-            maxLength={32}
-            style={styles.input}
-            autoCapitalize="words"
-            returnKeyType="next"
-            onSubmitEditing={() => assetTickerInputRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
-            {home.assetTicker}
-          </AppText>
-
-          <TextField
-            ref={assetTickerInputRef}
-            value={assetTicker}
-            onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-            placeholder={'Enter a short ticker symbol (e.g., BTC)'}
-            maxLength={8}
-            style={styles.input}
-            autoCapitalize="characters"
-            returnKeyType="next"
-            onSubmitEditing={() => totalSupplyInputRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
-            {home.totalSupplyAmount}
-          </AppText>
-
-          <TextField
-            ref={totalSupplyInputRef}
-            value={formatNumber(totalSupplyAmt)}
-            onChangeText={text => handleTotalSupplyChange(text)}
-            placeholder={'Enter the maximum number of units'}
-            keyboardType="numeric"
-            style={styles.input}
-            returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
-          />
-
-          <Slider
-            title="Precision"
-            value={precision}
-            onValueChange={value => setPrecision(value)}
-            minimumValue={0}
-            maximumValue={10}
-            step={1}
-          />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
-            Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)
-          </AppText>
-        </View>
+        {assetType === AssetType.Coin ? (
+          <View>
+<TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+            <TextField
+              value={description}
+              onChangeText={text => setDescription(text)}
+              placeholder={home.assetDescription}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              keyboardType={'default'}
+              returnKeyType={'Enter'}
+              maxLength={100}
+              multiline={true}
+              numberOfLines={2}
+              style={[styles.input, description && styles.descInput]}
+            />
+            <TextField
+              value={formatNumber(totalSupplyAmt)}
+              onChangeText={text => handleTotalSupplyChange(text)}
+              placeholder={home.totalSupplyAmount}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <Slider
+              title="Precision"
+              value={precision}
+              onValueChange={(value)=> setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
+            />
+            <UploadAssetFileButton
+              onPress={handlePickImage}
+              title={home.uploadFile}
+              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
+            />
+            {image && (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{
+                    uri:
+                      Platform.OS === 'ios'
+                        ? image.replace('file://', '')
+                        : image,
+                  }}
+                  style={styles.imageStyle}
+                />
+                <AppTouchable
+                  style={styles.closeIconWrapper}
+                  onPress={() => setImage('')}>
+                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
+                </AppTouchable>
+              </View>
+            )}
+          </View>
+        ) : (
+          <View>
+            <TextField
+              value={assetName}
+              onChangeText={text => setAssetName(text)}
+              placeholder={home.assetName}
+              maxLength={32}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+            <TextField
+              value={description}
+              onChangeText={text => setDescription(text)}
+              placeholder={home.assetDescription}
+              onContentSizeChange={event => {
+                setInputHeight(event.nativeEvent.contentSize.height);
+              }}
+              keyboardType={'default'}
+              returnKeyType={'Enter'}
+              maxLength={100}
+              multiline={true}
+              numberOfLines={2}
+              style={[styles.input, description && styles.descInput]}
+            />
+          </View>
+        )}
       </KeyboardAvoidView>
       {colorable.length === 0 && (
         <View style={styles.reservedSatsWrapper}>
@@ -334,8 +429,5 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     reservedSatsText: {
       color: theme.colors.secondaryHeadingColor,
     },
-    textInputTitle: {
-      color: theme.colors.secondaryHeadingColor,
-    },
   });
-export default IssueScreen;
+export default IssueCollectibleScreen;

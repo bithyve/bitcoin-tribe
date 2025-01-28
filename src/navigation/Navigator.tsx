@@ -71,6 +71,7 @@ import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
+import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -187,6 +188,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUESCREEN}
           component={IssueScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUECOLLECTIBLESCREEN}
+          component={IssueCollectible}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}
