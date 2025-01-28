@@ -415,7 +415,8 @@
     "coloured": "Coloured",
     "unColoured": "UnColoured",
     "availableTxnFee": "Available transaction fee",
-    "output": "Output"
+    "output": "Output",
+    "utxoValue": "UTXO Value"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

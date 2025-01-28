@@ -179,7 +179,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
             const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
           }
@@ -224,7 +224,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
           }
         } else {
@@ -262,7 +262,7 @@ export class ApiHandler {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
               releaseNote: '',
               date: new Date().toString(),
-              title: 'Initially installed',
+              title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
           }
         }
@@ -302,7 +302,7 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: '',
           date: new Date().toString(),
-          title: 'Initially installed',
+          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
         });
       }
     } catch (error) {
@@ -351,7 +351,7 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: '',
           date: new Date().toString(),
-          title: 'Initially installed',
+          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
         });
       } else {
         throw new Error(backup.error);
@@ -1290,15 +1290,27 @@ export class ApiHandler {
     }
   }
 
-  static async checkVersion(previousVersion, currentVerion) {
+  static async checkVersion() {
     try {
-      dbManager.createObject(RealmSchema.VersionHistory, {
-        version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-        releaseNote: '',
-        date: new Date().toString(),
-        title: `Upgraded from ${previousVersion.version} to ${currentVerion}`,
-      });
-      return true;
+      const versionHistoryData = dbManager.getCollection(
+        RealmSchema.VersionHistory,
+      );
+      const lastIndex = versionHistoryData.length - 1;
+      const version = dbManager.getObjectByIndex(
+        RealmSchema.VersionHistory,
+        lastIndex,
+      );
+      const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
+      if (version?.version !== currentVersion) {
+        dbManager.createObject(RealmSchema.VersionHistory, {
+          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          releaseNote: '',
+          date: new Date().toString(),
+          title: `Upgraded from ${version.version} to ${currentVersion}`,
+        });
+        return true;
+      }
+      return false;
     } catch (error) {
       console.log('check Version', error);
       throw error;

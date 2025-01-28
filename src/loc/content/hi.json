@@ -415,7 +415,8 @@
     "coloured": "रंगीन",
     "unColoured": "बिना रंग का",
     "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
-    "output": "आउटपुट"
+    "output": "आउटपुट",
+    "utxoValue": "UTXO मूल्य"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

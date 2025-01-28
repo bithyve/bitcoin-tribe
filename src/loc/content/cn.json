@@ -415,7 +415,8 @@
     "coloured": "彩色",
     "unColoured": "非彩色",
     "availableTxnFee": "可用交易费",
-    "output": "输出"
+    "output": "输出",
+    "utxoValue": "UTXO 值"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
