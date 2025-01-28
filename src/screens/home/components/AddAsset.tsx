@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -29,6 +29,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import SecondaryCTA from 'src/components/SecondaryCTA';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -178,24 +179,29 @@ function AddAsset() {
     wallet?.specs.balances.unconfirmed,
   ]);
 
-  const navigateToIssue = (addToRegistry: boolean) => {
-    if (issueAssetType === AssetType.Coin) {
-      navigation.replace(NavigationRoutes.ISSUESCREEN, {
-        issueAssetType,
-        addToRegistry,
-      });
-    } else {
-      navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
-        issueAssetType,
-        addToRegistry,
-      });
-    }
-  };
+  const navigateToIssue = useCallback(
+    (addToRegistry: boolean) => {
+      setTimeout(() => {
+        if (issueAssetType === AssetType.Coin) {
+          navigation.replace(NavigationRoutes.ISSUESCREEN, {
+            issueAssetType,
+            addToRegistry,
+          });
+        } else {
+          navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
+            issueAssetType,
+            addToRegistry,
+          });
+        }
+      }, 500);
+    },
+    [issueAssetType, navigation]
+  );
 
   return (
     <ScreenContainer>
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
-
+      <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
       <View>
         <ModalContainer
           title={'List Your Asset In Registry'}
@@ -224,7 +230,7 @@ function AddAsset() {
 
       <View style={styles.container}>
         <SelectOption
-          title={home.issueNew}
+          title={issueAssetType === AssetType.Coin ? 'Issue Coin' : 'Issue Collectible'}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
