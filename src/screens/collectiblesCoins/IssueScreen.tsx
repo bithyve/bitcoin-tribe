@@ -50,11 +50,12 @@ import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import Slider from 'src/components/Slider';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
-  const { issueAssetType } = useRoute().params;
+  const { issueAssetType, addToRegistry } = useRoute().params;
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -68,7 +69,7 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
-  const [precision, setPrecision] = useState('');
+  const [precision, setPrecision] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
@@ -131,6 +132,7 @@ function IssueScreen() {
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, ''),
         precision: Number(precision),
+        addToRegistry,
       });
       if (response?.assetId) {
         setLoading(false);
@@ -328,20 +330,13 @@ function IssueScreen() {
               style={styles.input}
             />
 
-            <TextField
+            <Slider
+              title="Precision"
               value={precision}
-              maxLength={2}
-              onChangeText={text => {
-                const num = parseInt(text, 10);
-                if (!isNaN(num) && num >= 0 && num <= 10) {
-                  setPrecision(text);
-                } else if (text === '') {
-                  setPrecision('');
-                }
-              }}
-              placeholder={'Precision'}
-              keyboardType="numeric"
-              style={styles.input}
+              onValueChange={(value)=> setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
             />
           </View>
         ) : (
@@ -375,20 +370,13 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
-            <TextField
+            <Slider
+              title="Precision"
               value={precision}
-              onChangeText={text => {
-                const num = parseInt(text, 10);
-                if (!isNaN(num) && num >= 0 && num <= 10) {
-                  setPrecision(text);
-                } else if (text === '') {
-                  setPrecision('');
-                }
-              }}
-              maxLength={2}
-              placeholder={'Precision'}
-              keyboardType="numeric"
-              style={styles.input}
+              onValueChange={(value)=> setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
             />
             <UploadAssetFileButton
               onPress={handlePickImage}

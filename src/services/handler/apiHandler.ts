@@ -3,6 +3,7 @@ import {
   DerivationPurpose,
   EntityKind,
   NetworkType,
+  TransactionKind,
   TxPriority,
   WalletType,
 } from 'src/services/wallets/enums';
@@ -59,6 +60,7 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 
 import * as RNFS from '@dr.pogodin/react-native-fs';
+import moment from 'moment';
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -642,6 +644,108 @@ export class ApiHandler {
     }
   }
 
+  static async payServiceFee({ feeDetails }): Promise<{ txid: string }> {
+    const wallet: Wallet = dbManager
+      .getObjectByIndex(RealmSchema.Wallet)
+      .toJSON();
+    const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+      JSON.parse(averageTxFeeJSON);
+    const averageTxFee: AverageTxFees =
+      averageTxFeeByNetwork[config.NETWORK_TYPE];
+    const { low } = await ApiHandler.sendPhaseOne({
+      sender: wallet,
+      recipient: {
+        address: feeDetails.address,
+        amount: feeDetails.fee,
+      },
+      averageTxFee,
+      selectedPriority: TxPriority.LOW,
+    });
+    const { txid } = await ApiHandler.sendToAddress({
+      recipient: {
+        address: feeDetails.address,
+        amount: feeDetails.includeTxFee
+          ? feeDetails.fee - low.fee
+          : feeDetails.fee,
+      },
+      skipSync: false,
+    });
+    if (txid) {
+      await ApiHandler.updateTransaction({
+        txid,
+        updateProps: {
+          note: '',
+          transactionKind: TransactionKind.SERVICE_FEE,
+          metadata: {
+            assetId: '',
+          },
+        },
+      });
+    }
+    return { txid };
+  }
+
+  static async updateTransaction({
+    txid,
+    updateProps,
+  }: {
+    txid: string;
+    updateProps: {};
+  }): Promise<boolean> {
+    const wallet: Wallet = dbManager
+      .getObjectByIndex(RealmSchema.Wallet)
+      .toJSON();
+    const transactions = wallet.specs.transactions;
+    const index = transactions.findIndex(tx => tx.txid === txid);
+    transactions[index] = {
+      ...transactions[index],
+      ...updateProps,
+    };
+    dbManager.updateObjectByPrimaryId(RealmSchema.Wallet, 'id', wallet.id, {
+      specs: {
+        transactions: transactions,
+        ...wallet.specs,
+      },
+    });
+    return true;
+  }
+
+  static async sendToAddress({
+    recipient,
+    skipSync = true,
+  }: {
+    recipient: { address: string; amount: number };
+    skipSync: boolean;
+  }): Promise<{ txid: string }> {
+    const wallet = dbManager.getObjectByIndex(RealmSchema.Wallet).toJSON();
+    const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
+      JSON.parse(averageTxFeeJSON);
+    const averageTxFee: AverageTxFees =
+      averageTxFeeByNetwork[config.NETWORK_TYPE];
+    const txPrerequisites = await ApiHandler.sendPhaseOne({
+      sender: wallet,
+      recipient,
+      averageTxFee,
+      selectedPriority: TxPriority.LOW,
+    });
+
+    if (!txPrerequisites) {
+      throw new Error('Failed to generate txPrerequisites');
+    }
+    const { txid } = await ApiHandler.sendPhaseTwo({
+      sender: wallet,
+      recipient,
+      txPrerequisites,
+      txPriority: TxPriority.LOW,
+    });
+    if (!skipSync) {
+      await ApiHandler.refreshWallets({ wallets: [wallet] });
+    }
+    return { txid };
+  }
+
   static async sendTransaction({
     sender,
     recipient,
@@ -935,11 +1039,13 @@ export class ApiHandler {
     ticker,
     supply,
     precision,
+    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     supply: string;
     precision: number;
+    addToRegistry;
   }) {
     try {
       const response = await RGBServices.issueAssetNia(
@@ -957,7 +1063,28 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        await Relay.registerAsset(app.id, { ...metadata, ...response });
+        if (addToRegistry) {
+          await Relay.registerAsset(app.id, { ...metadata, ...response });
+          const wallet: Wallet = dbManager
+            .getObjectByIndex(RealmSchema.Wallet)
+            .toJSON();
+          const tx = wallet.specs.transactions.find(
+            tx =>
+              tx.transactionKind === TransactionKind.SERVICE_FEE &&
+              tx.metadata?.assetId === '',
+          );
+          if (tx) {
+            ApiHandler.updateTransaction({
+              txid: tx.txid,
+              updateProps: {
+                metadata: {
+                  assetId: response.assetId,
+                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                },
+              },
+            });
+          }
+        }
         await ApiHandler.refreshRgbWallet();
       }
       return response;
@@ -972,12 +1099,14 @@ export class ApiHandler {
     supply,
     filePath,
     precision,
+    addToRegistry = true,
   }: {
     name: string;
     description: string;
     supply: string;
     filePath: string;
     precision: number;
+    addToRegistry: boolean;
   }) {
     try {
       const response = await RGBServices.issueAssetCfa(
@@ -997,7 +1126,28 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-        await Relay.registerAsset(app.id, { ...collectible });
+        if (addToRegistry) {
+          await Relay.registerAsset(app.id, { ...collectible });
+          const wallet: Wallet = dbManager
+            .getObjectByIndex(RealmSchema.Wallet)
+            .toJSON();
+          const tx = wallet.specs.transactions.find(
+            tx =>
+              tx.transactionKind === TransactionKind.SERVICE_FEE &&
+              tx.metadata?.assetId === '',
+          );
+          if (tx) {
+            ApiHandler.updateTransaction({
+              txid: tx.txid,
+              updateProps: {
+                metadata: {
+                  assetId: response.assetId,
+                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                },
+              },
+            });
+          }
+        }
       }
       return response;
     } catch (error) {
