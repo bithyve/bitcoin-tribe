@@ -185,7 +185,7 @@ function AddAsset() {
         addToRegistry,
       });
     } else {
-      navigation.replace(NavigationRoutes.ISSUESCREEN, {
+      navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
         issueAssetType,
         addToRegistry,
       });
