@@ -8,7 +8,7 @@ export class RealmDatabase {
 
   public static file = 'tribe.realm';
 
-  public static schemaVersion = 35;
+  public static schemaVersion = 36;
 
   /**
    * initializes/opens realm w/ appropriate configuration
@@ -169,6 +169,18 @@ export class RealmDatabase {
       });
     } catch (err) {
       console.log({ err });
+    }
+  };
+
+  public getAllObjects = (schema: string) => {
+    const realm = this.getDatabase();
+    try {
+      return realm.objects(schema);
+    } catch (err) {
+      console.log({ err });
+      throw new Error(
+        `Error fetching objects from schema ${schema}: ${err.message}`,
+      );
     }
   };
 }

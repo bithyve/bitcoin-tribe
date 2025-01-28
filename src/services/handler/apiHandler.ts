@@ -1140,8 +1140,12 @@ export class ApiHandler {
     }
   }
 
-  static async checkVersion(lastIndex) {
+  static async checkVersion() {
     try {
+      const versionHistoryData = dbManager.getObjects(
+        RealmSchema.VersionHistory,
+      );
+      const lastIndex = versionHistoryData.length - 1;
       const version = dbManager.getObjectByIndex(
         RealmSchema.VersionHistory,
         lastIndex,

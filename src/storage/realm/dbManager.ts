@@ -60,11 +60,11 @@ const createObjectBulk = (
  * generic :: fetches an object corresponding to provided schema and the supplied instance num
  * @param  {RealmSchema} schema
  */
-const getObjectByIndex = <T> (
+const getObjectByIndex = <T>(
   schema: RealmSchema,
   index: number = 0,
   all: boolean = false,
-) : T | T[] | undefined => {
+): T | T[] | undefined => {
   const objects = realm.get(schema) as Realm.Results<T>;
   if (all) {
     return Array.from(objects);
@@ -221,6 +221,10 @@ const getObjectByTxid = (schema: RealmSchema, txid: string) => {
   return realm.get(schema).filtered('utxo.outpoint.txid == $0', txid)[0];
 };
 
+const getObjects = (schema: RealmSchema) => {
+  return realm.getAllObjects(schema);
+};
+
 export default {
   initializeRealm,
   deleteRealm,
@@ -237,4 +241,5 @@ export default {
   getObjectByField,
   updateObject,
   getObjectByTxid,
+  getObjects,
 };
