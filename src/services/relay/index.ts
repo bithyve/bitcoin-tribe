@@ -91,6 +91,29 @@ export default class Relay {
     }
   };
 
+  public static getAssetIssuanceFee = async (): Promise<{
+    address: string,
+    fee: number,
+    includeTxFee: number,
+  }> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/servicefee/issuance`);
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   public static registerAsset = async (
     appID: string,
     asset: Asset,

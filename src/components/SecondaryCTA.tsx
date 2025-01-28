@@ -11,6 +11,7 @@ type secondaryCTAProps = {
   onPress: () => void;
   width?: number;
   height?: number;
+  disabled?: boolean;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
   const { title, onPress, width = 'auto', height } = props;
@@ -34,6 +35,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
         contentStyle={styles.container}
         mode="text"
         uppercase={false}
+        disabled={props.disabled}
         textColor={theme.colors.secondaryCtaTitleColor}
         labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}

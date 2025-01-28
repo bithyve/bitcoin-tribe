@@ -7,7 +7,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
 import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
-import { NetworkType, TransactionType } from 'src/services/wallets/enums';
+import { NetworkType, TransactionKind } from 'src/services/wallets/enums';
 import openLink from 'src/utils/OpenLink';
 import AppTouchable from 'src/components/AppTouchable';
 import config from 'src/utils/config';
@@ -80,7 +80,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   return (
     <View>
       <WalletTransactions
-        transId={transaction.txid}
+        transId={transaction.transactionKind || transaction.txid}
         transDate={transaction.date}
         transAmount={transAmount}
         transType={transaction.transactionType}
@@ -141,6 +141,13 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
         </AppText>
         {outputs}
       </View>
+
+      {transaction.transactionKind === TransactionKind.SERVICE_FEE && (
+        <LabeledContent
+          label={'Note'}
+          content={transaction.metadata?.note ? transaction.metadata?.note : 'Availibe to issue a new asset'}
+        />
+      )}
     </View>
   );
 }
