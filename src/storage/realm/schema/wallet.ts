@@ -84,6 +84,7 @@ export const TransactionSchema: ObjectSchema = {
     fee: 'int?',
     date: 'string?',
     transactionType: 'string?',
+    transactionKind: 'string?',
     amount: 'int',
     recipientAddresses: 'string[]',
     senderAddresses: 'string[]',
@@ -91,6 +92,8 @@ export const TransactionSchema: ObjectSchema = {
     tags: 'string[]',
     inputs: `${RealmSchema.Input}[]`,
     outputs: `${RealmSchema.Output}[]`,
+    note:'string?',
+    metadata: 'string?{}',
   },
 };
 
