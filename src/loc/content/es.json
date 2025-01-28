@@ -468,7 +468,7 @@
     "sendAssetLoadingSubTitle": "Tu transacción está siendo procesada—por favor espera. Relájate, y tus activos RGB serán enviados de forma segura.",
     "issueAssetLoadingTitle": "Emitiendo Activo",
     "issueAssetLoadingSubTitle": "Tu activo se está creando—por favor espera. Relájate y tu nuevo activo se emitirá pronto.",
-    "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 18,446,744,073,709,551,615.",
+    "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 9,007,199,254,740,992.",
     "swipeToSend": "Deslizar para enviar",
     "sendingAsset": "Enviando activos...",
     "cancelTransferMsg": "¡Transferencia cancelada!",

@@ -26,7 +26,7 @@ class Configuration {
       upperBound: 100,
     },
   };
-  public GAP_LIMIT: number = 5;
+  public GAP_LIMIT: number = 20;
   public HEXA_ID: string =
     'b01623f1065ba45d68b516efe2873f59bfc9b9b2d8b194f94f989d87d711830a';
   public RELAY_URL: string = 'https://bhrelay.appspot.com';

@@ -468,7 +468,7 @@
     "sendAssetLoadingSubTitle": "取引が処理されています—しばらくお待ちください！リラックスして、RGB資産が安全に送信されるのをお待ちください。",
     "issueAssetLoadingTitle": "資産を発行中",
     "issueAssetLoadingSubTitle": "資産を作成しています。少々お待ちください！リラックスして、新しい資産がまもなく発行されます。",
-    "totalSupplyAmountErrMsg": "入力した値が大きすぎます。18,446,744,073,709,551,615 より小さい数値を入力してください。",
+    "totalSupplyAmountErrMsg": "入力した値が大きすぎます。9,007,199,254,740,992 より小さい数値を入力してください。",
     "swipeToSend": "スワイプして送信",
     "sendingAsset": "資産を送信しています...",
     "cancelTransferMsg": "転送がキャンセルされました！",
