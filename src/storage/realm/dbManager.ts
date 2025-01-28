@@ -221,10 +221,6 @@ const getObjectByTxid = (schema: RealmSchema, txid: string) => {
   return realm.get(schema).filtered('utxo.outpoint.txid == $0', txid)[0];
 };
 
-const getObjects = (schema: RealmSchema) => {
-  return realm.getAllObjects(schema);
-};
-
 export default {
   initializeRealm,
   deleteRealm,
@@ -241,5 +237,4 @@ export default {
   getObjectByField,
   updateObject,
   getObjectByTxid,
-  getObjects,
 };
