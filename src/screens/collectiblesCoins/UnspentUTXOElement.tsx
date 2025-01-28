@@ -46,9 +46,9 @@ function UnspentUTXOElement({
     if (!assets) return {};
     return assets.reduce((map, asset) => {
       map[asset.assetId] = {
-        assetId: asset.assetId, // Include assetId
-        name: asset.name, // Include the name
-        ...asset, // Include the full asset object if needed
+        assetId: asset.assetId,
+        name: asset.name,
+        ...asset,
       };
       return map;
     }, {} as Record<string, { assetId: string; name: string } & (typeof assets)[0]>);
@@ -95,7 +95,7 @@ function UnspentUTXOElement({
                 style={styles.assetIdStyle}>
                 {assetID}
               </AppText>
-            ) : null; // Skip invalid allocations
+            ) : null;
           })
         : null}
       <View style={styles.contentWrapper}>

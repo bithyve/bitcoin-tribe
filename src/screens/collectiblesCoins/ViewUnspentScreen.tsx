@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
+
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -65,7 +66,7 @@ const ViewUnspentScreen = () => {
   );
   const uncolored = unspent.filter(utxo => utxo.utxo.colorable === false);
 
-  const { mutate, isLoading } = useMutation(ApiHandler.viewUtxos);
+  const { mutate } = useMutation(ApiHandler.viewUtxos);
 
   const listData = useMemo(() => {
     switch (utxoType) {
@@ -148,7 +149,7 @@ const ViewUnspentScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => pullDownToRefresh()}
-              colors={[theme.colors.accent1]} // You can customize this part
+              colors={[theme.colors.accent1]}
               progressBackgroundColor={theme.colors.inputBackground}
             />
           )
