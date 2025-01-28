@@ -285,7 +285,7 @@ const CombinedDarkTheme: AppTheme = {
     disabledCTAColor: Colors.DarkSalmon,
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
-    backupDoneBorder: Colors.GOGreen,
+    backupDoneBorder: Colors.UFOGreen1,
     closeChannelCTA: Colors.FireOpal,
     closeChannelCTATitle: Colors.White,
     assetsProgressFill: Colors.Turquoise,
