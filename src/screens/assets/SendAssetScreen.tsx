@@ -464,7 +464,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.medium}
@@ -478,7 +477,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.high}
@@ -492,7 +490,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.custom}
@@ -501,9 +498,8 @@ const SendAssetScreen = () => {
             setSelectedPriority={() => {
               setSelectedPriority(TxPriority.CUSTOM);
             }}
-            feeRateByPriority={''}
+            feeRateByPriority={0}
             estimatedBlocksByPriority={1}
-            disabled={false}
           />
         </View>
         {selectedPriority === TxPriority.CUSTOM && (

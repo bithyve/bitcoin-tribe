@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTheme } from 'react-native-paper';
 import {
   Keyboard,
@@ -49,6 +55,7 @@ import ClearIcon from 'src/assets/images/clearIcon.svg';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import WalletOperations from 'src/services/wallets/operations';
 
 function SendToContainer({
   wallet,
@@ -75,6 +82,9 @@ function SendToContainer({
   );
   const [customFee, setCustomFee] = useState(0);
   const [isSendMax, setIsSendMax] = useState(false);
+  const [sendMaxFee, setSendMaxFee] = useState(0);
+  const [sendMaxFeeInSats, setSendMaxFeeInSats] = useState(0);
+  const [sendMaxAmountInSats, setSendMaxAmountInSats] = useState(0);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -240,6 +250,22 @@ function SendToContainer({
     }
   }, [amount, wallet]);
 
+  useEffect(() => {
+    const recipients = [];
+    recipients.push({
+      address: recipientAddress,
+      amount: 0,
+    });
+    const fee = WalletOperations.calculateSendMaxFee(
+      wallet,
+      recipients,
+      selectedPriority === TxPriority.CUSTOM
+        ? Number(customFee)
+        : averageTxFee[selectedPriority]?.feePerByte,
+    );
+    setSendMaxFee(fee);
+  }, [recipientAddress, amount, selectedPriority, customFee]);
+
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
   };
@@ -253,35 +279,50 @@ function SendToContainer({
   const transferFee =
     app.appType === AppType.NODE_CONNECT
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
-      : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
+      : sendMaxFee;
+  // idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
 
-  const onSendMax = async () => {
+  const onSendMax = useCallback(() => {
+    if (!recipientAddress) {
+      Toast('Please enter recipient address first', true);
+      return;
+    }
     setIsSendMax(true);
-    setSelectedPriority(TxPriority.LOW);
+
     const availableToSpend = balances;
-    const txnFee = 226;
-    // const txnFee = await calculatedFee();
+
     if (
       initialCurrencyMode === CurrencyKind.SATS ||
       initialCurrencyMode === CurrencyKind.BITCOIN
     ) {
-      const sendMaxBalance = Number(availableToSpend) - Number(txnFee);
+      const sendMaxBalance = Number(availableToSpend) - Number(sendMaxFee);
       setAmount(sendMaxBalance.toFixed(0));
     } else {
       const feeAmount = ConvertSatsToFiat(
-        Number(txnFee),
+        Number(sendMaxFee),
         JSON.parse(exchangeRates),
         currencyCode,
       );
+      setSendMaxFeeInSats(sendMaxFee);
+
       const amountToSend = ConvertSatsToFiat(
         Number(availableToSpend),
         JSON.parse(exchangeRates),
         currencyCode,
       );
       const amount = amountToSend - feeAmount;
+
+      const sendMaxBalance = Number(availableToSpend) - Number(sendMaxFee);
       setAmount(amount.toFixed(2));
+      setSendMaxAmountInSats(sendMaxBalance);
     }
-  };
+  }, [isSendMax, selectedPriority, sendMaxFee]);
+
+  useEffect(() => {
+    if ((isSendMax && selectedPriority) || customFee) {
+      onSendMax();
+    }
+  }, [selectedPriority, isSendMax, customFee, sendMaxFee]);
 
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
@@ -368,9 +409,9 @@ function SendToContainer({
             keyboardType={'numeric'}
             inputStyle={styles.inputStyle}
             contentStyle={styles.contentStyle}
-            // rightText={common.max}
-            // onRightTextPress={() => {}}
-            // rightCTATextColor={theme.colors.accent1}
+            rightText={common.max}
+            onRightTextPress={() => onSendMax()}
+            rightCTATextColor={theme.colors.accent1}
           />
         </View>
         <View style={styles.availableBalanceWrapper}>
@@ -405,43 +446,45 @@ function SendToContainer({
             title={sendScreen.low}
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.LOW)}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.LOW);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
             )}
-            disabled={isSendMax}
           />
           <FeePriorityButton
             title={sendScreen.medium}
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.MEDIUM)}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.MEDIUM);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
             )}
-            disabled={isSendMax}
           />
           <FeePriorityButton
             title={sendScreen.high}
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
-            setSelectedPriority={() => setSelectedPriority(TxPriority.HIGH)}
+            setSelectedPriority={() => {
+              setSelectedPriority(TxPriority.HIGH);
+            }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
             )}
-            disabled={isSendMax}
           />
           <FeePriorityButton
             title={sendScreen.custom}
             priority={TxPriority.CUSTOM}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => setSelectedPriority(TxPriority.CUSTOM)}
-            feeRateByPriority={''}
+            feeRateByPriority={0}
             estimatedBlocksByPriority={1}
-            disabled={isSendMax}
           />
         </View>
         {selectedPriority === TxPriority.CUSTOM && (
@@ -507,8 +550,16 @@ function SendToContainer({
         <SendSuccessContainer
           // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
           recipientAddress={recipientAddress}
-          amount={amount.replace(/,/g, '')}
-          transFee={transferFee}
+          amount={
+            isSendMax && initialCurrencyMode === CurrencyKind.FIAT
+              ? sendMaxAmountInSats
+              : amount.replace(/,/g, '')
+          }
+          transFee={
+            isSendMax && initialCurrencyMode === CurrencyKind.FIAT
+              ? sendMaxFeeInSats
+              : transferFee
+          }
           feeRate={
             selectedPriority === TxPriority.CUSTOM
               ? customFee
@@ -520,7 +571,11 @@ function SendToContainer({
               : getEstimatedBlocksByPriority(selectedPriority)
           }
           selectedPriority={selectedPriority}
-          total={amount.replace(/,/g, '')}
+          total={
+            isSendMax && initialCurrencyMode === CurrencyKind.FIAT
+              ? sendMaxAmountInSats
+              : amount.replace(/,/g, '')
+          }
           onSuccessStatus={sendTransactionMutation.status === 'success'}
           onSuccessPress={() => successTransaction()}
           onPress={() => broadcastTransaction()}
@@ -555,8 +610,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '80%',
     },
     inputStyle: {
-      // width: '80%',
-      width: '100%',
+      width: '80%',
     },
     customFeeInputStyle: {
       width: '80%',

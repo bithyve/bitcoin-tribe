@@ -696,11 +696,13 @@ export default class WalletOperations {
 
   static calculateSendMaxFee = (
     wallet: Wallet,
-    numberOfRecipients: number,
+    recipients: {
+      address: string;
+      amount: number;
+    }[],
     feePerByte: number,
-    network: bitcoinJS.networks.Network,
     selectedUTXOs?: UTXO[],
-  ): { fee: number } => {
+  ): number => {
     const inputUTXOs =
       selectedUTXOs && selectedUTXOs.length
         ? selectedUTXOs
@@ -709,29 +711,15 @@ export default class WalletOperations {
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
     });
-
     const outputUTXOs = [];
-    for (let index = 0; index < numberOfRecipients; index++) {
-      // using random outputs for send all fee calculation
+    for (const recipient of recipients) {
       outputUTXOs.push({
-        address: bitcoinJS.payments.p2sh({
-          redeem: bitcoinJS.payments.p2wpkh({
-            pubkey: ECPair.makeRandom().publicKey,
-            network,
-          }),
-          network,
-        }).address,
+        address: recipient.address,
+        value: recipient.amount,
       });
     }
-    const { fee } = coinselectSplit(
-      inputUTXOs,
-      outputUTXOs,
-      feePerByte + testnetFeeSurcharge(wallet),
-    );
-
-    return {
-      fee,
-    };
+    const { fee } = coinselect(inputUTXOs, outputUTXOs, feePerByte);
+    return fee;
   };
 
   static prepareTransactionPrerequisites = (
@@ -773,7 +761,6 @@ export default class WalletOperations {
 
     const feePerByte = averageTxFees[selectedPriority].feePerByte;
     const estimatedBlocks = averageTxFees[selectedPriority].estimatedBlocks;
-
     const assets = coinselect(inputUTXOs, outputUTXOs, feePerByte);
     const priorityInputs = assets.inputs;
     const priorityOutputs = assets.outputs;
