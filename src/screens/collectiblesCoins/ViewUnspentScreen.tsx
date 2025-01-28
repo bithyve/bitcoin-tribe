@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, Platform, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -31,6 +31,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
@@ -38,6 +39,7 @@ const ViewUnspentScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations || { wallet: {}, assets: {} };
   const [utxoType, setUtxoType] = useState<UtxoType>(UtxoType.Colored);
+  const [refreshing, setRefreshing] = useState(false);
 
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -137,12 +139,19 @@ const ViewUnspentScreen = () => {
           </AppTouchable>
         )}
         refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={() => mutate()}
-            colors={[theme.colors.accent1]}
-            progressBackgroundColor={theme.colors.inputBackground}
-          />
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+              colors={[theme.colors.accent1]} // You can customize this part
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
         }
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
