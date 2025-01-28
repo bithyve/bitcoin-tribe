@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "ノードに接続中です。アプリを開き、画面をロック解除したままにしてください。",
     "nodeconnectSuccessfulTitle": "接続成功",
     "nodeconnectSuccessfulSubTitle": "接続が完了しました。次のステップに進んでください。",
-    "profileSetupLoadingTitle": "プロフィールを設定中です",
+    "profileSetupLoadingTitle": "ウォレットを設定しています",
     "profileSetupLoadingSubTitle": "準備が整うまでリラックスしてお待ちください。アプリはもうすぐ準備完了です。",
     "recoverLoadingTitle": "ウォレットを復元中",
     "recoverLoadingSubTitle": "復元プロセスを完了するまでしばらくお待ちください。すべてがスムーズに進むよう、アプリを閉じないでください。ご理解とご協力に感謝いたします！",
