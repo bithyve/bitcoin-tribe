@@ -27,6 +27,7 @@ type ModalContainerProps = {
   conatinerModalStyle?: StyleProp<ViewStyle>;
   height?: string;
   enableCloseIcon?: boolean;
+  onModalHide?: () => void
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
@@ -40,6 +41,7 @@ const ModalContainer = (props: ModalContainerProps) => {
     conatinerModalStyle,
     height,
     enableCloseIcon = true,
+    onModalHide
   } = props;
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(true);
@@ -70,8 +72,10 @@ const ModalContainer = (props: ModalContainerProps) => {
       onBackdropPress={onDismiss}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
+      animationOutTiming={100}
       backdropColor={Colors.Black}
       backdropOpacity={0.8}
+      onModalHide={onModalHide}
       style={[styles.containerStyle, conatinerModalStyle]}>
       <KeyboardAvoidView style={styles.container}>
         <AppTouchable onPress={onDismiss} style={styles.dashViewWrapper}>

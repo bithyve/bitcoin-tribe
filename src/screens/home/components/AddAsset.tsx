@@ -24,8 +24,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
-import LottieView from 'lottie-react-native';
-import PrimaryCTA from 'src/components/PrimaryCTA';
+import SecondaryCTA from 'src/components/SecondaryCTA';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -36,10 +35,16 @@ type ServiceFeeProps = {
   onPay: () => void;
   hideModal: () => void;
   status: 'error' | 'idle' | 'loading' | 'success';
-  issueAssetType: string
+  issueAssetType: string;
 };
 
-const ServiceFee = ({ feeDetails, onPay, status, issueAssetType, hideModal }: ServiceFeeProps) => {
+const ServiceFee = ({
+  feeDetails,
+  onPay,
+  status,
+  issueAssetType,
+  hideModal,
+}: ServiceFeeProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const navigation = useNavigation();
@@ -52,74 +57,42 @@ const ServiceFee = ({ feeDetails, onPay, status, issueAssetType, hideModal }: Se
 
   return (
     <View style={styles.containerFee}>
-      {status === 'success' ? (
-        <View>
-          <LottieView
-            source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
-            style={styles.loaderStyle}
-            autoPlay
-            loop
-          />
-          <PrimaryCTA
-            title={common.proceed}
-            onPress={() => {
-              hideModal();
-              setTimeout(() => {
-                navigation.replace(NavigationRoutes.ISSUESCREEN, {
-                  issueAssetType,
-                  addToRegistry: true,
-                });
-              }, 400);
-            }}
-            width={'100%'}
-            textColor={theme.colors.popupSentCTATitleColor}
-            buttonColor={theme.colors.popupSentCTABackColor}
-            height={hp(18)}
-          />
-        </View>
-      ) : (
-        <View>
-          <View style={styles.amtContainer}>
-            <View style={styles.labelWrapper}>
-              <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
-            </View>
-            <View style={styles.valueWrapper}>
-              <AppText style={styles.labelText}>{`${numberWithCommas(
-                feeDetails.fee,
-              )} sats`}</AppText>
-            </View>
+      <View>
+        <View style={styles.amtContainer}>
+          <View style={styles.labelWrapper}>
+            <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
           </View>
-
-            {
-              status !== 'loading' && (
-                <PrimaryCTA
-                title={common.skip}
-                onPress={() => {
-                  hideModal();
-                  setTimeout(() => {
-                    navigation.replace(NavigationRoutes.ISSUESCREEN, {
-                      issueAssetType,
-                      addToRegistry: false,
-                    });
-                  }, 400);
-                }}
-                width={'100%'}
-                textColor={theme.colors.popupSentCTATitleColor}
-                buttonColor={theme.colors.popupSentCTABackColor}
-                height={hp(18)}
-              />
-              )
-            }
-
-          <View style={styles.primaryCtaStyle}>
-            <SwipeToAction
-              title={'Swipe to Pay'}
-              loadingTitle={'Paying...'}
-              onSwipeComplete={onPay}
-            />
+          <View style={styles.valueWrapper}>
+            <AppText style={styles.labelText}>{`${numberWithCommas(
+              feeDetails.fee,
+            )} sats`}</AppText>
           </View>
         </View>
-      )}
+
+        <SecondaryCTA
+          title={common.skip}
+          disabled={status === 'loading'}
+          onPress={() => {
+            hideModal();
+            setTimeout(() => {
+              navigation.replace(NavigationRoutes.ISSUESCREEN, {
+                issueAssetType,
+                addToRegistry: false,
+              });
+            }, 400);
+          }}
+          buttonColor={theme.colors.buy}
+          height={hp(18)}
+        />
+
+        <View style={styles.primaryCtaStyle}>
+          <SwipeToAction
+            title={'Swipe to Pay'}
+            loadingTitle={'Paying...'}
+            onSwipeComplete={onPay}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -159,7 +132,7 @@ function AddAsset() {
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid.length < 0) {
           navigation.replace(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry: true,
@@ -190,6 +163,12 @@ function AddAsset() {
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setTimeout(() => {
+        navigation.replace(NavigationRoutes.ISSUESCREEN, {
+          issueAssetType,
+          addToRegistry: true,
+        });
+      }, 400);
     } else if (payServiceFeeFeeMutation.error) {
       Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
       payServiceFeeFeeMutation.reset();
@@ -216,7 +195,7 @@ function AddAsset() {
         <ModalContainer
           title={'List Your Asset In Registry'}
           subTitle={
-            'Please note that the service fee for this transaction is used exclusively for covering service charges on Tribe RGB. This fee will not be added to your reserve sats.'
+            'Do you want to store your Asset on our Tribe RGB Registry? A small platform fee is required. If not, you can skip this step.'
           }
           height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
