@@ -50,6 +50,7 @@ import {
   NodeInfo,
   RgbNodeConnectParams,
   RGBWallet,
+  UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
@@ -1026,6 +1027,35 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
+
+      if (assets.uda) {
+        if (ApiHandler.appType === AppType.NODE_CONNECT) {
+          // todo
+        }
+        if (ApiHandler.appType === AppType.ON_CHAIN) {
+          for (let i = 0; i < assets.uda.length; i++) {
+            const element: UniqueDigitalAsset = assets.uda[i];
+            if (Platform.OS === 'ios') {
+              const ext = element.token.media.mime.split('/')[1];
+              const destination = `${element.token.media.filePath}.${ext}`;
+              const exists = await RNFS.exists(destination);
+              if (!exists) {
+                await RNFS.copyFile(
+                  element.token.media.filePath,
+                  `${element.token.media.filePath}.${ext}`,
+                );
+              }
+              assets.uda[i].token.media.filePath = destination;
+            }
+            assets.uda[i].token.attachments = Object.values(element.token.attachments);
+          }
+        }
+        dbManager.createObjectBulk(
+          RealmSchema.UniqueDigitalAsset,
+          assets.uda,
+          Realm.UpdateMode.Modified,
+        );
+      }
       if (ApiHandler.appType === AppType.ON_CHAIN) {
         ApiHandler.backup();
       }
@@ -1079,7 +1109,9 @@ export class ApiHandler {
               updateProps: {
                 metadata: {
                   assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                  note: `Issued ${response.name} on ${moment().format(
+                    'DD MMM YY  •  hh:mm a',
+                  )}`,
                 },
               },
             });
@@ -1142,7 +1174,9 @@ export class ApiHandler {
               updateProps: {
                 metadata: {
                   assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                  note: `Issued ${response.name} on ${moment().format(
+                    'DD MMM YY  •  hh:mm a',
+                  )}`,
                 },
               },
             });
