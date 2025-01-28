@@ -156,7 +156,7 @@ function AppBackupMenu({ navigation }) {
               backup={backup}
             />
             {backup ? (
-              <AppText style={styles.textSuccessMsg} variant="caption">
+              <AppText style={styles.textSuccessMsg} variant="body2">
                 {settings.walletBackupSuccessMsg}
               </AppText>
             ) : (
@@ -183,7 +183,7 @@ function AppBackupMenu({ navigation }) {
               backup={assetBackup}
             />
             {assetBackup ? (
-              <AppText style={styles.textSuccessMsg} variant="caption">
+              <AppText style={styles.textSuccessMsg} variant="body2">
                 {settings.assetBackupSuccessMsg}
               </AppText>
             ) : (
@@ -206,7 +206,7 @@ function AppBackupMenu({ navigation }) {
         )}
       </View>
       <View>
-        <AppText style={styles.textStepTime} variant="caption">
+        <AppText style={styles.textStepTime} variant="body2">
           {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
             'DD MMM YY  •  hh:mm a',
           )}`}
@@ -256,13 +256,13 @@ const getStyles = (theme: AppTheme) =>
       marginHorizontal: hp(15),
     },
     textSuccessMsg: {
-      color: theme.colors.greenText,
+      color: theme.colors.backupDoneBorder,
       textAlign: 'justify',
       marginTop: hp(5),
       marginHorizontal: hp(15),
     },
     textStepTime: {
-      color: theme.colors.greenText,
+      color: theme.colors.headingColor,
       marginBottom: hp(5),
       textAlign: 'center',
     },
