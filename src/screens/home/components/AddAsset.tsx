@@ -152,7 +152,7 @@ function AddAsset() {
         navigateToIssue(true);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
-      Toast('Failed to fetch asset issuance fee.');
+      Toast('Failed to fetch asset issuance fee.', true);
       getAssetIssuanceFeeMutation.reset();
     }
   }, [
@@ -171,7 +171,10 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
+      Toast(
+        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
