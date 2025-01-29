@@ -496,7 +496,9 @@
     "enterAssetTickerPlaceholder": "短いティッカーシンボルを入力してください（例: BTC）",
     "attachments": "添付ファイル",
     "attachmentsCaption": "サポート画像やファイルを添付してください（最大16MB）",
-    "issueNewCoin": "新しいコインを発行"
+    "issueNewCoin": "新しいコインを発行",
+    "swipeToPay": "スワイプして支払う",
+    "payInprocess": "支払い中..."
   },
   "community": {
     "fnfTitle": "友達と家族",

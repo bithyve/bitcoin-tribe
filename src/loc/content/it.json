@@ -496,7 +496,9 @@
     "enterAssetTickerPlaceholder": "Inserisci un simbolo ticker breve (es. BTC)",
     "attachments": "Allegati",
     "attachmentsCaption": "Allega qualsiasi immagine o file di supporto (max 16MB)",
-    "issueNewCoin": "Emetti Nuova Moneta"
+    "issueNewCoin": "Emetti Nuova Moneta",
+    "swipeToPay": "corri per Pagare",
+    "payInprocess": "Pagamento in corso..."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

@@ -496,7 +496,9 @@
     "enterAssetTickerPlaceholder": "Introduce un símbolo de cotización corto (ej. BTC)",
     "attachments": "Adjuntos",
     "attachmentsCaption": "Adjunta cualquier imagen o archivo de soporte (máx. 16MB)",
-    "issueNewCoin": "Emitir Nueva Moneda"
+    "issueNewCoin": "Emitir Nueva Moneda",
+    "swipeToPay": "Desliza para Paga",
+    "payInprocess": "Pagando..."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

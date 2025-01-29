@@ -59,7 +59,7 @@ const ServiceFee = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, assets } = translations;
 
   if (!feeDetails) {
     return null;
@@ -94,8 +94,8 @@ const ServiceFee = ({
 
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
-            title={'Swipe to Pay'}
-            loadingTitle={'Paying...'}
+            title={assets.swipeToPay}
+            loadingTitle={assets.payInprocess}
             onSwipeComplete={onPay}
             backColor={theme.colors.swipeToActionThumbColor}
           />
