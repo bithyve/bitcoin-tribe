@@ -22,7 +22,7 @@ type TextFieldProps = {
   onChangeText: (text: string) => void;
   maxLength?: number;
   disabled?: boolean;
-  returnKeyType?: 'done' | 'Enter' | 'next';
+  returnKeyType?: 'done' | 'next';
   onSubmitEditing?: () => void;
   autoFocus?: boolean;
   rightText?: string;
@@ -39,9 +39,10 @@ type TextFieldProps = {
   onContentSizeChange?: (event) => void;
   secureTextEntry?: boolean;
   autoCorrect?: boolean;
+  blurOnSubmit?: boolean;
 };
 
-const TextField = (props: TextFieldProps) => {
+const TextField = React.forwardRef((props: TextFieldProps, ref) => {
   const {
     icon,
     placeholder,
@@ -67,12 +68,13 @@ const TextField = (props: TextFieldProps) => {
     contentStyle,
     secureTextEntry = false,
     autoCorrect = false,
+    blurOnSubmit,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
-    () => getStyles(theme, icon, rightText, rightCTATextColor, isFocused),
-    [theme, icon, rightText, rightCTATextColor, isFocused],
+    () => getStyles(theme, icon, rightText, rightCTATextColor),
+    [theme, icon, rightText, rightCTATextColor],
   );
 
   return (
@@ -83,6 +85,8 @@ const TextField = (props: TextFieldProps) => {
         // outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
         // activeOutlineColor={theme.colors.accent1}
         // outlineStyle={styles.outlineStyle}
+        ref={ref}
+        blurOnSubmit={blurOnSubmit}
         disabled={disabled}
         cursorColor={theme.colors.accent1}
         selectionColor={theme.colors.accent1}
@@ -132,12 +136,12 @@ const TextField = (props: TextFieldProps) => {
       )}
     </View>
   );
-};
+});
 const getStyles = (
   theme: AppTheme,
   icon,
   rightText,
-  rightCTATextColor = theme.colors.accent1,
+  rightCTATextColor,
 ) =>
   StyleSheet.create({
     container: {

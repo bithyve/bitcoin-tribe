@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -10,7 +10,11 @@ import SelectOption from 'src/components/SelectOption';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Relay from 'src/services/relay';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -25,6 +29,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import SecondaryCTA from 'src/components/SecondaryCTA';
+import ModalLoading from 'src/components/ModalLoading';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -33,21 +38,20 @@ type ServiceFeeProps = {
     includeTxFee: string;
   };
   onPay: () => void;
+  onSkip: () => void;
   hideModal: () => void;
   status: 'error' | 'idle' | 'loading' | 'success';
-  issueAssetType: string;
 };
 
 const ServiceFee = ({
   feeDetails,
   onPay,
   status,
-  issueAssetType,
+  onSkip,
   hideModal,
 }: ServiceFeeProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
@@ -75,10 +79,7 @@ const ServiceFee = ({
           onPress={() => {
             hideModal();
             setTimeout(() => {
-              navigation.replace(NavigationRoutes.ISSUESCREEN, {
-                issueAssetType,
-                addToRegistry: false,
-              });
+              onSkip();
             }, 400);
           }}
           buttonColor={theme.colors.buy}
@@ -132,20 +133,16 @@ function AddAsset() {
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length < 0) {
-          navigation.replace(NavigationRoutes.ISSUESCREEN, {
-            issueAssetType,
-            addToRegistry: true,
-          });
+        if (feesPaid.length > 0) {
+          navigateToIssue(true);
         } else {
-          setShowFeeModal(true);
+          setTimeout(() => {
+            setShowFeeModal(true);
+          }, 300);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
-        navigation.replace(NavigationRoutes.ISSUESCREEN, {
-          issueAssetType,
-          addToRegistry: true,
-        });
+        navigateToIssue(true);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
       Toast('Failed to fetch asset issuance fee.');
@@ -164,10 +161,7 @@ function AddAsset() {
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
       setTimeout(() => {
-        navigation.replace(NavigationRoutes.ISSUESCREEN, {
-          issueAssetType,
-          addToRegistry: true,
-        });
+        navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
       Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
@@ -187,10 +181,29 @@ function AddAsset() {
     wallet?.specs.balances.unconfirmed,
   ]);
 
+  const navigateToIssue = useCallback(
+    (addToRegistry: boolean) => {
+      setTimeout(() => {
+        if (issueAssetType === AssetType.Coin) {
+          navigation.replace(NavigationRoutes.ISSUESCREEN, {
+            issueAssetType,
+            addToRegistry,
+          });
+        } else {
+          navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
+            issueAssetType,
+            addToRegistry,
+          });
+        }
+      }, 500);
+    },
+    [issueAssetType, navigation]
+  );
+
   return (
     <ScreenContainer>
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
-
+      <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
       <View>
         <ModalContainer
           title={'List Your Asset In Registry'}
@@ -208,7 +221,7 @@ function AddAsset() {
             onPay={() => payServiceFeeFeeMutation.mutate({ feeDetails })}
             feeDetails={feeDetails}
             status={payServiceFeeFeeMutation.status}
-            issueAssetType={issueAssetType}
+            onSkip={() => navigateToIssue(false)}
             hideModal={() => {
               setShowFeeModal(false);
               getAssetIssuanceFeeMutation.reset();
@@ -219,7 +232,7 @@ function AddAsset() {
 
       <View style={styles.container}>
         <SelectOption
-          title={home.issueNew}
+          title={issueAssetType === AssetType.Coin ? 'Issue Coin' : 'Issue Collectible'}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {

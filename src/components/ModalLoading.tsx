@@ -32,6 +32,7 @@ const ModalLoading = (props: ModalProps) => {
       backdropOpacity={0.7}
       animationIn="fadeIn"
       animationOut="fadeOut"
+      animationOutTiming={100}
       style={styles.container}>
       <View style={styles.loaderWrapper}>
         <LottieView
