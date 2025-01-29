@@ -12,7 +12,7 @@ export interface RGBWallet {
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
-  utxos?: utxosRoot;
+  utxos?: RgbUnspent[];
   nodeUrl?: string;
   nodeAuthentication?: string;
   nodeInfo?: NodeInfoResponse;
@@ -22,33 +22,6 @@ export interface RGBWallet {
   };
   peerDNS?: string;
 }
-
-// Define the structure of an object in the rgbAllocations array
-interface RgbAllocation {
-  key: string;
-  value: any; // Adjust the type as needed, can be 'number', 'string', or other specific types
-}
-
-// Define the structure of the Outpoint object
-interface Outpoint {
-  txid: string; // Example field, represents a transaction ID
-  index: number; // Example field, represents an output index
-}
-
-// Define the structure of the UTXO object
-interface Utxo {
-  btcAmount: number;
-  colorable: boolean;
-  exists: boolean;
-  outpoint: Outpoint[]; // Array of Outpoint objects
-}
-
-// Define the unspentUTXOs interface
-export interface utxosRoot {
-  rgbAllocations: RgbAllocation[][]; // Array of array of RgbAllocation objects
-  utxo: Utxo; // UTXO object
-}
-
 interface Balance {
   future: number;
   settled: number;
@@ -114,24 +87,24 @@ export interface Collectible {
 }
 
 export interface Asset extends Coin, Collectible {}
-interface RgbAllocation {
+export interface RgbAllocation {
   amount: number;
   assetId: string;
   settled: boolean;
 }
-interface Outpoint {
-  txid: string;
-  vout: number;
-}
-interface Utxo {
+
+export interface RgbUtxo {
   btcAmount: number;
   colorable: boolean;
   exists: boolean;
-  outpoint: Outpoint;
+  outpoint: {
+    txid: string;
+    vout: number;
+  };
 }
 export interface RgbUnspent {
   rgbAllocations: RgbAllocation[];
-  utxo: Utxo;
+  utxo: RgbUtxo;
 }
 
 export enum AssetType {
@@ -146,8 +119,9 @@ export enum AssetFace {
 }
 
 export enum UtxoType {
-  Coloured = 'Coloured',
-  Uncoloured = 'Uncoloured',
+  Colored = 'Colored',
+  Colorable = 'Colorable',
+  Uncolored = 'Uncolored'
 }
 
 export interface RgbNodeConnectParams {

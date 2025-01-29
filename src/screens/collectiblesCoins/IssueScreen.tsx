@@ -15,7 +15,6 @@ import {
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppHeader from 'src/components/AppHeader';
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -24,7 +23,11 @@ import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { AssetType } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
 import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
@@ -47,11 +50,12 @@ import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import Slider from 'src/components/Slider';
 
-const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
+const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
-  const { issueAssetType } = useRoute().params;
+  const { issueAssetType, addToRegistry } = useRoute().params;
   const { appType } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -65,7 +69,7 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [description, setDescription] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
-  const [precision, setPrecision] = useState('');
+  const [precision, setPrecision] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
@@ -84,14 +88,16 @@ function IssueScreen() {
   // const createUtxos = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
-  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
-  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+    RealmSchema.RgbWallet,
   );
 
-  const totalReserveSatsAmount = useMemo(() => {
-    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
-  }, [UnspentUTXOData]);
+  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+  const colorable = unspent.filter(
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+  );
 
   useEffect(() => {
     if (createUtxoData) {
@@ -126,6 +132,7 @@ function IssueScreen() {
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, ''),
         precision: Number(precision),
+        addToRegistry,
       });
       if (response?.assetId) {
         setLoading(false);
@@ -323,20 +330,13 @@ function IssueScreen() {
               style={styles.input}
             />
 
-            <TextField
+            <Slider
+              title="Precision"
               value={precision}
-              maxLength={2}
-              onChangeText={text => {
-                const num = parseInt(text, 10);
-                if (!isNaN(num) && num >= 0 && num <= 10) {
-                  setPrecision(text);
-                } else if (text === '') {
-                  setPrecision('');
-                }
-              }}
-              placeholder={'Precision'}
-              keyboardType="numeric"
-              style={styles.input}
+              onValueChange={(value)=> setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
             />
           </View>
         ) : (
@@ -370,20 +370,13 @@ function IssueScreen() {
               keyboardType="numeric"
               style={styles.input}
             />
-            <TextField
+            <Slider
+              title="Precision"
               value={precision}
-              onChangeText={text => {
-                const num = parseInt(text, 10);
-                if (!isNaN(num) && num >= 0 && num <= 10) {
-                  setPrecision(text);
-                } else if (text === '') {
-                  setPrecision('');
-                }
-              }}
-              maxLength={2}
-              placeholder={'Precision'}
-              keyboardType="numeric"
-              style={styles.input}
+              onValueChange={(value)=> setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
             />
             <UploadAssetFileButton
               onPress={handlePickImage}
@@ -411,7 +404,7 @@ function IssueScreen() {
           </View>
         )}
       </KeyboardAvoidView>
-      {totalReserveSatsAmount === 0 && (
+      {colorable.length === 0 && (
         <View style={styles.reservedSatsWrapper}>
           <View style={styles.checkIconWrapper}>
             {isThemeDark ? <CheckIcon /> : <CheckIconLight />}

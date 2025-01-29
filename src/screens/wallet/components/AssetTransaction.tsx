@@ -20,6 +20,7 @@ import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg'
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type AssetTransactionProps = {
@@ -43,7 +44,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         settled: {
           send: <SentBtcIcon />,
           receiveblind: <RecieveBtcIcon />,
-          issuance: <RecieveBtcIcon />,
+          issuance: <IssuanceIcon />,
         },
         waitingcounterparty: {
           send: <WaitingCounterPartyIcon />,
@@ -63,7 +64,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         settled: {
           send: <SentLightningIcon />,
           receiveblind: <RecieveLightningIcon />,
-          issuance: <RecieveLightningIcon />,
+          issuance: <IssuanceIcon />,
         },
         failed: {
           send: <FailedTxnIcon />,

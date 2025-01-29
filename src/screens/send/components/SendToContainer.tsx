@@ -347,6 +347,8 @@ function SendToContainer({
     const isValidNumber = /^\d*\.?\d*$/.test(text);
     if (text.startsWith('0') && !text.startsWith('0.')) {
       setCustomFee(text.replace(/^0+/, ''));
+      Toast(sendScreen.validationZeroNotAllowed, true);
+      Keyboard.dismiss();
       return;
     }
     const numericValue = parseFloat(text);

@@ -60,11 +60,11 @@ const createObjectBulk = (
  * generic :: fetches an object corresponding to provided schema and the supplied instance num
  * @param  {RealmSchema} schema
  */
-const getObjectByIndex = <T> (
+const getObjectByIndex = <T>(
   schema: RealmSchema,
   index: number = 0,
   all: boolean = false,
-) : T | T[] | undefined => {
+): T | T[] | undefined => {
   const objects = realm.get(schema) as Realm.Results<T>;
   if (all) {
     return Array.from(objects);

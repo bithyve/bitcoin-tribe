@@ -48,11 +48,6 @@ function HomeScreen() {
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
-  const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
-    getJSONFromRealmObject,
-  );
-  const lastIndex = VersionHistoryData.length - 1;
-
   const assets = useMemo(() => {
     return [...coins.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
   }, [coins]);
@@ -73,14 +68,7 @@ function HomeScreen() {
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
-    const version = dbManager.getObjectByIndex(
-      RealmSchema.VersionHistory,
-      lastIndex,
-    );
-    const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
-    if (version?.version !== currentVersion) {
-      ApiHandler.checkVersion(version, currentVersion);
-    }
+    ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
   }, [app.appType]);
 
