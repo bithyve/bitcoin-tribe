@@ -27,7 +27,7 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 
 type AssetsListProps = {
   listData: Asset[];
-  onPressAsset?: () => void;
+  onPressAsset?: (asset: Asset) => void;
   onPressAddNew?: () => void;
   onRefresh?: () => void;
   loading?: boolean;
@@ -86,18 +86,13 @@ function CollectibleAssetsList(props: AssetsListProps) {
           />
         }
         renderItem={({ item, index }) => {
-          const navigateTo = NavigationRoutes.COLLECTIBLEDETAILS;
-          const styles = getStyles(theme, index);
-
           return (
             <View style={styles.assetWrapper}>
               <View style={styles.alternateSpace}>
                 <AssetCard
                   asset={item}
                   tag={'COLLECTIBLE'}
-                  onPress={() =>
-                    navigation.navigate(navigateTo, { assetId: item.assetId })
-                  }
+                  onPress={()=>onPressAsset(item)}
                 />
               </View>
             </View>

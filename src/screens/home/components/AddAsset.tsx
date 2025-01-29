@@ -136,7 +136,9 @@ function AddAsset() {
         if (feesPaid.length > 0) {
           navigateToIssue(true);
         } else {
-          setShowFeeModal(true);
+          setTimeout(() => {
+            setShowFeeModal(true);
+          }, 300);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
