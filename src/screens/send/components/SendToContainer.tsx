@@ -250,7 +250,7 @@ function SendToContainer({
     const recipients = [];
     recipients.push({
       address: recipientAddress,
-      amount: parseFloat(balances),
+      amount: 0,
     });
     const fee = WalletOperations.calculateSendMaxFee(
       wallet,
@@ -259,6 +259,7 @@ function SendToContainer({
         ? Number(customFee)
         : averageTxFee[selectedPriority]?.feePerByte,
     );
+    console.log('fee', fee);
     setSendMaxFee(fee);
   }, [recipientAddress, amount, selectedPriority, customFee]);
 
