@@ -62,7 +62,9 @@ const updateOutputsForFeeCalculation = (outputs, network) => {
   for (const o of outputs) {
     if (
       o.address &&
-      (o.address.startsWith('bcrt1') || o.address.startsWith('tb1'))
+      (o.address.startsWith('bcrt1') ||
+        o.address.startsWith('bc1') ||
+        o.address.startsWith('tb1'))
     ) {
       // in case address is non-typical and takes more bytes than coinselect library anticipates by default
       o.script = {
@@ -90,6 +92,7 @@ const updateInputsForFeeCalculation = (wallet: Wallet, inputUTXOs) => {
     wallet.scriptType === ScriptTypes['P2SH-P2WSH'];
   const isTaproot = wallet.scriptType === ScriptTypes.P2TR;
   console.log('isTaproot', isTaproot);
+  console.log('updateInputsForFeeCalculation inputUTXOs', inputUTXOs);
   return inputUTXOs.map(u => {
     if (isTaproot) {
       u.script = { length: 15 }; // P2TR
@@ -742,73 +745,6 @@ export default class WalletOperations {
     };
     return averageTxFeeByNetwork;
   };
-
-  // static calculateSendMaxFee = (
-  //   wallet: Wallet,
-  //   recipients: {
-  //     address: string;
-  //     amount: number;
-  //   }[],
-  //   feePerByte: number,
-  //   selectedUTXOs?: UTXO[],
-  // ): number => {
-  //   let inputUTXOs;
-  //   if (selectedUTXOs && selectedUTXOs.length) {
-  //     inputUTXOs = selectedUTXOs;
-  //   } else {
-  //     inputUTXOs = [
-  //       ...wallet.specs.confirmedUTXOs,
-  //       ...wallet.specs.unconfirmedUTXOs,
-  //     ];
-  //   }
-
-  //   inputUTXOs = updateInputsForFeeCalculation(wallet, inputUTXOs);
-  //   let availableBalance = 0;
-  //   inputUTXOs.forEach(utxo => {
-  //     availableBalance += utxo.value;
-  //   });
-
-  //   let outputUTXOs = [];
-  //   for (const recipient of recipients) {
-  //     outputUTXOs.push({
-  //       address: recipient.address,
-  //       value: availableBalance,
-  //     });
-  //   }
-  //   outputUTXOs = updateOutputsForFeeCalculation(
-  //     outputUTXOs,
-  //     wallet.networkType,
-  //   );
-
-  //   let { inputs, outputs, fee } = coinselect(
-  //     inputUTXOs,
-  //     outputUTXOs,
-  //     feePerByte,
-  //   );
-
-  //   let i = 0;
-  //   const MAX_RETRIES = 10000; // Could raise to allow more retries in case of many uneconomic UTXOs in a wallet
-  //   while (!inputs || (!outputs && i < MAX_RETRIES)) {
-  //     let netAmount = 0;
-  //     recipients.forEach(recipient => {
-  //       netAmount += recipient.amount;
-  //     });
-  //     if (outputUTXOs && outputUTXOs.length) {
-  //       outputUTXOs[0].value = availableBalance - fee - i;
-  //     }
-
-  //     ({ inputs, outputs, fee } = coinselect(
-  //       deepClone(inputUTXOs),
-  //       deepClone(outputUTXOs),
-  //       feePerByte,
-  //     ));
-  //     i++;
-  //   }
-  //   console.log('outputUTXOs[0].value', outputUTXOs[0].value);
-  //   fee = availableBalance - outputUTXOs[0].value;
-  //   console.log('calc fee', fee);
-  //   return fee;
-  // };
 
   static calculateSendMaxFee = (
     wallet: Wallet,
