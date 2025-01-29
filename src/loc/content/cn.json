@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "正在连接到您的节点。请保持应用打开并解锁屏幕。",
     "nodeconnectSuccessfulTitle": "连接成功",
     "nodeconnectSuccessfulSubTitle": "您已成功连接。继续下一步。",
-    "profileSetupLoadingTitle": "正在设置您的个人资料",
+    "profileSetupLoadingTitle": "我们正在设置您的钱包",
     "profileSetupLoadingSubTitle": "放松一下，我们正在为您准备一切。您的应用程序马上就会准备好。",
     "recoverLoadingTitle": "正在恢复您的钱包",
     "recoverLoadingSubTitle": "请稍等片刻，我们正在完成恢复过程。请勿关闭应用程序以确保一切顺利进行。感谢您的耐心等待！",
@@ -397,7 +397,7 @@
     "date": "日期",
     "numOfUtxo": "UTXO数量",
     "transferDetails": "转账详情",
-    "viewUnspent": "查看未花费的UTXO",
+    "viewUnspent": "查看UTXO",
     "walletRefreshMsg": "钱包更新成功",
     "unspentTitle": "未使用交易输出概览",
     "satsAmount": "Sats金额",
@@ -415,7 +415,8 @@
     "coloured": "彩色",
     "unColoured": "非彩色",
     "availableTxnFee": "可用交易费",
-    "output": "输出"
+    "output": "输出",
+    "utxoValue": "UTXO 值"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
@@ -467,7 +468,7 @@
     "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
     "issueAssetLoadingTitle": "发行资产",
     "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
-    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 18,446,744,073,709,551,615 的数字。",
+    "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 9,007,199,254,740,992 的数字。",
     "swipeToSend": "滑动发送",
     "sendingAsset": "正在发送资产...",
     "cancelTransferMsg": "取消转账！",

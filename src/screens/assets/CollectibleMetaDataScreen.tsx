@@ -25,6 +25,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import moment from 'moment';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -96,21 +97,21 @@ const CollectibleMetaDataScreen = () => {
         <ModalLoading visible={isLoading} />
       ) : (
         <>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{
-                uri: Platform.select({
-                  android: `file://${collectible.media?.filePath}`,
-                  ios: collectible.media?.filePath,
-                }),
-              }}
-              resizeMode="contain"
-              style={styles.imageStyle}
-            />
-          </View>
           <ScrollView
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{
+                  uri: Platform.select({
+                    android: `file://${collectible.media?.filePath}`,
+                    ios: collectible.media?.filePath,
+                  }),
+                }}
+                resizeMode="contain"
+                style={styles.imageStyle}
+              />
+            </View>
             <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={assets.details}
@@ -126,6 +127,18 @@ const CollectibleMetaDataScreen = () => {
                     collectible.metaData &&
                     numberWithCommas(collectible.metaData.issuedSupply)
               }
+            />
+
+            <Item
+              title={assets.precision}
+              value={collectible && collectible.precision}
+            />
+
+            <Item
+              title={assets.issuedOn}
+              value={moment
+                .unix(collectible.metaData && collectible.metaData.timestamp)
+                .format('DD MMM YY  hh:mm A')}
             />
           </ScrollView>
         </>

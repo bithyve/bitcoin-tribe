@@ -8,7 +8,7 @@ import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Asset } from 'src/models/interfaces/RGBWallet';
+import { Asset, UtxoType } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
@@ -23,6 +23,7 @@ type UnspentUTXOElementProps = {
   rgbAllocations: any;
   style?: StyleProp<ViewStyle>;
   assets: Asset[];
+  mode: UtxoType;
 };
 function UnspentUTXOElement({
   transID,
@@ -30,6 +31,7 @@ function UnspentUTXOElement({
   rgbAllocations,
   style,
   assets,
+  mode,
 }: UnspentUTXOElementProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -44,9 +46,9 @@ function UnspentUTXOElement({
     if (!assets) return {};
     return assets.reduce((map, asset) => {
       map[asset.assetId] = {
-        assetId: asset.assetId, // Include assetId
-        name: asset.name, // Include the name
-        ...asset, // Include the full asset object if needed
+        assetId: asset.assetId,
+        name: asset.name,
+        ...asset,
       };
       return map;
     }, {} as Record<string, { assetId: string; name: string } & (typeof assets)[0]>);
@@ -93,13 +95,15 @@ function UnspentUTXOElement({
                 style={styles.assetIdStyle}>
                 {assetID}
               </AppText>
-            ) : null; // Skip invalid allocations
+            ) : null;
           })
         : null}
       <View style={styles.contentWrapper}>
         <View style={styles.transIDWrapper}>
           <AppText variant="body2" style={styles.labelTextStyle}>
-            {walletTranslations.availableTxnFee}
+            {mode === UtxoType.Uncolored
+              ? 'Value'
+              : walletTranslations.availableTxnFee}
           </AppText>
         </View>
         <View style={styles.amtWrapper}>
@@ -161,14 +165,15 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(3),
     },
     transIDWrapper: {
-      width: '70%',
+      width: '65%',
     },
     amtWrapper: {
-      width: '30%',
+      width: '35%',
       alignItems: 'flex-end',
     },
     transIDText: {
       color: theme.colors.headingColor,
+      textAlign: 'right',
     },
     amountText: {
       color: theme.colors.headingColor,
@@ -177,7 +182,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     labelWrapper: {
-      width: '30%',
+      width: '35%',
       alignItems: 'flex-start',
     },
     assetNameText: {

@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
     "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
-    "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
+    "profileSetupLoadingTitle": "हम आपका वॉलेट सेट कर रहे हैं",
     "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।",
     "recoverLoadingTitle": "आपका वॉलेट पुनर्प्राप्त किया जा रहा है",
     "recoverLoadingSubTitle": "कृपया एक पल धैर्य रखें जब तक हम पुनर्प्राप्ति प्रक्रिया पूरी कर लें। सुनिश्चित करने के लिए ऐप बंद न करें कि सब कुछ सुचारू रूप से चले। आपके धैर्य के लिए धन्यवाद!",
@@ -397,7 +397,7 @@
     "date": "तिथि",
     "numOfUtxo": "UTXO की संख्या",
     "transferDetails": "स्थानांतरण विवरण",
-    "viewUnspent": "अनस्पेंट UTXOs देखें",
+    "viewUnspent": "UTXO देखें",
     "walletRefreshMsg": "वॉलेट सफलतापूर्वक अपडेट किया गया",
     "unspentTitle": "UTXOs का अवलोकन",
     "satsAmount": "सैट्स राशि",
@@ -415,7 +415,8 @@
     "coloured": "रंगीन",
     "unColoured": "बिना रंग का",
     "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
-    "output": "आउटपुट"
+    "output": "आउटपुट",
+    "utxoValue": "UTXO मूल्य"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
@@ -467,7 +468,7 @@
     "sendAssetLoadingSubTitle": "आपका लेन-देन प्रोसेस हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपकी RGB संपत्ति सुरक्षित रूप से भेज दी जाएगी।",
     "issueAssetLoadingTitle": "संपत्ति जारी हो रही है",
     "issueAssetLoadingSubTitle": "आपकी संपत्ति बनाई जा रही है—कृपया प्रतीक्षा करें! आराम करें और आपकी नई संपत्ति जल्द ही जारी की जाएगी।",
-    "totalSupplyAmountErrMsg": "आपने जो मान दर्ज किया है वह बहुत बड़ा है। कृपया 18,446,744,073,709,551,615 से छोटा नंबर दर्ज करें।",
+    "totalSupplyAmountErrMsg": "आपने जो मान दर्ज किया है वह बहुत बड़ा है। कृपया 9,007,199,254,740,992 से छोटा नंबर दर्ज करें।",
     "swipeToSend": "भेजने के लिए स्वाइप करें",
     "sendingAsset": "संपत्ति भेजी जा रही है...",
     "cancelTransferMsg": "ट्रांसफर रद्द कर दिया गया!",

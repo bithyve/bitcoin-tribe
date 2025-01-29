@@ -123,7 +123,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   style={styles.onChainTotalBalanceWrapper}
                   onPress={() => {}}>
                   <View style={styles.totalBalanceWrapper1}>
-                    <AppText variant="heading1" style={styles.totalBalance}>
+                    <AppText variant="heading2" style={styles.totalBalance}>
                       {numberWithCommas(
                         asset.balance.future + asset.balance?.offchainOutbound,
                       )}

@@ -141,7 +141,7 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, wallet, amount } = useRoute().params;
+  const { assetId, rgbInvoice, amount } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -160,10 +160,11 @@ const SendAssetScreen = () => {
   const createUtxos = useMutation(ApiHandler.createUtxos);
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
-  const allAssets: Asset[] = [...coins, ...collectibles];
+  const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
+  const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [assetAmount, setAssetAmount] = useState(amount || '');
+  const [assetAmount, setAssetAmount] = useState(amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -353,6 +354,8 @@ const SendAssetScreen = () => {
     const isValidNumber = /^\d*\.?\d*$/.test(text);
     if (text.startsWith('0') && !text.startsWith('0.')) {
       setCustomFee(text.replace(/^0+/, ''));
+      Toast(sendScreen.validationZeroNotAllowed, true);
+      Keyboard.dismiss();
       return;
     }
     const numericValue = parseFloat(text);
@@ -391,15 +394,19 @@ const SendAssetScreen = () => {
         <AssetItem
           name={assetData?.name}
           details={
-            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetIface.toUpperCase() !== AssetFace.RGB25
               ? assetData?.ticker
               : assetData?.details
           }
           image={
-            assetData?.media?.filePath
+            assetData.assetIface.toUpperCase() !== AssetFace.RGB20
               ? Platform.select({
-                  android: `file://${assetData.media?.filePath}`,
-                  ios: assetData.media?.filePath,
+                  android: `file://${
+                    assetData.media?.filePath || assetData?.token.media.filePath
+                  }`,
+                  ios:
+                    assetData.media?.filePath ||
+                    assetData?.token.media.filePath,
                 })
               : null
           }
@@ -447,6 +454,7 @@ const SendAssetScreen = () => {
           rightText={common.max}
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
+          disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}

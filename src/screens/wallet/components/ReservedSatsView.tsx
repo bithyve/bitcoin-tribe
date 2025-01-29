@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-
 import AppText from 'src/components/AppText';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
@@ -18,9 +17,9 @@ import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import ReserveAmtIcon from 'src/assets/images/reserveAmtIcon.svg';
 import ReserveAmtIconLight from 'src/assets/images/reserveAmtIcon_light.svg';
 import { RealmSchema } from 'src/storage/enum';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 
 function ReservedSatsView() {
   const navigation = useNavigation();
@@ -34,14 +33,20 @@ function ReservedSatsView() {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
-  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
-  );
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+
+  const unspent: RgbUnspent[] = useMemo(() => {
+    if (!rgbWallet || !rgbWallet.utxos) return [];
+    return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
+  }, [rgbWallet]);
 
   const totalReserveSatsAmount = useMemo(() => {
-    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
-  }, [UnspentUTXOData]);
+    const colorable = unspent.filter(
+      utxo => utxo.utxo.colorable === true,
+    );
+    const total = colorable.reduce((sum, utxo) => sum + utxo.utxo.btcAmount, 0);
+    return total;
+  }, [unspent]);
 
   return (
     <AppTouchable
