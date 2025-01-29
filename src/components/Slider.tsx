@@ -99,6 +99,7 @@ const getStyles = (theme: AppTheme) =>
     },
     title: {
       marginBottom: 5,
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 

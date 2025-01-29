@@ -125,7 +125,7 @@ export default class Relay {
         formData.append('appID', appID);
         formData.append('network', 'regtest');
         formData.append('asset', JSON.stringify(asset));
-        if (asset.media) {
+        if (asset?.media) {
           formData.append('media', {
             uri: Platform.select({
               android: `file://${asset.media.filePath}`,

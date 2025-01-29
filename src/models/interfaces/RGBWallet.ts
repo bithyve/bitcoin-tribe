@@ -86,7 +86,29 @@ export interface Collectible {
   metaData: MetaData;
 }
 
-export interface Asset extends Coin, Collectible {}
+export interface UniqueDigitalAsset {
+  addedAt: number;
+  assetId: string;
+  assetIface: string;
+  balance: Balance;
+  details: string;
+  issuedSupply: number;
+  name: string;
+  precision: number;
+  ticker: string;
+  timestamp: number;
+  token: {
+    attachments: Media[],
+    embeddedMedia: boolean;
+    index: number;
+    media: Media;
+    reserves: boolean;
+  };
+  transactions: Transaction[];
+  metaData: MetaData;
+}
+
+export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
 export interface RgbAllocation {
   amount: number;
   assetId: string;
@@ -110,12 +132,13 @@ export interface RgbUnspent {
 export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
-  UDA = 'UDA',
+  UDA = 'UDA', //Unique Digital Asset
 }
 
 export enum AssetFace {
-  RGB25 = 'RGB25',
-  RGB20 = 'RGB20',
+  RGB25 = 'RGB25',  // Collectible(CFA)
+  RGB20 = 'RGB20', // Coin(NIA)
+  RGB21 = 'RGB21' //  Unique Digital Asset(UDA)
 }
 
 export enum UtxoType {
