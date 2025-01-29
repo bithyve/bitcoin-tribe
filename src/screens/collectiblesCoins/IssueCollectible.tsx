@@ -191,6 +191,7 @@ function IssueCollectibleScreen() {
         name: assetName.trim(),
         details: description,
         ticker: assetTicker,
+        addToRegistry: addToRegistry,
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT

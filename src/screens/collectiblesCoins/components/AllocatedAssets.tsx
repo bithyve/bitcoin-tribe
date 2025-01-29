@@ -3,11 +3,11 @@ import { View, Image, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import Identicon from 'src/components/Identicon';
-import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 
 type allocatedAssetsProps = {
-  assets: Coin | Collectible;
+  assets: Coin | Collectible | UniqueDigitalAsset;
 };
 const AllocatedAssets = ({ assets }: allocatedAssetsProps) => {
   const theme: AppTheme = useTheme();

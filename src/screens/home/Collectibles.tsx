@@ -16,7 +16,7 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
-import { Asset, AssetType } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 
@@ -133,11 +133,17 @@ function Collectibles() {
             issueAssetType: AssetType.Collectible,
           })
         }
-        onPressAsset={asset =>
-          handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
-            assetId: asset.assetId,
-          })
-        }
+        onPressAsset={(asset: Asset) => {
+          if (asset.assetIface.toUpperCase() === AssetFace.RGB25) {
+            handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else {
+            handleNavigation(NavigationRoutes.UDADETAILS, {
+              assetId: asset.assetId,
+            });
+          }
+        }}
       />
     </ScreenContainer>
   );
