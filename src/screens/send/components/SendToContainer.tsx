@@ -6,14 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -22,7 +15,7 @@ import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
@@ -84,7 +77,7 @@ function SendToContainer({
   const [isSendMax, setIsSendMax] = useState(false);
   const [sendMaxFee, setSendMaxFee] = useState(0);
   const [sendMaxFeeInSats, setSendMaxFeeInSats] = useState(0);
-  const [sendMaxAmountInSats, setSendMaxAmountInSats] = useState(0);
+  const [sendMaxAmountInSats, setSendMaxAmountInSats] = useState('');
   const [recipientAddress, setRecipientAddress] = useState(address || '');
   const [inputHeight, setInputHeight] = React.useState(100);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -196,7 +189,10 @@ function SendToContainer({
         sender: wallet,
         recipient: {
           address: recipientAddress,
-          amount: parseFloat(amount.replace(/,/g, '')),
+          amount:
+            isSendMax && initialCurrencyMode === CurrencyKind.FIAT
+              ? parseFloat(sendMaxAmountInSats)
+              : parseFloat(amount.replace(/,/g, '')),
         },
         averageTxFee,
         selectedPriority,
@@ -254,7 +250,7 @@ function SendToContainer({
     const recipients = [];
     recipients.push({
       address: recipientAddress,
-      amount: 0,
+      amount: parseFloat(balances),
     });
     const fee = WalletOperations.calculateSendMaxFee(
       wallet,
@@ -279,8 +275,9 @@ function SendToContainer({
   const transferFee =
     app.appType === AppType.NODE_CONNECT
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
-      : sendMaxFee;
-  // idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
+      : isSendMax
+      ? sendMaxFee
+      : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
 
   const onSendMax = useCallback(() => {
     if (!recipientAddress) {
@@ -288,9 +285,7 @@ function SendToContainer({
       return;
     }
     setIsSendMax(true);
-
     const availableToSpend = balances;
-
     if (
       initialCurrencyMode === CurrencyKind.SATS ||
       initialCurrencyMode === CurrencyKind.BITCOIN
@@ -304,17 +299,15 @@ function SendToContainer({
         currencyCode,
       );
       setSendMaxFeeInSats(sendMaxFee);
-
       const amountToSend = ConvertSatsToFiat(
         Number(availableToSpend),
         JSON.parse(exchangeRates),
         currencyCode,
       );
-      const amount = amountToSend - feeAmount;
-
-      const sendMaxBalance = Number(availableToSpend) - Number(sendMaxFee);
-      setAmount(amount.toFixed(2));
-      setSendMaxAmountInSats(sendMaxBalance);
+      const sendMaxSatsBalance = Number(availableToSpend) - Number(sendMaxFee);
+      const sendMaxBalance = Number(amountToSend) - Number(feeAmount);
+      setAmount(sendMaxBalance.toFixed(2));
+      setSendMaxAmountInSats(sendMaxSatsBalance.toFixed(0));
     }
   }, [isSendMax, selectedPriority, sendMaxFee]);
 
@@ -333,6 +326,7 @@ function SendToContainer({
     }
   };
   const handleAmountInputChange = text => {
+    setIsSendMax(false);
     const numericValue = parseFloat(text.replace(/,/g, '') || '0');
     if (numericValue === 0) {
       Keyboard.dismiss();
@@ -343,7 +337,7 @@ function SendToContainer({
       Toast(sendScreen.availableBalanceMsg + balances, true);
     } else if (numericValue <= Number(balances)) {
       setAmount(text);
-      setIsSendMax(false);
+      // setIsSendMax(false);
     } else {
       Keyboard.dismiss();
       Toast(assets.checkSpendableAmt + balances, true);
@@ -536,7 +530,7 @@ function SendToContainer({
           sendTransactionMutation.status === 'success'
             ? Platform.OS === 'android'
               ? '100%'
-              : '35%'
+              : '48%'
             : ''
         }
         visible={visible}
