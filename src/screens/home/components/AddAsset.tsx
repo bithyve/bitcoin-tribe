@@ -1,5 +1,11 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -91,6 +97,7 @@ const ServiceFee = ({
             title={'Swipe to Pay'}
             loadingTitle={'Paying...'}
             onSwipeComplete={onPay}
+            backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
       </View>
@@ -197,7 +204,7 @@ function AddAsset() {
         }
       }, 500);
     },
-    [issueAssetType, navigation]
+    [issueAssetType, navigation],
   );
 
   return (
@@ -232,7 +239,11 @@ function AddAsset() {
 
       <View style={styles.container}>
         <SelectOption
-          title={issueAssetType === AssetType.Coin ? 'Issue Coin' : 'Issue Collectible'}
+          title={
+            issueAssetType === AssetType.Coin
+              ? 'Issue Coin'
+              : 'Issue Collectible'
+          }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
