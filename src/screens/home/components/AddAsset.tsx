@@ -1,5 +1,11 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -30,6 +36,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
+import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -197,7 +204,7 @@ function AddAsset() {
         }
       }, 500);
     },
-    [issueAssetType, navigation]
+    [issueAssetType, navigation],
   );
 
   return (
@@ -232,7 +239,11 @@ function AddAsset() {
 
       <View style={styles.container}>
         <SelectOption
-          title={issueAssetType === AssetType.Coin ? 'Issue Coin' : 'Issue Collectible'}
+          title={
+            issueAssetType === AssetType.Coin
+              ? 'Issue Coin'
+              : 'Issue Collectible'
+          }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -268,7 +279,15 @@ function AddAsset() {
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
           borderColor={theme.colors.borderColor}>
-          <AppText>{'Insufficient Balance'}</AppText>
+          <InsufficiantBalancePopupContainer
+            primaryOnPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+              }, 500);
+            }}
+            secondaryOnPress={() => setVisible(false)}
+          />
         </ResponsePopupContainer>
       </View>
     </ScreenContainer>
