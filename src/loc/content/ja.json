@@ -498,7 +498,9 @@
     "attachmentsCaption": "サポート画像やファイルを添付してください（最大16MB）",
     "issueNewCoin": "新しいコインを発行",
     "swipeToPay": "スワイプして支払う",
-    "payInprocess": "支払い中..."
+    "payInprocess": "支払い中...",
+    "listYourAssetInRegTitle": "アセットをレジストリに登録する",
+    "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

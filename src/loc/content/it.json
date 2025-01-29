@@ -498,7 +498,9 @@
     "attachmentsCaption": "Allega qualsiasi immagine o file di supporto (max 16MB)",
     "issueNewCoin": "Emetti Nuova Moneta",
     "swipeToPay": "corri per Pagare",
-    "payInprocess": "Pagamento in corso..."
+    "payInprocess": "Pagamento in corso...",
+    "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
+    "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
