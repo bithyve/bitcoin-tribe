@@ -298,7 +298,11 @@ const SendAssetScreen = () => {
       } else if (response?.error) {
         setVisible(false);
         setTimeout(() => {
-          Toast(`Failed: ${response?.error}`, true);
+          if(response?.error === 'details=Error from bdk: UTXO not found in the internal database') {
+            Toast('We encountered an issue while syncing your UTXOs. Please refresh your wallet from the Home screen and try again. Contact support on Telegram if needed.', true);
+          } else {
+            Toast(`Failed: ${response?.error}`, true);
+          }
         }, 500);
       }
     } catch (error) {
