@@ -164,7 +164,9 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [assetAmount, setAssetAmount] = useState(amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '');
+  const [assetAmount, setAssetAmount] = useState(
+    amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '',
+  );
   const [inputHeight, setInputHeight] = React.useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -440,6 +442,7 @@ const SendAssetScreen = () => {
             invoice ? setInvoice('') : handlePasteAddress()
           }
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.enterAmount}
@@ -454,6 +457,7 @@ const SendAssetScreen = () => {
           rightText={common.max}
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
         />
         <AppText variant="body2" style={styles.labelstyle}>

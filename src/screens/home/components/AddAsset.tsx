@@ -60,7 +60,7 @@ const ServiceFee = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, assets } = translations;
 
   if (!feeDetails) {
     return null;
@@ -95,9 +95,10 @@ const ServiceFee = ({
 
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
-            title={'Swipe to Pay'}
-            loadingTitle={'Paying...'}
+            title={assets.swipeToPay}
+            loadingTitle={assets.payInprocess}
             onSwipeComplete={onPay}
+            backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
       </View>
@@ -110,7 +111,7 @@ function AddAsset() {
   const { issueAssetType } = useRoute().params;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
@@ -152,7 +153,7 @@ function AddAsset() {
         navigateToIssue(true);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
-      Toast('Failed to fetch asset issuance fee.');
+      Toast('Failed to fetch asset issuance fee.', true);
       getAssetIssuanceFeeMutation.reset();
     }
   }, [
@@ -171,7 +172,10 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
+      Toast(
+        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -213,10 +217,8 @@ function AddAsset() {
       <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
       <View>
         <ModalContainer
-          title={'List Your Asset In Registry'}
-          subTitle={
-            'Do you want to store your Asset on our Tribe RGB Registry? A small platform fee is required. If not, you can skip this step.'
-          }
+          title={assets.listYourAssetInRegTitle}
+          subTitle={assets.listYourAssetInRegSubTitle}
           height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
