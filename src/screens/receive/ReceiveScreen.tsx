@@ -66,6 +66,8 @@ function ReceiveScreen({ route }) {
 
   useEffect(() => {
     if (getNodeOnchainBtcAddress.isError) {
+      Toast(getNodeOnchainBtcAddress.error?.message, true);
+      navigation.goBack();
     } else if (getNodeOnchainBtcAddress.data) {
       if (getNodeOnchainBtcAddress.data.address) {
         setAddress(getNodeOnchainBtcAddress.data.address);

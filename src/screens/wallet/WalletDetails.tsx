@@ -60,9 +60,10 @@ function WalletDetails({ navigation, route }) {
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const { mutate, isLoading, isError, isSuccess } = useMutation(
+  const { mutate, isLoading, isError, isSuccess, error } = useMutation(
     ApiHandler.receiveTestSats,
   );
+
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate: fetchOnChainTransaction, data } = useMutation(
     ApiHandler.getNodeOnchainBtcTransactions,
@@ -84,6 +85,12 @@ function WalletDetails({ navigation, route }) {
       });
     }
   }, [autoRefresh && isFocused]);
+
+  useEffect(() => {
+    if (isError) {
+      Toast(error?.message || 'Failed to get test coins', true);
+    }
+  }, [isError, error]);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
