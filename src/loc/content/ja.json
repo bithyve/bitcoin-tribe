@@ -500,7 +500,8 @@
     "swipeToPay": "スワイプして支払う",
     "payInprocess": "支払い中...",
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
-    "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。"
+    "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。",
+    "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。"
   },
   "community": {
     "fnfTitle": "友達と家族",

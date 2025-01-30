@@ -500,7 +500,8 @@
     "swipeToPay": "Desliza para Paga",
     "payInprocess": "Pagando...",
     "listYourAssetInRegTitle": "Lista tu activo en el registro",
-    "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso."
+    "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
+    "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos."
   },
   "community": {
     "fnfTitle": "Amigas y familia",
