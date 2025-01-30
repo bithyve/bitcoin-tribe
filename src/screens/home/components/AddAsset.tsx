@@ -157,10 +157,12 @@ function AddAsset() {
       getAssetIssuanceFeeMutation.reset();
     }
   }, [
-    getAssetIssuanceFeeMutation,
+    getAssetIssuanceFeeMutation.isSuccess,
+    getAssetIssuanceFeeMutation.data,
+    getAssetIssuanceFeeMutation.error,
     navigation,
     issueAssetType,
-    wallet.specs.transactions,
+    // wallet.specs.transactions,
   ]);
 
   useEffect(() => {
