@@ -36,6 +36,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
+import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -280,7 +281,15 @@ function AddAsset() {
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
           borderColor={theme.colors.borderColor}>
-          <AppText>{'Insufficient Balance'}</AppText>
+          <InsufficiantBalancePopupContainer
+            primaryOnPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+              }, 500);
+            }}
+            secondaryOnPress={() => setVisible(false)}
+          />
         </ResponsePopupContainer>
       </View>
     </ScreenContainer>
