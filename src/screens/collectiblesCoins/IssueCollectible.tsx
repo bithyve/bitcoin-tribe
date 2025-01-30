@@ -254,7 +254,7 @@ function IssueCollectibleScreen() {
       !assetName ||
       !assetTicker ||
       !description ||
-      !attachments.length ||
+      !attachments?.length ||
       !image
     );
   }, [
@@ -262,7 +262,7 @@ function IssueCollectibleScreen() {
     assetName,
     assetTicker,
     description,
-    attachments.length,
+    attachments?.length,
     image,
     totalSupplyAmt,
   ]);
@@ -281,7 +281,9 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     try {
       const result = await pickImage(false, 5);
-      setAttachments(result);
+      if(result && result?.length) {
+        setAttachments(result);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -555,6 +557,7 @@ function IssueCollectibleScreen() {
               data={attachments}
               extraData={[attachments]}
               horizontal
+              showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
                 <View style={styles.imageWrapper}>
                   <Image
