@@ -354,6 +354,7 @@ function SendToContainer({
               recipientAddress ? setRecipientAddress('') : handlePasteAddress()
             }
             rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
           />
         </View>
         <View style={styles.inputWrapper}>
