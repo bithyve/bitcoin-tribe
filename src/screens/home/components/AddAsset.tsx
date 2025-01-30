@@ -162,7 +162,6 @@ function AddAsset() {
     getAssetIssuanceFeeMutation.error,
     navigation,
     issueAssetType,
-    // wallet.specs.transactions,
   ]);
 
   useEffect(() => {
