@@ -146,6 +146,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           title={sendScreen.swipeToBroadcast}
           loadingTitle={sendScreen.broadcastingTXN}
           onSwipeComplete={onPress}
+          backColor={theme.colors.swipeToActionThumbColor}
         />
       </View>
     </View>

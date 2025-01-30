@@ -50,6 +50,7 @@ import {
   NodeInfo,
   RgbNodeConnectParams,
   RGBWallet,
+  UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { NativeModules, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
@@ -1026,6 +1027,51 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
+
+      if (assets.uda) {
+        if (ApiHandler.appType === AppType.NODE_CONNECT) {
+          // todo
+        }
+        if (ApiHandler.appType === AppType.ON_CHAIN) {
+          for (let i = 0; i < assets.uda.length; i++) {
+            const element: UniqueDigitalAsset = assets.uda[i];
+            assets.uda[i].token.attachments = Object.values(
+              element.token.attachments,
+            );
+            if (Platform.OS === 'ios') {
+              const ext = element.token.media.mime.split('/')[1];
+              const destination = `${element.token.media.filePath}.${ext}`;
+              const exists = await RNFS.exists(destination);
+              if (!exists) {
+                await RNFS.copyFile(
+                  element.token.media.filePath,
+                  `${element.token.media.filePath}.${ext}`,
+                );
+              }
+              assets.uda[i].token.media.filePath = destination;
+              for (let j = 0; j < element.token.attachments.length; j++) {
+                const attachment = element.token.attachments[j];
+                const ex = attachment.mime.split('/')[1];
+                const dest = `${attachment.filePath}.${ex}`;
+                const isexists = await RNFS.exists(dest);
+                if (!isexists) {
+                  await RNFS.copyFile(
+                    attachment.filePath,
+                    `${attachment.filePath}.${ex}`,
+                  );
+                  assets.uda[i].token.attachments[j].filePath = dest;
+                }
+              }
+            }
+
+          }
+        }
+        dbManager.createObjectBulk(
+          RealmSchema.UniqueDigitalAsset,
+          assets.uda,
+          Realm.UpdateMode.Modified,
+        );
+      }
       if (ApiHandler.appType === AppType.ON_CHAIN) {
         ApiHandler.backup();
       }
@@ -1079,7 +1125,9 @@ export class ApiHandler {
               updateProps: {
                 metadata: {
                   assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                  note: `Issued ${response.name} on ${moment().format(
+                    'DD MMM YY  •  hh:mm a',
+                  )}`,
                 },
               },
             });
@@ -1142,7 +1190,9 @@ export class ApiHandler {
               updateProps: {
                 metadata: {
                   assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format('DD MMM YY  •  hh:mm a')}`,
+                  note: `Issued ${response.name} on ${moment().format(
+                    'DD MMM YY  •  hh:mm a',
+                  )}`,
                 },
               },
             });
@@ -1161,12 +1211,14 @@ export class ApiHandler {
     details,
     mediaFilePath,
     attachmentsFilePaths,
+    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     details: string;
     mediaFilePath: string;
     attachmentsFilePaths: string[];
+    addToRegistry;
   }) {
     try {
       const response = await RGBServices.issueAssetUda(
@@ -1180,6 +1232,36 @@ export class ApiHandler {
       );
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const collectible = dbManager.getObjectByPrimaryId(
+          RealmSchema.UniqueDigitalAsset,
+          'assetId',
+          response?.assetId,
+        ) as unknown as Collectible;
+        if (addToRegistry) {
+          // await Relay.registerAsset(app.id, { ...collectible });
+          const wallet: Wallet = dbManager
+            .getObjectByIndex(RealmSchema.Wallet)
+            .toJSON();
+          const tx = wallet.specs.transactions.find(
+            tx =>
+              tx.transactionKind === TransactionKind.SERVICE_FEE &&
+              tx.metadata?.assetId === '',
+          );
+          if (tx) {
+            ApiHandler.updateTransaction({
+              txid: tx.txid,
+              updateProps: {
+                metadata: {
+                  assetId: response.assetId,
+                  note: `Issued ${response.name} on ${moment().format(
+                    'DD MMM YY  •  hh:mm a',
+                  )}`,
+                },
+              },
+            });
+          }
+        }
       }
       return response;
     } catch (error) {

@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -15,6 +14,7 @@ import {
   Collectible,
   RgbUnspent,
   RGBWallet,
+  UniqueDigitalAsset,
   UtxoType,
 } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
@@ -45,9 +45,10 @@ const ViewUnspentScreen = () => {
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const udas = useQuery<UniqueDigitalAsset[]>(RealmSchema.UniqueDigitalAsset);
   const combined: Asset[] = useMemo(
-    () => [...coins, ...collectibles],
-    [coins, collectibles],
+    () => [...coins, ...collectibles, ...udas],
+    [coins, collectibles, udas],
   );
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
