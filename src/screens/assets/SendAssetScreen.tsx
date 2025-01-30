@@ -295,11 +295,9 @@ const SendAssetScreen = () => {
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
       });
-      setLoading(false);
       if (response?.txid) {
-        setTimeout(() => {
-          setSuccessStatus(true);
-        }, 500);
+        setLoading(false);
+        setSuccessStatus(true);
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
@@ -408,6 +406,8 @@ const SendAssetScreen = () => {
     setCustomFee(text);
   };
 
+  // console.log('successStatus', successStatus);
+  console.log('loading', loading);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -481,6 +481,7 @@ const SendAssetScreen = () => {
             invoice ? setInvoice('') : handlePasteAddress()
           }
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
           error={invoiceValidationError}
           onBlur={() => setInvoiceValidationError('')}
         />
@@ -497,6 +498,7 @@ const SendAssetScreen = () => {
           rightText={common.max}
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
           error={amountValidationError}
         />
@@ -593,7 +595,10 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
+          onDismiss={() => {
+            if (loading || successStatus) return;
+            setVisible(false);
+          }}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={assetData?.name}
@@ -632,7 +637,14 @@ const SendAssetScreen = () => {
           }}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled || createUtxos.isLoading || loading}
+          disabled={
+            isButtonDisabled ||
+            createUtxos.isLoading ||
+            loading ||
+            amountValidationError.length > 0 ||
+            customAmtValidationError.length > 0 ||
+            invoiceValidationError.length > 0
+          }
           width={wp(120)}
         />
       </View>
