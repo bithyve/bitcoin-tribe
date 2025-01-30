@@ -496,7 +496,7 @@
     "enterAssetTickerPlaceholder": "Enter a short ticker symbol (e.g., BTC)",
     "attachments": "Attachments",
     "attachmentsCaption": "Attach any supporting images or files (max 16MB)",
-    "issueNewCoin": "Issue New Coin",
+    "issueNewCoin": "Issue Coin",
     "swipeToPay": "Swipe to Pay",
     "payInprocess": "Paying...",
     "listYourAssetInRegTitle": "List Your Asset In Registry",
