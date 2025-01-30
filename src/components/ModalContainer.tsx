@@ -27,7 +27,7 @@ type ModalContainerProps = {
   conatinerModalStyle?: StyleProp<ViewStyle>;
   height?: string;
   enableCloseIcon?: boolean;
-  onModalHide?: () => void
+  onModalHide?: () => void;
 };
 
 const ModalContainer = (props: ModalContainerProps) => {
@@ -41,7 +41,7 @@ const ModalContainer = (props: ModalContainerProps) => {
     conatinerModalStyle,
     height,
     enableCloseIcon = true,
-    onModalHide
+    onModalHide,
   } = props;
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(true);
@@ -77,31 +77,33 @@ const ModalContainer = (props: ModalContainerProps) => {
       backdropOpacity={0.8}
       onModalHide={onModalHide}
       style={[styles.containerStyle, conatinerModalStyle]}>
-      <KeyboardAvoidView style={styles.container}>
+      <View style={styles.container}>
         <AppTouchable onPress={onDismiss} style={styles.dashViewWrapper}>
           <View style={styles.dashView} />
         </AppTouchable>
-        <View style={styles.headingWrapper}>
-          <View style={styles.contentWrapper}>
-            <AppText
-              variant={enableCloseIcon ? 'heading1' : 'heading2'}
-              style={styles.titleText}>
-              {title}
-            </AppText>
-            {subTitle ? (
-              <AppText variant="body1" style={styles.subTitleText}>
-                {subTitle}
+        <KeyboardAvoidView style={styles.container}>
+          <View style={styles.headingWrapper}>
+            <View style={styles.contentWrapper}>
+              <AppText
+                variant={enableCloseIcon ? 'heading1' : 'heading2'}
+                style={styles.titleText}>
+                {title}
               </AppText>
-            ) : null}
+              {subTitle ? (
+                <AppText variant="body1" style={styles.subTitleText}>
+                  {subTitle}
+                </AppText>
+              ) : null}
+            </View>
+            {enableCloseIcon && (
+              <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
+                <IconClose />
+              </AppTouchable>
+            )}
           </View>
-          {enableCloseIcon && (
-            <AppTouchable onPress={onDismiss} style={styles.closeIconWrapper}>
-              <IconClose />
-            </AppTouchable>
-          )}
-        </View>
-        {children}
-      </KeyboardAvoidView>
+          {children}
+        </KeyboardAvoidView>
+      </View>
     </Modal>
   );
 };
