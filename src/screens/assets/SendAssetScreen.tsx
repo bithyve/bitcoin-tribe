@@ -7,13 +7,12 @@ import React, {
   useEffect,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
+import { Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -23,7 +22,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
-// import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
@@ -36,14 +34,12 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
-// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -64,13 +60,6 @@ type ItemProps = {
   amount?: string;
 };
 
-type routeParamsProps = {
-  assetId: string;
-  rgbInvoice: string;
-  wallet: Wallet;
-  amount: string;
-};
-
 const AssetItem = ({
   name,
   details,
@@ -81,7 +70,7 @@ const AssetItem = ({
   amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
+  const styles = useMemo(() => getStyles(theme, 100), [theme]);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -164,18 +153,19 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
-  const [assetAmount, setAssetAmount] = useState(amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '');
-  const [inputHeight, setInputHeight] = React.useState(100);
+  const [assetAmount, setAssetAmount] = useState(
+    amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '',
+  );
+  const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [selectedPriority, setSelectedPriority] = React.useState(
-    TxPriority.LOW,
-  );
-  const [selectedFeeRate, setSelectedFeeRate] = React.useState(
+  const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
+  const [isDonation, setIsDonation] = useState(false);
+  const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee[TxPriority.LOW].feePerByte,
   );
   const styles = getStyles(theme, inputHeight);
@@ -284,6 +274,7 @@ const SendAssetScreen = () => {
         amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
+        isDonation,
       });
       setLoading(false);
       if (response?.txid) {
@@ -298,8 +289,14 @@ const SendAssetScreen = () => {
       } else if (response?.error) {
         setVisible(false);
         setTimeout(() => {
-          if(response?.error === 'details=Error from bdk: UTXO not found in the internal database') {
-            Toast('We encountered an issue while syncing your UTXOs. Please refresh your wallet from the Home screen and try again. Contact support on Telegram if needed.', true);
+          if (
+            response?.error ===
+            'details=Error from bdk: UTXO not found in the internal database'
+          ) {
+            Toast(
+              'We encountered an issue while syncing your UTXOs. Please refresh your wallet from the Home screen and try again. Contact support on Telegram if needed.',
+              true,
+            );
           } else {
             Toast(`Failed: ${response?.error}`, true);
           }
@@ -537,6 +534,18 @@ const SendAssetScreen = () => {
           </View>
         )}
 
+        <View style={styles.containerSwitch}>
+          <AppText variant="heading3">
+            Send this transfer as a donation?
+          </AppText>
+
+          <Switch
+            value={isDonation}
+            onValueChange={value => setIsDonation(value)}
+            color={theme.colors.accent1}
+          />
+        </View>
+
         <ModalContainer
           title={
             successStatus
@@ -691,6 +700,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    containerSwitch: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginVertical: hp(15),
+      paddingBottom: hp(30),
     },
   });
 
