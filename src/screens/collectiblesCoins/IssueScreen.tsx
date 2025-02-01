@@ -163,7 +163,7 @@ function IssueScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'Issue New Coin'} />
+      <AppHeader title={assets.issueNewCoin} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -190,7 +190,7 @@ function IssueScreen() {
           <TextField
             value={assetName}
             onChangeText={text => setAssetName(text)}
-            placeholder={'Enter a name for your asset'}
+            placeholder={assets.enterAssetNamePlaceholder}
             maxLength={32}
             style={styles.input}
             autoCapitalize="words"
@@ -206,7 +206,7 @@ function IssueScreen() {
             ref={assetTickerInputRef}
             value={assetTicker}
             onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-            placeholder={'Enter a short ticker symbol (e.g., BTC)'}
+            placeholder={assets.enterAssetTickerPlaceholder}
             maxLength={8}
             style={styles.input}
             autoCapitalize="characters"
@@ -222,7 +222,7 @@ function IssueScreen() {
             ref={totalSupplyInputRef}
             value={formatNumber(totalSupplyAmt)}
             onChangeText={text => handleTotalSupplyChange(text)}
-            placeholder={'Enter the maximum number of units'}
+            placeholder={assets.enterTotSupplyPlaceholder}
             keyboardType="numeric"
             style={styles.input}
             returnKeyType="done"
@@ -238,7 +238,7 @@ function IssueScreen() {
             step={1}
           />
           <AppText variant="secondaryCta" style={styles.textInputTitle}>
-            Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)
+            {assets.precisionCaption}
           </AppText>
         </View>
       </KeyboardAvoidView>
@@ -336,6 +336,8 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     textInputTitle: {
       color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(5),
+      marginBottom: hp(3),
     },
   });
 export default IssueScreen;

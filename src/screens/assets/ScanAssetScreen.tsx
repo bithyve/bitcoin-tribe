@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Code } from 'react-native-vision-camera';
 import { useQuery } from '@realm/react';
@@ -31,13 +31,16 @@ function ScanAssetScreen({ navigation }) {
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
+  const [isScanning, setIsScanning] = useState(true);
 
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
+      setIsScanning(false);
       const { codes, paymentInfo } = input;
       const value = paymentInfo || codes?.[0]?.value;
 
       if (!value) {
+        setIsScanning(true);
         return;
       }
 
@@ -48,9 +51,11 @@ function ScanAssetScreen({ navigation }) {
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
+            setIsScanning(true);
             Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {
+            setIsScanning(true);
             navigation.replace(NavigationRoutes.SENDASSET, {
               assetId: res.assetId,
               rgbInvoice: value,
@@ -58,6 +63,7 @@ function ScanAssetScreen({ navigation }) {
             });
           }
         } else {
+          setIsScanning(true);
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
             rgbInvoice: value,
@@ -68,6 +74,7 @@ function ScanAssetScreen({ navigation }) {
       }
 
       if (value.startsWith('lnbc')) {
+        setIsScanning(true);
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
           invoice: value,
         });
@@ -89,11 +96,13 @@ function ScanAssetScreen({ navigation }) {
 
       switch (paymentInfoKind) {
         case PaymentInfoKind.RLN_INVOICE:
+          setIsScanning(true);
           navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
             invoice: value,
           });
           break;
         default:
+          setIsScanning(true);
           Toast(sendScreen.invalidRGBInvoiceAddress, true);
       }
     },
@@ -112,7 +121,7 @@ function ScanAssetScreen({ navigation }) {
         enableBack={true}
       />
       <View style={styles.scannerWrapper}>
-        <QRScanner onCodeScanned={onCodeScanned} />
+        <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />
       </View>
       <OptionCard
         title={sendScreen.enterInvoiceManually}

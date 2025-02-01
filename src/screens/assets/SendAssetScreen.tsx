@@ -161,6 +161,9 @@ const SendAssetScreen = () => {
   const [visible, setVisible] = useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
+  const [amountValidationError, setAmountValidationError] = useState('');
+  const [invoiceValidationError, setInvoiceValidationError] = useState('');
+  const [customAmtValidationError, setCustomAmtValidationError] = useState('');
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
@@ -191,22 +194,27 @@ const SendAssetScreen = () => {
   }, [createUtxos.data]);
 
   const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (numericValue === 0) {
-      Keyboard.dismiss();
+    const numericValue = parseFloat(text.replace(/,/g, '') || null);
+    if (isNaN(numericValue)) {
+      setAmountValidationError('');
       setAssetAmount('');
-      Toast(sendScreen.validationZeroNotAllowed, true);
+    } else if (numericValue === 0) {
+      setAssetAmount(text);
+      setAmountValidationError(sendScreen.validationZeroNotAllowed);
     } else if (Number(assetData?.balance.spendable) === 0) {
-      Keyboard.dismiss();
-      Toast(
+      setAmountValidationError(
         sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
-        true,
       );
     } else if (numericValue <= assetData?.balance.spendable) {
       setAssetAmount(text);
+      setAmountValidationError('');
+    } else if (numericValue > Number(assetData?.balance.spendable)) {
+      setAmountValidationError(
+        assets.checkSpendableAmt + assetData?.balance.spendable,
+      );
     } else {
-      Keyboard.dismiss();
-      Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+      setAssetAmount('');
+      setAmountValidationError('');
     }
   };
 
@@ -276,11 +284,9 @@ const SendAssetScreen = () => {
         feeRate: selectedFeeRate,
         isDonation,
       });
-      setLoading(false);
       if (response?.txid) {
-        setTimeout(() => {
-          setSuccessStatus(true);
-        }, 500);
+        setLoading(false);
+        setSuccessStatus(true);
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
@@ -325,21 +331,52 @@ const SendAssetScreen = () => {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           setValidatingInvoiceLoader(false);
-          Toast(assets.invoiceMisamatchMsg, true);
+          setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else if (res.assetId && res.assetId === assetId) {
           setInvoice(clipboardValue);
           setAssetAmount(res.amount.toString() || 0);
           setValidatingInvoiceLoader(false);
+          setInvoiceValidationError('');
         } else {
           setInvoice(clipboardValue);
           setValidatingInvoiceLoader(false);
+          setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
         setInvoice(clipboardValue);
         setValidatingInvoiceLoader(false);
+        setInvoiceValidationError('');
       }
     } catch (error) {
-      Toast('Invalid invoice', true);
+      setInvoiceValidationError('Invalid invoice');
+      setValidatingInvoiceLoader(false);
+    }
+  };
+
+  const handleInvoiceInputChange = async text => {
+    try {
+      const res = await ApiHandler.decodeInvoice(text);
+      if (res.assetId) {
+        const assetData = allAssets.find(item => item.assetId === res.assetId);
+        if (!assetData || res.assetId !== assetId) {
+          setInvoiceValidationError(assets.invoiceMisamatchMsg);
+        } else if (res.assetId && res.assetId === assetId) {
+          setInvoice(text);
+          setAssetAmount(res.amount.toString() || 0);
+          setInvoiceValidationError('');
+        } else {
+          setInvoice(text);
+          setInvoiceValidationError('');
+        }
+      } else if (res.recipientId) {
+        setInvoice(text);
+        setInvoiceValidationError('');
+      } else {
+        setInvoice(text);
+        setInvoiceValidationError('Invalid invoice');
+      }
+    } catch (error) {
+      setInvoiceValidationError('Invalid invoice');
       setValidatingInvoiceLoader(false);
     }
   };
@@ -355,8 +392,7 @@ const SendAssetScreen = () => {
     const isValidNumber = /^\d*\.?\d*$/.test(text);
     if (text.startsWith('0') && !text.startsWith('0.')) {
       setCustomFee(text.replace(/^0+/, ''));
-      Toast(sendScreen.validationZeroNotAllowed, true);
-      Keyboard.dismiss();
+      setCustomAmtValidationError(sendScreen.validationZeroNotAllowed);
       return;
     }
     const numericValue = parseFloat(text);
@@ -364,10 +400,13 @@ const SendAssetScreen = () => {
       setCustomFee(0);
       return;
     }
+    setCustomAmtValidationError('');
     setSelectedFeeRate(Number(text));
     setCustomFee(text);
   };
 
+  // console.log('successStatus', successStatus);
+  console.log('loading', loading);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -424,7 +463,7 @@ const SendAssetScreen = () => {
         </AppText>
         <TextField
           value={invoice}
-          onChangeText={text => setInvoice(text)}
+          onChangeText={handleInvoiceInputChange}
           placeholder={assets.invoice}
           style={styles.input}
           multiline={true}
@@ -441,6 +480,9 @@ const SendAssetScreen = () => {
             invoice ? setInvoice('') : handlePasteAddress()
           }
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
+          error={invoiceValidationError}
+          onBlur={() => setInvoiceValidationError('')}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.enterAmount}
@@ -455,7 +497,9 @@ const SendAssetScreen = () => {
           rightText={common.max}
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
+          error={amountValidationError}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
@@ -530,6 +574,10 @@ const SendAssetScreen = () => {
               rightText={'sat/vB'}
               onRightTextPress={() => {}}
               rightCTATextColor={theme.colors.headingColor}
+              error={customAmtValidationError}
+              onSubmitEditing={() => {
+                setCustomAmtValidationError('');
+              }}
             />
           </View>
         )}
@@ -558,7 +606,10 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
+          onDismiss={() => {
+            if (loading || successStatus) return;
+            setVisible(false);
+          }}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={assetData?.name}
@@ -597,7 +648,14 @@ const SendAssetScreen = () => {
           }}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled || createUtxos.isLoading || loading}
+          disabled={
+            isButtonDisabled ||
+            createUtxos.isLoading ||
+            loading ||
+            amountValidationError.length > 0 ||
+            customAmtValidationError.length > 0 ||
+            invoiceValidationError.length > 0
+          }
           width={wp(120)}
         />
       </View>

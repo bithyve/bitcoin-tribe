@@ -243,7 +243,7 @@ function IssueCollectibleScreen() {
     navigation,
     totalSupplyAmt,
     precision,
-    attachments
+    attachments,
   ]);
 
   const isButtonDisabled = useMemo(() => {
@@ -327,7 +327,7 @@ function IssueCollectibleScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'Issue Collectible'} />
+      <AppHeader title={assets.issueCollectibles} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -348,8 +348,7 @@ function IssueCollectibleScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View style={styles.containerTop}>
-          <AppText variant="heading3">Make this collectible unique</AppText>
-
+          <AppText variant="heading3">{assets.makeCollectibleUnique}</AppText>
           <Switch
             value={assetType === AssetType.UDA}
             onValueChange={value => {
@@ -368,7 +367,7 @@ function IssueCollectibleScreen() {
             <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
-              placeholder={'Enter a name for your asset'}
+              placeholder={assets.enterAssetNamePlaceholder}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
@@ -384,7 +383,7 @@ function IssueCollectibleScreen() {
               ref={descriptionInputRef}
               value={description}
               onChangeText={text => setDescription(text)}
-              placeholder={'Describe your asset'}
+              placeholder={assets.enterDescNamePlaceholder}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
@@ -406,14 +405,14 @@ function IssueCollectibleScreen() {
               ref={totalSupplyInputRef}
               value={formatNumber(totalSupplyAmt)}
               onChangeText={text => handleTotalSupplyChange(text)}
-              placeholder={'Enter the maximum number of units'}
+              placeholder={assets.enterTotSupplyPlaceholder}
               keyboardType="numeric"
               style={styles.input}
               returnKeyType="done"
             />
 
             <Slider
-              title="Precision"
+              title={assets.precision}
               value={precision}
               onValueChange={value => setPrecision(value)}
               minimumValue={0}
@@ -421,13 +420,13 @@ function IssueCollectibleScreen() {
               step={1}
             />
             <AppText variant="caption" style={styles.textInputTitle}>
-              Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)
+              {assets.precisionCaption}
             </AppText>
 
             <AppText
               variant="secondaryCta"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
-              Media File
+              {assets.mediaFile}
             </AppText>
 
             <UploadAssetFileButton
@@ -455,7 +454,7 @@ function IssueCollectibleScreen() {
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
-              Add an image to represent your asset (e.g., logo or artwork)
+              {assets.assetImageCaption}
             </AppText>
           </View>
         ) : (
@@ -466,7 +465,7 @@ function IssueCollectibleScreen() {
             <TextField
               value={assetName}
               onChangeText={text => setAssetName(text)}
-              placeholder={'Enter a name for your asset'}
+              placeholder={assets.enterAssetNamePlaceholder}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
@@ -483,7 +482,7 @@ function IssueCollectibleScreen() {
               ref={assetTickerInputRef}
               value={assetTicker}
               onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
-              placeholder={'Enter a short ticker symbol (e.g., BTC)'}
+              placeholder={assets.enterAssetTickerPlaceholder}
               maxLength={8}
               style={styles.input}
               autoCapitalize="characters"
@@ -499,7 +498,7 @@ function IssueCollectibleScreen() {
               ref={descriptionInputRef}
               value={description}
               onChangeText={text => setDescription(text)}
-              placeholder={'Describe your asset'}
+              placeholder={assets.enterDescNamePlaceholder}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
               }}
@@ -516,7 +515,7 @@ function IssueCollectibleScreen() {
             <AppText
               variant="secondaryCta"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
-              Media File
+              {assets.mediaFile}
             </AppText>
 
             <UploadAssetFileButton
@@ -544,13 +543,13 @@ function IssueCollectibleScreen() {
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
-              Add an image to represent your asset (e.g., logo or artwork)
+              {assets.assetImageCaption}
             </AppText>
 
             <AppText
               variant="secondaryCta"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
-              Attachments
+              {assets.attachments}
             </AppText>
 
             <FlatList
@@ -588,7 +587,7 @@ function IssueCollectibleScreen() {
             />
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
-              Attach any supporting images or files (max 16MB)
+              {assets.attachmentsCaption}
             </AppText>
           </View>
         )}
@@ -692,6 +691,8 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     textInputTitle: {
       color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(5),
+      marginBottom: hp(3),
     },
     containerTop: {
       flexDirection: 'row',

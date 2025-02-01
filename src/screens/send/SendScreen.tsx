@@ -22,7 +22,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
-import ModalLoading from 'src/components/ModalLoading';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -48,19 +47,15 @@ function SendScreen({ route, navigation }) {
         return;
       }
       if (value.startsWith('rgb:')) {
-        // setValidatingInvoiceLoader(true);
         const res = await ApiHandler.decodeInvoice(value);
         if (res.assetId) {
           const assetData = allAssets.find(
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
-            // setValidatingInvoiceLoader(false);
             setIsScanning(true);
             Toast(assets.assetNotFoundMsg, true);
-            navigation.goBack();
           } else {
-            // setValidatingInvoiceLoader(false);
             setIsScanning(true);
             navigation.replace(NavigationRoutes.SENDASSET, {
               assetId: res.assetId,
@@ -70,7 +65,6 @@ function SendScreen({ route, navigation }) {
             });
           }
         } else {
-          // setValidatingInvoiceLoader(false);
           setIsScanning(true);
           navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
             wallet,
