@@ -225,11 +225,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun sendAsset( assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, promise: Promise){
+    fun sendAsset( assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean, promise: Promise){
         backgroundHandler.post {
             try {
                 val endpoints = listOf(consignmentEndpoints)
-                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate))
+                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()
