@@ -173,7 +173,10 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
+      Toast(
+        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -241,8 +244,8 @@ function AddAsset() {
         <SelectOption
           title={
             issueAssetType === AssetType.Coin
-              ? 'Issue Coin'
-              : 'Issue Collectible'
+              ? assets.issueNewCoin
+              : assets.issueCollectibles
           }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
