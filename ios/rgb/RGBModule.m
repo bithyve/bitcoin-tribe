@@ -141,11 +141,12 @@ RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId
                   amount:(nonnull NSNumber *)amount
                   consignmentEndpoints:(NSString *)consignmentEndpoints
                   fee:(nonnull NSNumber *)fee
+                  isDonation:(BOOL *)isDonation
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [
-    helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints fee: fee callback:^(NSString * _Nonnull response) {
+    helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints fee: fee isDonation: isDonation callback:^(NSString * _Nonnull response) {
       resolve(response);
     }
    ];

@@ -1,5 +1,11 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -30,6 +36,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
+import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -53,7 +60,7 @@ const ServiceFee = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, assets } = translations;
 
   if (!feeDetails) {
     return null;
@@ -88,9 +95,10 @@ const ServiceFee = ({
 
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
-            title={'Swipe to Pay'}
-            loadingTitle={'Paying...'}
+            title={assets.swipeToPay}
+            loadingTitle={assets.payInprocess}
             onSwipeComplete={onPay}
+            backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
       </View>
@@ -103,7 +111,7 @@ function AddAsset() {
   const { issueAssetType } = useRoute().params;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
@@ -145,14 +153,15 @@ function AddAsset() {
         navigateToIssue(true);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
-      Toast('Failed to fetch asset issuance fee.');
+      Toast(assets.failToFetchIssueFee, true);
       getAssetIssuanceFeeMutation.reset();
     }
   }, [
-    getAssetIssuanceFeeMutation,
+    getAssetIssuanceFeeMutation.isSuccess,
+    getAssetIssuanceFeeMutation.data,
+    getAssetIssuanceFeeMutation.error,
     navigation,
     issueAssetType,
-    wallet.specs.transactions,
   ]);
 
   useEffect(() => {
@@ -164,7 +173,7 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`);
+      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -197,7 +206,7 @@ function AddAsset() {
         }
       }, 500);
     },
-    [issueAssetType, navigation]
+    [issueAssetType, navigation],
   );
 
   return (
@@ -206,10 +215,8 @@ function AddAsset() {
       <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
       <View>
         <ModalContainer
-          title={'List Your Asset In Registry'}
-          subTitle={
-            'Do you want to store your Asset on our Tribe RGB Registry? A small platform fee is required. If not, you can skip this step.'
-          }
+          title={assets.listYourAssetInRegTitle}
+          subTitle={assets.listYourAssetInRegSubTitle}
           height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
@@ -232,7 +239,11 @@ function AddAsset() {
 
       <View style={styles.container}>
         <SelectOption
-          title={issueAssetType === AssetType.Coin ? 'Issue Coin' : 'Issue Collectible'}
+          title={
+            issueAssetType === AssetType.Coin
+              ? 'Issue Coin'
+              : 'Issue Collectible'
+          }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -268,7 +279,15 @@ function AddAsset() {
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
           borderColor={theme.colors.borderColor}>
-          <AppText>{'Insufficient Balance'}</AppText>
+          <InsufficiantBalancePopupContainer
+            primaryOnPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+              }, 500);
+            }}
+            secondaryOnPress={() => setVisible(false)}
+          />
         </ResponsePopupContainer>
       </View>
     </ScreenContainer>

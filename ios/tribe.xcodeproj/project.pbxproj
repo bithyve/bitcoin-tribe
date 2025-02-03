@@ -696,8 +696,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1627628e-1165-4081-91ab-8348ccb34dd2";
-				PROVISIONING_PROFILE_SPECIFIER = "Tribe RGB Production";
+				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
+				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tribe.app/tribe";
 			};
 			name = Release;
@@ -711,7 +711,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 82;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -747,7 +747,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 82;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -765,9 +765,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bithyve.tribe;
 				PRODUCT_NAME = tribe;
-				PROVISIONING_PROFILE = "1627628e-1165-4081-91ab-8348ccb34dd2";
-				PROVISIONING_PROFILE_SPECIFIER = "Tribe RGB Production";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Tribe RGB Production";
+				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
+				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "com.bithyve.tribe AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -784,7 +784,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 82;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -820,8 +820,8 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 82;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 84;
+				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -837,8 +837,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bithyve.tribe.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1627628e-1165-4081-91ab-8348ccb34dd2";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
+				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
