@@ -153,14 +153,15 @@ function AddAsset() {
         navigateToIssue(true);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
-      Toast('Failed to fetch asset issuance fee.', true);
+      Toast(assets.failToFetchIssueFee, true);
       getAssetIssuanceFeeMutation.reset();
     }
   }, [
-    getAssetIssuanceFeeMutation,
+    getAssetIssuanceFeeMutation.isSuccess,
+    getAssetIssuanceFeeMutation.data,
+    getAssetIssuanceFeeMutation.error,
     navigation,
     issueAssetType,
-    wallet.specs.transactions,
   ]);
 
   useEffect(() => {
@@ -172,10 +173,7 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(
-        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
-        true,
-      );
+      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }

@@ -30,13 +30,13 @@ interface Balance {
   offchainInbound?: number;
 }
 
-export interface Transaction {
+export interface Transfer {
   amount: number;
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
-  kind: string;
-  status: string;
+  kind: TransferKind;
+  status: TransferStatus;
   updatedAt: number;
   txid: string | null;
   recipientId: string | null;
@@ -63,7 +63,7 @@ export interface Coin {
   precision: number;
   ticker: string;
   timestamp: number;
-  transactions: Transaction[];
+  transactions: Transfer[];
   metaData: MetaData;
 }
 
@@ -104,7 +104,7 @@ export interface UniqueDigitalAsset {
     media: Media;
     reserves: boolean;
   };
-  transactions: Transaction[];
+  transactions: Transfer[];
   metaData: MetaData;
 }
 
@@ -145,6 +145,20 @@ export enum UtxoType {
   Colored = 'Colored',
   Colorable = 'Colorable',
   Uncolored = 'Uncolored'
+}
+
+export enum TransferKind {
+  ISSUANCE = 'ISSUANCE',
+  RECEIVE_BLIND = 'RECEIVE_BLIND',
+  RECEIVE_WITNESS = 'RECEIVE_WITNESS',
+  SEND = 'SEND'
+}
+
+export enum TransferStatus {
+  WAITING_COUNTERPARTY = 'WAITING_COUNTERPARTY',
+  WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
+  SETTLED = 'SETTLED',
+  FAILED = 'FAILED'
 }
 
 export interface RgbNodeConnectParams {

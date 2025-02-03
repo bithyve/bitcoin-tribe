@@ -93,6 +93,7 @@ type CustomColors = {
   assetBalanceBackColor: string;
   appBackupStepLabel: string;
   swipeToActionThumbColor: string;
+  errorBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -194,6 +195,7 @@ const CombinedDefaultTheme: AppTheme = {
     assetBalanceBackColor: Colors.BrandeisBlue,
     appBackupStepLabel: Colors.BrandeisBlue,
     swipeToActionThumbColor: Colors.BrandeisBlue,
+    errorBorderColor: Colors.ImperialRed,
   },
   fonts: {
     regular: {
@@ -303,6 +305,7 @@ const CombinedDarkTheme: AppTheme = {
     assetBalanceBackColor: Colors.Golden,
     appBackupStepLabel: Colors.Golden,
     swipeToActionThumbColor: Colors.Golden,
+    errorBorderColor: Colors.ImperialRed,
   },
   fonts: {
     regular: {

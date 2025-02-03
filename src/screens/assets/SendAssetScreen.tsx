@@ -7,13 +7,12 @@ import React, {
   useEffect,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
+import { Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -23,7 +22,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
-// import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
@@ -36,14 +34,12 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
-// import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-// import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -64,13 +60,6 @@ type ItemProps = {
   amount?: string;
 };
 
-type routeParamsProps = {
-  assetId: string;
-  rgbInvoice: string;
-  wallet: Wallet;
-  amount: string;
-};
-
 const AssetItem = ({
   name,
   details,
@@ -81,7 +70,7 @@ const AssetItem = ({
   amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme, 100), [theme]);
+  const styles = useMemo(() => getStyles(theme, 100), [theme]);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -167,17 +156,19 @@ const SendAssetScreen = () => {
   const [assetAmount, setAssetAmount] = useState(
     amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '',
   );
-  const [inputHeight, setInputHeight] = React.useState(100);
+  const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
+  const [amountValidationError, setAmountValidationError] = useState('');
+  const [invoiceValidationError, setInvoiceValidationError] = useState('');
+  const [customAmtValidationError, setCustomAmtValidationError] = useState('');
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [selectedPriority, setSelectedPriority] = React.useState(
-    TxPriority.LOW,
-  );
-  const [selectedFeeRate, setSelectedFeeRate] = React.useState(
+  const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
+  const [isDonation, setIsDonation] = useState(false);
+  const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee[TxPriority.LOW].feePerByte,
   );
   const styles = getStyles(theme, inputHeight);
@@ -203,22 +194,27 @@ const SendAssetScreen = () => {
   }, [createUtxos.data]);
 
   const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (numericValue === 0) {
-      Keyboard.dismiss();
+    const numericValue = parseFloat(text.replace(/,/g, '') || null);
+    if (isNaN(numericValue)) {
+      setAmountValidationError('');
       setAssetAmount('');
-      Toast(sendScreen.validationZeroNotAllowed, true);
+    } else if (numericValue === 0) {
+      setAssetAmount(text);
+      setAmountValidationError(sendScreen.validationZeroNotAllowed);
     } else if (Number(assetData?.balance.spendable) === 0) {
-      Keyboard.dismiss();
-      Toast(
+      setAmountValidationError(
         sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
-        true,
       );
     } else if (numericValue <= assetData?.balance.spendable) {
       setAssetAmount(text);
+      setAmountValidationError('');
+    } else if (numericValue > Number(assetData?.balance.spendable)) {
+      setAmountValidationError(
+        assets.checkSpendableAmt + assetData?.balance.spendable,
+      );
     } else {
-      Keyboard.dismiss();
-      Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+      setAssetAmount('');
+      setAmountValidationError('');
     }
   };
 
@@ -286,12 +282,11 @@ const SendAssetScreen = () => {
         amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
         consignmentEndpoints: endpoints,
         feeRate: selectedFeeRate,
+        isDonation,
       });
-      setLoading(false);
       if (response?.txid) {
-        setTimeout(() => {
-          setSuccessStatus(true);
-        }, 500);
+        setLoading(false);
+        setSuccessStatus(true);
         // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
@@ -300,7 +295,17 @@ const SendAssetScreen = () => {
       } else if (response?.error) {
         setVisible(false);
         setTimeout(() => {
-          Toast(`Failed: ${response?.error}`, true);
+          if (
+            response?.error ===
+            'details=Error from bdk: UTXO not found in the internal database'
+          ) {
+            Toast(
+              'We encountered an issue while syncing your UTXOs. Please refresh your wallet from the Home screen and try again. Contact support on Telegram if needed.',
+              true,
+            );
+          } else {
+            Toast(`Failed: ${response?.error}`, true);
+          }
         }, 500);
       }
     } catch (error) {
@@ -326,21 +331,52 @@ const SendAssetScreen = () => {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           setValidatingInvoiceLoader(false);
-          Toast(assets.invoiceMisamatchMsg, true);
+          setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else if (res.assetId && res.assetId === assetId) {
           setInvoice(clipboardValue);
           setAssetAmount(res.amount.toString() || 0);
           setValidatingInvoiceLoader(false);
+          setInvoiceValidationError('');
         } else {
           setInvoice(clipboardValue);
           setValidatingInvoiceLoader(false);
+          setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
         setInvoice(clipboardValue);
         setValidatingInvoiceLoader(false);
+        setInvoiceValidationError('');
       }
     } catch (error) {
-      Toast('Invalid invoice', true);
+      setInvoiceValidationError('Invalid invoice');
+      setValidatingInvoiceLoader(false);
+    }
+  };
+
+  const handleInvoiceInputChange = async text => {
+    try {
+      const res = await ApiHandler.decodeInvoice(text);
+      if (res.assetId) {
+        const assetData = allAssets.find(item => item.assetId === res.assetId);
+        if (!assetData || res.assetId !== assetId) {
+          setInvoiceValidationError(assets.invoiceMisamatchMsg);
+        } else if (res.assetId && res.assetId === assetId) {
+          setInvoice(text);
+          setAssetAmount(res.amount.toString() || 0);
+          setInvoiceValidationError('');
+        } else {
+          setInvoice(text);
+          setInvoiceValidationError('');
+        }
+      } else if (res.recipientId) {
+        setInvoice(text);
+        setInvoiceValidationError('');
+      } else {
+        setInvoice(text);
+        setInvoiceValidationError('Invalid invoice');
+      }
+    } catch (error) {
+      setInvoiceValidationError('Invalid invoice');
       setValidatingInvoiceLoader(false);
     }
   };
@@ -356,8 +392,7 @@ const SendAssetScreen = () => {
     const isValidNumber = /^\d*\.?\d*$/.test(text);
     if (text.startsWith('0') && !text.startsWith('0.')) {
       setCustomFee(text.replace(/^0+/, ''));
-      Toast(sendScreen.validationZeroNotAllowed, true);
-      Keyboard.dismiss();
+      setCustomAmtValidationError(sendScreen.validationZeroNotAllowed);
       return;
     }
     const numericValue = parseFloat(text);
@@ -365,10 +400,13 @@ const SendAssetScreen = () => {
       setCustomFee(0);
       return;
     }
+    setCustomAmtValidationError('');
     setSelectedFeeRate(Number(text));
     setCustomFee(text);
   };
 
+  // console.log('successStatus', successStatus);
+  console.log('loading', loading);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -425,7 +463,7 @@ const SendAssetScreen = () => {
         </AppText>
         <TextField
           value={invoice}
-          onChangeText={text => setInvoice(text)}
+          onChangeText={handleInvoiceInputChange}
           placeholder={assets.invoice}
           style={styles.input}
           multiline={true}
@@ -443,6 +481,8 @@ const SendAssetScreen = () => {
           }
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
+          error={invoiceValidationError}
+          onBlur={() => setInvoiceValidationError('')}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.enterAmount}
@@ -459,6 +499,7 @@ const SendAssetScreen = () => {
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
+          error={amountValidationError}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
@@ -533,9 +574,25 @@ const SendAssetScreen = () => {
               rightText={'sat/vB'}
               onRightTextPress={() => {}}
               rightCTATextColor={theme.colors.headingColor}
+              error={customAmtValidationError}
+              onSubmitEditing={() => {
+                setCustomAmtValidationError('');
+              }}
             />
           </View>
         )}
+
+        <View style={styles.containerSwitch}>
+          <AppText variant="heading3">
+            Send this transfer as a donation?
+          </AppText>
+
+          <Switch
+            value={isDonation}
+            onValueChange={value => setIsDonation(value)}
+            color={theme.colors.accent1}
+          />
+        </View>
 
         <ModalContainer
           title={
@@ -549,7 +606,10 @@ const SendAssetScreen = () => {
           }
           visible={visible}
           enableCloseIcon={false}
-          onDismiss={() => (loading || successStatus ? {} : setVisible(false))}>
+          onDismiss={() => {
+            if (loading || successStatus) return;
+            setVisible(false);
+          }}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={assetData?.name}
@@ -588,7 +648,14 @@ const SendAssetScreen = () => {
           }}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          disabled={isButtonDisabled || createUtxos.isLoading || loading}
+          disabled={
+            isButtonDisabled ||
+            createUtxos.isLoading ||
+            loading ||
+            amountValidationError.length > 0 ||
+            customAmtValidationError.length > 0 ||
+            invoiceValidationError.length > 0
+          }
           width={wp(120)}
         />
       </View>
@@ -691,6 +758,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    containerSwitch: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginVertical: hp(15),
+      paddingBottom: hp(30),
     },
   });
 

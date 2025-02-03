@@ -687,13 +687,13 @@ import CloudKit
     }
   }
   
-  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, callback: @escaping ((String) -> Void)) -> Void{
     do{
       var recipientMap: [String: [Recipient]] = [:]
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount), transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: false, feeRate: Float(truncating: fee), minConfirmations: 0, skipSync: true)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: isDonation, feeRate: Float(truncating: fee), minConfirmations: 0, skipSync: true)
       }
       print(response)
       let data: [String: Any] = [

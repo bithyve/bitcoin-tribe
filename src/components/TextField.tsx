@@ -13,6 +13,7 @@ import CommonStyles from 'src/common/styles/CommonStyles';
 import { AppTheme } from 'src/theme';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
+import Colors from 'src/theme/Colors';
 
 type TextFieldProps = {
   icon?: React.ReactNode;
@@ -40,6 +41,8 @@ type TextFieldProps = {
   secureTextEntry?: boolean;
   autoCorrect?: boolean;
   blurOnSubmit?: boolean;
+  error?: string;
+  onBlur?: () => void;
 };
 
 const TextField = React.forwardRef((props: TextFieldProps, ref) => {
@@ -69,6 +72,8 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
     secureTextEntry = false,
     autoCorrect = false,
     blurOnSubmit,
+    error,
+    onBlur,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const theme: AppTheme = useTheme();
@@ -78,71 +83,85 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
   );
 
   return (
-    <View style={[styles.container, style, isFocused && styles.outlineStyle]}>
-      {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
-      <TextInput
-        // mode="outlined"
-        // outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
-        // activeOutlineColor={theme.colors.accent1}
-        // outlineStyle={styles.outlineStyle}
-        ref={ref}
-        blurOnSubmit={blurOnSubmit}
-        disabled={disabled}
-        cursorColor={theme.colors.accent1}
-        selectionColor={theme.colors.accent1}
-        textColor={theme.colors.headingColor}
-        placeholder={placeholder}
-        placeholderTextColor={theme.colors.placeholder}
-        style={[styles.inputContainer, inputStyle]}
-        underlineStyle={styles.underlineStyle}
-        contentStyle={[
-          CommonStyles.textFieldLabel,
-          styles.textStyles,
-          contentStyle,
-        ]}
-        value={value}
-        onChangeText={text => onChangeText(text)}
-        keyboardType={keyboardType}
-        maxLength={maxLength}
-        maxFontSizeMultiplier={1}
-        returnKeyType={returnKeyType}
-        onSubmitEditing={onSubmitEditing}
-        autoFocus={autoFocus}
-        autoCapitalize={autoCapitalize}
-        multiline={multiline}
-        numberOfLines={numberOfLines}
-        onContentSizeChange={onContentSizeChange}
-        // contentStyle={contentStyle}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        secureTextEntry={secureTextEntry}
-        autoCorrect={autoCorrect}
-      />
-      {rightText && (
-        <AppTouchable
-          style={[styles.rightTextWrapper, rightCTAStyle]}
-          onPress={onRightTextPress}>
-          <AppText variant="smallCTA" style={styles.rightTextStyle}>
-            {rightText}
-          </AppText>
-        </AppTouchable>
-      )}
-      {rightIcon && (
-        <AppTouchable
-          style={[styles.rightTextWrapper, rightCTAStyle]}
-          onPress={onRightTextPress}>
-          {rightIcon}
-        </AppTouchable>
-      )}
-    </View>
+    <>
+      <View
+        style={[
+          styles.container,
+          style,
+          isFocused && styles.outlineStyle,
+          error && styles.errorBorder,
+        ]}>
+        {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
+        <TextInput
+          // mode="outlined"
+          // outlineColor={disabled ? 'transparent' : theme.colors.inputBackground}
+          // activeOutlineColor={theme.colors.accent1}
+          // outlineStyle={styles.outlineStyle}
+          ref={ref}
+          blurOnSubmit={blurOnSubmit}
+          disabled={disabled}
+          cursorColor={theme.colors.accent1}
+          selectionColor={theme.colors.accent1}
+          textColor={theme.colors.headingColor}
+          placeholder={placeholder}
+          placeholderTextColor={theme.colors.placeholder}
+          style={[styles.inputContainer, inputStyle]}
+          underlineStyle={styles.underlineStyle}
+          contentStyle={[
+            CommonStyles.textFieldLabel,
+            styles.textStyles,
+            contentStyle,
+          ]}
+          value={value}
+          onChangeText={text => onChangeText(text)}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
+          maxFontSizeMultiplier={1}
+          returnKeyType={returnKeyType}
+          onSubmitEditing={onSubmitEditing}
+          autoFocus={autoFocus}
+          autoCapitalize={autoCapitalize}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
+          onContentSizeChange={onContentSizeChange}
+          // contentStyle={contentStyle}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => {
+            setIsFocused(false);
+            if (onBlur) {
+              onBlur();
+            }
+          }}
+          secureTextEntry={secureTextEntry}
+          autoCorrect={autoCorrect}
+        />
+
+        {rightText && (
+          <AppTouchable
+            style={[styles.rightTextWrapper, rightCTAStyle]}
+            onPress={onRightTextPress}>
+            <AppText variant="smallCTA" style={styles.rightTextStyle}>
+              {rightText}
+            </AppText>
+          </AppTouchable>
+        )}
+        {rightIcon && (
+          <AppTouchable
+            style={[styles.rightTextWrapper, rightCTAStyle]}
+            onPress={onRightTextPress}>
+            {rightIcon}
+          </AppTouchable>
+        )}
+      </View>
+      {error ? (
+        <AppText style={styles.errorText} variant="caption">
+          {error}
+        </AppText>
+      ) : null}
+    </>
   );
 });
-const getStyles = (
-  theme: AppTheme,
-  icon,
-  rightText,
-  rightCTATextColor,
-) =>
+const getStyles = (theme: AppTheme, icon, rightText, rightCTATextColor) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -188,6 +207,16 @@ const getStyles = (
       borderRadius: 15,
       borderColor: theme.colors.accent1,
       borderWidth: 1.5,
+    },
+    errorBorder: {
+      borderRadius: 15,
+      borderColor: theme.colors.errorBorderColor,
+      borderWidth: 1.5,
+    },
+    errorText: {
+      color: Colors.CandyAppleRed,
+      marginTop: 4,
+      marginHorizontal: hp(10),
     },
   });
 
