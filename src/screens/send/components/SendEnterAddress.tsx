@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
@@ -13,6 +14,8 @@ import WalletUtilities from 'src/services/wallets/operations/utils';
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
+import { Keys } from 'src/storage';
 
 function SendEnterAddress({
   onDismiss,
@@ -25,6 +28,7 @@ function SendEnterAddress({
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, sendScreen } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [address, setAddress] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
   const styles = React.useMemo(
@@ -75,7 +79,7 @@ function SendEnterAddress({
         inputStyle={styles.inputStyle}
         contentStyle={address ? styles.contentStyle : styles.contentStyle1}
         rightText={!address && sendScreen.paste}
-        rightIcon={address && <ClearIcon />}
+        rightIcon={address && isThemeDark ? <ClearIcon /> : <ClearIconLight />}
         onRightTextPress={() =>
           address ? setAddress('') : handlePasteAddress()
         }

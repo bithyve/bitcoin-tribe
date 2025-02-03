@@ -35,7 +35,7 @@ const Colors = {
   Green: 'rgba(116, 255, 81, 1)',
   GOGreen: 'rgba(9, 185, 109, 1)',
   DarkSilver: 'rgba(111, 111, 111, 1)',
-  GhostWhite: 'rgba(249, 249, 249, 1)',
+  GhostWhite: 'rgba(245, 245, 245, 1)',
   Platinum: 'rgba(232, 232, 232,1)',
   Lavender: 'rgba(228, 235, 246, 1)',
   CandyAppleRed: 'rgba(255, 10, 10,1)',
