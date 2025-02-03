@@ -17,17 +17,28 @@ function VersionHistoryList() {
     getJSONFromRealmObject,
   );
   const lastIndex = VersionHistoryData.length - 1;
+  const reversedData = [...VersionHistoryData].reverse();
+
   return (
     <FlatList
-      data={VersionHistoryData.reverse()}
-      renderItem={({ item, index }) => (
-        <VersionHistoryItem
-          title={item.title}
-          date={item.date}
-          releaseNotes={item.releaseNotes}
-          lastIndex={lastIndex === index}
-        />
-      )}
+      data={reversedData}
+      renderItem={({ item, index }) => {
+        const previousItem =
+          index < reversedData.length - 1 ? reversedData[index + 1] : null;
+
+        const title = previousItem
+          ? `Upgraded from ${previousItem.version} to ${item.version}`
+          : `Initially installed ${item.version}`;
+
+        return (
+          <VersionHistoryItem
+            title={title}
+            date={item.date}
+            releaseNotes={item.releaseNotes}
+            lastIndex={lastIndex === index}
+          />
+        );
+      }}
       style={styles.container}
     />
   );
