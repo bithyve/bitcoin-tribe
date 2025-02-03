@@ -315,7 +315,7 @@ const SendAssetScreen = () => {
       }, 500);
       console.log(error);
     }
-  }, [invoice, assetAmount, navigation]);
+  }, [invoice, assetAmount, navigation, isDonation]);
 
   const handlePasteAddress = async () => {
     try {
