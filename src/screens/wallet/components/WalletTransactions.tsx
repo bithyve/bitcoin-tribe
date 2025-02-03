@@ -24,12 +24,13 @@ import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
+import { TransactionType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
   transId: string;
   transDate: string;
   transAmount: string;
-  transType: string;
+  transType: TransactionType;
   backColor?: string;
   disabled?: boolean;
   transaction: Transaction;
@@ -171,7 +172,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
             <AppText
               variant="body1"
               style={[
-                styles.amountText,
+                transType === TransactionType.SENT ? styles.amountSend : styles.amountTextReceive,
                 {
                   fontSize: transAmount.toString().length > 10 ? 11 : 16,
                 },
@@ -235,8 +236,12 @@ const getStyles = (theme: AppTheme, backColor) =>
       alignItems: 'center',
       justifyContent: 'flex-end',
     },
-    amountText: {
-      color: theme.colors.headingColor,
+    amountTextReceive: {
+      color: '#4CD964',
+      marginTop: hp(2),
+    },
+    amountSend: {
+      color: '#0166FF',
       marginTop: hp(2),
     },
     satsText: {

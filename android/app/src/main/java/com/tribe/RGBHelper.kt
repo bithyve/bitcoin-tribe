@@ -164,11 +164,12 @@ object RGBHelper {
         amount: ULong,
         consignmentEndpoints: List<String>,
         feeRate: Float = AppConstants.defaultFeeRate,
+        isDonation: Boolean
     ): String {
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
-            false,
+            isDonation,
             feeRate,
             0u,
             false

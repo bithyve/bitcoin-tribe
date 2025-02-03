@@ -496,11 +496,12 @@
     "enterAssetTickerPlaceholder": "Enter a short ticker symbol (e.g., BTC)",
     "attachments": "Attachments",
     "attachmentsCaption": "Attach any supporting images or files (max 16MB)",
-    "issueNewCoin": "Issue New Coin",
+    "issueNewCoin": "Issue Coin",
     "swipeToPay": "Swipe to Pay",
     "payInprocess": "Paying...",
     "listYourAssetInRegTitle": "List Your Asset In Registry",
-    "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step."
+    "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step.",
+    "failToFetchIssueFee": "Failed to fetch asset issuance fee."
   },
   "community": {
     "fnfTitle": "Friends & Family",

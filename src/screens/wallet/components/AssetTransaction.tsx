@@ -1,32 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { Transaction } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import { Keys } from 'src/storage';
 import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
+import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
 
 type AssetTransactionProps = {
   backColor?: string;
   disabled?: boolean;
-  transaction: Transaction;
+  transaction: Transfer;
   coin: string;
 };
 function AssetTransaction(props: AssetTransactionProps) {
@@ -36,7 +34,6 @@ function AssetTransaction(props: AssetTransactionProps) {
   const { backColor, disabled, transaction, coin } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const getStatusIcon = (kind, status, type) => {
     const icons = {
@@ -47,7 +44,7 @@ function AssetTransaction(props: AssetTransactionProps) {
           issuance: <IssuanceIcon />,
         },
         waitingcounterparty: {
-          send: <WaitingCounterPartyIcon />,
+          send: <WaitingCounterPartySendIcon />,
           receiveblind: <WaitingCounterPartyIcon />,
         },
         waitingconfirmations: {
@@ -82,6 +79,15 @@ function AssetTransaction(props: AssetTransactionProps) {
     // Return the icon based on kind, status, and type, or fall back to the default icon
     return icons[type]?.[status]?.[kind] || defaultIcons[type];
   };
+
+
+  const amtTextStyle = useMemo(() => {
+    const kind = transaction.kind.toUpperCase();
+    if(kind === TransferKind.SEND) {
+      return styles.amountSend;
+    }
+    return styles.amountTextReceive;
+  }, [styles.amountSend, styles.amountTextReceive, transaction.kind]);
 
   return (
     <AppTouchable
@@ -124,7 +130,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             <AppText
               variant="body1"
               style={[
-                styles.amountText,
+                amtTextStyle,
                 {
                   fontSize: transaction.amount.toString().length > 10 ? 11 : 16,
                 },
@@ -181,6 +187,14 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountText: {
       color: theme.colors.headingColor,
+      marginTop: hp(2),
+    },
+    amountTextReceive: {
+      color: '#4CD964',
+      marginTop: hp(2),
+    },
+    amountSend: {
+      color: '#0166FF',
       marginTop: hp(2),
     },
   });
