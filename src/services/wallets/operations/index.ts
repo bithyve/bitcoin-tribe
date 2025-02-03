@@ -91,8 +91,6 @@ const updateInputsForFeeCalculation = (wallet: Wallet, inputUTXOs) => {
     wallet.scriptType === ScriptTypes['P2SH-P2WPKH'] ||
     wallet.scriptType === ScriptTypes['P2SH-P2WSH'];
   const isTaproot = wallet.scriptType === ScriptTypes.P2TR;
-  console.log('isTaproot', isTaproot);
-  console.log('updateInputsForFeeCalculation inputUTXOs', inputUTXOs);
   return inputUTXOs.map(u => {
     if (isTaproot) {
       u.script = { length: 15 }; // P2TR
@@ -754,24 +752,62 @@ export default class WalletOperations {
     }[],
     feePerByte: number,
     selectedUTXOs?: UTXO[],
-  ): number => {
-    const inputUTXOs =
-      selectedUTXOs && selectedUTXOs.length
-        ? selectedUTXOs
-        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
-    let confirmedBalance = 0;
+  ): { fee: number } => {
+    let inputUTXOs;
+    if (selectedUTXOs && selectedUTXOs.length) {
+      inputUTXOs = selectedUTXOs;
+    } else {
+      inputUTXOs = [
+        ...wallet.specs.confirmedUTXOs,
+        ...wallet.specs.unconfirmedUTXOs,
+      ];
+    }
+
+    inputUTXOs = updateInputsForFeeCalculation(wallet, inputUTXOs);
+
+    let availableBalance = 0;
     inputUTXOs.forEach(utxo => {
-      confirmedBalance += utxo.value;
+      availableBalance += utxo.value;
     });
-    const outputUTXOs = [];
+
+    let outputUTXOs = [];
     for (const recipient of recipients) {
       outputUTXOs.push({
         address: recipient.address,
-        value: confirmedBalance,
+        value: availableBalance,
       });
     }
-    const { fee } = coinselect(inputUTXOs, outputUTXOs, feePerByte);
-    return fee;
+    outputUTXOs = updateOutputsForFeeCalculation(
+      outputUTXOs,
+      wallet.networkType,
+    );
+    let { inputs, outputs, fee } = coinselect(
+      inputUTXOs,
+      outputUTXOs,
+      feePerByte + testnetFeeSurcharge(wallet),
+    );
+    let i = 0;
+    const MAX_RETRIES = 10000; // Could raise to allow more retries in case of many uneconomic UTXOs in a wallet
+    while ((!inputs || !outputs) && i < MAX_RETRIES) {
+      let netAmount = 0;
+      recipients.forEach(recipient => {
+        netAmount += recipient.amount;
+      });
+      if (outputUTXOs && outputUTXOs.length) {
+        outputUTXOs[0].value = availableBalance - fee - i;
+      }
+
+      ({ inputs, outputs, fee } = coinselect(
+        deepClone(inputUTXOs),
+        deepClone(outputUTXOs),
+        feePerByte + testnetFeeSurcharge(wallet),
+      ));
+      i++;
+    }
+    fee = availableBalance - outputUTXOs[0].value;
+    return {
+      fee,
+    };
   };
 
   static prepareTransactionPrerequisites = (

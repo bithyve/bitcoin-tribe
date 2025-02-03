@@ -261,8 +261,7 @@ function SendToContainer({
         ? Number(customFee)
         : averageTxFee[selectedPriority]?.feePerByte,
     );
-    console.log('fee', fee);
-    setSendMaxFee(fee);
+    setSendMaxFee(fee.fee);
   }, [recipientAddress, amount, selectedPriority, customFee]);
 
   const getFeeRateByPriority = (priority: TxPriority) => {
