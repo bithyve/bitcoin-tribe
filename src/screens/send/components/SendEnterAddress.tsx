@@ -12,6 +12,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import { AppTheme } from 'src/theme';
 import config from 'src/utils/config';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
 
 function SendEnterAddress({
   onDismiss,
@@ -73,8 +74,11 @@ function SendEnterAddress({
         numberOfLines={3}
         inputStyle={styles.inputStyle}
         contentStyle={address ? styles.contentStyle : styles.contentStyle1}
-        rightText={sendScreen.paste}
-        onRightTextPress={() => handlePasteAddress()}
+        rightText={!address && sendScreen.paste}
+        rightIcon={address && <ClearIcon />}
+        onRightTextPress={() =>
+          address ? setAddress('') : handlePasteAddress()
+        }
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.accent1}
       />
