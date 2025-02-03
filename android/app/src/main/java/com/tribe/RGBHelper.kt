@@ -164,11 +164,12 @@ object RGBHelper {
         amount: ULong,
         consignmentEndpoints: List<String>,
         feeRate: Float = AppConstants.defaultFeeRate,
+        isDonation: Boolean
     ): String {
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
-            false,
+            isDonation,
             feeRate,
             0u,
             false
@@ -180,17 +181,13 @@ object RGBHelper {
         return jsonObject.toString()
     }
 
-    fun issueRgb20Asset(ticker: String, name: String, amounts: List<ULong>): String {
+    fun issueAssetNia(ticker: String, name: String, amounts: List<ULong>, precision: Int): String {
         return try {
-            Log.d(TAG, "issueRgb20Asset: ticker= $ticker name= $name amounts= $amounts")
-
-            //checkMaxAssets()
-            val contract = handleMissingFunds { issueAssetRgb20(ticker, name, amounts) }
+            val contract = handleMissingFunds { issueAssetRgb20(ticker, name, amounts, precision) }
             val gson = Gson()
             val json = gson.toJson(contract)
             return json.toString()
         }catch (e: Exception) {
-            Log.d(TAG, "issueRgb20Asset: Exception= ${e.message}")
             val message = e.message
             val jsonObject = JsonObject()
             jsonObject.addProperty("error", message)
@@ -198,16 +195,13 @@ object RGBHelper {
         }
     }
 
-    fun issueRgb25Asset(name: String, description: String, amounts: List<ULong>, filePath: String): String {
+    fun issueAssetCfa(name: String, description: String, amounts: List<ULong>, precision: Int, filePath: String): String {
         return try {
-            Log.d(TAG, "issueRgb25Asset: filePath= $filePath name= $name")
-            //checkMaxAssets()
-            val contract = handleMissingFunds { issueAssetRgb25(name, description, amounts, filePath) }
+            val contract = handleMissingFunds { issueAssetRgb25(name, description, amounts, precision, filePath) }
             val gson = Gson()
             val json = gson.toJson(contract)
             return json.toString()
         }catch (e: Exception) {
-            Log.d(TAG, "issueRgb25Asset: Exception= ${e.message}")
             val message = e.message
             val jsonObject = JsonObject()
             jsonObject.addProperty("error", message)
@@ -215,12 +209,12 @@ object RGBHelper {
         }
     }
 
-    private fun issueAssetRgb20(ticker: String, name: String, amounts: List<ULong>): AssetNia? {
+    private fun issueAssetRgb20(ticker: String, name: String, amounts: List<ULong>, precision: Int): AssetNia? {
         val asset = RGBWalletRepository.wallet?.issueAssetNia(
             RGBWalletRepository.online!!,
             ticker,
             name,
-            AppConstants.rgbDefaultPrecision,
+            precision.toUByte(),
             amounts
         )
         if (asset != null) {
@@ -229,12 +223,12 @@ object RGBHelper {
         return  asset
     }
 
-    private fun issueAssetRgb25(name: String, description: String, amounts: List<ULong>, filePath: String): AssetCfa? {
+    private fun issueAssetRgb25(name: String, description: String, amounts: List<ULong>, precision: Int, filePath: String): AssetCfa? {
         val asset = RGBWalletRepository.wallet?.issueAssetCfa(
             RGBWalletRepository.online!!,
             name,
             description,
-            AppConstants.rgbDefaultPrecision,
+            precision.toUByte(),
             amounts,
             filePath
         )
@@ -242,17 +236,19 @@ object RGBHelper {
         return  asset
     }
 
-    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): AssetUda? {
+    fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): String? {
         val asset = RGBWalletRepository.wallet?.issueAssetUda(
             RGBWalletRepository.online!!,
-            name,
             ticker,
+            name,
             details,
             AppConstants.rgbDefaultPrecision,
             mediaFilePath,
             attachmentsFilePaths,
         )
-        return  asset
+        val gson = Gson()
+        val json = gson.toJson(asset)
+        return  json
     }
 
     fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
@@ -288,6 +284,21 @@ object RGBHelper {
     fun decodeInvoice(invoiceString: String): InvoiceData {
         return Invoice(invoiceString).invoiceData()
     }
+
+    fun createUtxosBegin(upTo: Boolean, num: Int, size: Int, feeRate: Float, skipSync: Boolean): String? {
+        return RGBWalletRepository.wallet?.createUtxosBegin(
+            RGBWalletRepository.online!!, upTo,
+            num.toUByte(), size.toUInt(), feeRate, skipSync)
+    }
+
+    fun signPsbt(unsignedPsbt: String): String? {
+        return RGBWalletRepository.wallet?.signPsbt(unsignedPsbt)
+    }
+
+    fun createUtxosEnd(signedPsbt: String, skipSync: Boolean): UByte? {
+        return RGBWalletRepository.wallet?.createUtxosEnd(RGBWalletRepository.online!!, signedPsbt, skipSync)
+    }
+
 
     fun createNewUTXOs(feeRate: Float): Boolean {
         var attempts = 3

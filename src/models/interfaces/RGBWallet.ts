@@ -12,7 +12,7 @@ export interface RGBWallet {
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
-  utxos?: utxosRoot;
+  utxos?: RgbUnspent[];
   nodeUrl?: string;
   nodeAuthentication?: string;
   nodeInfo?: NodeInfoResponse;
@@ -22,33 +22,6 @@ export interface RGBWallet {
   };
   peerDNS?: string;
 }
-
-// Define the structure of an object in the rgbAllocations array
-interface RgbAllocation {
-  key: string;
-  value: any; // Adjust the type as needed, can be 'number', 'string', or other specific types
-}
-
-// Define the structure of the Outpoint object
-interface Outpoint {
-  txid: string; // Example field, represents a transaction ID
-  index: number; // Example field, represents an output index
-}
-
-// Define the structure of the UTXO object
-interface Utxo {
-  btcAmount: number;
-  colorable: boolean;
-  exists: boolean;
-  outpoint: Outpoint[]; // Array of Outpoint objects
-}
-
-// Define the unspentUTXOs interface
-export interface utxosRoot {
-  rgbAllocations: RgbAllocation[][]; // Array of array of RgbAllocation objects
-  utxo: Utxo; // UTXO object
-}
-
 interface Balance {
   future: number;
   settled: number;
@@ -57,13 +30,13 @@ interface Balance {
   offchainInbound?: number;
 }
 
-export interface Transaction {
+export interface Transfer {
   amount: number;
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
-  kind: string;
-  status: string;
+  kind: TransferKind;
+  status: TransferStatus;
   updatedAt: number;
   txid: string | null;
   recipientId: string | null;
@@ -90,7 +63,7 @@ export interface Coin {
   precision: number;
   ticker: string;
   timestamp: number;
-  transactions: Transaction[];
+  transactions: Transfer[];
   metaData: MetaData;
 }
 
@@ -113,36 +86,79 @@ export interface Collectible {
   metaData: MetaData;
 }
 
-export interface Asset extends Coin, Collectible {}
-interface RgbAllocation {
+export interface UniqueDigitalAsset {
+  addedAt: number;
+  assetId: string;
+  assetIface: string;
+  balance: Balance;
+  details: string;
+  issuedSupply: number;
+  name: string;
+  precision: number;
+  ticker: string;
+  timestamp: number;
+  token: {
+    attachments: Media[],
+    embeddedMedia: boolean;
+    index: number;
+    media: Media;
+    reserves: boolean;
+  };
+  transactions: Transfer[];
+  metaData: MetaData;
+}
+
+export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
+export interface RgbAllocation {
   amount: number;
   assetId: string;
   settled: boolean;
 }
-interface Outpoint {
-  txid: string;
-  vout: number;
-}
-interface Utxo {
+
+export interface RgbUtxo {
   btcAmount: number;
   colorable: boolean;
   exists: boolean;
-  outpoint: Outpoint;
+  outpoint: {
+    txid: string;
+    vout: number;
+  };
 }
 export interface RgbUnspent {
   rgbAllocations: RgbAllocation[];
-  utxo: Utxo;
+  utxo: RgbUtxo;
 }
 
 export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
-  UDA = 'UDA'
+  UDA = 'UDA', //Unique Digital Asset
 }
 
 export enum AssetFace {
-  RGB25 = 'RGB25',
-  RGB20 = 'RGB20',
+  RGB25 = 'RGB25',  // Collectible(CFA)
+  RGB20 = 'RGB20', // Coin(NIA)
+  RGB21 = 'RGB21' //  Unique Digital Asset(UDA)
+}
+
+export enum UtxoType {
+  Colored = 'Colored',
+  Colorable = 'Colorable',
+  Uncolored = 'Uncolored'
+}
+
+export enum TransferKind {
+  ISSUANCE = 'ISSUANCE',
+  RECEIVE_BLIND = 'RECEIVE_BLIND',
+  RECEIVE_WITNESS = 'RECEIVE_WITNESS',
+  SEND = 'SEND'
+}
+
+export enum TransferStatus {
+  WAITING_COUNTERPARTY = 'WAITING_COUNTERPARTY',
+  WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
+  SETTLED = 'SETTLED',
+  FAILED = 'FAILED'
 }
 
 export interface RgbNodeConnectParams {
@@ -150,7 +166,7 @@ export interface RgbNodeConnectParams {
   nodeId: string;
   authentication: string;
   peerDNS?: string;
-  mnemonic?: string
+  mnemonic?: string;
 }
 
 export interface NodeInfo {

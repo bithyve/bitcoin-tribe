@@ -59,6 +59,7 @@ function CoinAssetsList(props: AssetsListProps) {
         extraData={[listData]}
         keyExtractor={item => item.assetId}
         ListFooterComponent={FooterComponent}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView
@@ -119,7 +120,7 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: '85%',
+      height: Platform.OS === 'android' ? '82%' : '85%',
       marginHorizontal: wp(10),
       marginTop: hp(20),
     },

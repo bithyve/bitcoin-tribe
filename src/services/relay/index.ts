@@ -76,7 +76,30 @@ export default class Relay {
     try {
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/supported/new`);
+        res = await RestClient.post(`${RELAY}/supported/new`, {});
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getAssetIssuanceFee = async (): Promise<{
+    address: string,
+    fee: number,
+    includeTxFee: number,
+  }> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/servicefee/issuance`);
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
@@ -102,7 +125,7 @@ export default class Relay {
         formData.append('appID', appID);
         formData.append('network', 'regtest');
         formData.append('asset', JSON.stringify(asset));
-        if (asset.media) {
+        if (asset?.media) {
           formData.append('media', {
             uri: Platform.select({
               android: `file://${asset.media.filePath}`,

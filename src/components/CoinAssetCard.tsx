@@ -13,7 +13,6 @@ import {
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import Identicon from './Identicon';
-import Colors from 'src/theme/Colors';
 
 type CoinAssetCardProps = {
   asset: Asset;
@@ -26,8 +25,8 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
   const theme: AppTheme = useTheme();
 
   const balance = useMemo(() => {
-    return asset.balance.future;
-  }, [asset.balance.future]);
+    return asset?.balance?.future ?? 0;
+  }, [asset?.balance?.future]);
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 

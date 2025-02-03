@@ -1,11 +1,7 @@
 import { Animated, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import {
-  CommonActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -17,12 +13,12 @@ import TransactionsList from './TransactionsList';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import AssetDetailsHeader from './components/AssetDetailsHeader';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
+import CoinDetailsHeader from './CoinDetailsHeader';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -78,10 +74,8 @@ const CoinDetailsScreen = () => {
 
   return (
     <ScreenContainer>
-      <AssetDetailsHeader
+      <CoinDetailsHeader
         asset={coin}
-        assetName={coin.name}
-        assetTicker={coin.ticker}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
@@ -96,11 +90,8 @@ const CoinDetailsScreen = () => {
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
         onPressRecieve={() =>
-          navigation.replace(NavigationRoutes.RECEIVEASSET, {
-            refresh: true,
-            assetId: coin.assetId,
-            amount: 0,
-            selectedType: 'bitcoin',
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            invoiceAssetId: coin.assetId,
           })
         }
       />

@@ -91,6 +91,9 @@ type CustomColors = {
   assetCardGradient3: string;
   assetCardVerticalBorder: string;
   assetBalanceBackColor: string;
+  appBackupStepLabel: string;
+  swipeToActionThumbColor: string;
+  errorBorderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -160,9 +163,9 @@ const CombinedDefaultTheme: AppTheme = {
     roundBuyCTAGradient1: Colors.BrandeisBlue2,
     roundBuyCTAGradient2: Colors.BrandeisBlue2,
     roundBuyCTAGradient3: Colors.BrandeisBlue2,
-    roundSendCTATitle: Colors.CandyAppleRed,
-    roundBuyCTATitle: Colors.BrandeisBlue,
-    roundReceiveCTATitle: Colors.UFOGreen1,
+    roundSendCTATitle: Colors.ChineseBlack,
+    roundBuyCTATitle: Colors.ChineseBlack,
+    roundReceiveCTATitle: Colors.ChineseBlack,
     segmentSelectTitle: Colors.BrandeisBlue,
     suggestedText: Colors.White,
     //
@@ -190,6 +193,9 @@ const CombinedDefaultTheme: AppTheme = {
     assetCardGradient3: Colors.White,
     assetCardVerticalBorder: Colors.Platinum,
     assetBalanceBackColor: Colors.BrandeisBlue,
+    appBackupStepLabel: Colors.BrandeisBlue,
+    swipeToActionThumbColor: Colors.BrandeisBlue,
+    errorBorderColor: Colors.ImperialRed,
   },
   fonts: {
     regular: {
@@ -283,7 +289,7 @@ const CombinedDarkTheme: AppTheme = {
     disabledCTAColor: Colors.DarkSalmon,
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
-    backupDoneBorder: Colors.GOGreen,
+    backupDoneBorder: Colors.UFOGreen1,
     closeChannelCTA: Colors.FireOpal,
     closeChannelCTATitle: Colors.White,
     assetsProgressFill: Colors.Turquoise,
@@ -297,6 +303,9 @@ const CombinedDarkTheme: AppTheme = {
     assetCardGradient3: Colors.SacramentoStateGreen,
     assetCardVerticalBorder: Colors.Arsenic,
     assetBalanceBackColor: Colors.Golden,
+    appBackupStepLabel: Colors.Golden,
+    swipeToActionThumbColor: Colors.Golden,
+    errorBorderColor: Colors.ImperialRed,
   },
   fonts: {
     regular: {

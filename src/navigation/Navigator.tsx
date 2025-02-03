@@ -64,6 +64,15 @@ import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 import ViewLogs from 'src/screens/settings/ViewLogs';
+import OnchainLearnMore from 'src/screens/onBoarding/OnchainLearnMore';
+import LNLearnMore from 'src/screens/onBoarding/LNLearnMore';
+import SupportLearnMore from 'src/screens/onBoarding/SupportLearnMore';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useTheme } from 'react-native-paper';
+import { AppTheme } from 'src/theme';
+import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
+import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -106,6 +115,18 @@ function LoginStack() {
       <Stack.Screen
         name={NavigationRoutes.IMPORTRGBBACKUP}
         component={ImportRgbBackup}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ONCHAINLEARNMORE}
+        component={OnchainLearnMore}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.LNLEARNMORE}
+        component={LNLearnMore}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORTLEARNMORE}
+        component={SupportLearnMore}
       />
     </Stack.Navigator>
   );
@@ -170,6 +191,10 @@ function AppStack() {
           component={IssueScreen}
         />
         <Stack.Screen
+          name={NavigationRoutes.ISSUECOLLECTIBLESCREEN}
+          component={IssueCollectible}
+        />
+        <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}
           component={ReceiveAsset}
         />
@@ -190,6 +215,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.COLLECTIBLEDETAILS}
           component={CollectibleDetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.UDADETAILS}
+          component={UDADetailsScreen}
         />
         <Stack.Screen
           name={NavigationRoutes.COINMETADATA}
@@ -283,8 +312,22 @@ function AppStack() {
 }
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const theme: AppTheme = useTheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        dark: isThemeDark,
+        colors: {
+          background: theme.colors.primaryBackground,
+          border: theme.colors.primaryBackground,
+          card: theme.colors.primaryBackground,
+          notification: '',
+          primary: '',
+          text: '',
+        },
+      }}>
       <RGBWalletStatus />
 
       <Stack.Navigator screenOptions={{ headerShown: false }}>

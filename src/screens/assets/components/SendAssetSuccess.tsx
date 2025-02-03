@@ -80,6 +80,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
           title={assets.swipeToSend}
           loadingTitle={assets.sendingAsset}
           onSwipeComplete={onPress}
+          backColor={theme.colors.swipeToActionThumbColor}
         />
       </View>
     </View>

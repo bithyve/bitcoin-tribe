@@ -1,98 +1,250 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery as realmUseQuery } from '@realm/react';
 
-import AppText from 'src/components/AppText';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp } from 'src/constants/responsive';
-import TransactionButtons from '../wallet/components/TransactionButtons';
-import { Coin } from 'src/models/interfaces/RGBWallet';
-import Toolbar from './Toolbar';
+import { hp, wp } from 'src/constants/responsive';
+import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import AppHeader from 'src/components/AppHeader';
+import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconLightning from 'src/assets/images/icon_lightning_new.svg';
+import { Keys } from 'src/storage';
+import AppText from 'src/components/AppText';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import Identicon from 'src/components/Identicon';
+import AppType from 'src/models/enums/AppType';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppTouchable from 'src/components/AppTouchable';
 
-type CoinDetailsHeaderProps = {
-  coin: Coin;
-  wallet: Wallet;
-  onPressSetting: () => void;
+type assetDetailsHeaderProps = {
+  asset?: Coin | Collectible;
+  onPressSetting?: () => void;
+  onPressSend: () => void;
+  onPressRecieve: () => void;
   onPressBuy?: () => void;
+  smallHeaderOpacity?: any;
+  largeHeaderHeight?: any;
+  headerRightIcon?: React.ReactNode;
 };
-function CoinDetailsHeader(props: CoinDetailsHeaderProps) {
-  const navigation = useNavigation();
+function CoinDetailsHeader(props: assetDetailsHeaderProps) {
+  const {
+    asset,
+    onPressSetting,
+    onPressSend,
+    onPressRecieve,
+    onPressBuy,
+    smallHeaderOpacity,
+    largeHeaderHeight,
+    headerRightIcon,
+  } = props;
+  const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
-  const { coin, wallet, onPressSetting, onPressBuy } = props;
+  const combinedBalance =
+    asset.balance.future + asset.balance?.offchainOutbound || 0;
+  const lengthOfTotalBalance = combinedBalance.toString().length;
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
+  const styles = getStyles(theme, insets, lengthOfTotalBalance);
+
   return (
-    <View style={styles.container}>
-      <Toolbar onPress={onPressSetting} ticker={coin.ticker} />
-      <AppText variant="body1" style={styles.usernameText}>
-        {coin.name}
-      </AppText>
-      <View>
-        <AppText variant="body2" style={styles.totalBalText}>
-          {home.totalBalance}
-        </AppText>
+    <>
+      {/* <Animated.View
+        style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
+        <AppHeader title={asset.ticker} rightIcon={headerRightIcon}/>
+      </Animated.View> */}
+      <View
+        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
+        style={styles.largeHeader}>
+        <AppHeader
+          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+          onSettingsPress={onPressSetting}
+        />
+        <View style={styles.largeHeaderContainer}>
+          <View style={styles.largeHeaderContentWrapper}>
+            {app.appType === AppType.NODE_CONNECT ? (
+              <View style={styles.balanceContainer}>
+                <View style={styles.totalBalanceWrapper}>
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {numberWithCommas(
+                      asset.balance.future + asset.balance?.offchainOutbound,
+                    )}
+                  </AppText>
+                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                    {home.totalBalance}
+                  </AppText>
+                </View>
+                <View style={styles.modeBalanceWrapper}>
+                  <View style={styles.balanceWrapper}>
+                    <IconBTC />
+                    <AppText variant="heading3" style={styles.balanceText}>
+                      0.0000
+                    </AppText>
+                  </View>
+                  <View style={styles.balanceWrapper}>
+                    <IconLightning />
+                    <AppText variant="heading3" style={styles.balanceText}>
+                      0.0000
+                    </AppText>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.balanceContainer}>
+                <View style={styles.totalBalanceWrapper}>
+                  <View style={styles.identiconWrapper}>
+                    <View style={styles.identiconWrapper2}>
+                      <Identicon
+                        value={asset.assetId}
+                        style={styles.identiconView}
+                        size={50}
+                      />
+                    </View>
+                  </View>
+                  <View>
+                    <AppText variant="body1" style={styles.assetTickerText}>
+                      {asset.ticker}
+                    </AppText>
+                    <AppText variant="body2" style={styles.assetNameText}>
+                      {asset.name}
+                    </AppText>
+                  </View>
+                </View>
+                <AppTouchable
+                  style={styles.onChainTotalBalanceWrapper}
+                  onPress={() => {}}>
+                  <View style={styles.totalBalanceWrapper1}>
+                    <AppText variant="heading2" style={styles.totalBalance}>
+                      {numberWithCommas(
+                        asset.balance.future + asset.balance?.offchainOutbound,
+                      )}
+                    </AppText>
+                  </View>
+                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                    {home.totalBalance}
+                  </AppText>
+                </AppTouchable>
+              </View>
+            )}
+            <View style={styles.transCtaWrapper}>
+              <TransactionButtons
+                onPressSend={onPressSend}
+                onPressRecieve={onPressRecieve}
+                onPressBuy={onPressBuy}
+                sendCtaWidth={wp(150)}
+                receiveCtaWidth={wp(150)}
+              />
+            </View>
+          </View>
+        </View>
       </View>
-      <View style={styles.balanceWrapper}>
-        <AppText
-          variant="walletBalance"
-          style={[
-            styles.balanceText,
-            {
-              fontSize: coin.balance.future.toString().length > 10 ? 24 : 39,
-            },
-          ]}>
-          {numberWithCommas(
-            coin.balance.future + coin.balance?.offchainOutbound,
-          )}
-        </AppText>
-      </View>
-      <TransactionButtons
-        onPressSend={() =>
-          navigation.navigate(NavigationRoutes.SCANASSET, {
-            assetId: coin.assetId,
-            rgbInvoice: '',
-            wallet: wallet,
-          })
-        }
-        // onPressBuy={onPressBuy}
-        onPressRecieve={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-            refresh: true,
-          })
-        }
-      />
-    </View>
+    </>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
   StyleSheet.create({
-    container: {
+    smallHeader: {
+      position: 'absolute',
+      top: insets.top,
+      left: 0,
+      right: 0,
       alignItems: 'center',
-      width: '100%',
-      paddingBottom: Platform.OS === 'android' ? 0 : 10,
+      zIndex: 10,
+      paddingHorizontal: hp(16),
+      backgroundColor: theme.colors.primaryBackground,
     },
-    usernameText: {
-      color: theme.colors.accent3,
-      textAlign: 'center',
-      marginVertical: 10,
+    largeHeader: {
+      alignItems: 'center',
+      height: '50%',
+    },
+    largeHeaderContainer: {
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: hp(20),
+      width: '100%',
+      paddingVertical: hp(10),
+    },
+    largeHeaderContentWrapper: {
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(15),
+      width: '100%',
+      borderRadius: hp(40),
+      // overflow: 'visible',
+      position: 'relative',
+    },
+    totalBalance: {
+      color: theme.colors.headingColor,
+    },
+    totalBalanceLabel: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    balanceText: {
+      color: theme.colors.headingColor,
+      marginLeft: hp(5),
+    },
+    balanceContainer: {
+      flexDirection: 'row',
+      width: '100%',
+      marginVertical: hp(10),
+    },
+    totalBalanceWrapper: {
+      width: '50%',
+      borderRightWidth: 1,
+      borderRightColor: theme.colors.borderColor,
+      alignItems: 'center',
+    },
+    totalBalanceWrapper1: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    modeBalanceWrapper: {
+      width: '50%',
+      alignItems: 'center',
     },
     balanceWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: hp(10),
     },
-    balanceText: {
+    transCtaWrapper: {
+      marginTop: hp(15),
+      alignItems: 'center',
+    },
+    identiconWrapper: {
+      alignSelf: 'center',
+      marginVertical: hp(10),
+    },
+    identiconWrapper2: {
+      borderColor: theme.colors.coinsBorderColor,
+      borderWidth: 2,
+      padding: 5,
+      borderRadius: 110,
+    },
+    identiconView: {
+      height: 50,
+      width: 50,
+      borderRadius: 50,
+    },
+    assetTickerText: {
       color: theme.colors.headingColor,
+      textAlign: 'center',
     },
-    totalBalText: {
+    assetNameText: {
       color: theme.colors.secondaryHeadingColor,
-      fontWeight: '400',
+      textAlign: 'center',
+    },
+    onChainTotalBalanceWrapper: {
+      width: '50%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default CoinDetailsHeader;

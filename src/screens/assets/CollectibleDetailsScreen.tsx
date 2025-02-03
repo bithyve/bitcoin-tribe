@@ -105,11 +105,8 @@ const CollectibleDetailsScreen = () => {
           })
         }
         onPressRecieve={() =>
-          navigation.replace(NavigationRoutes.RECEIVEASSET, {
-            refresh: true,
-            assetId: assetId,
-            amount: 0,
-            selectedType: 'bitcoin',
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            invoiceAssetId: assetId,
           })
         }
       />
