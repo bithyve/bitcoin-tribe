@@ -223,8 +223,7 @@ const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
       position: 'relative',
     },
     trackText: {
-      position: 'absolute',
-      right: 40,
+      textAlign: 'center',
       color: theme.colors.popupCTATitleColor,
       fontSize: 16,
       fontWeight: '400',
