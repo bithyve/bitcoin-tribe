@@ -61,6 +61,7 @@ const getStyles = (width, buttonColor, height) =>
       justifyContent: 'center',
       // borderColor: buttonColor,
       // borderWidth: 0.5,
+      width: width,
     },
     contentStyle: {
       height: hp(40),

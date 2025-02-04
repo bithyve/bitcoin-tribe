@@ -108,7 +108,7 @@ function SelectWallet() {
         />
         <LearnMoreTextView
           title={onBoarding.onchainLearMoreInfo}
-          onPress={() => {}}
+          onPress={() => navigation.navigate(NavigationRoutes.ONCHAINLEARNMORE)}
         />
         {openAdvanceOptions && (
           <>
@@ -132,7 +132,9 @@ function SelectWallet() {
               />
               <LearnMoreTextView
                 title={onBoarding.lightningLearnMoreInfo}
-                onPress={() => {}}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.LNLEARNMORE)
+                }
               />
               <SelectWalletTypeOption
                 title={onBoarding.supported}
@@ -149,7 +151,9 @@ function SelectWallet() {
               />
               <LearnMoreTextView
                 title={onBoarding.supportLearnMoreInfo}
-                onPress={() => {}}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.SUPPORTLEARNMORE)
+                }
               />
             </View>
           </>

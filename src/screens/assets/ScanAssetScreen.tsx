@@ -1,10 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Code } from 'react-native-vision-camera';
 import { useQuery } from '@realm/react';
 import { useRoute } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -21,8 +20,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 
-function ScanAssetScreen({ route, navigation }) {
-  const { assetId, wallet, rgbInvoice } = useRoute().params;
+function ScanAssetScreen({ navigation }) {
+  const { assetId, rgbInvoice } = useRoute().params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen, assets } = translations;
@@ -30,14 +29,18 @@ function ScanAssetScreen({ route, navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
-  const allAssets: Asset[] = [...coins, ...collectibles];
+  const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
+  const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
+  const [isScanning, setIsScanning] = useState(true);
 
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
+      setIsScanning(false);
       const { codes, paymentInfo } = input;
       const value = paymentInfo || codes?.[0]?.value;
 
       if (!value) {
+        setIsScanning(true);
         return;
       }
 
@@ -48,20 +51,21 @@ function ScanAssetScreen({ route, navigation }) {
             item => item.assetId === res.assetId,
           );
           if (!assetData) {
+            setIsScanning(true);
             Toast(assets.assetNotFoundMsg, true);
             navigation.goBack();
           } else {
+            setIsScanning(true);
             navigation.replace(NavigationRoutes.SENDASSET, {
               assetId: res.assetId,
-              wallet: wallet,
               rgbInvoice: value,
               amount: res.amount.toString(),
             });
           }
         } else {
+          setIsScanning(true);
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
-            wallet: wallet,
             rgbInvoice: value,
             amount: 0,
           });
@@ -70,6 +74,7 @@ function ScanAssetScreen({ route, navigation }) {
       }
 
       if (value.startsWith('lnbc')) {
+        setIsScanning(true);
         navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
           invoice: value,
         });
@@ -91,15 +96,17 @@ function ScanAssetScreen({ route, navigation }) {
 
       switch (paymentInfoKind) {
         case PaymentInfoKind.RLN_INVOICE:
+          setIsScanning(true);
           navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
             invoice: value,
           });
           break;
         default:
+          setIsScanning(true);
           Toast(sendScreen.invalidRGBInvoiceAddress, true);
       }
     },
-    [wallet, navigation],
+    [navigation],
   );
 
   const onCodeScanned = async (codes: Code[]) => {
@@ -114,7 +121,7 @@ function ScanAssetScreen({ route, navigation }) {
         enableBack={true}
       />
       <View style={styles.scannerWrapper}>
-        <QRScanner onCodeScanned={onCodeScanned} />
+        <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />
       </View>
       <OptionCard
         title={sendScreen.enterInvoiceManually}
@@ -122,7 +129,6 @@ function ScanAssetScreen({ route, navigation }) {
         onPress={() => {
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
-            wallet: wallet,
             rgbInvoice: rgbInvoice,
           });
         }}

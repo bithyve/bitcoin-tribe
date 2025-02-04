@@ -1,5 +1,6 @@
 import {
   NetworkType,
+  TransactionKind,
   TransactionType,
   TxPriorityDefault,
 } from '../enums';
@@ -108,6 +109,7 @@ export interface Transaction {
   fee?: number;
   date?: string;
   transactionType?: TransactionType;
+  transactionKind?: TransactionKind;
   amount: number;
   recipientAddresses?: string[];
   senderAddresses?: string[];
@@ -115,6 +117,8 @@ export interface Transaction {
   tags?: string[];
   inputs: Input[];
   outputs: Output[];
+  note?: string,
+  metadata?: {}
 }
 
 interface Input {

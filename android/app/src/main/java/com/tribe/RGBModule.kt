@@ -109,20 +109,17 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 promise.resolve(jsonObject.toString())
             }
         }
-
     }
 
     @ReactMethod
-    fun issueRgb20Asset( ticker: String, name: String, supply: String, promise: Promise){
+    fun createUtxosBegin(upTo: Boolean, num: Int, size: Int, feeRate: Float, skipSync: Boolean, promise: Promise){
         backgroundHandler.post {
-            Log.d(TAG, "issueRgb20Asset: ${supply}")
             try {
-                val amounts = listOf(supply)
-                val response = RGBHelper.issueRgb20Asset(ticker, name, amounts.map { it.toULong() })
-                promise.resolve(response)
+                val unsignedPsbt = RGBHelper.createUtxosBegin(upTo, num, size, feeRate, skipSync)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("unsignedPsbt", unsignedPsbt)
+                promise.resolve(jsonObject.toString())
             }catch (e: Exception) {
-                Log.d(TAG, "issueRgb20Asset:e.message ${e.message}")
-
                 val message = e.message
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", message)
@@ -132,14 +129,63 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun issueRgb25Asset(name: String, description: String, supply: String,filePath: String, promise: Promise){
+    fun signPsbt(unsignedPsbt: String, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val signedPsbt = RGBHelper.signPsbt(unsignedPsbt)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("signedPsbt", signedPsbt)
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun createUtxosEnd(signedPsbt: String, skipSync: Boolean, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val num = RGBHelper.createUtxosEnd(signedPsbt, skipSync)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("num", num?.toInt())
+                promise.resolve(jsonObject.toString())
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun issueAssetNia(ticker: String, name: String, supply: String, precision: Int, promise: Promise){
+        backgroundHandler.post {
+            try {
+                val amounts = listOf(supply)
+                val response = RGBHelper.issueAssetNia(ticker, name, amounts.map { it.toULong() }, precision)
+                promise.resolve(response)
+            }catch (e: Exception) {
+                val message = e.message
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun issueAssetCfa(name: String, description: String, supply: String, precision: Int, filePath: String, promise: Promise){
         backgroundHandler.post{
             try {
                 val amounts = listOf(supply)
-                val response = RGBHelper.issueRgb25Asset(name, description, amounts.map { it.toULong() }, filePath)
+                val response = RGBHelper.issueAssetCfa(name, description, amounts.map { it.toULong() }, precision, filePath)
                 promise.resolve(response)
             }catch (e: Exception) {
-                Log.d(TAG, "issueRgb20Asset:e.message ${e.message}")
                 val message = e.message
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", message)
@@ -179,12 +225,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun sendAsset( assetId: String, blindedUTXO: String, amount: String, consignmentEndpoints: String, feeRate: Float, promise: Promise){
+    fun sendAsset( assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean, promise: Promise){
         backgroundHandler.post {
             try {
                 val endpoints = listOf(consignmentEndpoints)
-                Log.d(TAG, "sendAsset: blindedUTXO=$blindedUTXO, amount=$amount, endpoints=$endpoints, feeRate=$feeRate")
-                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate))
+                promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()

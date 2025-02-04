@@ -25,6 +25,38 @@ export default class RGBServices {
     return address;
   };
 
+  static createUtxosBegin = async (
+    upTo: boolean,
+    num: Number,
+    size: Number,
+    feeRate: Number,
+    skipSync: boolean,
+  ): Promise<{ unsignedPsbt: string; error?: string }> => {
+    const response = await RGB.createUtxosBegin(
+      upTo,
+      num,
+      size,
+      feeRate,
+      skipSync,
+    );
+    return JSON.parse(response);
+  };
+
+  static signPsbt = async (
+    unsignedPsbt: string,
+  ): Promise<{ signedPsbt: string; error?: string }> => {
+    const response = await RGB.signPsbt(unsignedPsbt);
+    return JSON.parse(response);
+  };
+
+  static createUtxosEnd = async (
+    signedPsbt: string,
+    skipSync: boolean,
+  ): Promise<{ num: Number; error?: string }> => {
+    const response = await RGB.createUtxosEnd(signedPsbt, skipSync);
+    return JSON.parse(response);
+  };
+
   static createUtxos = async (
     feePerByte,
     appType: AppType,
@@ -170,10 +202,11 @@ export default class RGBServices {
     }
   };
 
-  static issueRgb20Asset = async (
+  static issueAssetNia = async (
     ticker: string,
     name: string,
     supply: string,
+    precision: number,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
@@ -191,15 +224,16 @@ export default class RGBServices {
         return response;
       }
     } else {
-      const data = await RGB.issueRgb20Asset(ticker, name, supply);
+      const data = await RGB.issueAssetNia(ticker, name, supply, precision);
       return JSON.parse(data);
     }
   };
 
-  static issueRgb25Asset = async (
+  static issueAssetCfa = async (
     name: string,
     description: string,
     supply: string,
+    precision: number,
     filePath: string,
     appType: AppType,
     api: RLNNodeApiServices,
@@ -211,7 +245,7 @@ export default class RGBServices {
           amounts: [Number(supply)],
           details: description,
           name,
-          precision: 0,
+          precision,
           file_digest: responseDigest.digest,
         });
         if (response) {
@@ -222,10 +256,11 @@ export default class RGBServices {
         }
       }
     } else {
-      const data = await RGB.issueRgb25Asset(
+      const data = await RGB.issueAssetCfa(
         name,
         description,
         supply,
+        precision,
         filePath,
       );
       return JSON.parse(data);
@@ -258,16 +293,17 @@ export default class RGBServices {
   static sendAsset = async (
     assetId: string,
     blindedUTXO: string,
-    amount: string,
+    amount: number,
     consignmentEndpoints: string,
     feePerByte,
+    isDonation: boolean,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT) {
       const response = await api.sendasset({
         asset_id: assetId,
-        donation: false,
+        donation: isDonation,
         fee_rate: feePerByte,
         min_confirmations: 0,
         recipient_id: blindedUTXO,
@@ -283,6 +319,7 @@ export default class RGBServices {
         amount,
         consignmentEndpoints,
         feePerByte,
+        isDonation,
       );
       return JSON.parse(data);
     }
@@ -308,7 +345,7 @@ export default class RGBServices {
 
   /**
    * Set the status for eligible transfers to [`TransferStatus::Failed`]
-  */
+   */
   static failTransfer = async (
     batchTransferIdx: Number,
     noAssetOnly: boolean,
@@ -319,7 +356,7 @@ export default class RGBServices {
 
   /**
    * Delete eligible transfers from the database
-  */
+   */
   static deleteransfer = async (
     batchTransferIdx: Number,
     noAssetOnly: boolean,

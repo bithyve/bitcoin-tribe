@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {
   Camera,
+  Code,
   useCameraDevice,
   useCodeScanner,
 } from 'react-native-vision-camera';
@@ -25,16 +26,16 @@ import pickImage from 'src/utils/imagePicker';
 import Toast from './Toast';
 
 type QRScannerProps = {
-  onCodeScanned: (codes: string) => void;
+  onCodeScanned: (codes: Code[]) => void;
+  isScanning: boolean;
 };
 
 const QRScanner = (props: QRScannerProps) => {
-  const { onCodeScanned } = props;
+  const { onCodeScanned, isScanning = true } = props;
   const device = useCameraDevice('back');
   const { translations } = useContext(LocalizationContext);
   const { sendScreen } = translations;
   const [cameraPermission, setCameraPermission] = useState(null);
-  const [isScanning, setIsScanning] = useState(true);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
@@ -89,10 +90,11 @@ const QRScanner = (props: QRScannerProps) => {
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
-      if (isScanning) {
-        setIsScanning(false); // Stop scanning after detecting a QR code
-        onCodeScanned(codes); // Pass the detected codes
-      }
+      onCodeScanned(codes);
+      // if (isScanning) {
+      //   setIsScanning(false); // Stop scanning after detecting a QR code
+      //   onCodeScanned(codes); // Pass the detected codes
+      // }
     },
   });
 

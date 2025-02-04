@@ -33,6 +33,11 @@ export enum TransactionType {
   SENT = 'Sent',
 }
 
+export enum TransactionKind {
+  SERVICE_FEE = 'Service fee',
+  CREATE_UTXOS = 'Create UTXOs',
+}
+
 export enum RGBTransactionType {
   RECEIVE = 'RECEIVE',
   SEND = 'SEND',

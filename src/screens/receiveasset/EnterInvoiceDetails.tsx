@@ -1,30 +1,29 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import Toast from 'src/components/Toast';
-import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
+import { formatNumber } from 'src/utils/numberWithCommas';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -119,7 +118,16 @@ const EnterInvoiceDetails = () => {
       ? 'lightning'
       : 'bitcoin',
   );
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
 
+  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+  const colorable = unspent.filter(
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+  );
+
+  const styles = getStyles(theme, inputHeight, app.appType);
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
     setAssetId(clipboardValue);
@@ -139,23 +147,11 @@ const EnterInvoiceDetails = () => {
     }
   }
 
-  const storedWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
-  const UnspentUTXOData = storedWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
-  );
-
-  const totalReserveSatsAmount = useMemo(() => {
-    return ApiHandler.calculateTotalReserveSatsAmount(UnspentUTXOData);
-  }, [UnspentUTXOData]);
-
-  const styles = getStyles(theme, inputHeight, app.appType);
-
   const handleAmountInputChange = text => {
     const cleanText = text.replace(/,/g, '');
     const reg = /^\d*$/;
     if (reg.test(cleanText)) {
-      const formattedText = numberWithCommas(cleanText);
-      setAmount(formattedText);
+      setAmount(text);
     }
   };
 
@@ -222,7 +218,7 @@ const EnterInvoiceDetails = () => {
         />
 
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
@@ -230,7 +226,7 @@ const EnterInvoiceDetails = () => {
         />
       </View>
       <View style={styles.footerWrapper}>
-        {totalReserveSatsAmount === 0 ? (
+        {colorable.length === 0 ? (
           <View style={styles.reservedSatsWrapper}>
             <View style={styles.checkIconWrapper}>
               {isThemeDark ? <CheckIcon /> : <CheckIconLight />}

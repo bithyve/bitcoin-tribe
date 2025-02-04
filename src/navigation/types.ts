@@ -54,7 +54,9 @@ export type AppStackParams = {
   [NavigationRoutes.LIGHTNINGRECEIVE]: undefined;
   [NavigationRoutes.SUPPORTTERMANDCONDITION]: undefined;
   [NavigationRoutes.SENDBTCSCREEN]: undefined;
-
+  [NavigationRoutes.ONCHAINLEARNMORE]: undefined;
+  [NavigationRoutes.LNLEARNMORE]: undefined;
+  [NavigationRoutes.SUPPORTLEARNMORE]: undefined;
   // Add other routes as needed
 };
 

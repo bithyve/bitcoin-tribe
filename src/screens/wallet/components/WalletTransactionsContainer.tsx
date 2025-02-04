@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  Animated,
   FlatList,
   Platform,
   RefreshControl,
@@ -9,7 +8,6 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
-
 import AppText from 'src/components/AppText';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
@@ -28,9 +26,9 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import EmptyStateView from 'src/components/EmptyStateView';
 import WalletTransactions from './WalletTransactions';
 import AppType from 'src/models/enums/AppType';
+import { useNavigation } from '@react-navigation/native';
 
 function WalletTransactionsContainer({
-  navigation,
   refreshing,
   transactions,
   wallet,
@@ -38,6 +36,7 @@ function WalletTransactionsContainer({
   autoRefresh,
   scrollY,
 }) {
+  const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletStrings } = translations;
@@ -93,7 +92,7 @@ function WalletTransactionsContainer({
         ListFooterComponent={FooterComponent}
         renderItem={({ item }) => (
           <WalletTransactions
-            transId={item.txid}
+            transId={item.transactionKind || item.txid}
             tranStatus={item.status}
             transDate={item.date}
             transAmount={
