@@ -633,7 +633,7 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
-            if (assetAmount > assetData?.balance.spendable) {
+            if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
               if (Number(assetData?.balance.spendable) === 0) {
                 setAmountValidationError(
