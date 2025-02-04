@@ -501,7 +501,9 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
-    "failToFetchIssueFee": "获取资产发行费用失败。"
+    "failToFetchIssueFee": "获取资产发行费用失败。",
+    "requestInvoiceProcessTitle": "正在处理您的请求",
+    "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！"
   },
   "community": {
     "fnfTitle": "朋友和家人",

@@ -501,7 +501,9 @@
     "payInprocess": "Pagamento in corso...",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
-    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset."
+    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
+    "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
+    "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
