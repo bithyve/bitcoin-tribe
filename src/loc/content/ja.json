@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "ウォレットタイプ",
     "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！",
     "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
-    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました"
+    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "वॉलेट प्रकार",
     "copyWalletIDMsg": "वॉलेट ID सफलतापूर्वक कॉपी किया गया!",
     "walletBackupSuccessMsg": "आपका वॉलेट सफलतापूर्वक बैकअप किया गया है",
-    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं"
+    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "钱包类型",
     "copyWalletIDMsg": "钱包 ID 已成功复制！",
     "walletBackupSuccessMsg": "您的钱包已成功备份",
-    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份"
+    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

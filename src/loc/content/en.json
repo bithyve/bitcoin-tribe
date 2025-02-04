@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Wallet Type",
     "copyWalletIDMsg": "Wallet ID copied successfully!",
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
-    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up"
+    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

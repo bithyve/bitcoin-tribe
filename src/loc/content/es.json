@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Tipo de Billetera",
     "copyWalletIDMsg": "¡ID de billetera copiado con éxito!",
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
-    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito"
+    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
