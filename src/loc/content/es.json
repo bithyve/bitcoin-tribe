@@ -503,7 +503,9 @@
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
     "requestInvoiceProcessTitle": "Procesando su solicitud",
-    "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!"
+    "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
