@@ -405,8 +405,6 @@ const SendAssetScreen = () => {
     setCustomFee(text);
   };
 
-  // console.log('successStatus', successStatus);
-  console.log('loading', loading);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
