@@ -224,9 +224,7 @@ function SettingsScreen({ navigation }) {
             openLink('https://t.me/BitcoinTribeSupport');
           }}
           onPressX={() => {
-            openLink(
-              'https://x.com/BitcoinTribe_?t=QxwE3_ZHsQfx_sD2swKsgw&s=09',
-            );
+            openLink('https://x.com/BitcoinTribe_');
           }}
         />
       </View>
