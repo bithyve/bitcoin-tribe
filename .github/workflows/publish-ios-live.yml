@@ -44,13 +44,11 @@ jobs:
       - name: Debug Installed Gems
         run: bundle list
 
-      - name: Create Fastlane Directory
-        run: mkdir -p ./fastlane
-
       - name: Decode App Store API Key
         run: |
-          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ./fastlane/AuthKey.p8
-          ls -la ./fastlane/
+        mkdir -p ios/fastlane
+        echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ios/fastlane/AuthKey.p8
+        ls -la ios/fastlane/
 
       - name: Install CocoaPods
         run: |
