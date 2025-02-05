@@ -21,8 +21,6 @@ function VersionHistoryList() {
         new Date(b.date as string).getTime() -
         new Date(a.date as string).getTime(),
     );
-  console.log('versionHistory', versionHistory);
-
   const lastIndex = versionHistory.length - 1;
 
   return (
