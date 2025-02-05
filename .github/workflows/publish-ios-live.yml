@@ -28,32 +28,23 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Ensure Bundler is Installed
+      - name: Install Bundler
         run: gem install bundler
 
-      - name: Configure Bundler Path
-        run: |
-          bundle config set path 'vendor/bundle'
+      - name: Ensure Correct Bundler Version
+        run: bundler -v  
 
-      - name: Install Fastlane via Bundler
-        run: |
-          if [ ! -f "Gemfile" ]; then
-            echo 'source "https://rubygems.org"' > Gemfile
-            echo 'gem "fastlane"' >> Gemfile
-          fi
-          bundle install --clean
+      - name: Install Fastlane
+        run: gem install fastlane
+  
+      - name: Install Fastlane dependencies
+        run: bundle check || bundle install
+      
+      - name: Debug Installed Gems
+        run: bundle list
 
-      - name: Ensure Fastlane Directory & Fastfile Exist
-        run: |
-          mkdir -p ./fastlane
-          if [ ! -f "./fastlane/Fastfile" ]; then
-            echo 'default_platform(:ios)' > ./fastlane/Fastfile
-            echo 'platform :ios do' >> ./fastlane/Fastfile
-            echo '  lane :github_actions_live do' >> ./fastlane/Fastfile
-            echo '    puts "Fastlane setup is correct!"' >> ./fastlane/Fastfile
-            echo '  end' >> ./fastlane/Fastfile
-            echo 'end' >> ./fastlane/Fastfile
-          fi
+      - name: Create Fastlane Directory
+        run: mkdir -p ./fastlane
 
       - name: Decode App Store API Key
         run: |
@@ -80,7 +71,7 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
         run: |
           cd ios
-          bundle exec fastlane ios github_actions_live
+          bundle exec fastlane github_actions_live
 
       - name: Post PR comment with deployment status
         if: always()
