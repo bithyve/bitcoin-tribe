@@ -26,6 +26,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
+import AssetSpendableAmtView from './AssetSpendableAmtView';
 // import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 // import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 

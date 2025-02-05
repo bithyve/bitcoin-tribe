@@ -501,7 +501,9 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
-    "failToFetchIssueFee": "获取资产发行费用失败。"
+    "failToFetchIssueFee": "获取资产发行费用失败。",
+    "spendable": "可用余额: ",
+    "spendableBalanceInfo": "The balance that can be used after deducting扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

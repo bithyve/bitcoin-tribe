@@ -5,7 +5,8 @@ import {
   FlatList,
   Platform,
   RefreshControl,
-  Animated,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -31,6 +32,7 @@ function TransactionsList({
   coin,
   assetId = '',
   scrollY,
+  style,
 }: {
   transactions: Transaction[];
   isLoading: boolean;
@@ -41,6 +43,7 @@ function TransactionsList({
   coin: string;
   assetId: string;
   scrollY: any;
+  style?: StyleProp<ViewStyle>;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations, settings } = translations;
@@ -48,7 +51,7 @@ function TransactionsList({
   const styles = getStyles(theme);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.contentWrapper}>
         <AppText variant="heading3" style={styles.recentTransText}>
           {walletTranslations.recentTransaction}
@@ -103,7 +106,7 @@ function TransactionsList({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: '50%',
+      height: '47%',
     },
     container2: {
       marginTop: hp(15),

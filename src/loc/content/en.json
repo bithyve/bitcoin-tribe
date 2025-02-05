@@ -501,7 +501,9 @@
     "payInprocess": "Paying...",
     "listYourAssetInRegTitle": "List Your Asset In Registry",
     "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step.",
-    "failToFetchIssueFee": "Failed to fetch asset issuance fee."
+    "failToFetchIssueFee": "Failed to fetch asset issuance fee.",
+    "spendable": "Spendable: ",
+    "spendableBalanceInfo": "The balance that can be used after deducting amounts locked due to pending or \"waiting counterparty \" transactions."
   },
   "community": {
     "fnfTitle": "Friends & Family",

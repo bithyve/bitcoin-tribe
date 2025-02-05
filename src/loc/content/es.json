@@ -501,7 +501,9 @@
     "payInprocess": "Pagando...",
     "listYourAssetInRegTitle": "Lista tu activo en el registro",
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
-    "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos."
+    "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
+    "spendable": "Disponible: ",
+    "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\"."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

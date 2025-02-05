@@ -1,4 +1,4 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -19,6 +19,7 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
+import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -95,7 +96,14 @@ const CoinDetailsScreen = () => {
           })
         }
       />
+      <View style={styles.spendableBalanceWrapper}>
+        <AssetSpendableAmtView
+          spendableBalance={coin?.balance?.spendable}
+          style={styles.toolTipCotainer}
+        />
+      </View>
       <TransactionsList
+        style={styles.transactionContainer}
         transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
@@ -117,4 +125,14 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  spendableBalanceWrapper: {
+    top: -30,
+  },
+  transactionContainer: {
+    top: -25,
+  },
+  toolTipCotainer: {
+    top: 90,
+  },
+});
