@@ -29,6 +29,12 @@ jobs:
           ls -lah android/app/release.keystore  # Debugging: Ensure file exists
           keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD }}" -v
           echo "Signing key decoded and placed successfully"
+
+      - name: Create Google Play Service Account JSON
+        run: |
+          echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' | jq . > android/key.json
+          ls -lah android/key.json  # Verify file exists
+          cat android/key.json  # Debugging: Ensure JSON is valid
           
       - name: Set up Node.js
         uses: actions/setup-node@v3
