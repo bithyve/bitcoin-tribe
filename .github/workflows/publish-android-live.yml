@@ -22,17 +22,12 @@ jobs:
 
       - name: Create required directories
         run: mkdir -p android/app
-        
-      - name: Debug Secrets
-        run: |
-          echo "Store key Length: ${#SIGNING_KEY}"
-          echo "Key Alias: ${KEY_ALIAS}"
 
       - name: Decode and place signing key
         run: |
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > android/app/release.keystore
           ls -lah android/app/release.keystore  # Debugging: Ensure file exists
-          keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.STORE_PASSWORD }}" -v
+          keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD }}" -v
           echo "Signing key decoded and placed successfully"
           
       - name: Set up Node.js
@@ -54,9 +49,9 @@ jobs:
 
       - name: Run Fastlane for Play Store Deployment
         env:
-          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
         run: |
           cd android
