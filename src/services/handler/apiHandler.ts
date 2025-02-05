@@ -342,7 +342,7 @@ export class ApiHandler {
           toFile: path,
         });
         const restore = await RGBServices.restore(mnemonic, path);
-        ApiHandler.setupNewApp({
+        await ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
