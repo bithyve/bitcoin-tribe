@@ -7,7 +7,8 @@ on:
       - sprint
 
 jobs:
-  build-and-upload:
+  build-ios-live:
+    name: Build and publish iOS live app to TestFlight
     runs-on: macos-latest
 
     steps:
