@@ -29,6 +29,11 @@ jobs:
           ls -lah android/app/release.keystore  # Debugging: Ensure file exists
           keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.STORE_PASSWORD }}" -v
           echo "Signing key decoded and placed successfully"
+  
+      - name: Debug Secrets
+        run: |
+          echo "Store key Length: ${#SIGNING_KEY}"
+          echo "Key Alias: ${KEY_ALIAS}"
           
       - name: Set up Node.js
         uses: actions/setup-node@v3
