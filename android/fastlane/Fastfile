@@ -64,7 +64,12 @@ platform :android do
       json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
       package_name: 'com.bithyve.tribe'
     )
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    # file_path = lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH] || lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    # puts "🔍 Build Output Path: #{file_path}"
+    # if file_path.nil? || file_path.empty? || !File.exist?(file_path)
+    #   UI.user_error!("🚨 APK file not found at: #{file_path}")
+    # end
+    # upload_to_slack({ file_path: file_path })
   end
 
   desc "Push a new live build to Slack and internal track on Play Store"
