@@ -1,14 +1,13 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
@@ -19,21 +18,24 @@ import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySe
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
+import { Transfer } from 'src/models/interfaces/RGBWallet';
+import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrowLight from 'src/assets/images/icon_arrowr2light.svg';
+import { Keys } from 'src/storage';
+import GradientView from 'src/components/GradientView';
 
-type AssetTransactionProps = {
-  backColor?: string;
-  disabled?: boolean;
+type UdaTransactionProps = {
   transaction: Transfer;
   coin: string;
+  onPress: () => void;
 };
-function AssetTransaction(props: AssetTransactionProps) {
-  const navigation = useNavigation();
+function UDATransaction(props: UdaTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin } = props;
+  const { transaction, coin, onPress } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const getStatusIcon = (kind, status, type) => {
     const icons = {
@@ -77,25 +79,15 @@ function AssetTransaction(props: AssetTransactionProps) {
     return icons[type]?.[status]?.[kind] || defaultIcons[type];
   };
 
-  const amtTextStyle = useMemo(() => {
-    const kind = transaction.kind.toUpperCase();
-    if (kind === TransferKind.SEND) {
-      return styles.amountSend;
-    }
-    return styles.amountTextReceive;
-  }, [styles.amountSend, styles.amountTextReceive, transaction.kind]);
-
   return (
-    <AppTouchable
-      disabled={disabled}
-      style={styles.containerWrapper}
-      onPress={() => {
-        navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-          transaction: transaction,
-          coin: coin,
-        });
-      }}>
-      <View style={styles.container}>
+    <AppTouchable onPress={onPress}>
+      <GradientView
+        style={styles.container}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         <View style={styles.transDetailsWrapper}>
           <View>
             {getStatusIcon(
@@ -121,43 +113,27 @@ function AssetTransaction(props: AssetTransactionProps) {
             </AppText>
           </View>
         </View>
-        <View style={styles.amountWrapper}>
-          <View style={styles.amtIconWrapper}>
-            <AppText
-              variant="body1"
-              style={[
-                amtTextStyle,
-                {
-                  fontSize: transaction.amount.toString().length > 10 ? 11 : 16,
-                },
-              ]}>
-              &nbsp;{numberWithCommas(transaction.amount)}
-            </AppText>
-          </View>
-          {/* {!disabled ? <IconArrow /> : null} */}
+        <View style={styles.arrowWrapper}>
+          {isThemeDark ? <IconArrow /> : <IconArrowLight />}
         </View>
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    containerWrapper: {
-      paddingVertical: hp(15),
-      borderBottomColor: theme.colors.borderColor,
-      borderBottomWidth: 1,
-    },
     container: {
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
-      backgroundColor: backColor,
-      padding: backColor ? 15 : 0,
-      borderRadius: backColor ? 10 : 0,
+      padding: hp(15),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: 10,
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '60%',
+      width: '90%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -169,29 +145,8 @@ const getStyles = (theme: AppTheme, backColor) =>
     transDateText: {
       color: theme.colors.secondaryHeadingColor,
     },
-    amountWrapper: {
-      flexDirection: 'row',
-      width: '40%',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    amtIconWrapper: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    amountText: {
-      color: theme.colors.headingColor,
-      marginTop: hp(2),
-    },
-    amountTextReceive: {
-      color: '#4CD964',
-      marginTop: hp(2),
-    },
-    amountSend: {
-      color: '#0166FF',
-      marginTop: hp(2),
+    arrowWrapper: {
+      width: '10%',
     },
   });
-export default AssetTransaction;
+export default UDATransaction;

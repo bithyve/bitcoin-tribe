@@ -29,7 +29,8 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AppTouchable from 'src/components/AppTouchable';
+import MediaCarousel from './components/MediaCarousel';
+import UDATransaction from './components/UDATransaction';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -62,7 +63,7 @@ const UDADetailsScreen = () => {
   return (
     <ScreenContainer>
       <AppHeader title={uda.name} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
             uri: Platform.select({
@@ -96,32 +97,25 @@ const UDADetailsScreen = () => {
         </View>
 
         <Item title={assets.name} value={uda.name} />
+        <Item title={assets.assetId} value={assetId} />
         <Item title={assets.ticker} value={uda.ticker} />
         <Item title={assets.details} value={uda.details} />
+        <MediaCarousel images={uda.token.attachments} />
         <Item
           title={assets.issuedOn}
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
         />
-
-        <View>
-          <FlatList
-            data={uda.token.attachments}
-            horizontal
-            renderItem={({ item }) => (
-              <AppTouchable style={styles.imageWrapper}>
-                <Image
-                  source={{
-                    uri:
-                      Platform.OS === 'ios'
-                        ? item.filePath.replace('file://', '')
-                        : item.filePath,
-                  }}
-                  style={styles.imagesStyle}
-                />
-              </AppTouchable>
-            )}
-          />
-        </View>
+        <UDATransaction
+          transaction={uda.transactions[0]}
+          coin={uda.name}
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+              assetId: assetId,
+              transactions: uda.transactions,
+              assetName: uda.name,
+            });
+          }}
+        />
       </ScrollView>
     </ScreenContainer>
   );
@@ -140,19 +134,6 @@ const getStyles = () =>
       paddingBottom: 0,
       marginVertical: wp(5),
       alignItems: 'center',
-    },
-    imagesStyle: {
-      height: hp(80),
-      width: hp(80),
-      borderRadius: hp(15),
-      marginVertical: hp(10),
-      marginHorizontal: hp(5),
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    imageWrapper: {
-      height: 100,
-      width: 100,
     },
   });
 export default UDADetailsScreen;
