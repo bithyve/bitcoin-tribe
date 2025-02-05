@@ -52,4 +52,4 @@ jobs:
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
         run: |
           cd android
-          bundle exec fastlane github_actions
+          bundle exec fastlane github_actions_live
