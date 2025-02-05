@@ -1,4 +1,4 @@
-name: Publish iOS App to TestFlight
+name: Publish iOS live app to TestFlight
 
 on:
   pull_request:
