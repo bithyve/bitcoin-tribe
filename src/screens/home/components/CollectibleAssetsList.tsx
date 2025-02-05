@@ -88,11 +88,11 @@ function CollectibleAssetsList(props: AssetsListProps) {
         renderItem={({ item, index }) => {
           return (
             <View style={styles.assetWrapper}>
-              <View style={styles.alternateSpace}>
+              <View style={{ top: index % 2 === 0 ? 0 : hp(50) }}>
                 <AssetCard
                   asset={item}
                   tag={'COLLECTIBLE'}
-                  onPress={()=>onPressAsset(item)}
+                  onPress={() => onPressAsset(item)}
                 />
               </View>
             </View>
