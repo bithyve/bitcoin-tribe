@@ -35,21 +35,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Install Bundler
-        run: |
-          gem install bundler --user-install
-          echo "export GEM_HOME=$HOME/.gem" >> $GITHUB_ENV
-          echo "export PATH=$HOME/.gem/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Install dependencies with Bundler
-        run: |
-          source $GITHUB_ENV
-          bundle install --path vendor/bundle
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
 
       - name: Install Fastlane
-        run: |
-          source $GITHUB_ENV
-          gem install fastlane
+        run: gem install fastlane
 
       - name: Run Fastlane for Play Store Deployment
         env:
@@ -58,6 +51,5 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
         run: |
-          source $GITHUB_ENV
           cd android
           bundle exec fastlane github_actions
