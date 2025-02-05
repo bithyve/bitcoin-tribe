@@ -61,7 +61,8 @@ platform :android do
     )
     upload_to_play_store(
       track: 'internal',
-      json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"]
+      json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
+      package_name: 'com.bithyve.tribe'
     )
     upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
