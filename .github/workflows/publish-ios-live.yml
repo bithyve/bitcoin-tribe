@@ -48,7 +48,6 @@ jobs:
         run: |
           cd ios
           pod install --silent
-          cd ..
 
       - name: Set up Fastlane environment variables
         run: |
