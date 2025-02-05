@@ -33,12 +33,12 @@ jobs:
 
       - name: Ensure Correct Bundler Version
         run: bundler -v  
-
-      - name: Install Fastlane
-        run: gem install fastlane
   
       - name: Install Fastlane dependencies
-        run: bundle check || bundle install
+        run: |
+          cd ios
+          bundle config set --local path 'vendor/bundle'
+          bundle check || bundle install
       
       - name: Debug Installed Gems
         run: bundle list
