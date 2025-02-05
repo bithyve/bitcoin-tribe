@@ -1,4 +1,4 @@
-name: Deploy Android to Play Store
+name: Publish Android live app to PlayStore
 
 on:
   pull_request:
