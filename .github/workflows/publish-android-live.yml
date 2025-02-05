@@ -54,6 +54,7 @@ jobs:
         run: gem install fastlane
 
       - name: Run Fastlane for Play Store Deployment
+        id: fastlane_step
         env:
           STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
