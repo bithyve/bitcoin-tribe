@@ -64,7 +64,7 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
         run: |
           cd ios
-          bundle exec fastlane github_actions_live
+          bundle exec fastlane ios github_actions_live
 
       - name: Post PR comment with deployment status
         if: always()
