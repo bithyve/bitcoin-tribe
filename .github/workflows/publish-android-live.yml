@@ -34,6 +34,13 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install dependencies with Bundler
+        run: |
+          bundle install --path vendor/bundle
+
       - name: Install Fastlane
         run: |
           gem install fastlane
@@ -46,4 +53,4 @@ jobs:
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
         run: |
           cd android
-          fastlane github_actions_live
+          bundle exec fastlane github_actions
