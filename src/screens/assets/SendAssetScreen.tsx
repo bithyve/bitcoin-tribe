@@ -154,7 +154,7 @@ const SendAssetScreen = () => {
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(
-    amount || assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : '',
+    assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : amount || '',
   );
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
@@ -315,7 +315,7 @@ const SendAssetScreen = () => {
       }, 500);
       console.log(error);
     }
-  }, [invoice, assetAmount, navigation]);
+  }, [invoice, assetAmount, navigation, isDonation]);
 
   const handlePasteAddress = async () => {
     try {
@@ -405,8 +405,6 @@ const SendAssetScreen = () => {
     setCustomFee(text);
   };
 
-  // console.log('successStatus', successStatus);
-  console.log('loading', loading);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />

@@ -22,7 +22,7 @@ import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import Toast from 'src/components/Toast';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { formatNumber } from 'src/utils/numberWithCommas';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
@@ -151,8 +151,7 @@ const EnterInvoiceDetails = () => {
     const cleanText = text.replace(/,/g, '');
     const reg = /^\d*$/;
     if (reg.test(cleanText)) {
-      const formattedText = numberWithCommas(cleanText);
-      setAmount(formattedText);
+      setAmount(text);
     }
   };
 
@@ -219,7 +218,7 @@ const EnterInvoiceDetails = () => {
         />
 
         <TextField
-          value={amount}
+          value={formatNumber(amount)}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
