@@ -91,6 +91,43 @@ platform :ios do
     upload_to_testflight
     clean_build_artifacts
   end
+
+  desc "Push a new live build to TestFlight (GitHub Actions)"
+  lane :github_actions_live do
+    ENV["FASTLANE_DISABLE_COLORS"] = "1"
+    get_certificates(
+      output_path: "./builds"
+    )
+    get_provisioning_profile(
+      output_path: "./builds",
+      filename: "tribe_dist.mobileprovision"
+    )
+    update_project_provisioning(
+      xcodeproj: "tribe.xcodeproj",
+      target_filter: "tribe",
+      profile: "./builds/tribe_dist.mobileprovision",
+      build_configuration: "Release"
+    )
+    update_project_team(
+      teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    )
+    build_app(
+      workspace: "tribe.xcworkspace",
+      scheme: "tribe",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => "tribe_dist.mobileprovision"
+        }
+      },
+      build_path: "./builds",
+      output_directory: "./builds"
+    )
+    upload_to_testflight
+    clean_build_artifacts
+    puts "✅ Live build successfully uploaded to TestFlight! Build Number: #{latest_build}"
+  end
 end
 
 after_all do |lane|

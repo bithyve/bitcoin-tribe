@@ -1,0 +1,66 @@
+name: Publish iOS App to TestFlight
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - sprint
+      
+jobs:
+  build-and-upload:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Fastlane
+        run: gem install fastlane
+  
+      - name: Install Fastlane dependencies
+        run: bundle check || bundle install
+
+      - name: Decode App Store API Key
+        run: |
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ./fastlane/AuthKey.p8
+          ls -la ./fastlane/
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --silent
+          cd ..
+
+      - name: Set up Fastlane environment variables
+        run: |
+          echo "APP_STORE_CONNECT_API_KEY_ID=${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
+          echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
+          echo "APPLE_APP_IDENTIFIER=${{ secrets.APPLE_APP_IDENTIFIER }}" >> $GITHUB_ENV
+          echo "FASTLANE_APPLE_ID=${{ secrets.FASTLANE_APPLE_ID }}" >> $GITHUB_ENV
+
+      - name: Run Fastlane to upload to TestFlight
+        id: fastlane_step
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
+        run: bundle exec fastlane github_actions_live
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf ./fastlane/AuthKey.p8

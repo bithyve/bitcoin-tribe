@@ -2,7 +2,7 @@ name: Deploy Android to Play Store
 
 on:
   pull_request:
-    types: [closed] # Trigger when PR is merged
+    types: [closed]
     branches:
       - sprint 
 
