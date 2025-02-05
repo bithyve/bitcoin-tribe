@@ -36,6 +36,9 @@ jobs:
       - name: Install Fastlane dependencies
         run: bundle check || bundle install
 
+      - name: Create Fastlane Directory
+        run: mkdir -p ./fastlane
+
       - name: Decode App Store API Key
         run: |
           echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ./fastlane/AuthKey.p8
@@ -60,6 +63,19 @@ jobs:
         env:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
         run: bundle exec fastlane github_actions_live
+
+      - name: Post PR comment with deployment status
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "${{ steps.fastlane_step.outcome }}" == "success" ]]; then
+            STATUS="✅ Deployment to Play Store succeeded!"
+          else
+            STATUS="❌ Deployment to Play Store failed. Please check the logs for details."
+          fi
+          
+          gh pr comment ${{ github.event.pull_request.number }} --body "$STATUS"
 
       - name: Cleanup
         if: always()
