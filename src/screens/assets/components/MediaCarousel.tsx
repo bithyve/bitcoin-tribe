@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Image, FlatList, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
+
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
@@ -27,7 +28,10 @@ const MediaCarousel = (props: mediaCarouselProps) => {
         <AppTouchable style={styles.imageWrapper}>
           <Image
             source={{
-              uri: `file://${item.filePath}`,
+              uri: Platform.select({
+                android: `file://${item.filePath}`,
+                ios: item.filePath,
+              }),
             }}
             style={styles.imagesStyle}
           />

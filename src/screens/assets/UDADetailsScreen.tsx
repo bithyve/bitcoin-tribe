@@ -1,16 +1,13 @@
-import {
-  FlatList,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
-import ScreenContainer from 'src/components/ScreenContainer';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
+import { useTheme } from 'react-native-paper';
+import moment from 'moment';
+
+import ScreenContainer from 'src/components/ScreenContainer';
 import { UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -18,7 +15,6 @@ import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, wp } from 'src/constants/responsive';
 import AppHeader from 'src/components/AppHeader';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { Item } from './CollectibleMetaDataScreen';
@@ -26,8 +22,6 @@ import IconSend from 'src/assets/images/icon_send.svg';
 import IconSendLight from 'src/assets/images/icon_send_light.svg';
 import RoundedCTA from 'src/components/RoundedCTA';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
-import moment from 'moment';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import MediaCarousel from './components/MediaCarousel';
 import UDATransaction from './components/UDATransaction';
