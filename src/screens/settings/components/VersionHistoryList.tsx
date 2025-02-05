@@ -1,34 +1,41 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import VersionHistoryItem from './VersionHistoryItem';
-import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import { hp } from 'src/constants/responsive';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function VersionHistoryList() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
-  const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
-    getJSONFromRealmObject,
-  );
-  const lastIndex = VersionHistoryData.length - 1;
-  const reversedData = [...VersionHistoryData].reverse();
+  const versionHistory = useQuery<VersionHistory[]>(RealmSchema.VersionHistory)
+    .map(getJSONFromRealmObject)
+    .sort(
+      (a, b) =>
+        new Date(b.date as string).getTime() -
+        new Date(a.date as string).getTime(),
+    );
+  console.log('versionHistory', versionHistory);
+
+  const lastIndex = versionHistory.length - 1;
 
   return (
     <FlatList
-      data={reversedData}
+      data={versionHistory}
       renderItem={({ item, index }) => {
         const previousItem =
-          index < reversedData.length - 1 ? reversedData[index + 1] : null;
+          index < versionHistory.length - 1 ? versionHistory[index + 1] : null;
 
-        const title = previousItem
-          ? `Upgraded from ${previousItem.version} to ${item.version}`
-          : `Initially installed ${item.version}`;
+        const title =
+          index === versionHistory.length - 1
+            ? item.title
+            : `Upgraded from ${previousItem.version} to ${item.version}`;
 
         return (
           <VersionHistoryItem
