@@ -48,6 +48,7 @@ jobs:
         run: |
           cd ios
           pod install --silent
+          cd ..
 
       - name: Set up Fastlane environment variables
         run: |
@@ -61,7 +62,9 @@ jobs:
         id: fastlane_step
         env:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
-        run: bundle exec fastlane github_actions_live
+        run: |
+          cd ios
+          bundle exec fastlane github_actions_live
 
       - name: Post PR comment with deployment status
         if: always()
