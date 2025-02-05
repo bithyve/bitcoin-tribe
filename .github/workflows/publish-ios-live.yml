@@ -7,7 +7,8 @@ on:
       - sprint
 
 jobs:
-  build-and-upload:
+  build-ios-live:
+    name: Build and publish iOS live app to TestFlight
     runs-on: macos-latest
 
     steps:
@@ -33,12 +34,12 @@ jobs:
 
       - name: Ensure Correct Bundler Version
         run: bundler -v  
-
-      - name: Install Fastlane
-        run: gem install fastlane
   
       - name: Install Fastlane dependencies
-        run: bundle check || bundle install
+        run: |
+          cd ios
+          bundle config set --local path 'vendor/bundle'
+          bundle check || bundle install
       
       - name: Debug Installed Gems
         run: bundle list
