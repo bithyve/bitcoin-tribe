@@ -41,6 +41,31 @@ platform :android do
     upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
+  desc "Push a new live build from github actions to internal track on Play Store"
+  lane :github_actions_live do
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+    releaseFilePath = File.join(Dir.pwd, "../app", "release.keystore")
+    gradle(task: 'clean')
+    gradle(
+      task: 'bundle',
+      build_type: 'productionRelease',
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
+    upload_to_play_store(
+      track: 'internal',
+      json_key: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"]
+    )
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+  end
+
   desc "Push a new live build to Slack and internal track on Play Store"
   lane :live do
     store_password = ENV["STORE_PASSWORD"]
