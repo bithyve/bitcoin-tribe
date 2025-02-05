@@ -5,6 +5,7 @@ on:
     types: [closed] # Trigger when PR is merged
     branches:
       - sprint 
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -35,14 +36,18 @@ jobs:
         run: yarn install
 
       - name: Install Bundler
-        run: gem install bundler
+        run: gem install bundler --user-install
 
       - name: Install dependencies with Bundler
         run: |
+          export GEM_HOME="$HOME/.gem"
+          export PATH="$GEM_HOME/bin:$PATH"
           bundle install --path vendor/bundle
 
       - name: Install Fastlane
         run: |
+          export GEM_HOME="$HOME/.gem"
+          export PATH="$GEM_HOME/bin:$PATH"
           gem install fastlane
 
       - name: Run Fastlane for Play Store Deployment
@@ -52,5 +57,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
         run: |
+          export GEM_HOME="$HOME/.gem"
+          export PATH="$GEM_HOME/bin:$PATH"
           cd android
           bundle exec fastlane github_actions
