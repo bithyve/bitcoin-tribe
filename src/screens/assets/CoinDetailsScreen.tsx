@@ -20,6 +20,7 @@ import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
+import { windowHeight } from 'src/constants/responsive';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -133,6 +134,6 @@ const styles = StyleSheet.create({
     top: -25,
   },
   toolTipCotainer: {
-    top: 90,
+    top: windowHeight > 670 ? 90 : 70,
   },
 });

@@ -19,7 +19,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 
 const CollectibleDetailsScreen = () => {
@@ -151,7 +151,7 @@ const getStyles = () =>
       top: -25,
     },
     toolTipCotainer: {
-      top: 110,
+      top: windowHeight > 670 ? 110 : 100,
     },
   });
 export default CollectibleDetailsScreen;

@@ -48,7 +48,9 @@ const AssetSpendableAmtView = (props: assetSpendableAmtViewProps) => {
           visible={visible}
           onDismiss={() => setVisible(false)}
           contentContainerStyle={[styles.tooltipContainer, style]}>
-          <Text style={styles.tooltipText}>{assets.spendableBalanceInfo}</Text>
+          <AppText variant="caption" style={styles.tooltipText}>
+            {assets.spendableBalanceInfo}
+          </AppText>
         </Modal>
       </Portal>
     </View>
@@ -82,7 +84,7 @@ const getStyles = (theme: AppTheme) =>
       right: 15,
     },
     tooltipText: {
-      color: 'white',
+      color: theme.colors.headingColor,
       fontSize: 14,
     },
   });
