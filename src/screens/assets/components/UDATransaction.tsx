@@ -91,8 +91,8 @@ function UDATransaction(props: UdaTransactionProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {getStatusIcon(
-              transaction.kind.toLowerCase().replace(/_/g, ''),
-              transaction.status.toLowerCase().replace(/_/g, ''),
+              transaction?.kind?.toLowerCase().replace(/_/g, ''),
+              transaction?.status?.toLowerCase().replace(/_/g, ''),
               'bitcoin',
             )}
           </View>
@@ -102,13 +102,15 @@ function UDATransaction(props: UdaTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
+              {transaction?.kind?.toLowerCase().replace(/_/g, '') === 'issuance'
                 ? assets.issued
-                : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+                : settings[
+                    transaction?.status?.toLowerCase().replace(/_/g, '')
+                  ]}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment
-                .unix(transaction.createdAt)
+                .unix(transaction?.createdAt)
                 .format('DD MMM YY  •  hh:mm a')}
             </AppText>
           </View>

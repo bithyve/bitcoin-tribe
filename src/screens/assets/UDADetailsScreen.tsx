@@ -35,6 +35,7 @@ const UDADetailsScreen = () => {
     RealmSchema.UniqueDigitalAsset,
     assetId,
   );
+
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
@@ -42,7 +43,6 @@ const UDADetailsScreen = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, common } = translations;
   const theme: AppTheme = useTheme();
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -99,17 +99,19 @@ const UDADetailsScreen = () => {
           title={assets.issuedOn}
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
         />
-        <UDATransaction
-          transaction={uda.transactions[0]}
-          coin={uda.name}
-          onPress={() => {
-            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
-              assetId: assetId,
-              transactions: uda.transactions,
-              assetName: uda.name,
-            });
-          }}
-        />
+        {uda?.transactions && (
+          <UDATransaction
+            transaction={uda?.transactions[0]}
+            coin={uda.name}
+            onPress={() => {
+              navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                assetId: assetId,
+                transactions: uda?.transactions,
+                assetName: uda.name,
+              });
+            }}
+          />
+        )}
       </ScrollView>
     </ScreenContainer>
   );
