@@ -1,6 +1,6 @@
 export interface VersionHistory {
   version: string;
   releaseNote?: string;
-  date: string | number | Date;
+  date: string;
   title: string;
 }

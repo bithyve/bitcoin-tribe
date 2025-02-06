@@ -27,13 +27,10 @@ function VersionHistoryList() {
     <FlatList
       data={versionHistory}
       renderItem={({ item, index }) => {
-        const previousItem =
-          index < versionHistory.length - 1 ? versionHistory[index + 1] : null;
-
         const title =
           index === versionHistory.length - 1
             ? item.title
-            : `Upgraded from ${previousItem.version} to ${item.version}`;
+            : `Upgraded to ${item.version}`;
 
         return (
           <VersionHistoryItem
