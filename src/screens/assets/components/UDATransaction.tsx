@@ -28,11 +28,12 @@ type UdaTransactionProps = {
   transaction: Transfer;
   coin: string;
   onPress: () => void;
+  disabled?: boolean;
 };
 function UDATransaction(props: UdaTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { transaction, coin, onPress } = props;
+  const { transaction, coin, onPress, disabled = false } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -80,7 +81,7 @@ function UDATransaction(props: UdaTransactionProps) {
   };
 
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} disabled={disabled}>
       <GradientView
         style={styles.container}
         colors={[
@@ -116,7 +117,7 @@ function UDATransaction(props: UdaTransactionProps) {
           </View>
         </View>
         <View style={styles.arrowWrapper}>
-          {isThemeDark ? <IconArrow /> : <IconArrowLight />}
+          {!disabled ? isThemeDark ? <IconArrow /> : <IconArrowLight /> : null}
         </View>
       </GradientView>
     </AppTouchable>

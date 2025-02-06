@@ -110,6 +110,7 @@ const UDADetailsScreen = () => {
                 assetName: uda.name,
               });
             }}
+            disabled={uda?.transactions.length === 1}
           />
         )}
       </ScrollView>
