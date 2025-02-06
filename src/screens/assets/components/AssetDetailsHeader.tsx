@@ -10,7 +10,6 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
-// import GradientView from 'src/components/GradientView';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
@@ -26,9 +25,6 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
-import AssetSpendableAmtView from './AssetSpendableAmtView';
-// import IconBitcoin from 'src/assets/images/icon_btc2.svg';
-// import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
