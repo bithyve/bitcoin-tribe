@@ -501,7 +501,10 @@
     "payInprocess": "Pagamento in corso...",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
-    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset."
+    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
+    "enterAssetName": "Inserisci il nome dell'asset",
+    "enterAssetTicker": "Inserisci il ticker dell'asset",
+    "enterTotalSupply": "Inserisci il totale delle unità fornite"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

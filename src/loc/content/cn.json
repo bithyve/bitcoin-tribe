@@ -501,7 +501,10 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
-    "failToFetchIssueFee": "获取资产发行费用失败。"
+    "failToFetchIssueFee": "获取资产发行费用失败。",
+    "enterAssetName": "请输入资产名称",
+    "enterAssetTicker": "请输入资产代码",
+    "enterTotalSupply": "请输入总供应量"
   },
   "community": {
     "fnfTitle": "朋友和家人",
