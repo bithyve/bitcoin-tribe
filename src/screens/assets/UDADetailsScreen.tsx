@@ -41,7 +41,7 @@ const UDADetailsScreen = () => {
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { assets, common } = translations;
+  const { assets, common, home } = translations;
   const theme: AppTheme = useTheme();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -90,10 +90,10 @@ const UDADetailsScreen = () => {
           />
         </View>
 
-        <Item title={assets.name} value={uda.name} />
+        <Item title={home.assetName} value={uda.name} />
         <Item title={assets.assetId} value={assetId} />
-        <Item title={assets.ticker} value={uda.ticker} />
-        <Item title={assets.details} value={uda.details} />
+        <Item title={home.assetTicker} value={uda.ticker} />
+        <Item title={home.assetDescription} value={uda.details} />
         <MediaCarousel images={uda.token.attachments} />
         <Item
           title={assets.issuedOn}
