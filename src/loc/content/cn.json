@@ -504,7 +504,8 @@
     "failToFetchIssueFee": "获取资产发行费用失败。",
     "enterAssetName": "请输入资产名称",
     "enterAssetTicker": "请输入资产代码",
-    "enterTotalSupply": "请输入总供应量"
+    "enterTotalSupply": "请输入总供应量",
+    "enterDescription": "请输入资产描述"
   },
   "community": {
     "fnfTitle": "朋友和家人",

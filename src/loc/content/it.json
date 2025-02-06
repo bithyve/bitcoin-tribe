@@ -504,7 +504,8 @@
     "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
     "enterAssetName": "Inserisci il nome dell'asset",
     "enterAssetTicker": "Inserisci il ticker dell'asset",
-    "enterTotalSupply": "Inserisci il totale delle unità fornite"
+    "enterTotalSupply": "Inserisci il totale delle unità fornite",
+    "enterDescription": "Inserisci la descrizione dell'asset"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

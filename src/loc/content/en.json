@@ -504,7 +504,8 @@
     "failToFetchIssueFee": "Failed to fetch asset issuance fee.",
     "enterAssetName": "Please enter asset name",
     "enterAssetTicker": "Please enter asset ticker",
-    "enterTotalSupply": "Please enter total supply units"
+    "enterTotalSupply": "Please enter total supply units",
+    "enterDescription": "Please enter asset description"
   },
   "community": {
     "fnfTitle": "Friends & Family",

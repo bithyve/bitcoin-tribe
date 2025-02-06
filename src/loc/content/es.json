@@ -504,7 +504,8 @@
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
     "enterAssetName": "Por favor, ingrese el nombre del activ",
     "enterAssetTicker": "Por favor, ingrese el ticker del activo",
-    "enterTotalSupply": "Por favor, ingrese la cantidad total de unidades"
+    "enterTotalSupply": "Por favor, ingrese la cantidad total de unidades",
+    "enterDescription": "Por favor, ingrese la descripción del activo"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

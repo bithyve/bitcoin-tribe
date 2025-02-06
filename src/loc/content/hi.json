@@ -504,7 +504,8 @@
     "failToFetchIssueFee": "संपत्ति निर्गमन शुल्क प्राप्त करने में विफल।",
     "enterAssetName": "कृपया एसेट का नाम दर्ज करें",
     "enterAssetTicker": "कृपया एसेट टिकर दर्ज करें",
-    "enterTotalSupply": "कृपया कुल आपूर्ति इकाइयाँ दर्ज करें"
+    "enterTotalSupply": "कृपया कुल आपूर्ति इकाइयाँ दर्ज करें",
+    "enterDescription": "कृपया संपत्ति का विवरण दर्ज करें"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
