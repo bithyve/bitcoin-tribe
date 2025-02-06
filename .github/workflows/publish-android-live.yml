@@ -1,0 +1,81 @@
+name: Publish Android live app to PlayStore
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev 
+
+jobs:
+  build-android-live:
+    name: Build and publish Android live app to PlayStore
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create required directories
+        run: mkdir -p android/app
+
+      - name: Decode and place signing key
+        run: |
+          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > android/app/release.keystore
+          ls -lah android/app/release.keystore  # Debugging: Ensure file exists
+          keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD }}" -v
+          echo "Signing key decoded and placed successfully"
+
+      - name: Create Google Play Service Account JSON
+        run: |
+          echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' | jq . > android/key.json
+          ls -lah android/key.json  # Verify file exists
+          cat android/key.json  # Debugging: Ensure JSON is valid
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Run Fastlane for Play Store Deployment
+        id: fastlane_step
+        env:
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+        run: |
+          cd android
+          bundle exec fastlane github_actions_live
+
+      - name: Post PR comment with deployment status
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "${{ steps.fastlane_step.outcome }}" == "success" ]]; then
+            STATUS="✅ Deployment to Play Store succeeded!"
+          else
+            STATUS="❌ Deployment to Play Store failed. Please check the logs for details."
+          fi
+          
+          gh pr comment ${{ github.event.pull_request.number }} --body "$STATUS"

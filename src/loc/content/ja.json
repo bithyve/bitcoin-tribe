@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "ウォレットタイプ",
     "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！",
     "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
-    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました"
+    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -501,7 +503,11 @@
     "payInprocess": "支払い中...",
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
     "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。",
-    "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。"
+    "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。",
+    "requestInvoiceProcessTitle": "リクエストを処理中",
+    "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください"
   },
   "community": {
     "fnfTitle": "友達と家族",

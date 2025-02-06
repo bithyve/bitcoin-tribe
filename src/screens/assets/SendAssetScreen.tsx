@@ -636,11 +636,16 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
-            if (assetAmount > assetData?.balance.spendable) {
+            if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
-              Toast(
+              if (Number(assetData?.balance.spendable) === 0) {
+                setAmountValidationError(
+                  sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+                );
+                return;
+              }
+              setAmountValidationError(
                 assets.checkSpendableAmt + assetData?.balance.spendable,
-                true,
               );
               return;
             }
