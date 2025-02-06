@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "ウォレットタイプ",
     "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！",
     "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
-    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました"
+    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -505,7 +507,11 @@
     "enterAssetName": "アセット名を入力してください",
     "enterAssetTicker": "アセットティッカーを入力してください",
     "enterTotalSupply": "総供給量を入力してください",
-    "enterDescription": "アセットの説明を入力してください"
+    "enterDescription": "アセットの説明を入力してください",
+    "requestInvoiceProcessTitle": "リクエストを処理中",
+    "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください"
   },
   "community": {
     "fnfTitle": "友達と家族",

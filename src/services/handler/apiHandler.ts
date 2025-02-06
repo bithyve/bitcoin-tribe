@@ -299,12 +299,14 @@ export class ApiHandler {
           walletImage: '',
           mnemonic: mnemonic,
         });
-        dbManager.createObject(RealmSchema.VersionHistory, {
-          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-          releaseNote: '',
-          date: new Date().toString(),
-          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-        });
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.VersionHistory,
+          'version',
+          `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          {
+            title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          },
+        );
       }
     } catch (error) {
       throw error;
@@ -340,7 +342,7 @@ export class ApiHandler {
           toFile: path,
         });
         const restore = await RGBServices.restore(mnemonic, path);
-        ApiHandler.setupNewApp({
+        await ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
@@ -348,12 +350,14 @@ export class ApiHandler {
           walletImage: '',
           mnemonic: mnemonic,
         });
-        dbManager.createObject(RealmSchema.VersionHistory, {
-          version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-          releaseNote: '',
-          date: new Date().toString(),
-          title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-        });
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.VersionHistory,
+          'version',
+          `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          {
+            title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
+          },
+        );
       } else {
         throw new Error(backup.error);
       }
@@ -1063,7 +1067,6 @@ export class ApiHandler {
                 }
               }
             }
-
           }
         }
         dbManager.createObjectBulk(
@@ -1317,7 +1320,7 @@ export class ApiHandler {
     amount: number;
     consignmentEndpoints: string;
     feeRate: number;
-    isDonation: boolean
+    isDonation: boolean;
   }) {
     try {
       const response = await RGBServices.sendAsset(

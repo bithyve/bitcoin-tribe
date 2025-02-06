@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "钱包类型",
     "copyWalletIDMsg": "钱包 ID 已成功复制！",
     "walletBackupSuccessMsg": "您的钱包已成功备份",
-    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份"
+    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -505,7 +507,11 @@
     "enterAssetName": "请输入资产名称",
     "enterAssetTicker": "请输入资产代码",
     "enterTotalSupply": "请输入总供应量",
-    "enterDescription": "请输入资产描述"
+    "enterDescription": "请输入资产描述",
+    "requestInvoiceProcessTitle": "正在处理您的请求",
+    "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
+    "cancelingTransferTitle": "正在取消您的转账",
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程"
   },
   "community": {
     "fnfTitle": "朋友和家人",

@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Tipo di Wallet",
     "copyWalletIDMsg": "ID del portafoglio copiato con successo!",
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
-    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati"
+    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -505,7 +507,11 @@
     "enterAssetName": "Inserisci il nome dell'asset",
     "enterAssetTicker": "Inserisci il ticker dell'asset",
     "enterTotalSupply": "Inserisci il totale delle unità fornite",
-    "enterDescription": "Inserisci la descrizione dell'asset"
+    "enterDescription": "Inserisci la descrizione dell'asset",
+    "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
+    "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
+    "cancelingTransferTitle": "Annullamento del trasferimento",
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Tipo de Billetera",
     "copyWalletIDMsg": "¡ID de billetera copiado con éxito!",
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
-    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito"
+    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -505,7 +507,11 @@
     "enterAssetName": "Por favor, ingrese el nombre del activ",
     "enterAssetTicker": "Por favor, ingrese el ticker del activo",
     "enterTotalSupply": "Por favor, ingrese la cantidad total de unidades",
-    "enterDescription": "Por favor, ingrese la descripción del activo"
+    "enterDescription": "Por favor, ingrese la descripción del activo",
+    "requestInvoiceProcessTitle": "Procesando su solicitud",
+    "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
