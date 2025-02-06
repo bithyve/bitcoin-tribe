@@ -244,8 +244,8 @@ function AddAsset() {
         <SelectOption
           title={
             issueAssetType === AssetType.Coin
-              ? 'Issue Coin'
-              : 'Issue Collectible'
+              ? assets.issueNewCoin
+              : assets.issueCollectibles
           }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
