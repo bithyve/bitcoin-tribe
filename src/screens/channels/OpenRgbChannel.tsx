@@ -103,6 +103,8 @@ const OpenRgbChannel = () => {
     return !pubkeyAddress || !capacity || !pushMsats || !assetId || !assetAmt;
   }, [pubkeyAddress, capacity, pushMsats, assetId, assetAmt]);
 
+  const sanitizeInput = text => text.replace(/[^0-9]/g, '');
+
   const handlePubKeyAddressChange = text => {
     if (!text.trim()) {
       setPubkeyAddress('');
@@ -114,7 +116,7 @@ const OpenRgbChannel = () => {
     }
   };
   const handleCapacityChange = text => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = sanitizeInput(text);
     if (sanitizedText) {
       setCapacity(sanitizedText);
       setCapacityValidationError(null);
@@ -124,7 +126,7 @@ const OpenRgbChannel = () => {
     }
   };
   const handlePushMSatsChange = text => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = sanitizeInput(text);
     if (sanitizedText) {
       setPushMsats(sanitizedText);
       setPushMSatsValidationError(null);
@@ -135,7 +137,7 @@ const OpenRgbChannel = () => {
   };
 
   const handleAssetAmountChange = text => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = sanitizeInput(text);
     if (sanitizedText) {
       setAssetAmt(sanitizedText);
       setAssetAmountValidationError(null);
