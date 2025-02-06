@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -15,7 +16,9 @@ import { Platform, StyleSheet, View } from 'react-native';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import { hp } from 'src/constants/responsive';
 import CancelIllustration from 'src/assets/images/cancelIllustration.svg';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { Keys } from 'src/storage';
 
 function TransferDetails({ route, navigation }) {
   const transaction: Transaction = route.params?.transaction;
@@ -24,6 +27,7 @@ function TransferDetails({ route, navigation }) {
   const { wallet, assets } = translations;
   const [visible, setVisible] = useState(false);
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const {
     mutate: cancelTransactionMutation,
@@ -37,7 +41,9 @@ function TransferDetails({ route, navigation }) {
 
   useEffect(() => {
     if (isSuccess) {
-      setVisible(true);
+      setTimeout(() => {
+        setVisible(true);
+      }, 600);
     } else if (isError) {
       setVisible(false);
       Toast(`${error}` || 'An error occurred', true);
@@ -80,6 +86,19 @@ function TransferDetails({ route, navigation }) {
           />
         </View>
       </ModalContainer>
+      <View>
+        <ResponsePopupContainer
+          visible={isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.cancelingTransferTitle}
+            subTitle={assets.cancelingTransferSubTitle}
+            illustrationPath={require('src/assets/images/jsons/cancelIllustration.json')}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }
