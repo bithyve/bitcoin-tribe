@@ -573,7 +573,11 @@
     "createChannelBulletPoint2": "资产ID和金额详情",
     "createChannelBulletPoint3": "可用资金（以聪为单位）",
     "createChannelTitle": "通道创建",
-    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。",
+    "enterPubKeyaddress": "请输入有效的公钥和地址",
+    "enterCapacityAmt": "请输入容量金额",
+    "enterMSats": "请输入毫聪（mSats）",
+    "enterAssetAmt": "请输入资产金额"
   },
   "lightning": {
     "sendTitle": "发送",

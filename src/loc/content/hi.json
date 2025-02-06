@@ -573,7 +573,11 @@
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
     "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि",
     "createChannelTitle": "चैनल निर्माण",
-    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।"
+    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।",
+    "enterPubKeyaddress": "कृपया वैध पब्लिक की और पता दर्ज करें",
+    "enterCapacityAmt": "कृपया क्षमता राशि दर्ज करें",
+    "enterMSats": "कृपया mSats दर्ज करें",
+    "enterAssetAmt": "कृपया संपत्ति राशि दर्ज करें"
   },
   "lightning": {
     "sendTitle": "भेजें",

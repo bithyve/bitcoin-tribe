@@ -573,7 +573,11 @@
     "createChannelBulletPoint2": "Dettagli ID e importo dell'asset",
     "createChannelBulletPoint3": "Fondi disponibili in satoshi",
     "createChannelTitle": "Creazione del Canale",
-    "createChannelSubTitle": "Rilassati mentre prepariamo tutto per te. Il tuo canale sarà aperto tra un momento."
+    "createChannelSubTitle": "Rilassati mentre prepariamo tutto per te. Il tuo canale sarà aperto tra un momento.",
+    "enterPubKeyaddress": "Inserisci una chiave pubblica e un indirizzo validi",
+    "enterCapacityAmt": "Inserisci l'importo della capacità",
+    "enterMSats": "Inserisci i milli-satoshi (mSats)",
+    "enterAssetAmt": "Inserisci l'importo dell'asset"
   },
   "lightning": {
     "sendTitle": "Invia",

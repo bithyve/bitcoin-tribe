@@ -573,7 +573,11 @@
     "createChannelBulletPoint2": "ID del activo y detalles del monto",
     "createChannelBulletPoint3": "Fondos disponibles en satoshis",
     "createChannelTitle": "Creación de Canal",
-    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento."
+    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento.",
+    "enterPubKeyaddress": "Por favor, ingrese una clave pública y dirección válidas",
+    "enterCapacityAmt": "Por favor, ingrese la cantidad de capacidad",
+    "enterMSats": "Por favor, ingrese los mSats",
+    "enterAssetAmt": "Por favor, ingrese la cantidad del activo"
   },
   "lightning": {
     "sendTitle": "Enviar",
