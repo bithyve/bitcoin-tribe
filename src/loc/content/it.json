@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Tipo di Wallet",
     "copyWalletIDMsg": "ID del portafoglio copiato con successo!",
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
-    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati"
+    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -503,7 +505,11 @@
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
     "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
     "spendable": "Disponibile: ",
-    "spendableBalanceInfo": "Il saldo utilizzabile dopo la detrazione degli importi bloccati a causa di transazioni in sospeso o \"in attesa della controparte\"."
+    "spendableBalanceInfo": "Il saldo utilizzabile dopo la detrazione degli importi bloccati a causa di transazioni in sospeso o \"in attesa della controparte\".",
+    "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
+    "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
+    "cancelingTransferTitle": "Annullamento del trasferimento",
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

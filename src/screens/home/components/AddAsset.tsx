@@ -13,7 +13,7 @@ import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import {
@@ -68,7 +68,7 @@ const ServiceFee = ({
 
   return (
     <View style={styles.containerFee}>
-      <View>
+      <View style={styles.wrapper}>
         <View style={styles.amtContainer}>
           <View style={styles.labelWrapper}>
             <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
@@ -79,7 +79,8 @@ const ServiceFee = ({
             )} sats`}</AppText>
           </View>
         </View>
-
+      </View>
+      <View>
         <SecondaryCTA
           title={common.skip}
           disabled={status === 'loading'}
@@ -89,8 +90,7 @@ const ServiceFee = ({
               onSkip();
             }, 400);
           }}
-          buttonColor={theme.colors.buy}
-          height={hp(18)}
+          height={hp(16)}
         />
 
         <View style={styles.primaryCtaStyle}>
@@ -173,7 +173,10 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
+      Toast(
+        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -241,8 +244,8 @@ function AddAsset() {
         <SelectOption
           title={
             issueAssetType === AssetType.Coin
-              ? 'Issue Coin'
-              : 'Issue Collectible'
+              ? assets.issueNewCoin
+              : assets.issueCollectibles
           }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
@@ -306,7 +309,10 @@ const getStyles = (theme: AppTheme) =>
     containerFee: {
       borderTopColor: theme.colors.borderColor,
       borderTopWidth: 1,
-      paddingTop: hp(15),
+      paddingTop: hp(5),
+    },
+    wrapper: {
+      height: '46%',
     },
     labelWrapper: {
       width: '45%',
@@ -314,6 +320,7 @@ const getStyles = (theme: AppTheme) =>
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'flex-end',
       width: '55%',
     },
     labelText: {
@@ -331,6 +338,8 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
       borderStyle: 'dashed',
       flexDirection: 'row',
+      width: '80%',
+      alignSelf: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',

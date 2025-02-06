@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "钱包类型",
     "copyWalletIDMsg": "钱包 ID 已成功复制！",
     "walletBackupSuccessMsg": "您的钱包已成功备份",
-    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份"
+    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -503,7 +505,11 @@
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
     "failToFetchIssueFee": "获取资产发行费用失败。",
     "spendable": "可用余额: ",
-    "spendableBalanceInfo": "The balance that can be used after deducting扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。"
+    "spendableBalanceInfo": "扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。",
+    "requestInvoiceProcessTitle": "正在处理您的请求",
+    "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
+    "cancelingTransferTitle": "正在取消您的转账",
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程"
   },
   "community": {
     "fnfTitle": "朋友和家人",

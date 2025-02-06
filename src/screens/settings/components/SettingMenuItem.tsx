@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { windowHeight } from 'src/constants/responsive';
 
 function SettingMenuItem({ SettingsMenu }) {
   const theme: AppTheme = useTheme();
@@ -39,12 +39,9 @@ function SettingMenuItem({ SettingsMenu }) {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    scrollingWrapper: {
-      flex: 1,
-      paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
-    },
+    scrollingWrapper: {},
     footer: {
-      height: windowHeight > 670 ? 80 : 40, // Adjust the height as needed
+      height: windowHeight > 670 ? 20 : 10,
     },
   });
 export default SettingMenuItem;

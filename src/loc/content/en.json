@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Wallet Type",
     "copyWalletIDMsg": "Wallet ID copied successfully!",
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
-    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up"
+    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -503,7 +505,11 @@
     "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step.",
     "failToFetchIssueFee": "Failed to fetch asset issuance fee.",
     "spendable": "Spendable: ",
-    "spendableBalanceInfo": "The balance that can be used after deducting amounts locked due to pending or \"waiting counterparty \" transactions."
+    "spendableBalanceInfo": "The balance that can be used after deducting amounts locked due to pending or \"waiting counterparty \" transactions.",
+    "requestInvoiceProcessTitle": "Processing Your Request",
+    "requestInvoiceProcessSubTitle": "Your invoice is being generated. This may take a few moments due to UTXO availability. Thank you for your patience!",
+    "cancelingTransferTitle": "Canceling Your Transfer",
+    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process"
   },
   "community": {
     "fnfTitle": "Friends & Family",
