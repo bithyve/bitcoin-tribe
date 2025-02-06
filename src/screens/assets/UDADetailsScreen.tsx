@@ -99,7 +99,7 @@ const UDADetailsScreen = () => {
           title={assets.issuedOn}
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
         />
-        {uda?.transactions && (
+        {uda?.transactions.length > 0 && (
           <UDATransaction
             transaction={uda?.transactions[0]}
             coin={uda.name}
