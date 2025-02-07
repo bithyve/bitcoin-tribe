@@ -58,6 +58,8 @@ import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
+import AddMediaFile from 'src/assets/images/addMediaFile.svg';
+import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -281,7 +283,7 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     try {
       const result = await pickImage(false, 5);
-      if(result && result?.length) {
+      if (result && result?.length) {
         setAttachments(result);
       }
     } catch (error) {
@@ -518,12 +520,7 @@ function IssueCollectibleScreen() {
               {assets.mediaFile}
             </AppText>
 
-            <UploadAssetFileButton
-              onPress={handlePickImage}
-              title={home.uploadFile}
-              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
-            />
-            {image && (
+            {image ? (
               <View style={styles.imageWrapper}>
                 <Image
                   source={{
@@ -540,6 +537,12 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
+            ) : (
+              <AppTouchable
+                onPress={handlePickImage}
+                style={styles.addMediafileIconWrapper}>
+                {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
+              </AppTouchable>
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
@@ -579,9 +582,9 @@ function IssueCollectibleScreen() {
               )}
               ListFooterComponent={() => (
                 <AppTouchable
-                  style={[styles.imageStyle]}
-                  onPress={selectAttchments}>
-                  <AppText style={{ fontSize: 70 }}>+</AppText>
+                  onPress={selectAttchments}
+                  style={[styles.selectAttatchmentIconWrapper]}>
+                  {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
                 </AppTouchable>
               )}
             />
@@ -672,7 +675,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     closeIconWrapper: {
       position: 'absolute',
       bottom: 0,
-      left: Platform.OS === 'ios' ? 80 : 85,
+      left: Platform.OS === 'ios' ? 70 : 80,
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
@@ -699,6 +702,13 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: hp(20),
+    },
+    addMediafileIconWrapper: {
+      marginVertical: hp(5),
+    },
+    selectAttatchmentIconWrapper: {
+      marginHorizontal: hp(5),
+      marginVertical: hp(12),
     },
   });
 export default IssueCollectibleScreen;
