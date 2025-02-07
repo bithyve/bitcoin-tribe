@@ -330,7 +330,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     amtContainer: {
-      marginVertical: hp(20),
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(50),
       padding: hp(15),
       borderRadius: 15,
       alignItems: 'center',
