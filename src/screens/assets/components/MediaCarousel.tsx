@@ -14,9 +14,11 @@ interface ImageItem {
 
 type mediaCarouselProps = {
   images: ImageItem[];
+  handleImageSelect: (item: ImageItem) => void;
 };
+
 const MediaCarousel = (props: mediaCarouselProps) => {
-  const { images } = props;
+  const { images, handleImageSelect } = props;
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
@@ -25,17 +27,21 @@ const MediaCarousel = (props: mediaCarouselProps) => {
       data={images}
       horizontal
       renderItem={({ item }) => (
-        <AppTouchable style={styles.imageWrapper}>
-          <Image
-            source={{
-              uri: Platform.select({
-                android: `file://${item.filePath}`,
-                ios: item.filePath,
-              }),
-            }}
-            style={styles.imagesStyle}
-          />
-        </AppTouchable>
+        <>
+          <AppTouchable
+            style={styles.imageWrapper}
+            onPress={() => handleImageSelect(item)}>
+            <Image
+              source={{
+                uri: Platform.select({
+                  android: `file://${item.filePath}`,
+                  ios: item.filePath,
+                }),
+              }}
+              style={styles.imagesStyle}
+            />
+          </AppTouchable>
+        </>
       )}
     />
   );

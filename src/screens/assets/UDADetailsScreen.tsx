@@ -1,11 +1,12 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
+import ImageViewing from 'react-native-image-viewing';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
@@ -43,6 +44,9 @@ const UDADetailsScreen = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, common, home } = translations;
   const theme: AppTheme = useTheme();
+  const [visible, setVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -94,7 +98,13 @@ const UDADetailsScreen = () => {
         <Item title={assets.assetId} value={assetId} />
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
-        <MediaCarousel images={uda.token.attachments} />
+        <MediaCarousel
+          images={uda.token.attachments}
+          handleImageSelect={item => {
+            setVisible(true);
+            setSelectedImage(item?.filePath);
+          }}
+        />
         <Item
           title={assets.issuedOn}
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
@@ -113,6 +123,21 @@ const UDADetailsScreen = () => {
             disabled={uda?.transactions.length === 1}
           />
         )}
+        <>
+          <ImageViewing
+            images={[
+              {
+                uri: Platform.select({
+                  android: `file://${selectedImage}`,
+                  ios: selectedImage,
+                }),
+              },
+            ]}
+            imageIndex={0}
+            visible={visible}
+            onRequestClose={() => setVisible(false)}
+          />
+        </>
       </ScrollView>
     </ScreenContainer>
   );
