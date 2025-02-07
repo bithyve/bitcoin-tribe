@@ -675,7 +675,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     closeIconWrapper: {
       position: 'absolute',
       bottom: 0,
-      left: Platform.OS === 'ios' ? 70 : 80,
+      left: 70,
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
