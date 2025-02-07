@@ -418,7 +418,9 @@
     "unColoured": "UnColoured",
     "availableTxnFee": "Available transaction fee",
     "output": "Output",
-    "utxoValue": "UTXO Value"
+    "utxoValue": "UTXO Value",
+    "requestTSatsProcessTitle": "Processing Your Request",
+    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

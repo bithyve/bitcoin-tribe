@@ -418,7 +418,9 @@
     "unColoured": "非彩色",
     "availableTxnFee": "可用交易费",
     "output": "输出",
-    "utxoValue": "UTXO 值"
+    "utxoValue": "UTXO 值",
+    "requestTSatsProcessTitle": "正在处理您的请求",
+    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

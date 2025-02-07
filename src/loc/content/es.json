@@ -418,7 +418,9 @@
     "unColoured": "Sin color",
     "availableTxnFee": "Tarifa de transacción disponible",
     "output": "Salida",
-    "utxoValue": "Valor UTXO"
+    "utxoValue": "Valor UTXO",
+    "requestTSatsProcessTitle": "Procesando su solicitud",
+    "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

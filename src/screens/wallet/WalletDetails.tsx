@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Animated } from 'react-native';
+import { StyleSheet, Animated, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
 import { useMutation, UseMutationResult } from 'react-query';
@@ -29,6 +29,9 @@ import BuyModal from './components/BuyModal';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
@@ -36,11 +39,18 @@ function WalletDetails({ navigation, route }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletStrings, common, sendScreen, home } = translations;
+  const {
+    wallet: walletStrings,
+    common,
+    sendScreen,
+    home,
+    assets,
+  } = translations;
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
@@ -187,7 +197,24 @@ function WalletDetails({ navigation, route }) {
           onPrimaryPress={() => openLink('https://t.me/BitcoinTribeSupport')}
         />
       </ResponsePopupContainer>
-      <ModalLoading visible={isLoading} />
+      <View>
+        <ResponsePopupContainer
+          visible={isLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={walletStrings.requestTSatsProcessTitle}
+            subTitle={walletStrings.requestTSatsProcessSubTitle}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
+                : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
+            }
+          />
+        </ResponsePopupContainer>
+      </View>
+      {/* <ModalLoading visible={isLoading} /> */}
     </ScreenContainer>
   );
 }
