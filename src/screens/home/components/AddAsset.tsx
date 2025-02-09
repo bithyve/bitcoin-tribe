@@ -146,7 +146,7 @@ function AddAsset() {
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
-          }, 300);
+          }, 500);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
