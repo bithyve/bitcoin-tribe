@@ -134,6 +134,27 @@ export default class Relay {
             name: asset.media.filePath.split('/').pop(),
             type: asset.media.mime,
           });
+        } else if (asset?.token?.media) {
+          formData.append('media', {
+            uri: Platform.select({
+              android: `file://${asset.token.media.filePath}`,
+              ios: asset.token.media.filePath,
+            }),
+            name: asset.token.media.filePath.split('/').pop(),
+            type: asset.token.media.mime,
+          });
+        } 
+        if (asset?.token?.attachments) {
+          asset.token.attachments.forEach(attachment => {
+            formData.append('attachments', {
+              uri: Platform.select({
+                android: `file://${attachment.filePath}`,
+                ios: attachment.filePath,
+              }),
+              name: attachment.filePath.split('/').pop(),
+              type: attachment.mime,
+            });
+          });
         }
         res = await RestClient.post(`${RELAY}/registry/add`, formData, {
           'Content-Type': 'multipart/form-data',

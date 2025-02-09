@@ -1265,7 +1265,7 @@ export class ApiHandler {
           response?.assetId,
         ) as unknown as Collectible;
         if (addToRegistry) {
-          // await Relay.registerAsset(app.id, { ...collectible });
+          await Relay.registerAsset(app.id, { ...collectible });
           const wallet: Wallet = dbManager
             .getObjectByIndex(RealmSchema.Wallet)
             .toJSON();
