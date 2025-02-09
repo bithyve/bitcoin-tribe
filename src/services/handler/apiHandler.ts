@@ -997,6 +997,7 @@ export class ApiHandler {
         );
       }
       if (assets.cfa) {
+        const cfas = [];
         if (ApiHandler.appType === AppType.NODE_CONNECT) {
           for (let i = 0; i < assets.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
@@ -1007,54 +1008,71 @@ export class ApiHandler {
             const ext = assets.cfa[i].media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
             await RNFS.writeFile(path, base64, 'base64');
-            assets.cfa[i].media.filePath = path;
+            cfas.push({
+              ...assets.cfa[i],
+              media: {
+                ...assets.cfa[i].media,
+                filePath: path,
+              },
+            });
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
-          for (let i = 0; i < assets.cfa.length; i++) {
-            const element: Collectible = assets.cfa[i];
+          for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-            const exists = await RNFS.exists(destination);
-            if (!exists) {
-              await RNFS.copyFile(
-                element.media.filePath,
-                `${element.media.filePath}.${ext}`,
-              );
+            
+            if (!(await RNFS.exists(destination))) {
+              await RNFS.copyFile(element.media.filePath, destination);
             }
-            assets.cfa[i].media.filePath = destination;
+            
+            cfas.push({
+              ...element,
+              media: {
+                ...element.media,
+                filePath: destination
+              }
+            });
           }
+        } else {
+          cfas.push(...assets.cfa);
         }
         dbManager.createObjectBulk(
           RealmSchema.Collectible,
-          assets.cfa,
+          cfas,
           Realm.UpdateMode.Modified,
         );
       }
 
       if (assets.uda) {
+        const udas = [];
         if (ApiHandler.appType === AppType.NODE_CONNECT) {
           // todo
         }
         if (ApiHandler.appType === AppType.ON_CHAIN) {
           for (let i = 0; i < assets.uda.length; i++) {
-            const element: UniqueDigitalAsset = assets.uda[i];
+            const uda: UniqueDigitalAsset = assets.uda[i];
             assets.uda[i].token.attachments = Object.values(
-              element.token.attachments,
+              uda.token.attachments,
             );
+            uda.token.attachments = Object.values(uda.token.attachments);
             if (Platform.OS === 'ios') {
-              const ext = element.token.media.mime.split('/')[1];
-              const destination = `${element.token.media.filePath}.${ext}`;
+              const ext = uda.token.media.mime.split('/')[1];
+              const destination = `${uda.token.media.filePath}.${ext}`;
               const exists = await RNFS.exists(destination);
               if (!exists) {
                 await RNFS.copyFile(
-                  element.token.media.filePath,
-                  `${element.token.media.filePath}.${ext}`,
+                  uda.token.media.filePath,
+                  `${uda.token.media.filePath}.${ext}`,
                 );
               }
-              assets.uda[i].token.media.filePath = destination;
-              for (let j = 0; j < element.token.attachments.length; j++) {
-                const attachment = element.token.attachments[j];
+              // assets.uda[i].token.media.filePath = destination;
+              uda.token.media = {
+                ...uda.token.media,
+                filePath: destination,
+              };
+              for (let j = 0; j < uda.token.attachments.length; j++) {
+                const attachment = uda.token.attachments[j];
                 const ex = attachment.mime.split('/')[1];
                 const dest = `${attachment.filePath}.${ex}`;
                 const isexists = await RNFS.exists(dest);
@@ -1063,15 +1081,20 @@ export class ApiHandler {
                     attachment.filePath,
                     `${attachment.filePath}.${ex}`,
                   );
-                  assets.uda[i].token.attachments[j].filePath = dest;
+                  // assets.uda[i].token.attachments[j].filePath = dest;
                 }
+                uda.token.attachments[j] = {
+                  ...uda.token.attachments[j],
+                  filePath: dest,
+                };
               }
             }
+            udas.push(uda);
           }
         }
         dbManager.createObjectBulk(
           RealmSchema.UniqueDigitalAsset,
-          assets.uda,
+          udas,
           Realm.UpdateMode.Modified,
         );
       }
