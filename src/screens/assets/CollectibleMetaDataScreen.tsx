@@ -74,7 +74,7 @@ const CollectibleMetaDataScreen = () => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { assets } = translations;
+  const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -132,9 +132,12 @@ const CollectibleMetaDataScreen = () => {
                 style={styles.imageStyle}
               />
             </View>
-            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
-              title={assets.details}
+              title={home.assetName}
+              value={collectible && collectible.name}
+            />
+            <Item
+              title={home.assetDescription}
               value={collectible && collectible.details}
             />
             <AssetIDContainer assetId={assetId} />

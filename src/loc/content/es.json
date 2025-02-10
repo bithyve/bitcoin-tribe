@@ -507,6 +507,8 @@
     "listYourAssetInRegTitle": "Lista tu activo en el registro",
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
+    "spendable": "Disponible: ",
+    "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\".",
     "enterAssetName": "Por favor, ingrese el nombre del activ",
     "enterAssetTicker": "Por favor, ingrese el ticker del activo",
     "enterTotalSupply": "Por favor, ingrese la cantidad total de unidades",

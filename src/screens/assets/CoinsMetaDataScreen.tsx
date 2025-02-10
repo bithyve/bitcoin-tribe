@@ -54,7 +54,7 @@ const CoinsMetaDataScreen = () => {
   const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { assets } = translations;
+  const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
@@ -86,9 +86,9 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.rowWrapper}>
-            <Item title={assets.name} value={coin.name} width={'45%'} />
+            <Item title={home.assetName} value={coin.name} width={'45%'} />
             <Item
-              title={assets.ticker}
+              title={home.assetTicker}
               value={coin.metaData && coin.metaData.ticker}
               width={'45%'}
             />
