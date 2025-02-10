@@ -1,16 +1,14 @@
-import {
-  FlatList,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import React, { useContext, useEffect } from 'react';
-import ScreenContainer from 'src/components/ScreenContainer';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
+import { useTheme } from 'react-native-paper';
+import moment from 'moment';
+import ImageViewing from 'react-native-image-viewing';
+
+import ScreenContainer from 'src/components/ScreenContainer';
 import { UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -18,7 +16,6 @@ import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, wp } from 'src/constants/responsive';
 import AppHeader from 'src/components/AppHeader';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { Item } from './CollectibleMetaDataScreen';
@@ -26,10 +23,10 @@ import IconSend from 'src/assets/images/icon_send.svg';
 import IconSendLight from 'src/assets/images/icon_send_light.svg';
 import RoundedCTA from 'src/components/RoundedCTA';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
-import moment from 'moment';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import AppTouchable from 'src/components/AppTouchable';
+import MediaCarousel from './components/MediaCarousel';
+import UDATransaction from './components/UDATransaction';
+import AssetTransaction from '../wallet/components/AssetTransaction';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -40,13 +37,16 @@ const UDADetailsScreen = () => {
     RealmSchema.UniqueDigitalAsset,
     assetId,
   );
+
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { assets, common } = translations;
+  const { assets, common, home } = translations;
   const theme: AppTheme = useTheme();
+  const [visible, setVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -58,11 +58,11 @@ const UDADetailsScreen = () => {
     });
     return unsubscribe;
   }, [navigation, assetId]);
-
+  console.log('uda', uda);
   return (
     <ScreenContainer>
       <AppHeader title={uda.name} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
             uri: Platform.select({
@@ -95,33 +95,51 @@ const UDADetailsScreen = () => {
           />
         </View>
 
-        <Item title={assets.name} value={uda.name} />
-        <Item title={assets.ticker} value={uda.ticker} />
-        <Item title={assets.details} value={uda.details} />
+        <Item title={home.assetName} value={uda.name} />
+        <Item title={assets.assetId} value={assetId} />
+        <Item title={home.assetTicker} value={uda.ticker} />
+        <Item title={home.assetDescription} value={uda.details} />
+        <MediaCarousel
+          images={uda.token.attachments}
+          handleImageSelect={item => {
+            setVisible(true);
+            setSelectedImage(item?.filePath);
+          }}
+        />
         <Item
           title={assets.issuedOn}
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
         />
-
-        <View>
-          <FlatList
-            data={uda.token.attachments}
-            horizontal
-            renderItem={({ item }) => (
-              <AppTouchable style={styles.imageWrapper}>
-                <Image
-                  source={{
-                    uri:
-                      Platform.OS === 'ios'
-                        ? item.filePath.replace('file://', '')
-                        : item.filePath,
-                  }}
-                  style={styles.imagesStyle}
-                />
-              </AppTouchable>
-            )}
+        {uda?.transactions.length > 0 && (
+          <AssetTransaction
+            transaction={uda?.transactions[0]}
+            coin={uda.name}
+            onPress={() => {
+              navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                assetId: assetId,
+                transactions: uda?.transactions,
+                assetName: uda.name,
+              });
+            }}
+            disabled={uda?.transactions.length === 1}
+            assetFace={uda.assetIface}
           />
-        </View>
+        )}
+        <>
+          <ImageViewing
+            images={[
+              {
+                uri: Platform.select({
+                  android: `file://${selectedImage}`,
+                  ios: selectedImage,
+                }),
+              },
+            ]}
+            imageIndex={0}
+            visible={visible}
+            onRequestClose={() => setVisible(false)}
+          />
+        </>
       </ScrollView>
     </ScreenContainer>
   );
@@ -140,19 +158,6 @@ const getStyles = () =>
       paddingBottom: 0,
       marginVertical: wp(5),
       alignItems: 'center',
-    },
-    imagesStyle: {
-      height: hp(80),
-      width: hp(80),
-      borderRadius: hp(15),
-      marginVertical: hp(10),
-      marginHorizontal: hp(5),
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    imageWrapper: {
-      height: 100,
-      width: 100,
     },
   });
 export default UDADetailsScreen;
