@@ -62,8 +62,18 @@ const RgbChannels = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={`${node.channelsTitle}  ${data ? `(${data.length})` : ''}`}
-        rightIcon={data && data.length ? isThemeDark ? <PlusIcon /> : <PlusLightIcon /> : null}
+        title={`${node.channelsTitle}  ${
+          data && data?.length ? `(${data?.length})` : ''
+        }`}
+        rightIcon={
+          data && data.length ? (
+            isThemeDark ? (
+              <PlusIcon />
+            ) : (
+              <PlusLightIcon />
+            )
+          ) : null
+        }
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)
         }
@@ -93,7 +103,11 @@ const RgbChannels = () => {
             />
           )}
           ListEmptyComponent={
-            <EmptyChannelsStateView onPress={()=> navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)}/>
+            <EmptyChannelsStateView
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.OPENRGBCHANNEL)
+              }
+            />
           }
         />
       )}
