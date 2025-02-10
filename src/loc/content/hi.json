@@ -506,6 +506,10 @@
     "failToFetchIssueFee": "संपत्ति निर्गमन शुल्क प्राप्त करने में विफल।",
     "spendable": "खर्च करने योग्य: ",
     "spendableBalanceInfo": "लंबित या \"प्रतीक्षारत प्रतिपक्ष\" लेनदेन के कारण अवरुद्ध राशि को घटाने के बाद उपयोग की जा सकने वाली शेष राशि।",
+    "enterAssetName": "कृपया एसेट का नाम दर्ज करें",
+    "enterAssetTicker": "कृपया एसेट टिकर दर्ज करें",
+    "enterTotalSupply": "कृपया कुल आपूर्ति इकाइयाँ दर्ज करें",
+    "enterDescription": "कृपया संपत्ति का विवरण दर्ज करें",
     "requestInvoiceProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
     "requestInvoiceProcessSubTitle": "आपका इनवॉइस जेनरेट किया जा रहा है। UTXO की उपलब्धता के कारण इसमें कुछ समय लग सकता है। आपके धैर्य के लिए धन्यवाद!",
     "cancelingTransferTitle": "आपका ट्रांसफर रद्द किया जा रहा है",
@@ -577,7 +581,11 @@
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
     "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि",
     "createChannelTitle": "चैनल निर्माण",
-    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।"
+    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।",
+    "enterPubKeyaddress": "कृपया वैध पब्लिक की और पता दर्ज करें",
+    "enterCapacityAmt": "कृपया क्षमता राशि दर्ज करें",
+    "enterMSats": "कृपया mSats दर्ज करें",
+    "enterAssetAmt": "कृपया संपत्ति राशि दर्ज करें"
   },
   "lightning": {
     "sendTitle": "भेजें",
