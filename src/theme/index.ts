@@ -126,7 +126,7 @@ const CombinedDefaultTheme: AppTheme = {
     popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
-    inputBackground: Colors.BrightGray,
+    inputBackground: Colors.White,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,

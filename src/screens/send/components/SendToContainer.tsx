@@ -46,6 +46,8 @@ import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
+
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
@@ -364,7 +366,13 @@ function SendToContainer({
             }
             inputStyle={styles.recipientInputStyle}
             rightText={!recipientAddress && sendScreen.paste}
-            rightIcon={recipientAddress && <ClearIcon />}
+            rightIcon={
+              recipientAddress && isThemeDark ? (
+                <ClearIcon />
+              ) : (
+                <ClearIconLight />
+              )
+            }
             onRightTextPress={() =>
               recipientAddress ? setRecipientAddress('') : handlePasteAddress()
             }

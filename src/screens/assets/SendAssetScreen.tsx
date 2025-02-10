@@ -34,6 +34,7 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -473,7 +474,9 @@ const SendAssetScreen = () => {
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
           inputStyle={styles.inputStyle}
           rightText={!invoice && sendScreen.paste}
-          rightIcon={invoice && <ClearIcon />}
+          rightIcon={
+            invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
           onRightTextPress={() =>
             invoice ? setInvoice('') : handlePasteAddress()
           }
