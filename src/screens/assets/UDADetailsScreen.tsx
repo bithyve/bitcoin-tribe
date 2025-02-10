@@ -26,6 +26,7 @@ import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import MediaCarousel from './components/MediaCarousel';
 import UDATransaction from './components/UDATransaction';
+import AssetTransaction from '../wallet/components/AssetTransaction';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ const UDADetailsScreen = () => {
     });
     return unsubscribe;
   }, [navigation, assetId]);
-
+  console.log('uda', uda);
   return (
     <ScreenContainer>
       <AppHeader title={uda.name} />
@@ -110,7 +111,7 @@ const UDADetailsScreen = () => {
           value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
         />
         {uda?.transactions.length > 0 && (
-          <UDATransaction
+          <AssetTransaction
             transaction={uda?.transactions[0]}
             coin={uda.name}
             onPress={() => {
@@ -121,6 +122,7 @@ const UDADetailsScreen = () => {
               });
             }}
             disabled={uda?.transactions.length === 1}
+            assetFace={uda.assetIface}
           />
         )}
         <>

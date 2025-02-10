@@ -93,7 +93,16 @@ function TransactionsList({
           )
         }
         renderItem={({ item }) => (
-          <AssetTransaction transaction={item} coin={coin} />
+          <AssetTransaction
+            transaction={item}
+            coin={coin}
+            onPress={() => {
+              navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+                transaction: item,
+                coin: coin,
+              });
+            }}
+          />
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
