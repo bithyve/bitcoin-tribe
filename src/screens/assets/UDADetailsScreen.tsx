@@ -25,8 +25,8 @@ import RoundedCTA from 'src/components/RoundedCTA';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import MediaCarousel from './components/MediaCarousel';
-import UDATransaction from './components/UDATransaction';
 import AssetTransaction from '../wallet/components/AssetTransaction';
+import AssetIDContainer from './components/AssetIDContainer';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -96,7 +96,7 @@ const UDADetailsScreen = () => {
         </View>
 
         <Item title={home.assetName} value={uda.name} />
-        <Item title={assets.assetId} value={assetId} />
+        <AssetIDContainer assetId={assetId} />
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
         <MediaCarousel
