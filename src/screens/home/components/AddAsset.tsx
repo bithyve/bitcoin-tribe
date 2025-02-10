@@ -224,6 +224,7 @@ function AddAsset() {
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
+            if(payServiceFeeFeeMutation.isLoading) return
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
