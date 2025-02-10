@@ -7,7 +7,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import Toast from 'react-native-root-toast';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
@@ -22,7 +21,7 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import SelectAssetIDView from './components/SelectAssetIDView';
 import RGBAssetDropdownList from './components/RGBAssetDropdownList';
 import { Keys } from 'src/storage';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
@@ -60,8 +59,8 @@ const OpenRgbChannel = () => {
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin);
-  const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered('balance.spendable > 0');
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible).filtered('balance.spendable > 0');
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined.sort((a, b) => a.timestamp - b.timestamp);
