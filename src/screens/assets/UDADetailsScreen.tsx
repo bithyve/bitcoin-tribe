@@ -28,10 +28,10 @@ import AssetTransaction from '../wallet/components/AssetTransaction';
 import AssetIDContainer from './components/AssetIDContainer';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
-
+import { requestAppReview } from 'src/services/appreview';
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
-  const { assetId } = useRoute().params;
+  const { assetId, askReview } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
@@ -48,6 +48,14 @@ const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview]);
 
   const showVerifyIssuer = useMemo(() => {
     return !uda?.issuer?.verified && uda.transactions.some(transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE);

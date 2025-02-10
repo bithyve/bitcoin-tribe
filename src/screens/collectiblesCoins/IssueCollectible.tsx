@@ -22,7 +22,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -166,7 +165,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.COLLECTIBLE);
+        navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true });
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -228,7 +227,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.COLLECTIBLE);
+        navigation.replace(NavigationRoutes.UDADETAILS, { assetId: response.assetId, askReview: true });
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'

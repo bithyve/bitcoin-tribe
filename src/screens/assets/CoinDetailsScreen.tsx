@@ -5,7 +5,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -21,11 +20,12 @@ import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
+import { requestAppReview } from 'src/services/appreview';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId } = useRoute().params;
+  const { assetId, askReview } = useRoute().params;
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -34,6 +34,14 @@ const CoinDetailsScreen = () => {
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

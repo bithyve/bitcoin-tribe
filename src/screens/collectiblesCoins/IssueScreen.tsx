@@ -11,7 +11,6 @@ import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -123,7 +122,9 @@ function IssueScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.ASSETS);
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.COINDETAILS, { assetId: response.assetId, askReview: true });
+        }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
