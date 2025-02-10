@@ -1,4 +1,4 @@
-import { Animated, Image, Platform, StyleSheet } from 'react-native';
+import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -19,7 +19,8 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
+import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -110,7 +111,12 @@ const CollectibleDetailsScreen = () => {
           })
         }
       />
-
+      <View style={styles.spendableBalanceWrapper}>
+        <AssetSpendableAmtView
+          spendableBalance={collectible?.balance?.spendable}
+          style={styles.toolTipCotainer}
+        />
+      </View>
       <TransactionsList
         transactions={transactionsData}
         isLoading={isLoading}
@@ -126,6 +132,7 @@ const CollectibleDetailsScreen = () => {
         coin={collectible.name}
         assetId={assetId}
         scrollY={scrollY}
+        style={styles.transactionContainer}
       />
     </ScreenContainer>
   );
@@ -136,6 +143,15 @@ const getStyles = () =>
       height: hp(40),
       width: hp(40),
       borderRadius: 10,
+    },
+    spendableBalanceWrapper: {
+      top: -30,
+    },
+    transactionContainer: {
+      top: -25,
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 110 : 100,
     },
   });
 export default CollectibleDetailsScreen;
