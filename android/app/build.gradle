@@ -84,6 +84,9 @@ android {
         versionCode 91
         versionName "0.2.8"
         missingDimensionStrategy 'react-native-camera', 'general'
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'tribe'
+        ]
     }
     signingConfigs {
         release {

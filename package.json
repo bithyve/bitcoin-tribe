@@ -58,6 +58,7 @@
     "react": "18.2.0",
     "react-localization": "1.0.19",
     "react-native": "0.74.1",
+    "react-native-app-auth": "8.0.1",
     "react-native-biometrics": "3.0.1",
     "react-native-canvas": "0.1.40",
     "react-native-config": "^1.5.2",
