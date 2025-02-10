@@ -143,7 +143,7 @@ export default class Relay {
             name: asset.token.media.filePath.split('/').pop(),
             type: asset.token.media.mime,
           });
-        } 
+        }
         if (asset?.token?.attachments) {
           asset.token.attachments.forEach(attachment => {
             formData.append('attachments', {
@@ -158,6 +158,75 @@ export default class Relay {
         }
         res = await RestClient.post(`${RELAY}/registry/add`, formData, {
           'Content-Type': 'multipart/form-data',
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static verifyIssuer = async (
+    appID: string,
+    assetId: string,
+    issuer: {
+      type: string,
+      id: string,
+      name: string,
+      username: string,
+    },
+  ): Promise<{ status: boolean }> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.post(`${RELAY}/registry/verifyissuer`, {
+          appID,
+          assetId,
+          issuer,
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getAssetsVerificationStatus = async (
+    assetIds: string[],
+  ): Promise<{
+    status: boolean,
+    records?: {
+      assetId: string,
+      issuer: {
+        verified: boolean,
+        verifiedBy: {
+          type: string,
+          name: string,
+          id: string,
+          username: string,
+        }[]
+      }}[],
+    error?: string;
+  }> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.post(`${RELAY}/registry/getverificationstatus`, {
+          assetIds,
         });
       } catch (err) {
         if (err.response) {

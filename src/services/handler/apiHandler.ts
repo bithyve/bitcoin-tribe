@@ -1101,6 +1101,7 @@ export class ApiHandler {
       if (ApiHandler.appType === AppType.ON_CHAIN) {
         ApiHandler.backup();
       }
+      await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
     }
@@ -1908,6 +1909,43 @@ export class ApiHandler {
         throw new Error(response.error);
       } else {
         throw new Error('Error - Canceling transfer ');
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async updateAssetVerificationStatus() {
+    try {
+      const getUnverifiedAssets = (schema: RealmSchema) => 
+        dbManager.getCollection(schema).filter(asset => !asset.issuer || asset?.issuer?.verified === false);
+
+      const schemas = [
+        { schema: RealmSchema.Coin, type: 'coin' },
+        { schema: RealmSchema.Collectible, type: 'collectible' },
+        { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' }
+      ];
+
+      const assetIds = schemas.flatMap(({ schema }) => 
+        getUnverifiedAssets(schema).map(asset => asset.assetId)
+      );
+      if (assetIds.length === 0) return;
+      const response = await Relay.getAssetsVerificationStatus(assetIds);
+      if (!response.status) {
+        throw new Error(response.error || 'Failed to update asset verification status');
+      }
+      if (response?.records) {
+        for (const { assetId, issuer } of response.records) {
+          for (const { schema } of schemas) {
+            const asset = dbManager.getCollection(schema).find(a => a.assetId === assetId);
+            if (asset) {
+              dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+                issuer
+              });
+            }
+          }
+        }
       }
     } catch (error) {
       console.log(error);
