@@ -79,26 +79,27 @@ const UDADetailsScreen = () => {
           style={styles.imageStyle}
         />
 
-        <View style={styles.buttonWrapper}>
-          <RoundedCTA
-            colors={[
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
-            ]}
-            textColor={theme.colors.roundSendCTATitle}
-            icon={isThemeDark ? <IconSend /> : <IconSendLight />}
-            buttonColor={theme.colors.sendCtaBorderColor}
-            title={common.send}
-            onPress={() =>
-              navigation.navigate(NavigationRoutes.SCANASSET, {
-                assetId: assetId,
-                rgbInvoice: '',
-              })
-            }
-            width={wp(105)}
-          />
-        </View>
+        {uda.balance.spendable > 0 &&
+          <View style={styles.buttonWrapper}>
+            <RoundedCTA
+              colors={[
+                theme.colors.inputBackground,
+                theme.colors.inputBackground,
+                theme.colors.inputBackground,
+              ]}
+              textColor={theme.colors.roundSendCTATitle}
+              icon={isThemeDark ? <IconSend /> : <IconSendLight />}
+              buttonColor={theme.colors.sendCtaBorderColor}
+              title={common.send}
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.SCANASSET, {
+                  assetId: assetId,
+                  rgbInvoice: '',
+                })
+              }
+              width={wp(105)}
+            />
+          </View>}
 
         {
           uda?.issuer && uda.issuer.verified && (
