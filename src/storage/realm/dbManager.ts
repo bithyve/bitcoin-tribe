@@ -166,9 +166,9 @@ const getObjectByField = (
  * generic :: fetches an object corresponding to provided schema and the supplied id
  * @param  {RealmSchema} schema
  */
-const getCollection = (schema: RealmSchema) => {
+const getCollection = <T extends Realm.Object>(schema: RealmSchema): T[] => {
   const objects = realm.get(schema);
-  return objects.toJSON();
+  return objects.toJSON() as T[];
 };
 
 /**
