@@ -914,6 +914,7 @@ export class ApiHandler {
           },
         );
       }
+      ApiHandler.viewUtxos();
     } catch (error) {
       console.log('errors', error);
       throw error;
