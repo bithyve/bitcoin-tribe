@@ -519,7 +519,9 @@
     "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください",
     "hideCoin": "コインを非表示",
     "hideCollectible": "コレクティブルを非表示",
-    "hideUda": "UDAを非表示"
+    "hideUda": "UDAを非表示",
+    "noHiddenAssetTitle": "非表示の資産はありません",
+    "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

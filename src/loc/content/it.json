@@ -519,7 +519,9 @@
     "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione",
     "hideCoin": "Nascondi Moneta",
     "hideCollectible": "Nascondi Collezionabile",
-    "hideUda": "Nascondi UDA"
+    "hideUda": "Nascondi UDA",
+    "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

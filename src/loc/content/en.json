@@ -519,7 +519,9 @@
     "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process",
     "hideCoin": "Hide Coin",
     "hideCollectible": "Hide Collectible",
-    "hideUda": "Hide UDA"
+    "hideUda": "Hide UDA",
+    "noHiddenAssetTitle": "No Hidden Assets",
+    "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime."
   },
   "community": {
     "fnfTitle": "Friends & Family",

@@ -107,8 +107,8 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
         }
         ListEmptyComponent={
           <EmptyStateView
-            title={home.noAssetTitle}
-            subTitle={home.noCoinAssetSubTitle}
+            title={assets.noHiddenAssetTitle}
+            subTitle={assets.noHiddenAssetSubTitle}
             IllustartionImage={
               isThemeDark ? (
                 <NoAssetsIllustration />

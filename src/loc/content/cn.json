@@ -519,7 +519,9 @@
     "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程",
     "hideCoin": "隐藏币",
     "hideCollectible": "隐藏藏品",
-    "hideUda": "隐藏 UDA"
+    "hideUda": "隐藏 UDA",
+    "noHiddenAssetTitle": "没有隐藏资产",
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
