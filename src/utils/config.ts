@@ -32,6 +32,7 @@ class Configuration {
   public RELAY_URL: string = 'https://bhrelay.appspot.com';
   public RELAY_VERSION: string = 'v1';
   public RELAY: string = `${this.RELAY_URL}/api/${this.RELAY_VERSION}`;
+  public TWITTER_CLIENT_ID: string = config.TWITTER_CLIENT_ID;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();

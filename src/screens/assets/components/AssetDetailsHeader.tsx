@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
@@ -25,6 +24,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -107,9 +107,14 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               </View>
             )}
           </View>
-          <AppText variant="body2" style={styles.assetNameText}>
-            {assetName}
-          </AppText>
+          <View style={styles.row}>
+            <AppText variant="body2" style={styles.assetNameText}>
+              {assetName}
+            </AppText>
+            {asset.issuer?.verified && (
+              <IconVerified width={24} height={24} />
+            )}
+          </View>
         </View>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
@@ -143,7 +148,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             ) : (
               <AppTouchable
                 style={styles.onChainTotalBalanceWrapper}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View style={styles.totalBalanceWrapper1}>
                   <AppText variant="pageTitle2" style={styles.totalBalance}>
                     {numberWithCommas(
@@ -277,10 +282,15 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     assetNameText: {
       textAlign: 'center',
-      top: -50,
     },
     onChainTotalBalanceWrapper: {
       alignItems: 'center',
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      top: -50,
+      justifyContent: 'center',
     },
   });
 export default AssetDetailsHeader;

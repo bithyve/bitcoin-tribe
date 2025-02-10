@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
@@ -23,6 +22,7 @@ import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -111,12 +111,14 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     </View>
                   </View>
                   <View>
-                    <AppText variant="body1" style={styles.assetTickerText}>
-                      {asset.ticker}
-                    </AppText>
-                    <AppText variant="body2" style={styles.assetNameText}>
-                      {asset.name}
-                    </AppText>
+                    <View style={styles.row}>
+                      <AppText variant="body1" style={styles.assetTickerText}>
+                        {asset.ticker}
+                      </AppText>
+                      {asset.issuer?.verified && (
+                        <IconVerified width={24} height={24} />
+                      )}
+                    </View>
                   </View>
                 </View>
                 <AppTouchable
@@ -236,6 +238,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     assetTickerText: {
       color: theme.colors.headingColor,
       textAlign: 'center',
+      marginRight: hp(2),
     },
     assetNameText: {
       color: theme.colors.secondaryHeadingColor,
@@ -245,6 +248,10 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       width: '50%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default CoinDetailsHeader;
