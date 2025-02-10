@@ -6,7 +6,11 @@ import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { Coin } from 'src/models/interfaces/RGBWallet';
@@ -18,6 +22,8 @@ import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -44,6 +50,8 @@ export const Item = ({ title, value, width = '100%' }) => {
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
@@ -56,6 +64,13 @@ const CoinsMetaDataScreen = () => {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
+
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
+      visible: false,
+    });
+    navigation.dispatch(popAction);
+  };
 
   return (
     <ScreenContainer style={styles.container}>
@@ -94,7 +109,9 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.rowWrapper}>
             <Item
               title={assets.issuedSupply}
-              value={coin.metaData && numberWithCommas(coin.metaData.issuedSupply)}
+              value={
+                coin.metaData && numberWithCommas(coin.metaData.issuedSupply)
+              }
               width={'45%'}
             />
             <Item
@@ -111,6 +128,7 @@ const CoinsMetaDataScreen = () => {
           />
         </ScrollView>
       )}
+      <HideAssetView title="Hide Coin" onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

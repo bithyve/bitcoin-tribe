@@ -270,6 +270,8 @@
     "expired": "Expirado",
     "viewNodeInfo": "Información del Nodo",
     "channelManagement": "Gestión de canales",
+    "hiddenAssets": "Activos Ocultos",
+    "hiddenAssetSubTitle": "Administra tus monedas y coleccionables ocultos. Toca el ícono del ojo para mostrarlos.",
     "cloudBackupLoadingTitle": "Copia de seguridad en la nube",
     "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto.",
     "walletBackupInfo": "Escribe tu frase semilla y guárdala de forma segura fuera de la aplicación.",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
     "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostrar"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

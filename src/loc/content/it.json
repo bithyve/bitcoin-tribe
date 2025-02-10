@@ -270,6 +270,8 @@
     "expired": "Scaduto",
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
+    "hiddenAssets": "Beni Nascosti",
+    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca l'icona dell'occhio per mostrarli.",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
     "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
     "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostra"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

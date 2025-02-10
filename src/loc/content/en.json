@@ -270,6 +270,8 @@
     "expired": "Expired",
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
+    "hiddenAssets": "Hidden Assets",
+    "hiddenAssetSubTitle": "Manage your hidden coins and collectibles. Tap the eye icon to unhide.",
     "cloudBackupLoadingTitle": "Cloud Backup",
     "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
     "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "UnHide"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

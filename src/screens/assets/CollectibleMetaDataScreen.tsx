@@ -1,6 +1,10 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
-import { useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -26,6 +30,8 @@ import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -63,6 +69,8 @@ const onShare = async filePath => {
 
 const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -77,6 +85,18 @@ const CollectibleMetaDataScreen = () => {
       mutate({ assetId, schema: RealmSchema.Collectible });
     }
   }, []);
+
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(
+      RealmSchema.Collectible,
+      'assetId',
+      assetId,
+      {
+        visible: false,
+      },
+    );
+    navigation.dispatch(popAction);
+  };
 
   return (
     <ScreenContainer style={styles.container}>
@@ -143,6 +163,7 @@ const CollectibleMetaDataScreen = () => {
           </ScrollView>
         </>
       )}
+      <HideAssetView title="Hide Collectible" onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

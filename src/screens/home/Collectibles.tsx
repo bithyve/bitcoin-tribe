@@ -47,8 +47,10 @@ function Collectibles() {
 
   const assets: Asset[] = useMemo(() => {
     return [
-      ...collectibles.map(item => item as Asset),
-      ...udas.map(item => item as Asset),
+      ...collectibles
+        .filter(item => item.visible !== false)
+        .map(item => item as Asset),
+      ...udas.filter(item => item.visible !== false).map(item => item as Asset),
     ].sort((a, b) => b.timestamp - a.timestamp);
   }, [collectibles, udas]);
 

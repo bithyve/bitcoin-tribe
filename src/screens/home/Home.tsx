@@ -49,7 +49,9 @@ function HomeScreen() {
   const [walletName, setWalletName] = useState(null);
 
   const assets = useMemo(() => {
-    return [...coins.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
+    return [...coins.toJSON()]
+      .filter(item => item.visible !== false)
+      .sort((a, b) => b.timestamp - a.timestamp);
   }, [coins]);
 
   const balances = useMemo(() => {

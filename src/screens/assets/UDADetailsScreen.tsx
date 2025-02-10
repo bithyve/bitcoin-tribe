@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
@@ -30,9 +34,12 @@ import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppTouchable from 'src/components/AppTouchable';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const { assetId } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
@@ -59,10 +66,22 @@ const UDADetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(
+      RealmSchema.UniqueDigitalAsset,
+      'assetId',
+      assetId,
+      {
+        visible: false,
+      },
+    );
+    navigation.dispatch(popAction);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={uda.name} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
             uri: Platform.select({
@@ -123,6 +142,7 @@ const UDADetailsScreen = () => {
           />
         </View>
       </ScrollView>
+      <HideAssetView title="Hide UDA" onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };
