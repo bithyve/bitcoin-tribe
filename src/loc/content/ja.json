@@ -516,7 +516,10 @@
     "requestInvoiceProcessTitle": "リクエストを処理中",
     "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
     "cancelingTransferTitle": "Cancelando su transferencia",
-    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください"
+    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください",
+    "hideCoin": "コインを非表示",
+    "hideCollectible": "コレクティブルを非表示",
+    "hideUda": "UDAを非表示"
   },
   "community": {
     "fnfTitle": "友達と家族",

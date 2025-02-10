@@ -166,7 +166,10 @@ const CollectibleMetaDataScreen = () => {
           </ScrollView>
         </>
       )}
-      <HideAssetView title="Hide Collectible" onPress={() => hideAsset()} />
+      <HideAssetView
+        title={assets.hideCollectible}
+        onPress={() => hideAsset()}
+      />
     </ScreenContainer>
   );
 };

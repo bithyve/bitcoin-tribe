@@ -128,7 +128,7 @@ const CoinsMetaDataScreen = () => {
           />
         </ScrollView>
       )}
-      <HideAssetView title="Hide Coin" onPress={() => hideAsset()} />
+      <HideAssetView title={assets.hideCoin} onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

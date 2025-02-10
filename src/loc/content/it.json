@@ -516,7 +516,10 @@
     "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
     "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
     "cancelingTransferTitle": "Annullamento del trasferimento",
-    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione"
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione",
+    "hideCoin": "Nascondi Moneta",
+    "hideCollectible": "Nascondi Collezionabile",
+    "hideUda": "Nascondi UDA"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

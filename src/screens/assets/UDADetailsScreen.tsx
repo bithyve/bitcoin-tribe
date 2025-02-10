@@ -160,7 +160,7 @@ const UDADetailsScreen = () => {
           />
         </>
       </ScrollView>
-      <HideAssetView title="Hide UDA" onPress={() => hideAsset()} />
+      <HideAssetView title={assets.hideUda} onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

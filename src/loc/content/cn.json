@@ -516,7 +516,10 @@
     "requestInvoiceProcessTitle": "正在处理您的请求",
     "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
     "cancelingTransferTitle": "正在取消您的转账",
-    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程"
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程",
+    "hideCoin": "隐藏币",
+    "hideCollectible": "隐藏藏品",
+    "hideUda": "隐藏 UDA"
   },
   "community": {
     "fnfTitle": "朋友和家人",

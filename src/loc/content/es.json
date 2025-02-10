@@ -516,7 +516,10 @@
     "requestInvoiceProcessTitle": "Procesando su solicitud",
     "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
     "cancelingTransferTitle": "Cancelando su transferencia",
-    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura",
+    "hideCoin": "Ocultar Moneda",
+    "hideCollectible": "Ocultar Coleccionable",
+    "hideUda": "Ocultar UDA"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
