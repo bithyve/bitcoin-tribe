@@ -28,7 +28,6 @@ export const getXProfile = async (accessToken: string) => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Failed to get Twitter profile:', error);
         throw error;
     }
 };
@@ -46,7 +45,6 @@ export const loginWithTwitter = async (): Promise<{
         }
         throw new Error('No access token received');
     } catch (error) {
-        console.log(error);
         throw error;
     }
 };
