@@ -165,7 +165,9 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true });
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true });
+        }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -227,7 +229,9 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.replace(NavigationRoutes.UDADETAILS, { assetId: response.assetId, askReview: true });
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.UDADETAILS, { assetId: response.assetId, askReview: true });
+        }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
