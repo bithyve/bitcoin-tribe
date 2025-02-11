@@ -13,7 +13,11 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { Coin, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  Coin,
+  TransferKind,
+  AssetVisibilityType,
+} from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import moment from 'moment';
@@ -69,7 +73,7 @@ const CoinsMetaDataScreen = () => {
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
-      visible: false,
+      visibility: AssetVisibilityType.HIDDEN,
     });
     navigation.dispatch(popAction);
   };

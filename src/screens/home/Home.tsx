@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -19,10 +19,8 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import dbManager from 'src/storage/realm/dbManager';
 import { AssetType, Coin } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -42,16 +40,17 @@ function HomeScreen() {
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
-  const coins = useQuery<Coin[]>(RealmSchema.Coin);
+
+  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+    collection.filtered("visibility != 'HIDDEN'").sorted('timestamp', true),
+  );
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
   const assets = useMemo(() => {
-    return [...coins.toJSON()]
-      .filter(item => item.visible !== false)
-      .sort((a, b) => b.timestamp - a.timestamp);
+    return coins;
   }, [coins]);
 
   const balances = useMemo(() => {

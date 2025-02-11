@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 
@@ -9,7 +9,12 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import HiddenAssetsList from './components/HiddenAssetsList';
 import { RealmSchema } from 'src/storage/enum';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collectible,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 
 function HiddenAssets() {
   const theme: AppTheme = useTheme();
@@ -17,16 +22,21 @@ function HiddenAssets() {
   const { common, settings } = translations;
   const styles = getStyles(theme);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin);
-  const collectibles = useQuery(RealmSchema.Collectible);
-  const udas = useQuery(RealmSchema.UniqueDigitalAsset);
-
+  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+    collection.filtered("visibility == 'HIDDEN'"),
+  );
+  const collectibles = useQuery<Collectible>(
+    RealmSchema.Collectible,
+    collection => collection.filtered("visibility == 'HIDDEN'"),
+  );
+  const udas = useQuery<UniqueDigitalAsset>(
+    RealmSchema.UniqueDigitalAsset,
+    collection => collection.filtered("visibility == 'HIDDEN'"),
+  );
   const assets: Asset[] = useMemo(() => {
-    return [
-      ...coins.filter(item => item.visible === false),
-      ...collectibles.filter(item => item.visible === false),
-      ...udas.filter(item => item.visible === false),
-    ].sort((a, b) => b.timestamp - a.timestamp);
+    return [...coins, ...collectibles, ...udas].sort(
+      (a, b) => b.timestamp - a.timestamp,
+    );
   }, [coins, collectibles, udas]);
 
   return (

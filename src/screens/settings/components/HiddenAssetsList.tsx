@@ -15,7 +15,11 @@ import EmptyStateView from 'src/components/EmptyStateView';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  AssetVisibilityType,
+} from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 import NoAssetsIllustration from 'src/assets/images/noCoinAssets.svg';
@@ -77,9 +81,8 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
         return;
     }
     dbManager.updateObjectByPrimaryId(schemaType, 'assetId', assetId, {
-      visible: true,
+      visibility: AssetVisibilityType.DEFAULT,
     });
-    navigation.goBack();
   };
 
   return (

@@ -111,7 +111,7 @@ export interface UniqueDigitalAsset {
   ticker: string;
   timestamp: number;
   token: {
-    attachments: Media[],
+    attachments: Media[];
     embeddedMedia: boolean;
     index: number;
     media: Media;
@@ -150,29 +150,35 @@ export enum AssetType {
 }
 
 export enum AssetFace {
-  RGB25 = 'RGB25',  // Collectible(CFA)
+  RGB25 = 'RGB25', // Collectible(CFA)
   RGB20 = 'RGB20', // Coin(NIA)
-  RGB21 = 'RGB21' //  Unique Digital Asset(UDA)
+  RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
+}
+
+export enum AssetVisibilityType {
+  DEFAULT = 'DEFAULT',
+  HIDDEN = 'HIDDEN',
+  // ARCHIVED = 'ARCHIVED',
 }
 
 export enum UtxoType {
   Colored = 'Colored',
   Colorable = 'Colorable',
-  Uncolored = 'Uncolored'
+  Uncolored = 'Uncolored',
 }
 
 export enum TransferKind {
   ISSUANCE = 'ISSUANCE',
   RECEIVE_BLIND = 'RECEIVE_BLIND',
   RECEIVE_WITNESS = 'RECEIVE_WITNESS',
-  SEND = 'SEND'
+  SEND = 'SEND',
 }
 
 export enum TransferStatus {
   WAITING_COUNTERPARTY = 'WAITING_COUNTERPARTY',
   WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
   SETTLED = 'SETTLED',
-  FAILED = 'FAILED'
+  FAILED = 'FAILED',
 }
 
 export enum IssuerVerificationMethod {

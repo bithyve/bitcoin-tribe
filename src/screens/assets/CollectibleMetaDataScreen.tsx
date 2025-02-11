@@ -14,7 +14,11 @@ import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Collectible, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  Collectible,
+  TransferKind,
+  AssetVisibilityType,
+} from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
@@ -93,7 +97,7 @@ const CollectibleMetaDataScreen = () => {
       'assetId',
       assetId,
       {
-        visible: false,
+        visibility: AssetVisibilityType.HIDDEN,
       },
     );
     navigation.dispatch(popAction);

@@ -5,16 +5,17 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
+  AssetVisibilityType,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -39,6 +40,7 @@ import AssetIDContainer from './components/AssetIDContainer';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
+
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
@@ -94,7 +96,7 @@ const UDADetailsScreen = () => {
       'assetId',
       assetId,
       {
-        visible: false,
+        visibility: AssetVisibilityType.HIDDEN,
       },
     );
     navigation.dispatch(popAction);
