@@ -53,6 +53,16 @@ export interface MetaData {
   timestamp: number;
 }
 
+export interface Issuer {
+  verified: boolean;
+  verifiedBy: {
+    type: IssuerVerificationMethod;
+    name?: string;
+    id?: string;
+    username?: string;
+  }[];
+}
+
 export interface Coin {
   addedAt: number;
   assetId: string;
@@ -65,6 +75,7 @@ export interface Coin {
   timestamp: number;
   transactions: Transfer[];
   metaData: MetaData;
+  issuer: Issuer;
 }
 
 interface Media {
@@ -84,6 +95,8 @@ export interface Collectible {
   precision: number;
   timestamp: number;
   metaData: MetaData;
+  transactions: Transfer[];
+  issuer: Issuer;
 }
 
 export interface UniqueDigitalAsset {
@@ -106,6 +119,7 @@ export interface UniqueDigitalAsset {
   };
   transactions: Transfer[];
   metaData: MetaData;
+  issuer: Issuer;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -159,6 +173,10 @@ export enum TransferStatus {
   WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
   SETTLED = 'SETTLED',
   FAILED = 'FAILED'
+}
+
+export enum IssuerVerificationMethod {
+  TWITTER = 'twitter',
 }
 
 export interface RgbNodeConnectParams {

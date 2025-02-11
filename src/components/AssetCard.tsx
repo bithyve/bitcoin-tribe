@@ -17,6 +17,7 @@ import {
 import GradientView from './GradientView';
 import AssetChip from './AssetChip';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type AssetCardProps = {
   asset: Asset;
@@ -71,6 +72,9 @@ const AssetCard = (props: AssetCardProps) => {
           )}
         </View>
         <View style={styles.contentWrapper}>
+          {asset.issuer?.verified && (
+            <IconVerified width={24} height={24} />
+          )}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
@@ -105,6 +109,8 @@ const getStyles = (theme: AppTheme) =>
       paddingVertical: 5,
       height: '30%',
       justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     titleText: {
       lineHeight: hp(18),
@@ -130,6 +136,10 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       alignSelf: 'center',
       bottom: -10,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default AssetCard;

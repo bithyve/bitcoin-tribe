@@ -58,5 +58,6 @@ export const CoinSchema: ObjectSchema = {
     transactions: `${RealmSchema.AssetTransaction}[]`,
     metaData: `${RealmSchema.MetaData}`,
     visible: 'bool?',
+    issuer: `${RealmSchema.Issuer}?`,
   },
 };

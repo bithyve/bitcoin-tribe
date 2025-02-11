@@ -1,5 +1,5 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import {
   StackActions,
   useNavigation,
@@ -9,13 +9,12 @@ import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Share from 'react-native-share';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Collectible } from 'src/models/interfaces/RGBWallet';
+import { Collectible, TransferKind } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
@@ -32,6 +31,8 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
 import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
+import VerifyIssuer from './components/VerifyIssuer';
+import IssuerVerified from './components/IssuerVerified';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -98,6 +99,15 @@ const CollectibleMetaDataScreen = () => {
     navigation.dispatch(popAction);
   };
 
+  const showVerifyIssuer = useMemo(() => {
+    return (
+      !collectible?.issuer?.verified &&
+      collectible.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [collectible.transactions, collectible.issuer]);
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -132,6 +142,14 @@ const CollectibleMetaDataScreen = () => {
                 style={styles.imageStyle}
               />
             </View>
+            {collectible?.issuer && collectible.issuer.verified && (
+              <IssuerVerified
+                id={collectible.issuer.verifiedBy[0].id}
+                name={collectible.issuer.verifiedBy[0].name}
+                username={collectible.issuer.verifiedBy[0].username}
+              />
+            )}
+            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={home.assetName}
               value={collectible && collectible.name}
@@ -163,6 +181,13 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
+
+            {showVerifyIssuer && (
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Collectible}
+              />
+            )}
           </ScrollView>
         </>
       )}

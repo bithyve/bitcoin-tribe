@@ -1,5 +1,5 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import {
   StackActions,
   useNavigation,
@@ -12,9 +12,11 @@ import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
-
 import ScreenContainer from 'src/components/ScreenContainer';
-import { UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
+import {
+  TransferKind,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
@@ -33,11 +35,14 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import MediaCarousel from './components/MediaCarousel';
 import AssetTransaction from '../wallet/components/AssetTransaction';
-
+import AssetIDContainer from './components/AssetIDContainer';
+import VerifyIssuer from './components/VerifyIssuer';
+import IssuerVerified from './components/IssuerVerified';
+import { requestAppReview } from 'src/services/appreview';
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
-  const { assetId } = useRoute().params;
+  const { assetId, askReview } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
@@ -54,6 +59,23 @@ const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview]);
+
+  const showVerifyIssuer = useMemo(() => {
+    return (
+      !uda?.issuer?.verified &&
+      uda.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [uda.transactions, uda.issuer]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -93,29 +115,39 @@ const UDADetailsScreen = () => {
           style={styles.imageStyle}
         />
 
-        <View style={styles.buttonWrapper}>
-          <RoundedCTA
-            colors={[
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
-            ]}
-            textColor={theme.colors.roundSendCTATitle}
-            icon={isThemeDark ? <IconSend /> : <IconSendLight />}
-            buttonColor={theme.colors.sendCtaBorderColor}
-            title={common.send}
-            onPress={() =>
-              navigation.navigate(NavigationRoutes.SCANASSET, {
-                assetId: assetId,
-                rgbInvoice: '',
-              })
-            }
-            width={wp(105)}
+        {uda.balance.spendable > 0 && (
+          <View style={styles.buttonWrapper}>
+            <RoundedCTA
+              colors={[
+                theme.colors.inputBackground,
+                theme.colors.inputBackground,
+                theme.colors.inputBackground,
+              ]}
+              textColor={theme.colors.roundSendCTATitle}
+              icon={isThemeDark ? <IconSend /> : <IconSendLight />}
+              buttonColor={theme.colors.sendCtaBorderColor}
+              title={common.send}
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.SCANASSET, {
+                  assetId: assetId,
+                  rgbInvoice: '',
+                })
+              }
+              width={wp(105)}
+            />
+          </View>
+        )}
+
+        {uda?.issuer && uda.issuer.verified && (
+          <IssuerVerified
+            id={uda.issuer.verifiedBy[0].id}
+            name={uda.issuer.verifiedBy[0].name}
+            username={uda.issuer.verifiedBy[0].username}
           />
-        </View>
+        )}
 
         <Item title={home.assetName} value={uda.name} />
-        <Item title={assets.assetId} value={assetId} />
+        <AssetIDContainer assetId={assetId} />
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
         <MediaCarousel
@@ -142,6 +174,13 @@ const UDADetailsScreen = () => {
             }}
             disabled={uda?.transactions.length === 1}
             assetFace={uda.assetIface}
+          />
+        )}
+
+        {showVerifyIssuer && (
+          <VerifyIssuer
+            assetId={assetId}
+            schema={RealmSchema.UniqueDigitalAsset}
           />
         )}
         <>

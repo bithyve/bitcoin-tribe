@@ -5,7 +5,6 @@ import { useQuery } from '@realm/react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
@@ -15,7 +14,7 @@ import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
@@ -57,11 +56,21 @@ function ReceiveAssetScreen() {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [lightningInvoice, setLightningInvoice] = useState('');
   const [rgbInvoice, setRgbInvoice] = useState('');
+  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+  const colorable = unspent.filter(
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+  );
 
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
-        mutate({ assetId, amount });
+        if (colorable.length > 0) {
+          mutate({ assetId, amount });
+        } else {
+          createUtxos();
+        }
       } else {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
@@ -69,7 +78,11 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      mutate({ assetId, amount });
+      if (colorable.length > 0) {
+        mutate({ assetId, amount });
+      } else {
+        createUtxos();
+      }
     }
   }, []);
 
@@ -80,9 +93,7 @@ function ReceiveAssetScreen() {
       const errorMessage = getErrorMessage(error);
       const handleSpecificError = message => {
         if (message === 'Insufficient sats for RGB') {
-          setTimeout(() => {
-            createUtxos();
-          }, 500);
+          createUtxos();
           return true;
         } else {
           Toast(errorMessage, true);
@@ -115,9 +126,7 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (createUtxoData) {
-      setTimeout(() => {
-        mutate({ assetId, amount });
-      }, 400);
+      mutate({ assetId, amount });
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
@@ -146,6 +155,13 @@ function ReceiveAssetScreen() {
     }
   }, [selectedType]);
 
+  const loading = useMemo(() => {
+    return isLoading ||
+      createUtxosLoading ||
+      generateLNInvoiceMutation.isLoading
+    ;
+  }, [isLoading, createUtxosLoading, generateLNInvoiceMutation.isLoading]);
+
   const qrValue = useMemo(() => {
     if (selectedType === 'bitcoin') {
       setRgbInvoice(rgbWallet?.receiveData?.invoice);
@@ -153,7 +169,7 @@ function ReceiveAssetScreen() {
     } else {
       return lightningInvoice;
     }
-  }, [selectedType, rgbWallet?.receiveData?.invoice, lightningInvoice]);
+  }, [selectedType, rgbWallet?.receiveData?.invoice, lightningInvoice, loading]);
 
   return (
     <ScreenContainer>
@@ -162,16 +178,10 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
       />
-      {isLoading ||
-      createUtxosLoading ||
-      generateLNInvoiceMutation.isLoading ? (
+      {loading ? (
         <View>
           <ResponsePopupContainer
-            visible={
-              isLoading ||
-              createUtxosLoading ||
-              generateLNInvoiceMutation.isLoading
-            }
+            visible={loading}
             enableClose={true}
             backColor={theme.colors.modalBackColor}
             borderColor={theme.colors.modalBackColor}>

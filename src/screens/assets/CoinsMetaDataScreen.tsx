@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import { Coin, TransferKind } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import moment from 'moment';
@@ -24,6 +24,8 @@ import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
+import VerifyIssuer from './components/VerifyIssuer';
+import IssuerVerified from './components/IssuerVerified';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -72,19 +74,31 @@ const CoinsMetaDataScreen = () => {
     navigation.dispatch(popAction);
   };
 
+  const showVerifyIssuer = useMemo(() => {
+    return (
+      !coin?.issuer?.verified &&
+      coin.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [coin.transactions, coin.issuer]);
+
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader
-        title={assets.coinMetaTitle}
-        subTitle={assets.coinMetaSubTitle}
-        enableBack={true}
-      />
+      <AppHeader title={assets.coinMetaTitle} subTitle={''} enableBack={true} />
       {isLoading ? (
         <ModalLoading visible={isLoading} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
+          {coin.issuer && coin.issuer.verified && (
+            <IssuerVerified
+              id={coin.issuer.verifiedBy[0].id}
+              name={coin.issuer.verifiedBy[0].name}
+              username={coin.issuer.verifiedBy[0].username}
+            />
+          )}
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
             <Item
@@ -126,6 +140,10 @@ const CoinsMetaDataScreen = () => {
               .unix(coin.metaData && coin.metaData.timestamp)
               .format('DD MMM YY  hh:mm A')}
           />
+
+          {showVerifyIssuer && (
+            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+          )}
         </ScrollView>
       )}
       <HideAssetView title={assets.hideCoin} onPress={() => hideAsset()} />
@@ -167,6 +185,7 @@ const getStyles = (theme: AppTheme, width) =>
       height: '60%',
       marginTop: wp(20),
       borderRadius: 20,
+      paddingVertical: hp(10),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,

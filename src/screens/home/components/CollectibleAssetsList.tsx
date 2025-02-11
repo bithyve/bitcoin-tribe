@@ -7,9 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AssetCard from 'src/components/AssetCard';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
@@ -17,6 +15,7 @@ import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { Asset } from 'src/models/interfaces/RGBWallet';
+import { useNavigation } from '@react-navigation/native';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoAssetsIllustration from 'src/assets/images/noCollectibeAssets.svg';
