@@ -73,11 +73,11 @@ const UDADetailsScreen = () => {
   const showVerifyIssuer = useMemo(() => {
     return (
       !uda?.issuer?.verified &&
-      uda.transactions.some(
+      uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda.transactions, uda.issuer]);
+  }, [uda?.transactions, uda?.issuer]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -104,20 +104,20 @@ const UDADetailsScreen = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={uda.name} />
+      <AppHeader title={uda?.name} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
             uri: Platform.select({
-              android: `file://${uda.token.media?.filePath}`,
-              ios: uda.token.media?.filePath,
+              android: `file://${uda?.token.media?.filePath}`,
+              ios: uda?.token.media?.filePath,
             }),
           }}
           resizeMode="contain"
           style={styles.imageStyle}
         />
 
-        {uda.balance.spendable > 0 && (
+        {uda?.balance.spendable > 0 && (
           <View style={styles.buttonWrapper}>
             <RoundedCTA
               colors={[
@@ -140,11 +140,11 @@ const UDADetailsScreen = () => {
           </View>
         )}
 
-        {uda?.issuer && uda.issuer.verified && (
+        {uda?.issuer && uda?.issuer?.verified && (
           <IssuerVerified
-            id={uda.issuer.verifiedBy[0].id}
-            name={uda.issuer.verifiedBy[0].name}
-            username={uda.issuer.verifiedBy[0].username}
+            id={uda?.issuer?.verifiedBy[0]?.id}
+            name={uda?.issuer?.verifiedBy[0]?.name}
+            username={uda?.issuer?.verifiedBy[0]?.username}
           />
         )}
 
@@ -153,7 +153,7 @@ const UDADetailsScreen = () => {
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
         <MediaCarousel
-          images={uda.token.attachments}
+          images={uda?.token.attachments}
           handleImageSelect={item => {
             setVisible(true);
             setSelectedImage(item?.filePath);
@@ -161,21 +161,21 @@ const UDADetailsScreen = () => {
         />
         <Item
           title={assets.issuedOn}
-          value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
+          value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
         />
         {uda?.transactions.length > 0 && (
           <AssetTransaction
             transaction={uda?.transactions[0]}
-            coin={uda.name}
+            coin={uda?.name}
             onPress={() => {
               navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
                 assetId: assetId,
                 transactions: uda?.transactions,
-                assetName: uda.name,
+                assetName: uda?.name,
               });
             }}
             disabled={uda?.transactions.length === 1}
-            assetFace={uda.assetIface}
+            assetFace={uda?.assetIface}
           />
         )}
 

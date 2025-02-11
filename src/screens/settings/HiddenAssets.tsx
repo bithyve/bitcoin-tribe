@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
@@ -21,6 +21,7 @@ function HiddenAssets() {
   const { translations } = useContext(LocalizationContext);
   const { common, settings } = translations;
   const styles = getStyles(theme);
+  const [refreshing, setRefreshing] = useState(false);
 
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered("visibility == 'HIDDEN'"),
@@ -45,7 +46,15 @@ function HiddenAssets() {
         title={settings.hiddenAssets}
         subTitle={settings.hiddenAssetSubTitle}
       />
-      <HiddenAssetsList listData={assets} />
+      <HiddenAssetsList
+        listData={assets}
+        onRefresh={() => {
+          setRefreshing(true);
+          setTimeout(() => setRefreshing(false), 2000);
+        }}
+        loading={refreshing}
+        refreshingStatus={refreshing}
+      />
     </ScreenContainer>
   );
 }
