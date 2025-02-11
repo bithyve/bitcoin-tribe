@@ -20,7 +20,6 @@ const SocialLinks = (props: SocialLinksProps) => {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
-  console.log('windowHeight', windowHeight);
   return (
     <View style={styles.container}>
       <SocialButton
