@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import {
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -14,9 +12,8 @@ import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
-
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
@@ -47,10 +44,10 @@ import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
-
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import { requestAppReview } from 'src/services/appreview';
 
 function SendToContainer({
   wallet,
@@ -146,6 +143,7 @@ function SendToContainer({
           ],
         }),
       );
+      requestAppReview();
     }, 400);
   };
 

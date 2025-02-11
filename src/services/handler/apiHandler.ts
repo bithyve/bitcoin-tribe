@@ -388,9 +388,11 @@ export class ApiHandler {
     const key = decrypt(hash, encryptedKey);
     const uint8array = stringToArrayBuffer(key);
     await dbManager.initializeRealm(uint8array);
+    const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
+    const apiHandler = new ApiHandler(rgbWallet, app.appType);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpub,
@@ -424,6 +426,8 @@ export class ApiHandler {
       const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      const apiHandler = new ApiHandler(rgbWallet, app.appType);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpub,
@@ -910,6 +914,7 @@ export class ApiHandler {
           },
         );
       }
+      ApiHandler.viewUtxos();
     } catch (error) {
       console.log('errors', error);
       throw error;
