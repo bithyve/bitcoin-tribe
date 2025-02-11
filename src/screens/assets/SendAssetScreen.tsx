@@ -585,7 +585,7 @@ const SendAssetScreen = () => {
 
         <View style={styles.containerSwitch}>
           <AppText variant="heading3">
-            Send this transfer as a donation?
+            Send as donation?
           </AppText>
 
           <Switch
@@ -622,7 +622,10 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            onSuccessPress={() => navigation.goBack()}
+            onSuccessPress={() => {
+              navigation.goBack()
+              navigation.setParams({ askReview: true });
+            }}
             onPress={sendAsset}
             estimateBlockTime={
               selectedPriority === TxPriority.CUSTOM

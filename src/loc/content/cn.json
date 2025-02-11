@@ -506,6 +506,12 @@
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
     "failToFetchIssueFee": "获取资产发行费用失败。",
+    "spendable": "可用余额: ",
+    "spendableBalanceInfo": "扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。",
+    "enterAssetName": "请输入资产名称",
+    "enterAssetTicker": "请输入资产代码",
+    "enterTotalSupply": "请输入总供应量",
+    "enterDescription": "请输入资产描述",
     "requestInvoiceProcessTitle": "正在处理您的请求",
     "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
     "cancelingTransferTitle": "正在取消您的转账",
@@ -577,7 +583,11 @@
     "createChannelBulletPoint2": "资产ID和金额详情",
     "createChannelBulletPoint3": "可用资金（以聪为单位）",
     "createChannelTitle": "通道创建",
-    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。",
+    "enterPubKeyaddress": "请输入有效的公钥和地址",
+    "enterCapacityAmt": "请输入容量金额",
+    "enterMSats": "请输入毫聪（mSats）",
+    "enterAssetAmt": "请输入资产金额"
   },
   "lightning": {
     "sendTitle": "发送",

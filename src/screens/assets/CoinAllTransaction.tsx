@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -17,9 +17,11 @@ import AssetTransaction from '../wallet/components/AssetTransaction';
 import { hp } from 'src/constants/responsive';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys } from 'src/storage';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -48,7 +50,16 @@ function CoinAllTransaction() {
           )
         }
         renderItem={({ item }) => (
-          <AssetTransaction transaction={item} coin={assetName} />
+          <AssetTransaction
+            transaction={item}
+            coin={assetName}
+            onPress={() => {
+              navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+                transaction: item,
+                coin: assetName,
+              });
+            }}
+          />
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}

@@ -7,7 +7,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import Toast from 'react-native-root-toast';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
@@ -22,7 +21,7 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import SelectAssetIDView from './components/SelectAssetIDView';
 import RGBAssetDropdownList from './components/RGBAssetDropdownList';
 import { Keys } from 'src/storage';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
@@ -30,7 +29,13 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { common, node, assets, channel: channelTranslation } = translations;
+  const {
+    common,
+    node,
+    assets,
+    channel: channelTranslation,
+    sendScreen,
+  } = translations;
   const [pubkeyAddress, setPubkeyAddress] = useState('');
   const [capacity, setCapacity] = useState('30010');
   const [pushMsats, setPushMsats] = useState('1394');
@@ -42,13 +47,20 @@ const OpenRgbChannel = () => {
   const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
+  const [pubKeyAddressValidationError, setPubKeyAddressValidationError] =
+    useState('');
+  const [capacityValidationError, setCapacityValidationError] = useState('');
+  const [pushMSatsValidationError, setPushMSatsValidationError] = useState('');
+  const [assetAmountValidationError, setAssetAmountValidationError] =
+    useState('');
+
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin);
-  const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered('balance.spendable > 0');
+  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible).filtered('balance.spendable > 0');
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined.sort((a, b) => a.timestamp - b.timestamp);
@@ -63,22 +75,81 @@ const OpenRgbChannel = () => {
       CustomToast(`${error}`, true);
     }
   }, [openChannelMutation.isSuccess, openChannelMutation.isError]);
-  
+
   useEffect(() => {
     const amount = parseFloat(assetAmt.replace(/,/g, ''));
+    if (Number(selectedAsset?.balance?.spendable) === 0) {
+      setAssetAmountValidationError(
+        sendScreen.spendableBalanceMsg + selectedAsset?.balance.spendable,
+      );
+    }
     if (selectedAsset?.balance?.spendable < amount) {
-      CustomToast(assets.checkSpendableAmt + selectedAsset?.balance?.spendable, true, Toast.positions.TOP);
-    } 
-    if(assetAmt && !selectedAsset){
+      setAssetAmountValidationError(
+        assets.checkSpendableAmt + selectedAsset?.balance?.spendable,
+      );
+    }
+    if (assetAmt && !selectedAsset) {
       Keyboard.dismiss();
-      CustomToast(channelTranslation.selectYourAssetErrMsg, true, Toast.positions.TOP);
+      CustomToast(
+        channelTranslation.selectYourAssetErrMsg,
+        true,
+        Toast.positions.TOP,
+      );
     }
   }, [assetAmt, selectedAsset]);
+
+  const isButtonDisabled = useMemo(() => {
+    return !pubkeyAddress || !capacity || !pushMsats || !assetId || !assetAmt;
+  }, [pubkeyAddress, capacity, pushMsats, assetId, assetAmt]);
+
+  const sanitizeInput = text => text.replace(/[^0-9]/g, '');
+
+  const handlePubKeyAddressChange = text => {
+    if (!text.trim()) {
+      setPubkeyAddress('');
+      setPubKeyAddressValidationError(channelTranslation.enterPubKeyaddress);
+    } else {
+      const trimmedText = text.trim();
+      setPubkeyAddress(trimmedText);
+      setPubKeyAddressValidationError(null);
+    }
+  };
+  const handleCapacityChange = text => {
+    const sanitizedText = sanitizeInput(text);
+    if (sanitizedText) {
+      setCapacity(sanitizedText);
+      setCapacityValidationError(null);
+    } else if (!sanitizedText) {
+      setCapacity('');
+      setCapacityValidationError(channelTranslation.enterCapacityAmt);
+    }
+  };
+  const handlePushMSatsChange = text => {
+    const sanitizedText = sanitizeInput(text);
+    if (sanitizedText) {
+      setPushMsats(sanitizedText);
+      setPushMSatsValidationError(null);
+    } else if (!sanitizedText) {
+      setPushMsats('');
+      setPushMSatsValidationError(channelTranslation.enterMSats);
+    }
+  };
+
+  const handleAssetAmountChange = text => {
+    const sanitizedText = sanitizeInput(text);
+    if (sanitizedText) {
+      setAssetAmt(sanitizedText);
+      setAssetAmountValidationError(null);
+    } else if (!sanitizedText) {
+      setAssetAmt('');
+      setAssetAmountValidationError(channelTranslation.enterAssetAmt);
+    }
+  };
 
   return (
     <ScreenContainer>
       <AppHeader
-        title={assetsDropdown? '' : node.openChannelTitle}
+        title={assetsDropdown ? '' : node.openChannelTitle}
         onBackNavigation={() => {
           if (assetsDropdown) {
             setAssetsDropdown(false);
@@ -108,10 +179,7 @@ const OpenRgbChannel = () => {
         keyboardOpeningTime={0}>
         <TextField
           value={pubkeyAddress}
-          onChangeText={text => {
-            const trimmedText = text.trim();
-            setPubkeyAddress(trimmedText);
-          }}
+          onChangeText={handlePubKeyAddressChange}
           placeholder={node.peerPubAndAddress}
           style={[styles.input, pubkeyAddress && styles.multilinePubKeyInput]}
           onContentSizeChange={event => {
@@ -121,6 +189,7 @@ const OpenRgbChannel = () => {
           returnKeyType={'Enter'}
           multiline={true}
           numberOfLines={2}
+          error={pubKeyAddressValidationError}
         />
 
         <AppText variant="caption" style={styles.textHint}>
@@ -129,10 +198,11 @@ const OpenRgbChannel = () => {
 
         <TextField
           value={capacity}
-          onChangeText={text => setCapacity(text)}
+          onChangeText={handleCapacityChange}
           placeholder={node.capacity}
           style={styles.input}
           keyboardType="numeric"
+          error={capacityValidationError}
         />
         <AppText variant="caption" style={styles.textHint}>
           {node.capacityNote}
@@ -140,10 +210,11 @@ const OpenRgbChannel = () => {
 
         <TextField
           value={pushMsats}
-          onChangeText={text => setPushMsats(text)}
+          onChangeText={handlePushMSatsChange}
           placeholder={node.pushMsats}
           style={styles.input}
           keyboardType="numeric"
+          error={pushMSatsValidationError}
         />
         <AppText variant="caption" style={styles.textHint}>
           {node.pushMsatsNote}
@@ -161,16 +232,15 @@ const OpenRgbChannel = () => {
         </AppText>
         <TextField
           value={formatNumber(assetAmt)}
-          onChangeText={text => {
-            setAssetAmt(text)
-          }}
+          onChangeText={handleAssetAmountChange}
           placeholder={node.assetAmount}
           multiline={false}
           numberOfLines={1}
           keyboardType="numeric"
           rightText={
             selectedAsset
-              ? channelTranslation.availableBalanceText + selectedAsset?.balance?.spendable
+              ? channelTranslation.availableBalanceText +
+                selectedAsset?.balance?.spendable
               : ''
           }
           style={styles.assetAmtInput}
@@ -179,6 +249,7 @@ const OpenRgbChannel = () => {
           onRightTextPress={() => {}}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.headingColor}
+          error={assetAmountValidationError}
         />
         <AppText variant="caption" style={styles.textHint}>
           {node.assetAmountNote}
@@ -217,7 +288,7 @@ const OpenRgbChannel = () => {
             }}
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
-            disabled={false}
+            disabled={isButtonDisabled}
             width={wp(120)}
             primaryLoading={false}
           />

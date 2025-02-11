@@ -13,7 +13,7 @@ import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import {
@@ -146,7 +146,7 @@ function AddAsset() {
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
-          }, 300);
+          }, 500);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
@@ -224,6 +224,7 @@ function AddAsset() {
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
+            if(payServiceFeeFeeMutation.isLoading) return
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
@@ -330,11 +331,11 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     amtContainer: {
-      marginVertical: hp(20),
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(45),
       padding: hp(15),
       borderRadius: 15,
       alignItems: 'center',
-      borderColor: '#787878',
+      borderColor: theme.colors.serviceFeeBorder,
       borderWidth: 1,
       borderStyle: 'dashed',
       flexDirection: 'row',
