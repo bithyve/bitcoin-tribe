@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "Conectando a tu nodo. Mantén la aplicación abierta y la pantalla desbloqueada.",
     "nodeconnectSuccessfulTitle": "Conexión exitosa",
     "nodeconnectSuccessfulSubTitle": "Ahora estás conectado. Procede al siguiente paso.",
-    "profileSetupLoadingTitle": "Estamos configurando tu perfil",
+    "profileSetupLoadingTitle": "Estamos configurando tu billetera",
     "profileSetupLoadingSubTitle": "Relájate mientras preparamos todo para ti. Tu aplicación estará lista en un momento.",
     "recoverLoadingTitle": "Recuperando tu billetera",
     "recoverLoadingSubTitle": "Por favor, espera un momento mientras completamos el proceso de recuperación. Evita cerrar la aplicación para asegurar que todo funcione sin problemas. ¡Gracias por tu paciencia!",
@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Tipo de Billetera",
     "copyWalletIDMsg": "¡ID de billetera copiado con éxito!",
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
-    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito"
+    "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -397,7 +399,7 @@
     "date": "Fecha",
     "numOfUtxo": "Número de UTXO",
     "transferDetails": "Detalles de la transferencia",
-    "viewUnspent": "Ver UTXOs no gastados",
+    "viewUnspent": "Ver UTXOs",
     "walletRefreshMsg": "Billetera actualizada con éxito",
     "unspentTitle": "Descripción general de UTXOs",
     "satsAmount": "Cantidad de sats",
@@ -415,7 +417,8 @@
     "coloured": "Coloreado",
     "unColoured": "Sin color",
     "availableTxnFee": "Tarifa de transacción disponible",
-    "output": "Salida"
+    "output": "Salida",
+    "utxoValue": "Valor UTXO"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
@@ -483,7 +486,34 @@
     "assetProcessErrorMsg": "Ocurrió un problema al procesar su solicitud. Por favor, inténtelo de nuevo.",
     "invoiceMisamatchMsg": "Esta factura no corresponde a este activo. Por favor, verifique e intente nuevamente.",
     "assetNotFoundMsg": "Activo no encontrado. Por favor, verifique e intente nuevamente.",
-    "invoiceCopiedMsg": "Factura copiada con éxito"
+    "invoiceCopiedMsg": "Factura copiada con éxito",
+    "issueCollectibles": "Emitir Coleccionable",
+    "makeCollectibleUnique": "Haz que este coleccionable sea único",
+    "enterAssetNamePlaceholder": "Introduce un nombre para tu activo",
+    "enterDescNamePlaceholder": "Describe tu activo",
+    "enterTotSupplyPlaceholder": "Introduce el número máximo de unidades",
+    "precisionCaption": "Configura cuán divisible es cada unidad (ej. 0 = unidades enteras, 2 = centavos)",
+    "mediaFile": "Archivo multimedia",
+    "assetImageCaption": "Agrega una imagen para representar tu activo (ej. logotipo o ilustración)",
+    "enterAssetTickerPlaceholder": "Introduce un símbolo de cotización corto (ej. BTC)",
+    "attachments": "Adjuntos",
+    "attachmentsCaption": "Adjunta cualquier imagen o archivo de soporte (máx. 16MB)",
+    "issueNewCoin": "Emitir Moneda",
+    "swipeToPay": "Desliza para Paga",
+    "payInprocess": "Pagando...",
+    "listYourAssetInRegTitle": "Lista tu activo en el registro",
+    "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
+    "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
+    "spendable": "Disponible: ",
+    "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\".",
+    "enterAssetName": "Por favor, ingrese el nombre del activ",
+    "enterAssetTicker": "Por favor, ingrese el ticker del activo",
+    "enterTotalSupply": "Por favor, ingrese la cantidad total de unidades",
+    "enterDescription": "Por favor, ingrese la descripción del activo",
+    "requestInvoiceProcessTitle": "Procesando su solicitud",
+    "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
@@ -551,7 +581,11 @@
     "createChannelBulletPoint2": "ID del activo y detalles del monto",
     "createChannelBulletPoint3": "Fondos disponibles en satoshis",
     "createChannelTitle": "Creación de Canal",
-    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento."
+    "createChannelSubTitle": "Siéntate y relájate mientras preparamos todo para ti. Tu canal estará abierto en un momento.",
+    "enterPubKeyaddress": "Por favor, ingrese una clave pública y dirección válidas",
+    "enterCapacityAmt": "Por favor, ingrese la cantidad de capacidad",
+    "enterMSats": "Por favor, ingrese los mSats",
+    "enterAssetAmt": "Por favor, ingrese la cantidad del activo"
   },
   "lightning": {
     "sendTitle": "Enviar",

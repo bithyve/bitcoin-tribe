@@ -16,7 +16,7 @@ const requestPermission = async () => {
   return true;
 };
 
-const pickImage = async (includeBase64 = false) => {
+const pickImage = async (includeBase64 = false, selectionLimit = 1) => {
   // if (Platform.OS === 'android') {
   //   const permission = await requestPermission();
   //   if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
@@ -39,6 +39,7 @@ const pickImage = async (includeBase64 = false) => {
         includeBase64: includeBase64,
         maxHeight: 500,
         maxWidth: 500,
+        selectionLimit,
       },
       response => {
         if (response.didCancel) {
@@ -50,7 +51,7 @@ const pickImage = async (includeBase64 = false) => {
         } else if (response.assets && response.assets.length > 0) {
           const uri = includeBase64
             ? response.assets[0].base64
-            : response.assets[0].uri;
+            : selectionLimit > 1 ? response.assets.map(res=>res.uri) : response.assets[0].uri;
           resolve(uri); // Resolve with the URI or base64 string
         } else {
           resolve(null); // Resolve with null if no assets are found

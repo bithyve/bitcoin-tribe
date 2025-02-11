@@ -21,6 +21,7 @@ interface Props {
   loadingTitle: string;
   onSwipeComplete: () => void;
   backColor?: string;
+  loaderTextColor?: string;
 }
 
 const SwipeToAction: React.FC<Props> = ({
@@ -28,11 +29,12 @@ const SwipeToAction: React.FC<Props> = ({
   title,
   loadingTitle,
   backColor = Colors.Golden,
+  loaderTextColor = Colors.Black,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
-    () => getStyles(theme, backColor),
-    [theme, backColor],
+    () => getStyles(theme, backColor, loaderTextColor),
+    [theme, backColor, loaderTextColor],
   );
   const [swiped, setSwiped] = useState(false);
   const translateX = new Animated.Value(0);
@@ -205,7 +207,7 @@ const SwipeToAction: React.FC<Props> = ({
   );
 };
 
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -221,22 +223,21 @@ const getStyles = (theme: AppTheme, backColor) =>
       position: 'relative',
     },
     trackText: {
-      position: 'absolute',
-      alignSelf: 'center',
+      textAlign: 'center',
       color: theme.colors.popupCTATitleColor,
       fontSize: 16,
       fontWeight: '400',
       fontFamily: Fonts.LufgaRegular,
     },
     thumb: {
-      width: 60,
-      height: 45,
+      width: 45,
+      height: 40,
       backgroundColor: Colors.White,
       borderRadius: 15,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      left: 7,
+      left: 8,
     },
     successText: {
       fontSize: 24,
@@ -271,6 +272,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     textLoading: {
       fontSize: 16,
       fontFamily: Fonts.LufgaRegular,
+      color: loaderTextColor,
     },
   });
 

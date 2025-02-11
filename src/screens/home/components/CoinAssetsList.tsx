@@ -59,6 +59,7 @@ function CoinAssetsList(props: AssetsListProps) {
         extraData={[listData]}
         keyExtractor={item => item.assetId}
         ListFooterComponent={FooterComponent}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView

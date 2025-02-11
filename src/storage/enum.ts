@@ -25,8 +25,12 @@ export enum RealmSchema {
   MetaData = 'MetaData',
   Collectible = 'Collectible',
   CollectibleMedia = 'CollectibleMedia',
+  UniqueDigitalAsset = 'UniqueDigitalAsset',
+  Token = 'Token',
   BackupHistory = 'BackupHistory',
   CloudBackupHistory = 'CloudBackupHistory',
   NodeInfo = 'NodeInfo',
   NodeBtcBalance = 'NodeBtcBalance',
+  Issuer = 'Issuer',
+  IssuerVerifiedBy = 'IssuerVerifiedBy',
 }

@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import {
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -14,9 +12,8 @@ import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
-
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
@@ -46,9 +43,11 @@ import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import { requestAppReview } from 'src/services/appreview';
 
 function SendToContainer({
   wallet,
@@ -77,6 +76,9 @@ function SendToContainer({
   const [isSendMax, setIsSendMax] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState(address || '');
   const [inputHeight, setInputHeight] = React.useState(100);
+  const [amountValidationError, setAmountValidationError] = useState('');
+  const [invoiceValidationError, setInvoiceValidationError] = useState('');
+  const [customAmtValidationError, setCustomAmtValidationError] = useState('');
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [selectedPriority, setSelectedPriority] = React.useState(
     TxPriority.LOW,
@@ -141,6 +143,7 @@ function SendToContainer({
           ],
         }),
       );
+      requestAppReview();
     }, 400);
   };
 
@@ -163,8 +166,7 @@ function SendToContainer({
           return false;
       }
     } else {
-      Keyboard.dismiss();
-      Toast(sendScreen.invalidBtcAddress, true); // Invalid input
+      setInvoiceValidationError(sendScreen.invalidBtcAddress);
     }
   };
 
@@ -288,30 +290,44 @@ function SendToContainer({
     if (validateAddressOrInput(clipboardValue)) {
       setRecipientAddress(clipboardValue);
     } else {
-      Toast(sendScreen.invalidBtcAddress, true);
+      setInvoiceValidationError(sendScreen.invalidBtcAddress);
     }
   };
   const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || '0');
-    if (numericValue === 0) {
-      Keyboard.dismiss();
+    const numericValue = parseFloat(text.replace(/,/g, '') || null);
+    if (isNaN(numericValue)) {
+      setAmountValidationError('');
       setAmount('');
-      Toast(sendScreen.validationZeroNotAllowed, true);
+    } else if (numericValue === 0) {
+      setAmount(text);
+      setAmountValidationError(sendScreen.validationZeroNotAllowed);
     } else if (Number(balances) === 0) {
-      Keyboard.dismiss();
-      Toast(sendScreen.availableBalanceMsg + balances, true);
+      setAmountValidationError(sendScreen.availableBalanceMsg + balances);
     } else if (numericValue <= Number(balances)) {
       setAmount(text);
       setIsSendMax(false);
+      setAmountValidationError('');
+    } else if (numericValue > Number(balances)) {
+      setAmountValidationError(assets.checkSpendableAmt + balances);
     } else {
-      Keyboard.dismiss();
-      Toast(assets.checkSpendableAmt + balances, true);
+      setAmount('');
+      setAmountValidationError('');
     }
   };
+
+  const handleInvoiceInputChange = text => {
+    if (validateAddressOrInput(text)) {
+      setRecipientAddress(text);
+    } else {
+      setInvoiceValidationError(sendScreen.invalidBtcAddress);
+    }
+  };
+
   const handleCustomFeeInput = text => {
     const isValidNumber = /^\d*\.?\d*$/.test(text);
     if (text.startsWith('0') && !text.startsWith('0.')) {
       setCustomFee(text.replace(/^0+/, ''));
+      setCustomAmtValidationError(sendScreen.validationZeroNotAllowed);
       return;
     }
     const numericValue = parseFloat(text);
@@ -319,6 +335,7 @@ function SendToContainer({
       setCustomFee(0);
       return;
     }
+    setCustomAmtValidationError('');
     setCustomFee(text);
   };
 
@@ -331,7 +348,7 @@ function SendToContainer({
           </AppText>
           <TextField
             value={recipientAddress}
-            onChangeText={text => setRecipientAddress(text)}
+            onChangeText={handleInvoiceInputChange}
             placeholder={sendScreen.recipientAddress}
             // style={styles.input}
             multiline={true}
@@ -347,11 +364,20 @@ function SendToContainer({
             }
             inputStyle={styles.recipientInputStyle}
             rightText={!recipientAddress && sendScreen.paste}
-            rightIcon={recipientAddress && <ClearIcon />}
+            rightIcon={
+              recipientAddress && isThemeDark ? (
+                <ClearIcon />
+              ) : (
+                <ClearIconLight />
+              )
+            }
             onRightTextPress={() =>
               recipientAddress ? setRecipientAddress('') : handlePasteAddress()
             }
             rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
+            error={invoiceValidationError}
+            onBlur={() => setInvoiceValidationError('')}
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -371,6 +397,7 @@ function SendToContainer({
             // rightText={common.max}
             // onRightTextPress={() => {}}
             // rightCTATextColor={theme.colors.accent1}
+            error={amountValidationError}
           />
         </View>
         <View style={styles.availableBalanceWrapper}>
@@ -459,6 +486,10 @@ function SendToContainer({
               rightText={'sat/vB'}
               onRightTextPress={() => {}}
               rightCTATextColor={theme.colors.headingColor}
+              error={customAmtValidationError}
+              onSubmitEditing={() => {
+                setCustomAmtValidationError('');
+              }}
             />
           </View>
         )}
@@ -469,7 +500,10 @@ function SendToContainer({
             disabled={
               !amount ||
               !recipientAddress ||
-              (selectedPriority === TxPriority.CUSTOM && !customFee)
+              (selectedPriority === TxPriority.CUSTOM && !customFee) ||
+              amountValidationError.length > 0 ||
+              customAmtValidationError.length > 0 ||
+              invoiceValidationError.length > 0
             }
             title={common.next}
             onPress={() => initiateSend()}

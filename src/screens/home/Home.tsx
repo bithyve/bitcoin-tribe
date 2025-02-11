@@ -22,6 +22,7 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import dbManager from 'src/storage/realm/dbManager';
 import { AssetType, Coin } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -67,11 +68,7 @@ function HomeScreen() {
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
-    const version = dbManager.getObjectByIndex(RealmSchema.VersionHistory);
-    const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
-    if (version?.version !== currentVersion) {
-      ApiHandler.checkVersion(version, currentVersion);
-    }
+    ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
   }, [app.appType]);
 

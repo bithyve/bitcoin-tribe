@@ -92,6 +92,9 @@ type CustomColors = {
   assetCardVerticalBorder: string;
   assetBalanceBackColor: string;
   appBackupStepLabel: string;
+  swipeToActionThumbColor: string;
+  errorBorderColor: string;
+  serviceFeeBorder: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -124,7 +127,7 @@ const CombinedDefaultTheme: AppTheme = {
     popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
-    inputBackground: Colors.BrightGray,
+    inputBackground: Colors.White,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
@@ -192,6 +195,9 @@ const CombinedDefaultTheme: AppTheme = {
     assetCardVerticalBorder: Colors.Platinum,
     assetBalanceBackColor: Colors.BrandeisBlue,
     appBackupStepLabel: Colors.BrandeisBlue,
+    swipeToActionThumbColor: Colors.BrandeisBlue,
+    errorBorderColor: Colors.ImperialRed,
+    serviceFeeBorder: Colors.SonicSilver,
   },
   fonts: {
     regular: {
@@ -285,7 +291,7 @@ const CombinedDarkTheme: AppTheme = {
     disabledCTAColor: Colors.DarkSalmon,
     btcCtaBackColor: Colors.TennesseeOrange,
     lightningCtaBackColor: Colors.Golden,
-    backupDoneBorder: Colors.GOGreen,
+    backupDoneBorder: Colors.UFOGreen1,
     closeChannelCTA: Colors.FireOpal,
     closeChannelCTATitle: Colors.White,
     assetsProgressFill: Colors.Turquoise,
@@ -300,6 +306,9 @@ const CombinedDarkTheme: AppTheme = {
     assetCardVerticalBorder: Colors.Arsenic,
     assetBalanceBackColor: Colors.Golden,
     appBackupStepLabel: Colors.Golden,
+    swipeToActionThumbColor: Colors.Golden,
+    errorBorderColor: Colors.ImperialRed,
+    serviceFeeBorder: Colors.SonicSilver,
   },
   fonts: {
     regular: {

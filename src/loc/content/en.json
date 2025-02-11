@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "Connecting to your node. Keep the app open and screen unlocked.",
     "nodeconnectSuccessfulTitle": "Connection Successful",
     "nodeconnectSuccessfulSubTitle": "You’re now connected. Proceed to the next step.",
-    "profileSetupLoadingTitle": "We’re Setting Up Your Profile",
+    "profileSetupLoadingTitle": "We’re Setting Up Your Wallet",
     "profileSetupLoadingSubTitle": "Sit back and relax as we get everything ready for you. Your app will be ready in just a moment.",
     "recoverLoadingTitle": "Recovering Your Wallet",
     "recoverLoadingSubTitle": "Please hold on for a moment while we complete the recovery process. Avoid closing the app to ensure everything runs smoothly. Thank you for your patience!",
@@ -169,7 +169,7 @@
     "collectibles": "Collectibles",
     "issue": "Issue",
     "assetName": "Asset Name",
-    "assetTicker": "Asset ticker",
+    "assetTicker": "Asset Ticker",
     "assetDescription": "Asset Description",
     "totalSupplyAmount": "Total Supply",
     "attachFile": "Attach file",
@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "Wallet Type",
     "copyWalletIDMsg": "Wallet ID copied successfully!",
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
-    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up"
+    "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -397,7 +399,7 @@
     "date": "Date",
     "numOfUtxo": "Number of UTXOs",
     "transferDetails": "Transfer Details",
-    "viewUnspent": "View Unspent UTXOs",
+    "viewUnspent": "View UTXOs",
     "walletRefreshMsg": "Wallet successfully updated",
     "unspentTitle": "UTXOs Overview",
     "satsAmount": "Sats Amount",
@@ -415,7 +417,8 @@
     "coloured": "Coloured",
     "unColoured": "UnColoured",
     "availableTxnFee": "Available transaction fee",
-    "output": "Output"
+    "output": "Output",
+    "utxoValue": "UTXO Value"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -483,7 +486,34 @@
     "assetProcessErrorMsg": "An issue occurred while processing your request. Please try again.",
     "invoiceMisamatchMsg": "This invoice is not for this asset. Please check and try again.",
     "assetNotFoundMsg": "Asset not found. Please check and try again.",
-    "invoiceCopiedMsg": "Invoice Copied successfully!"
+    "invoiceCopiedMsg": "Invoice Copied successfully!",
+    "issueCollectibles": "Issue Collectible",
+    "makeCollectibleUnique": "Make this collectible unique",
+    "enterAssetNamePlaceholder": "Enter a name for your asset",
+    "enterDescNamePlaceholder": "Describe your asset",
+    "enterTotSupplyPlaceholder": "Enter the maximum number of units",
+    "precisionCaption": "Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)",
+    "mediaFile": "Media File",
+    "assetImageCaption": "Add an image to represent your asset (e.g., logo or artwork)",
+    "enterAssetTickerPlaceholder": "Enter a short ticker symbol (e.g., BTC)",
+    "attachments": "Attachments",
+    "attachmentsCaption": "Attach any supporting images or files (max 16MB)",
+    "issueNewCoin": "Issue Coin",
+    "swipeToPay": "Swipe to Pay",
+    "payInprocess": "Paying...",
+    "listYourAssetInRegTitle": "List Your Asset In Registry",
+    "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step.",
+    "failToFetchIssueFee": "Failed to fetch asset issuance fee.",
+    "spendable": "Spendable: ",
+    "spendableBalanceInfo": "The balance that can be used after deducting amounts locked due to pending or \"waiting counterparty \" transactions.",
+    "enterAssetName": "Please enter asset name",
+    "enterAssetTicker": "Please enter asset ticker",
+    "enterTotalSupply": "Please enter total supply units",
+    "enterDescription": "Please enter asset description",
+    "requestInvoiceProcessTitle": "Processing Your Request",
+    "requestInvoiceProcessSubTitle": "Your invoice is being generated. This may take a few moments due to UTXO availability. Thank you for your patience!",
+    "cancelingTransferTitle": "Canceling Your Transfer",
+    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process"
   },
   "community": {
     "fnfTitle": "Friends & Family",
@@ -551,7 +581,11 @@
     "createChannelBulletPoint2": "Asset ID and Amount details",
     "createChannelBulletPoint3": "Funds available in satoshis",
     "createChannelTitle": "Channel Creation",
-    "createChannelSubTitle": "Sit back and relax as we get everything ready for you. Your channel will be open in just a moment."
+    "createChannelSubTitle": "Sit back and relax as we get everything ready for you. Your channel will be open in just a moment.",
+    "enterPubKeyaddress": "Please enter valid pubkey and address",
+    "enterCapacityAmt": "Please enter capacity amount",
+    "enterMSats": "Please enter mSats",
+    "enterAssetAmt": "Please enter asset amount"
   },
   "lightning": {
     "sendTitle": "Send",

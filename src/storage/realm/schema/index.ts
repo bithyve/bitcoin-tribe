@@ -31,9 +31,11 @@ import {
   MetaData,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
+import { UniqueDigitalAssetSchema, TokenSchema} from './uda';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
 import { NodeInfoSchema } from './nodeInfo';
+import { IssuerSchema, IssuerVerifiedBySchema } from './issuer';
 
 export default [
   TribeAppSchema,
@@ -60,6 +62,8 @@ export default [
   MetaData,
   CollectibleMediaSchema,
   CollectibleSchema,
+  UniqueDigitalAssetSchema,
+  TokenSchema,
   BackupHistorySchema,
   CloudBackupHistorySchema,
   NodeInfoSchema,
@@ -68,4 +72,6 @@ export default [
   OutputSchema,
   ScriptPubKeySchema,
   ScriptSigSchema,
+  IssuerSchema,
+  IssuerVerifiedBySchema,
 ];

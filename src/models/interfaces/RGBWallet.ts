@@ -30,13 +30,13 @@ interface Balance {
   offchainInbound?: number;
 }
 
-export interface Transaction {
+export interface Transfer {
   amount: number;
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
-  kind: string;
-  status: string;
+  kind: TransferKind;
+  status: TransferStatus;
   updatedAt: number;
   txid: string | null;
   recipientId: string | null;
@@ -53,6 +53,16 @@ export interface MetaData {
   timestamp: number;
 }
 
+export interface Issuer {
+  verified: boolean;
+  verifiedBy: {
+    type: IssuerVerificationMethod;
+    name?: string;
+    id?: string;
+    username?: string;
+  }[];
+}
+
 export interface Coin {
   addedAt: number;
   assetId: string;
@@ -63,8 +73,9 @@ export interface Coin {
   precision: number;
   ticker: string;
   timestamp: number;
-  transactions: Transaction[];
+  transactions: Transfer[];
   metaData: MetaData;
+  issuer: Issuer;
 }
 
 interface Media {
@@ -84,9 +95,34 @@ export interface Collectible {
   precision: number;
   timestamp: number;
   metaData: MetaData;
+  transactions: Transfer[];
+  issuer: Issuer;
 }
 
-export interface Asset extends Coin, Collectible {}
+export interface UniqueDigitalAsset {
+  addedAt: number;
+  assetId: string;
+  assetIface: string;
+  balance: Balance;
+  details: string;
+  issuedSupply: number;
+  name: string;
+  precision: number;
+  ticker: string;
+  timestamp: number;
+  token: {
+    attachments: Media[],
+    embeddedMedia: boolean;
+    index: number;
+    media: Media;
+    reserves: boolean;
+  };
+  transactions: Transfer[];
+  metaData: MetaData;
+  issuer: Issuer;
+}
+
+export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
 export interface RgbAllocation {
   amount: number;
   assetId: string;
@@ -110,18 +146,37 @@ export interface RgbUnspent {
 export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
-  UDA = 'UDA',
+  UDA = 'UDA', //Unique Digital Asset
 }
 
 export enum AssetFace {
-  RGB25 = 'RGB25',
-  RGB20 = 'RGB20',
+  RGB25 = 'RGB25',  // Collectible(CFA)
+  RGB20 = 'RGB20', // Coin(NIA)
+  RGB21 = 'RGB21' //  Unique Digital Asset(UDA)
 }
 
 export enum UtxoType {
   Colored = 'Colored',
   Colorable = 'Colorable',
   Uncolored = 'Uncolored'
+}
+
+export enum TransferKind {
+  ISSUANCE = 'ISSUANCE',
+  RECEIVE_BLIND = 'RECEIVE_BLIND',
+  RECEIVE_WITNESS = 'RECEIVE_WITNESS',
+  SEND = 'SEND'
+}
+
+export enum TransferStatus {
+  WAITING_COUNTERPARTY = 'WAITING_COUNTERPARTY',
+  WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
+  SETTLED = 'SETTLED',
+  FAILED = 'FAILED'
+}
+
+export enum IssuerVerificationMethod {
+  TWITTER = 'twitter',
 }
 
 export interface RgbNodeConnectParams {

@@ -90,6 +90,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           loadingTitle={assets.cancelTransactionCtaMsg}
           onSwipeComplete={onPress}
           backColor={Colors.FireOpal}
+          loaderTextColor={theme.colors.successPopupTitleColor}
         />
       )}
     </View>

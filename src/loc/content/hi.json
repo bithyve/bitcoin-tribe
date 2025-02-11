@@ -127,7 +127,7 @@
     "supportNodeConnectingSubTitle": "आपके नोड से कनेक्ट किया जा रहा है। ऐप को खुला रखें और स्क्रीन को अनलॉक रखें।",
     "nodeconnectSuccessfulTitle": "कनेक्शन सफल",
     "nodeconnectSuccessfulSubTitle": "अब आप जुड़े हुए हैं। अगले चरण पर आगे बढ़ें।",
-    "profileSetupLoadingTitle": "हम आपकी प्रोफ़ाइल सेट कर रहे हैं",
+    "profileSetupLoadingTitle": "हम आपका वॉलेट सेट कर रहे हैं",
     "profileSetupLoadingSubTitle": "आराम से बैठें, हम सब कुछ आपके लिए तैयार कर रहे हैं। आपका ऐप बस एक पल में तैयार हो जाएगा।",
     "recoverLoadingTitle": "आपका वॉलेट पुनर्प्राप्त किया जा रहा है",
     "recoverLoadingSubTitle": "कृपया एक पल धैर्य रखें जब तक हम पुनर्प्राप्ति प्रक्रिया पूरी कर लें। सुनिश्चित करने के लिए ऐप बंद न करें कि सब कुछ सुचारू रूप से चले। आपके धैर्य के लिए धन्यवाद!",
@@ -283,7 +283,9 @@
     "activateWalletTypeLabel": "वॉलेट प्रकार",
     "copyWalletIDMsg": "वॉलेट ID सफलतापूर्वक कॉपी किया गया!",
     "walletBackupSuccessMsg": "आपका वॉलेट सफलतापूर्वक बैकअप किया गया है",
-    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं"
+    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -397,7 +399,7 @@
     "date": "तिथि",
     "numOfUtxo": "UTXO की संख्या",
     "transferDetails": "स्थानांतरण विवरण",
-    "viewUnspent": "अनस्पेंट UTXOs देखें",
+    "viewUnspent": "UTXO देखें",
     "walletRefreshMsg": "वॉलेट सफलतापूर्वक अपडेट किया गया",
     "unspentTitle": "UTXOs का अवलोकन",
     "satsAmount": "सैट्स राशि",
@@ -415,7 +417,8 @@
     "coloured": "रंगीन",
     "unColoured": "बिना रंग का",
     "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
-    "output": "आउटपुट"
+    "output": "आउटपुट",
+    "utxoValue": "UTXO मूल्य"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
@@ -483,7 +486,34 @@
     "assetProcessErrorMsg": "आपकी अनुरोध को संसाधित करते समय एक समस्या हुई। कृपया पुनः प्रयास करें।",
     "invoiceMisamatchMsg": "यह चालान इस संपत्ति के लिए नहीं है। कृपया जांचें और पुनः प्रयास करें।",
     "assetNotFoundMsg": "संपत्ति नहीं मिली। कृपया जांचें और पुनः प्रयास करें।",
-    "invoiceCopiedMsg": "चालान सफलतापूर्वक कॉपी किया गया"
+    "invoiceCopiedMsg": "चालान सफलतापूर्वक कॉपी किया गया",
+    "issueCollectibles": "कलेक्टिबल जारी करें",
+    "makeCollectibleUnique": "इस कलेक्टिबल को अद्वितीय बनाएं",
+    "enterAssetNamePlaceholder": "अपने एसेट का नाम दर्ज करें",
+    "enterDescNamePlaceholder": "अपने एसेट का वर्णन करें",
+    "enterTotSupplyPlaceholder": "अधिकतम इकाइयों की संख्या दर्ज करें",
+    "precisionCaption": "सेट करें कि प्रत्येक इकाई कितनी विभाज्य है (उदाहरण: 0 = पूर्ण इकाइयाँ, 2 = पैसे)",
+    "mediaFile": "मीडिया फ़ाइल",
+    "assetImageCaption": "अपने संपत्ति का प्रतिनिधित्व करने के लिए एक छवि जोड़ें (जैसे, लोगो या कलाकृति)",
+    "enterAssetTickerPlaceholder": "एक छोटा टिकर प्रतीक दर्ज करें (जैसे, BTC)",
+    "attachments": "संलग्नक",
+    "attachmentsCaption": "कोई भी सहायक छवियाँ या फ़ाइलें संलग्न करें (अधिकतम 16MB)",
+    "issueNewCoin": "सिक्का जारी करें",
+    "swipeToPay": "भुगतान करने के लिए स्वाइप करें",
+    "payInprocess": "भुगतान हो रहा है...",
+    "listYourAssetInRegTitle": "अपनी संपत्ति को रजिस्टर में सूचीबद्ध करें",
+    "listYourAssetInRegSubTitle": "क्या आप अपनी संपत्ति को हमारे Tribe RGB रजिस्टर में संग्रहीत करना चाहते हैं? एक छोटी सी सेवा शुल्क आवश्यक है। यदि नहीं, तो आप इस चरण को छोड़ सकते हैं।",
+    "failToFetchIssueFee": "संपत्ति निर्गमन शुल्क प्राप्त करने में विफल।",
+    "spendable": "खर्च करने योग्य: ",
+    "spendableBalanceInfo": "लंबित या \"प्रतीक्षारत प्रतिपक्ष\" लेनदेन के कारण अवरुद्ध राशि को घटाने के बाद उपयोग की जा सकने वाली शेष राशि।",
+    "enterAssetName": "कृपया एसेट का नाम दर्ज करें",
+    "enterAssetTicker": "कृपया एसेट टिकर दर्ज करें",
+    "enterTotalSupply": "कृपया कुल आपूर्ति इकाइयाँ दर्ज करें",
+    "enterDescription": "कृपया संपत्ति का विवरण दर्ज करें",
+    "requestInvoiceProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
+    "requestInvoiceProcessSubTitle": "आपका इनवॉइस जेनरेट किया जा रहा है। UTXO की उपलब्धता के कारण इसमें कुछ समय लग सकता है। आपके धैर्य के लिए धन्यवाद!",
+    "cancelingTransferTitle": "आपका ट्रांसफर रद्द किया जा रहा है",
+    "cancelingTransferSubTitle": "कृपया प्रतीक्षा करें, हम आपके लेनदेन प्रक्रिया को सुरक्षित रूप से रोक रहे हैं"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
@@ -551,7 +581,11 @@
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
     "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि",
     "createChannelTitle": "चैनल निर्माण",
-    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।"
+    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।",
+    "enterPubKeyaddress": "कृपया वैध पब्लिक की और पता दर्ज करें",
+    "enterCapacityAmt": "कृपया क्षमता राशि दर्ज करें",
+    "enterMSats": "कृपया mSats दर्ज करें",
+    "enterAssetAmt": "कृपया संपत्ति राशि दर्ज करें"
   },
   "lightning": {
     "sendTitle": "भेजें",

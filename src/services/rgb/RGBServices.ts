@@ -296,13 +296,14 @@ export default class RGBServices {
     amount: number,
     consignmentEndpoints: string,
     feePerByte,
+    isDonation: boolean,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT) {
       const response = await api.sendasset({
         asset_id: assetId,
-        donation: false,
+        donation: isDonation,
         fee_rate: feePerByte,
         min_confirmations: 0,
         recipient_id: blindedUTXO,
@@ -318,6 +319,7 @@ export default class RGBServices {
         amount,
         consignmentEndpoints,
         feePerByte,
+        isDonation,
       );
       return JSON.parse(data);
     }

@@ -7,18 +7,17 @@ import {
   Platform,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
-import { wp, hp, windowHeight } from 'src/constants/responsive';
+import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import {
   formatLargeNumber,
-  numberWithCommas,
 } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import AssetChip from './AssetChip';
-import { Asset } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type AssetCardProps = {
   asset: Asset;
@@ -36,6 +35,14 @@ const AssetCard = (props: AssetCardProps) => {
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 
+  const uri = useMemo(() => {
+    const media = asset?.media?.filePath || asset.token.media.filePath;
+    return Platform.select({
+      android: `file://${media}`,
+      ios: media,
+    });
+  }, [asset?.media?.filePath, asset?.token?.media.filePath]);
+
   return (
     <AppTouchable onPress={onPress}>
       <GradientView
@@ -48,24 +55,26 @@ const AssetCard = (props: AssetCardProps) => {
         <View style={styles.assetImageWrapper}>
           <Image
             source={{
-              uri: Platform.select({
-                android: `file://${asset.media?.filePath}`,
-                ios: asset.media?.filePath,
-              }),
+              uri: uri,
             }}
             style={styles.imageStyle}
           />
-          <View style={styles.tagWrapper}>
-            <AssetChip
-              tagText={formatLargeNumber(balance)}
-              backColor={
-                tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
-              }
-              tagColor={theme.colors.tagText}
-            />
-          </View>
+          {asset.assetIface.toUpperCase() === AssetFace.RGB25 && (
+            <View style={styles.tagWrapper}>
+              <AssetChip
+                tagText={formatLargeNumber(balance)}
+                backColor={
+                  tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
+                }
+                tagColor={theme.colors.tagText}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.contentWrapper}>
+          {asset.issuer?.verified && (
+            <IconVerified width={24} height={24} />
+          )}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
@@ -100,6 +109,8 @@ const getStyles = (theme: AppTheme) =>
       paddingVertical: 5,
       height: '30%',
       justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     titleText: {
       lineHeight: hp(18),
@@ -125,6 +136,10 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       alignSelf: 'center',
       bottom: -10,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default AssetCard;

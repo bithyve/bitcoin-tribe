@@ -1,11 +1,10 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -19,11 +18,14 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
+import AssetSpendableAmtView from './components/AssetSpendableAmtView';
+import { windowHeight } from 'src/constants/responsive';
+import { requestAppReview } from 'src/services/appreview';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId } = useRoute().params;
+  const { assetId, askReview } = useRoute().params;
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -32,6 +34,14 @@ const CoinDetailsScreen = () => {
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -95,7 +105,14 @@ const CoinDetailsScreen = () => {
           })
         }
       />
+      <View style={styles.spendableBalanceWrapper}>
+        <AssetSpendableAmtView
+          spendableBalance={coin?.balance?.spendable}
+          style={styles.toolTipCotainer}
+        />
+      </View>
       <TransactionsList
+        style={styles.transactionContainer}
         transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
@@ -117,4 +134,14 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  spendableBalanceWrapper: {
+    top: -30,
+  },
+  transactionContainer: {
+    top: -25,
+  },
+  toolTipCotainer: {
+    top: windowHeight > 670 ? 90 : 70,
+  },
+});

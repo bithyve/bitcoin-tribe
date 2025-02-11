@@ -1,18 +1,17 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, GestureResponderEvent } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import {
   formatLargeNumber,
-  numberWithCommas,
 } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import Identicon from './Identicon';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type CoinAssetCardProps = {
   asset: Asset;
@@ -40,11 +39,14 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
           theme.colors.assetCardGradient3,
         ]}>
         <View style={styles.contentWrapper}>
-          {asset.ticker && (
-            <AppText variant="heading3" style={styles.titleText}>
-              {asset.ticker}
-            </AppText>
-          )}
+            <View style={styles.row}>
+              <AppText variant="heading3" style={styles.titleText}>
+                {asset.ticker}
+              </AppText>
+              {asset.issuer?.verified && (
+                <IconVerified width={24} height={24} />
+              )}
+            </View>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
@@ -88,6 +90,7 @@ const getStyles = (theme: AppTheme) =>
       lineHeight: hp(25),
       fontWeight: '600',
       color: theme.colors.headingColor,
+      marginRight: hp(2),
     },
     nameText: {
       fontWeight: '300',
@@ -128,6 +131,10 @@ const getStyles = (theme: AppTheme) =>
       width: 1.5,
       backgroundColor: theme.colors.assetCardVerticalBorder,
       marginHorizontal: hp(5),
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default CoinAssetCard;

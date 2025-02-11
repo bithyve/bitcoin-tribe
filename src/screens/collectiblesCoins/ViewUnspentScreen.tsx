@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, Platform, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -14,6 +14,7 @@ import {
   Collectible,
   RgbUnspent,
   RGBWallet,
+  UniqueDigitalAsset,
   UtxoType,
 } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
@@ -31,6 +32,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
@@ -38,13 +40,15 @@ const ViewUnspentScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations || { wallet: {}, assets: {} };
   const [utxoType, setUtxoType] = useState<UtxoType>(UtxoType.Colored);
+  const [refreshing, setRefreshing] = useState(false);
 
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const udas = useQuery<UniqueDigitalAsset[]>(RealmSchema.UniqueDigitalAsset);
   const combined: Asset[] = useMemo(
-    () => [...coins, ...collectibles],
-    [coins, collectibles],
+    () => [...coins, ...collectibles, ...udas],
+    [coins, collectibles, udas],
   );
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
@@ -63,7 +67,7 @@ const ViewUnspentScreen = () => {
   );
   const uncolored = unspent.filter(utxo => utxo.utxo.colorable === false);
 
-  const { mutate, isLoading } = useMutation(ApiHandler.viewUtxos);
+  const { mutate } = useMutation(ApiHandler.viewUtxos);
 
   const listData = useMemo(() => {
     switch (utxoType) {
@@ -81,12 +85,17 @@ const ViewUnspentScreen = () => {
   }, [mutate]);
 
   const redirectToBlockExplorer = (txid: string) => {
-    if (config.NETWORK_TYPE === NetworkType.REGTEST) return
+    if (config.NETWORK_TYPE === NetworkType.REGTEST) return;
     openLink(
       `https://mempool.space${
         config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
       }/tx/${txid}`,
     );
+  };
+  const pullDownToRefresh = () => {
+    setRefreshing(true);
+    mutate();
+    setTimeout(() => setRefreshing(false), 2000);
   };
 
   return (
@@ -132,12 +141,19 @@ const ViewUnspentScreen = () => {
           </AppTouchable>
         )}
         refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={() => mutate()}
-            colors={[theme.colors.accent1]}
-            progressBackgroundColor={theme.colors.inputBackground}
-          />
+          Platform.OS === 'ios' ? (
+            <RefreshControlView
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+            />
+          ) : (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => pullDownToRefresh()}
+              colors={[theme.colors.accent1]}
+              progressBackgroundColor={theme.colors.inputBackground}
+            />
+          )
         }
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={

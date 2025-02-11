@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
@@ -17,11 +16,9 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
-import AppText from 'src/components/AppText';
-import { AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import dbManager from 'src/storage/realm/dbManager';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
@@ -42,14 +39,18 @@ function Collectibles() {
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
   const collectibles = useQuery(RealmSchema.Collectible);
+  const udas = useQuery(RealmSchema.UniqueDigitalAsset);
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
-  const assets = useMemo(() => {
-    return [...collectibles.toJSON()].sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles]);
+  const assets: Asset[] = useMemo(() => {
+    return [
+      ...collectibles.map(item => item as Asset),
+      ...udas.map(item => item as Asset),
+    ].sort((a, b) => b.timestamp - a.timestamp);
+  }, [collectibles, udas]);
 
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
@@ -132,11 +133,17 @@ function Collectibles() {
             issueAssetType: AssetType.Collectible,
           })
         }
-        onPressAsset={asset =>
-          handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
-            assetId: asset.assetId,
-          })
-        }
+        onPressAsset={(asset: Asset) => {
+          if (asset.assetIface.toUpperCase() === AssetFace.RGB25) {
+            handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else {
+            handleNavigation(NavigationRoutes.UDADETAILS, {
+              assetId: asset.assetId,
+            });
+          }
+        }}
       />
     </ScreenContainer>
   );
