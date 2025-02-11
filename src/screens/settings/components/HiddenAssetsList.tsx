@@ -54,12 +54,12 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
 
   const getAssetType = (assetIface: string) => {
     switch (assetIface.toUpperCase()) {
-      case 'RGB25':
+      case AssetFace.RGB25:
         return assets.collectible;
-      case 'RGB20':
+      case AssetFace.RGB20:
         return assets.coin;
-      case 'RGB21':
-        return 'UDA';
+      case AssetFace.RGB21:
+        return assets.collectible;
       default:
         return '';
     }
@@ -68,13 +68,13 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
   const unHideAsset = (assetId, assetIface) => {
     let schemaType;
     switch (assetIface.toUpperCase()) {
-      case 'RGB25':
+      case AssetFace.RGB25:
         schemaType = RealmSchema.Collectible;
         break;
-      case 'RGB20':
+      case AssetFace.RGB20:
         schemaType = RealmSchema.Coin;
         break;
-      case 'RGB21':
+      case AssetFace.RGB21:
         schemaType = RealmSchema.UniqueDigitalAsset;
         break;
       default:

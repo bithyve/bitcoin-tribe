@@ -49,10 +49,6 @@ function HomeScreen() {
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
-  const assets = useMemo(() => {
-    return coins;
-  }, [coins]);
-
   const balances = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
@@ -126,7 +122,7 @@ function HomeScreen() {
         />
       </View>
       <CoinAssetsList
-        listData={assets}
+        listData={coins}
         loading={refreshing}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing}
