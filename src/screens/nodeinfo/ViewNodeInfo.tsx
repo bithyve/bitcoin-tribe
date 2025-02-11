@@ -78,8 +78,11 @@ const ViewNodeInfo = () => {
 
   useEffect(() => {
     if (data) {
-      if (data?.message) {
-        Toast(data?.message, true);
+      if (data?.message === 'Internal server error') {
+        Toast(
+          'Unable to fetch node info due to a server error. Please try again later.',
+          true,
+        );
       } else {
         setnodeInfo(data);
       }
