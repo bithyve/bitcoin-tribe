@@ -390,7 +390,7 @@
     "noUTXOYet": "まだ取引はありません",
     "noUTXOYetSubTitle": "ビットコインを送受信してアクティビティを確認しましょう！",
     "xPubNoteSubTitle": "Xpubアドレスをスキャンまたはコピーして貼り付け",
-    "profileUpdateMsg": "プロフィールの更新に成功しました！",
+    "profileUpdateMsg": "プロフィールが正常に更新されました！",
     "profileUpdateErrMsg": "更新に失敗しました！",
     "rgbTransUnlockTitle": "5回のRGB取引アンロック",
     "rgbTransUnlockSubTitle": "5回のRGB取引が可能です",

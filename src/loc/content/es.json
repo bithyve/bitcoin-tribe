@@ -390,7 +390,7 @@
     "noUTXOYet": "Aún no hay transacciones",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Escanee o copie y pegue la dirección de Xpub",
-    "profileUpdateMsg": "¡Actualización de perfil exitosa!",
+    "profileUpdateMsg": "¡Perfil actualizado con éxito!",
     "profileUpdateErrMsg": "¡Fallo en la actualización!",
     "rgbTransUnlockTitle": "5 Desbloqueo de transacciones RGB",
     "rgbTransUnlockSubTitle": "Puede realizar 5 transacciones RBG ahora",
