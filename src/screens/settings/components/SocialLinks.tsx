@@ -20,7 +20,7 @@ const SocialLinks = (props: SocialLinksProps) => {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
-
+  console.log('windowHeight', windowHeight);
   return (
     <View style={styles.container}>
       <SocialButton
@@ -42,7 +42,13 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       bottom:
-        Platform.OS === 'android' ? '28%' : windowHeight > 670 ? '18%' : '22%',
+        Platform.OS === 'android'
+          ? windowHeight > 670
+            ? '25%'
+            : '28%'
+          : windowHeight > 670
+          ? '18%'
+          : '22%',
     },
   });
 
