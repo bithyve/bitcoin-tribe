@@ -42,7 +42,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       bottom:
-        Platform.OS === 'android' ? '26%' : windowHeight > 670 ? '18%' : '22%',
+        Platform.OS === 'android' ? '28%' : windowHeight > 670 ? '18%' : '22%',
     },
   });
 
