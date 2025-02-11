@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal for users who prefer a straightforward setup and minimal complexity.",
     "supportLearnMoreLabel3": "Backup Support",
     "supportLearnMoreContent3": "Relay-based backups ensure asset recovery and secure management.",
-    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode."
+    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode.",
+    "backupFileNotFound": "We couldn’t find your RGB Asset file. Please upload the file from your phone."
   },
   "home": {
     "addAssets": "Receive Asset",

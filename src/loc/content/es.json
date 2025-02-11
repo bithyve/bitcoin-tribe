@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal para usuarios que prefieren una configuración sencilla y mínima complejidad.",
     "supportLearnMoreLabel3": "Soporte de respaldo",
     "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
-    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible."
+    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible.",
+    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono."
   },
   "home": {
     "addAssets": "Recibir activo",
