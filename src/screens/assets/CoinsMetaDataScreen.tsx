@@ -16,7 +16,7 @@ import { useMutation } from 'react-query';
 import {
   Coin,
   TransferKind,
-  AssetVisibilityType,
+  AssetVisibility,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -73,7 +73,7 @@ const CoinsMetaDataScreen = () => {
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
-      visibility: AssetVisibilityType.HIDDEN,
+      visibility: AssetVisibility.HIDDEN,
     });
     navigation.dispatch(popAction);
   };

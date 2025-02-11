@@ -19,7 +19,11 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { AssetType, Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  AssetVisibility,
+  Coin,
+} from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function HomeScreen() {
@@ -42,7 +46,9 @@ function HomeScreen() {
   const wallet = useWallets({}).wallets[0];
 
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
-    collection.filtered("visibility != 'HIDDEN'").sorted('timestamp', true),
+    collection
+      .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
+      .sorted('timestamp', true),
   );
 
   const [refreshing, setRefreshing] = useState(false);

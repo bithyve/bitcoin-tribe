@@ -17,7 +17,7 @@ import AppHeader from 'src/components/AppHeader';
 import {
   Collectible,
   TransferKind,
-  AssetVisibilityType,
+  AssetVisibility,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -97,7 +97,7 @@ const CollectibleMetaDataScreen = () => {
       'assetId',
       assetId,
       {
-        visibility: AssetVisibilityType.HIDDEN,
+        visibility: AssetVisibility.HIDDEN,
       },
     );
     navigation.dispatch(popAction);

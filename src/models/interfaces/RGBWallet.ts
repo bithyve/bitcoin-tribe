@@ -76,6 +76,7 @@ export interface Coin {
   transactions: Transfer[];
   metaData: MetaData;
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 interface Media {
@@ -97,6 +98,7 @@ export interface Collectible {
   metaData: MetaData;
   transactions: Transfer[];
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 export interface UniqueDigitalAsset {
@@ -120,6 +122,7 @@ export interface UniqueDigitalAsset {
   transactions: Transfer[];
   metaData: MetaData;
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -155,7 +158,7 @@ export enum AssetFace {
   RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
 }
 
-export enum AssetVisibilityType {
+export enum AssetVisibility {
   DEFAULT = 'DEFAULT',
   HIDDEN = 'HIDDEN',
   // ARCHIVED = 'ARCHIVED',

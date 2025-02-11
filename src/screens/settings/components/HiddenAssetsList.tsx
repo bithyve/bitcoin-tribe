@@ -18,7 +18,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   Asset,
   AssetFace,
-  AssetVisibilityType,
+  AssetVisibility,
 } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
@@ -81,7 +81,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
         return;
     }
     dbManager.updateObjectByPrimaryId(schemaType, 'assetId', assetId, {
-      visibility: AssetVisibilityType.DEFAULT,
+      visibility: AssetVisibility.DEFAULT,
     });
   };
 

@@ -11,6 +11,7 @@ import HiddenAssetsList from './components/HiddenAssetsList';
 import { RealmSchema } from 'src/storage/enum';
 import {
   Asset,
+  AssetVisibility,
   Coin,
   Collectible,
   UniqueDigitalAsset,
@@ -24,15 +25,17 @@ function HiddenAssets() {
   const [refreshing, setRefreshing] = useState(false);
 
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
-    collection.filtered("visibility == 'HIDDEN'"),
+    collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
   );
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
-    collection => collection.filtered("visibility == 'HIDDEN'"),
+    collection =>
+      collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
-    collection => collection.filtered("visibility == 'HIDDEN'"),
+    collection =>
+      collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
   );
   const assets: Asset[] = useMemo(() => {
     return [...coins, ...collectibles, ...udas].sort(

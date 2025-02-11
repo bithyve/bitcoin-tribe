@@ -20,6 +20,7 @@ import {
   Asset,
   AssetFace,
   AssetType,
+  AssetVisibility,
   Collectible,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
@@ -46,11 +47,13 @@ function Collectibles() {
   const wallet = useWallets({}).wallets[0];
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
-    collection => collection.filtered("visibility != 'HIDDEN'"),
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
-    collection => collection.filtered("visibility != 'HIDDEN'"),
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
 
   const [refreshing, setRefreshing] = useState(false);

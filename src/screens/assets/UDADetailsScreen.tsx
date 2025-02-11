@@ -15,7 +15,7 @@ import ImageViewing from 'react-native-image-viewing';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
-  AssetVisibilityType,
+  AssetVisibility,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -96,7 +96,7 @@ const UDADetailsScreen = () => {
       'assetId',
       assetId,
       {
-        visibility: AssetVisibilityType.HIDDEN,
+        visibility: AssetVisibility.HIDDEN,
       },
     );
     navigation.dispatch(popAction);
