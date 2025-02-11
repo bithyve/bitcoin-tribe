@@ -1,13 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
 import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
@@ -19,21 +19,33 @@ import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySe
 import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetFace,
+  Transfer,
+  TransferKind,
+} from 'src/models/interfaces/RGBWallet';
+import IconArrow from 'src/assets/images/icon_arrowr2.svg';
+import IconArrowLight from 'src/assets/images/icon_arrowr2light.svg';
+import { Keys } from 'src/storage';
 
 type AssetTransactionProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transfer;
   coin: string;
+  onPress: () => void;
+  assetFace?: string;
 };
 function AssetTransaction(props: AssetTransactionProps) {
-  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace } = props;
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, backColor, assetFace),
+    [theme, backColor, assetFace],
+  );
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const getStatusIcon = (kind, status, type) => {
     const icons = {
@@ -70,20 +82,16 @@ function AssetTransaction(props: AssetTransactionProps) {
         },
       },
     };
-
-    // Add a fallback for the default icons for Bitcoin and Lightning
     const defaultIcons = {
       bitcoin: <RecieveBtcIcon />,
       lightning: <RecieveLightningIcon />,
     };
-    // Return the icon based on kind, status, and type, or fall back to the default icon
     return icons[type]?.[status]?.[kind] || defaultIcons[type];
   };
 
-
   const amtTextStyle = useMemo(() => {
     const kind = transaction.kind.toUpperCase();
-    if(kind === TransferKind.SEND) {
+    if (kind === TransferKind.SEND) {
       return styles.amountSend;
     }
     return styles.amountTextReceive;
@@ -92,13 +100,12 @@ function AssetTransaction(props: AssetTransactionProps) {
   return (
     <AppTouchable
       disabled={disabled}
-      style={styles.containerWrapper}
-      onPress={() => {
-        navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-          transaction: transaction,
-          coin: coin,
-        });
-      }}>
+      style={
+        assetFace?.toUpperCase() === AssetFace.RGB21
+          ? styles.containerWrapper1
+          : styles.containerWrapper
+      }
+      onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.transDetailsWrapper}>
           <View>
@@ -125,31 +132,46 @@ function AssetTransaction(props: AssetTransactionProps) {
             </AppText>
           </View>
         </View>
-        <View style={styles.amountWrapper}>
-          <View style={styles.amtIconWrapper}>
-            <AppText
-              variant="body1"
-              style={[
-                amtTextStyle,
-                {
-                  fontSize: transaction.amount.toString().length > 10 ? 11 : 16,
-                },
-              ]}>
-              &nbsp;{numberWithCommas(transaction.amount)}
-            </AppText>
+        {assetFace?.toUpperCase() !== AssetFace.RGB21 ? (
+          <View style={styles.amountWrapper}>
+            <View style={styles.amtIconWrapper}>
+              <AppText
+                variant="body1"
+                style={[
+                  amtTextStyle,
+                  {
+                    fontSize:
+                      transaction.amount.toString().length > 10 ? 11 : 16,
+                  },
+                ]}>
+                &nbsp;{numberWithCommas(transaction.amount)}
+              </AppText>
+            </View>
           </View>
-          {/* {!disabled ? <IconArrow /> : null} */}
-        </View>
+        ) : !disabled ? (
+          isThemeDark ? (
+            <IconArrow />
+          ) : (
+            <IconArrowLight />
+          )
+        ) : null}
       </View>
     </AppTouchable>
   );
 }
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme, backColor, assetFace) =>
   StyleSheet.create({
     containerWrapper: {
       paddingVertical: hp(15),
       borderBottomColor: theme.colors.borderColor,
       borderBottomWidth: 1,
+    },
+    containerWrapper1: {
+      paddingVertical: hp(10),
+      paddingHorizontal: hp(20),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: 10,
     },
     container: {
       flexDirection: 'row',
@@ -161,7 +183,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '60%',
+      width: assetFace?.toUpperCase() === AssetFace.RGB21 ? '92%' : '60%',
       alignItems: 'center',
     },
     contentWrapper: {
@@ -175,7 +197,7 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '40%',
+      width: assetFace?.toUpperCase() === AssetFace.RGB21 ? '8%' : '40%',
       alignItems: 'center',
       justifyContent: 'space-between',
     },

@@ -21,6 +21,7 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
     },
     transactions: `${RealmSchema.AssetTransaction}[]`,
     metaData: `${RealmSchema.MetaData}`,
+    issuer: `${RealmSchema.Issuer}`,
   },
 };
 

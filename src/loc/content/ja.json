@@ -504,6 +504,12 @@
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
     "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。",
     "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。",
+    "spendable": "使用可能残高: ",
+    "spendableBalanceInfo": "保留中または「カウンターパーティー待ち」の取引によってロックされた金額を差し引いた後に使用可能な残高。",
+    "enterAssetName": "アセット名を入力してください",
+    "enterAssetTicker": "アセットティッカーを入力してください",
+    "enterTotalSupply": "総供給量を入力してください",
+    "enterDescription": "アセットの説明を入力してください",
     "requestInvoiceProcessTitle": "リクエストを処理中",
     "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
     "cancelingTransferTitle": "Cancelando su transferencia",
@@ -575,7 +581,11 @@
     "createChannelBulletPoint2": "アセットIDと金額の詳細",
     "createChannelBulletPoint3": "利用可能な資金（サトシ単位）",
     "createChannelTitle": "チャネル作成",
-    "createChannelSubTitle": "準備が整うまでお待ちください。チャネルはすぐに開きます。"
+    "createChannelSubTitle": "準備が整うまでお待ちください。チャネルはすぐに開きます。",
+    "enterPubKeyaddress": "有効な公開鍵とアドレスを入力してください",
+    "enterCapacityAmt": "容量の金額を入力してください",
+    "enterMSats": "mSats を入力してください",
+    "enterAssetAmt": "アセットの金額を入力してください"
   },
   "lightning": {
     "sendTitle": "送信",
