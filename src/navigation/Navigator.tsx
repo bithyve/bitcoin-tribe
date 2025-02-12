@@ -73,6 +73,7 @@ import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
 import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
+import HiddenAssets from 'src/screens/settings/HiddenAssets';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -306,6 +307,10 @@ function AppStack() {
           component={LightningSend}
         />
         <Stack.Screen name={NavigationRoutes.VIEWLOGS} component={ViewLogs} />
+        <Stack.Screen
+          name={NavigationRoutes.HIDDENASSETS}
+          component={HiddenAssets}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );

@@ -271,6 +271,8 @@
     "expired": "Expired",
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
+    "hiddenAssets": "Hidden Assets",
+    "hiddenAssetSubTitle": "Manage your hidden coins and collectibles. Tap the eye icon to unhide.",
     "cloudBackupLoadingTitle": "Cloud Backup",
     "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
     "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",
@@ -286,7 +288,8 @@
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "UnHide"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -516,7 +519,12 @@
     "requestInvoiceProcessTitle": "Processing Your Request",
     "requestInvoiceProcessSubTitle": "Your invoice is being generated. This may take a few moments due to UTXO availability. Thank you for your patience!",
     "cancelingTransferTitle": "Canceling Your Transfer",
-    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process"
+    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process",
+    "hideCoin": "Hide Coin",
+    "hideCollectible": "Hide Collectible",
+    "hideUda": "Hide UDA",
+    "noHiddenAssetTitle": "No Hidden Assets",
+    "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime."
   },
   "community": {
     "fnfTitle": "Friends & Family",

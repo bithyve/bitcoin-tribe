@@ -16,7 +16,14 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
-import { Asset, AssetFace, AssetType } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  AssetType,
+  AssetVisibility,
+  Collectible,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 
@@ -38,18 +45,25 @@ function Collectibles() {
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
-  const collectibles = useQuery(RealmSchema.Collectible);
-  const udas = useQuery(RealmSchema.UniqueDigitalAsset);
+  const collectibles = useQuery<Collectible>(
+    RealmSchema.Collectible,
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const udas = useQuery<UniqueDigitalAsset>(
+    RealmSchema.UniqueDigitalAsset,
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
 
   const [refreshing, setRefreshing] = useState(false);
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
 
   const assets: Asset[] = useMemo(() => {
-    return [
-      ...collectibles.map(item => item as Asset),
-      ...udas.map(item => item as Asset),
-    ].sort((a, b) => b.timestamp - a.timestamp);
+    return [...collectibles, ...udas]
+      .map(item => item as Asset)
+      .sort((a, b) => b.timestamp - a.timestamp);
   }, [collectibles, udas]);
 
   const balances = useMemo(() => {

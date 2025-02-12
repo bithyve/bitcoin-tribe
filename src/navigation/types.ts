@@ -57,6 +57,7 @@ export type AppStackParams = {
   [NavigationRoutes.ONCHAINLEARNMORE]: undefined;
   [NavigationRoutes.LNLEARNMORE]: undefined;
   [NavigationRoutes.SUPPORTLEARNMORE]: undefined;
+  [NavigationRoutes.HIDDENASSETS]: undefined;
   // Add other routes as needed
 };
 
