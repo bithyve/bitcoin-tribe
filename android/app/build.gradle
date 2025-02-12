@@ -71,6 +71,7 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -81,9 +82,12 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 88
-        versionName "0.2.7"
+        versionCode 92
+        versionName "0.2.8"
         missingDimensionStrategy 'react-native-camera', 'general'
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'tribe'
+        ]
     }
     signingConfigs {
         release {

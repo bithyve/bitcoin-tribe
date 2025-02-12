@@ -68,7 +68,7 @@ const ServiceFee = ({
 
   return (
     <View style={styles.containerFee}>
-      <View>
+      <View style={styles.wrapper}>
         <View style={styles.amtContainer}>
           <View style={styles.labelWrapper}>
             <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
@@ -79,7 +79,8 @@ const ServiceFee = ({
             )} sats`}</AppText>
           </View>
         </View>
-
+      </View>
+      <View>
         <SecondaryCTA
           title={common.skip}
           disabled={status === 'loading'}
@@ -89,8 +90,7 @@ const ServiceFee = ({
               onSkip();
             }, 400);
           }}
-          buttonColor={theme.colors.buy}
-          height={hp(18)}
+          height={hp(16)}
         />
 
         <View style={styles.primaryCtaStyle}>
@@ -146,7 +146,7 @@ function AddAsset() {
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
-          }, 300);
+          }, 500);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
@@ -173,7 +173,10 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
+      Toast(
+        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -221,6 +224,7 @@ function AddAsset() {
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
+            if(payServiceFeeFeeMutation.isLoading) return
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
@@ -241,8 +245,8 @@ function AddAsset() {
         <SelectOption
           title={
             issueAssetType === AssetType.Coin
-              ? 'Issue Coin'
-              : 'Issue Collectible'
+              ? assets.issueNewCoin
+              : assets.issueCollectibles
           }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
@@ -306,7 +310,10 @@ const getStyles = (theme: AppTheme) =>
     containerFee: {
       borderTopColor: theme.colors.borderColor,
       borderTopWidth: 1,
-      paddingTop: hp(15),
+      paddingTop: hp(5),
+    },
+    wrapper: {
+      height: '46%',
     },
     labelWrapper: {
       width: '45%',
@@ -314,6 +321,7 @@ const getStyles = (theme: AppTheme) =>
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'flex-end',
       width: '55%',
     },
     labelText: {
@@ -323,14 +331,16 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     amtContainer: {
-      marginVertical: hp(20),
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(45),
       padding: hp(15),
       borderRadius: 15,
       alignItems: 'center',
-      borderColor: '#787878',
+      borderColor: theme.colors.serviceFeeBorder,
       borderWidth: 1,
       borderStyle: 'dashed',
       flexDirection: 'row',
+      width: '80%',
+      alignSelf: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',

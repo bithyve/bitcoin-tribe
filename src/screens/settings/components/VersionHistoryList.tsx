@@ -1,33 +1,46 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useQuery } from '@realm/react';
 
 import { AppTheme } from 'src/theme';
 import VersionHistoryItem from './VersionHistoryItem';
-import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import { hp } from 'src/constants/responsive';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function VersionHistoryList() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
-  const VersionHistoryData = useQuery(RealmSchema.VersionHistory).map(
-    getJSONFromRealmObject,
-  );
-  const lastIndex = VersionHistoryData.length - 1;
+  const versionHistory = useQuery<VersionHistory[]>(RealmSchema.VersionHistory)
+    .map(getJSONFromRealmObject)
+    .sort(
+      (a, b) =>
+        new Date(b.date as string).getTime() -
+        new Date(a.date as string).getTime(),
+    );
+  const lastIndex = versionHistory.length - 1;
+
   return (
     <FlatList
-      data={VersionHistoryData.reverse()}
-      renderItem={({ item, index }) => (
-        <VersionHistoryItem
-          title={item.title}
-          date={item.date}
-          releaseNotes={item.releaseNotes}
-          lastIndex={lastIndex === index}
-        />
-      )}
+      data={versionHistory}
+      renderItem={({ item, index }) => {
+        const title =
+          index === versionHistory.length - 1
+            ? item.title
+            : `Upgraded to ${item.version}`;
+
+        return (
+          <VersionHistoryItem
+            title={title}
+            date={item.date}
+            releaseNotes={item.releaseNotes}
+            lastIndex={lastIndex === index}
+          />
+        );
+      }}
       style={styles.container}
     />
   );

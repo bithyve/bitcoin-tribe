@@ -13,7 +13,6 @@ import { useMutation } from 'react-query';
 import idx from 'idx';
 import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
-
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
@@ -45,10 +44,12 @@ import ModalContainer from 'src/components/ModalContainer';
 import FeePriorityButton from './FeePriorityButton';
 import { ConvertSatsToFiat } from 'src/constants/Bitcoin';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import WalletOperations from 'src/services/wallets/operations';
+import { requestAppReview } from 'src/services/appreview';
 
 function SendToContainer({
   wallet,
@@ -147,6 +148,7 @@ function SendToContainer({
           ],
         }),
       );
+      requestAppReview();
     }, 400);
   };
 
@@ -399,7 +401,13 @@ function SendToContainer({
             }
             inputStyle={styles.recipientInputStyle}
             rightText={!recipientAddress && sendScreen.paste}
-            rightIcon={recipientAddress && <ClearIcon />}
+            rightIcon={
+              recipientAddress && isThemeDark ? (
+                <ClearIcon />
+              ) : (
+                <ClearIconLight />
+              )
+            }
             onRightTextPress={() =>
               recipientAddress ? setRecipientAddress('') : handlePasteAddress()
             }

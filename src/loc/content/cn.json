@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "适合喜欢简单设置和最小复杂性的用户。",
     "supportLearnMoreLabel3": "备份支持",
     "supportLearnMoreContent3": "基于中继的备份确保资产恢复和安全管理。",
-    "supportLearnMoreContent4": "在支持模式下，享受增强安全性的用户友好体验。"
+    "supportLearnMoreContent4": "在支持模式下，享受增强安全性的用户友好体验。",
+    "backupFileNotFound": "我们找不到您的 RGB 资产文件。请从您的手机上传该文件。"
   },
   "home": {
     "addAssets": "接收资产",
@@ -270,6 +271,8 @@
     "expired": "已过期",
     "viewNodeInfo": "节点信息",
     "channelManagement": "渠道管理",
+    "hiddenAssets": "隐藏资产",
+    "hiddenAssetSubTitle": "管理您的隐藏币和收藏品。点击眼睛图标以取消隐藏。",
     "cloudBackupLoadingTitle": "云备份",
     "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。",
     "walletBackupInfo": "请写下您的种子短语，并将其安全地保存在应用程序外部。",
@@ -283,7 +286,10 @@
     "activateWalletTypeLabel": "钱包类型",
     "copyWalletIDMsg": "钱包 ID 已成功复制！",
     "walletBackupSuccessMsg": "您的钱包已成功备份",
-    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份"
+    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X",
+    "unHide": "取消隐藏"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -416,7 +422,9 @@
     "unColoured": "非彩色",
     "availableTxnFee": "可用交易费",
     "output": "输出",
-    "utxoValue": "UTXO 值"
+    "utxoValue": "UTXO 值",
+    "requestTSatsProcessTitle": "正在处理您的请求",
+    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
@@ -501,7 +509,22 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
-    "failToFetchIssueFee": "获取资产发行费用失败。"
+    "failToFetchIssueFee": "获取资产发行费用失败。",
+    "spendable": "可用余额: ",
+    "spendableBalanceInfo": "扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。",
+    "enterAssetName": "请输入资产名称",
+    "enterAssetTicker": "请输入资产代码",
+    "enterTotalSupply": "请输入总供应量",
+    "enterDescription": "请输入资产描述",
+    "requestInvoiceProcessTitle": "正在处理您的请求",
+    "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
+    "cancelingTransferTitle": "正在取消您的转账",
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程",
+    "hideCoin": "隐藏币",
+    "hideCollectible": "隐藏藏品",
+    "hideUda": "隐藏 UDA",
+    "noHiddenAssetTitle": "没有隐藏资产",
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -569,7 +592,11 @@
     "createChannelBulletPoint2": "资产ID和金额详情",
     "createChannelBulletPoint3": "可用资金（以聪为单位）",
     "createChannelTitle": "通道创建",
-    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。",
+    "enterPubKeyaddress": "请输入有效的公钥和地址",
+    "enterCapacityAmt": "请输入容量金额",
+    "enterMSats": "请输入毫聪（mSats）",
+    "enterAssetAmt": "请输入资产金额"
   },
   "lightning": {
     "sendTitle": "发送",

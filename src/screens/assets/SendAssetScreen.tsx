@@ -34,6 +34,7 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -473,7 +474,9 @@ const SendAssetScreen = () => {
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
           inputStyle={styles.inputStyle}
           rightText={!invoice && sendScreen.paste}
-          rightIcon={invoice && <ClearIcon />}
+          rightIcon={
+            invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
           onRightTextPress={() =>
             invoice ? setInvoice('') : handlePasteAddress()
           }
@@ -578,7 +581,7 @@ const SendAssetScreen = () => {
 
         <View style={styles.containerSwitch}>
           <AppText variant="heading3">
-            Send this transfer as a donation?
+            Send as donation?
           </AppText>
 
           <Switch
@@ -615,7 +618,10 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            onSuccessPress={() => navigation.goBack()}
+            onSuccessPress={() => {
+              navigation.goBack()
+              navigation.setParams({ askReview: true });
+            }}
             onPress={sendAsset}
             estimateBlockTime={
               selectedPriority === TxPriority.CUSTOM
@@ -629,11 +635,16 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
-            if (assetAmount > assetData?.balance.spendable) {
+            if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
-              Toast(
+              if (Number(assetData?.balance.spendable) === 0) {
+                setAmountValidationError(
+                  sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+                );
+                return;
+              }
+              setAmountValidationError(
                 assets.checkSpendableAmt + assetData?.balance.spendable,
-                true,
               );
               return;
             }

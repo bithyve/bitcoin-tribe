@@ -94,6 +94,7 @@ type CustomColors = {
   appBackupStepLabel: string;
   swipeToActionThumbColor: string;
   errorBorderColor: string;
+  serviceFeeBorder: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -126,7 +127,7 @@ const CombinedDefaultTheme: AppTheme = {
     popupSentCTATitleColor: Colors.White,
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
-    inputBackground: Colors.BrightGray,
+    inputBackground: Colors.White,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
@@ -196,6 +197,7 @@ const CombinedDefaultTheme: AppTheme = {
     appBackupStepLabel: Colors.BrandeisBlue,
     swipeToActionThumbColor: Colors.BrandeisBlue,
     errorBorderColor: Colors.ImperialRed,
+    serviceFeeBorder: Colors.SonicSilver,
   },
   fonts: {
     regular: {
@@ -306,6 +308,7 @@ const CombinedDarkTheme: AppTheme = {
     appBackupStepLabel: Colors.Golden,
     swipeToActionThumbColor: Colors.Golden,
     errorBorderColor: Colors.ImperialRed,
+    serviceFeeBorder: Colors.SonicSilver,
   },
   fonts: {
     regular: {

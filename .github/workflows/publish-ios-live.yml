@@ -1,0 +1,90 @@
+name: Publish iOS live app to TestFlight
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+
+jobs:
+  build-ios-live:
+    name: Build and publish iOS live app to TestFlight
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Ensure Correct Bundler Version
+        run: bundler -v  
+  
+      - name: Install Fastlane dependencies
+        run: |
+          cd ios
+          bundle config set --local path 'vendor/bundle'
+          bundle check || bundle install
+      
+      - name: Debug Installed Gems
+        run: bundle list
+
+      - name: Decode App Store API Key
+        run: |
+          mkdir -p ios/fastlane
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ios/fastlane/AuthKey.p8
+          ls -la ios/fastlane/
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --silent
+          cd ..
+
+      - name: Set up Fastlane environment variables
+        run: |
+          echo "APP_STORE_CONNECT_API_KEY_ID=${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
+          echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
+          echo "APPLE_APP_IDENTIFIER=${{ secrets.APPLE_APP_IDENTIFIER }}" >> $GITHUB_ENV
+          echo "FASTLANE_APPLE_ID=${{ secrets.FASTLANE_APPLE_ID }}" >> $GITHUB_ENV
+
+      - name: Run Fastlane to upload to TestFlight
+        id: fastlane_step
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
+        run: |
+          cd ios
+          bundle exec fastlane github_actions_live
+
+      - name: Post PR comment with deployment status
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "${{ steps.fastlane_step.outcome }}" == "success" ]]; then
+            STATUS="✅ Deployment to **TestFlight** succeeded!"
+          else
+            STATUS="❌ Deployment to **TestFlight** failed. Please check the logs for details."
+          fi
+          
+          gh pr comment ${{ github.event.pull_request.number }} --body "$STATUS"
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf ./fastlane/AuthKey.p8

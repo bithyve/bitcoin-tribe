@@ -1,10 +1,13 @@
 import React, { useContext, ReactNode, useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { useQuery } from '@realm/react';
+import ReactNativeBiometrics from 'react-native-biometrics';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import ReactNativeBiometrics from 'react-native-biometrics';
 import IconBackup from 'src/assets/images/icon_backup.svg';
 import IconBackupLight from 'src/assets/images/icon_backup_light.svg';
 import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
@@ -29,7 +32,6 @@ import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingMenuItem from './components/SettingMenuItem';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import Toast from 'src/components/Toast';
@@ -37,9 +39,11 @@ import * as SecureStore from 'src/storage/secure-store';
 // import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 import { RealmSchema } from 'src/storage/enum';
-import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
+import SocialLinks from './components/SocialLinks';
+import openLink from 'src/utils/OpenLink';
+import { hp } from 'src/constants/responsive';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -174,6 +178,12 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 8,
+      title: settings.hiddenAssets,
+      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
+    },
+    {
+      id: 9,
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
@@ -185,7 +195,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 9,
+      id: 10,
       title: settings.biometricUnlock,
       icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -203,7 +213,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 10,
+      id: 11,
       title: settings.appInfo,
       icon: isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
@@ -211,9 +221,32 @@ function SettingsScreen({ navigation }) {
   ];
   return (
     <ScreenContainer>
-      <SettingMenuItem SettingsMenu={SettingsMenu} />
+      <View style={styles.container}>
+        <SettingMenuItem SettingsMenu={SettingsMenu} />
+      </View>
+      <View style={styles.container1}>
+        <SocialLinks
+          onPressTelegram={() => {
+            openLink('https://t.me/BitcoinTribeSupport');
+          }}
+          onPressX={() => {
+            openLink('https://x.com/BitcoinTribe_');
+          }}
+        />
+      </View>
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) => StyleSheet.create({});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      height: Platform.OS === 'ios' ? '83%' : '80%',
+      paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
+    },
+    container1: {
+      height: Platform.OS === 'ios' ? '17%' : '20%',
+      justifyContent: 'flex-end',
+      paddingTop: hp(20),
+    },
+  });
 export default SettingsScreen;

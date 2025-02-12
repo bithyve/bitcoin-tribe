@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -37,6 +37,7 @@ const ImportRgbBackup = () => {
   const { onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [visibleLoader, setVisibleLoader] = useState(false);
   const { mutateAsync, status, isLoading, error } = useMutation(
     ApiHandler.restoreWithBackupFile,
   );
@@ -49,6 +50,7 @@ const ImportRgbBackup = () => {
       const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
       const key = decrypt(hash, await SecureStore.fetch(hash));
       setKey(key);
+      setVisibleLoader(false);
       Toast(onBoarding.appRecoveryMsg);
       setTimeout(() => {
         navigation.replace(NavigationRoutes.APPSTACK);
@@ -58,11 +60,13 @@ const ImportRgbBackup = () => {
     if (status === 'success') {
       onSuccess();
     } else if (status === 'error') {
+      setVisibleLoader(false);
       Toast(`Failed to restore ${error}`, true);
     }
   }, [status]);
 
   const pickFile = async () => {
+    setVisibleLoader(true);
     pickSingle({
       transitionStyle: 'flipHorizontal',
       copyTo: 'documentDirectory',
@@ -71,13 +75,15 @@ const ImportRgbBackup = () => {
       console.log(res);
       if (
         res &&
-        res.fileCopyUri.substring(res.fileCopyUri.lastIndexOf('.')) === '.rgb_backup'
+        res.fileCopyUri.substring(res.fileCopyUri.lastIndexOf('.')) ===
+          '.rgb_backup'
       ) {
         mutateAsync({
           mnemonic: route.params.mnemonic,
           filePath: res.fileCopyUri.replace('file://', ''),
         });
       } else {
+        setVisibleLoader(false);
         Toast('Invalid RGB backup file', true);
       }
     });
@@ -87,7 +93,7 @@ const ImportRgbBackup = () => {
     <ScreenContainer>
       <View>
         <ResponsePopupContainer
-          visible={isLoading}
+          visible={isLoading || visibleLoader}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>

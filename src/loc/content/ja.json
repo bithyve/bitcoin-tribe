@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "シンプルなセットアップと最小限の複雑さを好むユーザーに最適です。",
     "supportLearnMoreLabel3": "バックアップサポート",
     "supportLearnMoreContent3": "リレーベースのバックアップにより、資産の回復と安全な管理が保証されます。",
-    "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。"
+    "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。",
+    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。"
   },
   "home": {
     "addAssets": "資産を受け取る",
@@ -270,6 +271,8 @@
     "expired": "有効期限が切れました",
     "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
+    "hiddenAssets": "非表示の資産",
+    "hiddenAssetSubTitle": "非表示のコインやコレクションを管理します。目のアイコンをタップして表示します。",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
     "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。",
     "walletBackupInfo": "シードフレーズを書き留め、アプリの外で安全に保管してください。",
@@ -283,7 +286,10 @@
     "activateWalletTypeLabel": "ウォレットタイプ",
     "copyWalletIDMsg": "ウォレット ID が正常にコピーされました！",
     "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
-    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました"
+    "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X",
+    "unHide": "表示する"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -388,7 +394,7 @@
     "noUTXOYet": "まだ取引はありません",
     "noUTXOYetSubTitle": "ビットコインを送受信してアクティビティを確認しましょう！",
     "xPubNoteSubTitle": "Xpubアドレスをスキャンまたはコピーして貼り付け",
-    "profileUpdateMsg": "プロフィールの更新に成功しました！",
+    "profileUpdateMsg": "プロフィールが正常に更新されました！",
     "profileUpdateErrMsg": "更新に失敗しました！",
     "rgbTransUnlockTitle": "5回のRGB取引アンロック",
     "rgbTransUnlockSubTitle": "5回のRGB取引が可能です",
@@ -416,7 +422,9 @@
     "unColoured": "無色",
     "availableTxnFee": "利用可能な取引手数料",
     "output": "出力",
-    "utxoValue": "UTXO 値"
+    "utxoValue": "UTXO 値",
+    "requestTSatsProcessTitle": "リクエストを処理中",
+    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
@@ -501,7 +509,22 @@
     "payInprocess": "支払い中...",
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
     "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。",
-    "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。"
+    "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。",
+    "spendable": "使用可能残高: ",
+    "spendableBalanceInfo": "保留中または「カウンターパーティー待ち」の取引によってロックされた金額を差し引いた後に使用可能な残高。",
+    "enterAssetName": "アセット名を入力してください",
+    "enterAssetTicker": "アセットティッカーを入力してください",
+    "enterTotalSupply": "総供給量を入力してください",
+    "enterDescription": "アセットの説明を入力してください",
+    "requestInvoiceProcessTitle": "リクエストを処理中",
+    "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
+    "cancelingTransferTitle": "Cancelando su transferencia",
+    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください",
+    "hideCoin": "コインを非表示",
+    "hideCollectible": "コレクティブルを非表示",
+    "hideUda": "UDAを非表示",
+    "noHiddenAssetTitle": "非表示の資産はありません",
+    "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。"
   },
   "community": {
     "fnfTitle": "友達と家族",
@@ -569,7 +592,11 @@
     "createChannelBulletPoint2": "アセットIDと金額の詳細",
     "createChannelBulletPoint3": "利用可能な資金（サトシ単位）",
     "createChannelTitle": "チャネル作成",
-    "createChannelSubTitle": "準備が整うまでお待ちください。チャネルはすぐに開きます。"
+    "createChannelSubTitle": "準備が整うまでお待ちください。チャネルはすぐに開きます。",
+    "enterPubKeyaddress": "有効な公開鍵とアドレスを入力してください",
+    "enterCapacityAmt": "容量の金額を入力してください",
+    "enterMSats": "mSats を入力してください",
+    "enterAssetAmt": "アセットの金額を入力してください"
   },
   "lightning": {
     "sendTitle": "送信",

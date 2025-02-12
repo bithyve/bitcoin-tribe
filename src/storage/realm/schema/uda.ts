@@ -1,5 +1,6 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
+import { AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
 export const UniqueDigitalAssetSchema: ObjectSchema = {
   name: RealmSchema.UniqueDigitalAsset,
@@ -21,6 +22,11 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
     },
     transactions: `${RealmSchema.AssetTransaction}[]`,
     metaData: `${RealmSchema.MetaData}`,
+    issuer: `${RealmSchema.Issuer}`,
+    visibility: {
+      type: 'string',
+      default: AssetVisibility.DEFAULT,
+    },
   },
 };
 
