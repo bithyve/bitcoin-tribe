@@ -49,6 +49,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
   );
+  const [currency, setCurrency] = useMMKVString(Keys.APP_CURRENCY);
+  const initialCurrency = currency || 'USD';
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const styles = getStyles(theme, insets);
   const {
@@ -82,6 +84,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     if (!initialCurrencyMode || initialCurrencyMode === CurrencyKind.SATS) {
       setCurrencyMode(CurrencyKind.BITCOIN);
     } else if (initialCurrencyMode === CurrencyKind.BITCOIN) {
+      if (currency === undefined) {
+        setCurrency(initialCurrency);
+      }
       setCurrencyMode(CurrencyKind.FIAT);
     } else {
       setCurrencyMode(CurrencyKind.SATS);
