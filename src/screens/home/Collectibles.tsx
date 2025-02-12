@@ -1,9 +1,17 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -38,7 +46,6 @@ function Collectibles() {
   const navigation = useNavigation();
 
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
 
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
@@ -66,31 +73,37 @@ function Collectibles() {
       .sort((a, b) => b.timestamp - a.timestamp);
   }, [collectibles, udas]);
 
-  const balances = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
-      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+  const prevBalances = useRef(null);
+
+  const calculateBalance = useCallback(() => {
+    if (app?.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable ?? 0;
     }
-    return wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed;
+    return (
+      (wallet?.specs?.balances?.confirmed ?? 0) +
+      (wallet?.specs?.balances?.unconfirmed ?? 0)
+    );
   }, [
-    app.appType,
+    app?.appType,
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
-    wallet?.specs.balances,
+    wallet?.specs?.balances?.confirmed,
+    wallet?.specs?.balances?.unconfirmed,
   ]);
 
-  useEffect(() => {
-    refreshRgbWallet.mutate();
-    fetchUTXOs();
-    setAppType(app.appType);
-    refreshWallet.mutate({ wallets: [wallet] });
-    ApiHandler.getFeeAndExchangeRates();
-  }, [app.appType]);
+  const balances = useMemo(() => {
+    const newBalance = calculateBalance();
+    if (prevBalances.current === newBalance) return prevBalances.current;
+    prevBalances.current = newBalance;
+    return newBalance;
+  }, [calculateBalance]);
+
+  const walletImage = useMemo(() => app?.walletImage, [app?.walletImage]);
+  const displayName = useMemo(() => app?.appName, [app?.appName]);
 
   useEffect(() => {
-    if (app?.walletImage || app?.appName) {
-      setImage(app.walletImage);
-      setWalletName(app.appName);
-    }
-  }, [app]);
+    setImage(walletImage);
+    setWalletName(displayName);
+  }, [walletImage, displayName]);
 
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));
