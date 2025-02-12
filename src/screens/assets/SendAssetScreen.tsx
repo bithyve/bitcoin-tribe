@@ -322,7 +322,6 @@ const SendAssetScreen = () => {
     try {
       setValidatingInvoiceLoader(true);
       const clipboardValue = await Clipboard.getString();
-      console.log('clipboardValue', clipboardValue);
       if (!clipboardValue) {
         Toast('Clipboard is empty. Please copy a valid invoice.', true);
         setValidatingInvoiceLoader(false);
