@@ -214,7 +214,6 @@ function WalletDetails({ navigation, route }) {
           />
         </ResponsePopupContainer>
       </View>
-      {/* <ModalLoading visible={isLoading} /> */}
     </ScreenContainer>
   );
 }
