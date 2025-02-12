@@ -134,8 +134,8 @@ const getStyles = (theme: AppTheme) =>
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(150),
-      height: hp(150),
+      width: hp(250),
+      height: hp(250),
       marginVertical: hp(20),
     },
   });

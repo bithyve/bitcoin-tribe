@@ -322,6 +322,7 @@ const SendAssetScreen = () => {
     try {
       setValidatingInvoiceLoader(true);
       const clipboardValue = await Clipboard.getString();
+      console.log('clipboardValue', clipboardValue);
       if (!clipboardValue) {
         Toast('Clipboard is empty. Please copy a valid invoice.', true);
         setValidatingInvoiceLoader(false);
@@ -584,9 +585,7 @@ const SendAssetScreen = () => {
         )}
 
         <View style={styles.containerSwitch}>
-          <AppText variant="heading3">
-            Send as donation?
-          </AppText>
+          <AppText variant="heading3">Send as donation?</AppText>
 
           <Switch
             value={isDonation}
@@ -602,9 +601,6 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={
-            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
-          }
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => {
@@ -623,7 +619,7 @@ const SendAssetScreen = () => {
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
             onSuccessPress={() => {
-              navigation.goBack()
+              navigation.goBack();
               navigation.setParams({ askReview: true });
             }}
             onPress={sendAsset}

@@ -17,7 +17,6 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import SwipeToAction from 'src/components/SwipeToAction';
 import PrimaryCTA from 'src/components/PrimaryCTA';
-import { TxPriority } from 'src/services/wallets/enums';
 
 type sendSuccessProps = {
   recipientAddress: string;
@@ -210,9 +209,8 @@ const getStyles = (theme: AppTheme) =>
     },
     loaderStyle: {
       alignSelf: 'center',
-      width: hp(150),
-      height: hp(150),
-      marginVertical: hp(20),
+      width: hp(250),
+      height: hp(250),
     },
     gestureRootView: {
       flex: 1,
