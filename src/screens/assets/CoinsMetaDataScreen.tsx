@@ -6,10 +6,18 @@ import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { Coin, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  Coin,
+  TransferKind,
+  AssetVisibility,
+} from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import moment from 'moment';
@@ -18,6 +26,8 @@ import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 
@@ -46,6 +56,8 @@ export const Item = ({ title, value, width = '100%' }) => {
 
 const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { assets, home } = translations;
@@ -59,32 +71,38 @@ const CoinsMetaDataScreen = () => {
     }
   }, []);
 
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
+      visibility: AssetVisibility.HIDDEN,
+    });
+    navigation.dispatch(popAction);
+  };
+
   const showVerifyIssuer = useMemo(() => {
-    return !coin?.issuer?.verified && coin.transactions.some(transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE);
+    return (
+      !coin?.issuer?.verified &&
+      coin.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
   }, [coin.transactions, coin.issuer]);
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader
-        title={assets.coinMetaTitle}
-        subTitle={''}
-        enableBack={true}
-      />
+      <AppHeader title={assets.coinMetaTitle} subTitle={''} enableBack={true} />
       {isLoading ? (
         <ModalLoading visible={isLoading} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          {
-            coin.issuer && coin.issuer.verified && (
-              <IssuerVerified 
-                id={coin.issuer.verifiedBy[0].id}
-                name={coin.issuer.verifiedBy[0].name}
-                username={coin.issuer.verifiedBy[0].username}
-              />
-            )
-          }
+          {coin.issuer && coin.issuer.verified && (
+            <IssuerVerified
+              id={coin.issuer.verifiedBy[0].id}
+              name={coin.issuer.verifiedBy[0].name}
+              username={coin.issuer.verifiedBy[0].username}
+            />
+          )}
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
             <Item
@@ -127,9 +145,12 @@ const CoinsMetaDataScreen = () => {
               .format('DD MMM YY  hh:mm A')}
           />
 
-          {showVerifyIssuer && <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />}
+          {showVerifyIssuer && (
+            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+          )}
         </ScrollView>
       )}
+      <HideAssetView title={assets.hideCoin} onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

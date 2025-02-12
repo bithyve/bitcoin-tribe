@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideale per utenti che preferiscono una configurazione semplice e una complessità minima.",
     "supportLearnMoreLabel3": "Supporto di backup",
     "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
-    "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata."
+    "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata.",
+    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono."
   },
   "home": {
     "addAssets": "Ricevi asset",
@@ -270,6 +271,8 @@
     "expired": "Scaduto",
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
+    "hiddenAssets": "Beni Nascosti",
+    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca l'icona dell'occhio per mostrarli.",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
     "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
@@ -285,7 +288,8 @@
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
     "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostra"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -390,7 +394,7 @@
     "noUTXOYet": "Nessuna transazione ancora",
     "noUTXOYetSubTitle": "Inizia a inviare e ricevere Bitcoin per vedere la tua attività qui!",
     "xPubNoteSubTitle": "Scansiona o copia incolla l'indirizzo Xpub",
-    "profileUpdateMsg": "Aggiornamento profilo riuscito!",
+    "profileUpdateMsg": "Profilo aggiornato con successo!",
     "profileUpdateErrMsg": "Impossibile aggiornare!",
     "rgbTransUnlockTitle": "5 Sblocco transazione RGB",
     "rgbTransUnlockSubTitle": "Ora puoi eseguire 5 volte la transazione RBG",
@@ -418,7 +422,9 @@
     "unColoured": "Non colorato",
     "availableTxnFee": "Commissione di transazione disponibile",
     "output": "Uscita",
-    "utxoValue": "Valore UTXO"
+    "utxoValue": "Valore UTXO",
+    "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
+    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -513,7 +519,12 @@
     "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
     "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
     "cancelingTransferTitle": "Annullamento del trasferimento",
-    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione"
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione",
+    "hideCoin": "Nascondi Moneta",
+    "hideCollectible": "Nascondi Collezionabile",
+    "hideUda": "Nascondi UDA",
+    "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
