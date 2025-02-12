@@ -29,15 +29,27 @@ function SendScreen({ route, navigation }) {
   const { sendScreen, assets } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
-  const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
+  const [validatingInvoiceErrorMsg, setValidatingInvoiceErrorMsg] =
+    useState('');
   const [isScanning, setIsScanning] = useState(true);
   const { receiveData, title, subTitle, wallet } = route.params;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const allAssets: Asset[] = [...coins, ...collectibles];
+
+  const navigateWithDelay = (callback: () => void) => {
+    setVisible(false);
+    setTimeout(() => {
+      callback();
+    }, 400);
+  };
+
   const handlePaymentInfo = useCallback(
-    async (input: { codes?: Code[]; paymentInfo?: string }) => {
+    async (
+      input: { codes?: Code[]; paymentInfo?: string },
+      triggerSource: 'scan' | 'proceed',
+    ) => {
       setIsScanning(false);
       const { codes, paymentInfo } = input;
       const value = paymentInfo || codes?.[0]?.value;
@@ -54,31 +66,42 @@ function SendScreen({ route, navigation }) {
           );
           if (!assetData) {
             setIsScanning(true);
-            Toast(assets.assetNotFoundMsg, true);
+            if (triggerSource === 'scan') {
+              Toast(assets.assetNotFoundMsg, true);
+            } else {
+              setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
+            }
           } else {
             setIsScanning(true);
-            navigation.replace(NavigationRoutes.SENDASSET, {
-              assetId: res.assetId,
-              wallet: wallet,
-              rgbInvoice: value,
-              amount: res.amount.toString(),
+            navigateWithDelay(() => {
+              navigation.replace(NavigationRoutes.SENDASSET, {
+                assetId: res.assetId,
+                wallet: wallet,
+                rgbInvoice: value,
+                amount: res.amount.toString(),
+              });
             });
           }
         } else {
           setIsScanning(true);
-          navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-            wallet,
-            rgbInvoice: value,
-            assetID: '',
-            amount: '',
+          navigateWithDelay(() => {
+            navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+              wallet,
+              rgbInvoice: value,
+              assetID: '',
+              amount: '',
+            });
           });
         }
         return;
       }
       if (value.startsWith('lnbc')) {
         setIsScanning(true);
-        navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
-          invoice: value,
+        setVisible(false);
+        navigateWithDelay(() => {
+          navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
+            invoice: value,
+          });
         });
         return;
       }
@@ -98,35 +121,45 @@ function SendScreen({ route, navigation }) {
       switch (paymentInfoKind) {
         case PaymentInfoKind.ADDRESS:
           setIsScanning(true);
-          navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
+          navigateWithDelay(() => {
+            navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
+          });
           break;
         case PaymentInfoKind.PAYMENT_URI:
           setIsScanning(true);
-          navigation.navigate(NavigationRoutes.SENDTO, {
-            wallet,
-            address,
-            paymentURIAmount: amount,
+          navigateWithDelay(() => {
+            navigation.navigate(NavigationRoutes.SENDTO, {
+              wallet,
+              address,
+              paymentURIAmount: amount,
+            });
           });
           break;
         case PaymentInfoKind.RLN_INVOICE:
           setIsScanning(true);
-          navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
-            invoice: value,
+          navigateWithDelay(() => {
+            navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
+              invoice: value,
+            });
           });
           break;
         default:
           setIsScanning(true);
-          Toast(sendScreen.invalidBtcAndRgbInput, true);
+          if (triggerSource === 'scan') {
+            Toast(sendScreen.invalidBtcAndRgbInput, true);
+          } else {
+            setValidatingInvoiceErrorMsg(sendScreen.invalidBtcAndRgbInput);
+          }
       }
     },
     [wallet, navigation],
   );
 
   const onCodeScanned = async (codes: Code[]) => {
-    await handlePaymentInfo({ codes });
+    await handlePaymentInfo({ codes }, 'scan');
   };
   const onProceed = async (paymentInfo: string) => {
-    await handlePaymentInfo({ paymentInfo });
+    await handlePaymentInfo({ paymentInfo }, 'proceed');
   };
 
   return (
@@ -155,10 +188,17 @@ function SendScreen({ route, navigation }) {
         visible={visible}
         enableCloseIcon={false}
         height={Platform.OS == 'ios' && '85%'}
-        onDismiss={() => setVisible(false)}>
+        onDismiss={() => {
+          setValidatingInvoiceErrorMsg('');
+          setVisible(false);
+        }}>
         <SendEnterAddress
-          onDismiss={() => setVisible(false)}
+          onDismiss={() => {
+            setValidatingInvoiceErrorMsg('');
+            setVisible(false);
+          }}
           onProceed={address => onProceed(address)}
+          errorMessage={validatingInvoiceErrorMsg}
         />
       </ModalContainer>
     </ScreenContainer>
