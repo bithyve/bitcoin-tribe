@@ -13,7 +13,7 @@ import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import SelectOption from 'src/components/SelectOption';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
 import {
@@ -220,11 +220,13 @@ function AddAsset() {
         <ModalContainer
           title={assets.listYourAssetInRegTitle}
           subTitle={assets.listYourAssetInRegSubTitle}
-          height={Platform.OS === 'ios' ? '60%' : ''}
+          height={
+            Platform.OS === 'ios' ? (windowHeight < 670 ? '65%' : '60%') : ''
+          }
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
-            if(payServiceFeeFeeMutation.isLoading) return
+            if (payServiceFeeFeeMutation.isLoading) return;
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
