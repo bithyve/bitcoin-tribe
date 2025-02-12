@@ -21,11 +21,12 @@ import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
+import { requestAppReview } from 'src/services/appreview';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId } = useRoute().params;
+  const { assetId, askReview } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -34,6 +35,14 @@ const CollectibleDetailsScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview]);  
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

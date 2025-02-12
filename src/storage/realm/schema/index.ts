@@ -35,6 +35,7 @@ import { UniqueDigitalAssetSchema, TokenSchema} from './uda';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
 import { NodeInfoSchema } from './nodeInfo';
+import { IssuerSchema, IssuerVerifiedBySchema } from './issuer';
 
 export default [
   TribeAppSchema,
@@ -71,4 +72,6 @@ export default [
   OutputSchema,
   ScriptPubKeySchema,
   ScriptSigSchema,
+  IssuerSchema,
+  IssuerVerifiedBySchema,
 ];

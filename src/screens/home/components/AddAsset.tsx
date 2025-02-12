@@ -146,7 +146,7 @@ function AddAsset() {
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
-          }, 300);
+          }, 500);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
@@ -224,6 +224,7 @@ function AddAsset() {
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
+            if(payServiceFeeFeeMutation.isLoading) return
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
