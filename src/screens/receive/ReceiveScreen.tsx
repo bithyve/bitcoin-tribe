@@ -78,6 +78,7 @@ function ReceiveScreen({ route }) {
           'Unable to fetch address due to a server error. Please try again later.',
           true,
         );
+        navigation.goBack();
       }
     }
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);
