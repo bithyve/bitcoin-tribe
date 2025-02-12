@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal for users who prefer a straightforward setup and minimal complexity.",
     "supportLearnMoreLabel3": "Backup Support",
     "supportLearnMoreContent3": "Relay-based backups ensure asset recovery and secure management.",
-    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode."
+    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode.",
+    "backupFileNotFound": "We couldn’t find your RGB Asset file. Please upload the file from your phone."
   },
   "home": {
     "addAssets": "Receive Asset",
@@ -393,7 +394,7 @@
     "noUTXOYet": "No transactions yet",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Scan or Copy paste the Xpub Address",
-    "profileUpdateMsg": "Profile update successful!",
+    "profileUpdateMsg": "Profile updated successfully!",
     "profileUpdateErrMsg": "Failed to update!",
     "rgbTransUnlockTitle": "5 RGB Transaction Unlock",
     "rgbTransUnlockSubTitle": "You can do 5 time RBG transaction now",
@@ -421,7 +422,9 @@
     "unColoured": "UnColoured",
     "availableTxnFee": "Available transaction fee",
     "output": "Output",
-    "utxoValue": "UTXO Value"
+    "utxoValue": "UTXO Value",
+    "requestTSatsProcessTitle": "Processing Your Request",
+    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "उन उपयोगकर्ताओं के लिए आदर्श जो सीधे सेटअप और न्यूनतम जटिलता पसंद करते हैं।",
     "supportLearnMoreLabel3": "बैकअप समर्थन",
     "supportLearnMoreContent3": "रिले-आधारित बैकअप संपत्ति पुनर्प्राप्ति और सुरक्षित प्रबंधन सुनिश्चित करता है।",
-    "supportLearnMoreContent4": "समर्थित मोड में उन्नत सुरक्षा के साथ एक उपयोगकर्ता-अनुकूल अनुभव का आनंद लें।"
+    "supportLearnMoreContent4": "समर्थित मोड में उन्नत सुरक्षा के साथ एक उपयोगकर्ता-अनुकूल अनुभव का आनंद लें।",
+    "backupFileNotFound": "हम आपका RGB एसेट फ़ाइल नहीं ढूंढ सके। कृपया इसे अपने फ़ोन से अपलोड करें।"
   },
   "home": {
     "addAssets": "संपत्ति प्राप्त करें",
@@ -393,7 +394,7 @@
     "noUTXOYet": "अभी तक कोई लेनदेन नहीं",
     "noUTXOYetSubTitle": "यहां अपनी गतिविधि देखने के लिए बिटकॉइन भेजना और प्राप्त करना शुरू करें!",
     "xPubNoteSubTitle": "Xpub पता स्कैन या कॉपी पेस्ट करें",
-    "profileUpdateMsg": "प्रोफ़ाइल अपडेट सफल!",
+    "profileUpdateMsg": "प्रोफ़ाइल सफलतापूर्वक अपडेट किया गया!",
     "profileUpdateErrMsg": "अपडेट करने में विफल!",
     "rgbTransUnlockTitle": "5 आरजीबी लेनदेन अनलॉक",
     "rgbTransUnlockSubTitle": "आप अब 5 बार आरजीबी लेनदेन कर सकते हैं",
@@ -421,7 +422,9 @@
     "unColoured": "बिना रंग का",
     "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
     "output": "आउटपुट",
-    "utxoValue": "UTXO मूल्य"
+    "utxoValue": "UTXO मूल्य",
+    "requestTSatsProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
+    "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

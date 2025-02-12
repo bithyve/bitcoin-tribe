@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "シンプルなセットアップと最小限の複雑さを好むユーザーに最適です。",
     "supportLearnMoreLabel3": "バックアップサポート",
     "supportLearnMoreContent3": "リレーベースのバックアップにより、資産の回復と安全な管理が保証されます。",
-    "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。"
+    "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。",
+    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。"
   },
   "home": {
     "addAssets": "資産を受け取る",
@@ -393,7 +394,7 @@
     "noUTXOYet": "まだ取引はありません",
     "noUTXOYetSubTitle": "ビットコインを送受信してアクティビティを確認しましょう！",
     "xPubNoteSubTitle": "Xpubアドレスをスキャンまたはコピーして貼り付け",
-    "profileUpdateMsg": "プロフィールの更新に成功しました！",
+    "profileUpdateMsg": "プロフィールが正常に更新されました！",
     "profileUpdateErrMsg": "更新に失敗しました！",
     "rgbTransUnlockTitle": "5回のRGB取引アンロック",
     "rgbTransUnlockSubTitle": "5回のRGB取引が可能です",
@@ -421,7 +422,9 @@
     "unColoured": "無色",
     "availableTxnFee": "利用可能な取引手数料",
     "output": "出力",
-    "utxoValue": "UTXO 値"
+    "utxoValue": "UTXO 値",
+    "requestTSatsProcessTitle": "リクエストを処理中",
+    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

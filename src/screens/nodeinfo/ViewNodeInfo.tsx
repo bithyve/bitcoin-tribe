@@ -27,7 +27,7 @@ const ViewNodeInfo = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { mutate, isLoading, error, data } = useMutation(
+  const { mutate, isLoading, isError, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
   const { setIsWalletOnline } = useContext(AppContext);
@@ -64,7 +64,7 @@ const ViewNodeInfo = () => {
 
   useEffect(() => {
     if (unlockNodeMutation.isSuccess) {
-      setIsWalletOnline(true)
+      setIsWalletOnline(true);
       Toast('Node unlocked', false);
       unlockNodeMutation.reset();
     } else if (unlockNodeMutation.isError) {
@@ -78,9 +78,16 @@ const ViewNodeInfo = () => {
 
   useEffect(() => {
     if (data) {
-      setnodeInfo(data);
+      if (data?.message === 'Internal server error') {
+        Toast(
+          'Unable to fetch node info due to a server error. Please try again later.',
+          true,
+        );
+      } else {
+        setnodeInfo(data);
+      }
     } else if (error) {
-      Toast(error, false);
+      Toast(error, true);
     }
   }, [data, error]);
 

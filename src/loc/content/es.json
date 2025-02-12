@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal para usuarios que prefieren una configuración sencilla y mínima complejidad.",
     "supportLearnMoreLabel3": "Soporte de respaldo",
     "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
-    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible."
+    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible.",
+    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono."
   },
   "home": {
     "addAssets": "Recibir activo",
@@ -393,7 +394,7 @@
     "noUTXOYet": "Aún no hay transacciones",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Escanee o copie y pegue la dirección de Xpub",
-    "profileUpdateMsg": "¡Actualización de perfil exitosa!",
+    "profileUpdateMsg": "¡Perfil actualizado con éxito!",
     "profileUpdateErrMsg": "¡Fallo en la actualización!",
     "rgbTransUnlockTitle": "5 Desbloqueo de transacciones RGB",
     "rgbTransUnlockSubTitle": "Puede realizar 5 transacciones RBG ahora",
@@ -421,7 +422,9 @@
     "unColoured": "Sin color",
     "availableTxnFee": "Tarifa de transacción disponible",
     "output": "Salida",
-    "utxoValue": "Valor UTXO"
+    "utxoValue": "Valor UTXO",
+    "requestTSatsProcessTitle": "Procesando su solicitud",
+    "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
