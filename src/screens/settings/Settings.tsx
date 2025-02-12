@@ -178,6 +178,12 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 8,
+      title: settings.hiddenAssets,
+      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
+    },
+    {
+      id: 9,
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
@@ -189,7 +195,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 9,
+      id: 10,
       title: settings.biometricUnlock,
       icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -207,7 +213,7 @@ function SettingsScreen({ navigation }) {
     //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
     // },
     {
-      id: 10,
+      id: 11,
       title: settings.appInfo,
       icon: isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),

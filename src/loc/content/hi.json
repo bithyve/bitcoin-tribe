@@ -270,6 +270,8 @@
     "expired": "समाप्त हो गया",
     "viewNodeInfo": "नोड जानकारी",
     "channelManagement": "चैनल प्रबंधन",
+    "hiddenAssets": "छिपी हुई संपत्तियाँ",
+    "hiddenAssetSubTitle": "अपने छिपे हुए सिक्कों और संग्रहणीय वस्तुओं का प्रबंधन करें। अनहाइड करने के लिए आईकॉन पर टैप करें।",
     "cloudBackupLoadingTitle": "क्लाउड बैकअप",
     "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।",
     "walletBackupInfo": "अपना सीड वाक्यांश लिखें और इसे ऐप के बाहर सुरक्षित रूप से स्टोर करें।",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "आपका वॉलेट सफलतापूर्वक बैकअप किया गया है",
     "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "अनहाइड"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -513,7 +516,12 @@
     "requestInvoiceProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
     "requestInvoiceProcessSubTitle": "आपका इनवॉइस जेनरेट किया जा रहा है। UTXO की उपलब्धता के कारण इसमें कुछ समय लग सकता है। आपके धैर्य के लिए धन्यवाद!",
     "cancelingTransferTitle": "आपका ट्रांसफर रद्द किया जा रहा है",
-    "cancelingTransferSubTitle": "कृपया प्रतीक्षा करें, हम आपके लेनदेन प्रक्रिया को सुरक्षित रूप से रोक रहे हैं"
+    "cancelingTransferSubTitle": "कृपया प्रतीक्षा करें, हम आपके लेनदेन प्रक्रिया को सुरक्षित रूप से रोक रहे हैं",
+    "hideCoin": "सिक्का छिपाएं",
+    "hideCollectible": "संग्रहणीय छिपाएं",
+    "hideUda": "UDA छिपाएं",
+    "noHiddenAssetTitle": "कोई छिपी हुई संपत्ति नहीं",
+    "noHiddenAssetSubTitle": "आपकी सभी संपत्तियाँ दृश्यमान हैं। वर्तमान में आपके पास कोई छिपी हुई संपत्ति नहीं है। यदि आप किसी संपत्ति को छिपाने का विकल्प चुनते हैं, तो इसे एक अलग अनुभाग में ले जाया जाएगा और किसी भी समय सुलभ रहेगा।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -270,6 +270,8 @@
     "expired": "Scaduto",
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
+    "hiddenAssets": "Beni Nascosti",
+    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca l'icona dell'occhio per mostrarli.",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
     "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
     "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostra"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -513,7 +516,12 @@
     "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
     "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
     "cancelingTransferTitle": "Annullamento del trasferimento",
-    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione"
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione",
+    "hideCoin": "Nascondi Moneta",
+    "hideCollectible": "Nascondi Collezionabile",
+    "hideUda": "Nascondi UDA",
+    "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

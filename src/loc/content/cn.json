@@ -270,6 +270,8 @@
     "expired": "已过期",
     "viewNodeInfo": "节点信息",
     "channelManagement": "渠道管理",
+    "hiddenAssets": "隐藏资产",
+    "hiddenAssetSubTitle": "管理您的隐藏币和收藏品。点击眼睛图标以取消隐藏。",
     "cloudBackupLoadingTitle": "云备份",
     "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。",
     "walletBackupInfo": "请写下您的种子短语，并将其安全地保存在应用程序外部。",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "您的钱包已成功备份",
     "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "取消隐藏"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -513,7 +516,12 @@
     "requestInvoiceProcessTitle": "正在处理您的请求",
     "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
     "cancelingTransferTitle": "正在取消您的转账",
-    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程"
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程",
+    "hideCoin": "隐藏币",
+    "hideCollectible": "隐藏藏品",
+    "hideUda": "隐藏 UDA",
+    "noHiddenAssetTitle": "没有隐藏资产",
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

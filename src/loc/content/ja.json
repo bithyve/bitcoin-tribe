@@ -270,6 +270,8 @@
     "expired": "有効期限が切れました",
     "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
+    "hiddenAssets": "非表示の資産",
+    "hiddenAssetSubTitle": "非表示のコインやコレクションを管理します。目のアイコンをタップして表示します。",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
     "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。",
     "walletBackupInfo": "シードフレーズを書き留め、アプリの外で安全に保管してください。",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "あなたのウォレットは正常にバックアップされました",
     "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "表示する"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -513,7 +516,12 @@
     "requestInvoiceProcessTitle": "リクエストを処理中",
     "requestInvoiceProcessSubTitle": "請求書を生成中です。UTXOの利用可能性により、しばらく時間がかかる場合があります。ご理解いただきありがとうございます！",
     "cancelingTransferTitle": "Cancelando su transferencia",
-    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください"
+    "cancelingTransferSubTitle": "取引プロセスを安全に停止するまでお待ちください",
+    "hideCoin": "コインを非表示",
+    "hideCollectible": "コレクティブルを非表示",
+    "hideUda": "UDAを非表示",
+    "noHiddenAssetTitle": "非表示の資産はありません",
+    "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

@@ -270,6 +270,8 @@
     "expired": "Expirado",
     "viewNodeInfo": "Información del Nodo",
     "channelManagement": "Gestión de canales",
+    "hiddenAssets": "Activos Ocultos",
+    "hiddenAssetSubTitle": "Administra tus monedas y coleccionables ocultos. Toca el ícono del ojo para mostrarlos.",
     "cloudBackupLoadingTitle": "Copia de seguridad en la nube",
     "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto.",
     "walletBackupInfo": "Escribe tu frase semilla y guárdala de forma segura fuera de la aplicación.",
@@ -285,7 +287,8 @@
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
     "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostrar"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -513,7 +516,12 @@
     "requestInvoiceProcessTitle": "Procesando su solicitud",
     "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
     "cancelingTransferTitle": "Cancelando su transferencia",
-    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura",
+    "hideCoin": "Ocultar Moneda",
+    "hideCollectible": "Ocultar Coleccionable",
+    "hideUda": "Ocultar UDA",
+    "noHiddenAssetTitle": "No hay activos ocultos",
+    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
   },
   "community": {
     "fnfTitle": "Amigas y familia",
