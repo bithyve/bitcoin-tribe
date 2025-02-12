@@ -6,7 +6,6 @@ import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import CoinAssetsList from './components/CoinAssetsList';
 import HomeHeader from './components/HomeHeader';
@@ -17,8 +16,6 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
-import AppType from 'src/models/enums/AppType';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
 import {
   AssetType,
   AssetVisibility,
@@ -29,9 +26,6 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
-
-  const { translations } = useContext(LocalizationContext);
-  const { common, sendScreen, home } = translations;
 
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const navigation = useNavigation();
@@ -52,19 +46,6 @@ function HomeScreen() {
   );
 
   const [refreshing, setRefreshing] = useState(false);
-  const [image, setImage] = useState(null);
-  const [walletName, setWalletName] = useState(null);
-
-  const balances = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
-      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
-    }
-    return wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed;
-  }, [
-    app.appType,
-    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
-    wallet?.specs.balances,
-  ]);
 
   useEffect(() => {
     refreshRgbWallet.mutate();
@@ -75,25 +56,8 @@ function HomeScreen() {
     ApiHandler.getFeeAndExchangeRates();
   }, [app.appType]);
 
-  useEffect(() => {
-    if (app?.walletImage || app?.appName) {
-      setImage(app.walletImage);
-      setWalletName(app.appName);
-    }
-  }, [app]);
-
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));
-  };
-
-  const toggleDisplayMode = () => {
-    setAppType(
-      app.currencyMode === CurrencyKind.SATS
-        ? CurrencyKind.BITCOIN
-        : app.currencyMode === CurrencyKind.BITCOIN
-        ? CurrencyKind.FIAT
-        : CurrencyKind.SATS,
-    );
   };
 
   const handleRefresh = () => {
@@ -106,26 +70,7 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader
-          profile={image}
-          username={walletName}
-          balance={balances}
-          onPressScanner={() =>
-            handleNavigation(NavigationRoutes.SENDSCREEN, {
-              receiveData: 'send',
-              title: common.send,
-              subTitle: sendScreen.headerSubTitle,
-              wallet,
-            })
-          }
-          onPressNotification={() => console.log('Notification pressed')}
-          onPressProfile={() =>
-            handleNavigation(NavigationRoutes.WALLETDETAILS, {
-              autoRefresh: true,
-            })
-          }
-          onPressTotalAmt={toggleDisplayMode}
-        />
+        <HomeHeader />
       </View>
       <CoinAssetsList
         listData={coins}

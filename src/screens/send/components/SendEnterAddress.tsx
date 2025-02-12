@@ -1,13 +1,12 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
-import Toast from 'src/components/Toast';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import WalletUtilities from 'src/services/wallets/operations/utils';
@@ -20,9 +19,11 @@ import { Keys } from 'src/storage';
 function SendEnterAddress({
   onDismiss,
   onProceed,
+  errorMessage,
 }: {
   onDismiss: any;
   onProceed: (text: string) => void;
+  errorMessage?: string;
 }) {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -31,16 +32,22 @@ function SendEnterAddress({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [address, setAddress] = useState('');
   const [inputHeight, setInputHeight] = React.useState(100);
+  const [invoiceValidationError, setInvoiceValidationError] = useState('');
   const styles = React.useMemo(
     () => getStyles(theme, inputHeight),
     [theme, inputHeight],
   );
+
+  useEffect(() => {
+    setInvoiceValidationError(errorMessage);
+  }, [errorMessage]);
 
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
     if (clipboardValue.startsWith('rgb:')) {
       Keyboard.dismiss();
       setAddress(clipboardValue);
+      setInvoiceValidationError('');
       return;
     }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
@@ -53,13 +60,16 @@ function SendEnterAddress({
       setAddress(address);
     } else {
       Keyboard.dismiss();
-      onDismiss();
       if (clipboardValue.startsWith('rgb:')) {
-        Toast(sendScreen.invalidRGBInvoiceAddress, true);
+        setInvoiceValidationError(sendScreen.invalidRGBInvoiceAddress);
       } else {
-        Toast(sendScreen.invalidBtcAddress, true);
+        setInvoiceValidationError(sendScreen.invalidBtcAddress);
       }
     }
+  };
+  const handleClearAddress = () => {
+    setAddress('');
+    setInvoiceValidationError('');
   };
 
   return (
@@ -81,10 +91,11 @@ function SendEnterAddress({
         rightText={!address && sendScreen.paste}
         rightIcon={address && isThemeDark ? <ClearIcon /> : <ClearIconLight />}
         onRightTextPress={() =>
-          address ? setAddress('') : handlePasteAddress()
+          address ? handleClearAddress() : handlePasteAddress()
         }
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.accent1}
+        error={invoiceValidationError}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
@@ -92,12 +103,13 @@ function SendEnterAddress({
           secondaryTitle={common.cancel}
           primaryOnPress={() => {
             Keyboard.dismiss();
-            onDismiss();
-            setTimeout(() => {
-              onProceed(address);
-            }, 400);
+            onProceed(address);
           }}
-          secondaryOnPress={navigation.goBack}
+          secondaryOnPress={() => {
+            setInvoiceValidationError(null);
+            Keyboard.dismiss();
+            onDismiss();
+          }}
           width={wp(120)}
         />
       </View>

@@ -441,6 +441,9 @@ export class ApiHandler {
     try {
       const hash = hash512(pin);
       const key = decrypt(hash, await SecureStore.fetch(hash));
+      if (!key) {
+        throw new Error('PIN not found');
+      }
       return key;
     } catch (error) {
       throw new Error('Invalid PIN');
@@ -1026,17 +1029,17 @@ export class ApiHandler {
           for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-            
+
             if (!(await RNFS.exists(destination))) {
               await RNFS.copyFile(element.media.filePath, destination);
             }
-            
+
             cfas.push({
               ...element,
               media: {
                 ...element.media,
-                filePath: destination
-              }
+                filePath: destination,
+              },
             });
           }
         } else {
@@ -1923,30 +1926,36 @@ export class ApiHandler {
 
   static async updateAssetVerificationStatus() {
     try {
-      const getUnverifiedAssets = (schema: RealmSchema) => 
-        dbManager.getCollection(schema).filter(asset => !asset.issuer || asset?.issuer?.verified === false);
+      const getUnverifiedAssets = (schema: RealmSchema) =>
+        dbManager
+          .getCollection(schema)
+          .filter(asset => !asset.issuer || asset?.issuer?.verified === false);
 
       const schemas = [
         { schema: RealmSchema.Coin, type: 'coin' },
         { schema: RealmSchema.Collectible, type: 'collectible' },
-        { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' }
+        { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' },
       ];
 
-      const assetIds = schemas.flatMap(({ schema }) => 
-        getUnverifiedAssets(schema).map(asset => asset.assetId)
+      const assetIds = schemas.flatMap(({ schema }) =>
+        getUnverifiedAssets(schema).map(asset => asset.assetId),
       );
       if (assetIds.length === 0) return;
       const response = await Relay.getAssetsVerificationStatus(assetIds);
       if (!response.status) {
-        throw new Error(response.error || 'Failed to update asset verification status');
+        throw new Error(
+          response.error || 'Failed to update asset verification status',
+        );
       }
       if (response?.records) {
         for (const { assetId, issuer } of response.records) {
           for (const { schema } of schemas) {
-            const asset = dbManager.getCollection(schema).find(a => a.assetId === assetId);
+            const asset = dbManager
+              .getCollection(schema)
+              .find(a => a.assetId === assetId);
             if (asset) {
               dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-                issuer
+                issuer,
               });
             }
           }

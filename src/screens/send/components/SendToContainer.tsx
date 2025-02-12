@@ -562,13 +562,6 @@ function SendToContainer({
             ? sendScreen.sendConfirmationSubTitle
             : ''
         }
-        height={
-          sendTransactionMutation.status === 'success'
-            ? Platform.OS === 'android'
-              ? '100%'
-              : '48%'
-            : ''
-        }
         visible={visible}
         enableCloseIcon={false}
         onDismiss={() =>
