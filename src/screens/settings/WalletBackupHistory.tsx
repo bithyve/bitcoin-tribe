@@ -81,7 +81,11 @@ function WalletBackupHistory({ navigation }) {
             if (response) {
               setVisible(false);
               setTimeout(() => {
-                Toast(settings.SEED_BACKUP_CONFIRMATION_SKIPPED);
+                Toast(
+                  settings.SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST,
+                  false,
+                  true,
+                );
               }, 400);
               // navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
             }

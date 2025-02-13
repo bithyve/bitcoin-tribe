@@ -71,8 +71,14 @@ function ReceiveScreen({ route }) {
     } else if (getNodeOnchainBtcAddress.data) {
       if (getNodeOnchainBtcAddress.data.address) {
         setAddress(getNodeOnchainBtcAddress.data.address);
-      } else if (getNodeOnchainBtcAddress?.data?.message) {
-        Toast(getNodeOnchainBtcAddress?.data?.message, true);
+      } else if (
+        getNodeOnchainBtcAddress?.data?.message === 'Internal server error'
+      ) {
+        Toast(
+          'Unable to fetch address due to a server error. Please try again later.',
+          true,
+        );
+        navigation.goBack();
       }
     }
   }, [getNodeOnchainBtcAddress.isError, getNodeOnchainBtcAddress.data]);

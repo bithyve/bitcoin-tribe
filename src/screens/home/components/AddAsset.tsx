@@ -34,9 +34,9 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
-import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
+import AppTouchable from 'src/components/AppTouchable';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -81,18 +81,6 @@ const ServiceFee = ({
         </View>
       </View>
       <View>
-        <SecondaryCTA
-          title={common.skip}
-          disabled={status === 'loading'}
-          onPress={() => {
-            hideModal();
-            setTimeout(() => {
-              onSkip();
-            }, 400);
-          }}
-          height={hp(16)}
-        />
-
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
             title={assets.swipeToPay}
@@ -101,6 +89,18 @@ const ServiceFee = ({
             backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
+        <AppTouchable
+          disabled={status === 'loading'}
+          onPress={() => {
+            hideModal();
+            setTimeout(() => {
+              onSkip();
+            }, 400);
+          }}>
+          <AppText variant="body2" style={styles.skipText}>
+            {assets.skipForNow}
+          </AppText>
+        </AppTouchable>
       </View>
     </View>
   );
@@ -108,7 +108,7 @@ const ServiceFee = ({
 
 function AddAsset() {
   const navigation = useNavigation();
-  const { issueAssetType } = useRoute().params;
+  const issueAssetType = useRoute().params?.issueAssetType;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -220,11 +220,10 @@ function AddAsset() {
         <ModalContainer
           title={assets.listYourAssetInRegTitle}
           subTitle={assets.listYourAssetInRegSubTitle}
-          height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
-            if(payServiceFeeFeeMutation.isLoading) return
+            if (payServiceFeeFeeMutation.isLoading) return;
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
@@ -309,11 +308,11 @@ const getStyles = (theme: AppTheme) =>
     },
     containerFee: {
       borderTopColor: theme.colors.borderColor,
-      borderTopWidth: 1,
+      borderTopWidth: 2,
       paddingTop: hp(5),
     },
     wrapper: {
-      height: '46%',
+      // height: '50%',
     },
     labelWrapper: {
       width: '45%',
@@ -347,6 +346,12 @@ const getStyles = (theme: AppTheme) =>
       width: hp(150),
       height: hp(150),
       marginVertical: hp(20),
+    },
+    skipText: {
+      color: theme.colors.secondaryHeadingColor,
+      textDecorationLine: 'underline',
+      alignSelf: 'center',
+      marginVertical: hp(10),
     },
   });
 

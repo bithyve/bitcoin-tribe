@@ -25,7 +25,7 @@ function LNLearnMore() {
       <AppHeader title={onBoarding.mainnetAndLightning} />
       <ScrollView style={styles.wrapper}>
         <View>
-          <AppText variant="body1" style={styles.titleText}>
+          <AppText variant="heading3" style={styles.titleText}>
             {onBoarding.lnLearnMoreSubtitle}
           </AppText>
         </View>

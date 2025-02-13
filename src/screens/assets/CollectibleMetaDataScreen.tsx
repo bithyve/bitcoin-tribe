@@ -1,6 +1,10 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo } from 'react';
-import { useRoute } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -10,7 +14,11 @@ import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-import { Collectible, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  Collectible,
+  TransferKind,
+  AssetVisibility,
+} from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import DownloadIcon from 'src/assets/images/downloadBtn.svg';
@@ -25,6 +33,8 @@ import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 
@@ -64,6 +74,8 @@ const onShare = async filePath => {
 
 const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -79,8 +91,25 @@ const CollectibleMetaDataScreen = () => {
     }
   }, []);
 
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(
+      RealmSchema.Collectible,
+      'assetId',
+      assetId,
+      {
+        visibility: AssetVisibility.HIDDEN,
+      },
+    );
+    navigation.dispatch(popAction);
+  };
+
   const showVerifyIssuer = useMemo(() => {
-    return !collectible?.issuer?.verified && collectible.transactions.some(transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE);
+    return (
+      !collectible?.issuer?.verified &&
+      collectible.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
   }, [collectible.transactions, collectible.issuer]);
 
   return (
@@ -117,15 +146,13 @@ const CollectibleMetaDataScreen = () => {
                 style={styles.imageStyle}
               />
             </View>
-            {
-              collectible?.issuer && collectible.issuer.verified && (
-                <IssuerVerified
-                  id={collectible.issuer.verifiedBy[0].id}
-                  name={collectible.issuer.verifiedBy[0].name}
-                  username={collectible.issuer.verifiedBy[0].username}
-                />
-              )
-            }
+            {collectible?.issuer && collectible.issuer.verified && (
+              <IssuerVerified
+                id={collectible.issuer.verifiedBy[0].id}
+                name={collectible.issuer.verifiedBy[0].name}
+                username={collectible.issuer.verifiedBy[0].username}
+              />
+            )}
             <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={home.assetName}
@@ -142,8 +169,8 @@ const CollectibleMetaDataScreen = () => {
                 app.appType === AppType.NODE_CONNECT
                   ? numberWithCommas(collectible.issuedSupply)
                   : collectible &&
-                  collectible.metaData &&
-                  numberWithCommas(collectible.metaData.issuedSupply)
+                    collectible.metaData &&
+                    numberWithCommas(collectible.metaData.issuedSupply)
               }
             />
 
@@ -159,12 +186,16 @@ const CollectibleMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
 
-            {showVerifyIssuer &&
+            {showVerifyIssuer && (
               <VerifyIssuer
                 assetId={assetId}
-                schema={RealmSchema.Collectible} />
-            }
-
+                schema={RealmSchema.Collectible}
+              />
+            )}
+            <HideAssetView
+              title={assets.hideAsset}
+              onPress={() => hideAsset()}
+            />
           </ScrollView>
         </>
       )}

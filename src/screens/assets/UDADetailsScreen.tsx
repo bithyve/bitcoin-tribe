@@ -1,14 +1,22 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { TransferKind, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
+import {
+  TransferKind,
+  AssetVisibility,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
@@ -23,15 +31,20 @@ import IconSendLight from 'src/assets/images/icon_send_light.svg';
 import RoundedCTA from 'src/components/RoundedCTA';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import HideAssetView from './components/HideAssetView';
+import dbManager from 'src/storage/realm/dbManager';
 import MediaCarousel from './components/MediaCarousel';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import AssetIDContainer from './components/AssetIDContainer';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
+import VerifyIssuerModal from './components/VerifyIssuerModal';
+
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
-  const { assetId, askReview } = useRoute().params;
+  const popAction = StackActions.pop(2);
+  const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
@@ -48,18 +61,28 @@ const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   useEffect(() => {
     if (askReview) {
       setTimeout(() => {
         requestAppReview();
+        if (askVerify) {
+          setShowVerifyModal(true);
+        }
       }, 2000);
     }
-  }, [askReview]);
+
+  }, [askReview, askVerify]);
 
   const showVerifyIssuer = useMemo(() => {
-    return !uda?.issuer?.verified && uda.transactions.some(transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE);
-  }, [uda.transactions, uda.issuer]);
+    return (
+      !uda?.issuer?.verified &&
+      uda?.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [uda?.transactions, uda?.issuer]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -72,22 +95,34 @@ const UDADetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const hideAsset = () => {
+    dbManager.updateObjectByPrimaryId(
+      RealmSchema.UniqueDigitalAsset,
+      'assetId',
+      assetId,
+      {
+        visibility: AssetVisibility.HIDDEN,
+      },
+    );
+    navigation.dispatch(popAction);
+  };
+
   return (
     <ScreenContainer>
-      <AppHeader title={uda.name} />
+      <AppHeader title={uda?.name} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
             uri: Platform.select({
-              android: `file://${uda.token.media?.filePath}`,
-              ios: uda.token.media?.filePath,
+              android: `file://${uda?.token.media?.filePath}`,
+              ios: uda?.token.media?.filePath,
             }),
           }}
           resizeMode="contain"
           style={styles.imageStyle}
         />
 
-        {uda.balance.spendable > 0 &&
+        {uda?.balance.spendable > 0 && (
           <View style={styles.buttonWrapper}>
             <RoundedCTA
               colors={[
@@ -107,24 +142,23 @@ const UDADetailsScreen = () => {
               }
               width={wp(105)}
             />
-          </View>}
+          </View>
+        )}
 
-        {
-          uda?.issuer && uda.issuer.verified && (
-            <IssuerVerified
-              id={uda.issuer.verifiedBy[0].id}
-              name={uda.issuer.verifiedBy[0].name}
-              username={uda.issuer.verifiedBy[0].username}
-            />
-          )
-        }
+        {uda?.issuer && uda?.issuer?.verified && (
+          <IssuerVerified
+            id={uda?.issuer?.verifiedBy[0]?.id}
+            name={uda?.issuer?.verifiedBy[0]?.name}
+            username={uda?.issuer?.verifiedBy[0]?.username}
+          />
+        )}
 
         <Item title={home.assetName} value={uda.name} />
         <AssetIDContainer assetId={assetId} />
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
         <MediaCarousel
-          images={uda.token.attachments}
+          images={uda?.token.attachments}
           handleImageSelect={item => {
             setVisible(true);
             setSelectedImage(item?.filePath);
@@ -132,29 +166,30 @@ const UDADetailsScreen = () => {
         />
         <Item
           title={assets.issuedOn}
-          value={moment.unix(uda.timestamp).format('DD MMM YY  hh:mm A')}
+          value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
         />
         {uda?.transactions.length > 0 && (
           <AssetTransaction
             transaction={uda?.transactions[0]}
-            coin={uda.name}
+            coin={uda?.name}
             onPress={() => {
               navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
                 assetId: assetId,
                 transactions: uda?.transactions,
-                assetName: uda.name,
+                assetName: uda?.name,
               });
             }}
             disabled={uda?.transactions.length === 1}
-            assetFace={uda.assetIface}
+            assetFace={uda?.assetIface}
           />
         )}
 
-        {showVerifyIssuer &&
+        {showVerifyIssuer && (
           <VerifyIssuer
             assetId={assetId}
-            schema={RealmSchema.UniqueDigitalAsset} />
-        }
+            schema={RealmSchema.UniqueDigitalAsset}
+          />
+        )}
         <>
           <ImageViewing
             images={[
@@ -170,7 +205,15 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
       </ScrollView>
+      <HideAssetView title={assets.hideUda} onPress={() => hideAsset()} />
+      <VerifyIssuerModal
+        assetId={uda?.assetId}
+        isVisible={showVerifyModal}
+        onDismiss={() => setShowVerifyModal(false)}
+        schema={RealmSchema.UniqueDigitalAsset}
+      />
     </ScreenContainer>
   );
 };

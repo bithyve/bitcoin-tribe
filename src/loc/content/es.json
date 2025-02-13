@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal para usuarios que prefieren una configuración sencilla y mínima complejidad.",
     "supportLearnMoreLabel3": "Soporte de respaldo",
     "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
-    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible."
+    "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible.",
+    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono."
   },
   "home": {
     "addAssets": "Recibir activo",
@@ -245,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "La copia de seguridad en la nube falló",
     "CLOUD_BACKUP_HEALTH": "salud de la copia de seguridad en la nube",
     "CLOUD_BACKUP_HEALTH_FAILED": "Falló el estado de la copia de seguridad en la nube",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "Se ha omitido la confirmación del respaldo de la billetera",
     "walletBackupDone": "¡Copia de seguridad completa! Guarda tu frase de recuperación en un lugar seguro para el futuro.",
     "nodeWalletBackupDone": "¡La copia de seguridad de la billetera está completa! Sus datos están respaldados de forma segura.",
     "assetBackupDone": "¡Copia de seguridad exitosa! Tus datos están guardados de forma segura.",
@@ -270,6 +272,8 @@
     "expired": "Expirado",
     "viewNodeInfo": "Información del Nodo",
     "channelManagement": "Gestión de canales",
+    "hiddenAssets": "Activos Ocultos",
+    "hiddenAssetSubTitle": "Administra tus monedas y coleccionables ocultos. Toca el ícono del ojo para mostrarlos.",
     "cloudBackupLoadingTitle": "Copia de seguridad en la nube",
     "cloudBackupLoadingSubTitle": "Tus datos están siendo respaldados de manera segura—por favor espera. Relájate, y tu copia de seguridad se completará pronto.",
     "walletBackupInfo": "Escribe tu frase semilla y guárdala de forma segura fuera de la aplicación.",
@@ -285,7 +289,8 @@
     "walletBackupSuccessMsg": "Tu billetera ha sido respaldada con éxito",
     "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "Mostrar"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -390,7 +395,7 @@
     "noUTXOYet": "Aún no hay transacciones",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Escanee o copie y pegue la dirección de Xpub",
-    "profileUpdateMsg": "¡Actualización de perfil exitosa!",
+    "profileUpdateMsg": "¡Perfil actualizado con éxito!",
     "profileUpdateErrMsg": "¡Fallo en la actualización!",
     "rgbTransUnlockTitle": "5 Desbloqueo de transacciones RGB",
     "rgbTransUnlockSubTitle": "Puede realizar 5 transacciones RBG ahora",
@@ -418,7 +423,9 @@
     "unColoured": "Sin color",
     "availableTxnFee": "Tarifa de transacción disponible",
     "output": "Salida",
-    "utxoValue": "Valor UTXO"
+    "utxoValue": "Valor UTXO",
+    "requestTSatsProcessTitle": "Procesando su solicitud",
+    "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
@@ -503,6 +510,7 @@
     "payInprocess": "Pagando...",
     "listYourAssetInRegTitle": "Lista tu activo en el registro",
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
+    "skipForNow": "Omitir por ahora",
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
     "spendable": "Disponible: ",
     "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\".",
@@ -513,7 +521,13 @@
     "requestInvoiceProcessTitle": "Procesando su solicitud",
     "requestInvoiceProcessSubTitle": "Su factura se está generando. Esto puede tardar unos momentos debido a la disponibilidad de UTXO. ¡Gracias por su paciencia!",
     "cancelingTransferTitle": "Cancelando su transferencia",
-    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura"
+    "cancelingTransferSubTitle": "Por favor, espere mientras detenemos su proceso de transacción de forma segura",
+    "hideCoin": "Ocultar Moneda",
+    "hideCollectible": "Ocultar Coleccionable",
+    "hideUda": "Ocultar UDA",
+    "hideAsset": "Ocultar activo",
+    "noHiddenAssetTitle": "No hay activos ocultos",
+    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

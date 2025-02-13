@@ -76,6 +76,7 @@ export interface Coin {
   transactions: Transfer[];
   metaData: MetaData;
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 interface Media {
@@ -97,6 +98,7 @@ export interface Collectible {
   metaData: MetaData;
   transactions: Transfer[];
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 export interface UniqueDigitalAsset {
@@ -111,7 +113,7 @@ export interface UniqueDigitalAsset {
   ticker: string;
   timestamp: number;
   token: {
-    attachments: Media[],
+    attachments: Media[];
     embeddedMedia: boolean;
     index: number;
     media: Media;
@@ -120,6 +122,7 @@ export interface UniqueDigitalAsset {
   transactions: Transfer[];
   metaData: MetaData;
   issuer: Issuer;
+  visibility: AssetVisibility;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -150,29 +153,35 @@ export enum AssetType {
 }
 
 export enum AssetFace {
-  RGB25 = 'RGB25',  // Collectible(CFA)
+  RGB25 = 'RGB25', // Collectible(CFA)
   RGB20 = 'RGB20', // Coin(NIA)
-  RGB21 = 'RGB21' //  Unique Digital Asset(UDA)
+  RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
+}
+
+export enum AssetVisibility {
+  DEFAULT = 'DEFAULT',
+  HIDDEN = 'HIDDEN',
+  // ARCHIVED = 'ARCHIVED',
 }
 
 export enum UtxoType {
   Colored = 'Colored',
   Colorable = 'Colorable',
-  Uncolored = 'Uncolored'
+  Uncolored = 'Uncolored',
 }
 
 export enum TransferKind {
   ISSUANCE = 'ISSUANCE',
   RECEIVE_BLIND = 'RECEIVE_BLIND',
   RECEIVE_WITNESS = 'RECEIVE_WITNESS',
-  SEND = 'SEND'
+  SEND = 'SEND',
 }
 
 export enum TransferStatus {
   WAITING_COUNTERPARTY = 'WAITING_COUNTERPARTY',
   WAITING_CONFIRMATIONS = 'WAITING_CONFIRMATIONS',
   SETTLED = 'SETTLED',
-  FAILED = 'FAILED'
+  FAILED = 'FAILED',
 }
 
 export enum IssuerVerificationMethod {

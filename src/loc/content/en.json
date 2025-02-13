@@ -74,7 +74,7 @@
     "newPinCreated": "New Passcode created",
     "failToVerify": "Failed to verify",
     "invalidPin": "Invalid Passcode",
-    "enterYourPin": "Enter your Passcode",
+    "enterYourPin": "Enter Your Passcode",
     "recoverRGBState": "No backup found. Would you like to proceed with creating a new on-chain wallet?",
     "appRecoveryMsg": "App recovery successful. \nYou're all set!",
     "invalidMnemonic": "Invalid Mnemonic",
@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideal for users who prefer a straightforward setup and minimal complexity.",
     "supportLearnMoreLabel3": "Backup Support",
     "supportLearnMoreContent3": "Relay-based backups ensure asset recovery and secure management.",
-    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode."
+    "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode.",
+    "backupFileNotFound": "We couldn’t find your RGB Asset file. Please upload the file from your phone."
   },
   "home": {
     "addAssets": "Receive Asset",
@@ -245,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "Cloud backup failed",
     "CLOUD_BACKUP_HEALTH": "Cloud backup health",
     "CLOUD_BACKUP_HEALTH_FAILED": "Cloud backup health failed",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "Wallet backup confirmation is \nskipped",
     "walletBackupDone": "Backup complete! Keep your recovery phrase safe for future access.",
     "nodeWalletBackupDone": "Wallet Backup is completed. Your data is securely backed up!",
     "assetBackupDone": "backup successful! Your data is securely stored.",
@@ -270,6 +272,8 @@
     "expired": "Expired",
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
+    "hiddenAssets": "Hidden Assets",
+    "hiddenAssetSubTitle": "Manage your hidden coins and collectibles. Tap the eye icon to unhide.",
     "cloudBackupLoadingTitle": "Cloud Backup",
     "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
     "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",
@@ -285,7 +289,8 @@
     "walletBackupSuccessMsg": "Your wallet has been successfully backed up",
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
-    "tribeX": "Tribe X"
+    "tribeX": "Tribe X",
+    "unHide": "UnHide"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -390,7 +395,7 @@
     "noUTXOYet": "No transactions yet",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Scan or Copy paste the Xpub Address",
-    "profileUpdateMsg": "Profile update successful!",
+    "profileUpdateMsg": "Profile updated successfully!",
     "profileUpdateErrMsg": "Failed to update!",
     "rgbTransUnlockTitle": "5 RGB Transaction Unlock",
     "rgbTransUnlockSubTitle": "You can do 5 time RBG transaction now",
@@ -418,7 +423,9 @@
     "unColoured": "UnColoured",
     "availableTxnFee": "Available transaction fee",
     "output": "Output",
-    "utxoValue": "UTXO Value"
+    "utxoValue": "UTXO Value",
+    "requestTSatsProcessTitle": "Processing Your Request",
+    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -503,6 +510,7 @@
     "payInprocess": "Paying...",
     "listYourAssetInRegTitle": "List Your Asset In Registry",
     "listYourAssetInRegSubTitle": "Do you want to store your Asset on our Tribe RGB Registry? A small Service fee is required. If not, you can skip this step.",
+    "skipForNow": "Skip for now",
     "failToFetchIssueFee": "Failed to fetch asset issuance fee.",
     "spendable": "Spendable: ",
     "spendableBalanceInfo": "The balance that can be used after deducting amounts locked due to pending or \"waiting counterparty \" transactions.",
@@ -513,7 +521,13 @@
     "requestInvoiceProcessTitle": "Processing Your Request",
     "requestInvoiceProcessSubTitle": "Your invoice is being generated. This may take a few moments due to UTXO availability. Thank you for your patience!",
     "cancelingTransferTitle": "Canceling Your Transfer",
-    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process"
+    "cancelingTransferSubTitle": "Please wait while we safely stop your transaction process",
+    "hideCoin": "Hide Coin",
+    "hideCollectible": "Hide Collectible",
+    "hideUda": "Hide UDA",
+    "hideAsset": "Hide Asset",
+    "noHiddenAssetTitle": "No Hidden Assets",
+    "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime."
   },
   "community": {
     "fnfTitle": "Friends & Family",

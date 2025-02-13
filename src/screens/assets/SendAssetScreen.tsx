@@ -518,7 +518,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.medium}
@@ -532,7 +531,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.high}
@@ -546,7 +544,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.custom}
@@ -555,9 +552,8 @@ const SendAssetScreen = () => {
             setSelectedPriority={() => {
               setSelectedPriority(TxPriority.CUSTOM);
             }}
-            feeRateByPriority={''}
+            feeRateByPriority={0}
             estimatedBlocksByPriority={1}
-            disabled={false}
           />
         </View>
         {selectedPriority === TxPriority.CUSTOM && (
@@ -584,9 +580,7 @@ const SendAssetScreen = () => {
         )}
 
         <View style={styles.containerSwitch}>
-          <AppText variant="heading3">
-            Send as donation?
-          </AppText>
+          <AppText variant="heading3">Send as donation?</AppText>
 
           <Switch
             value={isDonation}
@@ -602,9 +596,6 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={
-            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
-          }
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => {
@@ -623,7 +614,7 @@ const SendAssetScreen = () => {
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
             onSuccessPress={() => {
-              navigation.goBack()
+              navigation.goBack();
               navigation.setParams({ askReview: true });
             }}
             onPress={sendAsset}
