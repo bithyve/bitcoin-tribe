@@ -6,16 +6,15 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
-import ModalLoading from 'src/components/ModalLoading';
 
 type ProfileDetailsProps = {
   title: string;
@@ -66,13 +65,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
 
   return (
     <>
-      <AppHeader
-        title={title}
-        subTitle={subTitle}
-        rightText={rightText}
-        onRightTextPress={onRightTextPress}
-        style={styles.wrapper}
-      />
+      <AppHeader title={title} subTitle={subTitle} style={styles.wrapper} />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={'padding'}
@@ -108,6 +101,8 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
+            width={wp(165)}
+            secondaryCTAWidth={wp(165)}
           />
         </ScrollView>
       </KeyboardAvoidingView>
