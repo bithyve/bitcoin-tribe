@@ -8,7 +8,12 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 
-export default (message, error = false, position = Toast.positions.BOTTOM) => {
+export default (
+  message,
+  error = false,
+  warning = false,
+  position = Toast.positions.BOTTOM,
+) => {
   return Toast.show(
     <View style={styles.container}>
       {error ? (
@@ -44,7 +49,11 @@ export default (message, error = false, position = Toast.positions.BOTTOM) => {
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: error ? Colors.FireOpal : Colors.UFOGreen1,
+      backgroundColor: warning
+        ? Colors.Golden
+        : error
+        ? Colors.FireOpal
+        : Colors.UFOGreen1,
       textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,

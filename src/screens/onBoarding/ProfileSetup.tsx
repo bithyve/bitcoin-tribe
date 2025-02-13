@@ -91,15 +91,15 @@ function ProfileSetup() {
         profileImage={profileImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
-        rightText={common.skip}
-        onRightTextPress={() => {
-          initiateWalletCreation();
-        }}
+        // rightText={common.skip}
+        // onRightTextPress={() => {
+        //   initiateWalletCreation();
+        // }}
         primaryStatus={setupNewAppMutation.status}
-        primaryCTATitle={common.next}
+        primaryCTATitle={common.proceed}
+        secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
         disabled={false}
-        // secondaryCTATitle={common.skip}
       />
       <View>
         <ResponsePopupContainer
