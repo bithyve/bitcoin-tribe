@@ -36,15 +36,15 @@ const VerifyIssuerModal = ({
   const { assets } = translations;
   return (
     <ModalContainer
-      title={'Verify Your Identity'}
-      subTitle={'Secure your assets by verifying your identity on Twitter.'}
+      title={assets.verifyYourIdentityTitle}
+      subTitle={assets.verifyYourIdentitySubTitle}
       visible={isVisible}
       enableCloseIcon={false}
       onDismiss={onDismiss}>
       <View style={styles.container}>
         <SkipButton onPress={onDismiss} title={assets.skipForNow} />
         <PrimaryCTA
-          title={'Verify Now'}
+          title={assets.verifyNow}
           onPress={async () => {
             await verifyIssuerOnTwitter(assetId, schema);
             onDismiss();

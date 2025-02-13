@@ -527,7 +527,13 @@
     "hideUda": "UDAを非表示",
     "hideAsset": "資産を非表示",
     "noHiddenAssetTitle": "非表示の資産はありません",
-    "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。"
+    "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。",
+    "verifyYourIdentityTitle": "本人確認を行う",
+    "verifyYourIdentitySubTitle": "Twitter で本人確認を行い、資産を保護しましょう。",
+    "verifyNow": "今すぐ確認",
+    "issuerVerificationTitle": "発行者の確認が必要です",
+    "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
+    "connectVerifyTwitter": "Twitter に接続して確認"
   },
   "community": {
     "fnfTitle": "友達と家族",

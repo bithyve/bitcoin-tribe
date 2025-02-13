@@ -527,7 +527,13 @@
     "hideUda": "Ocultar UDA",
     "hideAsset": "Ocultar activo",
     "noHiddenAssetTitle": "No hay activos ocultos",
-    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
+    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento.",
+    "verifyYourIdentityTitle": "Verifica tu identidad",
+    "verifyYourIdentitySubTitle": "Asegura tus activos verificando tu identidad en Twitter.",
+    "verifyNow": "Verificar ahora",
+    "issuerVerificationTitle": "Verificación del emisor requerida",
+    "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
+    "connectVerifyTwitter": "Conectar y verificar en Twitter"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

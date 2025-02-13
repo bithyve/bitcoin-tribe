@@ -527,7 +527,13 @@
     "hideUda": "隐藏 UDA",
     "hideAsset": "隐藏资产",
     "noHiddenAssetTitle": "没有隐藏资产",
-    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。",
+    "verifyYourIdentityTitle": "验证您的身份",
+    "verifyYourIdentitySubTitle": "通过在 Twitter 上验证您的身份来保护您的资产。",
+    "verifyNow": "立即验证",
+    "issuerVerificationTitle": "发行人验证必需",
+    "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
+    "connectVerifyTwitter": "连接并在 Twitter 上验证"
   },
   "community": {
     "fnfTitle": "朋友和家人",
