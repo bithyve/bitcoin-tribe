@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import SocialButton from './SocialButton';
 import TelegramIcon from 'src/assets/images/telegramIcon.svg';
 import TwitterIcon from 'src/assets/images/twitterIcon.svg';
 import { AppTheme } from 'src/theme';
-import { windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 interface SocialLinksProps {
@@ -40,14 +39,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      bottom:
-        Platform.OS === 'android'
-          ? windowHeight > 670
-            ? '25%'
-            : '28%'
-          : windowHeight > 670
-          ? '18%'
-          : '22%',
+      width: '100%',
     },
   });
 

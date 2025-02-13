@@ -226,29 +226,13 @@ function SettingsScreen({ navigation }) {
       <View style={styles.container}>
         <SettingMenuItem SettingsMenu={SettingsMenu} />
       </View>
-      <View style={styles.container1}>
-        <SocialLinks
-          onPressTelegram={() => {
-            openLink('https://t.me/BitcoinTribeSupport');
-          }}
-          onPressX={() => {
-            openLink('https://x.com/BitcoinTribe_');
-          }}
-        />
-      </View>
     </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: Platform.OS === 'ios' ? '83%' : '80%',
       paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
-    },
-    container1: {
-      height: Platform.OS === 'ios' ? '17%' : '20%',
-      justifyContent: 'flex-end',
-      paddingTop: hp(20),
     },
   });
 export default SettingsScreen;
