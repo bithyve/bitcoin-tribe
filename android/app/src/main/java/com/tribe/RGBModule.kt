@@ -371,8 +371,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun restore(mnemonic: String,filePath: String, promise: Promise){
-        val response = RGBHelper.restore(mnemonic, filePath, reactApplicationContext)
-        promise.resolve(response)
+        backgroundHandler.post {
+            val response = RGBHelper.restore(mnemonic, filePath, reactApplicationContext)
+            promise.resolve(response)
+        }
     }
 
     @ReactMethod

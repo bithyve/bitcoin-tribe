@@ -22,11 +22,11 @@ import AppType from 'src/models/enums/AppType';
 import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
-
+import VerifyIssuerModal from './components/VerifyIssuerModal';
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId, askReview } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -35,14 +35,17 @@ const CollectibleDetailsScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
   useEffect(() => {
     if (askReview) {
       setTimeout(() => {
         requestAppReview();
       }, 2000);
     }
-  }, [askReview]);  
+    if (askVerify) {
+      setShowVerifyModal(true);
+    }
+  }, [askReview, askVerify]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -142,6 +145,12 @@ const CollectibleDetailsScreen = () => {
         assetId={assetId}
         scrollY={scrollY}
         style={styles.transactionContainer}
+      />
+      <VerifyIssuerModal
+        assetId={collectible.assetId}
+        isVisible={showVerifyModal}
+        onDismiss={() => setShowVerifyModal(false)}
+        schema={RealmSchema.Collectible}
       />
     </ScreenContainer>
   );

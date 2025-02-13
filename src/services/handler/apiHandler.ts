@@ -59,7 +59,6 @@ import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
-
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
 
@@ -1961,6 +1960,17 @@ export class ApiHandler {
           }
         }
       }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async resetApp(key: string) {
+    try {
+      const uint8array = stringToArrayBuffer(key);
+      await dbManager.deleteRealm(uint8array);
+      Storage.clear();
     } catch (error) {
       console.log(error);
       throw error;

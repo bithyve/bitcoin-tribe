@@ -123,7 +123,7 @@ function IssueScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COINDETAILS, { assetId: response.assetId, askReview: true });
+          navigation.replace(NavigationRoutes.COINDETAILS, { assetId: response.assetId, askReview: true, askVerify: true });
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

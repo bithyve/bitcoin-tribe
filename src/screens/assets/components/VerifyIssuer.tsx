@@ -28,6 +28,36 @@ interface VerifyIssuerProps {
   schema: RealmSchema;
 }
 
+export const verifyIssuerOnTwitter = async (assetId, schema) => {
+  try {
+    const result = await loginWithTwitter();
+    if (result.username) {
+      const response = await Relay.verifyIssuer("appID", assetId, {
+        type: IssuerVerificationMethod.TWITTER,
+        id: result.id,
+        name: result.name,
+        username: result.username,
+      });
+      if (response.status) {
+        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          issuer: {
+            verified: true,
+            verifiedBy: [{
+              type: IssuerVerificationMethod.TWITTER,
+              id: result.id,
+              name: result.name,
+              username: result.username,
+            }]
+          }
+        });
+      }
+    }
+  } catch (error) {
+    Toast(`${error}`, true);
+    console.log(error);
+  }
+};
+
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (props: VerifyIssuerProps) => {
   const { assetId, schema } = props;
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +65,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (props: VerifyIssuerProps) => 
   const handleVerifyWithTwitter = React.useCallback(async () => {
     try {
       const result = await loginWithTwitter();
-      console.log('result', result);
       if (result.username) {
         setIsLoading(true);
         const response = await Relay.verifyIssuer("appID", assetId, {
