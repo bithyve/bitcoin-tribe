@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "云备份失败",
     "CLOUD_BACKUP_HEALTH": "云备份状态",
     "CLOUD_BACKUP_HEALTH_FAILED": "云备份状态检查失败",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "跳过钱包备份确认",
     "walletBackupDone": "备份完成！请妥善保管您的恢复短语以便将来使用。",
     "nodeWalletBackupDone": "钱包备份已完成。您的数据已安全备份！",
     "assetBackupDone": " 备份成功！您的数据已安全存储。",

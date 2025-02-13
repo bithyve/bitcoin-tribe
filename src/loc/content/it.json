@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "Il backup sul cloud è fallito",
     "CLOUD_BACKUP_HEALTH": "Salute del backup sul cloud",
     "CLOUD_BACKUP_HEALTH_FAILED": "La salute del backup sul cloud è fallita",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "La conferma del backup del portafoglio è stata saltata",
     "walletBackupDone": "Backup completato! Conserva al sicuro la tua frase di recupero per accessi futuri.",
     "nodeWalletBackupDone": "Il backup del portafoglio è stato completato. I tuoi dati sono stati salvati in modo sicuro!",
     "assetBackupDone": "Backup riuscito! I tuoi dati sono archiviati in modo sicuro.",

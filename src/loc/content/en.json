@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "Cloud backup failed",
     "CLOUD_BACKUP_HEALTH": "Cloud backup health",
     "CLOUD_BACKUP_HEALTH_FAILED": "Cloud backup health failed",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "Wallet backup confirmation is \nskipped",
     "walletBackupDone": "Backup complete! Keep your recovery phrase safe for future access.",
     "nodeWalletBackupDone": "Wallet Backup is completed. Your data is securely backed up!",
     "assetBackupDone": "backup successful! Your data is securely stored.",

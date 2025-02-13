@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "クラウドバックアップが失敗しました",
     "CLOUD_BACKUP_HEALTH": "クラウドバックアップの状態",
     "CLOUD_BACKUP_HEALTH_FAILED": "クラウドバックアップの状態が失敗しました",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "ウォレットバックアップの確認がスキップされました",
     "walletBackupDone": "バックアップ完了！将来のアクセスのためにリカバリフレーズを安全に保管してください。",
     "nodeWalletBackupDone": "ウォレットのバックアップが完了しました。データは安全にバックアップされています！",
     "assetBackupDone": "バックアップ成功！データは安全に保存されました。",
