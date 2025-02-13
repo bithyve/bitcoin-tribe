@@ -46,6 +46,10 @@ const ImportRgbBackup = () => {
   const { setKey } = useContext(AppContext);
 
   useEffect(() => {
+    Toast(onBoarding.backupFileNotFound, true);
+  }, []);
+
+  useEffect(() => {
     const onSuccess = async () => {
       const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
       const key = decrypt(hash, await SecureStore.fetch(hash));

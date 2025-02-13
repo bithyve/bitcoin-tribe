@@ -1,10 +1,9 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import CoinAssetsList from './components/CoinAssetsList';
@@ -22,13 +21,17 @@ import {
   Coin,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
+  const latestVersion = useQuery<VersionHistory>(RealmSchema.VersionHistory).slice(-1)[0];
+  const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
+  const { key } = useContext(AppContext);
 
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
@@ -48,6 +51,22 @@ function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    if(Number(versionNumber) < 93) {
+      Alert.alert(
+        'Unsupported Version',
+        'This version of Tribe is no longer supported. Please setup a new wallet to continue.',
+        [
+          { text: 'OK', onPress: () => {
+            ApiHandler.resetApp(key);
+            navigation.dispatch(CommonActions.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.LOGINSTACK }],
+            }));
+          } },
+        ],
+        {cancelable: false}
+      );
+    }
     refreshRgbWallet.mutate();
     fetchUTXOs();
     setAppType(app.appType);

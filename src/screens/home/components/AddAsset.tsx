@@ -108,7 +108,7 @@ const ServiceFee = ({
 
 function AddAsset() {
   const navigation = useNavigation();
-  const { issueAssetType } = useRoute().params;
+  const issueAssetType = useRoute().params?.issueAssetType;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;

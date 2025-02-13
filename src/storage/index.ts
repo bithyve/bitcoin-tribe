@@ -23,5 +23,7 @@ export class Storage {
   static set = (key: Keys, value: string | number | boolean): void =>
     MMKVStorage.set(key, value);
 
+  static clear = (): void => MMKVStorage.clearAll();
+
   static get = (key: Keys): string | undefined => MMKVStorage.getString(key);
 }

@@ -199,7 +199,6 @@ function EnterSeedContainer() {
           if (error instanceof Error && error.message === 'No backup found') {
             setVisibleLoader(false);
             navigation.navigate(NavigationRoutes.IMPORTRGBBACKUP, { mnemonic });
-            Toast(onBoarding.backupFileNotFound, true);
           } else {
             setVisibleLoader(false);
             Toast(`${error.message}`, true);
