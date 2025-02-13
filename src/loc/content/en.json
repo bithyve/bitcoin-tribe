@@ -525,6 +525,7 @@
     "hideCoin": "Hide Coin",
     "hideCollectible": "Hide Collectible",
     "hideUda": "Hide UDA",
+    "hideAsset": "Hide Asset",
     "noHiddenAssetTitle": "No Hidden Assets",
     "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime."
   },

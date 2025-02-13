@@ -525,6 +525,7 @@
     "hideCoin": "Ocultar Moneda",
     "hideCollectible": "Ocultar Coleccionable",
     "hideUda": "Ocultar UDA",
+    "hideAsset": "Ocultar activo",
     "noHiddenAssetTitle": "No hay activos ocultos",
     "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
   },

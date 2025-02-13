@@ -525,6 +525,7 @@
     "hideCoin": "隐藏币",
     "hideCollectible": "隐藏藏品",
     "hideUda": "隐藏 UDA",
+    "hideAsset": "隐藏资产",
     "noHiddenAssetTitle": "没有隐藏资产",
     "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
   },

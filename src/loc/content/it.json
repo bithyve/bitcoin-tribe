@@ -525,6 +525,7 @@
     "hideCoin": "Nascondi Moneta",
     "hideCollectible": "Nascondi Collezionabile",
     "hideUda": "Nascondi UDA",
+    "hideAsset": "Nascondi attività",
     "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
     "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
   },

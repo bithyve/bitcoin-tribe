@@ -193,7 +193,7 @@ const CollectibleMetaDataScreen = () => {
               />
             )}
             <HideAssetView
-              title={assets.hideCollectible}
+              title={assets.hideAsset}
               onPress={() => hideAsset()}
             />
           </ScrollView>
