@@ -30,7 +30,8 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       alignSelf: 'center',
-      marginTop: hp(20),
+      marginTop: hp(10),
+      marginBottom: hp(20),
     },
     titleStyle: {
       color: theme.colors.headingColor,
