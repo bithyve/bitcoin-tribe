@@ -510,6 +510,7 @@
     "payInprocess": "Pagamento in corso...",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
+    "skipForNow": "Salta per ora",
     "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
     "spendable": "Disponibile: ",
     "spendableBalanceInfo": "Il saldo utilizzabile dopo la detrazione degli importi bloccati a causa di transazioni in sospeso o \"in attesa della controparte\".",

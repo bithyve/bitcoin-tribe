@@ -70,7 +70,7 @@ const getStyles = (theme: AppTheme, backColor, borderColor) =>
       justifyContent: 'space-between',
       padding: windowHeight > 670 ? hp(20) : hp(10),
       backgroundColor: backColor,
-      borderRadius: 20,
+      borderRadius: 15,
       borderColor: borderColor,
       borderWidth: 1,
       marginVertical: hp(5),

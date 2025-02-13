@@ -510,6 +510,7 @@
     "payInprocess": "支払い中...",
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
     "listYourAssetInRegSubTitle": "あなたのアセットをTribe RGBレジストリに保存しますか？ 少額のサービス料金が必要です。必要ない場合は、このステップをスキップできます。",
+    "skipForNow": "今はスキップ",
     "failToFetchIssueFee": "資産発行手数料の取得に失敗しました。",
     "spendable": "使用可能残高: ",
     "spendableBalanceInfo": "保留中または「カウンターパーティー待ち」の取引によってロックされた金額を差し引いた後に使用可能な残高。",

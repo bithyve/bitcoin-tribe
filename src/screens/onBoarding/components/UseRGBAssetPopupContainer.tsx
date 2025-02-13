@@ -47,7 +47,7 @@ function UseRGBAssetPopupContainer(props: UseRGBAssetProps) {
         <PrimaryCTA
           onPress={onPress}
           title={common.understood}
-          width={hp(200)}
+          width={hp(180)}
           height={hp(14)}
         />
       </View>
@@ -65,12 +65,12 @@ const getStyles = (theme: AppTheme) =>
     },
     titleText: {
       color: theme.colors.headingColor,
-      textAlign: 'left',
+      textAlign: 'center',
       lineHeight: 30,
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
-      textAlign: 'left',
+      textAlign: 'center',
       lineHeight: 20,
       marginVertical: hp(5),
     },
