@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "La copia de seguridad en la nube falló",
     "CLOUD_BACKUP_HEALTH": "salud de la copia de seguridad en la nube",
     "CLOUD_BACKUP_HEALTH_FAILED": "Falló el estado de la copia de seguridad en la nube",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "Se ha omitido la confirmación del respaldo de la billetera",
     "walletBackupDone": "¡Copia de seguridad completa! Guarda tu frase de recuperación en un lugar seguro para el futuro.",
     "nodeWalletBackupDone": "¡La copia de seguridad de la billetera está completa! Sus datos están respaldados de forma segura.",
     "assetBackupDone": "¡Copia de seguridad exitosa! Tus datos están guardados de forma segura.",
@@ -509,6 +510,7 @@
     "payInprocess": "Pagando...",
     "listYourAssetInRegTitle": "Lista tu activo en el registro",
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Tribe RGB? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
+    "skipForNow": "Omitir por ahora",
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
     "spendable": "Disponible: ",
     "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\".",
@@ -523,6 +525,7 @@
     "hideCoin": "Ocultar Moneda",
     "hideCollectible": "Ocultar Coleccionable",
     "hideUda": "Ocultar UDA",
+    "hideAsset": "Ocultar activo",
     "noHiddenAssetTitle": "No hay activos ocultos",
     "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
   },
