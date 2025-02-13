@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
 import SelectOption from 'src/components/SelectOption';
@@ -59,7 +59,7 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     contentContainerStyle: {
-      paddingBottom: 50,
+      paddingBottom: Platform.OS === 'android' ? 100 : 50,
     },
   });
 export default SettingMenuItem;
