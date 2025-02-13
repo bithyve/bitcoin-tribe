@@ -36,7 +36,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
-import AppTouchable from 'src/components/AppTouchable';
+import SkipButton from 'src/components/SkipButton';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -89,18 +89,16 @@ const ServiceFee = ({
             backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
-        <AppTouchable
+        <SkipButton
           disabled={status === 'loading'}
           onPress={() => {
             hideModal();
             setTimeout(() => {
               onSkip();
             }, 400);
-          }}>
-          <AppText variant="body2" style={styles.skipText}>
-            {assets.skipForNow}
-          </AppText>
-        </AppTouchable>
+          }}
+          title={assets.skipForNow}
+        />
       </View>
     </View>
   );
@@ -346,12 +344,6 @@ const getStyles = (theme: AppTheme) =>
       width: hp(150),
       height: hp(150),
       marginVertical: hp(20),
-    },
-    skipText: {
-      color: theme.colors.secondaryHeadingColor,
-      textDecorationLine: 'underline',
-      alignSelf: 'center',
-      marginVertical: hp(10),
     },
   });
 
