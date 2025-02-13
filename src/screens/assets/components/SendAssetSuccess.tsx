@@ -122,6 +122,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       alignItems: 'center',
       width: '55%',
+      justifyContent: 'flex-end',
     },
     labelText: {
       color: theme.colors.headingColor,
