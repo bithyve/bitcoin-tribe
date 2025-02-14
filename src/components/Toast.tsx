@@ -7,8 +7,6 @@ import Colors from 'src/theme/Colors';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { Keys } from 'src/storage';
 
 export default (
   message,
@@ -46,7 +44,6 @@ export default (
     {
       duration: Toast.durations.SHORT,
       position: position,
-      // shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,
@@ -65,8 +62,6 @@ export default (
         paddingHorizontal: hp(10),
         paddingVertical: hp(15),
         flexWrap: 'wrap',
-        // width: wp(300),
-        // minHeight: hp(50),
         alignItems: 'center',
         justifyContent: 'center',
       },
