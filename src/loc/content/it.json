@@ -527,7 +527,13 @@
     "hideUda": "Nascondi UDA",
     "hideAsset": "Nascondi attività",
     "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
-    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento.",
+    "verifyYourIdentityTitle": "Verifica la tua identità",
+    "verifyYourIdentitySubTitle": "Proteggi i tuoi asset verificando la tua identità su Twitter.",
+    "verifyNow": "Verifica ora",
+    "issuerVerificationTitle": "Verifica dell'emittente richiesta",
+    "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",
+    "connectVerifyTwitter": "Connetti e verifica su Twitter"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

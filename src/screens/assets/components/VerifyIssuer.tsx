@@ -1,14 +1,15 @@
-import { StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
-import AppText from 'src/components/AppText'
-import SelectOption from 'src/components/SelectOption'
-import { loginWithTwitter } from 'src/services/twitter'
-import Relay from 'src/services/relay'
-import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet'
-import dbManager from 'src/storage/realm/dbManager'
-import { RealmSchema } from 'src/storage/enum'
-import ModalLoading from 'src/components/ModalLoading'
+import { StyleSheet, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import AppText from 'src/components/AppText';
+import SelectOption from 'src/components/SelectOption';
+import { loginWithTwitter } from 'src/services/twitter';
+import Relay from 'src/services/relay';
+import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
+import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const styles = StyleSheet.create({
   title: {
@@ -16,12 +17,12 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginBottom: 5,
-    color: '#787878'
+    color: '#787878',
   },
   container: {
     marginVertical: 20,
-  }
-})
+  },
+});
 
 interface VerifyIssuerProps {
   assetId: string;
@@ -32,7 +33,7 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
   try {
     const result = await loginWithTwitter();
     if (result.username) {
-      const response = await Relay.verifyIssuer("appID", assetId, {
+      const response = await Relay.verifyIssuer('appID', assetId, {
         type: IssuerVerificationMethod.TWITTER,
         id: result.id,
         name: result.name,
@@ -42,13 +43,15 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
             verified: true,
-            verifiedBy: [{
-              type: IssuerVerificationMethod.TWITTER,
-              id: result.id,
-              name: result.name,
-              username: result.username,
-            }]
-          }
+            verifiedBy: [
+              {
+                type: IssuerVerificationMethod.TWITTER,
+                id: result.id,
+                name: result.name,
+                username: result.username,
+              },
+            ],
+          },
         });
       }
     }
@@ -58,16 +61,20 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
   }
 };
 
-const VerifyIssuer: React.FC<VerifyIssuerProps> = (props: VerifyIssuerProps) => {
+const VerifyIssuer: React.FC<VerifyIssuerProps> = (
+  props: VerifyIssuerProps,
+) => {
   const { assetId, schema } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
 
   const handleVerifyWithTwitter = React.useCallback(async () => {
     try {
       const result = await loginWithTwitter();
       if (result.username) {
         setIsLoading(true);
-        const response = await Relay.verifyIssuer("appID", assetId, {
+        const response = await Relay.verifyIssuer('appID', assetId, {
           type: IssuerVerificationMethod.TWITTER,
           id: result.id,
           name: result.name,
@@ -78,14 +85,16 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (props: VerifyIssuerProps) => 
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
               verified: true,
-              verifiedBy: [{
-                type: IssuerVerificationMethod.TWITTER,
-                id: result.id,
-                name: result.name,
-                username: result.username,
-              }]
-            }
-          })
+              verifiedBy: [
+                {
+                  type: IssuerVerificationMethod.TWITTER,
+                  id: result.id,
+                  name: result.name,
+                  username: result.username,
+                },
+              ],
+            },
+          });
         }
       }
     } catch (error) {
@@ -98,17 +107,21 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (props: VerifyIssuerProps) => 
   return (
     <View style={styles.container}>
       <ModalLoading visible={isLoading} />
-      <AppText variant='heading1' style={styles.title}>Issuer Verification Required</AppText>
-      <AppText variant='heading3' style={styles.subtitle}>Verify your identity by connecting your Twitter account.</AppText>
+      <AppText variant="heading3" style={styles.title}>
+        {assets.issuerVerificationTitle}
+      </AppText>
+      <AppText variant="body2" style={styles.subtitle}>
+        {assets.issuerVerificationSubTitle}
+      </AppText>
 
       <SelectOption
-        title={'Connect & Verify on Twitter'}
+        title={assets.connectVerifyTwitter}
         subTitle={''}
         onPress={handleVerifyWithTwitter}
         testID={'verify-with-twitter'}
       />
     </View>
-  )
-}
+  );
+};
 
-export default VerifyIssuer
+export default VerifyIssuer;

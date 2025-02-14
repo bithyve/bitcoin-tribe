@@ -133,13 +133,11 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
               ]}>
               <View style={styles.assetImageWrapper}>
                 {item?.assetIface.toUpperCase() === AssetFace.RGB20 ? (
-                  <>
-                    <Identicon
-                      value={item.assetId}
-                      style={styles.identiconView}
-                      size={30}
-                    />
-                  </>
+                  <Identicon
+                    value={item.assetId}
+                    style={styles.identiconView}
+                    size={30}
+                  />
                 ) : (
                   <Image
                     source={{

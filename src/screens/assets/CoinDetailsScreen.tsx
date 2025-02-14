@@ -46,7 +46,6 @@ const CoinDetailsScreen = () => {
         }
       }, 2000);
     }
-
   }, [askReview, askVerify]);
 
   useEffect(() => {
@@ -67,13 +66,13 @@ const CoinDetailsScreen = () => {
   const transactionsData =
     appType === AppType.NODE_CONNECT
       ? Object.values({
-        ...filteredPayments,
-        ...coin?.transactions,
-      }).sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime() || 0;
-        const dateB = new Date(b.createdAt).getTime() || 0;
-        return dateA - dateB;
-      })
+          ...filteredPayments,
+          ...coin?.transactions,
+        }).sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime() || 0;
+          const dateB = new Date(b.createdAt).getTime() || 0;
+          return dateA - dateB;
+        })
       : coin?.transactions;
 
   const largeHeaderHeight = scrollY.interpolate({
@@ -153,6 +152,7 @@ const styles = StyleSheet.create({
   },
   transactionContainer: {
     top: -25,
+    height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {
     top: windowHeight > 670 ? 90 : 70,

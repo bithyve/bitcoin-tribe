@@ -28,6 +28,8 @@ import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
 import IconChannelMgt from 'src/assets/images/channelMgt.svg';
 import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
+import HiddenAssetIcon from 'src/assets/images/hiddenAsset.svg';
+import HiddenAssetIconLight from 'src/assets/images/hiddenAsset_light.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -179,7 +181,7 @@ function SettingsScreen({ navigation }) {
     {
       id: 8,
       title: settings.hiddenAssets,
-      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      icon: isThemeDark ? <HiddenAssetIcon /> : <HiddenAssetIconLight />,
       onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
     },
     {
@@ -224,29 +226,13 @@ function SettingsScreen({ navigation }) {
       <View style={styles.container}>
         <SettingMenuItem SettingsMenu={SettingsMenu} />
       </View>
-      <View style={styles.container1}>
-        <SocialLinks
-          onPressTelegram={() => {
-            openLink('https://t.me/BitcoinTribeSupport');
-          }}
-          onPressX={() => {
-            openLink('https://x.com/BitcoinTribe_');
-          }}
-        />
-      </View>
     </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: Platform.OS === 'ios' ? '83%' : '80%',
       paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
-    },
-    container1: {
-      height: Platform.OS === 'ios' ? '17%' : '20%',
-      justifyContent: 'flex-end',
-      paddingTop: hp(20),
     },
   });
 export default SettingsScreen;

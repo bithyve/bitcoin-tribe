@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
@@ -22,7 +22,7 @@ import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
-import IconVerified from 'src/assets/images/issuer_verified.svg'
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -166,7 +166,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     largeHeader: {
       alignItems: 'center',
-      height: '50%',
+      height: windowHeight > 820 ? '46%' : '50%',
     },
     largeHeaderContainer: {
       borderColor: theme.colors.borderColor,

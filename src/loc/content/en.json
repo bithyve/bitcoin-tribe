@@ -290,7 +290,7 @@
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "UnHide"
+    "unHide": "Unhide"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -527,7 +527,13 @@
     "hideUda": "Hide UDA",
     "hideAsset": "Hide Asset",
     "noHiddenAssetTitle": "No Hidden Assets",
-    "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime."
+    "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime.",
+    "verifyYourIdentityTitle": "Verify Your Identity",
+    "verifyYourIdentitySubTitle": "Secure your assets by verifying your identity on Twitter.",
+    "verifyNow": "Verify Now",
+    "issuerVerificationTitle": "Issuer Verification Required",
+    "issuerVerificationSubTitle": "Verify your identity by connecting your Twitter account.",
+    "connectVerifyTwitter": "Connect & Verify on Twitter"
   },
   "community": {
     "fnfTitle": "Friends & Family",

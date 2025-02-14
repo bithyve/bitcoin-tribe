@@ -72,7 +72,6 @@ const UDADetailsScreen = () => {
         }
       }, 2000);
     }
-
   }, [askReview, askVerify]);
 
   const showVerifyIssuer = useMemo(() => {
@@ -207,7 +206,6 @@ const UDADetailsScreen = () => {
         </>
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
       </ScrollView>
-      <HideAssetView title={assets.hideUda} onPress={() => hideAsset()} />
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
