@@ -290,7 +290,7 @@
     "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "表示する"
+    "unHide": "非表示を解除"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
