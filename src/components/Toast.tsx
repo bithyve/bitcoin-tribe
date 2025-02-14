@@ -7,6 +7,8 @@ import Colors from 'src/theme/Colors';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 export default (
   message,
@@ -34,7 +36,7 @@ export default (
       <AppText
         style={[
           styles.toastMessageStyle,
-          { color: error ? Colors.White : Colors.RaisinBlack },
+          { color: error ? Colors.White : Colors.White },
         ]}>
         {message && message.length > 150
           ? `${message.substring(0, 150)}...`
@@ -53,8 +55,8 @@ export default (
         ? Colors.Golden
         : error
         ? Colors.FireOpal
-        : Colors.UFOGreen1,
-      textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
+        : Colors.GOGreen,
+      textColor: error ? Colors.ImperialRed : Colors.White,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
       containerStyle: {
