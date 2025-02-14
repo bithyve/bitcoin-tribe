@@ -171,10 +171,12 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(
-        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
-        true,
-      );
+      const errorMessage =
+        payServiceFeeFeeMutation.error?.message ||
+        payServiceFeeFeeMutation.error?.toString() ||
+        'An unexpected error occurred';
+
+      Toast(`Failed to pay service fee: ${errorMessage}`, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
