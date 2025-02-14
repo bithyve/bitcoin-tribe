@@ -36,7 +36,7 @@ const CoinDetailsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
-  console.log('windowHeight', windowHeight);
+
   useEffect(() => {
     if (askReview) {
       setTimeout(async () => {
