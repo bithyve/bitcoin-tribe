@@ -195,6 +195,8 @@ const CollectibleMetaDataScreen = () => {
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}
+              isVerified={collectible?.issuer?.verified}
+              assetId={assetId}
             />
           </ScrollView>
         </>

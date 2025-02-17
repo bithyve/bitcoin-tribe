@@ -124,6 +124,18 @@ export default class Relay {
     }
   };
 
+  public static getAsset = async (assetId: string): Promise<{
+    asset: Asset;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/registry/asset/${assetId}`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   public static registerAsset = async (
     appID: string,
     asset: Asset,

@@ -409,11 +409,13 @@ export class ApiHandler {
     Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
   }
 
-  static async resetPinMethod(key: string) {
-    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+  static async changePin({ key, pin = '' }) {
+    const hash = hash512(pin || config.ENC_KEY_STORAGE_IDENTIFIER);
     const encryptedKey = encrypt(hash, key);
     SecureStore.store(hash, encryptedKey);
-    Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    if (!pin) {
+      Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    }
   }
 
   static async loginWithPin(pin: string) {
@@ -521,8 +523,8 @@ export class ApiHandler {
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
-        ? predefinedRegtestNodes
-        : predefinedMainnetNodes;
+          ? predefinedRegtestNodes
+          : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
     ) as any;

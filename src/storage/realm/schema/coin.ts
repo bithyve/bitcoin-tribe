@@ -62,6 +62,7 @@ export const CoinSchema: ObjectSchema = {
     visibility: {
       type: 'string',
       default: AssetVisibility.DEFAULT,
+      optional: true,
     },
   },
 };

@@ -163,11 +163,7 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
-            assetId: response.assetId,
-            askReview: true,
-            askVerify: true,
-          });
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true, askVerify: addToRegistry });
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

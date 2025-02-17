@@ -10,7 +10,6 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
