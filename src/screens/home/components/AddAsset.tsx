@@ -50,7 +50,7 @@ type ServiceFeeProps = {
   status: 'error' | 'idle' | 'loading' | 'success';
 };
 
-const ServiceFee = ({
+export const ServiceFee = ({
   feeDetails,
   onPay,
   status,
