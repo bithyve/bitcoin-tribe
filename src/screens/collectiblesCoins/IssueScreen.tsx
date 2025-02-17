@@ -228,7 +228,7 @@ function IssueScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetName}
           </AppText>
           <TextField
@@ -243,7 +243,7 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetNameValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetTicker}
           </AppText>
 
@@ -260,7 +260,7 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetTickerValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.totalSupplyAmount}
           </AppText>
 
@@ -284,7 +284,7 @@ function IssueScreen() {
             maximumValue={10}
             step={1}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="caption" style={styles.textInputTitle}>
             {assets.precisionCaption}
           </AppText>
         </View>

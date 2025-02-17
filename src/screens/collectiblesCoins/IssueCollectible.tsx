@@ -444,7 +444,7 @@ function IssueCollectibleScreen() {
 
         {assetType === AssetType.Collectible ? (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
@@ -460,7 +460,7 @@ function IssueCollectibleScreen() {
               error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
@@ -482,7 +482,7 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.totalSupplyAmount}
             </AppText>
 
@@ -510,7 +510,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
@@ -545,7 +545,7 @@ function IssueCollectibleScreen() {
           </View>
         ) : (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
@@ -561,7 +561,7 @@ function IssueCollectibleScreen() {
               error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetTicker}
             </AppText>
 
@@ -579,7 +579,7 @@ function IssueCollectibleScreen() {
               error={assetTickerValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
@@ -602,7 +602,7 @@ function IssueCollectibleScreen() {
             />
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
@@ -637,7 +637,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.attachments}
             </AppText>
