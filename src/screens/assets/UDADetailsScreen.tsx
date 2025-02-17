@@ -204,7 +204,12 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
+        <HideAssetView
+          title={assets.hideAsset}
+          onPress={() => hideAsset()}
+          isVerified={uda?.issuer?.verified}
+          assetId={assetId}
+        />
       </ScrollView>
       <VerifyIssuerModal
         assetId={uda?.assetId}
