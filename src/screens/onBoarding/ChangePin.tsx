@@ -1,25 +1,23 @@
 import React, { useContext } from 'react';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import CreatePinContainer from './components/CreatePinContainer';
+import ChangePinContainer from './components/ChangePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute } from '@react-navigation/native';
 
-function CreatePin() {
-  const { biometricProcess } = useRoute().params;
+function ChangePin() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, settings } = translations;
 
   return (
     <ScreenContainer>
       <AppHeader
-        title={settings.setPasscodeTitle}
-        subTitle={onBoarding.enterPin}
+        title={'Change Passcode'}
+        subTitle={'Keep the passcode field empty to remove'}
         // onSettingsPress={onSettingsPress}
       />
-      <CreatePinContainer biometricProcess={biometricProcess} />
+      <ChangePinContainer />
     </ScreenContainer>
   );
 }
 
-export default CreatePin;
+export default ChangePin;
