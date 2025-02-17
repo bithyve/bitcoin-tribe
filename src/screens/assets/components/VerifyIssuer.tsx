@@ -200,7 +200,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
               metadata: {
                 assetId: assetId,
                 note: `Issued ${asset.name} on ${moment().format(
-                  'DD MMM YY  •  hh:mm a',
+                  'DD MMM YY  •  hh:mm A',
                 )}`,
               },
             },

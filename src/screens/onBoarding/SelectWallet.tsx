@@ -196,7 +196,7 @@ function SelectWallet() {
             <Buttons
               primaryTitle={common.proceed}
               primaryOnPress={() => createNodeMutation.mutate()}
-              width={wp(120)}
+              width={'100%'}
               disabled={!checkedTermsCondition}
             />
           </View>

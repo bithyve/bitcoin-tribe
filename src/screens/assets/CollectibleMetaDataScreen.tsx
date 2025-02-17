@@ -153,7 +153,6 @@ const CollectibleMetaDataScreen = () => {
                 username={collectible.issuer.verifiedBy[0].username}
               />
             )}
-            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={home.assetName}
               value={collectible && collectible.name}
@@ -226,7 +225,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     assetNameWrapper: {
-      padding: 10,
+      minHeight: hp(50),
+      paddingHorizontal: hp(10),
+      justifyContent: 'center',
       borderRadius: 10,
       borderWidth: 1,
       borderColor: theme.colors.borderColor,

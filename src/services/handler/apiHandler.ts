@@ -1162,7 +1162,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1227,7 +1227,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1291,7 +1291,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
