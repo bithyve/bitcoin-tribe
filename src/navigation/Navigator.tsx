@@ -74,6 +74,7 @@ import { AppTheme } from 'src/theme';
 import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
 import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
 import HiddenAssets from 'src/screens/settings/HiddenAssets';
+import ChangePin from 'src/screens/onBoarding/ChangePin';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -261,6 +262,10 @@ function AppStack() {
           component={WalletBackupHistory}
         />
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+        <Stack.Screen
+          name={NavigationRoutes.CHANGEPIN}
+          component={ChangePin}
+        />
         <Stack.Screen
           name={NavigationRoutes.CLOUDBACKUP}
           component={CloudBackup}

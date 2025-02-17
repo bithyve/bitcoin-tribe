@@ -94,7 +94,7 @@
     "react-native-webview": "13.12.5",
     "react-query": "^3.39.3",
     "readable-stream": "1.0.33",
-    "realm": "12.11.0",
+    "realm": "12.14.1",
     "rn-nodeify": "github:tradle/rn-nodeify",
     "rn-qr-generator": "^1.4.3",
     "stream-browserify": "^1.0.0",

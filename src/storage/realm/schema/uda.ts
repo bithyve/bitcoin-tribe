@@ -26,6 +26,7 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
     visibility: {
       type: 'string',
       default: AssetVisibility.DEFAULT,
+      optional: true,
     },
   },
 };
