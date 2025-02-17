@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useMutation } from 'react-query';
 import { useQuery } from '@realm/react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -25,6 +25,7 @@ import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { AppTheme } from 'src/theme';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function ReceiveAssetScreen() {
   const { translations } = useContext(LocalizationContext);
@@ -177,6 +178,14 @@ function ReceiveAssetScreen() {
         title={assets.receiveAssetTitle}
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
+        onBackNavigation={() =>  navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: NavigationRoutes.HOME },
+            ],
+          })
+        )}
       />
       {loading ? (
         <View>

@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "Il backup sul cloud è fallito",
     "CLOUD_BACKUP_HEALTH": "Salute del backup sul cloud",
     "CLOUD_BACKUP_HEALTH_FAILED": "La salute del backup sul cloud è fallita",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "La conferma del backup del portafoglio è stata saltata",
     "walletBackupDone": "Backup completato! Conserva al sicuro la tua frase di recupero per accessi futuri.",
     "nodeWalletBackupDone": "Il backup del portafoglio è stato completato. I tuoi dati sono stati salvati in modo sicuro!",
     "assetBackupDone": "Backup riuscito! I tuoi dati sono archiviati in modo sicuro.",
@@ -509,6 +510,7 @@
     "payInprocess": "Pagamento in corso...",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
+    "skipForNow": "Salta per ora",
     "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
     "spendable": "Disponibile: ",
     "spendableBalanceInfo": "Il saldo utilizzabile dopo la detrazione degli importi bloccati a causa di transazioni in sospeso o \"in attesa della controparte\".",
@@ -523,8 +525,15 @@
     "hideCoin": "Nascondi Moneta",
     "hideCollectible": "Nascondi Collezionabile",
     "hideUda": "Nascondi UDA",
+    "hideAsset": "Nascondi attività",
     "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
-    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento."
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento.",
+    "verifyYourIdentityTitle": "Verifica la tua identità",
+    "verifyYourIdentitySubTitle": "Proteggi i tuoi asset verificando la tua identità su Twitter.",
+    "verifyNow": "Verifica ora",
+    "issuerVerificationTitle": "Verifica dell'emittente richiesta",
+    "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",
+    "connectVerifyTwitter": "Connetti e verifica su Twitter"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

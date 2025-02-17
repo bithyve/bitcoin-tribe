@@ -59,7 +59,7 @@ const SelectOption = (props: SelectOptionProps) => {
         <View style={styles.iconWrapper}>
           {icon}
           <View style={styles.contentWrapper}>
-            <AppText variant="heading3" style={styles.titleStyle}>
+            <AppText variant="body1" style={styles.titleStyle}>
               {title}
             </AppText>
             {subTitle ? (

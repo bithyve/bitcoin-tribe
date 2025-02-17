@@ -59,7 +59,6 @@ import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
-
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
 
@@ -410,11 +409,13 @@ export class ApiHandler {
     Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
   }
 
-  static async resetPinMethod(key: string) {
-    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+  static async changePin({ key, pin = '' }) {
+    const hash = hash512(pin || config.ENC_KEY_STORAGE_IDENTIFIER);
     const encryptedKey = encrypt(hash, key);
     SecureStore.store(hash, encryptedKey);
-    Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    if (!pin) {
+      Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    }
   }
 
   static async loginWithPin(pin: string) {
@@ -441,6 +442,9 @@ export class ApiHandler {
     try {
       const hash = hash512(pin);
       const key = decrypt(hash, await SecureStore.fetch(hash));
+      if (!key) {
+        throw new Error('PIN not found');
+      }
       return key;
     } catch (error) {
       throw new Error('Invalid PIN');
@@ -519,8 +523,8 @@ export class ApiHandler {
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
-        ? predefinedRegtestNodes
-        : predefinedMainnetNodes;
+          ? predefinedRegtestNodes
+          : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
     ) as any;
@@ -1026,17 +1030,17 @@ export class ApiHandler {
           for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-            
+
             if (!(await RNFS.exists(destination))) {
               await RNFS.copyFile(element.media.filePath, destination);
             }
-            
+
             cfas.push({
               ...element,
               media: {
                 ...element.media,
-                filePath: destination
-              }
+                filePath: destination,
+              },
             });
           }
         } else {
@@ -1923,35 +1927,52 @@ export class ApiHandler {
 
   static async updateAssetVerificationStatus() {
     try {
-      const getUnverifiedAssets = (schema: RealmSchema) => 
-        dbManager.getCollection(schema).filter(asset => !asset.issuer || asset?.issuer?.verified === false);
+      const getUnverifiedAssets = (schema: RealmSchema) =>
+        dbManager
+          .getCollection(schema)
+          .filter(asset => !asset.issuer || asset?.issuer?.verified === false);
 
       const schemas = [
         { schema: RealmSchema.Coin, type: 'coin' },
         { schema: RealmSchema.Collectible, type: 'collectible' },
-        { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' }
+        { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' },
       ];
 
-      const assetIds = schemas.flatMap(({ schema }) => 
-        getUnverifiedAssets(schema).map(asset => asset.assetId)
+      const assetIds = schemas.flatMap(({ schema }) =>
+        getUnverifiedAssets(schema).map(asset => asset.assetId),
       );
       if (assetIds.length === 0) return;
       const response = await Relay.getAssetsVerificationStatus(assetIds);
       if (!response.status) {
-        throw new Error(response.error || 'Failed to update asset verification status');
+        throw new Error(
+          response.error || 'Failed to update asset verification status',
+        );
       }
       if (response?.records) {
         for (const { assetId, issuer } of response.records) {
           for (const { schema } of schemas) {
-            const asset = dbManager.getCollection(schema).find(a => a.assetId === assetId);
+            const asset = dbManager
+              .getCollection(schema)
+              .find(a => a.assetId === assetId);
             if (asset) {
               dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-                issuer
+                issuer,
               });
             }
           }
         }
       }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async resetApp(key: string) {
+    try {
+      const uint8array = stringToArrayBuffer(key);
+      await dbManager.deleteRealm(uint8array);
+      Storage.clear();
     } catch (error) {
       console.log(error);
       throw error;

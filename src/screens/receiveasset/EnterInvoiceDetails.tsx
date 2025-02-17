@@ -136,7 +136,7 @@ const EnterInvoiceDetails = () => {
   function validateAndNavigateToReceiveAsset() {
     const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
     if (assetIdPattern.test(assetId)) {
-      navigation.replace(NavigationRoutes.RECEIVEASSET, {
+      navigation.navigate(NavigationRoutes.RECEIVEASSET, {
         refresh: true,
         assetId,
         amount,
@@ -243,10 +243,10 @@ const EnterInvoiceDetails = () => {
           primaryOnPress={() => validateAndNavigateToReceiveAsset()}
           secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
-            navigation.replace(NavigationRoutes.RECEIVEASSET, {
+            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
               refresh: true,
-              assetId,
-              amount,
+              assetId: '',
+              amount: '',
               selectedType,
             })
           }

@@ -16,6 +16,9 @@ import {
   Collectible,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
+import useWallets from 'src/hooks/useWallets';
 
 function HiddenAssets() {
   const theme: AppTheme = useTheme();
@@ -24,6 +27,9 @@ function HiddenAssets() {
   const styles = getStyles(theme);
   const [refreshing, setRefreshing] = useState(false);
 
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+  const wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
   );
@@ -43,6 +49,13 @@ function HiddenAssets() {
     );
   }, [coins, collectibles, udas]);
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    refreshRgbWallet.mutate();
+    refreshWallet.mutate({ wallets: [wallet] });
+    setTimeout(() => setRefreshing(false), 2000);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -51,10 +64,7 @@ function HiddenAssets() {
       />
       <HiddenAssetsList
         listData={assets}
-        onRefresh={() => {
-          setRefreshing(true);
-          setTimeout(() => setRefreshing(false), 2000);
-        }}
+        onRefresh={() => handleRefresh()}
         loading={refreshing}
         refreshingStatus={refreshing}
       />

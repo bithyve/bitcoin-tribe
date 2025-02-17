@@ -34,9 +34,9 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
-import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
+import SkipButton from 'src/components/SkipButton';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -50,7 +50,7 @@ type ServiceFeeProps = {
   status: 'error' | 'idle' | 'loading' | 'success';
 };
 
-const ServiceFee = ({
+export const ServiceFee = ({
   feeDetails,
   onPay,
   status,
@@ -81,18 +81,6 @@ const ServiceFee = ({
         </View>
       </View>
       <View>
-        <SecondaryCTA
-          title={common.skip}
-          disabled={status === 'loading'}
-          onPress={() => {
-            hideModal();
-            setTimeout(() => {
-              onSkip();
-            }, 400);
-          }}
-          height={hp(16)}
-        />
-
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
             title={assets.swipeToPay}
@@ -101,6 +89,16 @@ const ServiceFee = ({
             backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
+        <SkipButton
+          disabled={status === 'loading'}
+          onPress={() => {
+            hideModal();
+            setTimeout(() => {
+              onSkip();
+            }, 400);
+          }}
+          title={assets.skipForNow}
+        />
       </View>
     </View>
   );
@@ -108,7 +106,7 @@ const ServiceFee = ({
 
 function AddAsset() {
   const navigation = useNavigation();
-  const { issueAssetType } = useRoute().params;
+  const issueAssetType = useRoute().params?.issueAssetType;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -173,10 +171,12 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(
-        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
-        true,
-      );
+      const errorMessage =
+        payServiceFeeFeeMutation.error?.message ||
+        payServiceFeeFeeMutation.error?.toString() ||
+        'An unexpected error occurred';
+
+      Toast(`Failed to pay service fee: ${errorMessage}`, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -220,11 +220,10 @@ function AddAsset() {
         <ModalContainer
           title={assets.listYourAssetInRegTitle}
           subTitle={assets.listYourAssetInRegSubTitle}
-          height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
-            if(payServiceFeeFeeMutation.isLoading) return
+            if (payServiceFeeFeeMutation.isLoading) return;
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
@@ -309,11 +308,11 @@ const getStyles = (theme: AppTheme) =>
     },
     containerFee: {
       borderTopColor: theme.colors.borderColor,
-      borderTopWidth: 1,
+      borderTopWidth: 2,
       paddingTop: hp(5),
     },
     wrapper: {
-      height: '46%',
+      // height: '50%',
     },
     labelWrapper: {
       width: '45%',

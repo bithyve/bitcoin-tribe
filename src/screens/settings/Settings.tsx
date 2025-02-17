@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import ReactNativeBiometrics from 'react-native-biometrics';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -14,8 +13,6 @@ import IconLangCurrency from 'src/assets/images/icon_globe1.svg';
 import IconLangCurrencyLight from 'src/assets/images/icon_lang_light.svg';
 import IconAppInfo from 'src/assets/images/icon_info.svg';
 import IconAppInfoLight from 'src/assets/images/icon_info_light.svg';
-// import IconNodes from 'src/assets/images/icon_node.svg';
-// import IconNodesLight from 'src/assets/images/icon_node_light.svg';
 import SetPasscode from 'src/assets/images/setPasscode.svg';
 import SetPasscodeLight from 'src/assets/images/setPasscode_light.svg';
 import IconBiometric from 'src/assets/images/icon_fingerprint.svg';
@@ -28,6 +25,8 @@ import IconNamePic from 'src/assets/images/icon_namePic.svg';
 import IconNamePicLight from 'src/assets/images/icon_namePic_light.svg';
 import IconChannelMgt from 'src/assets/images/channelMgt.svg';
 import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
+import HiddenAssetIcon from 'src/assets/images/hiddenAsset.svg';
+import HiddenAssetIconLight from 'src/assets/images/hiddenAsset_light.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -36,14 +35,14 @@ import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
 import Toast from 'src/components/Toast';
 import * as SecureStore from 'src/storage/secure-store';
-// import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import SocialLinks from './components/SocialLinks';
-import openLink from 'src/utils/OpenLink';
 import { hp } from 'src/constants/responsive';
+import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -72,6 +71,10 @@ function SettingsScreen({ navigation }) {
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [visible, setVisible] = useState(false);
+  const [passcode, setPasscode] = useState('');
+  const [invalidPin, setInvalidPin] = useState('');
+  const login = useMutation(ApiHandler.verifyPin);
 
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -111,6 +114,19 @@ function SettingsScreen({ navigation }) {
     }
   }, [isEnableBiometrics, pinMethod]);
 
+  useEffect(() => {
+    if (login.error) {
+      setInvalidPin(onBoarding.invalidPin);
+      setPasscode('');
+    } else if (login.data) {
+      setVisible(false);
+      setPasscode('');
+      setTimeout(() => {
+        navigation.navigate(NavigationRoutes.CHANGEPIN);
+      }, 100);
+    }
+  }, [login.error, login.data]);
+
   const toggleBiometrics = () => {
     if (pinMethod === PinMethod.DEFAULT) {
       setIsEnableBiometrics(true);
@@ -125,6 +141,11 @@ function SettingsScreen({ navigation }) {
       Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
       setBiometrics(false);
     }
+  };
+
+  const handlePasscodeChange = newPasscode => {
+    setInvalidPin('');
+    setPasscode(newPasscode);
   };
 
   const SettingsMenu: SettingMenuProps[] = [
@@ -170,6 +191,13 @@ function SettingsScreen({ navigation }) {
       hideMenu: pinMethod !== PinMethod.DEFAULT,
     },
     {
+      id: 12,
+      title: 'Change Passcode',
+      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
+      onPress: () => setVisible(true),
+      hideMenu: pinMethod === PinMethod.DEFAULT,
+    },
+    {
       id: 7,
       title: settings.channelManagement,
       icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
@@ -179,7 +207,7 @@ function SettingsScreen({ navigation }) {
     {
       id: 8,
       title: settings.hiddenAssets,
-      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      icon: isThemeDark ? <HiddenAssetIcon /> : <HiddenAssetIconLight />,
       onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
     },
     {
@@ -219,20 +247,31 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
   ];
+
   return (
     <ScreenContainer>
+      <EnterPasscodeModal
+        title={'Change Passcode'}
+        subTitle={'Enter your current passcode'}
+        visible={visible}
+        passcode={passcode}
+        invalidPin={invalidPin}
+        onPasscodeChange={handlePasscodeChange}
+        onDismiss={() => {
+          setPasscode('');
+          handlePasscodeChange('');
+          setVisible(false);
+          login.reset();
+        }}
+        primaryOnPress={() => {
+          setPasscode('');
+          handlePasscodeChange('');
+          login.mutate(passcode);
+        }}
+        isLoading={login.isLoading}
+      />
       <View style={styles.container}>
         <SettingMenuItem SettingsMenu={SettingsMenu} />
-      </View>
-      <View style={styles.container1}>
-        <SocialLinks
-          onPressTelegram={() => {
-            openLink('https://t.me/BitcoinTribeSupport');
-          }}
-          onPressX={() => {
-            openLink('https://x.com/BitcoinTribe_');
-          }}
-        />
       </View>
     </ScreenContainer>
   );
@@ -240,13 +279,7 @@ function SettingsScreen({ navigation }) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: Platform.OS === 'ios' ? '83%' : '80%',
       paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
-    },
-    container1: {
-      height: Platform.OS === 'ios' ? '17%' : '20%',
-      justifyContent: 'flex-end',
-      paddingTop: hp(20),
     },
   });
 export default SettingsScreen;

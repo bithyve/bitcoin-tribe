@@ -11,7 +11,6 @@ import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
@@ -40,11 +39,12 @@ import AssetIDContainer from './components/AssetIDContainer';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
+import VerifyIssuerModal from './components/VerifyIssuerModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
-  const { assetId, askReview } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
@@ -61,14 +61,18 @@ const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   useEffect(() => {
     if (askReview) {
       setTimeout(() => {
         requestAppReview();
+        if (askVerify) {
+          setShowVerifyModal(true);
+        }
       }, 2000);
     }
-  }, [askReview]);
+  }, [askReview, askVerify]);
 
   const showVerifyIssuer = useMemo(() => {
     return (
@@ -200,8 +204,19 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        <HideAssetView
+          title={assets.hideAsset}
+          onPress={() => hideAsset()}
+          isVerified={uda?.issuer?.verified}
+          assetId={assetId}
+        />
       </ScrollView>
-      <HideAssetView title={assets.hideUda} onPress={() => hideAsset()} />
+      <VerifyIssuerModal
+        assetId={uda?.assetId}
+        isVisible={showVerifyModal}
+        onDismiss={() => setShowVerifyModal(false)}
+        schema={RealmSchema.UniqueDigitalAsset}
+      />
     </ScreenContainer>
   );
 };

@@ -42,9 +42,6 @@ import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import UploadAssetFileButton from './components/UploadAssetFileButton';
-import UploadFile from 'src/assets/images/uploadFile.svg';
-import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
@@ -166,7 +163,7 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true });
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true, askVerify: addToRegistry });
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -230,7 +227,10 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.UDADETAILS, { assetId: response.assetId, askReview: true });
+          navigation.replace(NavigationRoutes.UDADETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+          });
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -514,13 +514,7 @@ function IssueCollectibleScreen() {
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
-
-            <UploadAssetFileButton
-              onPress={handlePickImage}
-              title={home.uploadFile}
-              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
-            />
-            {image && (
+            {image ? (
               <View style={styles.imageWrapper}>
                 <Image
                   source={{
@@ -537,6 +531,12 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
+            ) : (
+              <AppTouchable
+                onPress={handlePickImage}
+                style={styles.addMediafileIconWrapper}>
+                {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
+              </AppTouchable>
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>

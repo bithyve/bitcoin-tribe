@@ -148,9 +148,14 @@ const CoinsMetaDataScreen = () => {
           {showVerifyIssuer && (
             <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
           )}
+          <HideAssetView
+            title={assets.hideAsset}
+            onPress={() => hideAsset()}
+            isVerified={coin?.issuer?.verified}
+            assetId={assetId}
+          />
         </ScrollView>
       )}
-      <HideAssetView title={assets.hideCoin} onPress={() => hideAsset()} />
     </ScreenContainer>
   );
 };

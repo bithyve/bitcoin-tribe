@@ -192,13 +192,15 @@ const CollectibleMetaDataScreen = () => {
                 schema={RealmSchema.Collectible}
               />
             )}
+            <HideAssetView
+              title={assets.hideAsset}
+              onPress={() => hideAsset()}
+              isVerified={collectible?.issuer?.verified}
+              assetId={assetId}
+            />
           </ScrollView>
         </>
       )}
-      <HideAssetView
-        title={assets.hideCollectible}
-        onPress={() => hideAsset()}
-      />
     </ScreenContainer>
   );
 };

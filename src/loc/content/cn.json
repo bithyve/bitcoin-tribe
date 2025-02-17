@@ -246,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "云备份失败",
     "CLOUD_BACKUP_HEALTH": "云备份状态",
     "CLOUD_BACKUP_HEALTH_FAILED": "云备份状态检查失败",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "跳过钱包备份确认",
     "walletBackupDone": "备份完成！请妥善保管您的恢复短语以便将来使用。",
     "nodeWalletBackupDone": "钱包备份已完成。您的数据已安全备份！",
     "assetBackupDone": " 备份成功！您的数据已安全存储。",
@@ -509,6 +510,7 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
+    "skipForNow": "暂时跳过",
     "failToFetchIssueFee": "获取资产发行费用失败。",
     "spendable": "可用余额: ",
     "spendableBalanceInfo": "扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。",
@@ -523,8 +525,15 @@
     "hideCoin": "隐藏币",
     "hideCollectible": "隐藏藏品",
     "hideUda": "隐藏 UDA",
+    "hideAsset": "隐藏资产",
     "noHiddenAssetTitle": "没有隐藏资产",
-    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。"
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。",
+    "verifyYourIdentityTitle": "验证您的身份",
+    "verifyYourIdentitySubTitle": "通过在 Twitter 上验证您的身份来保护您的资产。",
+    "verifyNow": "立即验证",
+    "issuerVerificationTitle": "发行人验证必需",
+    "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
+    "connectVerifyTwitter": "连接并在 Twitter 上验证"
   },
   "community": {
     "fnfTitle": "朋友和家人",

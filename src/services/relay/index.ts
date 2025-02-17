@@ -7,7 +7,17 @@ import { Platform } from 'react-native';
 
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
-  public static getRegtestSats = async (address: string, amount: number) => {};
+  public static getRegtestSats = async (address: string, amount: number) => {
+    try {
+      const res = await RestClient.post(`${RELAY}/btcfaucet/getcoins`, {
+        HEXA_ID, address, amount, network: 'iris',
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  };
 
   public static getTestcoins = async (
     recipientAddress: string,
@@ -109,6 +119,18 @@ export default class Relay {
         }
       }
       return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getAsset = async (assetId: string): Promise<{
+    asset: Asset;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/registry/asset/${assetId}`);
+      return res.data;
     } catch (err) {
       throw new Error(err);
     }

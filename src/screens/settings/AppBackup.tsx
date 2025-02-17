@@ -95,7 +95,11 @@ function AppBackup({ navigation }) {
             if (response) {
               navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
               setTimeout(() => {
-                Toast(settings.SEED_BACKUP_CONFIRMATION_SKIPPED);
+                Toast(
+                  settings.SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST,
+                  false,
+                  true,
+                );
               }, 400);
             }
           }}

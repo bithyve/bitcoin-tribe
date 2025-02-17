@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-
 import AppText from 'src/components/AppText';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
@@ -16,6 +15,7 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AllocatedAssets from './components/AllocatedAssets';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type UnspentUTXOElementProps = {
   transID: string;
@@ -76,6 +76,9 @@ function UnspentUTXOElement({
                   <AppText variant="heading3" style={styles.assetNameText}>
                     {assetName}
                   </AppText>
+                  {assetMap[allocation.assetId]?.issuer?.verified && (
+                    <IconVerified width={24} height={24} />
+                  )}
                 </View>
                 <AppText variant="body2" style={styles.assetAmountText}>
                   {numberWithCommas(allocation.amount)}

@@ -21,11 +21,12 @@ import CoinDetailsHeader from './CoinDetailsHeader';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
+import VerifyIssuerModal from './components/VerifyIssuerModal';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId, askReview } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -34,14 +35,18 @@ const CoinDetailsScreen = () => {
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   useEffect(() => {
     if (askReview) {
-      setTimeout(() => {
-        requestAppReview();
+      setTimeout(async () => {
+        await requestAppReview();
+        if (askVerify) {
+          setShowVerifyModal(true);
+        }
       }, 2000);
     }
-  }, [askReview]);
+  }, [askReview, askVerify]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -128,6 +133,13 @@ const CoinDetailsScreen = () => {
         assetId={assetId}
         scrollY={scrollY}
       />
+
+      <VerifyIssuerModal
+        assetId={coin.assetId}
+        isVisible={showVerifyModal}
+        onDismiss={() => setShowVerifyModal(false)}
+        schema={RealmSchema.Coin}
+      />
     </ScreenContainer>
   );
 };
@@ -140,6 +152,7 @@ const styles = StyleSheet.create({
   },
   transactionContainer: {
     top: -25,
+    height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {
     top: windowHeight > 670 ? 90 : 70,

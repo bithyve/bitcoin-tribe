@@ -1348,7 +1348,7 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
-  - RealmJS (12.11.0):
+  - RealmJS (12.14.1):
     - React
   - RNCClipboard (1.15.0):
     - React-Core
@@ -1920,7 +1920,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 87b14969bb0b10538014fb8407d472f9904bc8cd
   React-utils: 67574b07bff4429fd6c4d43a7fad8254d814ee20
   ReactCommon: 64c64f4ae1f2debe3fab1800e00cb8466a4477b7
-  RealmJS: 8fddbbde745ed05822373911e55b4c0b3905380e
+  RealmJS: 5b0258b3c04b9f48536b2692965690afe024164c
   RNCClipboard: dbcf25b8f666b4685c02eeb65be981d30198e505
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
   RNGestureHandler: 8d857f8c5e6697585f6a246d1acbf0533c438ab1
