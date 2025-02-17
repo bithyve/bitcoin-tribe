@@ -646,8 +646,6 @@ const SendAssetScreen = () => {
             Keyboard.dismiss();
             setVisible(true);
           }}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
@@ -656,7 +654,7 @@ const SendAssetScreen = () => {
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
-          width={wp(120)}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>
@@ -762,7 +760,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     containerSwitch: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginVertical: hp(15),
+      marginVertical: hp(20),
       paddingBottom: hp(30),
     },
   });
