@@ -102,7 +102,17 @@ function SupportTermAndCondition() {
           <AppTouchable
             onPress={() => SetCheckedTermsCondition(!checkedTermsCondition)}
             style={styles.checkIconWrapper}>
-            {checkedTermsCondition ? isThemeDark? <CheckIcon /> : <CheckIconLight/> : isThemeDark? <UnCheckIcon /> : <UnCheckIconLight/>}
+            {checkedTermsCondition ? (
+              isThemeDark ? (
+                <CheckIcon />
+              ) : (
+                <CheckIconLight />
+              )
+            ) : isThemeDark ? (
+              <UnCheckIcon />
+            ) : (
+              <UnCheckIconLight />
+            )}
           </AppTouchable>
           <View style={styles.termConditionWrapper1}>
             <Text style={styles.termConditionText}>
@@ -114,7 +124,7 @@ function SupportTermAndCondition() {
           <Buttons
             primaryTitle={common.proceed}
             primaryOnPress={() => createNodeMutation.mutate()}
-            width={wp(120)}
+            width={'100%'}
             disabled={!checkedTermsCondition}
           />
         </View>

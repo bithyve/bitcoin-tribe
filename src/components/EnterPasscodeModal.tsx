@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from './Buttons';
 import ModalContainer from './ModalContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -95,7 +95,8 @@ const EnterPasscodeModal: React.FC<Props> = ({
           secondaryTitle={common.cancel}
           secondaryOnPress={onDismiss}
           disabled={passcode === '' || passcode.length !== 4 || isLoading}
-          width={wp(120)}
+          width={windowWidth / 2.4}
+          secondaryCTAWidth={windowWidth / 2.4}
           primaryLoading={isLoading}
         />
       </View>

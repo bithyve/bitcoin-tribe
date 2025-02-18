@@ -27,7 +27,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -163,7 +163,11 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true, askVerify: addToRegistry });
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -701,7 +705,8 @@ function IssueCollectibleScreen() {
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
             disabled={isButtonDisabled || createUtxos.isLoading || loading}
-            width={wp(120)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
             primaryLoading={createUtxos.isLoading || loading}
           />
         </View>
