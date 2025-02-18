@@ -24,7 +24,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
-import IconVerified from 'src/assets/images/issuer_verified.svg'
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -92,7 +92,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     ios: assetImage,
                   }),
                 }}
-                resizeMode="contain"
+                resizeMode="cover"
                 style={styles.imageStyle}
               />
             ) : (
@@ -111,9 +111,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             <AppText variant="body2" style={styles.assetNameText}>
               {assetName}
             </AppText>
-            {asset.issuer?.verified && (
-              <IconVerified width={24} height={24} />
-            )}
+            {asset.issuer?.verified && <IconVerified width={24} height={24} />}
           </View>
         </View>
         <View style={styles.largeHeaderContainer}>
@@ -148,7 +146,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             ) : (
               <AppTouchable
                 style={styles.onChainTotalBalanceWrapper}
-                onPress={() => { }}>
+                onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
                   <AppText variant="pageTitle2" style={styles.totalBalance}>
                     {numberWithCommas(

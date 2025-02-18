@@ -142,7 +142,7 @@ const CollectibleMetaDataScreen = () => {
                     ios: collectible.media?.filePath,
                   }),
                 }}
-                resizeMode="contain"
+                resizeMode="cover"
                 style={styles.imageStyle}
               />
             </View>
@@ -249,11 +249,11 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      padding: hp(16),
+      paddingHorizontal: hp(16),
     },
     imageStyle: {
       width: '100%',
-      height: 200,
+      height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),

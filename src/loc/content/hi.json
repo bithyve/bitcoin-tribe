@@ -533,7 +533,8 @@
     "verifyNow": "अभी सत्यापित करें",
     "issuerVerificationTitle": "जारीकर्ता सत्यापन आवश्यक",
     "issuerVerificationSubTitle": "अपनी पहचान सत्यापित करने के लिए अपने ट्विटर खाते से कनेक्ट करें।",
-    "connectVerifyTwitter": "कनेक्ट करें और ट्विटर पर सत्यापित करें"
+    "connectVerifyTwitter": "कनेक्ट करें और ट्विटर पर सत्यापित करें",
+    "viewInRegistry": "रजिस्टर में देखें"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

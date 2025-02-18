@@ -4,7 +4,10 @@ import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
 import Relay from 'src/services/relay';
-import { Asset, IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
@@ -183,7 +186,11 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
 
   const registerAsset = React.useCallback(async () => {
     try {
-      const asset = dbManager.getObjectByPrimaryId(schema, 'assetId', assetId) as unknown as Asset;
+      const asset = dbManager.getObjectByPrimaryId(
+        schema,
+        'assetId',
+        assetId,
+      ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {

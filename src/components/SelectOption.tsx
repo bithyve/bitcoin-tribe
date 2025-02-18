@@ -107,7 +107,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
       justifyContent: 'space-between',
       padding: windowHeight > 670 ? hp(16) : hp(10),
       backgroundColor: backColor,
-      borderRadius: 15,
+      borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(10),
