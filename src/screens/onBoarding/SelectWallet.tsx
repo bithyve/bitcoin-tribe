@@ -68,6 +68,20 @@ function SelectWallet() {
     } else if (createNodeMutation.data) {
       setTimeout(() => {
         setVisible(true);
+        setTimeout(() => {
+          setVisible(false);
+          navigation.navigate(NavigationRoutes.PROFILESETUP, {
+            nodeConnectParams: {
+              nodeUrl: createNodeMutation.data.apiUrl,
+              nodeId: createNodeMutation.data.node.nodeId,
+              authentication: createNodeMutation.data.token,
+              peerDNS: createNodeMutation.data.peerDNS,
+              mnemonic: createNodeMutation.data.node.mnemonic,
+            },
+            nodeInfo: {},
+            appType: AppType.SUPPORTED_RLN,
+          });
+        }, 3000);
       }, 100);
     }
   }, [createNodeMutation.data, createNodeMutation.error]);
@@ -225,20 +239,20 @@ function SelectWallet() {
           <NodeConnectSuccessPopupContainer
             title={onBoarding.nodeconnectSuccessfulTitle}
             subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
-            onPress={() => {
-              setVisible(false);
-              navigation.navigate(NavigationRoutes.PROFILESETUP, {
-                nodeConnectParams: {
-                  nodeUrl: createNodeMutation.data.apiUrl,
-                  nodeId: createNodeMutation.data.node.nodeId,
-                  authentication: createNodeMutation.data.token,
-                  peerDNS: createNodeMutation.data.peerDNS,
-                  mnemonic: createNodeMutation.data.node.mnemonic,
-                },
-                nodeInfo: {},
-                appType: AppType.SUPPORTED_RLN,
-              });
-            }}
+            // onPress={() => {
+            //   setVisible(false);
+            //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
+            //     nodeConnectParams: {
+            //       nodeUrl: createNodeMutation.data.apiUrl,
+            //       nodeId: createNodeMutation.data.node.nodeId,
+            //       authentication: createNodeMutation.data.token,
+            //       peerDNS: createNodeMutation.data.peerDNS,
+            //       mnemonic: createNodeMutation.data.node.mnemonic,
+            //     },
+            //     nodeInfo: {},
+            //     appType: AppType.SUPPORTED_RLN,
+            //   });
+            // }}
           />
         </ResponsePopupContainer>
       </View>

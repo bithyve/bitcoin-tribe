@@ -22,6 +22,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import ModalLoading from 'src/components/ModalLoading';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -165,9 +166,9 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      {/* <View>
-        <ModalLoading visible={validatingInvoiceLoader} />
-      </View> */}
+      <View>
+        <ModalLoading visible={!isScanning} />
+      </View>
       <View style={styles.scannerWrapper}>
         {!visible && (
           <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />
