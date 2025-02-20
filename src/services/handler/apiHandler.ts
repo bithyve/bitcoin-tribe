@@ -872,7 +872,7 @@ export class ApiHandler {
           JSON.parse(averageTxFeeJSON);
         const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
         const utxos = await RGBServices.createUtxos(
-          averageTxFee.high.feePerByte,
+          averageTxFee.low.feePerByte,
           ApiHandler.appType,
           ApiHandler.api,
         );

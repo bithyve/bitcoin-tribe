@@ -153,7 +153,7 @@ export default class Relay {
               android: `file://${asset.media.filePath}`,
               ios: asset.media.filePath,
             }),
-            name: asset.media.filePath.split('/').pop(),
+            name: `${Math.random().toString(36).substring(2, 11)}_${asset.media.filePath.split('/').pop()}`,
             type: asset.media.mime,
           });
         } else if (asset?.token?.media) {
@@ -162,7 +162,7 @@ export default class Relay {
               android: `file://${asset.token.media.filePath}`,
               ios: asset.token.media.filePath,
             }),
-            name: asset.token.media.filePath.split('/').pop(),
+            name: `${Math.random().toString(36).substring(2, 11)}_${asset.token.media.filePath.split('/').pop()}`,
             type: asset.token.media.mime,
           });
         }
@@ -173,7 +173,7 @@ export default class Relay {
                 android: `file://${attachment.filePath}`,
                 ios: attachment.filePath,
               }),
-              name: attachment.filePath.split('/').pop(),
+              name: `${Math.random().toString(36).substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
               type: attachment.mime,
             });
           });

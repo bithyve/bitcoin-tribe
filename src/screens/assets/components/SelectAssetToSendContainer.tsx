@@ -153,7 +153,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
         }
         renderItem={({ item, index }) => (
           <View>
-            {item.assetIface.toUpperCase() === AssetFace.RGB20 && (
+            {item.assetIface.toUpperCase() === AssetFace.RGB20 ? (
               <Item
                 key={index}
                 name={item.name}
@@ -171,9 +171,8 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 }
                 index={index}
                 ticker={item.ticker}
-              />
-            )}
-            {item.assetIface.toUpperCase() === AssetFace.RGB25 && (
+              />)
+            : (
               <Item
                 key={index}
                 name={item.name}
@@ -191,8 +190,8 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 index={index}
                 ticker={item.ticker}
                 image={Platform.select({
-                  android: `file://${item.media?.filePath}`,
-                  ios: item.media?.filePath,
+                  android: `file://${item.media?.filePath || item.token.media.filePath}`,
+                  ios: item.media?.filePath || item.token.media.filePath,
                 })}
               />
             )}

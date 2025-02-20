@@ -234,6 +234,7 @@ function IssueCollectibleScreen() {
           navigation.replace(NavigationRoutes.UDADETAILS, {
             assetId: response.assetId,
             askReview: true,
+            askVerify: addToRegistry,
           });
         }, 700);
       } else if (
