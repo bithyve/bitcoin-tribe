@@ -6,24 +6,18 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import android.os.Handler
-import android.os.HandlerThread
 import com.bithyve.tribe.AppConstants
 import com.bithyve.tribe.RGBHelper
 import com.bithyve.tribe.RGBWalletRepository
 import com.facebook.react.bridge.ReadableArray
+import kotlinx.coroutines.*
 import org.rgbtools.BitcoinNetwork
 
 
 class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     val TAG = "RGBMODULE"
-    private val backgroundHandler: Handler
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
-    init {
-        val handlerThread = HandlerThread("BackgroundThread")
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
-    }
     override
     fun getName() = "RGB"
 
@@ -74,14 +68,14 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun syncRgbAssets(promise: Promise){
-        backgroundHandler.post{
+        coroutineScope.launch {
             promise.resolve(RGBHelper.syncRgbAssets())
         }
     }
 
     @ReactMethod
     fun receiveAsset(assetID: String, amount: Float, promise: Promise){
-        backgroundHandler.post{
+        coroutineScope.launch{
             try {
                 promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong()))
             }catch (e: Exception) {
@@ -95,7 +89,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun createUtxos(feeRate: Float, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val created = RGBHelper.createNewUTXOs(feeRate)
                 val jsonObject = JsonObject()
@@ -113,7 +107,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun createUtxosBegin(upTo: Boolean, num: Int, size: Int, feeRate: Float, skipSync: Boolean, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val unsignedPsbt = RGBHelper.createUtxosBegin(upTo, num, size, feeRate, skipSync)
                 val jsonObject = JsonObject()
@@ -130,7 +124,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun signPsbt(unsignedPsbt: String, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val signedPsbt = RGBHelper.signPsbt(unsignedPsbt)
                 val jsonObject = JsonObject()
@@ -147,7 +141,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun createUtxosEnd(signedPsbt: String, skipSync: Boolean, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val num = RGBHelper.createUtxosEnd(signedPsbt, skipSync)
                 val jsonObject = JsonObject()
@@ -164,7 +158,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun issueAssetNia(ticker: String, name: String, supply: String, precision: Int, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val amounts = listOf(supply)
                 val response = RGBHelper.issueAssetNia(ticker, name, amounts.map { it.toULong() }, precision)
@@ -180,7 +174,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun issueAssetCfa(name: String, description: String, supply: String, precision: Int, filePath: String, promise: Promise){
-        backgroundHandler.post{
+        coroutineScope.launch{
             try {
                 val amounts = listOf(supply)
                 val response = RGBHelper.issueAssetCfa(name, description, amounts.map { it.toULong() }, precision, filePath)
@@ -196,7 +190,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: ReadableArray, promise: Promise){
-        backgroundHandler.post{
+        coroutineScope.launch{
             try {
                 val attachments = mutableListOf<String>()
                 for (i in 0 until attachmentsFilePaths.size()) {
@@ -226,7 +220,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun sendAsset( assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val endpoints = listOf(consignmentEndpoints)
                 promise.resolve(RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation))
@@ -241,7 +235,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun failTransfer( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val status = RGBHelper.failTransfer(batchTransferIdx, noAssetOnly, true)
                 val jsonObject = JsonObject()
@@ -259,7 +253,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun deleteTransfers( batchTransferIdx: Int, noAssetOnly: Boolean, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val status = RGBHelper.deleteTransfers(batchTransferIdx, noAssetOnly)
                 val jsonObject = JsonObject()
@@ -277,7 +271,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun getWalletData(promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val walletData = RGBHelper.getWalletData()
                 val gson = Gson()
@@ -295,7 +289,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun getBtcBalance(promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             try {
                 val balance = RGBHelper.getBtcBalance()
                 val gson = Gson()
@@ -340,7 +334,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun refreshAsset(assetId: String, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             val rgbUtxo = RGBHelper.getUnspents()
             //val bitcoinUtxo = BdkHelper.getUnspents()
             val jsonObject = JsonObject()
@@ -357,7 +351,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun backup(backupPath: String, password: String, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             val response = RGBHelper.backup(backupPath, password, reactApplicationContext)
             promise.resolve(response.toString())
         }
@@ -371,7 +365,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun restore(mnemonic: String,filePath: String, promise: Promise){
-        backgroundHandler.post {
+        coroutineScope.launch {
             val response = RGBHelper.restore(mnemonic, filePath, reactApplicationContext)
             promise.resolve(response)
         }
