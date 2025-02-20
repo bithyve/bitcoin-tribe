@@ -95,6 +95,7 @@ type CustomColors = {
   swipeToActionThumbColor: string;
   errorBorderColor: string;
   serviceFeeBorder: string;
+  txIDColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -198,6 +199,7 @@ const CombinedDefaultTheme: AppTheme = {
     swipeToActionThumbColor: Colors.BrandeisBlue,
     errorBorderColor: Colors.ImperialRed,
     serviceFeeBorder: Colors.SonicSilver,
+    txIDColor: Colors.BrandeisBlue,
   },
   fonts: {
     regular: {
@@ -309,6 +311,7 @@ const CombinedDarkTheme: AppTheme = {
     swipeToActionThumbColor: Colors.Golden,
     errorBorderColor: Colors.ImperialRed,
     serviceFeeBorder: Colors.SonicSilver,
+    txIDColor: Colors.BrandeisBlue,
   },
   fonts: {
     regular: {

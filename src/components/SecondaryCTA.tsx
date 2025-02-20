@@ -53,7 +53,7 @@ const getStyles = (theme: AppTheme, width, height) =>
       // flexDirection: 'row',
       // alignItems: 'center',
       borderRadius: 18,
-      marginHorizontal: 10,
+      // marginHorizontal: 10,
     },
     ctaContainerStyle: {
       borderRadius: 20,

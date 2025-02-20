@@ -208,7 +208,7 @@ function AppBackupMenu({ navigation }) {
       <View>
         <AppText style={styles.textStepTime} variant="body2">
           {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm a',
+            'DD MMM YY  •  hh:mm A',
           )}`}
         </AppText>
       </View>

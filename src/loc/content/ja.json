@@ -533,7 +533,8 @@
     "verifyNow": "今すぐ確認",
     "issuerVerificationTitle": "発行者の確認が必要です",
     "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
-    "connectVerifyTwitter": "Twitter に接続して確認"
+    "connectVerifyTwitter": "Twitter に接続して確認",
+    "viewInRegistry": "レジストリで表示"
   },
   "community": {
     "fnfTitle": "友達と家族",

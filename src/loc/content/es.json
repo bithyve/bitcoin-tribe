@@ -533,7 +533,8 @@
     "verifyNow": "Verificar ahora",
     "issuerVerificationTitle": "Verificación del emisor requerida",
     "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
-    "connectVerifyTwitter": "Conectar y verificar en Twitter"
+    "connectVerifyTwitter": "Conectar y verificar en Twitter",
+    "viewInRegistry": "Ver en el Registro"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

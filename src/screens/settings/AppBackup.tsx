@@ -9,7 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import SeedCard from 'src/components/SeedCard';
 import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
@@ -65,7 +65,8 @@ function AppBackup({ navigation }) {
           primaryOnPress={() => setVisible(true)}
           secondaryTitle={common.exit}
           secondaryOnPress={() => navigation.goBack()}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
         />
       )}
       <ModalContainer

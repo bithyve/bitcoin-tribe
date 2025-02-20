@@ -142,7 +142,7 @@ const CollectibleMetaDataScreen = () => {
                     ios: collectible.media?.filePath,
                   }),
                 }}
-                resizeMode="contain"
+                resizeMode="cover"
                 style={styles.imageStyle}
               />
             </View>
@@ -153,7 +153,6 @@ const CollectibleMetaDataScreen = () => {
                 username={collectible.issuer.verifiedBy[0].username}
               />
             )}
-            <Item title={assets.name} value={collectible && collectible.name} />
             <Item
               title={home.assetName}
               value={collectible && collectible.name}
@@ -226,7 +225,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     assetNameWrapper: {
-      padding: 10,
+      minHeight: hp(50),
+      paddingHorizontal: hp(10),
+      justifyContent: 'center',
       borderRadius: 10,
       borderWidth: 1,
       borderColor: theme.colors.borderColor,
@@ -248,11 +249,11 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      padding: hp(16),
+      paddingHorizontal: hp(16),
     },
     imageStyle: {
       width: '100%',
-      height: 200,
+      height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),

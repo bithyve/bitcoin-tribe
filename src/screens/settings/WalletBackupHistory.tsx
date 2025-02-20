@@ -51,7 +51,7 @@ function WalletBackupHistory({ navigation }) {
       <Buttons
         primaryTitle={settings.healthCheck}
         primaryOnPress={() => setVisible(true)}
-        width={wp(170)}
+        width={'100%'}
       />
       <ModalContainer
         title={settings.confirmBackupPhrase}

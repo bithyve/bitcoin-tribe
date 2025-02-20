@@ -17,7 +17,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
@@ -47,7 +47,6 @@ import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
 import { RealmSchema } from 'src/storage/enum';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import ModalLoading from 'src/components/ModalLoading';
 
@@ -502,6 +501,16 @@ const SendAssetScreen = () => {
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
           error={amountValidationError}
         />
+        <View style={styles.availableBalanceWrapper}>
+          <AppText variant="body2" style={styles.labelstyle}>
+            {sendScreen.availableBalance}
+          </AppText>
+          <View style={styles.balanceWrapper}>
+            <AppText variant="body2" style={styles.availableBalanceText}>
+              {numberWithCommas(assetData?.balance.spendable)}
+            </AppText>
+          </View>
+        </View>
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
         </AppText>
@@ -646,8 +655,6 @@ const SendAssetScreen = () => {
             Keyboard.dismiss();
             setVisible(true);
           }}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
@@ -656,7 +663,7 @@ const SendAssetScreen = () => {
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
-          width={wp(120)}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>
@@ -762,8 +769,20 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     containerSwitch: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginVertical: hp(15),
+      marginVertical: hp(20),
       paddingBottom: hp(30),
+    },
+    availableBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    availableBalanceText: {
+      color: theme.colors.headingColor,
     },
   });
 
