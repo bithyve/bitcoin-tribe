@@ -290,7 +290,11 @@
     "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "Mostra"
+    "unHide": "Mostra",
+    "backupPhraseTitle": "Frase di backup",
+    "backupPhraseSubTitle": "Scrivi attentamente la Frase di Backup di 12 parole in un luogo privato e assicurati della sua sicurezza.",
+    "backupPhraseTitle1": "Attenzione",
+    "backupPhraseSubTitle1": "Chiunque abbia accesso alla Frase di Backup può accedere ai tuoi fondi e prelevarli. Se la perdi, non potrai eseguire il backup del tuo portafoglio."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

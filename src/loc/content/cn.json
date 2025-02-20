@@ -290,7 +290,11 @@
     "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "取消隐藏"
+    "unHide": "取消隐藏",
+    "backupPhraseTitle": "备份短语",
+    "backupPhraseSubTitle": "请将 12 个单词的备份短语妥善记录在安全的私密位置，并确保其安全。",
+    "backupPhraseTitle1": "注意",
+    "backupPhraseSubTitle1": "任何拥有备份短语的人都可以访问并提取您的资金。丢失它意味着您无法恢复您的钱包。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

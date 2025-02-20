@@ -30,6 +30,7 @@ import AppText from 'src/components/AppText';
 import moment from 'moment';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
+import BackupPhraseModal from 'src/components/BackupPhraseModal';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -41,6 +42,7 @@ function AppBackupMenu({ navigation }) {
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
+  const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
@@ -149,9 +151,7 @@ function AppBackupMenu({ navigation }) {
                   ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
                   : pinMethod !== PinMethod.DEFAULT
                   ? setVisible(true)
-                  : navigation.navigate(NavigationRoutes.APPBACKUP, {
-                      viewOnly: false,
-                    })
+                  : setVisibleBackupPhrase(true)
               }
               backup={backup}
             />
@@ -231,6 +231,16 @@ function AppBackupMenu({ navigation }) {
           login.mutate(passcode);
         }}
         isLoading={login.isLoading}
+      />
+      <BackupPhraseModal
+        visible={visibleBackupPhrase}
+        primaryOnPress={() => {
+          setVisibleBackupPhrase(false);
+          navigation.navigate(NavigationRoutes.APPBACKUP, {
+            viewOnly: false,
+          });
+        }}
+        onDismiss={() => setVisibleBackupPhrase(false)}
       />
     </ScreenContainer>
   );

@@ -290,7 +290,11 @@
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "Unhide"
+    "unHide": "Unhide",
+    "backupPhraseTitle": "Backup Phrase",
+    "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
+    "backupPhraseTitle1": "Beware",
+    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’s backup your wallet"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

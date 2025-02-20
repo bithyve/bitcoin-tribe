@@ -290,7 +290,11 @@
     "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "Mostrar"
+    "unHide": "Mostrar",
+    "backupPhraseTitle": "Frase de respaldo",
+    "backupPhraseSubTitle": "Escriba cuidadosamente la Frase de Respaldo de 12 palabras en un lugar privado y asegúrese de su seguridad.",
+    "backupPhraseTitle1": "Cuidado",
+    "backupPhraseSubTitle1": "Cualquiera que tenga acceso a la Frase de Respaldo puede acceder y retirar sus fondos. Perderla significa que no podrá hacer una copia de seguridad de su billetera."
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",

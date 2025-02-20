@@ -290,7 +290,11 @@
     "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "अनहाइड करें"
+    "unHide": "अनहाइड करें",
+    "backupPhraseTitle": "बैकअप वाक्यांश",
+    "backupPhraseSubTitle": "कृपया 12-शब्दों का बैकअप वाक्यांश एक निजी स्थान पर लिखें और इसकी सुरक्षा सुनिश्चित करें।",
+    "backupPhraseTitle1": "सावधान रहें",
+    "backupPhraseSubTitle1": "जो कोई भी बैकअप वाक्यांश तक पहुंच रखता है, वह आपकी धनराशि को एक्सेस और निकाल सकता है। इसे खो देने का मतलब है कि आप अपने वॉलेट का बैकअप नहीं ले सकते।"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
