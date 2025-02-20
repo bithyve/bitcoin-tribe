@@ -16,12 +16,14 @@ interface Props {
   visible: boolean;
   primaryOnPress: () => void;
   onDismiss?: () => void;
+  primaryCtaTitle: string;
 }
 
 const BackupPhraseModal: React.FC<Props> = ({
   visible,
   primaryOnPress,
   onDismiss,
+  primaryCtaTitle,
 }) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -56,7 +58,7 @@ const BackupPhraseModal: React.FC<Props> = ({
           </AppText>
         </View>
         <Buttons
-          primaryTitle={common.next}
+          primaryTitle={primaryCtaTitle}
           primaryOnPress={primaryOnPress}
           secondaryTitle={common.cancel}
           secondaryOnPress={onDismiss}

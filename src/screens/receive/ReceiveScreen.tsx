@@ -30,6 +30,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import OptionCard from 'src/components/OptionCard';
 import IconCopy from 'src/assets/images/icon_copy.svg';
 import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
+import BackupPhraseModal from 'src/components/BackupPhraseModal';
 
 function ReceiveScreen({ route }) {
   const theme = useTheme();
@@ -38,6 +39,11 @@ function ReceiveScreen({ route }) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { receciveScreen, common } = translations;
   const [visible, setVisible] = useState(false);
+  const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
+  const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const [showBackupAlert, setShowBackupAlert] = useMMKVBoolean(
+    Keys.SHOW_WALLET_BACKUP_ALERT,
+  );
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [amount, setAmount] = useState(0);
   const [paymentURI, setPaymentURI] = useState(null);
@@ -94,6 +100,12 @@ function ReceiveScreen({ route }) {
     }
   }, [amount, address]);
 
+  useEffect(() => {
+    if (!backup && showBackupAlert === undefined) {
+      setVisibleBackupPhrase(true);
+    }
+  }, [backup]);
+
   const qrValue = useMemo(() => {
     return paymentURI || address || 'address';
   }, [address, paymentURI]);
@@ -149,6 +161,20 @@ function ReceiveScreen({ route }) {
           primaryOnPress={() => setVisible(false)}
         />
       </ModalContainer>
+      <View>
+        <BackupPhraseModal
+          visible={visibleBackupPhrase}
+          primaryCtaTitle={common.backup}
+          primaryOnPress={() => {
+            setVisibleBackupPhrase(false);
+            setShowBackupAlert(false);
+            navigation.navigate(NavigationRoutes.APPBACKUP, {
+              viewOnly: false,
+            });
+          }}
+          onDismiss={() => setVisibleBackupPhrase(false)}
+        />
+      </View>
     </ScreenContainer>
   );
 }

@@ -34,7 +34,7 @@ import BackupPhraseModal from 'src/components/BackupPhraseModal';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings, onBoarding } = translations;
+  const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
@@ -234,6 +234,7 @@ function AppBackupMenu({ navigation }) {
       />
       <BackupPhraseModal
         visible={visibleBackupPhrase}
+        primaryCtaTitle={common.next}
         primaryOnPress={() => {
           setVisibleBackupPhrase(false);
           navigation.navigate(NavigationRoutes.APPBACKUP, {
