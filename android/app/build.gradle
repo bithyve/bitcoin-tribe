@@ -142,7 +142,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation "com.google.android.gms:play-services-drive:17.0.0"
-
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
     // For animated GIF support
     //  implementation 'com.facebook.fresco:animated-gif:2.5.0'
     //Fresco - For Animated Gifs in React Native Android
