@@ -172,7 +172,10 @@ function ReceiveScreen({ route }) {
               viewOnly: false,
             });
           }}
-          onDismiss={() => setVisibleBackupPhrase(false)}
+          onDismiss={() => {
+            setShowBackupAlert(false);
+            setVisibleBackupPhrase(false);
+          }}
         />
       </View>
     </ScreenContainer>
