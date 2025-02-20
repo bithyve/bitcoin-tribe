@@ -1,20 +1,14 @@
 import React, { useMemo } from 'react';
 import { Image, FlatList, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
+import { Media } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 
-interface ImageItem {
-  base64Image?: string;
-  filePath: string;
-  mime: string;
-}
-
 type mediaCarouselProps = {
-  images: ImageItem[];
-  handleImageSelect: (item: ImageItem) => void;
+  images: Media[];
+  handleImageSelect: (item: Media) => void;
 };
 
 const MediaCarousel = (props: mediaCarouselProps) => {
