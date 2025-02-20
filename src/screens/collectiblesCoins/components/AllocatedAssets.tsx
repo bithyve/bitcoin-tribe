@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Identicon from 'src/components/Identicon';
 import { AssetFace, Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
@@ -27,7 +27,10 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
       <View key={asset.assetId}>
         {mediaPath ? (
           <Image
-            source={{ uri: mediaPath }}
+            source={{ uri: Platform.select({
+              android: `file://${mediaPath}`,
+              ios: mediaPath,
+            }) }}
             style={styles.assetImage}
             resizeMode="contain"
           />
