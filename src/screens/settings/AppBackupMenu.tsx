@@ -93,11 +93,17 @@ function AppBackupMenu({ navigation }) {
     } else if (login.data) {
       setVisible(false);
       setPasscode('');
-      setTimeout(() => {
-        navigation.navigate(NavigationRoutes.APPBACKUP, {
-          viewOnly: false,
-        });
-      }, 100);
+      if (!backup) {
+        setTimeout(() => {
+          setVisibleBackupPhrase(true);
+        }, 500);
+      } else {
+        setTimeout(() => {
+          navigation.navigate(NavigationRoutes.APPBACKUP, {
+            viewOnly: false,
+          });
+        }, 100);
+      }
     }
   }, [login.error, login.data]);
 
