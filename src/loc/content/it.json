@@ -298,7 +298,13 @@
     "walletMgtTitle": "Gestione del Portafoglio",
     "personalizationTitle": "Personalizzazione",
     "appSecurityTitle": "Sicurezza dell'App",
-    "AboutSupportTitle": "Informazioni e Supporto"
+    "AboutSupportTitle": "Informazioni e Supporto",
+    "utxoInfoTitle1": "Cosa Sono gli UTXO?",
+    "utxoInfoSubTitle1": "Gli UTXO (Unspent Transaction Outputs) sono come monete digitali nel tuo portafoglio Bitcoin. Quando effettui una transazione, essa genera degli output e quelli che non hai ancora utilizzato si chiamano UTXO.",
+    "utxoInfoTitle2": "UTXO Colorati",
+    "utxoInfoSubTitle2": "UTXO già associati ad asset RGB, rappresentando token specifici o oggetti da collezione.",
+    "utxoInfoTitle3": "UTXO Colorabili",
+    "utxoInfoSubTitle3": "UTXO disponibili e pronti per essere associati agli asset RGB per l’uso nelle transazioni RGB."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",

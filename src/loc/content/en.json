@@ -298,7 +298,13 @@
     "walletMgtTitle": "Wallet Management",
     "personalizationTitle": "Personalization",
     "appSecurityTitle": "App Security",
-    "AboutSupportTitle": "About & Support"
+    "AboutSupportTitle": "About & Support",
+    "utxoInfoTitle1": "What Are UTXOs?",
+    "utxoInfoSubTitle1": "UTXOs (Unspent Transaction Outputs) are like digital coins in your Bitcoin wallet. When you make a transaction, it creates outputs, and the ones you haven’t used yet are called UTXOs.",
+    "utxoInfoTitle2": "Coloured UTXOs",
+    "utxoInfoSubTitle2": "UTXOs already associated with RGB assets, representing specific tokens or collectibles.",
+    "utxoInfoTitle3": "Colourable UTXOs",
+    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions."
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",

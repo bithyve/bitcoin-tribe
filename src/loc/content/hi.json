@@ -298,7 +298,13 @@
     "walletMgtTitle": "वॉलेट प्रबंधन",
     "personalizationTitle": "वैयक्तिकरण",
     "appSecurityTitle": "ऐप सुरक्षा",
-    "AboutSupportTitle": "बारे में और सहायता"
+    "AboutSupportTitle": "बारे में और सहायता",
+    "utxoInfoTitle1": "UTXO क्या हैं?",
+    "utxoInfoSubTitle1": "UTXO (अप्रयुक्त लेनदेन आउटपुट) आपके बिटकॉइन वॉलेट में डिजिटल सिक्कों की तरह होते हैं। जब आप कोई लेनदेन करते हैं, तो यह आउटपुट बनाता है, और जो अभी तक उपयोग नहीं किए गए हैं उन्हें UTXO कहा जाता है।",
+    "utxoInfoTitle2": "रंगीन UTXO",
+    "utxoInfoSubTitle2": "RGB संपत्तियों से जुड़े हुए UTXO, जो विशिष्ट टोकन या संग्रहणीय वस्तुओं का प्रतिनिधित्व करते हैं।",
+    "utxoInfoTitle3": "रंगीन योग्य UTXO",
+    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

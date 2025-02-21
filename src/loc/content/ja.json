@@ -298,7 +298,13 @@
     "walletMgtTitle": "ウォレット管理",
     "personalizationTitle": "パーソナライズ",
     "appSecurityTitle": "アプリのセキュリティ",
-    "AboutSupportTitle": "情報とサポート"
+    "AboutSupportTitle": "情報とサポート",
+    "utxoInfoTitle1": "UTXOとは？",
+    "utxoInfoSubTitle1": "UTXO（未使用トランザクション出力）は、あなたのビットコインウォレット内のデジタルコインのようなものです。トランザクションを行うと出力が作成され、まだ使用していないものがUTXOと呼ばれます。",
+    "utxoInfoTitle2": "カラーUTXO",
+    "utxoInfoSubTitle2": "RGBアセットに関連付けられたUTXOで、特定のトークンやコレクションアイテムを表します。",
+    "utxoInfoTitle3": "カラリング可能なUTXO",
+    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
