@@ -30,10 +30,11 @@ import AppText from 'src/components/AppText';
 import moment from 'moment';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
+import BackupPhraseModal from 'src/components/BackupPhraseModal';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings, onBoarding } = translations;
+  const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
@@ -41,6 +42,7 @@ function AppBackupMenu({ navigation }) {
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [visible, setVisible] = useState(false);
+  const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
@@ -91,11 +93,17 @@ function AppBackupMenu({ navigation }) {
     } else if (login.data) {
       setVisible(false);
       setPasscode('');
-      setTimeout(() => {
-        navigation.navigate(NavigationRoutes.APPBACKUP, {
-          viewOnly: false,
-        });
-      }, 100);
+      if (!backup) {
+        setTimeout(() => {
+          setVisibleBackupPhrase(true);
+        }, 500);
+      } else {
+        setTimeout(() => {
+          navigation.navigate(NavigationRoutes.APPBACKUP, {
+            viewOnly: false,
+          });
+        }, 100);
+      }
     }
   }, [login.error, login.data]);
 
@@ -149,9 +157,7 @@ function AppBackupMenu({ navigation }) {
                   ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
                   : pinMethod !== PinMethod.DEFAULT
                   ? setVisible(true)
-                  : navigation.navigate(NavigationRoutes.APPBACKUP, {
-                      viewOnly: false,
-                    })
+                  : setVisibleBackupPhrase(true)
               }
               backup={backup}
             />
@@ -208,7 +214,7 @@ function AppBackupMenu({ navigation }) {
       <View>
         <AppText style={styles.textStepTime} variant="body2">
           {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm a',
+            'DD MMM YY  •  hh:mm A',
           )}`}
         </AppText>
       </View>
@@ -231,6 +237,17 @@ function AppBackupMenu({ navigation }) {
           login.mutate(passcode);
         }}
         isLoading={login.isLoading}
+      />
+      <BackupPhraseModal
+        visible={visibleBackupPhrase}
+        primaryCtaTitle={common.next}
+        primaryOnPress={() => {
+          setVisibleBackupPhrase(false);
+          navigation.navigate(NavigationRoutes.APPBACKUP, {
+            viewOnly: false,
+          });
+        }}
+        onDismiss={() => setVisibleBackupPhrase(false)}
       />
     </ScreenContainer>
   );

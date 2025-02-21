@@ -9,12 +9,12 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
-import PrimaryCTA from 'src/components/PrimaryCTA';
+// import PrimaryCTA from 'src/components/PrimaryCTA';
 
 type nodeConnectSuccessProps = {
   title: string;
   subTitle: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 function NodeConnectSuccessPopupContainer(props: nodeConnectSuccessProps) {
@@ -42,14 +42,14 @@ function NodeConnectSuccessPopupContainer(props: nodeConnectSuccessProps) {
           loop
         />
       </View>
-      <View style={styles.ctaWrapper}>
+      {/* <View style={styles.ctaWrapper}>
         <PrimaryCTA
           onPress={onPress}
           title={common.proceed}
           width={hp(150)}
           height={hp(14)}
         />
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -83,8 +83,8 @@ const getStyles = (theme: AppTheme) =>
       width: hp(300),
       height: hp(300),
     },
-    ctaWrapper: {
-      marginBottom: hp(10),
-    },
+    // ctaWrapper: {
+    //   marginBottom: hp(10),
+    // },
   });
 export default NodeConnectSuccessPopupContainer;

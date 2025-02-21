@@ -17,7 +17,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
@@ -34,6 +34,7 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -46,7 +47,6 @@ import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
 import { RealmSchema } from 'src/storage/enum';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import ModalLoading from 'src/components/ModalLoading';
 
@@ -473,7 +473,9 @@ const SendAssetScreen = () => {
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
           inputStyle={styles.inputStyle}
           rightText={!invoice && sendScreen.paste}
-          rightIcon={invoice && <ClearIcon />}
+          rightIcon={
+            invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
           onRightTextPress={() =>
             invoice ? setInvoice('') : handlePasteAddress()
           }
@@ -499,6 +501,16 @@ const SendAssetScreen = () => {
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
           error={amountValidationError}
         />
+        <View style={styles.availableBalanceWrapper}>
+          <AppText variant="body2" style={styles.labelstyle}>
+            {sendScreen.availableBalance}
+          </AppText>
+          <View style={styles.balanceWrapper}>
+            <AppText variant="body2" style={styles.availableBalanceText}>
+              {numberWithCommas(assetData?.balance.spendable)}
+            </AppText>
+          </View>
+        </View>
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
         </AppText>
@@ -515,7 +527,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.medium}
@@ -529,7 +540,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.high}
@@ -543,7 +553,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.custom}
@@ -552,9 +561,8 @@ const SendAssetScreen = () => {
             setSelectedPriority={() => {
               setSelectedPriority(TxPriority.CUSTOM);
             }}
-            feeRateByPriority={''}
+            feeRateByPriority={0}
             estimatedBlocksByPriority={1}
-            disabled={false}
           />
         </View>
         {selectedPriority === TxPriority.CUSTOM && (
@@ -581,9 +589,7 @@ const SendAssetScreen = () => {
         )}
 
         <View style={styles.containerSwitch}>
-          <AppText variant="heading3">
-            Send this transfer as a donation?
-          </AppText>
+          <AppText variant="heading3">Send as donation?</AppText>
 
           <Switch
             value={isDonation}
@@ -599,9 +605,6 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={
-            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
-          }
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => {
@@ -619,7 +622,10 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            onSuccessPress={() => navigation.goBack()}
+            onSuccessPress={() => {
+              navigation.goBack();
+              navigation.setParams({ askReview: true });
+            }}
             onPress={sendAsset}
             estimateBlockTime={
               selectedPriority === TxPriority.CUSTOM
@@ -633,19 +639,22 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
-            if (assetAmount > assetData?.balance.spendable) {
+            if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
-              Toast(
+              if (Number(assetData?.balance.spendable) === 0) {
+                setAmountValidationError(
+                  sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+                );
+                return;
+              }
+              setAmountValidationError(
                 assets.checkSpendableAmt + assetData?.balance.spendable,
-                true,
               );
               return;
             }
             Keyboard.dismiss();
             setVisible(true);
           }}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
@@ -654,7 +663,7 @@ const SendAssetScreen = () => {
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
-          width={wp(120)}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>
@@ -760,8 +769,20 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     containerSwitch: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginVertical: hp(15),
+      marginVertical: hp(20),
       paddingBottom: hp(30),
+    },
+    availableBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    availableBalanceText: {
+      color: theme.colors.headingColor,
     },
   });
 

@@ -40,20 +40,23 @@ function AppHeader(props: AppHeaderProps) {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, enableBack),
+    [theme, enableBack],
+  );
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        <View style={styles.leftIconWrapper}>
-          {enableBack && (
+        {enableBack && (
+          <View style={styles.leftIconWrapper}>
             <AppTouchable
               onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
               {isThemeDark ? <GoBack /> : <GoBackLight />}
             </AppTouchable>
-          )}
-        </View>
+          </View>
+        )}
         <View style={styles.middleTitleWrapper}>
           {title && (
             <AppText variant="heading3" style={styles.headerTitle}>
@@ -90,7 +93,7 @@ function AppHeader(props: AppHeaderProps) {
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, enableBack: boolean) =>
   StyleSheet.create({
     container: {
       width: '100%',
@@ -110,8 +113,9 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     middleTitleWrapper: {
-      width: '65%',
-      alignItems: 'center',
+      width: enableBack ? '65%' : '80%',
+      alignItems: enableBack ? 'center' : 'flex-start',
+      marginLeft: enableBack ? 0 : 5,
     },
     rightIconWrapper: {
       width: '20%',

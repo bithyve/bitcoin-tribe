@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "适合喜欢简单设置和最小复杂性的用户。",
     "supportLearnMoreLabel3": "备份支持",
     "supportLearnMoreContent3": "基于中继的备份确保资产恢复和安全管理。",
-    "supportLearnMoreContent4": "在支持模式下，享受增强安全性的用户友好体验。"
+    "supportLearnMoreContent4": "在支持模式下，享受增强安全性的用户友好体验。",
+    "backupFileNotFound": "我们找不到您的 RGB 资产文件。请从您的手机上传该文件。"
   },
   "home": {
     "addAssets": "接收资产",
@@ -245,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "云备份失败",
     "CLOUD_BACKUP_HEALTH": "云备份状态",
     "CLOUD_BACKUP_HEALTH_FAILED": "云备份状态检查失败",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "跳过钱包备份确认",
     "walletBackupDone": "备份完成！请妥善保管您的恢复短语以便将来使用。",
     "nodeWalletBackupDone": "钱包备份已完成。您的数据已安全备份！",
     "assetBackupDone": " 备份成功！您的数据已安全存储。",
@@ -270,6 +272,8 @@
     "expired": "已过期",
     "viewNodeInfo": "节点信息",
     "channelManagement": "渠道管理",
+    "hiddenAssets": "隐藏资产",
+    "hiddenAssetSubTitle": "管理您的隐藏币和收藏品。点击眼睛图标以取消隐藏。",
     "cloudBackupLoadingTitle": "云备份",
     "cloudBackupLoadingSubTitle": "您的数据正在安全备份中，请稍等！放松一下，您的备份很快就会完成。",
     "walletBackupInfo": "请写下您的种子短语，并将其安全地保存在应用程序外部。",
@@ -283,7 +287,24 @@
     "activateWalletTypeLabel": "钱包类型",
     "copyWalletIDMsg": "钱包 ID 已成功复制！",
     "walletBackupSuccessMsg": "您的钱包已成功备份",
-    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份"
+    "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X",
+    "unHide": "取消隐藏",
+    "backupPhraseTitle": "备份短语",
+    "backupPhraseSubTitle": "请将 12 个单词的备份短语妥善记录在安全的私密位置，并确保其安全。",
+    "backupPhraseTitle1": "注意",
+    "backupPhraseSubTitle1": "任何拥有备份短语的人都可以访问并提取您的资金。丢失它意味着您无法恢复您的钱包。",
+    "walletMgtTitle": "钱包管理",
+    "personalizationTitle": "个性化",
+    "appSecurityTitle": "应用安全",
+    "AboutSupportTitle": "关于与支持",
+    "utxoInfoTitle1": "什么是UTXO？",
+    "utxoInfoSubTitle1": "UTXO（未花费交易输出）就像您比特币钱包中的数字硬币。当您进行交易时，它会创建输出，而尚未使用的那些称为UTXO。",
+    "utxoInfoTitle2": "彩色UTXO",
+    "utxoInfoSubTitle2": "已与RGB资产关联的UTXO，代表特定的代币或收藏品。",
+    "utxoInfoTitle3": "可着色UTXO",
+    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -416,7 +437,9 @@
     "unColoured": "非彩色",
     "availableTxnFee": "可用交易费",
     "output": "输出",
-    "utxoValue": "UTXO 值"
+    "utxoValue": "UTXO 值",
+    "requestTSatsProcessTitle": "正在处理您的请求",
+    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
@@ -501,7 +524,31 @@
     "payInprocess": "支付中...",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
     "listYourAssetInRegSubTitle": "您想将您的资产存储在我们的Tribe RGB注册表中吗？需要支付少量服务费。如果不想，您可以跳过此步骤。",
-    "failToFetchIssueFee": "获取资产发行费用失败。"
+    "skipForNow": "暂时跳过",
+    "failToFetchIssueFee": "获取资产发行费用失败。",
+    "spendable": "可用余额: ",
+    "spendableBalanceInfo": "扣除因待处理或“等待交易对手”交易锁定的金额后可用的余额。",
+    "enterAssetName": "请输入资产名称",
+    "enterAssetTicker": "请输入资产代码",
+    "enterTotalSupply": "请输入总供应量",
+    "enterDescription": "请输入资产描述",
+    "requestInvoiceProcessTitle": "正在处理您的请求",
+    "requestInvoiceProcessSubTitle": "您的发票正在生成中。由于 UTXO 的可用性，这可能需要一些时间。感谢您的耐心等待！",
+    "cancelingTransferTitle": "正在取消您的转账",
+    "cancelingTransferSubTitle": "请稍候，我们正在安全地停止您的交易过程",
+    "hideCoin": "隐藏币",
+    "hideCollectible": "隐藏藏品",
+    "hideUda": "隐藏 UDA",
+    "hideAsset": "隐藏资产",
+    "noHiddenAssetTitle": "没有隐藏资产",
+    "noHiddenAssetSubTitle": "所有资产均可见。您当前没有任何隐藏资产。如果您选择隐藏某项资产，它将被移至单独的部分，并可随时访问。",
+    "verifyYourIdentityTitle": "验证您的身份",
+    "verifyYourIdentitySubTitle": "通过在 Twitter 上验证您的身份来保护您的资产。",
+    "verifyNow": "立即验证",
+    "issuerVerificationTitle": "发行人验证必需",
+    "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
+    "connectVerifyTwitter": "连接并在 Twitter 上验证",
+    "viewInRegistry": "在注册表中查看"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -569,7 +616,11 @@
     "createChannelBulletPoint2": "资产ID和金额详情",
     "createChannelBulletPoint3": "可用资金（以聪为单位）",
     "createChannelTitle": "通道创建",
-    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。"
+    "createChannelSubTitle": "请稍等片刻，我们正在为您准备一切。您的通道即将开启。",
+    "enterPubKeyaddress": "请输入有效的公钥和地址",
+    "enterCapacityAmt": "请输入容量金额",
+    "enterMSats": "请输入毫聪（mSats）",
+    "enterAssetAmt": "请输入资产金额"
   },
   "lightning": {
     "sendTitle": "发送",

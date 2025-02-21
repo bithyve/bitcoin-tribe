@@ -66,7 +66,7 @@ export const cryptoRandom = () => {
 
 // random number
 export const generateRandomNumber = max => {
-  const number = Math.floor(Math.random() * max) + 1;
+  const number = Math.floor(Math.random() * max);
   return number;
 };
 

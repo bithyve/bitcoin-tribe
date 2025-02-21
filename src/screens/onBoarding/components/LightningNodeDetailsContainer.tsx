@@ -214,7 +214,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={primaryOnPress}
-          width={wp(120)}
+          width={'100%'}
           primaryLoading={isLoading}
           disabled={isLoading}
         />

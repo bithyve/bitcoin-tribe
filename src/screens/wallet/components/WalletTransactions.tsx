@@ -158,7 +158,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               {tranStatus ? Capitalize(tranStatus) : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
-              {moment(transDate).format('DD MMM YY  •  hh:mm a')}
+              {moment(transDate).format('DD MMM YY  •  hh:mm A')}
             </AppText>
           </View>
         </View>

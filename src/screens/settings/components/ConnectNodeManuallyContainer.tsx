@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 
@@ -54,7 +54,8 @@ function ConnectNodeManuallyContainer() {
         primaryOnPress={() => console.log('primary')}
         secondaryTitle={common.cancel}
         secondaryOnPress={() => console.log('secondary')}
-        width={wp(120)}
+        width={windowWidth / 2.5}
+        secondaryCTAWidth={windowWidth / 2.5}
         style={styles.buttonWrapper}
       />
     </>

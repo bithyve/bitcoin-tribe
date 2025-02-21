@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "Ideale per utenti che preferiscono una configurazione semplice e una complessità minima.",
     "supportLearnMoreLabel3": "Supporto di backup",
     "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
-    "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata."
+    "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata.",
+    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono."
   },
   "home": {
     "addAssets": "Ricevi asset",
@@ -245,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "Il backup sul cloud è fallito",
     "CLOUD_BACKUP_HEALTH": "Salute del backup sul cloud",
     "CLOUD_BACKUP_HEALTH_FAILED": "La salute del backup sul cloud è fallita",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "La conferma del backup del portafoglio è stata saltata",
     "walletBackupDone": "Backup completato! Conserva al sicuro la tua frase di recupero per accessi futuri.",
     "nodeWalletBackupDone": "Il backup del portafoglio è stato completato. I tuoi dati sono stati salvati in modo sicuro!",
     "assetBackupDone": "Backup riuscito! I tuoi dati sono archiviati in modo sicuro.",
@@ -270,6 +272,8 @@
     "expired": "Scaduto",
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
+    "hiddenAssets": "Beni Nascosti",
+    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca l'icona dell'occhio per mostrarli.",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
     "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
@@ -283,7 +287,24 @@
     "activateWalletTypeLabel": "Tipo di Wallet",
     "copyWalletIDMsg": "ID del portafoglio copiato con successo!",
     "walletBackupSuccessMsg": "Il tuo portafoglio è stato correttamente salvato",
-    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati"
+    "assetBackupSuccessMsg": "I tuoi asset RGB sono stati correttamente salvati",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X",
+    "unHide": "Mostra",
+    "backupPhraseTitle": "Frase di backup",
+    "backupPhraseSubTitle": "Scrivi attentamente la Frase di Backup di 12 parole in un luogo privato e assicurati della sua sicurezza.",
+    "backupPhraseTitle1": "Attenzione",
+    "backupPhraseSubTitle1": "Chiunque abbia accesso alla Frase di Backup può accedere ai tuoi fondi e prelevarli. Se la perdi, non potrai eseguire il backup del tuo portafoglio.",
+    "walletMgtTitle": "Gestione del Portafoglio",
+    "personalizationTitle": "Personalizzazione",
+    "appSecurityTitle": "Sicurezza dell'App",
+    "AboutSupportTitle": "Informazioni e Supporto",
+    "utxoInfoTitle1": "Cosa Sono gli UTXO?",
+    "utxoInfoSubTitle1": "Gli UTXO (Unspent Transaction Outputs) sono come monete digitali nel tuo portafoglio Bitcoin. Quando effettui una transazione, essa genera degli output e quelli che non hai ancora utilizzato si chiamano UTXO.",
+    "utxoInfoTitle2": "UTXO Colorati",
+    "utxoInfoSubTitle2": "UTXO già associati ad asset RGB, rappresentando token specifici o oggetti da collezione.",
+    "utxoInfoTitle3": "UTXO Colorabili",
+    "utxoInfoSubTitle3": "UTXO disponibili e pronti per essere associati agli asset RGB per l’uso nelle transazioni RGB."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -388,7 +409,7 @@
     "noUTXOYet": "Nessuna transazione ancora",
     "noUTXOYetSubTitle": "Inizia a inviare e ricevere Bitcoin per vedere la tua attività qui!",
     "xPubNoteSubTitle": "Scansiona o copia incolla l'indirizzo Xpub",
-    "profileUpdateMsg": "Aggiornamento profilo riuscito!",
+    "profileUpdateMsg": "Profilo aggiornato con successo!",
     "profileUpdateErrMsg": "Impossibile aggiornare!",
     "rgbTransUnlockTitle": "5 Sblocco transazione RGB",
     "rgbTransUnlockSubTitle": "Ora puoi eseguire 5 volte la transazione RBG",
@@ -416,7 +437,9 @@
     "unColoured": "Non colorato",
     "availableTxnFee": "Commissione di transazione disponibile",
     "output": "Uscita",
-    "utxoValue": "Valore UTXO"
+    "utxoValue": "Valore UTXO",
+    "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
+    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -501,7 +524,31 @@
     "payInprocess": "Pagamento in corso...",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
     "listYourAssetInRegSubTitle": "Vuoi archiviare il tuo asset nel nostro Tribe RGB Registry? È richiesta una piccola commissione di servizio. Se no, puoi saltare questo passaggio.",
-    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset."
+    "skipForNow": "Salta per ora",
+    "failToFetchIssueFee": "Impossibile recuperare la tassa di emissione dell'asset.",
+    "spendable": "Disponibile: ",
+    "spendableBalanceInfo": "Il saldo utilizzabile dopo la detrazione degli importi bloccati a causa di transazioni in sospeso o \"in attesa della controparte\".",
+    "enterAssetName": "Inserisci il nome dell'asset",
+    "enterAssetTicker": "Inserisci il ticker dell'asset",
+    "enterTotalSupply": "Inserisci il totale delle unità fornite",
+    "enterDescription": "Inserisci la descrizione dell'asset",
+    "requestInvoiceProcessTitle": "Elaborazione della tua richiesta",
+    "requestInvoiceProcessSubTitle": "La tua fattura è in fase di generazione. Questo potrebbe richiedere alcuni momenti a causa della disponibilità di UTXO. Grazie per la tua pazienza!",
+    "cancelingTransferTitle": "Annullamento del trasferimento",
+    "cancelingTransferSubTitle": "Attendere mentre interrompiamo in sicurezza il processo di transazione",
+    "hideCoin": "Nascondi Moneta",
+    "hideCollectible": "Nascondi Collezionabile",
+    "hideUda": "Nascondi UDA",
+    "hideAsset": "Nascondi attività",
+    "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
+    "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento.",
+    "verifyYourIdentityTitle": "Verifica la tua identità",
+    "verifyYourIdentitySubTitle": "Proteggi i tuoi asset verificando la tua identità su Twitter.",
+    "verifyNow": "Verifica ora",
+    "issuerVerificationTitle": "Verifica dell'emittente richiesta",
+    "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",
+    "connectVerifyTwitter": "Connetti e verifica su Twitter",
+    "viewInRegistry": "Visualizza nel Registro"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
@@ -569,7 +616,11 @@
     "createChannelBulletPoint2": "Dettagli ID e importo dell'asset",
     "createChannelBulletPoint3": "Fondi disponibili in satoshi",
     "createChannelTitle": "Creazione del Canale",
-    "createChannelSubTitle": "Rilassati mentre prepariamo tutto per te. Il tuo canale sarà aperto tra un momento."
+    "createChannelSubTitle": "Rilassati mentre prepariamo tutto per te. Il tuo canale sarà aperto tra un momento.",
+    "enterPubKeyaddress": "Inserisci una chiave pubblica e un indirizzo validi",
+    "enterCapacityAmt": "Inserisci l'importo della capacità",
+    "enterMSats": "Inserisci i milli-satoshi (mSats)",
+    "enterAssetAmt": "Inserisci l'importo dell'asset"
   },
   "lightning": {
     "sendTitle": "Invia",

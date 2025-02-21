@@ -73,7 +73,9 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       borderRadius: hp(20),
       padding: hp(20),
-      marginVertical: hp(10),
+      marginVertical: hp(5),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     titleText: {
       color: theme.colors.accent2,

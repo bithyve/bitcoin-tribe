@@ -157,7 +157,8 @@
     "supportLearnMoreContent2": "उन उपयोगकर्ताओं के लिए आदर्श जो सीधे सेटअप और न्यूनतम जटिलता पसंद करते हैं।",
     "supportLearnMoreLabel3": "बैकअप समर्थन",
     "supportLearnMoreContent3": "रिले-आधारित बैकअप संपत्ति पुनर्प्राप्ति और सुरक्षित प्रबंधन सुनिश्चित करता है।",
-    "supportLearnMoreContent4": "समर्थित मोड में उन्नत सुरक्षा के साथ एक उपयोगकर्ता-अनुकूल अनुभव का आनंद लें।"
+    "supportLearnMoreContent4": "समर्थित मोड में उन्नत सुरक्षा के साथ एक उपयोगकर्ता-अनुकूल अनुभव का आनंद लें।",
+    "backupFileNotFound": "हम आपका RGB एसेट फ़ाइल नहीं ढूंढ सके। कृपया इसे अपने फ़ोन से अपलोड करें।"
   },
   "home": {
     "addAssets": "संपत्ति प्राप्त करें",
@@ -245,6 +246,7 @@
     "CLOUD_BACKUP_FAILED": "क्लाउड बैकअप विफल हो गया है",
     "CLOUD_BACKUP_HEALTH": "क्लाउड बैकअप स्वास्थ्य",
     "CLOUD_BACKUP_HEALTH_FAILED": "क्लाउड बैकअप स्वास्थ्य विफल हो गया है",
+    "SEED_BACKUP_CONFIRMATION_SKIPPED_TOAST": "वॉलेट बैकअप पुष्टि को छोड़ दिया गया है",
     "walletBackupDone": "बैकअप पूरा! भविष्य के उपयोग के लिए अपने पुनर्प्राप्ति वाक्यांश को सुरक्षित रखें।",
     "nodeWalletBackupDone": "वॉलेट बैकअप पूरा हो गया है। आपका डेटा सुरक्षित रूप से बैकअप कर लिया गया है!",
     "assetBackupDone": "बैकअप सफल! आपका डेटा सुरक्षित रूप से संग्रहीत है।",
@@ -270,6 +272,8 @@
     "expired": "समाप्त हो गया",
     "viewNodeInfo": "नोड जानकारी",
     "channelManagement": "चैनल प्रबंधन",
+    "hiddenAssets": "छिपी हुई संपत्तियाँ",
+    "hiddenAssetSubTitle": "अपने छिपे हुए सिक्कों और संग्रहणीय वस्तुओं का प्रबंधन करें। अनहाइड करने के लिए आईकॉन पर टैप करें।",
     "cloudBackupLoadingTitle": "क्लाउड बैकअप",
     "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।",
     "walletBackupInfo": "अपना सीड वाक्यांश लिखें और इसे ऐप के बाहर सुरक्षित रूप से स्टोर करें।",
@@ -283,7 +287,24 @@
     "activateWalletTypeLabel": "वॉलेट प्रकार",
     "copyWalletIDMsg": "वॉलेट ID सफलतापूर्वक कॉपी किया गया!",
     "walletBackupSuccessMsg": "आपका वॉलेट सफलतापूर्वक बैकअप किया गया है",
-    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं"
+    "assetBackupSuccessMsg": "आपके RGB संपत्तियां सफलतापूर्वक बैकअप की गई हैं",
+    "tribeTelegram": "Tribe Telegram",
+    "tribeX": "Tribe X",
+    "unHide": "अनहाइड करें",
+    "backupPhraseTitle": "बैकअप वाक्यांश",
+    "backupPhraseSubTitle": "कृपया 12-शब्दों का बैकअप वाक्यांश एक निजी स्थान पर लिखें और इसकी सुरक्षा सुनिश्चित करें।",
+    "backupPhraseTitle1": "सावधान रहें",
+    "backupPhraseSubTitle1": "जो कोई भी बैकअप वाक्यांश तक पहुंच रखता है, वह आपकी धनराशि को एक्सेस और निकाल सकता है। इसे खो देने का मतलब है कि आप अपने वॉलेट का बैकअप नहीं ले सकते।",
+    "walletMgtTitle": "वॉलेट प्रबंधन",
+    "personalizationTitle": "वैयक्तिकरण",
+    "appSecurityTitle": "ऐप सुरक्षा",
+    "AboutSupportTitle": "बारे में और सहायता",
+    "utxoInfoTitle1": "UTXO क्या हैं?",
+    "utxoInfoSubTitle1": "UTXO (अप्रयुक्त लेनदेन आउटपुट) आपके बिटकॉइन वॉलेट में डिजिटल सिक्कों की तरह होते हैं। जब आप कोई लेनदेन करते हैं, तो यह आउटपुट बनाता है, और जो अभी तक उपयोग नहीं किए गए हैं उन्हें UTXO कहा जाता है।",
+    "utxoInfoTitle2": "रंगीन UTXO",
+    "utxoInfoSubTitle2": "RGB संपत्तियों से जुड़े हुए UTXO, जो विशिष्ट टोकन या संग्रहणीय वस्तुओं का प्रतिनिधित्व करते हैं।",
+    "utxoInfoTitle3": "रंगीन योग्य UTXO",
+    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -388,7 +409,7 @@
     "noUTXOYet": "अभी तक कोई लेनदेन नहीं",
     "noUTXOYetSubTitle": "यहां अपनी गतिविधि देखने के लिए बिटकॉइन भेजना और प्राप्त करना शुरू करें!",
     "xPubNoteSubTitle": "Xpub पता स्कैन या कॉपी पेस्ट करें",
-    "profileUpdateMsg": "प्रोफ़ाइल अपडेट सफल!",
+    "profileUpdateMsg": "प्रोफ़ाइल सफलतापूर्वक अपडेट किया गया!",
     "profileUpdateErrMsg": "अपडेट करने में विफल!",
     "rgbTransUnlockTitle": "5 आरजीबी लेनदेन अनलॉक",
     "rgbTransUnlockSubTitle": "आप अब 5 बार आरजीबी लेनदेन कर सकते हैं",
@@ -416,7 +437,9 @@
     "unColoured": "बिना रंग का",
     "availableTxnFee": "उपलब्ध लेन-देन शुल्क",
     "output": "आउटपुट",
-    "utxoValue": "UTXO मूल्य"
+    "utxoValue": "UTXO मूल्य",
+    "requestTSatsProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
+    "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
@@ -501,7 +524,31 @@
     "payInprocess": "भुगतान हो रहा है...",
     "listYourAssetInRegTitle": "अपनी संपत्ति को रजिस्टर में सूचीबद्ध करें",
     "listYourAssetInRegSubTitle": "क्या आप अपनी संपत्ति को हमारे Tribe RGB रजिस्टर में संग्रहीत करना चाहते हैं? एक छोटी सी सेवा शुल्क आवश्यक है। यदि नहीं, तो आप इस चरण को छोड़ सकते हैं।",
-    "failToFetchIssueFee": "संपत्ति निर्गमन शुल्क प्राप्त करने में विफल।"
+    "skipForNow": "अभी के लिए छोड़ दें",
+    "failToFetchIssueFee": "संपत्ति निर्गमन शुल्क प्राप्त करने में विफल।",
+    "spendable": "खर्च करने योग्य: ",
+    "spendableBalanceInfo": "लंबित या \"प्रतीक्षारत प्रतिपक्ष\" लेनदेन के कारण अवरुद्ध राशि को घटाने के बाद उपयोग की जा सकने वाली शेष राशि।",
+    "enterAssetName": "कृपया एसेट का नाम दर्ज करें",
+    "enterAssetTicker": "कृपया एसेट टिकर दर्ज करें",
+    "enterTotalSupply": "कृपया कुल आपूर्ति इकाइयाँ दर्ज करें",
+    "enterDescription": "कृपया संपत्ति का विवरण दर्ज करें",
+    "requestInvoiceProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
+    "requestInvoiceProcessSubTitle": "आपका इनवॉइस जेनरेट किया जा रहा है। UTXO की उपलब्धता के कारण इसमें कुछ समय लग सकता है। आपके धैर्य के लिए धन्यवाद!",
+    "cancelingTransferTitle": "आपका ट्रांसफर रद्द किया जा रहा है",
+    "cancelingTransferSubTitle": "कृपया प्रतीक्षा करें, हम आपके लेनदेन प्रक्रिया को सुरक्षित रूप से रोक रहे हैं",
+    "hideCoin": "सिक्का छिपाएं",
+    "hideCollectible": "संग्रहणीय छिपाएं",
+    "hideUda": "UDA छिपाएं",
+    "hideAsset": "संपत्ति छुपाएँ",
+    "noHiddenAssetTitle": "कोई छिपी हुई संपत्ति नहीं",
+    "noHiddenAssetSubTitle": "आपकी सभी संपत्तियाँ दृश्यमान हैं। वर्तमान में आपके पास कोई छिपी हुई संपत्ति नहीं है। यदि आप किसी संपत्ति को छिपाने का विकल्प चुनते हैं, तो इसे एक अलग अनुभाग में ले जाया जाएगा और किसी भी समय सुलभ रहेगा।",
+    "verifyYourIdentityTitle": "अपनी पहचान सत्यापित करें",
+    "verifyYourIdentitySubTitle": "अपने संपत्तियों को सुरक्षित रखने के लिए ट्विटर पर अपनी पहचान सत्यापित करें।",
+    "verifyNow": "अभी सत्यापित करें",
+    "issuerVerificationTitle": "जारीकर्ता सत्यापन आवश्यक",
+    "issuerVerificationSubTitle": "अपनी पहचान सत्यापित करने के लिए अपने ट्विटर खाते से कनेक्ट करें।",
+    "connectVerifyTwitter": "कनेक्ट करें और ट्विटर पर सत्यापित करें",
+    "viewInRegistry": "रजिस्टर में देखें"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",
@@ -569,7 +616,11 @@
     "createChannelBulletPoint2": "एसेट आईडी और राशि विवरण",
     "createChannelBulletPoint3": "सतोशी में उपलब्ध धनराशि",
     "createChannelTitle": "चैनल निर्माण",
-    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।"
+    "createChannelSubTitle": "आराम से बैठें और हमें आपके लिए सब कुछ तैयार करने दें। आपका चैनल बस एक पल में खुल जाएगा।",
+    "enterPubKeyaddress": "कृपया वैध पब्लिक की और पता दर्ज करें",
+    "enterCapacityAmt": "कृपया क्षमता राशि दर्ज करें",
+    "enterMSats": "कृपया mSats दर्ज करें",
+    "enterAssetAmt": "कृपया संपत्ति राशि दर्ज करें"
   },
   "lightning": {
     "sendTitle": "भेजें",

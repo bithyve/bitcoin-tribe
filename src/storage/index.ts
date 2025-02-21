@@ -16,12 +16,15 @@ export enum Keys {
   CURRENCY_MODE = 'CURRENCY_MODE',
   BACKUPALERT = 'BACKUPALERT',
   SETUPAPP = 'SETUPAPP',
-  RGB_ASSET_RELAY_BACKUP = 'RGB_ASSET_RELAY_BACKUP'
+  RGB_ASSET_RELAY_BACKUP = 'RGB_ASSET_RELAY_BACKUP',
+  SHOW_WALLET_BACKUP_ALERT = 'SHOW_WALLET_BACKUP_ALERT',
 }
 
 export class Storage {
   static set = (key: Keys, value: string | number | boolean): void =>
     MMKVStorage.set(key, value);
+
+  static clear = (): void => MMKVStorage.clearAll();
 
   static get = (key: Keys): string | undefined => MMKVStorage.getString(key);
 }
