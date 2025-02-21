@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -7,6 +7,7 @@ import SocialLinks from './SocialLinks';
 import openLink from 'src/utils/OpenLink';
 import SettingSectionList from './SettingSectionList';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type SettingMenuItemProps = {
   WalletMgtMenu: SettingMenuProps[];
@@ -23,6 +24,8 @@ function SettingMenuItem({
 }: SettingMenuItemProps) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { settings } = translations;
   const FooterComponent = () => {
     return (
       <View style={styles.footer}>
@@ -43,19 +46,19 @@ function SettingMenuItem({
       style={styles.scrollingWrapper}>
       <SettingSectionList
         data={WalletMgtMenu}
-        sectionTitle={'Wallet Management'}
+        sectionTitle={settings.walletMgtTitle}
       />
       <SettingSectionList
         data={PersonalizationMenu}
-        sectionTitle={'Personalization'}
+        sectionTitle={settings.personalizationTitle}
       />
       <SettingSectionList
         data={AppSecurityMenu}
-        sectionTitle={'App Security'}
+        sectionTitle={settings.appSecurityTitle}
       />
       <SettingSectionList
         data={SettingsMenu}
-        sectionTitle={'About & Support'}
+        sectionTitle={settings.AboutSupportTitle}
       />
 
       <FooterComponent />

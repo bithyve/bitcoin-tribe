@@ -294,7 +294,11 @@
     "backupPhraseTitle": "Frase de respaldo",
     "backupPhraseSubTitle": "Escriba cuidadosamente la Frase de Respaldo de 12 palabras en un lugar privado y asegúrese de su seguridad.",
     "backupPhraseTitle1": "Cuidado",
-    "backupPhraseSubTitle1": "Cualquiera que tenga acceso a la Frase de Respaldo puede acceder y retirar sus fondos. Perderla significa que no podrá hacer una copia de seguridad de su billetera."
+    "backupPhraseSubTitle1": "Cualquiera que tenga acceso a la Frase de Respaldo puede acceder y retirar sus fondos. Perderla significa que no podrá hacer una copia de seguridad de su billetera.",
+    "walletMgtTitle": "Gestión de Billetera",
+    "personalizationTitle": "Personalización",
+    "appSecurityTitle": "Seguridad de la Aplicación",
+    "AboutSupportTitle": "Acerca de y Soporte"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
