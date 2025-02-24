@@ -8,7 +8,7 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import UTXOInfoIllustration from 'src/assets/images/utxoInfoIllustration.svg';
 import UTXOInfoIllustrationLight from 'src/assets/images/utxoInfoIllustration_light.svg';
-import { hp, windowWidth } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -73,7 +73,7 @@ const UTXOInfoModal: React.FC<Props> = ({
             primaryTitle={primaryCtaTitle}
             primaryOnPress={primaryOnPress}
             height={hp(14)}
-            width={windowWidth / 2.7}
+            width={wp(130)}
           />
         </View>
       </View>
