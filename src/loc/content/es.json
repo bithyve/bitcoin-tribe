@@ -51,7 +51,8 @@
     "joinGroup": "Unirse al grupo",
     "understood": "Entendido",
     "createChannel": "Crear Canal",
-    "done": "Hecho"
+    "done": "Hecho",
+    "okay": "De acuerdo"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -548,7 +549,17 @@
     "issuerVerificationTitle": "Verificación del emisor requerida",
     "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
     "connectVerifyTwitter": "Conectar y verificar en Twitter",
-    "viewInRegistry": "Ver en el Registro"
+    "viewInRegistry": "Ver en el Registro",
+    "udaCollectibleInfo1": "UDAs vs. Coleccionables",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "son activos digitales únicos que representan artículos como arte raro, boletos o certificados con propiedad verificada.",
+    "udaCollectibleInfoBold1": "Coleccionables",
+    "udaCollectibleInfo3": "son activos de edición limitada emitidos en lotes, como artículos de juego o recompensas.",
+    "udaCollectibleInfo4": "Diferencias clave",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "Únicos, exclusivos.",
+    "udaCollectibleInfoBold3": "Coleccionables: ",
+    "udaCollectibleInfo6": "Parte de una serie, emitidos en grandes cantidades."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

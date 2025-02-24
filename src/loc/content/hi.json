@@ -51,7 +51,8 @@
     "joinGroup": "समूह में शामिल हों",
     "understood": "समझ गया",
     "createChannel": "चैनल बनाएं",
-    "done": "हो गया"
+    "done": "हो गया",
+    "okay": "ठीक है"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -548,7 +549,17 @@
     "issuerVerificationTitle": "जारीकर्ता सत्यापन आवश्यक",
     "issuerVerificationSubTitle": "अपनी पहचान सत्यापित करने के लिए अपने ट्विटर खाते से कनेक्ट करें।",
     "connectVerifyTwitter": "कनेक्ट करें और ट्विटर पर सत्यापित करें",
-    "viewInRegistry": "रजिस्टर में देखें"
+    "viewInRegistry": "रजिस्टर में देखें",
+    "udaCollectibleInfo1": "यूडीए बनाम कलेक्टिबल्स",
+    "udaCollectibleInfoBold": "यूडीए",
+    "udaCollectibleInfo2": "ऐसे अद्वितीय डिजिटल संपत्तियां हैं जो दुर्लभ कला, टिकट, या प्रमाण पत्र जैसी चीज़ों का प्रतिनिधित्व करती हैं और जिनकी स्वामित्व सत्यापित होती है।",
+    "udaCollectibleInfoBold1": "कलेक्टिबल्स",
+    "udaCollectibleInfo3": "सीमित संस्करण वाली संपत्तियां हैं जो बैच में जारी की जाती हैं, जैसे गेमिंग आइटम या इनाम।",
+    "udaCollectibleInfo4": "मुख्य अंतर",
+    "udaCollectibleInfoBold2": "यूडीए: ",
+    "udaCollectibleInfo5": "एकमात्र, अनन्य।",
+    "udaCollectibleInfoBold3": "कलेक्टिबल्स: ",
+    "udaCollectibleInfo6": "श्रृंखला का हिस्सा, थोक में जारी।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

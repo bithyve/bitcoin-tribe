@@ -51,7 +51,8 @@
     "joinGroup": "Join Group",
     "understood": "Understood",
     "createChannel": "Create Channel",
-    "done": "Done"
+    "done": "Done",
+    "okay": "Okay"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -548,7 +549,17 @@
     "issuerVerificationTitle": "Issuer Verification Required",
     "issuerVerificationSubTitle": "Verify your identity by connecting your Twitter account.",
     "connectVerifyTwitter": "Connect & Verify on Twitter",
-    "viewInRegistry": "View in Registry"
+    "viewInRegistry": "View in Registry",
+    "udaCollectibleInfo1": "UDAs vs. Collectibles",
+    "udaCollectibleInfoBold": "UDAs ",
+    "udaCollectibleInfo2": "are unique digital assets representing items like rare art, tickets, or certificates with verified ownership.",
+    "udaCollectibleInfoBold1": "Collectibles ",
+    "udaCollectibleInfo3": "are limited-edition assets issued in batches, like gaming items or rewards.",
+    "udaCollectibleInfo4": "Key Differences",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "One-of-a-kind, exclusive.",
+    "udaCollectibleInfoBold3": "Collectibles: ",
+    "udaCollectibleInfo6": "Part of a series, issued in bulk."
   },
   "community": {
     "fnfTitle": "Friends & Family",

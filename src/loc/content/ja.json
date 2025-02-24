@@ -51,7 +51,8 @@
     "joinGroup": "グループに参加する",
     "understood": "理解しました",
     "createChannel": "チャンネルを作成",
-    "done": "完了"
+    "done": "完了",
+    "okay": "了解しました"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -548,7 +549,17 @@
     "issuerVerificationTitle": "発行者の確認が必要です",
     "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
     "connectVerifyTwitter": "Twitter に接続して確認",
-    "viewInRegistry": "レジストリで表示"
+    "viewInRegistry": "レジストリで表示",
+    "udaCollectibleInfo1": "UDAとコレクティブルの違い",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "は、希少なアート、チケット、証明書などのアイテムを表す一意のデジタル資産であり、所有権が確認されています。",
+    "udaCollectibleInfoBold1": "コレクティブル",
+    "udaCollectibleInfo3": "は、バッチで発行される限定版の資産であり、ゲームアイテムや報酬などが含まれます。",
+    "udaCollectibleInfo4": "主な違い",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "唯一無二で、排他的。",
+    "udaCollectibleInfoBold3": "コレクティブル: ",
+    "udaCollectibleInfo6": "シリーズの一部、大量発行。"
   },
   "community": {
     "fnfTitle": "友達と家族",

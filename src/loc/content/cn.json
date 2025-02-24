@@ -51,7 +51,8 @@
     "joinGroup": "加入群组",
     "understood": "明白了",
     "createChannel": "创建通道",
-    "done": "完成"
+    "done": "完成",
+    "okay": "好的"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -548,7 +549,17 @@
     "issuerVerificationTitle": "发行人验证必需",
     "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
     "connectVerifyTwitter": "连接并在 Twitter 上验证",
-    "viewInRegistry": "在注册表中查看"
+    "viewInRegistry": "在注册表中查看",
+    "udaCollectibleInfo1": "UDAs 与 收藏品",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "是代表稀有艺术品、门票或证书等项目的独特数字资产，并具有经过验证的所有权。",
+    "udaCollectibleInfoBold1": "收藏品",
+    "udaCollectibleInfo3": "是批量发行的限量版资产，例如游戏物品或奖励。",
+    "udaCollectibleInfo4": "主要区别",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "独一无二，独家专属。",
+    "udaCollectibleInfoBold3": "收藏品: ",
+    "udaCollectibleInfo6": "属于一个系列，批量发行。"
   },
   "community": {
     "fnfTitle": "朋友和家人",
