@@ -294,7 +294,17 @@
     "backupPhraseTitle": "バックアップフレーズ",
     "backupPhraseSubTitle": "12語のバックアップフレーズを慎重に書き留め、プライベートな場所に安全に保管してください。",
     "backupPhraseTitle1": "注意",
-    "backupPhraseSubTitle1": "バックアップフレーズにアクセスできる人は誰でも資金にアクセスし、引き出すことができます。失うとウォレットをバックアップできません。"
+    "backupPhraseSubTitle1": "バックアップフレーズにアクセスできる人は誰でも資金にアクセスし、引き出すことができます。失うとウォレットをバックアップできません。",
+    "walletMgtTitle": "ウォレット管理",
+    "personalizationTitle": "パーソナライズ",
+    "appSecurityTitle": "アプリのセキュリティ",
+    "AboutSupportTitle": "情報とサポート",
+    "utxoInfoTitle1": "UTXOとは？",
+    "utxoInfoSubTitle1": "UTXO（未使用トランザクション出力）は、あなたのビットコインウォレット内のデジタルコインのようなものです。トランザクションを行うと出力が作成され、まだ使用していないものがUTXOと呼ばれます。",
+    "utxoInfoTitle2": "カラーUTXO",
+    "utxoInfoSubTitle2": "RGBアセットに関連付けられたUTXOで、特定のトークンやコレクションアイテムを表します。",
+    "utxoInfoTitle3": "カラリング可能なUTXO",
+    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

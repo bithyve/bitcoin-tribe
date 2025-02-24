@@ -43,21 +43,9 @@ import { hp } from 'src/constants/responsive';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import { SettingMenuProps } from 'src/models/interfaces/Settings';
 
 const RNBiometrics = new ReactNativeBiometrics();
-
-type SettingMenuProps = {
-  id: number;
-  title: string;
-  subtitle?: string;
-  icon: ReactNode;
-  onPress?: () => void;
-  enableSwitch?: boolean;
-  toggleValue?: boolean;
-  onValueChange?: () => void;
-  testID?: string;
-  hideMenu?: boolean;
-};
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -148,7 +136,35 @@ function SettingsScreen({ navigation }) {
     setPasscode(newPasscode);
   };
 
-  const SettingsMenu: SettingMenuProps[] = [
+  const WalletMgtMenu: SettingMenuProps[] = [
+    {
+      id: 1,
+      title: walletTranslation.walletSettings,
+      icon: isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
+    },
+    {
+      id: 2,
+      title: settings.viewNodeInfo,
+      icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+    {
+      id: 3,
+      title: settings.channelManagement,
+      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
+      hideMenu: app.appType === AppType.ON_CHAIN,
+    },
+    {
+      id: 4,
+      title: settings.hiddenAssets,
+      icon: isThemeDark ? <HiddenAssetIcon /> : <HiddenAssetIconLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
+    },
+  ];
+  const PersonalizationMenu: SettingMenuProps[] = [
     {
       id: 1,
       title: walletTranslation.nameAndPic,
@@ -157,61 +173,12 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 2,
-      title: walletTranslation.walletSettings,
-      icon: isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
-    },
-    {
-      id: 3,
-      title: settings.appBackup,
-      icon: isThemeDark ? <IconBackup /> : <IconBackupLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
-    },
-    {
-      id: 4,
       title: settings.langAndCurrency,
       icon: isThemeDark ? <IconLangCurrency /> : <IconLangCurrencyLight />,
       onPress: () => navigation.navigate(NavigationRoutes.LANGUAGEANDCURRENCY),
     },
     {
-      id: 5,
-      title: settings.viewNodeInfo,
-      icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
-      hideMenu: app.appType === AppType.ON_CHAIN,
-    },
-    {
-      id: 6,
-      title: settings.setPasscodeTitle,
-      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
-      onPress: () =>
-        navigation.navigate(NavigationRoutes.CREATEPIN, {
-          biometricProcess: false,
-        }),
-      hideMenu: pinMethod !== PinMethod.DEFAULT,
-    },
-    {
-      id: 12,
-      title: 'Change Passcode',
-      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
-      onPress: () => setVisible(true),
-      hideMenu: pinMethod === PinMethod.DEFAULT,
-    },
-    {
-      id: 7,
-      title: settings.channelManagement,
-      icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
-      hideMenu: app.appType === AppType.ON_CHAIN,
-    },
-    {
-      id: 8,
-      title: settings.hiddenAssets,
-      icon: isThemeDark ? <HiddenAssetIcon /> : <HiddenAssetIconLight />,
-      onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
-    },
-    {
-      id: 9,
+      id: 3,
       title: settings.darkMode,
       icon: isThemeDark ? <IconDarkMode /> : <IconDarkModeLight />,
       onValueChange: () => {
@@ -223,7 +190,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => setDarkTheme(!darkTheme),
     },
     {
-      id: 10,
+      id: 4,
       title: settings.biometricUnlock,
       icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
       onValueChange: toggleBiometrics,
@@ -232,20 +199,47 @@ function SettingsScreen({ navigation }) {
       testID: 'biometric_unlock',
       onPress: toggleBiometrics,
     },
-
-    // TO DO - will implement node setting functionality. This commented temporarily
-    // {
-    //   id: 5,
-    //   title: settings.nodeSettings,
-    //   icon: isThemeDark ? <IconNodes /> : <IconNodesLight/>,
-    //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
-    // },
+  ];
+  const AppSecurityMenu: SettingMenuProps[] = [
     {
-      id: 11,
+      id: 1,
+      title: settings.setPasscodeTitle,
+      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
+      onPress: () =>
+        navigation.navigate(NavigationRoutes.CREATEPIN, {
+          biometricProcess: false,
+        }),
+      hideMenu: pinMethod !== PinMethod.DEFAULT,
+    },
+    {
+      id: 2,
+      title: 'Change Passcode',
+      icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
+      onPress: () => setVisible(true),
+      hideMenu: pinMethod === PinMethod.DEFAULT,
+    },
+    {
+      id: 3,
+      title: settings.appBackup,
+      icon: isThemeDark ? <IconBackup /> : <IconBackupLight />,
+      onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
+    },
+  ];
+
+  const SettingsMenu: SettingMenuProps[] = [
+    {
+      id: 1,
       title: settings.appInfo,
       icon: isThemeDark ? <IconAppInfo /> : <IconAppInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPINFO),
     },
+    // TO DO - will implement node setting functionality. This commented temporarily
+    // {
+    //   id: 2,
+    //   title: settings.nodeSettings,
+    //   icon: isThemeDark ? <IconNodes /> : <IconNodesLight/>,
+    //   onPress: () => navigation.navigate(NavigationRoutes.NODESETTINGS),
+    // },
   ];
 
   return (
@@ -271,7 +265,12 @@ function SettingsScreen({ navigation }) {
         isLoading={login.isLoading}
       />
       <View style={styles.container}>
-        <SettingMenuItem SettingsMenu={SettingsMenu} />
+        <SettingMenuItem
+          WalletMgtMenu={WalletMgtMenu}
+          PersonalizationMenu={PersonalizationMenu}
+          AppSecurityMenu={AppSecurityMenu}
+          SettingsMenu={SettingsMenu}
+        />
       </View>
     </ScreenContainer>
   );
