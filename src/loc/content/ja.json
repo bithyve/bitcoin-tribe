@@ -567,7 +567,8 @@
     "donationTranferInfo5": "ギフトに最適",
     "donationTranferInfo6": "チップ、クラウドファンディング、プレゼント、ギフト送付に利用できます。",
     "donationTranferInfo7": "シンプルかつ効率的",
-    "donationTranferInfo8": "転送は即座に完了します。"
+    "donationTranferInfo8": "転送は即座に完了します。",
+    "sendAsDonation": "寄付として送信しますか？"
   },
   "community": {
     "fnfTitle": "友達と家族",

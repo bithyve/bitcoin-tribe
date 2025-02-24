@@ -567,7 +567,8 @@
     "donationTranferInfo5": "उपहार देने के लिए परफेक्ट",
     "donationTranferInfo6": "इसे टिप देने, क्राउडफंडिंग, गिवअवे या उपहार भेजने के लिए उपयोग करें।",
     "donationTranferInfo7": "सरल और प्रभावी",
-    "donationTranferInfo8": "ट्रांसफर तुरंत पूरा हो जाता है।"
+    "donationTranferInfo8": "ट्रांसफर तुरंत पूरा हो जाता है।",
+    "sendAsDonation": "दान के रूप में भेजें?"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

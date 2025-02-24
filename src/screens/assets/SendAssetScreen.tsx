@@ -595,7 +595,7 @@ const SendAssetScreen = () => {
 
         <View style={styles.containerSwitch}>
           <AppText variant="body1" style={styles.sendDonationTitle}>
-            Send as donation?
+            {assets.sendAsDonation}
           </AppText>
           <View style={styles.switchWrapper}>
             <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
@@ -799,7 +799,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     sendDonationTitle: {
       color: theme.colors.headingColor,
-      width: '70%',
+      width: '72%',
     },
     availableBalanceWrapper: {
       flexDirection: 'row',
@@ -816,7 +816,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     switchWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '30%',
+      width: '26%',
       justifyContent: 'space-between',
     },
   });

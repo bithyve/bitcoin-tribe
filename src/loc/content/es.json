@@ -567,7 +567,8 @@
     "donationTranferInfo5": "Perfecto para Regalos",
     "donationTranferInfo6": "Úsalo para propinas, crowdfunding, sorteos o enviar regalos.",
     "donationTranferInfo7": "Sencillo y Eficiente",
-    "donationTranferInfo8": "Las transferencias se completan de inmediato."
+    "donationTranferInfo8": "Las transferencias se completan de inmediato.",
+    "sendAsDonation": "¿Enviar como donación?"
   },
   "community": {
     "fnfTitle": "Amigas y familia",

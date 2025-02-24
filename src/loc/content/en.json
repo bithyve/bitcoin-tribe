@@ -567,7 +567,8 @@
     "donationTranferInfo5": "Perfect for Gifting",
     "donationTranferInfo6": "Use it for tipping, crowdfunding, giveaways, or sending gifts.",
     "donationTranferInfo7": "Simple and Efficient",
-    "donationTranferInfo8": "Transfers are completed immediately."
+    "donationTranferInfo8": "Transfers are completed immediately.",
+    "sendAsDonation": "Send as donation?"
   },
   "community": {
     "fnfTitle": "Friends & Family",
