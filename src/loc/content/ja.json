@@ -645,7 +645,16 @@
     "enterPubKeyaddress": "有効な公開鍵とアドレスを入力してください",
     "enterCapacityAmt": "容量の金額を入力してください",
     "enterMSats": "mSats を入力してください",
-    "enterAssetAmt": "アセットの金額を入力してください"
+    "enterAssetAmt": "アセットの金額を入力してください",
+    "channelInfo1": "チャネルとは？",
+    "channelInfo2": "ビットコインのチャネルを使用すると、低手数料で瞬時に取引を送受信できます。これは、あなたと他のピアとの間に直接的なリンクを作成し、取引をより速くします。",
+    "channelInfo3": "Tribe RGBアプリでチャネルを作成するために必要なパラメータは次のとおりです：",
+    "channelInfoBold1": "ピアアドレスと公開鍵：",
+    "channelInfo4": "受信者のライトニングノード情報。",
+    "channelInfoBold2": "アセットIDと数量：",
+    "channelInfo5": "使用するRGBアセットとその数量を指定します。",
+    "channelInfoBold3": "サトシ単位の資金：",
+    "channelInfo6": "チャネルを開くために必要なBTCの金額。"
   },
   "lightning": {
     "sendTitle": "送信",

@@ -645,7 +645,16 @@
     "enterPubKeyaddress": "Por favor, ingrese una clave pública y dirección válidas",
     "enterCapacityAmt": "Por favor, ingrese la cantidad de capacidad",
     "enterMSats": "Por favor, ingrese los mSats",
-    "enterAssetAmt": "Por favor, ingrese la cantidad del activo"
+    "enterAssetAmt": "Por favor, ingrese la cantidad del activo",
+    "channelInfo1": "¿Qué son los canales?",
+    "channelInfo2": "Los canales en Bitcoin te permiten enviar y recibir transacciones instantáneamente con bajas comisiones. Crean un enlace directo entre tú y otro usuario para transacciones más rápidas.",
+    "channelInfo3": "Para crear un canal en la aplicación Tribe RGB, se requieren los siguientes parámetros:",
+    "channelInfoBold1": "Dirección del Peer y Clave Pública:",
+    "channelInfo4": "Información del nodo Lightning del destinatario.",
+    "channelInfoBold2": "ID del Activo y Cantidad:",
+    "channelInfo5": "Especifica qué activo RGB se está utilizando y en qué cantidad.",
+    "channelInfoBold3": "Fondos en Satoshis:",
+    "channelInfo6": "Cantidad de BTC necesaria para abrir el canal."
   },
   "lightning": {
     "sendTitle": "Enviar",

@@ -645,7 +645,16 @@
     "enterPubKeyaddress": "请输入有效的公钥和地址",
     "enterCapacityAmt": "请输入容量金额",
     "enterMSats": "请输入毫聪（mSats）",
-    "enterAssetAmt": "请输入资产金额"
+    "enterAssetAmt": "请输入资产金额",
+    "channelInfo1": "什么是通道？",
+    "channelInfo2": "比特币通道允许您以低手续费即时发送和接收交易。它们在您和另一位用户之间创建直接链接，以加快交易速度。",
+    "channelInfo3": "在Tribe RGB应用程序中创建通道所需的参数包括：",
+    "channelInfoBold1": "对等地址和公钥：",
+    "channelInfo4": "接收方的闪电网络节点信息。",
+    "channelInfoBold2": "资产ID和数量：",
+    "channelInfo5": "指定使用的RGB资产及其数量。",
+    "channelInfoBold3": "资金（聪）：",
+    "channelInfo6": "开启通道所需的BTC金额。"
   },
   "lightning": {
     "sendTitle": "发送",
