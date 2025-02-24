@@ -188,7 +188,12 @@
     "backupAlertTitle": "Asegura tus fondos con un respaldo",
     "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora.",
     "createCoinTitle": "Crear moneda",
-    "createCollectibleTitle": "Crear coleccionables"
+    "createCollectibleTitle": "Crear coleccionables",
+    "pullDownInfo1": "Desliza hacia abajo para actualizar",
+    "pullDownInfo2": "Todos los saldos y estados de transacciones en Tribe RGB se actualizan automáticamente en segundo plano. Solo necesitas deslizar hacia abajo para una actualización forzada si es necesario.",
+    "pullDownInfo3": "¿Cuándo usar la actualización forzada?",
+    "pullDownInfo4": "Para ver rápidamente las últimas actualizaciones después de realizar una transacción.",
+    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante."
   },
   "settings": {
     "setting": "Configuraciones",

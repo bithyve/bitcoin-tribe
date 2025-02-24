@@ -188,7 +188,12 @@
     "backupAlertTitle": "バックアップで資金を保護する",
     "backupAlertSubTitle": "ウォレットをバックアップすることで、デバイスを紛失した場合でも資金を安全に保てます。今すぐバックアップを作成しましょう。",
     "createCoinTitle": "コインを作成",
-    "createCollectibleTitle": "コレクティブルを作成"
+    "createCollectibleTitle": "コレクティブルを作成",
+    "pullDownInfo1": "下にスワイプして更新",
+    "pullDownInfo2": "Tribe RGBのすべての残高と取引ステータスは、バックグラウンドで自動的に更新されます。強制的に更新が必要な場合のみ、下にスワイプしてください。",
+    "pullDownInfo3": "強制更新が必要なときは？",
+    "pullDownInfo4": "取引後に最新の更新情報をすぐに確認するため。",
+    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。"
   },
   "settings": {
     "setting": "設定",

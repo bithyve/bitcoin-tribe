@@ -188,7 +188,12 @@
     "backupAlertTitle": "Secure Your Funds \nwith a Backup",
     "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now.",
     "createCoinTitle": "Create coin",
-    "createCollectibleTitle": "Create Collectibles"
+    "createCollectibleTitle": "Create Collectibles",
+    "pullDownInfo1": "Pull Down to Refresh",
+    "pullDownInfo2": "All balances and transaction statuses in Tribe RGB update automatically in the background. You only need to pull down to refresh for a forced update if needed.",
+    "pullDownInfo3": "When to Use Forced Refresh?",
+    "pullDownInfo4": "To quickly see the latest updates after making a transaction.",
+    "pullDownInfo5": "To ensure your app reflects the most recent data instantly."
   },
   "settings": {
     "setting": "Settings",
