@@ -559,7 +559,15 @@
     "udaCollectibleInfoBold2": "UDAs: ",
     "udaCollectibleInfo5": "One-of-a-kind, exclusive.",
     "udaCollectibleInfoBold3": "Collectibles: ",
-    "udaCollectibleInfo6": "Part of a series, issued in bulk."
+    "udaCollectibleInfo6": "Part of a series, issued in bulk.",
+    "donationTranferInfo1": "Donation Transfer",
+    "donationTranferInfo2": "A donation transfer allows you to send assets instantly without needing receiver to do client-side verification.",
+    "donationTranferInfo3": "Instant Transfers",
+    "donationTranferInfo4": "No need for the recipient to approve the transfer.",
+    "donationTranferInfo5": "Perfect for Gifting",
+    "donationTranferInfo6": "Use it for tipping, crowdfunding, giveaways, or sending gifts.",
+    "donationTranferInfo7": "Simple and Efficient",
+    "donationTranferInfo8": "Transfers are completed immediately."
   },
   "community": {
     "fnfTitle": "Friends & Family",

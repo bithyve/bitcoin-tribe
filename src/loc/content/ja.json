@@ -559,7 +559,15 @@
     "udaCollectibleInfoBold2": "UDAs: ",
     "udaCollectibleInfo5": "唯一無二で、排他的。",
     "udaCollectibleInfoBold3": "コレクティブル: ",
-    "udaCollectibleInfo6": "シリーズの一部、大量発行。"
+    "udaCollectibleInfo6": "シリーズの一部、大量発行。",
+    "donationTranferInfo1": "寄付転送",
+    "donationTranferInfo2": "寄付転送を使用すると、受取人がクライアント側で検証する必要なく、資産を即座に送信できます。",
+    "donationTranferInfo3": "即時転送",
+    "donationTranferInfo4": "受取人が承認する必要はありません。",
+    "donationTranferInfo5": "ギフトに最適",
+    "donationTranferInfo6": "チップ、クラウドファンディング、プレゼント、ギフト送付に利用できます。",
+    "donationTranferInfo7": "シンプルかつ効率的",
+    "donationTranferInfo8": "転送は即座に完了します。"
   },
   "community": {
     "fnfTitle": "友達と家族",

@@ -49,6 +49,9 @@ import Colors from 'src/theme/Colors';
 import { RealmSchema } from 'src/storage/enum';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import ModalLoading from 'src/components/ModalLoading';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 
 type ItemProps = {
   name: string;
@@ -159,6 +162,8 @@ const SendAssetScreen = () => {
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [visibleDonationTranferInfo, setVisibleDonationTranferInfo] =
+    useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [amountValidationError, setAmountValidationError] = useState('');
@@ -589,13 +594,24 @@ const SendAssetScreen = () => {
         )}
 
         <View style={styles.containerSwitch}>
-          <AppText variant="heading3">Send as donation?</AppText>
+          <AppText variant="body1" style={styles.sendDonationTitle}>
+            Send as donation?
+          </AppText>
+          <View style={styles.switchWrapper}>
+            <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
+              {isThemeDark ? (
+                <InfoIcon width={24} height={24} />
+              ) : (
+                <InfoIconLight width={24} height={24} />
+              )}
+            </AppTouchable>
 
-          <Switch
-            value={isDonation}
-            onValueChange={value => setIsDonation(value)}
-            color={theme.colors.accent1}
-          />
+            <Switch
+              value={isDonation}
+              onValueChange={value => setIsDonation(value)}
+              color={theme.colors.accent1}
+            />
+          </View>
         </View>
 
         <ModalContainer
@@ -664,6 +680,13 @@ const SendAssetScreen = () => {
             invoiceValidationError.length > 0
           }
           width={'100%'}
+        />
+      </View>
+      <View>
+        <DonationTransferInfoModal
+          visible={visibleDonationTranferInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisibleDonationTranferInfo(false)}
         />
       </View>
     </ScreenContainer>
@@ -768,9 +791,15 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     containerSwitch: {
       flexDirection: 'row',
+      width: '100%',
       justifyContent: 'space-between',
       marginVertical: hp(20),
       paddingBottom: hp(30),
+      alignItems: 'center',
+    },
+    sendDonationTitle: {
+      color: theme.colors.headingColor,
+      width: '70%',
     },
     availableBalanceWrapper: {
       flexDirection: 'row',
@@ -783,6 +812,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     availableBalanceText: {
       color: theme.colors.headingColor,
+    },
+    switchWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '30%',
+      justifyContent: 'space-between',
     },
   });
 

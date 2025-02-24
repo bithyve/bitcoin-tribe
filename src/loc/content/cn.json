@@ -559,7 +559,15 @@
     "udaCollectibleInfoBold2": "UDAs: ",
     "udaCollectibleInfo5": "独一无二，独家专属。",
     "udaCollectibleInfoBold3": "收藏品: ",
-    "udaCollectibleInfo6": "属于一个系列，批量发行。"
+    "udaCollectibleInfo6": "属于一个系列，批量发行。",
+    "donationTranferInfo1": "捐赠转账",
+    "donationTranferInfo2": "捐赠转账允许您立即发送资产，而无需接收者进行客户端验证。",
+    "donationTranferInfo3": "即时转账",
+    "donationTranferInfo4": "无需接收者批准转账。",
+    "donationTranferInfo5": "适合赠送",
+    "donationTranferInfo6": "可用于打赏、众筹、赠品活动或赠送礼物。",
+    "donationTranferInfo7": "简单高效",
+    "donationTranferInfo8": "转账立即完成。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

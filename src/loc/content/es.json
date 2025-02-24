@@ -559,7 +559,15 @@
     "udaCollectibleInfoBold2": "UDAs: ",
     "udaCollectibleInfo5": "Únicos, exclusivos.",
     "udaCollectibleInfoBold3": "Coleccionables: ",
-    "udaCollectibleInfo6": "Parte de una serie, emitidos en grandes cantidades."
+    "udaCollectibleInfo6": "Parte de una serie, emitidos en grandes cantidades.",
+    "donationTranferInfo1": "Transferencia de Donación",
+    "donationTranferInfo2": "Una transferencia de donación te permite enviar activos instantáneamente sin que el receptor necesite verificar en su lado.",
+    "donationTranferInfo3": "Transferencias Instantáneas",
+    "donationTranferInfo4": "No es necesario que el destinatario apruebe la transferencia.",
+    "donationTranferInfo5": "Perfecto para Regalos",
+    "donationTranferInfo6": "Úsalo para propinas, crowdfunding, sorteos o enviar regalos.",
+    "donationTranferInfo7": "Sencillo y Eficiente",
+    "donationTranferInfo8": "Las transferencias se completan de inmediato."
   },
   "community": {
     "fnfTitle": "Amigas y familia",
