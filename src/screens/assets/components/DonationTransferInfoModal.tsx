@@ -6,9 +6,9 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
-import UTXOInfoIllustration from 'src/assets/images/utxoInfoIllustration.svg';
-import UTXOInfoIllustrationLight from 'src/assets/images/utxoInfoIllustration_light.svg';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import DonationTransIllustration from 'src/assets/images/donationTranferIllustration.svg';
+import DonationTransIllustrationLight from 'src/assets/images/donationTranferIllustration_light.svg';
+import { hp, wp } from 'src/constants/responsive';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -19,7 +19,7 @@ interface Props {
   primaryCtaTitle: string;
 }
 
-const UTXOInfoModal: React.FC<Props> = ({
+const DonationTransferInfoModal: React.FC<Props> = ({
   visible,
   primaryOnPress,
   primaryCtaTitle,
@@ -28,7 +28,7 @@ const UTXOInfoModal: React.FC<Props> = ({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { common, settings } = translations;
+  const { assets } = translations;
 
   return (
     <ResponsePopupContainer
@@ -38,34 +38,44 @@ const UTXOInfoModal: React.FC<Props> = ({
       borderColor={theme.colors.modalBackColor}>
       <View style={styles.contentContainer}>
         <View style={styles.wrapper}>
-          <AppText variant="heading2" style={styles.titleText}>
-            {settings.utxoInfoTitle1}
+          <AppText
+            variant="heading2"
+            style={[styles.titleText, styles.titleTextStyle]}>
+            {assets.donationTranferInfo1}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
-            {settings.utxoInfoSubTitle1}
+            {assets.donationTranferInfo2}
           </AppText>
         </View>
         <View style={styles.illustrationWrapper}>
           {isThemeDark ? (
-            <UTXOInfoIllustration />
+            <DonationTransIllustration />
           ) : (
-            <UTXOInfoIllustrationLight />
+            <DonationTransIllustrationLight />
           )}
         </View>
         <View style={styles.wrapper1}>
-          <AppText variant="heading3" style={styles.titleText}>
-            {settings.utxoInfoTitle2}
+          <AppText variant="body2" style={styles.titleText}>
+            {assets.donationTranferInfo3}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
-            {settings.utxoInfoSubTitle2}
+            {assets.donationTranferInfo4}
           </AppText>
         </View>
         <View style={styles.wrapper1}>
-          <AppText variant="heading3" style={styles.titleText}>
-            {settings.utxoInfoTitle3}
+          <AppText variant="body2" style={styles.titleText}>
+            {assets.donationTranferInfo5}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
-            {settings.utxoInfoSubTitle3}
+            {assets.donationTranferInfo6}
+          </AppText>
+        </View>
+        <View style={styles.wrapper1}>
+          <AppText variant="body2" style={styles.titleText}>
+            {assets.donationTranferInfo7}
+          </AppText>
+          <AppText variant="body2" style={styles.subTitleText}>
+            {assets.donationTranferInfo8}
           </AppText>
         </View>
         <View style={styles.buttonWrapper}>
@@ -87,6 +97,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       textAlign: 'left',
     },
+    titleTextStyle: {
+      marginBottom: hp(5),
+    },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
       textAlign: 'left',
@@ -104,7 +117,7 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       alignSelf: 'flex-end',
-      marginTop: hp(10),
+      marginTop: hp(15),
     },
   });
-export default UTXOInfoModal;
+export default DonationTransferInfoModal;

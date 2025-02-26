@@ -51,7 +51,8 @@
     "joinGroup": "加入群组",
     "understood": "明白了",
     "createChannel": "创建通道",
-    "done": "完成"
+    "done": "完成",
+    "okay": "好的"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -187,7 +188,12 @@
     "backupAlertTitle": "使用备份保护您的资金",
     "backupAlertSubTitle": "备份您的钱包可以确保您的资金安全，即使您丢失设备。请花点时间立即创建备份。",
     "createCoinTitle": "创建硬币",
-    "createCollectibleTitle": "创建收藏品"
+    "createCollectibleTitle": "创建收藏品",
+    "pullDownInfo1": "下拉刷新",
+    "pullDownInfo2": "Tribe RGB中的所有余额和交易状态都会在后台自动更新。只有在需要强制更新时，才需要下拉刷新。",
+    "pullDownInfo3": "什么时候需要强制刷新？",
+    "pullDownInfo4": "在进行交易后快速查看最新更新。",
+    "pullDownInfo5": "确保您的应用程序立即反映最新数据。"
   },
   "settings": {
     "setting": "设置",
@@ -548,7 +554,26 @@
     "issuerVerificationTitle": "发行人验证必需",
     "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
     "connectVerifyTwitter": "连接并在 Twitter 上验证",
-    "viewInRegistry": "在注册表中查看"
+    "viewInRegistry": "在注册表中查看",
+    "udaCollectibleInfo1": "UDAs 与 收藏品",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "是代表稀有艺术品、门票或证书等项目的独特数字资产，并具有经过验证的所有权。",
+    "udaCollectibleInfoBold1": "收藏品",
+    "udaCollectibleInfo3": "是批量发行的限量版资产，例如游戏物品或奖励。",
+    "udaCollectibleInfo4": "主要区别",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "独一无二，独家专属。",
+    "udaCollectibleInfoBold3": "收藏品: ",
+    "udaCollectibleInfo6": "属于一个系列，批量发行。",
+    "donationTranferInfo1": "捐赠转账",
+    "donationTranferInfo2": "捐赠转账允许您立即发送资产，而无需接收者进行客户端验证。",
+    "donationTranferInfo3": "即时转账",
+    "donationTranferInfo4": "无需接收者批准转账。",
+    "donationTranferInfo5": "适合赠送",
+    "donationTranferInfo6": "可用于打赏、众筹、赠品活动或赠送礼物。",
+    "donationTranferInfo7": "简单高效",
+    "donationTranferInfo8": "转账立即完成。",
+    "sendAsDonation": "作为捐赠发送？"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -620,7 +645,16 @@
     "enterPubKeyaddress": "请输入有效的公钥和地址",
     "enterCapacityAmt": "请输入容量金额",
     "enterMSats": "请输入毫聪（mSats）",
-    "enterAssetAmt": "请输入资产金额"
+    "enterAssetAmt": "请输入资产金额",
+    "channelInfo1": "什么是通道？",
+    "channelInfo2": "比特币通道允许您以低手续费即时发送和接收交易。它们在您和另一位用户之间创建直接链接，以加快交易速度。",
+    "channelInfo3": "在Tribe RGB应用程序中创建通道所需的参数包括：",
+    "channelInfoBold1": "对等地址和公钥：",
+    "channelInfo4": "接收方的闪电网络节点信息。",
+    "channelInfoBold2": "资产ID和数量：",
+    "channelInfo5": "指定使用的RGB资产及其数量。",
+    "channelInfoBold3": "资金（聪）：",
+    "channelInfo6": "开启通道所需的BTC金额。"
   },
   "lightning": {
     "sendTitle": "发送",

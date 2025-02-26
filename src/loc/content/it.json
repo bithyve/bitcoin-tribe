@@ -51,7 +51,8 @@
     "joinGroup": "Unisciti al gruppo",
     "understood": "Capito",
     "createChannel": "Crea Canale",
-    "done": "Fatto"
+    "done": "Fatto",
+    "okay": "Va bene"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -187,7 +188,12 @@
     "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
     "backupAlertSubTitle": "Eseguire il backup del tuo wallet garantisce che i tuoi fondi siano al sicuro, anche se perdi il dispositivo. Prenditi un momento per creare un backup ora.",
     "createCoinTitle": "Crea moneta",
-    "createCollectibleTitle": "Crea collezionabili"
+    "createCollectibleTitle": "Crea collezionabili",
+    "pullDownInfo1": "Scorri verso il basso per aggiornare",
+    "pullDownInfo2": "Tutti i saldi e gli stati delle transazioni in Tribe RGB si aggiornano automaticamente in background. È necessario scorrere verso il basso solo per un aggiornamento forzato se necessario.",
+    "pullDownInfo3": "Quando usare l'aggiornamento forzato?",
+    "pullDownInfo4": "Per vedere rapidamente gli ultimi aggiornamenti dopo una transazione.",
+    "pullDownInfo5": "Per assicurarti che l'app rifletta immediatamente i dati più recenti."
   },
   "settings": {
     "setting": "Impostazioni",
@@ -548,7 +554,26 @@
     "issuerVerificationTitle": "Verifica dell'emittente richiesta",
     "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",
     "connectVerifyTwitter": "Connetti e verifica su Twitter",
-    "viewInRegistry": "Visualizza nel Registro"
+    "viewInRegistry": "Visualizza nel Registro",
+    "udaCollectibleInfo1": "UDAs vs. Collezionabili",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "sono asset digitali unici che rappresentano oggetti come arte rara, biglietti o certificati con proprietà verificata.",
+    "udaCollectibleInfoBold1": "Collezionabili",
+    "udaCollectibleInfo3": "sono asset in edizione limitata emessi in lotti, come oggetti di gioco o premi.",
+    "udaCollectibleInfo4": "Differenze principali",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "Unici, esclusivi.",
+    "udaCollectibleInfoBold3": "Collezionabili: ",
+    "udaCollectibleInfo6": "Parte di una serie, emessi in grandi quantità.",
+    "donationTranferInfo1": "Trasferimento Donazione",
+    "donationTranferInfo2": "Un trasferimento di donazione ti permette di inviare asset istantaneamente senza che il destinatario debba verificare dal lato client.",
+    "donationTranferInfo3": "Trasferimenti Istantanei",
+    "donationTranferInfo4": "Il destinatario non deve approvare il trasferimento.",
+    "donationTranferInfo5": "Perfetto per Regali",
+    "donationTranferInfo6": "Usalo per mance, crowdfunding, omaggi o inviare regali.",
+    "donationTranferInfo7": "Semplice ed Efficiente",
+    "donationTranferInfo8": "I trasferimenti vengono completati immediatamente.",
+    "sendAsDonation": "Inviare come donazione?"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
@@ -620,7 +645,16 @@
     "enterPubKeyaddress": "Inserisci una chiave pubblica e un indirizzo validi",
     "enterCapacityAmt": "Inserisci l'importo della capacità",
     "enterMSats": "Inserisci i milli-satoshi (mSats)",
-    "enterAssetAmt": "Inserisci l'importo dell'asset"
+    "enterAssetAmt": "Inserisci l'importo dell'asset",
+    "channelInfo1": "Cosa sono i canali?",
+    "channelInfo2": "I canali in Bitcoin ti permettono di inviare e ricevere transazioni istantaneamente con commissioni basse. Creano un collegamento diretto tra te e un altro peer per transazioni più veloci.",
+    "channelInfo3": "Per creare un canale nell’app Tribe RGB, sono richiesti i seguenti parametri: ",
+    "channelInfoBold1": "Indirizzo Peer e Chiave Pubblica: ",
+    "channelInfo4": "Le informazioni sul nodo Lightning del destinatario.",
+    "channelInfoBold2": "ID e Quantità dell'Asset: ",
+    "channelInfo5": "Specifica quale asset RGB viene utilizzato e in quale quantità.",
+    "channelInfoBold3": "Fondi in Satoshi: ",
+    "channelInfo6": "L'importo di BTC richiesto per aprire il canale."
   },
   "lightning": {
     "sendTitle": "Invia",
