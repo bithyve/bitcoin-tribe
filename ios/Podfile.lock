@@ -996,9 +996,9 @@ PODS:
     - React-Core
   - react-native-biometrics (3.0.1):
     - React-Core
-  - react-native-config (1.5.3):
-    - react-native-config/App (= 1.5.3)
-  - react-native-config/App (1.5.3):
+  - react-native-config (1.5.5):
+    - react-native-config/App (= 1.5.5)
+  - react-native-config/App (1.5.5):
     - React-Core
   - react-native-document-picker (9.3.1):
     - DoubleConversion
@@ -1095,7 +1095,7 @@ PODS:
     - React
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-slider (4.5.5):
+  - react-native-slider (4.5.6):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1371,11 +1371,11 @@ PODS:
     - React-utils (= 0.74.1)
   - RealmJS (12.14.1):
     - React
-  - RNCClipboard (1.15.0):
+  - RNCClipboard (1.16.1):
     - React-Core
   - RNDeviceInfo (10.0.2):
     - React-Core
-  - RNGestureHandler (2.21.2):
+  - RNGestureHandler (2.24.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1424,73 +1424,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.16.6):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.16.6)
-    - RNReanimated/worklets (= 3.16.6)
-    - Yoga
-  - RNReanimated/reanimated (3.16.6):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.16.6)
-    - Yoga
-  - RNReanimated/reanimated/apple (3.16.6):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - RNReanimated/worklets (3.16.6):
+  - RNReanimated (3.6.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1533,7 +1467,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.5.0):
+  - RNSentry (6.9.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1554,7 +1488,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.43.0)
+    - Sentry/HybridSDK (= 8.45.0)
     - Yoga
   - RNShare (11.1.0):
     - DoubleConversion
@@ -1577,9 +1511,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.10.1):
+  - RNSVG (15.11.2):
     - React-Core
-  - Sentry/HybridSDK (8.43.0)
+  - Sentry/HybridSDK (8.45.0)
   - SocketRocket (0.7.0)
   - VisionCamera (4.3.2):
     - VisionCamera/Core (= 4.3.2)
@@ -1909,7 +1843,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
-  react-native-config: ea75335a7cca1d3326de1da384227e580a7c082e
+  react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-document-picker: 451699da81cba8b40b596b8076019a4deb86f46e
   react-native-image-picker: f1006d8935a3bc0baf8157faaa7857c76a77c8bb
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
@@ -1919,7 +1853,7 @@ SPEC CHECKSUMS:
   react-native-randombytes: 3c8f3e89d12487fd03a2f966c288d495415fc116
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-slider: 165dce3f4714aadcadefdd79445d8d500125f6b0
+  react-native-slider: bcfc4f2683c072497b157a3c3f00e514a05feec5
   react-native-tcp-socket: 0a0455b843f9dfcad875ea6cfafeb05c0abb0a24
   react-native-webview: ad8dc2d03264427555e6841b214e4f5d2255f6b6
   React-nativeconfig: b0073a590774e8b35192fead188a36d1dca23dec
@@ -1946,19 +1880,19 @@ SPEC CHECKSUMS:
   React-utils: 67574b07bff4429fd6c4d43a7fad8254d814ee20
   ReactCommon: 64c64f4ae1f2debe3fab1800e00cb8466a4477b7
   RealmJS: 5b0258b3c04b9f48536b2692965690afe024164c
-  RNCClipboard: dbcf25b8f666b4685c02eeb65be981d30198e505
+  RNCClipboard: ee059e6006b137e369caed5eb852b4aad9f5d886
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
-  RNGestureHandler: 8d857f8c5e6697585f6a246d1acbf0533c438ab1
+  RNGestureHandler: 4c50b5e4ca199cf497511d44e3fe45d54d62e279
   RNKeychain: bbe2f6d5cc008920324acb49ef86ccc03d3b38e4
   RNLocalize: 7c20518f8e5c68cbb980418c60a8c804409c1463
   RNQrGenerator: afacf12b55dfba0e3aaca963eec23691e8426431
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
-  RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
+  RNReanimated: dd4f379b94064ded836fa82efaf2c3061f5d3b0a
   RNScreens: 8a3ba045e7e8b5dd1b9a7764496430e17d00dfed
-  RNSentry: 3a8684dcad4c164cbe7dbc3743c053583808bcba
+  RNSentry: f2a242dd78d40e46c117c4feeb9a37b58e5241dc
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
-  RNSVG: 3421710ac15f4f2dc47e5c122f2c2e4282116830
-  Sentry: 532b281a53b1b45a523fd592f608956fb36e577c
+  RNSVG: 2df577ee9762d1b6deef820173b59b064c2570fe
+  Sentry: f7c0c4b82e2f7e5909a660544dfaff84e35d5e03
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: 6ad4b86176f6fea45e90e380d3d530bc5e1abff9
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372

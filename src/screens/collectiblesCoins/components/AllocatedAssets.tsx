@@ -2,7 +2,12 @@ import React, { useMemo } from 'react';
 import { View, Image, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Identicon from 'src/components/Identicon';
-import { AssetFace, Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetFace,
+  Coin,
+  Collectible,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 
 type allocatedAssetsProps = {
@@ -14,9 +19,9 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const mediaPath = useMemo(() => {
-    if(asset.assetIface.toUpperCase() === AssetFace.RGB21) {
+    if (asset.assetIface.toUpperCase() === AssetFace.RGB21) {
       return (asset as UniqueDigitalAsset).token.media.filePath;
-    } else if(asset.assetIface.toUpperCase() === AssetFace.RGB25) {
+    } else if (asset.assetIface.toUpperCase() === AssetFace.RGB25) {
       return (asset as Collectible).media.filePath;
     }
     return null;
@@ -27,15 +32,21 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
       <View key={asset.assetId}>
         {mediaPath ? (
           <Image
-            source={{ uri: Platform.select({
-              android: `file://${mediaPath}`,
-              ios: mediaPath,
-            }) }}
+            source={{
+              uri: Platform.select({
+                android: `file://${mediaPath}`,
+                ios: mediaPath,
+              }),
+            }}
             style={styles.assetImage}
-            resizeMode="contain"
+            resizeMode="cover"
           />
         ) : (
-          <Identicon value={asset.assetId} style={styles.identiconView} size={30} />
+          <Identicon
+            value={asset.assetId}
+            style={styles.identiconView}
+            size={30}
+          />
         )}
       </View>
     </View>

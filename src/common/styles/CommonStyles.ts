@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   heading2: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
   heading3: {
