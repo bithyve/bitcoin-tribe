@@ -51,7 +51,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      paddingHorizontal: 10,
+      marginBottom: hp(5),
     },
     wrapper: {
       flex: 1,
