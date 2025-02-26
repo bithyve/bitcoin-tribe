@@ -50,7 +50,7 @@ const UDADetailsScreen = () => {
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
-  );
+  ).toJSON();
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
