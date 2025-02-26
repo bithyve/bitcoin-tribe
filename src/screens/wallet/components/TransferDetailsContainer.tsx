@@ -79,7 +79,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
             label={wallet.date}
             content={moment
               .unix(transaction.updatedAt)
-              .format('DD MMM YY  •  hh:mm a')}
+              .format('DD MMM YY  •  hh:mm A')}
           />
         </View>
       </View>

@@ -7,7 +7,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 
 import Buttons from 'src/components/Buttons';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import { AppTheme } from 'src/theme';
@@ -110,7 +110,8 @@ function SendEnterAddress({
             Keyboard.dismiss();
             onDismiss();
           }}
-          width={wp(120)}
+          width={windowWidth / 2.5}
+          secondaryCTAWidth={windowWidth / 2.5}
         />
       </View>
     </View>

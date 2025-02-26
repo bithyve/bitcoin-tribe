@@ -28,7 +28,6 @@ import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
 import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
 import EnterInvoiceDetails from 'src/screens/receiveasset/EnterInvoiceDetails';
 import SendToScreen from 'src/screens/send/SendToScreen';
-import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
 import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
 import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
@@ -206,10 +205,6 @@ function AppStack() {
           component={EnterInvoiceDetails}
         />
         <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
-        <Stack.Screen
-          name={NavigationRoutes.BROADCASTTRANSACTION}
-          component={BroadcastTransaction}
-        />
         <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
         <Stack.Screen
           name={NavigationRoutes.COINDETAILS}
@@ -263,10 +258,7 @@ function AppStack() {
           component={WalletBackupHistory}
         />
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
-        <Stack.Screen
-          name={NavigationRoutes.CHANGEPIN}
-          component={ChangePin}
-        />
+        <Stack.Screen name={NavigationRoutes.CHANGEPIN} component={ChangePin} />
         <Stack.Screen
           name={NavigationRoutes.CLOUDBACKUP}
           component={CloudBackup}

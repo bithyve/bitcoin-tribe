@@ -59,7 +59,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      alignSelf: 'flex-end',
+      width: '100%',
+      alignSelf: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
     },
   });

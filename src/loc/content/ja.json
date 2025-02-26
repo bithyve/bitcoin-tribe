@@ -51,7 +51,8 @@
     "joinGroup": "グループに参加する",
     "understood": "理解しました",
     "createChannel": "チャンネルを作成",
-    "done": "完了"
+    "done": "完了",
+    "okay": "了解しました"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -187,7 +188,12 @@
     "backupAlertTitle": "バックアップで資金を保護する",
     "backupAlertSubTitle": "ウォレットをバックアップすることで、デバイスを紛失した場合でも資金を安全に保てます。今すぐバックアップを作成しましょう。",
     "createCoinTitle": "コインを作成",
-    "createCollectibleTitle": "コレクティブルを作成"
+    "createCollectibleTitle": "コレクティブルを作成",
+    "pullDownInfo1": "下にスワイプして更新",
+    "pullDownInfo2": "Tribe RGBのすべての残高と取引ステータスは、バックグラウンドで自動的に更新されます。強制的に更新が必要な場合のみ、下にスワイプしてください。",
+    "pullDownInfo3": "強制更新が必要なときは？",
+    "pullDownInfo4": "取引後に最新の更新情報をすぐに確認するため。",
+    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。"
   },
   "settings": {
     "setting": "設定",
@@ -290,7 +296,21 @@
     "assetBackupSuccessMsg": "あなたのRGB資産は正常にバックアップされました",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "非表示を解除"
+    "unHide": "非表示を解除",
+    "backupPhraseTitle": "バックアップフレーズ",
+    "backupPhraseSubTitle": "12語のバックアップフレーズを慎重に書き留め、プライベートな場所に安全に保管してください。",
+    "backupPhraseTitle1": "注意",
+    "backupPhraseSubTitle1": "バックアップフレーズにアクセスできる人は誰でも資金にアクセスし、引き出すことができます。失うとウォレットをバックアップできません。",
+    "walletMgtTitle": "ウォレット管理",
+    "personalizationTitle": "パーソナライズ",
+    "appSecurityTitle": "アプリのセキュリティ",
+    "AboutSupportTitle": "情報とサポート",
+    "utxoInfoTitle1": "UTXOとは？",
+    "utxoInfoSubTitle1": "UTXO（未使用トランザクション出力）は、あなたのビットコインウォレット内のデジタルコインのようなものです。トランザクションを行うと出力が作成され、まだ使用していないものがUTXOと呼ばれます。",
+    "utxoInfoTitle2": "カラーUTXO",
+    "utxoInfoSubTitle2": "RGBアセットに関連付けられたUTXOで、特定のトークンやコレクションアイテムを表します。",
+    "utxoInfoTitle3": "カラリング可能なUTXO",
+    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -533,7 +553,27 @@
     "verifyNow": "今すぐ確認",
     "issuerVerificationTitle": "発行者の確認が必要です",
     "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
-    "connectVerifyTwitter": "Twitter に接続して確認"
+    "connectVerifyTwitter": "Twitter に接続して確認",
+    "viewInRegistry": "レジストリで表示",
+    "udaCollectibleInfo1": "UDAとコレクティブルの違い",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "は、希少なアート、チケット、証明書などのアイテムを表す一意のデジタル資産であり、所有権が確認されています。",
+    "udaCollectibleInfoBold1": "コレクティブル",
+    "udaCollectibleInfo3": "は、バッチで発行される限定版の資産であり、ゲームアイテムや報酬などが含まれます。",
+    "udaCollectibleInfo4": "主な違い",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "唯一無二で、排他的。",
+    "udaCollectibleInfoBold3": "コレクティブル: ",
+    "udaCollectibleInfo6": "シリーズの一部、大量発行。",
+    "donationTranferInfo1": "寄付転送",
+    "donationTranferInfo2": "寄付転送を使用すると、受取人がクライアント側で検証する必要なく、資産を即座に送信できます。",
+    "donationTranferInfo3": "即時転送",
+    "donationTranferInfo4": "受取人が承認する必要はありません。",
+    "donationTranferInfo5": "ギフトに最適",
+    "donationTranferInfo6": "チップ、クラウドファンディング、プレゼント、ギフト送付に利用できます。",
+    "donationTranferInfo7": "シンプルかつ効率的",
+    "donationTranferInfo8": "転送は即座に完了します。",
+    "sendAsDonation": "寄付として送信しますか？"
   },
   "community": {
     "fnfTitle": "友達と家族",
@@ -605,7 +645,16 @@
     "enterPubKeyaddress": "有効な公開鍵とアドレスを入力してください",
     "enterCapacityAmt": "容量の金額を入力してください",
     "enterMSats": "mSats を入力してください",
-    "enterAssetAmt": "アセットの金額を入力してください"
+    "enterAssetAmt": "アセットの金額を入力してください",
+    "channelInfo1": "チャネルとは？",
+    "channelInfo2": "ビットコインのチャネルを使用すると、低手数料で瞬時に取引を送受信できます。これは、あなたと他のピアとの間に直接的なリンクを作成し、取引をより速くします。",
+    "channelInfo3": "Tribe RGBアプリでチャネルを作成するために必要なパラメータは次のとおりです：",
+    "channelInfoBold1": "ピアアドレスと公開鍵：",
+    "channelInfo4": "受信者のライトニングノード情報。",
+    "channelInfoBold2": "アセットIDと数量：",
+    "channelInfo5": "使用するRGBアセットとその数量を指定します。",
+    "channelInfoBold3": "サトシ単位の資金：",
+    "channelInfo6": "チャネルを開くために必要なBTCの金額。"
   },
   "lightning": {
     "sendTitle": "送信",

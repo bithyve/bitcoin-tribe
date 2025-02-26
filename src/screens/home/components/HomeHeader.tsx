@@ -25,6 +25,9 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 
 function HomeHeader() {
   const theme: AppTheme = useTheme();
@@ -41,6 +44,8 @@ function HomeHeader() {
   const rgbWallet = useRgbWallets({}).wallets[0];
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
+  const [visiblePullDownRefreshInfo, setVisiblePullDownRefreshInfo] =
+    useState(null);
 
   useEffect(() => {
     if (app?.walletImage || app?.appName) {
@@ -79,7 +84,7 @@ function HomeHeader() {
             <View style={styles.userDetailsWrapper}>
               <AppText
                 numberOfLines={1}
-                variant="heading1"
+                variant="heading3"
                 style={styles.usernameText}>
                 {walletName ? walletName : 'Satoshi’s Palette'}
               </AppText>
@@ -105,6 +110,12 @@ function HomeHeader() {
         <View style={styles.iconWrapper}>
           <IconWrapper
             onPress={() => {
+              setVisiblePullDownRefreshInfo(true);
+            }}>
+            {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+          </IconWrapper>
+          <IconWrapper
+            onPress={() => {
               handleNavigation(NavigationRoutes.SENDSCREEN, {
                 receiveData: 'send',
                 title: common.send,
@@ -115,6 +126,13 @@ function HomeHeader() {
             {isThemeDark ? <IconScanner /> : <IconScannerLight />}
           </IconWrapper>
         </View>
+      </View>
+      <View>
+        <PullDownRefreshInfoModal
+          visible={visiblePullDownRefreshInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisiblePullDownRefreshInfo(false)}
+        />
       </View>
     </View>
   );
@@ -129,7 +147,7 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '67%',
+      width: '68%',
       alignItems: 'center',
     },
     userDetailsWrapper: {
@@ -154,11 +172,9 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
     },
     iconWrapper: {
-      // width: '32%',
-      // flexDirection: 'row',
-      // justifyContent: 'space-between',
-      width: '33%',
-      alignItems: 'flex-end',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '32%',
     },
   });
 export default HomeHeader;

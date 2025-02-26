@@ -128,7 +128,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             <AppText variant="caption" style={styles.transDateText}>
               {moment
                 .unix(transaction.createdAt)
-                .format('DD MMM YY  •  hh:mm a')}
+                .format('DD MMM YY  •  hh:mm A')}
             </AppText>
           </View>
         </View>
