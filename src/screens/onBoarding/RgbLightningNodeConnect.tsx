@@ -41,6 +41,22 @@ function RgbLightningNodeConnect() {
       if (checkNodeConnection.data.pubkey) {
         setTimeout(() => {
           setVisible(true);
+          setTimeout(() => {
+            setVisible(false);
+            navigation.navigate(NavigationRoutes.PROFILESETUP, {
+              nodeConnectParams: {
+                nodeUrl: connectionURL,
+                nodeId: nodeID,
+                authentication: `${authType} ${
+                  authType === 'Basic'
+                    ? btoa(`${username}:${password}`)
+                    : bearerToken
+                }`,
+              },
+              nodeInfo: checkNodeConnection.data,
+              appType: AppType.NODE_CONNECT,
+            });
+          }, 3000);
         }, 400);
       } else {
         Toast(
@@ -121,22 +137,22 @@ function RgbLightningNodeConnect() {
           <NodeConnectSuccessPopupContainer
             title={onBoarding.nodeconnectSuccessfulTitle}
             subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
-            onPress={() => {
-              setVisible(false);
-              navigation.navigate(NavigationRoutes.PROFILESETUP, {
-                nodeConnectParams: {
-                  nodeUrl: connectionURL,
-                  nodeId: nodeID,
-                  authentication: `${authType} ${
-                    authType === 'Basic'
-                      ? btoa(`${username}:${password}`)
-                      : bearerToken
-                  }`,
-                },
-                nodeInfo: checkNodeConnection.data,
-                appType: AppType.NODE_CONNECT,
-              });
-            }}
+            // onPress={() => {
+            //   setVisible(false);
+            //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
+            //     nodeConnectParams: {
+            //       nodeUrl: connectionURL,
+            //       nodeId: nodeID,
+            //       authentication: `${authType} ${
+            //         authType === 'Basic'
+            //           ? btoa(`${username}:${password}`)
+            //           : bearerToken
+            //       }`,
+            //     },
+            //     nodeInfo: checkNodeConnection.data,
+            //     appType: AppType.NODE_CONNECT,
+            //   });
+            // }}
           />
         </ResponsePopupContainer>
       </View>

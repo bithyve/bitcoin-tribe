@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -33,7 +33,8 @@ function InsufficiantBalancePopupContainer(props: insufficientBalanceProps) {
           primaryOnPress={primaryOnPress}
           secondaryTitle={common.cancel}
           secondaryOnPress={secondaryOnPress}
-          width={wp(155)}
+          width={windowWidth / 2.6}
+          secondaryCTAWidth={windowWidth / 3}
           height={hp(14)}
         />
       </View>
@@ -58,7 +59,7 @@ const getStyles = (theme: AppTheme) =>
     },
     ctaWrapper: {
       alignSelf: 'center',
-      marginRight: hp(15),
+      // marginRight: hp(15),
     },
   });
 export default InsufficiantBalancePopupContainer;

@@ -163,6 +163,7 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       bottom: Platform.OS === 'android' ? 50 : 20,
       alignSelf: 'center',
+      paddingHorizontal: hp(0),
     },
     satsModeWrapper: {
       marginTop: hp(20),

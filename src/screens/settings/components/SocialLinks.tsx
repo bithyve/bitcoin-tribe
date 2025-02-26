@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import SocialButton from './SocialButton';
 import TelegramIcon from 'src/assets/images/telegramIcon.svg';
+import TelegramIconLight from 'src/assets/images/telegramIconLight.svg';
 import TwitterIcon from 'src/assets/images/twitterIcon.svg';
+import TwitterIconLight from 'src/assets/images/twitterIconLight.svg';
 import { AppTheme } from 'src/theme';
-import { windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 interface SocialLinksProps {
   onPressTelegram: () => void;
@@ -17,19 +20,19 @@ interface SocialLinksProps {
 const SocialLinks = (props: SocialLinksProps) => {
   const { onPressTelegram, onPressX } = props;
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { settings } = translations;
-
   return (
     <View style={styles.container}>
       <SocialButton
-        icon={<TelegramIcon />}
+        icon={isThemeDark ? <TelegramIcon /> : <TelegramIconLight />}
         title={settings.tribeTelegram}
         onPress={onPressTelegram}
       />
       <SocialButton
-        icon={<TwitterIcon />}
+        icon={isThemeDark ? <TwitterIcon /> : <TwitterIconLight />}
         title={settings.tribeX}
         onPress={onPressX}
       />
@@ -41,8 +44,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      bottom:
-        Platform.OS === 'android' ? '26%' : windowHeight > 670 ? '18%' : '22%',
+      width: '100%',
     },
   });
 

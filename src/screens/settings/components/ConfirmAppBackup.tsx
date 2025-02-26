@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import TextField from 'src/components/TextField';
 import { generateRandomNumber } from 'src/utils/encryption';
 import AppText from 'src/components/AppText';
@@ -92,7 +92,8 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
           primaryOnPress={onPressConfirm}
           secondaryTitle={common.skip}
           secondaryOnPress={secondaryOnPress}
-          width={wp(120)}
+          width={windowWidth / 2.5}
+          secondaryCTAWidth={windowWidth / 2.5}
         />
       </View>
     </View>

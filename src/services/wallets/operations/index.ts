@@ -25,6 +25,7 @@ import {
   DerivationPurpose,
   EntityKind,
   NetworkType,
+  ScriptTypes,
   TransactionType,
   TxPriority,
 } from '../enums';
@@ -54,6 +55,55 @@ const testnetFeeSurcharge = (wallet: Wallet) =>
      therefore we up the feeRatesPerByte by 1 to handle this case until we find a better sol
     */
   config.NETWORK_TYPE === NetworkType.TESTNET ? 1 : 0;
+
+const deepClone = obj => JSON.parse(JSON.stringify(obj));
+
+const updateOutputsForFeeCalculation = (outputs, network) => {
+  for (const o of outputs) {
+    if (
+      o.address &&
+      (o.address.startsWith('bcrt1') ||
+        o.address.startsWith('bc1') ||
+        o.address.startsWith('tb1'))
+    ) {
+      // in case address is non-typical and takes more bytes than coinselect library anticipates by default
+      o.script = {
+        length:
+          bitcoinJS.address.toOutputScript(
+            o.address,
+            network === NetworkType.MAINNET
+              ? bitcoinJS.networks.bitcoin
+              : network === NetworkType.REGTEST
+              ? bitcoinJS.networks.regtest
+              : bitcoinJS.networks.testnet,
+          ).length + 3,
+      };
+    }
+  }
+  return outputs;
+};
+
+const updateInputsForFeeCalculation = (wallet: Wallet, inputUTXOs) => {
+  const isNativeSegwit =
+    wallet.scriptType === ScriptTypes.P2WPKH ||
+    wallet.scriptType === ScriptTypes.P2WSH;
+  const isWrappedSegwit =
+    wallet.scriptType === ScriptTypes['P2SH-P2WPKH'] ||
+    wallet.scriptType === ScriptTypes['P2SH-P2WSH'];
+  const isTaproot = wallet.scriptType === ScriptTypes.P2TR;
+  return inputUTXOs.map(u => {
+    if (isTaproot) {
+      u.script = { length: 15 }; // P2TR
+    } else if (isNativeSegwit) {
+      u.script = { length: 27 }; // P2WPKH
+    } else if (isWrappedSegwit) {
+      u.script = { length: 50 }; // P2SH-P2WPKH
+    } else {
+      u.script = { length: 107 }; // Legacy P2PKH
+    }
+    return u;
+  });
+};
 
 export default class WalletOperations {
   public static getNextFreeExternalAddress = (
@@ -696,39 +746,65 @@ export default class WalletOperations {
 
   static calculateSendMaxFee = (
     wallet: Wallet,
-    numberOfRecipients: number,
+    recipients: {
+      address: string;
+      amount: number;
+    }[],
     feePerByte: number,
-    network: bitcoinJS.networks.Network,
     selectedUTXOs?: UTXO[],
   ): { fee: number } => {
-    const inputUTXOs =
-      selectedUTXOs && selectedUTXOs.length
-        ? selectedUTXOs
-        : [...wallet.specs.confirmedUTXOs, ...wallet.specs.unconfirmedUTXOs];
-    let confirmedBalance = 0;
+    let inputUTXOs;
+    if (selectedUTXOs && selectedUTXOs.length) {
+      inputUTXOs = selectedUTXOs;
+    } else {
+      inputUTXOs = [
+        ...wallet.specs.confirmedUTXOs,
+        ...wallet.specs.unconfirmedUTXOs,
+      ];
+    }
+
+    inputUTXOs = updateInputsForFeeCalculation(wallet, inputUTXOs);
+
+    let availableBalance = 0;
     inputUTXOs.forEach(utxo => {
-      confirmedBalance += utxo.value;
+      availableBalance += utxo.value;
     });
 
-    const outputUTXOs = [];
-    for (let index = 0; index < numberOfRecipients; index++) {
-      // using random outputs for send all fee calculation
+    let outputUTXOs = [];
+    for (const recipient of recipients) {
       outputUTXOs.push({
-        address: bitcoinJS.payments.p2sh({
-          redeem: bitcoinJS.payments.p2wpkh({
-            pubkey: ECPair.makeRandom().publicKey,
-            network,
-          }),
-          network,
-        }).address,
+        address: recipient.address,
+        value: availableBalance,
       });
     }
-    const { fee } = coinselectSplit(
+    outputUTXOs = updateOutputsForFeeCalculation(
+      outputUTXOs,
+      wallet.networkType,
+    );
+    let { inputs, outputs, fee } = coinselect(
       inputUTXOs,
       outputUTXOs,
       feePerByte + testnetFeeSurcharge(wallet),
     );
+    let i = 0;
+    const MAX_RETRIES = 10000; // Could raise to allow more retries in case of many uneconomic UTXOs in a wallet
+    while ((!inputs || !outputs) && i < MAX_RETRIES) {
+      let netAmount = 0;
+      recipients.forEach(recipient => {
+        netAmount += recipient.amount;
+      });
+      if (outputUTXOs && outputUTXOs.length) {
+        outputUTXOs[0].value = availableBalance - fee - i;
+      }
 
+      ({ inputs, outputs, fee } = coinselect(
+        deepClone(inputUTXOs),
+        deepClone(outputUTXOs),
+        feePerByte + testnetFeeSurcharge(wallet),
+      ));
+      i++;
+    }
+    fee = availableBalance - outputUTXOs[0].value;
     return {
       fee,
     };
@@ -762,7 +838,6 @@ export default class WalletOperations {
     inputUTXOs.forEach(utxo => {
       confirmedBalance += utxo.value;
     });
-
     const outputUTXOs = [];
     for (const recipient of recipients) {
       outputUTXOs.push({
@@ -770,15 +845,12 @@ export default class WalletOperations {
         value: recipient.amount,
       });
     }
-
     const feePerByte = averageTxFees[selectedPriority].feePerByte;
     const estimatedBlocks = averageTxFees[selectedPriority].estimatedBlocks;
-
     const assets = coinselect(inputUTXOs, outputUTXOs, feePerByte);
     const priorityInputs = assets.inputs;
     const priorityOutputs = assets.outputs;
     const priorityFee = assets.fee;
-
     let netAmount = 0;
     recipients.forEach(recipient => {
       netAmount += recipient.amount;

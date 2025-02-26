@@ -33,6 +33,9 @@ import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
+import UTXOInfoModal from './components/UTXOInfoModal';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 
 const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
@@ -41,6 +44,7 @@ const ViewUnspentScreen = () => {
   const { wallet, assets } = translations || { wallet: {}, assets: {} };
   const [utxoType, setUtxoType] = useState<UtxoType>(UtxoType.Colored);
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleUTXOInfo, setVisibleUTXOInfo] = useState(false);
 
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
@@ -103,6 +107,8 @@ const ViewUnspentScreen = () => {
       <AppHeader
         title={wallet.unspentTitle || 'Unspent Outputs'}
         enableBack={true}
+        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        onSettingsPress={() => setVisibleUTXOInfo(true)}
       />
       <SegmentedButtons
         value={utxoType}
@@ -169,6 +175,11 @@ const ViewUnspentScreen = () => {
             }
           />
         }
+      />
+      <UTXOInfoModal
+        visible={visibleUTXOInfo}
+        primaryCtaTitle={'Okay'}
+        primaryOnPress={() => setVisibleUTXOInfo(false)}
       />
     </ScreenContainer>
   );

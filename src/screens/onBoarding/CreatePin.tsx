@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-
 import CreatePinContainer from './components/CreatePinContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';

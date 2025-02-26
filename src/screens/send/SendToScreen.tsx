@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -10,8 +9,7 @@ import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-// import CurrencySwitch from 'src/components/CurrencySwitch';
+
 
 function SendToScreen({ route }) {
   const { wallet, address, paymentURIAmount } = route.params;

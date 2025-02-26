@@ -59,7 +59,7 @@ const SelectOption = (props: SelectOptionProps) => {
         <View style={styles.iconWrapper}>
           {icon}
           <View style={styles.contentWrapper}>
-            <AppText variant="heading3" style={styles.titleStyle}>
+            <AppText variant="body1" style={styles.titleStyle}>
               {title}
             </AppText>
             {subTitle ? (
@@ -107,7 +107,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
       justifyContent: 'space-between',
       padding: windowHeight > 670 ? hp(16) : hp(10),
       backgroundColor: backColor,
-      borderRadius: 20,
+      borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(10),

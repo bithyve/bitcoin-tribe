@@ -1,12 +1,19 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Colors from 'src/theme/Colors';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
-
+type feePriorityButtonProps = {
+  title: string;
+  priority: string;
+  selectedPriority: string;
+  setSelectedPriority: () => void;
+  feeRateByPriority: number;
+  estimatedBlocksByPriority: number;
+  disabled?: boolean;
+};
 const FeePriorityButton = ({
   title,
   priority,
@@ -15,7 +22,7 @@ const FeePriorityButton = ({
   feeRateByPriority,
   estimatedBlocksByPriority,
   disabled,
-}) => {
+}: feePriorityButtonProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const isSelected = selectedPriority === priority;

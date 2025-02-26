@@ -20,7 +20,7 @@ function LearnMoreTextView(props: LearnMoreTextViewProps) {
   return (
     <View style={styles.learnMoreWrapper1}>
       <Text style={styles.learnMoreTitleText}>
-        {title}&nbsp;
+        {title}
         <Text style={styles.learnMoreText} onPress={onPress}>
           {onBoarding.learnMore}
         </Text>

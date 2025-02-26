@@ -158,6 +158,7 @@ const getStyles = (theme: AppTheme) =>
     },
     ctaWrapper: {
       marginVertical: hp(10),
+      alignSelf: 'flex-end',
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,
