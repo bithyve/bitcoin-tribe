@@ -1,13 +1,24 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { NavigationState } from 'react-native-tab-view';
 
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 
-const UTXOTabBar = ({ navigationState, position, jumpTo }) => {
+type TabRoute = {
+  key: string;
+  title: string;
+};
+
+type Props = {
+  navigationState: NavigationState<TabRoute>;
+  jumpTo: (key: string) => void;
+};
+
+const UTXOTabBar: React.FC<Props> = ({ navigationState, jumpTo }) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
