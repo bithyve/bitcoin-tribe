@@ -69,10 +69,10 @@ function SettingMenuItem({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
-      height: '92%',
+      height: Platform.OS === 'android' ? '90%' : '92%',
     },
     footer: {
-      paddingBottom: hp(20),
+      paddingBottom: Platform.OS === 'android' ? hp(35) : hp(20),
       alignItems: 'center',
       justifyContent: 'center',
     },
