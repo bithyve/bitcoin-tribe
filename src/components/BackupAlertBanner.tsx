@@ -19,7 +19,7 @@ const BackupAlertBanner = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
   const [visible, setVisible] = useState(false);
-  return true ? (
+  return isBackupInProgress ? (
     <>
       <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
         <View style={styles.titleWrapper}>
