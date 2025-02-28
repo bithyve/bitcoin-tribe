@@ -53,7 +53,7 @@
     "createChannel": "チャンネルを作成",
     "done": "完了",
     "okay": "了解しました",
-    "backupInProgress": "資産の同期中",
+    "backupInProgress": "バックアップが進行中",
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。"
   },

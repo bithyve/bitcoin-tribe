@@ -53,7 +53,7 @@
     "createChannel": "Crea Canale",
     "done": "Fatto",
     "okay": "Va bene",
-    "backupInProgress": "Sincronizzazione degli asset in corso",
+    "backupInProgress": "Backup in corso",
     "tapToInfo": "Tocca per informazioni",
     "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento."
   },
