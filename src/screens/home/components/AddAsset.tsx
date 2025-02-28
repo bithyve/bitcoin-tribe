@@ -250,11 +250,12 @@ function AddAsset() {
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
-            if (!canProceed) {
-              setVisible(true);
-            } else {
-              getAssetIssuanceFeeMutation.mutate();
-            }
+            navigateToIssue(false);
+            // if (!canProceed) {
+            //   setVisible(true);
+            // } else {
+            //   getAssetIssuanceFeeMutation.mutate();
+            // }
           }}
           testID="issue_new"
         />
