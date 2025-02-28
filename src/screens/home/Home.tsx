@@ -22,20 +22,30 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
+import AppType from 'src/models/enums/AppType';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const latestVersion = useQuery<VersionHistory>(RealmSchema.VersionHistory).slice(-1)[0];
+  const latestVersion = useQuery<VersionHistory>(
+    RealmSchema.VersionHistory,
+  ).slice(-1)[0];
   const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
-  const { key } = useContext(AppContext);
-
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { key, isBackupInProgress, setBackupProcess } = useContext(AppContext);
+  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup);
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+    onSuccess: () => {
+      if (ApiHandler.appType === AppType.ON_CHAIN) {
+        backupMutate();
+      }
+    },
+  });
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-
+  // console.log('isBackupInProgress', isBackupInProgress);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
 
@@ -51,20 +61,29 @@ function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    if(Number(versionNumber) < 93) {
+    setBackupProcess(isLoading);
+  }, [isLoading, backupMutate]);
+
+  useEffect(() => {
+    if (Number(versionNumber) < 93) {
       Alert.alert(
         'Unsupported Version',
         'This version of Tribe is no longer supported. Please setup a new wallet to continue.',
         [
-          { text: 'OK', onPress: () => {
-            ApiHandler.resetApp(key);
-            navigation.dispatch(CommonActions.reset({
-              index: 0,
-              routes: [{ name: NavigationRoutes.LOGINSTACK }],
-            }));
-          } },
+          {
+            text: 'OK',
+            onPress: () => {
+              ApiHandler.resetApp(key);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: NavigationRoutes.LOGINSTACK }],
+                }),
+              );
+            },
+          },
         ],
-        {cancelable: false}
+        { cancelable: false },
       );
     }
     refreshRgbWallet.mutate();

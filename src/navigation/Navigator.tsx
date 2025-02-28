@@ -75,6 +75,7 @@ import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
 import HiddenAssets from 'src/screens/settings/HiddenAssets';
 import ChangePin from 'src/screens/onBoarding/ChangePin';
 import UTXOTabs from './tabNavigation/UTXOTabs';
+import BackupAlertBanner from 'src/components/BackupAlertBanner';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -332,7 +333,7 @@ function Navigator() {
         },
       }}>
       <RGBWalletStatus />
-
+      <BackupAlertBanner />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

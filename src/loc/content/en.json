@@ -52,7 +52,10 @@
     "understood": "Understood",
     "createChannel": "Create Channel",
     "done": "Done",
-    "okay": "Okay"
+    "okay": "Okay",
+    "backupInProgress": "Asset Syncing in Progress",
+    "tapToInfo": "Tap to Info",
+    "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes."
   },
   "onBoarding": {
     "welcome": "Welcome",

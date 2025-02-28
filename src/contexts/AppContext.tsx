@@ -8,12 +8,15 @@ export const AppContext = React.createContext({
   setIsWalletOnline: status => {},
   appType: null,
   setAppType: apptype => {},
+  isBackupInProgress: null,
+  setBackupProcess: status => {},
 });
 
 export function AppProvider({ children }) {
   const [key, setKey] = useState<string>(null);
   const [isWalletOnline, setIsWalletOnline] = useState<boolean>(null);
   const [appType, setAppType] = useState<AppType>(null);
+  const [isBackupInProgress, setBackupProcess] = useState<boolean>(null);
 
   return (
     <AppContext.Provider
@@ -24,6 +27,8 @@ export function AppProvider({ children }) {
         setIsWalletOnline: setIsWalletOnline,
         appType,
         setAppType: setAppType,
+        isBackupInProgress,
+        setBackupProcess: setBackupProcess,
       }}>
       {children}
     </AppContext.Provider>

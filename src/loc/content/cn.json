@@ -52,7 +52,10 @@
     "understood": "明白了",
     "createChannel": "创建通道",
     "done": "完成",
-    "okay": "好的"
+    "okay": "好的",
+    "backupInProgress": "资产同步进行中",
+    "tapToInfo": "点击查看信息",
+    "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。"
   },
   "onBoarding": {
     "welcome": "欢迎",
