@@ -36,14 +36,19 @@ function HomeScreen() {
   const navigation = useNavigation();
   const { key, setBackupProcess } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup);
+  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
+    ApiHandler.isBackupRequired,
+  );
+
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: () => {
-      if (ApiHandler.appType === AppType.ON_CHAIN) {
-        backupMutate();
+    onSuccess: async () => {
+      if (app.appType === AppType.ON_CHAIN) {
+        checkBackupRequired();
       }
     },
   });
+
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
@@ -61,7 +66,20 @@ function HomeScreen() {
 
   useEffect(() => {
     setBackupProcess(isLoading);
-  }, [isLoading, backupMutate]);
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isBackupRequired) {
+      backupMutate();
+    }
+  }, [isBackupRequired]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshRgbWallet.mutate();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (Number(versionNumber) < 93) {
@@ -85,7 +103,6 @@ function HomeScreen() {
         { cancelable: false },
       );
     }
-    refreshRgbWallet.mutate();
     fetchUTXOs();
     setAppType(app.appType);
     refreshWallet.mutate({ wallets: [wallet] });
@@ -100,6 +117,7 @@ function HomeScreen() {
   const handleRefresh = () => {
     setRefreshing(true);
     refreshRgbWallet.mutate();
+    checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };

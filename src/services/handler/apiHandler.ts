@@ -1107,9 +1107,6 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
-      if (ApiHandler.appType === AppType.ON_CHAIN) {
-        ApiHandler.backup();
-      }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
@@ -1856,6 +1853,14 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('backup error', error);
+    }
+  }
+
+  static async isBackupRequired() {
+    try {
+      return await RGBServices.isBackupRequired();
+    } catch (error) {
+      throw error;
     }
   }
 
