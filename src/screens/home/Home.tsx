@@ -34,7 +34,7 @@ function HomeScreen() {
   ).slice(-1)[0];
   const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
-  const { key, isBackupInProgress, setBackupProcess } = useContext(AppContext);
+  const { key, setBackupProcess } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup);
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
@@ -45,7 +45,6 @@ function HomeScreen() {
     },
   });
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  // console.log('isBackupInProgress', isBackupInProgress);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
 
