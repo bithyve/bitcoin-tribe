@@ -34,15 +34,23 @@ function HomeScreen() {
   ).slice(-1)[0];
   const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
-  const { key, setBackupProcess } = useContext(AppContext);
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup);
+  const { key, setBackupProcess, setBackupDone } = useContext(AppContext);
+  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
+    onSuccess: () => {
+      console.log('onSuces');
+      setBackupDone(true);
+      setTimeout(() => {
+        setBackupDone(false);
+      }, 1500);
+    },
+  });
   const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
     ApiHandler.isBackupRequired,
   );
 
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: async () => {
+    onSuccess: () => {
       if (app.appType === AppType.ON_CHAIN) {
         checkBackupRequired();
       }

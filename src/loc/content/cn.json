@@ -55,7 +55,8 @@
     "okay": "好的",
     "backupInProgress": "备份正在进行中",
     "tapToInfo": "点击查看信息",
-    "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。"
+    "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。",
+    "backDoneMsg": "备份过程已完成"
   },
   "onBoarding": {
     "welcome": "欢迎",

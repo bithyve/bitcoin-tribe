@@ -10,6 +10,8 @@ export const AppContext = React.createContext({
   setAppType: apptype => {},
   isBackupInProgress: null,
   setBackupProcess: status => {},
+  isBackupDone: null,
+  setBackupDone: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -17,6 +19,7 @@ export function AppProvider({ children }) {
   const [isWalletOnline, setIsWalletOnline] = useState<boolean>(null);
   const [appType, setAppType] = useState<AppType>(null);
   const [isBackupInProgress, setBackupProcess] = useState<boolean>(null);
+  const [isBackupDone, setBackupDone] = useState<boolean>(null);
 
   return (
     <AppContext.Provider
@@ -29,6 +32,8 @@ export function AppProvider({ children }) {
         setAppType: setAppType,
         isBackupInProgress,
         setBackupProcess: setBackupProcess,
+        isBackupDone,
+        setBackupDone: setBackupDone,
       }}>
       {children}
     </AppContext.Provider>
