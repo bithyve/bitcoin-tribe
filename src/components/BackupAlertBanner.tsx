@@ -19,15 +19,19 @@ const BackupAlertBanner = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
   const [visible, setVisible] = useState(false);
-  return isBackupInProgress ? (
+  return true ? (
     <>
       <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
         <View style={styles.titleWrapper}>
-          <Text style={styles.text}>{common.backupInProgress}</Text>
+          <AppText variant="body1" style={styles.text}>
+            {common.backupInProgress}
+          </AppText>
         </View>
         <View style={styles.tapViewWrapper}>
+          <AppText variant="body1" style={styles.text}>
+            {common.tapToInfo}
+          </AppText>
           <TapInfoIcon />
-          <Text style={styles.text}>{common.tapToInfo}</Text>
         </View>
       </AppTouchable>
       <Portal>
@@ -67,15 +71,15 @@ const getStyles = (theme: AppTheme, hasNotch) =>
     },
     text: {
       color: 'white',
-      fontSize: 14,
-      fontWeight: 'bold',
+      fontWeight: '500',
     },
     titleWrapper: {
-      width: '75%',
+      width: '72%',
     },
     tapViewWrapper: {
-      width: '25%',
+      width: '28%',
       flexDirection: 'row',
+      alignItems: 'center',
       justifyContent: 'space-between',
     },
     tooltipContainer: {
