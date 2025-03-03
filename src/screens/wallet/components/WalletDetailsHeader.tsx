@@ -135,10 +135,32 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
               </AppTouchable>
               <View style={styles.modeBalanceWrapper}>
                 <View style={styles.balanceWrapper}>
-                  <IconBTC />
-                  <AppText variant="heading3" style={styles.balanceText}>
-                    0.000
-                  </AppText>
+                  <View style={styles.currencyIconWrapper}>
+                    <IconBTC />
+                  </View>
+                  <View style={styles.totalBalanceWrapper1}>
+                    {initialCurrencyMode !== CurrencyKind.SATS && (
+                      <View style={styles.currencyIconWrapper}>
+                        {getCurrencyIcon(
+                          isThemeDark ? IconBitcoin : IconBitcoinLight,
+                          isThemeDark ? 'dark' : 'light',
+                          10,
+                        )}
+                      </View>
+                    )}
+
+                    <AppText variant="heading3" style={styles.totalBalance}>
+                      {getBalance(balances)}
+                    </AppText>
+                    {initialCurrencyMode === CurrencyKind.SATS && (
+                      <AppText variant="caption" style={styles.satsText}>
+                        sats
+                      </AppText>
+                    )}
+                  </View>
+                  {/* <AppText variant="heading3" style={styles.balanceText}>
+                    {balances}
+                  </AppText> */}
                 </View>
                 <View style={styles.balanceWrapper}>
                   <IconLightning />

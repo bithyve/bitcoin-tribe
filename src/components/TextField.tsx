@@ -166,7 +166,7 @@ const getStyles = (theme: AppTheme, icon, rightText, rightCTATextColor) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderRadius: 10,
+      borderRadius: 15,
       width: '100%',
       backgroundColor: theme.colors.inputBackground,
     },

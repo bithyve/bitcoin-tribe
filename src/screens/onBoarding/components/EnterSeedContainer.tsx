@@ -327,6 +327,7 @@ function EnterSeedContainer() {
             onPressHandleNext();
           }, 500);
         }}
+        width={'100%'}
         primaryTitle={common.next}
         primaryLoading={isLoading || setupNewAppMutation.isLoading}
       />

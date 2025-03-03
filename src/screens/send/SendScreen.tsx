@@ -60,41 +60,47 @@ function SendScreen({ route, navigation }) {
         return;
       }
       if (value.startsWith('rgb:')) {
-        const res = await ApiHandler.decodeInvoice(value);
-        if (res.assetId) {
-          const assetData = allAssets.find(
-            item => item.assetId === res.assetId,
-          );
-          if (!assetData) {
-            setIsScanning(true);
-            if (triggerSource === 'scan') {
-              Toast(assets.assetNotFoundMsg, true);
+        try {
+          const res = await ApiHandler.decodeInvoice(value);
+          if (res.assetId) {
+            const assetData = allAssets.find(
+              item => item.assetId === res.assetId,
+            );
+            if (!assetData) {
+              setIsScanning(true);
+              if (triggerSource === 'scan') {
+                Toast(assets.assetNotFoundMsg, true);
+              } else {
+                setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
+              }
             } else {
-              setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
+              setIsScanning(true);
+              navigateWithDelay(() => {
+                navigation.replace(NavigationRoutes.SENDASSET, {
+                  assetId: res.assetId,
+                  wallet: wallet,
+                  rgbInvoice: value,
+                  amount: res.amount.toString(),
+                });
+              });
             }
           } else {
             setIsScanning(true);
             navigateWithDelay(() => {
-              navigation.replace(NavigationRoutes.SENDASSET, {
-                assetId: res.assetId,
-                wallet: wallet,
+              navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+                wallet,
                 rgbInvoice: value,
-                amount: res.amount.toString(),
+                assetID: '',
+                amount: '',
               });
             });
           }
-        } else {
+          return;
+        } catch (error) {
           setIsScanning(true);
-          navigateWithDelay(() => {
-            navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-              wallet,
-              rgbInvoice: value,
-              assetID: '',
-              amount: '',
-            });
-          });
+          setValidatingInvoiceErrorMsg('Failed to decode RGB invoice.');
+          return;
         }
-        return;
       }
       if (value.startsWith('lnbc')) {
         setIsScanning(true);

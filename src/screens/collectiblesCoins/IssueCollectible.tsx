@@ -27,7 +27,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -57,6 +57,9 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
 import AddMediaFile from 'src/assets/images/addMediaFile.svg';
 import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
+import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -86,6 +89,9 @@ function IssueCollectibleScreen() {
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+  const [visibleUDACollectiblesInfo, setVisibleUDACollectiblesInfo] =
+    useState(false);
+
   const [assetType, setAssetType] = useState<AssetType>(issueAssetType);
   const [image, setImage] = useState('');
   const [attachments, setAttachments] = useState([]);
@@ -163,7 +169,11 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, { assetId: response.assetId, askReview: true, askVerify: addToRegistry });
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -411,7 +421,11 @@ function IssueCollectibleScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={assets.issueCollectibles} />
+      <AppHeader
+        title={assets.issueCollectibles}
+        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
+      />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -445,7 +459,7 @@ function IssueCollectibleScreen() {
 
         {assetType === AssetType.Collectible ? (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
@@ -461,7 +475,7 @@ function IssueCollectibleScreen() {
               error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
@@ -483,7 +497,7 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.totalSupplyAmount}
             </AppText>
 
@@ -511,7 +525,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
@@ -546,7 +560,7 @@ function IssueCollectibleScreen() {
           </View>
         ) : (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
@@ -562,7 +576,7 @@ function IssueCollectibleScreen() {
               error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetTicker}
             </AppText>
 
@@ -580,7 +594,7 @@ function IssueCollectibleScreen() {
               error={assetTickerValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
@@ -603,7 +617,7 @@ function IssueCollectibleScreen() {
             />
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
@@ -638,7 +652,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.attachments}
             </AppText>
@@ -702,7 +716,8 @@ function IssueCollectibleScreen() {
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
             disabled={isButtonDisabled || createUtxos.isLoading || loading}
-            width={wp(120)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
             primaryLoading={createUtxos.isLoading || loading}
           />
         </View>
@@ -722,6 +737,13 @@ function IssueCollectibleScreen() {
             secondaryOnPress={() => setVisibleFailedToCreatePopup(false)}
           />
         </ResponsePopupContainer>
+      </View>
+      <View>
+        <UDACollectiblesInfoModal
+          visible={visibleUDACollectiblesInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisibleUDACollectiblesInfo(false)}
+        />
       </View>
     </ScreenContainer>
   );

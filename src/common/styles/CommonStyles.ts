@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   heading2: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
   heading3: {
@@ -42,12 +42,12 @@ export default StyleSheet.create({
   },
   body2: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
   },
   caption: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
   },
   // Should be removed - body 3, 4, 5, 6 and 7

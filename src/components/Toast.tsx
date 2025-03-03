@@ -25,7 +25,7 @@ export default (
         />
       ) : (
         <LottieView
-          source={require('src/assets/images/jsons/successToast.json')}
+          source={warning? require('src/assets/images/jsons/warningToast.json') : require('src/assets/images/jsons/successToast.json')}
           style={styles.loaderStyle}
           autoPlay
           loop
@@ -34,7 +34,7 @@ export default (
       <AppText
         style={[
           styles.toastMessageStyle,
-          { color: error ? Colors.White : Colors.White },
+          { color: warning ? Colors.Black : error ? Colors.White : Colors.White },
         ]}>
         {message && message.length > 150
           ? `${message.substring(0, 150)}...`

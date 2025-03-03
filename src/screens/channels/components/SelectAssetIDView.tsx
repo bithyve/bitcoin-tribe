@@ -24,9 +24,9 @@ const SelectAssetIDView = (props: Props) => {
   const { selectedAsset, onPress } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
-  const { channel} = translations;
+  const { channel } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = getStyles(theme, theme.colors.ctaBackColor);
+  const styles = getStyles(theme, theme.colors.ctaBackColor, selectedAsset);
 
   return (
     <AppTouchable onPress={onPress}>
@@ -38,28 +38,33 @@ const SelectAssetIDView = (props: Props) => {
           theme.colors.cardGradient3,
         ]}>
         <View>
-          {selectedAsset ? <View style={styles.assetWrapper}>
-            <View>
-              {selectedAsset?.assetIface === AssetFace.RGB25 ? (
-                <Image
-                  source={{
-                    uri: selectedAsset?.media?.filePath,
-                  }}
-                  style={styles.imageStyle}
-                />
-              ) : (
-                <Identicon
-                  value={selectedAsset?.assetId}
-                  style={styles.identiconView}
-                  size={windowHeight > 670 ? 50 : 30}
-                />
-              )}
+          {selectedAsset ? (
+            <View style={styles.assetWrapper}>
+              <View>
+                {selectedAsset?.assetIface === AssetFace.RGB25 ? (
+                  <Image
+                    source={{
+                      uri: selectedAsset?.media?.filePath,
+                    }}
+                    style={styles.imageStyle}
+                  />
+                ) : (
+                  <Identicon
+                    value={selectedAsset?.assetId}
+                    style={styles.identiconView}
+                    size={windowHeight > 670 ? 50 : 30}
+                  />
+                )}
+              </View>
+              <AppText variant="body1" style={styles.titleText}>
+                {selectedAsset?.name}
+              </AppText>
             </View>
-            <AppText variant="body1" style={styles.titleText}>{selectedAsset?.name}</AppText>
-          </View>:
-          <AppText variant="body1" style={styles.titleText}>
-             {channel.selectYourAsset}
-          </AppText>}
+          ) : (
+            <AppText variant="body1" style={styles.titleText}>
+              {channel.selectYourAsset}
+            </AppText>
+          )}
         </View>
         <View>{isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}</View>
       </GradientView>
@@ -69,14 +74,15 @@ const SelectAssetIDView = (props: Props) => {
 
 export default SelectAssetIDView;
 
-const getStyles = (theme: AppTheme, backColor) =>
+const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
   StyleSheet.create({
     container: {
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: windowHeight > 670 ? hp(17) : hp(10),
+      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
+      minHeight: hp(65),
       backgroundColor: backColor,
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
@@ -85,19 +91,19 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     assetWrapper: {
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     imageStyle: {
       width: 30,
       height: 30,
       borderRadius: 10,
-      marginRight: hp(10)
+      marginRight: hp(10),
     },
     identiconView: {
-      height:  30 ,
-      width: 30,
-      borderRadius: 30,
-      marginRight: hp(10)
+      height: windowHeight > 670 ? 50 : 30,
+      width: windowHeight > 670 ? 50 : 30,
+      borderRadius: windowHeight > 670 ? 50 : 30,
+      marginRight: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,

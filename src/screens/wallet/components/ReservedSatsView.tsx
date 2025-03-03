@@ -116,7 +116,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
     },
     titleText: {
-      marginLeft: hp(10),
+      marginLeft: hp(5),
       color: theme.colors.headingColor,
     },
     amountWrapper: {
