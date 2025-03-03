@@ -85,11 +85,11 @@ export default class Relay {
 
   public static getChallenge = async (
     appID: string,
-    publicId: string,
+    publicKey: string,
   ): Promise<{ challenge: string, expiresAt: string, publicId: string}> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/challenge`, { appID, publicId });
+      res = await RestClient.post(`${RELAY}/app/challenge`, { appID, publicKey });
     } catch (err) {
       console.log(err, err.response)
       if (err.response) {
