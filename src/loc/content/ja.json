@@ -52,7 +52,11 @@
     "understood": "理解しました",
     "createChannel": "チャンネルを作成",
     "done": "完了",
-    "okay": "了解しました"
+    "okay": "了解しました",
+    "backupInProgress": "バックアップが進行中",
+    "tapToInfo": "情報を見るにはタップ",
+    "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
+    "backDoneMsg": "バックアップ処理が完了しました"
   },
   "onBoarding": {
     "welcome": "ようこそ",

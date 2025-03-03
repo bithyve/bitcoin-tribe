@@ -52,7 +52,11 @@
     "understood": "Capito",
     "createChannel": "Crea Canale",
     "done": "Fatto",
-    "okay": "Va bene"
+    "okay": "Va bene",
+    "backupInProgress": "Backup in corso",
+    "tapToInfo": "Tocca per informazioni",
+    "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
+    "backDoneMsg": "Il processo di backup è completato"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
