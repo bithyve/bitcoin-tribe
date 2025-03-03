@@ -51,7 +51,12 @@
     "joinGroup": "Join Group",
     "understood": "Understood",
     "createChannel": "Create Channel",
-    "done": "Done"
+    "done": "Done",
+    "okay": "Okay",
+    "backupInProgress": "Backup is in progress",
+    "tapToInfo": "Tap to Info",
+    "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes.",
+    "backDoneMsg": "Backup process is done"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -187,7 +192,12 @@
     "backupAlertTitle": "Secure Your Funds \nwith a Backup",
     "backupAlertSubTitle": "Backing up your wallet ensures that your funds are safe, even if you lose your device. Take a moment to create a backup now.",
     "createCoinTitle": "Create coin",
-    "createCollectibleTitle": "Create Collectibles"
+    "createCollectibleTitle": "Create Collectibles",
+    "pullDownInfo1": "Pull Down to Refresh",
+    "pullDownInfo2": "All balances and transaction statuses in Tribe RGB update automatically in the background. You only need to pull down to refresh for a forced update if needed.",
+    "pullDownInfo3": "When to Use Forced Refresh?",
+    "pullDownInfo4": "To quickly see the latest updates after making a transaction.",
+    "pullDownInfo5": "To ensure your app reflects the most recent data instantly."
   },
   "settings": {
     "setting": "Settings",
@@ -290,7 +300,21 @@
     "assetBackupSuccessMsg": "Your RGB Assets has been successfully backed up",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "Unhide"
+    "unHide": "Unhide",
+    "backupPhraseTitle": "Backup Phrase",
+    "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
+    "backupPhraseTitle1": "Beware",
+    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’s backup your wallet",
+    "walletMgtTitle": "Wallet Management",
+    "personalizationTitle": "Personalization",
+    "appSecurityTitle": "App Security",
+    "AboutSupportTitle": "About & Support",
+    "utxoInfoTitle1": "What Are UTXOs?",
+    "utxoInfoSubTitle1": "UTXOs (Unspent Transaction Outputs) are like digital coins in your Bitcoin wallet. When you make a transaction, it creates outputs, and the ones you haven’t used yet are called UTXOs.",
+    "utxoInfoTitle2": "Coloured UTXOs",
+    "utxoInfoSubTitle2": "UTXOs already associated with RGB assets, representing specific tokens or collectibles.",
+    "utxoInfoTitle3": "Colourable UTXOs",
+    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions."
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -533,7 +557,27 @@
     "verifyNow": "Verify Now",
     "issuerVerificationTitle": "Issuer Verification Required",
     "issuerVerificationSubTitle": "Verify your identity by connecting your Twitter account.",
-    "connectVerifyTwitter": "Connect & Verify on Twitter"
+    "connectVerifyTwitter": "Connect & Verify on Twitter",
+    "viewInRegistry": "View in Registry",
+    "udaCollectibleInfo1": "UDAs vs. Collectibles",
+    "udaCollectibleInfoBold": "UDAs ",
+    "udaCollectibleInfo2": "are unique digital assets representing items like rare art, tickets, or certificates with verified ownership.",
+    "udaCollectibleInfoBold1": "Collectibles ",
+    "udaCollectibleInfo3": "are limited-edition assets issued in batches, like gaming items or rewards.",
+    "udaCollectibleInfo4": "Key Differences",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "One-of-a-kind, exclusive.",
+    "udaCollectibleInfoBold3": "Collectibles: ",
+    "udaCollectibleInfo6": "Part of a series, issued in bulk.",
+    "donationTranferInfo1": "Donation Transfer",
+    "donationTranferInfo2": "A donation transfer allows you to send assets instantly without needing receiver to do client-side verification.",
+    "donationTranferInfo3": "Instant Transfers",
+    "donationTranferInfo4": "No need for the recipient to approve the transfer.",
+    "donationTranferInfo5": "Perfect for Gifting",
+    "donationTranferInfo6": "Use it for tipping, crowdfunding, giveaways, or sending gifts.",
+    "donationTranferInfo7": "Simple and Efficient",
+    "donationTranferInfo8": "Transfers are completed immediately.",
+    "sendAsDonation": "Send as donation?"
   },
   "community": {
     "fnfTitle": "Friends & Family",
@@ -605,7 +649,16 @@
     "enterPubKeyaddress": "Please enter valid pubkey and address",
     "enterCapacityAmt": "Please enter capacity amount",
     "enterMSats": "Please enter mSats",
-    "enterAssetAmt": "Please enter asset amount"
+    "enterAssetAmt": "Please enter asset amount",
+    "channelInfo1": "What Are Channels?",
+    "channelInfo2": "Channels in Bitcoin allow you to send and receive transactions instantly with low fees. They create a direct link between you and another peer for faster transactions.",
+    "channelInfo3": "To create a channel in the Tribe RGB app, the required parameters are:",
+    "channelInfoBold1": "Peer Address & Public Key: ",
+    "channelInfo4": "The recipient's Lightning node information.",
+    "channelInfoBold2": "Asset ID & Amount: ",
+    "channelInfo5": "Specifies which RGB asset is being used and its quantity.",
+    "channelInfoBold3": "Funds in Satoshis: ",
+    "channelInfo6": "The BTC amount required to open the channel."
   },
   "lightning": {
     "sendTitle": "Send",

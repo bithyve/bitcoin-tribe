@@ -523,8 +523,8 @@ export class ApiHandler {
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
-          ? predefinedRegtestNodes
-          : predefinedMainnetNodes;
+        ? predefinedRegtestNodes
+        : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
     ) as any;
@@ -1107,9 +1107,6 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
-      if (ApiHandler.appType === AppType.ON_CHAIN) {
-        ApiHandler.backup();
-      }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
@@ -1162,7 +1159,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1227,7 +1224,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1291,7 +1288,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1856,6 +1853,14 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('backup error', error);
+    }
+  }
+
+  static async isBackupRequired() {
+    try {
+      return await RGBServices.isBackupRequired();
+    } catch (error) {
+      throw error;
     }
   }
 

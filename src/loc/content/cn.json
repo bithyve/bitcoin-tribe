@@ -51,7 +51,12 @@
     "joinGroup": "加入群组",
     "understood": "明白了",
     "createChannel": "创建通道",
-    "done": "完成"
+    "done": "完成",
+    "okay": "好的",
+    "backupInProgress": "备份正在进行中",
+    "tapToInfo": "点击查看信息",
+    "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。",
+    "backDoneMsg": "备份过程已完成"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -187,7 +192,12 @@
     "backupAlertTitle": "使用备份保护您的资金",
     "backupAlertSubTitle": "备份您的钱包可以确保您的资金安全，即使您丢失设备。请花点时间立即创建备份。",
     "createCoinTitle": "创建硬币",
-    "createCollectibleTitle": "创建收藏品"
+    "createCollectibleTitle": "创建收藏品",
+    "pullDownInfo1": "下拉刷新",
+    "pullDownInfo2": "Tribe RGB中的所有余额和交易状态都会在后台自动更新。只有在需要强制更新时，才需要下拉刷新。",
+    "pullDownInfo3": "什么时候需要强制刷新？",
+    "pullDownInfo4": "在进行交易后快速查看最新更新。",
+    "pullDownInfo5": "确保您的应用程序立即反映最新数据。"
   },
   "settings": {
     "setting": "设置",
@@ -290,7 +300,21 @@
     "assetBackupSuccessMsg": "您的 RGB 资产已成功备份",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "取消隐藏"
+    "unHide": "取消隐藏",
+    "backupPhraseTitle": "备份短语",
+    "backupPhraseSubTitle": "请将 12 个单词的备份短语妥善记录在安全的私密位置，并确保其安全。",
+    "backupPhraseTitle1": "注意",
+    "backupPhraseSubTitle1": "任何拥有备份短语的人都可以访问并提取您的资金。丢失它意味着您无法恢复您的钱包。",
+    "walletMgtTitle": "钱包管理",
+    "personalizationTitle": "个性化",
+    "appSecurityTitle": "应用安全",
+    "AboutSupportTitle": "关于与支持",
+    "utxoInfoTitle1": "什么是UTXO？",
+    "utxoInfoSubTitle1": "UTXO（未花费交易输出）就像您比特币钱包中的数字硬币。当您进行交易时，它会创建输出，而尚未使用的那些称为UTXO。",
+    "utxoInfoTitle2": "彩色UTXO",
+    "utxoInfoSubTitle2": "已与RGB资产关联的UTXO，代表特定的代币或收藏品。",
+    "utxoInfoTitle3": "可着色UTXO",
+    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -533,7 +557,27 @@
     "verifyNow": "立即验证",
     "issuerVerificationTitle": "发行人验证必需",
     "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
-    "connectVerifyTwitter": "连接并在 Twitter 上验证"
+    "connectVerifyTwitter": "连接并在 Twitter 上验证",
+    "viewInRegistry": "在注册表中查看",
+    "udaCollectibleInfo1": "UDAs 与 收藏品",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "是代表稀有艺术品、门票或证书等项目的独特数字资产，并具有经过验证的所有权。",
+    "udaCollectibleInfoBold1": "收藏品",
+    "udaCollectibleInfo3": "是批量发行的限量版资产，例如游戏物品或奖励。",
+    "udaCollectibleInfo4": "主要区别",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "独一无二，独家专属。",
+    "udaCollectibleInfoBold3": "收藏品: ",
+    "udaCollectibleInfo6": "属于一个系列，批量发行。",
+    "donationTranferInfo1": "捐赠转账",
+    "donationTranferInfo2": "捐赠转账允许您立即发送资产，而无需接收者进行客户端验证。",
+    "donationTranferInfo3": "即时转账",
+    "donationTranferInfo4": "无需接收者批准转账。",
+    "donationTranferInfo5": "适合赠送",
+    "donationTranferInfo6": "可用于打赏、众筹、赠品活动或赠送礼物。",
+    "donationTranferInfo7": "简单高效",
+    "donationTranferInfo8": "转账立即完成。",
+    "sendAsDonation": "作为捐赠发送？"
   },
   "community": {
     "fnfTitle": "朋友和家人",
@@ -605,7 +649,16 @@
     "enterPubKeyaddress": "请输入有效的公钥和地址",
     "enterCapacityAmt": "请输入容量金额",
     "enterMSats": "请输入毫聪（mSats）",
-    "enterAssetAmt": "请输入资产金额"
+    "enterAssetAmt": "请输入资产金额",
+    "channelInfo1": "什么是通道？",
+    "channelInfo2": "比特币通道允许您以低手续费即时发送和接收交易。它们在您和另一位用户之间创建直接链接，以加快交易速度。",
+    "channelInfo3": "在Tribe RGB应用程序中创建通道所需的参数包括：",
+    "channelInfoBold1": "对等地址和公钥：",
+    "channelInfo4": "接收方的闪电网络节点信息。",
+    "channelInfoBold2": "资产ID和数量：",
+    "channelInfo5": "指定使用的RGB资产及其数量。",
+    "channelInfoBold3": "资金（聪）：",
+    "channelInfo6": "开启通道所需的BTC金额。"
   },
   "lightning": {
     "sendTitle": "发送",

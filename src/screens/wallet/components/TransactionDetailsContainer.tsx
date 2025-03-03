@@ -5,16 +5,16 @@ import { StyleSheet, View } from 'react-native';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
-import WalletTransactions from './WalletTransactions';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { NetworkType, TransactionKind } from 'src/services/wallets/enums';
 import openLink from 'src/utils/OpenLink';
-import AppTouchable from 'src/components/AppTouchable';
 import config from 'src/utils/config';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { BtcToSats } from 'src/constants/Bitcoin';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import LabelledItem from './LabelledItem';
+import TransactionInfoSection from './TransactionInfoSection';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -79,45 +79,29 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
 
   return (
     <View>
-      <WalletTransactions
-        transId={transaction.transactionKind || transaction.txid}
-        transDate={transaction.date}
-        transAmount={transAmount}
-        transType={transaction.transactionType}
-        backColor={theme.colors.cardBackground}
-        disabled={true}
-        transaction={transaction}
-        networkType={transaction.txid ? 'bitcoin' : 'lightning'}
+      <TransactionInfoSection
+        amount={transAmount}
+        txID={transaction.transactionKind || transaction.txid}
+        date={transaction.date}
+        onIDPress={() => redirectToBlockExplorer()}
       />
-      {/* {transaction.transactionType === TransactionType.SENT && (
-        <LabeledContent
-          label={wallet.toAddress}
-          content={transaction.recipientAddresses[0]}
-        />
-      )}
-      {transaction.transactionType === TransactionType.RECEIVED && (
-        <LabeledContent
-          label={wallet.fromAddress}
-          content={transaction.senderAddresses[0]}
-        />
-      )} */}
-      <AppTouchable onPress={() => redirectToBlockExplorer()}>
-        <LabeledContent
-          label={wallet.transactionID}
-          content={transaction.txid}
-        />
-      </AppTouchable>
-      <LabeledContent
-        label={wallet.fees}
-        enableCurrency={true}
-        content={`${transaction.fee}`}
-      />
-      <LabeledContent
-        label={wallet.amount}
-        enableCurrency={true}
-        content={`${transAmount}`}
-      />
-      <LabeledContent
+      <View style={styles.feeAmtWrapper}>
+        <View style={styles.labeledContentWrapper}>
+          <LabeledContent
+            label={wallet.amount}
+            enableCurrency={true}
+            content={`${transAmount}`}
+          />
+        </View>
+        <View style={styles.labeledContentWrapper}>
+          <LabeledContent
+            label={wallet.fees}
+            enableCurrency={true}
+            content={`${transaction.fee}`}
+          />
+        </View>
+      </View>
+      <LabelledItem
         label={wallet.confirmations}
         content={`${
           transaction.confirmations === 0
@@ -127,25 +111,26 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
             : transaction.confirmations
         }`}
       />
-
-      <View style={styles.wrapper}>
-        <AppText variant="body1" style={styles.labelStyle}>
+      <View style={[styles.wrapper, styles.borderStyle]}>
+        <AppText variant="heading3" style={styles.labelStyle}>
           Input
         </AppText>
         {inputs}
       </View>
-
       <View style={styles.wrapper}>
-        <AppText variant="body1" style={styles.labelStyle}>
+        <AppText variant="heading3" style={styles.labelStyle}>
           Output
         </AppText>
         {outputs}
       </View>
-
       {transaction.transactionKind === TransactionKind.SERVICE_FEE && (
         <LabeledContent
           label={'Note'}
-          content={transaction.metadata?.note ? transaction.metadata?.note : 'Availibe to issue a new asset'}
+          content={
+            transaction.metadata?.note
+              ? transaction.metadata?.note
+              : 'Availibe to issue a new asset'
+          }
         />
       )}
     </View>
@@ -167,6 +152,19 @@ const getStyles = (theme: AppTheme) =>
     wrapperOutput: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+    },
+    feeAmtWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
+    },
+    labeledContentWrapper: {
+      width: '48%',
+    },
+    borderStyle: {
+      paddingBottom: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.borderColor,
     },
   });
 

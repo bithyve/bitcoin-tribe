@@ -10,7 +10,7 @@ import Toast from 'react-native-root-toast';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -59,8 +59,12 @@ const OpenRgbChannel = () => {
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered('balance.spendable > 0');
-  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible).filtered('balance.spendable > 0');
+  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
+    'balance.spendable > 0',
+  );
+  const collectibles = useQuery<Collectible[]>(
+    RealmSchema.Collectible,
+  ).filtered('balance.spendable > 0');
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined.sort((a, b) => a.timestamp - b.timestamp);
@@ -289,7 +293,8 @@ const OpenRgbChannel = () => {
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
             disabled={isButtonDisabled}
-            width={wp(120)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
             primaryLoading={false}
           />
         </View>

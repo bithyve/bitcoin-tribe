@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppTheme } from 'src/theme';
-import SelectOption from 'src/components/SelectOption';
 import SocialLinks from './SocialLinks';
 import openLink from 'src/utils/OpenLink';
+import SettingSectionList from './SettingSectionList';
+import { SettingMenuProps } from 'src/models/interfaces/Settings';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
 
-function SettingMenuItem({ SettingsMenu }) {
+type SettingMenuItemProps = {
+  WalletMgtMenu: SettingMenuProps[];
+  PersonalizationMenu: SettingMenuProps[];
+  AppSecurityMenu: SettingMenuProps[];
+  SettingsMenu: SettingMenuProps[];
+};
+
+function SettingMenuItem({
+  WalletMgtMenu,
+  PersonalizationMenu,
+  AppSecurityMenu,
+  SettingsMenu,
+}: SettingMenuItemProps) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { settings } = translations;
   const FooterComponent = () => {
     return (
       <View style={styles.footer}>
@@ -25,41 +42,42 @@ function SettingMenuItem({ SettingsMenu }) {
     );
   };
   return (
-    <FlatList
-      style={styles.scrollingWrapper}
+    <ScrollView
       showsVerticalScrollIndicator={false}
-      data={SettingsMenu}
-      keyExtractor={item => item.id}
-      renderItem={({ item }) =>
-        !item.hideMenu ? (
-          <SelectOption
-            title={item.title}
-            subTitle={item.subtitle}
-            icon={item.icon}
-            onPress={item.onPress}
-            enableSwitch={item.enableSwitch}
-            onValueChange={item.onValueChange}
-            toggleValue={item.toggleValue}
-            testID={item.testID}
-            backup={item.backup}
-          />
-        ) : null
-      }
-      ListFooterComponent={FooterComponent}
-      contentContainerStyle={styles.contentContainerStyle}
-    />
+      style={styles.scrollingWrapper}>
+      <SettingSectionList
+        data={WalletMgtMenu}
+        sectionTitle={settings.walletMgtTitle}
+      />
+      <SettingSectionList
+        data={PersonalizationMenu}
+        sectionTitle={settings.personalizationTitle}
+      />
+      <SettingSectionList
+        data={AppSecurityMenu}
+        sectionTitle={settings.appSecurityTitle}
+      />
+      <SettingSectionList
+        data={SettingsMenu}
+        sectionTitle={settings.AboutSupportTitle}
+      />
+
+      <FooterComponent />
+    </ScrollView>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    scrollingWrapper: {},
+    scrollingWrapper: {
+      height: Platform.OS === 'android' ? '90%' : '92%',
+    },
     footer: {
-      paddingVertical: 20,
+      paddingBottom: Platform.OS === 'android' ? hp(35) : hp(20),
       alignItems: 'center',
       justifyContent: 'center',
     },
     contentContainerStyle: {
-      paddingBottom: Platform.OS === 'android' ? 100 : 50,
+      paddingBottom: Platform.OS === 'android' ? 120 : 50,
     },
   });
 export default SettingMenuItem;

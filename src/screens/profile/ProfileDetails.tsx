@@ -10,7 +10,7 @@ import { useTheme } from 'react-native-paper';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -101,8 +101,8 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            width={wp(165)}
-            secondaryCTAWidth={wp(165)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
           />
         </ScrollView>
       </KeyboardAvoidingView>

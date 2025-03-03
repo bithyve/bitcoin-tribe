@@ -44,7 +44,7 @@ const Slider = (props: Props) => {
   return (
     <View style={styles.container}>
       {props.title && (
-        <AppText style={styles.title} variant="secondaryCta">
+        <AppText style={styles.title} variant="body2">
           {props.title}
         </AppText>
       )}

@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import PinInputsView from 'src/components/PinInputsView';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import KeyPadView from 'src/components/KeyPadView';
 import DeleteIcon from 'src/assets/images/delete.svg';
 import DeleteIconLight from 'src/assets/images/delete_light.svg';
@@ -164,7 +164,8 @@ function ChangePinContainer() {
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={disbleProceed}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
         />
       </View>
       <KeyPadView

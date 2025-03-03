@@ -11,6 +11,7 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
+import GradientView from './GradientView';
 
 type labelContentProps = {
   label: string;
@@ -27,8 +28,14 @@ function LabeledContent(props: labelContentProps) {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
 
   return (
-    <View style={styles.wrapper}>
-      <AppText variant="body1" style={styles.labelStyle}>
+    <GradientView
+      style={styles.wrapper}
+      colors={[
+        theme.colors.cardGradient1,
+        theme.colors.cardGradient2,
+        theme.colors.cardGradient3,
+      ]}>
+      <AppText variant="heading3" style={styles.labelStyle}>
         {label}
       </AppText>
       {!enableCurrency ? (
@@ -52,13 +59,19 @@ function LabeledContent(props: labelContentProps) {
           )}
         </View>
       )}
-    </View>
+    </GradientView>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
       marginVertical: hp(10),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      padding: hp(10),
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 13,
     },
     labelStyle: {
       color: theme.colors.headingColor,
