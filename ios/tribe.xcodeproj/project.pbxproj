@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */; };
+		353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB8482D75503C002131C1 /* GoogleService-Info.plist */; };
+		353FB84B2D7553A8002131C1 /* GoogleService-Info 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */; };
 		35E339462C22A3AB007E532A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		35E339472C22A3AB007E532A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		35E3394B2C22A3AB007E532A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -35,14 +37,14 @@
 		3AC0DD772C4FD1E2003E7D56 /* LufgaMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */; };
 		3AC0DD782C4FD1E5003E7D56 /* LufgaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */; };
 		3AC0DD792C4FD1E8003E7D56 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
-		3D625D7C2965F5FE602315FF /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 75FE910822E064B56A80D493 /* libPods-tribe-tribe-dev.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		98522CA5FBAA40AD99C27A30 /* LufgaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */; };
-		A3D235A14D7B2002F6EEC5B9 /* libPods-tribe-tribeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C0C47856E001386C7CD3E4 /* libPods-tribe-tribeTests.a */; };
 		C33B24D6C2E3459FB164E874 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
 		C6D34549A556477FA8A556AF /* LufgaMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */; };
-		DE5D72B2BA8B70CA9BE084F0 /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4C49A06D772943B52B2FA5 /* libPods-tribe.a */; };
+		D5244F76108F4C665A23EAD3 /* libPods-tribe-tribeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A29F857FD0F7514589D217BB /* libPods-tribe-tribeTests.a */; };
 		F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
+		FB00B6F65AC98E228E3EF229 /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5EDE82D625826E58CAB1A9 /* libPods-tribe-tribe-dev.a */; };
+		FD7B5500DF83F9AA41266703 /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 000B55D4F0EECD7BCCC643ED /* libPods-tribe.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		000B55D4F0EECD7BCCC643ED /* libPods-tribe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356EE1AD99517003FC87E /* tribeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tribeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* tribeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tribeTests.m; sourceTree = "<group>"; };
@@ -66,8 +69,13 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = tribe/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tribe/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		192A7384E5EA3FAC16DC3E5C /* Pods-tribe-tribeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.release.xcconfig"; sourceTree = "<group>"; };
+		1C9F4B0C728077CF66866F05 /* Pods-tribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.debug.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.debug.xcconfig"; sourceTree = "<group>"; };
+		2267812E8A55B511C78CC140 /* Pods-tribe-tribeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaMedium.ttf; path = ../src/assets/fonts/LufgaMedium.ttf; sourceTree = "<group>"; };
-		234D9A10DF7278FF827C3676 /* Pods-tribe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.debug.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.debug.xcconfig"; sourceTree = "<group>"; };
+		297F1CBE4B4914505EB583EF /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
+		353FB8482D75503C002131C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
 		35B1B56D2C69C091007C473A /* tribe-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "tribe-dev.entitlements"; sourceTree = "<group>"; };
 		35B1B56E2C69C098007C473A /* tribe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tribe.entitlements; path = tribe/tribe.entitlements; sourceTree = "<group>"; };
 		35E339592C22A3AB007E532A /* tribe-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tribe-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,19 +89,15 @@
 		35EFBBCC2C3F74D600E57650 /* RGBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBHelper.swift; sourceTree = "<group>"; };
 		35EFBBCF2C3F750500E57650 /* RGBModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBModule.m; sourceTree = "<group>"; };
 		35EFBBD22C3F751E00E57650 /* RGBModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBModule.h; sourceTree = "<group>"; };
-		38C0C47856E001386C7CD3E4 /* libPods-tribe-tribeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		69A6D3DE4FE879F125960241 /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
-		75FE910822E064B56A80D493 /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B5EDE82D625826E58CAB1A9 /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tribe/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		968E5793EE26FBDE6AB61237 /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
+		891A2F5EAFFA2945F3086A58 /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
 		A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaSemiBold.ttf; path = ../src/assets/fonts/LufgaSemiBold.ttf; sourceTree = "<group>"; };
+		A29F857FD0F7514589D217BB /* libPods-tribe-tribeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaRegular.ttf; path = ../src/assets/fonts/LufgaRegular.ttf; sourceTree = "<group>"; };
-		D34631B967E726F884AACF16 /* Pods-tribe-tribeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.release.xcconfig"; sourceTree = "<group>"; };
-		D4C491D7DBFDC373E1267F61 /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
-		D84DFFAA172842B075550095 /* Pods-tribe-tribeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D3B5FCFF044AD510FBA7AA6A /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EE4C49A06D772943B52B2FA5 /* libPods-tribe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaBold.ttf; path = ../src/assets/fonts/LufgaBold.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3D235A14D7B2002F6EEC5B9 /* libPods-tribe-tribeTests.a in Frameworks */,
+				D5244F76108F4C665A23EAD3 /* libPods-tribe-tribeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35EFBBC12C3F739300E57650 /* rgb_libFFI.xcframework in Frameworks */,
-				DE5D72B2BA8B70CA9BE084F0 /* libPods-tribe.a in Frameworks */,
+				FD7B5500DF83F9AA41266703 /* libPods-tribe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35EFBBC22C3F739300E57650 /* rgb_libFFI.xcframework in Frameworks */,
-				3D625D7C2965F5FE602315FF /* libPods-tribe-tribe-dev.a in Frameworks */,
+				FB00B6F65AC98E228E3EF229 /* libPods-tribe-tribe-dev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,9 +180,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				EE4C49A06D772943B52B2FA5 /* libPods-tribe.a */,
-				75FE910822E064B56A80D493 /* libPods-tribe-tribe-dev.a */,
-				38C0C47856E001386C7CD3E4 /* libPods-tribe-tribeTests.a */,
+				000B55D4F0EECD7BCCC643ED /* libPods-tribe.a */,
+				6B5EDE82D625826E58CAB1A9 /* libPods-tribe-tribe-dev.a */,
+				A29F857FD0F7514589D217BB /* libPods-tribe-tribeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -209,6 +213,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */,
+				353FB8482D75503C002131C1 /* GoogleService-Info.plist */,
 				35B1B56D2C69C091007C473A /* tribe-dev.entitlements */,
 				13B07FAE1A68108700A75B9A /* tribe */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -238,12 +244,12 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				234D9A10DF7278FF827C3676 /* Pods-tribe.debug.xcconfig */,
-				D4C491D7DBFDC373E1267F61 /* Pods-tribe.release.xcconfig */,
-				69A6D3DE4FE879F125960241 /* Pods-tribe-tribe-dev.debug.xcconfig */,
-				968E5793EE26FBDE6AB61237 /* Pods-tribe-tribe-dev.release.xcconfig */,
-				D84DFFAA172842B075550095 /* Pods-tribe-tribeTests.debug.xcconfig */,
-				D34631B967E726F884AACF16 /* Pods-tribe-tribeTests.release.xcconfig */,
+				1C9F4B0C728077CF66866F05 /* Pods-tribe.debug.xcconfig */,
+				891A2F5EAFFA2945F3086A58 /* Pods-tribe.release.xcconfig */,
+				D3B5FCFF044AD510FBA7AA6A /* Pods-tribe-tribe-dev.debug.xcconfig */,
+				297F1CBE4B4914505EB583EF /* Pods-tribe-tribe-dev.release.xcconfig */,
+				2267812E8A55B511C78CC140 /* Pods-tribe-tribeTests.debug.xcconfig */,
+				192A7384E5EA3FAC16DC3E5C /* Pods-tribe-tribeTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -255,12 +261,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "tribeTests" */;
 			buildPhases = (
-				042AF2D1C3C9CEC5403E33E2 /* [CP] Check Pods Manifest.lock */,
+				8FC91EB12D67744F9CEA71BF /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				7E31E039EE0612BB013234F4 /* [CP] Embed Pods Frameworks */,
-				D49BA73BD48D0C5930A15561 /* [CP] Copy Pods Resources */,
+				B9B3B95EFCB5A08AF32D01D4 /* [CP] Embed Pods Frameworks */,
+				4319162EFDAD8B8C1AD144C4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -276,14 +282,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "tribe" */;
 			buildPhases = (
-				CC97B35BC4294E25A69900AE /* [CP] Check Pods Manifest.lock */,
+				02E52D980E66BE5031E4BC55 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				6EF79C395A506DCDB0B9D32F /* [CP] Embed Pods Frameworks */,
-				BDC503DA678C48332C17639D /* [CP] Copy Pods Resources */,
 				D909674E36AC42B29E3D7959 /* Upload Debug Symbols to Sentry */,
+				02629808486FFCD71DC2E6D8 /* [CP] Embed Pods Frameworks */,
+				296DC277F2743B54CEE30C24 /* [CP] Copy Pods Resources */,
+				F850A9AD2E3C43F9B4136E76 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -298,13 +305,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 35E339562C22A3AB007E532A /* Build configuration list for PBXNativeTarget "tribe-dev" */;
 			buildPhases = (
-				2F51A784370A9F5BC3488AEA /* [CP] Check Pods Manifest.lock */,
+				AC93C7D92C7AF8C9A7AA83AA /* [CP] Check Pods Manifest.lock */,
 				35E339452C22A3AB007E532A /* Sources */,
 				35E339482C22A3AB007E532A /* Frameworks */,
 				35E3394A2C22A3AB007E532A /* Resources */,
 				35E339532C22A3AB007E532A /* Bundle React Native code and images */,
-				C81B6E3BA80CB5CBB88CC137 /* [CP] Embed Pods Frameworks */,
-				6C29FDE6E63B697589A34000 /* [CP] Copy Pods Resources */,
+				0069F1883C135F9324A90942 /* [CP] Embed Pods Frameworks */,
+				371E43BD6F85981BBA0B56D8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -368,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */,
 				2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */,
@@ -386,6 +394,7 @@
 				3AC0DD792C4FD1E8003E7D56 /* LufgaSemiBold.ttf in Resources */,
 				35E3394C2C22A3AB007E532A /* Images.xcassets in Resources */,
 				3AC0DD782C4FD1E5003E7D56 /* LufgaRegular.ttf in Resources */,
+				353FB84B2D7553A8002131C1 /* GoogleService-Info 2.plist in Resources */,
 				35E3394D2C22A3AB007E532A /* PrivacyInfo.xcprivacy in Resources */,
 				3AC0DD772C4FD1E2003E7D56 /* LufgaMedium.ttf in Resources */,
 			);
@@ -394,151 +403,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/.xcode.env",
-			);
-			name = "Bundle React Native code and images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE\\\"\"\n";
-		};
-		042AF2D1C3C9CEC5403E33E2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tribe-tribeTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2F51A784370A9F5BC3488AEA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tribe-tribe-dev-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		35E339532C22A3AB007E532A /* Bundle React Native code and images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/.xcode.env",
-			);
-			name = "Bundle React Native code and images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
-		};
-		6C29FDE6E63B697589A34000 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6EF79C395A506DCDB0B9D32F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7E31E039EE0612BB013234F4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BDC503DA678C48332C17639D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C81B6E3BA80CB5CBB88CC137 /* [CP] Embed Pods Frameworks */ = {
+		0069F1883C135F9324A90942 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -555,7 +420,40 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CC97B35BC4294E25A69900AE /* [CP] Check Pods Manifest.lock */ = {
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE\\\"\"\n";
+		};
+		02629808486FFCD71DC2E6D8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		02E52D980E66BE5031E4BC55 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -577,7 +475,57 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D49BA73BD48D0C5930A15561 /* [CP] Copy Pods Resources */ = {
+		296DC277F2743B54CEE30C24 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe/Pods-tribe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		35E339532C22A3AB007E532A /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		371E43BD6F85981BBA0B56D8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4319162EFDAD8B8C1AD144C4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -594,6 +542,67 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8FC91EB12D67744F9CEA71BF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tribe-tribeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC93C7D92C7AF8C9A7AA83AA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tribe-tribe-dev-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B9B3B95EFCB5A08AF32D01D4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D909674E36AC42B29E3D7959 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -607,6 +616,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode-debug-files.sh";
+		};
+		F850A9AD2E3C43F9B4136E76 /* [CP-User] [RNFB] Core Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Core Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n##########################################################################\n##########################################################################\n#\n#  NOTE THAT IF YOU CHANGE THIS FILE YOU MUST RUN pod install AFTERWARDS\n#\n#  This file is installed as an Xcode build script in the project file\n#  by cocoapods, and you will not see your changes until you pod install\n#\n##########################################################################\n##########################################################################\n\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_analytics_storage\n  _ANALYTICS_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_analytics_storage\")\n  if [[ $_ANALYTICS_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_storage\n  _ANALYTICS_AD_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_storage\")\n  if [[ $_ANALYTICS_AD_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_user_data\n  _ANALYTICS_AD_USER_DATA=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_user_data\")\n  if [[ $_ANALYTICS_AD_USER_DATA ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_USER_DATA\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -662,7 +684,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D84DFFAA172842B075550095 /* Pods-tribe-tribeTests.debug.xcconfig */;
+			baseConfigurationReference = 2267812E8A55B511C78CC140 /* Pods-tribe-tribeTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -691,7 +713,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D34631B967E726F884AACF16 /* Pods-tribe-tribeTests.release.xcconfig */;
+			baseConfigurationReference = 192A7384E5EA3FAC16DC3E5C /* Pods-tribe-tribeTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -719,7 +741,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234D9A10DF7278FF827C3676 /* Pods-tribe.debug.xcconfig */;
+			baseConfigurationReference = 1C9F4B0C728077CF66866F05 /* Pods-tribe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -754,7 +776,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4C491D7DBFDC373E1267F61 /* Pods-tribe.release.xcconfig */;
+			baseConfigurationReference = 891A2F5EAFFA2945F3086A58 /* Pods-tribe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -791,7 +813,7 @@
 		};
 		35E339572C22A3AB007E532A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69A6D3DE4FE879F125960241 /* Pods-tribe-tribe-dev.debug.xcconfig */;
+			baseConfigurationReference = D3B5FCFF044AD510FBA7AA6A /* Pods-tribe-tribe-dev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -827,7 +849,7 @@
 		};
 		35E339582C22A3AB007E532A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 968E5793EE26FBDE6AB61237 /* Pods-tribe-tribe-dev.release.xcconfig */;
+			baseConfigurationReference = 297F1CBE4B4914505EB583EF /* Pods-tribe-tribe-dev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;

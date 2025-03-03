@@ -4,6 +4,7 @@ import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
@@ -81,6 +82,69 @@ export default class Relay {
       throw new Error('Failed fetch fee and exchange rates');
     }
   };
+
+  public static getChallenge = async (
+    appID: string,
+    publicId: string,
+  ): Promise<{ challenge: string, expiresAt: string, publicId: string}> => {
+    let res;
+    try {
+      res = await RestClient.post(`${RELAY}/app/challenge`, { appID, publicId });
+    } catch (err) {
+      console.log(err, err.response)
+      if (err.response) {
+        throw new Error(err.response.data.err);
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+    }
+    return res.data || res.json;
+  }
+
+  public static createNewApp = async (
+    name = '',
+    appID: string,
+    publicId: string,
+    publicKey: string,
+    appType: string,
+    network: string,
+    fcmToken = '',
+    signature: string
+  ): Promise<{ status: boolean, error?: string, app: TribeApp }> => {
+    let res;
+    try {
+      res = await RestClient.post(`${RELAY}/app/new`,
+        { name, appID, publicId, appType, network, fcmToken, signature, publicKey });
+    } catch (err) {
+      console.log(err, err.response.data)
+      if (err.response) {
+        throw new Error(err.response.data.err);
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+    }
+    return res.data || res.json;
+  }
+
+  public static syncFcmToken = async (
+    authToken: string,
+    fcmToken: string,
+  ): Promise<{ updated: boolean }> => {
+    let res;
+    try {
+      res = await RestClient.post(`${RELAY}/app/syncfcm`, { fcmToken }, {'authorization': `Bearer ${authToken}`});
+    } catch (err) {
+      if (err.response) {
+        throw new Error(err.response.data.err);
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+    }
+    return res.data || res.json;
+  }
 
   public static createSupportedNode = async (): Promise<{}> => {
     try {
@@ -241,7 +305,8 @@ export default class Relay {
           id: string,
           username: string,
         }[]
-      }}[],
+      }
+    }[],
     error?: string;
   }> => {
     try {

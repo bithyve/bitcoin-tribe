@@ -61,15 +61,26 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
+import { getMessaging, getToken, subscribeToTopic, unsubscribeFromTopic, requestPermission, AuthorizationStatus } from '@react-native-firebase/messaging';
+import { getApp } from '@react-native-firebase/app';
+import BIP32Factory from 'bip32';
+import ecc from '../wallets/operations/taproot-utils/noble_ecc';
+import { SHA256 } from 'crypto-js';
+import ECPairFactory from 'ecpair';
+const ECPair = ECPairFactory(ecc);
+
+const bip32 = BIP32Factory(ecc);
 
 export class ApiHandler {
   private static app: RGBWallet;
   private static appType: AppType;
   private static api: RLNNodeApiServices;
-  constructor(app: RGBWallet, appType: AppType) {
+  private static authToken: string;
+  constructor(app: RGBWallet, appType: AppType, authToken: string) {
     if (!ApiHandler.app) {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
+      ApiHandler.authToken = authToken;
       if (appType === AppType.NODE_CONNECT) {
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
@@ -146,6 +157,20 @@ export class ApiHandler {
             config.BIP85_IMAGE_ENCRYPTIONKEY_DERIVATION_PATH,
             primaryMnemonic,
           );
+          const privateKeyHex = SHA256(appID).toString();
+          const privateKey = Buffer.from(privateKeyHex, 'hex');
+          const keyPair = ECPair.fromPrivateKey(privateKey);
+          const publicKey = keyPair.publicKey.toString('hex');
+          const challenge = await Relay.getChallenge(appID, publicKey)
+          if(!challenge.challenge) {
+            throw new Error('Failed to get challenge');
+          }
+          const messageHash = crypto.createHash('sha256').update(challenge.challenge).digest();
+          const signature = keyPair.sign(Buffer.from(messageHash.toString('hex'), 'hex')).toString('hex');
+          const registerApp = await Relay.createNewApp('Tribe-Onchain-Wallet', appID, publicId, publicKey, AppType.ON_CHAIN, 'Iris_Regtest', '', signature)
+          if(!registerApp?.app?.authToken) {
+            throw new Error('Failed to generate auth token');
+          }
           const imageEncryptionKey = generateEncryptionKey(
             entropy.toString('hex'),
           );
@@ -161,6 +186,7 @@ export class ApiHandler {
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
             appType,
+            authToken: registerApp?.app?.authToken
           };
 
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
@@ -181,7 +207,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN);
+            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN, registerApp?.app?.authToken);
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
@@ -391,7 +417,7 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const apiHandler = new ApiHandler(rgbWallet, app.appType);
+    const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpub,
@@ -428,7 +454,7 @@ export class ApiHandler {
         RealmSchema.RgbWallet,
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
-      const apiHandler = new ApiHandler(rgbWallet, app.appType);
+      const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpub,
@@ -460,7 +486,7 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const apiHandler = new ApiHandler(rgbWallet, app.appType);
+    const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     if (app.appType === AppType.NODE_CONNECT) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
@@ -1437,6 +1463,37 @@ export class ApiHandler {
       throw error;
     }
   }
+
+  static async syncFcmToken(): Promise<boolean> {
+    try {
+      const firebaseApp = getApp();
+      const messaging = getMessaging(firebaseApp);
+      const authStatus = await requestPermission(messaging);
+      const enabled =
+        authStatus === AuthorizationStatus.AUTHORIZED ||
+        authStatus === AuthorizationStatus.PROVISIONAL;
+      if (!enabled) {
+        return false;
+      }
+      const token = await getToken(messaging);
+      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL)
+      if(token === Storage.get(Keys.FCM_TOKEN)) {
+        console.log('ssss')
+        return true
+      }
+      const response = await Relay.syncFcmToken(ApiHandler.authToken, token)
+      console.log('ssss', response)
+
+      if(response.updated) {
+        Storage.set(Keys.FCM_TOKEN, token);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.log('fcm update error: ', error);
+      throw error;
+    }
+  }
   static async viewUtxos() {
     try {
       const response = await RGBServices.getUnspents(
@@ -1796,6 +1853,7 @@ export class ApiHandler {
   static async unlockNode() {
     try {
       const response = await ApiHandler.api.unlock('tribe@2024');
+      console.log(response)
       if (response.error) {
         throw new Error(response.error);
       }
