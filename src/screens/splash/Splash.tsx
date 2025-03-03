@@ -68,14 +68,19 @@ function Splash({ navigation }) {
   // Handle login success
   const hasNavigated = useRef(false);
   useEffect(() => {
-    if (!data || hasNavigated.current) return;
+    if (!data || hasNavigated.current){};
     if (animationFinished) {
-      setKey(data.key);
-      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
-      setIsWalletOnline(data.isWalletOnline);
-      setAppType(app.appType);
-      navigation.replace(NavigationRoutes.APPSTACK);
-      hasNavigated.current = true;
+      if(!data?.key) {
+        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      } else {
+        setKey(data.key);
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        setIsWalletOnline(data.isWalletOnline);
+        setAppType(app.appType);
+        navigation.replace(NavigationRoutes.APPSTACK);
+        hasNavigated.current = true;
+      }
+
     }
   }, [data, animationFinished, navigation, setKey]);
 
