@@ -25,7 +25,7 @@ function OnchainLearnMore() {
       <AppHeader title={onBoarding.mainnet} />
       <ScrollView style={styles.wrapper}>
         <View>
-          <AppText variant="body1" style={styles.titleText}>
+          <AppText variant="heading3" style={styles.titleText}>
             {onBoarding.onChainLearnMoreSubTitle}
           </AppText>
         </View>

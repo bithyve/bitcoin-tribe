@@ -10,7 +10,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -118,7 +118,9 @@ const EnterInvoiceDetails = () => {
       ? 'lightning'
       : 'bitcoin',
   );
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+    RealmSchema.RgbWallet,
+  );
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -136,7 +138,7 @@ const EnterInvoiceDetails = () => {
   function validateAndNavigateToReceiveAsset() {
     const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
     if (assetIdPattern.test(assetId)) {
-      navigation.replace(NavigationRoutes.RECEIVEASSET, {
+      navigation.navigate(NavigationRoutes.RECEIVEASSET, {
         refresh: true,
         assetId,
         amount,
@@ -243,15 +245,16 @@ const EnterInvoiceDetails = () => {
           primaryOnPress={() => validateAndNavigateToReceiveAsset()}
           secondaryTitle={selectedType === 'bitcoin' && common.skip}
           secondaryOnPress={() =>
-            navigation.replace(NavigationRoutes.RECEIVEASSET, {
+            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
               refresh: true,
-              assetId,
-              amount,
+              assetId: '',
+              amount: '',
               selectedType,
             })
           }
           disabled={assetId === '' || amount === ''}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
         />
       </View>
     </ScreenContainer>

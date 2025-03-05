@@ -20,6 +20,9 @@ import PrimaryCTA from 'src/components/PrimaryCTA';
 import Colors from 'src/theme/Colors';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import CloseChannelPopupContainer from './components/CloseChannelPopupContainer';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import ChannelInfoModal from './components/ChannelInfoModal';
 
 const getStyles = (theme: AppTheme, backColor) =>
   StyleSheet.create({
@@ -83,9 +86,10 @@ const ChannelDetails = () => {
   const closeChannelMutation = useMutation(ApiHandler.closeChannel);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { node, channel: channelTranslations } = translations;
+  const { node, channel: channelTranslations, common } = translations;
   const { channel } = route.params;
   const [visible, setVisible] = useState(false);
+  const [visibleChannelInfo, setVisibleChannelInfo] = useState(false);
 
   const statusColors = {
     Opened: Colors.GOGreen,
@@ -108,7 +112,11 @@ const ChannelDetails = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader title={`${node.channelsTitle}`} />
+      <AppHeader
+        title={`${node.channelsTitle}`}
+        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        onSettingsPress={() => setVisibleChannelInfo(true)}
+      />
       <ModalLoading visible={closeChannelMutation.isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <GradientView
@@ -308,15 +316,22 @@ const ChannelDetails = () => {
             subTitle={channelTranslations.closeChannelPopupSubTitle}
             onPress={() => {
               setVisible(false);
-              setTimeout(()=>{
+              setTimeout(() => {
                 closeChannelMutation.mutate({
                   channelId: channel.channelId,
                   peerPubKey: channel.peerPubkey,
                 });
-              }, 400)
+              }, 400);
             }}
           />
         </ResponsePopupContainer>
+      </View>
+      <View>
+        <ChannelInfoModal
+          visible={visibleChannelInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisibleChannelInfo(false)}
+        />
       </View>
     </ScreenContainer>
   );

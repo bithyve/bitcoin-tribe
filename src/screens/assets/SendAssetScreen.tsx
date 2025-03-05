@@ -17,7 +17,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { hp, wp } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import TextField from 'src/components/TextField';
@@ -34,6 +34,7 @@ import {
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import {
   AverageTxFees,
   AverageTxFeesByNetwork,
@@ -46,9 +47,11 @@ import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
 import Colors from 'src/theme/Colors';
 import { RealmSchema } from 'src/storage/enum';
-import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import ModalLoading from 'src/components/ModalLoading';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 
 type ItemProps = {
   name: string;
@@ -159,6 +162,8 @@ const SendAssetScreen = () => {
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [visibleDonationTranferInfo, setVisibleDonationTranferInfo] =
+    useState(false);
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [amountValidationError, setAmountValidationError] = useState('');
@@ -473,7 +478,9 @@ const SendAssetScreen = () => {
           contentStyle={invoice ? styles.contentStyle : styles.contentStyle1}
           inputStyle={styles.inputStyle}
           rightText={!invoice && sendScreen.paste}
-          rightIcon={invoice && <ClearIcon />}
+          rightIcon={
+            invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
           onRightTextPress={() =>
             invoice ? setInvoice('') : handlePasteAddress()
           }
@@ -499,6 +506,16 @@ const SendAssetScreen = () => {
           disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
           error={amountValidationError}
         />
+        <View style={styles.availableBalanceWrapper}>
+          <AppText variant="body2" style={styles.labelstyle}>
+            {sendScreen.availableBalance}
+          </AppText>
+          <View style={styles.balanceWrapper}>
+            <AppText variant="body2" style={styles.availableBalanceText}>
+              {numberWithCommas(assetData?.balance.spendable)}
+            </AppText>
+          </View>
+        </View>
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
         </AppText>
@@ -515,7 +532,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.LOW,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.medium}
@@ -529,7 +545,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.MEDIUM,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.high}
@@ -543,7 +558,6 @@ const SendAssetScreen = () => {
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
               TxPriority.HIGH,
             )}
-            disabled={false}
           />
           <FeePriorityButton
             title={sendScreen.custom}
@@ -552,9 +566,8 @@ const SendAssetScreen = () => {
             setSelectedPriority={() => {
               setSelectedPriority(TxPriority.CUSTOM);
             }}
-            feeRateByPriority={''}
+            feeRateByPriority={0}
             estimatedBlocksByPriority={1}
-            disabled={false}
           />
         </View>
         {selectedPriority === TxPriority.CUSTOM && (
@@ -581,15 +594,24 @@ const SendAssetScreen = () => {
         )}
 
         <View style={styles.containerSwitch}>
-          <AppText variant="heading3">
-            Send this transfer as a donation?
+          <AppText variant="body1" style={styles.sendDonationTitle}>
+            {assets.sendAsDonation}
           </AppText>
+          <View style={styles.switchWrapper}>
+            <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
+              {isThemeDark ? (
+                <InfoIcon width={24} height={24} />
+              ) : (
+                <InfoIconLight width={24} height={24} />
+              )}
+            </AppTouchable>
 
-          <Switch
-            value={isDonation}
-            onValueChange={value => setIsDonation(value)}
-            color={theme.colors.accent1}
-          />
+            <Switch
+              value={isDonation}
+              onValueChange={value => setIsDonation(value)}
+              color={theme.colors.accent1}
+            />
+          </View>
         </View>
 
         <ModalContainer
@@ -599,9 +621,6 @@ const SendAssetScreen = () => {
               : sendScreen.sendConfirmation
           }
           subTitle={!successStatus ? sendScreen.sendConfirmationSubTitle : ''}
-          height={
-            successStatus ? (Platform.OS === 'android' ? '100%' : '50%') : ''
-          }
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => {
@@ -619,7 +638,10 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            onSuccessPress={() => navigation.goBack()}
+            onSuccessPress={() => {
+              navigation.goBack();
+              navigation.setParams({ askReview: true });
+            }}
             onPress={sendAsset}
             estimateBlockTime={
               selectedPriority === TxPriority.CUSTOM
@@ -633,19 +655,22 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={common.next}
           primaryOnPress={() => {
-            if (assetAmount > assetData?.balance.spendable) {
+            if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
-              Toast(
+              if (Number(assetData?.balance.spendable) === 0) {
+                setAmountValidationError(
+                  sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
+                );
+                return;
+              }
+              setAmountValidationError(
                 assets.checkSpendableAmt + assetData?.balance.spendable,
-                true,
               );
               return;
             }
             Keyboard.dismiss();
             setVisible(true);
           }}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
@@ -654,7 +679,14 @@ const SendAssetScreen = () => {
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
-          width={wp(120)}
+          width={'100%'}
+        />
+      </View>
+      <View>
+        <DonationTransferInfoModal
+          visible={visibleDonationTranferInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisibleDonationTranferInfo(false)}
         />
       </View>
     </ScreenContainer>
@@ -759,9 +791,33 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     containerSwitch: {
       flexDirection: 'row',
+      width: '100%',
       justifyContent: 'space-between',
-      marginVertical: hp(15),
+      marginVertical: hp(20),
       paddingBottom: hp(30),
+      alignItems: 'center',
+    },
+    sendDonationTitle: {
+      color: theme.colors.headingColor,
+      width: '72%',
+    },
+    availableBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    balanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    availableBalanceText: {
+      color: theme.colors.headingColor,
+    },
+    switchWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '26%',
+      justifyContent: 'space-between',
     },
   });
 

@@ -8,7 +8,12 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 
-export default (message, error = false, position = Toast.positions.BOTTOM) => {
+export default (
+  message,
+  error = false,
+  warning = false,
+  position = Toast.positions.BOTTOM,
+) => {
   return Toast.show(
     <View style={styles.container}>
       {error ? (
@@ -20,7 +25,7 @@ export default (message, error = false, position = Toast.positions.BOTTOM) => {
         />
       ) : (
         <LottieView
-          source={require('src/assets/images/jsons/successToast.json')}
+          source={warning? require('src/assets/images/jsons/warningToast.json') : require('src/assets/images/jsons/successToast.json')}
           style={styles.loaderStyle}
           autoPlay
           loop
@@ -29,7 +34,7 @@ export default (message, error = false, position = Toast.positions.BOTTOM) => {
       <AppText
         style={[
           styles.toastMessageStyle,
-          { color: error ? Colors.White : Colors.RaisinBlack },
+          { color: warning ? Colors.Black : error ? Colors.White : Colors.White },
         ]}>
         {message && message.length > 150
           ? `${message.substring(0, 150)}...`
@@ -39,13 +44,16 @@ export default (message, error = false, position = Toast.positions.BOTTOM) => {
     {
       duration: Toast.durations.SHORT,
       position: position,
-      // shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,
       opacity: 1,
-      backgroundColor: error ? Colors.FireOpal : Colors.UFOGreen1,
-      textColor: error ? Colors.ImperialRed : Colors.RaisinBlack,
+      backgroundColor: warning
+        ? Colors.Golden
+        : error
+        ? Colors.FireOpal
+        : Colors.GOGreen,
+      textColor: error ? Colors.ImperialRed : Colors.White,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
       containerStyle: {
@@ -54,8 +62,6 @@ export default (message, error = false, position = Toast.positions.BOTTOM) => {
         paddingHorizontal: hp(10),
         paddingVertical: hp(15),
         flexWrap: 'wrap',
-        // width: wp(300),
-        // minHeight: hp(50),
         alignItems: 'center',
         justifyContent: 'center',
       },

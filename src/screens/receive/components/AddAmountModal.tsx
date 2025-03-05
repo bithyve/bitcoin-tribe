@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import IconBitcoin from 'src/assets/images/icon_bitcoin.svg';
 import TextField from 'src/components/TextField';
@@ -70,7 +70,8 @@ function AddAmountModal(props: AddAmountModalProps) {
             secondaryOnPress();
           }}
           disabled={amount == ''}
-          width={wp(120)}
+          width={windowWidth / 2.5}
+          secondaryCTAWidth={windowWidth / 2.5}
         />
       </View>
       <KeyPadView

@@ -14,7 +14,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import AppHeader from 'src/components/AppHeader';
 import {
   FlatList,
   Image,
@@ -23,11 +22,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -42,9 +42,6 @@ import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import UploadAssetFileButton from './components/UploadAssetFileButton';
-import UploadFile from 'src/assets/images/uploadFile.svg';
-import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
@@ -58,6 +55,11 @@ import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
+import AddMediaFile from 'src/assets/images/addMediaFile.svg';
+import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
+import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -78,9 +80,18 @@ function IssueCollectibleScreen() {
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [precision, setPrecision] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [assetNameValidationError, setAssetNameValidationError] = useState('');
+  const [assetDescValidationError, setAssetDescValidationError] = useState('');
+  const [assetTickerValidationError, setAssetTickerValidationError] =
+    useState('');
+  const [assetTotSupplyValidationError, setAssetTotSupplyValidationError] =
+    useState('');
 
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+  const [visibleUDACollectiblesInfo, setVisibleUDACollectiblesInfo] =
+    useState(false);
+
   const [assetType, setAssetType] = useState<AssetType>(issueAssetType);
   const [image, setImage] = useState('');
   const [attachments, setAttachments] = useState([]);
@@ -157,7 +168,13 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.COLLECTIBLE);
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
+        }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -219,7 +236,13 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.COLLECTIBLE);
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.UDADETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
+        }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -281,7 +304,7 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     try {
       const result = await pickImage(false, 5);
-      if(result && result?.length) {
+      if (result && result?.length) {
         setAttachments(result);
       }
     } catch (error) {
@@ -307,18 +330,89 @@ function IssueCollectibleScreen() {
     setPrecision(0);
   };
 
+  const handleAssetNameChange = text => {
+    if (!text.trim()) {
+      setAssetName('');
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      setAssetName(text);
+      setAssetNameValidationError(null);
+    }
+  };
+  const handleAssetNameSubmit = () => {
+    if (!assetName.trim()) {
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      descriptionInputRef.current?.focus();
+    }
+  };
+  const handleUniqueAssetNameChange = text => {
+    if (!text.trim()) {
+      setAssetName('');
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      setAssetName(text);
+      setAssetNameValidationError(null);
+    }
+  };
+  const handleUniqueAssetNameSubmit = () => {
+    if (!assetName.trim()) {
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      assetTickerInputRef.current?.focus();
+    }
+  };
+  const handleUniqueAssetTickerChange = text => {
+    if (!text.trim()) {
+      setAssetTicker('');
+      setAssetTickerValidationError(assets.enterAssetTicker);
+    } else {
+      setAssetTicker(text.trim().toUpperCase());
+      setAssetTickerValidationError(null);
+    }
+  };
+  const handleAssetTickerSubmit = () => {
+    if (!assetTicker.trim()) {
+      setAssetTickerValidationError(assets.enterAssetTicker);
+    } else {
+      descriptionInputRef.current?.focus();
+    }
+  };
+
+  const handleAssetDescriptionChange = text => {
+    if (!text.trim()) {
+      setDescription('');
+      setAssetDescValidationError(assets.enterDescription);
+    } else {
+      setDescription(text);
+      setAssetDescValidationError(null);
+    }
+  };
+
+  const handleUniqueAssetDescriptionChange = text => {
+    if (!text.trim()) {
+      setDescription('');
+      setAssetDescValidationError(assets.enterDescription);
+    } else {
+      setDescription(text);
+      setAssetDescValidationError(null);
+    }
+  };
+
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
       if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
         setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
         setTotalSupplyAmt('');
+        setAssetTotSupplyValidationError(assets.enterTotalSupply);
       } else if (
         sanitizedText &&
         BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
       ) {
-        Toast(assets.totalSupplyAmountErrMsg, true);
+        setAssetTotSupplyValidationError(assets.totalSupplyAmountErrMsg);
       }
     } catch {
       setTotalSupplyAmt('');
@@ -327,7 +421,11 @@ function IssueCollectibleScreen() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={assets.issueCollectibles} />
+      <AppHeader
+        title={assets.issueCollectibles}
+        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
+      />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -361,28 +459,29 @@ function IssueCollectibleScreen() {
 
         {assetType === AssetType.Collectible ? (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
               value={assetName}
-              onChangeText={text => setAssetName(text)}
+              onChangeText={handleAssetNameChange}
               placeholder={assets.enterAssetNamePlaceholder}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
-              onSubmitEditing={() => descriptionInputRef.current?.focus()}
+              onSubmitEditing={handleAssetNameSubmit}
               blurOnSubmit={false}
               returnKeyType="next"
+              error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
               ref={descriptionInputRef}
               value={description}
-              onChangeText={text => setDescription(text)}
+              onChangeText={handleAssetDescriptionChange}
               placeholder={assets.enterDescNamePlaceholder}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
@@ -395,9 +494,10 @@ function IssueCollectibleScreen() {
               style={[styles.input, description && styles.descInput]}
               onSubmitEditing={() => totalSupplyInputRef.current?.focus()}
               blurOnSubmit={false}
+              error={assetDescValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.totalSupplyAmount}
             </AppText>
 
@@ -409,6 +509,7 @@ function IssueCollectibleScreen() {
               keyboardType="numeric"
               style={styles.input}
               returnKeyType="done"
+              error={assetTotSupplyValidationError}
             />
 
             <Slider
@@ -424,17 +525,11 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
-
-            <UploadAssetFileButton
-              onPress={handlePickImage}
-              title={home.uploadFile}
-              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
-            />
-            {image && (
+            {image ? (
               <View style={styles.imageWrapper}>
                 <Image
                   source={{
@@ -451,6 +546,12 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
+            ) : (
+              <AppTouchable
+                onPress={handlePickImage}
+                style={styles.addMediafileIconWrapper}>
+                {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
+              </AppTouchable>
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
@@ -459,45 +560,47 @@ function IssueCollectibleScreen() {
           </View>
         ) : (
           <View>
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetName}
             </AppText>
             <TextField
               value={assetName}
-              onChangeText={text => setAssetName(text)}
+              onChangeText={handleUniqueAssetNameChange}
               placeholder={assets.enterAssetNamePlaceholder}
               maxLength={32}
               style={styles.input}
               autoCapitalize="words"
-              onSubmitEditing={() => assetTickerInputRef.current?.focus()}
+              onSubmitEditing={handleUniqueAssetNameSubmit}
               blurOnSubmit={false}
               returnKeyType="next"
+              error={assetNameValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetTicker}
             </AppText>
 
             <TextField
               ref={assetTickerInputRef}
               value={assetTicker}
-              onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+              onChangeText={handleUniqueAssetTickerChange}
               placeholder={assets.enterAssetTickerPlaceholder}
               maxLength={8}
               style={styles.input}
               autoCapitalize="characters"
               returnKeyType="next"
-              onSubmitEditing={() => descriptionInputRef.current?.focus()}
+              onSubmitEditing={handleAssetTickerSubmit}
               blurOnSubmit={false}
+              error={assetTickerValidationError}
             />
 
-            <AppText variant="secondaryCta" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle}>
               {home.assetDescription}
             </AppText>
             <TextField
               ref={descriptionInputRef}
               value={description}
-              onChangeText={text => setDescription(text)}
+              onChangeText={handleUniqueAssetDescriptionChange}
               placeholder={assets.enterDescNamePlaceholder}
               onContentSizeChange={event => {
                 setInputHeight(event.nativeEvent.contentSize.height);
@@ -510,20 +613,16 @@ function IssueCollectibleScreen() {
               style={[styles.input, description && styles.descInput]}
               onSubmitEditing={() => Keyboard.dismiss()}
               blurOnSubmit={false}
+              error={assetDescValidationError}
             />
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.mediaFile}
             </AppText>
 
-            <UploadAssetFileButton
-              onPress={handlePickImage}
-              title={home.uploadFile}
-              icon={isThemeDark ? <UploadFile /> : <UploadFileLight />}
-            />
-            {image && (
+            {image ? (
               <View style={styles.imageWrapper}>
                 <Image
                   source={{
@@ -540,6 +639,12 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <IconClose /> : <IconCloseLight />}
                 </AppTouchable>
               </View>
+            ) : (
+              <AppTouchable
+                onPress={handlePickImage}
+                style={styles.addMediafileIconWrapper}>
+                {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
+              </AppTouchable>
             )}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
@@ -547,7 +652,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <AppText
-              variant="secondaryCta"
+              variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.attachments}
             </AppText>
@@ -579,9 +684,9 @@ function IssueCollectibleScreen() {
               )}
               ListFooterComponent={() => (
                 <AppTouchable
-                  style={[styles.imageStyle]}
-                  onPress={selectAttchments}>
-                  <AppText style={{ fontSize: 70 }}>+</AppText>
+                  onPress={selectAttchments}
+                  style={[styles.selectAttatchmentIconWrapper]}>
+                  {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
                 </AppTouchable>
               )}
             />
@@ -611,7 +716,8 @@ function IssueCollectibleScreen() {
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
             disabled={isButtonDisabled || createUtxos.isLoading || loading}
-            width={wp(120)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
             primaryLoading={createUtxos.isLoading || loading}
           />
         </View>
@@ -631,6 +737,13 @@ function IssueCollectibleScreen() {
             secondaryOnPress={() => setVisibleFailedToCreatePopup(false)}
           />
         </ResponsePopupContainer>
+      </View>
+      <View>
+        <UDACollectiblesInfoModal
+          visible={visibleUDACollectiblesInfo}
+          primaryCtaTitle={common.okay}
+          primaryOnPress={() => setVisibleUDACollectiblesInfo(false)}
+        />
       </View>
     </ScreenContainer>
   );
@@ -672,7 +785,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     closeIconWrapper: {
       position: 'absolute',
       bottom: 0,
-      left: Platform.OS === 'ios' ? 80 : 85,
+      left: 70,
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
@@ -699,6 +812,13 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: hp(20),
+    },
+    addMediafileIconWrapper: {
+      marginVertical: hp(5),
+    },
+    selectAttatchmentIconWrapper: {
+      marginHorizontal: hp(5),
+      marginVertical: hp(12),
     },
   });
 export default IssueCollectibleScreen;

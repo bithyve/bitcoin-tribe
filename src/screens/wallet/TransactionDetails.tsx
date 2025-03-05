@@ -11,6 +11,7 @@ import { Transaction } from 'src/services/wallets/interfaces';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { TransactionType } from 'src/services/wallets/enums';
 
 function TransactionDetails({ route }) {
   const transaction: Transaction = route.params?.transaction;
@@ -26,7 +27,7 @@ function TransactionDetails({ route }) {
         transAmount={
           app.appType === AppType.NODE_CONNECT
             ? `${transaction.received}`
-            : `${transaction.amount - transaction.fee}`
+            : transaction.transactionType ===  TransactionType.SENT ?`${transaction.amount - transaction.fee}` : transaction.amount
         }
         transaction={transaction}
       />
