@@ -34,9 +34,9 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
-import SecondaryCTA from 'src/components/SecondaryCTA';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
+import SkipButton from 'src/components/SkipButton';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -50,7 +50,7 @@ type ServiceFeeProps = {
   status: 'error' | 'idle' | 'loading' | 'success';
 };
 
-const ServiceFee = ({
+export const ServiceFee = ({
   feeDetails,
   onPay,
   status,
@@ -68,7 +68,7 @@ const ServiceFee = ({
 
   return (
     <View style={styles.containerFee}>
-      <View>
+      <View style={styles.wrapper}>
         <View style={styles.amtContainer}>
           <View style={styles.labelWrapper}>
             <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
@@ -79,20 +79,8 @@ const ServiceFee = ({
             )} sats`}</AppText>
           </View>
         </View>
-
-        <SecondaryCTA
-          title={common.skip}
-          disabled={status === 'loading'}
-          onPress={() => {
-            hideModal();
-            setTimeout(() => {
-              onSkip();
-            }, 400);
-          }}
-          buttonColor={theme.colors.buy}
-          height={hp(18)}
-        />
-
+      </View>
+      <View>
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
             title={assets.swipeToPay}
@@ -101,6 +89,16 @@ const ServiceFee = ({
             backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
+        <SkipButton
+          disabled={status === 'loading'}
+          onPress={() => {
+            hideModal();
+            setTimeout(() => {
+              onSkip();
+            }, 400);
+          }}
+          title={assets.skipForNow}
+        />
       </View>
     </View>
   );
@@ -108,7 +106,7 @@ const ServiceFee = ({
 
 function AddAsset() {
   const navigation = useNavigation();
-  const { issueAssetType } = useRoute().params;
+  const issueAssetType = useRoute().params?.issueAssetType;
   const wallet: Wallet = useWallets({}).wallets[0];
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -146,7 +144,7 @@ function AddAsset() {
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
-          }, 300);
+          }, 500);
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
@@ -173,7 +171,12 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
-      Toast(`Failed to pay service fee: ${payServiceFeeFeeMutation.error}`, true);
+      const errorMessage =
+        payServiceFeeFeeMutation.error?.message ||
+        payServiceFeeFeeMutation.error?.toString() ||
+        'An unexpected error occurred';
+
+      Toast(`Failed to pay service fee: ${errorMessage}`, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -217,10 +220,10 @@ function AddAsset() {
         <ModalContainer
           title={assets.listYourAssetInRegTitle}
           subTitle={assets.listYourAssetInRegSubTitle}
-          height={Platform.OS === 'ios' ? '60%' : ''}
           visible={showFeeModal}
           enableCloseIcon={false}
           onDismiss={() => {
+            if (payServiceFeeFeeMutation.isLoading) return;
             setShowFeeModal(false);
             getAssetIssuanceFeeMutation.reset();
           }}>
@@ -241,8 +244,8 @@ function AddAsset() {
         <SelectOption
           title={
             issueAssetType === AssetType.Coin
-              ? 'Issue Coin'
-              : 'Issue Collectible'
+              ? assets.issueNewCoin
+              : assets.issueCollectibles
           }
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
@@ -305,8 +308,11 @@ const getStyles = (theme: AppTheme) =>
     },
     containerFee: {
       borderTopColor: theme.colors.borderColor,
-      borderTopWidth: 1,
-      paddingTop: hp(15),
+      borderTopWidth: 2,
+      paddingTop: hp(5),
+    },
+    wrapper: {
+      // height: '50%',
     },
     labelWrapper: {
       width: '45%',
@@ -314,6 +320,7 @@ const getStyles = (theme: AppTheme) =>
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'flex-end',
       width: '55%',
     },
     labelText: {
@@ -323,14 +330,16 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     amtContainer: {
-      marginVertical: hp(20),
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(45),
       padding: hp(15),
       borderRadius: 15,
       alignItems: 'center',
-      borderColor: '#787878',
+      borderColor: theme.colors.serviceFeeBorder,
       borderWidth: 1,
       borderStyle: 'dashed',
       flexDirection: 'row',
+      width: '80%',
+      alignSelf: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',

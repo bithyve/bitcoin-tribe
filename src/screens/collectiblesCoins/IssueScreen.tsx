@@ -10,13 +10,13 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import AppHeader from 'src/components/AppHeader';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -51,7 +51,11 @@ function IssueScreen() {
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [precision, setPrecision] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [assetNameValidationError, setAssetNameValidationError] = useState('');
+  const [assetTickerValidationError, setAssetTickerValidationError] =
+    useState('');
+  const [assetTotSupplyValidationError, setAssetTotSupplyValidationError] =
+    useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
 
@@ -118,7 +122,13 @@ function IssueScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
-        navigation.navigate(NavigationRoutes.ASSETS);
+        setTimeout(() => {
+          navigation.replace(NavigationRoutes.COINDETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
+        }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
         response?.name === 'NoAvailableUtxos'
@@ -143,18 +153,56 @@ function IssueScreen() {
     issueCoin();
   };
 
+  const handleAssetNameChange = text => {
+    if (!text.trim()) {
+      setAssetName('');
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      setAssetName(text);
+      setAssetNameValidationError(null);
+    }
+  };
+
+  const handleAssetNameSubmit = () => {
+    if (!assetName.trim()) {
+      setAssetNameValidationError(assets.enterAssetName);
+    } else {
+      assetTickerInputRef.current?.focus();
+    }
+  };
+
+  const handleAssetTickerInput = text => {
+    if (!text.trim()) {
+      setAssetTicker('');
+      setAssetTickerValidationError(assets.enterAssetTicker);
+    } else {
+      setAssetTicker(text.trim().toUpperCase());
+      setAssetTickerValidationError(null);
+    }
+  };
+
+  const handleAssetTickerSubmit = () => {
+    if (!assetTicker.trim()) {
+      setAssetTickerValidationError(assets.enterAssetTicker);
+    } else {
+      totalSupplyInputRef.current?.focus();
+    }
+  };
+
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
       if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
         setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
         setTotalSupplyAmt('');
+        setAssetTotSupplyValidationError(assets.enterTotalSupply);
       } else if (
         sanitizedText &&
         BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
       ) {
-        Toast(assets.totalSupplyAmountErrMsg, true);
+        setAssetTotSupplyValidationError(assets.totalSupplyAmountErrMsg);
       }
     } catch {
       setTotalSupplyAmt('');
@@ -184,37 +232,39 @@ function IssueScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetName}
           </AppText>
           <TextField
             value={assetName}
-            onChangeText={text => setAssetName(text)}
+            onChangeText={handleAssetNameChange}
             placeholder={assets.enterAssetNamePlaceholder}
             maxLength={32}
             style={styles.input}
             autoCapitalize="words"
             returnKeyType="next"
-            onSubmitEditing={() => assetTickerInputRef.current?.focus()}
+            onSubmitEditing={handleAssetNameSubmit}
             blurOnSubmit={false}
+            error={assetNameValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetTicker}
           </AppText>
 
           <TextField
             ref={assetTickerInputRef}
             value={assetTicker}
-            onChangeText={text => setAssetTicker(text.trim().toUpperCase())}
+            onChangeText={handleAssetTickerInput}
             placeholder={assets.enterAssetTickerPlaceholder}
             maxLength={8}
             style={styles.input}
             autoCapitalize="characters"
             returnKeyType="next"
-            onSubmitEditing={() => totalSupplyInputRef.current?.focus()}
+            onSubmitEditing={handleAssetTickerSubmit}
             blurOnSubmit={false}
+            error={assetTickerValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.totalSupplyAmount}
           </AppText>
 
@@ -227,6 +277,7 @@ function IssueScreen() {
             style={styles.input}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
+            error={assetTotSupplyValidationError}
           />
 
           <Slider
@@ -237,7 +288,7 @@ function IssueScreen() {
             maximumValue={10}
             step={1}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="caption" style={styles.textInputTitle}>
             {assets.precisionCaption}
           </AppText>
         </View>
@@ -261,7 +312,8 @@ function IssueScreen() {
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled || createUtxos.isLoading || loading}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
           primaryLoading={createUtxos.isLoading || loading}
         />
       </View>

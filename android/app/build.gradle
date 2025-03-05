@@ -71,6 +71,7 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -81,9 +82,12 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 88
-        versionName "0.2.7"
+        versionCode 101
+        versionName "0.2.9"
         missingDimensionStrategy 'react-native-camera', 'general'
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'tribe'
+        ]
     }
     signingConfigs {
         release {
@@ -138,7 +142,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation "com.google.android.gms:play-services-drive:17.0.0"
-
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
     // For animated GIF support
     //  implementation 'com.facebook.fresco:animated-gif:2.5.0'
     //Fresco - For Animated Gifs in React Native Android

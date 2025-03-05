@@ -77,6 +77,7 @@ const getStyles = (theme: AppTheme) =>
     optionCardStyle: {
       paddingHorizontal: hp(20),
       borderRadius: 30,
+      marginVertical: hp(5),
     },
   });
 export default WalletSetupOption;

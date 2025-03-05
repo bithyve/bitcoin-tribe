@@ -1,4 +1,4 @@
-import { Animated, Image, Platform, StyleSheet } from 'react-native';
+import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -19,12 +19,14 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
-import { hp } from 'src/constants/responsive';
-
+import { hp, windowHeight } from 'src/constants/responsive';
+import AssetSpendableAmtView from './components/AssetSpendableAmtView';
+import { requestAppReview } from 'src/services/appreview';
+import VerifyIssuerModal from './components/VerifyIssuerModal';
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -33,6 +35,17 @@ const CollectibleDetailsScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const [refreshing, setRefreshing] = useState(false);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+  useEffect(() => {
+    if (askReview) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+    if (askVerify) {
+      setShowVerifyModal(true);
+    }
+  }, [askReview, askVerify]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -110,7 +123,12 @@ const CollectibleDetailsScreen = () => {
           })
         }
       />
-
+      <View style={styles.spendableBalanceWrapper}>
+        <AssetSpendableAmtView
+          spendableBalance={collectible?.balance?.spendable}
+          style={styles.toolTipCotainer}
+        />
+      </View>
       <TransactionsList
         transactions={transactionsData}
         isLoading={isLoading}
@@ -126,6 +144,13 @@ const CollectibleDetailsScreen = () => {
         coin={collectible.name}
         assetId={assetId}
         scrollY={scrollY}
+        style={styles.transactionContainer}
+      />
+      <VerifyIssuerModal
+        assetId={collectible.assetId}
+        isVisible={showVerifyModal}
+        onDismiss={() => setShowVerifyModal(false)}
+        schema={RealmSchema.Collectible}
       />
     </ScreenContainer>
   );
@@ -136,6 +161,15 @@ const getStyles = () =>
       height: hp(40),
       width: hp(40),
       borderRadius: 10,
+    },
+    spendableBalanceWrapper: {
+      top: -30,
+    },
+    transactionContainer: {
+      top: -25,
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 110 : 100,
     },
   });
 export default CollectibleDetailsScreen;

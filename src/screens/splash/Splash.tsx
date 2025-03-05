@@ -1,4 +1,10 @@
-import React, { useEffect, useContext, useCallback, useState } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useTheme } from 'react-native-paper';
@@ -60,20 +66,24 @@ function Splash({ navigation }) {
   }, [navigation, pinMethod, mutate]);
 
   // Handle login success
+  const hasNavigated = useRef(false);
   useEffect(() => {
-    if (data) {
-      setKey(data.key);
-      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
-      setIsWalletOnline(data.isWalletOnline);
-      setAppType(app.appType);
-      navigation.replace(NavigationRoutes.APPSTACK);
-    }
-  }, [data, navigation, setKey]);
+    if (!data || hasNavigated.current){};
+    if (animationFinished) {
+      if(!data?.key) {
+        navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
+      } else {
+        setKey(data.key);
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        setIsWalletOnline(data.isWalletOnline);
+        setAppType(app.appType);
+        navigation.replace(NavigationRoutes.APPSTACK);
+        hasNavigated.current = true;
+      }
 
-  // useEffect(() => {
-  //   const timer = setTimeout(onInit, 4000);
-  //   return () => clearTimeout(timer);
-  // }, [onInit]);
+    }
+  }, [data, animationFinished, navigation, setKey]);
+
   useEffect(() => {
     if (animationFinished) {
       onInit();
@@ -91,7 +101,11 @@ function Splash({ navigation }) {
         resizeMode="cover"
         style={styles.backImage}>
         <LottieView
-          source={isThemeDark ? require('src/assets/images/jsons/logoAnimation.json') : require('src/assets/images/jsons/logoAnimation_light.json')}
+          source={
+            isThemeDark
+              ? require('src/assets/images/jsons/logoAnimation.json')
+              : require('src/assets/images/jsons/logoAnimation_light.json')
+          }
           autoPlay
           loop={false}
           style={styles.splashImageStyle}

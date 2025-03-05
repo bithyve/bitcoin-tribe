@@ -38,8 +38,6 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       paddingHorizontal: hp(15),
       marginVertical: hp(10),
-      borderRadius: 10,
-      backgroundColor: theme.colors.cardBackground,
     },
     detailsWrapper: {
       flexDirection: 'row',

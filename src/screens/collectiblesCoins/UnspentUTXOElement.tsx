@@ -2,13 +2,12 @@ import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-
 import AppText from 'src/components/AppText';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Asset, UtxoType } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, UtxoType } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
@@ -16,6 +15,7 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AllocatedAssets from './components/AllocatedAssets';
+import IconVerified from 'src/assets/images/issuer_verified.svg'
 
 type UnspentUTXOElementProps = {
   transID: string;
@@ -72,14 +72,21 @@ function UnspentUTXOElement({
             allocation.assetId && (
               <View key={allocation.assetId} style={styles.allocationWrapper}>
                 <View style={styles.allocationWrapper1}>
-                  <AllocatedAssets assets={assetMap[allocation.assetId]} />
+                  <AllocatedAssets asset={assetMap[allocation.assetId]} />
                   <AppText variant="heading3" style={styles.assetNameText}>
                     {assetName}
                   </AppText>
+                  {assetMap[allocation.assetId]?.issuer?.verified && (
+                    <IconVerified width={24} height={24} />
+                  )}
                 </View>
-                <AppText variant="body2" style={styles.assetAmountText}>
-                  {numberWithCommas(allocation.amount)}
-                </AppText>
+                {
+                  assetMap[allocation.assetId]?.assetIface.toUpperCase() !== AssetFace.RGB21 && (
+                    <AppText variant="body2" style={styles.assetAmountText}>
+                      {numberWithCommas(allocation.amount)}
+                    </AppText>
+                  )
+                }
               </View>
             )
           );
@@ -121,7 +128,7 @@ function UnspentUTXOElement({
                   fontSize: satsAmount.toString().length > 10 ? 11 : 16,
                 },
               ]}>
-              &nbsp;{isNaN(satsAmount) ? 0 : getBalance(satsAmount)}
+              &nbsp;{isNaN(Number(satsAmount)) ? 0 : getBalance(Number(satsAmount))}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>

@@ -7,7 +7,7 @@ import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import FooterNote from 'src/components/FooterNote';
 import GradientView from 'src/components/GradientView';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useBalance from 'src/hooks/useBalance';
@@ -88,7 +88,8 @@ function RGBCreateUtxoContainer(props: utxoProps) {
           primaryOnPress={primaryOnPress}
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
         />
       </View>
     </View>

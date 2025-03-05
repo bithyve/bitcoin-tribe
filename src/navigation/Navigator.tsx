@@ -28,7 +28,6 @@ import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
 import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
 import EnterInvoiceDetails from 'src/screens/receiveasset/EnterInvoiceDetails';
 import SendToScreen from 'src/screens/send/SendToScreen';
-import BroadcastTransaction from 'src/screens/send/BroadcastTransaction';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
 import CoinDetails from 'src/screens/assets/CoinDetailsScreen';
 import CoinMetaData from 'src/screens/assets/CoinsMetaDataScreen';
@@ -73,6 +72,11 @@ import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
 import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
+import HiddenAssets from 'src/screens/settings/HiddenAssets';
+import ChangePin from 'src/screens/onBoarding/ChangePin';
+import UTXOTabs from './tabNavigation/UTXOTabs';
+import BackupAlertBanner from 'src/components/BackupAlertBanner';
+import BackupDoneBanner from 'src/components/BackupDoneBanner';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -203,10 +207,6 @@ function AppStack() {
           component={EnterInvoiceDetails}
         />
         <Stack.Screen name={NavigationRoutes.SENDTO} component={SendToScreen} />
-        <Stack.Screen
-          name={NavigationRoutes.BROADCASTTRANSACTION}
-          component={BroadcastTransaction}
-        />
         <Stack.Screen name={NavigationRoutes.SHOWXPUB} component={ShowXPub} />
         <Stack.Screen
           name={NavigationRoutes.COINDETAILS}
@@ -248,7 +248,7 @@ function AppStack() {
         />
         <Stack.Screen
           name={NavigationRoutes.VIEWUNSPENT}
-          component={ViewUnspent}
+          component={UTXOTabs}
         />
         <Stack.Screen name={NavigationRoutes.ADDASSET} component={AddAsset} />
         <Stack.Screen
@@ -260,6 +260,7 @@ function AppStack() {
           component={WalletBackupHistory}
         />
         <Stack.Screen name={NavigationRoutes.CREATEPIN} component={CreatePin} />
+        <Stack.Screen name={NavigationRoutes.CHANGEPIN} component={ChangePin} />
         <Stack.Screen
           name={NavigationRoutes.CLOUDBACKUP}
           component={CloudBackup}
@@ -306,6 +307,10 @@ function AppStack() {
           component={LightningSend}
         />
         <Stack.Screen name={NavigationRoutes.VIEWLOGS} component={ViewLogs} />
+        <Stack.Screen
+          name={NavigationRoutes.HIDDENASSETS}
+          component={HiddenAssets}
+        />
       </Stack.Navigator>
     </RealmProvider>
   );
@@ -329,7 +334,8 @@ function Navigator() {
         },
       }}>
       <RGBWalletStatus />
-
+      <BackupAlertBanner />
+      <BackupDoneBanner />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}
