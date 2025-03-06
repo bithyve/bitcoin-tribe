@@ -47,7 +47,7 @@ const EmptyChannelsStateView = (props: emptyStateProps) => {
           <PrimaryCTA
             title={common.createChannel}
             onPress={onPress}
-            width={hp(200)}
+            width={hp(250)}
           />
         </View>
       </View>
