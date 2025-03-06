@@ -8,7 +8,7 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import UTXOInfoIllustration from 'src/assets/images/utxoInfoIllustration.svg';
 import UTXOInfoIllustrationLight from 'src/assets/images/utxoInfoIllustration_light.svg';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -93,14 +93,14 @@ const getStyles = (theme: AppTheme) =>
     },
     wrapper: {
       marginTop: hp(5),
-      marginBottom: hp(20),
+      marginBottom: windowHeight > 670 ? hp(20) : hp(15),
     },
     illustrationWrapper: {
-      marginVertical: hp(20),
+      marginVertical: windowHeight > 670 ? hp(20) : hp(10),
       alignItems: 'center',
     },
     wrapper1: {
-      marginVertical: hp(5),
+      marginVertical: windowHeight > 670 ? hp(5) : hp(3),
     },
     buttonWrapper: {
       alignSelf: 'flex-end',
