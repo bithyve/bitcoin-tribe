@@ -41,6 +41,8 @@ function AppBackupMenu({ navigation }) {
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
+  const { manualAssetBackupStatus, setManualAssetBackupStatus } =
+    React.useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -66,6 +68,7 @@ function AppBackupMenu({ navigation }) {
           });
           if (shareResult.success) {
             setAssetBackup(true);
+            setManualAssetBackupStatus(false);
           }
           const response = await Relay.rgbFileBackup(
             Platform.select({
@@ -160,6 +163,7 @@ function AppBackupMenu({ navigation }) {
                   : setVisibleBackupPhrase(true)
               }
               backup={backup}
+              manualAssetBackupStatus={false}
             />
             {backup ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
@@ -187,8 +191,9 @@ function AppBackupMenu({ navigation }) {
                   : rgbAssetsbackup();
               }}
               backup={assetBackup}
+              manualAssetBackupStatus={manualAssetBackupStatus}
             />
-            {assetBackup ? (
+            {assetBackup && !manualAssetBackupStatus ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
                 {settings.assetBackupSuccessMsg}
               </AppText>
