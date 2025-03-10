@@ -46,6 +46,7 @@ function SettingSectionList(props: sectionListProps) {
               testID={item.testID}
               backup={item.backup}
               lastIndex={lastIndex === index}
+              manualAssetBackupStatus={item.manualAssetBackupStatus}
             />
           ) : null;
         })}

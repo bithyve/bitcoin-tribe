@@ -176,7 +176,10 @@ function AddAsset() {
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
 
-      Toast(`Failed to pay service fee: ${errorMessage}`, true);
+      Toast(
+        `Failed to pay service fee. Please refresh your wallet and try again.`,
+        true,
+      );
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -228,7 +231,10 @@ function AddAsset() {
             getAssetIssuanceFeeMutation.reset();
           }}>
           <ServiceFee
-            onPay={() => payServiceFeeFeeMutation.mutate({ feeDetails })}
+            onPay={async () => {
+              await ApiHandler.refreshWallets({ wallets: [wallet] });
+              payServiceFeeFeeMutation.mutate({ feeDetails });
+            }}
             feeDetails={feeDetails}
             status={payServiceFeeFeeMutation.status}
             onSkip={() => navigateToIssue(false)}

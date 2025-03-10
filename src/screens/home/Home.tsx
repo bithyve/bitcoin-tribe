@@ -34,13 +34,14 @@ function HomeScreen() {
   ).slice(-1)[0];
   const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
-  const { key, setBackupProcess, setBackupDone } = useContext(AppContext);
+  const { key, setBackupProcess, setBackupDone, setManualAssetBackupStatus } =
+    useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
-      console.log('onSuces');
       setBackupDone(true);
       setTimeout(() => {
         setBackupDone(false);
+        setManualAssetBackupStatus(true);
       }, 1500);
     },
   });

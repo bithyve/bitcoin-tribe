@@ -12,6 +12,8 @@ export const AppContext = React.createContext({
   setBackupProcess: status => {},
   isBackupDone: null,
   setBackupDone: status => {},
+  manualAssetBackupStatus: null,
+  setManualAssetBackupStatus: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -20,6 +22,8 @@ export function AppProvider({ children }) {
   const [appType, setAppType] = useState<AppType>(null);
   const [isBackupInProgress, setBackupProcess] = useState<boolean>(null);
   const [isBackupDone, setBackupDone] = useState<boolean>(null);
+  const [manualAssetBackupStatus, setManualAssetBackupStatus] =
+    useState<boolean>(null);
 
   return (
     <AppContext.Provider
@@ -34,6 +38,8 @@ export function AppProvider({ children }) {
         setBackupProcess: setBackupProcess,
         isBackupDone,
         setBackupDone: setBackupDone,
+        manualAssetBackupStatus,
+        setManualAssetBackupStatus: setManualAssetBackupStatus,
       }}>
       {children}
     </AppContext.Provider>
