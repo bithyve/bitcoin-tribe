@@ -28,14 +28,42 @@ const CollectibleDetailsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const {
+    appType,
+    setBackupProcess,
+    setBackupDone,
+    setManualAssetBackupStatus,
+  } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { mutate: backupMutate, isLoading: isBackupLoading } = useMutation(
+    ApiHandler.backup,
+    {
+      onSuccess: () => {
+        setBackupDone(true);
+        setTimeout(() => {
+          setBackupDone(false);
+          setManualAssetBackupStatus(true);
+        }, 1500);
+      },
+    },
+  );
+  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
+    ApiHandler.isBackupRequired,
+  );
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+    onSuccess: () => {
+      if (appType === AppType.ON_CHAIN) {
+        checkBackupRequired();
+      }
+    },
+  });
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+
   useEffect(() => {
     if (askReview) {
       setTimeout(() => {
@@ -46,6 +74,16 @@ const CollectibleDetailsScreen = () => {
       setShowVerifyModal(true);
     }
   }, [askReview, askVerify]);
+
+  useEffect(() => {
+    setBackupProcess(isBackupLoading);
+  }, [isBackupLoading]);
+
+  useEffect(() => {
+    if (isBackupRequired) {
+      backupMutate();
+    }
+  }, [isBackupRequired]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -135,6 +173,7 @@ const CollectibleDetailsScreen = () => {
         refresh={() => {
           setRefreshing(true);
           refreshRgbWallet.mutate();
+          checkBackupRequired();
           mutate({ assetId, schema: RealmSchema.Collectible });
           setTimeout(() => setRefreshing(false), 2000);
         }}
