@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 
@@ -91,7 +91,13 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       alignItems: 'center',
       alignSelf: 'flex-end',
       right: 15,
-      top: windowHeight > 670 ? 30 : 10,
+      top: hasNotch
+        ? 50
+        : Platform.OS === 'ios' && windowHeight > 820
+        ? 28
+        : Platform.OS === 'android'
+        ? 68
+        : 25,
     },
     tooltipText: {
       color: theme.colors.headingColor,

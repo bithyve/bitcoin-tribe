@@ -53,6 +53,7 @@ function SettingsScreen({ navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { manualAssetBackupStatus } = useContext(AppContext);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
   const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
@@ -210,6 +211,7 @@ function SettingsScreen({ navigation }) {
           biometricProcess: false,
         }),
       hideMenu: pinMethod !== PinMethod.DEFAULT,
+      manualAssetBackupStatus: false,
     },
     {
       id: 2,
@@ -217,12 +219,14 @@ function SettingsScreen({ navigation }) {
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => setVisible(true),
       hideMenu: pinMethod === PinMethod.DEFAULT,
+      manualAssetBackupStatus: false,
     },
     {
       id: 3,
       title: settings.appBackup,
       icon: isThemeDark ? <IconBackup /> : <IconBackupLight />,
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
+      manualAssetBackupStatus: manualAssetBackupStatus,
     },
   ];
 
