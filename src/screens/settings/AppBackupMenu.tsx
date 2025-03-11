@@ -199,18 +199,30 @@ function AppBackupMenu({ navigation }) {
               </AppText>
             ) : (
               <>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo1}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo2}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo3}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo4}
-                </AppText>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo1}
+                  </AppText>
+                </View>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo2}
+                  </AppText>
+                </View>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo3}
+                  </AppText>
+                </View>
               </>
             )}
           </View>
@@ -281,7 +293,6 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.backupDoneBorder,
       textAlign: 'justify',
       marginTop: hp(5),
-      marginHorizontal: hp(15),
     },
     textStepTime: {
       color: theme.colors.headingColor,
@@ -290,6 +301,15 @@ const getStyles = (theme: AppTheme) =>
     },
     bodyWrapper: {
       height: Platform.OS === 'android' ? '70%' : '74%',
+    },
+    contentWrapper: {
+      flexDirection: 'row',
+      marginHorizontal: hp(15),
+    },
+    dotViewStyle: {
+      color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(1),
+      fontSize: hp(18),
     },
   });
 export default AppBackupMenu;
