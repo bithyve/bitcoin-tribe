@@ -21,6 +21,7 @@ import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
 import LoadingSpinner from 'src/components/LoadingSpinner';
+import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
 
 function TransactionsList({
   transactions,
@@ -50,6 +51,12 @@ function TransactionsList({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: event => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
   return (
     <View style={[styles.container, style]}>
       <View style={styles.contentWrapper}>
@@ -70,11 +77,9 @@ function TransactionsList({
         </AppTouchable>
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
-      <FlatList
-        // onScroll={Animated.event(
-        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        //   { useNativeDriver: false },
-        // )}
+      <Animated.FlatList
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         style={styles.container2}
         data={transactions}
         refreshControl={

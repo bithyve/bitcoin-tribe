@@ -22,10 +22,15 @@ import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import {
+  interpolate,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
   const { assetId, askReview, askVerify } = useRoute().params;
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -75,24 +80,19 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
-  const largeHeaderHeight = scrollY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [350, 0],
-    extrapolate: 'clamp',
+  const largeHeaderHeight = useDerivedValue(() => {
+    return interpolate(scrollY.value, [0, 300], [350, 0], 'clamp');
   });
-
-  const smallHeaderOpacity = scrollY.interpolate({
-    inputRange: [100, 150],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
+  const smallHeaderOpacity = useDerivedValue(() => {
+    return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
   });
 
   return (
     <ScreenContainer>
       <CoinDetailsHeader
         asset={coin}
-        // smallHeaderOpacity={smallHeaderOpacity}
-        // largeHeaderHeight={largeHeaderHeight}
+        smallHeaderOpacity={smallHeaderOpacity}
+        largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
         onPressSend={() =>
           navigation.navigate(NavigationRoutes.SCANASSET, {

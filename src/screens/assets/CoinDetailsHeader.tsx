@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
+import Animated from 'react-native-reanimated';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -58,13 +60,15 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
 
   return (
     <>
-      {/* <Animated.View
+      <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={asset.ticker} rightIcon={headerRightIcon}/>
-      </Animated.View> */}
-      <View
-        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
-        style={styles.largeHeader}>
+        <AppHeader title={asset.ticker} rightIcon={headerRightIcon} />
+      </Animated.View>
+      <Animated.View
+        style={[
+          styles.largeHeader,
+          { height: largeHeaderHeight, overflow: 'hidden' },
+        ]}>
         <AppHeader
           rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
@@ -148,7 +152,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
             </View>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </>
   );
 }
