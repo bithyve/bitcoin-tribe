@@ -409,11 +409,13 @@ export class ApiHandler {
     Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
   }
 
-  static async resetPinMethod(key: string) {
-    const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
+  static async changePin({ key, pin = '' }) {
+    const hash = hash512(pin || config.ENC_KEY_STORAGE_IDENTIFIER);
     const encryptedKey = encrypt(hash, key);
     SecureStore.store(hash, encryptedKey);
-    Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    if (!pin) {
+      Storage.set(Keys.PIN_METHOD, PinMethod.DEFAULT);
+    }
   }
 
   static async loginWithPin(pin: string) {
@@ -870,7 +872,7 @@ export class ApiHandler {
           JSON.parse(averageTxFeeJSON);
         const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
         const utxos = await RGBServices.createUtxos(
-          averageTxFee.high.feePerByte,
+          averageTxFee.low.feePerByte,
           ApiHandler.appType,
           ApiHandler.api,
         );
@@ -1105,9 +1107,6 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
-      if (ApiHandler.appType === AppType.ON_CHAIN) {
-        ApiHandler.backup();
-      }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
@@ -1160,7 +1159,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1225,7 +1224,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1289,7 +1288,7 @@ export class ApiHandler {
                 metadata: {
                   assetId: response.assetId,
                   note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm a',
+                    'DD MMM YY  •  hh:mm A',
                   )}`,
                 },
               },
@@ -1854,6 +1853,14 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('backup error', error);
+    }
+  }
+
+  static async isBackupRequired() {
+    try {
+      return await RGBServices.isBackupRequired();
+    } catch (error) {
+      throw error;
     }
   }
 

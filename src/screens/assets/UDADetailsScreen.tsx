@@ -50,7 +50,7 @@ const UDADetailsScreen = () => {
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
-  );
+  ).toJSON();
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -72,7 +72,6 @@ const UDADetailsScreen = () => {
         }
       }, 2000);
     }
-
   }, [askReview, askVerify]);
 
   const showVerifyIssuer = useMemo(() => {
@@ -205,9 +204,13 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
+        <HideAssetView
+          title={assets.hideAsset}
+          onPress={() => hideAsset()}
+          isVerified={uda?.issuer?.verified}
+          assetId={assetId}
+        />
       </ScrollView>
-      <HideAssetView title={assets.hideUda} onPress={() => hideAsset()} />
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}

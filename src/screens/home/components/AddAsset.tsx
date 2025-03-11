@@ -36,7 +36,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
-import AppTouchable from 'src/components/AppTouchable';
+import SkipButton from 'src/components/SkipButton';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -50,7 +50,7 @@ type ServiceFeeProps = {
   status: 'error' | 'idle' | 'loading' | 'success';
 };
 
-const ServiceFee = ({
+export const ServiceFee = ({
   feeDetails,
   onPay,
   status,
@@ -89,18 +89,16 @@ const ServiceFee = ({
             backColor={theme.colors.swipeToActionThumbColor}
           />
         </View>
-        <AppTouchable
+        <SkipButton
           disabled={status === 'loading'}
           onPress={() => {
             hideModal();
             setTimeout(() => {
               onSkip();
             }, 400);
-          }}>
-          <AppText variant="body2" style={styles.skipText}>
-            {assets.skipForNow}
-          </AppText>
-        </AppTouchable>
+          }}
+          title={assets.skipForNow}
+        />
       </View>
     </View>
   );
@@ -173,8 +171,13 @@ function AddAsset() {
         navigateToIssue(true);
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
+      const errorMessage =
+        payServiceFeeFeeMutation.error?.message ||
+        payServiceFeeFeeMutation.error?.toString() ||
+        'An unexpected error occurred';
+
       Toast(
-        `Failed to pay service fee: ${payServiceFeeFeeMutation.error}`,
+        `Failed to pay service fee. Please refresh your wallet and try again.`,
         true,
       );
       payServiceFeeFeeMutation.reset();
@@ -228,7 +231,10 @@ function AddAsset() {
             getAssetIssuanceFeeMutation.reset();
           }}>
           <ServiceFee
-            onPay={() => payServiceFeeFeeMutation.mutate({ feeDetails })}
+            onPay={async () => {
+              await ApiHandler.refreshWallets({ wallets: [wallet] });
+              payServiceFeeFeeMutation.mutate({ feeDetails });
+            }}
             feeDetails={feeDetails}
             status={payServiceFeeFeeMutation.status}
             onSkip={() => navigateToIssue(false)}
@@ -346,12 +352,6 @@ const getStyles = (theme: AppTheme) =>
       width: hp(150),
       height: hp(150),
       marginVertical: hp(20),
-    },
-    skipText: {
-      color: theme.colors.secondaryHeadingColor,
-      textDecorationLine: 'underline',
-      alignSelf: 'center',
-      marginVertical: hp(10),
     },
   });
 

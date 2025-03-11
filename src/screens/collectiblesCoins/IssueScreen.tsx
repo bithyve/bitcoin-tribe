@@ -16,7 +16,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -123,7 +123,11 @@ function IssueScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COINDETAILS, { assetId: response.assetId, askReview: true, askVerify: true });
+          navigation.replace(NavigationRoutes.COINDETAILS, {
+            assetId: response.assetId,
+            askReview: true,
+            askVerify: addToRegistry,
+          });
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -228,7 +232,7 @@ function IssueScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetName}
           </AppText>
           <TextField
@@ -243,7 +247,7 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetNameValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetTicker}
           </AppText>
 
@@ -260,7 +264,7 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetTickerValidationError}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle}>
             {home.totalSupplyAmount}
           </AppText>
 
@@ -284,7 +288,7 @@ function IssueScreen() {
             maximumValue={10}
             step={1}
           />
-          <AppText variant="secondaryCta" style={styles.textInputTitle}>
+          <AppText variant="caption" style={styles.textInputTitle}>
             {assets.precisionCaption}
           </AppText>
         </View>
@@ -308,7 +312,8 @@ function IssueScreen() {
           secondaryTitle={common.cancel}
           secondaryOnPress={() => navigation.goBack()}
           disabled={isButtonDisabled || createUtxos.isLoading || loading}
-          width={wp(120)}
+          width={windowWidth / 2.3}
+          secondaryCTAWidth={windowWidth / 2.3}
           primaryLoading={createUtxos.isLoading || loading}
         />
       </View>

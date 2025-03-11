@@ -25,7 +25,7 @@ const NetworkBanner = () => {
     return () => unsubscribe();
   }, []);
 
-  if (isConnected) return null; // Don't display banner if connected
+  if (isConnected) return null;
 
   return (
     <View style={styles.banner}>
@@ -48,7 +48,7 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       left: 0,
       right: 0,
       backgroundColor: Colors.FireOpal,
-      zIndex: 1000, // Ensures the banner is above everything
+      zIndex: 1000,
       alignItems: 'center',
     },
     text: {

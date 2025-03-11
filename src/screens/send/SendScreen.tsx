@@ -3,7 +3,6 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -22,6 +21,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import ModalLoading from 'src/components/ModalLoading';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -59,41 +59,47 @@ function SendScreen({ route, navigation }) {
         return;
       }
       if (value.startsWith('rgb:')) {
-        const res = await ApiHandler.decodeInvoice(value);
-        if (res.assetId) {
-          const assetData = allAssets.find(
-            item => item.assetId === res.assetId,
-          );
-          if (!assetData) {
-            setIsScanning(true);
-            if (triggerSource === 'scan') {
-              Toast(assets.assetNotFoundMsg, true);
+        try {
+          const res = await ApiHandler.decodeInvoice(value);
+          if (res.assetId) {
+            const assetData = allAssets.find(
+              item => item.assetId === res.assetId,
+            );
+            if (!assetData) {
+              setIsScanning(true);
+              if (triggerSource === 'scan') {
+                Toast(assets.assetNotFoundMsg, true);
+              } else {
+                setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
+              }
             } else {
-              setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
+              setIsScanning(true);
+              navigateWithDelay(() => {
+                navigation.replace(NavigationRoutes.SENDASSET, {
+                  assetId: res.assetId,
+                  wallet: wallet,
+                  rgbInvoice: value,
+                  amount: res.amount.toString(),
+                });
+              });
             }
           } else {
             setIsScanning(true);
             navigateWithDelay(() => {
-              navigation.replace(NavigationRoutes.SENDASSET, {
-                assetId: res.assetId,
-                wallet: wallet,
+              navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
+                wallet,
                 rgbInvoice: value,
-                amount: res.amount.toString(),
+                assetID: '',
+                amount: '',
               });
             });
           }
-        } else {
+          return;
+        } catch (error) {
           setIsScanning(true);
-          navigateWithDelay(() => {
-            navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
-              wallet,
-              rgbInvoice: value,
-              assetID: '',
-              amount: '',
-            });
-          });
+          setValidatingInvoiceErrorMsg('Failed to decode RGB invoice.');
+          return;
         }
-        return;
       }
       if (value.startsWith('lnbc')) {
         setIsScanning(true);
@@ -165,9 +171,9 @@ function SendScreen({ route, navigation }) {
   return (
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
-      {/* <View>
-        <ModalLoading visible={validatingInvoiceLoader} />
-      </View> */}
+      <View>
+        <ModalLoading visible={!isScanning} />
+      </View>
       <View style={styles.scannerWrapper}>
         {!visible && (
           <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />

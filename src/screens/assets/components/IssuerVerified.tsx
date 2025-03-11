@@ -46,7 +46,7 @@ const IssuerVerified : React.FC<IssuerVerifiedProps> = (props: IssuerVerifiedPro
   const styles = getStyles(theme);
 
   const onPress = useCallback(() => {
-    openLink(`https://x.com/i/user/${id}`);
+    openLink(`https://twitter.com/i/user/${id}`);
   }, [id]);
 
   return (

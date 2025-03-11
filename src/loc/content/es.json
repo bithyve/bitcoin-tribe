@@ -51,7 +51,12 @@
     "joinGroup": "Unirse al grupo",
     "understood": "Entendido",
     "createChannel": "Crear Canal",
-    "done": "Hecho"
+    "done": "Hecho",
+    "okay": "De acuerdo",
+    "backupInProgress": "Copia de seguridad en progreso",
+    "tapToInfo": "Toca para información",
+    "backupInProgressMsg": "Completa tu copia de seguridad para proteger tus activos. Por favor, espera mientras finaliza.",
+    "backDoneMsg": "El proceso de copia de seguridad ha finalizado"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -187,7 +192,12 @@
     "backupAlertTitle": "Asegura tus fondos con un respaldo",
     "backupAlertSubTitle": "Respaldar tu billetera asegura que tus fondos estén seguros, incluso si pierdes tu dispositivo. Tómate un momento para crear un respaldo ahora.",
     "createCoinTitle": "Crear moneda",
-    "createCollectibleTitle": "Crear coleccionables"
+    "createCollectibleTitle": "Crear coleccionables",
+    "pullDownInfo1": "Desliza hacia abajo para actualizar",
+    "pullDownInfo2": "Todos los saldos y estados de transacciones en Tribe RGB se actualizan automáticamente en segundo plano. Solo necesitas deslizar hacia abajo para una actualización forzada si es necesario.",
+    "pullDownInfo3": "¿Cuándo usar la actualización forzada?",
+    "pullDownInfo4": "Para ver rápidamente las últimas actualizaciones después de realizar una transacción.",
+    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante."
   },
   "settings": {
     "setting": "Configuraciones",
@@ -290,7 +300,21 @@
     "assetBackupSuccessMsg": "Tus activos RGB han sido respaldados con éxito",
     "tribeTelegram": "Tribe Telegram",
     "tribeX": "Tribe X",
-    "unHide": "Mostrar"
+    "unHide": "Mostrar",
+    "backupPhraseTitle": "Frase de respaldo",
+    "backupPhraseSubTitle": "Escriba cuidadosamente la Frase de Respaldo de 12 palabras en un lugar privado y asegúrese de su seguridad.",
+    "backupPhraseTitle1": "Cuidado",
+    "backupPhraseSubTitle1": "Cualquiera que tenga acceso a la Frase de Respaldo puede acceder y retirar sus fondos. Perderla significa que no podrá hacer una copia de seguridad de su billetera.",
+    "walletMgtTitle": "Gestión de Billetera",
+    "personalizationTitle": "Personalización",
+    "appSecurityTitle": "Seguridad de la Aplicación",
+    "AboutSupportTitle": "Acerca de y Soporte",
+    "utxoInfoTitle1": "¿Qué Son los UTXO?",
+    "utxoInfoSubTitle1": "Los UTXO (Unspent Transaction Outputs) son como monedas digitales en tu billetera de Bitcoin. Cuando realizas una transacción, esta crea salidas, y las que aún no has utilizado se llaman UTXO.",
+    "utxoInfoTitle2": "UTXO Coloreados",
+    "utxoInfoSubTitle2": "UTXO ya asociados con activos RGB, representando tokens específicos o coleccionables.",
+    "utxoInfoTitle3": "UTXO Coloreables",
+    "utxoInfoSubTitle3": "UTXO disponibles y listos para asociarse con activos RGB y utilizarse en transacciones RGB."
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -527,7 +551,33 @@
     "hideUda": "Ocultar UDA",
     "hideAsset": "Ocultar activo",
     "noHiddenAssetTitle": "No hay activos ocultos",
-    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento."
+    "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento.",
+    "verifyYourIdentityTitle": "Verifica tu identidad",
+    "verifyYourIdentitySubTitle": "Asegura tus activos verificando tu identidad en Twitter.",
+    "verifyNow": "Verificar ahora",
+    "issuerVerificationTitle": "Verificación del emisor requerida",
+    "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
+    "connectVerifyTwitter": "Conectar y verificar en Twitter",
+    "viewInRegistry": "Ver en el Registro",
+    "udaCollectibleInfo1": "UDAs vs. Coleccionables",
+    "udaCollectibleInfoBold": "UDAs",
+    "udaCollectibleInfo2": "son activos digitales únicos que representan artículos como arte raro, boletos o certificados con propiedad verificada.",
+    "udaCollectibleInfoBold1": "Coleccionables",
+    "udaCollectibleInfo3": "son activos de edición limitada emitidos en lotes, como artículos de juego o recompensas.",
+    "udaCollectibleInfo4": "Diferencias clave",
+    "udaCollectibleInfoBold2": "UDAs: ",
+    "udaCollectibleInfo5": "Únicos, exclusivos.",
+    "udaCollectibleInfoBold3": "Coleccionables: ",
+    "udaCollectibleInfo6": "Parte de una serie, emitidos en grandes cantidades.",
+    "donationTranferInfo1": "Transferencia de Donación",
+    "donationTranferInfo2": "Una transferencia de donación te permite enviar activos instantáneamente sin que el receptor necesite verificar en su lado.",
+    "donationTranferInfo3": "Transferencias Instantáneas",
+    "donationTranferInfo4": "No es necesario que el destinatario apruebe la transferencia.",
+    "donationTranferInfo5": "Perfecto para Regalos",
+    "donationTranferInfo6": "Úsalo para propinas, crowdfunding, sorteos o enviar regalos.",
+    "donationTranferInfo7": "Sencillo y Eficiente",
+    "donationTranferInfo8": "Las transferencias se completan de inmediato.",
+    "sendAsDonation": "¿Enviar como donación?"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
@@ -599,7 +649,16 @@
     "enterPubKeyaddress": "Por favor, ingrese una clave pública y dirección válidas",
     "enterCapacityAmt": "Por favor, ingrese la cantidad de capacidad",
     "enterMSats": "Por favor, ingrese los mSats",
-    "enterAssetAmt": "Por favor, ingrese la cantidad del activo"
+    "enterAssetAmt": "Por favor, ingrese la cantidad del activo",
+    "channelInfo1": "¿Qué son los canales?",
+    "channelInfo2": "Los canales en Bitcoin te permiten enviar y recibir transacciones instantáneamente con bajas comisiones. Crean un enlace directo entre tú y otro usuario para transacciones más rápidas.",
+    "channelInfo3": "Para crear un canal en la aplicación Tribe RGB, se requieren los siguientes parámetros:",
+    "channelInfoBold1": "Dirección del Peer y Clave Pública:",
+    "channelInfo4": "Información del nodo Lightning del destinatario.",
+    "channelInfoBold2": "ID del Activo y Cantidad:",
+    "channelInfo5": "Especifica qué activo RGB se está utilizando y en qué cantidad.",
+    "channelInfoBold3": "Fondos en Satoshis:",
+    "channelInfo6": "Cantidad de BTC necesaria para abrir el canal."
   },
   "lightning": {
     "sendTitle": "Enviar",

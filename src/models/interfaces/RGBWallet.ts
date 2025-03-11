@@ -79,10 +79,11 @@ export interface Coin {
   visibility: AssetVisibility;
 }
 
-interface Media {
+export interface Media {
   filePath: string;
   mime: string;
   digest?: string;
+  base64Image?: string;
 }
 export interface Collectible {
   addedAt: number;

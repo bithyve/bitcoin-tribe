@@ -10,7 +10,21 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-
+  if ([[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] intValue] > 95) {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"FirstRun"]) {
+      NSArray *secItemClasses = @[(__bridge id)kSecClassGenericPassword,
+                      (__bridge id)kSecClassInternetPassword,
+                      (__bridge id)kSecClassCertificate,
+                      (__bridge id)kSecClassKey,
+                      (__bridge id)kSecClassIdentity];
+      for (id secItemClass in secItemClasses) {
+          NSDictionary *spec = @{(__bridge id)kSecClass: secItemClass};
+          SecItemDelete((__bridge CFDictionaryRef)spec);
+      }
+      [[NSUserDefaults standardUserDefaults] setValue:@"1strun" forKey:@"FirstRun"];
+      [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+  }
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

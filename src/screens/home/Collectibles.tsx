@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -22,14 +22,40 @@ import {
   Collectible,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { AppContext } from 'src/contexts/AppContext';
+import AppType from 'src/models/enums/AppType';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
 
   const navigation = useNavigation();
+  const { key, setBackupProcess, setBackupDone, setManualAssetBackupStatus } =
+    useContext(AppContext);
 
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
+    onSuccess: () => {
+      setBackupDone(true);
+      setTimeout(() => {
+        setBackupDone(false);
+        setManualAssetBackupStatus(true);
+      }, 1500);
+    },
+  });
+  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
+    ApiHandler.isBackupRequired,
+  );
+
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+    onSuccess: () => {
+      if (app.appType === AppType.ON_CHAIN) {
+        checkBackupRequired();
+      }
+    },
+  });
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
@@ -52,6 +78,23 @@ function Collectibles() {
       .sort((a, b) => b.timestamp - a.timestamp);
   }, [collectibles, udas]);
 
+  useEffect(() => {
+    setBackupProcess(isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isBackupRequired) {
+      backupMutate();
+    }
+  }, [isBackupRequired]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshRgbWallet.mutate();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));
   };
@@ -59,6 +102,7 @@ function Collectibles() {
   const handleRefresh = () => {
     setRefreshing(true);
     refreshRgbWallet.mutate();
+    checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };
