@@ -243,7 +243,7 @@
     "appInfoTitle": "App Info",
     "appInfoScreenSubTitle": "Tribe RGB app details and Build version history",
     "walletBackup": "Wallet backup",
-    "rgbAssetsbackup": "Asset backup",
+    "rgbAssetsbackup": "Manual Asset Backup (optional)",
     "appBackupMenuSubTitle": "Wallet Backup and Asset Backup are mandatory. Complete Step 1 before proceeding to Step 2.",
     "nodeAppBackupMenuSubTitle": "Wallet Backup is required. Please complete the backup to ensure your data is secure.",
     "appBackupStepCheck": "Complete Step 1 before proceeding to Step 2.",

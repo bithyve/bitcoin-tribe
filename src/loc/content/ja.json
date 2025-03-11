@@ -243,7 +243,7 @@
     "appInfoTitle": "アプリ情報",
     "appInfoScreenSubTitle": "Tribe RGBアプリの詳細とビルドバージョン履歴",
     "walletBackup": "ウォレットバックアップ",
-    "rgbAssetsbackup": "アセットバックアップ",
+    "rgbAssetsbackup": "手動アセットバックアップ（オプション）",
     "appBackupMenuSubTitle": "ウォレットのバックアップと資産のバックアップは必須です。ステップ 2 に進む前にステップ 1 を完了してください。",
     "nodeAppBackupMenuSubTitle": "データを保護するために資産のバックアップが必要です。",
     "appBackupStepCheck": "ステップ 2 に進む前にステップ 1 を完了してください。",

@@ -243,7 +243,7 @@
     "appInfoTitle": "应用信息",
     "appInfoScreenSubTitle": "Tribe RGB应用详细信息和构建版本历史",
     "walletBackup": "钱包备份",
-    "rgbAssetsbackup": "资产备份",
+    "rgbAssetsbackup": "手动资产备份（可选）",
     "appBackupMenuSubTitle": "钱包备份和资产备份是必须的。在继续到步骤 2 之前完成步骤 1。",
     "nodeAppBackupMenuSubTitle": " 资产备份是保障您数据安全的必要措施。",
     "appBackupStepCheck": "在继续到步骤 2 之前完成步骤 1。",

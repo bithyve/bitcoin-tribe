@@ -243,7 +243,7 @@
     "appInfoTitle": "Información de la aplicación",
     "appInfoScreenSubTitle": "Detalles de la aplicación Tribe RGB e historial de versiones de compilación",
     "walletBackup": "Respaldo de la billetera",
-    "rgbAssetsbackup": "Copia de seguridad de activos",
+    "rgbAssetsbackup": "Copia de seguridad manual de activos (opcional)",
     "appBackupMenuSubTitle": "La copia de seguridad de la billetera y de los activos es obligatoria. Complete el Paso 1 antes de continuar con el Paso 2.",
     "nodeAppBackupMenuSubTitle": "Se requiere una copia de seguridad de los activos para proteger sus datos.",
     "appBackupStepCheck": "Complete el Paso 1 antes de continuar con el Paso 2.",
