@@ -41,8 +41,12 @@ function AppBackupMenu({ navigation }) {
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
-  const { manualAssetBackupStatus, setManualAssetBackupStatus } =
-    React.useContext(AppContext);
+  const {
+    manualAssetBackupStatus,
+    setManualAssetBackupStatus,
+    setHasCompletedManualBackup,
+    hasCompletedManualBackup,
+  } = React.useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -69,6 +73,7 @@ function AppBackupMenu({ navigation }) {
           if (shareResult.success) {
             setAssetBackup(true);
             setManualAssetBackupStatus(false);
+            setHasCompletedManualBackup(true);
           }
           const response = await Relay.rgbFileBackup(
             Platform.select({
@@ -164,6 +169,7 @@ function AppBackupMenu({ navigation }) {
               }
               backup={backup}
               manualAssetBackupStatus={false}
+              hasCompletedManualBackup={false}
             />
             {backup ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
@@ -192,6 +198,7 @@ function AppBackupMenu({ navigation }) {
               }}
               backup={assetBackup}
               manualAssetBackupStatus={manualAssetBackupStatus}
+              hasCompletedManualBackup={hasCompletedManualBackup}
             />
             {assetBackup && !manualAssetBackupStatus ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
