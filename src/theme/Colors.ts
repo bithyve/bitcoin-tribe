@@ -51,5 +51,6 @@ const Colors = {
   ZinnwalditeBrown: 'rgba(41, 34, 0, 1)',
   SacramentoStateGreen: 'rgba(0, 49, 43, 1)',
   BrightGray: 'rgba(233, 238, 239, 1)',
+  VividGamboge: 'rgba(255, 149, 0,1)',
 };
 export default Colors;

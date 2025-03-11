@@ -14,6 +14,7 @@ import GradientView from './GradientView';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import CheckMarkGreen from 'src/assets/images/checkmarkGreen.svg';
+import DotView from './DotView';
 
 type SelectOptionProps = {
   icon?: React.ReactNode;
@@ -28,6 +29,7 @@ type SelectOptionProps = {
   testID?: string;
   showArrow?: boolean;
   backup?: boolean;
+  manualAssetBackupStatus?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -44,6 +46,7 @@ const SelectOption = (props: SelectOptionProps) => {
     testID,
     showArrow = true,
     backup = false,
+    manualAssetBackupStatus,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, backColor, backup);
@@ -69,7 +72,15 @@ const SelectOption = (props: SelectOptionProps) => {
             ) : null}
           </View>
         </View>
-        {!backup ? (
+        {manualAssetBackupStatus ? (
+          <View style={styles.manualBackupStatusWrapper}>
+            <DotView
+              backColor={theme.colors.errorPopupBorderColor}
+              style={styles.dotViewWrapper}
+            />
+            {isThemeDark ? <IconSettingArrow /> : <IconSettingArrowLight />}
+          </View>
+        ) : !backup ? (
           showArrow ? (
             <View>
               {enableSwitch ? (
@@ -126,6 +137,13 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
     subTitleStyle: {
       flexWrap: 'wrap',
       color: theme.colors.secondaryHeadingColor,
+    },
+    manualBackupStatusWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    dotViewWrapper: {
+      marginRight: hp(10),
     },
   });
 export default SelectOption;

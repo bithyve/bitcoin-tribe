@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -9,6 +9,8 @@ import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
 
 
 function SendToScreen({ route }) {
@@ -26,6 +28,11 @@ function SendToScreen({ route }) {
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
+  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+
+  useEffect(() => {
+    refreshWallet.mutate({ wallets: [wallet] });
+  }, []);
 
   const toggleCurrencyMode = () => {
     if (

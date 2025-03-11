@@ -97,6 +97,7 @@ type CustomColors = {
   serviceFeeBorder: string;
   txIDColor: string;
   settingMenuHeader: string;
+  backupAlertBackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -202,6 +203,7 @@ const CombinedDefaultTheme: AppTheme = {
     serviceFeeBorder: Colors.SonicSilver,
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.BrightGray,
+    backupAlertBackColor: Colors.VividGamboge,
   },
   fonts: {
     regular: {
@@ -315,6 +317,7 @@ const CombinedDarkTheme: AppTheme = {
     serviceFeeBorder: Colors.SonicSilver,
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.CharlestonGreen,
+    backupAlertBackColor: Colors.VividGamboge,
   },
   fonts: {
     regular: {

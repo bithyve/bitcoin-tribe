@@ -8,6 +8,7 @@ import openLink from 'src/utils/OpenLink';
 import SettingSectionList from './SettingSectionList';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
 
 type SettingMenuItemProps = {
   WalletMgtMenu: SettingMenuProps[];
@@ -68,15 +69,15 @@ function SettingMenuItem({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     scrollingWrapper: {
-      height: '92%',
+      height: Platform.OS === 'android' ? '90%' : '92%',
     },
     footer: {
-      paddingVertical: 20,
+      paddingBottom: Platform.OS === 'android' ? hp(35) : hp(20),
       alignItems: 'center',
       justifyContent: 'center',
     },
     contentContainerStyle: {
-      paddingBottom: Platform.OS === 'android' ? 100 : 50,
+      paddingBottom: Platform.OS === 'android' ? 120 : 50,
     },
   });
 export default SettingMenuItem;

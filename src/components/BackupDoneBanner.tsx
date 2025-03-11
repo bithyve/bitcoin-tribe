@@ -1,37 +1,27 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
 import DeviceInfo from 'react-native-device-info';
 import { useTheme } from 'react-native-paper';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
+import { AppContext } from 'src/contexts/AppContext';
 
-const NetworkBanner = () => {
-  const [isConnected, setIsConnected] = useState(true);
+const BackupDoneBanner = () => {
+  const { isBackupDone } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      setIsConnected(state.isConnected);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  if (isConnected) return null;
-
-  return (
+  return isBackupDone ? (
     <View style={styles.banner}>
-      <Text style={styles.text}>{common.noInternet}</Text>
+      <Text style={styles.text}>{common.backDoneMsg}</Text>
     </View>
-  );
+  ) : null;
 };
 
 const getStyles = (theme: AppTheme, hasNotch) =>
@@ -47,8 +37,9 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : 16,
       left: 0,
       right: 0,
-      backgroundColor: Colors.FireOpal,
+      backgroundColor: Colors.GOGreen,
       zIndex: 1000,
+      paddingVertical: hp(3),
       alignItems: 'center',
     },
     text: {
@@ -58,4 +49,4 @@ const getStyles = (theme: AppTheme, hasNotch) =>
     },
   });
 
-export default NetworkBanner;
+export default BackupDoneBanner;

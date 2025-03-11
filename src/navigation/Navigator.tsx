@@ -74,6 +74,9 @@ import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
 import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
 import HiddenAssets from 'src/screens/settings/HiddenAssets';
 import ChangePin from 'src/screens/onBoarding/ChangePin';
+import UTXOTabs from './tabNavigation/UTXOTabs';
+import BackupAlertBanner from 'src/components/BackupAlertBanner';
+import BackupDoneBanner from 'src/components/BackupDoneBanner';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -245,7 +248,7 @@ function AppStack() {
         />
         <Stack.Screen
           name={NavigationRoutes.VIEWUNSPENT}
-          component={ViewUnspent}
+          component={UTXOTabs}
         />
         <Stack.Screen name={NavigationRoutes.ADDASSET} component={AddAsset} />
         <Stack.Screen
@@ -331,7 +334,8 @@ function Navigator() {
         },
       }}>
       <RGBWalletStatus />
-
+      <BackupAlertBanner />
+      <BackupDoneBanner />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

@@ -41,7 +41,7 @@ const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { wallet, assets } = translations || { wallet: {}, assets: {} };
+  const { wallet, assets, common } = translations || { wallet: {}, assets: {} };
   const [utxoType, setUtxoType] = useState<UtxoType>(UtxoType.Colored);
   const [refreshing, setRefreshing] = useState(false);
   const [visibleUTXOInfo, setVisibleUTXOInfo] = useState(false);
@@ -178,7 +178,7 @@ const ViewUnspentScreen = () => {
       />
       <UTXOInfoModal
         visible={visibleUTXOInfo}
-        primaryCtaTitle={'Okay'}
+        primaryCtaTitle={common.okay}
         primaryOnPress={() => setVisibleUTXOInfo(false)}
       />
     </ScreenContainer>

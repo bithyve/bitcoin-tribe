@@ -523,8 +523,8 @@ export class ApiHandler {
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
-          ? predefinedRegtestNodes
-          : predefinedMainnetNodes;
+        ? predefinedRegtestNodes
+        : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
     ) as any;
@@ -1106,9 +1106,6 @@ export class ApiHandler {
           udas,
           Realm.UpdateMode.Modified,
         );
-      }
-      if (ApiHandler.appType === AppType.ON_CHAIN) {
-        ApiHandler.backup();
       }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
@@ -1856,6 +1853,14 @@ export class ApiHandler {
       }
     } catch (error) {
       console.log('backup error', error);
+    }
+  }
+
+  static async isBackupRequired() {
+    try {
+      return await RGBServices.isBackupRequired();
+    } catch (error) {
+      throw error;
     }
   }
 
