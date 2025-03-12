@@ -38,29 +38,8 @@ const CollectibleDetailsScreen = () => {
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
-  const { mutate: backupMutate, isLoading: isBackupLoading } = useMutation(
-    ApiHandler.backup,
-    {
-      onSuccess: () => {
-        setBackupDone(true);
-        setTimeout(() => {
-          setBackupDone(false);
-          setManualAssetBackupStatus(true);
-        }, 1500);
-      },
-    },
-  );
-  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
-    ApiHandler.isBackupRequired,
-  );
-  const refreshRgbWallet = useMutation({
-    mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: () => {
-      if (appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
-      }
-    },
-  });
+  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
 
@@ -74,16 +53,6 @@ const CollectibleDetailsScreen = () => {
       setShowVerifyModal(true);
     }
   }, [askReview, askVerify]);
-
-  useEffect(() => {
-    setBackupProcess(isBackupLoading);
-  }, [isBackupLoading]);
-
-  useEffect(() => {
-    if (isBackupRequired) {
-      backupMutate();
-    }
-  }, [isBackupRequired]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -173,7 +142,6 @@ const CollectibleDetailsScreen = () => {
         refresh={() => {
           setRefreshing(true);
           refreshRgbWallet.mutate();
-          checkBackupRequired();
           mutate({ assetId, schema: RealmSchema.Collectible });
           setTimeout(() => setRefreshing(false), 2000);
         }}
