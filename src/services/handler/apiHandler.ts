@@ -107,6 +107,7 @@ export class ApiHandler {
     appType,
     rgbNodeConnectParams,
     rgbNodeInfo,
+    authToken,
   }: {
     appName: string;
     pinMethod: PinMethod;
@@ -116,6 +117,7 @@ export class ApiHandler {
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
     rgbNodeInfo?: NodeInfo;
+    authToken: string;
   }) {
     Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
@@ -220,7 +222,7 @@ export class ApiHandler {
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
           };
-          const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT);
+          const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT, authToken);
 
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
@@ -240,6 +242,7 @@ export class ApiHandler {
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
+            authToken,
           };
 
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
