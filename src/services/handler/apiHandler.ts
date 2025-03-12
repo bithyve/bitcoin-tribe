@@ -254,8 +254,22 @@ export class ApiHandler {
             });
           }
         } else {
+          const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
+          const privateKey = Buffer.from(privateKeyHex, 'hex');
+          const keyPair = ECPair.fromPrivateKey(privateKey);
+          const publicKey = keyPair.publicKey.toString('hex');
+          const challenge = await Relay.getChallenge(rgbNodeInfo.pubkey, publicKey)
+          if(!challenge.challenge) {
+            throw new Error('Failed to get challenge');
+          }
+          const messageHash = crypto.createHash('sha256').update(challenge.challenge).digest();
+          const signature = keyPair.sign(Buffer.from(messageHash.toString('hex'), 'hex')).toString('hex');
+          const registerApp = await Relay.createNewApp('Tribe-Node-Connect', rgbNodeInfo.pubkey, rgbNodeInfo.pubkey, publicKey, AppType.NODE_CONNECT, 'Iris_Regtest', '', signature)
+          if(!registerApp?.app?.authToken) {
+            throw new Error('Failed to generate auth token');
+          }
           const newAPP: TribeApp = {
-            id: rgbNodeConnectParams.nodeId,
+            id: rgbNodeInfo.pubkey,
             publicId: rgbNodeInfo.pubkey,
             appName,
             walletImage,
@@ -269,6 +283,7 @@ export class ApiHandler {
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
+            authToken: registerApp?.app?.authToken
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
