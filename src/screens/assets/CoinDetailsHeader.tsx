@@ -11,6 +11,7 @@ import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
@@ -57,7 +58,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     asset.balance.future + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
-  const styles = getStyles(theme, insets, lengthOfTotalBalance);
+  const styles = getStyles(theme, insets, lengthOfTotalBalance, app.appType);
 
   return (
     <>
@@ -74,60 +75,34 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
         />
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
-            {app.appType === AppType.NODE_CONNECT ? (
-              <View style={styles.balanceContainer}>
-                <View style={styles.totalBalanceWrapper}>
-                  <AppText variant="heading2" style={styles.totalBalance}>
-                    {numberWithCommas(
-                      asset.balance.future +
-                        asset.balance?.offchainOutbound +
-                        totalAssetLocalAmount,
-                    )}
-                  </AppText>
-                  <AppText variant="body1" style={styles.totalBalanceLabel}>
-                    {home.totalBalance}
-                  </AppText>
-                </View>
-                <View style={styles.modeBalanceWrapper}>
-                  <View style={styles.balanceWrapper}>
-                    <IconBTC />
-                    <AppText variant="heading3" style={styles.balanceText}>
-                      {numberWithCommas(
-                        asset.balance.future + asset.balance?.offchainOutbound,
-                      )}
-                    </AppText>
+            <View style={styles.balanceContainer}>
+              <View style={styles.totalBalanceWrapper}>
+                <View style={styles.identiconWrapper}>
+                  <View style={styles.identiconWrapper2}>
+                    <Identicon
+                      value={asset.assetId}
+                      style={styles.identiconView}
+                      size={50}
+                    />
                   </View>
-                  <View style={styles.balanceWrapper}>
-                    <IconLightning />
-                    <AppText variant="heading3" style={styles.balanceText}>
-                      {numberWithCommas(totalAssetLocalAmount)}
+                </View>
+                <View>
+                  <View style={styles.row}>
+                    <AppText variant="body1" style={styles.assetTickerText}>
+                      {asset.ticker}
+                    </AppText>
+                    {asset.issuer?.verified && (
+                      <IconVerified width={24} height={24} />
+                    )}
+                  </View>
+                  <View style={styles.row}>
+                    <AppText variant="body2" style={styles.assetNameText}>
+                      {asset.name}
                     </AppText>
                   </View>
                 </View>
               </View>
-            ) : (
-              <View style={styles.balanceContainer}>
-                <View style={styles.totalBalanceWrapper}>
-                  <View style={styles.identiconWrapper}>
-                    <View style={styles.identiconWrapper2}>
-                      <Identicon
-                        value={asset.assetId}
-                        style={styles.identiconView}
-                        size={50}
-                      />
-                    </View>
-                  </View>
-                  <View>
-                    <View style={styles.row}>
-                      <AppText variant="body1" style={styles.assetTickerText}>
-                        {asset.ticker}
-                      </AppText>
-                      {asset.issuer?.verified && (
-                        <IconVerified width={24} height={24} />
-                      )}
-                    </View>
-                  </View>
-                </View>
+              <View style={styles.totalBalanceWrapper2}>
                 <AppTouchable
                   style={styles.onChainTotalBalanceWrapper}
                   onPress={() => {}}>
@@ -138,12 +113,31 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       )}
                     </AppText>
                   </View>
-                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                  <AppText variant="body2" style={styles.totalBalanceLabel}>
                     {home.totalBalance}
                   </AppText>
                 </AppTouchable>
+                {app.appType === AppType.NODE_CONNECT && (
+                  <>
+                    <View style={styles.balanceWrapper}>
+                      {isThemeDark ? <IconBTC /> : <IconBTCLight />}
+                      <AppText variant="heading3" style={styles.balanceText}>
+                        {numberWithCommas(
+                          asset.balance.future +
+                            asset.balance?.offchainOutbound,
+                        )}
+                      </AppText>
+                    </View>
+                    <View style={styles.balanceWrapper}>
+                      <IconLightning />
+                      <AppText variant="heading3" style={styles.balanceText}>
+                        {numberWithCommas(totalAssetLocalAmount)}
+                      </AppText>
+                    </View>
+                  </>
+                )}
               </View>
-            )}
+            </View>
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
                 onPressSend={onPressSend}
@@ -159,7 +153,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     </>
   );
 }
-const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
+const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
   StyleSheet.create({
     smallHeader: {
       position: 'absolute',
@@ -180,7 +174,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderWidth: 1,
       borderRadius: hp(20),
       width: '100%',
-      paddingVertical: hp(10),
+      paddingVertical: appType === AppType.NODE_CONNECT ? hp(0) : hp(10),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
@@ -213,6 +207,10 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     totalBalanceWrapper1: {
       flexDirection: 'row',
+      alignItems: 'center',
+    },
+    totalBalanceWrapper2: {
+      width: '50%',
       alignItems: 'center',
     },
     modeBalanceWrapper: {
@@ -252,13 +250,16 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       textAlign: 'center',
     },
     onChainTotalBalanceWrapper: {
-      width: '50%',
+      flex: 1,
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: hp(5),
     },
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default CoinDetailsHeader;

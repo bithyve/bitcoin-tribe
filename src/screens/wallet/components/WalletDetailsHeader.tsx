@@ -20,6 +20,7 @@ import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconBitcoinOnChain from 'src/assets/images/icon_btc3.svg';
 import IconBitcoinOnChainLight from 'src/assets/images/icon_btc3_light.svg';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
@@ -137,7 +138,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
               <View style={styles.modeBalanceWrapper}>
                 <View style={styles.balanceWrapper}>
                   <View style={styles.currencyIconWrapper}>
-                    <IconBTC />
+                    {isThemeDark ? <IconBTC /> : <IconBTCLight />}
                   </View>
                   <View style={styles.totalBalanceWrapper1}>
                     {initialCurrencyMode !== CurrencyKind.SATS && (

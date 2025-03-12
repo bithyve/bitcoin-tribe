@@ -10,6 +10,7 @@ import { hp, wp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
@@ -134,7 +135,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 </View>
                 <View style={styles.modeBalanceWrapper}>
                   <View style={styles.balanceWrapper}>
-                    <IconBTC />
+                    {isThemeDark ? <IconBTC /> : <IconBTCLight />}
                     <AppText variant="heading3" style={styles.balanceText}>
                       {numberWithCommas(
                         asset.balance.future + asset.balance?.offchainOutbound,
