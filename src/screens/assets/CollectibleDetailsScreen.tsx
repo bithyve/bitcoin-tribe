@@ -1,14 +1,10 @@
 import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import ScreenContainer from 'src/components/ScreenContainer';
-import {
-  CommonActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
+import ScreenContainer from 'src/components/ScreenContainer';
 import { Collectible } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -23,6 +19,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -34,8 +31,10 @@ const CollectibleDetailsScreen = () => {
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+
   useEffect(() => {
     if (askReview) {
       setTimeout(() => {

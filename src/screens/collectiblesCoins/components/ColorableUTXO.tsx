@@ -10,8 +10,6 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-import ScreenContainer from 'src/components/ScreenContainer';
-import AppHeader from 'src/components/AppHeader';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import {
   Asset,
@@ -38,9 +36,8 @@ import { Keys } from 'src/storage';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
-import UTXOInfoModal from '../components/UTXOInfoModal';
-
 import { windowHeight } from 'src/constants/responsive';
+
 const ColorableUTXO = () => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -67,6 +64,15 @@ const ColorableUTXO = () => {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
+  const colorableWithoutAssetId = unspent.filter(
+    utxo =>
+      utxo.utxo.colorable === true && utxo.rgbAllocations[0]?.assetId === null,
+  );
+  const combinedColorable: Asset[] = useMemo(
+    () => [...colorable, ...colorableWithoutAssetId],
+    [colorable, colorableWithoutAssetId],
+  );
+
   const { mutate } = useMutation(ApiHandler.viewUtxos);
   useEffect(() => {
     mutate();
@@ -89,7 +95,7 @@ const ColorableUTXO = () => {
   };
   return (
     <FlatList
-      data={colorable}
+      data={combinedColorable}
       renderItem={({ item }) => (
         <AppTouchable
           onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
@@ -103,6 +109,7 @@ const ColorableUTXO = () => {
             rgbAllocations={item.rgbAllocations || []}
             assets={combined || []}
             mode={UtxoType.Colorable}
+            colorableWithoutAssetId={item.rgbAllocations[0]?.assetId === null}
           />
         </AppTouchable>
       )}
