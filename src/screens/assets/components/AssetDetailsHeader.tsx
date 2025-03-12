@@ -38,6 +38,7 @@ type assetDetailsHeaderProps = {
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
   headerRightIcon?: React.ReactNode;
+  totalAssetLocalAmount?: number;
 };
 function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const {
@@ -52,6 +53,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     smallHeaderOpacity,
     largeHeaderHeight,
     headerRightIcon,
+    totalAssetLocalAmount,
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
@@ -121,7 +123,9 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.totalBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
-                      asset.balance.future + asset.balance?.offchainOutbound,
+                      asset.balance.future +
+                        asset.balance?.offchainOutbound +
+                        totalAssetLocalAmount,
                     )}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
@@ -132,13 +136,15 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   <View style={styles.balanceWrapper}>
                     <IconBTC />
                     <AppText variant="heading3" style={styles.balanceText}>
-                      0.0000
+                      {numberWithCommas(
+                        asset.balance.future + asset.balance?.offchainOutbound,
+                      )}
                     </AppText>
                   </View>
                   <View style={styles.balanceWrapper}>
                     <IconLightning />
                     <AppText variant="heading3" style={styles.balanceText}>
-                      0.0000
+                      {numberWithCommas(totalAssetLocalAmount)}
                     </AppText>
                   </View>
                 </View>

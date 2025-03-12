@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -33,6 +34,7 @@ type assetDetailsHeaderProps = {
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
   headerRightIcon?: React.ReactNode;
+  totalAssetLocalAmount?: number;
 };
 function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const {
@@ -44,6 +46,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     smallHeaderOpacity,
     largeHeaderHeight,
     headerRightIcon,
+    totalAssetLocalAmount,
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
@@ -76,7 +79,9 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.totalBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
-                      asset.balance.future + asset.balance?.offchainOutbound,
+                      asset.balance.future +
+                        asset.balance?.offchainOutbound +
+                        totalAssetLocalAmount,
                     )}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
@@ -87,13 +92,15 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   <View style={styles.balanceWrapper}>
                     <IconBTC />
                     <AppText variant="heading3" style={styles.balanceText}>
-                      0.0000
+                      {numberWithCommas(
+                        asset.balance.future + asset.balance?.offchainOutbound,
+                      )}
                     </AppText>
                   </View>
                   <View style={styles.balanceWrapper}>
                     <IconLightning />
                     <AppText variant="heading3" style={styles.balanceText}>
-                      0.0000
+                      {numberWithCommas(totalAssetLocalAmount)}
                     </AppText>
                   </View>
                 </View>
