@@ -30,6 +30,7 @@ type SelectOptionProps = {
   showArrow?: boolean;
   backup?: boolean;
   manualAssetBackupStatus?: boolean;
+  hasCompletedManualBackup?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -47,6 +48,7 @@ const SelectOption = (props: SelectOptionProps) => {
     showArrow = true,
     backup = false,
     manualAssetBackupStatus,
+    hasCompletedManualBackup,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, backColor, backup);
@@ -72,7 +74,7 @@ const SelectOption = (props: SelectOptionProps) => {
             ) : null}
           </View>
         </View>
-        {manualAssetBackupStatus ? (
+        {manualAssetBackupStatus && hasCompletedManualBackup ? (
           <View style={styles.manualBackupStatusWrapper}>
             <DotView
               backColor={theme.colors.errorPopupBorderColor}
