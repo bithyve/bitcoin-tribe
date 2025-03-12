@@ -1451,7 +1451,15 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.0.2):
     - React-Core
-  - RNGestureHandler (2.21.2):
+  - RNFBApp (21.11.0):
+    - Firebase/CoreOnly (= 11.8.0)
+    - React-Core
+  - RNFBMessaging (21.11.0):
+    - Firebase/Messaging (= 11.8.0)
+    - FirebaseCoreExtension
+    - React-Core
+    - RNFBApp
+  - RNGestureHandler (2.24.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1500,7 +1508,73 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.6.2):
+  - RNReanimated (3.16.6):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated (= 3.16.6)
+    - RNReanimated/worklets (= 3.16.6)
+    - Yoga
+  - RNReanimated/reanimated (3.16.6):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated/apple (= 3.16.6)
+    - Yoga
+  - RNReanimated/reanimated/apple (3.16.6):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNReanimated/worklets (3.16.6):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1986,12 +2060,14 @@ SPEC CHECKSUMS:
   RealmJS: 5b0258b3c04b9f48536b2692965690afe024164c
   RNCClipboard: ee059e6006b137e369caed5eb852b4aad9f5d886
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
-  RNGestureHandler: 8d857f8c5e6697585f6a246d1acbf0533c438ab1
+  RNFBApp: fd5bf956d6114cd3172680ab9c2185143faaa385
+  RNFBMessaging: 387873ff9c0deb29ec76b1a5c492d06012af58f4
+  RNGestureHandler: 4c50b5e4ca199cf497511d44e3fe45d54d62e279
   RNKeychain: bbe2f6d5cc008920324acb49ef86ccc03d3b38e4
   RNLocalize: 7c20518f8e5c68cbb980418c60a8c804409c1463
   RNQrGenerator: afacf12b55dfba0e3aaca963eec23691e8426431
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
-  RNReanimated: dd4f379b94064ded836fa82efaf2c3061f5d3b0a
+  RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: 8a3ba045e7e8b5dd1b9a7764496430e17d00dfed
   RNSentry: f2a242dd78d40e46c117c4feeb9a37b58e5241dc
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
