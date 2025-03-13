@@ -253,7 +253,9 @@ const EnterInvoiceDetails = () => {
             })
           }
           disabled={assetId === '' || amount === ''}
-          width={windowWidth / 2.3}
+          width={
+            selectedType === 'bitcoin' ? windowWidth / 2.3 : windowWidth / 1.1
+          }
           secondaryCTAWidth={windowWidth / 2.3}
         />
       </View>

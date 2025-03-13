@@ -15,7 +15,7 @@ import { AppTheme } from 'src/theme';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AllocatedAssets from './components/AllocatedAssets';
-import IconVerified from 'src/assets/images/issuer_verified.svg'
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 
 type UnspentUTXOElementProps = {
   transID: string;
@@ -24,6 +24,7 @@ type UnspentUTXOElementProps = {
   style?: StyleProp<ViewStyle>;
   assets: Asset[];
   mode: UtxoType;
+  colorableWithoutAssetId?: boolean;
 };
 function UnspentUTXOElement({
   transID,
@@ -32,9 +33,13 @@ function UnspentUTXOElement({
   style,
   assets,
   mode,
+  colorableWithoutAssetId,
 }: UnspentUTXOElementProps) {
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const styles = React.useMemo(
+    () => getStyles(theme, colorableWithoutAssetId),
+    [theme, colorableWithoutAssetId],
+  );
   const { translations } = React.useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
   const { getBalance, getCurrencyIcon } = useBalance();
@@ -80,13 +85,12 @@ function UnspentUTXOElement({
                     <IconVerified width={24} height={24} />
                   )}
                 </View>
-                {
-                  assetMap[allocation.assetId]?.assetIface.toUpperCase() !== AssetFace.RGB21 && (
-                    <AppText variant="body2" style={styles.assetAmountText}>
-                      {numberWithCommas(allocation.amount)}
-                    </AppText>
-                  )
-                }
+                {assetMap[allocation.assetId]?.assetIface.toUpperCase() !==
+                  AssetFace.RGB21 && (
+                  <AppText variant="body2" style={styles.assetAmountText}>
+                    {numberWithCommas(allocation.amount)}
+                  </AppText>
+                )}
               </View>
             )
           );
@@ -128,7 +132,8 @@ function UnspentUTXOElement({
                   fontSize: satsAmount.toString().length > 10 ? 11 : 16,
                 },
               ]}>
-              &nbsp;{isNaN(Number(satsAmount)) ? 0 : getBalance(Number(satsAmount))}
+              &nbsp;
+              {isNaN(Number(satsAmount)) ? 0 : getBalance(Number(satsAmount))}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
               <AppText variant="caption" style={styles.satsText}>
@@ -157,12 +162,14 @@ function UnspentUTXOElement({
     </GradientView>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, colorableWithoutAssetId: boolean) =>
   StyleSheet.create({
     container: {
       padding: 20,
       borderRadius: 15,
-      borderColor: theme.colors.borderColor,
+      borderColor: colorableWithoutAssetId
+        ? theme.colors.txIDColor
+        : theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(5),
     },
