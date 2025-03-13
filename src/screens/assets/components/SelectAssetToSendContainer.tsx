@@ -27,6 +27,7 @@ import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'src/components/Identicon';
 import { Keys } from 'src/storage';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -110,7 +111,7 @@ const Item = ({
         </View>
         <View style={styles.amountWrapper}>
           <AppText variant="smallCTA" style={styles.amountText}>
-            {amount}
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </GradientView>
@@ -171,8 +172,8 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 }
                 index={index}
                 ticker={item.ticker}
-              />)
-            : (
+              />
+            ) : (
               <Item
                 key={index}
                 name={item.name}
@@ -190,7 +191,9 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 index={index}
                 ticker={item.ticker}
                 image={Platform.select({
-                  android: `file://${item.media?.filePath || item.token.media.filePath}`,
+                  android: `file://${
+                    item.media?.filePath || item.token.media.filePath
+                  }`,
                   ios: item.media?.filePath || item.token.media.filePath,
                 })}
               />
