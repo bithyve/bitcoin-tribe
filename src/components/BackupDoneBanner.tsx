@@ -39,7 +39,7 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       right: 0,
       backgroundColor: Colors.GOGreen,
       zIndex: 1000,
-      paddingVertical: hp(3),
+      paddingVertical: windowHeight > 820 ? hp(3) : 0,
       alignItems: 'center',
     },
     text: {
