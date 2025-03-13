@@ -53,7 +53,6 @@ function CoinAssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
-      {/* {props.loading && !refreshingStatus ? <LoadingSpinner /> : null} */}
       <FlatList
         data={listData}
         extraData={[listData]}
