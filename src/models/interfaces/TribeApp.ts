@@ -13,4 +13,5 @@ export interface TribeApp {
   networkType: NetworkType;
   enableAnalytics: boolean;
   appType: AppType;
+  authToken?: string;
 }

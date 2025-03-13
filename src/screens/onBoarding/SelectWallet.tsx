@@ -77,6 +77,7 @@ function SelectWallet() {
               authentication: createNodeMutation.data.token,
               peerDNS: createNodeMutation.data.peerDNS,
               mnemonic: createNodeMutation.data.node.mnemonic,
+              authToken: createNodeMutation.data.authToken,
             },
             nodeInfo: {},
             appType: AppType.SUPPORTED_RLN,

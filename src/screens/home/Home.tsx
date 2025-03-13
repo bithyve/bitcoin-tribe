@@ -117,6 +117,7 @@ function HomeScreen() {
     refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
+    ApiHandler.syncFcmToken();
   }, [app.appType]);
 
   const handleNavigation = (route, params?) => {

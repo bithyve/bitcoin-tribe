@@ -75,6 +75,7 @@ function ProfileSetup() {
         rgbNodeConnectParams: route.params?.nodeConnectParams || null,
         rgbNodeInfo: route.params?.nodeInfo || null,
         mnemonic: route.params?.mnemonic || '',
+        authToken: route.params?.authToken || '',
       });
     }, 200);
   };
