@@ -32,8 +32,14 @@ function Collectibles() {
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
 
   const navigation = useNavigation();
-  const { key, setBackupProcess, setBackupDone, setManualAssetBackupStatus } =
-    useContext(AppContext);
+  const {
+    key,
+    setBackupProcess,
+    setBackupDone,
+    setManualAssetBackupStatus,
+    isBackupInProgress,
+    isBackupDone,
+  } = useContext(AppContext);
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -100,6 +106,9 @@ function Collectibles() {
   };
 
   const handleRefresh = () => {
+    if (isBackupInProgress || isBackupDone) {
+      return;
+    }
     setRefreshing(true);
     refreshRgbWallet.mutate();
     checkBackupRequired();
@@ -114,9 +123,9 @@ function Collectibles() {
       </View>
       <CollectibleAssetsList
         listData={assets}
-        loading={refreshing}
+        loading={refreshing && !isBackupInProgress && !isBackupDone}
         onRefresh={handleRefresh}
-        refreshingStatus={refreshing}
+        refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
         onPressAddNew={() =>
           handleNavigation(NavigationRoutes.ADDASSET, {
             issueAssetType: AssetType.Collectible,

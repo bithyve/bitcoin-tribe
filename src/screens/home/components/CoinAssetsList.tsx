@@ -38,7 +38,8 @@ type AssetsListProps = {
 };
 
 function CoinAssetsList(props: AssetsListProps) {
-  const { listData, onPressAsset, onPressAddNew, refreshingStatus } = props;
+  const { listData, onPressAsset, onPressAddNew, loading, refreshingStatus } =
+    props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -52,7 +53,7 @@ function CoinAssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
-      {props.loading && !refreshingStatus ? <LoadingSpinner /> : null}
+      {/* {props.loading && !refreshingStatus ? <LoadingSpinner /> : null} */}
       <FlatList
         data={listData}
         extraData={[listData]}

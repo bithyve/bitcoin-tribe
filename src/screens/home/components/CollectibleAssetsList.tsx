@@ -47,7 +47,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
-      {props.loading && !refreshingStatus ? <LoadingSpinner /> : null}
+      {/* {props.loading && !refreshingStatus ? <LoadingSpinner /> : null} */}
       <FlatList
         showsVerticalScrollIndicator={false}
         numColumns={2}
