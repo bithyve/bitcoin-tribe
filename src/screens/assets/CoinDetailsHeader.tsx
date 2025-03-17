@@ -59,7 +59,6 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const styles = getStyles(theme, insets, lengthOfTotalBalance, app.appType);
-  console.log('windowHeight', windowHeight);
   return (
     <>
       {/* <Animated.View
