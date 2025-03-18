@@ -1493,11 +1493,9 @@ export class ApiHandler {
       const token = await getToken(messaging);
       subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL)
       if(token === Storage.get(Keys.FCM_TOKEN)) {
-        console.log('ssss')
         return true
       }
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token)
-      console.log('ssss', response)
 
       if(response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
