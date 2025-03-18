@@ -12,4 +12,6 @@ export interface SettingMenuProps {
   testID?: string;
   hideMenu?: boolean;
   backup?: boolean;
+  manualAssetBackupStatus?: boolean;
+  hasCompletedManualBackup?: boolean;
 }

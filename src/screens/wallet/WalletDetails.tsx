@@ -73,6 +73,9 @@ function WalletDetails({ navigation, route }) {
   const { mutate, isLoading, isError, isSuccess, error } = useMutation(
     ApiHandler.receiveTestSats,
   );
+  const { mutate: getChannelMutate, data: channelsData } = useMutation(
+    ApiHandler.getChannels,
+  );
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate: fetchOnChainTransaction, data } = useMutation(
@@ -87,6 +90,16 @@ function WalletDetails({ navigation, route }) {
     });
     setTimeout(() => setRefreshing(false), 2000);
   };
+
+  const totalAssetLocalAmount = useMemo(() => {
+    const validatedChannelsData = Array.isArray(channelsData)
+      ? channelsData
+      : [];
+    return validatedChannelsData.reduce(
+      (sum, channel) => sum + (channel.asset_local_amount || 0),
+      0,
+    );
+  }, [channelsData]);
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
@@ -115,6 +128,7 @@ function WalletDetails({ navigation, route }) {
     if (app.appType === AppType.NODE_CONNECT) {
       fetchOnChainTransaction();
       listPaymentshMutation.mutate();
+      getChannelMutate();
     }
   }, []);
   useEffect(() => {
@@ -166,6 +180,7 @@ function WalletDetails({ navigation, route }) {
             ? mutate()
             : setVisibleRequestTSats(true)
         }
+        totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <WalletTransactionsContainer
         navigation={navigation}

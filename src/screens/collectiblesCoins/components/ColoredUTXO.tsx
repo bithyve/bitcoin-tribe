@@ -62,7 +62,10 @@ const ColoredUTXO = () => {
     return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
   }, [rgbWallet]);
   const colored = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length > 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length > 0 &&
+      utxo.rgbAllocations[0]?.assetId !== null,
   );
   const { mutate } = useMutation(ApiHandler.viewUtxos);
   useEffect(() => {

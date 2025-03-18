@@ -35,6 +35,8 @@ const ChannelInfoModal: React.FC<Props> = ({
     <ResponsePopupContainer
       visible={visible}
       enableClose={true}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
       backColor={theme.colors.modalBackColor}
       borderColor={theme.colors.modalBackColor}>
       <View style={styles.contentContainer}>
