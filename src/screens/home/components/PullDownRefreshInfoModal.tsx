@@ -8,7 +8,7 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import PullDownIllustration from 'src/assets/images/pullDownIllustration.svg';
 import PullDownIllustrationLight from 'src/assets/images/pullDownIllustration_light.svg';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -34,6 +34,8 @@ const PullDownRefreshInfoModal: React.FC<Props> = ({
     <ResponsePopupContainer
       visible={visible}
       enableClose={true}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
       backColor={theme.colors.modalBackColor}
       borderColor={theme.colors.modalBackColor}>
       <View style={styles.contentContainer}>

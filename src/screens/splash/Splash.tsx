@@ -10,7 +10,7 @@ import LottieView from 'lottie-react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
-
+import Realm from 'realm';
 import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
@@ -21,6 +21,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmDatabase } from 'src/storage/realm/realm';
 
 function Splash({ navigation }) {
   const theme: AppTheme = useTheme();
@@ -71,6 +72,9 @@ function Splash({ navigation }) {
     if (!data || hasNavigated.current){};
     if (animationFinished) {
       if(!data?.key) {
+        // Realm.deleteFile({
+        //   path: RealmDatabase.file
+        // })
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       } else {
         setKey(data.key);

@@ -20,8 +20,42 @@ type popupContainerProps = {
   backColor: string;
   borderColor: string;
   width?: string;
-  animationIn?:"fadeIn" | "fadeOut" | "bounce" | "flash" | "jello" | "pulse" | "rotate" | "rubberBand" | "shake" | "swing" | "tada" | "wobble" | "bounceIn" | "bounceInDown" | "bounceInUp" | "bounceInLeft" ;
-  animationOut?:"fadeIn" | "fadeOut" | "bounce" | "flash" | "jello" | "pulse" | "rotate" | "rubberBand" | "shake" | "swing" | "tada" | "wobble" | "bounceIn" | "bounceInDown" | "bounceInUp" | "bounceInLeft";
+  animationIn?:
+    | 'fadeIn'
+    | 'fadeOut'
+    | 'bounce'
+    | 'flash'
+    | 'jello'
+    | 'pulse'
+    | 'rotate'
+    | 'rubberBand'
+    | 'shake'
+    | 'swing'
+    | 'tada'
+    | 'wobble'
+    | 'bounceIn'
+    | 'bounceInDown'
+    | 'bounceInUp'
+    | 'bounceInLeft'
+    | 'slideInUp';
+  animationOut?:
+    | 'fadeIn'
+    | 'fadeOut'
+    | 'bounce'
+    | 'flash'
+    | 'jello'
+    | 'pulse'
+    | 'rotate'
+    | 'rubberBand'
+    | 'shake'
+    | 'swing'
+    | 'tada'
+    | 'wobble'
+    | 'bounceIn'
+    | 'bounceInDown'
+    | 'bounceInUp'
+    | 'bounceInLeft'
+    | 'slideOutDown';
 };
 
 const ResponsePopupContainer = (props: popupContainerProps) => {
@@ -37,8 +71,8 @@ const ResponsePopupContainer = (props: popupContainerProps) => {
     backColor,
     borderColor,
     width = '95%',
-    animationIn='fadeIn',
-    animationOut='fadeOut'
+    animationIn = 'fadeIn',
+    animationOut = 'fadeOut',
   } = props;
 
   const styles = getStyles(theme, backColor, borderColor, width);

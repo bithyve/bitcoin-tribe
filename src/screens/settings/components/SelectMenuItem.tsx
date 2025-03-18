@@ -11,6 +11,8 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import CheckMarkGreen from 'src/assets/images/checkmarkGreen.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
+import DotView from 'src/components/DotView';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type SelectMenuProps = {
   icon?: React.ReactNode;
@@ -26,6 +28,8 @@ type SelectMenuProps = {
   showArrow?: boolean;
   backup?: boolean;
   lastIndex?: boolean;
+  manualAssetBackupStatus?: boolean;
+  hasCompletedManualBackup?: boolean;
 };
 const SelectMenuItem = (props: SelectMenuProps) => {
   const theme: AppTheme = useTheme();
@@ -43,8 +47,12 @@ const SelectMenuItem = (props: SelectMenuProps) => {
     showArrow = true,
     backup = false,
     lastIndex,
+    manualAssetBackupStatus,
+    hasCompletedManualBackup,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { translations } = React.useContext(LocalizationContext);
+  const { settings } = translations;
   const styles = getStyles(theme, backColor, backup, lastIndex);
   return (
     <AppTouchable onPress={onPress}>
@@ -62,6 +70,9 @@ const SelectMenuItem = (props: SelectMenuProps) => {
             ) : null}
           </View>
         </View>
+        {manualAssetBackupStatus && hasCompletedManualBackup && (
+          <DotView backColor={theme.colors.errorPopupBorderColor} />
+        )}
         {!backup ? (
           showArrow ? (
             <View>

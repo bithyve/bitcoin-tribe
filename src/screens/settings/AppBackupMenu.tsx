@@ -41,6 +41,12 @@ function AppBackupMenu({ navigation }) {
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
+  const {
+    manualAssetBackupStatus,
+    setManualAssetBackupStatus,
+    setHasCompletedManualBackup,
+    hasCompletedManualBackup,
+  } = React.useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -66,6 +72,8 @@ function AppBackupMenu({ navigation }) {
           });
           if (shareResult.success) {
             setAssetBackup(true);
+            setManualAssetBackupStatus(false);
+            setHasCompletedManualBackup(true);
           }
           const response = await Relay.rgbFileBackup(
             Platform.select({
@@ -160,6 +168,8 @@ function AppBackupMenu({ navigation }) {
                   : setVisibleBackupPhrase(true)
               }
               backup={backup}
+              manualAssetBackupStatus={false}
+              hasCompletedManualBackup={false}
             />
             {backup ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
@@ -187,25 +197,39 @@ function AppBackupMenu({ navigation }) {
                   : rgbAssetsbackup();
               }}
               backup={assetBackup}
+              manualAssetBackupStatus={manualAssetBackupStatus}
+              hasCompletedManualBackup={hasCompletedManualBackup}
             />
-            {assetBackup ? (
+            {assetBackup && !manualAssetBackupStatus ? (
               <AppText style={styles.textSuccessMsg} variant="body2">
                 {settings.assetBackupSuccessMsg}
               </AppText>
             ) : (
               <>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo1}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo2}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo3}
-                </AppText>
-                <AppText variant="caption" style={styles.textSubtext}>
-                  {settings.assetBackupInfo4}
-                </AppText>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo1}
+                  </AppText>
+                </View>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo2}
+                  </AppText>
+                </View>
+                <View style={styles.contentWrapper}>
+                  <AppText variant="caption" style={styles.dotViewStyle}>
+                    {`\u2022`}
+                  </AppText>
+                  <AppText variant="caption" style={styles.textSubtext}>
+                    {settings.assetBackupInfo3}
+                  </AppText>
+                </View>
               </>
             )}
           </View>
@@ -276,7 +300,6 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.backupDoneBorder,
       textAlign: 'justify',
       marginTop: hp(5),
-      marginHorizontal: hp(15),
     },
     textStepTime: {
       color: theme.colors.headingColor,
@@ -285,6 +308,15 @@ const getStyles = (theme: AppTheme) =>
     },
     bodyWrapper: {
       height: Platform.OS === 'android' ? '70%' : '74%',
+    },
+    contentWrapper: {
+      flexDirection: 'row',
+      marginHorizontal: hp(15),
+    },
+    dotViewStyle: {
+      color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(1),
+      fontSize: hp(18),
     },
   });
 export default AppBackupMenu;

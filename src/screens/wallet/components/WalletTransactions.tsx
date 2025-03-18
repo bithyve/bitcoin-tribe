@@ -172,7 +172,9 @@ function WalletTransactions(props: WalletTransactionsProps) {
             <AppText
               variant="body1"
               style={[
-                transType === TransactionType.SENT ? styles.amountSend : styles.amountTextReceive,
+                transType === TransactionType.SENT
+                  ? styles.amountSend
+                  : styles.amountTextReceive,
                 {
                   fontSize: transAmount.toString().length > 10 ? 11 : 16,
                 },
@@ -237,11 +239,11 @@ const getStyles = (theme: AppTheme, backColor) =>
       justifyContent: 'flex-end',
     },
     amountTextReceive: {
-      color: '#4CD964',
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     amountSend: {
-      color: '#0166FF',
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     satsText: {
