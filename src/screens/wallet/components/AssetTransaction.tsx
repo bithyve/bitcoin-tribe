@@ -212,11 +212,11 @@ const getStyles = (theme: AppTheme, backColor, assetFace) =>
       marginTop: hp(2),
     },
     amountTextReceive: {
-      color: '#4CD964',
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
     amountSend: {
-      color: '#0166FF',
+      color: theme.colors.headingColor,
       marginTop: hp(2),
     },
   });
