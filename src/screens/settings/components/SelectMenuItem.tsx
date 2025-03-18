@@ -12,7 +12,6 @@ import CheckMarkGreen from 'src/assets/images/checkmarkGreen.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import AppText from 'src/components/AppText';
 import DotView from 'src/components/DotView';
-import { AppContext } from 'src/contexts/AppContext';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type SelectMenuProps = {
@@ -30,6 +29,7 @@ type SelectMenuProps = {
   backup?: boolean;
   lastIndex?: boolean;
   manualAssetBackupStatus?: boolean;
+  hasCompletedManualBackup?: boolean;
 };
 const SelectMenuItem = (props: SelectMenuProps) => {
   const theme: AppTheme = useTheme();
@@ -48,6 +48,7 @@ const SelectMenuItem = (props: SelectMenuProps) => {
     backup = false,
     lastIndex,
     manualAssetBackupStatus,
+    hasCompletedManualBackup,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = React.useContext(LocalizationContext);
@@ -69,7 +70,7 @@ const SelectMenuItem = (props: SelectMenuProps) => {
             ) : null}
           </View>
         </View>
-        {manualAssetBackupStatus && (
+        {manualAssetBackupStatus && hasCompletedManualBackup && (
           <DotView backColor={theme.colors.errorPopupBorderColor} />
         )}
         {!backup ? (
