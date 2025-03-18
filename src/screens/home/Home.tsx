@@ -34,8 +34,14 @@ function HomeScreen() {
   ).slice(-1)[0];
   const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
-  const { key, setBackupProcess, setBackupDone, setManualAssetBackupStatus } =
-    useContext(AppContext);
+  const {
+    key,
+    setBackupProcess,
+    setBackupDone,
+    setManualAssetBackupStatus,
+    isBackupInProgress,
+    isBackupDone,
+  } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
       setBackupDone(true);
@@ -125,6 +131,9 @@ function HomeScreen() {
   };
 
   const handleRefresh = () => {
+    if (isBackupInProgress || isBackupDone) {
+      return;
+    }
     setRefreshing(true);
     refreshRgbWallet.mutate();
     checkBackupRequired();
@@ -139,9 +148,9 @@ function HomeScreen() {
       </View>
       <CoinAssetsList
         listData={coins}
-        loading={refreshing}
+        loading={refreshing && !isBackupInProgress && !isBackupDone}
         onRefresh={handleRefresh}
-        refreshingStatus={refreshing}
+        refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
         onPressAddNew={() =>
           handleNavigation(NavigationRoutes.ADDASSET, {
             issueAssetType: AssetType.Coin,
