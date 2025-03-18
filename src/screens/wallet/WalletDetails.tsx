@@ -92,7 +92,10 @@ function WalletDetails({ navigation, route }) {
   };
 
   const totalAssetLocalAmount = useMemo(() => {
-    return (channelsData ?? []).reduce(
+    const validatedChannelsData = Array.isArray(channelsData)
+      ? channelsData
+      : [];
+    return validatedChannelsData.reduce(
       (sum, channel) => sum + (channel.asset_local_amount || 0),
       0,
     );
