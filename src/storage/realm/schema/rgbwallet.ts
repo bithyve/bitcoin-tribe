@@ -35,6 +35,8 @@ export const RgbWalletSchema: ObjectSchema = {
     nodeAuthentication: 'string?',
     nodeBtcBalance: `${RealmSchema.NodeBtcBalance}?`,
     peerDNS: 'string?',
+    nodeOnchainTransactions: `${RealmSchema.NodeOnChainTransaction}[]`,
+    lnPayments: `${RealmSchema.LNPayments}[]`,
   },
   primaryKey: 'mnemonic',
 };

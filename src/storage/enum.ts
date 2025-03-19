@@ -33,4 +33,6 @@ export enum RealmSchema {
   NodeBtcBalance = 'NodeBtcBalance',
   Issuer = 'Issuer',
   IssuerVerifiedBy = 'IssuerVerifiedBy',
+  NodeOnChainTransaction = 'NodeOnChainTransaction',
+  LNPayments = 'LNPayments',
 }
