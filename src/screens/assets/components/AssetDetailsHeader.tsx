@@ -210,6 +210,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: hp(40),
       // overflow: 'visible',
       position: 'relative',
+      backgroundColor: theme.colors.walletBackgroundColor,
     },
     totalBalance: {
       color: theme.colors.headingColor,

@@ -98,6 +98,7 @@ type CustomColors = {
   txIDColor: string;
   settingMenuHeader: string;
   backupAlertBackColor: string;
+  walletBackgroundColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -204,6 +205,7 @@ const CombinedDefaultTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.BrightGray,
     backupAlertBackColor: Colors.VividGamboge,
+    walletBackgroundColor: Colors.White,
   },
   fonts: {
     regular: {
@@ -318,6 +320,7 @@ const CombinedDarkTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.CharlestonGreen,
     backupAlertBackColor: Colors.VividGamboge,
+    walletBackgroundColor: Colors.SmokyBlack,
   },
   fonts: {
     regular: {
