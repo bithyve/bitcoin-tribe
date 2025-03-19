@@ -42,7 +42,7 @@ function SendScreen({ route, navigation }) {
     setVisible(false);
     setTimeout(() => {
       callback();
-    }, 1000);
+    }, 2000);
   };
 
   const handlePaymentInfo = useCallback(

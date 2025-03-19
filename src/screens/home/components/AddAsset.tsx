@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -37,6 +37,8 @@ import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import SkipButton from 'src/components/SkipButton';
+import AppType from 'src/models/enums/AppType';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 type ServiceFeeProps = {
   feeDetails: {
@@ -116,6 +118,7 @@ function AddAsset() {
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
+  const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
 
@@ -131,15 +134,19 @@ function AddAsset() {
 
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
+      if (app.appType === AppType.NODE_CONNECT) {
+        navigateToIssue(true);
+        return;
+      }
       const feeData = getAssetIssuanceFeeMutation.data;
       if (feeData.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs.transactions.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid?.length > 0) {
           navigateToIssue(true);
         } else {
           setTimeout(() => {
@@ -186,6 +193,9 @@ function AddAsset() {
   }, [payServiceFeeFeeMutation, navigation, issueAssetType]);
 
   const canProceed = useMemo(() => {
+    if (app.appType === AppType.NODE_CONNECT) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable + rgbWallet?.nodeBtcBalance?.vanilla?.future > 0;
+    }
     return (
       wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
         0 || colorable.length > 0
@@ -194,6 +204,7 @@ function AddAsset() {
     colorable.length,
     wallet?.specs.balances.confirmed,
     wallet?.specs.balances.unconfirmed,
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
   ]);
 
   const navigateToIssue = useCallback(

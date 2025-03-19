@@ -31,6 +31,14 @@ Push a new dev build to TestFlight
 
 Push a new live build to TestFlight
 
+### ios github_actions_live
+
+```sh
+[bundle exec] fastlane ios github_actions_live
+```
+
+Push a new live build to TestFlight (GitHub Actions)
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

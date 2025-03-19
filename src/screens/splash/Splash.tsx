@@ -72,9 +72,9 @@ function Splash({ navigation }) {
     if (!data || hasNavigated.current){};
     if (animationFinished) {
       if(!data?.key) {
-        Realm.deleteFile({
-          path: RealmDatabase.file
-        })
+        // Realm.deleteFile({
+        //   path: RealmDatabase.file
+        // })
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       } else {
         setKey(data.key);
