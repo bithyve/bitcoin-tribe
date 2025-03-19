@@ -71,7 +71,9 @@ function WalletDetails({ navigation, route }) {
     ApiHandler.receiveTestSats,
     {
       onSuccess: () => {
-        fetchOnChainTransaction();
+        if (app.appType === AppType.NODE_CONNECT) {
+          fetchOnChainTransaction();
+        }
       },
     },
   );
@@ -87,7 +89,9 @@ function WalletDetails({ navigation, route }) {
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
-    fetchOnChainTransaction();
+    if (app.appType === AppType.NODE_CONNECT) {
+      fetchOnChainTransaction();
+    }
     walletRefreshMutation.mutate({
       wallets: [wallet],
     });
@@ -106,7 +110,9 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      fetchOnChainTransaction();
+      if (app.appType === AppType.NODE_CONNECT) {
+        fetchOnChainTransaction();
+      }
       walletRefreshMutation.mutate({
         wallets: [wallet],
       });
