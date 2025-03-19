@@ -207,7 +207,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       paddingHorizontal: hp(10),
       paddingVertical: hp(15),
       width: '100%',
-      borderRadius: hp(40),
+      borderRadius: hp(20),
       // overflow: 'visible',
       position: 'relative',
       backgroundColor: theme.colors.walletBackgroundColor,

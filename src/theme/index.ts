@@ -14,6 +14,7 @@ type CustomColors = {
   accent2: string;
   accent3: string;
   inputBackground: string;
+  transButtonBackColor: string;
   headingColor: string;
   bodyColor: string;
   placeholder: string;
@@ -132,6 +133,7 @@ const CombinedDefaultTheme: AppTheme = {
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
+    transButtonBackColor: Colors.BrightGray,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
@@ -247,6 +249,7 @@ const CombinedDarkTheme: AppTheme = {
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
+    transButtonBackColor: Colors.CharlestonGreen,
     profileBackground: Colors.Black,
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
