@@ -39,7 +39,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   };
 
   const outputs = useMemo(() => {
-    return transaction?.outputs.map((output, index) => (
+    return (transaction?.outputs ?? []).map((output, index) => (
       <View key={index} style={styles.wrapperOutput}>
         <AppText
           numberOfLines={1}
@@ -59,7 +59,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   }, [transaction?.outputs]);
 
   const inputs = useMemo(() => {
-    return transaction?.inputs.map((input, index) => (
+    return (transaction?.inputs ?? []).map((input, index) => (
       <View key={index} style={styles.wrapperOutput}>
         <AppText
           numberOfLines={1}
@@ -101,28 +101,34 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           />
         </View>
       </View>
-      <LabelledItem
-        label={wallet.confirmations}
-        content={`${
-          transaction.confirmations === 0
-            ? '0'
-            : transaction.confirmations > 6
-            ? '6+'
-            : transaction.confirmations
-        }`}
-      />
-      <View style={[styles.wrapper, styles.borderStyle]}>
-        <AppText variant="heading3" style={styles.labelStyle}>
-          Input
-        </AppText>
-        {inputs}
-      </View>
-      <View style={styles.wrapper}>
-        <AppText variant="heading3" style={styles.labelStyle}>
-          Output
-        </AppText>
-        {outputs}
-      </View>
+      {transaction.confirmations === undefined ? null : (
+        <LabelledItem
+          label={wallet.confirmations}
+          content={`${
+            transaction.confirmations === 0
+              ? '0'
+              : transaction.confirmations > 6
+              ? '6+'
+              : transaction.confirmations
+          }`}
+        />
+      )}
+      {inputs.length ? (
+        <View style={[styles.wrapper, styles.borderStyle]}>
+          <AppText variant="heading3" style={styles.labelStyle}>
+            Input
+          </AppText>
+          {inputs}
+        </View>
+      ) : null}
+      {outputs.length ? (
+        <View style={styles.wrapper}>
+          <AppText variant="heading3" style={styles.labelStyle}>
+            Output
+          </AppText>
+          {outputs}
+        </View>
+      ) : null}
       {transaction.transactionKind === TransactionKind.SERVICE_FEE && (
         <LabeledContent
           label={'Note'}

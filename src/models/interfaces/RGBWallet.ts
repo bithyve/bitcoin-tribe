@@ -1,4 +1,5 @@
 import { NodeInfoResponse } from 'src/services/rgbnode';
+import { LNPayments, NodeOnchainTransaction } from './Transactions';
 
 export interface RGBWallet {
   mnemonic: string;
@@ -21,6 +22,8 @@ export interface RGBWallet {
     colored: Balance;
   };
   peerDNS?: string;
+  nodeOnchainTransactions: NodeOnchainTransaction[];
+  lnPayments: LNPayments[];
 }
 interface Balance {
   future: number;

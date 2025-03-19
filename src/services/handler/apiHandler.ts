@@ -61,6 +61,7 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
+import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -981,7 +982,18 @@ export class ApiHandler {
   static async listPayments() {
     try {
       const response = await ApiHandler.api.listpayments();
-      if (response.payments) {
+      if (response.payments && Array.isArray(response.payments)) {
+        const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            lnPayments: response?.payments,
+          },
+        );
         return snakeCaseToCamelCaseCase(response.payments);
       } else {
         throw new Error(response.error);
@@ -1611,13 +1623,25 @@ export class ApiHandler {
       const response = await ApiHandler.api.listTransactions({
         skip_sync: false,
       });
-      if (response) {
+      if (response && Array.isArray(response.transactions)) {
+        const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            nodeOnchainTransactions: response?.transactions,
+          },
+        );
         return response;
       } else {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('error- ', error);
       throw new Error('Failed to connect to node');
     }
   }

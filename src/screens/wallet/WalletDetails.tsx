@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Animated, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -22,7 +22,6 @@ import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
-import ModalLoading from 'src/components/ModalLoading';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
 import ModalContainer from 'src/components/ModalContainer';
 import BuyModal from './components/BuyModal';
@@ -31,7 +30,6 @@ import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
-import { useMMKVBoolean } from 'react-native-mmkv';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
@@ -40,7 +38,6 @@ function WalletDetails({ navigation, route }) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const { translations } = useContext(LocalizationContext);
@@ -72,19 +69,25 @@ function WalletDetails({ navigation, route }) {
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const { mutate, isLoading, isError, isSuccess, error } = useMutation(
     ApiHandler.receiveTestSats,
+    {
+      onSuccess: () => {
+        fetchOnChainTransaction();
+      },
+    },
   );
   const { mutate: getChannelMutate, data: channelsData } = useMutation(
     ApiHandler.getChannels,
   );
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate: fetchOnChainTransaction, data } = useMutation(
+  const { mutate: fetchOnChainTransaction } = useMutation(
     ApiHandler.getNodeOnchainBtcTransactions,
   );
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
+    fetchOnChainTransaction();
     walletRefreshMutation.mutate({
       wallets: [wallet],
     });
@@ -103,6 +106,7 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
+      fetchOnChainTransaction();
       walletRefreshMutation.mutate({
         wallets: [wallet],
       });
@@ -140,8 +144,8 @@ function WalletDetails({ navigation, route }) {
   const transactionsData =
     app.appType === AppType.NODE_CONNECT
       ? Object.values({
-          ...listPaymentshMutation.data,
-          ...data?.transactions,
+          ...rgbWallet.lnPayments,
+          ...rgbWallet.nodeOnchainTransactions,
         }).sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime() || 0;
           const dateB = new Date(b.createdAt).getTime() || 0;
