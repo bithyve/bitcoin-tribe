@@ -15,6 +15,10 @@ import { BtcToSats } from 'src/constants/Bitcoin';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import LabelledItem from './LabelledItem';
 import TransactionInfoSection from './TransactionInfoSection';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { useQuery } from '@realm/react';
+import AppType from 'src/models/enums/AppType';
+import { RealmSchema } from 'src/storage/enum';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -22,6 +26,7 @@ type WalletTransactionsProps = {
 };
 
 function TransactionDetailsContainer(props: WalletTransactionsProps) {
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const { transAmount, transaction } = props;
   const { translations } = useContext(LocalizationContext);
