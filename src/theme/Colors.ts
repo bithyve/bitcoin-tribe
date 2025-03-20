@@ -17,6 +17,7 @@ const Colors = {
   EerieBlack: 'rgba(26, 26, 26, 1)',
   VampireBlack: 'rgba(11, 11, 11, 1)',
   ChineseBlack: 'rgba(18, 18, 18, 1)',
+  SmokyBlack: 'rgba(13, 13, 13,1)',
   DarkCharcoal: 'rgba(47, 47, 47, 1)',
   White: 'rgba(255, 255, 255,1)',
   Quartz: 'rgba(75, 75, 75, 1)',

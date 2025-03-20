@@ -46,9 +46,9 @@ const TransactionButtons = (props: transButtonProps) => {
       <View style={styles.buttonWrapper}>
         <RoundedCTA
           colors={[
-            theme.colors.inputBackground,
-            theme.colors.inputBackground,
-            theme.colors.inputBackground,
+            theme.colors.transButtonBackColor,
+            theme.colors.transButtonBackColor,
+            theme.colors.transButtonBackColor,
           ]}
           textColor={theme.colors.roundSendCTATitle}
           icon={isThemeDark ? <IconSend /> : <IconSendLight />}
@@ -62,9 +62,9 @@ const TransactionButtons = (props: transButtonProps) => {
         <View style={styles.buttonWrapper}>
           <RoundedCTA
             colors={[
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
-              theme.colors.inputBackground,
+              theme.colors.transButtonBackColor,
+              theme.colors.transButtonBackColor,
+              theme.colors.transButtonBackColor,
             ]}
             icon={
               config.NETWORK_TYPE === NetworkType.TESTNET ||
@@ -96,9 +96,9 @@ const TransactionButtons = (props: transButtonProps) => {
       <View style={styles.buttonWrapper}>
         <RoundedCTA
           colors={[
-            theme.colors.inputBackground,
-            theme.colors.inputBackground,
-            theme.colors.inputBackground,
+            theme.colors.transButtonBackColor,
+            theme.colors.transButtonBackColor,
+            theme.colors.transButtonBackColor,
           ]}
           textColor={theme.colors.roundReceiveCTATitle}
           icon={isThemeDark ? <IconReceive /> : <IconReceiveLight />}

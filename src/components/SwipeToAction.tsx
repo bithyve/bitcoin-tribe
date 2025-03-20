@@ -226,8 +226,8 @@ const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
       textAlign: 'center',
       color: theme.colors.popupCTATitleColor,
       fontSize: 16,
-      fontWeight: '400',
-      fontFamily: Fonts.LufgaRegular,
+      fontWeight: '500',
+      fontFamily: Fonts.LufgaMedium,
     },
     thumb: {
       width: 45,
