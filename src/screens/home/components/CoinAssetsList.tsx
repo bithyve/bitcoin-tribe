@@ -29,6 +29,7 @@ import CoinAssetCard from 'src/components/CoinAssetCard';
 import CollectMoreCoins from 'src/assets/images/collectMoreCoins.svg';
 import CollectMoreCoinsLight from 'src/assets/images/collectMoreCoins_light.svg';
 import CollectMoreAssetView from './CollectMoreAssetView';
+import Colors from 'src/theme/Colors';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -144,6 +145,11 @@ const getStyles = (theme: AppTheme, index = null) =>
       position: 'absolute',
       bottom: 40,
       right: 0,
+      shadowColor: Colors.Black,
+      shadowOffset: { width: 8, height: 15 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 5,
     },
     footer: {
       height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed

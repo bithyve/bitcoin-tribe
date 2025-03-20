@@ -600,9 +600,9 @@ const SendAssetScreen = () => {
           <View style={styles.switchWrapper}>
             <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
               {isThemeDark ? (
-                <InfoIcon width={24} height={24} />
+                <InfoIcon width={26} height={26} />
               ) : (
-                <InfoIconLight width={24} height={24} />
+                <InfoIconLight width={26} height={26} />
               )}
             </AppTouchable>
 

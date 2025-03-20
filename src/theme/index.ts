@@ -120,7 +120,7 @@ const CombinedDefaultTheme: AppTheme = {
     headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
-    secondaryHeadingColor: Colors.SonicSilver,
+    secondaryHeadingColor: Colors.DarkElectricBlue,
     bodyColor: Colors.ChineseBlack,
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,

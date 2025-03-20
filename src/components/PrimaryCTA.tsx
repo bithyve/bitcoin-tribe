@@ -81,6 +81,10 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       // marginVertical: hp(20),
       width: width,
       backgroundColor: theme.colors.disableCtaBackColor,
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0,
+      shadowRadius: 0,
+      elevation: 0,
     },
   });
 export default PrimaryCTA;
