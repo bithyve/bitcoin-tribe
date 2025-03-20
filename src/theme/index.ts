@@ -98,6 +98,7 @@ type CustomColors = {
   txIDColor: string;
   settingMenuHeader: string;
   backupAlertBackColor: string;
+  sliderTrackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -204,6 +205,7 @@ const CombinedDefaultTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.BrightGray,
     backupAlertBackColor: Colors.VividGamboge,
+    sliderTrackColor: Colors.ChineseSilver,
   },
   fonts: {
     regular: {
@@ -318,6 +320,7 @@ const CombinedDarkTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.CharlestonGreen,
     backupAlertBackColor: Colors.VividGamboge,
+    sliderTrackColor: Colors.DarkCharcoal,
   },
   fonts: {
     regular: {

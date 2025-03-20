@@ -53,5 +53,6 @@ const Colors = {
   BrightGray: 'rgba(233, 238, 239, 1)',
   VividGamboge: 'rgba(255, 149, 0,1)',
   DarkElectricBlue: 'rgba(97, 106, 127,1)',
+  ChineseSilver: 'rgba(199, 206, 207,1)',
 };
 export default Colors;
