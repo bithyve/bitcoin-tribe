@@ -25,8 +25,10 @@ import { Keys } from 'src/storage';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import RefreshControlView from 'src/components/RefreshControlView';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import CoinAssetCard from 'src/components/CoinAssetCard';
+import CollectMoreCoins from 'src/assets/images/collectMoreCoins.svg';
+import CollectMoreCoinsLight from 'src/assets/images/collectMoreCoins_light.svg';
+import CollectMoreAssetView from './CollectMoreAssetView';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -45,7 +47,7 @@ function CoinAssetsList(props: AssetsListProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const FooterComponent = () => {
@@ -105,6 +107,13 @@ function CoinAssetsList(props: AssetsListProps) {
           );
         }}
       />
+      {listData.length === 1 && (
+        <CollectMoreAssetView
+          icon={isThemeDark ? <CollectMoreCoins /> : <CollectMoreCoinsLight />}
+          title={assets.collectMoreCoinTitle}
+          subTitle={assets.collectMoreCoinSubTitle}
+        />
+      )}
       <AppTouchable
         style={
           isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
