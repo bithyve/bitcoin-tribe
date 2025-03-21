@@ -611,9 +611,9 @@ const SendAssetScreen = () => {
           <View style={styles.switchWrapper}>
             <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
               {isThemeDark ? (
-                <InfoIcon width={26} height={26} />
+                <InfoIcon width={30} height={30} />
               ) : (
-                <InfoIconLight width={26} height={26} />
+                <InfoIconLight width={30} height={30} />
               )}
             </AppTouchable>
 
@@ -772,7 +772,6 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderRadius: 10,
     },
     amountText: {
-      // color: theme.colors.headingColor,
       color: Colors.Black,
     },
     nameText: {
