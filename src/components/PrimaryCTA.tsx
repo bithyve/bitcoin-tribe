@@ -75,6 +75,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
         Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
+      letterSpacing: 0.4,
     },
     disableButton: {
       borderRadius: 18,
