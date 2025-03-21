@@ -73,7 +73,9 @@ const AssetItem = ({
   amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
-  const styles = useMemo(() => getStyles(theme, 100), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = useMemo(() => getStyles(theme, 100), [theme, isThemeDark]);
+  console.log('tag', tag);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -100,16 +102,10 @@ const AssetItem = ({
           </View>
         )}
         <View style={styles.assetDetailsWrapper}>
-          <AppText
-            numberOfLines={1}
-            variant="body2"
-            style={{
-              color:
-                tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
-            }}>
+          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
             {name}
           </AppText>
-          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
+          <AppText numberOfLines={1} variant="body2" style={styles.detailsText}>
             {details}
           </AppText>
         </View>
@@ -119,10 +115,25 @@ const AssetItem = ({
               styles.amountTextWrapper,
               {
                 backgroundColor:
-                  tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
+                  tag === 'Coin'
+                    ? isThemeDark
+                      ? theme.colors.accent
+                      : theme.colors.accent1
+                    : theme.colors.accent4,
               },
             ]}>
-            <AppText variant="smallCTA" style={styles.amountText}>
+            <AppText
+              variant="smallCTA"
+              style={[
+                styles.amountText,
+                {
+                  color: isThemeDark
+                    ? Colors.Black
+                    : tag === 'Coin'
+                    ? Colors.White
+                    : Colors.Black,
+                },
+              ]}>
               {numberWithCommas(amount)}
             </AppText>
           </View>
@@ -765,6 +776,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       color: Colors.Black,
     },
     nameText: {
+      color: theme.colors.headingColor,
+    },
+    detailsText: {
       color: theme.colors.secondaryHeadingColor,
     },
     labelstyle: {
