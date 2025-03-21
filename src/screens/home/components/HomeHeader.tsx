@@ -45,7 +45,7 @@ function HomeHeader() {
   const [image, setImage] = useState(null);
   const [walletName, setWalletName] = useState(null);
   const [visiblePullDownRefreshInfo, setVisiblePullDownRefreshInfo] =
-    useState(null);
+    useState(false);
 
   useEffect(() => {
     if (app?.walletImage || app?.appName) {

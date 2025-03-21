@@ -59,7 +59,6 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const styles = getStyles(theme, insets, lengthOfTotalBalance, app.appType);
-
   return (
     <>
       {/* <Animated.View
@@ -167,14 +166,14 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
     },
     largeHeader: {
       alignItems: 'center',
-      height: windowHeight > 820 ? '46%' : '50%',
+      height: windowHeight > 810 ? '47%' : '50%',
     },
     largeHeaderContainer: {
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: hp(20),
       width: '100%',
-      paddingVertical: appType === AppType.NODE_CONNECT ? hp(0) : hp(10),
+      paddingVertical: appType === AppType.NODE_CONNECT ? hp(0) : hp(0),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),

@@ -1,6 +1,6 @@
 {
   "name": "tribe",
-  "version": "0.2.10",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
@@ -26,6 +26,8 @@
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-community/slider": "^4.5.5",
+    "@react-native-firebase/app": "21.11.0",
+    "@react-native-firebase/messaging": "21.11.0",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
