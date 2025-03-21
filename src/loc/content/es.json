@@ -577,7 +577,11 @@
     "donationTranferInfo6": "Úsalo para propinas, crowdfunding, sorteos o enviar regalos.",
     "donationTranferInfo7": "Sencillo y Eficiente",
     "donationTranferInfo8": "Las transferencias se completan de inmediato.",
-    "sendAsDonation": "¿Enviar como donación?"
+    "sendAsDonation": "¿Enviar como donación?",
+    "collectMoreCoinTitle": "¡Recoge más monedas!",
+    "collectMoreCoinSubTitle": "Sigue añadiendo más monedas\n para expandir tus activos.",
+    "collectMoreCollectibleTitle": "¡Recoge más coleccionables!",
+    "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

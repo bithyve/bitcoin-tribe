@@ -99,7 +99,6 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      marginTop: hp(20),
       flex: 1,
     },
     statusContainer: {
@@ -108,10 +107,9 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: '100%',
-      marginVertical: hp(10),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
-      borderRadius: 10,
+      borderRadius: 15,
     },
     wrapper: {
       height: '75%',

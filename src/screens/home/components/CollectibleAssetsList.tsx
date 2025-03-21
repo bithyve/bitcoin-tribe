@@ -22,7 +22,9 @@ import NoAssetsIllustration from 'src/assets/images/noCollectibeAssets.svg';
 import NoAssetsIllustrationLight from 'src/assets/images/noCollectibeAssets_light.svg';
 import { Keys } from 'src/storage';
 import RefreshControlView from 'src/components/RefreshControlView';
-import LoadingSpinner from 'src/components/LoadingSpinner';
+import CollectMoreCollectibles from 'src/assets/images/collectMoreCollectibles.svg';
+import CollectMoreCollectiblesLight from 'src/assets/images/collectMoreCollectibles_light.svg';
+import CollectMoreAssetView from './CollectMoreAssetView';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -40,7 +42,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
 
   const FooterComponent = () => {
     return <View style={styles.footer} />;
@@ -102,6 +104,19 @@ function CollectibleAssetsList(props: AssetsListProps) {
           );
         }}
       />
+      {listData.length === 1 && (
+        <CollectMoreAssetView
+          icon={
+            isThemeDark ? (
+              <CollectMoreCollectibles />
+            ) : (
+              <CollectMoreCollectiblesLight />
+            )
+          }
+          title={assets.collectMoreCollectibleTitle}
+          subTitle={assets.collectMoreCollectibleSubTitle}
+        />
+      )}
       <AppTouchable
         style={
           isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight

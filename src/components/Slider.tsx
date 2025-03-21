@@ -60,7 +60,7 @@ const Slider = (props: Props) => {
         minimumTrackTintColor={
           isThemeDark ? Colors.Golden : Colors.BrandeisBlue
         }
-        maximumTrackTintColor="#24262B"
+        maximumTrackTintColor={theme.colors.sliderTrackColor}
         thumbTintColor={isThemeDark ? Colors.Golden : Colors.BrandeisBlue}
       />
 

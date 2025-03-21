@@ -577,7 +577,11 @@
     "donationTranferInfo6": "Usalo per mance, crowdfunding, omaggi o inviare regali.",
     "donationTranferInfo7": "Semplice ed Efficiente",
     "donationTranferInfo8": "I trasferimenti vengono completati immediatamente.",
-    "sendAsDonation": "Inviare come donazione?"
+    "sendAsDonation": "Inviare come donazione?",
+    "collectMoreCoinTitle": "Colleziona più monete!",
+    "collectMoreCoinSubTitle": "Continua ad aggiungere più monete\n per espandere i tuoi beni.",
+    "collectMoreCollectibleTitle": "Colleziona più collezionabili!",
+    "collectMoreCollectibleSubTitle": "Continua ad aggiungere più collezionabili\n per espandere i tuoi beni."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

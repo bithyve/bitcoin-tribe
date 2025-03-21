@@ -108,12 +108,12 @@ function HomeHeader() {
           </View>
         </AppTouchable>
         <View style={styles.iconWrapper}>
-          <IconWrapper
+          {/* <IconWrapper
             onPress={() => {
               setVisiblePullDownRefreshInfo(true);
             }}>
             {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-          </IconWrapper>
+          </IconWrapper> */}
           <IconWrapper
             onPress={() => {
               handleNavigation(NavigationRoutes.SENDSCREEN, {
@@ -173,7 +173,7 @@ const getStyles = (theme: AppTheme) =>
     },
     iconWrapper: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       width: '32%',
     },
   });

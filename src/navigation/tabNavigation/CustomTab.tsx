@@ -181,7 +181,7 @@ const getStyles = (theme: AppTheme) =>
       fontSize: 13,
       fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 13 * 1.4,
-      fontWeight: '400',
+      fontWeight: '500',
     },
   });
 

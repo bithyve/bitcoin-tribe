@@ -5,13 +5,13 @@ import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
-import {
-  formatLargeNumber,
-} from 'src/utils/numberWithCommas';
+import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import Identicon from './Identicon';
-import IconVerified from 'src/assets/images/issuer_verified.svg'
+import IconVerified from 'src/assets/images/issuer_verified.svg';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 type CoinAssetCardProps = {
   asset: Asset;
@@ -22,12 +22,15 @@ type CoinAssetCardProps = {
 const CoinAssetCard = (props: CoinAssetCardProps) => {
   const { tag, onPress, asset } = props;
   const theme: AppTheme = useTheme();
-
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const balance = useMemo(() => {
     return asset?.balance?.future ?? 0;
   }, [asset?.balance?.future]);
 
-  const styles = useMemo(() => getStyles(theme), [theme]);
+  const styles = useMemo(
+    () => getStyles(theme, isThemeDark),
+    [theme, isThemeDark],
+  );
 
   return (
     <AppTouchable onPress={onPress}>
@@ -39,14 +42,12 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
           theme.colors.assetCardGradient3,
         ]}>
         <View style={styles.contentWrapper}>
-            <View style={styles.row}>
-              <AppText variant="heading3" style={styles.titleText}>
-                {asset.ticker}
-              </AppText>
-              {asset.issuer?.verified && (
-                <IconVerified width={24} height={24} />
-              )}
-            </View>
+          <View style={styles.row}>
+            <AppText variant="heading3" style={styles.titleText}>
+              {asset.ticker}
+            </AppText>
+            {asset.issuer?.verified && <IconVerified width={24} height={24} />}
+          </View>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
@@ -70,7 +71,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
     </AppTouchable>
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       borderRadius: 15,
@@ -110,7 +111,7 @@ const getStyles = (theme: AppTheme) =>
     tagWrapper1: {
       paddingVertical: hp(3),
       paddingHorizontal: hp(10),
-      backgroundColor: theme.colors.accent,
+      backgroundColor: isThemeDark ? theme.colors.accent : theme.colors.accent1,
       borderRadius: 15,
     },
     identiconWrapper: {
