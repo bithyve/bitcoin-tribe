@@ -75,7 +75,6 @@ const AssetItem = ({
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = useMemo(() => getStyles(theme, 100), [theme, isThemeDark]);
-  console.log('tag', tag);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
