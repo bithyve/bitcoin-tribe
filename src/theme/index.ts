@@ -176,7 +176,7 @@ const CombinedDefaultTheme: AppTheme = {
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
-    placeholder: Colors.SonicSilver,
+    placeholder: Colors.DarkElectricBlue,
     primaryText: Colors.RaisinBlack,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
