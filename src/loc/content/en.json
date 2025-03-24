@@ -577,7 +577,11 @@
     "donationTranferInfo6": "Use it for tipping, crowdfunding, giveaways, or sending gifts.",
     "donationTranferInfo7": "Simple and Efficient",
     "donationTranferInfo8": "Transfers are completed immediately.",
-    "sendAsDonation": "Send as donation?"
+    "sendAsDonation": "Send as donation?",
+    "collectMoreCoinTitle": "Collect More Coins!",
+    "collectMoreCoinSubTitle": "Keep adding more coins to\n expand your assets.",
+    "collectMoreCollectibleTitle": "Collect More Collectibles!",
+    "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets."
   },
   "community": {
     "fnfTitle": "Friends & Family",
