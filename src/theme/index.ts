@@ -98,6 +98,7 @@ type CustomColors = {
   txIDColor: string;
   settingMenuHeader: string;
   backupAlertBackColor: string;
+  sliderTrackColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -120,7 +121,7 @@ const CombinedDefaultTheme: AppTheme = {
     headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
-    secondaryHeadingColor: Colors.SonicSilver,
+    secondaryHeadingColor: Colors.DarkElectricBlue,
     bodyColor: Colors.ChineseBlack,
     secondaryCtaTitleColor: Colors.BrandeisBlue,
     ctaBackColor: Colors.BrandeisBlue,
@@ -175,7 +176,7 @@ const CombinedDefaultTheme: AppTheme = {
     //
     primaryCTA: Colors.ChineseOrange,
     accent3: Colors.SilverSand,
-    placeholder: Colors.SonicSilver,
+    placeholder: Colors.DarkElectricBlue,
     primaryText: Colors.RaisinBlack,
     shodowColor: Colors.ChineseWhite,
     inActiveDotColor: Colors.QuickSilver,
@@ -204,6 +205,7 @@ const CombinedDefaultTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.BrightGray,
     backupAlertBackColor: Colors.VividGamboge,
+    sliderTrackColor: Colors.ChineseSilver,
   },
   fonts: {
     regular: {
@@ -318,6 +320,7 @@ const CombinedDarkTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.CharlestonGreen,
     backupAlertBackColor: Colors.VividGamboge,
+    sliderTrackColor: Colors.DarkCharcoal,
   },
   fonts: {
     regular: {
