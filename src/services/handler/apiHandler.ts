@@ -106,6 +106,25 @@ export class ApiHandler {
     });
   }
 
+  static async fetchGithubRelease() {
+    try {
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${DeviceInfo.getVersion()}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        throw new Error(
+          `GitHub API request failed with status: ${response.status}`,
+        );
+      }
+      const releaseData = await response.json();
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      console.error('Error fetching GitHub release data:', error);
+      return null;
+    }
+  }
+
   static async setupNewApp({
     appName = '',
     pinMethod = PinMethod.DEFAULT,
@@ -153,6 +172,7 @@ export class ApiHandler {
     const isRealmInit = await dbManager.initializeRealm(uint8array);
     if (isRealmInit) {
       try {
+        const githubReleaseNote = await ApiHandler.fetchGithubRelease();
         if (appType === AppType.ON_CHAIN) {
           const primaryMnemonic = mnemonic
             ? mnemonic
@@ -212,7 +232,6 @@ export class ApiHandler {
             appType,
             authToken: registerApp?.app?.authToken,
           };
-
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -227,7 +246,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -281,7 +300,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -351,7 +370,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -1512,6 +1531,7 @@ export class ApiHandler {
 
   static async checkVersion() {
     try {
+      const githubReleaseNote = await ApiHandler.fetchGithubRelease();
       const versionHistoryData = dbManager.getCollection(
         RealmSchema.VersionHistory,
       );
@@ -1524,7 +1544,7 @@ export class ApiHandler {
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-          releaseNote: '',
+          releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
           title: `Upgraded from ${version.version} to ${currentVersion}`,
         });
