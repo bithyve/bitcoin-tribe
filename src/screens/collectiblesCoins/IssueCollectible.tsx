@@ -454,6 +454,10 @@ function IssueCollectibleScreen() {
               handleTabChange();
             }}
             color={theme.colors.accent1}
+            trackColor={{
+              false: theme.colors.toggleInActiveBackColor,
+              true: theme.colors.accent1,
+            }}
           />
         </View>
 

@@ -25,8 +25,11 @@ import { Keys } from 'src/storage';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import RefreshControlView from 'src/components/RefreshControlView';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import CoinAssetCard from 'src/components/CoinAssetCard';
+import CollectMoreCoins from 'src/assets/images/collectMoreCoins.svg';
+import CollectMoreCoinsLight from 'src/assets/images/collectMoreCoins_light.svg';
+import CollectMoreAssetView from './CollectMoreAssetView';
+import Colors from 'src/theme/Colors';
 
 type AssetsListProps = {
   listData: Asset[];
@@ -38,13 +41,14 @@ type AssetsListProps = {
 };
 
 function CoinAssetsList(props: AssetsListProps) {
-  const { listData, onPressAsset, onPressAddNew, refreshingStatus } = props;
+  const { listData, onPressAsset, onPressAddNew, loading, refreshingStatus } =
+    props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const FooterComponent = () => {
@@ -52,7 +56,6 @@ function CoinAssetsList(props: AssetsListProps) {
   };
   return (
     <View style={styles.container}>
-      {props.loading && !refreshingStatus ? <LoadingSpinner /> : null}
       <FlatList
         data={listData}
         extraData={[listData]}
@@ -105,6 +108,13 @@ function CoinAssetsList(props: AssetsListProps) {
           );
         }}
       />
+      {listData.length === 1 && (
+        <CollectMoreAssetView
+          icon={isThemeDark ? <CollectMoreCoins /> : <CollectMoreCoinsLight />}
+          title={assets.collectMoreCoinTitle}
+          subTitle={assets.collectMoreCoinSubTitle}
+        />
+      )}
       <AppTouchable
         style={
           isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
@@ -135,6 +145,11 @@ const getStyles = (theme: AppTheme, index = null) =>
       position: 'absolute',
       bottom: 40,
       right: 0,
+      shadowColor: Colors.Black,
+      shadowOffset: { width: 8, height: 15 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 5,
     },
     footer: {
       height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed

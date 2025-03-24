@@ -19,8 +19,8 @@ import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconBitcoinOnChain from 'src/assets/images/icon_btc3.svg';
 import IconBitcoinOnChainLight from 'src/assets/images/icon_btc3_light.svg';
-import GradientView from 'src/components/GradientView';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
+import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
@@ -38,6 +38,7 @@ type walletDetailsHeaderProps = {
   onPressBuy?: () => void;
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
+  totalAssetLocalAmount?: number;
 };
 function WalletDetailsHeader(props: walletDetailsHeaderProps) {
   const insets = useSafeAreaInsets();
@@ -63,6 +64,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
+    totalAssetLocalAmount,
   } = props;
 
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
@@ -136,7 +138,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
               <View style={styles.modeBalanceWrapper}>
                 <View style={styles.balanceWrapper}>
                   <View style={styles.currencyIconWrapper}>
-                    <IconBTC />
+                    {isThemeDark ? <IconBTC /> : <IconBTCLight />}
                   </View>
                   <View style={styles.totalBalanceWrapper1}>
                     {initialCurrencyMode !== CurrencyKind.SATS && (
@@ -163,10 +165,32 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                   </AppText> */}
                 </View>
                 <View style={styles.balanceWrapper}>
-                  <IconLightning />
-                  <AppText variant="heading3" style={styles.balanceText}>
+                  <View style={styles.currencyIconWrapper}>
+                    <IconLightning />
+                  </View>
+                  <View style={styles.totalBalanceWrapper1}>
+                    {initialCurrencyMode !== CurrencyKind.SATS && (
+                      <View style={styles.currencyIconWrapper}>
+                        {getCurrencyIcon(
+                          isThemeDark ? IconBitcoin : IconBitcoinLight,
+                          isThemeDark ? 'dark' : 'light',
+                          10,
+                        )}
+                      </View>
+                    )}
+
+                    <AppText variant="heading3" style={styles.totalBalance}>
+                      {getBalance(totalAssetLocalAmount)}
+                    </AppText>
+                    {initialCurrencyMode === CurrencyKind.SATS && (
+                      <AppText variant="caption" style={styles.satsText}>
+                        sats
+                      </AppText>
+                    )}
+                  </View>
+                  {/* <AppText variant="heading3" style={styles.balanceText}>
                     0.000
-                  </AppText>
+                  </AppText> */}
                 </View>
               </View>
             </View>
@@ -239,6 +263,7 @@ const getStyles = (theme: AppTheme, insets) =>
       borderWidth: 1,
       width: '100%',
       borderRadius: 15,
+      backgroundColor: theme.colors.walletBackgroundColor,
     },
     totalBalance: {
       color: theme.colors.headingColor,

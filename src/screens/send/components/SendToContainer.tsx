@@ -251,19 +251,21 @@ function SendToContainer({
   }, [amount, wallet]);
 
   useEffect(() => {
-    const recipients = [];
-    recipients.push({
-      address: recipientAddress,
-      amount: 0,
-    });
-    const fee = WalletOperations.calculateSendMaxFee(
-      wallet,
-      recipients,
-      selectedPriority === TxPriority.CUSTOM
-        ? Number(customFee)
-        : averageTxFee[selectedPriority]?.feePerByte,
-    );
-    setSendMaxFee(fee.fee);
+    if (app.appType === AppType.ON_CHAIN) {
+      const recipients = [];
+      recipients.push({
+        address: recipientAddress,
+        amount: 0,
+      });
+      const fee = WalletOperations.calculateSendMaxFee(
+        wallet,
+        recipients,
+        selectedPriority === TxPriority.CUSTOM
+          ? Number(customFee)
+          : averageTxFee[selectedPriority]?.feePerByte,
+      );
+      setSendMaxFee(fee.fee);
+    }
   }, [recipientAddress, amount, selectedPriority, customFee]);
 
   const getFeeRateByPriority = (priority: TxPriority) => {

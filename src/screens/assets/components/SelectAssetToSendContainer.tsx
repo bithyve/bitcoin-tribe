@@ -27,6 +27,8 @@ import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
 import Identicon from 'src/components/Identicon';
 import { Keys } from 'src/storage';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Colors from 'src/theme/Colors';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -60,6 +62,7 @@ const Item = ({
   amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
     <AppTouchable onPress={onPressAsset}>
@@ -87,15 +90,10 @@ const Item = ({
           </View>
         )}
         <View style={styles.assetDetailsWrapper}>
-          <AppText
-            variant="body2"
-            style={{
-              color:
-                tag === 'COIN' ? theme.colors.accent2 : theme.colors.accent1,
-            }}>
+          <AppText variant="body2" style={styles.nameText}>
             {name}
           </AppText>
-          <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
+          <AppText variant="body2" numberOfLines={1} style={styles.detailsText}>
             {details}
           </AppText>
         </View>
@@ -103,14 +101,24 @@ const Item = ({
           <AssetChip
             tagText={Capitalize(tag)}
             backColor={
-              tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
+              tag === 'COIN'
+                ? isThemeDark
+                  ? theme.colors.accent5
+                  : theme.colors.accent1
+                : theme.colors.accent4
             }
-            tagColor={theme.colors.tagText}
+            tagColor={
+              tag === 'COIN'
+                ? isThemeDark
+                  ? theme.colors.tagText
+                  : Colors.White
+                : theme.colors.tagText
+            }
           />
         </View>
         <View style={styles.amountWrapper}>
           <AppText variant="smallCTA" style={styles.amountText}>
-            {amount}
+            {numberWithCommas(amount)}
           </AppText>
         </View>
       </GradientView>
@@ -171,8 +179,8 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 }
                 index={index}
                 ticker={item.ticker}
-              />)
-            : (
+              />
+            ) : (
               <Item
                 key={index}
                 name={item.name}
@@ -190,7 +198,9 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 index={index}
                 ticker={item.ticker}
                 image={Platform.select({
-                  android: `file://${item.media?.filePath || item.token.media.filePath}`,
+                  android: `file://${
+                    item.media?.filePath || item.token.media.filePath
+                  }`,
                   ios: item.media?.filePath || item.token.media.filePath,
                 })}
               />
@@ -223,6 +233,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
     },
     nameText: {
+      color: theme.colors.headingColor,
+    },
+    detailsText: {
       color: theme.colors.secondaryHeadingColor,
     },
     identiconWrapper: {

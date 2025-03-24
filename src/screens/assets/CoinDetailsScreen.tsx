@@ -1,5 +1,5 @@
 import { Animated, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
@@ -38,6 +38,9 @@ const CoinDetailsScreen = () => {
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const { mutate: getChannelMutate, data: channelsData } = useMutation(
+    ApiHandler.getChannels,
+  );
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -59,10 +62,17 @@ const CoinDetailsScreen = () => {
       mutate({ assetId, schema: RealmSchema.Coin });
       if (appType === AppType.NODE_CONNECT) {
         listPaymentshMutation.mutate();
+        getChannelMutate();
       }
     });
     return unsubscribe;
   }, [navigation, assetId]);
+
+  const totalAssetLocalAmount = useMemo(() => {
+    return (channelsData ?? [])
+      .filter(channel => channel.asset_id === assetId)
+      .reduce((sum, channel) => sum + (channel.asset_local_amount || 0), 0);
+  }, [channelsData, assetId]);
 
   const filteredPayments = (listPaymentshMutation.data?.payments || []).filter(
     payment => payment.asset_id === assetId,
@@ -109,6 +119,7 @@ const CoinDetailsScreen = () => {
             invoiceAssetId: coin.assetId,
           })
         }
+        totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <View style={styles.spendableBalanceWrapper}>
         <AssetSpendableAmtView

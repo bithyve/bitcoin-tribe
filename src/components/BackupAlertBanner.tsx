@@ -19,6 +19,7 @@ const BackupAlertBanner = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
   const [visible, setVisible] = useState(false);
+
   return isBackupInProgress ? (
     <>
       <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
@@ -66,7 +67,7 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       zIndex: 1000,
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: hp(3),
+      paddingVertical: windowHeight > 820 ? hp(3) : 0,
       paddingHorizontal: hp(10),
     },
     text: {
