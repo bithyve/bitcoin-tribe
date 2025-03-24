@@ -25,7 +25,11 @@ export default (
         />
       ) : (
         <LottieView
-          source={warning? require('src/assets/images/jsons/warningToast.json') : require('src/assets/images/jsons/successToast.json')}
+          source={
+            warning
+              ? require('src/assets/images/jsons/warningToast.json')
+              : require('src/assets/images/jsons/successToast.json')
+          }
           style={styles.loaderStyle}
           autoPlay
           loop
@@ -34,7 +38,9 @@ export default (
       <AppText
         style={[
           styles.toastMessageStyle,
-          { color: warning ? Colors.Black : error ? Colors.White : Colors.White },
+          {
+            color: warning ? Colors.Black : error ? Colors.White : Colors.White,
+          },
         ]}>
         {message && message.length > 150
           ? `${message.substring(0, 150)}...`
@@ -56,6 +62,11 @@ export default (
       textColor: error ? Colors.ImperialRed : Colors.White,
       borderColor: error ? Colors.ImperialRed : Colors.ScreaminGreen,
       borderWidth: 1,
+      shadowColor: 'transparent',
+      shadowOpacity: 0,
+      shadowRadius: 0,
+      shadowOffset: { width: 0, height: 0 },
+      elevation: 0,
       containerStyle: {
         marginBottom: (windowWidth * 22) / 100,
         borderRadius: 20,
@@ -63,7 +74,6 @@ export default (
         paddingVertical: hp(15),
         flexWrap: 'wrap',
         alignItems: 'center',
-        justifyContent: 'center',
       },
     },
   );
