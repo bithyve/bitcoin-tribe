@@ -14,6 +14,7 @@ type CustomColors = {
   accent2: string;
   accent3: string;
   inputBackground: string;
+  transButtonBackColor: string;
   headingColor: string;
   bodyColor: string;
   placeholder: string;
@@ -98,6 +99,7 @@ type CustomColors = {
   txIDColor: string;
   settingMenuHeader: string;
   backupAlertBackColor: string;
+  walletBackgroundColor: string;
   sliderTrackColor: string;
 };
 
@@ -132,6 +134,7 @@ const CombinedDefaultTheme: AppTheme = {
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
+    transButtonBackColor: Colors.BrightGray,
     profileBackground: Colors.Black,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
@@ -205,6 +208,7 @@ const CombinedDefaultTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.BrightGray,
     backupAlertBackColor: Colors.VividGamboge,
+    walletBackgroundColor: Colors.White,
     sliderTrackColor: Colors.ChineseSilver,
   },
   fonts: {
@@ -247,6 +251,7 @@ const CombinedDarkTheme: AppTheme = {
     popupText: Colors.White,
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.CharlestonGreen,
+    transButtonBackColor: Colors.CharlestonGreen,
     profileBackground: Colors.Black,
     accent1: Colors.Golden,
     primaryCTAText: Colors.Black,
@@ -320,6 +325,7 @@ const CombinedDarkTheme: AppTheme = {
     txIDColor: Colors.BrandeisBlue,
     settingMenuHeader: Colors.CharlestonGreen,
     backupAlertBackColor: Colors.VividGamboge,
+    walletBackgroundColor: Colors.SmokyBlack,
     sliderTrackColor: Colors.DarkCharcoal,
   },
   fonts: {
