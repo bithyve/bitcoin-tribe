@@ -34,7 +34,11 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
       </View>
       <View style={styles.illustrationWrapper}>
         <LottieView
-          source={isThemeDark ? require('src/assets/images/jsons/nodeConnecting.json') : require('src/assets/images/jsons/nodeConnecting_light.json')}
+          source={
+            isThemeDark
+              ? require('src/assets/images/jsons/nodeConnecting.json')
+              : require('src/assets/images/jsons/nodeConnecting_light.json')
+          }
           style={styles.loaderStyle}
           autoPlay
           loop
@@ -48,7 +52,11 @@ function NodeConnectingPopupContainer(props: UseRGBAssetProps) {
         </View>
         <View style={styles.dotLoaderWrapper}>
           <LottieView
-            source={require('src/assets/images/jsons/dotsLoader.json')}
+            source={
+              isThemeDark
+                ? require('src/assets/images/jsons/dotsLoader.json')
+                : require('src/assets/images/jsons/dotsLoader_light.json')
+            }
             style={styles.dotLoaderStyle}
             autoPlay
             loop
