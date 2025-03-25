@@ -31,6 +31,7 @@ function WalletTransactionsContainer({
   pullDownToRefresh,
   autoRefresh,
   scrollY,
+  style,
 }) {
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -50,7 +51,7 @@ function WalletTransactionsContainer({
   });
 
   return (
-    <View>
+    <View style={[styles.container, style]}>
       <View style={styles.contentWrapper}>
         <AppText variant="body1" style={styles.recentTransText}>
           {walletStrings.recentTransaction}
@@ -150,6 +151,9 @@ const getStyles = (theme: AppTheme) =>
     listContainer: {
       marginTop: hp(15),
       height: '60%',
+    },
+    container: {
+      height: 'auto',
     },
   });
 export default WalletTransactionsContainer;

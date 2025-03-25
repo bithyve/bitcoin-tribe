@@ -7,6 +7,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
   interpolate,
+  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -35,6 +36,7 @@ import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
+import { windowHeight } from 'src/constants/responsive';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
@@ -63,6 +65,19 @@ function WalletDetails({ navigation, route }) {
   });
   const smallHeaderOpacity = useDerivedValue(() => {
     return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
+  });
+
+  const transactionsAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      flexGrow: 1,
+      flex: 1,
+      height: interpolate(
+        scrollY.value,
+        [0, 250],
+        [windowHeight * 0.7, windowHeight * 0.95],
+        'clamp',
+      ),
+    };
   });
 
   const wallet: Wallet = useWallets({}).wallets[0];
@@ -200,6 +215,7 @@ function WalletDetails({ navigation, route }) {
         pullDownToRefresh={() => pullDownToRefresh()}
         autoRefresh={walletRefreshMutation.isLoading}
         scrollY={scrollY}
+        style={transactionsAnimatedStyle}
       />
       <ModalContainer
         title={common.buy}

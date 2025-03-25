@@ -69,6 +69,7 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
       padding: hp(10),
       marginTop: hp(20),
+      backgroundColor: theme.colors.primaryBackground,
     },
     balanceText: {
       color: theme.colors.headingColor,

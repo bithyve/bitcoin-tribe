@@ -1,7 +1,7 @@
 import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -29,13 +29,24 @@ import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import { AppTheme } from 'src/theme';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
+  const theme: AppTheme = useTheme();
   const scrollY = useSharedValue(0);
   const { assetId, askReview, askVerify } = useRoute().params;
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
+
+  const largeHeaderHeight = useDerivedValue(() => {
+    return interpolate(scrollY.value, [0, 300], [350, 0], 'clamp');
+  });
+  const smallHeaderOpacity = useDerivedValue(() => {
+    return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
+  });
+
+  const styles = getStyles(theme);
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -94,20 +105,15 @@ const CoinDetailsScreen = () => {
 
   const transactionsAnimatedStyle = useAnimatedStyle(() => {
     return {
+      flexGrow: 1,
+      flex: 1,
       height: interpolate(
         scrollY.value,
-        [0, 300],
-        [windowHeight * 0.6, windowHeight * 0.9],
+        [0, 250],
+        [windowHeight * 0.7, windowHeight * 0.95],
         'clamp',
       ),
     };
-  });
-
-  const largeHeaderHeight = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 300], [350, 0], 'clamp');
-  });
-  const smallHeaderOpacity = useDerivedValue(() => {
-    return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
   });
 
   return (
@@ -171,15 +177,17 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({
-  spendableBalanceWrapper: {
-    top: -30,
-  },
-  transactionContainer: {
-    top: -25,
-    height: windowHeight > 820 ? '52%' : '47%',
-  },
-  toolTipCotainer: {
-    top: windowHeight > 670 ? 90 : 70,
-  },
-});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    spendableBalanceWrapper: {
+      top: -30,
+      backgroundColor: theme.colors.primaryBackground,
+    },
+    transactionContainer: {
+      top: -25,
+      minHeight: windowHeight * 0.6,
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 90 : 70,
+    },
+  });

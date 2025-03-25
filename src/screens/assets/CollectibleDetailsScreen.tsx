@@ -1,6 +1,6 @@
 import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
@@ -25,12 +25,14 @@ import {
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
+import { AppTheme } from 'src/theme';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const scrollY = useSharedValue(0);
   const { assetId, askReview, askVerify } = useRoute().params;
-  const styles = getStyles();
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { appType } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
@@ -88,23 +90,14 @@ const CollectibleDetailsScreen = () => {
         })
       : collectible?.transactions;
 
-  // const largeHeaderHeight = scrollY.interpolate({
-  //   inputRange: [0, 300],
-  //   outputRange: [350, 0],
-  //   extrapolate: 'clamp',
-  // });
-
-  // const smallHeaderOpacity = scrollY.interpolate({
-  //   inputRange: [100, 150],
-  //   outputRange: [0, 1],
-  //   extrapolate: 'clamp',
-  // });
   const transactionsAnimatedStyle = useAnimatedStyle(() => {
     return {
+      flexGrow: 1,
+      flex: 1,
       height: interpolate(
         scrollY.value,
-        [0, 300],
-        [windowHeight * 0.6, windowHeight * 0.9],
+        [0, 250],
+        [windowHeight * 0.7, windowHeight * 0.95],
         'clamp',
       ),
     };
@@ -186,7 +179,7 @@ const CollectibleDetailsScreen = () => {
     </ScreenContainer>
   );
 };
-const getStyles = () =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
       height: hp(40),
@@ -195,10 +188,10 @@ const getStyles = () =>
     },
     spendableBalanceWrapper: {
       top: -30,
+      backgroundColor: theme.colors.primaryBackground,
     },
     transactionContainer: {
       top: -25,
-      height: windowHeight > 820 ? '52%' : '47%',
     },
     toolTipCotainer: {
       top: windowHeight > 670 ? 110 : 100,
