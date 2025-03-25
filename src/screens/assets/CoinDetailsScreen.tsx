@@ -5,6 +5,13 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import {
+  interpolate,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
+
 import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -22,11 +29,6 @@ import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
-import {
-  interpolate,
-  useDerivedValue,
-  useSharedValue,
-} from 'react-native-reanimated';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -90,6 +92,17 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
+  const transactionsAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 300],
+        [windowHeight * 0.6, windowHeight * 0.9],
+        'clamp',
+      ),
+    };
+  });
+
   const largeHeaderHeight = useDerivedValue(() => {
     return interpolate(scrollY.value, [0, 300], [350, 0], 'clamp');
   });
@@ -127,8 +140,9 @@ const CoinDetailsScreen = () => {
           style={styles.toolTipCotainer}
         />
       </View>
+
       <TransactionsList
-        style={styles.transactionContainer}
+        style={[styles.transactionContainer, transactionsAnimatedStyle]}
         transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {

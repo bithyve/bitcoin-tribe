@@ -1,13 +1,10 @@
 import React, { useContext } from 'react';
-import {
-  FlatList,
-  Platform,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Platform, RefreshControl, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
+import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
+
 import AppText from 'src/components/AppText';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
@@ -26,7 +23,6 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import EmptyStateView from 'src/components/EmptyStateView';
 import WalletTransactions from './WalletTransactions';
 import AppType from 'src/models/enums/AppType';
-import { useNavigation } from '@react-navigation/native';
 
 function WalletTransactionsContainer({
   refreshing,
@@ -47,6 +43,12 @@ function WalletTransactionsContainer({
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: event => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
   return (
     <View>
       <View style={styles.contentWrapper}>
@@ -67,13 +69,12 @@ function WalletTransactionsContainer({
       </View>
       <ReservedSatsView />
       {autoRefresh && !refreshing ? <LoadingSpinner /> : null}
-      <FlatList
+      <Animated.FlatList
+        keyboardShouldPersistTaps="handled"
         style={styles.listContainer}
         data={transactions}
-        // onScroll={Animated.event(
-        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        //   { useNativeDriver: false },
-        // )}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView

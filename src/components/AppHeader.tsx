@@ -12,6 +12,7 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import Fonts from 'src/constants/Fonts';
 
 type AppHeaderProps = {
   title?: string;
@@ -23,6 +24,9 @@ type AppHeaderProps = {
   onBackNavigation?;
   rightText?: string;
   onRightTextPress?: () => void;
+  showTitleSection?: boolean;
+  titleSectionHeading?: string;
+  titleSectionSubHeading?: string;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -36,6 +40,9 @@ function AppHeader(props: AppHeaderProps) {
     rightText,
     onRightTextPress,
     onSettingsPress,
+    showTitleSection,
+    titleSectionHeading,
+    titleSectionSubHeading,
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -62,6 +69,20 @@ function AppHeader(props: AppHeaderProps) {
             <AppText variant="heading3" style={styles.headerTitle}>
               {title}
             </AppText>
+          )}
+          {showTitleSection && (
+            <View style={styles.titleSectionWrapper}>
+              <AppText
+                variant="body2"
+                style={[styles.headerTitle, styles.headerTitle1]}>
+                {titleSectionHeading}
+              </AppText>
+              <AppText
+                variant="body2"
+                style={[styles.headerTitle, styles.headerTitle1]}>
+                {titleSectionSubHeading}
+              </AppText>
+            </View>
           )}
         </View>
         <View style={styles.rightIconWrapper}>
@@ -132,6 +153,10 @@ const getStyles = (theme: AppTheme, enableBack: boolean) =>
     headerTitle: {
       color: theme.colors.headingColor,
     },
+    headerTitle1: {
+      fontWeight: '500',
+      fontFamily: Fonts.LufgaMedium,
+    },
     headerSubTitle: {
       color: theme.colors.secondaryHeadingColor,
     },
@@ -145,6 +170,9 @@ const getStyles = (theme: AppTheme, enableBack: boolean) =>
     },
     rightTextStyle: {
       color: theme.colors.accent1,
+    },
+    titleSectionWrapper: {
+      alignItems: 'center',
     },
   });
 export default AppHeader;

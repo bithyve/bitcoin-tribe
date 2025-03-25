@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
+import Animated from 'react-native-reanimated';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
@@ -74,13 +76,19 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
 
   return (
     <>
-      {/* <Animated.View
+      <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
-      </Animated.View> */}
-      <View
-        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
-        style={styles.largeHeader}>
+        <AppHeader
+          title={assetTicker}
+          rightIcon={headerRightIcon}
+          onSettingsPress={onPressSetting}
+        />
+      </Animated.View>
+      <Animated.View
+        style={[
+          styles.largeHeader,
+          { height: largeHeaderHeight, overflow: 'hidden' },
+        ]}>
         <AppHeader
           rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
@@ -177,7 +185,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             </View>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </>
   );
 }

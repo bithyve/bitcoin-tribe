@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
@@ -27,6 +27,7 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import useBalance from 'src/hooks/useBalance';
 import AppText from 'src/components/AppText';
+import Animated from 'react-native-reanimated';
 
 type walletDetailsHeaderProps = {
   username: string;
@@ -97,13 +98,12 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
 
   return (
     <>
-      {/* <Animated.View
+      <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader title={username} />
-      </Animated.View> */}
-      <View
-        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
-        style={styles.largeHeader}>
+      </Animated.View>
+      <Animated.View
+        style={[styles.largeHeader, { height: largeHeaderHeight }]}>
         <AppHeader title={username} />
         <View style={styles.largeHeaderContentWrapper}>
           {app.appType === AppType.NODE_CONNECT ? (
@@ -235,7 +235,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
             />
           </View>
         </View>
-      </View>
+      </Animated.View>
     </>
   );
 }

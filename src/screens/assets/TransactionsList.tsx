@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import {
   StyleSheet,
   View,
-  FlatList,
   Platform,
   RefreshControl,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
 
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -21,7 +21,6 @@ import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
 
 function TransactionsList({
   transactions,
@@ -78,6 +77,7 @@ function TransactionsList({
       </View>
       {isLoading && !refreshingStatus ? <LoadingSpinner /> : null}
       <Animated.FlatList
+        keyboardShouldPersistTaps="handled"
         onScroll={onScroll}
         scrollEventThrottle={16}
         style={styles.container2}

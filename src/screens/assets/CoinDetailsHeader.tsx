@@ -64,7 +64,15 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     <>
       <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={asset.ticker} rightIcon={headerRightIcon} />
+        <AppHeader
+          showTitleSection={true}
+          titleSectionHeading={`${home.totalBalance}: ${numberWithCommas(
+            asset.balance.future + asset.balance?.offchainOutbound,
+          )}`}
+          titleSectionSubHeading={asset.name}
+          rightIcon={headerRightIcon}
+          onSettingsPress={onPressSetting}
+        />
       </Animated.View>
       <Animated.View
         style={[

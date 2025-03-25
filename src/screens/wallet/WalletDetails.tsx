@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Animated, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import {
+  interpolate,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
@@ -38,7 +43,7 @@ function WalletDetails({ navigation, route }) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
 
   const { translations } = useContext(LocalizationContext);
   const {
@@ -53,17 +58,12 @@ function WalletDetails({ navigation, route }) {
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
   const [walletName, setWalletName] = useState(null);
 
-  // const largeHeaderHeight = scrollY.interpolate({
-  //   inputRange: [0, 250],
-  //   outputRange: [300, 0],
-  //   extrapolate: 'clamp',
-  // });
-
-  // const smallHeaderOpacity = scrollY.interpolate({
-  //   inputRange: [100, 150],
-  //   outputRange: [0, 1],
-  //   extrapolate: 'clamp',
-  // });
+  const largeHeaderHeight = useDerivedValue(() => {
+    return interpolate(scrollY.value, [0, 200], [250, 0], 'clamp');
+  });
+  const smallHeaderOpacity = useDerivedValue(() => {
+    return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
+  });
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -165,8 +165,8 @@ function WalletDetails({ navigation, route }) {
         wallet={wallet}
         rgbWallet={rgbWallet}
         username={walletName ? walletName : 'Satoshi’s Palette'}
-        // smallHeaderOpacity={smallHeaderOpacity}
-        // largeHeaderHeight={largeHeaderHeight}
+        smallHeaderOpacity={smallHeaderOpacity}
+        largeHeaderHeight={largeHeaderHeight}
         onPressSend={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.SENDBTCSCREEN, {

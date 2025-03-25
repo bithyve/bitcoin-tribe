@@ -19,10 +19,16 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import {
+  interpolate,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
   const { appType } = useContext(AppContext);
@@ -93,6 +99,22 @@ const CollectibleDetailsScreen = () => {
   //   outputRange: [0, 1],
   //   extrapolate: 'clamp',
   // });
+  const transactionsAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 300],
+        [windowHeight * 0.6, windowHeight * 0.9],
+        'clamp',
+      ),
+    };
+  });
+  const largeHeaderHeight = useDerivedValue(() => {
+    return interpolate(scrollY.value, [0, 300], [370, 0], 'clamp');
+  });
+  const smallHeaderOpacity = useDerivedValue(() => {
+    return interpolate(scrollY.value, [100, 150], [0, 1], 'clamp');
+  });
   return (
     <ScreenContainer>
       <AssetDetailsHeader
@@ -100,8 +122,8 @@ const CollectibleDetailsScreen = () => {
         assetName={collectible.name}
         assetTicker={collectible.details}
         assetImage={collectible?.media?.filePath}
-        // smallHeaderOpacity={smallHeaderOpacity}
-        // largeHeaderHeight={largeHeaderHeight}
+        smallHeaderOpacity={smallHeaderOpacity}
+        largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={
           <Image
             source={{
@@ -153,7 +175,7 @@ const CollectibleDetailsScreen = () => {
         coin={collectible.name}
         assetId={assetId}
         scrollY={scrollY}
-        style={styles.transactionContainer}
+        style={[styles.transactionContainer, transactionsAnimatedStyle]}
       />
       <VerifyIssuerModal
         assetId={collectible.assetId}
@@ -176,6 +198,7 @@ const getStyles = () =>
     },
     transactionContainer: {
       top: -25,
+      height: windowHeight > 820 ? '52%' : '47%',
     },
     toolTipCotainer: {
       top: windowHeight > 670 ? 110 : 100,
