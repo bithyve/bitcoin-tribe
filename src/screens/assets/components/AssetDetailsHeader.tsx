@@ -79,7 +79,13 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
       <Animated.View
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader
-          title={assetTicker}
+          showTitleSection={true}
+          titleSectionHeading={`${home.totalBalance}: ${numberWithCommas(
+            asset.balance.future +
+              asset.balance?.offchainOutbound +
+              totalAssetLocalAmount,
+          )}`}
+          titleSectionSubHeading={assetName}
           rightIcon={headerRightIcon}
           onSettingsPress={onPressSetting}
         />
