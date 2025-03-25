@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
-import Animated from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -73,11 +73,19 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: smallHeaderOpacity.value,
+    display: smallHeaderOpacity.value === 0 ? 'none' : 'flex',
+  }));
 
   return (
     <>
       <Animated.View
-        style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
+        style={[
+          styles.smallHeader,
+          { opacity: smallHeaderOpacity },
+          animatedStyle,
+        ]}>
         <AppHeader
           showTitleSection={true}
           titleSectionHeading={`${home.totalBalance}: ${numberWithCommas(

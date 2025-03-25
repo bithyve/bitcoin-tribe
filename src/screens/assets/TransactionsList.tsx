@@ -79,6 +79,8 @@ function TransactionsList({
       <Animated.FlatList
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}
+        onMomentumScrollEnd={onScroll}
+        onScrollEndDrag={onScroll}
         scrollEventThrottle={16}
         style={styles.container2}
         data={transactions}

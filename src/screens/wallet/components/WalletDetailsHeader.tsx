@@ -27,7 +27,10 @@ import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
 import useBalance from 'src/hooks/useBalance';
 import AppText from 'src/components/AppText';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 type walletDetailsHeaderProps = {
   username: string;
@@ -96,14 +99,33 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     }
   };
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: smallHeaderOpacity.value,
+    display: smallHeaderOpacity.value === 0 ? 'none' : 'flex',
+  }));
+
+  const animatedLargeHeaderStyle = useAnimatedStyle(() => {
+    return {
+      height: largeHeaderHeight.value,
+      opacity: interpolate(largeHeaderHeight.value, [0, 100], [0, 1], 'clamp'),
+    };
+  });
   return (
     <>
       <Animated.View
-        style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
+        style={[
+          styles.smallHeader,
+          { opacity: smallHeaderOpacity },
+          animatedStyle,
+        ]}>
         <AppHeader title={username} />
       </Animated.View>
       <Animated.View
-        style={[styles.largeHeader, { height: largeHeaderHeight }]}>
+        style={[
+          styles.largeHeader,
+          { height: largeHeaderHeight },
+          animatedLargeHeaderStyle,
+        ]}>
         <AppHeader title={username} />
         <View style={styles.largeHeaderContentWrapper}>
           {app.appType === AppType.NODE_CONNECT ? (
@@ -255,6 +277,7 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
       overflow: 'hidden',
       marginBottom: hp(15),
+      backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
