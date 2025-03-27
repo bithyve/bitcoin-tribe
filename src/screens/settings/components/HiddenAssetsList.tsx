@@ -27,10 +27,10 @@ import NoAssetsIllustrationLight from 'src/assets/images/noCoinAssets_light.svg'
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
-import Identicon from 'src/components/Identicon';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import AssetIcon from 'src/components/AssetIcon';
 
 type HiddenAssetsListProps = {
   listData: Asset[];
@@ -133,9 +133,9 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
               ]}>
               <View style={styles.assetImageWrapper}>
                 {item?.assetIface.toUpperCase() === AssetFace.RGB20 ? (
-                  <Identicon
-                    value={item.assetId}
-                    style={styles.identiconView}
+                  <AssetIcon
+                    assetTicker={item.ticker}
+                    assetID={item.assetId}
                     size={30}
                   />
                 ) : (
@@ -235,18 +235,6 @@ const getStyles = (theme: AppTheme) =>
     },
     assetBalance: {
       color: theme.colors.accent1,
-    },
-    identiconWrapper: {
-      borderColor: theme.colors.coinsBorderColor,
-      borderWidth: 1,
-      padding: 5,
-      borderRadius: 100,
-      alignItems: 'center',
-    },
-    identiconView: {
-      height: hp(30),
-      width: hp(30),
-      borderRadius: hp(30),
     },
     imageStyle: {
       width: hp(30),
