@@ -106,6 +106,35 @@ export class ApiHandler {
     });
   }
 
+  static async loadGithubReleaseNotes(fullVersion: string) {
+    try {
+      const version = fullVersion.split('(')[0];
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${version}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        return {
+          releaseNote: '',
+        };
+      }
+      const releaseData = await response.json();
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.VersionHistory,
+        'version',
+        fullVersion,
+        {
+          releaseNote: releaseData.body || '',
+        },
+      );
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      return {
+        releaseNote: '',
+      };
+    }
+  }
+
   static async fetchGithubRelease() {
     try {
       const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${DeviceInfo.getVersion()}`;

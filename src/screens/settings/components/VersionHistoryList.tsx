@@ -28,7 +28,7 @@ function VersionHistoryList() {
       renderItem={({ item, index }) => {
         const title =
           index === versionHistory.length - 1
-            ? item.title
+            ? String(item.title)
             : `Upgraded to ${item.version}`;
         return (
           <VersionHistoryItem
@@ -36,6 +36,7 @@ function VersionHistoryList() {
             date={item.date}
             releaseNotes={item.releaseNote}
             lastIndex={lastIndex === index}
+            version={item.version}
           />
         );
       }}
