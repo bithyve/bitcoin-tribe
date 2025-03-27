@@ -41,7 +41,6 @@ import {
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
@@ -52,9 +51,11 @@ import ModalLoading from 'src/components/ModalLoading';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import DonationTransferInfoModal from './components/DonationTransferInfoModal';
+import AssetIcon from 'src/components/AssetIcon';
 
 type ItemProps = {
   name: string;
+  ticker?: string;
   details?: string;
   image?: string;
   tag?: string;
@@ -65,6 +66,7 @@ type ItemProps = {
 
 const AssetItem = ({
   name,
+  ticker,
   details,
   image,
   tag,
@@ -96,7 +98,7 @@ const AssetItem = ({
         ) : (
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
-            <Identicon value={assetId} style={styles.identiconView} size={50} />
+            <AssetIcon assetTicker={ticker} assetID={assetId} size={50} />
             {/* </View> */}
           </View>
         )}
@@ -446,6 +448,7 @@ const SendAssetScreen = () => {
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
           name={assetData?.name}
+          ticker={assetData?.ticker}
           details={
             assetData?.assetIface.toUpperCase() !== AssetFace.RGB25
               ? assetData?.ticker
