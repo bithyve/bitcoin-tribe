@@ -292,9 +292,9 @@ const getStyles = (theme: AppTheme) =>
     },
     textSubtext: {
       color: theme.colors.secondaryHeadingColor,
-      textAlign: 'justify',
       marginTop: hp(5),
       marginHorizontal: hp(15),
+      letterSpacing: 0.1,
     },
     textSuccessMsg: {
       color: theme.colors.backupDoneBorder,
