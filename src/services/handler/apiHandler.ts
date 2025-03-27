@@ -175,7 +175,6 @@ export class ApiHandler {
     if (isRealmInit) {
       try {
         const githubReleaseNote = await ApiHandler.fetchGithubRelease();
-        console.log('githubReleaseNote', githubReleaseNote);
         if (appType === AppType.ON_CHAIN) {
           const primaryMnemonic = mnemonic
             ? mnemonic
