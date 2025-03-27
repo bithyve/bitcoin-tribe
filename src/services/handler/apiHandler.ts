@@ -111,9 +111,9 @@ export class ApiHandler {
       const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${DeviceInfo.getVersion()}`;
       const response = await fetch(GITHUB_RELEASE_URL);
       if (!response.ok) {
-        throw new Error(
-          `GitHub API request failed with status: ${response.status}`,
-        );
+        return {
+          releaseNote: '',
+        };
       }
       const releaseData = await response.json();
       return {
@@ -121,7 +121,9 @@ export class ApiHandler {
       };
     } catch (error) {
       console.error('Error fetching GitHub release data:', error);
-      return null;
+      return {
+        releaseNote: '',
+      };
     }
   }
 
@@ -173,6 +175,7 @@ export class ApiHandler {
     if (isRealmInit) {
       try {
         const githubReleaseNote = await ApiHandler.fetchGithubRelease();
+        console.log('githubReleaseNote', githubReleaseNote);
         if (appType === AppType.ON_CHAIN) {
           const primaryMnemonic = mnemonic
             ? mnemonic
