@@ -73,6 +73,7 @@ const getStyles = (theme: AppTheme, lastIndex) =>
       marginHorizontal: 15,
       color: theme.colors.headingColor,
       borderRadius: 10,
+      marginTop: hp(10),
     },
     dotView: {
       backgroundColor: theme.colors.accent2,

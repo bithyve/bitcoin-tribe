@@ -25,10 +25,10 @@ import AppTouchable from 'src/components/AppTouchable';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetChip from 'src/components/AssetChip';
 import Capitalize from 'src/utils/capitalizeUtils';
-import Identicon from 'src/components/Identicon';
 import { Keys } from 'src/storage';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Colors from 'src/theme/Colors';
+import AssetIcon from 'src/components/AssetIcon';
 
 type selectAssetsProps = {
   assetsData: Asset[];
@@ -84,9 +84,7 @@ const Item = ({
           </View>
         ) : (
           <View style={styles.identiconWrapper}>
-            {/* <View style={styles.identiconWrapper2}> */}
-            <Identicon value={assetId} style={styles.identiconView} size={50} />
-            {/* </View> */}
+            <AssetIcon assetTicker={details} assetID={assetId} size={50} />
           </View>
         )}
         <View style={styles.assetDetailsWrapper}>
@@ -242,11 +240,6 @@ const getStyles = (theme: AppTheme) =>
       width: '15%',
       height: '100%',
       justifyContent: 'center',
-    },
-    identiconView: {
-      height: 50,
-      width: 50,
-      borderRadius: 50,
     },
     assetDetailsWrapper: {
       width: '37%',

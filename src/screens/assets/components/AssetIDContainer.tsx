@@ -90,6 +90,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       width: '70%',
+      minHeight: hp(50),
       borderWidth: 1,
       borderColor: theme.colors.borderColor,
       borderRadius: 10,

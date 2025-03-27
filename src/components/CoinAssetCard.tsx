@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, GestureResponderEvent } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import { hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
@@ -8,10 +10,9 @@ import { AppTheme } from 'src/theme';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
-import Identicon from './Identicon';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import { Keys } from 'src/storage';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import AssetIcon from './AssetIcon';
 
 type CoinAssetCardProps = {
   asset: Asset;
@@ -61,9 +62,9 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
         </View>
         <View style={styles.verticalLineStyle} />
         <View style={styles.identiconWrapper}>
-          <Identicon
-            value={asset.assetId}
-            style={styles.identiconView}
+          <AssetIcon
+            assetTicker={asset.ticker}
+            assetID={asset.assetId}
             size={56}
           />
         </View>
@@ -121,11 +122,6 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: 110,
       marginVertical: hp(10),
       marginHorizontal: hp(10),
-    },
-    identiconView: {
-      height: 56,
-      width: 56,
-      borderRadius: 56,
     },
     verticalLineStyle: {
       height: '100%',
