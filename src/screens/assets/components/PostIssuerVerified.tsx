@@ -7,6 +7,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import openLink from 'src/utils/OpenLink';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
+import GradientView from 'src/components/GradientView';
+import Colors from 'src/theme/Colors';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -55,24 +57,28 @@ const PostIssuerVerified: React.FC<IssuerVerifiedProps> = (
   }, [id]);
 
   return (
-    <AppTouchable style={styles.container} onPress={onPress}>
-      <View style={styles.rowWrapper}>
-        <View style={{ width: '89%' }}>
-          <AppText variant="body2" style={styles.title}>
-            Issuer Verified via 𝕏
-          </AppText>
-          <View style={styles.iconWrapper}>
-            <IconX />
-            <View>
-              <AppText variant="body2">{name}</AppText>
-              <AppText variant="body2" style={styles.textUsername}>
-                @{username}
-              </AppText>
+    <AppTouchable onPress={onPress}>
+      <GradientView
+        style={styles.container}
+        colors={[Colors.EerieBlack, Colors.VampireBlack, Colors.ChineseBlack]}>
+        <View style={styles.rowWrapper}>
+          <View style={{ width: '89%' }}>
+            <AppText variant="body2" style={styles.title}>
+              Issuer Verified via 𝕏
+            </AppText>
+            <View style={styles.iconWrapper}>
+              <IconX />
+              <View>
+                <AppText variant="body2">{name}</AppText>
+                <AppText variant="body2" style={styles.textUsername}>
+                  @{username}
+                </AppText>
+              </View>
             </View>
           </View>
+          <IconVerified />
         </View>
-        <IconVerified />
-      </View>
+      </GradientView>
     </AppTouchable>
   );
 };

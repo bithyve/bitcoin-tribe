@@ -281,7 +281,7 @@ const getStyles = (theme: AppTheme) =>
       margin: hp(6),
     },
     qrContainer: {
-      marginTop: 20,
+      marginTop: hp(45),
       alignItems: 'center',
       backgroundColor: 'white',
       padding: hp(3),
