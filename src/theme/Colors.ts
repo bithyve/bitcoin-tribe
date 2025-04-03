@@ -55,5 +55,6 @@ const Colors = {
   VividGamboge: 'rgba(255, 149, 0,1)',
   DarkElectricBlue: 'rgba(97, 106, 127,1)',
   ChineseSilver: 'rgba(199, 206, 207,1)',
+  DarkJungleGreen: 'rgba(21, 42, 32,1)',
 };
 export default Colors;
