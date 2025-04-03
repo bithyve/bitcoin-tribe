@@ -17,8 +17,8 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
       borderColor: theme.colors.backupDoneBorder,
       borderRadius: 10,
-      paddingHorizontal: 10,
-      paddingVertical: 5,
+      paddingHorizontal: 15,
+      paddingVertical: 12,
       width: '90%',
       alignSelf: 'center',
     },
@@ -52,34 +52,28 @@ const PostIssuerVerified: React.FC<IssuerVerifiedProps> = (
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
-  const onPress = useCallback(() => {
-    openLink(`https://twitter.com/i/user/${id}`);
-  }, [id]);
-
   return (
-    <AppTouchable onPress={onPress}>
-      <GradientView
-        style={styles.container}
-        colors={[Colors.EerieBlack, Colors.VampireBlack, Colors.ChineseBlack]}>
-        <View style={styles.rowWrapper}>
-          <View style={{ width: '89%' }}>
-            <AppText variant="body2" style={styles.title}>
-              Issuer Verified via 𝕏
-            </AppText>
-            <View style={styles.iconWrapper}>
-              <IconX />
-              <View>
-                <AppText variant="body2">{name}</AppText>
-                <AppText variant="body2" style={styles.textUsername}>
-                  @{username}
-                </AppText>
-              </View>
+    <GradientView
+      style={styles.container}
+      colors={[Colors.ChineseBlack, Colors.EerieBlack, Colors.VampireBlack]}>
+      <View style={styles.rowWrapper}>
+        <View style={{ width: '89%' }}>
+          <AppText variant="body2" style={styles.title}>
+            Issuer Verified via 𝕏
+          </AppText>
+          <View style={styles.iconWrapper}>
+            <IconX />
+            <View>
+              <AppText variant="body2">{name}</AppText>
+              <AppText variant="body2" style={styles.textUsername}>
+                @{username}
+              </AppText>
             </View>
           </View>
-          <IconVerified />
         </View>
-      </GradientView>
-    </AppTouchable>
+        <IconVerified />
+      </View>
+    </GradientView>
   );
 };
 
