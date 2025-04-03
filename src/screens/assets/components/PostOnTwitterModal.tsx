@@ -152,15 +152,11 @@ const PostOnTwitterModal: React.FC<Props> = ({
                       />
                     ) : (
                       <View style={styles.identiconWrapper}>
-                        <View style={styles.identiconWrapper2}>
-                          <AssetIcon
-                            assetTicker={
-                              issuerInfo.ticker && issuerInfo?.ticker
-                            }
-                            assetID={issuerInfo.assetId && issuerInfo?.assetId}
-                            size={190}
-                          />
-                        </View>
+                        <AssetIcon
+                          assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
+                          assetID={issuerInfo.assetId && issuerInfo?.assetId}
+                          size={200}
+                        />
                       </View>
                     )}
                   </View>
