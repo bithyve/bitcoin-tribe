@@ -3,8 +3,6 @@ import React, { useCallback } from 'react';
 import AppText from 'src/components/AppText';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import IconX from 'src/assets/images/icon_x.svg';
-import AppTouchable from 'src/components/AppTouchable';
-import openLink from 'src/utils/OpenLink';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import GradientView from 'src/components/GradientView';
@@ -16,9 +14,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
       borderWidth: 1,
       borderColor: theme.colors.backupDoneBorder,
-      borderRadius: 10,
+      borderRadius: 15,
       paddingHorizontal: 15,
-      paddingVertical: 12,
+      paddingVertical: 15,
       width: '90%',
       alignSelf: 'center',
     },
@@ -55,10 +53,14 @@ const PostIssuerVerified: React.FC<IssuerVerifiedProps> = (
   return (
     <GradientView
       style={styles.container}
-      colors={[Colors.ChineseBlack, Colors.EerieBlack, Colors.VampireBlack]}>
+      colors={[
+        Colors.ZinnwalditeBrown,
+        Colors.VampireBlack,
+        Colors.SacramentoStateGreen,
+      ]}>
       <View style={styles.rowWrapper}>
         <View style={{ width: '89%' }}>
-          <AppText variant="body2" style={styles.title}>
+          <AppText variant="body1" style={styles.title}>
             Issuer Verified via 𝕏
           </AppText>
           <View style={styles.iconWrapper}>
