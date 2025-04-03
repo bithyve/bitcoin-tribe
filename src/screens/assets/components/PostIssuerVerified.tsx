@@ -53,11 +53,7 @@ const PostIssuerVerified: React.FC<IssuerVerifiedProps> = (
   return (
     <GradientView
       style={styles.container}
-      colors={[
-        Colors.ZinnwalditeBrown,
-        Colors.VampireBlack,
-        Colors.SacramentoStateGreen,
-      ]}>
+      colors={[Colors.EerieBlack, Colors.VampireBlack, Colors.DarkJungleGreen]}>
       <View style={styles.rowWrapper}>
         <View style={{ width: '89%' }}>
           <AppText variant="body1" style={styles.title}>
