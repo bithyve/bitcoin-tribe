@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
@@ -30,6 +30,8 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -58,18 +60,30 @@ const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const { hasCompleteVerification, setCompleteVerification } =
+    React.useContext(AppContext);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
+
+  useEffect(() => {
+    if (coin?.issuer?.verified && hasCompleteVerification) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+      }, 500);
+    }
+  }, [coin?.issuer?.verified, hasCompleteVerification]);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -154,6 +168,16 @@ const CoinsMetaDataScreen = () => {
             isVerified={coin?.issuer?.verified}
             assetId={assetId}
           />
+          <>
+            <PostOnTwitterModal
+              visible={visiblePostOnTwitter}
+              secondaryOnPress={() => {
+                setVisiblePostOnTwitter(false);
+                setCompleteVerification(false);
+              }}
+              issuerInfo={coin}
+            />
+          </>
         </ScrollView>
       )}
     </ScreenContainer>

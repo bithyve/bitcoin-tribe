@@ -581,7 +581,9 @@
     "collectMoreCoinTitle": "Colleziona più monete!",
     "collectMoreCoinSubTitle": "Continua ad aggiungere più monete\n per espandere i tuoi beni.",
     "collectMoreCollectibleTitle": "Colleziona più collezionabili!",
-    "collectMoreCollectibleSubTitle": "Continua ad aggiungere più collezionabili\n per espandere i tuoi beni."
+    "collectMoreCollectibleSubTitle": "Continua ad aggiungere più collezionabili\n per espandere i tuoi beni.",
+    "issuerVerifiedTitle": "Emittente verificato\ncon successo!",
+    "issuerVerifiedSubTitle": "ha verificato l'identità dell'emittente su Bitcoin Tribe."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

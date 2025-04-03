@@ -581,7 +581,9 @@
     "collectMoreCoinTitle": "Collect More Coins!",
     "collectMoreCoinSubTitle": "Keep adding more coins to\n expand your assets.",
     "collectMoreCollectibleTitle": "Collect More Collectibles!",
-    "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets."
+    "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets.",
+    "issuerVerifiedTitle": "Issuer Verified\nSuccessfully!",
+    "issuerVerifiedSubTitle": "has verified the\nissuer's identity on Bitcoin Tribe."
   },
   "community": {
     "fnfTitle": "Friends & Family",

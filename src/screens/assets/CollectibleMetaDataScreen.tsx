@@ -1,5 +1,5 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
   StackActions,
   useNavigation,
@@ -37,6 +37,8 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -78,18 +80,28 @@ const CollectibleMetaDataScreen = () => {
   const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const { hasCompleteVerification } = React.useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
     }
   }, []);
+
+  useEffect(() => {
+    if (collectible.issuer?.verified && hasCompleteVerification) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+      }, 500);
+    }
+  }, [collectible?.issuer?.verified, hasCompleteVerification]);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -197,6 +209,13 @@ const CollectibleMetaDataScreen = () => {
               isVerified={collectible?.issuer?.verified}
               assetId={assetId}
             />
+            <>
+              <PostOnTwitterModal
+                visible={visiblePostOnTwitter}
+                secondaryOnPress={() => setVisiblePostOnTwitter(false)}
+                issuerInfo={collectible}
+              />
+            </>
           </ScrollView>
         </>
       )}
