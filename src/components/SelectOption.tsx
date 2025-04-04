@@ -128,7 +128,7 @@ const getStyles = (theme: AppTheme, backColor, backup) =>
     iconWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '80%',
+      width: '85%',
     },
     contentWrapper: {
       marginLeft: 10,

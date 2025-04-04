@@ -42,6 +42,32 @@ function SendEnterAddress({
     setInvoiceValidationError(errorMessage);
   }, [errorMessage]);
 
+  const handleInvoiceInputChange = text => {
+    if (text.startsWith('rgb:')) {
+      Keyboard.dismiss();
+      setAddress(text);
+      setInvoiceValidationError('');
+      return;
+    }
+    const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
+    let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
+      text,
+      network,
+    );
+    if (paymentInfoKind) {
+      Keyboard.dismiss();
+      setAddress(address);
+      setInvoiceValidationError('');
+    } else {
+      Keyboard.dismiss();
+      if (text.startsWith('rgb:')) {
+        setInvoiceValidationError(sendScreen.invalidRGBInvoiceAddress);
+      } else {
+        setInvoiceValidationError(sendScreen.invalidBtcAddress);
+      }
+    }
+  };
+
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
     if (clipboardValue.startsWith('rgb:')) {
@@ -58,6 +84,7 @@ function SendEnterAddress({
     if (paymentInfoKind) {
       Keyboard.dismiss();
       setAddress(address);
+      setInvoiceValidationError('');
     } else {
       Keyboard.dismiss();
       if (clipboardValue.startsWith('rgb:')) {
@@ -76,7 +103,7 @@ function SendEnterAddress({
     <View style={styles.container}>
       <TextField
         value={address}
-        onChangeText={text => setAddress(text)}
+        onChangeText={handleInvoiceInputChange}
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         returnKeyType={'Enter'}
@@ -96,6 +123,7 @@ function SendEnterAddress({
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.accent1}
         error={invoiceValidationError}
+        onBlur={() => setInvoiceValidationError('')}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons
