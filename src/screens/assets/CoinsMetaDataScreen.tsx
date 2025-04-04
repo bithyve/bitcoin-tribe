@@ -78,12 +78,16 @@ const CoinsMetaDataScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (coin?.issuer?.verified && hasCompleteVerification) {
+    if (
+      coin?.issuer?.verified &&
+      hasCompleteVerification &&
+      !visiblePostOnTwitter
+    ) {
       setTimeout(() => {
         setVisiblePostOnTwitter(true);
       }, 500);
     }
-  }, [coin?.issuer?.verified, hasCompleteVerification]);
+  }, [coin?.issuer?.verified, hasCompleteVerification, visiblePostOnTwitter]);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {

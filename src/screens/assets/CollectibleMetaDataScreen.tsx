@@ -80,7 +80,8 @@ const CollectibleMetaDataScreen = () => {
   const popAction = StackActions.pop(2);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { hasCompleteVerification } = React.useContext(AppContext);
+  const { hasCompleteVerification, setCompleteVerification } =
+    React.useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
@@ -96,12 +97,20 @@ const CollectibleMetaDataScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (collectible.issuer?.verified && hasCompleteVerification) {
+    if (
+      collectible.issuer?.verified &&
+      hasCompleteVerification &&
+      !visiblePostOnTwitter
+    ) {
       setTimeout(() => {
         setVisiblePostOnTwitter(true);
       }, 500);
     }
-  }, [collectible?.issuer?.verified, hasCompleteVerification]);
+  }, [
+    collectible?.issuer?.verified,
+    hasCompleteVerification,
+    visiblePostOnTwitter,
+  ]);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -212,7 +221,10 @@ const CollectibleMetaDataScreen = () => {
             <>
               <PostOnTwitterModal
                 visible={visiblePostOnTwitter}
-                secondaryOnPress={() => setVisiblePostOnTwitter(false)}
+                secondaryOnPress={() => {
+                  setVisiblePostOnTwitter(false);
+                  setCompleteVerification(false);
+                }}
                 issuerInfo={collectible}
               />
             </>

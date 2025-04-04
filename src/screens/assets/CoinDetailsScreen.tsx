@@ -1,7 +1,11 @@
 import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -26,6 +30,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
+  const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const { appType, hasCompleteVerification, setCompleteVerification } =
@@ -54,13 +59,20 @@ const CoinDetailsScreen = () => {
     }
   }, [askReview, askVerify]);
 
-  useEffect(() => {
-    if (coin?.issuer?.verified && hasCompleteVerification) {
-      setTimeout(() => {
-        setVisiblePostOnTwitter(true);
-      }, 1000);
-    }
-  }, [coin?.issuer?.verified, hasCompleteVerification]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

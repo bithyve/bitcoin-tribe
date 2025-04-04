@@ -1,6 +1,10 @@
 import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
@@ -23,6 +27,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
+  const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
@@ -52,13 +57,20 @@ const CollectibleDetailsScreen = () => {
     }
   }, [askReview, askVerify]);
 
-  useEffect(() => {
-    if (collectible?.issuer?.verified && hasCompleteVerification) {
-      setTimeout(() => {
-        setVisiblePostOnTwitter(true);
-      }, 1000);
-    }
-  }, [collectible?.issuer?.verified, hasCompleteVerification]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        collectible?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [collectible?.issuer?.verified, hasCompleteVerification]),
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
