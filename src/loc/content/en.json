@@ -56,7 +56,8 @@
     "backupInProgress": "Backup is in progress",
     "tapToInfo": "Tap to Info",
     "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes.",
-    "backDoneMsg": "Backup process is done"
+    "backDoneMsg": "Backup process is done",
+    "share": "Share"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -583,7 +584,9 @@
     "collectMoreCollectibleTitle": "Collect More Collectibles!",
     "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets.",
     "issuerVerifiedTitle": "Issuer Verified\nSuccessfully!",
-    "issuerVerifiedSubTitle": "has verified the\nissuer's identity on Bitcoin Tribe."
+    "issuerVerifiedSubTitle": "has verified the\nissuer's identity on Bitcoin Tribe.",
+    "verificationSuccessTitle": "Verification Successful!",
+    "verificationSuccessSubTitle": "Your issuer is now verified via X! Share with your community by pressing the share button."
   },
   "community": {
     "fnfTitle": "Friends & Family",

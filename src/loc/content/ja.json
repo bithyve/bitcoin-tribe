@@ -56,7 +56,8 @@
     "backupInProgress": "バックアップが進行中",
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
-    "backDoneMsg": "バックアップ処理が完了しました"
+    "backDoneMsg": "バックアップ処理が完了しました",
+    "share": "共有"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -583,7 +584,9 @@
     "collectMoreCollectibleTitle": "もっとコレクティブルを集めよう！",
     "collectMoreCollectibleSubTitle": "資産を拡大するために、\nもっとコレクティブルを追加しましょう。",
     "issuerVerifiedTitle": "発行者が正常に\n確認されました！",
-    "issuerVerifiedSubTitle": "が Bitcoin Tribe で発行者の身元を確認しました。"
+    "issuerVerifiedSubTitle": "が Bitcoin Tribe で発行者の身元を確認しました。",
+    "verificationSuccessTitle": "認証に成功しました！",
+    "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。"
   },
   "community": {
     "fnfTitle": "友達と家族",

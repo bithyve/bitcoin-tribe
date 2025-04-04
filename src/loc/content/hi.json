@@ -56,7 +56,8 @@
     "backupInProgress": "बैकअप प्रगति पर है",
     "tapToInfo": "जानकारी के लिए टैप करें",
     "backupInProgressMsg": "अपनी संपत्तियों को सुरक्षित करने के लिए अपना बैकअप पूरा करें। कृपया समाप्त होने तक प्रतीक्षा करें।",
-    "backDoneMsg": "बैकअप प्रक्रिया पूरी हो गई है"
+    "backDoneMsg": "बैकअप प्रक्रिया पूरी हो गई है",
+    "share": "साझा करें"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -583,7 +584,9 @@
     "collectMoreCollectibleTitle": "और अधिक कलेक्टिबल्स एकत्र करें!",
     "collectMoreCollectibleSubTitle": "अधिक कलेक्टिबल्स जोड़ते रहें\n और अपनी संपत्ति बढ़ाएं।",
     "issuerVerifiedTitle": "जारीकर्ता सफलतापूर्वक\nसत्यापित!",
-    "issuerVerifiedSubTitle": "ने Bitcoin Tribe पर जारीकर्ता की पहचान सत्यापित कर ली है।"
+    "issuerVerifiedSubTitle": "ने Bitcoin Tribe पर जारीकर्ता की पहचान सत्यापित कर ली है।",
+    "verificationSuccessTitle": "सत्यापन सफल!",
+    "verificationSuccessSubTitle": "आपका जारीकर्ता अब X के माध्यम से सत्यापित है! अपने समुदाय के साथ साझा करने के लिए शेयर बटन दबाएं।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

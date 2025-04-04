@@ -96,12 +96,14 @@ const PostOnTwitterModal: React.FC<Props> = ({
   };
   return (
     <ModalContainer
-      title={''}
-      subTitle={''}
+      title={assets.verificationSuccessTitle}
+      subTitle={assets.verificationSuccessSubTitle}
       visible={visible}
       enableCloseIcon={false}
       onDismiss={() => navigation.goBack()}>
-      <View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollWrapper}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <ViewShot
             ref={viewShotRef}
@@ -190,16 +192,16 @@ const PostOnTwitterModal: React.FC<Props> = ({
             </ImageBackground>
           </ViewShot>
         </ScrollView>
-        <View>
-          <Buttons
-            primaryTitle={common.proceed}
-            primaryOnPress={captureAndShare}
-            secondaryTitle={common.cancel}
-            secondaryOnPress={secondaryOnPress}
-            width={windowWidth / 2.7}
-            secondaryCTAWidth={windowWidth / 2.7}
-          />
-        </View>
+      </ScrollView>
+      <View>
+        <Buttons
+          primaryTitle={common.share}
+          primaryOnPress={captureAndShare}
+          secondaryTitle={common.cancel}
+          secondaryOnPress={secondaryOnPress}
+          width={windowWidth / 2.7}
+          secondaryCTAWidth={windowWidth / 2.7}
+        />
       </View>
     </ModalContainer>
   );
@@ -294,6 +296,10 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(15),
       marginBottom: hp(25),
       fontWeight: 'bold',
+    },
+    scrollWrapper: {
+      height: hp(350),
+      marginVertical: hp(20),
     },
   });
 export default PostOnTwitterModal;
