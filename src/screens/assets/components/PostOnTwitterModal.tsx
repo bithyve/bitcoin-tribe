@@ -240,6 +240,8 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       height: '100%',
       borderRadius: 15,
+      borderBottomLeftRadius: 30,
+      borderBottomRightRadius: 30,
     },
     assetImageWrapper: {
       width: '100%',
