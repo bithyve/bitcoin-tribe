@@ -586,7 +586,9 @@
     "issuerVerifiedTitle": "Issuer Verified\nSuccessfully!",
     "issuerVerifiedSubTitle": "has verified the\nissuer's identity on Bitcoin Tribe.",
     "verificationSuccessTitle": "Verification Successful!",
-    "verificationSuccessSubTitle": "Your issuer is now verified via X! Share with your community by pressing the share button."
+    "verificationSuccessSubTitle": "Your issuer is now verified via X! Share with your community by pressing the share button.",
+    "issuedPostTitle": "Issued Asset Successfully!",
+    "issuedPostSubTitle": "has successfully issued your asset on Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Friends & Family",

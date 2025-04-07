@@ -586,7 +586,9 @@
     "issuerVerifiedTitle": "जारीकर्ता सफलतापूर्वक\nसत्यापित!",
     "issuerVerifiedSubTitle": "ने Bitcoin Tribe पर जारीकर्ता की पहचान सत्यापित कर ली है।",
     "verificationSuccessTitle": "सत्यापन सफल!",
-    "verificationSuccessSubTitle": "आपका जारीकर्ता अब X के माध्यम से सत्यापित है! अपने समुदाय के साथ साझा करने के लिए शेयर बटन दबाएं।"
+    "verificationSuccessSubTitle": "आपका जारीकर्ता अब X के माध्यम से सत्यापित है! अपने समुदाय के साथ साझा करने के लिए शेयर बटन दबाएं।",
+    "issuedPostTitle": "एसेट सफलतापूर्वक जारी किया गया!",
+    "issuedPostSubTitle": "ने आपके एसेट को Bitcoin Tribe पर सफलतापूर्वक जारी किया है"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -586,7 +586,9 @@
     "issuerVerifiedTitle": "発行者が正常に\n確認されました！",
     "issuerVerifiedSubTitle": "が Bitcoin Tribe で発行者の身元を確認しました。",
     "verificationSuccessTitle": "認証に成功しました！",
-    "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。"
+    "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。",
+    "issuedPostTitle": "資産の発行に成功しました！",
+    "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました"
   },
   "community": {
     "fnfTitle": "友達と家族",

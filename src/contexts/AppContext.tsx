@@ -18,6 +18,8 @@ export const AppContext = React.createContext({
   setHasCompletedManualBackup: status => {},
   hasCompleteVerification: null,
   setCompleteVerification: status => {},
+  hasIssuedAsset: null,
+  setHasIssuedAsset: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -32,6 +34,7 @@ export function AppProvider({ children }) {
     useState(null);
   const [hasCompleteVerification, setCompleteVerification] =
     useState<boolean>(null);
+  const [hasIssuedAsset, setHasIssuedAsset] = useState<boolean>(null);
 
   return (
     <AppContext.Provider
@@ -52,6 +55,8 @@ export function AppProvider({ children }) {
         setHasCompletedManualBackup: setHasCompletedManualBackup,
         hasCompleteVerification,
         setCompleteVerification: setCompleteVerification,
+        hasIssuedAsset,
+        setHasIssuedAsset: setHasIssuedAsset,
       }}>
       {children}
     </AppContext.Provider>

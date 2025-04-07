@@ -586,7 +586,9 @@
     "issuerVerifiedTitle": "发行人验证\n成功！",
     "issuerVerifiedSubTitle": "已在 Bitcoin Tribe 上验证发行人的身份。",
     "verificationSuccessTitle": "验证成功！",
-    "verificationSuccessSubTitle": "您的发行者已通过 X 验证！点击分享按钮与您的社区分享。"
+    "verificationSuccessSubTitle": "您的发行者已通过 X 验证！点击分享按钮与您的社区分享。",
+    "issuedPostTitle": "资产发行成功！",
+    "issuedPostSubTitle": "已在 Bitcoin Tribe 上成功发行您的资产"
   },
   "community": {
     "fnfTitle": "朋友和家人",

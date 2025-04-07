@@ -586,7 +586,9 @@
     "issuerVerifiedTitle": "Emittente verificato\ncon successo!",
     "issuerVerifiedSubTitle": "ha verificato l'identità dell'emittente su Bitcoin Tribe.",
     "verificationSuccessTitle": "Verifica riuscita!",
-    "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione."
+    "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione.",
+    "issuedPostTitle": "Asset emesso con successo!",
+    "issuedPostSubTitle": "ha emesso con successo il tuo asset su Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",
