@@ -27,8 +27,11 @@ const getStyles = (theme: AppTheme) =>
     title: {
       color: theme.colors.backupDoneBorder,
     },
+    textName: {
+      color: Colors.White,
+    },
     textUsername: {
-      color: theme.colors.secondaryHeadingColor,
+      color: Colors.SonicSilver,
     },
     iconWrapper: {
       flexDirection: 'row',
@@ -62,7 +65,9 @@ const PostIssuerVerified: React.FC<IssuerVerifiedProps> = (
           <View style={styles.iconWrapper}>
             <IconX />
             <View>
-              <AppText variant="body2">{name}</AppText>
+              <AppText variant="body2" style={styles.textName}>
+                {name}
+              </AppText>
               <AppText variant="body2" style={styles.textUsername}>
                 @{username}
               </AppText>
