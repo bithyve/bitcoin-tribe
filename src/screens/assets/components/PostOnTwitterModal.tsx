@@ -100,7 +100,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       subTitle={assets.verificationSuccessSubTitle}
       visible={visible}
       enableCloseIcon={false}
-      onDismiss={() => navigation.goBack()}>
+      onDismiss={() => setCompleteVerification(false)}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollWrapper}>
@@ -225,11 +225,11 @@ const getStyles = (theme: AppTheme) =>
     headingText: {
       fontWeight: 'bold',
       fontSize: hp(70),
-      color: theme.colors.headingColor,
+      color: Colors.White,
       marginBottom: hp(3),
     },
     text: {
-      color: theme.colors.headingColor,
+      color: Colors.White,
       fontSize: hp(26),
     },
     userNameStyle: {
@@ -294,7 +294,7 @@ const getStyles = (theme: AppTheme) =>
     verifiedViewWrapper: {},
     assetTitleText: {
       textAlign: 'center',
-      color: theme.colors.headingColor,
+      color: Colors.White,
       marginTop: hp(15),
       marginBottom: hp(25),
       fontWeight: 'bold',
