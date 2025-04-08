@@ -22,6 +22,7 @@ import useWallets from 'src/hooks/useWallets';
 import { ServiceFee } from 'src/screens/home/components/AddAsset';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import moment from 'moment';
+import { AppContext } from 'src/contexts/AppContext';
 
 const styles = StyleSheet.create({
   title: {
@@ -77,6 +78,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
   const { assetId, schema } = props;
+  const { setCompleteVerification } = React.useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
@@ -165,6 +167,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         });
         setIsLoading(false);
         if (response.status) {
+          console.log('response.status', response.status);
+          setCompleteVerification(true);
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
               verified: true,

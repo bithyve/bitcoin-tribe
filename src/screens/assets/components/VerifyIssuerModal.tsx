@@ -8,6 +8,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import SkipButton from 'src/components/SkipButton';
 import { hp, wp } from 'src/constants/responsive';
+import { AppContext } from 'src/contexts/AppContext';
 
 interface VerifyIssuerModalProps {
   assetId: string;
@@ -34,6 +35,7 @@ const VerifyIssuerModal = ({
 }: VerifyIssuerModalProps) => {
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
+  const { setCompleteVerification } = useContext(AppContext);
   return (
     <ModalContainer
       title={assets.verifyYourIdentityTitle}
@@ -48,6 +50,7 @@ const VerifyIssuerModal = ({
           onPress={async () => {
             await verifyIssuerOnTwitter(assetId, schema);
             onDismiss();
+            setCompleteVerification(true);
           }}
           width={wp(180)}
         />
