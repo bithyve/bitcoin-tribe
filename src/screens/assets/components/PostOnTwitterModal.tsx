@@ -3,27 +3,27 @@ import {
   ImageBackground,
   PixelRatio,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, { useContext, useRef } from 'react';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 import * as RNFS from '@dr.pogodin/react-native-fs';
+import { useTheme } from 'react-native-paper';
+import QRCode from 'react-native-qrcode-svg';
+
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalContainer from 'src/components/ModalContainer';
 import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
 import { AssetFace, Issuer } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import AssetIcon from 'src/components/AssetIcon';
 import PostIssuerVerified from './PostIssuerVerified';
-import QRCode from 'react-native-qrcode-svg';
 import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
 
@@ -50,8 +50,28 @@ const PostOnTwitterModal: React.FC<Props> = ({
     () => getStyles(theme, cardWidth, cardHeight),
     [theme, cardWidth, cardHeight],
   );
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot | null>(null);
+
+  useEffect(() => {
+    if (visible) {
+      showPreview();
+    }
+  }, [visible]);
+
+  const showPreview = async () => {
+    try {
+      if (!viewShotRef.current) return;
+
+      const uri = await viewShotRef.current.capture();
+      if (uri) {
+        setCapturedImage(uri);
+      }
+    } catch (error) {
+      console.error('Error capturing ViewShot:', error);
+    }
+  };
 
   const captureAndShare = async () => {
     try {
@@ -77,7 +97,9 @@ const PostOnTwitterModal: React.FC<Props> = ({
 
         const tweetText = `Issuer ${
           issuerInfo.issuer?.verifiedBy[0]?.username || ''
-        } verified successfully! 🚀 #BitcoinTribe`;
+        } verified successfully with Asset ID: ${
+          issuerInfo.assetId
+        }! 🚀 #BitcoinTribe`;
 
         const shareOptions = {
           title: 'Share via',
@@ -101,98 +123,99 @@ const PostOnTwitterModal: React.FC<Props> = ({
       visible={visible}
       enableCloseIcon={false}
       onDismiss={() => setCompleteVerification(false)}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollWrapper}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <ViewShot
-            ref={viewShotRef}
-            options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
-            style={styles.container}>
-            <ImageBackground
-              source={require('src/assets/images/TwitterTemplate.png')}
-              resizeMode="cover"
-              style={styles.card}>
-              <View style={styles.wrapper}>
-                <AppText variant="heading1" style={styles.headingText}>
-                  {assets.issuerVerifiedTitle}
-                </AppText>
-                <Text style={styles.text}>
-                  <Text style={[styles.text, styles.userNameStyle]}>
-                    {issuerInfo.issuer &&
-                      issuerInfo?.issuer?.verifiedBy[0]?.username}{' '}
-                  </Text>
-                  {assets.issuerVerifiedSubTitle}
+      <View style={styles.modalContent}>
+        <ViewShot
+          ref={viewShotRef}
+          options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
+          style={styles.container}>
+          <ImageBackground
+            source={require('src/assets/images/TwitterTemplate.png')}
+            resizeMode="cover"
+            style={styles.card}>
+            <View style={styles.wrapper}>
+              <AppText variant="heading1" style={styles.headingText}>
+                {assets.issuerVerifiedTitle}
+              </AppText>
+              <Text style={styles.text}>
+                <Text style={[styles.text, styles.userNameStyle]}>
+                  {issuerInfo.issuer &&
+                    issuerInfo?.issuer?.verifiedBy[0]?.username}{' '}
                 </Text>
-                <View style={styles.qrContainer}>
-                  <QRCode value="https://bitcointribe.com" size={120} />
-                  <AppText variant="body2" style={styles.scanText}>
-                    Scan Me!
-                  </AppText>
-                </View>
+                {assets.issuerVerifiedSubTitle}
+              </Text>
+              <View style={styles.qrContainer}>
+                <QRCode value="https://bitcointribe.com" size={120} />
+                <AppText variant="body2" style={styles.scanText}>
+                  Scan Me!
+                </AppText>
               </View>
-              <View style={styles.wrapper1}>
-                <ImageBackground
-                  source={require('src/assets/images/twitterTemplateAssetbackground.png')}
-                  resizeMode="cover"
-                  style={styles.assetCardWrapper}>
-                  <View style={styles.assetImageWrapper}>
-                    {issuerInfo.issuer &&
-                    issuerInfo.assetIface.toUpperCase() === AssetFace.RGB25 ? (
-                      <Image
-                        source={{
-                          uri: Platform.select({
-                            android: `file://${
-                              issuerInfo.issuer && issuerInfo?.media?.filePath
-                            }`,
-                            ios:
-                              issuerInfo.issuer && issuerInfo?.media?.filePath,
-                          }),
-                        }}
-                        resizeMode="cover"
-                        style={styles.imageStyle}
+            </View>
+            <View style={styles.wrapper1}>
+              <ImageBackground
+                source={require('src/assets/images/twitterTemplateAssetbackground.png')}
+                resizeMode="cover"
+                style={styles.assetCardWrapper}>
+                <View style={styles.assetImageWrapper}>
+                  {issuerInfo.issuer &&
+                  issuerInfo.assetIface.toUpperCase() === AssetFace.RGB25 ? (
+                    <Image
+                      source={{
+                        uri: Platform.select({
+                          android: `file://${
+                            issuerInfo.issuer && issuerInfo?.media?.filePath
+                          }`,
+                          ios: issuerInfo.issuer && issuerInfo?.media?.filePath,
+                        }),
+                      }}
+                      resizeMode="cover"
+                      style={styles.imageStyle}
+                    />
+                  ) : (
+                    <View style={styles.identiconWrapper}>
+                      <AssetIcon
+                        assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
+                        assetID={issuerInfo.assetId && issuerInfo?.assetId}
+                        size={200}
                       />
-                    ) : (
-                      <View style={styles.identiconWrapper}>
-                        <AssetIcon
-                          assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
-                          assetID={issuerInfo.assetId && issuerInfo?.assetId}
-                          size={200}
-                        />
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.verifiedViewWrapper}>
-                    <View>
-                      <AppText variant="body1" style={styles.assetTitleText}>
-                        {issuerInfo.name}
-                      </AppText>
                     </View>
-                    {issuerInfo.issuer &&
-                      issuerInfo.issuer &&
-                      issuerInfo.issuer.verified && (
-                        <PostIssuerVerified
-                          id={
-                            issuerInfo.issuer &&
-                            issuerInfo.issuer.verifiedBy[0].id
-                          }
-                          name={
-                            issuerInfo.issuer &&
-                            issuerInfo.issuer.verifiedBy[0].name
-                          }
-                          username={
-                            issuerInfo.issuer &&
-                            issuerInfo.issuer.verifiedBy[0].username
-                          }
-                        />
-                      )}
+                  )}
+                </View>
+                <View style={styles.verifiedViewWrapper}>
+                  <View>
+                    <AppText variant="body1" style={styles.assetTitleText}>
+                      {issuerInfo.name}
+                    </AppText>
                   </View>
-                </ImageBackground>
-              </View>
-            </ImageBackground>
-          </ViewShot>
-        </ScrollView>
-      </ScrollView>
+                  {issuerInfo.issuer &&
+                    issuerInfo.issuer &&
+                    issuerInfo.issuer.verified && (
+                      <PostIssuerVerified
+                        id={
+                          issuerInfo.issuer &&
+                          issuerInfo.issuer.verifiedBy[0].id
+                        }
+                        name={
+                          issuerInfo.issuer &&
+                          issuerInfo.issuer.verifiedBy[0].name
+                        }
+                        username={
+                          issuerInfo.issuer &&
+                          issuerInfo.issuer.verifiedBy[0].username
+                        }
+                      />
+                    )}
+                </View>
+              </ImageBackground>
+            </View>
+          </ImageBackground>
+        </ViewShot>
+
+        <Image
+          source={{ uri: capturedImage }}
+          style={styles.previewImageStyle}
+          resizeMode="contain"
+        />
+      </View>
       <View>
         <Buttons
           primaryTitle={common.share}
@@ -209,9 +232,13 @@ const PostOnTwitterModal: React.FC<Props> = ({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: hp(20),
+      position: 'absolute',
+      top: -9999,
+      left: -9999,
+    },
+    modalContent: {
+      height: hp(220),
+      marginBottom: hp(15),
     },
     card: {
       width: 1200,
@@ -299,9 +326,10 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(25),
       fontWeight: 'bold',
     },
-    scrollWrapper: {
-      height: hp(350),
-      marginVertical: hp(20),
+    previewImageStyle: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 10,
     },
   });
 export default PostOnTwitterModal;
