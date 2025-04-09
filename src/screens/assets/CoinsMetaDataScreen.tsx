@@ -32,6 +32,7 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
+import { findTweetWithAssetID, getUserTweets } from 'src/services/twitter';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -104,6 +105,22 @@ const CoinsMetaDataScreen = () => {
       )
     );
   }, [coin.transactions, coin.issuer]);
+
+  const searchForAssetTweet = async (assetID: string) => {
+    const userId = coin?.issuer?.verifiedBy[0].id;
+    const accessToken = coin?.issuer?.accessToken;
+    const tweets = await getUserTweets(userId, accessToken);
+    const tweetId = findTweetWithAssetID(tweets, assetID);
+    if (tweetId) {
+      console.log('Found tweet ID:', tweetId);
+    } else {
+      console.log('No tweet found with assetID:', assetID);
+    }
+  };
+
+  useEffect(() => {
+    searchForAssetTweet(coin.assetId);
+  }, []);
 
   return (
     <ScreenContainer style={styles.container}>

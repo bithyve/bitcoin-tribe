@@ -7,6 +7,7 @@ export const IssuerSchema = {
       type: 'bool',
       default: false,
     },
+    accessToken: 'string?',
     verifiedBy: `${RealmSchema.IssuerVerifiedBy}[]`,
   },
 };

@@ -56,6 +56,7 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
             verified: true,
+            accessToken: result.accessToken,
             verifiedBy: [
               {
                 type: IssuerVerificationMethod.TWITTER,
@@ -172,6 +173,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
               verified: true,
+              accessToken: result.accessToken,
               verifiedBy: [
                 {
                   type: IssuerVerificationMethod.TWITTER,
