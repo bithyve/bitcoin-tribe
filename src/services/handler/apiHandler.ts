@@ -61,7 +61,15 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
-import { getMessaging, getToken, subscribeToTopic, unsubscribeFromTopic, requestPermission, AuthorizationStatus } from '@react-native-firebase/messaging';
+import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
+import {
+  getMessaging,
+  getToken,
+  subscribeToTopic,
+  unsubscribeFromTopic,
+  requestPermission,
+  AuthorizationStatus,
+} from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
 import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
@@ -96,6 +104,56 @@ export class ApiHandler {
         resolve('Success');
       }, 1000);
     });
+  }
+
+  static async loadGithubReleaseNotes(fullVersion: string) {
+    try {
+      const version = fullVersion.split('(')[0];
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${version}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        return {
+          releaseNote: '',
+        };
+      }
+      const releaseData = await response.json();
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.VersionHistory,
+        'version',
+        fullVersion,
+        {
+          releaseNote: releaseData.body || '',
+        },
+      );
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      return {
+        releaseNote: '',
+      };
+    }
+  }
+
+  static async fetchGithubRelease() {
+    try {
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${DeviceInfo.getVersion()}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        return {
+          releaseNote: '',
+        };
+      }
+      const releaseData = await response.json();
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      console.error('Error fetching GitHub release data:', error);
+      return {
+        releaseNote: '',
+      };
+    }
   }
 
   static async setupNewApp({
@@ -145,6 +203,7 @@ export class ApiHandler {
     const isRealmInit = await dbManager.initializeRealm(uint8array);
     if (isRealmInit) {
       try {
+        const githubReleaseNote = await ApiHandler.fetchGithubRelease();
         if (appType === AppType.ON_CHAIN) {
           const primaryMnemonic = mnemonic
             ? mnemonic
@@ -163,14 +222,28 @@ export class ApiHandler {
           const privateKey = Buffer.from(privateKeyHex, 'hex');
           const keyPair = ECPair.fromPrivateKey(privateKey);
           const publicKey = keyPair.publicKey.toString('hex');
-          const challenge = await Relay.getChallenge(appID, publicKey)
-          if(!challenge.challenge) {
+          const challenge = await Relay.getChallenge(appID, publicKey);
+          if (!challenge.challenge) {
             throw new Error('Failed to get challenge');
           }
-          const messageHash = crypto.createHash('sha256').update(challenge.challenge).digest();
-          const signature = keyPair.sign(Buffer.from(messageHash.toString('hex'), 'hex')).toString('hex');
-          const registerApp = await Relay.createNewApp('Tribe-Onchain-Wallet', appID, publicId, publicKey, AppType.ON_CHAIN, 'Iris_Regtest', '', signature)
-          if(!registerApp?.app?.authToken) {
+          const messageHash = crypto
+            .createHash('sha256')
+            .update(challenge.challenge)
+            .digest();
+          const signature = keyPair
+            .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
+            .toString('hex');
+          const registerApp = await Relay.createNewApp(
+            'Tribe-Onchain-Wallet',
+            appID,
+            publicId,
+            publicKey,
+            AppType.ON_CHAIN,
+            'Iris_Regtest',
+            '',
+            signature,
+          );
+          if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
           }
           const imageEncryptionKey = generateEncryptionKey(
@@ -188,9 +261,8 @@ export class ApiHandler {
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
             appType,
-            authToken: registerApp?.app?.authToken
+            authToken: registerApp?.app?.authToken,
           };
-
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -205,11 +277,15 @@ export class ApiHandler {
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            const apiHandler = new ApiHandler(rgbWallet, AppType.ON_CHAIN, registerApp?.app?.authToken);
+            const apiHandler = new ApiHandler(
+              rgbWallet,
+              AppType.ON_CHAIN,
+              registerApp?.app?.authToken,
+            );
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
@@ -222,7 +298,11 @@ export class ApiHandler {
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
           };
-          const apiHandler = new ApiHandler(rgbWallet, AppType.NODE_CONNECT, authToken);
+          const apiHandler = new ApiHandler(
+            rgbWallet,
+            AppType.NODE_CONNECT,
+            authToken,
+          );
 
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
@@ -251,7 +331,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -261,14 +341,31 @@ export class ApiHandler {
           const privateKey = Buffer.from(privateKeyHex, 'hex');
           const keyPair = ECPair.fromPrivateKey(privateKey);
           const publicKey = keyPair.publicKey.toString('hex');
-          const challenge = await Relay.getChallenge(rgbNodeInfo.pubkey, publicKey)
-          if(!challenge.challenge) {
+          const challenge = await Relay.getChallenge(
+            rgbNodeInfo.pubkey,
+            publicKey,
+          );
+          if (!challenge.challenge) {
             throw new Error('Failed to get challenge');
           }
-          const messageHash = crypto.createHash('sha256').update(challenge.challenge).digest();
-          const signature = keyPair.sign(Buffer.from(messageHash.toString('hex'), 'hex')).toString('hex');
-          const registerApp = await Relay.createNewApp('Tribe-Node-Connect', rgbNodeInfo.pubkey, rgbNodeInfo.pubkey, publicKey, AppType.NODE_CONNECT, 'Iris_Regtest', '', signature)
-          if(!registerApp?.app?.authToken) {
+          const messageHash = crypto
+            .createHash('sha256')
+            .update(challenge.challenge)
+            .digest();
+          const signature = keyPair
+            .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
+            .toString('hex');
+          const registerApp = await Relay.createNewApp(
+            'Tribe-Node-Connect',
+            rgbNodeInfo.pubkey,
+            rgbNodeInfo.pubkey,
+            publicKey,
+            AppType.NODE_CONNECT,
+            'Iris_Regtest',
+            '',
+            signature,
+          );
+          if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
           }
           const newAPP: TribeApp = {
@@ -286,7 +383,7 @@ export class ApiHandler {
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
-            authToken: registerApp?.app?.authToken
+            authToken: registerApp?.app?.authToken,
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -304,7 +401,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -1025,7 +1122,18 @@ export class ApiHandler {
   static async listPayments() {
     try {
       const response = await ApiHandler.api.listpayments();
-      if (response.payments) {
+      if (response.payments && Array.isArray(response.payments)) {
+        const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            lnPayments: response?.payments,
+          },
+        );
         return snakeCaseToCamelCaseCase(response.payments);
       } else {
         throw new Error(response.error);
@@ -1454,6 +1562,7 @@ export class ApiHandler {
 
   static async checkVersion() {
     try {
+      const githubReleaseNote = await ApiHandler.fetchGithubRelease();
       const versionHistoryData = dbManager.getCollection(
         RealmSchema.VersionHistory,
       );
@@ -1466,7 +1575,7 @@ export class ApiHandler {
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-          releaseNote: '',
+          releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
           title: `Upgraded from ${version.version} to ${currentVersion}`,
         });
@@ -1491,13 +1600,13 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL)
-      if(token === Storage.get(Keys.FCM_TOKEN)) {
-        return true
+      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL);
+      if (token === Storage.get(Keys.FCM_TOKEN)) {
+        return true;
       }
-      const response = await Relay.syncFcmToken(ApiHandler.authToken, token)
+      const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
 
-      if(response.updated) {
+      if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
         return true;
       }
@@ -1684,13 +1793,25 @@ export class ApiHandler {
       const response = await ApiHandler.api.listTransactions({
         skip_sync: false,
       });
-      if (response) {
+      if (response && Array.isArray(response.transactions)) {
+        const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            nodeOnchainTransactions: response?.transactions,
+          },
+        );
         return response;
       } else {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('error- ', error);
       throw new Error('Failed to connect to node');
     }
   }
@@ -1866,7 +1987,7 @@ export class ApiHandler {
   static async unlockNode() {
     try {
       const response = await ApiHandler.api.unlock('tribe@2024');
-      console.log(response)
+      console.log(response);
       if (response.error) {
         throw new Error(response.error);
       }

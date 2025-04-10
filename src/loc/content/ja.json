@@ -577,7 +577,11 @@
     "donationTranferInfo6": "チップ、クラウドファンディング、プレゼント、ギフト送付に利用できます。",
     "donationTranferInfo7": "シンプルかつ効率的",
     "donationTranferInfo8": "転送は即座に完了します。",
-    "sendAsDonation": "寄付として送信しますか？"
+    "sendAsDonation": "寄付として送信しますか？",
+    "collectMoreCoinTitle": "もっとコインを集めよう！",
+    "collectMoreCoinSubTitle": "資産を拡大するために、\nもっとコインを追加しましょう。",
+    "collectMoreCollectibleTitle": "もっとコレクティブルを集めよう！",
+    "collectMoreCollectibleSubTitle": "資産を拡大するために、\nもっとコレクティブルを追加しましょう。"
   },
   "community": {
     "fnfTitle": "友達と家族",

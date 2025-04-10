@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Image, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import Identicon from 'src/components/Identicon';
+import AssetIcon from 'src/components/AssetIcon';
 import {
   AssetFace,
   Coin,
@@ -42,9 +42,9 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
             resizeMode="cover"
           />
         ) : (
-          <Identicon
-            value={asset.assetId}
-            style={styles.identiconView}
+          <AssetIcon
+            assetTicker={asset.ticker}
+            assetID={asset.assetId}
             size={30}
           />
         )}

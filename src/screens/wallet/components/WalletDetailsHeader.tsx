@@ -263,6 +263,7 @@ const getStyles = (theme: AppTheme, insets) =>
       borderWidth: 1,
       width: '100%',
       borderRadius: 15,
+      backgroundColor: theme.colors.walletBackgroundColor,
     },
     totalBalance: {
       color: theme.colors.headingColor,

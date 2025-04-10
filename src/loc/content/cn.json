@@ -577,7 +577,11 @@
     "donationTranferInfo6": "可用于打赏、众筹、赠品活动或赠送礼物。",
     "donationTranferInfo7": "简单高效",
     "donationTranferInfo8": "转账立即完成。",
-    "sendAsDonation": "作为捐赠发送？"
+    "sendAsDonation": "作为捐赠发送？",
+    "collectMoreCoinTitle": "收集更多硬币！",
+    "collectMoreCoinSubTitle": "不断添加更多硬币，\n以扩展您的资产。",
+    "collectMoreCollectibleTitle": "收集更多藏品！",
+    "collectMoreCollectibleSubTitle": "不断添加更多藏品，\n以扩展您的资产。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

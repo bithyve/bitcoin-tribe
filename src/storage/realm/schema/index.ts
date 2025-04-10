@@ -31,11 +31,16 @@ import {
   MetaData,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
-import { UniqueDigitalAssetSchema, TokenSchema} from './uda';
+import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
 import { NodeInfoSchema } from './nodeInfo';
 import { IssuerSchema, IssuerVerifiedBySchema } from './issuer';
+import {
+  ConfirmationTimeSchema,
+  NodeOnchainTransactionSchema,
+} from './nodeOnchainTransaction';
+import { LNPaymentsSchema } from './lnPayments';
 
 export default [
   TribeAppSchema,
@@ -74,4 +79,7 @@ export default [
   ScriptSigSchema,
   IssuerSchema,
   IssuerVerifiedBySchema,
+  NodeOnchainTransactionSchema,
+  ConfirmationTimeSchema,
+  LNPaymentsSchema,
 ];
