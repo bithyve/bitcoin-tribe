@@ -2,23 +2,37 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
-
+import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
 
-function VersionHistoryItem({ title, releaseNotes, date, lastIndex }) {
+type Props = {
+  title: string;
+  releaseNotes: string;
+  date: string;
+  lastIndex: boolean;
+  version: string;
+};
+function VersionHistoryItem({
+  title,
+  releaseNotes,
+  date,
+  lastIndex,
+  version,
+}: Props) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, lastIndex),
     [theme, lastIndex],
   );
-
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const toggleCollapse = () => {
+  const handlePressItem = version => {
     setIsCollapsed(!isCollapsed);
+    ApiHandler.loadGithubReleaseNotes(version);
   };
 
   return (
@@ -27,7 +41,11 @@ function VersionHistoryItem({ title, releaseNotes, date, lastIndex }) {
       <View>
         <View style={styles.borderLeft} />
         <View style={styles.wrapper}>
-          <AppTouchable onPress={toggleCollapse} style={styles.header}>
+          <AppTouchable
+            onPress={() => {
+              handlePressItem(version);
+            }}
+            style={styles.header}>
             <AppText variant="body1" style={styles.version}>
               {title}
             </AppText>
@@ -73,6 +91,7 @@ const getStyles = (theme: AppTheme, lastIndex) =>
       marginHorizontal: 15,
       color: theme.colors.headingColor,
       borderRadius: 10,
+      marginTop: hp(10),
     },
     dotView: {
       backgroundColor: theme.colors.accent2,

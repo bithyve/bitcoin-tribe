@@ -167,7 +167,9 @@ const getStyles = (theme: AppTheme, width) =>
       flexDirection: 'column',
     },
     assetNameWrapper: {
-      padding: 12,
+      justifyContent: 'center',
+      paddingLeft: 10,
+      minHeight: hp(50),
       borderRadius: 10,
       borderWidth: 1,
       borderColor: theme.colors.borderColor,
@@ -192,9 +194,7 @@ const getStyles = (theme: AppTheme, width) =>
     },
     scrollingContainer: {
       height: '60%',
-      marginTop: wp(20),
       borderRadius: 20,
-      paddingVertical: hp(10),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,

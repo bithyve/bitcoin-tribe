@@ -10,7 +10,6 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
-import SecondaryCTA from 'src/components/SecondaryCTA';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 
 type UseRGBAssetProps = {
@@ -43,7 +42,7 @@ function UseRGBAssetPopupContainer(props: UseRGBAssetProps) {
           <UseRGBAssetIllustrationLight />
         )}
       </View>
-      <View>
+      <View style={styles.buttonWrapper}>
         <PrimaryCTA
           onPress={onPress}
           title={common.understood}
@@ -76,6 +75,9 @@ const getStyles = (theme: AppTheme) =>
     },
     illustrationWrapper: {
       marginVertical: hp(35),
+    },
+    buttonWrapper: {
+      marginBottom: hp(15),
     },
   });
 export default UseRGBAssetPopupContainer;

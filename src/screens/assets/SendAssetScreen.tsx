@@ -41,7 +41,6 @@ import {
 } from 'src/services/wallets/interfaces';
 import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
-import Identicon from 'src/components/Identicon';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
@@ -52,9 +51,11 @@ import ModalLoading from 'src/components/ModalLoading';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import DonationTransferInfoModal from './components/DonationTransferInfoModal';
+import AssetIcon from 'src/components/AssetIcon';
 
 type ItemProps = {
   name: string;
+  ticker?: string;
   details?: string;
   image?: string;
   tag?: string;
@@ -65,6 +66,7 @@ type ItemProps = {
 
 const AssetItem = ({
   name,
+  ticker,
   details,
   image,
   tag,
@@ -73,7 +75,8 @@ const AssetItem = ({
   amount,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
-  const styles = useMemo(() => getStyles(theme, 100), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = useMemo(() => getStyles(theme, 100), [theme, isThemeDark]);
   return (
     <AppTouchable onPress={onPressAsset}>
       <GradientView
@@ -95,21 +98,15 @@ const AssetItem = ({
         ) : (
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
-            <Identicon value={assetId} style={styles.identiconView} size={50} />
+            <AssetIcon assetTicker={ticker} assetID={assetId} size={50} />
             {/* </View> */}
           </View>
         )}
         <View style={styles.assetDetailsWrapper}>
-          <AppText
-            numberOfLines={1}
-            variant="body2"
-            style={{
-              color:
-                tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
-            }}>
+          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
             {name}
           </AppText>
-          <AppText numberOfLines={1} variant="body2" style={styles.nameText}>
+          <AppText numberOfLines={1} variant="body2" style={styles.detailsText}>
             {details}
           </AppText>
         </View>
@@ -119,10 +116,25 @@ const AssetItem = ({
               styles.amountTextWrapper,
               {
                 backgroundColor:
-                  tag === 'Coin' ? theme.colors.accent : theme.colors.accent4,
+                  tag === 'Coin'
+                    ? isThemeDark
+                      ? theme.colors.accent
+                      : theme.colors.accent1
+                    : theme.colors.accent4,
               },
             ]}>
-            <AppText variant="smallCTA" style={styles.amountText}>
+            <AppText
+              variant="smallCTA"
+              style={[
+                styles.amountText,
+                {
+                  color: isThemeDark
+                    ? Colors.Black
+                    : tag === 'Coin'
+                    ? Colors.White
+                    : Colors.Black,
+                },
+              ]}>
               {numberWithCommas(amount)}
             </AppText>
           </View>
@@ -436,6 +448,7 @@ const SendAssetScreen = () => {
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
           name={assetData?.name}
+          ticker={assetData?.ticker}
           details={
             assetData?.assetIface.toUpperCase() !== AssetFace.RGB25
               ? assetData?.ticker
@@ -600,9 +613,9 @@ const SendAssetScreen = () => {
           <View style={styles.switchWrapper}>
             <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
               {isThemeDark ? (
-                <InfoIcon width={24} height={24} />
+                <InfoIcon width={30} height={30} />
               ) : (
-                <InfoIconLight width={24} height={24} />
+                <InfoIconLight width={30} height={30} />
               )}
             </AppTouchable>
 
@@ -761,10 +774,12 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       borderRadius: 10,
     },
     amountText: {
-      // color: theme.colors.headingColor,
       color: Colors.Black,
     },
     nameText: {
+      color: theme.colors.headingColor,
+    },
+    detailsText: {
       color: theme.colors.secondaryHeadingColor,
     },
     labelstyle: {
