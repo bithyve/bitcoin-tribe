@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 
@@ -12,14 +11,15 @@ const ScreenContainer = props => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const safePadding = '5%';
   return (
-    <SafeAreaView style={{ ...styles.container, ...props.style }}>
+    <View style={{ ...styles.container, ...props.style, safePadding }}>
       <StatusBar
         barStyle={isThemeDark ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.primaryBackground}
       />
       {props.children}
-    </SafeAreaView>
+    </View>
   );
 };
 

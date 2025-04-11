@@ -8,44 +8,62 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-pod 'FirebaseCore', :modular_headers => true;
-pod 'GoogleUtilities', :modular_headers => true;
+# use_frameworks! :linkage => :static
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+pod 'FirebaseCore', :modular_headers => true
+pod 'GoogleUtilities', :modular_headers => true
+pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
 target 'tribe' do
   config = use_native_modules!
+  flags = get_default_flags()
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # An absolute path to your application root.
+    :hermes_enabled => true,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  target 'tribeTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   target 'tribe-dev' do
     config = use_native_modules!
     use_react_native!(
       :path => config[:reactNativePath],
-      # An absolute path to your application root.
       :app_path => "#{Pod::Config.instance.installation_root}/.."
     )
-    end
+  end
 
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
       config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
+      :mac_catalyst_enabled => false
     )
+  
+    # require_relative '../node_modules/react-native-reanimated/scripts/post-install.rb'
+    # Reanimated::PostInstall.new(installer).run
+  
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |build_config|
+        build_config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+        build_config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
+        build_config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+    
+        if target.name == 'MMKVCore'
+          target.source_build_phase.files.each do |file|
+            if file.display_name.include?('MMKV_OSX.cpp')
+              file.remove_from_project
+            end
+          end
+        end
+      end
+    
+      if target.name == 'RNReanimated'
+        target.build_configurations.each do |build_config|
+          build_config.build_settings['HEADER_SEARCH_PATHS'] ||= '$(inherited)'
+          build_config.build_settings['HEADER_SEARCH_PATHS'] += ' $(PODS_ROOT)/React-Core/**'
+          build_config.build_settings['HEADER_SEARCH_PATHS'] += ' $(PODS_ROOT)/ReactCommon $(PODS_ROOT)/React-Core/ReactCommon'
+        end
+      end
+    end
   end
-end
+end  

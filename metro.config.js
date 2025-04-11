@@ -9,7 +9,7 @@ const { assetExts, sourceExts } = defaultConfig.resolver;
  * Metro configuration
  * https://reactnative.dev/docs/metro
  *
- * @type {import('metro-config').MetroConfig}
+ * @type {import('@react-native/metro-config').MetroConfig}
  */
 
 const config = {
@@ -18,7 +18,7 @@ const config = {
   },
   resolver: {
     assetExts: assetExts.filter(ext => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'svg'],
+    sourceExts: [...sourceExts, 'svg', 'jsx', 'js', 'ts', 'tsx'],
   },
 };
 

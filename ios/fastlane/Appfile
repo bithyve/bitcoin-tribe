@@ -1,5 +1,5 @@
 app_identifier("com.bithyve.tribe") # The bundle identifier of your app
-apple_id("shashank@cakesofttech.com") # Your Apple Developer Portal username
+apple_id("akshaychavan8551@gmail.com") # Your Apple Developer Portal username
 
 itc_team_id("119521567") # App Store Connect Team ID
 team_id("Y5TCB759QL") # Developer Portal Team ID

@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { StatusBar, StyleSheet, useWindowDimensions, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppHeader from 'src/components/AppHeader';
 import ColorableUTXO from 'src/screens/collectiblesCoins/components/ColorableUTXO';
@@ -38,7 +43,7 @@ export default function UTXOTabs() {
   const { wallet } = translations;
 
   return (
-    <SafeAreaView style={{ ...styles.container }}>
+    <View style={{ ...styles.container }}>
       <StatusBar
         barStyle={isThemeDark ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.primaryBackground}
@@ -63,7 +68,7 @@ export default function UTXOTabs() {
           primaryOnPress={() => setVisibleUTXOInfo(false)}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -73,6 +78,8 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
       paddingHorizontal: hp(16),
       paddingBottom: hp(16),
-      paddingTop: windowHeight < 675 ? hp(16) : hp(10),
+      // paddingTop: windowHeight < 675 ? hp(16) : hp(10),
+      paddingTop:
+        Platform.OS === 'android' ? StatusBar.currentHeight ?? hp(10) : hp(10),
     },
   });
