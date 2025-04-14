@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import Identicon from './Identicon';
@@ -9,9 +9,10 @@ type props = {
   assetTicker: string;
   assetID: string;
   size: number;
+  style?: StyleProp<ViewStyle>;
 };
 
-const AssetIcon = ({ assetTicker, assetID, size }: props) => {
+const AssetIcon = ({ assetTicker, assetID, size, style }: props) => {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme, size), [theme, size]);
 
@@ -21,7 +22,7 @@ const AssetIcon = ({ assetTicker, assetID, size }: props) => {
   useEffect(() => {
     const fetchIcon = async () => {
       try {
-        const url = `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/64/${ticker}.png`;
+        const url = `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/128/${ticker}.png`;
         const response = await fetch(url);
         if (response.ok) {
           setIconUrl(url);
@@ -43,7 +44,11 @@ const AssetIcon = ({ assetTicker, assetID, size }: props) => {
       {iconUrl ? (
         <Image source={{ uri: iconUrl }} style={styles.imageStyle} />
       ) : (
-        <Identicon value={assetID} size={size} style={styles.identiconView} />
+        <Identicon
+          value={assetID}
+          size={size}
+          style={[styles.identiconView, style]}
+        />
       )}
     </View>
   );

@@ -56,7 +56,8 @@
     "backupInProgress": "Copia de seguridad en progreso",
     "tapToInfo": "Toca para información",
     "backupInProgressMsg": "Completa tu copia de seguridad para proteger tus activos. Por favor, espera mientras finaliza.",
-    "backDoneMsg": "El proceso de copia de seguridad ha finalizado"
+    "backDoneMsg": "El proceso de copia de seguridad ha finalizado",
+    "share": "Compartir"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -581,7 +582,13 @@
     "collectMoreCoinTitle": "¡Recoge más monedas!",
     "collectMoreCoinSubTitle": "Sigue añadiendo más monedas\n para expandir tus activos.",
     "collectMoreCollectibleTitle": "¡Recoge más coleccionables!",
-    "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos."
+    "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos.",
+    "issuerVerifiedTitle": "¡Emisor verificado\ncon éxito!",
+    "issuerVerifiedSubTitle": "ha verificado la identidad del emisor en Bitcoin Tribe.",
+    "verificationSuccessTitle": "¡Verificación exitosa!",
+    "verificationSuccessSubTitle": "¡Tu emisor ahora está verificado a través de X! Compártelo con tu comunidad presionando el botón de compartir.",
+    "issuedPostTitle": "¡Activo emitido con éxito!",
+    "issuedPostSubTitle": "ha emitido tu activo con éxito en Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Amigas y familia",
