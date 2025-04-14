@@ -152,6 +152,7 @@ function IssueCollectibleScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, ''),
         precision: Number(precision),
+        addToRegistry: addToRegistry,
         filePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT
