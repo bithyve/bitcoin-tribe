@@ -1,6 +1,10 @@
 import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
@@ -19,13 +23,16 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
+  const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const { appType, hasCompleteVerification, setCompleteVerification } =
+    useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
@@ -37,6 +44,7 @@ const CollectibleDetailsScreen = () => {
 
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
 
   useEffect(() => {
     if (askReview) {
@@ -48,6 +56,21 @@ const CollectibleDetailsScreen = () => {
       setShowVerifyModal(true);
     }
   }, [askReview, askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        collectible?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [collectible?.issuer?.verified, hasCompleteVerification]),
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -161,6 +184,16 @@ const CollectibleDetailsScreen = () => {
         onDismiss={() => setShowVerifyModal(false)}
         schema={RealmSchema.Collectible}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+          }}
+          issuerInfo={collectible}
+        />
+      </>
     </ScreenContainer>
   );
 };
