@@ -94,12 +94,12 @@ const PostOnTwitterModal: React.FC<Props> = ({
           console.error('File was not saved properly:', filePath);
           return;
         }
-
-        const tweetText = `Issuer ${
-          issuerInfo.issuer?.verifiedBy[0]?.username || ''
-        } verified successfully with Asset ID: ${
-          issuerInfo.assetId
-        }! 🚀 #BitcoinTribe`;
+        const tweetText = `I’ve officially verified my identity as the issuer of "${
+          issuerInfo.name || 'this asset'
+        }" on @bitcointribe_.
+        
+        Transparency matters.
+        Trust, but verify — start here 👇`;
 
         const shareOptions = {
           title: 'Share via',
@@ -110,7 +110,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
 
         await Share.shareSingle(shareOptions);
       }, 1000);
-      secondaryOnPress;
+      secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
       console.error('Error sharing to Twitter:', error);
@@ -138,14 +138,21 @@ const PostOnTwitterModal: React.FC<Props> = ({
               </AppText>
               <Text style={styles.text}>
                 <Text style={[styles.text, styles.userNameStyle]}>
+                  @
                   {issuerInfo.issuer &&
                     issuerInfo?.issuer?.verifiedBy[0]?.username}{' '}
                 </Text>
                 {assets.issuerVerifiedSubTitle}
+                <Text style={[styles.text, styles.userNameStyle]}>
+                  {' '}
+                  {issuerInfo.name}
+                </Text>
               </Text>
-              <View style={styles.qrContainer}>
-                <QRCode value="https://bitcointribe.com" size={120} />
-                <AppText variant="body2" style={styles.scanText}>
+              <View>
+                <View style={styles.qrContainer}>
+                  <QRCode value="https://bitcointribe.com" size={226} />
+                </View>
+                <AppText variant="body1" style={styles.scanText}>
                   Scan Me!
                 </AppText>
               </View>
@@ -175,16 +182,27 @@ const PostOnTwitterModal: React.FC<Props> = ({
                       <AssetIcon
                         assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
                         assetID={issuerInfo.assetId && issuerInfo?.assetId}
-                        size={200}
+                        size={208}
                       />
                     </View>
                   )}
                 </View>
                 <View style={styles.verifiedViewWrapper}>
                   <View>
-                    <AppText variant="body1" style={styles.assetTitleText}>
+                    <AppText
+                      variant="heading3"
+                      style={
+                        issuerInfo.ticker
+                          ? styles.assetTitleText
+                          : styles.assetTitleText1
+                      }>
                       {issuerInfo.name}
                     </AppText>
+                    {issuerInfo.ticker && (
+                      <AppText variant="body1" style={styles.assetTickerText}>
+                        {issuerInfo.ticker}
+                      </AppText>
+                    )}
                   </View>
                   {issuerInfo.issuer &&
                     issuerInfo.issuer &&
@@ -242,7 +260,7 @@ const getStyles = (theme: AppTheme) =>
     },
     card: {
       width: 1200,
-      height: 675,
+      height: 685,
       backgroundColor: '#1E1E1E',
       alignItems: 'center',
       flexDirection: 'row',
@@ -278,12 +296,14 @@ const getStyles = (theme: AppTheme) =>
     identiconWrapper: {
       zIndex: 999,
       alignSelf: 'center',
-      marginTop: hp(20),
-      width: 200,
-      height: 200,
+      marginTop: hp(25),
+      width: hp(208),
+      height: hp(208),
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'visible',
+      backgroundColor: Colors.White,
+      borderRadius: hp(200),
     },
     identiconWrapper2: {
       borderColor: theme.colors.coinsBorderColor,
@@ -302,28 +322,40 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     assetCardWrapper: {
-      height: hp(440),
+      height: hp(450),
       width: wp(337),
-      borderRadius: 15,
+      borderRadius: 30,
       margin: hp(6),
     },
     qrContainer: {
-      marginTop: hp(45),
+      marginTop: hp(35),
       alignItems: 'center',
       backgroundColor: 'white',
-      padding: hp(3),
+      padding: hp(5),
     },
     scanText: {
-      color: Colors.Black,
-      marginTop: 5,
+      color: Colors.White,
+      marginTop: hp(10),
       textAlign: 'center',
+      fontSize: hp(28),
     },
     verifiedViewWrapper: {},
     assetTitleText: {
       textAlign: 'center',
       color: Colors.White,
-      marginTop: hp(15),
-      marginBottom: hp(25),
+      marginBottom: hp(10),
+      fontWeight: 'bold',
+    },
+    assetTitleText1: {
+      textAlign: 'center',
+      color: Colors.White,
+      marginVertical: hp(25),
+      fontWeight: 'bold',
+    },
+    assetTickerText: {
+      textAlign: 'center',
+      color: Colors.White,
+      marginBottom: hp(20),
       fontWeight: 'bold',
     },
     previewImageStyle: {
