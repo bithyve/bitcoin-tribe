@@ -27,6 +27,7 @@ import PostIssuerVerified from './PostIssuerVerified';
 import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -145,7 +146,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       console.error('Error sharing to Twitter:', error);
     }
   };
-
+  console.log('issuerInfo', issuerInfo);
   return (
     <ModalContainer
       title={assets.assetCreateMsg}
@@ -223,7 +224,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
                       <AssetIcon
                         assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
                         assetID={issuerInfo.assetId && issuerInfo?.assetId}
-                        size={250}
+                        size={230}
                       />
                     </View>
                   )}
@@ -247,6 +248,14 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
                     {issuerInfo.assetId && (
                       <AppText variant="body1" style={styles.assetTickerText}>
                         Asset ID: {issuerInfo.assetId}
+                      </AppText>
+                    )}
+                    {issuerInfo.assetId && (
+                      <AppText variant="body1" style={styles.assetTickerText}>
+                        Issued Date:{' '}
+                        {moment
+                          .unix(issuerInfo && issuerInfo.timestamp)
+                          .format('DD MMM YYYY')}
                       </AppText>
                     )}
                   </View>
@@ -325,13 +334,13 @@ const getStyles = (theme: AppTheme) =>
       zIndex: 999,
       alignSelf: 'center',
       marginTop: hp(30),
-      width: hp(250),
-      height: hp(250),
+      width: hp(230),
+      height: hp(230),
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'visible',
       backgroundColor: Colors.White,
-      borderRadius: hp(200),
+      borderRadius: hp(230),
     },
     wrapper: {
       width: '58%',
@@ -377,7 +386,7 @@ const getStyles = (theme: AppTheme) =>
     assetTickerText: {
       textAlign: 'center',
       color: Colors.White,
-      marginBottom: hp(20),
+      marginBottom: hp(10),
       fontWeight: 'bold',
     },
     previewImageStyle: {
