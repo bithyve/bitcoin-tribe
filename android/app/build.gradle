@@ -82,7 +82,7 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 114
+        versionCode 115
         versionName "0.3.2"
         missingDimensionStrategy 'react-native-camera', 'general'
         manifestPlaceholders = [
