@@ -26,6 +26,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import PostIssuerVerified from './PostIssuerVerified';
 import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
+import Toast from 'src/components/Toast';
 
 interface Props {
   visible: boolean;
@@ -53,6 +54,18 @@ const PostOnTwitterModal: React.FC<Props> = ({
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot | null>(null);
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      if (viewShotRef.current) {
+        const uri = await viewShotRef.current.capture();
+        if (uri) setImageUri(uri);
+      }
+    };
+
+    loadImage();
+  }, []);
 
   useEffect(() => {
     if (visible) {
@@ -76,40 +89,49 @@ const PostOnTwitterModal: React.FC<Props> = ({
   const captureAndShare = async () => {
     try {
       if (!viewShotRef.current) return;
-      setTimeout(async () => {
-        const uri = await viewShotRef.current.capture();
+      let uri = imageUri;
+      if (!uri) {
+        uri = await viewShotRef.current.capture({ result: 'tmpfile' });
         if (!uri) {
           console.error('Failed to capture image');
           return;
         }
-        const randomNumber = Math.floor(Math.random() * 100000);
-        const filePath =
-          Platform.OS === 'ios'
-            ? `${RNFS.DocumentDirectoryPath}/tweet_image_${randomNumber}.jpg`
-            : `${RNFS.ExternalCachesDirectoryPath}/tweet_image_${randomNumber}.jpg`;
+        setImageUri(uri);
+      }
+      const randomNumber = Math.floor(Math.random() * 100000);
+      const filePath =
+        Platform.OS === 'ios'
+          ? `${RNFS.DocumentDirectoryPath}/tweet_image_${randomNumber}.jpg`
+          : `${RNFS.ExternalCachesDirectoryPath}/tweet_image_${randomNumber}.jpg`;
 
-        await RNFS.copyFile(uri, filePath);
-        const fileExists = await RNFS.exists(filePath);
-        if (!fileExists) {
-          console.error('File was not saved properly:', filePath);
-          return;
-        }
-        const tweetText = `I’ve officially verified my identity as the issuer of "${
-          issuerInfo.name || 'this asset'
-        }" on @bitcointribe_.
+      await RNFS.copyFile(uri, filePath);
+      const fileExists = await RNFS.exists(filePath);
+      if (!fileExists) {
+        console.error('File was not saved properly:', filePath);
+        return;
+      }
+      const tweetText = `I’ve officially verified my identity as the issuer of "${
+        issuerInfo.name || 'this asset'
+      }" on @bitcointribe_.
         
         Transparency matters.
         Trust, but verify — start here 👇`;
 
-        const shareOptions = {
-          title: 'Share via',
-          message: tweetText,
-          url: `file://${filePath}`,
-          social: Share.Social.TWITTER,
-        };
+      const shareOptions = {
+        title: 'Share via',
+        message: tweetText,
+        url: `file://${filePath}`,
+        social: Share.Social.TWITTER,
+      };
+      const isTwitterAvailable = await Share.isPackageInstalled(
+        'com.twitter.android',
+      );
+      if (!isTwitterAvailable) {
+        Toast('X not installed. Please install X to share.');
+        return;
+      }
 
-        await Share.shareSingle(shareOptions);
-      }, 1000);
+      await Share.shareSingle(shareOptions);
       secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
@@ -172,6 +194,23 @@ const PostOnTwitterModal: React.FC<Props> = ({
                             issuerInfo.issuer && issuerInfo?.media?.filePath
                           }`,
                           ios: issuerInfo.issuer && issuerInfo?.media?.filePath,
+                        }),
+                      }}
+                      resizeMode="cover"
+                      style={styles.imageStyle}
+                    />
+                  ) : issuerInfo.assetIface.toUpperCase() ===
+                    AssetFace.RGB21 ? (
+                    <Image
+                      source={{
+                        uri: Platform.select({
+                          android: `file://${
+                            issuerInfo.token &&
+                            issuerInfo?.token.media?.filePath
+                          }`,
+                          ios:
+                            issuerInfo.token &&
+                            issuerInfo?.token.media?.filePath,
                         }),
                       }}
                       resizeMode="cover"

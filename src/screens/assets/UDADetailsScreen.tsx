@@ -1,7 +1,8 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -40,13 +41,16 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const hasShownPostModal = useRef(false);
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const { appType, hasCompleteVerification, setCompleteVerification } =
+    useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
@@ -62,6 +66,7 @@ const UDADetailsScreen = () => {
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
 
   useEffect(() => {
     if (askReview) {
@@ -73,6 +78,21 @@ const UDADetailsScreen = () => {
       }, 2000);
     }
   }, [askReview, askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        uda?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [uda?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const showVerifyIssuer = useMemo(() => {
     return (
@@ -217,6 +237,16 @@ const UDADetailsScreen = () => {
         onDismiss={() => setShowVerifyModal(false)}
         schema={RealmSchema.UniqueDigitalAsset}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+          }}
+          issuerInfo={uda}
+        />
+      </>
     </ScreenContainer>
   );
 };
