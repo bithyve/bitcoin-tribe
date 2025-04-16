@@ -24,6 +24,7 @@ import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -31,8 +32,13 @@ const CollectibleDetailsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType, hasCompleteVerification, setCompleteVerification } =
-    useContext(AppContext);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
@@ -45,6 +51,16 @@ const CollectibleDetailsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+
+  useEffect(() => {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
 
   useEffect(() => {
     if (askReview) {
@@ -190,6 +206,16 @@ const CollectibleDetailsScreen = () => {
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+          }}
+          issuerInfo={collectible}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
           }}
           issuerInfo={collectible}
         />

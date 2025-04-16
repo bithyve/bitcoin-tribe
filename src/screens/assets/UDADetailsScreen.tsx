@@ -42,6 +42,7 @@ import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -49,8 +50,13 @@ const UDADetailsScreen = () => {
   const hasShownPostModal = useRef(false);
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType, hasCompleteVerification, setCompleteVerification } =
-    useContext(AppContext);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
@@ -67,6 +73,16 @@ const UDADetailsScreen = () => {
   const [selectedImage, setSelectedImage] = useState('');
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+
+  useEffect(() => {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
 
   useEffect(() => {
     if (askReview) {
@@ -102,7 +118,6 @@ const UDADetailsScreen = () => {
       )
     );
   }, [uda?.transactions, uda?.issuer]);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -243,6 +258,16 @@ const UDADetailsScreen = () => {
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+          }}
+          issuerInfo={uda}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
           }}
           issuerInfo={uda}
         />
