@@ -146,7 +146,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       console.error('Error sharing to Twitter:', error);
     }
   };
-  console.log('issuerInfo', issuerInfo);
+
   return (
     <ModalContainer
       title={assets.assetCreateMsg}
