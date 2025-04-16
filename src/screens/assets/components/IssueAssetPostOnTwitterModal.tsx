@@ -250,7 +250,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
                         Asset ID: {issuerInfo.assetId}
                       </AppText>
                     )}
-                    {issuerInfo.assetId && (
+                    {issuerInfo.timestamp && (
                       <AppText variant="body1" style={styles.assetTickerText}>
                         Issued Date:{' '}
                         {moment
