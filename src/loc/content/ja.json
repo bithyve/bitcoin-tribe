@@ -588,7 +588,8 @@
     "verificationSuccessTitle": "認証に成功しました！",
     "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。",
     "issuedPostTitle": "資産の発行に成功しました！",
-    "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました"
+    "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました",
+    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。"
   },
   "community": {
     "fnfTitle": "友達と家族",

@@ -1,7 +1,8 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -40,13 +41,22 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const hasShownPostModal = useRef(false);
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
@@ -62,6 +72,17 @@ const UDADetailsScreen = () => {
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+
+  useEffect(() => {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
 
   useEffect(() => {
     if (askReview) {
@@ -74,6 +95,21 @@ const UDADetailsScreen = () => {
     }
   }, [askReview, askVerify]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        uda?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [uda?.issuer?.verified, hasCompleteVerification]),
+  );
+
   const showVerifyIssuer = useMemo(() => {
     return (
       !uda?.issuer?.verified &&
@@ -82,7 +118,6 @@ const UDADetailsScreen = () => {
       )
     );
   }, [uda?.transactions, uda?.issuer]);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -217,6 +252,26 @@ const UDADetailsScreen = () => {
         onDismiss={() => setShowVerifyModal(false)}
         schema={RealmSchema.UniqueDigitalAsset}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+          }}
+          issuerInfo={uda}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
+          }}
+          issuerInfo={uda}
+        />
+      </>
     </ScreenContainer>
   );
 };

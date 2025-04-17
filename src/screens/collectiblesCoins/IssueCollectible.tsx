@@ -71,6 +71,7 @@ function IssueCollectibleScreen() {
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
+  const { setHasIssuedAsset } = useContext(AppContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -166,6 +167,9 @@ function IssueCollectibleScreen() {
       if (response?.assetId) {
         setLoading(false);
         Toast(assets.assetCreateMsg);
+        if (!addToRegistry) {
+          setHasIssuedAsset(true);
+        }
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
@@ -234,6 +238,9 @@ function IssueCollectibleScreen() {
       if (response?.assetId) {
         setLoading(false);
         Toast(assets.assetCreateMsg);
+        if (!addToRegistry) {
+          setHasIssuedAsset(true);
+        }
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);

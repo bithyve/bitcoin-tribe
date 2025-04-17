@@ -34,6 +34,7 @@ import { RealmSchema } from 'src/storage/enum';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
+import { AppContext } from 'src/contexts/AppContext';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -43,6 +44,7 @@ function IssueScreen() {
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
+  const { setHasIssuedAsset } = useContext(AppContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -119,6 +121,9 @@ function IssueScreen() {
       if (response?.assetId) {
         setLoading(false);
         Toast(assets.assetCreateMsg);
+        if (!addToRegistry) {
+          setHasIssuedAsset(true);
+        }
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
