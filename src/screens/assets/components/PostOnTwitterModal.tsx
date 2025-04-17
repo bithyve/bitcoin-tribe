@@ -69,7 +69,9 @@ const PostOnTwitterModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (visible) {
-      showPreview();
+      setTimeout(() => {
+        showPreview();
+      }, 1000);
     }
   }, [visible]);
 
