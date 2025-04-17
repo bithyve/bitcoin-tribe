@@ -46,7 +46,7 @@ function AssetTransaction(props: AssetTransactionProps) {
     [theme, backColor, assetFace],
   );
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
+  console.log('transaction', transaction);
   const getStatusIcon = (kind, status, type) => {
     const icons = {
       bitcoin: {
@@ -98,12 +98,13 @@ function AssetTransaction(props: AssetTransactionProps) {
   }, [styles.amountSend, styles.amountTextReceive, transaction.kind]);
 
   const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
   const kindLabel =
-    normalizedKind === 'issuance'
+    normalizedKind === 'issuance' && normalizedStatus === 'settled'
       ? settings.issuance
-      : normalizedKind === 'send'
+      : normalizedKind === 'send' && normalizedStatus === 'settled'
       ? settings.send
-      : normalizedKind === 'receiveblind'
+      : normalizedKind === 'receiveblind' && normalizedStatus === 'settled'
       ? settings.receiveblind
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
