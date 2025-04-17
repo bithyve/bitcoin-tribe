@@ -28,6 +28,7 @@ import GradientView from 'src/components/GradientView';
 import {
   Asset,
   AssetFace,
+  AssetVisibility,
   Coin,
   Collectible,
 } from 'src/models/interfaces/RGBWallet';
@@ -52,6 +53,8 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 import AssetIcon from 'src/components/AssetIcon';
+import dbManager from 'src/storage/realm/dbManager';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type ItemProps = {
   name: string;
@@ -145,7 +148,7 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, amount } = useRoute().params;
+  const { assetId, rgbInvoice, amount, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -635,8 +638,23 @@ const SendAssetScreen = () => {
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
             onSuccessPress={() => {
-              navigation.goBack();
-              navigation.setParams({ askReview: true });
+              setVisible(false);
+              setTimeout(() => {
+                if (isUDA) {
+                  dbManager.updateObjectByPrimaryId(
+                    RealmSchema.UniqueDigitalAsset,
+                    'assetId',
+                    assetId,
+                    {
+                      visibility: AssetVisibility.HIDDEN,
+                    },
+                  );
+                  navigation.replace(NavigationRoutes.HOME);
+                } else {
+                  navigation.goBack();
+                  navigation.setParams({ askReview: true });
+                }
+              }, 600);
             }}
             onPress={sendAsset}
             estimateBlockTime={

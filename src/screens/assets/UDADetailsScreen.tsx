@@ -1,5 +1,12 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   StackActions,
   useFocusEffect,
@@ -118,6 +125,7 @@ const UDADetailsScreen = () => {
       )
     );
   }, [uda?.transactions, uda?.issuer]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -172,6 +180,7 @@ const UDADetailsScreen = () => {
                 navigation.navigate(NavigationRoutes.SCANASSET, {
                   assetId: assetId,
                   rgbInvoice: '',
+                  isUDA: true,
                 })
               }
               width={wp(105)}
