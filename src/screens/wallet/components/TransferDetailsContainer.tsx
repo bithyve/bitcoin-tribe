@@ -36,6 +36,17 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
     Toast(assets.copiedTxIDMsg);
   };
 
+  const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
+  const kindLabel =
+    normalizedKind === 'issuance' && normalizedStatus === 'settled'
+      ? settings.issuance
+      : normalizedKind === 'send' && normalizedStatus === 'settled'
+      ? settings.send
+      : normalizedKind === 'receiveblind' && normalizedStatus === 'settled'
+      ? settings.receiveblind
+      : settings[transaction.status.toLowerCase().replace(/_/g, '')];
+
   return (
     <View style={styles.container}>
       <GradientView
@@ -49,9 +60,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           {wallet.status}
         </AppText>
         <AppText variant="body2" style={styles.textStyle}>
-          {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
-            ? assets.issued
-            : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+          {kindLabel}
         </AppText>
       </GradientView>
       <View style={styles.wrapper}>
