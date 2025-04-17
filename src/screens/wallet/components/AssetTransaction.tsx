@@ -46,7 +46,7 @@ function AssetTransaction(props: AssetTransactionProps) {
     [theme, backColor, assetFace],
   );
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  console.log('transaction', transaction);
+
   const getStatusIcon = (kind, status, type) => {
     const icons = {
       bitcoin: {
