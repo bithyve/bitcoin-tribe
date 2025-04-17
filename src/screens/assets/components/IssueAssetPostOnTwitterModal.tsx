@@ -376,7 +376,7 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'center',
       color: Colors.White,
       marginBottom: hp(10),
-      marginTop: hp(20),
+      marginTop: hp(18),
       fontWeight: 'bold',
     },
     assetTitleText1: {
@@ -390,6 +390,7 @@ const getStyles = (theme: AppTheme) =>
       color: Colors.White,
       marginBottom: hp(5),
       fontWeight: 'bold',
+      marginHorizontal: hp(15),
     },
     previewImageStyle: {
       width: '100%',
