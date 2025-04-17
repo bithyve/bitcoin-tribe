@@ -388,7 +388,7 @@ const getStyles = (theme: AppTheme) =>
     assetTickerText: {
       textAlign: 'center',
       color: Colors.White,
-      marginBottom: hp(10),
+      marginBottom: hp(5),
       fontWeight: 'bold',
     },
     previewImageStyle: {
