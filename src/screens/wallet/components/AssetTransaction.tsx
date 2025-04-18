@@ -97,6 +97,17 @@ function AssetTransaction(props: AssetTransactionProps) {
     return styles.amountTextReceive;
   }, [styles.amountSend, styles.amountTextReceive, transaction.kind]);
 
+  const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
+  const kindLabel =
+    normalizedKind === 'issuance' && normalizedStatus === 'settled'
+      ? settings.issuance
+      : normalizedKind === 'send' && normalizedStatus === 'settled'
+      ? settings.send
+      : normalizedKind === 'receiveblind' && normalizedStatus === 'settled'
+      ? settings.receiveblind
+      : settings[transaction.status.toLowerCase().replace(/_/g, '')];
+
   return (
     <AppTouchable
       disabled={disabled}
@@ -121,9 +132,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
-                ? assets.issued
-                : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+              {kindLabel}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment

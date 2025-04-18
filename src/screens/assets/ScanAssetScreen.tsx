@@ -21,7 +21,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 
 function ScanAssetScreen({ navigation }) {
-  const { assetId, rgbInvoice } = useRoute().params;
+  const { assetId, rgbInvoice, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { sendScreen, assets } = translations;
@@ -60,6 +60,7 @@ function ScanAssetScreen({ navigation }) {
               assetId: res.assetId,
               rgbInvoice: value,
               amount: res.amount.toString(),
+              isUDA: isUDA,
             });
           }
         } else {
@@ -68,6 +69,7 @@ function ScanAssetScreen({ navigation }) {
             assetId: assetId,
             rgbInvoice: value,
             amount: 0,
+            isUDA: isUDA,
           });
         }
         return;
@@ -130,6 +132,7 @@ function ScanAssetScreen({ navigation }) {
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
             rgbInvoice: rgbInvoice,
+            isUDA: isUDA,
           });
         }}
       />
