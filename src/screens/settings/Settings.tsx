@@ -1,4 +1,4 @@
-import React, { useContext, ReactNode, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
@@ -117,7 +117,7 @@ function SettingsScreen({ navigation }) {
     }
   }, [login.error, login.data]);
 
-  const toggleBiometrics = () => {
+  const toggleBiometrics = useCallback(() => {
     if (pinMethod === PinMethod.DEFAULT) {
       setIsEnableBiometrics(true);
       navigation.navigate(NavigationRoutes.CREATEPIN, {
@@ -131,7 +131,7 @@ function SettingsScreen({ navigation }) {
       Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
       setBiometrics(false);
     }
-  };
+  }, [pinMethod, navigation, enableBiometrics]);
 
   const handlePasscodeChange = newPasscode => {
     setInvalidPin('');
