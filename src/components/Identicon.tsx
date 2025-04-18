@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Canvas from 'react-native-canvas';
 import { IndenticonLib } from './Identiconlib';
@@ -12,14 +12,23 @@ interface Props {
 const Identicon = ({ value, style, size = 45 }: Props) => {
   const canvasRef = useRef(null);
 
-  const handleCanvas = (canvas: any) => {
-    if (canvas) {
-      canvas.width = size;
-      canvas.height = size;
+  const handleCanvas = useCallback(
+    (canvas: any) => {
+      if (canvas) {
+        canvas.width = size;
+        canvas.height = size;
 
-      IndenticonLib.generateSync(canvas, { id: value, size }, size);
-    }
-  };
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+          IndenticonLib.generateSync(canvas, { id: value, size }, size);
+        } else {
+          console.warn('Canvas context is not available.');
+        }
+      }
+    },
+    [value, size],
+  );
 
   useEffect(() => {
     if (handleCanvas.current) {
