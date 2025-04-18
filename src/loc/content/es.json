@@ -280,6 +280,8 @@
     "receiveblind": "Recibir",
     "settled": "Liquidado",
     "waitingcounterparty": "Esperando contraparte",
+    "waitingcounterpartySend": "Esperando verificación",
+    "waitingcounterpartyReceive": "Esperando transferencia",
     "waitingconfirmations": "Esperando confirmación",
     "Failed": "Fallido",
     "removed": "Eliminado",

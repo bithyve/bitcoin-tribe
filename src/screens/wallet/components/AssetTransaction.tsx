@@ -16,11 +16,15 @@ import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg'
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
-import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
+import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
+import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmationIconReceive.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   AssetFace,
+  AssetTransferKind,
+  AssetTransferStatus,
   Transfer,
   TransferKind,
 } from 'src/models/interfaces/RGBWallet';
@@ -57,11 +61,11 @@ function AssetTransaction(props: AssetTransactionProps) {
         },
         waitingcounterparty: {
           send: <WaitingCounterPartySendIcon />,
-          receiveblind: <WaitingCounterPartyIcon />,
+          receiveblind: <WaitingCounterPartyReceiveIcon />,
         },
         waitingconfirmations: {
-          send: <WaitingConfirmationIcon />,
-          receiveblind: <WaitingConfirmationIcon />,
+          send: <WaitingConfirmationIconSend />,
+          receiveblind: <WaitingConfirmationIconReceive />,
         },
         failed: {
           send: <FailedTxnIcon />,
@@ -100,12 +104,21 @@ function AssetTransaction(props: AssetTransactionProps) {
   const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
   const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
   const kindLabel =
-    normalizedKind === 'issuance' && normalizedStatus === 'settled'
+    normalizedKind === AssetTransferKind.Issuance &&
+    normalizedStatus === AssetTransferStatus.Settled
       ? settings.issuance
-      : normalizedKind === 'send' && normalizedStatus === 'settled'
+      : normalizedKind === AssetTransferKind.Send &&
+        normalizedStatus === AssetTransferStatus.Settled
       ? settings.send
-      : normalizedKind === 'receiveblind' && normalizedStatus === 'settled'
+      : normalizedKind === AssetTransferKind.ReceiveBlind &&
+        normalizedStatus === AssetTransferStatus.Settled
       ? settings.receiveblind
+      : normalizedKind === AssetTransferKind.Send &&
+        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      ? settings.waitingcounterpartySend
+      : normalizedKind === AssetTransferKind.ReceiveBlind &&
+        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
   return (

@@ -280,6 +280,8 @@
     "receiveblind": "प्राप्त करें",
     "settled": "निपटान हो गया",
     "waitingcounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
+    "waitingcounterpartySend": "सत्यापन की प्रतीक्षा कर रहा है",
+    "waitingcounterpartyReceive": "हस्तांतरण की प्रतीक्षा कर रहा है",
     "waitingconfirmations": "पुष्टि की प्रतीक्षा में",
     "Failed": "असफल",
     "removed": "हटा दिया गया",
