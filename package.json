@@ -64,7 +64,6 @@
     "react-native": "0.74.1",
     "react-native-app-auth": "8.0.1",
     "react-native-biometrics": "3.0.1",
-    "react-native-canvas": "0.1.40",
     "react-native-config": "^1.5.2",
     "react-native-crypto": "^2.1.0",
     "react-native-device-info": "10.0.2",
