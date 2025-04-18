@@ -80,7 +80,10 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
     try {
       if (!viewShotRef.current) return;
 
-      const uri = await viewShotRef.current.capture({ result: 'tmpfile' });
+      const uri = await viewShotRef.current.capture({
+        result: 'tmpfile',
+        format: 'png',
+      });
       if (uri) {
         setCapturedImage(uri);
       }
@@ -94,7 +97,10 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       if (!viewShotRef.current) return;
       let uri = imageUri;
       if (!uri) {
-        uri = await viewShotRef.current.capture({ result: 'tmpfile' });
+        uri = await viewShotRef.current.capture({
+          result: 'tmpfile',
+          format: 'png',
+        });
         if (!uri) {
           console.error('Failed to capture image');
           return;

@@ -280,6 +280,8 @@
     "receiveblind": "Receive",
     "settled": "Settled",
     "waitingcounterparty": "Waiting Counterparty",
+    "waitingcounterpartySend": "Waiting Verification",
+    "waitingcounterpartyReceive": "Waiting Transfer",
     "waitingconfirmations": "Waiting Confirmation",
     "failed": "Failed",
     "removed": "Removed",

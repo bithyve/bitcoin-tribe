@@ -280,6 +280,8 @@
     "receiveblind": "Ricevi",
     "settled": "Sistemato",
     "waitingcounterparty": "In attesa della controparte",
+    "waitingcounterpartySend": "In attesa di verifica",
+    "waitingcounterpartyReceive": "In attesa del trasferimento",
     "waitingconfirmations": "In attesa di conferma",
     "Failed": "Fallito",
     "removed": "Rimosso",

@@ -12,7 +12,11 @@ import Colors from 'src/theme/Colors';
 import TransferLabelContent from './TransferLabelContent';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
-import { Transaction } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetTransferKind,
+  AssetTransferStatus,
+  Transaction,
+} from 'src/models/interfaces/RGBWallet';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
@@ -39,12 +43,21 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
   const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
   const kindLabel =
-    normalizedKind === 'issuance' && normalizedStatus === 'settled'
+    normalizedKind === AssetTransferKind.Issuance &&
+    normalizedStatus === AssetTransferStatus.Settled
       ? settings.issuance
-      : normalizedKind === 'send' && normalizedStatus === 'settled'
+      : normalizedKind === AssetTransferKind.Send &&
+        normalizedStatus === AssetTransferStatus.Settled
       ? settings.send
-      : normalizedKind === 'receiveblind' && normalizedStatus === 'settled'
+      : normalizedKind === AssetTransferKind.ReceiveBlind &&
+        normalizedStatus === AssetTransferStatus.Settled
       ? settings.receiveblind
+      : normalizedKind === AssetTransferKind.Send &&
+        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      ? settings.waitingcounterpartySend
+      : normalizedKind === AssetTransferKind.ReceiveBlind &&
+        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
   return (
@@ -93,7 +106,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
         </View>
       </View>
       {transaction.status.toLowerCase().replace(/_/g, '') ===
-        'waitingcounterparty' && (
+        AssetTransferStatus.WaitingCounterparty && (
         <SwipeToAction
           title={assets.cancelTransactionCtaTitle}
           loadingTitle={assets.cancelTransactionCtaMsg}
