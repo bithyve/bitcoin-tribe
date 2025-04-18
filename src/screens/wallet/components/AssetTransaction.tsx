@@ -14,7 +14,6 @@ import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
-import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
 import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
 import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
