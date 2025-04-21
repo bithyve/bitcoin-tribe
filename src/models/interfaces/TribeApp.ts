@@ -14,4 +14,8 @@ export interface TribeApp {
   enableAnalytics: boolean;
   appType: AppType;
   authToken?: string;
+  keyPair?: {
+    publicKey: string;
+    privateKey: string;
+  };
 }

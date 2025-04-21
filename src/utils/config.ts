@@ -35,6 +35,7 @@ class Configuration {
   public SENTRY_DNS: string = config.SENTRY_DNS || '';
   public TWITTER_CLIENT_ID: string = config.TWITTER_CLIENT_ID;
   public TRIBE_FCM_BROADCAST_CHANNEL: string = config.TRIBE_FCM_BROADCAST_CHANNEL;
+  public CONTACT_KEY_PATH: string = config.CONTACT_KEY_PATH;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();

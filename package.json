@@ -48,6 +48,7 @@
     "constants-browserify": "^1.0.0",
     "crypto": "1.0.1",
     "crypto-js": "4.2.0",
+    "eciesjs": "0.4.14",
     "ecpair": "2.0.1",
     "electrum-client": "git+https://github.com/bithyve/rn-electrum-client.git",
     "events": "^1.0.0",

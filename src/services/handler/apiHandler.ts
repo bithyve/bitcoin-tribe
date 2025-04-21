@@ -160,7 +160,7 @@ export class ApiHandler {
     appName = '',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage = '',
+    walletImage = {},
     mnemonic = null,
     appType,
     rgbNodeConnectParams,
@@ -170,7 +170,7 @@ export class ApiHandler {
     appName: string;
     pinMethod: PinMethod;
     passcode: '';
-    walletImage: '';
+    walletImage: object;
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
@@ -209,6 +209,7 @@ export class ApiHandler {
             ? mnemonic
             : bip39.generateMnemonic();
           const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
+          const key = bip32.fromSeed(primarySeed, config.NETWORK).derivePath(config.CONTACT_KEY_PATH);
           const appID = crypto
             .createHash('sha256')
             .update(primarySeed)
@@ -263,6 +264,10 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
+            keyPair: {
+              publicKey: key.publicKey.toString('hex'),
+              privateKey: key.privateKey.toString('hex'),
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
