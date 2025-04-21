@@ -5,7 +5,7 @@ import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-
+import { Storage, Keys } from 'src/storage';
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
