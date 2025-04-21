@@ -234,7 +234,7 @@ export class ApiHandler {
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
           const registerApp = await Relay.createNewApp(
-            'Tribe-Onchain-Wallet',
+            appName,
             appID,
             publicId,
             publicKey,
@@ -242,6 +242,7 @@ export class ApiHandler {
             'Iris_Regtest',
             '',
             signature,
+            walletImage,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -253,7 +254,7 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.walletImage || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,

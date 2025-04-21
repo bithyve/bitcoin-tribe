@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Keyboard, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
-import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
@@ -20,6 +18,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -29,7 +28,7 @@ function ProfileSetup() {
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
 
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState<{}>(null);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,15 +42,21 @@ function ProfileSetup() {
     }
   }, [setupNewAppMutation.isError, setupNewAppMutation.isSuccess]);
 
-  const handlePickImage = async () => {
+  const handlePickImage = useCallback(async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(true);
-      setProfileImage(result);
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        selectionLimit: 1,
+        maxHeight: 400,
+        maxWidth: 400,
+      });
+      console.log('result', result.assets?.[0]);
+      setProfileImage(result.assets?.[0]);
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
   const onSuccess = async () => {
     setIsLoading(false);
@@ -89,7 +94,7 @@ function ProfileSetup() {
         primaryOnPress={() => initiateWalletCreation()}
         secondaryOnPress={() => initiateWalletCreation()}
         addPicTitle={onBoarding.addPicture}
-        profileImage={profileImage}
+        profileImage={profileImage?.uri}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         // rightText={common.skip}

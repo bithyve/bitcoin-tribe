@@ -112,12 +112,33 @@ export default class Relay {
     appType: string,
     network: string,
     fcmToken = '',
-    signature: string
+    signature: string,
+    image?: { uri: string, name: string, type: string }
   ): Promise<{ status: boolean, error?: string, app: TribeApp }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/new`,
-        { name, appID, publicId, appType, network, fcmToken, signature, publicKey });
+      const formData = new FormData();
+      formData.append('appID', appID);
+      formData.append('network', 'regtest');
+      formData.append('name', name);
+      formData.append('publicId', publicId);
+      formData.append('appType', appType);
+      formData.append('fcmToken', fcmToken);
+      formData.append('signature', signature);
+      formData.append('publicKey', publicKey);
+      if (image) {
+        formData.append('image', {
+          uri: Platform.select({
+            android: `file://${image?.uri}`,
+            ios: image?.uri,
+          }),
+          name: `${appID}_${image?.uri.split('/').pop()}`,
+          type: 'image/jpeg',
+        });
+      }
+      res = await RestClient.post(`${RELAY}/app/new`, formData, {
+        'Content-Type': 'multipart/form-data',
+      });
     } catch (err) {
       console.log(err, err.response.data)
       if (err.response) {

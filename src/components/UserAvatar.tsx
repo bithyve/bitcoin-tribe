@@ -3,11 +3,10 @@ import { Avatar, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { AppTheme } from 'src/theme';
 import ProfilePlaceholder from 'src/assets/images/profilePlaceholder.svg';
-import { hp } from 'src/constants/responsive';
 
 type UserAvatarProps = {
   size: number;
-  imageSource: any;
+  imageSource: string;
 };
 const UserAvatar = (props: UserAvatarProps) => {
   const theme: AppTheme = useTheme();
@@ -16,7 +15,7 @@ const UserAvatar = (props: UserAvatarProps) => {
   return imageSource ? (
     <Avatar.Image
       size={size}
-      source={{ uri: `data:image/jpeg;base64,${imageSource}` }}
+      source={{ uri: imageSource }}
       style={styles.wrapper}
     />
   ) : (
