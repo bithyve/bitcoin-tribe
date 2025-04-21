@@ -13,9 +13,9 @@ import TransferLabelContent from './TransferLabelContent';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import {
-  AssetTransferKind,
-  AssetTransferStatus,
+  TransferKind,
   Transaction,
+  TransferStatus,
 } from 'src/models/interfaces/RGBWallet';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
@@ -42,21 +42,24 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
 
   const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
   const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
+  function normalize(value: string): string {
+    return value.toLowerCase().replace(/_/g, '');
+  }
   const kindLabel =
-    normalizedKind === AssetTransferKind.Issuance &&
-    normalizedStatus === AssetTransferStatus.Settled
+    normalizedKind === normalize(TransferKind.ISSUANCE) &&
+    normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.issuance
-      : normalizedKind === AssetTransferKind.Send &&
-        normalizedStatus === AssetTransferStatus.Settled
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.send
-      : normalizedKind === AssetTransferKind.ReceiveBlind &&
-        normalizedStatus === AssetTransferStatus.Settled
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.receiveblind
-      : normalizedKind === AssetTransferKind.Send &&
-        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartySend
-      : normalizedKind === AssetTransferKind.ReceiveBlind &&
-        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
@@ -106,7 +109,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
         </View>
       </View>
       {transaction.status.toLowerCase().replace(/_/g, '') ===
-        AssetTransferStatus.WaitingCounterparty && (
+        normalize(TransferStatus.WAITING_COUNTERPARTY) && (
         <SwipeToAction
           title={assets.cancelTransactionCtaTitle}
           loadingTitle={assets.cancelTransactionCtaMsg}

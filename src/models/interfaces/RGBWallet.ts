@@ -188,17 +188,6 @@ export enum TransferStatus {
   FAILED = 'FAILED',
 }
 
-export enum AssetTransferKind {
-  Issuance = 'issuance',
-  Send = 'send',
-  ReceiveBlind = 'receiveblind',
-}
-
-export enum AssetTransferStatus {
-  Settled = 'settled',
-  WaitingCounterparty = 'waitingcounterparty',
-}
-
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
 }

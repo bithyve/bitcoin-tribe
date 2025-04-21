@@ -22,10 +22,9 @@ import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   AssetFace,
-  AssetTransferKind,
-  AssetTransferStatus,
   Transfer,
   TransferKind,
+  TransferStatus,
 } from 'src/models/interfaces/RGBWallet';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconArrowLight from 'src/assets/images/icon_arrowr2light.svg';
@@ -102,21 +101,24 @@ function AssetTransaction(props: AssetTransactionProps) {
 
   const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
   const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
+  function normalize(value: string): string {
+    return value.toLowerCase().replace(/_/g, '');
+  }
   const kindLabel =
-    normalizedKind === AssetTransferKind.Issuance &&
-    normalizedStatus === AssetTransferStatus.Settled
+    normalizedKind === normalize(TransferKind.ISSUANCE) &&
+    normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.issuance
-      : normalizedKind === AssetTransferKind.Send &&
-        normalizedStatus === AssetTransferStatus.Settled
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.send
-      : normalizedKind === AssetTransferKind.ReceiveBlind &&
-        normalizedStatus === AssetTransferStatus.Settled
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
       ? settings.receiveblind
-      : normalizedKind === AssetTransferKind.Send &&
-        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartySend
-      : normalizedKind === AssetTransferKind.ReceiveBlind &&
-        normalizedStatus === AssetTransferStatus.WaitingCounterparty
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
