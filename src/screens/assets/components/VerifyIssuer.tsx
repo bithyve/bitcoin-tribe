@@ -167,7 +167,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         });
         setIsLoading(false);
         if (response.status) {
-          console.log('response.status', response.status);
           setCompleteVerification(true);
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
