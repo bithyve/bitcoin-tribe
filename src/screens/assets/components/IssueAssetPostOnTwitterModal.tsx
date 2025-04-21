@@ -111,7 +111,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       const filePath =
         Platform.OS === 'ios'
           ? `${RNFS.DocumentDirectoryPath}/tweet_image_${randomNumber}.jpg`
-          : `${RNFS.ExternalCachesDirectoryPath}/tweet_image_${randomNumber}.jpg`;
+          : `${RNFS.TemporaryDirectoryPath}/tweet_image_${randomNumber}.jpg`;
 
       await RNFS.copyFile(uri, filePath);
       const fileExists = await RNFS.exists(filePath);
