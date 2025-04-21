@@ -594,7 +594,8 @@
     "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione.",
     "issuedPostTitle": "Asset emesso con successo!",
     "issuedPostSubTitle": "ha emesso con successo il tuo asset su Bitcoin Tribe",
-    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione."
+    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione.",
+    "registerAssetMsg": "Il tuo asset è stato aggiunto al registro di Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

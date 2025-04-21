@@ -594,7 +594,8 @@
     "verificationSuccessSubTitle": "您的发行者已通过 X 验证！点击分享按钮与您的社区分享。",
     "issuedPostTitle": "资产发行成功！",
     "issuedPostSubTitle": "已在 Bitcoin Tribe 上成功发行您的资产",
-    "issuedSuccessSubTitle": "您的资产已创建。点击分享按钮与社区分享。"
+    "issuedSuccessSubTitle": "您的资产已创建。点击分享按钮与社区分享。",
+    "registerAssetMsg": "您的资产已添加到 Bitcoin Tribe 注册表中"
   },
   "community": {
     "fnfTitle": "朋友和家人",

@@ -202,6 +202,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
         setIsAddedInRegistry(true);
+        Toast(assets.registerAssetMsg);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
