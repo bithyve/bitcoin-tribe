@@ -253,7 +253,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
 
       <SelectOption
         title={'Register Asset'}
-        subTitle={'Add asset to Tribe RGB registry'}
+        subTitle={'Add asset to Bitcoin Tribe registry'}
         onPress={() => getAssetIssuanceFeeMutation.mutate()}
         testID={'register-asset'}
       />
