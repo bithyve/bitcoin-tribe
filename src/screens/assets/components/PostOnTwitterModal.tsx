@@ -132,8 +132,11 @@ const PostOnTwitterModal: React.FC<Props> = ({
         Toast('X not installed. Please install X to share.');
         return;
       }
-
-      await Share.shareSingle(shareOptions);
+      if (Platform.OS === 'android') {
+        await Share.shareSingle(shareOptions);
+      } else {
+        await Share.open(shareOptions);
+      }
       secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
