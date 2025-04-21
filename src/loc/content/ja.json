@@ -280,6 +280,8 @@
     "receiveblind": "受け取る",
     "settled": "清算済み",
     "waitingcounterparty": "相手を待っています",
+    "waitingcounterpartySend": "検証待ち",
+    "waitingcounterpartyReceive": "転送待ち",
     "waitingconfirmations": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",

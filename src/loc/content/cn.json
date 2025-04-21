@@ -280,6 +280,8 @@
     "receiveblind": "接收",
     "settled": "结算完成",
     "waitingcounterparty": "等待对方",
+    "waitingcounterpartySend": "等待验证",
+    "waitingcounterpartyReceive": "等待转账",
     "waitingconfirmations": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
