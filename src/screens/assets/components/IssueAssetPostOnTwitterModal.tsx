@@ -421,10 +421,10 @@ const getStyles = (theme: AppTheme) =>
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
       textAlign: 'left',
+      width: wp(270),
     },
     contentWrapper: {
-      marginTop: hp(5),
-      marginBottom: hp(20),
+      marginVertical: hp(15),
     },
   });
 export default IssueAssetPostOnTwitterModal;
