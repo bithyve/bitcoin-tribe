@@ -137,6 +137,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                     assetTicker={item.ticker}
                     assetID={item.assetId}
                     size={30}
+                    verified={item?.issuer?.verified}
                   />
                 ) : (
                   <Image

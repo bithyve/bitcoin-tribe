@@ -83,6 +83,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       assetTicker={asset.ticker}
                       assetID={asset.assetId}
                       size={50}
+                      verified={asset?.issuer?.verified}
                     />
                   </View>
                 </View>

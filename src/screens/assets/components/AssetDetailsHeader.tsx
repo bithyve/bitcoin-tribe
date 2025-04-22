@@ -106,6 +106,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     assetTicker={asset?.ticker}
                     assetID={asset?.assetId}
                     size={120}
+                    verified={asset?.issuer?.verified}
                   />
                 </View>
               </View>

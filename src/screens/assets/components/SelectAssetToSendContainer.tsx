@@ -48,6 +48,7 @@ type ItemProps = {
   ticker?: string;
   assetId?: string;
   amount?: string;
+  verified?: boolean;
 };
 
 const Item = ({
@@ -60,6 +61,7 @@ const Item = ({
   ticker,
   assetId,
   amount,
+  verified,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -84,7 +86,12 @@ const Item = ({
           </View>
         ) : (
           <View style={styles.identiconWrapper}>
-            <AssetIcon assetTicker={details} assetID={assetId} size={50} />
+            <AssetIcon
+              assetTicker={details}
+              assetID={assetId}
+              size={50}
+              verified={verified}
+            />
           </View>
         )}
         <View style={styles.assetDetailsWrapper}>
@@ -177,6 +184,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 }
                 index={index}
                 ticker={item.ticker}
+                verified={item?.issuer?.verified}
               />
             ) : (
               <Item
@@ -201,6 +209,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                   }`,
                   ios: item.media?.filePath || item.token.media.filePath,
                 })}
+                verified={item?.issuer?.verified}
               />
             )}
           </View>

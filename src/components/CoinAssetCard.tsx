@@ -66,6 +66,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
             assetTicker={asset.ticker}
             assetID={asset.assetId}
             size={56}
+            verified={asset?.issuer?.verified}
           />
         </View>
       </GradientView>

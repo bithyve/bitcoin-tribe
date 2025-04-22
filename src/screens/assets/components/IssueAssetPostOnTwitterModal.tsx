@@ -236,6 +236,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
                         assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
                         assetID={issuerInfo.assetId && issuerInfo?.assetId}
                         size={230}
+                        verified={issuerInfo?.issuer?.verified}
                       />
                     </View>
                   )}
