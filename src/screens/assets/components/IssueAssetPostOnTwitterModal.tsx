@@ -139,13 +139,6 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
               message: tweetText,
               url: `file://${filePath}`,
             };
-      const isTwitterAvailable = await Share.isPackageInstalled(
-        'com.twitter.android',
-      );
-      if (!isTwitterAvailable) {
-        Toast('X not installed. Please install X to share.');
-        return;
-      }
       if (Platform.OS === 'android') {
         await Share.shareSingle(shareOptions);
       } else {
@@ -154,7 +147,19 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
+      secondaryOnPress();
       console.error('Error sharing to Twitter:', error);
+      let errorMessage = 'Something went wrong while sharing.';
+      if (error?.message) {
+        if (error.message.includes('couldn’t be opened')) {
+          errorMessage = 'The image could not be found. Please try again.';
+        } else if (error.message.includes('User did not share')) {
+          errorMessage = 'Sharing was cancelled.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      Toast(errorMessage, true);
     }
   };
 
