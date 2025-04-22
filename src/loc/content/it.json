@@ -58,7 +58,8 @@
     "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
     "backDoneMsg": "Il processo di backup è completato",
     "share": "Condividi",
-    "registry": "Registro"
+    "registry": "Registro",
+    "verify": "Verifica"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -559,8 +560,8 @@
     "hideAsset": "Nascondi attività",
     "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
     "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento.",
-    "verifyYourIdentityTitle": "Verifica la tua identità",
-    "verifyYourIdentitySubTitle": "Proteggi i tuoi asset verificando la tua identità su Twitter.",
+    "verifyYourIdentityTitle": "Perché la verifica è importante?",
+    "verifyYourIdentitySubTitle": "La verifica dimostra che l'asset è autentico e collegato a te. Costruisce fiducia, previene falsificazioni e mostra che il tuo asset è reale e riconosciuto sulla blockchain.",
     "verifyNow": "Verifica ora",
     "issuerVerificationTitle": "Verifica dell'emittente richiesta",
     "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",

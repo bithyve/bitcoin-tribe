@@ -58,7 +58,8 @@
     "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes.",
     "backDoneMsg": "Backup process is done",
     "share": "Share",
-    "registry": "Registry"
+    "registry": "Registry",
+    "verify": "Verify"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -559,8 +560,8 @@
     "hideAsset": "Hide Asset",
     "noHiddenAssetTitle": "No Hidden Assets",
     "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime.",
-    "verifyYourIdentityTitle": "Verify Your Identity",
-    "verifyYourIdentitySubTitle": "Secure your assets by verifying your identity on Twitter.",
+    "verifyYourIdentityTitle": "Why Verification is Important?",
+    "verifyYourIdentitySubTitle": "Verification proves the asset is authentic and linked to you. It builds trust, prevents fakes and shows your asset is real and recognised on-chain ",
     "verifyNow": "Verify Now",
     "issuerVerificationTitle": "Issuer Verification Required",
     "issuerVerificationSubTitle": "Verify your identity by connecting your Twitter account.",

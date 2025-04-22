@@ -416,12 +416,11 @@ const getStyles = (theme: AppTheme) =>
     contentContainer: {},
     titleText: {
       color: theme.colors.headingColor,
-      textAlign: 'center',
+      textAlign: 'left',
     },
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
-      textAlign: 'center',
-      marginHorizontal: hp(15),
+      textAlign: 'left',
     },
     contentWrapper: {
       marginTop: hp(5),

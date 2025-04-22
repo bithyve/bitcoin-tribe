@@ -58,7 +58,8 @@
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
     "backDoneMsg": "バックアップ処理が完了しました",
     "share": "共有",
-    "registry": "レジストリ"
+    "registry": "レジストリ",
+    "verify": "確認する"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -559,8 +560,8 @@
     "hideAsset": "資産を非表示",
     "noHiddenAssetTitle": "非表示の資産はありません",
     "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。",
-    "verifyYourIdentityTitle": "本人確認を行う",
-    "verifyYourIdentitySubTitle": "Twitter で本人確認を行い、資産を保護しましょう。",
+    "verifyYourIdentityTitle": "なぜ本人確認が重要なのか？",
+    "verifyYourIdentitySubTitle": "確認によって資産が本物であり、あなたと結びついていることが証明されます。信頼を築き、偽物を防ぎ、資産が本物でオンチェーンで認識されていることを示します。",
     "verifyNow": "今すぐ確認",
     "issuerVerificationTitle": "発行者の確認が必要です",
     "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
