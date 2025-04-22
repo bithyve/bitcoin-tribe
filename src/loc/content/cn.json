@@ -57,7 +57,8 @@
     "tapToInfo": "点击查看信息",
     "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。",
     "backDoneMsg": "备份过程已完成",
-    "share": "分享"
+    "share": "分享",
+    "registry": "注册表"
   },
   "onBoarding": {
     "welcome": "欢迎",

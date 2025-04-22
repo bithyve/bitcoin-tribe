@@ -57,7 +57,8 @@
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
     "backDoneMsg": "バックアップ処理が完了しました",
-    "share": "共有"
+    "share": "共有",
+    "registry": "レジストリ"
   },
   "onBoarding": {
     "welcome": "ようこそ",

@@ -57,7 +57,8 @@
     "tapToInfo": "Tocca per informazioni",
     "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
     "backDoneMsg": "Il processo di backup è completato",
-    "share": "Condividi"
+    "share": "Condividi",
+    "registry": "Registro"
   },
   "onBoarding": {
     "welcome": "Benvenuto",

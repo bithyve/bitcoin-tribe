@@ -9,7 +9,7 @@ import {
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -28,12 +28,17 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import AssetRegisterModal from './components/AssetRegisterModal';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Relay from 'src/services/relay';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
+  const { translations } = useContext(LocalizationContext);
+  const { common, settings, assets } = translations;
   const {
     appType,
     hasCompleteVerification,
@@ -55,14 +60,30 @@ const CoinDetailsScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
+  const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
+  const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
+    useState(false);
+  const [feeDetails, setFeeDetails] = useState(null);
+  const [showFeeModal, setShowFeeModal] = useState(false);
+  const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
+  const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
 
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
+        setVisibleAssetRegistry(true);
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!visibleAssetRegistry && openTwitterAfterRegistryClose) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+        setOpenTwitterAfterRegistryClose(false);
+      }, 1000);
+    }
+  }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -210,6 +231,17 @@ const CoinDetailsScreen = () => {
           issuerInfo={coin}
         />
       </>
+      <View>
+        <AssetRegisterModal
+          visible={visibleAssetRegistry}
+          primaryCtaTitle={common.registry}
+          primaryOnPress={() => {}}
+          onDismiss={() => {
+            setVisibleAssetRegistry(false);
+            setOpenTwitterAfterRegistryClose(true);
+          }}
+        />
+      </View>
     </ScreenContainer>
   );
 };
