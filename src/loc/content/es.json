@@ -56,7 +56,8 @@
     "backupInProgress": "Copia de seguridad en progreso",
     "tapToInfo": "Toca para información",
     "backupInProgressMsg": "Completa tu copia de seguridad para proteger tus activos. Por favor, espera mientras finaliza.",
-    "backDoneMsg": "El proceso de copia de seguridad ha finalizado"
+    "backDoneMsg": "El proceso de copia de seguridad ha finalizado",
+    "share": "Compartir"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -274,8 +275,13 @@
     "EnterPasscode": "Introduce el código",
     "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
     "setPasscodeTitle": "Establecer código",
+    "issuance": "Emitido",
+    "send": "Enviar",
+    "receiveblind": "Recibir",
     "settled": "Liquidado",
     "waitingcounterparty": "Esperando contraparte",
+    "waitingcounterpartySend": "Esperando verificación",
+    "waitingcounterpartyReceive": "Esperando transferencia",
     "waitingconfirmations": "Esperando confirmación",
     "Failed": "Fallido",
     "removed": "Eliminado",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "¡Recoge más monedas!",
     "collectMoreCoinSubTitle": "Sigue añadiendo más monedas\n para expandir tus activos.",
     "collectMoreCollectibleTitle": "¡Recoge más coleccionables!",
-    "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos."
+    "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos.",
+    "issuerVerifiedTitle": "¡Verificado en Bitcoin Tribe!",
+    "issuerVerifiedSubTitle": "ahora es un emisor confiable de",
+    "verificationSuccessTitle": "¡Verificación exitosa!",
+    "verificationSuccessSubTitle": "¡Tu emisor ahora está verificado a través de X! Compártelo con tu comunidad presionando el botón de compartir.",
+    "issuedPostTitle": "¡Activo emitido con éxito!",
+    "issuedPostSubTitle": "ha emitido tu activo con éxito en Bitcoin Tribe",
+    "issuedSuccessSubTitle": "Tu activo ha sido creado. Compártelo con tu comunidad presionando el botón de compartir."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

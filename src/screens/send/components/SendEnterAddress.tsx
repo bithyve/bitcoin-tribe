@@ -42,31 +42,50 @@ function SendEnterAddress({
     setInvoiceValidationError(errorMessage);
   }, [errorMessage]);
 
-  const handlePasteAddress = async () => {
-    const clipboardValue = await Clipboard.getString();
-    if (clipboardValue.startsWith('rgb:')) {
-      Keyboard.dismiss();
-      setAddress(clipboardValue);
+  const handlePastedText = (rawText: string) => {
+    const text = rawText.replace(/\s/g, '') || null;
+    const isRgbInvoice = text?.startsWith('rgb:');
+
+    Keyboard.dismiss();
+
+    if (isRgbInvoice) {
+      setAddress(text);
       setInvoiceValidationError('');
       return;
     }
+
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
-    let { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
-      clipboardValue,
+    const { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
+      text,
       network,
     );
+
     if (paymentInfoKind) {
-      Keyboard.dismiss();
       setAddress(address);
+      setInvoiceValidationError('');
     } else {
-      Keyboard.dismiss();
-      if (clipboardValue.startsWith('rgb:')) {
-        setInvoiceValidationError(sendScreen.invalidRGBInvoiceAddress);
-      } else {
-        setInvoiceValidationError(sendScreen.invalidBtcAddress);
-      }
+      setInvoiceValidationError(
+        isRgbInvoice
+          ? sendScreen.invalidRGBInvoiceAddress
+          : sendScreen.invalidBtcAddress,
+      );
     }
   };
+
+  const handleInvoiceInputChange = (text: string) => {
+    if (!text?.trim()) {
+      setAddress('');
+      setInvoiceValidationError('');
+      return;
+    }
+    handlePastedText(text);
+  };
+
+  const handlePasteAddress = async () => {
+    const clipboardValue = await Clipboard.getString();
+    handlePastedText(clipboardValue);
+  };
+
   const handleClearAddress = () => {
     setAddress('');
     setInvoiceValidationError('');
@@ -76,7 +95,7 @@ function SendEnterAddress({
     <View style={styles.container}>
       <TextField
         value={address}
-        onChangeText={text => setAddress(text)}
+        onChangeText={handleInvoiceInputChange}
         placeholder={sendScreen.enterAddress}
         keyboardType={'default'}
         returnKeyType={'Enter'}
@@ -96,6 +115,7 @@ function SendEnterAddress({
         rightCTAStyle={styles.rightCTAStyle}
         rightCTATextColor={theme.colors.accent1}
         error={invoiceValidationError}
+        onBlur={() => setInvoiceValidationError('')}
       />
       <View style={styles.primaryCTAContainer}>
         <Buttons

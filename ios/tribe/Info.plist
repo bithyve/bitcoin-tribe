@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>107</string>
+	<string>117</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -80,6 +80,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>twitter</string>
+    <string>twitterauth</string>
+</array>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.com.bithyve.tribe</key>

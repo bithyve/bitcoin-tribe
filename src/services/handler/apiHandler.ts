@@ -1746,11 +1746,15 @@ export class ApiHandler {
     }
   }
   static async getFeeAndExchangeRates() {
-    const { exchangeRates, averageTxFees } =
+    const { exchangeRates, serviceFee } =
       await Relay.fetchFeeAndExchangeRates();
     Storage.set(
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
+    );
+    Storage.set(
+      Keys.SERVICE_FEE,
+      JSON.stringify(serviceFee),
     );
     await ApiHandler.getTxRates();
   }

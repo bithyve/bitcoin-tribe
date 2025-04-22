@@ -194,7 +194,11 @@ function AddAsset() {
 
   const canProceed = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
-      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable + rgbWallet?.nodeBtcBalance?.vanilla?.future > 0;
+      return (
+        rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
+          rgbWallet?.nodeBtcBalance?.vanilla?.future >
+        0
+      );
     }
     return (
       wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >

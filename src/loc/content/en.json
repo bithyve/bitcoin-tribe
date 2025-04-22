@@ -56,7 +56,8 @@
     "backupInProgress": "Backup is in progress",
     "tapToInfo": "Tap to Info",
     "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes.",
-    "backDoneMsg": "Backup process is done"
+    "backDoneMsg": "Backup process is done",
+    "share": "Share"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -274,8 +275,13 @@
     "EnterPasscode": "Enter Passcode",
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
     "setPasscodeTitle": "Set Passcode",
+    "issuance": "Issued",
+    "send": "Send",
+    "receiveblind": "Receive",
     "settled": "Settled",
     "waitingcounterparty": "Waiting Counterparty",
+    "waitingcounterpartySend": "Waiting Verification",
+    "waitingcounterpartyReceive": "Waiting Transfer",
     "waitingconfirmations": "Waiting Confirmation",
     "failed": "Failed",
     "removed": "Removed",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "Collect More Coins!",
     "collectMoreCoinSubTitle": "Keep adding more coins to\n expand your assets.",
     "collectMoreCollectibleTitle": "Collect More Collectibles!",
-    "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets."
+    "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets.",
+    "issuerVerifiedTitle": "Verified on Bitcoin Tribe!",
+    "issuerVerifiedSubTitle": "is now a trusted issuer of",
+    "verificationSuccessTitle": "Verification Successful!",
+    "verificationSuccessSubTitle": "Your issuer is now verified via X! Share with your community by pressing the share button.",
+    "issuedPostTitle": "Issued Asset Successfully!",
+    "issuedPostSubTitle": "has successfully issued your asset on Bitcoin Tribe",
+    "issuedSuccessSubTitle": "Your asset is created. Share with your community by pressing the share button."
   },
   "community": {
     "fnfTitle": "Friends & Family",

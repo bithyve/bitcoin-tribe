@@ -56,7 +56,8 @@
     "backupInProgress": "バックアップが進行中",
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
-    "backDoneMsg": "バックアップ処理が完了しました"
+    "backDoneMsg": "バックアップ処理が完了しました",
+    "share": "共有"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -274,8 +275,13 @@
     "EnterPasscode": "パスコードを入力",
     "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
     "setPasscodeTitle": "パスコードを設定",
+    "issuance": "発行済み",
+    "send": "送信",
+    "receiveblind": "受け取る",
     "settled": "清算済み",
     "waitingcounterparty": "相手を待っています",
+    "waitingcounterpartySend": "検証待ち",
+    "waitingcounterpartyReceive": "転送待ち",
     "waitingconfirmations": "確認待ち",
     "Failed": "失敗",
     "removed": "削除されました",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "もっとコインを集めよう！",
     "collectMoreCoinSubTitle": "資産を拡大するために、\nもっとコインを追加しましょう。",
     "collectMoreCollectibleTitle": "もっとコレクティブルを集めよう！",
-    "collectMoreCollectibleSubTitle": "資産を拡大するために、\nもっとコレクティブルを追加しましょう。"
+    "collectMoreCollectibleSubTitle": "資産を拡大するために、\nもっとコレクティブルを追加しましょう。",
+    "issuerVerifiedTitle": "Bitcoin Tribeで認証済み！",
+    "issuerVerifiedSubTitle": "は信頼された発行者です",
+    "verificationSuccessTitle": "認証に成功しました！",
+    "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。",
+    "issuedPostTitle": "資産の発行に成功しました！",
+    "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました",
+    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。"
   },
   "community": {
     "fnfTitle": "友達と家族",

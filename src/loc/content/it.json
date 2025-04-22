@@ -56,7 +56,8 @@
     "backupInProgress": "Backup in corso",
     "tapToInfo": "Tocca per informazioni",
     "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
-    "backDoneMsg": "Il processo di backup è completato"
+    "backDoneMsg": "Il processo di backup è completato",
+    "share": "Condividi"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -274,8 +275,13 @@
     "EnterPasscode": "Inserisci il codice",
     "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
     "setPasscodeTitle": "Imposta il codice",
+    "issuance": "Emesso",
+    "send": "Invia",
+    "receiveblind": "Ricevi",
     "settled": "Sistemato",
     "waitingcounterparty": "In attesa della controparte",
+    "waitingcounterpartySend": "In attesa di verifica",
+    "waitingcounterpartyReceive": "In attesa del trasferimento",
     "waitingconfirmations": "In attesa di conferma",
     "Failed": "Fallito",
     "removed": "Rimosso",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "Colleziona più monete!",
     "collectMoreCoinSubTitle": "Continua ad aggiungere più monete\n per espandere i tuoi beni.",
     "collectMoreCollectibleTitle": "Colleziona più collezionabili!",
-    "collectMoreCollectibleSubTitle": "Continua ad aggiungere più collezionabili\n per espandere i tuoi beni."
+    "collectMoreCollectibleSubTitle": "Continua ad aggiungere più collezionabili\n per espandere i tuoi beni.",
+    "issuerVerifiedTitle": "Verificato su Bitcoin Tribe!",
+    "issuerVerifiedSubTitle": "è ora un emittente affidabile di",
+    "verificationSuccessTitle": "Verifica riuscita!",
+    "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione.",
+    "issuedPostTitle": "Asset emesso con successo!",
+    "issuedPostSubTitle": "ha emesso con successo il tuo asset su Bitcoin Tribe",
+    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

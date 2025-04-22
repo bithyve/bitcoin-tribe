@@ -1,7 +1,11 @@
 import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -22,12 +26,21 @@ import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
+  const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
-  const { appType } = useContext(AppContext);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
@@ -39,6 +52,17 @@ const CoinDetailsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+
+  useEffect(() => {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
 
   useEffect(() => {
     if (askReview) {
@@ -50,6 +74,21 @@ const CoinDetailsScreen = () => {
       }, 2000);
     }
   }, [askReview, askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -151,6 +190,26 @@ const CoinDetailsScreen = () => {
         onDismiss={() => setShowVerifyModal(false)}
         schema={RealmSchema.Coin}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+          }}
+          issuerInfo={coin}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
+          }}
+          issuerInfo={coin}
+        />
+      </>
     </ScreenContainer>
   );
 };

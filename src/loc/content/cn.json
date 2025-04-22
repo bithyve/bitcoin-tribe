@@ -56,7 +56,8 @@
     "backupInProgress": "备份正在进行中",
     "tapToInfo": "点击查看信息",
     "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。",
-    "backDoneMsg": "备份过程已完成"
+    "backDoneMsg": "备份过程已完成",
+    "share": "分享"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -274,8 +275,13 @@
     "EnterPasscode": "输入密码",
     "EnterPasscodeSubTitle": "确认密码以显示种子短语",
     "setPasscodeTitle": "设置密码",
+    "issuance": "已发行",
+    "send": "发送",
+    "receiveblind": "接收",
     "settled": "结算完成",
     "waitingcounterparty": "等待对方",
+    "waitingcounterpartySend": "等待验证",
+    "waitingcounterpartyReceive": "等待转账",
     "waitingconfirmations": "等待确认",
     "Failed": "失败",
     "removed": "已移除",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "收集更多硬币！",
     "collectMoreCoinSubTitle": "不断添加更多硬币，\n以扩展您的资产。",
     "collectMoreCollectibleTitle": "收集更多藏品！",
-    "collectMoreCollectibleSubTitle": "不断添加更多藏品，\n以扩展您的资产。"
+    "collectMoreCollectibleSubTitle": "不断添加更多藏品，\n以扩展您的资产。",
+    "issuerVerifiedTitle": "已在 Bitcoin Tribe 验证！",
+    "issuerVerifiedSubTitle": "现在是受信任的发行者",
+    "verificationSuccessTitle": "验证成功！",
+    "verificationSuccessSubTitle": "您的发行者已通过 X 验证！点击分享按钮与您的社区分享。",
+    "issuedPostTitle": "资产发行成功！",
+    "issuedPostSubTitle": "已在 Bitcoin Tribe 上成功发行您的资产",
+    "issuedSuccessSubTitle": "您的资产已创建。点击分享按钮与社区分享。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

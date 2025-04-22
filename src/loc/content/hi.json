@@ -56,7 +56,8 @@
     "backupInProgress": "बैकअप प्रगति पर है",
     "tapToInfo": "जानकारी के लिए टैप करें",
     "backupInProgressMsg": "अपनी संपत्तियों को सुरक्षित करने के लिए अपना बैकअप पूरा करें। कृपया समाप्त होने तक प्रतीक्षा करें।",
-    "backDoneMsg": "बैकअप प्रक्रिया पूरी हो गई है"
+    "backDoneMsg": "बैकअप प्रक्रिया पूरी हो गई है",
+    "share": "साझा करें"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -274,8 +275,13 @@
     "EnterPasscode": "पासकोड दर्ज करें",
     "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
     "setPasscodeTitle": "पासकोड सेट करें",
+    "issuance": "जारी किया गया",
+    "send": "भेजें",
+    "receiveblind": "प्राप्त करें",
     "settled": "निपटान हो गया",
     "waitingcounterparty": "प्रतिपक्ष की प्रतीक्षा कर रहा है",
+    "waitingcounterpartySend": "सत्यापन की प्रतीक्षा कर रहा है",
+    "waitingcounterpartyReceive": "हस्तांतरण की प्रतीक्षा कर रहा है",
     "waitingconfirmations": "पुष्टि की प्रतीक्षा में",
     "Failed": "असफल",
     "removed": "हटा दिया गया",
@@ -581,7 +587,14 @@
     "collectMoreCoinTitle": "और अधिक सिक्के एकत्र करें!",
     "collectMoreCoinSubTitle": "अधिक सिक्के जोड़ते रहें\n और अपनी संपत्ति बढ़ाएं।",
     "collectMoreCollectibleTitle": "और अधिक कलेक्टिबल्स एकत्र करें!",
-    "collectMoreCollectibleSubTitle": "अधिक कलेक्टिबल्स जोड़ते रहें\n और अपनी संपत्ति बढ़ाएं।"
+    "collectMoreCollectibleSubTitle": "अधिक कलेक्टिबल्स जोड़ते रहें\n और अपनी संपत्ति बढ़ाएं।",
+    "issuerVerifiedTitle": "Bitcoin Tribe पर सत्यापित!",
+    "issuerVerifiedSubTitle": "अब एक विश्वसनीय जारीकर्ता है",
+    "verificationSuccessTitle": "सत्यापन सफल!",
+    "verificationSuccessSubTitle": "आपका जारीकर्ता अब X के माध्यम से सत्यापित है! अपने समुदाय के साथ साझा करने के लिए शेयर बटन दबाएं।",
+    "issuedPostTitle": "एसेट सफलतापूर्वक जारी किया गया!",
+    "issuedPostSubTitle": "ने आपके एसेट को Bitcoin Tribe पर सफलतापूर्वक जारी किया है",
+    "issuedSuccessSubTitle": "आपकी संपत्ति बनाई गई है। शेयर बटन दबाकर इसे अपने समुदाय के साथ साझा करें।"
   },
   "community": {
     "fnfTitle": "मित्र और परिवार",

@@ -1,26 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import Canvas from 'react-native-canvas';
-import { IndenticonLib } from './Identiconlib';
+import Svg, { G, Path } from 'react-native-svg';
+import { generateIdenticonSvg } from 'src/utils/identicon';
+import { SvgXml } from 'react-native-svg';
 
 interface Props {
-    value: string;
-    style?: {[key: string]: any};
-    size?: number;
+  value: string;
+  style?: { [key: string]: any };
+  size?: number;
 }
 
 const Identicon = ({ value, style, size = 45 }: Props) => {
-    const handleCanvas = useRef(null);
+  const svgMarkup = generateIdenticonSvg(value, size);
 
-    useEffect(() => {
-        if (handleCanvas.current) {IndenticonLib.generateSync(handleCanvas.current, { id: value, size }, size);}
-    }, []);
-
-    return (
-        <View style={[{width: size, height: size, borderRadius: 30, overflow: 'hidden'}, style]}>
-            <Canvas ref={handleCanvas}/>
-        </View>
-    );
+  return (
+    <View
+      style={[
+        {
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          overflow: 'hidden',
+        },
+        style,
+      ]}>
+      <SvgXml xml={svgMarkup} width={size} height={size} />
+    </View>
+  );
 };
 
 export default Identicon;
