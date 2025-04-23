@@ -81,7 +81,7 @@ const CollectibleDetailsScreen = () => {
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
       setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
+        setVisiblePostOnTwitter(true);
         setOpenTwitterAfterVerifyClose(false);
       }, 1000);
     }

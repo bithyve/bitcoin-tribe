@@ -26,6 +26,7 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { AppContext } from 'src/contexts/AppContext';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
@@ -33,11 +34,13 @@ function AssetRegistryScreen() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
+  const { setHasIssuedAsset } = useContext(AppContext);
   const styles = getStyles(theme);
   const wallet: Wallet = useWallets({}).wallets[0];
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [feeDetails, setFeeDetails] = useState(null);
+  const [addedToRegistry, setAddedToRegistry] = useState(false);
 
   const schema = () => {
     switch (issueType) {
@@ -52,26 +55,26 @@ function AssetRegistryScreen() {
     }
   };
 
-  const routeMap = (askReview = true) => {
+  const routeMap = (askVerify: boolean) => {
     switch (issueType) {
       case AssetType.Coin:
         navigation.replace(NavigationRoutes.COINDETAILS, {
           assetId,
-          askReview,
+          askReview: true,
           askVerify,
         });
         break;
       case AssetType.Collectible:
         navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
           assetId,
-          askReview,
+          askReview: true,
           askVerify,
         });
         break;
       case AssetType.UDA:
         navigation.replace(NavigationRoutes.UDADETAILS, {
           assetId,
-          askReview,
+          askReview: true,
           askVerify,
         });
         break;
@@ -144,7 +147,8 @@ function AssetRegistryScreen() {
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
-        routeMap();
+        const askVerify = true;
+        setTimeout(() => routeMap(askVerify), 500);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
@@ -215,6 +219,7 @@ function AssetRegistryScreen() {
           <SkipButton
             disabled={payServiceFeeFeeMutation.status === 'loading'}
             onPress={() => {
+              setHasIssuedAsset(true);
               routeMap(false);
             }}
             title={assets.skipForNow}

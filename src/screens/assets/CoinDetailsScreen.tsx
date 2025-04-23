@@ -86,7 +86,7 @@ const CoinDetailsScreen = () => {
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
       setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
+        setVisiblePostOnTwitter(true);
         setOpenTwitterAfterVerifyClose(false);
       }, 1000);
     }
@@ -94,15 +94,14 @@ const CoinDetailsScreen = () => {
 
   useEffect(() => {
     if (askReview) {
-      setTimeout(async () => {
-        await requestAppReview();
-        if (askAddToRegistry) {
-        } else if (askVerify) {
-          setShowVerifyModal(true);
-        }
+      setTimeout(() => {
+        requestAppReview();
       }, 2000);
     }
-  }, [askReview, askVerify, askAddToRegistry]);
+    if (askVerify) {
+      setShowVerifyModal(true);
+    }
+  }, [askReview, askVerify]);
 
   useFocusEffect(
     React.useCallback(() => {
