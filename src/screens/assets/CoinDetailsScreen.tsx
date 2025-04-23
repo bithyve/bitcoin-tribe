@@ -30,7 +30,6 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import AssetRegisterModal from './components/AssetRegisterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import Relay from 'src/services/relay';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -63,10 +62,8 @@ const CoinDetailsScreen = () => {
   const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
   const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
     useState(false);
-  const [feeDetails, setFeeDetails] = useState(null);
-  const [showFeeModal, setShowFeeModal] = useState(false);
-  const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
-  const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
+    useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -84,6 +81,15 @@ const CoinDetailsScreen = () => {
       }, 1000);
     }
   }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -208,7 +214,10 @@ const CoinDetailsScreen = () => {
       <VerifyIssuerModal
         assetId={coin.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setOpenTwitterAfterVerifyClose(true);
+        }}
         schema={RealmSchema.Coin}
       />
       <>

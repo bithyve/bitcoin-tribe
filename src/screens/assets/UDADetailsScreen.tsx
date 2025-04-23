@@ -50,6 +50,7 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import AssetRegisterModal from './components/AssetRegisterModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -82,14 +83,37 @@ const UDADetailsScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
+  const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
+  const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
+    useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
+    useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
+        setVisibleAssetRegistry(true);
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!visibleAssetRegistry && openTwitterAfterRegistryClose) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+        setOpenTwitterAfterRegistryClose(false);
+      }, 1000);
+    }
+  }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -258,7 +282,10 @@ const UDADetailsScreen = () => {
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setOpenTwitterAfterVerifyClose(true);
+        }}
         schema={RealmSchema.UniqueDigitalAsset}
       />
       <>
@@ -281,6 +308,17 @@ const UDADetailsScreen = () => {
           issuerInfo={uda}
         />
       </>
+      <View>
+        <AssetRegisterModal
+          visible={visibleAssetRegistry}
+          primaryCtaTitle={common.registry}
+          primaryOnPress={() => {}}
+          onDismiss={() => {
+            setVisibleAssetRegistry(false);
+            setOpenTwitterAfterRegistryClose(true);
+          }}
+        />
+      </View>
     </ScreenContainer>
   );
 };
