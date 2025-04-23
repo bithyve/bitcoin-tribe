@@ -312,7 +312,7 @@
     "backupPhraseTitle": "Backup Phrase",
     "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
     "backupPhraseTitle1": "Beware",
-    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’s backup your wallet",
+    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’t backup your wallet",
     "walletMgtTitle": "Wallet Management",
     "personalizationTitle": "Personalization",
     "appSecurityTitle": "App Security",
