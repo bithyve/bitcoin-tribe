@@ -596,7 +596,9 @@
     "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione.",
     "issuedPostTitle": "Asset emesso con successo!",
     "issuedPostSubTitle": "ha emesso con successo il tuo asset su Bitcoin Tribe",
-    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione."
+    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione.",
+    "assetRegistryTitle": "Perché il registro è importante?",
+    "assetRegistrySubTitle": "Registrare il tuo asset lo aggiunge al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico, di tua proprietà e protetto on-chain. Non sei pronto a registrarlo? Puoi saltare la registrazione e comunque condividerlo su Twitter."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

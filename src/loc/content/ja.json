@@ -596,7 +596,9 @@
     "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。",
     "issuedPostTitle": "資産の発行に成功しました！",
     "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました",
-    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。"
+    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。",
+    "assetRegistryTitle": "なぜ登録が重要なのか？",
+    "assetRegistrySubTitle": "資産を登録すると、公式の Bitcoin Tribe レジストリに追加されます。これは資産が本物であなたの所有であり、オンチェーンで保護されていることを証明します。まだ登録の準備ができていませんか？登録をスキップしても Twitter に投稿できます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

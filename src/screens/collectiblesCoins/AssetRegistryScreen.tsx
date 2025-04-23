@@ -179,12 +179,10 @@ function AssetRegistryScreen() {
       <AppHeader title="Registry Importance" style={styles.headerWrapper} />
       <View style={styles.wrapper}>
         <AppText variant="heading2" style={styles.titleText}>
-          {'Why Registry is important?'}
+          {assets.assetRegistryTitle}
         </AppText>
         <AppText variant="body2" style={styles.subTitleText}>
-          {
-            "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine owned by you and secured on-chain. not ready to register? You can skip registry and still post about it on Twitter"
-          }
+          {assets.assetRegistrySubTitle}
         </AppText>
       </View>
       <View style={styles.illustrationWrapper}>
