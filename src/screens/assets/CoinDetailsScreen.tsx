@@ -33,7 +33,7 @@ const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const { assetId, askReview, askVerify } = useRoute().params;
+  const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
   const {
     appType,
     hasCompleteVerification,
@@ -68,12 +68,13 @@ const CoinDetailsScreen = () => {
     if (askReview) {
       setTimeout(async () => {
         await requestAppReview();
-        if (askVerify) {
+        if(askAddToRegistry) {
+        } else if (askVerify) {
           setShowVerifyModal(true);
         }
       }, 2000);
     }
-  }, [askReview, askVerify]);
+  }, [askReview, askVerify, askAddToRegistry]);
 
   useFocusEffect(
     React.useCallback(() => {
