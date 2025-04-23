@@ -25,7 +25,6 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
-import AssetRegisterModal from './components/AssetRegisterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const CollectibleDetailsScreen = () => {
@@ -65,7 +64,7 @@ const CollectibleDetailsScreen = () => {
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
-        setVisibleAssetRegistry(true);
+        setVisibleIssuedPostOnTwitter(true);
       }, 1000);
     }
   }, [hasIssuedAsset]);
@@ -249,17 +248,6 @@ const CollectibleDetailsScreen = () => {
           issuerInfo={collectible}
         />
       </>
-      <View>
-        <AssetRegisterModal
-          visible={visibleAssetRegistry}
-          primaryCtaTitle={common.registry}
-          primaryOnPress={() => {}}
-          onDismiss={() => {
-            setVisibleAssetRegistry(false);
-            setOpenTwitterAfterRegistryClose(true);
-          }}
-        />
-      </View>
     </ScreenContainer>
   );
 };

@@ -174,11 +174,19 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
-            assetId: response.assetId,
-            askReview: true,
-            askVerify: addToRegistry,
-          });
+          if (!addToRegistry) {
+            navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
+              assetId: response.assetId,
+              askVerify: addToRegistry,
+              issueType: AssetType.Collectible,
+            });
+          } else {
+            navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: response.assetId,
+              askReview: true,
+              askVerify: addToRegistry,
+            });
+          }
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -245,11 +253,19 @@ function IssueCollectibleScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.UDADETAILS, {
-            assetId: response.assetId,
-            askReview: true,
-            askVerify: addToRegistry,
-          });
+          if (!addToRegistry) {
+            navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
+              assetId: response.assetId,
+              askVerify: addToRegistry,
+              issueType: AssetType.UDA,
+            });
+          } else {
+            navigation.replace(NavigationRoutes.UDADETAILS, {
+              assetId: response.assetId,
+              askReview: true,
+              askVerify: addToRegistry,
+            });
+          }
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

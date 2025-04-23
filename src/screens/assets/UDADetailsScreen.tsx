@@ -50,7 +50,6 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
-import AssetRegisterModal from './components/AssetRegisterModal';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -92,7 +91,7 @@ const UDADetailsScreen = () => {
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
-        setVisibleAssetRegistry(true);
+        setVisibleIssuedPostOnTwitter(true);
       }, 1000);
     }
   }, [hasIssuedAsset]);
@@ -308,17 +307,6 @@ const UDADetailsScreen = () => {
           issuerInfo={uda}
         />
       </>
-      <View>
-        <AssetRegisterModal
-          visible={visibleAssetRegistry}
-          primaryCtaTitle={common.registry}
-          primaryOnPress={() => {}}
-          onDismiss={() => {
-            setVisibleAssetRegistry(false);
-            setOpenTwitterAfterRegistryClose(true);
-          }}
-        />
-      </View>
     </ScreenContainer>
   );
 };
