@@ -57,7 +57,9 @@
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
     "backDoneMsg": "バックアップ処理が完了しました",
-    "share": "共有"
+    "share": "共有",
+    "registry": "レジストリ",
+    "verify": "確認する"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -558,8 +560,8 @@
     "hideAsset": "資産を非表示",
     "noHiddenAssetTitle": "非表示の資産はありません",
     "noHiddenAssetSubTitle": "すべての資産が表示されています。現在、非表示の資産はありません。資産を非表示にすると、別のセクションに移動され、いつでもアクセスできます。",
-    "verifyYourIdentityTitle": "本人確認を行う",
-    "verifyYourIdentitySubTitle": "Twitter で本人確認を行い、資産を保護しましょう。",
+    "verifyYourIdentityTitle": "なぜ本人確認が重要なのか？",
+    "verifyYourIdentitySubTitle": "確認によって資産が本物であり、あなたと結びついていることが証明されます。信頼を築き、偽物を防ぎ、資産が本物でオンチェーンで認識されていることを示します。",
     "verifyNow": "今すぐ確認",
     "issuerVerificationTitle": "発行者の確認が必要です",
     "issuerVerificationSubTitle": "Twitter アカウントを接続して本人確認を行ってください。",
@@ -594,7 +596,9 @@
     "verificationSuccessSubTitle": "あなたの発行者は X によって認証されました！シェアボタンを押してコミュニティと共有しましょう。",
     "issuedPostTitle": "資産の発行に成功しました！",
     "issuedPostSubTitle": "は Bitcoin Tribe 上で資産を正常に発行しました",
-    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。"
+    "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。",
+    "assetRegistryTitle": "なぜ登録が重要なのか？",
+    "assetRegistrySubTitle": "資産を登録すると、公式の Bitcoin Tribe レジストリに追加されます。これは資産が本物であなたの所有であり、オンチェーンで保護されていることを証明します。まだ登録の準備ができていませんか？登録をスキップしても Twitter に投稿できます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

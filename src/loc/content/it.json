@@ -57,7 +57,9 @@
     "tapToInfo": "Tocca per informazioni",
     "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
     "backDoneMsg": "Il processo di backup è completato",
-    "share": "Condividi"
+    "share": "Condividi",
+    "registry": "Registro",
+    "verify": "Verifica"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -558,8 +560,8 @@
     "hideAsset": "Nascondi attività",
     "noHiddenAssetTitle": "Nessuna Risorsa Nascosta",
     "noHiddenAssetSubTitle": "Tutti i tuoi asset sono visibili. Attualmente non hai alcun asset nascosto. Se scegli di nascondere un asset, verrà spostato in una sezione separata e rimarrà accessibile in qualsiasi momento.",
-    "verifyYourIdentityTitle": "Verifica la tua identità",
-    "verifyYourIdentitySubTitle": "Proteggi i tuoi asset verificando la tua identità su Twitter.",
+    "verifyYourIdentityTitle": "Perché la verifica è importante?",
+    "verifyYourIdentitySubTitle": "La verifica dimostra che l'asset è autentico e collegato a te. Costruisce fiducia, previene falsificazioni e mostra che il tuo asset è reale e riconosciuto sulla blockchain.",
     "verifyNow": "Verifica ora",
     "issuerVerificationTitle": "Verifica dell'emittente richiesta",
     "issuerVerificationSubTitle": "Verifica la tua identità collegando il tuo account Twitter.",
@@ -594,7 +596,9 @@
     "verificationSuccessSubTitle": "Il tuo emittente è ora verificato tramite X! Condividi con la tua community premendo il pulsante di condivisione.",
     "issuedPostTitle": "Asset emesso con successo!",
     "issuedPostSubTitle": "ha emesso con successo il tuo asset su Bitcoin Tribe",
-    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione."
+    "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione.",
+    "assetRegistryTitle": "Perché il registro è importante?",
+    "assetRegistrySubTitle": "Registrare il tuo asset lo aggiunge al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico, di tua proprietà e protetto on-chain. Non sei pronto a registrarlo? Puoi saltare la registrazione e comunque condividerlo su Twitter."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

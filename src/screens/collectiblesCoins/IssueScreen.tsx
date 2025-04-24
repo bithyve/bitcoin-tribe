@@ -20,7 +20,11 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
@@ -34,7 +38,6 @@ import { RealmSchema } from 'src/storage/enum';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
-import { AppContext } from 'src/contexts/AppContext';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -44,7 +47,6 @@ function IssueScreen() {
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { setHasIssuedAsset } = useContext(AppContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -121,18 +123,23 @@ function IssueScreen() {
       if (response?.assetId) {
         setLoading(false);
         Toast(assets.assetCreateMsg);
-        if (!addToRegistry) {
-          setHasIssuedAsset(true);
-        }
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COINDETAILS, {
-            assetId: response.assetId,
-            askReview: true,
-            askVerify: addToRegistry,
-          });
+          if (!addToRegistry) {
+            navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
+              assetId: response.assetId,
+              askVerify: addToRegistry,
+              issueType: AssetType.Coin,
+            });
+          } else {
+            navigation.replace(NavigationRoutes.COINDETAILS, {
+              assetId: response.assetId,
+              askReview: true,
+              askVerify: addToRegistry,
+            });
+          }
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

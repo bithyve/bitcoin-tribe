@@ -77,6 +77,7 @@ import ChangePin from 'src/screens/onBoarding/ChangePin';
 import UTXOTabs from './tabNavigation/UTXOTabs';
 import BackupAlertBanner from 'src/components/BackupAlertBanner';
 import BackupDoneBanner from 'src/components/BackupDoneBanner';
+import AssetRegistryScreen from 'src/screens/collectiblesCoins/AssetRegistryScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -310,6 +311,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.HIDDENASSETS}
           component={HiddenAssets}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ASSETREGISTRYSCREEN}
+          component={AssetRegistryScreen}
         />
       </Stack.Navigator>
     </RealmProvider>
