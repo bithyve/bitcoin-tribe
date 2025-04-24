@@ -599,7 +599,9 @@
     "issuedSuccessSubTitle": "あなたのアセットが作成されました。共有ボタンを押してコミュニティと共有しましょう。",
     "registerAssetMsg": "あなたの資産は Bitcoin Tribe のレジストリに追加されました",
     "assetRegistryTitle": "なぜ登録が重要なのか？",
-    "assetRegistrySubTitle": "資産を登録すると、公式の Bitcoin Tribe レジストリに追加されます。これは資産が本物であなたの所有であり、オンチェーンで保護されていることを証明します。まだ登録の準備ができていませんか？登録をスキップしても Twitter に投稿できます。"
+    "assetRegistrySubTitle": "資産を登録すると、Bitcoin Tribe の公式レジストリに追加され、本物であなたの所有物であることが証明されます。",
+    "assetRegistrySubTitle2": "一度限りのサービス料は ",
+    "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。"
   },
   "community": {
     "fnfTitle": "友達と家族",

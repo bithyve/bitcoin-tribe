@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
 import AssetRegisterIllustration from 'src/assets/images/assetRegisterIllustration.svg';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import SkipButton from 'src/components/SkipButton';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Relay from 'src/services/relay';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import Toast from 'src/components/Toast';
@@ -27,6 +27,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { AppContext } from 'src/contexts/AppContext';
+import Fonts from 'src/constants/Fonts';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
@@ -176,14 +177,15 @@ function AssetRegistryScreen() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title="Registry Importance" style={styles.headerWrapper} />
+      <AppHeader title={common.registry} style={styles.headerWrapper} />
       <View style={styles.wrapper}>
-        <AppText variant="heading2" style={styles.titleText}>
-          {assets.assetRegistryTitle}
-        </AppText>
-        <AppText variant="body2" style={styles.subTitleText}>
-          {assets.assetRegistrySubTitle}
-        </AppText>
+        <Text style={styles.subTitleText}>
+          {assets.assetRegistrySubTitle} {assets.assetRegistrySubTitle2}{' '}
+          <Text style={styles.subTitleText}>{`${numberWithCommas(
+            feeDetails?.fee,
+          )} sats`}</Text>{' '}
+          {assets.assetRegistrySubTitle3}
+        </Text>
       </View>
       <View style={styles.illustrationWrapper}>
         <AssetRegisterIllustration />
@@ -239,9 +241,10 @@ const getStyles = (theme: AppTheme) =>
     },
     wrapper: {
       paddingHorizontal: hp(20),
+      paddingTop: hp(10),
     },
     feeWrapper: {
-      marginVertical: hp(20),
+      marginVertical: hp(12),
     },
     titleText: {
       color: theme.colors.headingColor,
@@ -251,17 +254,17 @@ const getStyles = (theme: AppTheme) =>
     subTitleText: {
       color: theme.colors.secondaryHeadingColor,
       textAlign: 'left',
+      fontSize: 16,
+      fontWeight: '400',
+      fontFamily: Fonts.LufgaRegular,
     },
     illustrationWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: '45%',
+      height: '38%',
     },
     containerFee: {
-      padding: hp(25),
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      backgroundColor: theme.colors.modalBackColor,
+      paddingHorizontal: hp(25),
       height: '50%',
       width: '100%',
     },

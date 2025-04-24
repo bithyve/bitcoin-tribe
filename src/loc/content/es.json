@@ -599,7 +599,9 @@
     "issuedSuccessSubTitle": "Tu activo ha sido creado. Compártelo con tu comunidad presionando el botón de compartir.",
     "registerAssetMsg": "Tu activo ha sido añadido al registro de Bitcoin Tribe",
     "assetRegistryTitle": "¿Por qué es importante el registro?",
-    "assetRegistrySubTitle": "Registrar tu activo lo añade al registro oficial de Bitcoin Tribe, demostrando que es auténtico, de tu propiedad y está asegurado en la cadena. ¿No estás listo para registrarlo? Puedes omitir el registro y aún así publicarlo en Twitter."
+    "assetRegistrySubTitle": "Registrar tu activo lo añade al registro oficial de Bitcoin Tribe, demostrando que es genuino y de tu propiedad.",
+    "assetRegistrySubTitle2": "Se aplica una tarifa de servicio única de ",
+    "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter."
   },
   "community": {
     "fnfTitle": "Amigas y familia",
