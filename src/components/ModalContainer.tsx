@@ -69,7 +69,7 @@ const ModalContainer = (props: ModalContainerProps) => {
   return (
     <Modal
       isVisible={visible}
-      // onBackdropPress={onDismiss}
+      onBackdropPress={onDismiss}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       animationOutTiming={100}
