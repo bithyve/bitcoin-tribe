@@ -53,6 +53,7 @@ const SelectAssetIDView = (props: Props) => {
                     assetTicker={selectedAsset?.ticker}
                     assetID={selectedAsset?.assetId}
                     size={windowHeight > 670 ? 50 : 30}
+                    verified={selectedAsset?.issuer?.verified}
                   />
                 )}
               </View>

@@ -10,9 +10,10 @@ type props = {
   assetID: string;
   size: number;
   style?: StyleProp<ViewStyle>;
+  verified?: boolean;
 };
 
-const AssetIcon = ({ assetTicker, assetID, size, style }: props) => {
+const AssetIcon = ({ assetTicker, assetID, size, style, verified }: props) => {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme, size), [theme, size]);
 
@@ -41,7 +42,7 @@ const AssetIcon = ({ assetTicker, assetID, size, style }: props) => {
 
   return (
     <View>
-      {iconUrl ? (
+      {iconUrl && verified ? (
         <Image source={{ uri: iconUrl }} style={styles.imageStyle} />
       ) : (
         <Identicon

@@ -201,6 +201,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
         setIsAddedInRegistry(true);
+        Toast(assets.registerAssetMsg);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
@@ -252,7 +253,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
 
       <SelectOption
         title={'Register Asset'}
-        subTitle={'Add asset to Tribe RGB registry'}
+        subTitle={'Add asset to Bitcoin Tribe registry'}
         onPress={() => getAssetIssuanceFeeMutation.mutate()}
         testID={'register-asset'}
       />

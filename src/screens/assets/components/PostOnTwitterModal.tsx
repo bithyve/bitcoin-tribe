@@ -104,7 +104,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       const filePath =
         Platform.OS === 'ios'
           ? `${RNFS.DocumentDirectoryPath}/tweet_image_${randomNumber}.jpg`
-          : `${RNFS.ExternalCachesDirectoryPath}/tweet_image_${randomNumber}.jpg`;
+          : `${RNFS.TemporaryDirectoryPath}/tweet_image_${randomNumber}.jpg`;
 
       await RNFS.copyFile(uri, filePath);
       const fileExists = await RNFS.exists(filePath);
@@ -125,19 +125,27 @@ const PostOnTwitterModal: React.FC<Props> = ({
         url: `file://${filePath}`,
         social: Share.Social.TWITTER,
       };
-      const isTwitterAvailable = await Share.isPackageInstalled(
-        'com.twitter.android',
-      );
-      if (!isTwitterAvailable) {
-        Toast('X not installed. Please install X to share.');
-        return;
+      if (Platform.OS === 'android') {
+        await Share.shareSingle(shareOptions);
+      } else {
+        await Share.open(shareOptions);
       }
-
-      await Share.shareSingle(shareOptions);
       secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
+      secondaryOnPress();
       console.error('Error sharing to Twitter:', error);
+      let errorMessage = 'Something went wrong while sharing.';
+      if (error?.message) {
+        if (error.message.includes('couldn’t be opened')) {
+          errorMessage = 'The image could not be found. Please try again.';
+        } else if (error.message.includes('User did not share')) {
+          errorMessage = 'Sharing was cancelled.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      Toast(errorMessage, true);
     }
   };
   return (
@@ -231,6 +239,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
                         assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
                         assetID={issuerInfo.assetId && issuerInfo?.assetId}
                         size={208}
+                        verified={issuerInfo?.issuer?.verified}
                       />
                     </View>
                   )}
