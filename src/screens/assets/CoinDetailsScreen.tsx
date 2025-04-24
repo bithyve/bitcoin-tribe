@@ -60,9 +60,6 @@ const CoinDetailsScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
-  const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
-  const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
-    useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
 
@@ -73,15 +70,6 @@ const CoinDetailsScreen = () => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
-
-  useEffect(() => {
-    if (!visibleAssetRegistry && openTwitterAfterRegistryClose) {
-      setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
-        setOpenTwitterAfterRegistryClose(false);
-      }, 1000);
-    }
-  }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
 
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
@@ -215,9 +203,17 @@ const CoinDetailsScreen = () => {
       <VerifyIssuerModal
         assetId={coin.assetId}
         isVisible={showVerifyModal}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => {
+            setVisiblePostOnTwitter(true);
+          }, 500);
+        }}
         onDismiss={() => {
           setShowVerifyModal(false);
-          setOpenTwitterAfterVerifyClose(true);
+          setTimeout(() => {
+            setVisibleIssuedPostOnTwitter(true);
+          }, 500);
         }}
         schema={RealmSchema.Coin}
       />

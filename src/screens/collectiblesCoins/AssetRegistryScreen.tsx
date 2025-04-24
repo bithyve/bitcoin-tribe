@@ -149,7 +149,7 @@ function AssetRegistryScreen() {
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
         const askVerify = true;
-        setTimeout(() => routeMap(askVerify), 500);
+        setTimeout(() => routeMap(askVerify), 1000);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
