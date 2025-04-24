@@ -17,7 +17,6 @@ import QRCode from 'react-native-qrcode-svg';
 
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import ModalContainer from 'src/components/ModalContainer';
 import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
 import { AssetFace, Issuer } from 'src/models/interfaces/RGBWallet';
@@ -27,6 +26,7 @@ import PostIssuerVerified from './PostIssuerVerified';
 import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 
 interface Props {
   visible: boolean;
@@ -149,13 +149,20 @@ const PostOnTwitterModal: React.FC<Props> = ({
     }
   };
   return (
-    <ModalContainer
-      title={assets.verificationSuccessTitle}
-      subTitle={assets.verificationSuccessSubTitle}
+    <ResponsePopupContainer
       visible={visible}
-      enableCloseIcon={false}
-      onDismiss={() => setCompleteVerification(false)}>
-      <View style={styles.modalContent}>
+      enableClose={true}
+      backColor={theme.colors.modalBackColor}
+      borderColor={theme.colors.modalBackColor}>
+      <View style={styles.contentContainer}>
+        <View style={styles.contentWrapper}>
+          <AppText variant="heading2" style={styles.titleText}>
+            {assets.verificationSuccessTitle}
+          </AppText>
+          <AppText variant="body2" style={styles.subTitleText}>
+            {assets.verificationSuccessSubTitle}
+          </AppText>
+        </View>
         <ViewShot
           ref={viewShotRef}
           options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
@@ -277,24 +284,25 @@ const PostOnTwitterModal: React.FC<Props> = ({
             </View>
           </ImageBackground>
         </ViewShot>
-
-        <Image
-          source={{ uri: capturedImage }}
-          style={styles.previewImageStyle}
-          resizeMode="contain"
-        />
+        <View>
+          <Image
+            source={{ uri: capturedImage }}
+            style={styles.previewImageStyle}
+            resizeMode="contain"
+          />
+        </View>
       </View>
       <View>
         <Buttons
           primaryTitle={common.share}
           primaryOnPress={captureAndShare}
-          secondaryTitle={common.cancel}
+          secondaryTitle={common.skip}
           secondaryOnPress={secondaryOnPress}
           width={windowWidth / 2.7}
           secondaryCTAWidth={windowWidth / 2.7}
         />
       </View>
-    </ModalContainer>
+    </ResponsePopupContainer>
   );
 };
 const getStyles = (theme: AppTheme) =>
@@ -303,10 +311,6 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       top: -9999,
       left: -9999,
-    },
-    modalContent: {
-      height: hp(220),
-      marginBottom: hp(15),
     },
     card: {
       width: 1200,
@@ -409,9 +413,25 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: 'bold',
     },
     previewImageStyle: {
+      height: 220,
       width: '100%',
-      height: '100%',
       borderRadius: 10,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      marginVertical: hp(10),
+    },
+    contentContainer: {},
+    titleText: {
+      color: theme.colors.headingColor,
+      textAlign: 'left',
+    },
+    subTitleText: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'left',
+      width: wp(270),
+    },
+    contentWrapper: {
+      marginVertical: hp(15),
     },
   });
 export default PostOnTwitterModal;

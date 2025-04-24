@@ -25,12 +25,15 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
+  const { translations } = useContext(LocalizationContext);
+  const { common, settings, assets } = translations;
   const styles = getStyles();
   const {
     appType,
@@ -47,11 +50,15 @@ const CollectibleDetailsScreen = () => {
   const { mutate: getChannelMutate, data: channelsData } = useMutation(
     ApiHandler.getChannels,
   );
-
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+  const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
+  const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
+    useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
 
   useEffect(() => {
@@ -61,6 +68,24 @@ const CollectibleDetailsScreen = () => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!visibleAssetRegistry && openTwitterAfterRegistryClose) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+        setOpenTwitterAfterRegistryClose(false);
+      }, 1000);
+    }
+  }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -197,7 +222,10 @@ const CollectibleDetailsScreen = () => {
       <VerifyIssuerModal
         assetId={collectible.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setOpenTwitterAfterVerifyClose(true);
+        }}
         schema={RealmSchema.Collectible}
       />
       <>

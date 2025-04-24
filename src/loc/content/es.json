@@ -57,7 +57,9 @@
     "tapToInfo": "Toca para información",
     "backupInProgressMsg": "Completa tu copia de seguridad para proteger tus activos. Por favor, espera mientras finaliza.",
     "backDoneMsg": "El proceso de copia de seguridad ha finalizado",
-    "share": "Compartir"
+    "share": "Compartir",
+    "registry": "Registro",
+    "verify": "Verificar"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -558,8 +560,8 @@
     "hideAsset": "Ocultar activo",
     "noHiddenAssetTitle": "No hay activos ocultos",
     "noHiddenAssetSubTitle": "Todos tus activos son visibles. Actualmente, no tienes ningún activo oculto. Si decides ocultar un activo, se moverá a una sección separada y seguirá siendo accesible en cualquier momento.",
-    "verifyYourIdentityTitle": "Verifica tu identidad",
-    "verifyYourIdentitySubTitle": "Asegura tus activos verificando tu identidad en Twitter.",
+    "verifyYourIdentityTitle": "¿Por qué es importante la verificación?",
+    "verifyYourIdentitySubTitle": "La verificación demuestra que el activo es auténtico y está vinculado a ti. Genera confianza, evita falsificaciones y muestra que tu activo es real y reconocido en la cadena.",
     "verifyNow": "Verificar ahora",
     "issuerVerificationTitle": "Verificación del emisor requerida",
     "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
@@ -595,7 +597,9 @@
     "issuedPostTitle": "¡Activo emitido con éxito!",
     "issuedPostSubTitle": "ha emitido tu activo con éxito en Bitcoin Tribe",
     "issuedSuccessSubTitle": "Tu activo ha sido creado. Compártelo con tu comunidad presionando el botón de compartir.",
-    "registerAssetMsg": "Tu activo ha sido añadido al registro de Bitcoin Tribe"
+    "registerAssetMsg": "Tu activo ha sido añadido al registro de Bitcoin Tribe",
+    "assetRegistryTitle": "¿Por qué es importante el registro?",
+    "assetRegistrySubTitle": "Registrar tu activo lo añade al registro oficial de Bitcoin Tribe, demostrando que es auténtico, de tu propiedad y está asegurado en la cadena. ¿No estás listo para registrarlo? Puedes omitir el registro y aún así publicarlo en Twitter."
   },
   "community": {
     "fnfTitle": "Amigas y familia",

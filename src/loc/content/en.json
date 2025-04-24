@@ -57,7 +57,9 @@
     "tapToInfo": "Tap to Info",
     "backupInProgressMsg": "Complete your backup to secure your assets. Please wait while it finishes.",
     "backDoneMsg": "Backup process is done",
-    "share": "Share"
+    "share": "Share",
+    "registry": "Registry",
+    "verify": "Verify"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -310,7 +312,7 @@
     "backupPhraseTitle": "Backup Phrase",
     "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
     "backupPhraseTitle1": "Beware",
-    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’s backup your wallet",
+    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’t backup your wallet",
     "walletMgtTitle": "Wallet Management",
     "personalizationTitle": "Personalization",
     "appSecurityTitle": "App Security",
@@ -558,8 +560,8 @@
     "hideAsset": "Hide Asset",
     "noHiddenAssetTitle": "No Hidden Assets",
     "noHiddenAssetSubTitle": "All your assets are visible. You currently don’t have any hidden assets. If you choose to hide an asset, it will be moved to a separate section and remain accessible anytime.",
-    "verifyYourIdentityTitle": "Verify Your Identity",
-    "verifyYourIdentitySubTitle": "Secure your assets by verifying your identity on Twitter.",
+    "verifyYourIdentityTitle": "Why Verification is Important?",
+    "verifyYourIdentitySubTitle": "Verification proves the asset is authentic and linked to you. It builds trust, prevents fakes and shows your asset is real and recognised on-chain ",
     "verifyNow": "Verify Now",
     "issuerVerificationTitle": "Issuer Verification Required",
     "issuerVerificationSubTitle": "Verify your identity by connecting your Twitter account.",
@@ -595,7 +597,9 @@
     "issuedPostTitle": "Issued Asset Successfully!",
     "issuedPostSubTitle": "has successfully issued your asset on Bitcoin Tribe",
     "issuedSuccessSubTitle": "Your asset is created. Share with your community by pressing the share button.",
-    "registerAssetMsg": "Your asset has been added to the Bitcoin Tribe registry"
+    "registerAssetMsg": "Your asset has been added to the Bitcoin Tribe registry",
+    "assetRegistryTitle": "Why Registry is important?",
+    "assetRegistrySubTitle": "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine owned by you and secured on-chain. not ready to register? You can skip registry and still post about it on Twitter"
   },
   "community": {
     "fnfTitle": "Friends & Family",
