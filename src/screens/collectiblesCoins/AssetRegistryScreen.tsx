@@ -261,7 +261,8 @@ const getStyles = (theme: AppTheme) =>
     illustrationWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: '38%',
+      height: Platform.OS === 'ios' ? '38%' : '34%',
+      paddingTop: Platform.OS === 'ios' ? hp(0) : hp(20),
     },
     containerFee: {
       paddingHorizontal: hp(25),
