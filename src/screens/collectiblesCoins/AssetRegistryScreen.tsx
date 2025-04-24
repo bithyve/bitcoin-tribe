@@ -220,7 +220,7 @@ function AssetRegistryScreen() {
             disabled={payServiceFeeFeeMutation.status === 'loading'}
             onPress={() => {
               setHasIssuedAsset(true);
-              routeMap(false);
+              setTimeout(() => routeMap(false), 500);
             }}
             title={assets.skipForNow}
           />

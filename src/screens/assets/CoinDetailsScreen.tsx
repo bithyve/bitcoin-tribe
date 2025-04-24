@@ -205,15 +205,11 @@ const CoinDetailsScreen = () => {
         isVisible={showVerifyModal}
         onVerify={() => {
           setShowVerifyModal(false);
-          setTimeout(() => {
-            setVisiblePostOnTwitter(true);
-          }, 500);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
         }}
         onDismiss={() => {
           setShowVerifyModal(false);
-          setTimeout(() => {
-            setVisibleIssuedPostOnTwitter(true);
-          }, 500);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
         }}
         schema={RealmSchema.Coin}
       />
