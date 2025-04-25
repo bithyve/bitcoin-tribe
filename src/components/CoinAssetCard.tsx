@@ -47,7 +47,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
             <AppText variant="heading3" style={styles.titleText}>
               {asset.ticker}
             </AppText>
-            {asset.issuer?.verified && <IconVerified width={24} height={24} />}
+            {asset.issuer?.verified && <IconVerified width={20} height={20} />}
           </View>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}

@@ -82,7 +82,7 @@ function UnspentUTXOElement({
                     {assetName}
                   </AppText>
                   {assetMap[allocation.assetId]?.issuer?.verified && (
-                    <IconVerified width={24} height={24} />
+                    <IconVerified width={20} height={20} />
                   )}
                 </View>
                 {assetMap[allocation.assetId]?.assetIface.toUpperCase() !==
