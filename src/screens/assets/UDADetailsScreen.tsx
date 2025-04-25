@@ -84,6 +84,7 @@ const UDADetailsScreen = () => {
     useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -135,7 +136,7 @@ const UDADetailsScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer]);
+  }, [uda?.transactions, uda?.issuer, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -242,6 +243,7 @@ const UDADetailsScreen = () => {
           <VerifyIssuer
             assetId={assetId}
             schema={RealmSchema.UniqueDigitalAsset}
+            onVerificationComplete={() => setRefreshToggle(t => !t)}
           />
         )}
         <>

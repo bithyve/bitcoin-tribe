@@ -70,6 +70,7 @@ const CoinsMetaDataScreen = () => {
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
@@ -103,7 +104,7 @@ const CoinsMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer]);
+  }, [coin.transactions, coin.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -164,7 +165,11 @@ const CoinsMetaDataScreen = () => {
           />
 
           {showVerifyIssuer && (
-            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+            />
           )}
           <HideAssetView
             title={assets.hideAsset}

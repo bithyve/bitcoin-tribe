@@ -89,6 +89,7 @@ const CollectibleMetaDataScreen = () => {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -131,7 +132,7 @@ const CollectibleMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer]);
+  }, [collectible.transactions, collectible.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -210,6 +211,7 @@ const CollectibleMetaDataScreen = () => {
               <VerifyIssuer
                 assetId={assetId}
                 schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
               />
             )}
             <HideAssetView
