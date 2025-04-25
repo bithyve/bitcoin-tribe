@@ -261,7 +261,7 @@ const getStyles = (theme: AppTheme) =>
     illustrationWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: Platform.OS === 'ios' ? '38%' : '34%',
+      height: Platform.OS === 'ios' ? '38%' : '33%',
       paddingTop: Platform.OS === 'ios' ? hp(0) : hp(20),
     },
     containerFee: {
@@ -288,7 +288,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     amtContainer: {
-      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(45),
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(35),
       padding: hp(15),
       borderRadius: 15,
       alignItems: 'center',
