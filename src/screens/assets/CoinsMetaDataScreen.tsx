@@ -8,6 +8,7 @@ import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -63,6 +64,7 @@ const CoinsMetaDataScreen = () => {
 
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const hasShownPostModal = useRef(false);
   const { hasCompleteVerification, setCompleteVerification } =
     React.useContext(AppContext);
   const { assets, home } = translations;
@@ -78,17 +80,20 @@ const CoinsMetaDataScreen = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      coin?.issuer?.verified &&
-      hasCompleteVerification &&
-      !visiblePostOnTwitter
-    ) {
-      setTimeout(() => {
-        setVisiblePostOnTwitter(true);
-      }, 500);
-    }
-  }, [coin?.issuer?.verified, hasCompleteVerification, visiblePostOnTwitter]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {

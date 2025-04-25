@@ -140,6 +140,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       setCompleteVerification(false);
     } catch (error) {
       secondaryOnPress();
+      setCompleteVerification(false);
       console.error('Error sharing to Twitter:', error);
       let errorMessage = 'Something went wrong while sharing.';
       if (error?.message) {

@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
@@ -203,7 +204,6 @@ function AssetRegistryScreen() {
             </View>
           </View>
         </View>
-
         <View style={styles.primaryCtaStyle}>
           <SwipeToAction
             title={assets.swipeToPay}
@@ -285,7 +285,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(20),
     },
     skipWrapper: {
-      marginVertical: hp(15),
+      marginVertical: hp(20),
     },
     amtContainer: {
       marginVertical: Platform.OS === 'ios' ? hp(20) : hp(35),
@@ -300,4 +300,4 @@ const getStyles = (theme: AppTheme) =>
       alignSelf: 'center',
     },
   });
-export default AssetRegistryScreen;
+export default gestureHandlerRootHOC(AssetRegistryScreen);
