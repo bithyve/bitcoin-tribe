@@ -39,6 +39,7 @@ interface Props {
 
 const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
   visible,
+  primaryOnPress,
   secondaryOnPress,
   issuerInfo,
 }) => {
@@ -145,7 +146,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       } else {
         await Share.open(shareOptions);
       }
-      secondaryOnPress();
+      primaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
       secondaryOnPress();

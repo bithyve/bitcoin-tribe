@@ -40,6 +40,8 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
+import SelectOption from 'src/components/SelectOption';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -92,6 +94,7 @@ const CollectibleMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -215,6 +218,13 @@ const CollectibleMetaDataScreen = () => {
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
               />
             )}
+            {!collectible?.isPosted && collectible?.issuer?.verified && (
+              <SelectOption
+                title={'Share Post'}
+                subTitle={''}
+                onPress={() => setVisiblePostOnTwitter(true)}
+              />
+            )}
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}
@@ -224,9 +234,20 @@ const CollectibleMetaDataScreen = () => {
             <>
               <PostOnTwitterModal
                 visible={visiblePostOnTwitter}
+                primaryOnPress={() => {
+                  setVisiblePostOnTwitter(false);
+                  setCompleteVerification(false);
+                  updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+                  setRefresh(prev => !prev);
+                }}
                 secondaryOnPress={() => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
+                  updateAssetPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
                 }}
                 issuerInfo={collectible}
               />

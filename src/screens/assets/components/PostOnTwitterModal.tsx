@@ -38,6 +38,7 @@ interface Props {
 const PostOnTwitterModal: React.FC<Props> = ({
   visible,
   secondaryOnPress,
+  primaryOnPress,
   issuerInfo,
 }) => {
   const scaleFactor = PixelRatio.get();
@@ -136,7 +137,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       } else {
         await Share.open(shareOptions);
       }
-      secondaryOnPress();
+      primaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
       secondaryOnPress();

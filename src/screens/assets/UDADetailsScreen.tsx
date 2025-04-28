@@ -50,6 +50,8 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import SelectOption from 'src/components/SelectOption';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -85,6 +87,7 @@ const UDADetailsScreen = () => {
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -261,6 +264,13 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        {!uda?.isPosted && uda?.issuer?.verified && (
+          <SelectOption
+            title={'Share Post'}
+            subTitle={''}
+            onPress={() => setVisiblePostOnTwitter(true)}
+          />
+        )}
         <HideAssetView
           title={assets.hideAsset}
           onPress={() => hideAsset()}
@@ -286,9 +296,24 @@ const UDADetailsScreen = () => {
       <>
         <PostOnTwitterModal
           visible={visiblePostOnTwitter}
+          primaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
+            setRefresh(prev => !prev);
+          }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              false,
+            );
           }}
           issuerInfo={uda}
         />

@@ -33,6 +33,8 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
+import SelectOption from 'src/components/SelectOption';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -73,6 +75,7 @@ const CoinsMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
@@ -176,6 +179,13 @@ const CoinsMetaDataScreen = () => {
               onVerificationComplete={() => setRefreshToggle(t => !t)}
             />
           )}
+          {!coin?.isPosted && coin?.issuer?.verified && (
+            <SelectOption
+              title={'Share Post'}
+              subTitle={''}
+              onPress={() => setVisiblePostOnTwitter(true)}
+            />
+          )}
           <HideAssetView
             title={assets.hideAsset}
             onPress={() => hideAsset()}
@@ -185,9 +195,16 @@ const CoinsMetaDataScreen = () => {
           <>
             <PostOnTwitterModal
               visible={visiblePostOnTwitter}
+              primaryOnPress={() => {
+                setVisiblePostOnTwitter(false);
+                setCompleteVerification(false);
+                updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+                setRefresh(prev => !prev);
+              }}
               secondaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
+                updateAssetPostStatus(RealmSchema.Coin, assetId, false);
               }}
               issuerInfo={coin}
             />

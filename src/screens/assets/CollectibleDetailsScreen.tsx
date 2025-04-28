@@ -26,6 +26,7 @@ import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -223,9 +224,15 @@ const CollectibleDetailsScreen = () => {
       <>
         <PostOnTwitterModal
           visible={visiblePostOnTwitter}
+          primaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+          }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+            updateAssetPostStatus(RealmSchema.Collectible, assetId, false);
           }}
           issuerInfo={collectible}
         />
