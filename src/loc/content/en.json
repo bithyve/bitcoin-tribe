@@ -291,7 +291,7 @@
     "viewNodeInfo": "Node Info",
     "channelManagement": "Channel Management",
     "hiddenAssets": "Hidden Assets",
-    "hiddenAssetSubTitle": "Manage your hidden coins and collectibles. Tap the eye icon to unhide.",
+    "hiddenAssetSubTitle": "Manage your hidden coins and collectibles. Tap Unhide Button to Unhide Asset.",
     "cloudBackupLoadingTitle": "Cloud Backup",
     "cloudBackupLoadingSubTitle": "Your data is being securely backed up—please hold on! Sit back, relax, and your backup will be completed soon.",
     "walletBackupInfo": "Write down your seed phrase and store it securely outside the app.",

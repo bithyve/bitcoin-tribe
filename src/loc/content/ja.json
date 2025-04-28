@@ -291,7 +291,7 @@
     "viewNodeInfo": "ノード情報",
     "channelManagement": "チャネル管理",
     "hiddenAssets": "非表示の資産",
-    "hiddenAssetSubTitle": "非表示のコインやコレクションを管理します。目のアイコンをタップして表示します。",
+    "hiddenAssetSubTitle": "非表示のコインとコレクティブルを管理します。資産を表示するには「非表示解除」ボタンをタップしてください。",
     "cloudBackupLoadingTitle": "クラウドバックアップ",
     "cloudBackupLoadingSubTitle": "データを安全にバックアップしています—しばらくお待ちください！リラックスして、バックアップの完了をお待ちください。",
     "walletBackupInfo": "シードフレーズを書き留め、アプリの外で安全に保管してください。",
