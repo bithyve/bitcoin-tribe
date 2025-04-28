@@ -83,7 +83,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
 
       const uri = await viewShotRef.current.capture({
         result: 'tmpfile',
-        format: 'jpg',
+        format: 'png',
       });
       if (uri) {
         setCapturedImage(uri);
@@ -122,7 +122,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       }
       const tweetText = `I’ve officially issued "${
         issuerInfo.name || 'this asset'
-      }" on @bitcointribe_.
+      }".
         
         Transparency matters.
         Trust, but verify — start here 👇`;

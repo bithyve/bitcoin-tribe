@@ -312,7 +312,7 @@
     "backupPhraseTitle": "Frase di backup",
     "backupPhraseSubTitle": "Scrivi attentamente la Frase di Backup di 12 parole in un luogo privato e assicurati della sua sicurezza.",
     "backupPhraseTitle1": "Attenzione",
-    "backupPhraseSubTitle1": "Chiunque abbia accesso alla Frase di Backup può accedere ai tuoi fondi e prelevarli. Se la perdi, non potrai eseguire il backup del tuo portafoglio.",
+    "backupPhraseSubTitle1": "Chiunque abbia accesso alla Frase di Backup può accedere ai tuoi fondi e prelevarli. Se la perdi, non potrai recuperare il tuo portafoglio.",
     "walletMgtTitle": "Gestione del Portafoglio",
     "personalizationTitle": "Personalizzazione",
     "appSecurityTitle": "Sicurezza dell'App",
@@ -599,7 +599,9 @@
     "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione.",
     "registerAssetMsg": "Il tuo asset è stato aggiunto al registro di Bitcoin Tribe",
     "assetRegistryTitle": "Perché il registro è importante?",
-    "assetRegistrySubTitle": "Registrare il tuo asset lo aggiunge al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico, di tua proprietà e protetto on-chain. Non sei pronto a registrarlo? Puoi saltare la registrazione e comunque condividerlo su Twitter."
+    "assetRegistrySubTitle": "Registrando il tuo asset lo aggiungi al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico e di tua proprietà.",
+    "assetRegistrySubTitle2": "È prevista una commissione di servizio una tantum di ",
+    "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter."
   },
   "community": {
     "fnfTitle": "Amici e Famiglia",

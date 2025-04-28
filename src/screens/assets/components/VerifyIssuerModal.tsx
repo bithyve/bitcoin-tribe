@@ -16,6 +16,7 @@ import AssetVerifyIllustration from 'src/assets/images/assetVerifyIllustration.s
 interface VerifyIssuerModalProps {
   assetId: string;
   isVisible: boolean;
+  onVerify: () => void;
   onDismiss: () => void;
   schema: RealmSchema;
 }
@@ -49,6 +50,7 @@ const getStyles = (theme: AppTheme) =>
 const VerifyIssuerModal = ({
   assetId,
   isVisible,
+  onVerify,
   onDismiss,
   schema,
 }: VerifyIssuerModalProps) => {
@@ -81,7 +83,7 @@ const VerifyIssuerModal = ({
             primaryTitle={common.verify}
             primaryOnPress={async () => {
               await verifyIssuerOnTwitter(assetId, schema);
-              onDismiss();
+              onVerify();
               setCompleteVerification(true);
             }}
             secondaryTitle={common.skip}

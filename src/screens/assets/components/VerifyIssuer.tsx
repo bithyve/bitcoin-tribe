@@ -40,9 +40,14 @@ const styles = StyleSheet.create({
 interface VerifyIssuerProps {
   assetId: string;
   schema: RealmSchema;
+  onVerificationComplete?: () => void;
 }
 
-export const verifyIssuerOnTwitter = async (assetId, schema) => {
+export const verifyIssuerOnTwitter = async (
+  assetId,
+  schema,
+  onVerificationComplete,
+) => {
   try {
     const result = await loginWithTwitter();
     if (result.username) {
@@ -66,6 +71,7 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
             ],
           },
         });
+        onVerificationComplete?.();
       }
     }
   } catch (error) {

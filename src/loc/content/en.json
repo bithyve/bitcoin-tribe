@@ -312,7 +312,7 @@
     "backupPhraseTitle": "Backup Phrase",
     "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
     "backupPhraseTitle1": "Beware",
-    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing them means you can’t backup your wallet",
+    "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing it means you can’t recover your wallet.",
     "walletMgtTitle": "Wallet Management",
     "personalizationTitle": "Personalization",
     "appSecurityTitle": "App Security",
@@ -599,7 +599,9 @@
     "issuedSuccessSubTitle": "Your asset is created. Share with your community by pressing the share button.",
     "registerAssetMsg": "Your asset has been added to the Bitcoin Tribe registry",
     "assetRegistryTitle": "Why Registry is important?",
-    "assetRegistrySubTitle": "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine owned by you and secured on-chain. not ready to register? You can skip registry and still post about it on Twitter"
+    "assetRegistrySubTitle": "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine, owned by you.",
+    "assetRegistrySubTitle2": "A one-time service fee of ",
+    "assetRegistrySubTitle3": " applies. Not ready to register? You can skip it and still share your asset on X"
   },
   "community": {
     "fnfTitle": "Friends & Family",

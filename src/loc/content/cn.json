@@ -312,7 +312,7 @@
     "backupPhraseTitle": "备份短语",
     "backupPhraseSubTitle": "请将 12 个单词的备份短语妥善记录在安全的私密位置，并确保其安全。",
     "backupPhraseTitle1": "注意",
-    "backupPhraseSubTitle1": "任何拥有备份短语的人都可以访问并提取您的资金。丢失它意味着您无法恢复您的钱包。",
+    "backupPhraseSubTitle1": "任何拥有备份助记词的人都可以访问并提取您的资金。丢失它意味着您无法恢复钱包。",
     "walletMgtTitle": "钱包管理",
     "personalizationTitle": "个性化",
     "appSecurityTitle": "应用安全",
@@ -599,7 +599,9 @@
     "issuedSuccessSubTitle": "您的资产已创建。点击分享按钮与社区分享。",
     "registerAssetMsg": "您的资产已添加到 Bitcoin Tribe 注册表中",
     "assetRegistryTitle": "为什么注册很重要？",
-    "assetRegistrySubTitle": "注册您的资产会将其添加到官方的 Bitcoin Tribe 注册表中——证明它是真实的、归您所有并已在链上保护。还没准备好注册？您仍然可以跳过注册并在 Twitter 上发布。"
+    "assetRegistrySubTitle": "注册您的资产会将其添加到 Bitcoin Tribe 的官方注册表中，证明它是真实且归您所有。",
+    "assetRegistrySubTitle2": "一次性服务费用为 ",
+    "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。"
   },
   "community": {
     "fnfTitle": "朋友和家人",

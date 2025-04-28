@@ -82,11 +82,9 @@ const UDADetailsScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
-  const [visibleAssetRegistry, setVisibleAssetRegistry] = useState(false);
-  const [openTwitterAfterRegistryClose, setOpenTwitterAfterRegistryClose] =
-    useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -95,15 +93,6 @@ const UDADetailsScreen = () => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
-
-  useEffect(() => {
-    if (!visibleAssetRegistry && openTwitterAfterRegistryClose) {
-      setTimeout(() => {
-        setVisibleIssuedPostOnTwitter(true);
-        setOpenTwitterAfterRegistryClose(false);
-      }, 1000);
-    }
-  }, [visibleAssetRegistry, openTwitterAfterRegistryClose]);
 
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
@@ -147,7 +136,7 @@ const UDADetailsScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer]);
+  }, [uda?.transactions, uda?.issuer, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -254,6 +243,7 @@ const UDADetailsScreen = () => {
           <VerifyIssuer
             assetId={assetId}
             schema={RealmSchema.UniqueDigitalAsset}
+            onVerificationComplete={() => setRefreshToggle(t => !t)}
           />
         )}
         <>
@@ -281,9 +271,15 @@ const UDADetailsScreen = () => {
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => {
+            setVisiblePostOnTwitter(true);
+          }, 1000);
+        }}
         onDismiss={() => {
           setShowVerifyModal(false);
-          setOpenTwitterAfterVerifyClose(true);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
         }}
         schema={RealmSchema.UniqueDigitalAsset}
       />
