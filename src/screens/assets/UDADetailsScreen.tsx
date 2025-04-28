@@ -266,7 +266,7 @@ const UDADetailsScreen = () => {
         </>
         {!uda?.isPosted && uda?.issuer?.verified && (
           <SelectOption
-            title={'Share Post'}
+            title={assets.sharePostTitle}
             subTitle={''}
             onPress={() => setVisiblePostOnTwitter(true)}
           />

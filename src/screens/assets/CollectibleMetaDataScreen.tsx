@@ -220,7 +220,7 @@ const CollectibleMetaDataScreen = () => {
             )}
             {!collectible?.isPosted && collectible?.issuer?.verified && (
               <SelectOption
-                title={'Share Post'}
+                title={assets.sharePostTitle}
                 subTitle={''}
                 onPress={() => setVisiblePostOnTwitter(true)}
               />

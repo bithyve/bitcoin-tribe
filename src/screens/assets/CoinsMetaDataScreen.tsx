@@ -181,7 +181,7 @@ const CoinsMetaDataScreen = () => {
           )}
           {!coin?.isPosted && coin?.issuer?.verified && (
             <SelectOption
-              title={'Share Post'}
+              title={assets.sharePostTitle}
               subTitle={''}
               onPress={() => setVisiblePostOnTwitter(true)}
             />

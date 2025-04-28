@@ -601,7 +601,8 @@
     "assetRegistryTitle": "Why Registry is important?",
     "assetRegistrySubTitle": "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine, owned by you.",
     "assetRegistrySubTitle2": "A one-time service fee of ",
-    "assetRegistrySubTitle3": " applies. Not ready to register? You can skip it and still share your asset on X"
+    "assetRegistrySubTitle3": " applies. Not ready to register? You can skip it and still share your asset on X",
+    "sharePostTitle": "Share Post"
   },
   "community": {
     "fnfTitle": "Friends & Family",
