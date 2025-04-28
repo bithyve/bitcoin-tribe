@@ -2,12 +2,18 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppTheme } from 'src/theme';
+import IconArrowUp from 'src/assets/images/icon_arrowUp.svg';
+import IconArrowUpLight from 'src/assets/images/icon_arrowUp_light.svg';
+import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
+import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
+import { Keys } from 'src/storage';
 
 type Props = {
   title: string;
@@ -24,6 +30,7 @@ function VersionHistoryItem({
   version,
 }: Props) {
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(
     () => getStyles(theme, lastIndex),
     [theme, lastIndex],
@@ -33,6 +40,13 @@ function VersionHistoryItem({
   const handlePressItem = version => {
     setIsCollapsed(!isCollapsed);
     ApiHandler.loadGithubReleaseNotes(version);
+  };
+  const renderIcon = () => {
+    if (isCollapsed) {
+      return isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />;
+    } else {
+      return isThemeDark ? <IconArrowUp /> : <IconArrowUpLight />;
+    }
   };
 
   return (
@@ -46,12 +60,15 @@ function VersionHistoryItem({
               handlePressItem(version);
             }}
             style={styles.header}>
-            <AppText variant="body1" style={styles.version}>
-              {title}
-            </AppText>
-            <AppText variant="body2" style={styles.versionSubTitle}>
-              {moment(date).fromNow()}
-            </AppText>
+            <View style={styles.titleViewWrapper}>
+              <AppText variant="body1" style={styles.version}>
+                {title}
+              </AppText>
+              <AppText variant="body2" style={styles.versionSubTitle}>
+                {moment(date).fromNow()}
+              </AppText>
+            </View>
+            <View style={styles.dropDownIconWrapper}>{renderIcon()}</View>
           </AppTouchable>
           {!isCollapsed && releaseNotes && (
             <View style={styles.content}>
@@ -71,6 +88,7 @@ const getStyles = (theme: AppTheme, lastIndex) =>
       flexDirection: 'row',
     },
     header: {
+      flexDirection: 'row',
       marginLeft: hp(20),
     },
     wrapper: {
@@ -112,6 +130,12 @@ const getStyles = (theme: AppTheme, lastIndex) =>
       bottom: -10,
       width: !lastIndex && 2,
       backgroundColor: !lastIndex && theme.colors.accent2,
+    },
+    titleViewWrapper: {
+      width: '90%',
+    },
+    dropDownIconWrapper: {
+      width: '10%',
     },
   });
 export default VersionHistoryItem;
