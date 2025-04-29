@@ -85,19 +85,17 @@ const CoinDetailsScreen = () => {
 
   useEffect(() => {
     if (askVerify) {
-      setShowVerifyModal(true);
+      setTimeout(() => setShowVerifyModal(true), 1000);
     }
   }, [askVerify]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (askReview && refresh) {
-        setTimeout(() => {
-          requestAppReview();
-        }, 2000);
-      }
-    }, [askReview, refresh]),
-  );
+  useEffect(() => {
+    if (askReview && refresh) {
+      setTimeout(() => {
+        requestAppReview();
+      }, 2000);
+    }
+  }, [askReview, refresh]);
 
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
