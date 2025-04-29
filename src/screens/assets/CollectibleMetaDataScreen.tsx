@@ -1,7 +1,8 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -78,6 +79,7 @@ const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const hasShownPostModal = useRef(false);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { hasCompleteVerification, setCompleteVerification } =
@@ -89,6 +91,7 @@ const CollectibleMetaDataScreen = () => {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -96,21 +99,20 @@ const CollectibleMetaDataScreen = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      collectible.issuer?.verified &&
-      hasCompleteVerification &&
-      !visiblePostOnTwitter
-    ) {
-      setTimeout(() => {
-        setVisiblePostOnTwitter(true);
-      }, 500);
-    }
-  }, [
-    collectible?.issuer?.verified,
-    hasCompleteVerification,
-    visiblePostOnTwitter,
-  ]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        collectible?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [collectible?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -131,7 +133,7 @@ const CollectibleMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer]);
+  }, [collectible.transactions, collectible.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -210,6 +212,7 @@ const CollectibleMetaDataScreen = () => {
               <VerifyIssuer
                 assetId={assetId}
                 schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
               />
             )}
             <HideAssetView

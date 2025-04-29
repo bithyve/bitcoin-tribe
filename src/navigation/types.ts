@@ -57,6 +57,7 @@ export type AppStackParams = {
   [NavigationRoutes.LNLEARNMORE]: undefined;
   [NavigationRoutes.SUPPORTLEARNMORE]: undefined;
   [NavigationRoutes.HIDDENASSETS]: undefined;
+  [NavigationRoutes.ASSETREGISTRYSCREEN]: undefined;
   // Add other routes as needed
 };
 

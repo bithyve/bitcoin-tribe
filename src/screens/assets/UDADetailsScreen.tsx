@@ -82,6 +82,9 @@ const UDADetailsScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
+    useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -90,6 +93,15 @@ const UDADetailsScreen = () => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -124,7 +136,7 @@ const UDADetailsScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer]);
+  }, [uda?.transactions, uda?.issuer, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -231,6 +243,7 @@ const UDADetailsScreen = () => {
           <VerifyIssuer
             assetId={assetId}
             schema={RealmSchema.UniqueDigitalAsset}
+            onVerificationComplete={() => setRefreshToggle(t => !t)}
           />
         )}
         <>
@@ -258,7 +271,16 @@ const UDADetailsScreen = () => {
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => {
+            setVisiblePostOnTwitter(true);
+          }, 1000);
+        }}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
         schema={RealmSchema.UniqueDigitalAsset}
       />
       <>

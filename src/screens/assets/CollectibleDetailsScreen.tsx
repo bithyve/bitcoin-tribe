@@ -25,12 +25,15 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
+  const { translations } = useContext(LocalizationContext);
+  const { common, settings, assets } = translations;
   const styles = getStyles();
   const {
     appType,
@@ -47,11 +50,12 @@ const CollectibleDetailsScreen = () => {
   const { mutate: getChannelMutate, data: channelsData } = useMutation(
     ApiHandler.getChannels,
   );
-
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
 
   useEffect(() => {
@@ -61,6 +65,15 @@ const CollectibleDetailsScreen = () => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -197,7 +210,14 @@ const CollectibleDetailsScreen = () => {
       <VerifyIssuerModal
         assetId={collectible.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
+        }}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
         schema={RealmSchema.Collectible}
       />
       <>

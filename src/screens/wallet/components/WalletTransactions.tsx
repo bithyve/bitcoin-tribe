@@ -24,7 +24,8 @@ import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
-import { TransactionType } from 'src/services/wallets/enums';
+import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
+import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -142,11 +143,15 @@ function WalletTransactions(props: WalletTransactionsProps) {
         }>
         <View style={styles.transDetailsWrapper}>
           <View>
-            {getStatusIcon(
-              transType,
-              networkType,
-              isThemeDark,
-              props.transaction.confirmations,
+            {transId === TransactionKind.SERVICE_FEE ? (
+              <ServiceFeeIcon />
+            ) : (
+              getStatusIcon(
+                transType,
+                networkType,
+                isThemeDark,
+                props.transaction.confirmations,
+              )
             )}
           </View>
           <View style={styles.contentWrapper}>

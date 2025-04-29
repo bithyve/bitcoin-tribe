@@ -274,7 +274,7 @@ function AddAsset() {
             if (!canProceed) {
               setVisible(true);
             } else {
-              getAssetIssuanceFeeMutation.mutate();
+              navigateToIssue(false)
             }
           }}
           testID="issue_new"

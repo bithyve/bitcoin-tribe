@@ -1,61 +1,100 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext } from 'react';
 
-import ModalContainer from 'src/components/ModalContainer';
 import { verifyIssuerOnTwitter } from './VerifyIssuer';
-import PrimaryCTA from 'src/components/PrimaryCTA';
 import { RealmSchema } from 'src/storage/enum';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import SkipButton from 'src/components/SkipButton';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { AppContext } from 'src/contexts/AppContext';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import { useTheme } from 'react-native-paper';
+import { AppTheme } from 'src/theme';
+import AppText from 'src/components/AppText';
+import Buttons from 'src/components/Buttons';
+import AssetVerifyIllustration from 'src/assets/images/assetVerifyIllustration.svg';
 
 interface VerifyIssuerModalProps {
   assetId: string;
   isVisible: boolean;
+  onVerify: () => void;
   onDismiss: () => void;
   schema: RealmSchema;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: hp(20),
-    marginVertical: hp(10),
-  },
-});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: hp(10),
+    },
+    contentContainer: {},
+    contentWrapper: {
+      marginTop: hp(5),
+      marginBottom: hp(20),
+    },
+    titleText: {
+      color: theme.colors.headingColor,
+      textAlign: 'left',
+    },
+    subTitleText: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'left',
+    },
+    illustrationWrapper: {
+      marginVertical: hp(25),
+      alignSelf: 'center',
+    },
+  });
 
 const VerifyIssuerModal = ({
   assetId,
   isVisible,
+  onVerify,
   onDismiss,
   schema,
 }: VerifyIssuerModalProps) => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { assets } = translations;
+  const { assets, common } = translations;
   const { setCompleteVerification } = useContext(AppContext);
   return (
-    <ModalContainer
-      title={assets.verifyYourIdentityTitle}
-      subTitle={assets.verifyYourIdentitySubTitle}
+    <ResponsePopupContainer
       visible={isVisible}
-      enableCloseIcon={false}
-      onDismiss={onDismiss}>
+      enableClose={true}
+      backColor={theme.colors.modalBackColor}
+      borderColor={theme.colors.modalBackColor}>
       <View style={styles.container}>
-        <SkipButton onPress={onDismiss} title={assets.skipForNow} />
-        <PrimaryCTA
-          title={assets.verifyNow}
-          onPress={async () => {
-            await verifyIssuerOnTwitter(assetId, schema);
-            onDismiss();
-            setCompleteVerification(true);
-          }}
-          width={wp(180)}
-        />
+        <View style={styles.contentContainer}>
+          <View style={styles.contentWrapper}>
+            <AppText variant="heading2" style={styles.titleText}>
+              {assets.verifyYourIdentityTitle}
+            </AppText>
+            <AppText variant="body2" style={styles.subTitleText}>
+              {assets.verifyYourIdentitySubTitle}
+            </AppText>
+          </View>
+          <View style={styles.illustrationWrapper}>
+            <AssetVerifyIllustration />
+          </View>
+          {/* <View> */}
+          <Buttons
+            primaryTitle={common.verify}
+            primaryOnPress={async () => {
+              await verifyIssuerOnTwitter(assetId, schema);
+              onVerify();
+              setCompleteVerification(true);
+            }}
+            secondaryTitle={common.skip}
+            secondaryOnPress={onDismiss}
+            width={windowWidth / 2.7}
+            secondaryCTAWidth={windowWidth / 2.9}
+          />
+          {/* </View> */}
+        </View>
       </View>
-    </ModalContainer>
+    </ResponsePopupContainer>
   );
 };
 

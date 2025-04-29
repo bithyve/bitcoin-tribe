@@ -83,6 +83,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       assetTicker={asset.ticker}
                       assetID={asset.assetId}
                       size={50}
+                      verified={asset?.issuer?.verified}
                     />
                   </View>
                 </View>
@@ -92,7 +93,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       {asset.ticker}
                     </AppText>
                     {asset.issuer?.verified && (
-                      <IconVerified width={24} height={24} />
+                      <IconVerified width={20} height={20} />
                     )}
                   </View>
                   <View style={styles.row}>

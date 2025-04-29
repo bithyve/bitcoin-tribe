@@ -46,6 +46,7 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
             assetTicker={asset.ticker}
             assetID={asset.assetId}
             size={30}
+            verified={asset?.issuer?.verified}
           />
         )}
       </View>

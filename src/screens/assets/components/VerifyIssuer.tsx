@@ -40,9 +40,14 @@ const styles = StyleSheet.create({
 interface VerifyIssuerProps {
   assetId: string;
   schema: RealmSchema;
+  onVerificationComplete?: () => void;
 }
 
-export const verifyIssuerOnTwitter = async (assetId, schema) => {
+export const verifyIssuerOnTwitter = async (
+  assetId,
+  schema,
+  onVerificationComplete,
+) => {
   try {
     const result = await loginWithTwitter();
     if (result.username) {
@@ -66,6 +71,7 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
             ],
           },
         });
+        onVerificationComplete?.();
       }
     }
   } catch (error) {
@@ -167,7 +173,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         });
         setIsLoading(false);
         if (response.status) {
-          console.log('response.status', response.status);
           setCompleteVerification(true);
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
@@ -202,6 +207,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
         setIsAddedInRegistry(true);
+        Toast(assets.registerAssetMsg);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
@@ -253,7 +259,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
 
       <SelectOption
         title={'Register Asset'}
-        subTitle={'Add asset to Tribe RGB registry'}
+        subTitle={'Add asset to Bitcoin Tribe registry'}
         onPress={() => getAssetIssuanceFeeMutation.mutate()}
         testID={'register-asset'}
       />

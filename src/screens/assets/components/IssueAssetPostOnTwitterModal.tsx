@@ -28,6 +28,7 @@ import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import moment from 'moment';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 
 interface Props {
   visible: boolean;
@@ -111,7 +112,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       const filePath =
         Platform.OS === 'ios'
           ? `${RNFS.DocumentDirectoryPath}/tweet_image_${randomNumber}.jpg`
-          : `${RNFS.ExternalCachesDirectoryPath}/tweet_image_${randomNumber}.jpg`;
+          : `${RNFS.TemporaryDirectoryPath}/tweet_image_${randomNumber}.jpg`;
 
       await RNFS.copyFile(uri, filePath);
       const fileExists = await RNFS.exists(filePath);
@@ -121,7 +122,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       }
       const tweetText = `I’ve officially issued "${
         issuerInfo.name || 'this asset'
-      }" on @bitcointribe_.
+      }".
         
         Transparency matters.
         Trust, but verify — start here 👇`;
@@ -139,30 +140,47 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
               message: tweetText,
               url: `file://${filePath}`,
             };
-      const isTwitterAvailable = await Share.isPackageInstalled(
-        'com.twitter.android',
-      );
-      if (!isTwitterAvailable) {
-        Toast('X not installed. Please install X to share.');
-        return;
+      if (Platform.OS === 'android') {
+        await Share.shareSingle(shareOptions);
+      } else {
+        await Share.open(shareOptions);
       }
-
-      await Share.shareSingle(shareOptions);
       secondaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
+      secondaryOnPress();
       console.error('Error sharing to Twitter:', error);
+      let errorMessage = 'Something went wrong while sharing.';
+      if (error?.message) {
+        if (error.message.includes('couldn’t be opened')) {
+          errorMessage = 'The image could not be found. Please try again.';
+        } else if (error.message.includes('User did not share')) {
+          errorMessage = 'Sharing was cancelled.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      Toast(errorMessage, true);
     }
   };
 
   return (
-    <ModalContainer
-      title={assets.assetCreateMsg}
-      subTitle={assets.issuedSuccessSubTitle}
+    <ResponsePopupContainer
       visible={visible}
-      enableCloseIcon={false}
-      onDismiss={() => setCompleteVerification(false)}>
-      <View style={styles.modalContent}>
+      enableClose={true}
+      backColor={theme.colors.modalBackColor}
+      borderColor={theme.colors.modalBackColor}>
+      <View style={styles.contentContainer}>
+        <View style={styles.contentWrapper}>
+          <AppText variant="heading2" style={styles.titleText}>
+            {'Why Sharing is Important?'}
+          </AppText>
+          <AppText variant="body2" style={styles.subTitleText}>
+            {
+              "Sharing your asset lets others discover it, builds visibility, and show the world it's yours. it's the first step to gaining recognition and community trust."
+            }
+          </AppText>
+        </View>
         <ViewShot
           ref={viewShotRef}
           options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
@@ -233,6 +251,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
                         assetTicker={issuerInfo.ticker && issuerInfo?.ticker}
                         assetID={issuerInfo.assetId && issuerInfo?.assetId}
                         size={230}
+                        verified={issuerInfo?.issuer?.verified}
                       />
                     </View>
                   )}
@@ -272,24 +291,25 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
             </View>
           </ImageBackground>
         </ViewShot>
-
-        <Image
-          source={{ uri: capturedImage }}
-          style={styles.previewImageStyle}
-          resizeMode="contain"
-        />
+        <View>
+          <Image
+            source={{ uri: capturedImage }}
+            style={styles.previewImageStyle}
+            resizeMode="contain"
+          />
+        </View>
+        <View>
+          <Buttons
+            primaryTitle={common.share}
+            primaryOnPress={captureAndShare}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={secondaryOnPress}
+            width={windowWidth / 2.7}
+            secondaryCTAWidth={windowWidth / 2.7}
+          />
+        </View>
       </View>
-      <View>
-        <Buttons
-          primaryTitle={common.share}
-          primaryOnPress={captureAndShare}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={secondaryOnPress}
-          width={windowWidth / 2.7}
-          secondaryCTAWidth={windowWidth / 2.7}
-        />
-      </View>
-    </ModalContainer>
+    </ResponsePopupContainer>
   );
 };
 const getStyles = (theme: AppTheme) =>
@@ -298,10 +318,6 @@ const getStyles = (theme: AppTheme) =>
       position: 'absolute',
       top: -9999,
       left: -9999,
-    },
-    modalContent: {
-      height: hp(220),
-      marginBottom: hp(15),
     },
     card: {
       width: 1200,
@@ -399,9 +415,25 @@ const getStyles = (theme: AppTheme) =>
       marginHorizontal: hp(15),
     },
     previewImageStyle: {
+      height: 220,
       width: '100%',
-      height: '100%',
       borderRadius: 10,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      marginVertical: hp(10),
+    },
+    contentContainer: {},
+    titleText: {
+      color: theme.colors.headingColor,
+      textAlign: 'left',
+    },
+    subTitleText: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'left',
+      width: wp(270),
+    },
+    contentWrapper: {
+      marginVertical: hp(15),
     },
   });
 export default IssueAssetPostOnTwitterModal;

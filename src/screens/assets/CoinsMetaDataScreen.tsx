@@ -8,6 +8,7 @@ import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -63,6 +64,7 @@ const CoinsMetaDataScreen = () => {
 
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const hasShownPostModal = useRef(false);
   const { hasCompleteVerification, setCompleteVerification } =
     React.useContext(AppContext);
   const { assets, home } = translations;
@@ -70,6 +72,7 @@ const CoinsMetaDataScreen = () => {
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
@@ -77,17 +80,20 @@ const CoinsMetaDataScreen = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      coin?.issuer?.verified &&
-      hasCompleteVerification &&
-      !visiblePostOnTwitter
-    ) {
-      setTimeout(() => {
-        setVisiblePostOnTwitter(true);
-      }, 500);
-    }
-  }, [coin?.issuer?.verified, hasCompleteVerification, visiblePostOnTwitter]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -103,7 +109,7 @@ const CoinsMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer]);
+  }, [coin.transactions, coin.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -164,7 +170,11 @@ const CoinsMetaDataScreen = () => {
           />
 
           {showVerifyIssuer && (
-            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+            />
           )}
           <HideAssetView
             title={assets.hideAsset}

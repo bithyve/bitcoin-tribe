@@ -106,6 +106,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     assetTicker={asset?.ticker}
                     assetID={asset?.assetId}
                     size={120}
+                    verified={asset?.issuer?.verified}
                   />
                 </View>
               </View>
@@ -115,7 +116,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             <AppText variant="body2" style={styles.assetNameText}>
               {assetName}
             </AppText>
-            {asset.issuer?.verified && <IconVerified width={24} height={24} />}
+            {asset.issuer?.verified && <IconVerified width={20} height={20} />}
           </View>
         </View>
         <View style={styles.largeHeaderContainer}>
