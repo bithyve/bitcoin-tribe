@@ -126,7 +126,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       
   Transparency matters.
   Trust, but verify — start here 👇`;
-      const registryUrl = `\n\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
+      const registryUrl = `\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
       const twitterAppURL = `twitter://post?message=${encodeURIComponent(
         tweetText + registryUrl,
       )}`;
