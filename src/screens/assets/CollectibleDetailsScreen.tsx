@@ -1,4 +1,11 @@
-import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  AppState,
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   useFocusEffect,
@@ -31,6 +38,7 @@ import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
+  const appState = useRef(AppState.currentState);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
@@ -58,6 +66,7 @@ const CollectibleDetailsScreen = () => {
     useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -77,15 +86,45 @@ const CollectibleDetailsScreen = () => {
   }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
-    if (askReview) {
-      setTimeout(() => {
-        requestAppReview();
-      }, 2000);
-    }
     if (askVerify) {
       setShowVerifyModal(true);
     }
-  }, [askReview, askVerify]);
+  }, [askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (askReview && refresh) {
+        setTimeout(() => {
+          requestAppReview();
+        }, 2000);
+      }
+    }, [askReview, refresh]),
+  );
+
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        if (askReview && refresh) {
+          setTimeout(() => {
+            requestAppReview();
+          }, 2000);
+        }
+      }
+      appState.current = nextAppState;
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [askReview, refresh]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -228,6 +267,7 @@ const CollectibleDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+            setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
@@ -240,9 +280,14 @@ const CollectibleDetailsScreen = () => {
       <>
         <IssueAssetPostOnTwitterModal
           visible={visibleIssuedPostOnTwitter}
+          primaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setRefresh(prev => !prev);
+          }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
+            setRefresh(prev => !prev);
           }}
           issuerInfo={collectible}
         />

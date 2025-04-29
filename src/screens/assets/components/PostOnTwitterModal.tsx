@@ -57,7 +57,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot | null>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
-  console.log('issuerInfo', issuerInfo);
+
   useEffect(() => {
     const loadImage = async () => {
       if (viewShotRef.current) {

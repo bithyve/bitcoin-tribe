@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, AppState, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -35,6 +35,7 @@ const CoinDetailsScreen = () => {
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const appState = useRef(AppState.currentState);
 
   const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
@@ -63,6 +64,7 @@ const CoinDetailsScreen = () => {
     useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -82,15 +84,45 @@ const CoinDetailsScreen = () => {
   }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
-    if (askReview) {
-      setTimeout(() => {
-        requestAppReview();
-      }, 2000);
-    }
     if (askVerify) {
       setShowVerifyModal(true);
     }
-  }, [askReview, askVerify]);
+  }, [askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (askReview && refresh) {
+        setTimeout(() => {
+          requestAppReview();
+        }, 2000);
+      }
+    }, [askReview, refresh]),
+  );
+
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        if (askReview && refresh) {
+          setTimeout(() => {
+            requestAppReview();
+          }, 2000);
+        }
+      }
+      appState.current = nextAppState;
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [askReview, refresh]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -221,6 +253,7 @@ const CoinDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+            setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
@@ -235,12 +268,12 @@ const CoinDetailsScreen = () => {
           visible={visibleIssuedPostOnTwitter}
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
-            updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+            setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
-            updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+            setRefresh(prev => !prev);
           }}
           issuerInfo={coin}
         />
