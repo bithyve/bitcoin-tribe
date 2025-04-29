@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  Linking,
   PixelRatio,
   Platform,
   StyleSheet,
@@ -127,24 +128,37 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
         
         Transparency matters.
         Trust, but verify — start here 👇`;
+      const registryUrl = `\n\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
+      const twitterAppURL = `twitter://post?message=${encodeURIComponent(
+        tweetText + registryUrl,
+      )}`;
+      const twitterWebURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        tweetText + registryUrl,
+      )}`;
 
-      const shareOptions =
-        Platform.OS === 'android'
-          ? {
-              title: 'Share via',
-              message: tweetText,
-              url: `file://${filePath}`,
-              social: Share.Social.TWITTER,
-            }
-          : {
-              title: 'Share via',
-              message: tweetText,
-              url: `file://${filePath}`,
-            };
-      if (Platform.OS === 'android') {
-        await Share.shareSingle(shareOptions);
+      const canOpenTwitterApp = await Linking.canOpenURL(twitterAppURL);
+
+      if (canOpenTwitterApp) {
+        const shareOptions =
+          Platform.OS === 'android'
+            ? {
+                title: 'Share via',
+                message: tweetText,
+                url: `file://${filePath}`,
+                social: Share.Social.TWITTER,
+              }
+            : {
+                title: 'Share via',
+                message: tweetText,
+                url: `file://${filePath}`,
+              };
+        if (Platform.OS === 'android') {
+          await Share.shareSingle(shareOptions);
+        } else {
+          await Share.open(shareOptions);
+        }
       } else {
-        await Share.open(shareOptions);
+        await Linking.openURL(twitterWebURL);
       }
       primaryOnPress();
       setCompleteVerification(false);

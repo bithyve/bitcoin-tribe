@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  Linking,
   PixelRatio,
   Platform,
   StyleSheet,
@@ -56,7 +57,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot | null>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
-
+  console.log('issuerInfo', issuerInfo);
   useEffect(() => {
     const loadImage = async () => {
       if (viewShotRef.current) {
@@ -122,21 +123,36 @@ const PostOnTwitterModal: React.FC<Props> = ({
       const tweetText = `I’ve officially verified my identity as the issuer of "${
         issuerInfo.name || 'this asset'
       }".
-        
-        Transparency matters.
-        Trust, but verify — start here 👇`;
+      
+  Transparency matters.
+  Trust, but verify — start here 👇`;
+      const registryUrl = `\n\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
+      const twitterAppURL = `twitter://post?message=${encodeURIComponent(
+        tweetText + registryUrl,
+      )}`;
+      const twitterWebURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        tweetText + registryUrl,
+      )}`;
 
-      const shareOptions = {
-        title: 'Share via',
-        message: tweetText,
-        url: `file://${filePath}`,
-        social: Share.Social.TWITTER,
-      };
-      if (Platform.OS === 'android') {
-        await Share.shareSingle(shareOptions);
+      const canOpenTwitterApp = await Linking.canOpenURL(twitterAppURL);
+
+      if (canOpenTwitterApp) {
+        const shareOptions = {
+          title: 'Share via',
+          message: tweetText,
+          url: `file://${filePath}`,
+          social: Share.Social.TWITTER,
+        };
+
+        if (Platform.OS === 'android') {
+          await Share.shareSingle(shareOptions);
+        } else {
+          await Share.open(shareOptions);
+        }
       } else {
-        await Share.open(shareOptions);
+        await Linking.openURL(twitterWebURL);
       }
+
       primaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
