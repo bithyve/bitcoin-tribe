@@ -14,6 +14,9 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import moment from 'moment';
+
 import {
   Coin,
   TransferKind,
@@ -21,7 +24,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import moment from 'moment';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
@@ -33,8 +35,9 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
-import SelectOption from 'src/components/SelectOption';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import { Keys } from 'src/storage';
+import ShareOptionView from './components/ShareOptionView';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -66,6 +69,7 @@ const CoinsMetaDataScreen = () => {
 
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const hasShownPostModal = useRef(false);
   const { hasCompleteVerification, setCompleteVerification } =
     React.useContext(AppContext);
@@ -180,9 +184,8 @@ const CoinsMetaDataScreen = () => {
             />
           )}
           {!coin?.isPosted && coin?.issuer?.verified && (
-            <SelectOption
+            <ShareOptionView
               title={assets.sharePostTitle}
-              subTitle={''}
               onPress={() => setVisiblePostOnTwitter(true)}
             />
           )}

@@ -6,14 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  useCallback,
-} from 'react';
+import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import {
   StackActions,
   useFocusEffect,
@@ -26,6 +19,7 @@ import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
@@ -57,8 +51,8 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
-import SelectOption from 'src/components/SelectOption';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import ShareOptionView from './components/ShareOptionView';
 
 const UDADetailsScreen = () => {
   const navigation = useNavigation();
@@ -301,9 +295,8 @@ const UDADetailsScreen = () => {
           />
         </>
         {!uda?.isPosted && uda?.issuer?.verified && (
-          <SelectOption
+          <ShareOptionView
             title={assets.sharePostTitle}
-            subTitle={''}
             onPress={() => setVisiblePostOnTwitter(true)}
           />
         )}

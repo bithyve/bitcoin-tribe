@@ -10,10 +10,12 @@ import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Share from 'react-native-share';
+import moment from 'moment';
+import { useTheme } from 'react-native-paper';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
-import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import {
   Collectible,
@@ -33,15 +35,14 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import AssetIDContainer from './components/AssetIDContainer';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import moment from 'moment';
 import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
-import SelectOption from 'src/components/SelectOption';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import ShareOptionView from './components/ShareOptionView';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -219,9 +220,8 @@ const CollectibleMetaDataScreen = () => {
               />
             )}
             {!collectible?.isPosted && collectible?.issuer?.verified && (
-              <SelectOption
+              <ShareOptionView
                 title={assets.sharePostTitle}
-                subTitle={''}
                 onPress={() => setVisiblePostOnTwitter(true)}
               />
             )}
