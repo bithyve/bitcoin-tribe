@@ -120,8 +120,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       }
       const tweetText = `I’ve officially verified my identity as the issuer of "${
         issuerInfo.name || 'this asset'
-      }".
-        with Asset ID - ${issuerInfo?.assetId}
+      }".\nwith Asset ID - ${issuerInfo?.assetId}
 
         Transparency matters.
         Trust, but verify — start here 👇`;

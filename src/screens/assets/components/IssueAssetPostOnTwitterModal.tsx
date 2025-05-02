@@ -122,8 +122,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       }
       const tweetText = `I’ve officially issued "${
         issuerInfo.name || 'this asset'
-      }".
-        with Asset ID - ${issuerInfo?.assetId}
+      }".\nwith Asset ID - ${issuerInfo?.assetId}
 
         Transparency matters.
         Trust, but verify — start here 👇`;
@@ -164,7 +163,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       Toast(errorMessage, true);
     }
   };
-  console.log('issuerInfo', issuerInfo);
+
   return (
     <ResponsePopupContainer
       visible={visible}
