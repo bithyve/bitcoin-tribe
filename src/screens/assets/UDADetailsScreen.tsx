@@ -19,6 +19,7 @@ import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
@@ -52,11 +53,12 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 
 const UDADetailsScreen = () => {
+  const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
   const hasShownPostModal = useRef(false);
   const { assetId, askReview, askVerify } = useRoute().params;
-  const styles = getStyles();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const {
     appType,
     hasCompleteVerification,
@@ -75,7 +77,6 @@ const UDADetailsScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, common, home } = translations;
-  const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -162,8 +163,8 @@ const UDADetailsScreen = () => {
   };
 
   return (
-    <ScreenContainer>
-      <AppHeader title={uda?.name} />
+    <ScreenContainer style={styles.container}>
+      <AppHeader title={uda?.name} style={styles.wrapper} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
@@ -199,52 +200,60 @@ const UDADetailsScreen = () => {
             />
           </View>
         )}
-
-        {uda?.issuer && uda?.issuer?.verified && (
-          <IssuerVerified
-            id={uda?.issuer?.verifiedBy[0]?.id}
-            name={uda?.issuer?.verifiedBy[0]?.name}
-            username={uda?.issuer?.verifiedBy[0]?.username}
-          />
-        )}
-
+        <View style={styles.wrapper}>
+          {uda?.issuer && uda?.issuer?.verified && (
+            <IssuerVerified
+              id={uda?.issuer?.verifiedBy[0]?.id}
+              name={uda?.issuer?.verifiedBy[0]?.name}
+              username={uda?.issuer?.verifiedBy[0]?.username}
+            />
+          )}
+        </View>
         <Item title={home.assetName} value={uda.name} />
-        <AssetIDContainer assetId={assetId} />
+        <View style={styles.wrapper}>
+          <AssetIDContainer assetId={assetId} />
+        </View>
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
-        <MediaCarousel
-          images={uda?.token.attachments}
-          handleImageSelect={item => {
-            setVisible(true);
-            setSelectedImage(item?.filePath);
-          }}
-        />
+        <View style={styles.wrapper}>
+          <MediaCarousel
+            images={uda?.token.attachments}
+            handleImageSelect={item => {
+              setVisible(true);
+              setSelectedImage(item?.filePath);
+            }}
+          />
+        </View>
         <Item
           title={assets.issuedOn}
           value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
         />
-        {uda?.transactions.length > 0 && (
-          <AssetTransaction
-            transaction={uda?.transactions[0]}
-            coin={uda?.name}
-            onPress={() => {
-              navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
-                assetId: assetId,
-                transactions: uda?.transactions,
-                assetName: uda?.name,
-              });
-            }}
-            disabled={uda?.transactions.length === 1}
-            assetFace={uda?.assetIface}
-          />
-        )}
-
+        <View style={styles.wrapper}>
+          {uda?.transactions.length > 0 && (
+            <AssetTransaction
+              transaction={uda?.transactions[0]}
+              coin={uda?.name}
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                  assetId: assetId,
+                  transactions: uda?.transactions,
+                  assetName: uda?.name,
+                });
+              }}
+              disabled={uda?.transactions.length === 1}
+              assetFace={uda?.assetIface}
+            />
+          )}
+        </View>
         {showVerifyIssuer && (
-          <VerifyIssuer
-            assetId={assetId}
-            schema={RealmSchema.UniqueDigitalAsset}
-            onVerificationComplete={() => setRefreshToggle(t => !t)}
-          />
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.UniqueDigitalAsset}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+            />
+            <View style={styles.seperatorView} />
+          </>
         )}
         <>
           <ImageViewing
@@ -306,7 +315,7 @@ const UDADetailsScreen = () => {
     </ScreenContainer>
   );
 };
-const getStyles = () =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
       width: '100%',
@@ -320,6 +329,18 @@ const getStyles = () =>
       paddingBottom: 0,
       marginVertical: wp(5),
       alignItems: 'center',
+    },
+    container: {
+      paddingHorizontal: hp(0),
+    },
+    wrapper: {
+      paddingHorizontal: hp(16),
+    },
+    seperatorView: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
     },
   });
 export default UDADetailsScreen;
