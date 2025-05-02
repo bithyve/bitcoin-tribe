@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import moment from 'moment';
 
 import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
@@ -24,7 +25,6 @@ import { TransactionKind } from 'src/services/wallets/enums';
 import useWallets from 'src/hooks/useWallets';
 import { ServiceFee } from 'src/screens/home/components/AddAsset';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import moment from 'moment';
 import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
