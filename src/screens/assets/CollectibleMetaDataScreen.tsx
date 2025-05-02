@@ -173,13 +173,15 @@ const CollectibleMetaDataScreen = () => {
                 style={styles.imageStyle}
               />
             </View>
-            {collectible?.issuer && collectible.issuer.verified && (
-              <IssuerVerified
-                id={collectible.issuer.verifiedBy[0].id}
-                name={collectible.issuer.verifiedBy[0].name}
-                username={collectible.issuer.verifiedBy[0].username}
-              />
-            )}
+            <View style={styles.wrapper}>
+              {collectible?.issuer && collectible.issuer.verified && (
+                <IssuerVerified
+                  id={collectible.issuer.verifiedBy[0].id}
+                  name={collectible.issuer.verifiedBy[0].name}
+                  username={collectible.issuer.verifiedBy[0].username}
+                />
+              )}
+            </View>
             <Item
               title={home.assetName}
               value={collectible && collectible.name}
@@ -188,7 +190,9 @@ const CollectibleMetaDataScreen = () => {
               title={home.assetDescription}
               value={collectible && collectible.details}
             />
-            <AssetIDContainer assetId={assetId} />
+            <View style={styles.wrapper}>
+              <AssetIDContainer assetId={assetId} />
+            </View>
             <Item
               title={assets.issuedSupply}
               value={
@@ -213,11 +217,14 @@ const CollectibleMetaDataScreen = () => {
             />
 
             {showVerifyIssuer && (
-              <VerifyIssuer
-                assetId={assetId}
-                schema={RealmSchema.Collectible}
-                onVerificationComplete={() => setRefreshToggle(t => !t)}
-              />
+              <>
+                <VerifyIssuer
+                  assetId={assetId}
+                  schema={RealmSchema.Collectible}
+                  onVerificationComplete={() => setRefreshToggle(t => !t)}
+                />
+                <View style={styles.seperatorView} />
+              </>
             )}
             {!collectible?.isPosted && collectible?.issuer?.verified && (
               <ShareOptionView
@@ -264,13 +271,14 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flex: 1,
       flexDirection: 'column',
-      paddingHorizontal: 0,
+      paddingHorizontal: hp(0),
     },
     headerWrapper: {
       paddingHorizontal: 20,
     },
     itemWrapper: {
       marginVertical: hp(10),
+      paddingHorizontal: hp(16),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,
@@ -304,7 +312,6 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
-      paddingHorizontal: hp(16),
     },
     imageStyle: {
       width: '100%',
@@ -314,8 +321,16 @@ const getStyles = (theme: AppTheme) =>
       marginBottom: hp(25),
     },
     imageWrapper: {
-      // borderBottomColor: theme.colors.borderColor,
-      // borderBottomWidth: 1,
+      paddingHorizontal: hp(16),
+    },
+    wrapper: {
+      paddingHorizontal: hp(16),
+    },
+    seperatorView: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
     },
   });
 

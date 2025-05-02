@@ -124,8 +124,8 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       }
       const tweetText = `I’ve officially issued "${
         issuerInfo.name || 'this asset'
-      }".
-        
+      }".\nwith Asset ID - ${issuerInfo?.assetId}
+
         Transparency matters.
         Trust, but verify — start here 👇`;
       const registryUrl = `\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
@@ -188,11 +188,11 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       <View style={styles.contentContainer}>
         <View style={styles.contentWrapper}>
           <AppText variant="heading2" style={styles.titleText}>
-            {'Why Sharing is Important?'}
+            {'Why Share Your Issued Asset?'}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
             {
-              "Sharing your asset lets others discover it, builds visibility, and show the world it's yours. it's the first step to gaining recognition and community trust."
+              'Sharing boosts visibility — but it doesn’t prove ownership. Verify yourself to make it official.'
             }
           </AppText>
         </View>
