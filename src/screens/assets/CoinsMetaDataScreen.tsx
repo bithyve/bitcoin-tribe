@@ -113,20 +113,27 @@ const CoinsMetaDataScreen = () => {
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title={assets.coinMetaTitle} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={assets.coinMetaTitle}
+        subTitle={''}
+        enableBack={true}
+        style={styles.wrapper}
+      />
       {isLoading ? (
         <ModalLoading visible={isLoading} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          {coin.issuer && coin.issuer.verified && (
-            <IssuerVerified
-              id={coin.issuer.verifiedBy[0].id}
-              name={coin.issuer.verifiedBy[0].name}
-              username={coin.issuer.verifiedBy[0].username}
-            />
-          )}
+          <View style={styles.wrapper}>
+            {coin.issuer && coin.issuer.verified && (
+              <IssuerVerified
+                id={coin.issuer.verifiedBy[0].id}
+                name={coin.issuer.verifiedBy[0].name}
+                username={coin.issuer.verifiedBy[0].username}
+              />
+            )}
+          </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
             <Item
@@ -135,7 +142,9 @@ const CoinsMetaDataScreen = () => {
               width={'45%'}
             />
           </View>
-          <AssetIDContainer assetId={assetId} />
+          <View style={styles.wrapper}>
+            <AssetIDContainer assetId={assetId} />
+          </View>
           <View style={styles.rowWrapper}>
             <Item
               title={assets.schema}
@@ -162,20 +171,26 @@ const CoinsMetaDataScreen = () => {
               width={'45%'}
             />
           </View>
-          <Item
-            title={assets.issuedOn}
-            value={moment
-              .unix(coin.metaData && coin.metaData.timestamp)
-              .format('DD MMM YY  hh:mm A')}
-          />
+          <View style={styles.wrapper}>
+            <Item
+              title={assets.issuedOn}
+              value={moment
+                .unix(coin.metaData && coin.metaData.timestamp)
+                .format('DD MMM YY  hh:mm A')}
+            />
+          </View>
 
           {showVerifyIssuer && (
-            <VerifyIssuer
-              assetId={assetId}
-              schema={RealmSchema.Coin}
-              onVerificationComplete={() => setRefreshToggle(t => !t)}
-            />
+            <>
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Coin}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+              />
+              <View style={styles.seperatorView} />
+            </>
           )}
+
           <HideAssetView
             title={assets.hideAsset}
             onPress={() => hideAsset()}
@@ -203,6 +218,7 @@ const getStyles = (theme: AppTheme, width) =>
     container: {
       flex: 1,
       flexDirection: 'column',
+      paddingHorizontal: hp(0),
     },
     assetNameWrapper: {
       justifyContent: 'center',
@@ -245,6 +261,16 @@ const getStyles = (theme: AppTheme, width) =>
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
+      paddingHorizontal: hp(16),
+    },
+    wrapper: {
+      paddingHorizontal: hp(16),
+    },
+    seperatorView: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
     },
   });
 

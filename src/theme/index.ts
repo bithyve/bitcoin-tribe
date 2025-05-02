@@ -30,6 +30,8 @@ type CustomColors = {
   cardGradient1: string;
   cardGradient2: string;
   cardGradient3: string;
+  cardGradient4: string;
+  cardGradient5: string;
   secondaryCtaTitleColor: string;
   ctaBackColor: string;
   disableCtaBackColor: string;
@@ -120,6 +122,8 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
+    cardGradient4: Colors.GhostWhite,
+    cardGradient5: Colors.GhostWhite,
     headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
     headingColor: Colors.ChineseBlack,
@@ -237,6 +241,8 @@ const CombinedDarkTheme: AppTheme = {
     cardGradient1: Colors.EerieBlack,
     cardGradient2: Colors.VampireBlack,
     cardGradient3: Colors.ChineseBlack,
+    cardGradient4: Colors.DarkGunmetal,
+    cardGradient5: Colors.Black,
     headerCardGradientColor: Colors.Black,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
