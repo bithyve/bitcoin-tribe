@@ -467,7 +467,7 @@
     "receiveAssetSubTitle": "RGB請求書をスキャンまたはコピーして貼り付け",
     "insufficientSatsRGB": "アセット取引のためにサットが予約されました",
     "insufficientSatsRGBSubTitle": "5000以上のサットがこの取引および今後4回のアセット取引のためにウォレットから予約されます。",
-    "coinMetaTitle": "メタデータ",
+    "coinMetaTitle": "アセットの詳細",
     "coinMetaSubTitle": "データ駆動の洞察の力を発見し、変革しましょう。",
     "name": "名前",
     "ticker": "ティッカー",

@@ -467,7 +467,7 @@
     "receiveAssetSubTitle": "扫描或复制粘贴RGB发票",
     "insufficientSatsRGB": "为资产交易保留的Sats",
     "insufficientSatsRGBSubTitle": "将从您的钱包中保留5000个以上的Sats用于此交易和未来四笔资产交易。",
-    "coinMetaTitle": "元数据",
+    "coinMetaTitle": "资产详情",
     "coinMetaSubTitle": "发现数据驱动的见解并进行转变。",
     "name": "名称",
     "ticker": "代码",

@@ -467,7 +467,7 @@
     "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB",
     "insufficientSatsRGB": "Sats reservados para transacciones de activos",
     "insufficientSatsRGBSubTitle": "Se reservarán más de 5000 sats de su billetera para esta y cuatro transacciones de activos futuras.",
-    "coinMetaTitle": "Metadatos",
+    "coinMetaTitle": "Detalles del activo",
     "coinMetaSubTitle": "Descubra el poder de la información basada en datos y transforme.",
     "name": "Nombre",
     "ticker": "Corazón",

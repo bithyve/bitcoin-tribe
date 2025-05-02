@@ -467,7 +467,7 @@
     "receiveAssetSubTitle": "Scansiona o copia incolla la fattura RGB",
     "insufficientSatsRGB": "Sats riservati per la transazione della risorsa",
     "insufficientSatsRGBSubTitle": "5000 + sats saranno riservati dal tuo portafoglio per questa e altre quattro transazioni future di risorse.",
-    "coinMetaTitle": "Metadati",
+    "coinMetaTitle": "Dettagli dell'asset",
     "coinMetaSubTitle": "Scopri il potere delle intuizioni basate sui dati e trasformati.",
     "name": "Nome",
     "ticker": "Ticker",
