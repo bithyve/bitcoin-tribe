@@ -825,6 +825,7 @@ export class ApiHandler {
       },
       skipSync: false,
     });
+    await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
       await ApiHandler.updateTransaction({
         txid,
