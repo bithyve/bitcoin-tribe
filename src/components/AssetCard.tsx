@@ -11,13 +11,11 @@ import { wp, hp } from 'src/constants/responsive';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
-import {
-  formatLargeNumber,
-} from 'src/utils/numberWithCommas';
+import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import AssetChip from './AssetChip';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
-import IconVerified from 'src/assets/images/issuer_verified.svg'
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 
 type AssetCardProps = {
   asset: Asset;
@@ -72,12 +70,10 @@ const AssetCard = (props: AssetCardProps) => {
           )}
         </View>
         <View style={styles.contentWrapper}>
-          {asset.issuer?.verified && (
-            <IconVerified width={24} height={24} />
-          )}
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
+          {asset.issuer?.verified && <IconVerified width={20} height={20} />}
         </View>
       </GradientView>
     </AppTouchable>

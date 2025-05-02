@@ -20,7 +20,11 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetType,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
@@ -123,11 +127,19 @@ function IssueScreen() {
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
         setTimeout(() => {
-          navigation.replace(NavigationRoutes.COINDETAILS, {
-            assetId: response.assetId,
-            askReview: true,
-            askVerify: addToRegistry,
-          });
+          if (!addToRegistry) {
+            navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
+              assetId: response.assetId,
+              askVerify: addToRegistry,
+              issueType: AssetType.Coin,
+            });
+          } else {
+            navigation.replace(NavigationRoutes.COINDETAILS, {
+              assetId: response.assetId,
+              askReview: true,
+              askVerify: addToRegistry,
+            });
+          }
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

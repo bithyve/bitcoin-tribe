@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
@@ -26,6 +26,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import AssetIcon from 'src/components/AssetIcon';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -101,10 +102,11 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             ) : (
               <View style={styles.identiconWrapper}>
                 <View style={styles.identiconWrapper2}>
-                  <Identicon
-                    value={asset.assetId}
-                    style={styles.identiconView}
+                  <AssetIcon
+                    assetTicker={asset?.ticker}
+                    assetID={asset?.assetId}
                     size={120}
+                    verified={asset?.issuer?.verified}
                   />
                 </View>
               </View>
@@ -114,7 +116,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             <AppText variant="body2" style={styles.assetNameText}>
               {assetName}
             </AppText>
-            {asset.issuer?.verified && <IconVerified width={24} height={24} />}
+            {asset.issuer?.verified && <IconVerified width={20} height={20} />}
           </View>
         </View>
         <View style={styles.largeHeaderContainer}>

@@ -106,6 +106,56 @@ export class ApiHandler {
     });
   }
 
+  static async loadGithubReleaseNotes(fullVersion: string) {
+    try {
+      const version = fullVersion.split('(')[0];
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${version}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        return {
+          releaseNote: '',
+        };
+      }
+      const releaseData = await response.json();
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.VersionHistory,
+        'version',
+        fullVersion,
+        {
+          releaseNote: releaseData.body || '',
+        },
+      );
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      return {
+        releaseNote: '',
+      };
+    }
+  }
+
+  static async fetchGithubRelease() {
+    try {
+      const GITHUB_RELEASE_URL = `https://api.github.com/repos/bithyve/bitcoin-tribe/releases/tags/v${DeviceInfo.getVersion()}`;
+      const response = await fetch(GITHUB_RELEASE_URL);
+      if (!response.ok) {
+        return {
+          releaseNote: '',
+        };
+      }
+      const releaseData = await response.json();
+      return {
+        releaseNote: releaseData.body || '',
+      };
+    } catch (error) {
+      console.error('Error fetching GitHub release data:', error);
+      return {
+        releaseNote: '',
+      };
+    }
+  }
+
   static async setupNewApp({
     appName = '',
     pinMethod = PinMethod.DEFAULT,
@@ -153,6 +203,7 @@ export class ApiHandler {
     const isRealmInit = await dbManager.initializeRealm(uint8array);
     if (isRealmInit) {
       try {
+        const githubReleaseNote = await ApiHandler.fetchGithubRelease();
         if (appType === AppType.ON_CHAIN) {
           const primaryMnemonic = mnemonic
             ? mnemonic
@@ -212,7 +263,6 @@ export class ApiHandler {
             appType,
             authToken: registerApp?.app?.authToken,
           };
-
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
@@ -227,7 +277,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -281,7 +331,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeConnectParams.nodeId);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -351,7 +401,7 @@ export class ApiHandler {
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
               version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-              releaseNote: '',
+              releaseNote: githubReleaseNote.releaseNote,
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
@@ -775,6 +825,7 @@ export class ApiHandler {
       },
       skipSync: false,
     });
+    await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
       await ApiHandler.updateTransaction({
         txid,
@@ -1512,6 +1563,7 @@ export class ApiHandler {
 
   static async checkVersion() {
     try {
+      const githubReleaseNote = await ApiHandler.fetchGithubRelease();
       const versionHistoryData = dbManager.getCollection(
         RealmSchema.VersionHistory,
       );
@@ -1524,7 +1576,7 @@ export class ApiHandler {
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
-          releaseNote: '',
+          releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
           title: `Upgraded from ${version.version} to ${currentVersion}`,
         });
@@ -1695,11 +1747,15 @@ export class ApiHandler {
     }
   }
   static async getFeeAndExchangeRates() {
-    const { exchangeRates, averageTxFees } =
+    const { exchangeRates, serviceFee } =
       await Relay.fetchFeeAndExchangeRates();
     Storage.set(
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
+    );
+    Storage.set(
+      Keys.SERVICE_FEE,
+      JSON.stringify(serviceFee),
     );
     await ApiHandler.getTxRates();
   }

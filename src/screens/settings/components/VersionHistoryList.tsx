@@ -22,22 +22,21 @@ function VersionHistoryList() {
         new Date(a.date as string).getTime(),
     );
   const lastIndex = versionHistory.length - 1;
-
   return (
     <FlatList
       data={versionHistory}
       renderItem={({ item, index }) => {
         const title =
           index === versionHistory.length - 1
-            ? item.title
+            ? String(item.title)
             : `Upgraded to ${item.version}`;
-
         return (
           <VersionHistoryItem
             title={title}
             date={item.date}
-            releaseNotes={item.releaseNotes}
+            releaseNotes={item.releaseNote}
             lastIndex={lastIndex === index}
+            version={item.version}
           />
         );
       }}

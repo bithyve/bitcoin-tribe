@@ -19,12 +19,12 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
-import Identicon from 'src/components/Identicon';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import AssetIcon from 'src/components/AssetIcon';
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -59,6 +59,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const styles = getStyles(theme, insets, lengthOfTotalBalance, app.appType);
+
   return (
     <>
       {/* <Animated.View
@@ -78,10 +79,11 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
               <View style={styles.totalBalanceWrapper}>
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
-                    <Identicon
-                      value={asset.assetId}
-                      style={styles.identiconView}
+                    <AssetIcon
+                      assetTicker={asset.ticker}
+                      assetID={asset.assetId}
                       size={50}
+                      verified={asset?.issuer?.verified}
                     />
                   </View>
                 </View>
@@ -91,7 +93,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       {asset.ticker}
                     </AppText>
                     {asset.issuer?.verified && (
-                      <IconVerified width={24} height={24} />
+                      <IconVerified width={20} height={20} />
                     )}
                   </View>
                   <View style={styles.row}>
@@ -234,11 +236,6 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
       borderWidth: 2,
       padding: 5,
       borderRadius: 110,
-    },
-    identiconView: {
-      height: 50,
-      width: 50,
-      borderRadius: 50,
     },
     assetTickerText: {
       color: theme.colors.headingColor,

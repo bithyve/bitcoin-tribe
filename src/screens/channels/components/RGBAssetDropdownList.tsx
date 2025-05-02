@@ -13,14 +13,14 @@ import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import Identicon from 'src/components/Identicon';
+import AssetIcon from 'src/components/AssetIcon';
 
 type DropdownProps = {
   style;
   assets: Asset[];
   callback: (item) => void;
   onDissmiss?: () => void;
-  selectedAsset: Asset[]; 
+  selectedAsset: Asset[];
 };
 
 function RGBAssetDropdownList(props: DropdownProps) {
@@ -56,7 +56,9 @@ function RGBAssetDropdownList(props: DropdownProps) {
         style={styles.container2}
         data={assets}
         renderItem={({ item }) => (
-          <AppTouchable onPress={() => callback(item)} style={styles.assetContainer}>
+          <AppTouchable
+            onPress={() => callback(item)}
+            style={styles.assetContainer}>
             <View style={styles.assetWrapper}>
               <View style={styles.assetImageWrapper}>
                 {item?.assetIface === AssetFace.RGB25 ? (
@@ -67,10 +69,11 @@ function RGBAssetDropdownList(props: DropdownProps) {
                     style={styles.imageStyle}
                   />
                 ) : (
-                  <Identicon
-                    value={item?.assetId}
-                    style={styles.identiconView}
+                  <AssetIcon
+                    assetTicker={item?.ticker}
+                    assetID={item?.assetId}
                     size={windowHeight > 670 ? 50 : 30}
+                    verified={item?.issuer?.verified}
                   />
                 )}
               </View>
@@ -85,7 +88,11 @@ function RGBAssetDropdownList(props: DropdownProps) {
                 color={theme.colors.accent1}
                 uncheckedColor={theme.colors.headingColor}
                 value={item.assetId}
-                status={selectedAsset?.assetId === item.assetId ? 'checked' : 'unchecked'}
+                status={
+                  selectedAsset?.assetId === item.assetId
+                    ? 'checked'
+                    : 'unchecked'
+                }
                 onPress={() => callback(item)}
               />
             </View>
@@ -139,7 +146,7 @@ const getStyles = (theme: AppTheme) =>
       width: windowHeight > 670 ? 50 : 30,
       borderRadius: windowHeight > 670 ? 50 : 30,
     },
-    assetContainer:{
+    assetContainer: {
       flexDirection: 'row',
       padding: hp(10),
       margin: hp(10),
@@ -151,12 +158,12 @@ const getStyles = (theme: AppTheme) =>
     assetWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '90%'
+      width: '90%',
     },
     assetImageWrapper: {
       width: '20%',
     },
-    radioBtnWrapper:{
+    radioBtnWrapper: {
       width: '10%',
     },
     assetnameText: {

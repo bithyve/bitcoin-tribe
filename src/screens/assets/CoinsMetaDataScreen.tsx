@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
@@ -8,6 +8,7 @@ import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -30,6 +31,8 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -58,18 +61,39 @@ const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const hasShownPostModal = useRef(false);
+  const { hasCompleteVerification, setCompleteVerification } =
+    React.useContext(AppContext);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -85,7 +109,7 @@ const CoinsMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer]);
+  }, [coin.transactions, coin.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -146,7 +170,11 @@ const CoinsMetaDataScreen = () => {
           />
 
           {showVerifyIssuer && (
-            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+            />
           )}
           <HideAssetView
             title={assets.hideAsset}
@@ -154,6 +182,16 @@ const CoinsMetaDataScreen = () => {
             isVerified={coin?.issuer?.verified}
             assetId={assetId}
           />
+          <>
+            <PostOnTwitterModal
+              visible={visiblePostOnTwitter}
+              secondaryOnPress={() => {
+                setVisiblePostOnTwitter(false);
+                setCompleteVerification(false);
+              }}
+              issuerInfo={coin}
+            />
+          </>
         </ScrollView>
       )}
     </ScreenContainer>

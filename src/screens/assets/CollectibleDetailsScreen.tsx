@@ -1,6 +1,10 @@
 import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
@@ -19,13 +23,25 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
+  const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
+  const { translations } = useContext(LocalizationContext);
+  const { common, settings, assets } = translations;
   const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
@@ -34,9 +50,30 @@ const CollectibleDetailsScreen = () => {
   const { mutate: getChannelMutate, data: channelsData } = useMutation(
     ApiHandler.getChannels,
   );
-
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
+    useState(false);
+
+  useEffect(() => {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
     if (askReview) {
@@ -48,6 +85,21 @@ const CollectibleDetailsScreen = () => {
       setShowVerifyModal(true);
     }
   }, [askReview, askVerify]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        collectible?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [collectible?.issuer?.verified, hasCompleteVerification]),
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -158,9 +210,36 @@ const CollectibleDetailsScreen = () => {
       <VerifyIssuerModal
         assetId={collectible.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
+        }}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
         schema={RealmSchema.Collectible}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+          }}
+          issuerInfo={collectible}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
+          }}
+          issuerInfo={collectible}
+        />
+      </>
     </ScreenContainer>
   );
 };

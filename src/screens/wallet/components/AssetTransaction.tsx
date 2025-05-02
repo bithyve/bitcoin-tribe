@@ -14,15 +14,17 @@ import RecieveBtcIcon from 'src/assets/images/btcRecieveAssetTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningRecieveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
-import WaitingCounterPartyIcon from 'src/assets/images/waitingCounterPartyIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
-import WaitingConfirmationIcon from 'src/assets/images/waitingConfirmationIcon.svg';
+import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
+import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
+import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmationIconReceive.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   AssetFace,
   Transfer,
   TransferKind,
+  TransferStatus,
 } from 'src/models/interfaces/RGBWallet';
 import IconArrow from 'src/assets/images/icon_arrowr2.svg';
 import IconArrowLight from 'src/assets/images/icon_arrowr2light.svg';
@@ -57,11 +59,11 @@ function AssetTransaction(props: AssetTransactionProps) {
         },
         waitingcounterparty: {
           send: <WaitingCounterPartySendIcon />,
-          receiveblind: <WaitingCounterPartyIcon />,
+          receiveblind: <WaitingCounterPartyReceiveIcon />,
         },
         waitingconfirmations: {
-          send: <WaitingConfirmationIcon />,
-          receiveblind: <WaitingConfirmationIcon />,
+          send: <WaitingConfirmationIconSend />,
+          receiveblind: <WaitingConfirmationIconReceive />,
         },
         failed: {
           send: <FailedTxnIcon />,
@@ -97,6 +99,29 @@ function AssetTransaction(props: AssetTransactionProps) {
     return styles.amountTextReceive;
   }, [styles.amountSend, styles.amountTextReceive, transaction.kind]);
 
+  const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
+  function normalize(value: string): string {
+    return value.toLowerCase().replace(/_/g, '');
+  }
+  const kindLabel =
+    normalizedKind === normalize(TransferKind.ISSUANCE) &&
+    normalizedStatus === normalize(TransferStatus.SETTLED)
+      ? settings.issuance
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
+      ? settings.send
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.SETTLED)
+      ? settings.receiveblind
+      : normalizedKind === normalize(TransferKind.SEND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
+      ? settings.waitingcounterpartySend
+      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
+      ? settings.waitingcounterpartyReceive
+      : settings[transaction.status.toLowerCase().replace(/_/g, '')];
+
   return (
     <AppTouchable
       disabled={disabled}
@@ -121,9 +146,7 @@ function AssetTransaction(props: AssetTransactionProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {transaction.kind.toLowerCase().replace(/_/g, '') === 'issuance'
-                ? assets.issued
-                : settings[transaction.status.toLowerCase().replace(/_/g, '')]}
+              {kindLabel}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment

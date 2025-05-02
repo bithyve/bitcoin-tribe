@@ -1,7 +1,8 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -37,6 +38,8 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -76,20 +79,40 @@ const CollectibleMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const hasShownPostModal = useRef(false);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const { hasCompleteVerification, setCompleteVerification } =
+    React.useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
     }
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        collectible?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [collectible?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -110,7 +133,7 @@ const CollectibleMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer]);
+  }, [collectible.transactions, collectible.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -189,6 +212,7 @@ const CollectibleMetaDataScreen = () => {
               <VerifyIssuer
                 assetId={assetId}
                 schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
               />
             )}
             <HideAssetView
@@ -197,6 +221,16 @@ const CollectibleMetaDataScreen = () => {
               isVerified={collectible?.issuer?.verified}
               assetId={assetId}
             />
+            <>
+              <PostOnTwitterModal
+                visible={visiblePostOnTwitter}
+                secondaryOnPress={() => {
+                  setVisiblePostOnTwitter(false);
+                  setCompleteVerification(false);
+                }}
+                issuerInfo={collectible}
+              />
+            </>
           </ScrollView>
         </>
       )}

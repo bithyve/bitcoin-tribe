@@ -135,7 +135,7 @@ function AddAsset() {
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
       if (app.appType === AppType.NODE_CONNECT) {
-        navigateToIssue(true);
+        navigateToIssue(false);
         return;
       }
       const feeData = getAssetIssuanceFeeMutation.data;
@@ -147,7 +147,7 @@ function AddAsset() {
             tx.metadata?.assetId === '',
         );
         if (feesPaid?.length > 0) {
-          navigateToIssue(true);
+          navigateToIssue(false);
         } else {
           setTimeout(() => {
             setShowFeeModal(true);
@@ -155,7 +155,7 @@ function AddAsset() {
           getAssetIssuanceFeeMutation.reset();
         }
       } else {
-        navigateToIssue(true);
+        navigateToIssue(false);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
       Toast(assets.failToFetchIssueFee, true);
@@ -194,7 +194,11 @@ function AddAsset() {
 
   const canProceed = useMemo(() => {
     if (app.appType === AppType.NODE_CONNECT) {
-      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable + rgbWallet?.nodeBtcBalance?.vanilla?.future > 0;
+      return (
+        rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
+          rgbWallet?.nodeBtcBalance?.vanilla?.future >
+        0
+      );
     }
     return (
       wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
@@ -270,7 +274,7 @@ function AddAsset() {
             if (!canProceed) {
               setVisible(true);
             } else {
-              getAssetIssuanceFeeMutation.mutate();
+              navigateToIssue(false)
             }
           }}
           testID="issue_new"

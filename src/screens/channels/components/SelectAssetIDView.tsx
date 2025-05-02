@@ -13,7 +13,7 @@ import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import Identicon from 'src/components/Identicon';
+import AssetIcon from 'src/components/AssetIcon';
 
 type Props = {
   selectedAsset: Asset;
@@ -49,10 +49,11 @@ const SelectAssetIDView = (props: Props) => {
                     style={styles.imageStyle}
                   />
                 ) : (
-                  <Identicon
-                    value={selectedAsset?.assetId}
-                    style={styles.identiconView}
+                  <AssetIcon
+                    assetTicker={selectedAsset?.ticker}
+                    assetID={selectedAsset?.assetId}
                     size={windowHeight > 670 ? 50 : 30}
+                    verified={selectedAsset?.issuer?.verified}
                   />
                 )}
               </View>
