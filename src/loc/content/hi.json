@@ -565,7 +565,7 @@
     "verifyNow": "अभी सत्यापित करें",
     "issuerVerificationTitle": "जारीकर्ता सत्यापन आवश्यक",
     "issuerVerificationSubTitle": "अपनी पहचान सत्यापित करने के लिए अपने ट्विटर खाते से कनेक्ट करें।",
-    "connectVerifyTwitter": "कनेक्ट करें और ट्विटर पर सत्यापित करें",
+    "connectVerifyTwitter": "X पर सत्यापित करें",
     "viewInRegistry": "रजिस्टर में देखें",
     "udaCollectibleInfo1": "यूडीए बनाम कलेक्टिबल्स",
     "udaCollectibleInfoBold": "यूडीए",
@@ -601,7 +601,8 @@
     "assetRegistryTitle": "रजिस्ट्री क्यों महत्वपूर्ण है?",
     "assetRegistrySubTitle": "आपकी संपत्ति को पंजीकृत करने से यह Bitcoin Tribe की आधिकारिक रजिस्ट्री में जुड़ जाती है, जिससे यह प्रमाणित होता है कि यह असली है और आपकी है।",
     "assetRegistrySubTitle2": "एक बार की सेवा शुल्क ",
-    "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।"
+    "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।",
+    "verificationTitle": "VERIFICATION"
   },
   "community": {
     "fnfTitle": "Community",

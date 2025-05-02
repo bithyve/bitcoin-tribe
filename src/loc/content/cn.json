@@ -565,7 +565,7 @@
     "verifyNow": "立即验证",
     "issuerVerificationTitle": "发行人验证必需",
     "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
-    "connectVerifyTwitter": "连接并在 Twitter 上验证",
+    "connectVerifyTwitter": "在 X 上验证",
     "viewInRegistry": "在注册表中查看",
     "udaCollectibleInfo1": "UDAs 与 收藏品",
     "udaCollectibleInfoBold": "UDAs",
@@ -601,7 +601,8 @@
     "assetRegistryTitle": "为什么注册很重要？",
     "assetRegistrySubTitle": "注册您的资产会将其添加到 Bitcoin Tribe 的官方注册表中，证明它是真实且归您所有。",
     "assetRegistrySubTitle2": "一次性服务费用为 ",
-    "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。"
+    "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
+    "verificationTitle": "VERIFICATION"
   },
   "community": {
     "fnfTitle": "Community",

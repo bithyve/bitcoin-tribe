@@ -565,7 +565,7 @@
     "verifyNow": "Verificar ahora",
     "issuerVerificationTitle": "Verificación del emisor requerida",
     "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
-    "connectVerifyTwitter": "Conectar y verificar en Twitter",
+    "connectVerifyTwitter": "Verificar en X",
     "viewInRegistry": "Ver en el Registro",
     "udaCollectibleInfo1": "UDAs vs. Coleccionables",
     "udaCollectibleInfoBold": "UDAs",
@@ -601,7 +601,8 @@
     "assetRegistryTitle": "¿Por qué es importante el registro?",
     "assetRegistrySubTitle": "Registrar tu activo lo añade al registro oficial de Bitcoin Tribe, demostrando que es genuino y de tu propiedad.",
     "assetRegistrySubTitle2": "Se aplica una tarifa de servicio única de ",
-    "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter."
+    "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
+    "verificationTitle": "VERIFICATION"
   },
   "community": {
     "fnfTitle": "Community",
