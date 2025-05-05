@@ -29,6 +29,7 @@ function BackupHistoryList() {
           date={item.date}
           releaseNotes={item.releaseNotes}
           lastIndex={lastIndex === index}
+          showCollapseIcon={false}
         />
       )}
       style={styles.container}
