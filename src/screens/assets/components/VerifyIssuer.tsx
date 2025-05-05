@@ -30,7 +30,7 @@ import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import InfoIcon from 'src/assets/images/infoIcon1.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
 import VerticalGradientView from 'src/components/VerticalGradientView';
 

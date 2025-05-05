@@ -197,12 +197,14 @@ const CoinsMetaDataScreen = () => {
               <View style={styles.seperatorView} />
             </>
           )}
-          {!coin?.isPosted && coin?.issuer?.verified && (
-            <ShareOptionView
-              title={assets.sharePostTitle}
-              onPress={() => setVisiblePostOnTwitter(true)}
-            />
-          )}
+          <View style={styles.wrapper}>
+            {!coin?.isPosted && coin?.issuer?.verified && (
+              <ShareOptionView
+                title={assets.sharePostTitle}
+                onPress={() => setVisiblePostOnTwitter(true)}
+              />
+            )}
+          </View>
           <HideAssetView
             title={assets.hideAsset}
             onPress={() => hideAsset()}
