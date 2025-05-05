@@ -223,7 +223,7 @@
     "currencySubTitle": "Choose your Currency",
     "appBackupScreenSubTitle": "Write down this Backup Phrase",
     "confirmBackupPhrase": "Confirm backup phrase",
-    "confirmBackupPhraseSubtitle": "Key in the word exactly like it was displayed",
+    "confirmBackupPhraseSubtitle": "Enter key in the word exactly like it was displayed",
     "enterSeedWord": "Enter Seed Word",
     "enterSeedWordLabel": "Enter the first (01) word",
     "conSettingScreenSubTitle": "Enter lightning details",
