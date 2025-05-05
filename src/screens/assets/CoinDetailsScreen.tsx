@@ -8,8 +8,12 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import {
+  Asset,
+  Coin,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -30,8 +34,12 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import { findTweetWithAssetID, getUserTweets } from 'src/services/twitter';
+import dbManager from 'src/storage/realm/dbManager';
+import Relay from 'src/services/relay';
 
 const CoinDetailsScreen = () => {
+  const storage = new MMKV();
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -149,6 +157,45 @@ const CoinDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const searchForAssetTweet = async (assetID: string) => {
+    // const accessToken = coin.issuer.verifiedBy[0].accessToken;
+    const accessToken = storage.getString('accessToken');
+    console.log('accessToken', accessToken);
+    const tweets = await getUserTweets(
+      coin.issuer.verifiedBy[0].id,
+      accessToken,
+    );
+    console.log('tweets', tweets);
+    const tweetId = findTweetWithAssetID(tweets, assetID);
+
+    if (tweetId) {
+      const response = await Relay.verifyIssuer('appID', assetId, {
+        type: IssuerVerificationMethod.TWITTER_POST,
+        link: tweetId,
+      });
+      if (response.status) {
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.Coin,
+          'assetId',
+          assetId,
+          {
+            issuer: {
+              verified: true,
+              verifiedBy: [
+                {
+                  type: IssuerVerificationMethod.TWITTER_POST,
+                  link: tweetId,
+                },
+              ],
+            },
+          },
+        );
+      }
+    } else {
+      console.log('No tweet found with assetID:', assetID);
+    }
+  };
+
   const totalAssetLocalAmount = useMemo(() => {
     return (channelsData ?? [])
       .filter(channel => channel.asset_id === assetId)
@@ -252,6 +299,7 @@ const CoinDetailsScreen = () => {
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
+            searchForAssetTweet(assetId);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
