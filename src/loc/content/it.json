@@ -291,7 +291,7 @@
     "viewNodeInfo": "Informazioni Nodo",
     "channelManagement": "Gestione del canale",
     "hiddenAssets": "Beni Nascosti",
-    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca l'icona dell'occhio per mostrarli.",
+    "hiddenAssetSubTitle": "Gestisci le tue monete e collezionabili nascosti. Tocca il pulsante 'Scopri' per rendere visibile l'asset.",
     "cloudBackupLoadingTitle": "Backup su cloud",
     "cloudBackupLoadingSubTitle": "I tuoi dati vengono salvati in modo sicuro—attendi un momento! Rilassati e il tuo backup sarà completato a breve.",
     "walletBackupInfo": "Annota la tua frase seed e conservala in un luogo sicuro al di fuori dell'app.",
@@ -602,7 +602,8 @@
     "assetRegistrySubTitle": "Registrando il tuo asset lo aggiungi al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico e di tua proprietà.",
     "assetRegistrySubTitle2": "È prevista una commissione di servizio una tantum di ",
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
-    "verificationTitle": "VERIFICATION"
+    "sharePostTitle": "Condividi il post su X",
+    "verificationTitle": "VERIFICA"
   },
   "community": {
     "fnfTitle": "Community",

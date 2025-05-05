@@ -1,12 +1,12 @@
-import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  useCallback,
-} from 'react';
+import {
+  AppState,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import {
   StackActions,
   useFocusEffect,
@@ -51,12 +51,15 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import ShareOptionView from './components/ShareOptionView';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
   const hasShownPostModal = useRef(false);
+  const appState = useRef(AppState.currentState);
   const { assetId, askReview, askVerify } = useRoute().params;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const {
@@ -86,6 +89,7 @@ const UDADetailsScreen = () => {
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -105,15 +109,43 @@ const UDADetailsScreen = () => {
   }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
-    if (askReview) {
+    if (askVerify) {
+      setTimeout(() => setShowVerifyModal(true), 1000);
+    }
+  }, [askVerify]);
+
+  useEffect(() => {
+    if (askReview && refresh) {
       setTimeout(() => {
         requestAppReview();
-        if (askVerify) {
-          setShowVerifyModal(true);
-        }
       }, 2000);
     }
-  }, [askReview, askVerify]);
+  }, [askReview, refresh]);
+
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        if (askReview && refresh) {
+          setTimeout(() => {
+            requestAppReview();
+          }, 2000);
+        }
+      }
+      appState.current = nextAppState;
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [askReview, refresh]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -270,6 +302,12 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        {!uda?.isPosted && uda?.issuer?.verified && (
+          <ShareOptionView
+            title={assets.sharePostTitle}
+            onPress={() => setVisiblePostOnTwitter(true)}
+          />
+        )}
         <HideAssetView
           title={assets.hideAsset}
           onPress={() => hideAsset()}
@@ -295,9 +333,24 @@ const UDADetailsScreen = () => {
       <>
         <PostOnTwitterModal
           visible={visiblePostOnTwitter}
+          primaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
+            setRefresh(prev => !prev);
+          }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              false,
+            );
           }}
           issuerInfo={uda}
         />
@@ -305,9 +358,14 @@ const UDADetailsScreen = () => {
       <>
         <IssueAssetPostOnTwitterModal
           visible={visibleIssuedPostOnTwitter}
+          primaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setRefresh(prev => !prev);
+          }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
+            setRefresh(prev => !prev);
           }}
           issuerInfo={uda}
         />

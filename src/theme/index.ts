@@ -103,6 +103,8 @@ type CustomColors = {
   backupAlertBackColor: string;
   walletBackgroundColor: string;
   sliderTrackColor: string;
+  hideAssetCTABackColor: string;
+  hideAssetDeviderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -214,6 +216,8 @@ const CombinedDefaultTheme: AppTheme = {
     backupAlertBackColor: Colors.VividGamboge,
     walletBackgroundColor: Colors.White,
     sliderTrackColor: Colors.ChineseSilver,
+    hideAssetCTABackColor: Colors.BrandeisBlue1,
+    hideAssetDeviderColor: Colors.DarkSilver,
   },
   fonts: {
     regular: {
@@ -333,6 +337,8 @@ const CombinedDarkTheme: AppTheme = {
     backupAlertBackColor: Colors.VividGamboge,
     walletBackgroundColor: Colors.SmokyBlack,
     sliderTrackColor: Colors.DarkCharcoal,
+    hideAssetCTABackColor: Colors.Golden1,
+    hideAssetDeviderColor: Colors.Arsenic,
   },
   fonts: {
     regular: {
