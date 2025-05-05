@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "A one-time service fee of ",
     "assetRegistrySubTitle3": "applies. Not ready to register? You can skip it and still share your asset on X",
     "sharePostTitle": "Share post on X",
-    "verificationTitle": "VERIFICATION"
+    "verificationTitle": "VERIFICATION",
+    "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee."
   },
   "community": {
     "fnfTitle": "Community",

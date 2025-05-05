@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "È prevista una commissione di servizio una tantum di ",
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
-    "verificationTitle": "VERIFICA"
+    "verificationTitle": "VERIFICA",
+    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio."
   },
   "community": {
     "fnfTitle": "Community",
