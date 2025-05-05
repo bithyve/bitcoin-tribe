@@ -182,11 +182,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(
-        `Failed to pay service fee. Please refresh your wallet and try again.`,
-        true,
-      );
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+      }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }

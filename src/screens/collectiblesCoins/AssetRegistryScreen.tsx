@@ -130,8 +130,10 @@ function AssetRegistryScreen() {
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(assets.payServiceFeeFundError, true);
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+        navigation.goBack();
+      }
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);
