@@ -15,6 +15,7 @@ const config = {
 };
 const TWITTER_API_BASE = 'https://api.twitter.com/2';
 const storage = new MMKV();
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export const getXProfile = async (accessToken: string) => {
   try {
@@ -39,18 +40,17 @@ export const loginWithTwitter = async (): Promise<{
   id: string;
   name: string;
   username: string;
-  accessToken: string;
 }> => {
   try {
     const result = await authorize(config);
     if (result.accessToken) {
+      console.log('result.accessToken', result.accessToken);
       storage.set('accessToken', result.accessToken);
       const profile = await getXProfile(result.accessToken);
       return {
         id: profile.data.id,
         name: profile.data.name,
         username: profile.data.username,
-        accessToken: result.accessToken,
       };
     }
     throw new Error('No access token received');
@@ -59,31 +59,64 @@ export const loginWithTwitter = async (): Promise<{
   }
 };
 
-export const getUserTweets = async (
+export const getUserTweetByAssetId = async (
   userId: string,
   accessToken: string,
-): Promise<any[]> => {
+  assetId: string,
+): Promise<any | null> => {
   try {
+    console.log('getUserTweetByAssetId userId', userId);
     const response = await fetch(
       `${TWITTER_API_BASE}/users/${userId}/tweets?max_results=10`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
       },
     );
+
     const json = await response.json();
-    return json?.data || [];
+    const tweets = json?.data || [];
+
+    console.log('Fetched tweets:', tweets);
+
+    const matchingTweet = tweets.find(tweet => tweet.text.includes(assetId));
+
+    if (matchingTweet) {
+      console.log('Found matching tweet:', matchingTweet);
+      return matchingTweet;
+    } else {
+      console.log('No tweet found with assetId:', assetId);
+      return null;
+    }
   } catch (error) {
     console.error('Error fetching tweets:', error);
-    return [];
+    return null;
   }
 };
 
-export const findTweetWithAssetID = (
-  tweets: any[],
-  assetID: string,
-): string | null => {
-  const tweet = tweets.find(t => t.text.includes(assetID));
-  return tweet ? tweet.id : null;
+export const getUserTweetByAssetIdWithRetry = async (
+  userId: string,
+  accessToken: string,
+  assetId: string,
+  retries = 5,
+  delayMs = 5000,
+): Promise<any | null> => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const tweet = await getUserTweetByAssetId(userId, accessToken, assetId);
+    if (tweet) return tweet;
+    if (attempt < retries) {
+      await delay(delayMs);
+    }
+  }
+  return null;
 };
+
+// export const findTweetWithAssetID = (
+//   tweets: any[],
+//   assetID: string,
+// ): string | null => {
+//   const tweet = tweets.find(t => t.text.includes(assetID));
+//   return tweet ? tweet.id : null;
+// };

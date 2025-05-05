@@ -34,7 +34,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
-import { findTweetWithAssetID, getUserTweets } from 'src/services/twitter';
+import { getUserTweetByAssetIdWithRetry } from 'src/services/twitter';
 import dbManager from 'src/storage/realm/dbManager';
 import Relay from 'src/services/relay';
 
@@ -73,6 +73,7 @@ const CoinDetailsScreen = () => {
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -116,6 +117,12 @@ const CoinDetailsScreen = () => {
             requestAppReview();
           }, 2000);
         }
+        if (isSharingToTwitter) {
+          setIsSharingToTwitter(false);
+          setTimeout(() => {
+            searchForAssetTweet(assetId);
+          }, 5000);
+        }
       }
       appState.current = nextAppState;
     };
@@ -128,7 +135,7 @@ const CoinDetailsScreen = () => {
     return () => {
       subscription.remove();
     };
-  }, [askReview, refresh]);
+  }, [askReview, refresh, isSharingToTwitter]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -158,21 +165,20 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const searchForAssetTweet = async (assetID: string) => {
-    // const accessToken = coin.issuer.verifiedBy[0].accessToken;
     const accessToken = storage.getString('accessToken');
-    console.log('accessToken', accessToken);
-    const tweets = await getUserTweets(
+    console.log('accessToken', accessToken, coin.issuer.verifiedBy[0].id);
+    const matchingTweet = await getUserTweetByAssetIdWithRetry(
       coin.issuer.verifiedBy[0].id,
       accessToken,
+      assetID,
     );
-    console.log('tweets', tweets);
-    const tweetId = findTweetWithAssetID(tweets, assetID);
-
-    if (tweetId) {
+    console.log('matchingTweet', matchingTweet);
+    if (matchingTweet) {
       const response = await Relay.verifyIssuer('appID', assetId, {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
       });
+      console.log('details response', response);
       if (response.status) {
         dbManager.updateObjectByPrimaryId(
           RealmSchema.Coin,
@@ -183,7 +189,7 @@ const CoinDetailsScreen = () => {
               verified: true,
               verifiedBy: [
                 {
-                  type: IssuerVerificationMethod.TWITTER_POST,
+                  type: IssuerVerificationMethod.TWITTER,
                   link: tweetId,
                 },
               ],
@@ -299,7 +305,7 @@ const CoinDetailsScreen = () => {
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
-            searchForAssetTweet(assetId);
+            setIsSharingToTwitter(true);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
