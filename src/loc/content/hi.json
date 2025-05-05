@@ -291,7 +291,7 @@
     "viewNodeInfo": "नोड जानकारी",
     "channelManagement": "चैनल प्रबंधन",
     "hiddenAssets": "छिपी हुई संपत्तियाँ",
-    "hiddenAssetSubTitle": "अपने छिपे हुए सिक्कों और संग्रहणीय वस्तुओं का प्रबंधन करें। अनहाइड करने के लिए आईकॉन पर टैप करें।",
+    "hiddenAssetSubTitle": "अपने छिपे हुए सिक्कों और कलेक्टिबल्स को प्रबंधित करें। एसेट को अनहाइड करने के लिए अनहाइड बटन टैप करें।",
     "cloudBackupLoadingTitle": "क्लाउड बैकअप",
     "cloudBackupLoadingSubTitle": "आपका डेटा सुरक्षित रूप से बैकअप हो रहा है—कृपया प्रतीक्षा करें! आराम करें, और आपका बैकअप जल्द ही पूरा हो जाएगा।",
     "walletBackupInfo": "अपना सीड वाक्यांश लिखें और इसे ऐप के बाहर सुरक्षित रूप से स्टोर करें।",
@@ -602,7 +602,8 @@
     "assetRegistrySubTitle": "आपकी संपत्ति को पंजीकृत करने से यह Bitcoin Tribe की आधिकारिक रजिस्ट्री में जुड़ जाती है, जिससे यह प्रमाणित होता है कि यह असली है और आपकी है।",
     "assetRegistrySubTitle2": "एक बार की सेवा शुल्क ",
     "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।",
-    "verificationTitle": "VERIFICATION"
+    "sharePostTitle": "X पर पोस्ट साझा करें",
+    "verificationTitle": "सत्यापन"
   },
   "community": {
     "fnfTitle": "Community",

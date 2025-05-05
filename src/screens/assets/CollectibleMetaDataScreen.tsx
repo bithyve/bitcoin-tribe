@@ -41,6 +41,8 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import ShareOptionView from './components/ShareOptionView';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -93,6 +95,7 @@ const CollectibleMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -223,6 +226,12 @@ const CollectibleMetaDataScreen = () => {
                 <View style={styles.seperatorView} />
               </>
             )}
+            {!collectible?.isPosted && collectible?.issuer?.verified && (
+              <ShareOptionView
+                title={assets.sharePostTitle}
+                onPress={() => setVisiblePostOnTwitter(true)}
+              />
+            )}
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}
@@ -232,9 +241,20 @@ const CollectibleMetaDataScreen = () => {
             <>
               <PostOnTwitterModal
                 visible={visiblePostOnTwitter}
+                primaryOnPress={() => {
+                  setVisiblePostOnTwitter(false);
+                  setCompleteVerification(false);
+                  updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+                  setRefresh(prev => !prev);
+                }}
                 secondaryOnPress={() => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
+                  updateAssetPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
                 }}
                 issuerInfo={collectible}
               />

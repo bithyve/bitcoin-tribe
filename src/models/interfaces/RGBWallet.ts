@@ -80,6 +80,7 @@ export interface Coin {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
+  isPosted: boolean;
 }
 
 export interface Media {
@@ -103,6 +104,7 @@ export interface Collectible {
   transactions: Transfer[];
   issuer: Issuer;
   visibility: AssetVisibility;
+  isPosted: boolean;
 }
 
 export interface UniqueDigitalAsset {
@@ -127,6 +129,7 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
+  isPosted: boolean;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
