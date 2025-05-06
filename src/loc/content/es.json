@@ -223,7 +223,7 @@
     "currencySubTitle": "Elige tu moneda",
     "appBackupScreenSubTitle": "Escribe esta frase de respaldo",
     "confirmBackupPhrase": "Confirma la frase de respaldo",
-    "confirmBackupPhraseSubtitle": "Introduce la palabra exactamente como se mostró",
+    "confirmBackupPhraseSubtitle": "Ingresa la palabra exactamente como se mostró",
     "enterSeedWord": "Introduce la palabra semilla",
     "enterSeedWordLabel": "Introduce la primera (01) palabra",
     "conSettingScreenSubTitle": "Introduce los detalles de lightning",
@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "Se aplica una tarifa de servicio única de ",
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
-    "verificationTitle": "VERIFICACIÓN"
+    "verificationTitle": "VERIFICACIÓN",
+    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio."
   },
   "community": {
     "fnfTitle": "Community",

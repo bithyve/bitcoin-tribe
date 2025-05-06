@@ -73,7 +73,6 @@ function SendScreen({ route, navigation }) {
                 setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
               }
             } else {
-              setIsScanning(true);
               navigateWithDelay(() => {
                 navigation.replace(NavigationRoutes.SENDASSET, {
                   assetId: res.assetId,
@@ -82,9 +81,9 @@ function SendScreen({ route, navigation }) {
                   amount: res.amount.toString(),
                 });
               });
+              setIsScanning(true);
             }
           } else {
-            setIsScanning(true);
             navigateWithDelay(() => {
               navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
                 wallet,
@@ -93,6 +92,7 @@ function SendScreen({ route, navigation }) {
                 amount: '',
               });
             });
+            setIsScanning(true);
           }
           return;
         } catch (error) {

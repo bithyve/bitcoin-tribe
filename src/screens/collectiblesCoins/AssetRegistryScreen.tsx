@@ -130,11 +130,10 @@ function AssetRegistryScreen() {
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(
-        `Failed to pay service fee. Please refresh your wallet and try again.`,
-        true,
-      );
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+        navigation.goBack();
+      }
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);

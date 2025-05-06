@@ -223,7 +223,7 @@
     "currencySubTitle": "选择您的货币",
     "appBackupScreenSubTitle": "写下这个备份短语",
     "confirmBackupPhrase": "确认备份短语",
-    "confirmBackupPhraseSubtitle": "准确输入显示的单词",
+    "confirmBackupPhraseSubtitle": "请按照显示的顺序准确输入密语中的单词",
     "enterSeedWord": "输入种子词",
     "enterSeedWordLabel": "输入第一个（01）单词",
     "conSettingScreenSubTitle": "输入闪电网络详细信息",
@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "一次性服务费用为 ",
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
-    "verificationTitle": "验证"
+    "verificationTitle": "验证",
+    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。"
   },
   "community": {
     "fnfTitle": "Community",
