@@ -223,7 +223,7 @@
     "currencySubTitle": "अपनी मुद्रा चुनें",
     "appBackupScreenSubTitle": "यह बैकअप वाक्यांश लिखें",
     "confirmBackupPhrase": "बैकअप वाक्यांश की पुष्टि करें",
-    "confirmBackupPhraseSubtitle": "शब्द को ठीक उसी तरह दर्ज करें जैसा दिखाया गया था",
+    "confirmBackupPhraseSubtitle": "वाक्यांश के शब्द को ठीक उसी तरह दर्ज करें जैसे यह दिखाया गया था",
     "enterSeedWord": "सीड वर्ड दर्ज करें",
     "enterSeedWordLabel": "पहला (01) शब्द दर्ज करें",
     "conSettingScreenSubTitle": "लाइटनिंग विवरण दर्ज करें",
@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "एक बार की सेवा शुल्क ",
     "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।",
     "sharePostTitle": "X पर पोस्ट साझा करें",
-    "verificationTitle": "सत्यापन"
+    "verificationTitle": "सत्यापन",
+    "payServiceFeeFundError": "पर्याप्त धनराशि नहीं है। कृपया सेवा शुल्क का भुगतान करने के लिए अपने वॉलेट में कम से कम 5,000 सैट्स सुनिश्चित करें।"
   },
   "community": {
     "fnfTitle": "Community",

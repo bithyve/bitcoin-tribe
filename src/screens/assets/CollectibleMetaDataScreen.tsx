@@ -226,12 +226,14 @@ const CollectibleMetaDataScreen = () => {
                 <View style={styles.seperatorView} />
               </>
             )}
-            {!collectible?.isPosted && collectible?.issuer?.verified && (
-              <ShareOptionView
-                title={assets.sharePostTitle}
-                onPress={() => setVisiblePostOnTwitter(true)}
-              />
-            )}
+            <View style={styles.wrapper}>
+              {!collectible?.isPosted && collectible?.issuer?.verified && (
+                <ShareOptionView
+                  title={assets.sharePostTitle}
+                  onPress={() => setVisiblePostOnTwitter(true)}
+                />
+              )}
+            </View>
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}

@@ -302,12 +302,14 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {!uda?.isPosted && uda?.issuer?.verified && (
-          <ShareOptionView
-            title={assets.sharePostTitle}
-            onPress={() => setVisiblePostOnTwitter(true)}
-          />
-        )}
+        <View style={styles.wrapper}>
+          {!uda?.isPosted && uda?.issuer?.verified && (
+            <ShareOptionView
+              title={assets.sharePostTitle}
+              onPress={() => setVisiblePostOnTwitter(true)}
+            />
+          )}
+        </View>
         <HideAssetView
           title={assets.hideAsset}
           onPress={() => hideAsset()}

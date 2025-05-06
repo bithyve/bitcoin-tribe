@@ -21,6 +21,7 @@ type Props = {
   date: string;
   lastIndex: boolean;
   version: string;
+  showCollapseIcon?: boolean;
 };
 function VersionHistoryItem({
   title,
@@ -28,6 +29,7 @@ function VersionHistoryItem({
   date,
   lastIndex,
   version,
+  showCollapseIcon,
 }: Props) {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -68,7 +70,9 @@ function VersionHistoryItem({
                 {moment(date).fromNow()}
               </AppText>
             </View>
-            <View style={styles.dropDownIconWrapper}>{renderIcon()}</View>
+            {showCollapseIcon && (
+              <View style={styles.dropDownIconWrapper}>{renderIcon()}</View>
+            )}
           </AppTouchable>
           {!isCollapsed && releaseNotes && (
             <View style={styles.content}>
