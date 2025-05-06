@@ -827,13 +827,13 @@ export class ApiHandler {
     });
     await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
-      await ApiHandler.updateTransaction({
+      const updated = await ApiHandler.updateTransaction({
         txid,
         updateProps: {
-          note: '',
           transactionKind: TransactionKind.SERVICE_FEE,
           metadata: {
             assetId: '',
+            note: '',
           },
         },
       });
@@ -848,22 +848,27 @@ export class ApiHandler {
     txid: string;
     updateProps: {};
   }): Promise<boolean> {
-    const wallet: Wallet = dbManager
-      .getObjectByIndex(RealmSchema.Wallet)
-      .toJSON();
-    const transactions = wallet.specs.transactions;
-    const index = transactions.findIndex(tx => tx.txid === txid);
-    transactions[index] = {
-      ...transactions[index],
-      ...updateProps,
-    };
-    dbManager.updateObjectByPrimaryId(RealmSchema.Wallet, 'id', wallet.id, {
-      specs: {
-        transactions: transactions,
-        ...wallet.specs,
-      },
-    });
-    return true;
+    try {
+      const wallet: Wallet = dbManager
+        .getObjectByIndex(RealmSchema.Wallet)
+        .toJSON();
+      const transactions = wallet.specs.transactions;
+      const index = transactions.findIndex(tx => tx.txid === txid);
+      transactions[index] = {
+        ...transactions[index],
+        ...updateProps,
+      };
+      dbManager.updateObjectByPrimaryId(RealmSchema.Wallet, 'id', wallet.id, {
+        specs: {
+          transactions: transactions,
+          ...wallet.specs,
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log('error', error);
+      return false;
+    }
   }
 
   static async sendToAddress({
@@ -1753,10 +1758,7 @@ export class ApiHandler {
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
     );
-    Storage.set(
-      Keys.SERVICE_FEE,
-      JSON.stringify(serviceFee),
-    );
+    Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
     await ApiHandler.getTxRates();
   }
 
