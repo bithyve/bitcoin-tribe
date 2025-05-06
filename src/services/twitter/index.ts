@@ -44,7 +44,6 @@ export const loginWithTwitter = async (): Promise<{
   try {
     const result = await authorize(config);
     if (result.accessToken) {
-      console.log('result.accessToken', result.accessToken);
       storage.set('accessToken', result.accessToken);
       const profile = await getXProfile(result.accessToken);
       return {
@@ -65,7 +64,6 @@ export const getUserTweetByAssetId = async (
   assetId: string,
 ): Promise<any | null> => {
   try {
-    console.log('getUserTweetByAssetId userId', userId);
     const response = await fetch(
       `${TWITTER_API_BASE}/users/${userId}/tweets?max_results=10`,
       {
@@ -79,15 +77,11 @@ export const getUserTweetByAssetId = async (
     const json = await response.json();
     const tweets = json?.data || [];
 
-    console.log('Fetched tweets:', tweets);
-
     const matchingTweet = tweets.find(tweet => tweet.text.includes(assetId));
 
     if (matchingTweet) {
-      console.log('Found matching tweet:', matchingTweet);
       return matchingTweet;
     } else {
-      console.log('No tweet found with assetId:', assetId);
       return null;
     }
   } catch (error) {
@@ -100,7 +94,7 @@ export const getUserTweetByAssetIdWithRetry = async (
   userId: string,
   accessToken: string,
   assetId: string,
-  retries = 5,
+  retries = 10,
   delayMs = 5000,
 ): Promise<any | null> => {
   for (let attempt = 1; attempt <= retries; attempt++) {
