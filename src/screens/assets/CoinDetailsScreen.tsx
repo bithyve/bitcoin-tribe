@@ -37,6 +37,7 @@ import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import { getUserTweetByAssetIdWithRetry } from 'src/services/twitter';
 import dbManager from 'src/storage/realm/dbManager';
 import Relay from 'src/services/relay';
+import { connected } from 'process';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -106,36 +107,36 @@ const CoinDetailsScreen = () => {
     }
   }, [askReview, refresh]);
 
-  useEffect(() => {
-    const handleAppStateChange = nextAppState => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        if (askReview && refresh) {
-          setTimeout(() => {
-            requestAppReview();
-          }, 2000);
-        }
-        if (isSharingToTwitter) {
-          setIsSharingToTwitter(false);
-          setTimeout(() => {
-            searchForAssetTweet(assetId);
-          }, 5000);
-        }
-      }
-      appState.current = nextAppState;
-    };
+  // useEffect(() => {
+  //   const handleAppStateChange = nextAppState => {
+  //     if (
+  //       appState.current.match(/inactive|background/) &&
+  //       nextAppState === 'active'
+  //     ) {
+  //       if (askReview && refresh) {
+  //         setTimeout(() => {
+  //           requestAppReview();
+  //         }, 2000);
+  //       }
+  //       if (isSharingToTwitter) {
+  //         setIsSharingToTwitter(false);
+  //         setTimeout(() => {
+  //           searchForAssetTweet(assetId);
+  //         }, 5000);
+  //       }
+  //     }
+  //     appState.current = nextAppState;
+  //   };
 
-    const subscription = AppState.addEventListener(
-      'change',
-      handleAppStateChange,
-    );
+  //   const subscription = AppState.addEventListener(
+  //     'change',
+  //     handleAppStateChange,
+  //   );
 
-    return () => {
-      subscription.remove();
-    };
-  }, [askReview, refresh, isSharingToTwitter]);
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, [askReview, refresh, isSharingToTwitter]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -164,43 +165,43 @@ const CoinDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
-  const searchForAssetTweet = async (assetID: string) => {
-    const accessToken = storage.getString('accessToken');
-    console.log('accessToken', accessToken, coin.issuer.verifiedBy[0].id);
-    const matchingTweet = await getUserTweetByAssetIdWithRetry(
-      coin.issuer.verifiedBy[0].id,
-      accessToken,
-      assetID,
-    );
-    console.log('matchingTweet', matchingTweet);
-    if (matchingTweet) {
-      const response = await Relay.verifyIssuer('appID', assetId, {
-        type: IssuerVerificationMethod.TWITTER_POST,
-        link: tweetId,
-      });
-      console.log('details response', response);
-      if (response.status) {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.Coin,
-          'assetId',
-          assetId,
-          {
-            issuer: {
-              verified: true,
-              verifiedBy: [
-                {
-                  type: IssuerVerificationMethod.TWITTER,
-                  link: tweetId,
-                },
-              ],
-            },
-          },
-        );
-      }
-    } else {
-      console.log('No tweet found with assetID:', assetID);
-    }
-  };
+  // const searchForAssetTweet = async (assetID: string) => {
+  //   const accessToken = storage.getString('accessToken');
+  //   const matchingTweet = await getUserTweetByAssetIdWithRetry(
+  //     coin.issuer.verifiedBy[0].id,
+  //     accessToken,
+  //     assetID,
+  //     coin.issuer.verifiedBy[0].username,
+  //   );
+  //   console.log('matchingTweet', matchingTweet);
+  //   if (matchingTweet && matchingTweet.id) {
+  //     const response = await Relay.verifyIssuer('appID', assetId, {
+  //       type: IssuerVerificationMethod.TWITTER_POST,
+  //       link: matchingTweet.id,
+  //     });
+  //     console.log('details response', response);
+  //     if (response.status) {
+  //       dbManager.updateObjectByPrimaryId(
+  //         RealmSchema.Coin,
+  //         'assetId',
+  //         assetId,
+  //         {
+  //           issuer: {
+  //             verified: true,
+  //             verifiedBy: [
+  //               {
+  //                 type: IssuerVerificationMethod.TWITTER,
+  //                 link: matchingTweet.id,
+  //               },
+  //             ],
+  //           },
+  //         },
+  //       );
+  //     }
+  //   } else {
+  //     console.log('No tweet found with assetID:', assetID);
+  //   }
+  // };
 
   const totalAssetLocalAmount = useMemo(() => {
     return (channelsData ?? [])

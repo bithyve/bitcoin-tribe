@@ -27,6 +27,7 @@ import PinMethod from 'src/models/enums/PinMethod';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import * as bip39 from 'bip39';
 import crypto from 'crypto';
+import { MMKV } from 'react-native-mmkv';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
@@ -46,7 +47,9 @@ import { Keys, Storage } from 'src/storage';
 import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
+  Asset,
   Collectible,
+  IssuerVerificationMethod,
   NodeInfo,
   RgbNodeConnectParams,
   RGBWallet,
@@ -75,9 +78,11 @@ import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
+import { getUserTweetByAssetId } from '../twitter';
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
+const storage = new MMKV();
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -1753,10 +1758,7 @@ export class ApiHandler {
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
     );
-    Storage.set(
-      Keys.SERVICE_FEE,
-      JSON.stringify(serviceFee),
-    );
+    Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
     await ApiHandler.getTxRates();
   }
 
@@ -2180,6 +2182,58 @@ export class ApiHandler {
       Storage.clear();
     } catch (error) {
       console.log(error);
+      throw error;
+    }
+  }
+
+  static async searchForAssetTweet(asset) {
+    try {
+      const accessToken = storage.getString('accessToken');
+      const twitterHandle = asset?.issuer?.verifiedBy?.[0]?.link;
+
+      if (twitterHandle) return;
+
+      const matchingTweet = await getUserTweetByAssetId(
+        asset.issuer.verifiedBy[0].id,
+        accessToken,
+        asset.assetId,
+      );
+
+      if (matchingTweet) {
+        const response = await Relay.verifyIssuer('appID', assetId, {
+          type: IssuerVerificationMethod.TWITTER_POST,
+          link: matchingTweet.id,
+          id: asset.issuer.verifiedBy[0].id,
+          name: asset.issuer.verifiedBy[0].name,
+          username: asset.issuer.verifiedBy[0].username,
+        });
+
+        if (response.status) {
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.Coin,
+            'assetId',
+            asset.assetId,
+            {
+              issuer: {
+                verified: true,
+                verifiedBy: [
+                  {
+                    type: IssuerVerificationMethod.TWITTER_POST,
+                    link: matchingTweet.id,
+                    id: asset.issuer.verifiedBy[0].id,
+                    name: asset.issuer.verifiedBy[0].name,
+                    username: asset.issuer.verifiedBy[0].username,
+                  },
+                ],
+              },
+            },
+          );
+        }
+      } else {
+        console.log('No tweet found with assetID:', asset.assetId);
+      }
+    } catch (error) {
+      console.error('Failed to verify issuer via tweet:', error);
       throw error;
     }
   }
