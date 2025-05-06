@@ -223,7 +223,7 @@
     "currencySubTitle": "通貨を選択してください",
     "appBackupScreenSubTitle": "このバックアップフレーズを書き留めてください",
     "confirmBackupPhrase": "バックアップフレーズを確認",
-    "confirmBackupPhraseSubtitle": "表示された通りに正確に単語を入力してください",
+    "confirmBackupPhraseSubtitle": "表示されたとおりに正確に単語を入力してください",
     "enterSeedWord": "シードワードを入力",
     "enterSeedWordLabel": "最初の(01)単語を入力",
     "conSettingScreenSubTitle": "ライトニングの詳細を入力",
@@ -603,7 +603,8 @@
     "assetRegistrySubTitle2": "一度限りのサービス料は ",
     "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。",
     "sharePostTitle": "X に投稿を共有する",
-    "verificationTitle": "認証"
+    "verificationTitle": "認証",
+    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。"
   },
   "community": {
     "fnfTitle": "Community",

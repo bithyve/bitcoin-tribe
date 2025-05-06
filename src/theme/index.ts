@@ -124,7 +124,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
-    cardGradient4: Colors.GhostWhite,
+    cardGradient4: Colors.Platinum,
     cardGradient5: Colors.GhostWhite,
     headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,

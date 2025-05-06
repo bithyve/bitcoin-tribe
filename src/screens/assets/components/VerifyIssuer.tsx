@@ -30,7 +30,7 @@ import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import InfoIcon from 'src/assets/images/infoIcon1.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
 import VerticalGradientView from 'src/components/VerticalGradientView';
 
@@ -182,11 +182,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(
-        `Failed to pay service fee. Please refresh your wallet and try again.`,
-        true,
-      );
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+      }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }

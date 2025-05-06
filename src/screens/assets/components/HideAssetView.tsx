@@ -9,6 +9,10 @@ import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import openLink from 'src/utils/OpenLink';
+import HideAsseIcon from 'src/assets/images/hideAsset.svg';
+import HideAssetIconLight from 'src/assets/images/hideAsset_light.svg';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 type hideAssetViewProps = {
   title: string;
@@ -23,12 +27,14 @@ function HideAssetView(props: hideAssetViewProps) {
   const { assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
     <View style={[styles.container, isVerified && styles.container2]}>
-      <AppTouchable onPress={onPress}>
+      <AppTouchable onPress={onPress} style={styles.hideAssetTextWrapper}>
+        <View>{isThemeDark ? <HideAsseIcon /> : <HideAssetIconLight />}</View>
         <AppText variant="body2" style={[styles.titleStyle]}>
-          {title}
+          &nbsp;{title}
         </AppText>
       </AppTouchable>
       {isVerified && (
@@ -56,11 +62,14 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
     },
     container2: {
-      marginLeft: 30,
+      marginLeft: 10,
     },
     titleStyle: {
       color: theme.colors.headingColor,
       textDecorationLine: 'underline',
+    },
+    hideAssetTextWrapper: {
+      flexDirection: 'row',
     },
   });
 export default HideAssetView;
