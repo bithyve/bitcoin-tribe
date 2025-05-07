@@ -22,7 +22,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import ModalContainer from 'src/components/ModalContainer';
 import { TransactionKind } from 'src/services/wallets/enums';
-import useWallets from 'src/hooks/useWallets';
 import { ServiceFee } from 'src/screens/home/components/AddAsset';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { AppContext } from 'src/contexts/AppContext';
@@ -33,6 +32,7 @@ import InfoIcon from 'src/assets/images/infoIcon1.svg';
 import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
 import VerticalGradientView from 'src/components/VerticalGradientView';
+import { useQuery as realmUseQuery } from '@realm/react';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -126,7 +126,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [showFeeModal, setShowFeeModal] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
-  const wallet: Wallet = useWallets({}).wallets[0];
+  const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
 
   useEffect(() => {
     const fetchAsset = async () => {
