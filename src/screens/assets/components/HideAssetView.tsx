@@ -28,7 +28,7 @@ function HideAssetView(props: hideAssetViewProps) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  console.log('assetId', assetId);
+
   return (
     <View style={[styles.container, isVerified && styles.container2]}>
       <AppTouchable onPress={onPress} style={styles.hideAssetTextWrapper}>
