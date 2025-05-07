@@ -70,6 +70,7 @@ const getStyles = (theme: AppTheme) =>
     },
     hideAssetTextWrapper: {
       flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default HideAssetView;

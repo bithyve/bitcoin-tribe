@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* tribeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* tribeTests.m */; };
-		064E91FFF3FD2DA039D4FE49 /* Pods_tribe_tribeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C346142D6D03C1AA939A6756 /* Pods_tribe_tribeTests.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */; };
+		2A4198BF67632C36AC53DE05 /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85211309807C85F046D8B5A2 /* libPods-tribe-tribe-dev.a */; };
 		353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB8482D75503C002131C1 /* GoogleService-Info.plist */; };
 		353FB84B2D7553A8002131C1 /* GoogleService-Info 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */; };
 		35E339462C22A3AB007E532A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -39,11 +39,11 @@
 		3AC0DD782C4FD1E5003E7D56 /* LufgaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */; };
 		3AC0DD792C4FD1E8003E7D56 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		89E0114E107B4D179614D57C /* Pods_tribe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF1A88463F6EDB0E9973448 /* Pods_tribe.framework */; };
-		92DC0E74CF0F56795A1288AD /* Pods_tribe_tribe_dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1B2C34708CFBC2D6B5680 /* Pods_tribe_tribe_dev.framework */; };
 		98522CA5FBAA40AD99C27A30 /* LufgaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */; };
+		B2739C612B7FF8683C3E410B /* libPods-tribe-tribeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B5642EEB549DA67592D9ACD /* libPods-tribe-tribeTests.a */; };
 		C33B24D6C2E3459FB164E874 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
 		C6D34549A556477FA8A556AF /* LufgaMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */; };
+		EA635E5C624924A6F9332228 /* libPods-tribe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 684576640DE46A1A4D46262A /* libPods-tribe.a */; };
 		F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +71,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tribe/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaMedium.ttf; path = ../src/assets/fonts/LufgaMedium.ttf; sourceTree = "<group>"; };
+		2B5642EEB549DA67592D9ACD /* libPods-tribe-tribeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		353FB8482D75503C002131C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
 		35B1B56D2C69C091007C473A /* tribe-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "tribe-dev.entitlements"; sourceTree = "<group>"; };
@@ -89,13 +90,12 @@
 		4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		626D68F206C6BBA29D54A1FD /* Pods-tribe-tribeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribeTests.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribeTests/Pods-tribe-tribeTests.release.xcconfig"; sourceTree = "<group>"; };
 		655DF6C97BE0786AE0669E41 /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
+		684576640DE46A1A4D46262A /* libPods-tribe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tribe/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		85211309807C85F046D8B5A2 /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaSemiBold.ttf; path = ../src/assets/fonts/LufgaSemiBold.ttf; sourceTree = "<group>"; };
 		A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaRegular.ttf; path = ../src/assets/fonts/LufgaRegular.ttf; sourceTree = "<group>"; };
-		B0C1B2C34708CFBC2D6B5680 /* Pods_tribe_tribe_dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tribe_tribe_dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C346142D6D03C1AA939A6756 /* Pods_tribe_tribeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tribe_tribeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3B6765369A7FA139D5DAB5B /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
-		CEF1A88463F6EDB0E9973448 /* Pods_tribe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tribe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3619F9245DE1964E4A3B582 /* Pods-tribe-tribe-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.debug.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaBold.ttf; path = ../src/assets/fonts/LufgaBold.ttf; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				064E91FFF3FD2DA039D4FE49 /* Pods_tribe_tribeTests.framework in Frameworks */,
+				B2739C612B7FF8683C3E410B /* libPods-tribe-tribeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35EFBBC12C3F739300E57650 /* rgb_libFFI.xcframework in Frameworks */,
-				89E0114E107B4D179614D57C /* Pods_tribe.framework in Frameworks */,
+				EA635E5C624924A6F9332228 /* libPods-tribe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35EFBBC22C3F739300E57650 /* rgb_libFFI.xcframework in Frameworks */,
-				92DC0E74CF0F56795A1288AD /* Pods_tribe_tribe_dev.framework in Frameworks */,
+				2A4198BF67632C36AC53DE05 /* libPods-tribe-tribe-dev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,9 +180,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				CEF1A88463F6EDB0E9973448 /* Pods_tribe.framework */,
-				B0C1B2C34708CFBC2D6B5680 /* Pods_tribe_tribe_dev.framework */,
-				C346142D6D03C1AA939A6756 /* Pods_tribe_tribeTests.framework */,
+				684576640DE46A1A4D46262A /* libPods-tribe.a */,
+				85211309807C85F046D8B5A2 /* libPods-tribe-tribe-dev.a */,
+				2B5642EEB549DA67592D9ACD /* libPods-tribe-tribeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -749,7 +749,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 123;
+				CURRENT_PROJECT_VERSION = 124;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -785,7 +785,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 123;
+				CURRENT_PROJECT_VERSION = 124;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -822,7 +822,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 123;
+				CURRENT_PROJECT_VERSION = 124;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -858,7 +858,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 123;
+				CURRENT_PROJECT_VERSION = 124;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";

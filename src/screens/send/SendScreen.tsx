@@ -81,7 +81,6 @@ function SendScreen({ route, navigation }) {
                   amount: res.amount.toString(),
                 });
               });
-              setIsScanning(true);
             }
           } else {
             navigateWithDelay(() => {
@@ -92,7 +91,6 @@ function SendScreen({ route, navigation }) {
                 amount: '',
               });
             });
-            setIsScanning(true);
           }
           return;
         } catch (error) {
