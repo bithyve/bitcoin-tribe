@@ -43,6 +43,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -117,6 +118,12 @@ const CollectibleMetaDataScreen = () => {
       }
     }, [collectible?.issuer?.verified, hasCompleteVerification]),
   );
+
+  useEffect(() => {
+    if (collectible?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(collectible);
+    }
+  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -234,6 +241,13 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
+            {collectible?.issuer?.verifiedBy[0].link && (
+              <View style={styles.wrapper}>
+                <EmbeddedTweetView
+                  tweetId={collectible?.issuer?.verifiedBy[0].link}
+                />
+              </View>
+            )}
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}

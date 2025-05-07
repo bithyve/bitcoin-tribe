@@ -53,6 +53,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -182,6 +183,12 @@ const UDADetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  useEffect(() => {
+    if (uda?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(uda);
+    }
+  }, []);
+
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
       RealmSchema.UniqueDigitalAsset,
@@ -310,6 +317,11 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
+        {uda?.issuer?.verifiedBy[0].link && (
+          <View style={styles.wrapper}>
+            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0].link} />
+          </View>
+        )}
         <HideAssetView
           title={assets.hideAsset}
           onPress={() => hideAsset()}

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { AppState, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
@@ -14,13 +14,14 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 
 import {
   Coin,
   TransferKind,
   AssetVisibility,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -38,6 +39,14 @@ import { AppContext } from 'src/contexts/AppContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import { Keys } from 'src/storage';
 import ShareOptionView from './components/ShareOptionView';
+import {
+  findTweetWithAssetID,
+  getUserTweetByAssetId,
+  getUserTweetByAssetIdWithRetry,
+  getUserTweets,
+} from 'src/services/twitter';
+import Relay from 'src/services/relay';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -63,9 +72,11 @@ export const Item = ({ title, value, width = '100%' }) => {
 };
 
 const CoinsMetaDataScreen = () => {
+  const storage = new MMKV();
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const appState = useRef(AppState.currentState);
 
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -101,6 +112,12 @@ const CoinsMetaDataScreen = () => {
       }
     }, [coin?.issuer?.verified, hasCompleteVerification]),
   );
+
+  useEffect(() => {
+    if (coin?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(coin);
+    }
+  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -205,6 +222,11 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
+          {coin?.issuer?.verifiedBy[0].link && (
+            <View style={styles.wrapper}>
+              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0].link} />
+            </View>
+          )}
           <HideAssetView
             title={assets.hideAsset}
             onPress={() => hideAsset()}

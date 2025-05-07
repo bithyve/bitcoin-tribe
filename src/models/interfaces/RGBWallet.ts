@@ -63,6 +63,7 @@ export interface Issuer {
     name?: string;
     id?: string;
     username?: string;
+    link?: string;
   }[];
 }
 
@@ -193,6 +194,7 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
+  TWITTER_POST = 'Twitter_Post',
 }
 
 export interface RgbNodeConnectParams {

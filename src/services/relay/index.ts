@@ -11,7 +11,10 @@ export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
     try {
       const res = await RestClient.post(`${RELAY}/btcfaucet/getcoins`, {
-        HEXA_ID, address, amount, network: 'iris',
+        HEXA_ID,
+        address,
+        amount,
+        network: 'iris',
       });
       return res.data;
     } catch (error) {
@@ -88,12 +91,15 @@ export default class Relay {
   public static getChallenge = async (
     appID: string,
     publicKey: string,
-  ): Promise<{ challenge: string, expiresAt: string, publicId: string}> => {
+  ): Promise<{ challenge: string; expiresAt: string; publicId: string }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/challenge`, { appID, publicKey });
+      res = await RestClient.post(`${RELAY}/app/challenge`, {
+        appID,
+        publicKey,
+      });
     } catch (err) {
-      console.log(err, err.response)
+      console.log(err, err.response);
       if (err.response) {
         throw new Error(err.response.data.err);
       }
@@ -102,7 +108,7 @@ export default class Relay {
       }
     }
     return res.data || res.json;
-  }
+  };
 
   public static createNewApp = async (
     name = '',
@@ -112,14 +118,22 @@ export default class Relay {
     appType: string,
     network: string,
     fcmToken = '',
-    signature: string
-  ): Promise<{ status: boolean, error?: string, app: TribeApp }> => {
+    signature: string,
+  ): Promise<{ status: boolean; error?: string; app: TribeApp }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/new`,
-        { name, appID, publicId, appType, network, fcmToken, signature, publicKey });
+      res = await RestClient.post(`${RELAY}/app/new`, {
+        name,
+        appID,
+        publicId,
+        appType,
+        network,
+        fcmToken,
+        signature,
+        publicKey,
+      });
     } catch (err) {
-      console.log(err, err.response.data)
+      console.log(err, err.response.data);
       if (err.response) {
         throw new Error(err.response.data.err);
       }
@@ -128,7 +142,7 @@ export default class Relay {
       }
     }
     return res.data || res.json;
-  }
+  };
 
   public static syncFcmToken = async (
     authToken: string,
@@ -136,7 +150,11 @@ export default class Relay {
   ): Promise<{ updated: boolean }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/syncfcm`, { fcmToken }, {'authorization': `Bearer ${authToken}`});
+      res = await RestClient.post(
+        `${RELAY}/app/syncfcm`,
+        { fcmToken },
+        { authorization: `Bearer ${authToken}` },
+      );
     } catch (err) {
       if (err.response) {
         throw new Error(err.response.data.err);
@@ -146,7 +164,7 @@ export default class Relay {
       }
     }
     return res.data || res.json;
-  }
+  };
 
   public static createSupportedNode = async (): Promise<{}> => {
     try {
@@ -168,13 +186,13 @@ export default class Relay {
   };
 
   public static getAssetIssuanceFee = async (): Promise<{
-    address: string,
-    fee: number,
-    includeTxFee: number,
+    address: string;
+    fee: number;
+    includeTxFee: number;
   }> => {
     try {
       const serviceFee = Storage.get(Keys.SERVICE_FEE);
-      if(serviceFee) {
+      if (serviceFee) {
         return JSON.parse(serviceFee);
       }
       let res;
@@ -194,7 +212,9 @@ export default class Relay {
     }
   };
 
-  public static getAsset = async (assetId: string): Promise<{
+  public static getAsset = async (
+    assetId: string,
+  ): Promise<{
     asset: Asset;
     status: boolean;
   }> => {
@@ -223,7 +243,9 @@ export default class Relay {
               android: `file://${asset.media.filePath}`,
               ios: asset.media.filePath,
             }),
-            name: `${Math.random().toString(36).substring(2, 11)}_${asset.media.filePath.split('/').pop()}`,
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${asset.media.filePath.split('/').pop()}`,
             type: asset.media.mime,
           });
         } else if (asset?.token?.media) {
@@ -232,7 +254,11 @@ export default class Relay {
               android: `file://${asset.token.media.filePath}`,
               ios: asset.token.media.filePath,
             }),
-            name: `${Math.random().toString(36).substring(2, 11)}_${asset.token.media.filePath.split('/').pop()}`,
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${asset.token.media.filePath
+              .split('/')
+              .pop()}`,
             type: asset.token.media.mime,
           });
         }
@@ -243,7 +269,9 @@ export default class Relay {
                 android: `file://${attachment.filePath}`,
                 ios: attachment.filePath,
               }),
-              name: `${Math.random().toString(36).substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
+              name: `${Math.random()
+                .toString(36)
+                .substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
               type: attachment.mime,
             });
           });
@@ -269,10 +297,11 @@ export default class Relay {
     appID: string,
     assetId: string,
     issuer: {
-      type: string,
-      id: string,
-      name: string,
-      username: string,
+      type: string;
+      id: string;
+      name: string;
+      username: string;
+      link: string;
     },
   ): Promise<{ status: boolean }> => {
     try {
@@ -300,19 +329,20 @@ export default class Relay {
   public static getAssetsVerificationStatus = async (
     assetIds: string[],
   ): Promise<{
-    status: boolean,
+    status: boolean;
     records?: {
-      assetId: string,
+      assetId: string;
       issuer: {
-        verified: boolean,
+        verified: boolean;
         verifiedBy: {
-          type: string,
-          name: string,
-          id: string,
-          username: string,
-        }[]
-      }
-    }[],
+          type: string;
+          name: string;
+          id: string;
+          username: string;
+          link: string;
+        }[];
+      };
+    }[];
     error?: string;
   }> => {
     try {
