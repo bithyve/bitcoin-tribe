@@ -46,6 +46,20 @@ function SendScreen({ route, navigation }) {
     }, 2000);
   };
 
+  const formatInvoiceErrorMessage = (error: any): string => {
+    const rawMessage = error?.message || '';
+    if (rawMessage.includes('InvalidInvoice')) {
+      if (rawMessage.includes('invalid query parameter')) {
+        return 'The invoice contains invalid details. Please check the invoice.';
+      }
+      return 'The invoice format is invalid. Please try again.';
+    }
+    if (rawMessage.includes('RgbLibError')) {
+      return 'Failed to process the RGB invoice. Please ensure it is correct.';
+    }
+    return 'An unknown error occurred while decoding the invoice.';
+  };
+
   const handlePaymentInfo = useCallback(
     async (
       input: { codes?: Code[]; paymentInfo?: string },
@@ -100,9 +114,11 @@ function SendScreen({ route, navigation }) {
           }
           return;
         } catch (error) {
+          const errorMsg = formatInvoiceErrorMessage(error);
           setIsScanning(true);
           setVisibleModal(false);
-          setValidatingInvoiceErrorMsg('Failed to decode RGB invoice.');
+          setValidatingInvoiceErrorMsg(errorMsg);
+          console.log('error send', error);
           return;
         }
       }
