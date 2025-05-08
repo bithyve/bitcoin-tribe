@@ -33,6 +33,8 @@ import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
 import VerticalGradientView from 'src/components/VerticalGradientView';
 import { useQuery as realmUseQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -112,6 +114,7 @@ export const verifyIssuerOnTwitter = async (
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
+  const navigation = useNavigation();
   const { assetId, schema } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -303,6 +306,12 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             subTitle={''}
             onPress={handleVerifyWithTwitter}
             testID={'verify-with-twitter'}
+          />
+          <SelectOption
+            title={assets.verifyDomain}
+            subTitle={''}
+            onPress={() => navigation.navigate(NavigationRoutes.REGISTERDOMAIN)}
+            testID={'verify-with-domain'}
           />
         </View>
       ) : (

@@ -566,6 +566,7 @@
     "issuerVerificationTitle": "Verificación del emisor requerida",
     "issuerVerificationSubTitle": "Verifique su identidad conectando su cuenta de Twitter.",
     "connectVerifyTwitter": "Verificar en X",
+    "verifyDomain": "Verificar Dominio",
     "viewInRegistry": "Ver en el Registro",
     "udaCollectibleInfo1": "UDAs vs. Coleccionables",
     "udaCollectibleInfoBold": "UDAs",
@@ -604,7 +605,18 @@
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
     "verificationTitle": "VERIFICACIÓN",
-    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio."
+    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio.",
+    "recordCard": "Tarjeta de Registro",
+    "recordType": "Tipo de Registro",
+    "domain": "Dominio",
+    "value": "Valor",
+    "addTXTrecordInfoText": "Agrega un registro TXT a tu DNS para verificar la propiedad del dominio",
+    "addedDNSRecordInfoText": "He agregado los registros DNS",
+    "registerDomainInfo1": "Puedes guardar tu nombre de dominio o proceder a verificarlo.",
+    "registerDomainInfo2": "Guardar lo asociará con tu activo (puedes verificarlo más tarde).",
+    "registerDomainInfo3": "Al continuar se te pedirá agregar un registro TXT a tu DNS. Una vez verificado, tu dominio se vinculará al activo y aparecerá en el registro.",
+    "enterDomain": "Ingresar Dominio",
+    "enterDomainName": "Ingrese un nombre de dominio"
   },
   "community": {
     "fnfTitle": "Community",

@@ -182,7 +182,7 @@ const CoinDetailsScreen = () => {
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
-
+  console.log('coin', coin);
   return (
     <ScreenContainer>
       <CoinDetailsHeader

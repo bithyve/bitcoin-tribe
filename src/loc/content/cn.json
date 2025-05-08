@@ -566,6 +566,7 @@
     "issuerVerificationTitle": "发行人验证必需",
     "issuerVerificationSubTitle": "通过连接您的 Twitter 账户验证您的身份。",
     "connectVerifyTwitter": "在 X 上验证",
+    "verifyDomain": "验证域名",
     "viewInRegistry": "在注册表中查看",
     "udaCollectibleInfo1": "UDAs 与 收藏品",
     "udaCollectibleInfoBold": "UDAs",
@@ -604,7 +605,18 @@
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
-    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。"
+    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
+    "recordCard": "记录卡",
+    "recordType": "记录类型",
+    "domain": "域名",
+    "value": "值",
+    "addTXTrecordInfoText": "在您的 DNS 中添加 TXT 记录以验证域名所有权",
+    "addedDNSRecordInfoText": "我已添加了 DNS 记录",
+    "registerDomainInfo1": "您可以选择保存域名或继续验证。",
+    "registerDomainInfo2": "保存将把域名与您的资产关联（您可以稍后验证）。",
+    "registerDomainInfo3": "继续将提示您在 DNS 中添加 TXT 记录。验证后，您的域名将与资产关联并显示在注册表中。",
+    "enterDomain": "输入域名",
+    "enterDomainName": "请输入一个域名"
   },
   "community": {
     "fnfTitle": "Community",
