@@ -392,7 +392,10 @@
     "availableBalanceMsg": "利用可能な残高は ",
     "spendableBalanceMsg": "使用可能な残高は ",
     "dustAmountMsg": "金額が少なすぎます",
-    "validationZeroNotAllowed": "0は許可されていません！"
+    "validationZeroNotAllowed": "0は許可されていません！",
+    "invoiceInvalidContainErrMsg": "請求書に無効な詳細が含まれています。請求書を確認してください。",
+    "invoiceFormatErrMsg": "請求書の形式が無効です。もう一度お試しください。",
+    "failedInvoiceProcessErrMsg": "RGB請求書の処理に失敗しました。正しいことを確認してください。"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",

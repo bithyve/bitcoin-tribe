@@ -392,7 +392,10 @@
     "availableBalanceMsg": "Il saldo disponibile è ",
     "spendableBalanceMsg": "Il saldo disponibile è ",
     "dustAmountMsg": "Importo troppo basso",
-    "validationZeroNotAllowed": "0 non è consentito!"
+    "validationZeroNotAllowed": "0 non è consentito!",
+    "invoiceInvalidContainErrMsg": "La fattura contiene dettagli non validi. Controlla la fattura.",
+    "invoiceFormatErrMsg": "Il formato della fattura non è valido. Riprova.",
+    "failedInvoiceProcessErrMsg": "Impossibile elaborare la fattura RGB. Assicurati che sia corretta."
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

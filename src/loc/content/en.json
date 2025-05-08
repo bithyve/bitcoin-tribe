@@ -392,7 +392,10 @@
     "availableBalanceMsg": "Available balance is ",
     "spendableBalanceMsg": "Spendable balance is ",
     "dustAmountMsg": "Amount too low",
-    "validationZeroNotAllowed": "0 is not allowed!"
+    "validationZeroNotAllowed": "0 is not allowed!",
+    "invoiceInvalidContainErrMsg": "The invoice contains invalid details. Please check the invoice.",
+    "invoiceFormatErrMsg": "The invoice format is invalid. Please try again.",
+    "failedInvoiceProcessErrMsg": "Failed to process the RGB invoice. Please ensure it is correct."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

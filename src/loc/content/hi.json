@@ -392,7 +392,10 @@
     "availableBalanceMsg": " उपलब्ध शेष राशि है ",
     "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है ",
     "dustAmountMsg": "राशि बहुत कम है",
-    "validationZeroNotAllowed": "0 की अनुमति नहीं है!"
+    "validationZeroNotAllowed": "0 की अनुमति नहीं है!",
+    "invoiceInvalidContainErrMsg": "चालान में अमान्य विवरण हैं। कृपया चालान की जाँच करें।",
+    "invoiceFormatErrMsg": "चालान का प्रारूप अमान्य है। कृपया पुनः प्रयास करें।",
+    "failedInvoiceProcessErrMsg": "RGB चालान प्रोसेस करने में विफल। कृपया सुनिश्चित करें कि यह सही है।"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",

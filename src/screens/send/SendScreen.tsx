@@ -50,12 +50,12 @@ function SendScreen({ route, navigation }) {
     const rawMessage = error?.message || '';
     if (rawMessage.includes('InvalidInvoice')) {
       if (rawMessage.includes('invalid query parameter')) {
-        return 'The invoice contains invalid details. Please check the invoice.';
+        return sendScreen.invoiceInvalidContainErrMsg;
       }
-      return 'The invoice format is invalid. Please try again.';
+      return sendScreen.invoiceFormatErrMsg;
     }
     if (rawMessage.includes('RgbLibError')) {
-      return 'Failed to process the RGB invoice. Please ensure it is correct.';
+      return sendScreen.failedInvoiceProcessErrMsg;
     }
     return 'An unknown error occurred while decoding the invoice.';
   };

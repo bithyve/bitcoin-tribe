@@ -392,7 +392,10 @@
     "availableBalanceMsg": "可用余额为 ",
     "spendableBalanceMsg": "可支配余额为 ",
     "dustAmountMsg": "金额过低",
-    "validationZeroNotAllowed": "不允许输入0！"
+    "validationZeroNotAllowed": "不允许输入0！",
+    "invoiceInvalidContainErrMsg": "发票包含无效信息。请检查发票。",
+    "invoiceFormatErrMsg": "发票格式无效。请重试。",
+    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
