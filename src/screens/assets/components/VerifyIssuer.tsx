@@ -29,12 +29,9 @@ import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
-import InfoIcon from 'src/assets/images/infoIcon1.svg';
-import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
-import VerticalGradientView from 'src/components/VerticalGradientView';
-import AppTouchable from 'src/components/AppTouchable';
 import ShareOptionView from './ShareOptionView';
+import VerificationSection from './VerificationSection';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -309,28 +306,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     <>
       {isAddedInRegistry ? (
         !showVerifyIssuer ? null : (
-          <VerticalGradientView
-            colors={[
-              theme.colors.cardGradient4,
-              theme.colors.cardGradient5,
-              theme.colors.cardGradient5,
-            ]}
-            style={styles.gradientContainer}>
-            <View style={styles.verifyViewWrapper}>
-              <View style={styles.verifyTitleWrapper}>
-                <AppText variant="body1" style={styles.verifyTitle}>
-                  {assets.verificationTitle}
-                </AppText>
-              </View>
-              <AppTouchable onPress={() => setVisible(true)}>
-                {isThemeDark ? (
-                  <InfoIcon width={24} height={24} />
-                ) : (
-                  <InfoIconLight width={24} height={24} />
-                )}
-              </AppTouchable>
-            </View>
-
+          <VerificationSection onInfoPress={() => setVisible(true)}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
               {showVerifyIssuer && (
@@ -343,30 +319,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
               )}
             </View>
             <ShareOptionContainer />
-          </VerticalGradientView>
+          </VerificationSection>
         )
       ) : (
-        <VerticalGradientView
-          colors={[
-            theme.colors.cardGradient4,
-            theme.colors.cardGradient5,
-            theme.colors.cardGradient5,
-          ]}
-          style={styles.gradientContainer}>
-          <View style={styles.verifyViewWrapper}>
-            <View style={styles.verifyTitleWrapper}>
-              <AppText variant="body1" style={styles.verifyTitle}>
-                {assets.verificationTitle}
-              </AppText>
-            </View>
-            <AppTouchable onPress={() => setVisible(true)}>
-              {isThemeDark ? (
-                <InfoIcon width={24} height={24} />
-              ) : (
-                <InfoIconLight width={24} height={24} />
-              )}
-            </AppTouchable>
-          </View>
+        <VerificationSection onInfoPress={() => setVisible(true)}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
@@ -403,7 +359,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
               </ModalContainer>
             </View>
           </View>
-        </VerticalGradientView>
+        </VerificationSection>
       )}
 
       <Portal>
