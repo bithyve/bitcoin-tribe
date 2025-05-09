@@ -79,6 +79,9 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       fontSize: 14,
     },
+    shareOptionWrapper: {
+      marginTop: hp(10),
+    },
   });
 
 interface VerifyIssuerProps {
@@ -292,7 +295,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         asset?.isVerifyPosted === null ||
         asset?.isIssuedPosted === false ||
         asset?.isIssuedPosted === null) && (
-        <View>
+        <View style={styles.shareOptionWrapper}>
           <ShareOptionView
             title={assets.sharePostTitle}
             onPress={onPressShare}
