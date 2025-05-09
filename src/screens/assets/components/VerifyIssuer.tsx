@@ -288,7 +288,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   if (requesting) {
     return <CardSkeletonLoader />;
   }
-  console.log('asset', asset);
+
   return (
     <>
       <VerticalGradientView

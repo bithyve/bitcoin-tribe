@@ -354,7 +354,11 @@ const UDADetailsScreen = () => {
               assetId,
               true,
             );
-            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
             setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
@@ -365,7 +369,11 @@ const UDADetailsScreen = () => {
               assetId,
               false,
             );
-            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
           }}
           issuerInfo={uda}
         />
@@ -376,13 +384,21 @@ const UDADetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              false,
+            );
           }}
           issuerInfo={uda}
         />

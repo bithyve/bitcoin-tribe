@@ -269,7 +269,11 @@ const CollectibleMetaDataScreen = () => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
                   updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
-                  updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
                   setRefresh(prev => !prev);
                 }}
                 secondaryOnPress={() => {
@@ -280,7 +284,11 @@ const CollectibleMetaDataScreen = () => {
                     assetId,
                     false,
                   );
-                  updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
                 }}
                 issuerInfo={collectible}
               />
@@ -291,13 +299,21 @@ const CollectibleMetaDataScreen = () => {
                 primaryOnPress={() => {
                   setVisibleIssuedPostOnTwitter(false);
                   setRefresh(prev => !prev);
-                  updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
                 }}
                 secondaryOnPress={() => {
                   setVisibleIssuedPostOnTwitter(false);
                   setHasIssuedAsset(false);
                   setRefresh(prev => !prev);
-                  updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
                 }}
                 issuerInfo={collectible}
               />
