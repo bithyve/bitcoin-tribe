@@ -607,7 +607,9 @@
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
     "verificationTitle": "VERIFICA",
-    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio."
+    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
+    "verificationInfoText1": "Registrati per dimostrare la proprietà — o condividi su Twitter senza registrazione.",
+    "verificationInfoText2": "Collega la tua identità all’asset verificando tramite X o dominio, e condividilo per renderlo ufficiale."
   },
   "community": {
     "fnfTitle": "Community",

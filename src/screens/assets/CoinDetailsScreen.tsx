@@ -29,7 +29,10 @@ import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -251,12 +254,14 @@ const CoinDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           issuerInfo={coin}
         />
@@ -267,11 +272,13 @@ const CoinDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           issuerInfo={coin}
         />

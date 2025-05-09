@@ -607,7 +607,9 @@
     "assetRegistrySubTitle3": "applies. Not ready to register? You can skip it and still share your asset on X",
     "sharePostTitle": "Share post on X",
     "verificationTitle": "VERIFICATION",
-    "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee."
+    "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee.",
+    "verificationInfoText1": "Register to prove ownership — or just share on Twitter without registering.",
+    "verificationInfoText2": "Link your identity to the asset by verifying via X or domain, and share it to make it official."
   },
   "community": {
     "fnfTitle": "Community",

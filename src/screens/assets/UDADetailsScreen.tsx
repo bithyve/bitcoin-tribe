@@ -51,8 +51,13 @@ import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import SelectOption from 'src/components/SelectOption';
+import openLink from 'src/utils/OpenLink';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -205,7 +210,7 @@ const UDADetailsScreen = () => {
               ios: uda?.token.media?.filePath,
             }),
           }}
-          resizeMode="contain"
+          resizeMode="cover"
           style={styles.imageStyle}
         />
 
@@ -277,16 +282,35 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
-        {showVerifyIssuer && (
-          <>
-            <VerifyIssuer
-              assetId={assetId}
-              schema={RealmSchema.UniqueDigitalAsset}
-              onVerificationComplete={() => setRefreshToggle(t => !t)}
+        <>
+          <VerifyIssuer
+            assetId={assetId}
+            schema={RealmSchema.UniqueDigitalAsset}
+            onVerificationComplete={() => setRefreshToggle(t => !t)}
+            showVerifyIssuer={showVerifyIssuer}
+            asset={uda}
+            onPressShare={() => {
+              if (!uda.isIssuedPosted) {
+                setVisibleIssuedPostOnTwitter(true);
+              } else if (!uda.isVerifyPosted) {
+                setVisiblePostOnTwitter(true);
+              }
+            }}
+          />
+          <View style={styles.seperatorView} />
+        </>
+        <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+          {uda?.issuer?.verified && (
+            <SelectOption
+              title={assets.viewInRegistry}
+              subTitle={''}
+              onPress={() =>
+                openLink(`https://bitcointribe.app/registry?assetId=${assetId}`)
+              }
+              testID={'view_in_registry'}
             />
-            <View style={styles.seperatorView} />
-          </>
-        )}
+          )}
+        </View>
         <>
           <ImageViewing
             images={[
@@ -302,20 +326,7 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        <View style={styles.wrapper}>
-          {!uda?.isPosted && uda?.issuer?.verified && (
-            <ShareOptionView
-              title={assets.sharePostTitle}
-              onPress={() => setVisiblePostOnTwitter(true)}
-            />
-          )}
-        </View>
-        <HideAssetView
-          title={assets.hideAsset}
-          onPress={() => hideAsset()}
-          isVerified={uda?.issuer?.verified}
-          assetId={assetId}
-        />
+        <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
       </ScrollView>
       <VerifyIssuerModal
         assetId={uda?.assetId}
@@ -343,6 +354,7 @@ const UDADetailsScreen = () => {
               assetId,
               true,
             );
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
@@ -353,6 +365,7 @@ const UDADetailsScreen = () => {
               assetId,
               false,
             );
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           issuerInfo={uda}
         />
@@ -363,11 +376,13 @@ const UDADetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           issuerInfo={uda}
         />
@@ -379,7 +394,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
       width: '100%',
-      height: 200,
+      height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),
@@ -401,6 +416,9 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
+    },
+    viewRegistryCtaWrapper: {
+      marginTop: hp(10),
     },
   });
 export default UDADetailsScreen;
