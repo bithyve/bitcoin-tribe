@@ -331,8 +331,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
-              title={'Register Asset'}
-              subTitle={'Add asset to Bitcoin Tribe registry'}
+              title={assets.registerAssetTitle}
+              subTitle={assets.registerAssetSubTitle}
               onPress={() => getAssetIssuanceFeeMutation.mutate()}
               testID={'register-asset'}
             />

@@ -609,7 +609,9 @@
     "verificationTitle": "認証",
     "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
     "verificationInfoText1": "所有権を証明するには登録 — または登録せずに Twitter で共有することもできます。",
-    "verificationInfoText2": "X またはドメインで認証して、資産にあなたの身元をリンクし、公式として共有しましょう。"
+    "verificationInfoText2": "X またはドメインで認証して、資産にあなたの身元をリンクし、公式として共有しましょう。",
+    "registerAssetTitle": "資産を登録",
+    "registerAssetSubTitle": "資産を Bitcoin Tribe レジストリに追加"
   },
   "community": {
     "fnfTitle": "Community",

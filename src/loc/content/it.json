@@ -609,7 +609,9 @@
     "verificationTitle": "VERIFICA",
     "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
     "verificationInfoText1": "Registrati per dimostrare la proprietà — o condividi su Twitter senza registrazione.",
-    "verificationInfoText2": "Collega la tua identità all’asset verificando tramite X o dominio, e condividilo per renderlo ufficiale."
+    "verificationInfoText2": "Collega la tua identità all’asset verificando tramite X o dominio, e condividilo per renderlo ufficiale.",
+    "registerAssetTitle": "Registrare Asset",
+    "registerAssetSubTitle": "Aggiungi l'asset al registro di Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Community",
