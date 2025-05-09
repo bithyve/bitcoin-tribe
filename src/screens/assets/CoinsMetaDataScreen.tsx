@@ -41,6 +41,8 @@ import {
 } from 'src/utils/postStatusUtils';
 import { Keys } from 'src/storage';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import SelectOption from 'src/components/SelectOption';
+import openLink from 'src/utils/OpenLink';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -212,7 +214,20 @@ const CoinsMetaDataScreen = () => {
             />
             <View style={styles.seperatorView} />
           </>
-
+          <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+            {coin?.issuer?.verified && (
+              <SelectOption
+                title={assets.viewInRegistry}
+                subTitle={''}
+                onPress={() =>
+                  openLink(
+                    `https://bitcointribe.app/registry?assetId=${assetId}`,
+                  )
+                }
+                testID={'view_in_registry'}
+              />
+            )}
+          </View>
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
           <>
             <PostOnTwitterModal
@@ -314,6 +329,9 @@ const getStyles = (theme: AppTheme, width) =>
       width: '100%',
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
+    },
+    viewRegistryCtaWrapper: {
+      marginTop: hp(10),
     },
   });
 
