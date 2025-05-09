@@ -33,7 +33,10 @@ import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -265,12 +268,14 @@ const CollectibleDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+            updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
             setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Collectible, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
           }}
           issuerInfo={collectible}
         />
@@ -281,11 +286,17 @@ const CollectibleDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(
+              RealmSchema.Collectible,
+              assetId,
+              false,
+            );
           }}
           issuerInfo={collectible}
         />

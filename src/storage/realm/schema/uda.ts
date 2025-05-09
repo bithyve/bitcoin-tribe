@@ -28,7 +28,8 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
       default: AssetVisibility.DEFAULT,
       optional: true,
     },
-    isPosted: 'bool?',
+    isVerifyPosted: 'bool?',
+    isIssuedPosted: 'bool?',
   },
 };
 

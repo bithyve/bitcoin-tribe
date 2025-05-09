@@ -70,7 +70,7 @@ const getStyles = (theme: AppTheme, backColor) =>
       borderRadius: 15,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
-      marginVertical: hp(5),
+      marginBottom: hp(5),
     },
     iconWrapper: {
       flexDirection: 'row',
