@@ -308,7 +308,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   return (
     <>
       {isAddedInRegistry ? (
-        !showVerifyIssuer ? null : (
+        !showVerifyIssuer &&
+        asset?.isVerifyPosted &&
+        asset?.isIssuedPosted ? null : (
           <VerificationSection onInfoPress={() => setVisible(true)}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
