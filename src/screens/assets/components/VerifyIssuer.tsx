@@ -4,6 +4,7 @@ import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
+import { useQuery as realmUseQuery } from '@realm/react';
 
 import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
@@ -32,7 +33,6 @@ import InfoIcon from 'src/assets/images/infoIcon1.svg';
 import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
 import VerticalGradientView from 'src/components/VerticalGradientView';
-import { useQuery as realmUseQuery } from '@realm/react';
 import AppTouchable from 'src/components/AppTouchable';
 import ShareOptionView from './ShareOptionView';
 
@@ -289,42 +289,84 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     return <CardSkeletonLoader />;
   }
 
+  const ShareOptionContainer = () => {
+    return (
+      (asset?.isVerifyPosted === false ||
+        asset?.isVerifyPosted === null ||
+        asset?.isIssuedPosted === false ||
+        asset?.isIssuedPosted === null) && (
+        <View>
+          <ShareOptionView
+            title={assets.sharePostTitle}
+            onPress={onPressShare}
+          />
+        </View>
+      )
+    );
+  };
+
   return (
     <>
-      <VerticalGradientView
-        colors={[
-          theme.colors.cardGradient4,
-          theme.colors.cardGradient5,
-          theme.colors.cardGradient5,
-        ]}
-        style={styles.gradientContainer}>
-        <View style={styles.verifyViewWrapper}>
-          <View style={styles.verifyTitleWrapper}>
-            <AppText variant="body1" style={styles.verifyTitle}>
-              {assets.verificationTitle}
-            </AppText>
+      {isAddedInRegistry ? (
+        !showVerifyIssuer ? null : (
+          <VerticalGradientView
+            colors={[
+              theme.colors.cardGradient4,
+              theme.colors.cardGradient5,
+              theme.colors.cardGradient5,
+            ]}
+            style={styles.gradientContainer}>
+            <View style={styles.verifyViewWrapper}>
+              <View style={styles.verifyTitleWrapper}>
+                <AppText variant="body1" style={styles.verifyTitle}>
+                  {assets.verificationTitle}
+                </AppText>
+              </View>
+              <AppTouchable onPress={() => setVisible(true)}>
+                {isThemeDark ? (
+                  <InfoIcon width={24} height={24} />
+                ) : (
+                  <InfoIconLight width={24} height={24} />
+                )}
+              </AppTouchable>
+            </View>
+
+            <View style={styles.container}>
+              <ModalLoading visible={isLoading} />
+              {showVerifyIssuer && (
+                <SelectOption
+                  title={assets.connectVerifyTwitter}
+                  subTitle={''}
+                  onPress={handleVerifyWithTwitter}
+                  testID={'verify-with-twitter'}
+                />
+              )}
+            </View>
+            <ShareOptionContainer />
+          </VerticalGradientView>
+        )
+      ) : (
+        <VerticalGradientView
+          colors={[
+            theme.colors.cardGradient4,
+            theme.colors.cardGradient5,
+            theme.colors.cardGradient5,
+          ]}
+          style={styles.gradientContainer}>
+          <View style={styles.verifyViewWrapper}>
+            <View style={styles.verifyTitleWrapper}>
+              <AppText variant="body1" style={styles.verifyTitle}>
+                {assets.verificationTitle}
+              </AppText>
+            </View>
+            <AppTouchable onPress={() => setVisible(true)}>
+              {isThemeDark ? (
+                <InfoIcon width={24} height={24} />
+              ) : (
+                <InfoIconLight width={24} height={24} />
+              )}
+            </AppTouchable>
           </View>
-          <AppTouchable onPress={() => setVisible(true)}>
-            {isThemeDark ? (
-              <InfoIcon width={24} height={24} />
-            ) : (
-              <InfoIconLight width={24} height={24} />
-            )}
-          </AppTouchable>
-        </View>
-        {isAddedInRegistry ? (
-          <View style={styles.container}>
-            <ModalLoading visible={isLoading} />
-            {showVerifyIssuer && (
-              <SelectOption
-                title={assets.connectVerifyTwitter}
-                subTitle={''}
-                onPress={handleVerifyWithTwitter}
-                testID={'verify-with-twitter'}
-              />
-            )}
-          </View>
-        ) : (
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
@@ -333,6 +375,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
               onPress={() => getAssetIssuanceFeeMutation.mutate()}
               testID={'register-asset'}
             />
+            <ShareOptionContainer />
             <View>
               <ModalContainer
                 title={assets.listYourAssetInRegTitle}
@@ -360,19 +403,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
               </ModalContainer>
             </View>
           </View>
-        )}
-        {(asset?.isVerifyPosted === false ||
-          asset?.isVerifyPosted === null ||
-          asset?.isIssuedPosted === false ||
-          asset?.isIssuedPosted === null) && (
-          <View>
-            <ShareOptionView
-              title={assets.sharePostTitle}
-              onPress={onPressShare}
-            />
-          </View>
-        )}
-      </VerticalGradientView>
+        </VerticalGradientView>
+      )}
+
       <Portal>
         <Modal
           visible={visible}
