@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useState, useEffect } from 'react';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
@@ -73,7 +73,7 @@ const getStyles = (theme: AppTheme) =>
       width: 270,
       alignSelf: 'flex-end',
       right: 15,
-      bottom: hp(145),
+      bottom: Platform.OS === 'ios' ? hp(165) : hp(120),
     },
     tooltipText: {
       color: theme.colors.headingColor,

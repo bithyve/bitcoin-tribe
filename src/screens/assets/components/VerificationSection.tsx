@@ -64,6 +64,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       marginTop: hp(20),
       alignItems: 'center',
+      marginBottom: hp(15),
     },
     verifyTitleWrapper: {
       width: '90%',
