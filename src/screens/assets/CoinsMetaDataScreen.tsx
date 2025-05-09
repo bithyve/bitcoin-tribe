@@ -118,6 +118,15 @@ const CoinsMetaDataScreen = () => {
     );
   }, [coin.transactions, coin.issuer, refreshToggle]);
 
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !coin?.issuer?.isDomainVerified &&
+      coin.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [coin.transactions, coin.issuer, refreshToggle]);
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -186,17 +195,16 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-
-          {showVerifyIssuer && (
-            <>
-              <VerifyIssuer
-                assetId={assetId}
-                schema={RealmSchema.Coin}
-                onVerificationComplete={() => setRefreshToggle(t => !t)}
-              />
-              <View style={styles.seperatorView} />
-            </>
-          )}
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
+            />
+            <View style={styles.seperatorView} />
+          </>
           <View style={styles.wrapper}>
             {!coin?.isPosted && coin?.issuer?.verified && (
               <ShareOptionView

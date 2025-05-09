@@ -1,11 +1,12 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
+import { useQuery as realmUseQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
 
-import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
 import Relay from 'src/services/relay';
@@ -27,14 +28,9 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
-import { hp } from 'src/constants/responsive';
-import InfoIcon from 'src/assets/images/infoIcon1.svg';
-import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { Keys } from 'src/storage';
-import VerticalGradientView from 'src/components/VerticalGradientView';
-import { useQuery as realmUseQuery } from '@realm/react';
-import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import VerificationSection from './VerificationSection';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -48,30 +44,14 @@ const getStyles = (theme: AppTheme) =>
     container: {
       marginVertical: 20,
     },
-    gradientContainer: {
-      marginTop: hp(20),
-      paddingHorizontal: hp(16),
-      borderTopLeftRadius: hp(20),
-      borderTopRightRadius: hp(20),
-    },
-    verifyViewWrapper: {
-      flexDirection: 'row',
-      width: '100%',
-      marginTop: hp(20),
-      alignItems: 'center',
-    },
-    verifyTitleWrapper: {
-      width: '90%',
-    },
-    verifyTitle: {
-      color: theme.colors.secondaryHeadingColor,
-    },
   });
 
 interface VerifyIssuerProps {
   assetId: string;
   schema: RealmSchema;
   onVerificationComplete?: () => void;
+  showVerifyIssuer: boolean;
+  showDomainVerifyIssuer: boolean;
 }
 
 export const verifyIssuerOnTwitter = async (
@@ -115,7 +95,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
   const navigation = useNavigation();
-  const { assetId, schema } = props;
+  const { assetId, schema, showVerifyIssuer, showDomainVerifyIssuer } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -270,88 +250,73 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     return <CardSkeletonLoader />;
   }
   return (
-    <VerticalGradientView
-      colors={[
-        theme.colors.cardGradient4,
-        theme.colors.cardGradient5,
-        theme.colors.cardGradient5,
-      ]}
-      style={styles.gradientContainer}>
-      <View style={styles.verifyViewWrapper}>
-        <View style={styles.verifyTitleWrapper}>
-          <AppText variant="body2" style={styles.verifyTitle}>
-            {assets.verificationTitle}
-          </AppText>
-        </View>
-        <View>
-          {isThemeDark ? (
-            <InfoIcon width={24} height={24} />
-          ) : (
-            <InfoIconLight width={24} height={24} />
-          )}
-        </View>
-      </View>
+    <>
       {isAddedInRegistry ? (
-        <View style={styles.container}>
-          <ModalLoading visible={isLoading} />
-          {/* <AppText variant="heading3" style={styles.title}>
-            {assets.issuerVerificationTitle}
-          </AppText>
-          <AppText variant="body2" style={styles.subtitle}>
-            {assets.issuerVerificationSubTitle}
-          </AppText> */}
-
-          <SelectOption
-            title={assets.connectVerifyTwitter}
-            subTitle={''}
-            onPress={handleVerifyWithTwitter}
-            testID={'verify-with-twitter'}
-          />
-          <SelectOption
-            title={assets.verifyDomain}
-            subTitle={''}
-            onPress={() => navigation.navigate(NavigationRoutes.REGISTERDOMAIN)}
-            testID={'verify-with-domain'}
-          />
-        </View>
+        !showVerifyIssuer && !showDomainVerifyIssuer ? null : (
+          <VerificationSection>
+            <View style={styles.container}>
+              <ModalLoading visible={isLoading} />
+              {showVerifyIssuer && (
+                <SelectOption
+                  title={assets.connectVerifyTwitter}
+                  subTitle={''}
+                  onPress={handleVerifyWithTwitter}
+                  testID={'verify-with-twitter'}
+                />
+              )}
+              {showDomainVerifyIssuer && (
+                <SelectOption
+                  title={assets.verifyDomain}
+                  subTitle={''}
+                  onPress={() =>
+                    navigation.navigate(NavigationRoutes.REGISTERDOMAIN)
+                  }
+                  testID={'verify-with-domain'}
+                />
+              )}
+            </View>
+          </VerificationSection>
+        )
       ) : (
-        <View style={styles.container}>
-          <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
-          <SelectOption
-            title={'Register Asset'}
-            subTitle={'Add asset to Bitcoin Tribe registry'}
-            onPress={() => getAssetIssuanceFeeMutation.mutate()}
-            testID={'register-asset'}
-          />
-          <View>
-            <ModalContainer
-              title={assets.listYourAssetInRegTitle}
-              subTitle={assets.listYourAssetInRegSubTitle}
-              visible={showFeeModal}
-              enableCloseIcon={false}
-              onDismiss={() => {
-                if (payServiceFeeFeeMutation.isLoading) return;
-                setShowFeeModal(false);
-                getAssetIssuanceFeeMutation.reset();
-              }}>
-              <ServiceFee
-                onPay={async () => {
-                  await ApiHandler.refreshWallets({ wallets: [wallet] });
-                  payServiceFeeFeeMutation.mutate({ feeDetails });
-                }}
-                feeDetails={feeDetails}
-                status={payServiceFeeFeeMutation.status}
-                onSkip={() => setShowFeeModal(false)}
-                hideModal={() => {
+        <VerificationSection>
+          <View style={styles.container}>
+            <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
+            <SelectOption
+              title={'Register Asset'}
+              subTitle={'Add asset to Bitcoin Tribe registry'}
+              onPress={() => getAssetIssuanceFeeMutation.mutate()}
+              testID={'register-asset'}
+            />
+            <View>
+              <ModalContainer
+                title={assets.listYourAssetInRegTitle}
+                subTitle={assets.listYourAssetInRegSubTitle}
+                visible={showFeeModal}
+                enableCloseIcon={false}
+                onDismiss={() => {
+                  if (payServiceFeeFeeMutation.isLoading) return;
                   setShowFeeModal(false);
                   getAssetIssuanceFeeMutation.reset();
-                }}
-              />
-            </ModalContainer>
+                }}>
+                <ServiceFee
+                  onPay={async () => {
+                    await ApiHandler.refreshWallets({ wallets: [wallet] });
+                    payServiceFeeFeeMutation.mutate({ feeDetails });
+                  }}
+                  feeDetails={feeDetails}
+                  status={payServiceFeeFeeMutation.status}
+                  onSkip={() => setShowFeeModal(false)}
+                  hideModal={() => {
+                    setShowFeeModal(false);
+                    getAssetIssuanceFeeMutation.reset();
+                  }}
+                />
+              </ModalContainer>
+            </View>
           </View>
-        </View>
+        </VerificationSection>
       )}
-    </VerticalGradientView>
+    </>
   );
 };
 

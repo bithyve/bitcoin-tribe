@@ -171,6 +171,15 @@ const UDADetailsScreen = () => {
     );
   }, [uda?.transactions, uda?.issuer, refreshToggle]);
 
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !uda?.issuer?.isDomainVerified &&
+      uda.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [uda.transactions, uda.issuer, refreshToggle]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
@@ -277,16 +286,16 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
-        {showVerifyIssuer && (
-          <>
-            <VerifyIssuer
-              assetId={assetId}
-              schema={RealmSchema.UniqueDigitalAsset}
-              onVerificationComplete={() => setRefreshToggle(t => !t)}
-            />
-            <View style={styles.seperatorView} />
-          </>
-        )}
+        <>
+          <VerifyIssuer
+            assetId={assetId}
+            schema={RealmSchema.UniqueDigitalAsset}
+            onVerificationComplete={() => setRefreshToggle(t => !t)}
+            showVerifyIssuer={showVerifyIssuer}
+            showDomainVerifyIssuer={showDomainVerifyIssuer}
+          />
+          <View style={styles.seperatorView} />
+        </>
         <>
           <ImageViewing
             images={[

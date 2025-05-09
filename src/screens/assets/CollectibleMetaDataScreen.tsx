@@ -139,6 +139,15 @@ const CollectibleMetaDataScreen = () => {
     );
   }, [collectible.transactions, collectible.issuer, refreshToggle]);
 
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !collectible?.issuer?.isDomainVerified &&
+      collectible.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [collectible.transactions, collectible.issuer, refreshToggle]);
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -216,16 +225,16 @@ const CollectibleMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
 
-            {showVerifyIssuer && (
-              <>
-                <VerifyIssuer
-                  assetId={assetId}
-                  schema={RealmSchema.Collectible}
-                  onVerificationComplete={() => setRefreshToggle(t => !t)}
-                />
-                <View style={styles.seperatorView} />
-              </>
-            )}
+            <>
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+                showVerifyIssuer={showVerifyIssuer}
+                showDomainVerifyIssuer={showDomainVerifyIssuer}
+              />
+              <View style={styles.seperatorView} />
+            </>
             <View style={styles.wrapper}>
               {!collectible?.isPosted && collectible?.issuer?.verified && (
                 <ShareOptionView

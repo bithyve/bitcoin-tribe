@@ -64,6 +64,19 @@ export interface Issuer {
     id?: string;
     username?: string;
   }[];
+  isDomainVerified: boolean;
+  domainVerifications: {
+    domain: string;
+    method: string;
+    dnsRecords: {
+      type: string;
+      name: string;
+      value: string;
+    }[];
+    userConfirmedDnsAdded: boolean;
+    verifiedAt?: string;
+    status: string;
+  };
 }
 
 export interface Coin {

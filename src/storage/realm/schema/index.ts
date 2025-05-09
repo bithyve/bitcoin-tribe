@@ -35,7 +35,12 @@ import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
 import { BackupHistorySchema } from './backupHistory';
 import { CloudBackupHistorySchema } from './cloudBackupHistory';
 import { NodeInfoSchema } from './nodeInfo';
-import { IssuerSchema, IssuerVerifiedBySchema } from './issuer';
+import {
+  IssuerSchema,
+  IssuerVerifiedBySchema,
+  IssuerDomainVerificationSchema,
+  DnsRecordSchema,
+} from './issuer';
 import {
   ConfirmationTimeSchema,
   NodeOnchainTransactionSchema,
@@ -82,4 +87,6 @@ export default [
   NodeOnchainTransactionSchema,
   ConfirmationTimeSchema,
   LNPaymentsSchema,
+  IssuerDomainVerificationSchema,
+  DnsRecordSchema,
 ];

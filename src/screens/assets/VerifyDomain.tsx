@@ -113,7 +113,7 @@ function VerifyDomain() {
         <Buttons
           primaryTitle={assets.verifyDomain}
           primaryOnPress={() => {}}
-          secondaryTitle={common.save}
+          secondaryTitle={common.cancel}
           secondaryOnPress={() => {}}
           width={windowWidth / 2.4}
           secondaryCTAWidth={windowWidth / 2.4}
