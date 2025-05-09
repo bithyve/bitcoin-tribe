@@ -118,6 +118,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
       textAlign: 'center',
+      marginRight: hp(2),
     },
     amountText: {
       fontWeight: '300',
