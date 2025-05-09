@@ -73,7 +73,7 @@ const getStyles = (theme: AppTheme) =>
       width: 270,
       alignSelf: 'flex-end',
       right: 15,
-      bottom: Platform.OS === 'ios' ? hp(165) : hp(120),
+      bottom: hp(165),
     },
     tooltipText: {
       color: theme.colors.headingColor,
