@@ -19,6 +19,7 @@ import {
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import useWallets from 'src/hooks/useWallets';
+import { hp } from 'src/constants/responsive';
 
 function HiddenAssets() {
   const theme: AppTheme = useTheme();
@@ -61,6 +62,7 @@ function HiddenAssets() {
       <AppHeader
         title={settings.hiddenAssets}
         subTitle={settings.hiddenAssetSubTitle}
+        style={styles.headerWrapper}
       />
       <HiddenAssetsList
         listData={assets}
@@ -74,5 +76,8 @@ function HiddenAssets() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {},
+    headerWrapper: {
+      marginBottom: hp(10),
+    },
   });
 export default HiddenAssets;

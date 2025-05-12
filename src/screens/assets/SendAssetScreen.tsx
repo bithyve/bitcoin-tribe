@@ -28,6 +28,7 @@ import GradientView from 'src/components/GradientView';
 import {
   Asset,
   AssetFace,
+  AssetVisibility,
   Coin,
   Collectible,
 } from 'src/models/interfaces/RGBWallet';
@@ -52,6 +53,8 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 import AssetIcon from 'src/components/AssetIcon';
+import dbManager from 'src/storage/realm/dbManager';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type ItemProps = {
   name: string;
@@ -62,6 +65,7 @@ type ItemProps = {
   onPressAsset?: (item: any) => void;
   assetId?: string;
   amount?: string;
+  verified?: boolean;
 };
 
 const AssetItem = ({
@@ -73,6 +77,7 @@ const AssetItem = ({
   onPressAsset,
   assetId,
   amount,
+  verified,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -98,7 +103,12 @@ const AssetItem = ({
         ) : (
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
-            <AssetIcon assetTicker={ticker} assetID={assetId} size={50} />
+            <AssetIcon
+              assetTicker={ticker}
+              assetID={assetId}
+              size={50}
+              verified={verified}
+            />
             {/* </View> */}
           </View>
         )}
@@ -145,7 +155,7 @@ const AssetItem = ({
 };
 
 const SendAssetScreen = () => {
-  const { assetId, rgbInvoice, amount } = useRoute().params;
+  const { assetId, rgbInvoice, amount, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
@@ -334,68 +344,51 @@ const SendAssetScreen = () => {
     }
   }, [invoice, assetAmount, navigation, isDonation]);
 
-  const handlePasteAddress = async () => {
+  const validateAndSetInvoice = async (rawText: string, fromPaste = false) => {
+    const cleanedText = rawText.replace(/\s/g, '');
     try {
-      setValidatingInvoiceLoader(true);
-      const clipboardValue = await Clipboard.getString();
-      if (!clipboardValue) {
-        Toast('Clipboard is empty. Please copy a valid invoice.', true);
-        setValidatingInvoiceLoader(false);
+      fromPaste && setValidatingInvoiceLoader(true);
+      if (!cleanedText) {
+        if (fromPaste) {
+          Toast('Clipboard is empty. Please copy a valid invoice.', true);
+        } else {
+          setInvoiceValidationError('Invoice cannot be empty.');
+        }
         return;
       }
-      const res = await ApiHandler.decodeInvoice(clipboardValue);
-      if (res.assetId) {
-        const assetData = allAssets.find(item => item.assetId === res.assetId);
-        if (!assetData || res.assetId !== assetId) {
-          setValidatingInvoiceLoader(false);
-          setInvoiceValidationError(assets.invoiceMisamatchMsg);
-        } else if (res.assetId && res.assetId === assetId) {
-          setInvoice(clipboardValue);
-          setAssetAmount(res.amount.toString() || 0);
-          setValidatingInvoiceLoader(false);
-          setInvoiceValidationError('');
-        } else {
-          setInvoice(clipboardValue);
-          setValidatingInvoiceLoader(false);
-          setInvoiceValidationError('');
-        }
-      } else if (res.recipientId) {
-        setInvoice(clipboardValue);
-        setValidatingInvoiceLoader(false);
-        setInvoiceValidationError('');
-      }
-    } catch (error) {
-      setInvoiceValidationError('Invalid invoice');
-      setValidatingInvoiceLoader(false);
-    }
-  };
 
-  const handleInvoiceInputChange = async text => {
-    try {
-      const res = await ApiHandler.decodeInvoice(text);
+      const res = await ApiHandler.decodeInvoice(cleanedText);
+
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
-        } else if (res.assetId && res.assetId === assetId) {
-          setInvoice(text);
-          setAssetAmount(res.amount.toString() || 0);
-          setInvoiceValidationError('');
         } else {
-          setInvoice(text);
+          setInvoice(cleanedText);
+          setAssetAmount(res.amount.toString() || '0');
           setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
-        setInvoice(text);
+        setInvoice(cleanedText);
         setInvoiceValidationError('');
       } else {
-        setInvoice(text);
+        setInvoice(cleanedText);
         setInvoiceValidationError('Invalid invoice');
       }
     } catch (error) {
       setInvoiceValidationError('Invalid invoice');
-      setValidatingInvoiceLoader(false);
+    } finally {
+      fromPaste && setValidatingInvoiceLoader(false);
     }
+  };
+
+  const handlePasteAddress = async () => {
+    const clipboardValue = await Clipboard.getString();
+    await validateAndSetInvoice(clipboardValue, true);
+  };
+
+  const handleInvoiceInputChange = async (text: string) => {
+    await validateAndSetInvoice(text, false);
   };
 
   const setMaxAmount = () => {
@@ -473,6 +466,7 @@ const SendAssetScreen = () => {
           }
           assetId={assetId}
           amount={assetData?.balance.spendable}
+          verified={assetData?.issuer?.verified}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -652,8 +646,23 @@ const SendAssetScreen = () => {
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
             onSuccessPress={() => {
-              navigation.goBack();
-              navigation.setParams({ askReview: true });
+              setVisible(false);
+              setTimeout(() => {
+                if (isUDA) {
+                  dbManager.updateObjectByPrimaryId(
+                    RealmSchema.UniqueDigitalAsset,
+                    'assetId',
+                    assetId,
+                    {
+                      visibility: AssetVisibility.HIDDEN,
+                    },
+                  );
+                  navigation.replace(NavigationRoutes.HOME);
+                } else {
+                  navigation.goBack();
+                  navigation.setParams({ askReview: true });
+                }
+              }, 600);
             }}
             onPress={sendAsset}
             estimateBlockTime={

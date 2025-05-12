@@ -29,6 +29,7 @@ function SendScreen({ route, navigation }) {
   const { sendScreen, assets } = translations;
   const styles = getStyles(theme);
   const [visible, setVisible] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [validatingInvoiceErrorMsg, setValidatingInvoiceErrorMsg] =
     useState('');
   const [isScanning, setIsScanning] = useState(true);
@@ -51,11 +52,13 @@ function SendScreen({ route, navigation }) {
       triggerSource: 'scan' | 'proceed',
     ) => {
       setIsScanning(false);
+      setVisibleModal(true);
       const { codes, paymentInfo } = input;
       const value = paymentInfo || codes?.[0]?.value;
 
       if (!value) {
         setIsScanning(true);
+        setVisibleModal(false);
         return;
       }
       if (value.startsWith('rgb:')) {
@@ -67,13 +70,14 @@ function SendScreen({ route, navigation }) {
             );
             if (!assetData) {
               setIsScanning(true);
+              setVisibleModal(false);
               if (triggerSource === 'scan') {
                 Toast(assets.assetNotFoundMsg, true);
               } else {
                 setValidatingInvoiceErrorMsg(assets.assetNotFoundMsg);
               }
             } else {
-              setIsScanning(true);
+              setVisibleModal(false);
               navigateWithDelay(() => {
                 navigation.replace(NavigationRoutes.SENDASSET, {
                   assetId: res.assetId,
@@ -84,7 +88,7 @@ function SendScreen({ route, navigation }) {
               });
             }
           } else {
-            setIsScanning(true);
+            setVisibleModal(false);
             navigateWithDelay(() => {
               navigation.replace(NavigationRoutes.SELECTASSETTOSEND, {
                 wallet,
@@ -97,12 +101,14 @@ function SendScreen({ route, navigation }) {
           return;
         } catch (error) {
           setIsScanning(true);
+          setVisibleModal(false);
           setValidatingInvoiceErrorMsg('Failed to decode RGB invoice.');
           return;
         }
       }
       if (value.startsWith('lnbc')) {
         setIsScanning(true);
+        setVisibleModal(false);
         setVisible(false);
         navigateWithDelay(() => {
           navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
@@ -127,12 +133,14 @@ function SendScreen({ route, navigation }) {
       switch (paymentInfoKind) {
         case PaymentInfoKind.ADDRESS:
           setIsScanning(true);
+          setVisibleModal(false);
           navigateWithDelay(() => {
             navigation.navigate(NavigationRoutes.SENDTO, { wallet, address });
           });
           break;
         case PaymentInfoKind.PAYMENT_URI:
           setIsScanning(true);
+          setVisibleModal(false);
           navigateWithDelay(() => {
             navigation.navigate(NavigationRoutes.SENDTO, {
               wallet,
@@ -143,6 +151,7 @@ function SendScreen({ route, navigation }) {
           break;
         case PaymentInfoKind.RLN_INVOICE:
           setIsScanning(true);
+          setVisibleModal(false);
           navigateWithDelay(() => {
             navigation.replace(NavigationRoutes.LIGHTNINGSEND, {
               invoice: value,
@@ -151,6 +160,7 @@ function SendScreen({ route, navigation }) {
           break;
         default:
           setIsScanning(true);
+          setVisibleModal(false);
           if (triggerSource === 'scan') {
             Toast(sendScreen.invalidBtcAndRgbInput, true);
           } else {
@@ -172,7 +182,7 @@ function SendScreen({ route, navigation }) {
     <ScreenContainer>
       <AppHeader title={title} subTitle={subTitle} enableBack={true} />
       <View>
-        <ModalLoading visible={!isScanning} />
+        <ModalLoading visible={visibleModal} />
       </View>
       <View style={styles.scannerWrapper}>
         {!visible && (

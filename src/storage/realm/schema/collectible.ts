@@ -34,5 +34,6 @@ export const CollectibleSchema: ObjectSchema = {
       default: AssetVisibility.DEFAULT,
       optional: true,
     },
+    isPosted: 'bool?',
   },
 };

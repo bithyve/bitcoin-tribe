@@ -1,7 +1,15 @@
-import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import {
+  AppState,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, { useContext, useEffect, useState, useMemo, useRef } from 'react';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -11,6 +19,7 @@ import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import ImageViewing from 'react-native-image-viewing';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   TransferKind,
@@ -40,13 +49,26 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import ShareOptionView from './components/ShareOptionView';
 
 const UDADetailsScreen = () => {
+  const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const hasShownPostModal = useRef(false);
+  const appState = useRef(AppState.currentState);
   const { assetId, askReview, askVerify } = useRoute().params;
-  const styles = getStyles();
-  const { appType } = useContext(AppContext);
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const {
+    appType,
+    hasCompleteVerification,
+    setCompleteVerification,
+    hasIssuedAsset,
+    setHasIssuedAsset,
+  } = useContext(AppContext);
   const uda = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
@@ -58,21 +80,87 @@ const UDADetailsScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, common, home } = translations;
-  const theme: AppTheme = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+  const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
+    useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    if (askReview) {
+    if (hasIssuedAsset) {
+      setTimeout(() => {
+        setVisibleIssuedPostOnTwitter(true);
+      }, 1000);
+    }
+  }, [hasIssuedAsset]);
+
+  useEffect(() => {
+    if (!showVerifyModal && openTwitterAfterVerifyClose) {
+      setTimeout(() => {
+        setVisiblePostOnTwitter(true);
+        setOpenTwitterAfterVerifyClose(false);
+      }, 1000);
+    }
+  }, [showVerifyModal, openTwitterAfterVerifyClose]);
+
+  useEffect(() => {
+    if (askVerify) {
+      setTimeout(() => setShowVerifyModal(true), 1000);
+    }
+  }, [askVerify]);
+
+  useEffect(() => {
+    if (askReview && refresh) {
       setTimeout(() => {
         requestAppReview();
-        if (askVerify) {
-          setShowVerifyModal(true);
-        }
       }, 2000);
     }
-  }, [askReview, askVerify]);
+  }, [askReview, refresh]);
+
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        if (askReview && refresh) {
+          setTimeout(() => {
+            requestAppReview();
+          }, 2000);
+        }
+      }
+      appState.current = nextAppState;
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [askReview, refresh]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        uda?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [uda?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const showVerifyIssuer = useMemo(() => {
     return (
@@ -81,7 +169,7 @@ const UDADetailsScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer]);
+  }, [uda?.transactions, uda?.issuer, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -107,8 +195,8 @@ const UDADetailsScreen = () => {
   };
 
   return (
-    <ScreenContainer>
-      <AppHeader title={uda?.name} />
+    <ScreenContainer style={styles.container}>
+      <AppHeader title={uda?.name} style={styles.wrapper} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{
@@ -137,57 +225,67 @@ const UDADetailsScreen = () => {
                 navigation.navigate(NavigationRoutes.SCANASSET, {
                   assetId: assetId,
                   rgbInvoice: '',
+                  isUDA: true,
                 })
               }
               width={wp(105)}
             />
           </View>
         )}
-
-        {uda?.issuer && uda?.issuer?.verified && (
-          <IssuerVerified
-            id={uda?.issuer?.verifiedBy[0]?.id}
-            name={uda?.issuer?.verifiedBy[0]?.name}
-            username={uda?.issuer?.verifiedBy[0]?.username}
-          />
-        )}
-
+        <View style={styles.wrapper}>
+          {uda?.issuer && uda?.issuer?.verified && (
+            <IssuerVerified
+              id={uda?.issuer?.verifiedBy[0]?.id}
+              name={uda?.issuer?.verifiedBy[0]?.name}
+              username={uda?.issuer?.verifiedBy[0]?.username}
+            />
+          )}
+        </View>
         <Item title={home.assetName} value={uda.name} />
-        <AssetIDContainer assetId={assetId} />
+        <View style={styles.wrapper}>
+          <AssetIDContainer assetId={assetId} />
+        </View>
         <Item title={home.assetTicker} value={uda.ticker} />
         <Item title={home.assetDescription} value={uda.details} />
-        <MediaCarousel
-          images={uda?.token.attachments}
-          handleImageSelect={item => {
-            setVisible(true);
-            setSelectedImage(item?.filePath);
-          }}
-        />
+        <View style={styles.wrapper}>
+          <MediaCarousel
+            images={uda?.token.attachments}
+            handleImageSelect={item => {
+              setVisible(true);
+              setSelectedImage(item?.filePath);
+            }}
+          />
+        </View>
         <Item
           title={assets.issuedOn}
           value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
         />
-        {uda?.transactions.length > 0 && (
-          <AssetTransaction
-            transaction={uda?.transactions[0]}
-            coin={uda?.name}
-            onPress={() => {
-              navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
-                assetId: assetId,
-                transactions: uda?.transactions,
-                assetName: uda?.name,
-              });
-            }}
-            disabled={uda?.transactions.length === 1}
-            assetFace={uda?.assetIface}
-          />
-        )}
-
+        <View style={styles.wrapper}>
+          {uda?.transactions.length > 0 && (
+            <AssetTransaction
+              transaction={uda?.transactions[0]}
+              coin={uda?.name}
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                  assetId: assetId,
+                  transactions: uda?.transactions,
+                  assetName: uda?.name,
+                });
+              }}
+              disabled={uda?.transactions.length === 1}
+              assetFace={uda?.assetIface}
+            />
+          )}
+        </View>
         {showVerifyIssuer && (
-          <VerifyIssuer
-            assetId={assetId}
-            schema={RealmSchema.UniqueDigitalAsset}
-          />
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.UniqueDigitalAsset}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+            />
+            <View style={styles.seperatorView} />
+          </>
         )}
         <>
           <ImageViewing
@@ -204,6 +302,14 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        <View style={styles.wrapper}>
+          {!uda?.isPosted && uda?.issuer?.verified && (
+            <ShareOptionView
+              title={assets.sharePostTitle}
+              onPress={() => setVisiblePostOnTwitter(true)}
+            />
+          )}
+        </View>
         <HideAssetView
           title={assets.hideAsset}
           onPress={() => hideAsset()}
@@ -214,13 +320,62 @@ const UDADetailsScreen = () => {
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
-        onDismiss={() => setShowVerifyModal(false)}
+        onVerify={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => {
+            setVisiblePostOnTwitter(true);
+          }, 1000);
+        }}
+        onDismiss={() => {
+          setShowVerifyModal(false);
+          setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
         schema={RealmSchema.UniqueDigitalAsset}
       />
+      <>
+        <PostOnTwitterModal
+          visible={visiblePostOnTwitter}
+          primaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              true,
+            );
+            setRefresh(prev => !prev);
+          }}
+          secondaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(
+              RealmSchema.UniqueDigitalAsset,
+              assetId,
+              false,
+            );
+          }}
+          issuerInfo={uda}
+        />
+      </>
+      <>
+        <IssueAssetPostOnTwitterModal
+          visible={visibleIssuedPostOnTwitter}
+          primaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setRefresh(prev => !prev);
+          }}
+          secondaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setHasIssuedAsset(false);
+            setRefresh(prev => !prev);
+          }}
+          issuerInfo={uda}
+        />
+      </>
     </ScreenContainer>
   );
 };
-const getStyles = () =>
+const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
       width: '100%',
@@ -234,6 +389,18 @@ const getStyles = () =>
       paddingBottom: 0,
       marginVertical: wp(5),
       alignItems: 'center',
+    },
+    container: {
+      paddingHorizontal: hp(0),
+    },
+    wrapper: {
+      paddingHorizontal: hp(16),
+    },
+    seperatorView: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
     },
   });
 export default UDADetailsScreen;

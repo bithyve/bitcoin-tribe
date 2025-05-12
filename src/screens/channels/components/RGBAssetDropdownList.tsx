@@ -73,6 +73,7 @@ function RGBAssetDropdownList(props: DropdownProps) {
                     assetTicker={item?.ticker}
                     assetID={item?.assetId}
                     size={windowHeight > 670 ? 50 : 30}
+                    verified={item?.issuer?.verified}
                   />
                 )}
               </View>

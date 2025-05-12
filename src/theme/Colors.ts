@@ -23,6 +23,7 @@ const Colors = {
   Quartz: 'rgba(75, 75, 75, 1)',
   CharlestonGreen: 'rgba(36, 38, 43, 1)',
   Golden: 'rgba(255, 214, 0, 1)',
+  Golden1: 'rgba(255, 214, 0,0.2)',
   ScreaminGreen: 'rgba(116, 255, 81, 1)',
   TurquoiseBlue: 'rgba(1, 255, 227, 1)',
   DimGray: 'rgba(103, 108, 117,1)',
@@ -30,6 +31,7 @@ const Colors = {
   FireOpal: 'rgba(236, 85, 87, 1)',
   ImperialRed: 'rgba(236, 34, 64,1)',
   BrandeisBlue: 'rgba(1, 102, 255,1)',
+  BrandeisBlue1: 'rgba(1, 102, 255,0.2)',
   UFOGreen: 'rgba(12, 33, 17, 1)',
   UFOGreen1: 'rgba(76, 217, 100, 1)',
   Gray: 'rgba(128, 128, 128, 1)',
@@ -55,5 +57,7 @@ const Colors = {
   VividGamboge: 'rgba(255, 149, 0,1)',
   DarkElectricBlue: 'rgba(97, 106, 127,1)',
   ChineseSilver: 'rgba(199, 206, 207,1)',
+  DarkJungleGreen: 'rgba(21, 42, 32,1)',
+  DarkGunmetal: 'rgba(19, 29, 45,1)',
 };
 export default Colors;

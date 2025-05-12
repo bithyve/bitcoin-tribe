@@ -4,7 +4,7 @@
 [![Appstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/applebtn.png)](https://apps.apple.com/us/app/tribe-rgb/id6667112050)
 [![PGP_APK](https://github.com/bithyve/bitcoin-keeper/assets/50690016/67693cf0-a059-4391-8b48-a9d46a55e71c)](https://github.com/bithyve/tribe/releases)
 
-Explore the future of digital assets with Tribe RGB. Manage your Bitcoin and RGB assets with top-notch security and seamless backups. Tribe RGB offers a cutting-edge platform for decentralized finance, featuring a Bitcoin wallet, community gifting, and Friends & Family options. Join the Tribe and take control of your digital wealth today!
+Explore the future of digital assets with Bitcoin Tribe. Manage your Bitcoin and RGB assets with top-notch security and seamless backups. Bitcoin Tribe offers a cutting-edge platform for decentralized finance, featuring a Bitcoin wallet, community gifting, and Friends & Family options. Join the Tribe and take control of your digital wealth today!
 
 ## Prerequisites
 
@@ -53,6 +53,7 @@ yarn androidDevelopmentDebug
 **iOS**
 
 Extract the latest release of rgb_libFFI.xcframework.zip from [rgb-lib-swift/releases](https://github.com/RGB-Tools/rgb-lib-swift/releases) in `ios/rgb` folder
+
 ```bash
 yarn ios --scheme=tribe-dev
 ```
@@ -140,5 +141,3 @@ This project is licensed under the **MIT License.**
 
 - Follow us on [Twitter](https://twitter.com/BitcoinTribe_)
 - Join our [Telegram](https://t.me/BitcoinTribeSupport)
-
-
