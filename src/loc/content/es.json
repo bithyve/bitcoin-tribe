@@ -392,7 +392,10 @@
     "availableBalanceMsg": "El saldo disponible es",
     "spendableBalanceMsg": "El saldo disponible para gastar es ",
     "dustAmountMsg": "Cantidad demasiado baja",
-    "validationZeroNotAllowed": "¡0 no está permitido!"
+    "validationZeroNotAllowed": "¡0 no está permitido!",
+    "invoiceInvalidContainErrMsg": "La factura contiene detalles no válidos. Por favor revisa la factura.",
+    "invoiceFormatErrMsg": "El formato de la factura no es válido. Inténtalo de nuevo.",
+    "failedInvoiceProcessErrMsg": "No se pudo procesar la factura RGB. Asegúrate de que sea correcta."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -604,7 +607,11 @@
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
     "verificationTitle": "VERIFICACIÓN",
-    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio."
+    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio.",
+    "verificationInfoText1": "Regístrate para demostrar propiedad — o simplemente compártelo en Twitter sin registrarte.",
+    "verificationInfoText2": "Vincula tu identidad al activo verificando a través de X o dominio, y compártelo para hacerlo oficial.",
+    "registerAssetTitle": "Registrar Activo",
+    "registerAssetSubTitle": "Agregar el activo al registro de Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Community",
