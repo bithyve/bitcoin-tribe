@@ -28,6 +28,7 @@ export const IssuerVerifiedBySchema = {
 
 export const IssuerDomainVerificationSchema = {
   name: RealmSchema.IssuerDomainVerification,
+  embedded: true,
   properties: {
     domain: 'string',
     method: {
