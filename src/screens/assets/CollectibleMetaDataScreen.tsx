@@ -43,6 +43,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -183,11 +184,33 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {collectible?.issuer && collectible.issuer.verified && (
+              {collectible.issuer.verifiedBy.find(
+                v => v.type === 'twitter',
+              ) && (
                 <IssuerVerified
-                  id={collectible.issuer.verifiedBy[0].id}
-                  name={collectible.issuer.verifiedBy[0].name}
-                  username={collectible.issuer.verifiedBy[0].username}
+                  id={
+                    collectible.issuer.verifiedBy.find(
+                      v => v.type === 'twitter',
+                    )?.id
+                  }
+                  name={
+                    collectible.issuer.verifiedBy.find(
+                      v => v.type === 'twitter',
+                    )?.name
+                  }
+                  username={
+                    collectible.issuer.verifiedBy.find(
+                      v => v.type === 'twitter',
+                    )?.username
+                  }
+                />
+              )}
+              {collectible.issuer.verifiedBy.find(v => v.type === 'domain') && (
+                <IssuerDomainVerified
+                  domain={
+                    collectible.issuer.verifiedBy.find(v => v.type === 'domain')
+                      ?.name
+                  }
                 />
               )}
             </View>

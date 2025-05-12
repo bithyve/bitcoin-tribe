@@ -38,6 +38,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import { Keys } from 'src/storage';
 import ShareOptionView from './components/ShareOptionView';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -142,11 +143,23 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin.issuer && coin.issuer.verified && (
+            {coin.issuer.verifiedBy.find(v => v.type === 'twitter') && (
               <IssuerVerified
-                id={coin.issuer.verifiedBy[0].id}
-                name={coin.issuer.verifiedBy[0].name}
-                username={coin.issuer.verifiedBy[0].username}
+                id={coin.issuer.verifiedBy.find(v => v.type === 'twitter')?.id}
+                name={
+                  coin.issuer.verifiedBy.find(v => v.type === 'twitter')?.name
+                }
+                username={
+                  coin.issuer.verifiedBy.find(v => v.type === 'twitter')
+                    ?.username
+                }
+              />
+            )}
+            {coin.issuer.verifiedBy.find(v => v.type === 'domain') && (
+              <IssuerDomainVerified
+                domain={
+                  coin.issuer.verifiedBy.find(v => v.type === 'domain')?.name
+                }
               />
             )}
           </View>

@@ -53,6 +53,7 @@ import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -242,11 +243,20 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {uda?.issuer && uda?.issuer?.verified && (
+          {uda.issuer.verifiedBy.find(v => v.type === 'twitter') && (
             <IssuerVerified
-              id={uda?.issuer?.verifiedBy[0]?.id}
-              name={uda?.issuer?.verifiedBy[0]?.name}
-              username={uda?.issuer?.verifiedBy[0]?.username}
+              id={uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.id}
+              name={uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.name}
+              username={
+                uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.username
+              }
+            />
+          )}
+          {uda.issuer.verifiedBy.find(v => v.type === 'domain') && (
+            <IssuerDomainVerified
+              domain={
+                uda.issuer.verifiedBy.find(v => v.type === 'domain')?.name
+              }
             />
           )}
         </View>
