@@ -197,7 +197,7 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
-  TWITTER_POST = 'Twitter_Post',
+  TWITTER_POST = 'twitter_post',
 }
 
 export interface RgbNodeConnectParams {
