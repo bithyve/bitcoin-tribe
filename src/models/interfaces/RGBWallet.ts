@@ -206,6 +206,7 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
+  DOMAIN = 'domain',
 }
 
 export interface RgbNodeConnectParams {

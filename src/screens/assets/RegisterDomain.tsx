@@ -131,6 +131,8 @@ function RegisterDomain() {
             blurOnSubmit={false}
             returnKeyType="done"
             error={domainValidationError}
+            keyboardType="url"
+            autoCapitalize="none"
           />
         </View>
       </KeyboardAvoidView>
