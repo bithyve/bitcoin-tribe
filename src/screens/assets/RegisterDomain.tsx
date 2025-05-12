@@ -18,6 +18,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys } from 'src/storage';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
+import ModalLoading from 'src/components/ModalLoading';
 
 function RegisterDomain() {
   const navigation = useNavigation();
@@ -30,10 +31,18 @@ function RegisterDomain() {
   const [domainName, setDomainName] = useState('');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsCtaEnabled(!!domainName && !domainValidationError);
   }, [domainName, domainValidationError]);
+
+  const navigateWithDelay = (callback: () => void) => {
+    setIsLoading(false);
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
 
   const isValidDomain = (domain: string) => {
     const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/;
@@ -55,6 +64,7 @@ function RegisterDomain() {
   };
   const handleRegisterDomain = async () => {
     try {
+      setIsLoading(true);
       const response = await Relay.registerIssuerDomain(
         appId,
         assetId,
@@ -62,25 +72,30 @@ function RegisterDomain() {
       );
       if (response.status) {
         Toast('Your domain has been successfully registered.');
-        navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
-          record: response.record,
-          recordType: response.recordType,
-          domain: domainName,
-          assetId: assetId,
+        navigateWithDelay(() => {
+          navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
+            record: response.record,
+            recordType: response.recordType,
+            domain: domainName,
+            assetId: assetId,
+          });
         });
       } else {
+        setIsLoading(false);
         Toast(
           response.error || 'An error occurred during domain registration.',
           true,
         );
       }
     } catch (error) {
+      setIsLoading(false);
       console.error('handleRegisterDomain error:', error);
     }
   };
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyDomain} />
+      <ModalLoading visible={isLoading} />
       <KeyboardAvoidView style={styles.container}>
         <AppText variant="body1" style={styles.headText}>
           {assets.registerDomainInfo1}

@@ -27,6 +27,7 @@ import {
 } from '@react-navigation/native';
 import Toast from 'src/components/Toast';
 import Relay from 'src/services/relay';
+import ModalLoading from 'src/components/ModalLoading';
 
 const data = [
   {
@@ -56,6 +57,14 @@ function VerifyDomain() {
   const [domainName, setDomainName] = useState(domain || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigateWithDelay = (callback: () => void) => {
+    setIsLoading(false);
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
 
   const handleDomainNameChange = text => {
     if (!text.trim()) {
@@ -69,24 +78,30 @@ function VerifyDomain() {
 
   const handleVerifyDomain = async () => {
     try {
+      setIsLoading(true);
       const response = await Relay.verifyIssuerDomain(appId, assetId);
       if (response.status) {
         Toast('Your domain has been successfully verified.');
         await Relay.getAsset(assetId);
-        navigation.dispatch(popAction);
+        navigateWithDelay(() => {
+          navigation.dispatch(popAction);
+        });
       } else {
+        setIsLoading(false);
         Toast(
           response.error || 'An error occurred during domain verification.',
           true,
         );
       }
     } catch (error) {
+      setIsLoading(false);
       console.error('handleVerifyDomain error:', error);
     }
   };
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyDomain} />
+      <ModalLoading visible={isLoading} />
       <KeyboardAvoidView style={styles.container}>
         <View>
           <TextField
