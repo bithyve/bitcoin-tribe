@@ -33,11 +33,10 @@ import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
-import { getUserTweetByAssetIdWithRetry } from 'src/services/twitter';
-import dbManager from 'src/storage/realm/dbManager';
-import Relay from 'src/services/relay';
-import { connected } from 'process';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -236,6 +235,7 @@ const CoinDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
             setIsSharingToTwitter(true);
           }}
@@ -243,6 +243,7 @@ const CoinDetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           issuerInfo={coin}
         />
@@ -253,11 +254,13 @@ const CoinDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           issuerInfo={coin}
         />

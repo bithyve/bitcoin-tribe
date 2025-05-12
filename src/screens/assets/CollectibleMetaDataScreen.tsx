@@ -41,8 +41,14 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 import ShareOptionView from './components/ShareOptionView';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import SelectOption from 'src/components/SelectOption';
+import openLink from 'src/utils/OpenLink';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value }) => {
@@ -86,8 +92,11 @@ const CollectibleMetaDataScreen = () => {
   const hasShownPostModal = useRef(false);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { hasCompleteVerification, setCompleteVerification } =
-    React.useContext(AppContext);
+  const {
+    hasCompleteVerification,
+    setCompleteVerification,
+    setHasIssuedAsset,
+  } = React.useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
@@ -97,6 +106,8 @@ const CollectibleMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
 
   useEffect(() => {
     if (!collectible.metaData) {
@@ -223,21 +234,34 @@ const CollectibleMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
 
-            {showVerifyIssuer && (
-              <>
-                <VerifyIssuer
-                  assetId={assetId}
-                  schema={RealmSchema.Collectible}
-                  onVerificationComplete={() => setRefreshToggle(t => !t)}
-                />
-                <View style={styles.seperatorView} />
-              </>
-            )}
-            <View style={styles.wrapper}>
-              {!collectible?.isPosted && collectible?.issuer?.verified && (
-                <ShareOptionView
-                  title={assets.sharePostTitle}
-                  onPress={() => setVisiblePostOnTwitter(true)}
+            <>
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+                showVerifyIssuer={showVerifyIssuer}
+                asset={collectible}
+                onPressShare={() => {
+                  if (!collectible.isIssuedPosted) {
+                    setVisibleIssuedPostOnTwitter(true);
+                  } else if (!collectible.isVerifyPosted) {
+                    setVisiblePostOnTwitter(true);
+                  }
+                }}
+              />
+              <View style={styles.seperatorView} />
+            </>
+            <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+              {collectible?.issuer?.verified && (
+                <SelectOption
+                  title={assets.viewInRegistry}
+                  subTitle={''}
+                  onPress={() =>
+                    openLink(
+                      `https://bitcointribe.app/registry?assetId=${assetId}`,
+                    )
+                  }
+                  testID={'view_in_registry'}
                 />
               )}
             </View>
@@ -251,8 +275,6 @@ const CollectibleMetaDataScreen = () => {
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}
-              isVerified={collectible?.issuer?.verified}
-              assetId={assetId}
             />
             <>
               <PostOnTwitterModal
@@ -261,12 +283,47 @@ const CollectibleMetaDataScreen = () => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
                   updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
                   setRefresh(prev => !prev);
                 }}
                 secondaryOnPress={() => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
                   updateAssetPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
+                }}
+                issuerInfo={collectible}
+              />
+            </>
+            <>
+              <IssueAssetPostOnTwitterModal
+                visible={visibleIssuedPostOnTwitter}
+                primaryOnPress={() => {
+                  setVisibleIssuedPostOnTwitter(false);
+                  setRefresh(prev => !prev);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
+                }}
+                secondaryOnPress={() => {
+                  setVisibleIssuedPostOnTwitter(false);
+                  setHasIssuedAsset(false);
+                  setRefresh(prev => !prev);
+                  updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
                     assetId,
                     false,
@@ -305,7 +362,7 @@ const getStyles = (theme: AppTheme) =>
     },
     assetNameWrapper: {
       minHeight: hp(50),
-      paddingHorizontal: hp(10),
+      padding: hp(10),
       justifyContent: 'center',
       borderRadius: 10,
       borderWidth: 1,
@@ -347,6 +404,9 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
+    },
+    viewRegistryCtaWrapper: {
+      marginTop: hp(10),
     },
   });
 

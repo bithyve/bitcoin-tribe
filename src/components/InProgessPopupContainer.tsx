@@ -70,7 +70,7 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     detailsWrapper: {
-      marginTop: hp(20),
+      marginTop: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,
@@ -97,7 +97,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
-      marginVertical: hp(10),
+      marginTop: hp(5),
       alignItems: 'center',
     },
     dotLoaderStyle: {
