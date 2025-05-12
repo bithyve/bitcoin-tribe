@@ -137,6 +137,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                     assetTicker={item.ticker}
                     assetID={item.assetId}
                     size={30}
+                    verified={item?.issuer?.verified}
                   />
                 ) : (
                   <Image
@@ -210,13 +211,18 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     hiddenCta: {
+      alignItems: 'center',
+      justifyContent: 'center',
       borderColor: theme.colors.accent1,
-      borderWidth: 1,
-      padding: hp(5),
+      borderWidth: 1.5,
+      paddingVertical: hp(5),
+      paddingHorizontal: hp(8),
       borderRadius: 15,
+      backgroundColor: theme.colors.hideAssetCTABackColor,
     },
     hiddenCtaTitle: {
       color: theme.colors.accent1,
+      fontWeight: 'bold',
     },
     assetName: {
       color: theme.colors.headingColor,
@@ -228,9 +234,10 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     verticalLineStyle: {
-      height: '90%',
-      width: 2,
-      backgroundColor: theme.colors.assetCardVerticalBorder,
+      alignSelf: 'center',
+      height: '85%',
+      width: 1,
+      backgroundColor: theme.colors.hideAssetDeviderColor,
       marginHorizontal: hp(5),
     },
     assetBalance: {

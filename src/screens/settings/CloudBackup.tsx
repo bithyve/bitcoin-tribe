@@ -57,7 +57,11 @@ const CloudBackup = ({ navigation }) => {
           <InProgessPopupContainer
             title={settings.cloudBackupLoadingTitle}
             subTitle={settings.cloudBackupLoadingSubTitle}
-            illustrationPath={isThemeDark ? require('src/assets/images/jsons/cloudBackup.json') : require('src/assets/images/jsons/cloudBackup.json_light.json')}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/cloudBackup.json')
+                : require('src/assets/images/jsons/cloudBackup.json_light.json')
+            }
           />
         </ResponsePopupContainer>
       </View>
@@ -81,6 +85,7 @@ const CloudBackup = ({ navigation }) => {
             date={item.date}
             releaseNotes={item.releaseNotes}
             lastIndex={lastIndex === index}
+            showCollapseIcon={false}
           />
         )}
         ListEmptyComponent={

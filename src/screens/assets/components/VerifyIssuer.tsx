@@ -1,5 +1,10 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useState, useEffect } from 'react';
+import { useTheme } from 'react-native-paper';
+import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import moment from 'moment';
+
 import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
@@ -16,32 +21,62 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import ModalContainer from 'src/components/ModalContainer';
-import { useMutation } from 'react-query';
 import { TransactionKind } from 'src/services/wallets/enums';
-import useWallets from 'src/hooks/useWallets';
 import { ServiceFee } from 'src/screens/home/components/AddAsset';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import moment from 'moment';
+import { AppContext } from 'src/contexts/AppContext';
+import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
+import { AppTheme } from 'src/theme';
+import { hp } from 'src/constants/responsive';
+import InfoIcon from 'src/assets/images/infoIcon1.svg';
+import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
+import { Keys } from 'src/storage';
+import VerticalGradientView from 'src/components/VerticalGradientView';
+import { useQuery as realmUseQuery } from '@realm/react';
 
-const styles = StyleSheet.create({
-  title: {
-    marginBottom: 5,
-  },
-  subtitle: {
-    marginBottom: 5,
-    color: '#787878',
-  },
-  container: {
-    marginVertical: 20,
-  },
-});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    title: {
+      marginBottom: 5,
+    },
+    subtitle: {
+      marginBottom: 5,
+      color: '#787878',
+    },
+    container: {
+      marginVertical: 20,
+    },
+    gradientContainer: {
+      marginTop: hp(20),
+      paddingHorizontal: hp(16),
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
+    },
+    verifyViewWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      marginTop: hp(20),
+      alignItems: 'center',
+    },
+    verifyTitleWrapper: {
+      width: '90%',
+    },
+    verifyTitle: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+  });
 
 interface VerifyIssuerProps {
   assetId: string;
   schema: RealmSchema;
+  onVerificationComplete?: () => void;
 }
 
-export const verifyIssuerOnTwitter = async (assetId, schema) => {
+export const verifyIssuerOnTwitter = async (
+  assetId,
+  schema,
+  onVerificationComplete,
+) => {
   try {
     const result = await loginWithTwitter();
     if (result.username) {
@@ -65,6 +100,7 @@ export const verifyIssuerOnTwitter = async (assetId, schema) => {
             ],
           },
         });
+        onVerificationComplete?.();
       }
     }
   } catch (error) {
@@ -77,6 +113,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
   const { assetId, schema } = props;
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { setCompleteVerification } = React.useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
@@ -86,7 +126,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [showFeeModal, setShowFeeModal] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
-  const wallet: Wallet = useWallets({}).wallets[0];
+  const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -142,11 +182,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(
-        `Failed to pay service fee. Please refresh your wallet and try again.`,
-        true,
-      );
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+      }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
     }
@@ -165,6 +203,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         });
         setIsLoading(false);
         if (response.status) {
+          setCompleteVerification(true);
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
               verified: true,
@@ -198,6 +237,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       const { status } = await Relay.registerAsset(app.id, asset);
       if (status) {
         setIsAddedInRegistry(true);
+        Toast(assets.registerAssetMsg);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
@@ -224,63 +264,85 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   }, [assetId, schema]);
 
   if (requesting) {
-    return <View />;
+    return <CardSkeletonLoader />;
   }
-  return isAddedInRegistry ? (
-    <View style={styles.container}>
-      <ModalLoading visible={isLoading} />
-      <AppText variant="heading3" style={styles.title}>
-        {assets.issuerVerificationTitle}
-      </AppText>
-      <AppText variant="body2" style={styles.subtitle}>
-        {assets.issuerVerificationSubTitle}
-      </AppText>
-
-      <SelectOption
-        title={assets.connectVerifyTwitter}
-        subTitle={''}
-        onPress={handleVerifyWithTwitter}
-        testID={'verify-with-twitter'}
-      />
-    </View>
-  ) : (
-    <View style={styles.container}>
-      <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
-
-      <SelectOption
-        title={'Register Asset'}
-        subTitle={'Add asset to Tribe RGB registry'}
-        onPress={() => getAssetIssuanceFeeMutation.mutate()}
-        testID={'register-asset'}
-      />
-
-      <View>
-        <ModalContainer
-          title={assets.listYourAssetInRegTitle}
-          subTitle={assets.listYourAssetInRegSubTitle}
-          visible={showFeeModal}
-          enableCloseIcon={false}
-          onDismiss={() => {
-            if (payServiceFeeFeeMutation.isLoading) return;
-            setShowFeeModal(false);
-            getAssetIssuanceFeeMutation.reset();
-          }}>
-          <ServiceFee
-            onPay={async () => {
-              await ApiHandler.refreshWallets({ wallets: [wallet] });
-              payServiceFeeFeeMutation.mutate({ feeDetails });
-            }}
-            feeDetails={feeDetails}
-            status={payServiceFeeFeeMutation.status}
-            onSkip={() => setShowFeeModal(false)}
-            hideModal={() => {
-              setShowFeeModal(false);
-              getAssetIssuanceFeeMutation.reset();
-            }}
-          />
-        </ModalContainer>
+  return (
+    <VerticalGradientView
+      colors={[
+        theme.colors.cardGradient4,
+        theme.colors.cardGradient5,
+        theme.colors.cardGradient5,
+      ]}
+      style={styles.gradientContainer}>
+      <View style={styles.verifyViewWrapper}>
+        <View style={styles.verifyTitleWrapper}>
+          <AppText variant="body2" style={styles.verifyTitle}>
+            {assets.verificationTitle}
+          </AppText>
+        </View>
+        <View>
+          {isThemeDark ? (
+            <InfoIcon width={24} height={24} />
+          ) : (
+            <InfoIconLight width={24} height={24} />
+          )}
+        </View>
       </View>
-    </View>
+      {isAddedInRegistry ? (
+        <View style={styles.container}>
+          <ModalLoading visible={isLoading} />
+          {/* <AppText variant="heading3" style={styles.title}>
+            {assets.issuerVerificationTitle}
+          </AppText>
+          <AppText variant="body2" style={styles.subtitle}>
+            {assets.issuerVerificationSubTitle}
+          </AppText> */}
+
+          <SelectOption
+            title={assets.connectVerifyTwitter}
+            subTitle={''}
+            onPress={handleVerifyWithTwitter}
+            testID={'verify-with-twitter'}
+          />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
+          <SelectOption
+            title={'Register Asset'}
+            subTitle={'Add asset to Bitcoin Tribe registry'}
+            onPress={() => getAssetIssuanceFeeMutation.mutate()}
+            testID={'register-asset'}
+          />
+          <View>
+            <ModalContainer
+              title={assets.listYourAssetInRegTitle}
+              subTitle={assets.listYourAssetInRegSubTitle}
+              visible={showFeeModal}
+              enableCloseIcon={false}
+              onDismiss={() => {
+                if (payServiceFeeFeeMutation.isLoading) return;
+                setShowFeeModal(false);
+                getAssetIssuanceFeeMutation.reset();
+              }}>
+              <ServiceFee
+                onPay={async () => {
+                  await ApiHandler.refreshWallets({ wallets: [wallet] });
+                  payServiceFeeFeeMutation.mutate({ feeDetails });
+                }}
+                feeDetails={feeDetails}
+                status={payServiceFeeFeeMutation.status}
+                onSkip={() => setShowFeeModal(false)}
+                hideModal={() => {
+                  setShowFeeModal(false);
+                  getAssetIssuanceFeeMutation.reset();
+                }}
+              />
+            </ModalContainer>
+          </View>
+        </View>
+      )}
+    </VerticalGradientView>
   );
 };
 

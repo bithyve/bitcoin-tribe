@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
@@ -8,11 +8,15 @@ import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import moment from 'moment';
+
 import {
   Coin,
   TransferKind,
@@ -20,7 +24,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import moment from 'moment';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
@@ -30,6 +33,11 @@ import HideAssetView from './components/HideAssetView';
 import dbManager from 'src/storage/realm/dbManager';
 import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
+import PostOnTwitterModal from './components/PostOnTwitterModal';
+import { AppContext } from 'src/contexts/AppContext';
+import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import { Keys } from 'src/storage';
+import ShareOptionView from './components/ShareOptionView';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -58,18 +66,41 @@ const CoinsMetaDataScreen = () => {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const hasShownPostModal = useRef(false);
+  const { hasCompleteVerification, setCompleteVerification } =
+    React.useContext(AppContext);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        coin?.issuer?.verified &&
+        hasCompleteVerification &&
+        !hasShownPostModal.current
+      ) {
+        hasShownPostModal.current = true;
+        setTimeout(() => {
+          setVisiblePostOnTwitter(true);
+        }, 1000);
+      }
+    }, [coin?.issuer?.verified, hasCompleteVerification]),
+  );
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -85,24 +116,31 @@ const CoinsMetaDataScreen = () => {
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer]);
+  }, [coin.transactions, coin.issuer, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title={assets.coinMetaTitle} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={assets.coinMetaTitle}
+        subTitle={''}
+        enableBack={true}
+        style={styles.wrapper}
+      />
       {isLoading ? (
         <ModalLoading visible={isLoading} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
-          {coin.issuer && coin.issuer.verified && (
-            <IssuerVerified
-              id={coin.issuer.verifiedBy[0].id}
-              name={coin.issuer.verifiedBy[0].name}
-              username={coin.issuer.verifiedBy[0].username}
-            />
-          )}
+          <View style={styles.wrapper}>
+            {coin.issuer && coin.issuer.verified && (
+              <IssuerVerified
+                id={coin.issuer.verifiedBy[0].id}
+                name={coin.issuer.verifiedBy[0].name}
+                username={coin.issuer.verifiedBy[0].username}
+              />
+            )}
+          </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
             <Item
@@ -111,7 +149,9 @@ const CoinsMetaDataScreen = () => {
               width={'45%'}
             />
           </View>
-          <AssetIDContainer assetId={assetId} />
+          <View style={styles.wrapper}>
+            <AssetIDContainer assetId={assetId} />
+          </View>
           <View style={styles.rowWrapper}>
             <Item
               title={assets.schema}
@@ -138,22 +178,56 @@ const CoinsMetaDataScreen = () => {
               width={'45%'}
             />
           </View>
-          <Item
-            title={assets.issuedOn}
-            value={moment
-              .unix(coin.metaData && coin.metaData.timestamp)
-              .format('DD MMM YY  hh:mm A')}
-          />
+          <View style={styles.wrapper}>
+            <Item
+              title={assets.issuedOn}
+              value={moment
+                .unix(coin.metaData && coin.metaData.timestamp)
+                .format('DD MMM YY  hh:mm A')}
+            />
+          </View>
 
           {showVerifyIssuer && (
-            <VerifyIssuer assetId={assetId} schema={RealmSchema.Coin} />
+            <>
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Coin}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+              />
+              <View style={styles.seperatorView} />
+            </>
           )}
+          <View style={styles.wrapper}>
+            {!coin?.isPosted && coin?.issuer?.verified && (
+              <ShareOptionView
+                title={assets.sharePostTitle}
+                onPress={() => setVisiblePostOnTwitter(true)}
+              />
+            )}
+          </View>
           <HideAssetView
             title={assets.hideAsset}
             onPress={() => hideAsset()}
             isVerified={coin?.issuer?.verified}
             assetId={assetId}
           />
+          <>
+            <PostOnTwitterModal
+              visible={visiblePostOnTwitter}
+              primaryOnPress={() => {
+                setVisiblePostOnTwitter(false);
+                setCompleteVerification(false);
+                updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+                setRefresh(prev => !prev);
+              }}
+              secondaryOnPress={() => {
+                setVisiblePostOnTwitter(false);
+                setCompleteVerification(false);
+                updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+              }}
+              issuerInfo={coin}
+            />
+          </>
         </ScrollView>
       )}
     </ScreenContainer>
@@ -165,6 +239,7 @@ const getStyles = (theme: AppTheme, width) =>
     container: {
       flex: 1,
       flexDirection: 'column',
+      paddingHorizontal: hp(0),
     },
     assetNameWrapper: {
       justifyContent: 'center',
@@ -207,6 +282,16 @@ const getStyles = (theme: AppTheme, width) =>
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
+      paddingHorizontal: hp(16),
+    },
+    wrapper: {
+      paddingHorizontal: hp(16),
+    },
+    seperatorView: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
     },
   });
 

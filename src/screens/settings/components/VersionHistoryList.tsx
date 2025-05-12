@@ -37,6 +37,7 @@ function VersionHistoryList() {
             releaseNotes={item.releaseNote}
             lastIndex={lastIndex === index}
             version={item.version}
+            showCollapseIcon={true}
           />
         );
       }}

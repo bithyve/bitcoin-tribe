@@ -5,7 +5,7 @@ import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-
+import { Storage, Keys } from 'src/storage';
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
@@ -57,6 +57,7 @@ export default class Relay {
   public static fetchFeeAndExchangeRates = async (): Promise<{
     exchangeRates: any;
     averageTxFees: AverageTxFeesByNetwork;
+    serviceFee: any;
   }> => {
     try {
       let res;
@@ -72,11 +73,12 @@ export default class Relay {
           throw new Error(err.code);
         }
       }
-      const { exchangeRates, averageTxFees } = res.data || res.json;
+      const { exchangeRates, averageTxFees, serviceFee } = res.data || res.json;
 
       return {
         exchangeRates,
         averageTxFees,
+        serviceFee,
       };
     } catch (err) {
       throw new Error('Failed fetch fee and exchange rates');
@@ -171,6 +173,10 @@ export default class Relay {
     includeTxFee: number,
   }> => {
     try {
+      const serviceFee = Storage.get(Keys.SERVICE_FEE);
+      if(serviceFee) {
+        return JSON.parse(serviceFee);
+      }
       let res;
       try {
         res = await RestClient.get(`${RELAY}/servicefee/issuance`);
