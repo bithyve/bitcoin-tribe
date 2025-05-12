@@ -48,6 +48,7 @@ import {
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();

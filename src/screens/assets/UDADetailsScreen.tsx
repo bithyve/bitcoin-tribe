@@ -57,6 +57,7 @@ import {
 } from 'src/utils/postStatusUtils';
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
