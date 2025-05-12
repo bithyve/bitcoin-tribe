@@ -1,4 +1,4 @@
-# Bitcoin Tribe - My Assets, My People
+# Bitcoin Tribe - Your Digital Assets on RGB/Lightning
 
 [![Playstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/gpbtn.png)](https://play.google.com/store/apps/details?id=com.bithyve.tribe)
 [![Appstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/applebtn.png)](https://apps.apple.com/us/app/tribe-rgb/id6667112050)
