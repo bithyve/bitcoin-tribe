@@ -97,7 +97,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
-      marginVertical: hp(5),
+      marginTop: hp(5),
       alignItems: 'center',
     },
     dotLoaderStyle: {
