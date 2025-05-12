@@ -392,7 +392,10 @@
     "availableBalanceMsg": " उपलब्ध शेष राशि है ",
     "spendableBalanceMsg": "खर्च करने योग्य शेष राशि है ",
     "dustAmountMsg": "राशि बहुत कम है",
-    "validationZeroNotAllowed": "0 की अनुमति नहीं है!"
+    "validationZeroNotAllowed": "0 की अनुमति नहीं है!",
+    "invoiceInvalidContainErrMsg": "चालान में अमान्य विवरण हैं। कृपया चालान की जाँच करें।",
+    "invoiceFormatErrMsg": "चालान का प्रारूप अमान्य है। कृपया पुनः प्रयास करें।",
+    "failedInvoiceProcessErrMsg": "RGB चालान प्रोसेस करने में विफल। कृपया सुनिश्चित करें कि यह सही है।"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -616,7 +619,11 @@
     "registerDomainInfo2": "सहेजने से डोमेन आपके एसेट से जुड़ जाएगा (आप बाद में सत्यापन कर सकते हैं)।",
     "registerDomainInfo3": "आगे बढ़ने पर आपको अपने DNS में एक TXT रिकॉर्ड जोड़ने के लिए कहा जाएगा। एक बार सत्यापित हो जाने पर, आपका डोमेन एसेट से जुड़ जाएगा और रजिस्ट्री में दिखाई देगा।",
     "enterDomain": "डोमेन दर्ज करें",
-    "enterDomainName": "एक डोमेन नाम दर्ज करें"
+    "enterDomainName": "एक डोमेन नाम दर्ज करें",
+    "verificationInfoText1": "स्वामित्व साबित करने के लिए पंजीकरण करें — या बस बिना पंजीकरण के ट्विटर पर साझा करें।",
+    "verificationInfoText2": "X या डोमेन के माध्यम से सत्यापन करके अपनी पहचान को एसेट से लिंक करें, और इसे आधिकारिक बनाने के लिए साझा करें।",
+    "registerAssetTitle": "एसेट पंजीकरण करें",
+    "registerAssetSubTitle": "एसेट को Bitcoin Tribe रजिस्ट्री में जोड़ें"
   },
   "community": {
     "fnfTitle": "Community",

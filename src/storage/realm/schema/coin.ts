@@ -64,6 +64,7 @@ export const CoinSchema: ObjectSchema = {
       default: AssetVisibility.DEFAULT,
       optional: true,
     },
-    isPosted: 'bool?',
+    isVerifyPosted: 'bool?',
+    isIssuedPosted: 'bool?',
   },
 };

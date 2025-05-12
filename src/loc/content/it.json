@@ -392,7 +392,10 @@
     "availableBalanceMsg": "Il saldo disponibile è ",
     "spendableBalanceMsg": "Il saldo disponibile è ",
     "dustAmountMsg": "Importo troppo basso",
-    "validationZeroNotAllowed": "0 non è consentito!"
+    "validationZeroNotAllowed": "0 non è consentito!",
+    "invoiceInvalidContainErrMsg": "La fattura contiene dettagli non validi. Controlla la fattura.",
+    "invoiceFormatErrMsg": "Il formato della fattura non è valido. Riprova.",
+    "failedInvoiceProcessErrMsg": "Impossibile elaborare la fattura RGB. Assicurati che sia corretta."
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",
@@ -616,7 +619,11 @@
     "registerDomainInfo2": "Il salvataggio assocerà il dominio al tuo asset (potrai verificarlo più tardi).",
     "registerDomainInfo3": "Procedendo ti verrà chiesto di aggiungere un record TXT al tuo DNS. Una volta verificato, il dominio sarà collegato all’asset e mostrato nel registro.",
     "enterDomain": "Inserisci Dominio",
-    "enterDomainName": "Inserisci un nome di dominio"
+    "enterDomainName": "Inserisci un nome di dominio",
+    "verificationInfoText1": "Registrati per dimostrare la proprietà — o condividi su Twitter senza registrazione.",
+    "verificationInfoText2": "Collega la tua identità all’asset verificando tramite X o dominio, e condividilo per renderlo ufficiale.",
+    "registerAssetTitle": "Registrare Asset",
+    "registerAssetSubTitle": "Aggiungi l'asset al registro di Bitcoin Tribe"
   },
   "community": {
     "fnfTitle": "Community",

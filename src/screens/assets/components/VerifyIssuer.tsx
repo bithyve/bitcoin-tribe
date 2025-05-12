@@ -1,11 +1,10 @@
-import { StyleSheet, View } from 'react-native';
-import React, { useContext, useState, useEffect, useMemo } from 'react';
-import { useTheme } from 'react-native-paper';
+import { Platform, StyleSheet, View } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 import { useQuery as realmUseQuery } from '@realm/react';
-import { useNavigation } from '@react-navigation/native';
 
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
@@ -28,9 +27,11 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
+import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ShareOptionView from './ShareOptionView';
 import VerificationSection from './VerificationSection';
+import AppText from 'src/components/AppText';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -42,7 +43,44 @@ const getStyles = (theme: AppTheme) =>
       color: '#787878',
     },
     container: {
-      marginVertical: 20,
+      marginVertical: 10,
+    },
+    gradientContainer: {
+      marginTop: hp(20),
+      paddingHorizontal: hp(16),
+      paddingBottom: hp(10),
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
+    },
+    verifyViewWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      marginTop: hp(20),
+      alignItems: 'center',
+      marginBottom: hp(15),
+    },
+    verifyTitleWrapper: {
+      width: '90%',
+    },
+    verifyTitle: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    tooltipContainer: {
+      position: 'absolute',
+      backgroundColor: theme.colors.modalBackColor,
+      padding: 12,
+      borderRadius: 8,
+      width: 270,
+      alignSelf: 'flex-end',
+      right: 15,
+      bottom: hp(165),
+    },
+    tooltipText: {
+      color: theme.colors.headingColor,
+      fontSize: 14,
+    },
+    shareOptionWrapper: {
+      marginTop: hp(10),
     },
   });
 
@@ -50,8 +88,9 @@ interface VerifyIssuerProps {
   assetId: string;
   schema: RealmSchema;
   onVerificationComplete?: () => void;
-  showVerifyIssuer: boolean;
-  showDomainVerifyIssuer: boolean;
+  asset: Asset;
+  showVerifyIssuer?: boolean;
+  onPressShare?: () => void;
 }
 
 export const verifyIssuerOnTwitter = async (
@@ -94,8 +133,7 @@ export const verifyIssuerOnTwitter = async (
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
-  const navigation = useNavigation();
-  const { assetId, schema, showVerifyIssuer, showDomainVerifyIssuer } = props;
+  const { assetId, schema, asset, showVerifyIssuer, onPressShare } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -107,6 +145,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [requesting, setRequesting] = useState(true);
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
+  const [visible, setVisible] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
@@ -249,11 +288,30 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   if (requesting) {
     return <CardSkeletonLoader />;
   }
+
+  const ShareOptionContainer = () => {
+    return (
+      (asset?.isVerifyPosted === false ||
+        asset?.isVerifyPosted === null ||
+        asset?.isIssuedPosted === false ||
+        asset?.isIssuedPosted === null) && (
+        <View style={styles.shareOptionWrapper}>
+          <ShareOptionView
+            title={assets.sharePostTitle}
+            onPress={onPressShare}
+          />
+        </View>
+      )
+    );
+  };
+
   return (
     <>
       {isAddedInRegistry ? (
-        !showVerifyIssuer && !showDomainVerifyIssuer ? null : (
-          <VerificationSection>
+        !showVerifyIssuer &&
+        asset?.isVerifyPosted &&
+        asset?.isIssuedPosted ? null : (
+          <VerificationSection onInfoPress={() => setVisible(true)}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
               {showVerifyIssuer && (
@@ -264,31 +322,21 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   testID={'verify-with-twitter'}
                 />
               )}
-              {showDomainVerifyIssuer && (
-                <SelectOption
-                  title={assets.verifyDomain}
-                  subTitle={''}
-                  onPress={() =>
-                    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                      assetId: assetId,
-                    })
-                  }
-                  testID={'verify-with-domain'}
-                />
-              )}
             </View>
+            <ShareOptionContainer />
           </VerificationSection>
         )
       ) : (
-        <VerificationSection>
+        <VerificationSection onInfoPress={() => setVisible(true)}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
-              title={'Register Asset'}
-              subTitle={'Add asset to Bitcoin Tribe registry'}
+              title={assets.registerAssetTitle}
+              subTitle={assets.registerAssetSubTitle}
               onPress={() => getAssetIssuanceFeeMutation.mutate()}
               testID={'register-asset'}
             />
+            <ShareOptionContainer />
             <View>
               <ModalContainer
                 title={assets.listYourAssetInRegTitle}
@@ -318,6 +366,19 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
           </View>
         </VerificationSection>
       )}
+
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={styles.tooltipContainer}>
+          <AppText variant="caption" style={styles.tooltipText}>
+            {!isAddedInRegistry
+              ? assets.verificationInfoText1
+              : assets.verificationInfoText2}
+          </AppText>
+        </Modal>
+      </Portal>
     </>
   );
 };

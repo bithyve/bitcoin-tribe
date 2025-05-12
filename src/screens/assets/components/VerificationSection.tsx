@@ -11,13 +11,15 @@ import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { hp } from 'src/constants/responsive';
+import AppTouchable from 'src/components/AppTouchable';
 
 interface VerificationSectionProps {
   children: React.ReactNode;
+  onInfoPress: () => void;
 }
 
 function VerificationSection(props: VerificationSectionProps) {
-  const { children } = props;
+  const { children, onInfoPress } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -37,13 +39,13 @@ function VerificationSection(props: VerificationSectionProps) {
             {assets.verificationTitle}
           </AppText>
         </View>
-        <View>
+        <AppTouchable onPress={onInfoPress}>
           {isThemeDark ? (
             <InfoIcon width={24} height={24} />
           ) : (
             <InfoIconLight width={24} height={24} />
           )}
-        </View>
+        </AppTouchable>
       </View>
       {children}
     </VerticalGradientView>
@@ -62,6 +64,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       marginTop: hp(20),
       alignItems: 'center',
+      marginBottom: hp(15),
     },
     verifyTitleWrapper: {
       width: '90%',
