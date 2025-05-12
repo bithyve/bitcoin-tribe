@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useMMKVString } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
@@ -14,23 +15,67 @@ import RightArrowIcon from 'src/assets/images/icon_rightArrowSecondary.svg';
 import TextField from 'src/components/TextField';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Keys } from 'src/storage';
+import Relay from 'src/services/relay';
+import Toast from 'src/components/Toast';
 
 function RegisterDomain() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const { assetId } = useRoute().params;
+  const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
   const [domainName, setDomainName] = useState('');
   const [domainValidationError, setDomainNameValidationError] = useState('');
+  const [isCtaEnabled, setIsCtaEnabled] = useState(false);
 
+  useEffect(() => {
+    setIsCtaEnabled(!!domainName && !domainValidationError);
+  }, [domainName, domainValidationError]);
+
+  const isValidDomain = (domain: string) => {
+    const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/;
+    return domainRegex.test(domain);
+  };
   const handleDomainNameChange = text => {
-    if (!text.trim()) {
+    const trimmed = text.trim();
+    if (!trimmed) {
       setDomainName('');
       setDomainNameValidationError('Please enter domain');
+      return;
+    }
+    setDomainName(trimmed);
+    if (!isValidDomain(trimmed)) {
+      setDomainNameValidationError('Invalid domain format');
     } else {
-      setDomainName(text);
       setDomainNameValidationError(null);
+    }
+  };
+  const handleRegisterDomain = async () => {
+    try {
+      const response = await Relay.registerIssuerDomain(
+        appId,
+        assetId,
+        domainName,
+      );
+      if (response.status) {
+        Toast('Your domain has been successfully registered.');
+        navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
+          record: response.record,
+          recordType: response.recordType,
+          domain: domainName,
+          assetId: assetId,
+        });
+      } else {
+        Toast(
+          response.error || 'An error occurred during domain registration.',
+          true,
+        );
+      }
+    } catch (error) {
+      console.error('handleRegisterDomain error:', error);
     }
   };
   return (
@@ -77,13 +122,9 @@ function RegisterDomain() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() =>
-            navigation.navigate(NavigationRoutes.VERIFYDOMAIN)
-          }
-          secondaryTitle={common.save}
-          secondaryOnPress={() => {}}
-          width={windowWidth / 2.4}
-          secondaryCTAWidth={windowWidth / 2.4}
+          primaryOnPress={() => handleRegisterDomain()}
+          width={'100%'}
+          disabled={!isCtaEnabled}
         />
       </View>
     </ScreenContainer>

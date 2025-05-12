@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
@@ -20,6 +20,13 @@ import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { Keys } from 'src/storage';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import Toast from 'src/components/Toast';
+import Relay from 'src/services/relay';
 
 const data = [
   {
@@ -37,12 +44,16 @@ const data = [
 ];
 
 function VerifyDomain() {
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
+  const [appId] = useMMKVString(Keys.APPID);
+  const { record, recordType, domain, assetId } = useRoute().params;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
-  const [domainName, setDomainName] = useState('');
+  const [domainName, setDomainName] = useState(domain || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
 
@@ -53,6 +64,24 @@ function VerifyDomain() {
     } else {
       setDomainName(text);
       setDomainNameValidationError(null);
+    }
+  };
+
+  const handleVerifyDomain = async () => {
+    try {
+      const response = await Relay.verifyIssuerDomain(appId, assetId);
+      if (response.status) {
+        Toast('Your domain has been successfully verified.');
+        await Relay.getAsset(assetId);
+        navigation.dispatch(popAction);
+      } else {
+        Toast(
+          response.error || 'An error occurred during domain verification.',
+          true,
+        );
+      }
+    } catch (error) {
+      console.error('handleVerifyDomain error:', error);
     }
   };
   return (
@@ -69,24 +98,16 @@ function VerifyDomain() {
             blurOnSubmit={false}
             returnKeyType="done"
             error={domainValidationError}
+            disabled={true}
           />
           <AppText variant="body1" style={styles.labelText}>
             {assets.addTXTrecordInfoText}
           </AppText>
         </View>
-        <FlatList
-          style={styles.scrollWrapper}
-          data={data}
-          renderItem={({ item }) => (
-            <RecordCardView
-              index={item.index}
-              recordType={item.recordType}
-              domain={item.domain}
-              value={item.Value}
-            />
-          )}
-          keyExtractor={item => item.index}
-          ListEmptyComponent={<CardSkeletonLoader />}
+        <RecordCardView
+          recordType={recordType}
+          domain={domain}
+          value={record}
         />
       </KeyboardAvoidView>
       <View style={styles.checkIconContainer}>
@@ -112,11 +133,12 @@ function VerifyDomain() {
       <View style={styles.ctaWrapper}>
         <Buttons
           primaryTitle={assets.verifyDomain}
-          primaryOnPress={() => {}}
+          primaryOnPress={() => handleVerifyDomain()}
           secondaryTitle={common.cancel}
-          secondaryOnPress={() => {}}
+          secondaryOnPress={() => navigation.dispatch(popAction)}
           width={windowWidth / 2.4}
           secondaryCTAWidth={windowWidth / 2.4}
+          disabled={!checkedTermsCondition}
         />
       </View>
     </ScreenContainer>

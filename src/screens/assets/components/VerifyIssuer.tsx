@@ -269,7 +269,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   title={assets.verifyDomain}
                   subTitle={''}
                   onPress={() =>
-                    navigation.navigate(NavigationRoutes.REGISTERDOMAIN)
+                    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                      assetId: assetId,
+                    })
                   }
                   testID={'verify-with-domain'}
                 />

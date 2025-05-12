@@ -14,14 +14,13 @@ import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
 
 interface Props {
-  index: number;
   recordType: string;
   domain: string;
   value: string;
 }
 
 function RecordCardView(props: Props) {
-  const { index, recordType, domain, value } = props;
+  const { recordType, domain, value } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -37,7 +36,7 @@ function RecordCardView(props: Props) {
       ]}>
       <View style={styles.cardTitleView}>
         <AppText variant="heading3" style={styles.cardTitle}>
-          {assets.recordCard} {index}
+          {assets.recordCard}
         </AppText>
       </View>
       <View style={styles.contentContainer}>
@@ -108,6 +107,9 @@ const getStyles = (theme: AppTheme) =>
     },
     copiableView: {
       flexDirection: 'row',
+      width: '60%',
+      justifyContent: 'center',
+      marginRight: hp(3),
     },
   });
 export default RecordCardView;
