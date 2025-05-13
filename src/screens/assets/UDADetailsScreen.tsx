@@ -333,9 +333,9 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {uda?.issuer?.verifiedBy[0].link && (
+        {uda?.issuer?.verifiedBy[0]?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0].link} />
+            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0]?.link} />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />

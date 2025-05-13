@@ -153,11 +153,11 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin.issuer && coin.issuer.verified && (
+            {coin?.issuer && coin?.issuer?.verified && (
               <IssuerVerified
-                id={coin.issuer.verifiedBy[0].id}
-                name={coin.issuer.verifiedBy[0].name}
-                username={coin.issuer.verifiedBy[0].username}
+                id={coin?.issuer?.verifiedBy[0]?.id}
+                name={coin?.issuer?.verifiedBy[0]?.name}
+                username={coin?.issuer?.verifiedBy[0]?.username}
               />
             )}
           </View>
@@ -238,9 +238,9 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {coin?.issuer?.verifiedBy[0].link && (
+          {coin?.issuer?.verifiedBy[0]?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0].link} />
+              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0]?.link} />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
