@@ -22,5 +22,6 @@ export const IssuerVerifiedBySchema = {
     name: 'string?',
     id: 'string?',
     username: 'string?',
+    link: 'string?',
   },
 };

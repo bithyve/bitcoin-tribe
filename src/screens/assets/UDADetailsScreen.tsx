@@ -58,6 +58,7 @@ import {
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -195,6 +196,12 @@ const UDADetailsScreen = () => {
     });
     return unsubscribe;
   }, [navigation, assetId]);
+
+  useEffect(() => {
+    if (uda?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(uda);
+    }
+  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -348,6 +355,11 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
+        {uda?.issuer?.verifiedBy[0].link && (
+          <View style={styles.wrapper}>
+            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0].link} />
+          </View>
+        )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
       </ScrollView>
       <VerifyIssuerModal

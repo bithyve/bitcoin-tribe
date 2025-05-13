@@ -63,6 +63,7 @@ export interface Issuer {
     name?: string;
     id?: string;
     username?: string;
+    link?: string;
   }[];
   isDomainVerified: boolean;
   domainVerifications: {
@@ -210,6 +211,7 @@ export enum TransferStatus {
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
   DOMAIN = 'domain',
+  TWITTER_POST = 'twitter_post',
 }
 
 export interface RgbNodeConnectParams {

@@ -49,6 +49,7 @@ import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterMo
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -128,6 +129,12 @@ const CollectibleMetaDataScreen = () => {
       }
     }, [collectible?.issuer?.verified, hasCompleteVerification]),
   );
+
+  useEffect(() => {
+    if (collectible?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(collectible);
+    }
+  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -293,6 +300,13 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
+            {collectible?.issuer?.verifiedBy[0].link && (
+              <View style={styles.wrapper}>
+                <EmbeddedTweetView
+                  tweetId={collectible?.issuer?.verifiedBy[0].link}
+                />
+              </View>
+            )}
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}

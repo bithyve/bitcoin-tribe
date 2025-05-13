@@ -301,6 +301,7 @@ export default class Relay {
       id: string;
       name: string;
       username: string;
+      link: string;
     },
   ): Promise<{ status: boolean }> => {
     try {
@@ -338,6 +339,7 @@ export default class Relay {
           name: string;
           id: string;
           username: string;
+          link: string;
         }[];
       };
     }[];
