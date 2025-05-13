@@ -216,7 +216,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
               </Text>
               <View>
                 <View style={styles.qrContainer}>
-                  <QRCode value="https://bitcointribe.com" size={226} />
+                  <QRCode value="https://bitcointribe.app/" size={226} />
                 </View>
                 <AppText variant="body1" style={styles.scanText}>
                   Scan Me!
