@@ -2194,12 +2194,20 @@ export class ApiHandler {
   static async searchForAssetTweet(asset, schema) {
     try {
       const accessToken = storage.getString('accessToken');
-      const twitterHandle = asset?.issuer?.verifiedBy?.[0]?.link;
+      const twitterHandle = asset?.issuer?.verifiedBy?.find(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      )?.link;
 
       if (twitterHandle) return;
 
       const matchingTweet = await getUserTweetByAssetId(
-        asset.issuer.verifiedBy[0].id,
+        asset?.issuer?.verifiedBy?.find(
+          v =>
+            v.type === IssuerVerificationMethod.TWITTER ||
+            v.type === IssuerVerificationMethod.TWITTER_POST,
+        )?.id,
         accessToken,
         asset.assetId,
       );
