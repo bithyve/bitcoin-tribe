@@ -8,8 +8,12 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import {
+  Asset,
+  Coin,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -35,6 +39,7 @@ import {
 } from 'src/utils/postStatusUtils';
 
 const CoinDetailsScreen = () => {
+  const storage = new MMKV();
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -68,6 +73,7 @@ const CoinDetailsScreen = () => {
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -98,31 +104,6 @@ const CoinDetailsScreen = () => {
         requestAppReview();
       }, 2000);
     }
-  }, [askReview, refresh]);
-
-  useEffect(() => {
-    const handleAppStateChange = nextAppState => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        if (askReview && refresh) {
-          setTimeout(() => {
-            requestAppReview();
-          }, 2000);
-        }
-      }
-      appState.current = nextAppState;
-    };
-
-    const subscription = AppState.addEventListener(
-      'change',
-      handleAppStateChange,
-    );
-
-    return () => {
-      subscription.remove();
-    };
   }, [askReview, refresh]);
 
   useFocusEffect(
@@ -256,6 +237,7 @@ const CoinDetailsScreen = () => {
             updateAssetPostStatus(RealmSchema.Coin, assetId, true);
             updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
+            setIsSharingToTwitter(true);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
