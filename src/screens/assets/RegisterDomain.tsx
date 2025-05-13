@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVString } from 'react-native-mmkv';
@@ -64,6 +64,7 @@ function RegisterDomain() {
   };
   const handleRegisterDomain = async () => {
     try {
+      Keyboard.dismiss();
       setIsLoading(true);
       const response = await Relay.registerIssuerDomain(
         appId,
@@ -134,6 +135,7 @@ function RegisterDomain() {
             error={domainValidationError}
             keyboardType="url"
             autoCapitalize="none"
+            onSubmitEditing={handleRegisterDomain}
           />
         </View>
       </KeyboardAvoidView>
