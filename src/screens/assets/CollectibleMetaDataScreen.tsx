@@ -21,6 +21,7 @@ import {
   Collectible,
   TransferKind,
   AssetVisibility,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -166,6 +167,12 @@ const CollectibleMetaDataScreen = () => {
     );
   }, [collectible.transactions, collectible.issuer, refreshToggle]);
 
+  const twitterVerification = collectible?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -201,34 +208,20 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {collectible?.issuer?.verifiedBy?.find(
-                v => v.type === 'twitter',
-              ) && (
+              {twitterVerification && (
                 <IssuerVerified
-                  id={
-                    collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === 'twitter',
-                    )?.id
-                  }
-                  name={
-                    collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === 'twitter',
-                    )?.name
-                  }
-                  username={
-                    collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === 'twitter',
-                    )?.username
-                  }
+                  id={twitterVerification.id}
+                  name={twitterVerification.name}
+                  username={twitterVerification.username}
                 />
               )}
               {collectible?.issuer?.verifiedBy?.find(
-                v => v.type === 'domain',
+                v => v.type === IssuerVerificationMethod.DOMAIN,
               ) && (
                 <IssuerDomainVerified
                   domain={
                     collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === 'domain',
+                      v => v.type === IssuerVerificationMethod.DOMAIN,
                     )?.name
                   }
                 />
@@ -300,11 +293,9 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
-            {collectible?.issuer?.verifiedBy[0].link && (
+            {twitterVerification?.link && (
               <View style={styles.wrapper}>
-                <EmbeddedTweetView
-                  tweetId={collectible?.issuer?.verifiedBy[0].link}
-                />
+                <EmbeddedTweetView tweetId={twitterVerification?.link} />
               </View>
             )}
             <HideAssetView

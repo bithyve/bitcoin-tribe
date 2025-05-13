@@ -25,6 +25,7 @@ import {
   TransferKind,
   AssetVisibility,
   UniqueDigitalAsset,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -215,6 +216,12 @@ const UDADetailsScreen = () => {
     navigation.dispatch(popAction);
   };
 
+  const twitterVerification = uda?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader title={uda?.name} style={styles.wrapper} />
@@ -254,22 +261,21 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter') && (
+          {twitterVerification && (
             <IssuerVerified
-              id={uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.id}
-              name={
-                uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.name
-              }
-              username={
-                uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
-                  ?.username
-              }
+              id={twitterVerification.id}
+              name={twitterVerification.name}
+              username={twitterVerification.username}
             />
           )}
-          {uda?.issuer?.verifiedBy?.find(v => v.type === 'domain') && (
+          {uda?.issuer?.verifiedBy?.find(
+            v => v.type === IssuerVerificationMethod.DOMAIN,
+          ) && (
             <IssuerDomainVerified
               domain={
-                uda?.issuer?.verifiedBy?.find(v => v.type === 'domain')?.name
+                uda?.issuer?.verifiedBy?.find(
+                  v => v.type === IssuerVerificationMethod.DOMAIN,
+                )?.name
               }
             />
           )}
@@ -355,9 +361,9 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {uda?.issuer?.verifiedBy[0].link && (
+        {twitterVerification?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0].link} />
+            <EmbeddedTweetView tweetId={twitterVerification?.link} />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />

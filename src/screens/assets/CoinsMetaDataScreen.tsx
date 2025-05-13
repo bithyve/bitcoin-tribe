@@ -148,6 +148,12 @@ const CoinsMetaDataScreen = () => {
     );
   }, [coin.transactions, coin.issuer, refreshToggle]);
 
+  const twitterVerification = coin?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -163,25 +169,22 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter') && (
+            {twitterVerification && (
               <IssuerVerified
-                id={
-                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.id
-                }
-                name={
-                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
-                    ?.name
-                }
-                username={
-                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
-                    ?.username
-                }
+                id={twitterVerification.id}
+                name={twitterVerification.name}
+                username={twitterVerification.username}
               />
             )}
-            {coin?.issuer?.verifiedBy?.find(v => v.type === 'domain') && (
+
+            {coin?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.DOMAIN,
+            ) && (
               <IssuerDomainVerified
                 domain={
-                  coin?.issuer?.verifiedBy?.find(v => v.type === 'domain')?.name
+                  coin?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
                 }
               />
             )}
@@ -263,9 +266,9 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {coin?.issuer?.verifiedBy[0].link && (
+          {twitterVerification?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0].link} />
+              <EmbeddedTweetView tweetId={twitterVerification?.link} />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
