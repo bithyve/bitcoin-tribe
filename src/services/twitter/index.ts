@@ -4,7 +4,7 @@ import Config from 'src/utils/config';
 
 const config = {
   issuer: 'https://twitter.com',
-  clientId: Config.TWITTER_CLIENT_ID,
+  clientId: 'ZjA1RnRiSEFfNm1ESGFuY21hM1I6MTpjaQ',
   redirectUrl: 'tribe://callback',
   scopes: ['tweet.read', 'users.read', 'offline.access'],
   serviceConfiguration: {
