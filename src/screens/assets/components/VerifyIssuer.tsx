@@ -111,17 +111,30 @@ export const verifyIssuerOnTwitter = async (
         username: result.username,
       });
       if (response.status) {
-        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+        const existingAsset = await dbManager.getObjectByPrimaryId(
+          schema,
+          'assetId',
+          assetId,
+        );
+        const existingIssuer =
+          JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+        const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+          entry => entry.type !== IssuerVerificationMethod.TWITTER,
+        );
+        const updatedVerifiedBy = [
+          ...filteredVerifiedBy,
+          {
+            type: IssuerVerificationMethod.TWITTER,
+            id: result.id,
+            name: result.name,
+            username: result.username,
+          },
+        ];
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
+            ...existingIssuer,
             verified: true,
-            verifiedBy: [
-              {
-                type: IssuerVerificationMethod.TWITTER,
-                id: result.id,
-                name: result.name,
-                username: result.username,
-              },
-            ],
+            verifiedBy: updatedVerifiedBy,
           },
         });
         onVerificationComplete?.();
@@ -237,17 +250,30 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         setIsLoading(false);
         if (response.status) {
           setCompleteVerification(true);
-          dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          const existingAsset = await dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          );
+          const existingIssuer =
+            JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+          const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+            entry => entry.type !== IssuerVerificationMethod.TWITTER,
+          );
+          const updatedVerifiedBy = [
+            ...filteredVerifiedBy,
+            {
+              type: IssuerVerificationMethod.TWITTER,
+              id: result.id,
+              name: result.name,
+              username: result.username,
+            },
+          ];
+          await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
+              ...existingIssuer,
               verified: true,
-              verifiedBy: [
-                {
-                  type: IssuerVerificationMethod.TWITTER,
-                  id: result.id,
-                  name: result.name,
-                  username: result.username,
-                },
-              ],
+              verifiedBy: updatedVerifiedBy,
             },
           });
         }

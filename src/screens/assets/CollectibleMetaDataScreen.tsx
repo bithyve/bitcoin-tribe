@@ -133,7 +133,7 @@ const CollectibleMetaDataScreen = () => {
 
   useEffect(() => {
     if (collectible?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(collectible);
+      ApiHandler.searchForAssetTweet(collectible, RealmSchema.Collectible);
     }
   }, []);
 
@@ -151,21 +151,27 @@ const CollectibleMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !collectible?.issuer?.verified &&
+      !collectible?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       collectible.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer, refreshToggle]);
+  }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !collectible?.issuer?.isDomainVerified &&
+      !collectible?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
       collectible.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer, refreshToggle]);
+  }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
 
   const twitterVerification = collectible?.issuer?.verifiedBy?.find(
     v =>

@@ -171,21 +171,27 @@ const UDADetailsScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !uda?.issuer?.verified &&
+      !uda?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer, refreshToggle]);
+  }, [uda?.transactions, uda.issuer?.verifiedBy, refreshToggle]);
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !uda?.issuer?.isDomainVerified &&
-      uda.transactions.some(
+      !uda?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
+      uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda.transactions, uda.issuer, refreshToggle]);
+  }, [uda?.transactions, uda?.issuer?.verifiedBy, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -200,7 +206,7 @@ const UDADetailsScreen = () => {
 
   useEffect(() => {
     if (uda?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(uda);
+      ApiHandler.searchForAssetTweet(uda, RealmSchema.UniqueDigitalAsset);
     }
   }, []);
 

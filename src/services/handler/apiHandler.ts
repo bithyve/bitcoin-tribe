@@ -2191,7 +2191,7 @@ export class ApiHandler {
     }
   }
 
-  static async searchForAssetTweet(asset) {
+  static async searchForAssetTweet(asset, schema) {
     try {
       const accessToken = storage.getString('accessToken');
       const twitterHandle = asset?.issuer?.verifiedBy?.[0]?.link;
@@ -2214,25 +2214,20 @@ export class ApiHandler {
         });
 
         if (response.status) {
-          dbManager.updateObjectByPrimaryId(
-            RealmSchema.Coin,
-            'assetId',
-            asset.assetId,
-            {
-              issuer: {
-                verified: true,
-                verifiedBy: [
-                  {
-                    type: IssuerVerificationMethod.TWITTER_POST,
-                    link: matchingTweet.id,
-                    id: asset.issuer.verifiedBy[0].id,
-                    name: asset.issuer.verifiedBy[0].name,
-                    username: asset.issuer.verifiedBy[0].username,
-                  },
-                ],
-              },
+          dbManager.updateObjectByPrimaryId(schema, 'assetId', asset.assetId, {
+            issuer: {
+              verified: true,
+              verifiedBy: [
+                {
+                  type: IssuerVerificationMethod.TWITTER_POST,
+                  link: matchingTweet.id,
+                  id: asset.issuer.verifiedBy[0].id,
+                  name: asset.issuer.verifiedBy[0].name,
+                  username: asset.issuer.verifiedBy[0].username,
+                },
+              ],
             },
-          );
+          });
         }
       } else {
         console.log('No tweet found with assetID:', asset.assetId);

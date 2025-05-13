@@ -119,7 +119,7 @@ const CoinsMetaDataScreen = () => {
 
   useEffect(() => {
     if (coin?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(coin);
+      ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
 
@@ -132,21 +132,27 @@ const CoinsMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.verified &&
+      !coin?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer, refreshToggle]);
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.isDomainVerified &&
+      !coin?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer, refreshToggle]);
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
 
   const twitterVerification = coin?.issuer?.verifiedBy?.find(
     v =>
