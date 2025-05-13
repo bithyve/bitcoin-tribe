@@ -192,11 +192,11 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {collectible?.issuer && collectible.issuer.verified && (
+              {collectible?.issuer && collectible.issuer?.verified && (
                 <IssuerVerified
-                  id={collectible.issuer.verifiedBy[0].id}
-                  name={collectible.issuer.verifiedBy[0].name}
-                  username={collectible.issuer.verifiedBy[0].username}
+                  id={collectible?.issuer?.verifiedBy[0]?.id}
+                  name={collectible?.issuer?.verifiedBy[0]?.name}
+                  username={collectible?.issuer?.verifiedBy[0]?.username}
                 />
               )}
             </View>
@@ -265,10 +265,10 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
-            {collectible?.issuer?.verifiedBy[0].link && (
+            {collectible?.issuer?.verifiedBy[0]?.link && (
               <View style={styles.wrapper}>
                 <EmbeddedTweetView
-                  tweetId={collectible?.issuer?.verifiedBy[0].link}
+                  tweetId={collectible?.issuer?.verifiedBy[0]?.link}
                 />
               </View>
             )}
