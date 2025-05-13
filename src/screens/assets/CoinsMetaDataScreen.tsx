@@ -153,22 +153,25 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin.issuer.verifiedBy.find(v => v.type === 'twitter') && (
+            {coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter') && (
               <IssuerVerified
-                id={coin.issuer.verifiedBy.find(v => v.type === 'twitter')?.id}
+                id={
+                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.id
+                }
                 name={
-                  coin.issuer.verifiedBy.find(v => v.type === 'twitter')?.name
+                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
+                    ?.name
                 }
                 username={
-                  coin.issuer.verifiedBy.find(v => v.type === 'twitter')
+                  coin?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
                     ?.username
                 }
               />
             )}
-            {coin.issuer.verifiedBy.find(v => v.type === 'domain') && (
+            {coin?.issuer?.verifiedBy?.find(v => v.type === 'domain') && (
               <IssuerDomainVerified
                 domain={
-                  coin.issuer.verifiedBy.find(v => v.type === 'domain')?.name
+                  coin?.issuer?.verifiedBy?.find(v => v.type === 'domain')?.name
                 }
               />
             )}
@@ -225,6 +228,7 @@ const CoinsMetaDataScreen = () => {
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               asset={coin}
               showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
               onPressShare={() => {
                 if (!coin.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);

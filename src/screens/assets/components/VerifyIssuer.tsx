@@ -32,6 +32,8 @@ import { Keys } from 'src/storage';
 import ShareOptionView from './ShareOptionView';
 import VerificationSection from './VerificationSection';
 import AppText from 'src/components/AppText';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -90,6 +92,7 @@ interface VerifyIssuerProps {
   onVerificationComplete?: () => void;
   asset: Asset;
   showVerifyIssuer?: boolean;
+  showDomainVerifyIssuer?: boolean;
   onPressShare?: () => void;
 }
 
@@ -133,7 +136,15 @@ export const verifyIssuerOnTwitter = async (
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
-  const { assetId, schema, asset, showVerifyIssuer, onPressShare } = props;
+  const {
+    assetId,
+    schema,
+    asset,
+    showVerifyIssuer,
+    showDomainVerifyIssuer,
+    onPressShare,
+  } = props;
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -248,6 +259,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     }
   }, [assetId, schema]);
 
+  const handleVerifyWithDomain = () => {
+    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+      assetId: assetId,
+      schema: schema,
+    });
+  };
+
   const registerAsset = React.useCallback(async () => {
     try {
       const asset = dbManager.getObjectByPrimaryId(
@@ -309,6 +327,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     <>
       {isAddedInRegistry ? (
         !showVerifyIssuer &&
+        !showDomainVerifyIssuer &&
         asset?.isVerifyPosted &&
         asset?.isIssuedPosted ? null : (
           <VerificationSection onInfoPress={() => setVisible(true)}>
@@ -320,6 +339,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   subTitle={''}
                   onPress={handleVerifyWithTwitter}
                   testID={'verify-with-twitter'}
+                />
+              )}
+              {showDomainVerifyIssuer && (
+                <SelectOption
+                  title={assets.verifyDomain}
+                  subTitle={''}
+                  onPress={handleVerifyWithDomain}
+                  testID={'verify-with-domain'}
                 />
               )}
             </View>

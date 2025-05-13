@@ -2,11 +2,15 @@ import React, { useContext, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
-import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import ScreenContainer from 'src/components/ScreenContainer';
 import TextField from 'src/components/TextField';
@@ -20,36 +24,17 @@ import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { Keys } from 'src/storage';
-import {
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
 import Toast from 'src/components/Toast';
 import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
-
-const data = [
-  {
-    index: 1,
-    recordType: 'A',
-    domain: 'bitcointribe.com',
-    Value: '199.36.158.100',
-  },
-  {
-    index: 2,
-    recordType: 'TXT',
-    domain: 'bitcointribe.com',
-    Value: 'hosting-site=bitcoin-tribe-rgb-hosting-site=bitcoin',
-  },
-];
+import dbManager from 'src/storage/realm/dbManager';
 
 function VerifyDomain() {
   const navigation = useNavigation();
-  const popAction = StackActions.pop(2);
+  const popAction = StackActions.pop(3);
   const theme: AppTheme = useTheme();
   const [appId] = useMMKVString(Keys.APPID);
-  const { record, recordType, domain, assetId } = useRoute().params;
+  const { record, recordType, domain, assetId, schema } = useRoute().params;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -81,11 +66,18 @@ function VerifyDomain() {
       setIsLoading(true);
       const response = await Relay.verifyIssuerDomain(appId, assetId);
       if (response.status) {
-        Toast('Your domain has been successfully verified.');
-        await Relay.getAsset(assetId);
+        console.log('response', response?.data?.issuer);
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          issuer: {
+            isDomainVerified: true,
+            verified: response?.data?.issuer?.verified,
+            verifiedBy: response?.data?.issuer?.verifiedBy,
+          },
+        });
         navigateWithDelay(() => {
           navigation.dispatch(popAction);
         });
+        Toast('Your domain has been successfully verified.');
       } else {
         setIsLoading(false);
         Toast(

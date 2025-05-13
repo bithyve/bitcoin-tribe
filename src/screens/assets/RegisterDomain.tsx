@@ -23,7 +23,7 @@ import ModalLoading from 'src/components/ModalLoading';
 function RegisterDomain() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const { assetId } = useRoute().params;
+  const { assetId, schema } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -78,6 +78,7 @@ function RegisterDomain() {
             recordType: response.recordType,
             domain: domainName,
             assetId: assetId,
+            schema: schema,
           });
         });
       } else {

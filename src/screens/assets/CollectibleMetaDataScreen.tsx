@@ -194,32 +194,35 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {collectible.issuer.verifiedBy.find(
+              {collectible?.issuer?.verifiedBy?.find(
                 v => v.type === 'twitter',
               ) && (
                 <IssuerVerified
                   id={
-                    collectible.issuer.verifiedBy.find(
+                    collectible?.issuer?.verifiedBy?.find(
                       v => v.type === 'twitter',
                     )?.id
                   }
                   name={
-                    collectible.issuer.verifiedBy.find(
+                    collectible?.issuer?.verifiedBy?.find(
                       v => v.type === 'twitter',
                     )?.name
                   }
                   username={
-                    collectible.issuer.verifiedBy.find(
+                    collectible?.issuer?.verifiedBy?.find(
                       v => v.type === 'twitter',
                     )?.username
                   }
                 />
               )}
-              {collectible.issuer.verifiedBy.find(v => v.type === 'domain') && (
+              {collectible?.issuer?.verifiedBy?.find(
+                v => v.type === 'domain',
+              ) && (
                 <IssuerDomainVerified
                   domain={
-                    collectible.issuer.verifiedBy.find(v => v.type === 'domain')
-                      ?.name
+                    collectible?.issuer?.verifiedBy?.find(
+                      v => v.type === 'domain',
+                    )?.name
                   }
                 />
               )}
@@ -264,6 +267,7 @@ const CollectibleMetaDataScreen = () => {
                 schema={RealmSchema.Collectible}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
                 showVerifyIssuer={showVerifyIssuer}
+                showDomainVerifyIssuer={showDomainVerifyIssuer}
                 asset={collectible}
                 onPressShare={() => {
                   if (!collectible.isIssuedPosted) {

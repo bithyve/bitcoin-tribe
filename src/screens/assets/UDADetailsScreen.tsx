@@ -247,19 +247,22 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {uda.issuer.verifiedBy.find(v => v.type === 'twitter') && (
+          {uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter') && (
             <IssuerVerified
-              id={uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.id}
-              name={uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.name}
+              id={uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.id}
+              name={
+                uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')?.name
+              }
               username={
-                uda.issuer.verifiedBy.find(v => v.type === 'twitter')?.username
+                uda?.issuer?.verifiedBy?.find(v => v.type === 'twitter')
+                  ?.username
               }
             />
           )}
-          {uda.issuer.verifiedBy.find(v => v.type === 'domain') && (
+          {uda?.issuer?.verifiedBy?.find(v => v.type === 'domain') && (
             <IssuerDomainVerified
               domain={
-                uda.issuer.verifiedBy.find(v => v.type === 'domain')?.name
+                uda?.issuer?.verifiedBy?.find(v => v.type === 'domain')?.name
               }
             />
           )}
@@ -306,6 +309,7 @@ const UDADetailsScreen = () => {
             schema={RealmSchema.UniqueDigitalAsset}
             onVerificationComplete={() => setRefreshToggle(t => !t)}
             showVerifyIssuer={showVerifyIssuer}
+            showDomainVerifyIssuer={showDomainVerifyIssuer}
             asset={uda}
             onPressShare={() => {
               if (!uda.isIssuedPosted) {
