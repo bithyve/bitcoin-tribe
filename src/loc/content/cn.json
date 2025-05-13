@@ -392,7 +392,10 @@
     "availableBalanceMsg": "可用余额为 ",
     "spendableBalanceMsg": "可支配余额为 ",
     "dustAmountMsg": "金额过低",
-    "validationZeroNotAllowed": "不允许输入0！"
+    "validationZeroNotAllowed": "不允许输入0！",
+    "invoiceInvalidContainErrMsg": "发票包含无效信息。请检查发票。",
+    "invoiceFormatErrMsg": "发票格式无效。请重试。",
+    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -604,7 +607,11 @@
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
-    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。"
+    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
+    "verificationInfoText1": "注册以证明所有权 — 或者只是在 Twitter 上分享而不注册。",
+    "verificationInfoText2": "通过 X 或域名验证，将您的身份与资产关联，并分享以使其正式化。",
+    "registerAssetTitle": "注册资产",
+    "registerAssetSubTitle": "将资产添加到 Bitcoin Tribe 注册表中"
   },
   "community": {
     "fnfTitle": "Community",

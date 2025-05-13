@@ -321,6 +321,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
             secondaryOnPress={secondaryOnPress}
             width={windowWidth / 2.7}
             secondaryCTAWidth={windowWidth / 2.7}
+            height={hp(14)}
           />
         </View>
       </View>

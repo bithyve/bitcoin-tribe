@@ -392,7 +392,10 @@
     "availableBalanceMsg": "利用可能な残高は ",
     "spendableBalanceMsg": "使用可能な残高は ",
     "dustAmountMsg": "金額が少なすぎます",
-    "validationZeroNotAllowed": "0は許可されていません！"
+    "validationZeroNotAllowed": "0は許可されていません！",
+    "invoiceInvalidContainErrMsg": "請求書に無効な詳細が含まれています。請求書を確認してください。",
+    "invoiceFormatErrMsg": "請求書の形式が無効です。もう一度お試しください。",
+    "failedInvoiceProcessErrMsg": "RGB請求書の処理に失敗しました。正しいことを確認してください。"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
@@ -604,7 +607,11 @@
     "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。",
     "sharePostTitle": "X に投稿を共有する",
     "verificationTitle": "認証",
-    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。"
+    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
+    "verificationInfoText1": "所有権を証明するには登録 — または登録せずに Twitter で共有することもできます。",
+    "verificationInfoText2": "X またはドメインで認証して、資産にあなたの身元をリンクし、公式として共有しましょう。",
+    "registerAssetTitle": "資産を登録",
+    "registerAssetSubTitle": "資産を Bitcoin Tribe レジストリに追加"
   },
   "community": {
     "fnfTitle": "Community",

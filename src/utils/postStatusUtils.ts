@@ -4,9 +4,18 @@ import dbManager from 'src/storage/realm/dbManager';
 export const updateAssetPostStatus = (
   schema: RealmSchema,
   assetId: string,
-  isPosted: boolean,
+  isVerifyPosted: boolean,
 ) => {
   dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-    isPosted,
+    isVerifyPosted,
+  });
+};
+export const updateAssetIssuedPostStatus = (
+  schema: RealmSchema,
+  assetId: string,
+  isIssuedPosted: boolean,
+) => {
+  dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+    isIssuedPosted,
   });
 };

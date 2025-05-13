@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { AppState, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppText from 'src/components/AppText';
@@ -14,13 +14,14 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 
 import {
   Coin,
   TransferKind,
   AssetVisibility,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -35,9 +36,15 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
-import { updateAssetPostStatus } from 'src/utils/postStatusUtils';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 import { Keys } from 'src/storage';
-import ShareOptionView from './components/ShareOptionView';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import SelectOption from 'src/components/SelectOption';
+import openLink from 'src/utils/OpenLink';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -63,16 +70,21 @@ export const Item = ({ title, value, width = '100%' }) => {
 };
 
 const CoinsMetaDataScreen = () => {
+  const storage = new MMKV();
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
+  const appState = useRef(AppState.currentState);
 
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const hasShownPostModal = useRef(false);
-  const { hasCompleteVerification, setCompleteVerification } =
-    React.useContext(AppContext);
+  const {
+    hasCompleteVerification,
+    setCompleteVerification,
+    setHasIssuedAsset,
+  } = React.useContext(AppContext);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -80,6 +92,8 @@ const CoinsMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
 
   useEffect(() => {
     if (!coin.metaData) {
@@ -101,6 +115,12 @@ const CoinsMetaDataScreen = () => {
       }
     }, [coin?.issuer?.verified, hasCompleteVerification]),
   );
+
+  useEffect(() => {
+    if (coin?.issuer?.verified) {
+      ApiHandler.searchForAssetTweet(coin);
+    }
+  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -187,30 +207,43 @@ const CoinsMetaDataScreen = () => {
             />
           </View>
 
-          {showVerifyIssuer && (
-            <>
-              <VerifyIssuer
-                assetId={assetId}
-                schema={RealmSchema.Coin}
-                onVerificationComplete={() => setRefreshToggle(t => !t)}
-              />
-              <View style={styles.seperatorView} />
-            </>
-          )}
-          <View style={styles.wrapper}>
-            {!coin?.isPosted && coin?.issuer?.verified && (
-              <ShareOptionView
-                title={assets.sharePostTitle}
-                onPress={() => setVisiblePostOnTwitter(true)}
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              asset={coin}
+              showVerifyIssuer={showVerifyIssuer}
+              onPressShare={() => {
+                if (!coin.isIssuedPosted) {
+                  setVisibleIssuedPostOnTwitter(true);
+                } else if (!coin.isVerifyPosted) {
+                  setVisiblePostOnTwitter(true);
+                }
+              }}
+            />
+            <View style={styles.seperatorView} />
+          </>
+          <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+            {coin?.issuer?.verified && (
+              <SelectOption
+                title={assets.viewInRegistry}
+                subTitle={''}
+                onPress={() =>
+                  openLink(
+                    `https://bitcointribe.app/registry?assetId=${assetId}`,
+                  )
+                }
+                testID={'view_in_registry'}
               />
             )}
           </View>
-          <HideAssetView
-            title={assets.hideAsset}
-            onPress={() => hideAsset()}
-            isVerified={coin?.issuer?.verified}
-            assetId={assetId}
-          />
+          {coin?.issuer?.verifiedBy[0].link && (
+            <View style={styles.wrapper}>
+              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0].link} />
+            </View>
+          )}
+          <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
           <>
             <PostOnTwitterModal
               visible={visiblePostOnTwitter}
@@ -218,12 +251,31 @@ const CoinsMetaDataScreen = () => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
                 updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
                 setRefresh(prev => !prev);
               }}
               secondaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
                 updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+              }}
+              issuerInfo={coin}
+            />
+          </>
+          <>
+            <IssueAssetPostOnTwitterModal
+              visible={visibleIssuedPostOnTwitter}
+              primaryOnPress={() => {
+                setVisibleIssuedPostOnTwitter(false);
+                setRefresh(prev => !prev);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+              }}
+              secondaryOnPress={() => {
+                setVisibleIssuedPostOnTwitter(false);
+                setHasIssuedAsset(false);
+                setRefresh(prev => !prev);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
               }}
               issuerInfo={coin}
             />
@@ -292,6 +344,9 @@ const getStyles = (theme: AppTheme, width) =>
       width: '100%',
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
+    },
+    viewRegistryCtaWrapper: {
+      marginTop: hp(10),
     },
   });
 
