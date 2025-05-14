@@ -72,7 +72,7 @@ function RegisterDomain() {
         domainName,
       );
       if (response.status) {
-        Toast('Your domain has been successfully registered.');
+        Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
           navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
             record: response.record,

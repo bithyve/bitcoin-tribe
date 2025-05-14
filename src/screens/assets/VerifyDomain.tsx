@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
@@ -77,7 +77,7 @@ function VerifyDomain() {
         navigateWithDelay(() => {
           navigation.dispatch(popAction);
         });
-        Toast('Your domain has been successfully verified.');
+        Toast(assets.verifyDomainSuccessfully);
       } else {
         setIsLoading(false);
         Toast(
@@ -99,7 +99,7 @@ function VerifyDomain() {
           <TextField
             value={domainName}
             onChangeText={handleDomainNameChange}
-            placeholder={'Enter a domain name'}
+            placeholder={assets.enterDomainName}
             maxLength={32}
             style={styles.input}
             blurOnSubmit={false}

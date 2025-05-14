@@ -623,7 +623,11 @@
     "verificationInfoText1": "Register to prove ownership — or just share on Twitter without registering.",
     "verificationInfoText2": "Link your identity to the asset by verifying via X or domain, and share it to make it official.",
     "registerAssetTitle": "Register Asset",
-    "registerAssetSubTitle": "Add asset to Bitcoin Tribe registry"
+    "registerAssetSubTitle": "Add asset to Bitcoin Tribe registry",
+    "registerDomainSuccessfully": "Your domain has been successfully registered.",
+    "domainValueCopiedMsg": "Domain Value Copied Successfully",
+    "verifyDomainSuccessfully": "Your domain has been successfully verified.",
+    "domainVerified": "Domain Verified"
   },
   "community": {
     "fnfTitle": "Community",

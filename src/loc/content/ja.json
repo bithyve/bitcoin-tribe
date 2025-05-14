@@ -623,7 +623,11 @@
     "verificationInfoText1": "所有権を証明するには登録 — または登録せずに Twitter で共有することもできます。",
     "verificationInfoText2": "X またはドメインで認証して、資産にあなたの身元をリンクし、公式として共有しましょう。",
     "registerAssetTitle": "資産を登録",
-    "registerAssetSubTitle": "資産を Bitcoin Tribe レジストリに追加"
+    "registerAssetSubTitle": "資産を Bitcoin Tribe レジストリに追加",
+    "registerDomainSuccessfully": "ドメインが正常に登録されました。",
+    "domainValueCopiedMsg": "ドメインの値を正常にコピーしました",
+    "verifyDomainSuccessfully": "ドメインが正常に確認されました。",
+    "domainVerified": "ドメインが確認されました"
   },
   "community": {
     "fnfTitle": "Community",

@@ -623,7 +623,11 @@
     "verificationInfoText1": "注册以证明所有权 — 或者只是在 Twitter 上分享而不注册。",
     "verificationInfoText2": "通过 X 或域名验证，将您的身份与资产关联，并分享以使其正式化。",
     "registerAssetTitle": "注册资产",
-    "registerAssetSubTitle": "将资产添加到 Bitcoin Tribe 注册表中"
+    "registerAssetSubTitle": "将资产添加到 Bitcoin Tribe 注册表中",
+    "registerDomainSuccessfully": "您的域名已成功注册。",
+    "domainValueCopiedMsg": "域名值复制成功",
+    "verifyDomainSuccessfully": "您的域名已成功验证。",
+    "domainVerified": "域名已验证"
   },
   "community": {
     "fnfTitle": "Community",

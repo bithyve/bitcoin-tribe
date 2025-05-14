@@ -623,7 +623,11 @@
     "verificationInfoText1": "Regístrate para demostrar propiedad — o simplemente compártelo en Twitter sin registrarte.",
     "verificationInfoText2": "Vincula tu identidad al activo verificando a través de X o dominio, y compártelo para hacerlo oficial.",
     "registerAssetTitle": "Registrar Activo",
-    "registerAssetSubTitle": "Agregar el activo al registro de Bitcoin Tribe"
+    "registerAssetSubTitle": "Agregar el activo al registro de Bitcoin Tribe",
+    "registerDomainSuccessfully": "Tu dominio se ha registrado correctamente.",
+    "domainValueCopiedMsg": "Valor del dominio copiado con éxito",
+    "verifyDomainSuccessfully": "Tu dominio se ha verificado correctamente.",
+    "domainVerified": "Dominio verificado"
   },
   "community": {
     "fnfTitle": "Community",

@@ -1,11 +1,12 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
 import IconVerified from 'src/assets/images/issuer_domain_verified.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -38,6 +39,8 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   props: IssuerDomainVerifiedProps,
 ) => {
   const { domain } = props;
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
@@ -46,7 +49,7 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>
-            Domain Verified
+            {assets.domainVerified}
           </AppText>
           <View style={styles.iconWrapper}>
             <View>

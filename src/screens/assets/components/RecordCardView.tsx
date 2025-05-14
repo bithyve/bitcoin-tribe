@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -12,6 +13,7 @@ import IconCopy from 'src/assets/images/icon_copy1.svg';
 import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
+import Toast from 'src/components/Toast';
 
 interface Props {
   recordType: string;
@@ -26,6 +28,12 @@ function RecordCardView(props: Props) {
   const { common, assets } = translations;
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  const handleCopyText = async (text: string) => {
+    await Clipboard.setString(text);
+    Toast(assets.domainValueCopiedMsg);
+  };
+
   return (
     <GradientView
       style={styles.gradientContainer}
@@ -60,7 +68,9 @@ function RecordCardView(props: Props) {
           <AppText variant="body2" style={styles.labelText}>
             {assets.value}
           </AppText>
-          <AppTouchable style={styles.copiableView}>
+          <AppTouchable
+            style={styles.copiableView}
+            onPress={() => handleCopyText(value)}>
             <AppText variant="body2" style={styles.valueText}>
               {value}
             </AppText>
