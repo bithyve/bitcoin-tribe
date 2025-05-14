@@ -80,9 +80,9 @@ export const getUserTweetByAssetId = async (
       const waitTime = resetAfter ? Number(resetAfter) - now : null;
       if (waitTime && waitTime > 0) {
         Toast(
-          `Try again in ${waitTime} seconds (at ${new Date(
+          `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
             Number(resetAfter) * 1000,
-          ).toLocaleString()})`,
+          ).toLocaleTimeString()}).`,
           true,
         );
       }

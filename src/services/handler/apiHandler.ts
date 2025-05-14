@@ -2197,7 +2197,6 @@ export class ApiHandler {
       const twitterHandle = asset?.issuer?.verifiedBy?.find(
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       )?.link;
-      console.log('twitterHandle', twitterHandle);
       if (twitterHandle) return;
 
       const matchingTweet = await getUserTweetByAssetId(
