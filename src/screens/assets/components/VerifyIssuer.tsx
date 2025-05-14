@@ -170,6 +170,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [disabledCTA, setDisabledCTA] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
@@ -309,6 +310,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
+        setDisabledCTA(false);
         if (tx) {
           ApiHandler.updateTransaction({
             txid: tx.txid,
@@ -324,6 +326,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         }
       }
     } catch (error) {
+      setDisabledCTA(false);
       Toast(`${error}`, true);
       console.log(error);
     }
@@ -403,6 +406,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 }}>
                 <ServiceFee
                   onPay={async () => {
+                    setDisabledCTA(true);
                     await ApiHandler.refreshWallets({ wallets: [wallet] });
                     payServiceFeeFeeMutation.mutate({ feeDetails });
                   }}
@@ -413,6 +417,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                     setShowFeeModal(false);
                     getAssetIssuanceFeeMutation.reset();
                   }}
+                  disabledCTA={disabledCTA}
                 />
               </ModalContainer>
             </View>
