@@ -65,6 +65,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
       case AssetType.Collectible:
         navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
@@ -72,6 +73,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
       case AssetType.UDA:
         navigation.replace(NavigationRoutes.UDADETAILS, {
@@ -79,6 +81,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
 
       default:
@@ -150,7 +153,6 @@ function AssetRegistryScreen() {
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
-        setDisabledCTA(false);
         const tx = wallet.specs.transactions.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&

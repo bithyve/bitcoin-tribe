@@ -221,6 +221,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
       setTimeout(() => {
         registerAsset();
       }, 400);
@@ -234,6 +235,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
     }
   }, [payServiceFeeFeeMutation]);
 
@@ -310,7 +312,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        setDisabledCTA(false);
         if (tx) {
           ApiHandler.updateTransaction({
             txid: tx.txid,
@@ -400,7 +401,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 visible={showFeeModal}
                 enableCloseIcon={false}
                 onDismiss={() => {
-                  if (payServiceFeeFeeMutation.isLoading) return;
+                  if (disabledCTA) return;
                   setShowFeeModal(false);
                   getAssetIssuanceFeeMutation.reset();
                 }}>
@@ -415,6 +416,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   onSkip={() => setShowFeeModal(false)}
                   hideModal={() => {
                     setShowFeeModal(false);
+                    setDisabledCTA(false);
                     getAssetIssuanceFeeMutation.reset();
                   }}
                   disabledCTA={disabledCTA}
