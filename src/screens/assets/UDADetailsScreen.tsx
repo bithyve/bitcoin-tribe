@@ -228,6 +228,10 @@ const UDADetailsScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
+  const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader title={uda?.name} style={styles.wrapper} />
@@ -367,9 +371,9 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {twitterVerification?.link && (
+        {twitterPostVerification?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={twitterVerification?.link} />
+            <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />

@@ -179,6 +179,10 @@ const CollectibleMetaDataScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
+  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -299,9 +303,9 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
-            {twitterVerification?.link && (
+            {twitterPostVerification?.link && (
               <View style={styles.wrapper}>
-                <EmbeddedTweetView tweetId={twitterVerification?.link} />
+                <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
               </View>
             )}
             <HideAssetView

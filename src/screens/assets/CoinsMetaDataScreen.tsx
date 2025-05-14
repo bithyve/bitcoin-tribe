@@ -96,12 +96,22 @@ const CoinsMetaDataScreen = () => {
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
 
+  const twitterVerification = coin?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
-
+  console.log('coin-', coin?.issuer?.verifiedBy);
   useFocusEffect(
     React.useCallback(() => {
       if (
@@ -116,9 +126,9 @@ const CoinsMetaDataScreen = () => {
       }
     }, [coin?.issuer?.verified, hasCompleteVerification]),
   );
-
+  console.log('twitterPostVerification?.link', twitterPostVerification?.link);
   useEffect(() => {
-    if (coin?.issuer?.verified) {
+    if (coin?.issuer?.verified && twitterPostVerification?.link === null) {
       ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
@@ -154,12 +164,7 @@ const CoinsMetaDataScreen = () => {
     );
   }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
 
-  const twitterVerification = coin?.issuer?.verifiedBy?.find(
-    v =>
-      v.type === IssuerVerificationMethod.TWITTER ||
-      v.type === IssuerVerificationMethod.TWITTER_POST,
-  );
-
+  console.log('twitterPostVerification?.link', twitterPostVerification?.link);
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -272,9 +277,9 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {twitterVerification?.link && (
+          {twitterPostVerification?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={twitterVerification?.link} />
+              <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
