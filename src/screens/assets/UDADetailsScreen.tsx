@@ -205,7 +205,7 @@ const UDADetailsScreen = () => {
   }, [navigation, assetId]);
 
   useEffect(() => {
-    if (uda?.issuer?.verified) {
+    if (uda?.issuer?.verified || twitterPostVerification?.link === null) {
       ApiHandler.searchForAssetTweet(uda, RealmSchema.UniqueDigitalAsset);
     }
   }, []);

@@ -111,7 +111,7 @@ const CoinsMetaDataScreen = () => {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
-  console.log('coin-', coin?.issuer?.verifiedBy);
+
   useFocusEffect(
     React.useCallback(() => {
       if (
@@ -126,9 +126,8 @@ const CoinsMetaDataScreen = () => {
       }
     }, [coin?.issuer?.verified, hasCompleteVerification]),
   );
-  console.log('twitterPostVerification?.link', twitterPostVerification?.link);
   useEffect(() => {
-    if (coin?.issuer?.verified && twitterPostVerification?.link === null) {
+    if (coin?.issuer?.verified || twitterPostVerification?.link === null) {
       ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
@@ -164,7 +163,6 @@ const CoinsMetaDataScreen = () => {
     );
   }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
 
-  console.log('twitterPostVerification?.link', twitterPostVerification?.link);
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader

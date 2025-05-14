@@ -73,7 +73,6 @@ export const getUserTweetByAssetId = async (
         },
       },
     );
-
     if (response.status === 429) {
       const resetAfter = response.headers.get('x-rate-limit-reset');
       const now = Math.floor(Date.now() / 1000);
@@ -96,7 +95,6 @@ export const getUserTweetByAssetId = async (
     }
 
     const json = await response.json();
-    console.log('json', json);
     const tweets = json?.data || [];
 
     const matchingTweet = tweets.find(tweet => tweet.text.includes(assetId));

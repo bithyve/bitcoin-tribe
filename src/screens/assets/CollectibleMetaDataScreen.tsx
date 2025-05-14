@@ -132,7 +132,10 @@ const CollectibleMetaDataScreen = () => {
   );
 
   useEffect(() => {
-    if (collectible?.issuer?.verified) {
+    if (
+      collectible?.issuer?.verified ||
+      twitterPostVerification?.link === null
+    ) {
       ApiHandler.searchForAssetTweet(collectible, RealmSchema.Collectible);
     }
   }, []);

@@ -66,7 +66,6 @@ function VerifyDomain() {
       setIsLoading(true);
       const response = await Relay.verifyIssuerDomain(appId, assetId);
       if (response.status) {
-        console.log('response', response?.data?.issuer);
         await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
             isDomainVerified: true,

@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper';
 
 import CardSkeletonLoader from './CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
+import { hp } from 'src/constants/responsive';
 
 const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
   const webViewRef = useRef(null);
@@ -20,6 +21,13 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: ${theme.colors.primaryBackground}; 
+        }
+      </style>
       </head>
       <body>
         <blockquote class="twitter-tweet">
@@ -68,6 +76,7 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
         style={{
           height: webViewHeight,
           backgroundColor: theme.colors.primaryBackground,
+          marginTop: hp(10),
         }}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
