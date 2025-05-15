@@ -45,7 +45,7 @@ const getStyles = (theme: AppTheme) =>
       color: '#787878',
     },
     container: {
-      marginVertical: 10,
+      marginVertical: hp(5),
     },
     gradientContainer: {
       marginTop: hp(20),
@@ -81,9 +81,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       fontSize: 14,
     },
-    shareOptionWrapper: {
-      marginTop: hp(10),
-    },
+    shareOptionWrapper: {},
   });
 
 interface VerifyIssuerProps {
@@ -380,7 +378,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 />
               )}
             </View>
-            <ShareOptionContainer />
+            {!asset?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.TWITTER_POST,
+            )?.type && <ShareOptionContainer />}
           </VerificationSection>
         )
       ) : (

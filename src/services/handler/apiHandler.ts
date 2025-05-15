@@ -2228,41 +2228,31 @@ export class ApiHandler {
           );
 
           const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
-          const alreadyExists = existingVerifiedBy.some(
+          const twitterEntry = asset?.issuer?.verifiedBy?.find(
             v => v.type === IssuerVerificationMethod.TWITTER,
           );
-          let updatedVerifiedBy = [];
-          if (alreadyExists) {
+
+          if (!twitterEntry) return;
+          let updatedVerifiedBy: typeof existingVerifiedBy;
+          const twitterPostIndex = existingVerifiedBy.findIndex(
+            v => v.type === IssuerVerificationMethod.TWITTER_POST,
+          );
+
+          if (twitterPostIndex !== -1) {
+            updatedVerifiedBy = [...existingVerifiedBy];
+            updatedVerifiedBy[twitterPostIndex] = {
+              ...updatedVerifiedBy[twitterPostIndex],
+              link: matchingTweet.id,
+            };
+          } else {
             updatedVerifiedBy = [
               ...existingVerifiedBy,
               {
                 type: IssuerVerificationMethod.TWITTER_POST,
                 link: matchingTweet.id,
-                id: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.id,
-                name: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.name,
-                username: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.username,
-              },
-            ];
-          } else {
-            updatedVerifiedBy = [
-              {
-                type: IssuerVerificationMethod.TWITTER_POST,
-                link: matchingTweet.id,
-                id: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.id,
-                name: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.name,
-                username: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.username,
+                id: twitterEntry.id,
+                name: twitterEntry.name,
+                username: twitterEntry.username,
               },
             ];
           }

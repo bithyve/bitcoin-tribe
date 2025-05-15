@@ -110,6 +110,15 @@ const CollectibleMetaDataScreen = () => {
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
 
+  const twitterVerification = collectible?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -133,8 +142,9 @@ const CollectibleMetaDataScreen = () => {
 
   useEffect(() => {
     if (
-      collectible?.issuer?.verified ||
-      twitterPostVerification?.link === null
+      collectible?.issuer?.verified &&
+      twitterPostVerification &&
+      !twitterPostVerification?.link
     ) {
       ApiHandler.searchForAssetTweet(collectible, RealmSchema.Collectible);
     }
@@ -175,16 +185,6 @@ const CollectibleMetaDataScreen = () => {
       )
     );
   }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
-
-  const twitterVerification = collectible?.issuer?.verifiedBy?.find(
-    v =>
-      v.type === IssuerVerificationMethod.TWITTER ||
-      v.type === IssuerVerificationMethod.TWITTER_POST,
-  );
-
-  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
-    v => v.type === IssuerVerificationMethod.TWITTER_POST,
-  );
 
   return (
     <ScreenContainer style={styles.container}>
@@ -321,7 +321,12 @@ const CollectibleMetaDataScreen = () => {
                 primaryOnPress={() => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
-                  updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+                  updateAssetPostStatus(
+                    collectible,
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
                   updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
                     assetId,
@@ -333,6 +338,7 @@ const CollectibleMetaDataScreen = () => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
                   updateAssetPostStatus(
+                    collectible,
                     RealmSchema.Collectible,
                     assetId,
                     false,
@@ -353,6 +359,7 @@ const CollectibleMetaDataScreen = () => {
                   setVisibleIssuedPostOnTwitter(false);
                   setRefresh(prev => !prev);
                   updateAssetIssuedPostStatus(
+                    collectible,
                     RealmSchema.Collectible,
                     assetId,
                     true,
@@ -363,6 +370,7 @@ const CollectibleMetaDataScreen = () => {
                   setHasIssuedAsset(false);
                   setRefresh(prev => !prev);
                   updateAssetIssuedPostStatus(
+                    collectible,
                     RealmSchema.Collectible,
                     assetId,
                     false,
