@@ -369,14 +369,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   testID={'verify-with-twitter'}
                 />
               )}
-              {showDomainVerifyIssuer && (
+              {/* {showDomainVerifyIssuer && (
                 <SelectOption
                   title={assets.verifyDomain}
                   subTitle={''}
                   onPress={handleVerifyWithDomain}
                   testID={'verify-with-domain'}
                 />
-              )}
+              )} */}
             </View>
             {!asset?.issuer?.verifiedBy?.find(
               v => v.type === IssuerVerificationMethod.TWITTER_POST,
