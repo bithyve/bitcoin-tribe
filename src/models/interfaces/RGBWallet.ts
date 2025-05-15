@@ -65,6 +65,7 @@ export interface Issuer {
     username?: string;
     link?: string;
   }[];
+  isDomainVerified: boolean;
 }
 
 export interface Coin {
@@ -197,6 +198,7 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
+  DOMAIN = 'domain',
   TWITTER_POST = 'twitter_post',
 }
 

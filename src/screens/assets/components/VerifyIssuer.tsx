@@ -6,7 +6,6 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 import { useQuery as realmUseQuery } from '@realm/react';
 
-import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
 import Relay from 'src/services/relay';
@@ -32,6 +31,9 @@ import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import ShareOptionView from './ShareOptionView';
 import VerificationSection from './VerificationSection';
+import AppText from 'src/components/AppText';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -90,6 +92,7 @@ interface VerifyIssuerProps {
   onVerificationComplete?: () => void;
   asset: Asset;
   showVerifyIssuer?: boolean;
+  showDomainVerifyIssuer?: boolean;
   onPressShare?: () => void;
 }
 
@@ -108,17 +111,30 @@ export const verifyIssuerOnTwitter = async (
         username: result.username,
       });
       if (response.status) {
-        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+        const existingAsset = await dbManager.getObjectByPrimaryId(
+          schema,
+          'assetId',
+          assetId,
+        );
+        const existingIssuer =
+          JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+        const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+          entry => entry.type !== IssuerVerificationMethod.TWITTER,
+        );
+        const updatedVerifiedBy = [
+          ...filteredVerifiedBy,
+          {
+            type: IssuerVerificationMethod.TWITTER,
+            id: result.id,
+            name: result.name,
+            username: result.username,
+          },
+        ];
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
+            ...existingIssuer,
             verified: true,
-            verifiedBy: [
-              {
-                type: IssuerVerificationMethod.TWITTER,
-                id: result.id,
-                name: result.name,
-                username: result.username,
-              },
-            ],
+            verifiedBy: updatedVerifiedBy,
           },
         });
         onVerificationComplete?.();
@@ -133,7 +149,15 @@ export const verifyIssuerOnTwitter = async (
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
-  const { assetId, schema, asset, showVerifyIssuer, onPressShare } = props;
+  const {
+    assetId,
+    schema,
+    asset,
+    showVerifyIssuer,
+    showDomainVerifyIssuer,
+    onPressShare,
+  } = props;
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -226,17 +250,30 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         setIsLoading(false);
         if (response.status) {
           setCompleteVerification(true);
-          dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          const existingAsset = await dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          );
+          const existingIssuer =
+            JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+          const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+            entry => entry.type !== IssuerVerificationMethod.TWITTER,
+          );
+          const updatedVerifiedBy = [
+            ...filteredVerifiedBy,
+            {
+              type: IssuerVerificationMethod.TWITTER,
+              id: result.id,
+              name: result.name,
+              username: result.username,
+            },
+          ];
+          await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
+              ...existingIssuer,
               verified: true,
-              verifiedBy: [
-                {
-                  type: IssuerVerificationMethod.TWITTER,
-                  id: result.id,
-                  name: result.name,
-                  username: result.username,
-                },
-              ],
+              verifiedBy: updatedVerifiedBy,
             },
           });
         }
@@ -247,6 +284,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       console.log(error);
     }
   }, [assetId, schema]);
+
+  const handleVerifyWithDomain = () => {
+    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+      assetId: assetId,
+      schema: schema,
+    });
+  };
 
   const registerAsset = React.useCallback(async () => {
     try {
@@ -309,6 +353,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     <>
       {isAddedInRegistry ? (
         !showVerifyIssuer &&
+        !showDomainVerifyIssuer &&
         asset?.isVerifyPosted &&
         asset?.isIssuedPosted ? null : (
           <VerificationSection onInfoPress={() => setVisible(true)}>
@@ -320,6 +365,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   subTitle={''}
                   onPress={handleVerifyWithTwitter}
                   testID={'verify-with-twitter'}
+                />
+              )}
+              {showDomainVerifyIssuer && (
+                <SelectOption
+                  title={assets.verifyDomain}
+                  subTitle={''}
+                  onPress={handleVerifyWithDomain}
+                  testID={'verify-with-domain'}
                 />
               )}
             </View>

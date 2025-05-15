@@ -44,6 +44,7 @@ import { Keys } from 'src/storage';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value, width = '100%' }) => {
@@ -118,7 +119,7 @@ const CoinsMetaDataScreen = () => {
 
   useEffect(() => {
     if (coin?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(coin);
+      ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
 
@@ -131,12 +132,33 @@ const CoinsMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.verified &&
+      !coin?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer, refreshToggle]);
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
+
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !coin?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
+      coin.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
+
+  const twitterVerification = coin?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
 
   return (
     <ScreenContainer style={styles.container}>
@@ -153,11 +175,23 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin?.issuer && coin?.issuer?.verified && (
+            {twitterVerification && (
               <IssuerVerified
-                id={coin?.issuer?.verifiedBy[0]?.id}
-                name={coin?.issuer?.verifiedBy[0]?.name}
-                username={coin?.issuer?.verifiedBy[0]?.username}
+                id={twitterVerification.id}
+                name={twitterVerification.name}
+                username={twitterVerification.username}
+              />
+            )}
+
+            {coin?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.DOMAIN,
+            ) && (
+              <IssuerDomainVerified
+                domain={
+                  coin?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
+                }
               />
             )}
           </View>
@@ -206,7 +240,6 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-
           <>
             <VerifyIssuer
               assetId={assetId}
@@ -214,6 +247,7 @@ const CoinsMetaDataScreen = () => {
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               asset={coin}
               showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
               onPressShare={() => {
                 if (!coin.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
@@ -238,9 +272,9 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {coin?.issuer?.verifiedBy[0]?.link && (
+          {twitterVerification?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0]?.link} />
+              <EmbeddedTweetView tweetId={twitterVerification?.link} />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
