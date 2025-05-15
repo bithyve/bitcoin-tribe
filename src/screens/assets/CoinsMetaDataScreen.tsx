@@ -44,6 +44,7 @@ import { Keys } from 'src/storage';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 export const Item = ({ title, value, width = '100%' }) => {
@@ -95,6 +96,16 @@ const CoinsMetaDataScreen = () => {
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
 
+  const twitterVerification = coin?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
@@ -117,8 +128,12 @@ const CoinsMetaDataScreen = () => {
   );
 
   useEffect(() => {
-    if (coin?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(coin);
+    if (
+      coin?.issuer?.verified &&
+      twitterPostVerification &&
+      !twitterPostVerification?.link
+    ) {
+      ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
 
@@ -131,12 +146,27 @@ const CoinsMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.verified &&
+      !coin?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [coin.transactions, coin.issuer, refreshToggle]);
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
+
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !coin?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
+      coin.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -153,11 +183,23 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {coin?.issuer && coin?.issuer?.verified && (
+            {twitterVerification && (
               <IssuerVerified
-                id={coin?.issuer?.verifiedBy[0]?.id}
-                name={coin?.issuer?.verifiedBy[0]?.name}
-                username={coin?.issuer?.verifiedBy[0]?.username}
+                id={twitterVerification.id}
+                name={twitterVerification.name}
+                username={twitterVerification.username}
+              />
+            )}
+
+            {coin?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.DOMAIN,
+            ) && (
+              <IssuerDomainVerified
+                domain={
+                  coin?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
+                }
               />
             )}
           </View>
@@ -206,7 +248,6 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-
           <>
             <VerifyIssuer
               assetId={assetId}
@@ -214,6 +255,7 @@ const CoinsMetaDataScreen = () => {
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               asset={coin}
               showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
               onPressShare={() => {
                 if (!coin.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
@@ -222,7 +264,7 @@ const CoinsMetaDataScreen = () => {
                 }
               }}
             />
-            <View style={styles.seperatorView} />
+            {!coin?.issuer?.verified && <View style={styles.seperatorView} />}
           </>
           <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
             {coin?.issuer?.verified && (
@@ -238,9 +280,10 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {coin?.issuer?.verifiedBy[0]?.link && (
+          {coin?.issuer?.verified && <View style={styles.seperatorView} />}
+          {twitterPostVerification?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={coin?.issuer?.verifiedBy[0]?.link} />
+              <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
@@ -250,14 +293,14 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
-                updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, true);
                 updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
                 setRefresh(prev => !prev);
               }}
               secondaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
-                updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
                 updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
               }}
               issuerInfo={coin}
@@ -269,13 +312,23 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                updateAssetIssuedPostStatus(
+                  coin,
+                  RealmSchema.Coin,
+                  assetId,
+                  true,
+                );
               }}
               secondaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setHasIssuedAsset(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
+                updateAssetIssuedPostStatus(
+                  coin,
+                  RealmSchema.Coin,
+                  assetId,
+                  false,
+                );
               }}
               issuerInfo={coin}
             />
@@ -345,9 +398,7 @@ const getStyles = (theme: AppTheme, width) =>
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
     },
-    viewRegistryCtaWrapper: {
-      marginTop: hp(10),
-    },
+    viewRegistryCtaWrapper: {},
   });
 
 export default CoinsMetaDataScreen;

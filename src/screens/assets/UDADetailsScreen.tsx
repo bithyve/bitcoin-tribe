@@ -25,6 +25,7 @@ import {
   TransferKind,
   AssetVisibility,
   UniqueDigitalAsset,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -55,9 +56,9 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
-import ShareOptionView from './components/ShareOptionView';
 import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 
 const UDADetailsScreen = () => {
@@ -96,6 +97,16 @@ const UDADetailsScreen = () => {
     useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+
+  const twitterVerification = uda?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -170,12 +181,27 @@ const UDADetailsScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !uda?.issuer?.verified &&
+      !uda?.issuer?.verifiedBy?.some(
+        v =>
+          v.type === IssuerVerificationMethod.TWITTER ||
+          v.type === IssuerVerificationMethod.TWITTER_POST,
+      ) &&
       uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [uda?.transactions, uda?.issuer, refreshToggle]);
+  }, [uda?.transactions, uda.issuer?.verifiedBy, refreshToggle]);
+
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !uda?.issuer?.verifiedBy?.some(
+        v => v.type === IssuerVerificationMethod.DOMAIN,
+      ) &&
+      uda?.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [uda?.transactions, uda?.issuer?.verifiedBy, refreshToggle]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -189,8 +215,12 @@ const UDADetailsScreen = () => {
   }, [navigation, assetId]);
 
   useEffect(() => {
-    if (uda?.issuer?.verified) {
-      ApiHandler.searchForAssetTweet(uda);
+    if (
+      uda?.issuer?.verified &&
+      twitterPostVerification &&
+      !twitterPostVerification?.link
+    ) {
+      ApiHandler.searchForAssetTweet(uda, RealmSchema.UniqueDigitalAsset);
     }
   }, []);
 
@@ -245,11 +275,22 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {uda?.issuer && uda?.issuer?.verified && (
+          {twitterVerification && (
             <IssuerVerified
-              id={uda?.issuer?.verifiedBy[0]?.id}
-              name={uda?.issuer?.verifiedBy[0]?.name}
-              username={uda?.issuer?.verifiedBy[0]?.username}
+              id={twitterVerification.id}
+              name={twitterVerification.name}
+              username={twitterVerification.username}
+            />
+          )}
+          {uda?.issuer?.verifiedBy?.find(
+            v => v.type === IssuerVerificationMethod.DOMAIN,
+          ) && (
+            <IssuerDomainVerified
+              domain={
+                uda?.issuer?.verifiedBy?.find(
+                  v => v.type === IssuerVerificationMethod.DOMAIN,
+                )?.name
+              }
             />
           )}
         </View>
@@ -295,6 +336,7 @@ const UDADetailsScreen = () => {
             schema={RealmSchema.UniqueDigitalAsset}
             onVerificationComplete={() => setRefreshToggle(t => !t)}
             showVerifyIssuer={showVerifyIssuer}
+            showDomainVerifyIssuer={showDomainVerifyIssuer}
             asset={uda}
             onPressShare={() => {
               if (!uda.isIssuedPosted) {
@@ -333,9 +375,9 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {uda?.issuer?.verifiedBy[0]?.link && (
+        {twitterPostVerification?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={uda?.issuer?.verifiedBy[0]?.link} />
+            <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
@@ -362,6 +404,7 @@ const UDADetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               true,
@@ -377,6 +420,7 @@ const UDADetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               false,
@@ -397,6 +441,7 @@ const UDADetailsScreen = () => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               true,
@@ -407,6 +452,7 @@ const UDADetailsScreen = () => {
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               false,

@@ -267,14 +267,24 @@ const CollectibleDetailsScreen = () => {
           primaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
-            updateAssetPostStatus(RealmSchema.Collectible, assetId, true);
+            updateAssetPostStatus(
+              collectible,
+              RealmSchema.Collectible,
+              assetId,
+              true,
+            );
             updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
             setRefresh(prev => !prev);
           }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
-            updateAssetPostStatus(RealmSchema.Collectible, assetId, false);
+            updateAssetPostStatus(
+              collectible,
+              RealmSchema.Collectible,
+              assetId,
+              false,
+            );
             updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
           }}
           issuerInfo={collectible}
@@ -286,13 +296,19 @@ const CollectibleDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
+            updateAssetIssuedPostStatus(
+              collectible,
+              RealmSchema.Collectible,
+              assetId,
+              true,
+            );
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
+              collectible,
               RealmSchema.Collectible,
               assetId,
               false,
