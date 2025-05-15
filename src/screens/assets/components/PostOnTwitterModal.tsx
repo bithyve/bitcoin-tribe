@@ -20,7 +20,7 @@ import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
-import { AssetFace, Issuer } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, Issuer } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import AssetIcon from 'src/components/AssetIcon';
 import PostIssuerVerified from './PostIssuerVerified';
@@ -28,12 +28,13 @@ import Colors from 'src/theme/Colors';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import TwitterTemplate from 'src/components/TwitterTemplate';
 
 interface Props {
   visible: boolean;
   primaryOnPress?: () => void;
   secondaryOnPress: () => void;
-  issuerInfo: Issuer;
+  issuerInfo: Asset;
 }
 
 const PostOnTwitterModal: React.FC<Props> = ({
@@ -92,7 +93,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       console.error('Error capturing ViewShot:', error);
     }
   };
-
+  console.log('issuerInfo', issuerInfo);
   const captureAndShare = async () => {
     try {
       if (!viewShotRef.current) return;
@@ -187,7 +188,8 @@ const PostOnTwitterModal: React.FC<Props> = ({
             {assets.verificationSuccessSubTitle}
           </AppText>
         </View>
-        <ViewShot
+        <TwitterTemplate viewShotRef={viewShotRef} asset={issuerInfo} />
+        {/* <ViewShot
           ref={viewShotRef}
           options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
           style={styles.container}>
@@ -307,7 +309,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
               </ImageBackground>
             </View>
           </ImageBackground>
-        </ViewShot>
+        </ViewShot> */}
         <View>
           <Image
             source={{ uri: capturedImage }}
