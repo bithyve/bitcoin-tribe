@@ -45,7 +45,7 @@ const getStyles = (theme: AppTheme) =>
       color: '#787878',
     },
     container: {
-      marginVertical: 10,
+      marginVertical: hp(5),
     },
     gradientContainer: {
       marginTop: hp(20),
@@ -81,9 +81,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       fontSize: 14,
     },
-    shareOptionWrapper: {
-      marginTop: hp(10),
-    },
+    shareOptionWrapper: {},
   });
 
 interface VerifyIssuerProps {
@@ -170,6 +168,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [disabledCTA, setDisabledCTA] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
@@ -220,6 +219,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
       setTimeout(() => {
         registerAsset();
       }, 400);
@@ -233,6 +233,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
     }
   }, [payServiceFeeFeeMutation]);
 
@@ -324,6 +325,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         }
       }
     } catch (error) {
+      setDisabledCTA(false);
       Toast(`${error}`, true);
       console.log(error);
     }
@@ -367,16 +369,18 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   testID={'verify-with-twitter'}
                 />
               )}
-              {showDomainVerifyIssuer && (
+              {/* {showDomainVerifyIssuer && (
                 <SelectOption
                   title={assets.verifyDomain}
                   subTitle={''}
                   onPress={handleVerifyWithDomain}
                   testID={'verify-with-domain'}
                 />
-              )}
+              )} */}
             </View>
-            <ShareOptionContainer />
+            {!asset?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.TWITTER_POST,
+            )?.type && <ShareOptionContainer />}
           </VerificationSection>
         )
       ) : (
@@ -397,12 +401,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 visible={showFeeModal}
                 enableCloseIcon={false}
                 onDismiss={() => {
-                  if (payServiceFeeFeeMutation.isLoading) return;
+                  if (disabledCTA) return;
                   setShowFeeModal(false);
                   getAssetIssuanceFeeMutation.reset();
                 }}>
                 <ServiceFee
                   onPay={async () => {
+                    setDisabledCTA(true);
                     await ApiHandler.refreshWallets({ wallets: [wallet] });
                     payServiceFeeFeeMutation.mutate({ feeDetails });
                   }}
@@ -411,8 +416,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   onSkip={() => setShowFeeModal(false)}
                   hideModal={() => {
                     setShowFeeModal(false);
+                    setDisabledCTA(false);
                     getAssetIssuanceFeeMutation.reset();
                   }}
+                  disabledCTA={disabledCTA}
                 />
               </ModalContainer>
             </View>

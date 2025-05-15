@@ -98,6 +98,16 @@ const UDADetailsScreen = () => {
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
+  const twitterVerification = uda?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -205,7 +215,11 @@ const UDADetailsScreen = () => {
   }, [navigation, assetId]);
 
   useEffect(() => {
-    if (uda?.issuer?.verified) {
+    if (
+      uda?.issuer?.verified &&
+      twitterPostVerification &&
+      !twitterPostVerification?.link
+    ) {
       ApiHandler.searchForAssetTweet(uda, RealmSchema.UniqueDigitalAsset);
     }
   }, []);
@@ -221,12 +235,6 @@ const UDADetailsScreen = () => {
     );
     navigation.dispatch(popAction);
   };
-
-  const twitterVerification = uda?.issuer?.verifiedBy?.find(
-    v =>
-      v.type === IssuerVerificationMethod.TWITTER ||
-      v.type === IssuerVerificationMethod.TWITTER_POST,
-  );
 
   return (
     <ScreenContainer style={styles.container}>
@@ -367,9 +375,9 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {twitterVerification?.link && (
+        {twitterPostVerification?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={twitterVerification?.link} />
+            <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
@@ -396,6 +404,7 @@ const UDADetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               true,
@@ -411,6 +420,7 @@ const UDADetailsScreen = () => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
             updateAssetPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               false,
@@ -431,6 +441,7 @@ const UDADetailsScreen = () => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               true,
@@ -441,6 +452,7 @@ const UDADetailsScreen = () => {
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
+              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               false,

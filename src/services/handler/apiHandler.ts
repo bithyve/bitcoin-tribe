@@ -2195,23 +2195,17 @@ export class ApiHandler {
     try {
       const accessToken = storage.getString('accessToken');
       const twitterHandle = asset?.issuer?.verifiedBy?.find(
-        v =>
-          v.type === IssuerVerificationMethod.TWITTER ||
-          v.type === IssuerVerificationMethod.TWITTER_POST,
+        v => v.type === IssuerVerificationMethod.TWITTER_POST,
       )?.link;
-
       if (twitterHandle) return;
 
       const matchingTweet = await getUserTweetByAssetId(
         asset?.issuer?.verifiedBy?.find(
-          v =>
-            v.type === IssuerVerificationMethod.TWITTER ||
-            v.type === IssuerVerificationMethod.TWITTER_POST,
+          v => v.type === IssuerVerificationMethod.TWITTER,
         )?.id,
         accessToken,
         asset.assetId,
       );
-
       if (matchingTweet) {
         const response = await Relay.verifyIssuer('appID', asset.assetId, {
           type: IssuerVerificationMethod.TWITTER_POST,
@@ -2226,49 +2220,54 @@ export class ApiHandler {
             v => v.type === IssuerVerificationMethod.TWITTER,
           )?.username,
         });
-
         if (response.status) {
           const existingAsset = await dbManager.getObjectByPrimaryId(
             schema,
             'assetId',
             asset.assetId,
           );
-          const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
 
-          const alreadyExists = existingVerifiedBy.some(
+          const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
+          const twitterEntry = asset?.issuer?.verifiedBy?.find(
+            v => v.type === IssuerVerificationMethod.TWITTER,
+          );
+
+          if (!twitterEntry) return;
+          let updatedVerifiedBy: typeof existingVerifiedBy;
+          const twitterPostIndex = existingVerifiedBy.findIndex(
             v => v.type === IssuerVerificationMethod.TWITTER_POST,
           );
 
-          if (!alreadyExists) {
-            const updatedVerifiedBy = [
+          if (twitterPostIndex !== -1) {
+            updatedVerifiedBy = [...existingVerifiedBy];
+            updatedVerifiedBy[twitterPostIndex] = {
+              ...updatedVerifiedBy[twitterPostIndex],
+              link: matchingTweet.id,
+            };
+          } else {
+            updatedVerifiedBy = [
               ...existingVerifiedBy,
               {
                 type: IssuerVerificationMethod.TWITTER_POST,
                 link: matchingTweet.id,
-                id: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.id,
-                name: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.name,
-                username: asset?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.TWITTER,
-                )?.username,
+                id: twitterEntry.id,
+                name: twitterEntry.name,
+                username: twitterEntry.username,
               },
             ];
-
-            await dbManager.updateObjectByPrimaryId(
-              schema,
-              'assetId',
-              asset.assetId,
-              {
-                issuer: {
-                  verified: true,
-                  verifiedBy: updatedVerifiedBy,
-                },
-              },
-            );
           }
+
+          await dbManager.updateObjectByPrimaryId(
+            schema,
+            'assetId',
+            asset.assetId,
+            {
+              issuer: {
+                verified: true,
+                verifiedBy: updatedVerifiedBy,
+              },
+            },
+          );
         }
       } else {
         console.log('No tweet found with assetID:', asset.assetId);
