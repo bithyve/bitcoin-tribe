@@ -93,7 +93,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
       console.error('Error capturing ViewShot:', error);
     }
   };
-  console.log('issuerInfo', issuerInfo);
+
   const captureAndShare = async () => {
     try {
       if (!viewShotRef.current) return;
