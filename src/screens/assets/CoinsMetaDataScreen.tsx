@@ -102,8 +102,11 @@ const CoinsMetaDataScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
-  const twitterPostVerification = coin?.issuer?.verifiedBy?.find(
+  const twitterPostVerificationWithLink = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
+  const twitterPostVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
   useEffect(() => {
@@ -130,6 +133,7 @@ const CoinsMetaDataScreen = () => {
   useEffect(() => {
     if (
       coin?.issuer?.verified &&
+      !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
@@ -281,9 +285,11 @@ const CoinsMetaDataScreen = () => {
             )}
           </View>
           {coin?.issuer?.verified && <View style={styles.seperatorView} />}
-          {twitterPostVerification?.link && (
+          {twitterPostVerificationWithLink?.link && (
             <View style={styles.wrapper}>
-              <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
+              <EmbeddedTweetView
+                tweetId={twitterPostVerificationWithLink?.link}
+              />
             </View>
           )}
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />

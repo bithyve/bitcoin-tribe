@@ -16,10 +16,11 @@ import AppTouchable from 'src/components/AppTouchable';
 interface VerificationSectionProps {
   children: React.ReactNode;
   onInfoPress: () => void;
+  iconRef?: React.RefObject<View>;
 }
 
 function VerificationSection(props: VerificationSectionProps) {
-  const { children, onInfoPress } = props;
+  const { children, onInfoPress, iconRef } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -39,7 +40,7 @@ function VerificationSection(props: VerificationSectionProps) {
             {assets.verificationTitle}
           </AppText>
         </View>
-        <AppTouchable onPress={onInfoPress}>
+        <AppTouchable onPress={onInfoPress} ref={iconRef}>
           {isThemeDark ? (
             <InfoIcon width={24} height={24} />
           ) : (

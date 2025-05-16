@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -35,7 +35,7 @@ import AppText from 'src/components/AppText';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
     title: {
       marginBottom: 5,
@@ -75,7 +75,7 @@ const getStyles = (theme: AppTheme) =>
       width: 270,
       alignSelf: 'flex-end',
       right: 15,
-      bottom: hp(165),
+      top: tooltipPos.y - 15,
     },
     tooltipText: {
       color: theme.colors.headingColor,
@@ -157,9 +157,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { setCompleteVerification } = React.useContext(AppContext);
+  const iconRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
@@ -172,6 +172,11 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const styles = React.useMemo(
+    () => getStyles(theme, tooltipPos),
+    [theme, tooltipPos],
+  );
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -236,6 +241,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       setDisabledCTA(false);
     }
   }, [payServiceFeeFeeMutation]);
+
+  const openTooltip = () => {
+    iconRef.current?.measureInWindow((x, y) => {
+      setTooltipPos({ x, y });
+      setVisible(true);
+    });
+  };
 
   const handleVerifyWithTwitter = React.useCallback(async () => {
     try {
@@ -358,7 +370,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         !showDomainVerifyIssuer &&
         asset?.isVerifyPosted &&
         asset?.isIssuedPosted ? null : (
-          <VerificationSection onInfoPress={() => setVisible(true)}>
+          <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
               {showVerifyIssuer && (
@@ -384,7 +396,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
           </VerificationSection>
         )
       ) : (
-        <VerificationSection onInfoPress={() => setVisible(true)}>
+        <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
