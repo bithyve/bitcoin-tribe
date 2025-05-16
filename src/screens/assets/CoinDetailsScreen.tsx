@@ -254,13 +254,13 @@ const CoinDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(coin, RealmSchema.Coin, assetId, true);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(coin, RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           issuerInfo={coin}
         />

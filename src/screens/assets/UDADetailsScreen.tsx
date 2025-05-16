@@ -343,9 +343,9 @@ const UDADetailsScreen = () => {
             showDomainVerifyIssuer={showDomainVerifyIssuer}
             asset={uda}
             onPressShare={() => {
-              if (!uda.isIssuedPosted) {
+              if (!uda?.isIssuedPosted) {
                 setVisibleIssuedPostOnTwitter(true);
-              } else if (!uda.isVerifyPosted) {
+              } else if (!uda?.isVerifyPosted) {
                 setVisiblePostOnTwitter(true);
               }
             }}
@@ -447,7 +447,6 @@ const UDADetailsScreen = () => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
-              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               true,
@@ -458,7 +457,6 @@ const UDADetailsScreen = () => {
             setHasIssuedAsset(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(
-              uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
               false,
