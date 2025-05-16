@@ -186,39 +186,41 @@ function TwitterTemplate(props: TwitTemplateProps) {
               asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
             }
           />
-          {asset.issuer.verified && twitterVerification?.type && (
+          {asset?.issuer?.verified && twitterVerification?.type && (
             <PostInfoItem
               name={twitterVerification?.name}
               username={twitterVerification?.username}
             />
           )}
 
-          {asset.issuer.verified && domainVerification?.type && (
+          {asset?.issuer?.verified && domainVerification?.type && (
             <DomainInfoItem domain={domainVerification?.name} />
           )}
         </View>
         <View style={styles.assetIconContainer}>
           <View>
-            {asset.issuer &&
-            asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
+            {asset?.issuer &&
+            asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
               <Image
                 source={{
                   uri: Platform.select({
-                    android: `file://${asset.issuer && asset?.media?.filePath}`,
-                    ios: asset.issuer && asset?.media?.filePath,
+                    android: `file://${
+                      asset?.issuer && asset?.media?.filePath
+                    }`,
+                    ios: asset?.issuer && asset?.media?.filePath,
                   }),
                 }}
                 resizeMode="cover"
                 style={styles.imageStyle}
               />
-            ) : asset.assetIface.toUpperCase() === AssetFace.RGB21 ? (
+            ) : asset?.assetIface.toUpperCase() === AssetFace.RGB21 ? (
               <Image
                 source={{
                   uri: Platform.select({
                     android: `file://${
-                      asset.token && asset?.token.media?.filePath
+                      asset?.token && asset?.token.media?.filePath
                     }`,
-                    ios: asset.token && asset?.token.media?.filePath,
+                    ios: asset?.token && asset?.token.media?.filePath,
                   }),
                 }}
                 resizeMode="cover"
@@ -227,8 +229,8 @@ function TwitterTemplate(props: TwitTemplateProps) {
             ) : (
               <View style={styles.identiconWrapper}>
                 <AssetIcon
-                  assetTicker={asset.ticker && asset?.ticker}
-                  assetID={asset.assetId && asset?.assetId}
+                  assetTicker={asset?.ticker && asset?.ticker}
+                  assetID={asset?.assetId && asset?.assetId}
                   size={208}
                   verified={asset?.issuer?.verified}
                 />
@@ -337,6 +339,7 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       overflow: 'visible',
       borderRadius: hp(206),
+      backgroundColor: Colors.White,
     },
     tickerTextStyle: {
       color: Colors.White,

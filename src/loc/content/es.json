@@ -627,7 +627,8 @@
     "registerDomainSuccessfully": "Tu dominio se ha registrado correctamente.",
     "domainValueCopiedMsg": "Valor del dominio copiado con éxito",
     "verifyDomainSuccessfully": "Tu dominio se ha verificado correctamente.",
-    "domainVerified": "Dominio verificado"
+    "domainVerified": "Dominio verificado",
+    "domainVerifiedSuccessMsg": "¡Dominio verificado\ncon éxito!"
   },
   "community": {
     "fnfTitle": "Community",

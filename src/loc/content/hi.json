@@ -627,7 +627,8 @@
     "registerDomainSuccessfully": "आपका डोमेन सफलतापूर्वक पंजीकृत हो गया है।",
     "domainValueCopiedMsg": "डोमेन मान सफलतापूर्वक कॉपी किया गया",
     "verifyDomainSuccessfully": "आपका डोमेन सफलतापूर्वक सत्यापित हो गया है।",
-    "domainVerified": "डोमेन सत्यापित"
+    "domainVerified": "डोमेन सत्यापित",
+    "domainVerifiedSuccessMsg": "डोमेन सत्यापन\nसफल रहा!"
   },
   "community": {
     "fnfTitle": "Community",

@@ -627,7 +627,8 @@
     "registerDomainSuccessfully": "您的域名已成功注册。",
     "domainValueCopiedMsg": "域名值复制成功",
     "verifyDomainSuccessfully": "您的域名已成功验证。",
-    "domainVerified": "域名已验证"
+    "domainVerified": "域名已验证",
+    "domainVerifiedSuccessMsg": "域名验证\n成功！"
   },
   "community": {
     "fnfTitle": "Community",

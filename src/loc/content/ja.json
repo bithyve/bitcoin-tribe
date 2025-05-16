@@ -627,7 +627,8 @@
     "registerDomainSuccessfully": "ドメインが正常に登録されました。",
     "domainValueCopiedMsg": "ドメインの値を正常にコピーしました",
     "verifyDomainSuccessfully": "ドメインが正常に確認されました。",
-    "domainVerified": "ドメインが確認されました"
+    "domainVerified": "ドメインが確認されました",
+    "domainVerifiedSuccessMsg": "ドメインが\n正常に確認されました！"
   },
   "community": {
     "fnfTitle": "Community",

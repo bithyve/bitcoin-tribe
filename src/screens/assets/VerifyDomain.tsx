@@ -28,6 +28,8 @@ import Toast from 'src/components/Toast';
 import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
 import dbManager from 'src/storage/realm/dbManager';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
 
 function VerifyDomain() {
   const navigation = useNavigation();
@@ -43,6 +45,7 @@ function VerifyDomain() {
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const navigateWithDelay = (callback: () => void) => {
     setIsLoading(false);
@@ -74,9 +77,8 @@ function VerifyDomain() {
           },
         });
         navigateWithDelay(() => {
-          navigation.dispatch(popAction);
+          setVisible(true);
         });
-        Toast(assets.verifyDomainSuccessfully);
       } else {
         setIsLoading(false);
         Toast(
@@ -147,6 +149,24 @@ function VerifyDomain() {
           disabled={!checkedTermsCondition}
         />
       </View>
+      <View>
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.successPopupBackColor}
+          borderColor={theme.colors.successPopupBorderColor}
+          conatinerModalStyle={{}}>
+          <SendSuccessPopupContainer
+            title={assets.domainVerifiedSuccessMsg}
+            ctaTitle={common.done}
+            onPress={() => {
+              navigation.dispatch(popAction);
+            }}
+            style={styles.doneCtaWrapper}
+          />
+        </ResponsePopupContainer>
+      </View>
     </ScreenContainer>
   );
 }
@@ -166,6 +186,9 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     ctaWrapper: {},
+    doneCtaWrapper: {
+      marginTop: hp(20),
+    },
     checkIconContainer: {
       marginVertical: hp(20),
       flexDirection: 'row',
