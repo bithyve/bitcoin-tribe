@@ -104,8 +104,11 @@ const UDADetailsScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
-  const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
+  const twitterPostVerificationWithLink = uda?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
+  const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
   useEffect(() => {
@@ -217,6 +220,7 @@ const UDADetailsScreen = () => {
   useEffect(() => {
     if (
       uda?.issuer?.verified &&
+      !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
@@ -375,9 +379,11 @@ const UDADetailsScreen = () => {
             onRequestClose={() => setVisible(false)}
           />
         </>
-        {twitterPostVerification?.link && (
+        {twitterPostVerificationWithLink?.link && (
           <View style={styles.wrapper}>
-            <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
+            <EmbeddedTweetView
+              tweetId={twitterPostVerificationWithLink?.link}
+            />
           </View>
         )}
         <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
