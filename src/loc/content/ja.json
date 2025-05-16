@@ -628,7 +628,9 @@
     "domainValueCopiedMsg": "ドメインの値を正常にコピーしました",
     "verifyDomainSuccessfully": "ドメインが正常に確認されました。",
     "domainVerified": "ドメインが確認されました",
-    "domainVerifiedSuccessMsg": "ドメインが\n正常に確認されました！"
+    "domainVerifiedSuccessMsg": "ドメインが\n正常に確認されました！",
+    "postTitle": "Bitcoin Tribeで認証・発行完了！",
+    "postSubTitle": "Bitcoin Tribeで公開中 — X（Twitter）を通じて透明に発行・認証され、Bitcoin上のRGBスマートコントラクトの力を活用。"
   },
   "community": {
     "fnfTitle": "Community",

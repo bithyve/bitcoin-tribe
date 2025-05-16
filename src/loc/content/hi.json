@@ -628,7 +628,9 @@
     "domainValueCopiedMsg": "डोमेन मान सफलतापूर्वक कॉपी किया गया",
     "verifyDomainSuccessfully": "आपका डोमेन सफलतापूर्वक सत्यापित हो गया है।",
     "domainVerified": "डोमेन सत्यापित",
-    "domainVerifiedSuccessMsg": "डोमेन सत्यापन\nसफल रहा!"
+    "domainVerifiedSuccessMsg": "डोमेन सत्यापन\nसफल रहा!",
+    "postTitle": "Bitcoin Tribe पर सत्यापित और जारी किया गया!",
+    "postSubTitle": "अब Bitcoin Tribe पर लाइव है — X (Twitter) के माध्यम से पारदर्शिता से जारी और सत्यापित, Bitcoin पर RGB स्मार्ट कॉन्ट्रैक्ट की शक्ति का उपयोग करते हुए।"
   },
   "community": {
     "fnfTitle": "Community",

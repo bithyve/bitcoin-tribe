@@ -164,24 +164,21 @@ function TwitterTemplate(props: TwitTemplateProps) {
             <AppLogo />
           </View>
           <View style={styles.headingWrapper}>
-            <AppText style={styles.headingText}>
-              Verified & Issued on Bitcoin Tribe!
-            </AppText>
+            <AppText style={styles.headingText}>{assets.postTitle}</AppText>
             <Text style={styles.text}>
-              <Text>{asset.name}</Text> - <Text>{asset.ticker}</Text> is now
-              live on Bitcoin Tribe — transparently issued and verified via X
-              (Twitter), leveraging the power of RGB smart contracts on Bitcoin.
+              <Text>{asset.name}</Text> - <Text>{asset.ticker} </Text>
+              {assets.postSubTitle}
             </Text>
           </View>
-          <InfoItem title="Asset name:" value={asset.name} />
+          <InfoItem title={assets.assetName + ':'} value={asset.name} />
           <InfoItem
-            title="Issued on:"
+            title={assets.issuedOn + ':'}
             value={moment
               .unix(asset?.metaData && asset?.metaData?.timestamp)
               .format('DD MMM YYYY  hh:mm A')}
           />
           <InfoItem
-            title="Issued supply: "
+            title={assets.issuedSupply + ':'}
             value={
               asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
             }
@@ -374,6 +371,7 @@ const getStyles = (theme: AppTheme) =>
     },
     headingWrapper: {
       marginVertical: hp(20),
+      width: '95%',
     },
     verifiedIconWrapper: {
       top: -5,

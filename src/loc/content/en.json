@@ -628,7 +628,9 @@
     "domainValueCopiedMsg": "Domain Value Copied Successfully",
     "verifyDomainSuccessfully": "Your domain has been successfully verified.",
     "domainVerified": "Domain Verified",
-    "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!"
+    "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!",
+    "postTitle": "Verified & Issued on Bitcoin Tribe!",
+    "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin."
   },
   "community": {
     "fnfTitle": "Community",
