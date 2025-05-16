@@ -30,6 +30,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import moment from 'moment';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import TwitterTemplate from 'src/components/TwitterTemplate';
 
 interface Props {
   visible: boolean;
@@ -196,7 +197,8 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
             }
           </AppText>
         </View>
-        <ViewShot
+        <TwitterTemplate viewShotRef={viewShotRef} asset={issuerInfo} />
+        {/* <ViewShot
           ref={viewShotRef}
           options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
           style={styles.container}>
@@ -305,7 +307,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
               </ImageBackground>
             </View>
           </ImageBackground>
-        </ViewShot>
+        </ViewShot> */}
         <View>
           <Image
             source={{ uri: capturedImage }}

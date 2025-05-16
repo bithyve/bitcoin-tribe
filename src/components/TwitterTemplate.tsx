@@ -17,13 +17,19 @@ import { AppTheme } from 'src/theme';
 import Colors from 'src/theme/Colors';
 import AssetIcon from './AssetIcon';
 import AppText from './AppText';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  AssetFace,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import AppLogo from 'src/assets/images/websiteLogo.svg';
-import GradientView from './GradientView';
 import IconX from 'src/assets/images/icon_x.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import IconDomainVerified from 'src/assets/images/issuer_domain_verified.svg';
 import Fonts from 'src/constants/Fonts';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
+import moment from 'moment';
+import HorizontalGradientView from './HorizontalGradientView';
 
 type TwitTemplateProps = {
   viewShotRef: React.RefObject<ViewShot>;
@@ -50,12 +56,12 @@ const InfoItem = (props: InfoItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
-    <GradientView
+    <HorizontalGradientView
       style={styles.infoItemcontainer}
       colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
+        Colors.CharlestonGreen,
+        Colors.ChineseBlack1,
+        Colors.ChineseBlack1,
       ]}>
       <View style={styles.titleWrapper}>
         <AppText variant="body1" style={styles.text}>
@@ -67,7 +73,7 @@ const InfoItem = (props: InfoItemProps) => {
           {value}
         </AppText>
       </View>
-    </GradientView>
+    </HorizontalGradientView>
   );
 };
 
@@ -76,12 +82,12 @@ const PostInfoItem = (props: PostInfoItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
-    <GradientView
+    <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
       colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
+        Colors.CharlestonGreen,
+        Colors.ChineseBlack1,
+        Colors.ChineseBlack1,
       ]}>
       <View style={styles.verifiedWrapper}>
         <AppText variant="body1" style={styles.title}>
@@ -99,8 +105,10 @@ const PostInfoItem = (props: PostInfoItemProps) => {
           </View>
         </View>
       </View>
-      <IconVerified />
-    </GradientView>
+      <View style={styles.verifiedIconWrapper}>
+        <IconVerified />
+      </View>
+    </HorizontalGradientView>
   );
 };
 
@@ -109,19 +117,21 @@ const DomainInfoItem = (props: DomainInfoItemProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
-    <GradientView
+    <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
       colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
+        Colors.CharlestonGreen,
+        Colors.ChineseBlack1,
+        Colors.ChineseBlack1,
       ]}>
       <View style={styles.verifiedWrapper}>
         <AppText>Domain Verified</AppText>
         <AppText>{domain}</AppText>
       </View>
-      <IconDomainVerified />
-    </GradientView>
+      <View style={styles.verifiedIconWrapper}>
+        <IconDomainVerified />
+      </View>
+    </HorizontalGradientView>
   );
 };
 
@@ -131,18 +141,30 @@ function TwitterTemplate(props: TwitTemplateProps) {
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
+
+  const twitterVerification = asset?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER,
+  );
+
+  const domainVerification = asset?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
+
   return (
     <ViewShot
       ref={viewShotRef}
       options={{ format: 'jpg', quality: 1.0, width: 1200, height: 675 }}
       style={styles.container}>
-      <View style={styles.card}>
+      <ImageBackground
+        source={require('src/assets/images/TwitterTemplate.png')}
+        resizeMode="cover"
+        style={styles.card}>
         <View style={styles.assetInfoContainer}>
           <View>
             <AppLogo />
           </View>
           <View style={styles.headingWrapper}>
-            <AppText variant="heading1" style={styles.headingText}>
+            <AppText style={styles.headingText}>
               Verified & Issued on Bitcoin Tribe!
             </AppText>
             <Text style={styles.text}>
@@ -152,10 +174,28 @@ function TwitterTemplate(props: TwitTemplateProps) {
             </Text>
           </View>
           <InfoItem title="Asset name:" value={asset.name} />
-          <InfoItem title="Issued on:" value="21 April 2025" />
-          <InfoItem title="Issued supply: " value="21 April 2025" />
-          <PostInfoItem name="Tether" username="Tether_to" />
-          <DomainInfoItem domain="www.bitcointribe.app" />
+          <InfoItem
+            title="Issued on:"
+            value={moment
+              .unix(asset?.metaData && asset?.metaData?.timestamp)
+              .format('DD MMM YYYY  hh:mm A')}
+          />
+          <InfoItem
+            title="Issued supply: "
+            value={
+              asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
+            }
+          />
+          {asset.issuer.verified && twitterVerification?.type && (
+            <PostInfoItem
+              name={twitterVerification?.name}
+              username={twitterVerification?.username}
+            />
+          )}
+
+          {asset.issuer.verified && domainVerification?.type && (
+            <DomainInfoItem domain={domainVerification?.name} />
+          )}
         </View>
         <View style={styles.assetIconContainer}>
           <View>
@@ -196,7 +236,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             )}
           </View>
           <View>
-            <AppText style={styles.tickerTextStyle}>USDT</AppText>
+            <AppText style={styles.tickerTextStyle}>{asset.ticker}</AppText>
           </View>
           <View>
             <View style={styles.qrContainer}>
@@ -207,7 +247,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             </AppText>
           </View>
         </View>
-      </View>
+      </ImageBackground>
     </ViewShot>
   );
 }
@@ -229,7 +269,8 @@ const getStyles = (theme: AppTheme) =>
       gap: 10,
     },
     headingText: {
-      fontWeight: 'bold',
+      fontWeight: '600',
+      fontFamily: Fonts.LufgaMedium,
       fontSize: hp(40),
       color: Colors.White,
       marginBottom: hp(3),
@@ -244,6 +285,7 @@ const getStyles = (theme: AppTheme) =>
       width: '90%',
       marginVertical: hp(5),
       minHeight: hp(50),
+      borderRadius: hp(12),
     },
     verifyInfoItemcontainer: {
       flexDirection: 'row',
@@ -251,9 +293,11 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(5),
       minHeight: hp(75),
       alignItems: 'center',
+      borderRadius: hp(12),
     },
     assetInfoContainer: {
       width: '70%',
+      height: '80%',
     },
     textName: {
       color: Colors.White,
@@ -270,11 +314,13 @@ const getStyles = (theme: AppTheme) =>
       color: Colors.White,
     },
     assetIconContainer: {
-      borderRadius: hp(20),
-      backgroundColor: theme.colors.settingMenuHeader,
+      borderRadius: hp(30),
+      backgroundColor: '#24262B',
       height: hp(514),
       width: hp(297),
       alignItems: 'center',
+      borderColor: '#5F6163',
+      borderWidth: 1,
     },
     imageStyle: {
       width: hp(206),
@@ -290,7 +336,6 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'visible',
-      backgroundColor: Colors.White,
       borderRadius: hp(206),
     },
     tickerTextStyle: {
@@ -326,6 +371,9 @@ const getStyles = (theme: AppTheme) =>
     },
     headingWrapper: {
       marginVertical: hp(20),
+    },
+    verifiedIconWrapper: {
+      top: -5,
     },
   });
 export default TwitterTemplate;
