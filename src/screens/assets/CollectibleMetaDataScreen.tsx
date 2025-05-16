@@ -116,9 +116,13 @@ const CollectibleMetaDataScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
-  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
+  const twitterPostVerificationWithLink = collectible?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
   );
+  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -143,6 +147,7 @@ const CollectibleMetaDataScreen = () => {
   useEffect(() => {
     if (
       collectible?.issuer?.verified &&
+      !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
@@ -306,9 +311,11 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
-            {twitterPostVerification?.link && (
+            {twitterPostVerificationWithLink?.link && (
               <View style={styles.wrapper}>
-                <EmbeddedTweetView tweetId={twitterPostVerification?.link} />
+                <EmbeddedTweetView
+                  tweetId={twitterPostVerificationWithLink?.link}
+                />
               </View>
             )}
             <HideAssetView
