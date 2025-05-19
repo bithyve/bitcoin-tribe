@@ -101,7 +101,6 @@ const CoinsMetaDataScreen = () => {
       v.type === IssuerVerificationMethod.TWITTER ||
       v.type === IssuerVerificationMethod.TWITTER_POST,
   );
-
   const twitterPostVerificationWithLink = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
   );
@@ -137,6 +136,7 @@ const CoinsMetaDataScreen = () => {
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
+      console.log('call');
       ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
@@ -261,9 +261,9 @@ const CoinsMetaDataScreen = () => {
               showVerifyIssuer={showVerifyIssuer}
               showDomainVerifyIssuer={showDomainVerifyIssuer}
               onPressShare={() => {
-                if (!coin.isIssuedPosted) {
+                if (!coin?.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
-                } else if (!coin.isVerifyPosted) {
+                } else if (!coin?.isVerifyPosted) {
                   setVisiblePostOnTwitter(true);
                 }
               }}
@@ -318,23 +318,13 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(
-                  coin,
-                  RealmSchema.Coin,
-                  assetId,
-                  true,
-                );
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
               }}
               secondaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setHasIssuedAsset(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(
-                  coin,
-                  RealmSchema.Coin,
-                  assetId,
-                  false,
-                );
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
               }}
               issuerInfo={coin}
             />

@@ -627,7 +627,10 @@
     "registerDomainSuccessfully": "Tu dominio se ha registrado correctamente.",
     "domainValueCopiedMsg": "Valor del dominio copiado con éxito",
     "verifyDomainSuccessfully": "Tu dominio se ha verificado correctamente.",
-    "domainVerified": "Dominio verificado"
+    "domainVerified": "Dominio verificado",
+    "domainVerifiedSuccessMsg": "¡Dominio verificado\ncon éxito!",
+    "postTitle": "¡Verificado y Emitido en Bitcoin Tribe!",
+    "postSubTitle": "Ya está en vivo en Bitcoin Tribe — emitido y verificado de forma transparente a través de X (Twitter), aprovechando el poder de los contratos inteligentes RGB en Bitcoin."
   },
   "community": {
     "fnfTitle": "Community",
