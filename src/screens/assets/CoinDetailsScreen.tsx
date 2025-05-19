@@ -234,7 +234,7 @@ const CoinDetailsScreen = () => {
           primaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
-            updateAssetPostStatus(RealmSchema.Coin, assetId, true);
+            updateAssetPostStatus(coin, RealmSchema.Coin, assetId, true);
             updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
             setRefresh(prev => !prev);
             setIsSharingToTwitter(true);
@@ -242,7 +242,7 @@ const CoinDetailsScreen = () => {
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
-            updateAssetPostStatus(RealmSchema.Coin, assetId, false);
+            updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
             updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           issuerInfo={coin}

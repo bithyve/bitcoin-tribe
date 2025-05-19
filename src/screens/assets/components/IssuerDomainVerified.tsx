@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useCallback } from 'react';
-import AppText from 'src/components/AppText';
-import IconVerified from 'src/assets/images/issuer_verified.svg';
-import IconX from 'src/assets/images/icon_x.svg';
-import AppTouchable from 'src/components/AppTouchable';
-import openLink from 'src/utils/OpenLink';
+import React, { useCallback, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
+
+import AppText from 'src/components/AppText';
+import IconVerified from 'src/assets/images/issuer_domain_verified.svg';
+import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -25,47 +25,35 @@ const getStyles = (theme: AppTheme) =>
     title: {
       color: theme.colors.backupDoneBorder,
     },
-    textUsername: {
-      color: theme.colors.secondaryHeadingColor,
-    },
     iconWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 10,
     },
   });
 
-interface IssuerVerifiedProps {
-  id: string;
-  name: string;
-  username: string;
+interface IssuerDomainVerifiedProps {
+  domain: string;
 }
 
-const IssuerVerified: React.FC<IssuerVerifiedProps> = (
-  props: IssuerVerifiedProps,
+const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
+  props: IssuerDomainVerifiedProps,
 ) => {
-  const { id, name, username } = props;
+  const { domain } = props;
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
-  const onPress = useCallback(() => {
-    openLink(`https://twitter.com/i/user/${id}`);
-  }, [id]);
-
   return (
-    <AppTouchable style={styles.container} onPress={onPress}>
+    <AppTouchable style={styles.container}>
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>
-            Issuer Verified via 𝕏
+            {assets.domainVerified}
           </AppText>
           <View style={styles.iconWrapper}>
-            <IconX />
             <View>
-              <AppText variant="body2">{name}</AppText>
-              <AppText variant="caption" style={styles.textUsername}>
-                @{username}
-              </AppText>
+              <AppText variant="body2">{domain}</AppText>
             </View>
           </View>
         </View>
@@ -75,4 +63,4 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
   );
 };
 
-export default IssuerVerified;
+export default IssuerDomainVerified;

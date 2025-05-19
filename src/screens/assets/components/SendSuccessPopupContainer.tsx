@@ -1,6 +1,6 @@
 import LottieView from 'lottie-react-native';
 import React, { ReactNode, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 
@@ -13,13 +13,15 @@ import { AppTheme } from 'src/theme';
 
 type sendSuccessProps = {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   description?: string;
   onPress: () => void;
+  ctaTitle: string;
+  style?: StyleProp<ViewStyle>;
 };
 
 function SendSuccessPopupContainer(props: sendSuccessProps) {
-  const { title, subTitle, description, onPress } = props;
+  const { title, subTitle, description, onPress, ctaTitle, style } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -43,20 +45,26 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
         <AppText variant="heading2" style={styles.titleText}>
           {title}
         </AppText>
-        <AppText variant="body1" style={styles.subTitleText}>
-          {subTitle}
-        </AppText>
-        <AppText variant="body1" style={styles.descriptionText}>
-          {description}
-        </AppText>
+        {subTitle && (
+          <AppText variant="body1" style={styles.subTitleText}>
+            {subTitle}
+          </AppText>
+        )}
+        {description && (
+          <AppText variant="body1" style={styles.descriptionText}>
+            {description}
+          </AppText>
+        )}
       </View>
-      <PrimaryCTA
-        title={common.proceed}
-        onPress={onPress}
-        width={hp(152)}
-        textColor={theme.colors.popupCTATitleColor}
-        buttonColor={theme.colors.popupCTABackColor}
-      />
+      <View style={style}>
+        <PrimaryCTA
+          title={ctaTitle}
+          onPress={onPress}
+          width={hp(152)}
+          textColor={theme.colors.popupCTATitleColor}
+          buttonColor={theme.colors.popupCTABackColor}
+        />
+      </View>
     </View>
   );
 }

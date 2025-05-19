@@ -365,6 +365,47 @@ export default class Relay {
     }
   };
 
+  public static registerIssuerDomain = async (
+    appId: string,
+    assetId: string,
+    domain: string,
+  ): Promise<{
+    record: string;
+    recordType: string;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/registry/registerDomain/`, {
+        appId,
+        assetId,
+        domain,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static verifyIssuerDomain = async (
+    appId: string,
+    assetId: string,
+  ): Promise<{
+    asset: Asset;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/registry/verifyDomain/`, {
+        appId,
+        assetId,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   public static rgbFileBackup = async (
     filePath: string,
     appID: string,

@@ -1,12 +1,11 @@
 import { Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 import { useQuery as realmUseQuery } from '@realm/react';
 
-import AppText from 'src/components/AppText';
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
 import Relay from 'src/services/relay';
@@ -32,8 +31,11 @@ import { hp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import ShareOptionView from './ShareOptionView';
 import VerificationSection from './VerificationSection';
+import AppText from 'src/components/AppText';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
     title: {
       marginBottom: 5,
@@ -43,7 +45,7 @@ const getStyles = (theme: AppTheme) =>
       color: '#787878',
     },
     container: {
-      marginVertical: 10,
+      marginVertical: hp(5),
     },
     gradientContainer: {
       marginTop: hp(20),
@@ -73,15 +75,13 @@ const getStyles = (theme: AppTheme) =>
       width: 270,
       alignSelf: 'flex-end',
       right: 15,
-      bottom: hp(165),
+      top: tooltipPos.y - 15,
     },
     tooltipText: {
       color: theme.colors.headingColor,
       fontSize: 14,
     },
-    shareOptionWrapper: {
-      marginTop: hp(10),
-    },
+    shareOptionWrapper: {},
   });
 
 interface VerifyIssuerProps {
@@ -90,6 +90,7 @@ interface VerifyIssuerProps {
   onVerificationComplete?: () => void;
   asset: Asset;
   showVerifyIssuer?: boolean;
+  showDomainVerifyIssuer?: boolean;
   onPressShare?: () => void;
 }
 
@@ -108,17 +109,30 @@ export const verifyIssuerOnTwitter = async (
         username: result.username,
       });
       if (response.status) {
-        dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+        const existingAsset = await dbManager.getObjectByPrimaryId(
+          schema,
+          'assetId',
+          assetId,
+        );
+        const existingIssuer =
+          JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+        const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+          entry => entry.type !== IssuerVerificationMethod.TWITTER,
+        );
+        const updatedVerifiedBy = [
+          ...filteredVerifiedBy,
+          {
+            type: IssuerVerificationMethod.TWITTER,
+            id: result.id,
+            name: result.name,
+            username: result.username,
+          },
+        ];
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           issuer: {
+            ...existingIssuer,
             verified: true,
-            verifiedBy: [
-              {
-                type: IssuerVerificationMethod.TWITTER,
-                id: result.id,
-                name: result.name,
-                username: result.username,
-              },
-            ],
+            verifiedBy: updatedVerifiedBy,
           },
         });
         onVerificationComplete?.();
@@ -133,11 +147,19 @@ export const verifyIssuerOnTwitter = async (
 const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   props: VerifyIssuerProps,
 ) => {
-  const { assetId, schema, asset, showVerifyIssuer, onPressShare } = props;
+  const {
+    assetId,
+    schema,
+    asset,
+    showVerifyIssuer,
+    showDomainVerifyIssuer,
+    onPressShare,
+  } = props;
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { setCompleteVerification } = React.useContext(AppContext);
+  const iconRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
@@ -146,9 +168,15 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [disabledCTA, setDisabledCTA] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const styles = React.useMemo(
+    () => getStyles(theme, tooltipPos),
+    [theme, tooltipPos],
+  );
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -196,6 +224,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
       setTimeout(() => {
         registerAsset();
       }, 400);
@@ -209,8 +238,16 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
     }
   }, [payServiceFeeFeeMutation]);
+
+  const openTooltip = () => {
+    iconRef.current?.measureInWindow((x, y) => {
+      setTooltipPos({ x, y });
+      setVisible(true);
+    });
+  };
 
   const handleVerifyWithTwitter = React.useCallback(async () => {
     try {
@@ -226,17 +263,30 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         setIsLoading(false);
         if (response.status) {
           setCompleteVerification(true);
-          dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          const existingAsset = await dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          );
+          const existingIssuer =
+            JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+          const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+            entry => entry.type !== IssuerVerificationMethod.TWITTER,
+          );
+          const updatedVerifiedBy = [
+            ...filteredVerifiedBy,
+            {
+              type: IssuerVerificationMethod.TWITTER,
+              id: result.id,
+              name: result.name,
+              username: result.username,
+            },
+          ];
+          await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
             issuer: {
+              ...existingIssuer,
               verified: true,
-              verifiedBy: [
-                {
-                  type: IssuerVerificationMethod.TWITTER,
-                  id: result.id,
-                  name: result.name,
-                  username: result.username,
-                },
-              ],
+              verifiedBy: updatedVerifiedBy,
             },
           });
         }
@@ -247,6 +297,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       console.log(error);
     }
   }, [assetId, schema]);
+
+  const handleVerifyWithDomain = () => {
+    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+      assetId: assetId,
+      schema: schema,
+    });
+  };
 
   const registerAsset = React.useCallback(async () => {
     try {
@@ -280,6 +337,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         }
       }
     } catch (error) {
+      setDisabledCTA(false);
       Toast(`${error}`, true);
       console.log(error);
     }
@@ -309,9 +367,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     <>
       {isAddedInRegistry ? (
         !showVerifyIssuer &&
+        !showDomainVerifyIssuer &&
         asset?.isVerifyPosted &&
         asset?.isIssuedPosted ? null : (
-          <VerificationSection onInfoPress={() => setVisible(true)}>
+          <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
               {showVerifyIssuer && (
@@ -322,12 +381,22 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   testID={'verify-with-twitter'}
                 />
               )}
+              {showDomainVerifyIssuer && (
+                <SelectOption
+                  title={assets.verifyDomain}
+                  subTitle={''}
+                  onPress={handleVerifyWithDomain}
+                  testID={'verify-with-domain'}
+                />
+              )}
             </View>
-            <ShareOptionContainer />
+            {!asset?.issuer?.verifiedBy?.find(
+              v => v.type === IssuerVerificationMethod.TWITTER_POST,
+            )?.type && <ShareOptionContainer />}
           </VerificationSection>
         )
       ) : (
-        <VerificationSection onInfoPress={() => setVisible(true)}>
+        <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
             <SelectOption
@@ -344,12 +413,13 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 visible={showFeeModal}
                 enableCloseIcon={false}
                 onDismiss={() => {
-                  if (payServiceFeeFeeMutation.isLoading) return;
+                  if (disabledCTA) return;
                   setShowFeeModal(false);
                   getAssetIssuanceFeeMutation.reset();
                 }}>
                 <ServiceFee
                   onPay={async () => {
+                    setDisabledCTA(true);
                     await ApiHandler.refreshWallets({ wallets: [wallet] });
                     payServiceFeeFeeMutation.mutate({ feeDetails });
                   }}
@@ -358,8 +428,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   onSkip={() => setShowFeeModal(false)}
                   hideModal={() => {
                     setShowFeeModal(false);
+                    setDisabledCTA(false);
                     getAssetIssuanceFeeMutation.reset();
                   }}
+                  disabledCTA={disabledCTA}
                 />
               </ModalContainer>
             </View>
