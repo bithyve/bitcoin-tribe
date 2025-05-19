@@ -630,7 +630,8 @@
     "domainVerified": "डोमेन सत्यापित",
     "domainVerifiedSuccessMsg": "डोमेन सत्यापन\nसफल रहा!",
     "postTitle": "Bitcoin Tribe पर सत्यापित और जारी किया गया!",
-    "postSubTitle": "अब Bitcoin Tribe पर लाइव है — X (Twitter) के माध्यम से पारदर्शिता से जारी और सत्यापित, Bitcoin पर RGB स्मार्ट कॉन्ट्रैक्ट की शक्ति का उपयोग करते हुए।"
+    "postSubTitle": "अब Bitcoin Tribe पर लाइव है — X (Twitter) के माध्यम से पारदर्शिता से जारी और सत्यापित, Bitcoin पर RGB स्मार्ट कॉन्ट्रैक्ट की शक्ति का उपयोग करते हुए।",
+    "postSuccessMsg": "आपका ट्वीट पोस्ट हो गया है। कृपया एक क्षण प्रतीक्षा करें — यह जल्द ही अपडेट हो जाएगा।"
   },
   "community": {
     "fnfTitle": "Community",

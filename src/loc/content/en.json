@@ -630,7 +630,8 @@
     "domainVerified": "Domain Verified",
     "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!",
     "postTitle": "Verified & Issued on Bitcoin Tribe!",
-    "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin."
+    "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin.",
+    "postSuccessMsg": "Your tweet has been posted. Please wait a moment — it will be updated soon."
   },
   "community": {
     "fnfTitle": "Community",
