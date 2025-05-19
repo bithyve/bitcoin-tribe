@@ -2198,7 +2198,6 @@ export class ApiHandler {
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       )?.link;
       if (twitterHandle) return;
-
       const matchingTweet = await getUserTweetByAssetId(
         asset?.issuer?.verifiedBy?.find(
           v => v.type === IssuerVerificationMethod.TWITTER,

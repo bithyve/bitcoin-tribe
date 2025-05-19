@@ -288,9 +288,9 @@ const CollectibleMetaDataScreen = () => {
                 showDomainVerifyIssuer={showDomainVerifyIssuer}
                 asset={collectible}
                 onPressShare={() => {
-                  if (!collectible.isIssuedPosted) {
+                  if (!collectible?.isIssuedPosted) {
                     setVisibleIssuedPostOnTwitter(true);
-                  } else if (!collectible.isVerifyPosted) {
+                  } else if (!collectible?.isVerifyPosted) {
                     setVisiblePostOnTwitter(true);
                   }
                 }}
@@ -366,7 +366,6 @@ const CollectibleMetaDataScreen = () => {
                   setVisibleIssuedPostOnTwitter(false);
                   setRefresh(prev => !prev);
                   updateAssetIssuedPostStatus(
-                    collectible,
                     RealmSchema.Collectible,
                     assetId,
                     true,
@@ -377,7 +376,6 @@ const CollectibleMetaDataScreen = () => {
                   setHasIssuedAsset(false);
                   setRefresh(prev => !prev);
                   updateAssetIssuedPostStatus(
-                    collectible,
                     RealmSchema.Collectible,
                     assetId,
                     false,
