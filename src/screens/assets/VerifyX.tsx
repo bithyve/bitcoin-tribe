@@ -1,0 +1,210 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useMMKVString } from 'react-native-mmkv';
+
+import AppHeader from 'src/components/AppHeader';
+import AppText from 'src/components/AppText';
+import Buttons from 'src/components/Buttons';
+import ScreenContainer from 'src/components/ScreenContainer';
+import { hp, windowWidth } from 'src/constants/responsive';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { AppTheme } from 'src/theme';
+import RightArrowIcon from 'src/assets/images/icon_rightArrowSecondary.svg';
+import TextField from 'src/components/TextField';
+import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Keys } from 'src/storage';
+import Relay from 'src/services/relay';
+import Toast from 'src/components/Toast';
+import ModalLoading from 'src/components/ModalLoading';
+import dbManager from 'src/storage/realm/dbManager';
+import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
+import { loginWithTwitter } from 'src/services/twitter';
+import { AppContext } from 'src/contexts/AppContext';
+
+function VerifyX() {
+  const navigation = useNavigation();
+  const theme: AppTheme = useTheme();
+  const { setCompleteVerification } = React.useContext(AppContext);
+  const { assetId, schema } = useRoute().params;
+  const [appId] = useMMKVString(Keys.APPID);
+  const { translations } = useContext(LocalizationContext);
+  const { common, assets } = translations;
+  const styles = getStyles(theme);
+  const [xhandleName, setXhandleName] = useState('');
+  const [xhandleValidationError, setXhandleValidationError] = useState('');
+  const [isCtaEnabled, setIsCtaEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsCtaEnabled(!!xhandleName && !xhandleValidationError);
+  }, [xhandleName, xhandleValidationError]);
+
+  const navigateWithDelay = (callback: () => void) => {
+    setIsLoading(false);
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
+
+  const isValidTwitterHandle = (input: string): boolean => {
+    const handle = input.startsWith('@') ? input.slice(1) : input;
+    return /^[A-Za-z0-9_]{4,15}$/.test(handle);
+  };
+  const handleXhandleNameChange = text => {
+    const trimmed = text.trim();
+    if (!trimmed) {
+      setXhandleName('');
+      setXhandleValidationError('Please enter X handle');
+      return;
+    }
+    setXhandleName(trimmed);
+    if (!isValidTwitterHandle(trimmed)) {
+      setXhandleValidationError('Invalid x handle format');
+    } else {
+      setXhandleValidationError(null);
+    }
+  };
+
+  const handleVerifyWithTwitter = React.useCallback(async () => {
+    try {
+      const result = await loginWithTwitter();
+      if (result.username) {
+        setIsLoading(true);
+        const response = await Relay.verifyIssuer('appID', assetId, {
+          type: IssuerVerificationMethod.TWITTER,
+          id: result.id,
+          name: result.name,
+          username: result.username,
+        });
+        setIsLoading(false);
+        if (response.status) {
+          setCompleteVerification(true);
+          const existingAsset = await dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          );
+          const existingIssuer =
+            JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+          const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+            entry => entry.type !== IssuerVerificationMethod.TWITTER,
+          );
+          const updatedVerifiedBy = [
+            ...filteredVerifiedBy,
+            {
+              type: IssuerVerificationMethod.TWITTER,
+              id: result.id,
+              name: result.name,
+              username: result.username,
+            },
+          ];
+          await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+            issuer: {
+              ...existingIssuer,
+              verified: true,
+              verifiedBy: updatedVerifiedBy,
+            },
+          });
+          navigation.goBack();
+        }
+      }
+    } catch (error) {
+      Toast(`${error}`, true);
+      setIsLoading(false);
+      console.log(error);
+    }
+  }, [assetId, schema]);
+
+  return (
+    <ScreenContainer>
+      <AppHeader title={assets.verifyXTitle} />
+      <ModalLoading visible={isLoading} />
+      <KeyboardAvoidView style={styles.container}>
+        <AppText variant="body1" style={styles.headText}>
+          {assets.verifyXSubTitle}
+        </AppText>
+        <View>
+          <View style={styles.infoViewWrapper}>
+            <View>
+              <RightArrowIcon />
+            </View>
+            <AppText variant="body1" style={styles.subText}>
+              {assets.verifyXInfo1}
+            </AppText>
+          </View>
+          <View style={styles.infoViewWrapper}>
+            <View>
+              <RightArrowIcon />
+            </View>
+            <AppText variant="body1" style={styles.subText}>
+              {assets.verifyXInfo2}
+            </AppText>
+          </View>
+        </View>
+        <View style={styles.inputViewWrapper}>
+          <AppText variant="body1" style={styles.labelText}>
+            {assets.enterXhandleLabel}
+          </AppText>
+          <TextField
+            value={xhandleName}
+            onChangeText={handleXhandleNameChange}
+            placeholder={assets.enterXhandlePlaceholder}
+            maxLength={32}
+            style={styles.input}
+            blurOnSubmit={false}
+            returnKeyType="done"
+            error={xhandleValidationError}
+            keyboardType="url"
+            autoCapitalize="none"
+            onSubmitEditing={() => {}}
+          />
+        </View>
+      </KeyboardAvoidView>
+      <View style={styles.ctaWrapper}>
+        <Buttons
+          secondaryTitle={common.save}
+          secondaryOnPress={() => {}}
+          primaryTitle={assets.verifyXTitle}
+          primaryOnPress={handleVerifyWithTwitter}
+          //           disabled={!isCtaEnabled}
+          width={windowWidth / 2.2}
+          secondaryCTAWidth={windowWidth / 2.4}
+        />
+      </View>
+    </ScreenContainer>
+  );
+}
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    headText: {
+      color: theme.colors.headingColor,
+      marginVertical: hp(20),
+    },
+    subText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginLeft: hp(5),
+      width: '90%',
+    },
+    infoViewWrapper: {
+      flexDirection: 'row',
+      marginVertical: hp(5),
+    },
+    labelText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginVertical: hp(5),
+    },
+    inputViewWrapper: {
+      marginTop: hp(15),
+    },
+    input: {
+      marginVertical: hp(5),
+    },
+    ctaWrapper: {},
+  });
+export default VerifyX;

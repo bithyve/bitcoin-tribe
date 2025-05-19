@@ -631,7 +631,13 @@
     "domainVerifiedSuccessMsg": "¡Dominio verificado\ncon éxito!",
     "postTitle": "¡Verificado y Emitido en Bitcoin Tribe!",
     "postSubTitle": "Ya está en vivo en Bitcoin Tribe — emitido y verificado de forma transparente a través de X (Twitter), aprovechando el poder de los contratos inteligentes RGB en Bitcoin.",
-    "postSuccessMsg": "Tu tuit ha sido publicado. Por favor, espera un momento — se actualizará pronto."
+    "postSuccessMsg": "Tu tuit ha sido publicado. Por favor, espera un momento — se actualizará pronto.",
+    "verifyXTitle": "Verificar X",
+    "verifyXSubTitle": "Puedes guardar tu handle de X (Twitter) o verificarlo.",
+    "verifyXInfo1": "Guardar asociará el handle con tu activo (puedes verificarlo más tarde).",
+    "verifyXInfo2": "Verificar X confirma que eres el propietario de ese handle. Una vez verificado, aparecerá en el registro de activos y generará confianza con tu audiencia.",
+    "enterXhandleLabel": "Introduce el handle de X",
+    "enterXhandlePlaceholder": "Introduce un handle de X"
   },
   "community": {
     "fnfTitle": "Community",

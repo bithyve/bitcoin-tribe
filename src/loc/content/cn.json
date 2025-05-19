@@ -631,7 +631,13 @@
     "domainVerifiedSuccessMsg": "域名验证\n成功！",
     "postTitle": "已在 Bitcoin Tribe 验证并发行！",
     "postSubTitle": "现已上线 Bitcoin Tribe —— 通过 X（Twitter）透明发行并验证，利用 RGB 智能合约在比特币上实现。",
-    "postSuccessMsg": "你的推文已发布，请稍等 — 即将更新。"
+    "postSuccessMsg": "你的推文已发布，请稍等 — 即将更新。",
+    "verifyXTitle": "验证 X",
+    "verifyXSubTitle": "您可以选择保存您的 X（Twitter）账号或进行验证。",
+    "verifyXInfo1": "保存将把该账号与您的资产关联（您可以稍后验证）。",
+    "verifyXInfo2": "验证 X 可确认您拥有该账号。一旦验证，它将出现在资产注册表中，帮助提升受众信任。",
+    "enterXhandleLabel": "输入 X 账号",
+    "enterXhandlePlaceholder": "请输入 X 账号"
   },
   "community": {
     "fnfTitle": "Community",

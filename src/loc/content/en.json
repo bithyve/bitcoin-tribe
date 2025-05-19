@@ -631,7 +631,13 @@
     "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!",
     "postTitle": "Verified & Issued on Bitcoin Tribe!",
     "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin.",
-    "postSuccessMsg": "Your tweet has been posted. Please wait a moment — it will be updated soon."
+    "postSuccessMsg": "Your tweet has been posted. Please wait a moment — it will be updated soon.",
+    "verifyXTitle": "Verify X",
+    "verifyXSubTitle": "You can either save your X (Twitter) handle or verify it.",
+    "verifyXInfo1": "Save will store the handle with your asset (you can verify later).",
+    "verifyXInfo2": "Verify X confirms that you own this handle. Once verified, it will appear in the asset registry and help build trust with your audience.",
+    "enterXhandleLabel": "Enter X handle",
+    "enterXhandlePlaceholder": "Enter a X handle"
   },
   "community": {
     "fnfTitle": "Community",
