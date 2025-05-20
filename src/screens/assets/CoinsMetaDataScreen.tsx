@@ -187,7 +187,6 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {/* {twitterVerification && ( */}
             <IssuerVerified
               id={twitterVerification?.id}
               name={twitterVerification?.name}
@@ -197,11 +196,6 @@ const CoinsMetaDataScreen = () => {
                   : twitterVerification?.username
               }
             />
-            {/* )} */}
-
-            {/* {coin?.issuer?.verifiedBy?.find(
-              v => v.type === IssuerVerificationMethod.DOMAIN,
-            ) && ( */}
             <IssuerDomainVerified
               domain={
                 coin?.domainName
@@ -212,7 +206,6 @@ const CoinsMetaDataScreen = () => {
               }
               verified={coin?.issuer?.verified}
             />
-            {/* )} */}
           </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />

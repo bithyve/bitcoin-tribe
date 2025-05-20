@@ -226,7 +226,6 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {/* {twitterVerification && ( */}
               <IssuerVerified
                 id={twitterVerification.id}
                 name={twitterVerification.name}
@@ -236,10 +235,6 @@ const CollectibleMetaDataScreen = () => {
                     : twitterVerification.username
                 }
               />
-              {/* )} */}
-              {/* {collectible?.issuer?.verifiedBy?.find(
-                v => v.type === IssuerVerificationMethod.DOMAIN,
-              ) && ( */}
               <IssuerDomainVerified
                 domain={
                   collectible?.domainName
@@ -250,7 +245,6 @@ const CollectibleMetaDataScreen = () => {
                 }
                 verified={collectible?.issuer?.verified}
               />
-              {/* )} */}
             </View>
             <Item
               title={home.assetName}

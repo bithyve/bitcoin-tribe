@@ -279,7 +279,6 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {/* {twitterVerification && ( */}
           <IssuerVerified
             id={twitterVerification.id}
             name={twitterVerification.name}
@@ -289,10 +288,6 @@ const UDADetailsScreen = () => {
                 : twitterVerification.username
             }
           />
-          {/* )} */}
-          {/* {uda?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.DOMAIN,
-          ) && ( */}
           <IssuerDomainVerified
             domain={
               uda?.domainName
@@ -303,7 +298,6 @@ const UDADetailsScreen = () => {
             }
             verified={uda?.issuer?.verified}
           />
-          {/* )} */}
         </View>
         <Item title={home.assetName} value={uda.name} />
         <View style={styles.wrapper}>
