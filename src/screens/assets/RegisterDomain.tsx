@@ -24,7 +24,7 @@ import { saveDomainName } from 'src/utils/socialHandleUtils';
 function RegisterDomain() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const { assetId, schema } = useRoute().params;
+  const { assetId, schema, savedDomainName } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -132,7 +132,7 @@ function RegisterDomain() {
             {assets.enterDomain}
           </AppText>
           <TextField
-            value={domainName}
+            value={savedDomainName || domainName}
             onChangeText={handleDomainNameChange}
             placeholder={assets.enterDomainName}
             maxLength={32}

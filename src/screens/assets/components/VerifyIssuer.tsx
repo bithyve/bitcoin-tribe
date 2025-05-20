@@ -249,64 +249,18 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     });
   };
 
-  // const handleVerifyWithTwitter = React.useCallback(async () => {
-  //   try {
-  //     const result = await loginWithTwitter();
-  //     if (result.username) {
-  //       setIsLoading(true);
-  //       const response = await Relay.verifyIssuer('appID', assetId, {
-  //         type: IssuerVerificationMethod.TWITTER,
-  //         id: result.id,
-  //         name: result.name,
-  //         username: result.username,
-  //       });
-  //       setIsLoading(false);
-  //       if (response.status) {
-  //         setCompleteVerification(true);
-  //         const existingAsset = await dbManager.getObjectByPrimaryId(
-  //           schema,
-  //           'assetId',
-  //           assetId,
-  //         );
-  //         const existingIssuer =
-  //           JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
-  //         const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
-  //           entry => entry.type !== IssuerVerificationMethod.TWITTER,
-  //         );
-  //         const updatedVerifiedBy = [
-  //           ...filteredVerifiedBy,
-  //           {
-  //             type: IssuerVerificationMethod.TWITTER,
-  //             id: result.id,
-  //             name: result.name,
-  //             username: result.username,
-  //           },
-  //         ];
-  //         await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-  //           issuer: {
-  //             ...existingIssuer,
-  //             verified: true,
-  //             verifiedBy: updatedVerifiedBy,
-  //           },
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     Toast(`${error}`, true);
-  //     setIsLoading(false);
-  //     console.log(error);
-  //   }
-  // }, [assetId, schema]);
   const verifyXNavigation = () => {
     navigation.navigate(NavigationRoutes.VERIFYX, {
       assetId: assetId,
       schema: schema,
+      savedTwitterHandle: asset?.twitterHandle || '',
     });
   };
   const handleVerifyWithDomain = () => {
     navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
       assetId: assetId,
       schema: schema,
+      savedDomainName: asset?.domainName || '',
     });
   };
 

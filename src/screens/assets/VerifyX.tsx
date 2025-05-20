@@ -29,7 +29,7 @@ function VerifyX() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const { setCompleteVerification } = React.useContext(AppContext);
-  const { assetId, schema } = useRoute().params;
+  const { assetId, schema, savedTwitterHandle } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -155,7 +155,7 @@ function VerifyX() {
             {assets.enterXhandleLabel}
           </AppText>
           <TextField
-            value={xhandleName}
+            value={savedTwitterHandle || xhandleName}
             onChangeText={handleXhandleNameChange}
             placeholder={assets.enterXhandlePlaceholder}
             maxLength={32}
