@@ -19,6 +19,7 @@ import { Keys } from 'src/storage';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
+import { saveDomainName } from 'src/utils/socialHandleUtils';
 
 function RegisterDomain() {
   const navigation = useNavigation();
@@ -94,6 +95,12 @@ function RegisterDomain() {
       console.error('handleRegisterDomain error:', error);
     }
   };
+
+  const storeDomainName = () => {
+    saveDomainName(schema, assetId, domainName);
+    navigation.goBack();
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyDomain} />
@@ -143,8 +150,11 @@ function RegisterDomain() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => handleRegisterDomain()}
-          width={'100%'}
+          secondaryTitle={common.save}
+          secondaryOnPress={storeDomainName}
           disabled={!isCtaEnabled}
+          width={windowWidth / 2.2}
+          secondaryCTAWidth={windowWidth / 2.4}
         />
       </View>
     </ScreenContainer>

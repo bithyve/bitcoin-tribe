@@ -279,24 +279,31 @@ const UDADetailsScreen = () => {
           </View>
         )}
         <View style={styles.wrapper}>
-          {twitterVerification && (
-            <IssuerVerified
-              id={twitterVerification.id}
-              name={twitterVerification.name}
-              username={twitterVerification.username}
-            />
-          )}
-          {uda?.issuer?.verifiedBy?.find(
+          {/* {twitterVerification && ( */}
+          <IssuerVerified
+            id={twitterVerification.id}
+            name={twitterVerification.name}
+            username={
+              uda?.twitterHandle
+                ? uda?.twitterHandle.replace(/@/g, '')
+                : twitterVerification.username
+            }
+          />
+          {/* )} */}
+          {/* {uda?.issuer?.verifiedBy?.find(
             v => v.type === IssuerVerificationMethod.DOMAIN,
-          ) && (
-            <IssuerDomainVerified
-              domain={
-                uda?.issuer?.verifiedBy?.find(
-                  v => v.type === IssuerVerificationMethod.DOMAIN,
-                )?.name
-              }
-            />
-          )}
+          ) && ( */}
+          <IssuerDomainVerified
+            domain={
+              uda?.domainName
+                ? uda?.domainName
+                : uda?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
+            }
+            verified={uda?.issuer?.verified}
+          />
+          {/* )} */}
         </View>
         <Item title={home.assetName} value={uda.name} />
         <View style={styles.wrapper}>

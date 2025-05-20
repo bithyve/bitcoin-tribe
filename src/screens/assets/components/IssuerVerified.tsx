@@ -48,6 +48,10 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
+  if (!id && !name && !username) {
+    return null;
+  }
+
   const onPress = useCallback(() => {
     openLink(`https://twitter.com/i/user/${id}`);
   }, [id]);
@@ -62,14 +66,14 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
           <View style={styles.iconWrapper}>
             <IconX />
             <View>
-              <AppText variant="body2">{name}</AppText>
+              {name && <AppText variant="body2">{name}</AppText>}
               <AppText variant="caption" style={styles.textUsername}>
                 @{username}
               </AppText>
             </View>
           </View>
         </View>
-        <IconVerified />
+        {id && <IconVerified />}
       </View>
     </AppTouchable>
   );

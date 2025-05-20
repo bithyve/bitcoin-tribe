@@ -33,16 +33,21 @@ const getStyles = (theme: AppTheme) =>
 
 interface IssuerDomainVerifiedProps {
   domain: string;
+  verified?: boolean;
 }
 
 const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   props: IssuerDomainVerifiedProps,
 ) => {
-  const { domain } = props;
+  const { domain, verified } = props;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+
+  if (!domain && !verified) {
+    return null;
+  }
 
   return (
     <AppTouchable style={styles.container}>
@@ -57,7 +62,7 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
             </View>
           </View>
         </View>
-        <IconVerified />
+        {verified && <IconVerified />}
       </View>
     </AppTouchable>
   );

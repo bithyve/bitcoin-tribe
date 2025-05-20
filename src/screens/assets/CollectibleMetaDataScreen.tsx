@@ -226,24 +226,31 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {twitterVerification && (
-                <IssuerVerified
-                  id={twitterVerification.id}
-                  name={twitterVerification.name}
-                  username={twitterVerification.username}
-                />
-              )}
-              {collectible?.issuer?.verifiedBy?.find(
+              {/* {twitterVerification && ( */}
+              <IssuerVerified
+                id={twitterVerification.id}
+                name={twitterVerification.name}
+                username={
+                  collectible?.twitterHandle
+                    ? collectible?.twitterHandle.replace(/@/g, '')
+                    : twitterVerification.username
+                }
+              />
+              {/* )} */}
+              {/* {collectible?.issuer?.verifiedBy?.find(
                 v => v.type === IssuerVerificationMethod.DOMAIN,
-              ) && (
-                <IssuerDomainVerified
-                  domain={
-                    collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === IssuerVerificationMethod.DOMAIN,
-                    )?.name
-                  }
-                />
-              )}
+              ) && ( */}
+              <IssuerDomainVerified
+                domain={
+                  collectible?.domainName
+                    ? collectible?.domainName
+                    : collectible?.issuer?.verifiedBy?.find(
+                        v => v.type === IssuerVerificationMethod.DOMAIN,
+                      )?.name
+                }
+                verified={collectible?.issuer?.verified}
+              />
+              {/* )} */}
             </View>
             <Item
               title={home.assetName}

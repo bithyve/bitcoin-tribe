@@ -23,6 +23,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
 import { loginWithTwitter } from 'src/services/twitter';
 import { AppContext } from 'src/contexts/AppContext';
+import { saveTwitterHandle } from 'src/utils/socialHandleUtils';
 
 function VerifyX() {
   const navigation = useNavigation();
@@ -118,6 +119,11 @@ function VerifyX() {
     }
   }, [assetId, schema]);
 
+  const storeTwitterHandle = () => {
+    saveTwitterHandle(schema, assetId, xhandleName);
+    navigation.goBack();
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyXTitle} />
@@ -166,7 +172,7 @@ function VerifyX() {
       <View style={styles.ctaWrapper}>
         <Buttons
           secondaryTitle={common.save}
-          secondaryOnPress={() => {}}
+          secondaryOnPress={storeTwitterHandle}
           primaryTitle={assets.verifyXTitle}
           primaryOnPress={handleVerifyWithTwitter}
           //           disabled={!isCtaEnabled}

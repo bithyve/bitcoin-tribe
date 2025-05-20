@@ -171,7 +171,7 @@ const CoinsMetaDataScreen = () => {
       )
     );
   }, [coin.transactions, coin.issuer?.verifiedBy, refreshToggle]);
-
+  console.log('coin', coin);
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -187,25 +187,32 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {twitterVerification && (
-              <IssuerVerified
-                id={twitterVerification.id}
-                name={twitterVerification.name}
-                username={twitterVerification.username}
-              />
-            )}
+            {/* {twitterVerification && ( */}
+            <IssuerVerified
+              id={twitterVerification?.id}
+              name={twitterVerification?.name}
+              username={
+                coin?.twitterHandle
+                  ? coin?.twitterHandle?.replace(/@/g, '')
+                  : twitterVerification?.username
+              }
+            />
+            {/* )} */}
 
-            {coin?.issuer?.verifiedBy?.find(
+            {/* {coin?.issuer?.verifiedBy?.find(
               v => v.type === IssuerVerificationMethod.DOMAIN,
-            ) && (
-              <IssuerDomainVerified
-                domain={
-                  coin?.issuer?.verifiedBy?.find(
-                    v => v.type === IssuerVerificationMethod.DOMAIN,
-                  )?.name
-                }
-              />
-            )}
+            ) && ( */}
+            <IssuerDomainVerified
+              domain={
+                coin?.domainName
+                  ? coin?.domainName
+                  : coin?.issuer?.verifiedBy?.find(
+                      v => v.type === IssuerVerificationMethod.DOMAIN,
+                    )?.name
+              }
+              verified={coin?.issuer?.verified}
+            />
+            {/* )} */}
           </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />

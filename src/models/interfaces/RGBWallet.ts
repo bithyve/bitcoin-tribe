@@ -84,6 +84,8 @@ export interface Coin {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  twitterHandle: string;
+  domainName: string;
 }
 
 export interface Media {
@@ -109,6 +111,8 @@ export interface Collectible {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  twitterHandle: string;
+  domainName: string;
 }
 
 export interface UniqueDigitalAsset {
@@ -135,6 +139,8 @@ export interface UniqueDigitalAsset {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  twitterHandle: string;
+  domainName: string;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
