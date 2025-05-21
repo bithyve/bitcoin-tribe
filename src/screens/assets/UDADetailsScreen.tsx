@@ -351,7 +351,7 @@ const UDADetailsScreen = () => {
               }
             }}
           />
-          <View style={styles.seperatorView} />
+          {!uda?.issuer?.verified && <View style={styles.seperatorView} />}
         </>
         <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
           {uda?.issuer?.verified && (

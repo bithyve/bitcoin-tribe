@@ -351,7 +351,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             </View>
             {!asset?.issuer?.verifiedBy?.find(
               v => v.type === IssuerVerificationMethod.TWITTER_POST,
-            )?.type && <ShareOptionContainer />}
+            )?.type &&
+              showVerifyIssuer && <ShareOptionContainer />}
           </VerificationSection>
         )
       ) : (

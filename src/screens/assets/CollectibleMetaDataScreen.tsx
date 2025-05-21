@@ -296,7 +296,9 @@ const CollectibleMetaDataScreen = () => {
                   }
                 }}
               />
-              <View style={styles.seperatorView} />
+              {!collectible?.issuer?.verified && (
+                <View style={styles.seperatorView} />
+              )}
             </>
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {collectible?.issuer?.verified && (
