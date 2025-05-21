@@ -148,9 +148,9 @@ const PostOnTwitterModal: React.FC<Props> = ({
       } else {
         await Linking.openURL(twitterWebURL);
       }
-      Toast(assets.postSuccessMsg);
       primaryOnPress();
       setCompleteVerification(false);
+      Toast(assets.postSuccessMsg);
     } catch (error) {
       secondaryOnPress();
       setCompleteVerification(false);
