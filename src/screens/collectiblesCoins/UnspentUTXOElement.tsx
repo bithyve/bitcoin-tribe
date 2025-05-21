@@ -79,7 +79,7 @@ function UnspentUTXOElement({
                 <View style={styles.allocationWrapper1}>
                   <AllocatedAssets asset={assetMap[allocation.assetId]} />
                   <AppText variant="heading3" style={styles.assetNameText}>
-                    {assetName}
+                    {assetName}&nbsp;
                   </AppText>
                   {assetMap[allocation.assetId]?.issuer?.verified && (
                     <IconVerified width={20} height={20} />

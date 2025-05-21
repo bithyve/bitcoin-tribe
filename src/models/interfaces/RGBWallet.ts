@@ -63,7 +63,9 @@ export interface Issuer {
     name?: string;
     id?: string;
     username?: string;
+    link?: string;
   }[];
+  isDomainVerified: boolean;
 }
 
 export interface Coin {
@@ -80,7 +82,8 @@ export interface Coin {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
-  isPosted: boolean;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
 }
 
 export interface Media {
@@ -104,7 +107,8 @@ export interface Collectible {
   transactions: Transfer[];
   issuer: Issuer;
   visibility: AssetVisibility;
-  isPosted: boolean;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
 }
 
 export interface UniqueDigitalAsset {
@@ -129,7 +133,8 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
-  isPosted: boolean;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -193,6 +198,8 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
+  DOMAIN = 'domain',
+  TWITTER_POST = 'twitter_post',
 }
 
 export interface RgbNodeConnectParams {

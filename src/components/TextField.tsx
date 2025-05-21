@@ -19,7 +19,7 @@ type TextFieldProps = {
   icon?: React.ReactNode;
   placeholder?: string;
   value: string;
-  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
+  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad' | 'url';
   onChangeText: (text: string) => void;
   maxLength?: number;
   disabled?: boolean;

@@ -50,6 +50,7 @@ type ServiceFeeProps = {
   onSkip: () => void;
   hideModal: () => void;
   status: 'error' | 'idle' | 'loading' | 'success';
+  disabledCTA?: boolean;
 };
 
 export const ServiceFee = ({
@@ -58,6 +59,7 @@ export const ServiceFee = ({
   status,
   onSkip,
   hideModal,
+  disabledCTA,
 }: ServiceFeeProps) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -92,7 +94,7 @@ export const ServiceFee = ({
           />
         </View>
         <SkipButton
-          disabled={status === 'loading'}
+          disabled={disabledCTA}
           onPress={() => {
             hideModal();
             setTimeout(() => {
@@ -121,6 +123,7 @@ function AddAsset() {
   const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
   const [feeDetails, setFeeDetails] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
+  const [disabledCTA, setDisabledCTA] = useState(false);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -156,10 +159,12 @@ function AddAsset() {
         }
       } else {
         navigateToIssue(false);
+        setDisabledCTA(false);
       }
     } else if (getAssetIssuanceFeeMutation.error) {
       Toast(assets.failToFetchIssueFee, true);
       getAssetIssuanceFeeMutation.reset();
+      setDisabledCTA(false);
     }
   }, [
     getAssetIssuanceFeeMutation.isSuccess,
@@ -185,6 +190,7 @@ function AddAsset() {
       Toast(assets.payServiceFeeFundError, true);
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
+      setDisabledCTA(false);
     }
   }, [payServiceFeeFeeMutation, navigation, issueAssetType]);
 
@@ -215,11 +221,13 @@ function AddAsset() {
             issueAssetType,
             addToRegistry,
           });
+          setDisabledCTA(false);
         } else {
           navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
             issueAssetType,
             addToRegistry,
           });
+          setDisabledCTA(false);
         }
       }, 500);
     },
@@ -243,6 +251,7 @@ function AddAsset() {
           }}>
           <ServiceFee
             onPay={async () => {
+              setDisabledCTA(true);
               await ApiHandler.refreshWallets({ wallets: [wallet] });
               payServiceFeeFeeMutation.mutate({ feeDetails });
             }}
@@ -253,6 +262,7 @@ function AddAsset() {
               setShowFeeModal(false);
               getAssetIssuanceFeeMutation.reset();
             }}
+            disabledCTA={disabledCTA}
           />
         </ModalContainer>
       </View>
