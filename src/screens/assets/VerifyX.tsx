@@ -109,6 +109,7 @@ function VerifyX() {
               verifiedBy: updatedVerifiedBy,
             },
           });
+          await saveTwitterHandle(schema, assetId, '');
           navigation.goBack();
         }
       }
