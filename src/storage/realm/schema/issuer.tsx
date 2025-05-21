@@ -7,6 +7,10 @@ export const IssuerSchema = {
       type: 'bool',
       default: false,
     },
+    isDomainVerified: {
+      type: 'bool',
+      default: false,
+    },
     verifiedBy: `${RealmSchema.IssuerVerifiedBy}[]`,
   },
 };
@@ -18,5 +22,6 @@ export const IssuerVerifiedBySchema = {
     name: 'string?',
     id: 'string?',
     username: 'string?',
+    link: 'string?',
   },
 };
