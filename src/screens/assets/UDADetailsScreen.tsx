@@ -280,12 +280,12 @@ const UDADetailsScreen = () => {
         )}
         <View style={styles.wrapper}>
           <IssuerVerified
-            id={twitterVerification.id}
-            name={twitterVerification.name}
+            id={twitterVerification?.id}
+            name={twitterVerification?.name}
             username={
               uda?.twitterHandle
-                ? uda?.twitterHandle.replace(/@/g, '')
-                : twitterVerification.username
+                ? uda?.twitterHandle?.replace(/@/g, '')
+                : twitterVerification?.username
             }
           />
           <IssuerDomainVerified

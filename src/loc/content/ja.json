@@ -637,7 +637,10 @@
     "verifyXInfo1": "保存すると、そのハンドル名が資産に関連付けられます（後で認証できます）。",
     "verifyXInfo2": "X の認証により、このハンドル名の所有者であることが確認されます。認証されると資産レジストリに表示され、信頼の構築に役立ちます。",
     "enterXhandleLabel": "X ハンドルを入力",
-    "enterXhandlePlaceholder": "X ハンドルを入力してください"
+    "enterXhandlePlaceholder": "X ハンドルを入力してください",
+    "issuerVerificationTemplateTitle": "発行者が 𝕏 によって認証されました",
+    "xHandleTemplateTitle": "X ハンドル",
+    "domainName": "ドメイン名"
   },
   "community": {
     "fnfTitle": "Community",

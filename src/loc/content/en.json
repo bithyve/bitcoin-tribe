@@ -637,7 +637,10 @@
     "verifyXInfo1": "Save will store the handle with your asset (you can verify later).",
     "verifyXInfo2": "Verify X confirms that you own this handle. Once verified, it will appear in the asset registry and help build trust with your audience.",
     "enterXhandleLabel": "Enter X handle",
-    "enterXhandlePlaceholder": "Enter a X handle"
+    "enterXhandlePlaceholder": "Enter a X handle",
+    "issuerVerificationTemplateTitle": "Issuer Verified via 𝕏",
+    "xHandleTemplateTitle": "X Handle",
+    "domainName": "Domain Name"
   },
   "community": {
     "fnfTitle": "Community",

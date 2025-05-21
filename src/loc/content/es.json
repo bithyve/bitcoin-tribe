@@ -637,7 +637,10 @@
     "verifyXInfo1": "Guardar asociará el handle con tu activo (puedes verificarlo más tarde).",
     "verifyXInfo2": "Verificar X confirma que eres el propietario de ese handle. Una vez verificado, aparecerá en el registro de activos y generará confianza con tu audiencia.",
     "enterXhandleLabel": "Introduce el handle de X",
-    "enterXhandlePlaceholder": "Introduce un handle de X"
+    "enterXhandlePlaceholder": "Introduce un handle de X",
+    "issuerVerificationTemplateTitle": "Emisor verificado a través de 𝕏",
+    "xHandleTemplateTitle": "Handle de X",
+    "domainName": "Nombre de dominio"
   },
   "community": {
     "fnfTitle": "Community",

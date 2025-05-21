@@ -637,7 +637,10 @@
     "verifyXInfo1": "Salva memorizzerà l’handle con il tuo asset (puoi verificarlo in seguito).",
     "verifyXInfo2": "Verificare X conferma che possiedi questo handle. Una volta verificato, apparirà nel registro degli asset e aiuterà a creare fiducia con il tuo pubblico.",
     "enterXhandleLabel": "Inserisci handle X",
-    "enterXhandlePlaceholder": "Inserisci un handle X"
+    "enterXhandlePlaceholder": "Inserisci un handle X",
+    "issuerVerificationTemplateTitle": "Emittente verificato tramite 𝕏",
+    "xHandleTemplateTitle": "Handle X",
+    "domainName": "Nome di dominio"
   },
   "community": {
     "fnfTitle": "Community",

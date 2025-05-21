@@ -185,11 +185,15 @@ const CollectibleMetaDataScreen = () => {
       !collectible?.issuer?.verifiedBy?.some(
         v => v.type === IssuerVerificationMethod.DOMAIN,
       ) &&
-      collectible.transactions.some(
+      collectible?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
+  }, [
+    collectible?.transactions,
+    collectible?.issuer?.verifiedBy,
+    refreshToggle,
+  ]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -227,12 +231,12 @@ const CollectibleMetaDataScreen = () => {
             </View>
             <View style={styles.wrapper}>
               <IssuerVerified
-                id={twitterVerification.id}
-                name={twitterVerification.name}
+                id={twitterVerification?.id}
+                name={twitterVerification?.name}
                 username={
                   collectible?.twitterHandle
                     ? collectible?.twitterHandle.replace(/@/g, '')
-                    : twitterVerification.username
+                    : twitterVerification?.username
                 }
               />
               <IssuerDomainVerified

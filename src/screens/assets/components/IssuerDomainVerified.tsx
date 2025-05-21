@@ -54,7 +54,7 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>
-            {assets.domainVerified}
+            {verified ? assets.domainVerified : assets.domainName}
           </AppText>
           <View style={styles.iconWrapper}>
             <View>

@@ -637,7 +637,10 @@
     "verifyXInfo1": "保存将把该账号与您的资产关联（您可以稍后验证）。",
     "verifyXInfo2": "验证 X 可确认您拥有该账号。一旦验证，它将出现在资产注册表中，帮助提升受众信任。",
     "enterXhandleLabel": "输入 X 账号",
-    "enterXhandlePlaceholder": "请输入 X 账号"
+    "enterXhandlePlaceholder": "请输入 X 账号",
+    "issuerVerificationTemplateTitle": "发行方已通过 𝕏 验证",
+    "xHandleTemplateTitle": "X 账号",
+    "domainName": "域名"
   },
   "community": {
     "fnfTitle": "Community",
