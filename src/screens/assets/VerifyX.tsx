@@ -34,7 +34,7 @@ function VerifyX() {
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
-  const [xhandleName, setXhandleName] = useState('');
+  const [xhandleName, setXhandleName] = useState(savedTwitterHandle || '');
   const [xhandleValidationError, setXhandleValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -156,7 +156,7 @@ function VerifyX() {
             {assets.enterXhandleLabel}
           </AppText>
           <TextField
-            value={savedTwitterHandle || xhandleName}
+            value={xhandleName}
             onChangeText={handleXhandleNameChange}
             placeholder={assets.enterXhandlePlaceholder}
             maxLength={32}
@@ -166,7 +166,9 @@ function VerifyX() {
             error={xhandleValidationError}
             keyboardType="url"
             autoCapitalize="none"
-            onSubmitEditing={() => {}}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
           />
         </View>
       </KeyboardAvoidView>

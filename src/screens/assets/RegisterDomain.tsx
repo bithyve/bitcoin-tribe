@@ -29,7 +29,7 @@ function RegisterDomain() {
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
-  const [domainName, setDomainName] = useState('');
+  const [domainName, setDomainName] = useState(savedDomainName || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +73,7 @@ function RegisterDomain() {
         domainName,
       );
       if (response.status) {
+        saveDomainName(schema, assetId, domainName);
         Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
           navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
@@ -132,7 +133,7 @@ function RegisterDomain() {
             {assets.enterDomain}
           </AppText>
           <TextField
-            value={savedDomainName || domainName}
+            value={domainName}
             onChangeText={handleDomainNameChange}
             placeholder={assets.enterDomainName}
             maxLength={32}

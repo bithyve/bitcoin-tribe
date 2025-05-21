@@ -247,7 +247,7 @@ const CollectibleMetaDataScreen = () => {
                         v => v.type === IssuerVerificationMethod.DOMAIN,
                       )?.name
                 }
-                verified={collectible?.issuer?.verified}
+                verified={!showDomainVerifyIssuer}
               />
             </View>
             <Item

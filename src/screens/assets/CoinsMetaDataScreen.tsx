@@ -203,7 +203,7 @@ const CoinsMetaDataScreen = () => {
                       v => v.type === IssuerVerificationMethod.DOMAIN,
                     )?.name
               }
-              verified={coin?.issuer?.verified}
+              verified={!showDomainVerifyIssuer}
             />
           </View>
           <View style={styles.rowWrapper}>

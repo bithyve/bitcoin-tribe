@@ -296,7 +296,7 @@ const UDADetailsScreen = () => {
                     v => v.type === IssuerVerificationMethod.DOMAIN,
                   )?.name
             }
-            verified={uda?.issuer?.verified}
+            verified={!showDomainVerifyIssuer}
           />
         </View>
         <Item title={home.assetName} value={uda.name} />
