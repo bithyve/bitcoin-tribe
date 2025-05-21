@@ -12,6 +12,7 @@ import Relay from 'src/services/relay';
 import {
   Asset,
   IssuerVerificationMethod,
+  TransferKind,
 } from 'src/models/interfaces/RGBWallet';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
@@ -352,7 +353,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             {!asset?.issuer?.verifiedBy?.find(
               v => v.type === IssuerVerificationMethod.TWITTER_POST,
             )?.type &&
-              showVerifyIssuer && <ShareOptionContainer />}
+              asset?.transactions.some(
+                transaction =>
+                  transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+              ) && <ShareOptionContainer />}
           </VerificationSection>
         )
       ) : (
