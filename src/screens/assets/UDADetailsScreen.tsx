@@ -345,7 +345,7 @@ const UDADetailsScreen = () => {
             onPressShare={() => {
               if (!uda?.isIssuedPosted) {
                 setVisibleIssuedPostOnTwitter(true);
-              } else if (!uda?.isVerifyPosted) {
+              } else if (!uda?.isVerifyPosted && uda?.issuer?.verified) {
                 setVisiblePostOnTwitter(true);
               }
             }}

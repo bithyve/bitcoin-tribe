@@ -290,7 +290,10 @@ const CollectibleMetaDataScreen = () => {
                 onPressShare={() => {
                   if (!collectible?.isIssuedPosted) {
                     setVisibleIssuedPostOnTwitter(true);
-                  } else if (!collectible?.isVerifyPosted) {
+                  } else if (
+                    !collectible?.isVerifyPosted &&
+                    collectible?.issuer?.verified
+                  ) {
                     setVisiblePostOnTwitter(true);
                   }
                 }}

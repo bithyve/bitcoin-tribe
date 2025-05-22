@@ -263,7 +263,7 @@ const CoinsMetaDataScreen = () => {
               onPressShare={() => {
                 if (!coin?.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
-                } else if (!coin?.isVerifyPosted) {
+                } else if (!coin?.isVerifyPosted && coin?.issuer?.verified) {
                   setVisiblePostOnTwitter(true);
                 }
               }}
