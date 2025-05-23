@@ -82,6 +82,9 @@ const getStyles = (theme: AppTheme, tooltipPos) =>
       fontSize: 14,
     },
     shareOptionWrapper: {},
+    selectOptionWrapper: {
+      marginBottom: hp(5),
+    },
   });
 
 interface VerifyIssuerProps {
@@ -399,12 +402,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
-            <SelectOption
-              title={assets.registerAssetTitle}
-              subTitle={assets.registerAssetSubTitle}
-              onPress={() => getAssetIssuanceFeeMutation.mutate()}
-              testID={'register-asset'}
-            />
+            <View style={styles.selectOptionWrapper}>
+              <SelectOption
+                title={assets.registerAssetTitle}
+                subTitle={assets.registerAssetSubTitle}
+                onPress={() => getAssetIssuanceFeeMutation.mutate()}
+                testID={'register-asset'}
+              />
+            </View>
             <ShareOptionContainer />
             <View>
               <ModalContainer
