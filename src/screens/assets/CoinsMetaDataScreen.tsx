@@ -252,24 +252,29 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-          <>
-            <VerifyIssuer
-              assetId={assetId}
-              schema={RealmSchema.Coin}
-              onVerificationComplete={() => setRefreshToggle(t => !t)}
-              asset={coin}
-              showVerifyIssuer={showVerifyIssuer}
-              showDomainVerifyIssuer={showDomainVerifyIssuer}
-              onPressShare={() => {
-                if (!coin?.isIssuedPosted) {
-                  setVisibleIssuedPostOnTwitter(true);
-                } else if (!coin?.isVerifyPosted && coin?.issuer?.verified) {
-                  setVisiblePostOnTwitter(true);
-                }
-              }}
-            />
-            {!coin?.issuer?.verified && <View style={styles.seperatorView} />}
-          </>
+          {coin?.transactions.some(
+            transaction =>
+              transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+          ) && (
+            <>
+              <VerifyIssuer
+                assetId={assetId}
+                schema={RealmSchema.Coin}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+                asset={coin}
+                showVerifyIssuer={showVerifyIssuer}
+                showDomainVerifyIssuer={showDomainVerifyIssuer}
+                onPressShare={() => {
+                  if (!coin?.isIssuedPosted) {
+                    setVisibleIssuedPostOnTwitter(true);
+                  } else if (!coin?.isVerifyPosted && coin?.issuer?.verified) {
+                    setVisiblePostOnTwitter(true);
+                  }
+                }}
+              />
+              {!coin?.issuer?.verified && <View style={styles.seperatorView} />}
+            </>
+          )}
           <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
             {coin?.issuer?.verified && (
               <SelectOption

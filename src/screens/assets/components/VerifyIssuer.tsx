@@ -351,18 +351,19 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   }
 
   const ShareOptionContainer = () => {
+    const hasIssuance = asset?.transactions?.some(
+      tx => tx.kind?.toUpperCase() === TransferKind.ISSUANCE,
+    );
+
+    const shouldShowShareOption =
+      (!asset?.isIssuedPosted && hasIssuance) ||
+      (asset?.issuer?.verified && !asset?.isVerifyPosted);
+
+    if (!shouldShowShareOption) return null;
     return (
-      (asset?.isVerifyPosted === false ||
-        asset?.isVerifyPosted === null ||
-        asset?.isIssuedPosted === false ||
-        asset?.isIssuedPosted === null) && (
-        <View style={styles.shareOptionWrapper}>
-          <ShareOptionView
-            title={assets.sharePostTitle}
-            onPress={onPressShare}
-          />
-        </View>
-      )
+      <View style={styles.shareOptionWrapper}>
+        <ShareOptionView title={assets.sharePostTitle} onPress={onPressShare} />
+      </View>
     );
   };
 
@@ -393,9 +394,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 />
               )}
             </View>
-            {!asset?.issuer?.verifiedBy?.find(
-              v => v.type === IssuerVerificationMethod.TWITTER_POST,
-            )?.type && <ShareOptionContainer />}
+            <ShareOptionContainer />
           </VerificationSection>
         )
       ) : (
