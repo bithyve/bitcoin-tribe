@@ -76,7 +76,7 @@ function RegisterDomain() {
         saveDomainName(schema, assetId, domainName);
         Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
-          navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
+          navigation.replace(NavigationRoutes.VERIFYDOMAIN, {
             record: response.record,
             recordType: response.recordType,
             domain: domainName,

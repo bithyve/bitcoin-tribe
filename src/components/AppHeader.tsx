@@ -113,9 +113,9 @@ const getStyles = (theme: AppTheme, enableBack: boolean) =>
       alignItems: 'center',
     },
     middleTitleWrapper: {
-      width: enableBack ? '65%' : '80%',
-      alignItems: enableBack ? 'center' : 'flex-start',
-      marginLeft: enableBack ? 0 : 5,
+      width: '65%',
+      alignItems: 'center',
+      marginLeft: 0,
     },
     rightIconWrapper: {
       width: '20%',
