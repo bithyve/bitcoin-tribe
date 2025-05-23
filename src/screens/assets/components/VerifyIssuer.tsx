@@ -405,7 +405,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             <View style={styles.selectOptionWrapper}>
               <SelectOption
                 title={assets.registerAssetTitle}
-                subTitle={assets.registerAssetSubTitle}
+                subTitle={''}
                 onPress={() => getAssetIssuanceFeeMutation.mutate()}
                 testID={'register-asset'}
               />
