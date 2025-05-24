@@ -30,8 +30,6 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
     },
     isVerifyPosted: 'bool?',
     isIssuedPosted: 'bool?',
-    twitterHandle: 'string?',
-    domainName: 'string?',
   },
 };
 

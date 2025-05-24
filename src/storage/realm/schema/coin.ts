@@ -66,7 +66,5 @@ export const CoinSchema: ObjectSchema = {
     },
     isVerifyPosted: 'bool?',
     isIssuedPosted: 'bool?',
-    twitterHandle: 'string?',
-    domainName: 'string?',
   },
 };

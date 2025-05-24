@@ -60,6 +60,7 @@ import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
+import Relay from 'src/services/relay';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -97,6 +98,7 @@ const UDADetailsScreen = () => {
     useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
     v =>
@@ -109,6 +111,10 @@ const UDADetailsScreen = () => {
   );
   const twitterPostVerification = uda?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const domainVerification = uda?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
   );
 
   useEffect(() => {
@@ -141,6 +147,14 @@ const UDADetailsScreen = () => {
       }, 2000);
     }
   }, [askReview, refresh]);
+
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await Relay.getAsset(assetId);
+      setIsAddedInRegistry(asset.status);
+    };
+    fetchAsset();
+  }, [assetId]);
 
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
@@ -184,11 +198,7 @@ const UDADetailsScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !uda?.issuer?.verifiedBy?.some(
-        v =>
-          v.type === IssuerVerificationMethod.TWITTER ||
-          v.type === IssuerVerificationMethod.TWITTER_POST,
-      ) &&
+      !twitterVerification?.id &&
       uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
@@ -197,9 +207,7 @@ const UDADetailsScreen = () => {
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !uda?.issuer?.verifiedBy?.some(
-        v => v.type === IssuerVerificationMethod.DOMAIN,
-      ) &&
+      !domainVerification?.verified &&
       uda?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
@@ -219,7 +227,7 @@ const UDADetailsScreen = () => {
 
   useEffect(() => {
     if (
-      uda?.issuer?.verified &&
+      twitterVerification?.id &&
       !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
@@ -282,21 +290,15 @@ const UDADetailsScreen = () => {
           <IssuerVerified
             id={twitterVerification?.id}
             name={twitterVerification?.name}
-            username={
-              uda?.twitterHandle
-                ? uda?.twitterHandle?.replace(/@/g, '')
-                : twitterVerification?.username
-            }
+            username={twitterVerification?.username.replace(/@/g, '')}
           />
           <IssuerDomainVerified
             domain={
-              uda?.domainName
-                ? uda?.domainName
-                : uda?.issuer?.verifiedBy?.find(
-                    v => v.type === IssuerVerificationMethod.DOMAIN,
-                  )?.name
+              uda?.issuer?.verifiedBy?.find(
+                v => v.type === IssuerVerificationMethod.DOMAIN,
+              )?.name
             }
-            verified={!showDomainVerifyIssuer}
+            verified={domainVerification?.verified}
           />
         </View>
         <Item title={home.assetName} value={uda.name} />
@@ -354,7 +356,7 @@ const UDADetailsScreen = () => {
           {!uda?.issuer?.verified && <View style={styles.seperatorView} />}
         </>
         <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
-          {uda?.issuer?.verified && (
+          {isAddedInRegistry && (
             <SelectOption
               title={assets.viewInRegistry}
               subTitle={''}
@@ -365,6 +367,7 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
+        {isAddedInRegistry && <View style={styles.seperatorView} />}
         <>
           <ImageViewing
             images={[

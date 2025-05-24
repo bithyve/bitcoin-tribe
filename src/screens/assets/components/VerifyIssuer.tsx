@@ -178,6 +178,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     () => getStyles(theme, tooltipPos),
     [theme, tooltipPos],
   );
+  const twitterVerification = asset?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+  const domainVerification = asset?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -254,14 +262,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     navigation.navigate(NavigationRoutes.VERIFYX, {
       assetId: assetId,
       schema: schema,
-      savedTwitterHandle: asset?.twitterHandle || '',
+      savedTwitterHandle: twitterVerification?.username || '',
     });
   };
   const handleVerifyWithDomain = () => {
     navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
       assetId: assetId,
       schema: schema,
-      savedDomainName: asset?.domainName || '',
+      savedDomainName: domainVerification?.name || '',
     });
   };
 

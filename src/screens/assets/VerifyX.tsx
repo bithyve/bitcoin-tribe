@@ -109,7 +109,6 @@ function VerifyX() {
               verifiedBy: updatedVerifiedBy,
             },
           });
-          await saveTwitterHandle(schema, assetId, '');
           navigation.goBack();
         }
       }
@@ -120,9 +119,18 @@ function VerifyX() {
     }
   }, [assetId, schema]);
 
-  const storeTwitterHandle = () => {
-    saveTwitterHandle(schema, assetId, xhandleName);
-    navigation.goBack();
+  const storeTwitterHandle = async () => {
+    try {
+      setIsLoading(true);
+      await saveTwitterHandle(schema, assetId, xhandleName);
+      Toast('X handle saved successfully!');
+      navigateWithDelay(() => {
+        navigation.goBack();
+      });
+    } catch (error) {
+      console.error('Error saving Twitter handle:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
