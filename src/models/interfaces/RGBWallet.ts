@@ -64,6 +64,7 @@ export interface Issuer {
     id?: string;
     username?: string;
     link?: string;
+    verified?: Boolean;
   }[];
   isDomainVerified: boolean;
 }
@@ -133,8 +134,6 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
-  isVerifyPosted: boolean;
-  isIssuedPosted: boolean;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}

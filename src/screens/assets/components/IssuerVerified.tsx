@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import AppText from 'src/components/AppText';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import IconX from 'src/assets/images/icon_x.svg';
@@ -7,6 +7,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import openLink from 'src/utils/OpenLink';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -46,30 +47,38 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
 ) => {
   const { id, name, username } = props;
   const theme: AppTheme = useTheme();
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const styles = getStyles(theme);
 
   const onPress = useCallback(() => {
     openLink(`https://twitter.com/i/user/${id}`);
   }, [id]);
 
+  if (!id && !name && !username) {
+    return null;
+  }
+
   return (
     <AppTouchable style={styles.container} onPress={onPress}>
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>
-            Issuer Verified via 𝕏
+            {id
+              ? assets.issuerVerificationTemplateTitle
+              : assets.xHandleTemplateTitle}
           </AppText>
           <View style={styles.iconWrapper}>
             <IconX />
             <View>
-              <AppText variant="body2">{name}</AppText>
+              {name && <AppText variant="body2">{name}</AppText>}
               <AppText variant="caption" style={styles.textUsername}>
                 @{username}
               </AppText>
             </View>
           </View>
         </View>
-        <IconVerified />
+        {id && <IconVerified />}
       </View>
     </AppTouchable>
   );

@@ -80,6 +80,7 @@ import BackupDoneBanner from 'src/components/BackupDoneBanner';
 import AssetRegistryScreen from 'src/screens/collectiblesCoins/AssetRegistryScreen';
 import RegisterDomain from 'src/screens/assets/RegisterDomain';
 import VerifyDomain from 'src/screens/assets/VerifyDomain';
+import VerifyX from 'src/screens/assets/VerifyX';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -326,6 +327,7 @@ function AppStack() {
           name={NavigationRoutes.VERIFYDOMAIN}
           component={VerifyDomain}
         />
+        <Stack.Screen name={NavigationRoutes.VERIFYX} component={VerifyX} />
       </Stack.Navigator>
     </RealmProvider>
   );

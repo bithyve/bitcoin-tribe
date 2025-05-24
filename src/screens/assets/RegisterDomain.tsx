@@ -23,12 +23,12 @@ import ModalLoading from 'src/components/ModalLoading';
 function RegisterDomain() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const { assetId, schema } = useRoute().params;
+  const { assetId, schema, savedDomainName } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
-  const [domainName, setDomainName] = useState('');
+  const [domainName, setDomainName] = useState(savedDomainName || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +74,7 @@ function RegisterDomain() {
       if (response.status) {
         Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
-          navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
+          navigation.replace(NavigationRoutes.VERIFYDOMAIN, {
             record: response.record,
             recordType: response.recordType,
             domain: domainName,
@@ -94,6 +94,7 @@ function RegisterDomain() {
       console.error('handleRegisterDomain error:', error);
     }
   };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyDomain} />
@@ -143,8 +144,8 @@ function RegisterDomain() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => handleRegisterDomain()}
-          width={'100%'}
           disabled={!isCtaEnabled}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>

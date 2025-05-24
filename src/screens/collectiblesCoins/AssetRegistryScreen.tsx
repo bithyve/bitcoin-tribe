@@ -181,7 +181,11 @@ function AssetRegistryScreen() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title={common.registry} style={styles.headerWrapper} />
+      <AppHeader
+        title={common.registry}
+        style={styles.headerWrapper}
+        enableBack={!disabledCTA}
+      />
       <View style={styles.wrapper}>
         <Text style={styles.subTitleText}>
           {assets.assetRegistrySubTitle} {assets.assetRegistrySubTitle2}{' '}
