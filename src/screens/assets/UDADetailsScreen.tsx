@@ -337,24 +337,29 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
-        <>
-          <VerifyIssuer
-            assetId={assetId}
-            schema={RealmSchema.UniqueDigitalAsset}
-            onVerificationComplete={() => setRefreshToggle(t => !t)}
-            showVerifyIssuer={showVerifyIssuer}
-            showDomainVerifyIssuer={showDomainVerifyIssuer}
-            asset={uda}
-            onPressShare={() => {
-              if (!uda?.isIssuedPosted) {
-                setVisibleIssuedPostOnTwitter(true);
-              } else if (!uda?.isVerifyPosted) {
-                setVisiblePostOnTwitter(true);
-              }
-            }}
-          />
-          {!uda?.issuer?.verified && <View style={styles.seperatorView} />}
-        </>
+        {uda?.transactions.some(
+          transaction =>
+            transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+        ) && (
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.UniqueDigitalAsset}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
+              asset={uda}
+              onPressShare={() => {
+                if (!uda?.isIssuedPosted) {
+                  setVisibleIssuedPostOnTwitter(true);
+                } else if (!uda?.isVerifyPosted && uda?.issuer?.verified) {
+                  setVisiblePostOnTwitter(true);
+                }
+              }}
+            />
+            {!uda?.issuer?.verified && <View style={styles.seperatorView} />}
+          </>
+        )}
         <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
           {isAddedInRegistry && (
             <SelectOption

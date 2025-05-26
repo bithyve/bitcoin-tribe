@@ -242,7 +242,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     contentContainer: {},
     titleText: {
@@ -255,7 +255,7 @@ const getStyles = (theme: AppTheme) =>
       width: wp(270),
     },
     contentWrapper: {
-      marginVertical: hp(15),
+      marginVertical: hp(10),
     },
   });
 export default PostOnTwitterModal;

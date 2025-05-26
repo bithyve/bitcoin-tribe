@@ -285,27 +285,34 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-
-            <>
-              <VerifyIssuer
-                assetId={assetId}
-                schema={RealmSchema.Collectible}
-                onVerificationComplete={() => setRefreshToggle(t => !t)}
-                showVerifyIssuer={showVerifyIssuer}
-                showDomainVerifyIssuer={showDomainVerifyIssuer}
-                asset={collectible}
-                onPressShare={() => {
-                  if (!collectible?.isIssuedPosted) {
-                    setVisibleIssuedPostOnTwitter(true);
-                  } else if (!collectible?.isVerifyPosted) {
-                    setVisiblePostOnTwitter(true);
-                  }
-                }}
-              />
-              {!collectible?.issuer?.verified && (
-                <View style={styles.seperatorView} />
-              )}
-            </>
+            {collectible?.transactions.some(
+              transaction =>
+                transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+            ) && (
+              <>
+                <VerifyIssuer
+                  assetId={assetId}
+                  schema={RealmSchema.Collectible}
+                  onVerificationComplete={() => setRefreshToggle(t => !t)}
+                  showVerifyIssuer={showVerifyIssuer}
+                  showDomainVerifyIssuer={showDomainVerifyIssuer}
+                  asset={collectible}
+                  onPressShare={() => {
+                    if (!collectible?.isIssuedPosted) {
+                      setVisibleIssuedPostOnTwitter(true);
+                    } else if (
+                      !collectible?.isVerifyPosted &&
+                      collectible?.issuer?.verified
+                    ) {
+                      setVisiblePostOnTwitter(true);
+                    }
+                  }}
+                />
+                {!collectible?.issuer?.verified && (
+                  <View style={styles.seperatorView} />
+                )}
+              </>
+            )}
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {isAddedInRegistry && (
                 <SelectOption
