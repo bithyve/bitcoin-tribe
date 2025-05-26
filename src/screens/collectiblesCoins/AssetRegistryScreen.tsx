@@ -184,7 +184,7 @@ function AssetRegistryScreen() {
       <AppHeader
         title={common.registry}
         style={styles.headerWrapper}
-        enableBack={!disabledCTA}
+        disableBackCTA={disabledCTA}
       />
       <View style={styles.wrapper}>
         <Text style={styles.subTitleText}>
