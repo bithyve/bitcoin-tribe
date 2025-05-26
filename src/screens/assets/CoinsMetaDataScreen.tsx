@@ -46,6 +46,7 @@ import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
+import Relay from 'src/services/relay';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -95,6 +96,7 @@ const CoinsMetaDataScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
+  const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
 
   const twitterVerification = coin?.issuer?.verifiedBy?.find(
     v =>
@@ -107,12 +109,21 @@ const CoinsMetaDataScreen = () => {
   const twitterPostVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.TWITTER_POST,
   );
-
+  const domainVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await Relay.getAsset(assetId);
+      setIsAddedInRegistry(asset.status);
+    };
+    fetchAsset();
+  }, [assetId]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -131,12 +142,11 @@ const CoinsMetaDataScreen = () => {
 
   useEffect(() => {
     if (
-      coin?.issuer?.verified &&
+      twitterVerification?.id &&
       !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
-      console.log('call');
       ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);
@@ -150,11 +160,7 @@ const CoinsMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.verifiedBy?.some(
-        v =>
-          v.type === IssuerVerificationMethod.TWITTER ||
-          v.type === IssuerVerificationMethod.TWITTER_POST,
-      ) &&
+      !twitterVerification?.id &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
@@ -163,9 +169,7 @@ const CoinsMetaDataScreen = () => {
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !coin?.issuer?.verifiedBy?.some(
-        v => v.type === IssuerVerificationMethod.DOMAIN,
-      ) &&
+      !domainVerification?.verified &&
       coin.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
@@ -187,25 +191,19 @@ const CoinsMetaDataScreen = () => {
           style={styles.scrollingContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            {twitterVerification && (
-              <IssuerVerified
-                id={twitterVerification.id}
-                name={twitterVerification.name}
-                username={twitterVerification.username}
-              />
-            )}
-
-            {coin?.issuer?.verifiedBy?.find(
-              v => v.type === IssuerVerificationMethod.DOMAIN,
-            ) && (
-              <IssuerDomainVerified
-                domain={
-                  coin?.issuer?.verifiedBy?.find(
-                    v => v.type === IssuerVerificationMethod.DOMAIN,
-                  )?.name
-                }
-              />
-            )}
+            <IssuerVerified
+              id={twitterVerification?.id}
+              name={twitterVerification?.name}
+              username={twitterVerification?.username.replace(/@/g, '')}
+            />
+            <IssuerDomainVerified
+              domain={
+                coin?.issuer?.verifiedBy?.find(
+                  v => v.type === IssuerVerificationMethod.DOMAIN,
+                )?.name
+              }
+              verified={domainVerification?.verified}
+            />
           </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
@@ -276,7 +274,7 @@ const CoinsMetaDataScreen = () => {
             </>
           )}
           <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
-            {coin?.issuer?.verified && (
+            {isAddedInRegistry && (
               <SelectOption
                 title={assets.viewInRegistry}
                 subTitle={''}
@@ -289,7 +287,7 @@ const CoinsMetaDataScreen = () => {
               />
             )}
           </View>
-          {coin?.issuer?.verified && <View style={styles.seperatorView} />}
+          {isAddedInRegistry && <View style={styles.seperatorView} />}
           {twitterPostVerificationWithLink?.link && (
             <View style={styles.wrapper}>
               <EmbeddedTweetView

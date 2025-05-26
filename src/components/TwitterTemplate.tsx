@@ -196,15 +196,12 @@ function TwitterTemplate(props: TwitTemplateProps) {
         </View>
         <View style={styles.assetIconContainer}>
           <View>
-            {asset?.issuer &&
-            asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
+            {asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
               <Image
                 source={{
                   uri: Platform.select({
-                    android: `file://${
-                      asset?.issuer && asset?.media?.filePath
-                    }`,
-                    ios: asset?.issuer && asset?.media?.filePath,
+                    android: `file://${asset?.media?.filePath}`,
+                    ios: asset?.media?.filePath,
                   }),
                 }}
                 resizeMode="cover"
@@ -325,6 +322,7 @@ const getStyles = (theme: AppTheme) =>
       width: hp(206),
       height: hp(206),
       borderRadius: hp(206),
+      marginTop: hp(30),
     },
     identiconWrapper: {
       zIndex: 999,

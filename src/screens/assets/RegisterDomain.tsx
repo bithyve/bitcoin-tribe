@@ -19,16 +19,18 @@ import { Keys } from 'src/storage';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
+import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
+import dbManager from 'src/storage/realm/dbManager';
 
 function RegisterDomain() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const { assetId, schema } = useRoute().params;
+  const { assetId, schema, savedDomainName } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
-  const [domainName, setDomainName] = useState('');
+  const [domainName, setDomainName] = useState(savedDomainName || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,9 +74,36 @@ function RegisterDomain() {
         domainName,
       );
       if (response.status) {
+        const existingAsset = await dbManager.getObjectByPrimaryId(
+          schema,
+          'assetId',
+          assetId,
+        );
+        const existingIssuer =
+          JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+        const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+          entry => entry.type !== IssuerVerificationMethod.DOMAIN,
+        );
+        let updatedVerifiedBy = [
+          ...filteredVerifiedBy,
+          {
+            type: IssuerVerificationMethod.DOMAIN,
+            link: '',
+            id: '',
+            name: domainName,
+            username: domainName,
+            verified: false,
+          },
+        ];
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          issuer: {
+            verified: false,
+            verifiedBy: updatedVerifiedBy,
+          },
+        });
         Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
-          navigation.navigate(NavigationRoutes.VERIFYDOMAIN, {
+          navigation.replace(NavigationRoutes.VERIFYDOMAIN, {
             record: response.record,
             recordType: response.recordType,
             domain: domainName,
@@ -94,6 +123,7 @@ function RegisterDomain() {
       console.error('handleRegisterDomain error:', error);
     }
   };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.verifyDomain} />
@@ -143,8 +173,8 @@ function RegisterDomain() {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => handleRegisterDomain()}
-          width={'100%'}
           disabled={!isCtaEnabled}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>

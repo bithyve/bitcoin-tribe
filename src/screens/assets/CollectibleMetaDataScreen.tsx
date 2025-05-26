@@ -51,6 +51,7 @@ import SelectOption from 'src/components/SelectOption';
 import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
+import Relay from 'src/services/relay';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -109,6 +110,7 @@ const CollectibleMetaDataScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
+  const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
 
   const twitterVerification = collectible?.issuer?.verifiedBy?.find(
     v =>
@@ -123,11 +125,23 @@ const CollectibleMetaDataScreen = () => {
     v => v.type === IssuerVerificationMethod.TWITTER_POST,
   );
 
+  const domainVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
     }
   }, []);
+
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await Relay.getAsset(assetId);
+      setIsAddedInRegistry(asset.status);
+    };
+    fetchAsset();
+  }, [assetId]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -146,7 +160,7 @@ const CollectibleMetaDataScreen = () => {
 
   useEffect(() => {
     if (
-      collectible?.issuer?.verified &&
+      twitterVerification?.id &&
       !twitterPostVerificationWithLink &&
       twitterPostVerification &&
       !twitterPostVerification?.link
@@ -169,11 +183,7 @@ const CollectibleMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !collectible?.issuer?.verifiedBy?.some(
-        v =>
-          v.type === IssuerVerificationMethod.TWITTER ||
-          v.type === IssuerVerificationMethod.TWITTER_POST,
-      ) &&
+      !twitterVerification?.id &&
       collectible.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
@@ -182,14 +192,16 @@ const CollectibleMetaDataScreen = () => {
 
   const showDomainVerifyIssuer = useMemo(() => {
     return (
-      !collectible?.issuer?.verifiedBy?.some(
-        v => v.type === IssuerVerificationMethod.DOMAIN,
-      ) &&
-      collectible.transactions.some(
+      !domainVerification?.verified &&
+      collectible?.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
+  }, [
+    collectible?.transactions,
+    collectible?.issuer?.verifiedBy,
+    refreshToggle,
+  ]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -226,24 +238,19 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {twitterVerification && (
-                <IssuerVerified
-                  id={twitterVerification.id}
-                  name={twitterVerification.name}
-                  username={twitterVerification.username}
-                />
-              )}
-              {collectible?.issuer?.verifiedBy?.find(
-                v => v.type === IssuerVerificationMethod.DOMAIN,
-              ) && (
-                <IssuerDomainVerified
-                  domain={
-                    collectible?.issuer?.verifiedBy?.find(
-                      v => v.type === IssuerVerificationMethod.DOMAIN,
-                    )?.name
-                  }
-                />
-              )}
+              <IssuerVerified
+                id={twitterVerification?.id}
+                name={twitterVerification?.name}
+                username={twitterVerification?.username.replace(/@/g, '')}
+              />
+              <IssuerDomainVerified
+                domain={
+                  collectible?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
+                }
+                verified={domainVerification?.verified}
+              />
             </View>
             <Item
               title={home.assetName}
@@ -307,7 +314,7 @@ const CollectibleMetaDataScreen = () => {
               </>
             )}
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
-              {collectible?.issuer?.verified && (
+              {isAddedInRegistry && (
                 <SelectOption
                   title={assets.viewInRegistry}
                   subTitle={''}
@@ -320,6 +327,7 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
             </View>
+            {isAddedInRegistry && <View style={styles.seperatorView} />}
             {twitterPostVerificationWithLink?.link && (
               <View style={styles.wrapper}>
                 <EmbeddedTweetView

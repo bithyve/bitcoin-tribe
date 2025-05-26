@@ -23,5 +23,6 @@ export const IssuerVerifiedBySchema = {
     id: 'string?',
     username: 'string?',
     link: 'string?',
+    verified: 'bool?',
   },
 };

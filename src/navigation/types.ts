@@ -60,6 +60,7 @@ export type AppStackParams = {
   [NavigationRoutes.ASSETREGISTRYSCREEN]: undefined;
   [NavigationRoutes.REGISTERDOMAIN]: undefined;
   [NavigationRoutes.VERIFYDOMAIN]: undefined;
+  [NavigationRoutes.VERIFYX]: undefined;
   // Add other routes as needed
 };
 

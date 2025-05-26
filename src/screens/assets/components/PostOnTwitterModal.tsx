@@ -148,7 +148,6 @@ const PostOnTwitterModal: React.FC<Props> = ({
       } else {
         await Linking.openURL(twitterWebURL);
       }
-
       primaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
