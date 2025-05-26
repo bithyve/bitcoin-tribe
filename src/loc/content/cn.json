@@ -55,8 +55,8 @@
     "okay": "好的",
     "backupInProgress": "备份正在进行中",
     "tapToInfo": "点击查看信息",
-    "backupInProgressMsg": "完成您的备份以保护您的资产。请等待完成。",
-    "backDoneMsg": "备份过程已完成",
+    "backupInProgressMsg": "正在进行自动 RGB 备份。请勿关闭应用程序。",
+    "backDoneMsg": "自动 RGB 备份已完成。",
     "share": "分享",
     "registry": "注册表",
     "verify": "验证"

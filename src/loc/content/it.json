@@ -55,8 +55,8 @@
     "okay": "Va bene",
     "backupInProgress": "Backup in corso",
     "tapToInfo": "Tocca per informazioni",
-    "backupInProgressMsg": "Completa il backup per proteggere i tuoi asset. Attendi il completamento.",
-    "backDoneMsg": "Il processo di backup è completato",
+    "backupInProgressMsg": "Backup automatico RGB in corso. Non chiudere l'app.",
+    "backDoneMsg": "Backup automatico RGB completato.",
     "share": "Condividi",
     "registry": "Registro",
     "verify": "Verifica"

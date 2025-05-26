@@ -55,8 +55,8 @@
     "okay": "了解しました",
     "backupInProgress": "バックアップが進行中",
     "tapToInfo": "情報を見るにはタップ",
-    "backupInProgressMsg": "資産を保護するためにバックアップを完了してください。完了するまでお待ちください。",
-    "backDoneMsg": "バックアップ処理が完了しました",
+    "backupInProgressMsg": "自動RGBバックアップを実行中です。アプリを閉じないでください。",
+    "backDoneMsg": "自動RGBバックアップが完了しました。",
     "share": "共有",
     "registry": "レジストリ",
     "verify": "確認する"

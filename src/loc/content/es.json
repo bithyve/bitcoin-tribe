@@ -55,8 +55,8 @@
     "okay": "De acuerdo",
     "backupInProgress": "Copia de seguridad en progreso",
     "tapToInfo": "Toca para información",
-    "backupInProgressMsg": "Completa tu copia de seguridad para proteger tus activos. Por favor, espera mientras finaliza.",
-    "backDoneMsg": "El proceso de copia de seguridad ha finalizado",
+    "backupInProgressMsg": "La copia de seguridad automática de RGB está en curso. Por favor, no cierres la aplicación.",
+    "backDoneMsg": "La copia de seguridad automática de RGB se ha completado.",
     "share": "Compartir",
     "registry": "Registro",
     "verify": "Verificar"
