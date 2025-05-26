@@ -148,7 +148,6 @@ const PostOnTwitterModal: React.FC<Props> = ({
       } else {
         await Linking.openURL(twitterWebURL);
       }
-
       primaryOnPress();
       setCompleteVerification(false);
     } catch (error) {
@@ -243,7 +242,7 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: 10,
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginVertical: hp(10),
+      marginBottom: hp(10),
     },
     contentContainer: {},
     titleText: {
@@ -256,7 +255,7 @@ const getStyles = (theme: AppTheme) =>
       width: wp(270),
     },
     contentWrapper: {
-      marginVertical: hp(15),
+      marginVertical: hp(10),
     },
   });
 export default PostOnTwitterModal;

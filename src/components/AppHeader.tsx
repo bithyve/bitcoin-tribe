@@ -23,6 +23,7 @@ type AppHeaderProps = {
   onBackNavigation?;
   rightText?: string;
   onRightTextPress?: () => void;
+  disableBackCTA?: boolean;
 };
 
 function AppHeader(props: AppHeaderProps) {
@@ -36,6 +37,7 @@ function AppHeader(props: AppHeaderProps) {
     rightText,
     onRightTextPress,
     onSettingsPress,
+    disableBackCTA,
   } = props;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -52,6 +54,7 @@ function AppHeader(props: AppHeaderProps) {
         {enableBack && (
           <View style={styles.leftIconWrapper}>
             <AppTouchable
+              disabled={disableBackCTA}
               onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
               {isThemeDark ? <GoBack /> : <GoBackLight />}
             </AppTouchable>

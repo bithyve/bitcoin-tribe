@@ -12,6 +12,7 @@ import Relay from 'src/services/relay';
 import {
   Asset,
   IssuerVerificationMethod,
+  TransferKind,
 } from 'src/models/interfaces/RGBWallet';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
@@ -82,6 +83,9 @@ const getStyles = (theme: AppTheme, tooltipPos) =>
       fontSize: 14,
     },
     shareOptionWrapper: {},
+    selectOptionWrapper: {
+      marginBottom: hp(5),
+    },
   });
 
 interface VerifyIssuerProps {
@@ -177,6 +181,14 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     () => getStyles(theme, tooltipPos),
     [theme, tooltipPos],
   );
+  const twitterVerification = asset?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+  const domainVerification = asset?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     const fetchAsset = async () => {
@@ -249,59 +261,18 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     });
   };
 
-  const handleVerifyWithTwitter = React.useCallback(async () => {
-    try {
-      const result = await loginWithTwitter();
-      if (result.username) {
-        setIsLoading(true);
-        const response = await Relay.verifyIssuer('appID', assetId, {
-          type: IssuerVerificationMethod.TWITTER,
-          id: result.id,
-          name: result.name,
-          username: result.username,
-        });
-        setIsLoading(false);
-        if (response.status) {
-          setCompleteVerification(true);
-          const existingAsset = await dbManager.getObjectByPrimaryId(
-            schema,
-            'assetId',
-            assetId,
-          );
-          const existingIssuer =
-            JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
-          const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
-            entry => entry.type !== IssuerVerificationMethod.TWITTER,
-          );
-          const updatedVerifiedBy = [
-            ...filteredVerifiedBy,
-            {
-              type: IssuerVerificationMethod.TWITTER,
-              id: result.id,
-              name: result.name,
-              username: result.username,
-            },
-          ];
-          await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-            issuer: {
-              ...existingIssuer,
-              verified: true,
-              verifiedBy: updatedVerifiedBy,
-            },
-          });
-        }
-      }
-    } catch (error) {
-      Toast(`${error}`, true);
-      setIsLoading(false);
-      console.log(error);
-    }
-  }, [assetId, schema]);
-
+  const verifyXNavigation = () => {
+    navigation.navigate(NavigationRoutes.VERIFYX, {
+      assetId: assetId,
+      schema: schema,
+      savedTwitterHandle: twitterVerification?.username || '',
+    });
+  };
   const handleVerifyWithDomain = () => {
     navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
       assetId: assetId,
       schema: schema,
+      savedDomainName: domainVerification?.name || '',
     });
   };
 
@@ -348,18 +319,19 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   }
 
   const ShareOptionContainer = () => {
+    const hasIssuance = asset?.transactions?.some(
+      tx => tx.kind?.toUpperCase() === TransferKind.ISSUANCE,
+    );
+
+    const shouldShowShareOption =
+      (!asset?.isIssuedPosted && hasIssuance) ||
+      (asset?.issuer?.verified && !asset?.isVerifyPosted);
+
+    if (!shouldShowShareOption) return null;
     return (
-      (asset?.isVerifyPosted === false ||
-        asset?.isVerifyPosted === null ||
-        asset?.isIssuedPosted === false ||
-        asset?.isIssuedPosted === null) && (
-        <View style={styles.shareOptionWrapper}>
-          <ShareOptionView
-            title={assets.sharePostTitle}
-            onPress={onPressShare}
-          />
-        </View>
-      )
+      <View style={styles.shareOptionWrapper}>
+        <ShareOptionView title={assets.sharePostTitle} onPress={onPressShare} />
+      </View>
     );
   };
 
@@ -377,7 +349,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 <SelectOption
                   title={assets.connectVerifyTwitter}
                   subTitle={''}
-                  onPress={handleVerifyWithTwitter}
+                  onPress={verifyXNavigation}
                   testID={'verify-with-twitter'}
                 />
               )}
@@ -390,21 +362,21 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 />
               )}
             </View>
-            {!asset?.issuer?.verifiedBy?.find(
-              v => v.type === IssuerVerificationMethod.TWITTER_POST,
-            )?.type && <ShareOptionContainer />}
+            <ShareOptionContainer />
           </VerificationSection>
         )
       ) : (
         <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
           <View style={styles.container}>
             <ModalLoading visible={getAssetIssuanceFeeMutation.isLoading} />
-            <SelectOption
-              title={assets.registerAssetTitle}
-              subTitle={assets.registerAssetSubTitle}
-              onPress={() => getAssetIssuanceFeeMutation.mutate()}
-              testID={'register-asset'}
-            />
+            <View style={styles.selectOptionWrapper}>
+              <SelectOption
+                title={assets.registerAssetTitle}
+                subTitle={''}
+                onPress={() => getAssetIssuanceFeeMutation.mutate()}
+                testID={'register-asset'}
+              />
+            </View>
             <ShareOptionContainer />
             <View>
               <ModalContainer
