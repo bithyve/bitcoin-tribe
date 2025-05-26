@@ -12,6 +12,7 @@ import Relay from 'src/services/relay';
 import {
   Asset,
   IssuerVerificationMethod,
+  TransferKind,
 } from 'src/models/interfaces/RGBWallet';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
