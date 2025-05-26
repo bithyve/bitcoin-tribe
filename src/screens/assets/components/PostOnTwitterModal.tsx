@@ -150,7 +150,6 @@ const PostOnTwitterModal: React.FC<Props> = ({
       }
       primaryOnPress();
       setCompleteVerification(false);
-      Toast(assets.postSuccessMsg);
     } catch (error) {
       secondaryOnPress();
       setCompleteVerification(false);
