@@ -19,6 +19,8 @@ import { Keys } from 'src/storage';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
+import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
+import dbManager from 'src/storage/realm/dbManager';
 
 function RegisterDomain() {
   const navigation = useNavigation();
@@ -72,6 +74,33 @@ function RegisterDomain() {
         domainName,
       );
       if (response.status) {
+        const existingAsset = await dbManager.getObjectByPrimaryId(
+          schema,
+          'assetId',
+          assetId,
+        );
+        const existingIssuer =
+          JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+        const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+          entry => entry.type !== IssuerVerificationMethod.DOMAIN,
+        );
+        let updatedVerifiedBy = [
+          ...filteredVerifiedBy,
+          {
+            type: IssuerVerificationMethod.DOMAIN,
+            link: '',
+            id: '',
+            name: domainName,
+            username: domainName,
+            verified: false,
+          },
+        ];
+        await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          issuer: {
+            verified: false,
+            verifiedBy: updatedVerifiedBy,
+          },
+        });
         Toast(assets.registerDomainSuccessfully);
         navigateWithDelay(() => {
           navigation.replace(NavigationRoutes.VERIFYDOMAIN, {

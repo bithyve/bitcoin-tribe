@@ -16,13 +16,25 @@ export const saveTwitterHandle = async (
     username: twitterHandle,
   });
   if (response.status) {
+    const existingAsset = await dbManager.getObjectByPrimaryId(
+      schema,
+      'assetId',
+      assetId,
+    );
+    const existingIssuer =
+      JSON.parse(JSON.stringify(existingAsset?.issuer)) || {};
+    const filteredVerifiedBy = (existingIssuer.verifiedBy || []).filter(
+      entry => entry.type !== IssuerVerificationMethod.TWITTER,
+    );
     let updatedVerifiedBy = [
+      ...filteredVerifiedBy,
       {
         type: IssuerVerificationMethod.TWITTER,
         link: '',
         id: '',
         name: '',
         username: twitterHandle,
+        verified: false,
       },
     ];
     await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {

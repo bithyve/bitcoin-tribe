@@ -112,13 +112,11 @@ const CoinsMetaDataScreen = () => {
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
-  console.log('coin', coin?.issuer?.verifiedBy);
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
     }
   }, []);
-
   useEffect(() => {
     const fetchAsset = async () => {
       const asset = await Relay.getAsset(assetId);
