@@ -53,7 +53,7 @@
     "createChannel": "创建通道",
     "done": "完成",
     "okay": "好的",
-    "backupInProgress": "备份正在进行中",
+    "backupInProgress": "正在进行自动 RGB 备份",
     "tapToInfo": "点击查看信息",
     "backupInProgressMsg": "正在进行自动 RGB 备份。请勿关闭应用程序。",
     "backDoneMsg": "自动 RGB 备份已完成。",

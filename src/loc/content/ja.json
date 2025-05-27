@@ -53,7 +53,7 @@
     "createChannel": "チャンネルを作成",
     "done": "完了",
     "okay": "了解しました",
-    "backupInProgress": "バックアップが進行中",
+    "backupInProgress": "自動 RGB バックアップが進行中です",
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "自動RGBバックアップを実行中です。アプリを閉じないでください。",
     "backDoneMsg": "自動RGBバックアップが完了しました。",

@@ -53,7 +53,7 @@
     "createChannel": "Create Channel",
     "done": "Done",
     "okay": "Okay",
-    "backupInProgress": "Backup is in progress",
+    "backupInProgress": "Automatic RGB Backup is in progress",
     "tapToInfo": "Tap to Info",
     "backupInProgressMsg": "Automatic RGB backup is in progress. Please do not close the app.",
     "backDoneMsg": "Automatic RGB backup is complete.",

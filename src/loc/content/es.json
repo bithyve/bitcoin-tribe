@@ -53,7 +53,7 @@
     "createChannel": "Crear Canal",
     "done": "Hecho",
     "okay": "De acuerdo",
-    "backupInProgress": "Copia de seguridad en progreso",
+    "backupInProgress": "Copia de seguridad automática de RGB en progreso",
     "tapToInfo": "Toca para información",
     "backupInProgressMsg": "La copia de seguridad automática de RGB está en curso. Por favor, no cierres la aplicación.",
     "backDoneMsg": "La copia de seguridad automática de RGB se ha completado.",
