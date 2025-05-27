@@ -24,12 +24,12 @@ const BackupAlertBanner = () => {
     <>
       <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
         <View style={styles.titleWrapper}>
-          <AppText variant="body1" style={styles.text}>
+          <AppText variant="body2" style={styles.text}>
             {common.backupInProgress}
           </AppText>
         </View>
         <View style={styles.tapViewWrapper}>
-          <AppText variant="body1" style={styles.text}>
+          <AppText variant="body2" style={styles.text}>
             {common.tapToInfo}
           </AppText>
           <TapInfoIcon />
@@ -73,12 +73,13 @@ const getStyles = (theme: AppTheme, hasNotch) =>
     text: {
       color: 'white',
       fontWeight: '500',
+      letterSpacing: 0.1,
     },
     titleWrapper: {
-      width: '72%',
+      width: '74%',
     },
     tapViewWrapper: {
-      width: '28%',
+      width: '26%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',

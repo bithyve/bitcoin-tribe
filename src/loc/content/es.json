@@ -53,7 +53,7 @@
     "createChannel": "Crear Canal",
     "done": "Hecho",
     "okay": "De acuerdo",
-    "backupInProgress": "Copia de seguridad en progreso",
+    "backupInProgress": "Copia de seguridad automática de RGB en progreso",
     "tapToInfo": "Toca para información",
     "backupInProgressMsg": "La copia de seguridad automática de RGB está en curso. Por favor, no cierres la aplicación.",
     "backDoneMsg": "La copia de seguridad automática de RGB se ha completado.",
@@ -630,7 +630,9 @@
     "domainVerified": "Dominio verificado",
     "domainVerifiedSuccessMsg": "¡Dominio verificado\ncon éxito!",
     "postTitle": "¡Verificado y Emitido en Bitcoin Tribe!",
+    "postIssuedTitle": "¡Emitido en Bitcoin Tribe!",
     "postSubTitle": "Ya está en vivo en Bitcoin Tribe — emitido y verificado de forma transparente a través de X (Twitter), aprovechando el poder de los contratos inteligentes RGB en Bitcoin.",
+    "postIssuedSubTitle": "ya está disponible en Bitcoin Tribe — emitido de forma transparente, aprovechando el poder de los contratos inteligentes RGB en Bitcoin.",
     "postSuccessMsg": "Tu tuit ha sido publicado. Por favor, espera un momento — se actualizará pronto.",
     "verifyXTitle": "Verificar X",
     "verifyXSubTitle": "Puedes guardar tu handle de X (Twitter) o verificarlo.",
@@ -639,8 +641,8 @@
     "enterXhandleLabel": "Introduce el handle de X",
     "enterXhandlePlaceholder": "Introduce un handle de X",
     "issuerVerificationTemplateTitle": "Emisor verificado a través de 𝕏",
-    "xHandleTemplateTitle": "Handle de X",
-    "domainName": "Nombre de dominio"
+    "xHandleTemplateTitle": "Manejador de X (No verificado)",
+    "domainName": "Nombre de dominio (No verificado)"
   },
   "community": {
     "fnfTitle": "Community",

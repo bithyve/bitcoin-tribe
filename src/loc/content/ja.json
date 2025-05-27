@@ -53,7 +53,7 @@
     "createChannel": "チャンネルを作成",
     "done": "完了",
     "okay": "了解しました",
-    "backupInProgress": "バックアップが進行中",
+    "backupInProgress": "自動 RGB バックアップが進行中です",
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "自動RGBバックアップを実行中です。アプリを閉じないでください。",
     "backDoneMsg": "自動RGBバックアップが完了しました。",
@@ -630,7 +630,9 @@
     "domainVerified": "ドメインが確認されました",
     "domainVerifiedSuccessMsg": "ドメインが\n正常に確認されました！",
     "postTitle": "Bitcoin Tribeで認証・発行完了！",
+    "postIssuedTitle": "Bitcoin Tribe で発行されました！",
     "postSubTitle": "Bitcoin Tribeで公開中 — X（Twitter）を通じて透明に発行・認証され、Bitcoin上のRGBスマートコントラクトの力を活用。",
+    "postIssuedSubTitle": "現在 Bitcoin Tribe で公開中 — Bitcoin 上の RGB スマートコントラクトの力を活用し、透明性を持って発行されました。",
     "postSuccessMsg": "ツイートが投稿されました。少々お待ちください — 間もなく更新されます。",
     "verifyXTitle": "X を認証",
     "verifyXSubTitle": "X（Twitter）のハンドル名を保存するか認証するかを選べます。",
@@ -639,8 +641,8 @@
     "enterXhandleLabel": "X ハンドルを入力",
     "enterXhandlePlaceholder": "X ハンドルを入力してください",
     "issuerVerificationTemplateTitle": "発行者が 𝕏 によって認証されました",
-    "xHandleTemplateTitle": "X ハンドル",
-    "domainName": "ドメイン名"
+    "xHandleTemplateTitle": "X ハンドル（未確認）",
+    "domainName": "ドメイン名（未確認）"
   },
   "community": {
     "fnfTitle": "Community",
