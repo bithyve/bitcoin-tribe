@@ -178,7 +178,9 @@ function TwitterTemplate(props: TwitTemplateProps) {
             </AppText>
             <Text style={styles.text}>
               <Text>{asset.name}</Text> - <Text>{asset.ticker} </Text>
-              {assets.postSubTitle}
+              {asset?.issuer?.verified
+                ? assets.postSubTitle
+                : assets.postIssuedSubTitle}
             </Text>
           </View>
           <InfoItem title={assets.assetName + ':'} value={asset.name} />
