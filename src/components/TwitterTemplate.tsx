@@ -171,7 +171,11 @@ function TwitterTemplate(props: TwitTemplateProps) {
             <AppLogo />
           </View>
           <View style={styles.headingWrapper}>
-            <AppText style={styles.headingText}>{assets.postTitle}</AppText>
+            <AppText style={styles.headingText}>
+              {asset?.issuer?.verified
+                ? assets.postTitle
+                : assets.postIssuedTitle}
+            </AppText>
             <Text style={styles.text}>
               <Text>{asset.name}</Text> - <Text>{asset.ticker} </Text>
               {assets.postSubTitle}

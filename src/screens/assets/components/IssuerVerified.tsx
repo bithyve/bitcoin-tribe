@@ -9,12 +9,14 @@ import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, id) =>
   StyleSheet.create({
     container: {
       justifyContent: 'center',
       borderWidth: 1,
-      borderColor: theme.colors.backupDoneBorder,
+      borderColor: id
+        ? theme.colors.backupDoneBorder
+        : theme.colors.borderColor,
       borderRadius: 10,
       padding: 16,
       marginVertical: 10,
@@ -24,7 +26,7 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     title: {
-      color: theme.colors.backupDoneBorder,
+      color: id ? theme.colors.backupDoneBorder : theme.colors.headingColor,
     },
     textUsername: {
       color: theme.colors.secondaryHeadingColor,
@@ -49,7 +51,7 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, id);
 
   const onPress = useCallback(() => {
     openLink(`https://twitter.com/i/user/${id}`);
