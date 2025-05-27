@@ -49,6 +49,7 @@ type PostInfoItemProps = {
 
 type DomainInfoItemProps = {
   domain: string;
+  verified?: boolean;
 };
 
 const InfoItem = (props: InfoItemProps) => {
@@ -78,9 +79,11 @@ const InfoItem = (props: InfoItemProps) => {
 };
 
 const PostInfoItem = (props: PostInfoItemProps) => {
-  const { name, username } = props;
+  const { name, username, id } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   return (
     <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
@@ -91,7 +94,9 @@ const PostInfoItem = (props: PostInfoItemProps) => {
       ]}>
       <View style={styles.verifiedWrapper}>
         <AppText variant="body1" style={styles.title}>
-          Issuer Verified via 𝕏
+          {id
+            ? assets.issuerVerificationTemplateTitle
+            : assets.xHandleTemplateTitle}
         </AppText>
         <View style={styles.iconWrapper}>
           <IconX />
@@ -105,17 +110,17 @@ const PostInfoItem = (props: PostInfoItemProps) => {
           </View>
         </View>
       </View>
-      <View style={styles.verifiedIconWrapper}>
-        <IconVerified />
-      </View>
+      <View style={styles.verifiedIconWrapper}>{id && <IconVerified />}</View>
     </HorizontalGradientView>
   );
 };
 
 const DomainInfoItem = (props: DomainInfoItemProps) => {
-  const { domain } = props;
+  const { domain, verified } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   return (
     <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
@@ -125,11 +130,13 @@ const DomainInfoItem = (props: DomainInfoItemProps) => {
         Colors.ChineseBlack1,
       ]}>
       <View style={styles.verifiedWrapper}>
-        <AppText>Domain Verified</AppText>
+        <AppText>
+          {verified ? assets.domainVerified : assets.domainName}
+        </AppText>
         <AppText>{domain}</AppText>
       </View>
       <View style={styles.verifiedIconWrapper}>
-        <IconDomainVerified />
+        {verified && <IconDomainVerified />}
       </View>
     </HorizontalGradientView>
   );
@@ -164,10 +171,16 @@ function TwitterTemplate(props: TwitTemplateProps) {
             <AppLogo />
           </View>
           <View style={styles.headingWrapper}>
-            <AppText style={styles.headingText}>{assets.postTitle}</AppText>
+            <AppText style={styles.headingText}>
+              {asset?.issuer?.verified
+                ? assets.postTitle
+                : assets.postIssuedTitle}
+            </AppText>
             <Text style={styles.text}>
               <Text>{asset.name}</Text> - <Text>{asset.ticker} </Text>
-              {assets.postSubTitle}
+              {asset?.issuer?.verified
+                ? assets.postSubTitle
+                : assets.postIssuedSubTitle}
             </Text>
           </View>
           <InfoItem title={assets.assetName + ':'} value={asset.name} />
@@ -183,15 +196,19 @@ function TwitterTemplate(props: TwitTemplateProps) {
               asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
             }
           />
-          {asset?.issuer?.verified && twitterVerification?.type && (
+          {twitterVerification?.type && (
             <PostInfoItem
               name={twitterVerification?.name}
               username={twitterVerification?.username}
+              id={twitterVerification?.id}
             />
           )}
 
-          {asset?.issuer?.verified && domainVerification?.type && (
-            <DomainInfoItem domain={domainVerification?.name} />
+          {domainVerification?.type && (
+            <DomainInfoItem
+              domain={domainVerification?.name}
+              verified={domainVerification?.verified}
+            />
           )}
         </View>
         <View style={styles.assetIconContainer}>
