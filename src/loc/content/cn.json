@@ -639,8 +639,8 @@
     "enterXhandleLabel": "输入 X 账号",
     "enterXhandlePlaceholder": "请输入 X 账号",
     "issuerVerificationTemplateTitle": "发行方已通过 𝕏 验证",
-    "xHandleTemplateTitle": "X 账号",
-    "domainName": "域名"
+    "xHandleTemplateTitle": "X 用户名（未验证）",
+    "domainName": "域名（未验证）"
   },
   "community": {
     "fnfTitle": "Community",

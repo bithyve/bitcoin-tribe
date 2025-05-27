@@ -639,8 +639,8 @@
     "enterXhandleLabel": "Enter X handle",
     "enterXhandlePlaceholder": "Enter a X handle",
     "issuerVerificationTemplateTitle": "Issuer Verified via 𝕏",
-    "xHandleTemplateTitle": "X Handle",
-    "domainName": "Domain Name"
+    "xHandleTemplateTitle": "X Handle (Unverified)",
+    "domainName": "Domain Name (Unverified)"
   },
   "community": {
     "fnfTitle": "Community",

@@ -639,8 +639,8 @@
     "enterXhandleLabel": "X ハンドルを入力",
     "enterXhandlePlaceholder": "X ハンドルを入力してください",
     "issuerVerificationTemplateTitle": "発行者が 𝕏 によって認証されました",
-    "xHandleTemplateTitle": "X ハンドル",
-    "domainName": "ドメイン名"
+    "xHandleTemplateTitle": "X ハンドル（未確認）",
+    "domainName": "ドメイン名（未確認）"
   },
   "community": {
     "fnfTitle": "Community",

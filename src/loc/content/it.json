@@ -639,8 +639,8 @@
     "enterXhandleLabel": "Inserisci handle X",
     "enterXhandlePlaceholder": "Inserisci un handle X",
     "issuerVerificationTemplateTitle": "Emittente verificato tramite 𝕏",
-    "xHandleTemplateTitle": "Handle X",
-    "domainName": "Nome di dominio"
+    "xHandleTemplateTitle": "Handle X (Non verificato)",
+    "domainName": "Nome di dominio (Non verificato)"
   },
   "community": {
     "fnfTitle": "Community",
