@@ -56,3 +56,19 @@ export const loginWithTwitter = async (): Promise<{
     throw error;
   }
 };
+
+export const fetchAndVerifyTweet = async tweetId => {
+  try {
+    const accessToken = storage.getString('accessToken');
+    const response = await fetch(`${TWITTER_API_BASE}/tweets/${tweetId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

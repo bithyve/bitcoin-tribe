@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useMutation } from 'react-query';
 
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
@@ -12,16 +13,16 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, windowWidth } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import RightArrowIcon from 'src/assets/images/icon_rightArrowSecondary.svg';
 import TextField from 'src/components/TextField';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys } from 'src/storage';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
-import { validateTweetForAsset } from 'src/utils/socialHandleUtils';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { Asset } from 'src/models/interfaces/RGBWallet';
+import { RealmSchema } from 'src/storage/enum';
 
 function ImportXPost() {
   const navigation = useNavigation();
@@ -36,15 +37,26 @@ function ImportXPost() {
   const [inputHeight, setInputHeight] = React.useState(100);
   const [tweetUrlValidationError, setTweetUrlValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const styles = getStyles(theme, inputHeight);
+  const { mutateAsync, isLoading } = useMutation(
+    ({
+      tweetId,
+      assetId,
+      schema,
+      asset,
+    }: {
+      tweetId: string;
+      assetId: string;
+      schema: RealmSchema;
+      asset: Asset;
+    }) => ApiHandler.validateTweetForAsset(tweetId, assetId, schema, asset),
+  );
 
   useEffect(() => {
     setIsCtaEnabled(!!tweetUrl && !tweetUrlValidationError);
   }, [tweetUrl, tweetUrlValidationError]);
 
   const navigateWithDelay = (callback: () => void) => {
-    setIsLoading(false);
     setTimeout(() => {
       callback();
     }, 1000);
@@ -70,26 +82,23 @@ function ImportXPost() {
   };
 
   const handleVerifyTweet = async () => {
-    setIsLoading(true);
     const id = extractTweetId(tweetUrl.trim());
-
     if (!id) {
-      setIsLoading(false);
       Toast('Could not extract tweet ID.');
       return;
     }
-
-    const result = await validateTweetForAsset(id, assetId, schema, asset);
-
-    if (result.success) {
-      setTweetId(id);
-      navigateWithDelay(() => {
-        navigation.goBack();
-      });
-      Toast('X post added successfully.');
-    } else {
-      setIsLoading(false);
-      Toast(result.reason || 'Unknown error.', true);
+    try {
+      const result = await mutateAsync({ tweetId: id, assetId, schema, asset });
+      if (result?.success) {
+        setTweetId(id);
+        Toast('X post added successfully.');
+        navigateWithDelay(() => navigation.goBack());
+      } else {
+        Toast(result?.reason || 'Unknown error.', true);
+      }
+    } catch (error) {
+      Toast('Unexpected error occurred.', true);
+      console.error('handleVerifyTweet error:', error);
     }
   };
   const handleXPostUrlChange = text => {
