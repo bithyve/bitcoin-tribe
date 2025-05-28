@@ -52,6 +52,7 @@ import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -157,17 +158,6 @@ const CollectibleMetaDataScreen = () => {
       }
     }, [collectible?.issuer?.verified, hasCompleteVerification]),
   );
-
-  useEffect(() => {
-    if (
-      twitterVerification?.id &&
-      !twitterPostVerificationWithLink &&
-      twitterPostVerification &&
-      !twitterPostVerification?.link
-    ) {
-      ApiHandler.searchForAssetTweet(collectible, RealmSchema.Collectible);
-    }
-  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
@@ -326,6 +316,23 @@ const CollectibleMetaDataScreen = () => {
                   testID={'view_in_registry'}
                 />
               )}
+              {twitterVerification?.id &&
+                !twitterPostVerificationWithLink &&
+                twitterPostVerification &&
+                !twitterPostVerification?.link && (
+                  <SelectOption
+                    title={'Show your X post here'}
+                    subTitle={''}
+                    onPress={() =>
+                      navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                        assetId: assetId,
+                        schema: RealmSchema.Collectible,
+                        asset: collectible,
+                      })
+                    }
+                    testID={'import_x_post'}
+                  />
+                )}
             </View>
             {isAddedInRegistry && <View style={styles.seperatorView} />}
             {twitterPostVerificationWithLink?.link && (

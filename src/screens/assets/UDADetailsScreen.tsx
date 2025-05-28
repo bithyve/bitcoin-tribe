@@ -225,17 +225,6 @@ const UDADetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
-  useEffect(() => {
-    if (
-      twitterVerification?.id &&
-      !twitterPostVerificationWithLink &&
-      twitterPostVerification &&
-      !twitterPostVerification?.link
-    ) {
-      ApiHandler.searchForAssetTweet(uda, RealmSchema.UniqueDigitalAsset);
-    }
-  }, []);
-
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(
       RealmSchema.UniqueDigitalAsset,
@@ -371,6 +360,23 @@ const UDADetailsScreen = () => {
               testID={'view_in_registry'}
             />
           )}
+          {twitterVerification?.id &&
+            !twitterPostVerificationWithLink &&
+            twitterPostVerification &&
+            !twitterPostVerification?.link && (
+              <SelectOption
+                title={'Show your X post here'}
+                subTitle={''}
+                onPress={() =>
+                  navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                    assetId: assetId,
+                    schema: RealmSchema.UniqueDigitalAsset,
+                    asset: uda,
+                  })
+                }
+                testID={'import_x_post'}
+              />
+            )}
         </View>
         {isAddedInRegistry && <View style={styles.seperatorView} />}
         <>
