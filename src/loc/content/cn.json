@@ -642,7 +642,11 @@
     "enterXhandlePlaceholder": "请输入 X 账号",
     "issuerVerificationTemplateTitle": "发行方已通过 𝕏 验证",
     "xHandleTemplateTitle": "X 用户名（未验证）",
-    "domainName": "域名（未验证）"
+    "domainName": "域名（未验证）",
+    "importXPostTitle": "导入 X 帖子",
+    "importXPostSubTitle": "在下方粘贴你的 X 帖子链接。我们将快速获取并在应用中整洁地显示它——简单快捷。",
+    "importXPostLabel": "输入 X 帖子链接",
+    "importXPostPlaceholder": "输入帖子链接"
   },
   "community": {
     "fnfTitle": "Community",

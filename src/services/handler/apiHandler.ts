@@ -78,7 +78,8 @@ import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
-import { getUserTweetByAssetId } from '../twitter';
+import { fetchAndVerifyTweet } from '../twitter';
+import Toast from 'src/components/Toast';
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
@@ -2191,24 +2192,56 @@ export class ApiHandler {
     }
   }
 
-  static async searchForAssetTweet(asset, schema) {
+  static validateTweetForAsset = async (
+    tweetId: string,
+    assetId: string,
+    schema: RealmSchema,
+    asset: Asset,
+  ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
-      const accessToken = storage.getString('accessToken');
-      const twitterHandle = asset?.issuer?.verifiedBy?.find(
-        v => v.type === IssuerVerificationMethod.TWITTER_POST,
-      )?.link;
-      if (twitterHandle) return;
-      const matchingTweet = await getUserTweetByAssetId(
-        asset?.issuer?.verifiedBy?.find(
-          v => v.type === IssuerVerificationMethod.TWITTER,
-        )?.id,
-        accessToken,
-        asset.assetId,
-      );
-      if (matchingTweet) {
+      const response = await fetchAndVerifyTweet(tweetId);
+      if (response.status === 429) {
+        const resetAfter = response.headers.get('x-rate-limit-reset');
+        const now = Math.floor(Date.now() / 1000);
+        const waitTime = resetAfter ? Number(resetAfter) - now : null;
+        if (waitTime && waitTime > 0) {
+          Toast(
+            `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
+              Number(resetAfter) * 1000,
+            ).toLocaleTimeString()}).`,
+            true,
+          );
+        }
+
+        return null;
+      }
+
+      if (!response.ok) {
+        const errorJson = await response.json().catch(() => null);
+        if (errorJson?.title === 'UsageCapExceeded') {
+          return {
+            success: false,
+            reason: 'Twitter API usage cap exceeded. Please try again later.',
+          };
+        }
+        const message =
+          errorJson?.title ||
+          errorJson?.detail ||
+          `HTTP error ${response.status}`;
+        return { success: false, reason: message };
+      }
+
+      const data = await response.json();
+      const tweet = data?.data;
+
+      if (!tweet) {
+        return { success: false, reason: 'Tweet not found' };
+      }
+
+      if (tweet.text.includes(assetId)) {
         const response = await Relay.verifyIssuer('appID', asset.assetId, {
           type: IssuerVerificationMethod.TWITTER_POST,
-          link: matchingTweet.id,
+          link: tweetId,
           id: asset?.issuer?.verifiedBy?.find(
             v => v.type === IssuerVerificationMethod.TWITTER,
           )?.id,
@@ -2241,14 +2274,14 @@ export class ApiHandler {
             updatedVerifiedBy = [...existingVerifiedBy];
             updatedVerifiedBy[twitterPostIndex] = {
               ...updatedVerifiedBy[twitterPostIndex],
-              link: matchingTweet.id,
+              link: tweetId,
             };
           } else {
             updatedVerifiedBy = [
               ...existingVerifiedBy,
               {
                 type: IssuerVerificationMethod.TWITTER_POST,
-                link: matchingTweet.id,
+                link: tweetId,
                 id: twitterEntry.id,
                 name: twitterEntry.name,
                 username: twitterEntry.username,
@@ -2268,12 +2301,13 @@ export class ApiHandler {
             },
           );
         }
+        return { success: true, tweet };
       } else {
-        console.log('No tweet found with assetID:', asset.assetId);
+        return { success: false, reason: 'Asset ID not found in tweet text' };
       }
-    } catch (error) {
-      console.error('Failed to verify issuer via tweet:', error);
-      throw error;
+    } catch (error: any) {
+      console.error('Twitter API error:', error.message || error);
+      return { success: false, reason: 'Network or fetch error' };
     }
-  }
+  };
 }
