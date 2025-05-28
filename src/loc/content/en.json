@@ -53,7 +53,7 @@
     "createChannel": "Create Channel",
     "done": "Done",
     "okay": "Okay",
-    "backupInProgress": "Backup is in progress",
+    "backupInProgress": "Automatic RGB Backup is in progress",
     "tapToInfo": "Tap to Info",
     "backupInProgressMsg": "Automatic RGB backup is in progress. Please do not close the app.",
     "backDoneMsg": "Automatic RGB backup is complete.",
@@ -630,7 +630,9 @@
     "domainVerified": "Domain Verified",
     "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!",
     "postTitle": "Verified & Issued on Bitcoin Tribe!",
+    "postIssuedTitle": "Issued on Bitcoin Tribe!",
     "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin.",
+    "postIssuedSubTitle": "is now live on Bitcoin Tribe — transparently issued, leveraging the power of RGB smart contracts on Bitcoin.",
     "postSuccessMsg": "Your tweet has been posted. Please wait a moment — it will be updated soon.",
     "verifyXTitle": "Verify X",
     "verifyXSubTitle": "You can either save your X (Twitter) handle or verify it.",
@@ -639,8 +641,8 @@
     "enterXhandleLabel": "Enter X handle",
     "enterXhandlePlaceholder": "Enter a X handle",
     "issuerVerificationTemplateTitle": "Issuer Verified via 𝕏",
-    "xHandleTemplateTitle": "X Handle",
-    "domainName": "Domain Name"
+    "xHandleTemplateTitle": "X Handle (Unverified)",
+    "domainName": "Domain Name (Unverified)"
   },
   "community": {
     "fnfTitle": "Community",

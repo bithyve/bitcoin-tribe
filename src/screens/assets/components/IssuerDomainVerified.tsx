@@ -8,12 +8,14 @@ import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, verified) =>
   StyleSheet.create({
     container: {
       justifyContent: 'center',
       borderWidth: 1,
-      borderColor: theme.colors.backupDoneBorder,
+      borderColor: verified
+        ? theme.colors.backupDoneBorder
+        : theme.colors.borderColor,
       borderRadius: 10,
       padding: 16,
       marginVertical: 10,
@@ -23,7 +25,9 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
     },
     title: {
-      color: theme.colors.backupDoneBorder,
+      color: verified
+        ? theme.colors.backupDoneBorder
+        : theme.colors.headingColor,
     },
     iconWrapper: {
       flexDirection: 'row',
@@ -43,7 +47,7 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, verified);
 
   if (!domain && !verified) {
     return null;

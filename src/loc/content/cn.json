@@ -53,7 +53,7 @@
     "createChannel": "创建通道",
     "done": "完成",
     "okay": "好的",
-    "backupInProgress": "备份正在进行中",
+    "backupInProgress": "正在进行自动 RGB 备份",
     "tapToInfo": "点击查看信息",
     "backupInProgressMsg": "正在进行自动 RGB 备份。请勿关闭应用程序。",
     "backDoneMsg": "自动 RGB 备份已完成。",
@@ -630,7 +630,9 @@
     "domainVerified": "域名已验证",
     "domainVerifiedSuccessMsg": "域名验证\n成功！",
     "postTitle": "已在 Bitcoin Tribe 验证并发行！",
+    "postIssuedTitle": "已在 Bitcoin Tribe 上发行！",
     "postSubTitle": "现已上线 Bitcoin Tribe —— 通过 X（Twitter）透明发行并验证，利用 RGB 智能合约在比特币上实现。",
+    "postIssuedSubTitle": "现已上线 Bitcoin Tribe —— 透明发行，利用比特币上的 RGB 智能合约功能。",
     "postSuccessMsg": "你的推文已发布，请稍等 — 即将更新。",
     "verifyXTitle": "验证 X",
     "verifyXSubTitle": "您可以选择保存您的 X（Twitter）账号或进行验证。",
@@ -639,8 +641,8 @@
     "enterXhandleLabel": "输入 X 账号",
     "enterXhandlePlaceholder": "请输入 X 账号",
     "issuerVerificationTemplateTitle": "发行方已通过 𝕏 验证",
-    "xHandleTemplateTitle": "X 账号",
-    "domainName": "域名"
+    "xHandleTemplateTitle": "X 用户名（未验证）",
+    "domainName": "域名（未验证）"
   },
   "community": {
     "fnfTitle": "Community",
