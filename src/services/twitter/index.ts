@@ -1,6 +1,5 @@
 import { authorize } from 'react-native-app-auth';
 import { MMKV } from 'react-native-mmkv';
-import Toast from 'src/components/Toast';
 import Config from 'src/utils/config';
 
 const config = {
@@ -58,49 +57,18 @@ export const loginWithTwitter = async (): Promise<{
   }
 };
 
-export const getUserTweetByAssetId = async (
-  userId: string,
-  accessToken: string,
-  assetId: string,
-): Promise<any | null> => {
+export const fetchAndVerifyTweet = async tweetId => {
   try {
-    const response = await fetch(
-      `${TWITTER_API_BASE}/users/${userId}/tweets?max_results=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
+    const accessToken = storage.getString('accessToken');
+    const response = await fetch(`${TWITTER_API_BASE}/tweets/${tweetId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
-    );
-    if (response.status === 429) {
-      const resetAfter = response.headers.get('x-rate-limit-reset');
-      const now = Math.floor(Date.now() / 1000);
-      const waitTime = resetAfter ? Number(resetAfter) - now : null;
-      if (waitTime && waitTime > 0) {
-        Toast(
-          `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
-            Number(resetAfter) * 1000,
-          ).toLocaleTimeString()}).`,
-          true,
-        );
-      }
-
-      return null;
-    }
-
-    if (!response.ok) {
-      console.error(`Twitter API error: ${response.status}`);
-      return null;
-    }
-
-    const json = await response.json();
-    const tweets = json?.data || [];
-
-    const matchingTweet = tweets.find(tweet => tweet.text.includes(assetId));
-    return matchingTweet || null;
+    });
+    return response;
   } catch (error) {
-    console.error('Error fetching tweets:', error);
-    return null;
+    throw error;
   }
 };

@@ -642,7 +642,11 @@
     "enterXhandlePlaceholder": "Enter a X handle",
     "issuerVerificationTemplateTitle": "Issuer Verified via 𝕏",
     "xHandleTemplateTitle": "X Handle (Unverified)",
-    "domainName": "Domain Name (Unverified)"
+    "domainName": "Domain Name (Unverified)",
+    "importXPostTitle": "Import X Post",
+    "importXPostSubTitle": "Paste the link of your X post below. We’ll quickly fetch it and neatly show the post inside the app – simple and quick.",
+    "importXPostLabel": "Enter X Post URL",
+    "importXPostPlaceholder": "Enter Post URL"
   },
   "community": {
     "fnfTitle": "Community",

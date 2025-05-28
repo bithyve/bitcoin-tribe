@@ -61,6 +61,7 @@ export type AppStackParams = {
   [NavigationRoutes.REGISTERDOMAIN]: undefined;
   [NavigationRoutes.VERIFYDOMAIN]: undefined;
   [NavigationRoutes.VERIFYX]: undefined;
+  [NavigationRoutes.IMPORTXPOST]: undefined;
   // Add other routes as needed
 };
 

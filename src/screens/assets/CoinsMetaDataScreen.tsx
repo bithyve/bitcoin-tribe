@@ -47,6 +47,7 @@ import openLink from 'src/utils/OpenLink';
 import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -139,17 +140,6 @@ const CoinsMetaDataScreen = () => {
       }
     }, [coin?.issuer?.verified, hasCompleteVerification]),
   );
-
-  useEffect(() => {
-    if (
-      twitterVerification?.id &&
-      !twitterPostVerificationWithLink &&
-      twitterPostVerification &&
-      !twitterPostVerification?.link
-    ) {
-      ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
-    }
-  }, []);
 
   const hideAsset = () => {
     dbManager.updateObjectByPrimaryId(RealmSchema.Coin, 'assetId', assetId, {
@@ -286,6 +276,23 @@ const CoinsMetaDataScreen = () => {
                 testID={'view_in_registry'}
               />
             )}
+            {twitterVerification?.id &&
+              !twitterPostVerificationWithLink &&
+              twitterPostVerification &&
+              !twitterPostVerification?.link && (
+                <SelectOption
+                  title={'Show your X post here'}
+                  subTitle={''}
+                  onPress={() =>
+                    navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                      assetId: assetId,
+                      schema: RealmSchema.Coin,
+                      asset: coin,
+                    })
+                  }
+                  testID={'import_x_post'}
+                />
+              )}
           </View>
           {isAddedInRegistry && <View style={styles.seperatorView} />}
           {twitterPostVerificationWithLink?.link && (

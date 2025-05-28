@@ -158,7 +158,6 @@ function RegisterDomain() {
             value={domainName}
             onChangeText={handleDomainNameChange}
             placeholder={assets.enterDomainName}
-            maxLength={32}
             style={styles.input}
             blurOnSubmit={false}
             returnKeyType="done"

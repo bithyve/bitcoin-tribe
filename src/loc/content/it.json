@@ -642,7 +642,11 @@
     "enterXhandlePlaceholder": "Inserisci un handle X",
     "issuerVerificationTemplateTitle": "Emittente verificato tramite 𝕏",
     "xHandleTemplateTitle": "Handle X (Non verificato)",
-    "domainName": "Nome di dominio (Non verificato)"
+    "domainName": "Nome di dominio (Non verificato)",
+    "importXPostTitle": "Importa post da X",
+    "importXPostSubTitle": "Incolla il link del tuo post X qui sotto. Lo recupereremo rapidamente e lo mostreremo ordinatamente nell'app – semplice e veloce.",
+    "importXPostLabel": "Inserisci l'URL del post X",
+    "importXPostPlaceholder": "Inserisci l'URL del post"
   },
   "community": {
     "fnfTitle": "Community",
