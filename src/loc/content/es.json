@@ -642,7 +642,11 @@
     "enterXhandlePlaceholder": "Introduce un handle de X",
     "issuerVerificationTemplateTitle": "Emisor verificado a través de 𝕏",
     "xHandleTemplateTitle": "Manejador de X (No verificado)",
-    "domainName": "Nombre de dominio (No verificado)"
+    "domainName": "Nombre de dominio (No verificado)",
+    "importXPostTitle": "Importar publicación de X",
+    "importXPostSubTitle": "Pega el enlace de tu publicación de X abajo. Lo obtendremos rápidamente y lo mostraremos de forma ordenada en la app – simple y rápido.",
+    "importXPostLabel": "Ingresa la URL de la publicación de X",
+    "importXPostPlaceholder": "Ingresa la URL de la publicación"
   },
   "community": {
     "fnfTitle": "Community",

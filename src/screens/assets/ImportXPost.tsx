@@ -115,22 +115,20 @@ function ImportXPost() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={'Import X Post'} />
+      <AppHeader title={assets.importXPostTitle} />
       <ModalLoading visible={isLoading} />
       <KeyboardAvoidView style={styles.container}>
         <AppText variant="body1" style={styles.headText}>
-          {
-            'Paste the link of your X post below. We’ll quickly fetch it and neatly show the post inside the app – simple and quick.'
-          }
+          {assets.importXPostSubTitle}
         </AppText>
         <View style={styles.inputViewWrapper}>
           <AppText variant="body1" style={styles.labelText}>
-            {'Enter X Post URL'}
+            {assets.importXPostLabel}
           </AppText>
           <TextField
             value={tweetUrl}
             onChangeText={handleXPostUrlChange}
-            placeholder={'Enter Post URL'}
+            placeholder={assets.importXPostPlaceholder}
             autoFocus={true}
             multiline={true}
             onContentSizeChange={event => {

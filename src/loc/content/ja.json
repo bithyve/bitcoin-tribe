@@ -642,7 +642,11 @@
     "enterXhandlePlaceholder": "X ハンドルを入力してください",
     "issuerVerificationTemplateTitle": "発行者が 𝕏 によって認証されました",
     "xHandleTemplateTitle": "X ハンドル（未確認）",
-    "domainName": "ドメイン名（未確認）"
+    "domainName": "ドメイン名（未確認）",
+    "importXPostTitle": "Xポストをインポート",
+    "importXPostSubTitle": "下にXポストのリンクを貼り付けてください。すぐに取得してアプリ内にきれいに表示します – 簡単かつ迅速です。",
+    "importXPostLabel": "XポストのURLを入力",
+    "importXPostPlaceholder": "ポストURLを入力"
   },
   "community": {
     "fnfTitle": "Community",
