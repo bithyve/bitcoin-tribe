@@ -21,7 +21,7 @@ import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
-import { verifyTweetById } from 'src/services/twitter';
+import { validateTweetForAsset } from 'src/utils/socialHandleUtils';
 
 function ImportXPost() {
   const navigation = useNavigation();
@@ -79,7 +79,7 @@ function ImportXPost() {
       return;
     }
 
-    const result = await verifyTweetById(id, assetId, schema, asset);
+    const result = await validateTweetForAsset(id, assetId, schema, asset);
 
     if (result.success) {
       setTweetId(id);
