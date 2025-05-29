@@ -322,12 +322,10 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     const hasIssuance = asset?.transactions?.some(
       tx => tx.kind?.toUpperCase() === TransferKind.ISSUANCE,
     );
-
     const shouldShowShareOption =
       (!asset?.isIssuedPosted && hasIssuance) ||
       (asset?.issuer?.verified && !asset?.isVerifyPosted);
-
-    if (!shouldShowShareOption) return null;
+    if (!hasIssuance) return null;
     return (
       <View style={styles.shareOptionWrapper}>
         <ShareOptionView title={assets.sharePostTitle} onPress={onPressShare} />

@@ -311,7 +311,7 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
-                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, true);
+                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
                 updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
                 setRefresh(prev => !prev);
               }}
@@ -330,7 +330,7 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
               }}
               secondaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);

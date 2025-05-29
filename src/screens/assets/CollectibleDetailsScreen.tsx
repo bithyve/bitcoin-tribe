@@ -271,7 +271,7 @@ const CollectibleDetailsScreen = () => {
               collectible,
               RealmSchema.Collectible,
               assetId,
-              true,
+              false,
             );
             updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
             setRefresh(prev => !prev);
@@ -296,7 +296,11 @@ const CollectibleDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
-            updateAssetIssuedPostStatus(RealmSchema.Collectible, assetId, true);
+            updateAssetIssuedPostStatus(
+              RealmSchema.Collectible,
+              assetId,
+              false,
+            );
           }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);

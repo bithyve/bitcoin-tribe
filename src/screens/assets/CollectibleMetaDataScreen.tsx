@@ -358,7 +358,7 @@ const CollectibleMetaDataScreen = () => {
                     collectible,
                     RealmSchema.Collectible,
                     assetId,
-                    true,
+                    false,
                   );
                   updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
@@ -394,7 +394,7 @@ const CollectibleMetaDataScreen = () => {
                   updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
                     assetId,
-                    true,
+                    false,
                   );
                 }}
                 secondaryOnPress={() => {

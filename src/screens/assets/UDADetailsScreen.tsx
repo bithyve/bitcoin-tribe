@@ -430,7 +430,7 @@ const UDADetailsScreen = () => {
               uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
-              true,
+              false,
             );
             updateAssetIssuedPostStatus(
               RealmSchema.UniqueDigitalAsset,
@@ -466,7 +466,7 @@ const UDADetailsScreen = () => {
             updateAssetIssuedPostStatus(
               RealmSchema.UniqueDigitalAsset,
               assetId,
-              true,
+              false,
             );
           }}
           secondaryOnPress={() => {
