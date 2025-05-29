@@ -460,7 +460,8 @@
     "output": "आउटपुट",
     "utxoValue": "UTXO मूल्य",
     "requestTSatsProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
-    "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!"
+    "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!",
+    "xpubAndUtxoTitle": "xPUB और UTXOs"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

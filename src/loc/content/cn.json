@@ -460,7 +460,8 @@
     "output": "输出",
     "utxoValue": "UTXO 值",
     "requestTSatsProcessTitle": "正在处理您的请求",
-    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！"
+    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！",
+    "xpubAndUtxoTitle": "xPUB 和 UTXOs"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

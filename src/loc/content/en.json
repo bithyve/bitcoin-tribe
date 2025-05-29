@@ -460,7 +460,8 @@
     "output": "Output",
     "utxoValue": "UTXO Value",
     "requestTSatsProcessTitle": "Processing Your Request",
-    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!"
+    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!",
+    "xpubAndUtxoTitle": "xPUB and UTXOs"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",

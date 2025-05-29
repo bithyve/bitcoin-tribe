@@ -460,7 +460,8 @@
     "output": "Uscita",
     "utxoValue": "Valore UTXO",
     "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
-    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!"
+    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!",
+    "xpubAndUtxoTitle": "xPUB e UTXO"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",

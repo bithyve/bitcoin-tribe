@@ -460,7 +460,8 @@
     "output": "出力",
     "utxoValue": "UTXO 値",
     "requestTSatsProcessTitle": "リクエストを処理中",
-    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！"
+    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！",
+    "xpubAndUtxoTitle": "xPUBとUTXO"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
