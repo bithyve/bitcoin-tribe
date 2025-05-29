@@ -117,6 +117,10 @@ const UDADetailsScreen = () => {
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
 
+  const hasIssuanceTransaction = uda?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -326,10 +330,7 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
-        {uda?.transactions.some(
-          transaction =>
-            transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-        ) && (
+        {hasIssuanceTransaction && (
           <>
             <VerifyIssuer
               assetId={assetId}
@@ -360,7 +361,8 @@ const UDADetailsScreen = () => {
               testID={'view_in_registry'}
             />
           )}
-          {twitterVerification?.id &&
+          {hasIssuanceTransaction &&
+            twitterVerification?.id &&
             !twitterPostVerificationWithLink &&
             twitterPostVerification &&
             !twitterPostVerification?.link && (

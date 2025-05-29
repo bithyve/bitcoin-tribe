@@ -113,6 +113,10 @@ const CoinsMetaDataScreen = () => {
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
+  const hasIssuanceTransaction = coin?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
@@ -240,10 +244,7 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-          {coin?.transactions.some(
-            transaction =>
-              transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-          ) && (
+          {hasIssuanceTransaction && (
             <>
               <VerifyIssuer
                 assetId={assetId}
@@ -276,7 +277,8 @@ const CoinsMetaDataScreen = () => {
                 testID={'view_in_registry'}
               />
             )}
-            {twitterVerification?.id &&
+            {hasIssuanceTransaction &&
+              twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
               twitterPostVerification &&
               !twitterPostVerification?.link && (

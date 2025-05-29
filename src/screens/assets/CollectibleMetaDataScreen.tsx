@@ -130,6 +130,10 @@ const CollectibleMetaDataScreen = () => {
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
 
+  const hasIssuanceTransaction = collectible?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -275,10 +279,7 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-            {collectible?.transactions.some(
-              transaction =>
-                transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-            ) && (
+            {hasIssuanceTransaction && (
               <>
                 <VerifyIssuer
                   assetId={assetId}
@@ -316,7 +317,8 @@ const CollectibleMetaDataScreen = () => {
                   testID={'view_in_registry'}
                 />
               )}
-              {twitterVerification?.id &&
+              {hasIssuanceTransaction &&
+                twitterVerification?.id &&
                 !twitterPostVerificationWithLink &&
                 twitterPostVerification &&
                 !twitterPostVerification?.link && (
