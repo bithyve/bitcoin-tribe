@@ -121,6 +121,10 @@ const UDADetailsScreen = () => {
     transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
   );
 
+  const verified = uda?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -342,7 +346,7 @@ const UDADetailsScreen = () => {
               onPressShare={() => {
                 if (!uda?.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
-                } else if (!uda?.isVerifyPosted && uda?.issuer?.verified) {
+                } else if (!uda?.isVerifyPosted && verified) {
                   setVisiblePostOnTwitter(true);
                 }
               }}

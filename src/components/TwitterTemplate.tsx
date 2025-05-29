@@ -25,7 +25,7 @@ import {
 import AppLogo from 'src/assets/images/websiteLogo.svg';
 import IconX from 'src/assets/images/icon_x.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
-import IconDomainVerified from 'src/assets/images/issuer_domain_verified.svg';
+import IconDomainVerified from 'src/assets/images/issuer_verified.svg';
 import Fonts from 'src/constants/Fonts';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
@@ -130,10 +130,12 @@ const DomainInfoItem = (props: DomainInfoItemProps) => {
         Colors.ChineseBlack1,
       ]}>
       <View style={styles.verifiedWrapper}>
-        <AppText>
+        <AppText variant="body2" style={styles.textName}>
           {verified ? assets.domainVerified : assets.domainName}
         </AppText>
-        <AppText>{domain}</AppText>
+        <AppText variant="body2" style={styles.textUsername}>
+          {domain}
+        </AppText>
       </View>
       <View style={styles.verifiedIconWrapper}>
         {verified && <IconDomainVerified />}
@@ -284,7 +286,7 @@ const getStyles = (theme: AppTheme) =>
     headingText: {
       fontWeight: '600',
       fontFamily: Fonts.LufgaMedium,
-      fontSize: hp(40),
+      fontSize: hp(38),
       color: Colors.White,
       marginBottom: hp(3),
     },

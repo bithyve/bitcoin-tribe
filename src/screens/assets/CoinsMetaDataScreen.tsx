@@ -117,6 +117,10 @@ const CoinsMetaDataScreen = () => {
     transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
   );
 
+  const verified = coin?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
@@ -256,7 +260,7 @@ const CoinsMetaDataScreen = () => {
                 onPressShare={() => {
                   if (!coin?.isIssuedPosted) {
                     setVisibleIssuedPostOnTwitter(true);
-                  } else if (!coin?.isVerifyPosted && coin?.issuer?.verified) {
+                  } else if (!coin?.isVerifyPosted && verified) {
                     setVisiblePostOnTwitter(true);
                   }
                 }}

@@ -134,6 +134,10 @@ const CollectibleMetaDataScreen = () => {
     transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
   );
 
+  const verified = collectible?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -291,10 +295,7 @@ const CollectibleMetaDataScreen = () => {
                   onPressShare={() => {
                     if (!collectible?.isIssuedPosted) {
                       setVisibleIssuedPostOnTwitter(true);
-                    } else if (
-                      !collectible?.isVerifyPosted &&
-                      collectible?.issuer?.verified
-                    ) {
+                    } else if (!collectible?.isVerifyPosted && verified) {
                       setVisiblePostOnTwitter(true);
                     }
                   }}
