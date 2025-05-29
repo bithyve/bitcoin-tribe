@@ -409,7 +409,7 @@
     "confirmation": "确认",
     "rgbUtxoCreateNote": "RGB功能目前处于alpha阶段。因此，由于技术尚处于早期阶段，您可能需要完成额外的交易。",
     "walletSettings": "钱包设置",
-    "walletSettingSubTitle": "轻松管理您的钱包设置",
+    "walletSettingSubTitle": "访问您的钱包 xPub 和 UTXOs",
     "nameAndPic": "名称和照片",
     "nameAndPicSubTitle": "输入或编辑名称和照片",
     "showXPub": "显示xPub",

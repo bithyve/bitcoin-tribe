@@ -409,7 +409,7 @@
     "confirmation": "Confirmacione",
     "rgbUtxoCreateNote": "La función RGB se encuentra actualmente en alfa. Como resultado, es posible que deba completar una transacción adicional debido a la etapa inicial de esta tecnología.",
     "walletSettings": "Configuración de la billetera",
-    "walletSettingSubTitle": "Administre fácilmente la configuración de su billetera",
+    "walletSettingSubTitle": "Accede a tu xPub y UTXOs del monedero",
     "nameAndPic": "Nombre e imagen",
     "nameAndPicSubTitle": "Ingresar, Editar nombre y foto",
     "showXPub": "Mostrar xPub",

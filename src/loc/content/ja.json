@@ -409,7 +409,7 @@
     "confirmation": "確認",
     "rgbUtxoCreateNote": "RGB機能は現在アルファ版です。このため、この技術の初期段階により追加の取引が必要になる場合があります。",
     "walletSettings": "ウォレット設定",
-    "walletSettingSubTitle": "ウォレット設定を簡単に管理",
+    "walletSettingSubTitle": "ウォレットのxPubとUTXOにアクセス",
     "nameAndPic": "名前と写真",
     "nameAndPicSubTitle": "名前と写真を入力・編集",
     "showXPub": "xPubを表示",

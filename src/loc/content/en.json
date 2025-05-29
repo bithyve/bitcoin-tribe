@@ -409,7 +409,7 @@
     "confirmation": "Confirmation",
     "rgbUtxoCreateNote": "The RGB feature is currently in alpha. As a result, you may need to complete an additional transaction due to the early stage of this technology.",
     "walletSettings": "Wallet Settings",
-    "walletSettingSubTitle": "Easily Manage Your Wallet Settings",
+    "walletSettingSubTitle": "Access Your Wallet xPub and UTXOs",
     "nameAndPic": "Name and Picture",
     "nameAndPicSubTitle": "Enter, Edit Name and photo",
     "showXPub": "Show xPub",
