@@ -34,7 +34,7 @@ function ImportXPost() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [tweetUrl, setTweetUrl] = useState('');
   const [tweetId, setTweetId] = useState<string | null>(null);
-  const [inputHeight, setInputHeight] = React.useState(100);
+  const [inputHeight, setInputHeight] = React.useState(50);
   const [tweetUrlValidationError, setTweetUrlValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const styles = getStyles(theme, inputHeight);

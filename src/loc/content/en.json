@@ -644,7 +644,7 @@
     "xHandleTemplateTitle": "X Handle (Unverified)",
     "domainName": "Domain Name (Unverified)",
     "importXPostTitle": "Import X Post",
-    "importXPostSubTitle": "Paste the link of your X post below. We’ll quickly fetch it and neatly show the post inside the app – simple and quick.",
+    "importXPostSubTitle": "Paste the link to your X post below. We'll quickly fetch it and display the post inside the app — clean and easy.",
     "importXPostLabel": "Enter X Post URL",
     "importXPostPlaceholder": "Enter Post URL"
   },
