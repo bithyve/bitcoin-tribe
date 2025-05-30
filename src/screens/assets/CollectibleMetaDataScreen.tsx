@@ -130,6 +130,14 @@ const CollectibleMetaDataScreen = () => {
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
 
+  const hasIssuanceTransaction = collectible?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  const verified = collectible?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -275,10 +283,7 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-            {collectible?.transactions.some(
-              transaction =>
-                transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-            ) && (
+            {hasIssuanceTransaction && (
               <>
                 <VerifyIssuer
                   assetId={assetId}
@@ -290,10 +295,7 @@ const CollectibleMetaDataScreen = () => {
                   onPressShare={() => {
                     if (!collectible?.isIssuedPosted) {
                       setVisibleIssuedPostOnTwitter(true);
-                    } else if (
-                      !collectible?.isVerifyPosted &&
-                      collectible?.issuer?.verified
-                    ) {
+                    } else if (!collectible?.isVerifyPosted && verified) {
                       setVisiblePostOnTwitter(true);
                     }
                   }}
@@ -316,7 +318,8 @@ const CollectibleMetaDataScreen = () => {
                   testID={'view_in_registry'}
                 />
               )}
-              {twitterVerification?.id &&
+              {hasIssuanceTransaction &&
+                twitterVerification?.id &&
                 !twitterPostVerificationWithLink &&
                 twitterPostVerification &&
                 !twitterPostVerification?.link && (
@@ -356,7 +359,7 @@ const CollectibleMetaDataScreen = () => {
                     collectible,
                     RealmSchema.Collectible,
                     assetId,
-                    true,
+                    false,
                   );
                   updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
@@ -392,7 +395,7 @@ const CollectibleMetaDataScreen = () => {
                   updateAssetIssuedPostStatus(
                     RealmSchema.Collectible,
                     assetId,
-                    true,
+                    false,
                   );
                 }}
                 secondaryOnPress={() => {

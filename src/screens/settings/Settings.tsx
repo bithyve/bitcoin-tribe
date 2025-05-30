@@ -141,7 +141,7 @@ function SettingsScreen({ navigation }) {
   const WalletMgtMenu: SettingMenuProps[] = [
     {
       id: 1,
-      title: walletTranslation.walletSettings,
+      title: walletTranslation.xpubAndUtxoTitle,
       icon: isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
       onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
     },

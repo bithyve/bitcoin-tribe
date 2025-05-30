@@ -3,7 +3,7 @@ import React, { useCallback, useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 
 import AppText from 'src/components/AppText';
-import IconVerified from 'src/assets/images/issuer_domain_verified.svg';
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';

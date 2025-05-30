@@ -117,6 +117,14 @@ const UDADetailsScreen = () => {
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
 
+  const hasIssuanceTransaction = uda?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  const verified = uda?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -326,10 +334,7 @@ const UDADetailsScreen = () => {
             />
           )}
         </View>
-        {uda?.transactions.some(
-          transaction =>
-            transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-        ) && (
+        {hasIssuanceTransaction && (
           <>
             <VerifyIssuer
               assetId={assetId}
@@ -341,7 +346,7 @@ const UDADetailsScreen = () => {
               onPressShare={() => {
                 if (!uda?.isIssuedPosted) {
                   setVisibleIssuedPostOnTwitter(true);
-                } else if (!uda?.isVerifyPosted && uda?.issuer?.verified) {
+                } else if (!uda?.isVerifyPosted && verified) {
                   setVisiblePostOnTwitter(true);
                 }
               }}
@@ -360,7 +365,8 @@ const UDADetailsScreen = () => {
               testID={'view_in_registry'}
             />
           )}
-          {twitterVerification?.id &&
+          {hasIssuanceTransaction &&
+            twitterVerification?.id &&
             !twitterPostVerificationWithLink &&
             twitterPostVerification &&
             !twitterPostVerification?.link && (
@@ -428,7 +434,7 @@ const UDADetailsScreen = () => {
               uda,
               RealmSchema.UniqueDigitalAsset,
               assetId,
-              true,
+              false,
             );
             updateAssetIssuedPostStatus(
               RealmSchema.UniqueDigitalAsset,
@@ -464,7 +470,7 @@ const UDADetailsScreen = () => {
             updateAssetIssuedPostStatus(
               RealmSchema.UniqueDigitalAsset,
               assetId,
-              true,
+              false,
             );
           }}
           secondaryOnPress={() => {

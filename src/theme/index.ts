@@ -141,7 +141,7 @@ const CombinedDefaultTheme: AppTheme = {
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
     transButtonBackColor: Colors.BrightGray,
-    profileBackground: Colors.Black,
+    profileBackground: Colors.GhostWhite,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
     tagText: Colors.Black,
