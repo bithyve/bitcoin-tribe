@@ -20,7 +20,7 @@ object RGBWalletRepository {
 
     }
 
-    fun  initialize(network: String, mnemonic:String, xpub: String): String{
+    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String): String{
         try {
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
@@ -28,7 +28,8 @@ object RGBWalletRepository {
                 rgbNetwork!!,
                 DatabaseType.SQLITE,
                 1u,
-                xpub,
+                accountXpubVanilla,
+                accountXpubColored,
                 mnemonic,
                 1u
             )

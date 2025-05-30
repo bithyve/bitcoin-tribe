@@ -82,10 +82,16 @@ export default class RGBServices {
 
   static initiate = async (
     mnemonic: string,
-    pubKey: string,
+    accountXpubVanilla: string,
+    accountXpubColored: string,
   ): Promise<string> => {
     try {
-      const data = await RGB.initiate(this.NETWORK, mnemonic, pubKey);
+      const data = await RGB.initiate(
+        this.NETWORK,
+        mnemonic,
+        accountXpubVanilla,
+        accountXpubColored,
+      );
       return JSON.parse(data);
     } catch (error) {
       return `${error}`;

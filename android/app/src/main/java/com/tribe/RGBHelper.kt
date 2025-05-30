@@ -170,7 +170,7 @@ object RGBHelper {
             RGBWalletRepository.online!!,
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
             isDonation,
-            feeRate,
+            feeRate.toULong(),
             0u,
             false
         ) }
@@ -211,7 +211,6 @@ object RGBHelper {
 
     private fun issueAssetRgb20(ticker: String, name: String, amounts: List<ULong>, precision: Int): AssetNia? {
         val asset = RGBWalletRepository.wallet?.issueAssetNia(
-            RGBWalletRepository.online!!,
             ticker,
             name,
             precision.toUByte(),
@@ -225,7 +224,6 @@ object RGBHelper {
 
     private fun issueAssetRgb25(name: String, description: String, amounts: List<ULong>, precision: Int, filePath: String): AssetCfa? {
         val asset = RGBWalletRepository.wallet?.issueAssetCfa(
-            RGBWalletRepository.online!!,
             name,
             description,
             precision.toUByte(),
@@ -238,7 +236,6 @@ object RGBHelper {
 
     fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): String? {
         val asset = RGBWalletRepository.wallet?.issueAssetUda(
-            RGBWalletRepository.online!!,
             ticker,
             name,
             details,
@@ -276,7 +273,7 @@ object RGBHelper {
             false,
             null,
             null,
-            feeRate,
+            feeRate.toULong(),
             false
         )
     }
@@ -288,7 +285,7 @@ object RGBHelper {
     fun createUtxosBegin(upTo: Boolean, num: Int, size: Int, feeRate: Float, skipSync: Boolean): String? {
         return RGBWalletRepository.wallet?.createUtxosBegin(
             RGBWalletRepository.online!!, upTo,
-            num.toUByte(), size.toUInt(), feeRate, skipSync)
+            num.toUByte(), size.toUInt(), feeRate.toULong(), skipSync)
     }
 
     fun signPsbt(unsignedPsbt: String): String? {
@@ -340,7 +337,7 @@ object RGBHelper {
         val keys = restoreKeys(RGBWalletRepository.rgbNetwork!!, mnemonic)
         return File(
             context.filesDir,
-            AppConstants.backupName.format(keys.accountXpubFingerprint)
+            AppConstants.backupName.format(keys.accountXpubColoredFingerprint)
         )
     }
 

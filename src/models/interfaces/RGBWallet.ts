@@ -5,8 +5,9 @@ export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
-  accountXpub: string;
-  accountXpubFingerprint: string;
+  accountXpubColoredFingerprint: string;
+  accountXpubColored: string;
+  accountXpubVanilla: string;
   receiveData?: {
     invoice: string;
     recipientId: string;
