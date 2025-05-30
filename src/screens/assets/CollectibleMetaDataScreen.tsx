@@ -109,6 +109,7 @@ const CollectibleMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
@@ -216,8 +217,8 @@ const CollectibleMetaDataScreen = () => {
         }}
         style={styles.headerWrapper}
       />
-      {isLoading ? (
-        <ModalLoading visible={isLoading} />
+      {isLoading || isVerifyingIssuer ? (
+        <ModalLoading visible={isLoading || isVerifyingIssuer} />
       ) : (
         <>
           <ScrollView
@@ -240,6 +241,10 @@ const CollectibleMetaDataScreen = () => {
                 id={twitterVerification?.id}
                 name={twitterVerification?.name}
                 username={twitterVerification?.username.replace(/@/g, '')}
+                assetId={assetId}
+                schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+                setIsVerifyingIssuer={setIsVerifyingIssuer}
               />
               <IssuerDomainVerified
                 domain={
@@ -248,6 +253,13 @@ const CollectibleMetaDataScreen = () => {
                   )?.name
                 }
                 verified={domainVerification?.verified}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                    assetId: assetId,
+                    schema: RealmSchema.Collectible,
+                    savedDomainName: domainVerification?.name || '',
+                  });
+                }}
               />
             </View>
             <Item
