@@ -64,12 +64,10 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
-import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
 import {
   getMessaging,
   getToken,
   subscribeToTopic,
-  unsubscribeFromTopic,
   requestPermission,
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
@@ -80,6 +78,8 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
+import DHT from 'hyperdht';
+
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
@@ -215,6 +215,7 @@ export class ApiHandler {
             ? mnemonic
             : bip39.generateMnemonic();
           const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
+          const dhtKeyPair = DHT.keyPair([primarySeed]);
           const appID = crypto
             .createHash('sha256')
             .update(primarySeed)
@@ -268,6 +269,10 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              dhtPublicKey: dhtKeyPair.publicKey.toString('hex'),
+              dhtPrivateKey: dhtKeyPair.privateKey.toString('hex'),
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {

@@ -53,7 +53,12 @@ function SendEnterAddress({
       setInvoiceValidationError('');
       return;
     }
-
+    if(text.startsWith('tribecontact://')) {
+      Keyboard.dismiss();
+      setAddress(text);
+      setInvoiceValidationError('');
+      return;
+    }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
     const { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
       text,
