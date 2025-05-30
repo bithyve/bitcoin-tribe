@@ -610,7 +610,7 @@
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
     "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
-    "recordCard": "记录卡",
+    "recordCard": "DNS记录详情",
     "recordType": "记录类型",
     "domain": "域名",
     "value": "值",

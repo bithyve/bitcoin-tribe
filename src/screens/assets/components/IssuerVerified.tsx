@@ -8,6 +8,8 @@ import openLink from 'src/utils/OpenLink';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { verifyIssuerOnTwitter } from './VerifyIssuer';
+import { RealmSchema } from 'src/storage/enum';
 
 const getStyles = (theme: AppTheme, id) =>
   StyleSheet.create({
@@ -42,19 +44,37 @@ interface IssuerVerifiedProps {
   id: string;
   name: string;
   username: string;
+  assetId?: string;
+  schema?: RealmSchema;
+  onVerificationComplete?: () => void;
+  setIsVerifyingIssuer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const IssuerVerified: React.FC<IssuerVerifiedProps> = (
   props: IssuerVerifiedProps,
 ) => {
-  const { id, name, username } = props;
+  const {
+    id,
+    name,
+    username,
+    assetId,
+    schema,
+    onVerificationComplete,
+    setIsVerifyingIssuer,
+  } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const styles = getStyles(theme, id);
 
-  const onPress = useCallback(() => {
-    openLink(`https://twitter.com/i/user/${id}`);
+  const onPress = useCallback(async () => {
+    if (id) {
+      openLink(`https://twitter.com/i/user/${id}`);
+    } else {
+      setIsVerifyingIssuer(true);
+      await verifyIssuerOnTwitter(assetId, schema, onVerificationComplete);
+      setIsVerifyingIssuer(false);
+    }
   }, [id]);
 
   if (!id && !name && !username) {

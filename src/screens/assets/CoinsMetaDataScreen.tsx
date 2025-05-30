@@ -95,6 +95,7 @@ const CoinsMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
@@ -182,8 +183,8 @@ const CoinsMetaDataScreen = () => {
         enableBack={true}
         style={styles.wrapper}
       />
-      {isLoading ? (
-        <ModalLoading visible={isLoading} />
+      {isLoading || isVerifyingIssuer ? (
+        <ModalLoading visible={isLoading || isVerifyingIssuer} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
@@ -193,6 +194,10 @@ const CoinsMetaDataScreen = () => {
               id={twitterVerification?.id}
               name={twitterVerification?.name}
               username={twitterVerification?.username.replace(/@/g, '')}
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              setIsVerifyingIssuer={setIsVerifyingIssuer}
             />
             <IssuerDomainVerified
               domain={
@@ -201,6 +206,13 @@ const CoinsMetaDataScreen = () => {
                 )?.name
               }
               verified={domainVerification?.verified}
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                  assetId: assetId,
+                  schema: RealmSchema.Coin,
+                  savedDomainName: domainVerification?.name || '',
+                });
+              }}
             />
           </View>
           <View style={styles.rowWrapper}>

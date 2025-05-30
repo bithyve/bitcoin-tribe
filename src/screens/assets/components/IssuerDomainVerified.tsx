@@ -38,12 +38,13 @@ const getStyles = (theme: AppTheme, verified) =>
 interface IssuerDomainVerifiedProps {
   domain: string;
   verified?: boolean;
+  onPress?: () => void;
 }
 
 const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   props: IssuerDomainVerifiedProps,
 ) => {
-  const { domain, verified } = props;
+  const { domain, verified, onPress } = props;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const theme: AppTheme = useTheme();
@@ -54,7 +55,7 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   }
 
   return (
-    <AppTouchable style={styles.container}>
+    <AppTouchable style={styles.container} onPress={onPress}>
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>
