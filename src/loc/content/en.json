@@ -610,7 +610,7 @@
     "sharePostTitle": "Share post on X",
     "verificationTitle": "VERIFICATION",
     "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee.",
-    "recordCard": "Record Card",
+    "recordCard": "DNS Record Details",
     "recordType": "Record Type",
     "domain": "Domain",
     "value": "Value",
