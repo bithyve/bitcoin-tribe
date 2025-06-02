@@ -90,6 +90,7 @@ const VerifyIssuerModal = ({
             secondaryOnPress={onDismiss}
             width={windowWidth / 2.7}
             secondaryCTAWidth={windowWidth / 2.9}
+            height={hp(14)}
           />
           {/* </View> */}
         </View>
