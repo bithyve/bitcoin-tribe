@@ -140,14 +140,12 @@ function SendSuccessContainer(props: sendSuccessProps) {
           )}
         </View>
       </View>
-      <View style={styles.primaryCtaStyle}>
-        <SwipeToAction
-          title={sendScreen.swipeToBroadcast}
-          loadingTitle={sendScreen.broadcastingTXN}
-          onSwipeComplete={onPress}
-          backColor={theme.colors.swipeToActionThumbColor}
-        />
-      </View>
+      <SwipeToAction
+        title={sendScreen.swipeToBroadcast}
+        loadingTitle={sendScreen.broadcastingTXN}
+        onSwipeComplete={onPress}
+        backColor={theme.colors.swipeToActionThumbColor}
+      />
     </View>
   ) : (
     <>
@@ -179,6 +177,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       marginVertical: hp(10),
+      marginBottom: hp(20),
     },
     labelWrapper: {
       width: '45%',
@@ -194,10 +193,6 @@ const getStyles = (theme: AppTheme) =>
     },
     valueText: {
       color: theme.colors.headingColor,
-    },
-    primaryCtaStyle: {
-      marginTop: hp(30),
-      // alignSelf: 'center',
     },
     satsText: {
       color: theme.colors.headingColor,
