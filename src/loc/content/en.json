@@ -213,7 +213,7 @@
     "appBackup": "App Backup",
     "connectionSettings": "Connection Settings",
     "connectionSettingSubTitle": "Configure Tor and Nodes",
-    "appInfo": "App info and History",
+    "appInfo": "App info and Version History",
     "appInfoSubTitle": "App version and details",
     "language": "Language",
     "languageSubTitle": "Choose your Language",
@@ -409,7 +409,7 @@
     "confirmation": "Confirmation",
     "rgbUtxoCreateNote": "The RGB feature is currently in alpha. As a result, you may need to complete an additional transaction due to the early stage of this technology.",
     "walletSettings": "Wallet Settings",
-    "walletSettingSubTitle": "Easily Manage Your Wallet Settings",
+    "walletSettingSubTitle": "Access Your Wallet xPub and UTXOs",
     "nameAndPic": "Name and Picture",
     "nameAndPicSubTitle": "Enter, Edit Name and photo",
     "showXPub": "Show xPub",
@@ -460,7 +460,8 @@
     "output": "Output",
     "utxoValue": "UTXO Value",
     "requestTSatsProcessTitle": "Processing Your Request",
-    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!"
+    "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!",
+    "xpubAndUtxoTitle": "xPUB and UTXOs"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -609,7 +610,7 @@
     "sharePostTitle": "Share post on X",
     "verificationTitle": "VERIFICATION",
     "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee.",
-    "recordCard": "Record Card",
+    "recordCard": "DNS Record Details",
     "recordType": "Record Type",
     "domain": "Domain",
     "value": "Value",
@@ -644,7 +645,7 @@
     "xHandleTemplateTitle": "X Handle (Unverified)",
     "domainName": "Domain Name (Unverified)",
     "importXPostTitle": "Import X Post",
-    "importXPostSubTitle": "Paste the link of your X post below. We’ll quickly fetch it and neatly show the post inside the app – simple and quick.",
+    "importXPostSubTitle": "Paste the link to your X post below. We'll quickly fetch it and display the post inside the app — clean and easy.",
     "importXPostLabel": "Enter X Post URL",
     "importXPostPlaceholder": "Enter Post URL"
   },

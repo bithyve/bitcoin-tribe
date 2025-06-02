@@ -213,7 +213,7 @@
     "appBackup": "Backup dell'app",
     "connectionSettings": "Impostazioni connessione",
     "connectionSettingSubTitle": "Configura Tor e nodi",
-    "appInfo": "Informazioni sull'app e \ncronologia",
+    "appInfo": "Informazioni sull'app e \ncronologia delle versioni",
     "appInfoSubTitle": "Versione dell'app e dettagli",
     "language": "Lingua",
     "languageSubTitle": "Scegli la tua lingua",
@@ -409,7 +409,7 @@
     "confirmation": "Conferma",
     "rgbUtxoCreateNote": "La funzione RGB è attualmente in versione alpha. Di conseguenza, potrebbe essere necessario completare una transazione aggiuntiva a causa della fase iniziale di questa tecnologia.",
     "walletSettings": "Impostazioni portafoglio",
-    "walletSettingSubTitle": "Gestisci facilmente le impostazioni del tuo portafoglio",
+    "walletSettingSubTitle": "Accedi al tuo xPub e agli UTXO del wallet",
     "nameAndPic": "Nome e immagine",
     "nameAndPicSubTitle": "Inserisci, modifica nome e foto",
     "showXPub": "Mostra xPub",
@@ -460,7 +460,8 @@
     "output": "Uscita",
     "utxoValue": "Valore UTXO",
     "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
-    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!"
+    "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!",
+    "xpubAndUtxoTitle": "xPUB e UTXO"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -609,7 +610,7 @@
     "sharePostTitle": "Condividi il post su X",
     "verificationTitle": "VERIFICA",
     "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
-    "recordCard": "Scheda di Record",
+    "recordCard": "Dettagli del record DNS",
     "recordType": "Tipo di Record",
     "domain": "Dominio",
     "value": "Valore",
@@ -644,7 +645,7 @@
     "xHandleTemplateTitle": "Handle X (Non verificato)",
     "domainName": "Nome di dominio (Non verificato)",
     "importXPostTitle": "Importa post da X",
-    "importXPostSubTitle": "Incolla il link del tuo post X qui sotto. Lo recupereremo rapidamente e lo mostreremo ordinatamente nell'app – semplice e veloce.",
+    "importXPostSubTitle": "Incolla il link del tuo post su X qui sotto. Lo recupereremo rapidamente e lo mostreremo nell'app — chiaro e semplice.",
     "importXPostLabel": "Inserisci l'URL del post X",
     "importXPostPlaceholder": "Inserisci l'URL del post"
   },

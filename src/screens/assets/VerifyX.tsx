@@ -100,6 +100,7 @@ function VerifyX() {
               id: result.id,
               name: result.name,
               username: result.username,
+              verified: true,
             },
           ];
           await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -186,9 +187,9 @@ function VerifyX() {
           secondaryOnPress={storeTwitterHandle}
           primaryTitle={assets.verifyXTitle}
           primaryOnPress={handleVerifyWithTwitter}
-          //           disabled={!isCtaEnabled}
           width={windowWidth / 2.2}
           secondaryCTAWidth={windowWidth / 2.4}
+          secondaryCTADisabled={!isCtaEnabled}
         />
       </View>
     </ScreenContainer>

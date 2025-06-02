@@ -213,7 +213,7 @@
     "appBackup": "应用备份",
     "connectionSettings": "连接设置",
     "connectionSettingSubTitle": "配置Tor和节点",
-    "appInfo": "应用信息和历史",
+    "appInfo": "应用信息和版本历史",
     "appInfoSubTitle": "应用版本和详细信息",
     "language": "语言",
     "languageSubTitle": "选择您的语言",
@@ -409,7 +409,7 @@
     "confirmation": "确认",
     "rgbUtxoCreateNote": "RGB功能目前处于alpha阶段。因此，由于技术尚处于早期阶段，您可能需要完成额外的交易。",
     "walletSettings": "钱包设置",
-    "walletSettingSubTitle": "轻松管理您的钱包设置",
+    "walletSettingSubTitle": "访问您的钱包 xPub 和 UTXOs",
     "nameAndPic": "名称和照片",
     "nameAndPicSubTitle": "输入或编辑名称和照片",
     "showXPub": "显示xPub",
@@ -460,7 +460,8 @@
     "output": "输出",
     "utxoValue": "UTXO 值",
     "requestTSatsProcessTitle": "正在处理您的请求",
-    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！"
+    "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！",
+    "xpubAndUtxoTitle": "xPUB 和 UTXOs"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
@@ -609,7 +610,7 @@
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
     "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
-    "recordCard": "记录卡",
+    "recordCard": "DNS记录详情",
     "recordType": "记录类型",
     "domain": "域名",
     "value": "值",
@@ -644,7 +645,7 @@
     "xHandleTemplateTitle": "X 用户名（未验证）",
     "domainName": "域名（未验证）",
     "importXPostTitle": "导入 X 帖子",
-    "importXPostSubTitle": "在下方粘贴你的 X 帖子链接。我们将快速获取并在应用中整洁地显示它——简单快捷。",
+    "importXPostSubTitle": "在下方粘贴你的 X 帖子链接。我们会快速获取并在应用中清晰显示该帖子——简洁又方便。",
     "importXPostLabel": "输入 X 帖子链接",
     "importXPostPlaceholder": "输入帖子链接"
   },

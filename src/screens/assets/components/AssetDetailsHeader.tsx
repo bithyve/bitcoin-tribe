@@ -86,7 +86,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
           rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
           onSettingsPress={onPressSetting}
         />
-        <View>
+        <AppTouchable onPress={onPressSetting}>
           <View style={styles.assetImageWrapper}>
             {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
               <Image
@@ -118,7 +118,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             </AppText>
             {asset.issuer?.verified && <IconVerified width={20} height={20} />}
           </View>
-        </View>
+        </AppTouchable>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             {app.appType === AppType.NODE_CONNECT ? (

@@ -50,6 +50,16 @@ function RegisterDomain() {
     const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/;
     return domainRegex.test(domain);
   };
+
+  const sanitizeDomainInput = (input: string): string => {
+    const trimmed = input.trim();
+    if (!trimmed) return '';
+    if (!/^www\./i.test(trimmed)) {
+      return `www.${trimmed}`;
+    }
+    return trimmed;
+  };
+
   const handleDomainNameChange = text => {
     const trimmed = text.trim();
     if (!trimmed) {
@@ -71,7 +81,7 @@ function RegisterDomain() {
       const response = await Relay.registerIssuerDomain(
         appId,
         assetId,
-        domainName,
+        sanitizeDomainInput(domainName),
       );
       if (response.status) {
         const existingAsset = await dbManager.getObjectByPrimaryId(
@@ -90,8 +100,8 @@ function RegisterDomain() {
             type: IssuerVerificationMethod.DOMAIN,
             link: '',
             id: '',
-            name: domainName,
-            username: domainName,
+            name: sanitizeDomainInput(domainName),
+            username: sanitizeDomainInput(domainName),
             verified: false,
           },
         ];
@@ -106,7 +116,7 @@ function RegisterDomain() {
           navigation.replace(NavigationRoutes.VERIFYDOMAIN, {
             record: response.record,
             recordType: response.recordType,
-            domain: domainName,
+            domain: sanitizeDomainInput(domainName),
             assetId: assetId,
             schema: schema,
           });

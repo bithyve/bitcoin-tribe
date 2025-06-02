@@ -213,7 +213,7 @@
     "appBackup": "アプリのバックアップ",
     "connectionSettings": "接続設定",
     "connectionSettingSubTitle": "Torとノードを構成する",
-    "appInfo": "アプリ情報と履歴",
+    "appInfo": "アプリ情報とバージョン履歴",
     "appInfoSubTitle": "アプリのバージョンと詳細",
     "language": "言語",
     "languageSubTitle": "言語を選択してください",
@@ -409,7 +409,7 @@
     "confirmation": "確認",
     "rgbUtxoCreateNote": "RGB機能は現在アルファ版です。このため、この技術の初期段階により追加の取引が必要になる場合があります。",
     "walletSettings": "ウォレット設定",
-    "walletSettingSubTitle": "ウォレット設定を簡単に管理",
+    "walletSettingSubTitle": "ウォレットのxPubとUTXOにアクセス",
     "nameAndPic": "名前と写真",
     "nameAndPicSubTitle": "名前と写真を入力・編集",
     "showXPub": "xPubを表示",
@@ -460,7 +460,8 @@
     "output": "出力",
     "utxoValue": "UTXO 値",
     "requestTSatsProcessTitle": "リクエストを処理中",
-    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！"
+    "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！",
+    "xpubAndUtxoTitle": "xPUBとUTXO"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
@@ -609,7 +610,7 @@
     "sharePostTitle": "X に投稿を共有する",
     "verificationTitle": "認証",
     "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
-    "recordCard": "レコードカード",
+    "recordCard": "DNSレコードの詳細",
     "recordType": "レコードタイプ",
     "domain": "ドメイン",
     "value": "値",
@@ -644,7 +645,7 @@
     "xHandleTemplateTitle": "X ハンドル（未確認）",
     "domainName": "ドメイン名（未確認）",
     "importXPostTitle": "Xポストをインポート",
-    "importXPostSubTitle": "下にXポストのリンクを貼り付けてください。すぐに取得してアプリ内にきれいに表示します – 簡単かつ迅速です。",
+    "importXPostSubTitle": "下にXポストのリンクを貼り付けてください。すぐに取得してアプリ内にシンプルに表示します。",
     "importXPostLabel": "XポストのURLを入力",
     "importXPostPlaceholder": "ポストURLを入力"
   },

@@ -213,7 +213,7 @@
     "appBackup": "Respaldo de la aplicación",
     "connectionSettings": "Configuración de conexión",
     "connectionSettingSubTitle": "Configurar Tor y nodos",
-    "appInfo": "Información e historial de la aplicación",
+    "appInfo": "Información de la aplicación e \nhistorial de versiones",
     "appInfoSubTitle": "Versión y detalles de la aplicación",
     "language": "Idioma",
     "languageSubTitle": "Elige tu idioma",
@@ -409,7 +409,7 @@
     "confirmation": "Confirmacione",
     "rgbUtxoCreateNote": "La función RGB se encuentra actualmente en alfa. Como resultado, es posible que deba completar una transacción adicional debido a la etapa inicial de esta tecnología.",
     "walletSettings": "Configuración de la billetera",
-    "walletSettingSubTitle": "Administre fácilmente la configuración de su billetera",
+    "walletSettingSubTitle": "Accede a tu xPub y UTXOs del monedero",
     "nameAndPic": "Nombre e imagen",
     "nameAndPicSubTitle": "Ingresar, Editar nombre y foto",
     "showXPub": "Mostrar xPub",
@@ -460,7 +460,8 @@
     "output": "Salida",
     "utxoValue": "Valor UTXO",
     "requestTSatsProcessTitle": "Procesando su solicitud",
-    "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!"
+    "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!",
+    "xpubAndUtxoTitle": "xPUB y UTXOs"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
@@ -609,7 +610,7 @@
     "sharePostTitle": "Compartir publicación en X",
     "verificationTitle": "VERIFICACIÓN",
     "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio.",
-    "recordCard": "Tarjeta de Registro",
+    "recordCard": "Detalles del registro DNS",
     "recordType": "Tipo de Registro",
     "domain": "Dominio",
     "value": "Valor",
@@ -644,7 +645,7 @@
     "xHandleTemplateTitle": "Manejador de X (No verificado)",
     "domainName": "Nombre de dominio (No verificado)",
     "importXPostTitle": "Importar publicación de X",
-    "importXPostSubTitle": "Pega el enlace de tu publicación de X abajo. Lo obtendremos rápidamente y lo mostraremos de forma ordenada en la app – simple y rápido.",
+    "importXPostSubTitle": "Pega el enlace de tu publicación de X abajo. Lo obtendremos rápidamente y lo mostraremos en la app — limpio y fácil.",
     "importXPostLabel": "Ingresa la URL de la publicación de X",
     "importXPostPlaceholder": "Ingresa la URL de la publicación"
   },

@@ -95,6 +95,7 @@ const CoinsMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
@@ -113,6 +114,14 @@ const CoinsMetaDataScreen = () => {
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
+  const hasIssuanceTransaction = coin?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  const verified = coin?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
@@ -174,8 +183,8 @@ const CoinsMetaDataScreen = () => {
         enableBack={true}
         style={styles.wrapper}
       />
-      {isLoading ? (
-        <ModalLoading visible={isLoading} />
+      {isLoading || isVerifyingIssuer ? (
+        <ModalLoading visible={isLoading || isVerifyingIssuer} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
@@ -185,6 +194,10 @@ const CoinsMetaDataScreen = () => {
               id={twitterVerification?.id}
               name={twitterVerification?.name}
               username={twitterVerification?.username.replace(/@/g, '')}
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              setIsVerifyingIssuer={setIsVerifyingIssuer}
             />
             <IssuerDomainVerified
               domain={
@@ -193,6 +206,13 @@ const CoinsMetaDataScreen = () => {
                 )?.name
               }
               verified={domainVerification?.verified}
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                  assetId: assetId,
+                  schema: RealmSchema.Coin,
+                  savedDomainName: domainVerification?.name || '',
+                });
+              }}
             />
           </View>
           <View style={styles.rowWrapper}>
@@ -240,10 +260,7 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-          {coin?.transactions.some(
-            transaction =>
-              transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
-          ) && (
+          {hasIssuanceTransaction && (
             <>
               <VerifyIssuer
                 assetId={assetId}
@@ -255,7 +272,7 @@ const CoinsMetaDataScreen = () => {
                 onPressShare={() => {
                   if (!coin?.isIssuedPosted) {
                     setVisibleIssuedPostOnTwitter(true);
-                  } else if (!coin?.isVerifyPosted && coin?.issuer?.verified) {
+                  } else if (!coin?.isVerifyPosted && verified) {
                     setVisiblePostOnTwitter(true);
                   }
                 }}
@@ -276,7 +293,8 @@ const CoinsMetaDataScreen = () => {
                 testID={'view_in_registry'}
               />
             )}
-            {twitterVerification?.id &&
+            {hasIssuanceTransaction &&
+              twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
               twitterPostVerification &&
               !twitterPostVerification?.link && (
@@ -309,7 +327,7 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisiblePostOnTwitter(false);
                 setCompleteVerification(false);
-                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, true);
+                updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
                 updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
                 setRefresh(prev => !prev);
               }}
@@ -328,7 +346,7 @@ const CoinsMetaDataScreen = () => {
               primaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
                 setRefresh(prev => !prev);
-                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+                updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
               }}
               secondaryOnPress={() => {
                 setVisibleIssuedPostOnTwitter(false);
