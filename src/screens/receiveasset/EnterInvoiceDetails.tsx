@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -23,7 +24,17 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import Toast from 'src/components/Toast';
 import { formatNumber } from 'src/utils/numberWithCommas';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collectible,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
+import SelectYourAsset from './SelectYourAsset';
+import RGBAssetList from './RGBAssetList';
+import { useMutation } from 'react-query';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -93,6 +104,12 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     inputStyle: {
       width: '80%',
     },
+    assetsDropdownContainer: {
+      position: 'absolute',
+      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
+      borderRadius: 20,
+      marginHorizontal: hp(15),
+    },
   });
 
 const EnterInvoiceDetails = () => {
@@ -111,13 +128,32 @@ const EnterInvoiceDetails = () => {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [assetId, setAssetId] = useState(invoiceAssetId || '');
+  const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedType, setSelectedType] = React.useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
       ? 'lightning'
       : 'bitcoin',
   );
+  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
+    'balance.spendable > 0',
+  );
+  const collectibles = useQuery<Collectible[]>(
+    RealmSchema.Collectible,
+  ).filtered('balance.spendable > 0');
+
+  const assetsData: Asset[] = useMemo(() => {
+    const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
+    return combined.sort((a, b) => a.timestamp - b.timestamp);
+  }, [coins, collectibles]);
+
+  const { mutateAsync, isLoading, data, reset } = useMutation(
+    ({ query }: { query: string }) => ApiHandler.searchAssetFromRegistry(query),
+  );
+
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
@@ -134,6 +170,19 @@ const EnterInvoiceDetails = () => {
     const clipboardValue = await Clipboard.getString();
     setAssetId(clipboardValue);
   };
+
+  useEffect(() => {
+    const searchAsset = async () => {
+      const trimmed = searchAssetInput.trim();
+      if (trimmed.length === 0) {
+        reset();
+        return;
+      }
+      await mutateAsync({ query: trimmed });
+    };
+
+    searchAsset();
+  }, [searchAssetInput]);
 
   function validateAndNavigateToReceiveAsset() {
     const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
@@ -200,7 +249,15 @@ const EnterInvoiceDetails = () => {
         </View>
       )}
       <View style={styles.bodyWrapper}>
-        <TextField
+        <SelectYourAsset
+          selectedAsset={selectedAsset}
+          onPress={() => {
+            if (assetsData.length) {
+              setAssetsDropdown(true);
+            }
+          }}
+        />
+        {/* <TextField
           value={assetId}
           onChangeText={text => setAssetId(text.trim())}
           placeholder={assets.assetId}
@@ -217,7 +274,7 @@ const EnterInvoiceDetails = () => {
           onRightTextPress={() => handlePasteAddress()}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-        />
+        /> */}
 
         <TextField
           value={formatNumber(amount)}
@@ -259,6 +316,23 @@ const EnterInvoiceDetails = () => {
           secondaryCTAWidth={windowWidth / 2.3}
         />
       </View>
+      {assetsDropdown && (
+        <RGBAssetList
+          style={styles.assetsDropdownContainer}
+          assets={data?.records ? data?.records : assetsData}
+          callback={item => {
+            setSelectedAsset(item || item?.asset);
+            setAssetsDropdown(false);
+            setAssetId(item?.assetId || item?.asset?.assetId);
+          }}
+          searchAssetInput={searchAssetInput}
+          onChangeSearchInput={(text: string) => {
+            setSearchAssetInput(text);
+          }}
+          selectedAsset={selectedAsset || selectedAsset?.asset}
+          onDissmiss={() => setAssetsDropdown(false)}
+        />
+      )}
     </ScreenContainer>
   );
 };

@@ -2310,4 +2310,15 @@ export class ApiHandler {
       return { success: false, reason: 'Network or fetch error' };
     }
   };
+  static searchAssetFromRegistry = async (
+    query: string,
+  ): Promise<{ asset?: Asset }> => {
+    try {
+      const response = await Relay.registryAssetSearch(query);
+      return response;
+    } catch (error: any) {
+      console.error('Twitter API error:', error.message || error);
+      return error;
+    }
+  };
 }

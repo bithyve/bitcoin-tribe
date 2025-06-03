@@ -2,7 +2,11 @@ import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useMutation } from 'react-query';
 import { useQuery } from '@realm/react';
-import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -157,10 +161,9 @@ function ReceiveAssetScreen() {
   }, [selectedType]);
 
   const loading = useMemo(() => {
-    return isLoading ||
-      createUtxosLoading ||
-      generateLNInvoiceMutation.isLoading
-    ;
+    return (
+      isLoading || createUtxosLoading || generateLNInvoiceMutation.isLoading
+    );
   }, [isLoading, createUtxosLoading, generateLNInvoiceMutation.isLoading]);
 
   const qrValue = useMemo(() => {
@@ -170,7 +173,12 @@ function ReceiveAssetScreen() {
     } else {
       return lightningInvoice;
     }
-  }, [selectedType, rgbWallet?.receiveData?.invoice, lightningInvoice, loading]);
+  }, [
+    selectedType,
+    rgbWallet?.receiveData?.invoice,
+    lightningInvoice,
+    loading,
+  ]);
 
   return (
     <ScreenContainer>
@@ -178,14 +186,14 @@ function ReceiveAssetScreen() {
         title={assets.receiveAssetTitle}
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
-        onBackNavigation={() =>  navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [
-              { name: NavigationRoutes.HOME },
-            ],
-          })
-        )}
+        onBackNavigation={() =>
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{ name: NavigationRoutes.HOME }],
+            }),
+          )
+        }
       />
       {loading ? (
         <View>
