@@ -98,8 +98,8 @@ export default class RGBServices {
     }
   };
 
-  static getBalance = async (mnemonic: string): Promise<string> => {
-    const balance = await RGB.getBalance(mnemonic, this.NETWORK);
+  static getBalance = async (): Promise<string> => {
+    const balance = await RGB.getBtcBalance();
     return JSON.parse(balance);
   };
 
@@ -408,7 +408,7 @@ export default class RGBServices {
     recipientId?: string;
     expirationTimestamp?: number;
     assetId?: string;
-    assetIface?: string;
+    assetSchema?: string;
     network?: string;
     transportEndpoints?: string;
     error?: string;
