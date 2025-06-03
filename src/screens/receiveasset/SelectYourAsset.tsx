@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -11,7 +11,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 
@@ -41,13 +41,21 @@ const SelectYourAsset = (props: Props) => {
           {selectedAsset ? (
             <View style={styles.assetWrapper}>
               <View>
-                {selectedAsset?.assetIface === AssetFace.RGB25 ||
-                selectedAsset?.asset?.assetIface === AssetFace.RGB25 ? (
+                {selectedAsset?.assetSchema?.toUpperCase() ===
+                  AssetSchema.Collectible ||
+                selectedAsset?.asset?.assetSchema ===
+                  AssetSchema.Collectible ? (
                   <Image
                     source={{
-                      uri:
-                        selectedAsset?.media?.filePath ||
-                        selectedAsset?.asset?.media?.file,
+                      uri: Platform.select({
+                        android: `file://${
+                          selectedAsset.media?.filePath ||
+                          selectedAsset?.asset?.media.file
+                        }`,
+                        ios:
+                          selectedAsset?.media?.filePath ||
+                          selectedAsset?.asset?.media.file,
+                      }),
                     }}
                     style={styles.imageStyle}
                   />
@@ -59,7 +67,7 @@ const SelectYourAsset = (props: Props) => {
                     assetID={
                       selectedAsset?.assetId || selectedAsset?.asset?.assetId
                     }
-                    size={windowHeight > 670 ? 50 : 30}
+                    size={windowHeight > 670 ? 40 : 25}
                     verified={selectedAsset?.issuer?.verified}
                   />
                 )}
@@ -85,12 +93,12 @@ export default SelectYourAsset;
 const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
   StyleSheet.create({
     container: {
-      width: '100%',
+      width: '99%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
-      minHeight: hp(65),
+      minHeight: hp(60),
       backgroundColor: backColor,
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
@@ -115,5 +123,6 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
     },
     titleText: {
       color: theme.colors.headingColor,
+      marginLeft: hp(3),
     },
   });

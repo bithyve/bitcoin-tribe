@@ -5,6 +5,7 @@ import {
   FlatList,
   Image,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -17,13 +18,12 @@ import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
 import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
-import { formatLargeNumber, formatNumber } from 'src/utils/numberWithCommas';
+import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import TextField from 'src/components/TextField';
 import IconSearch from 'src/assets/images/icon_search.svg';
-import ModalLoading from 'src/components/ModalLoading';
 
 type DropdownProps = {
   style;
@@ -107,11 +107,18 @@ function RGBAssetList(props: DropdownProps) {
               style={styles.assetContainer}>
               <View style={styles.assetWrapper}>
                 <View style={styles.assetImageWrapper}>
-                  {item?.assetIface?.toUpperCase() === AssetFace.RGB25 ||
-                  item?.asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
+                  {item?.assetSchema?.toUpperCase() ===
+                    AssetSchema.Collectible ||
+                  item?.asset?.assetSchema?.toUpperCase() ===
+                    AssetSchema.Collectible ? (
                     <Image
                       source={{
-                        uri: item?.media?.filePath || item?.asset?.media.file,
+                        uri: Platform.select({
+                          android: `file://${
+                            item.media?.filePath || item?.asset?.media.file
+                          }`,
+                          ios: item?.media?.filePath || item?.asset?.media.file,
+                        }),
                       }}
                       style={styles.imageStyle}
                     />
@@ -152,6 +159,7 @@ const getStyles = (theme: AppTheme) =>
       zIndex: 999,
       height: '80%',
       backgroundColor: theme.colors.primaryBackground,
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
     },
     container2: {
       borderRadius: hp(20),
