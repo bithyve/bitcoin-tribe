@@ -514,9 +514,7 @@ const SendAssetScreen = () => {
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-          disabled={
-            assetData.metaData.assetSchema.toUpperCase() === AssetType.UDA
-          }
+          disabled={assetData.assetSchema.toUpperCase() === AssetType.UDA}
           error={amountValidationError}
         />
         <View style={styles.availableBalanceWrapper}>
