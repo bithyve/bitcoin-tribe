@@ -330,7 +330,7 @@ const UDADetailsScreen = () => {
                 });
               }}
               disabled={uda?.transactions.length === 1}
-              assetFace={uda?.assetIface}
+              assetFace={uda?.assetSchema.toUpperCase()}
             />
           )}
         </View>
