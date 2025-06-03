@@ -15,7 +15,7 @@ import EmptyStateView from 'src/components/EmptyStateView';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
 import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -166,7 +166,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
         }
         renderItem={({ item, index }) => (
           <View>
-            {item.assetIface.toUpperCase() === AssetFace.RGB20 ? (
+            {item.assetSchema.toUpperCase() === AssetSchema.Coin ? (
               <Item
                 key={index}
                 name={item.name}

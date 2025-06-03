@@ -278,7 +278,8 @@ export class ApiHandler {
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             const isWalletOnline = await RGBServices.initiate(
               rgbWallet.mnemonic,
-              rgbWallet.accountXpub,
+              rgbWallet.accountXpubVanilla,
+              rgbWallet.accountXpubColored,
             );
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -298,8 +299,9 @@ export class ApiHandler {
             mnemonic: rgbNodeConnectParams.mnemonic,
             xpub: '',
             rgbDir: '',
-            accountXpub: '',
-            accountXpubFingerprint: '',
+            accountXpubColored: '',
+            accountXpubColoredFingerprint: '',
+            accountXpubVanilla: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
@@ -311,8 +313,9 @@ export class ApiHandler {
           );
 
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpubFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
@@ -397,8 +400,9 @@ export class ApiHandler {
               mnemonic: rgbNodeInfo.pubkey,
               xpub: rgbNodeInfo.pubkey,
               rgbDir: '',
-              accountXpub: rgbNodeInfo.pubkey,
-              accountXpubFingerprint: rgbNodeInfo.pubkey,
+              accountXpubColored: rgbNodeInfo.pubkey,
+              accountXpubColoredFingerprint: rgbNodeInfo.pubkey,
+              accountXpubVanilla: rgbNodeInfo.pubkey,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
@@ -541,7 +545,8 @@ export class ApiHandler {
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
-      rgbWallet.accountXpub,
+      rgbWallet.accountXpubVanilla,
+      rgbWallet.accountXpubColored,
     );
     return { key, isWalletOnline };
   }
@@ -578,7 +583,8 @@ export class ApiHandler {
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
-        rgbWallet.accountXpub,
+        rgbWallet.accountXpubVanilla,
+        rgbWallet.accountXpubColored,
       );
       return { key, isWalletOnline };
     } catch (error) {
@@ -618,7 +624,8 @@ export class ApiHandler {
     } else {
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
-        rgbWallet.accountXpub,
+        rgbWallet.accountXpubVanilla,
+        rgbWallet.accountXpubColored,
       );
       return { key, isWalletOnline };
     }
@@ -992,8 +999,8 @@ export class ApiHandler {
         }
       } else {
         const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-        const { changeAddress: receivingAddress } =
-          WalletOperations.getNextFreeChangeAddress(wallet);
+        const { receivingAddress: receivingAddress } =
+          WalletOperations.getNextFreeExternalAddress(wallet);
         const { funded } = await Relay.getTestcoins(
           receivingAddress,
           wallet.networkType,
@@ -2052,7 +2059,7 @@ export class ApiHandler {
               ios: backupFile.file,
             }),
             app.id,
-            wallet.accountXpubFingerprint,
+            wallet.accountXpubColoredFingerprint,
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());

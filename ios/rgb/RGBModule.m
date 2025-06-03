@@ -49,11 +49,12 @@ RCT_EXPORT_METHOD(getAddress:(RCTPromiseResolveBlock)resolve
 
 RCT_EXPORT_METHOD(initiate:(NSString*)network
                   mnemonic:(NSString *)mnemonic
-                  pubKey:(NSString *)pubKey
+                  accountXpubVanilla:(NSString *)accountXpubVanilla
+                  accountXpubColored:(NSString *)accountXpubColored
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
-  [helper initiateWithBtcNetwotk:network mnemonic:mnemonic pubkey:pubKey callback:^(NSString * _Nonnull response) {
+  [helper initiateWithBtcNetwotk:network mnemonic:mnemonic accountXpubVanilla:accountXpubVanilla accountXpubColored:accountXpubColored callback:^(NSString * _Nonnull response) {
     resolve(response);
   }
    ];
