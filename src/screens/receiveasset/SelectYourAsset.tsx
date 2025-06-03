@@ -29,9 +29,9 @@ const SelectYourAsset = (props: Props) => {
   const styles = getStyles(theme, theme.colors.ctaBackColor, selectedAsset);
 
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} style={styles.container}>
       <GradientView
-        style={[styles.container]}
+        style={[styles.container1]}
         colors={[
           theme.colors.cardGradient1,
           theme.colors.cardGradient2,
@@ -94,12 +94,14 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
   StyleSheet.create({
     container: {
       width: '99%',
+      minHeight: hp(60),
+    },
+    container1: {
+      minHeight: hp(60),
+      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
-      minHeight: hp(60),
-      backgroundColor: backColor,
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
