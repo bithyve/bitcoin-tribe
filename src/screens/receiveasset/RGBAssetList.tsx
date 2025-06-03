@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, Image } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
@@ -17,6 +23,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import { formatLargeNumber, formatNumber } from 'src/utils/numberWithCommas';
 import TextField from 'src/components/TextField';
 import IconSearch from 'src/assets/images/icon_search.svg';
+import ModalLoading from 'src/components/ModalLoading';
 
 type DropdownProps = {
   style;
@@ -26,6 +33,7 @@ type DropdownProps = {
   selectedAsset: Asset[];
   searchAssetInput?: string;
   onChangeSearchInput?: (text: string) => void;
+  isLoading?: boolean;
 };
 
 function RGBAssetList(props: DropdownProps) {
@@ -37,6 +45,7 @@ function RGBAssetList(props: DropdownProps) {
     selectedAsset,
     searchAssetInput,
     onChangeSearchInput,
+    isLoading,
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
@@ -71,7 +80,15 @@ function RGBAssetList(props: DropdownProps) {
           placeholder={'Search from Tribe RGB registry'}
           style={styles.input}
           inputStyle={styles.inputStyle}
-          rightIcon={isThemeDark ? <IconSearch /> : <IconSearch />}
+          rightIcon={
+            isLoading ? (
+              <ActivityIndicator size="small" />
+            ) : isThemeDark ? (
+              <IconSearch />
+            ) : (
+              <IconSearch />
+            )
+          }
           onRightTextPress={() => () => {}}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}

@@ -312,6 +312,7 @@ const EnterInvoiceDetails = () => {
           }}
           selectedAsset={selectedAsset || selectedAsset?.asset}
           onDissmiss={() => setAssetsDropdown(false)}
+          isLoading={isLoading}
         />
       )}
     </ScreenContainer>
