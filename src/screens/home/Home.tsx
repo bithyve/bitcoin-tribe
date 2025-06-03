@@ -67,17 +67,31 @@ function HomeScreen() {
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
+  const [refreshing, setRefreshing] = useState(false);
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
-  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
 
-  const [refreshing, setRefreshing] = useState(false);
+  const coins = useMemo(() => {
+    if (!coinsResult) return [];
+    const coinsArray = coinsResult.slice();
+    const tribeCoinIndex = coinsArray.findIndex(c => c.name === 'Tribe tUSDt');
+    if (tribeCoinIndex !== -1) {
+      const [tribeCoin] = coinsArray.splice(tribeCoinIndex, 1);
+      return [tribeCoin, ...coinsArray];
+    }
+    return coinsArray;
+  }, [coinsResult]);
+
+  useEffect(() => {
+    ApiHandler.addPrepopulatedTribeCoin();
+  }, []);
 
   useEffect(() => {
     setBackupProcess(isLoading);
