@@ -82,16 +82,6 @@ function RGBAssetList(props: DropdownProps) {
           autoCapitalize="none"
           onSubmitEditing={() => {}}
         />
-        {/* <View style={styles.seacrhInputWrapper}>
-          <TextField
-            value={searchAssetInput}
-            onChangeText={onChangeSearchInput}
-            placeholder={'Search from Tribe RGB registry'}
-            style={styles.input}
-            keyboardType="numeric"
-          />
-          <IconSearch />
-        </View> */}
         <FlatList
           data={assets}
           renderItem={({ item }) => (

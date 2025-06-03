@@ -257,25 +257,6 @@ const EnterInvoiceDetails = () => {
             }
           }}
         />
-        {/* <TextField
-          value={assetId}
-          onChangeText={text => setAssetId(text.trim())}
-          placeholder={assets.assetId}
-          style={styles.input}
-          multiline={true}
-          returnKeyType={'Enter'}
-          onContentSizeChange={event => {
-            setInputHeight(event.nativeEvent.contentSize.height);
-          }}
-          numberOfLines={3}
-          contentStyle={assetId ? styles.contentStyle : styles.contentStyle1}
-          inputStyle={styles.inputStyle}
-          rightText={sendScreen.paste}
-          onRightTextPress={() => handlePasteAddress()}
-          rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.accent1}
-        /> */}
-
         <TextField
           value={formatNumber(amount)}
           onChangeText={handleAmountInputChange}
