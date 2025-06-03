@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -185,17 +185,12 @@ const EnterInvoiceDetails = () => {
   }, [searchAssetInput]);
 
   function validateAndNavigateToReceiveAsset() {
-    const assetIdPattern = /^rgb:([a-zA-Z0-9!$-]+(-[a-zA-Z0-9!$-]+)*)$/;
-    if (assetIdPattern.test(assetId)) {
-      navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-        refresh: true,
-        assetId,
-        amount,
-        selectedType,
-      });
-    } else {
-      Toast('Invalid asset ID', true);
-    }
+    navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+      refresh: true,
+      assetId,
+      amount,
+      selectedType,
+    });
   }
 
   const handleAmountInputChange = text => {
@@ -302,6 +297,7 @@ const EnterInvoiceDetails = () => {
           style={styles.assetsDropdownContainer}
           assets={data?.records ? data?.records : assetsData}
           callback={item => {
+            Keyboard.dismiss();
             setSelectedAsset(item || item?.asset);
             setAssetsDropdown(false);
             setAssetId(item?.assetId || item?.asset?.assetId);

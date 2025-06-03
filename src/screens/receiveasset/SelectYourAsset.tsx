@@ -28,6 +28,14 @@ const SelectYourAsset = (props: Props) => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, theme.colors.ctaBackColor, selectedAsset);
 
+  const filePath = selectedAsset?.media?.filePath;
+  const remoteFile = selectedAsset?.asset?.media?.file;
+
+  const imageUri = Platform.select({
+    android: filePath ? `file://${filePath}` : remoteFile,
+    ios: filePath || remoteFile,
+  });
+
   return (
     <AppTouchable onPress={onPress} style={styles.container}>
       <GradientView
@@ -45,20 +53,7 @@ const SelectYourAsset = (props: Props) => {
                   AssetSchema.Collectible ||
                 selectedAsset?.asset?.assetSchema ===
                   AssetSchema.Collectible ? (
-                  <Image
-                    source={{
-                      uri: Platform.select({
-                        android: `file://${
-                          selectedAsset.media?.filePath ||
-                          selectedAsset?.asset?.media.file
-                        }`,
-                        ios:
-                          selectedAsset?.media?.filePath ||
-                          selectedAsset?.asset?.media.file,
-                      }),
-                    }}
-                    style={styles.imageStyle}
-                  />
+                  <Image source={{ uri: imageUri }} style={styles.imageStyle} />
                 ) : (
                   <AssetIcon
                     assetTicker={

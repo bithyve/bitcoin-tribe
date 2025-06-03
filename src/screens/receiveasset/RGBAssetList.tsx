@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   Platform,
+  Keyboard,
 } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -101,52 +102,59 @@ function RGBAssetList(props: DropdownProps) {
         />
         <FlatList
           data={assets}
-          renderItem={({ item }) => (
-            <AppTouchable
-              onPress={() => callback(item || item?.asset)}
-              style={styles.assetContainer}>
-              <View style={styles.assetWrapper}>
-                <View style={styles.assetImageWrapper}>
-                  {item?.assetSchema?.toUpperCase() ===
-                    AssetSchema.Collectible ||
-                  item?.asset?.assetSchema?.toUpperCase() ===
-                    AssetSchema.Collectible ? (
-                    <Image
-                      source={{
-                        uri: Platform.select({
-                          android: `file://${
-                            item.media?.filePath || item?.asset?.media.file
-                          }`,
-                          ios: item?.media?.filePath || item?.asset?.media.file,
-                        }),
-                      }}
-                      style={styles.imageStyle}
-                    />
-                  ) : (
-                    <AssetIcon
-                      assetTicker={item?.ticker || item?.asset?.ticker}
-                      assetID={item?.assetId || item?.asset?.assetId}
-                      size={windowHeight > 670 ? 40 : 25}
-                      verified={item?.issuer?.verified}
-                    />
-                  )}
+          renderItem={({ item }) => {
+            const filePath = item?.media?.filePath || item?.asset?.media?.file;
+            const isCollectible =
+              item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
+              item?.asset?.assetSchema?.toUpperCase() ===
+                AssetSchema.Collectible;
+
+            const imageUri = filePath?.startsWith('http')
+              ? filePath
+              : Platform.select({
+                  android: `file://${filePath}`,
+                  ios: filePath,
+                });
+            return (
+              <AppTouchable
+                onPress={() => {
+                  Keyboard.dismiss();
+                  callback(item || item?.asset);
+                }}
+                style={styles.assetContainer}>
+                <View style={styles.assetWrapper}>
+                  <View style={styles.assetImageWrapper}>
+                    {isCollectible ? (
+                      <Image
+                        source={{ uri: imageUri }}
+                        style={styles.imageStyle}
+                      />
+                    ) : (
+                      <AssetIcon
+                        assetTicker={item?.ticker || item?.asset?.ticker}
+                        assetID={item?.assetId || item?.asset?.assetId}
+                        size={windowHeight > 670 ? 40 : 25}
+                        verified={item?.issuer?.verified}
+                      />
+                    )}
+                  </View>
+                  <View>
+                    <AppText variant="body1" style={styles.assetnameText}>
+                      {item?.name || item?.asset?.name}
+                    </AppText>
+                  </View>
                 </View>
-                <View>
-                  <AppText variant="body1" style={styles.assetnameText}>
-                    {item?.name || item?.asset?.name}
+
+                <View style={styles.balanceWrapper}>
+                  <AppText variant="body2" style={styles.balanceText}>
+                    {formatLargeNumber(
+                      item?.balance?.spendable || item?.asset?.issuedSupply,
+                    )}
                   </AppText>
                 </View>
-              </View>
-
-              <View style={styles.balanceWrapper}>
-                <AppText variant="body2" style={styles.balanceText}>
-                  {formatLargeNumber(
-                    item?.balance?.spendable || item?.asset?.issuedSupply,
-                  )}
-                </AppText>
-              </View>
-            </AppTouchable>
-          )}
+              </AppTouchable>
+            );
+          }}
         />
       </View>
     </View>

@@ -27,6 +27,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import {
   Asset,
+  AssetSchema,
   AssetType,
   AssetVisibility,
   Coin,
@@ -179,8 +180,11 @@ const SendAssetScreen = () => {
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(
-    assetData.metaData.assetSchema.toUpperCase() === AssetType.UDA ? '1' : amount || '',
+    assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
+      ? '1'
+      : amount || '',
   );
+
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -443,12 +447,12 @@ const SendAssetScreen = () => {
           name={assetData?.name}
           ticker={assetData?.ticker}
           details={
-            assetData?.metaData.assetSchema.toUpperCase() !== AssetType.Collectible
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
               ? assetData?.ticker
               : assetData?.details
           }
           image={
-            assetData.metaData.assetSchema.toUpperCase() !== AssetType.Coin
+            assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
                   android: `file://${
                     assetData.media?.filePath || assetData?.token.media.filePath
@@ -460,7 +464,7 @@ const SendAssetScreen = () => {
               : null
           }
           tag={
-            assetData?.metaData.assetSchema.toUpperCase() === AssetType.Coin
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Coin
               ? assets.coin
               : assets.collectible
           }
@@ -510,7 +514,9 @@ const SendAssetScreen = () => {
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-            disabled={assetData.metaData.assetSchema.toUpperCase() === AssetType.UDA}
+          disabled={
+            assetData.metaData.assetSchema.toUpperCase() === AssetType.UDA
+          }
           error={amountValidationError}
         />
         <View style={styles.availableBalanceWrapper}>
