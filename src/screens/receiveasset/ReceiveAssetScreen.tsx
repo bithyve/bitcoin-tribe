@@ -101,7 +101,10 @@ function ReceiveAssetScreen() {
           createUtxos();
           return true;
         } else if (message === 'Asset not found') {
-          mutate({ assetId: '', amount: '' });
+          setTimeout(() => {
+            mutate({ assetId: '', amount: 0 });
+          }, 100);
+          return true;
         } else {
           Toast(errorMessage, true);
           navigation.goBack();

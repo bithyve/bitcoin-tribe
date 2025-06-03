@@ -94,7 +94,7 @@ function RGBAssetList(props: DropdownProps) {
         </View> */}
         <FlatList
           data={assets}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <AppTouchable
               onPress={() => callback(item || item?.asset)}
               style={styles.assetContainer}>
