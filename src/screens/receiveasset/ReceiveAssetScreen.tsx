@@ -100,6 +100,8 @@ function ReceiveAssetScreen() {
         if (message === 'Insufficient sats for RGB') {
           createUtxos();
           return true;
+        } else if (message === 'Asset not found') {
+          mutate({ assetId: '', amount: '' });
         } else {
           Toast(errorMessage, true);
           navigation.goBack();
