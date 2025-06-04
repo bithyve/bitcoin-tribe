@@ -333,7 +333,6 @@ const CollectibleMetaDataScreen = () => {
               {hasIssuanceTransaction &&
                 twitterVerification?.id &&
                 !twitterPostVerificationWithLink &&
-                twitterPostVerification &&
                 !twitterPostVerification?.link && (
                   <SelectOption
                     title={'Show your X post here'}

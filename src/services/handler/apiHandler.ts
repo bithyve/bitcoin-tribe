@@ -2220,7 +2220,11 @@ export class ApiHandler {
           );
         }
 
-        return null;
+        return {
+          success: false,
+          reason:
+            'Too many requests to Twitter. Try again after a short break.',
+        };
       }
 
       if (!response.ok) {
@@ -2240,7 +2244,7 @@ export class ApiHandler {
 
       const data = await response.json();
       const tweet = data?.data;
-
+      console.log('tweet', tweet);
       if (!tweet) {
         return { success: false, reason: 'Tweet not found' };
       }
