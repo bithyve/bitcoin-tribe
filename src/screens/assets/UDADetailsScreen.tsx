@@ -449,6 +449,7 @@ const UDADetailsScreen = () => {
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
         </ScrollView>
       )}
+
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
