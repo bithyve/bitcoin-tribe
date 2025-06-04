@@ -100,6 +100,18 @@ function RGBAssetList(props: DropdownProps) {
           autoCapitalize="none"
           onSubmitEditing={() => {}}
         />
+        <View style={styles.labelWrapper}>
+          <View>
+            <AppText variant="caption" style={style.labelTextStyle}>
+              Asset Name
+            </AppText>
+          </View>
+          <View>
+            <AppText variant="caption" style={style.labelTextStyle}>
+              Avail. Bal.
+            </AppText>
+          </View>
+        </View>
         <FlatList
           data={assets}
           renderItem={({ item }) => {
@@ -255,6 +267,14 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       marginHorizontal: hp(5),
+    },
+    labelWrapper: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginHorizontal: hp(15),
+    },
+    labelTextStyle: {
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default RGBAssetList;
