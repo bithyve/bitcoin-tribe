@@ -48,7 +48,6 @@ export interface Transfer {
 }
 
 export interface MetaData {
-  assetIface: string;
   assetSchema: string;
   issuedSupply: number;
   name: string;
@@ -73,7 +72,6 @@ export interface Issuer {
 export interface Coin {
   addedAt: number;
   assetId: string;
-  assetIface: AssetFace;
   balance: Balance;
   issuedSupply: number;
   name: string;
@@ -86,6 +84,7 @@ export interface Coin {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
 }
 
 export interface Media {
@@ -97,7 +96,6 @@ export interface Media {
 export interface Collectible {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -111,12 +109,12 @@ export interface Collectible {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
 }
 
 export interface UniqueDigitalAsset {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -135,6 +133,7 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
+  assetSchema: AssetSchema;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -168,6 +167,12 @@ export enum AssetFace {
   RGB25 = 'RGB25', // Collectible(CFA)
   RGB20 = 'RGB20', // Coin(NIA)
   RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
+}
+
+export enum AssetSchema {
+  Coin = 'NIA',
+  Collectible = 'CFA',
+  UDA = 'UDA',
 }
 
 export enum AssetVisibility {

@@ -999,8 +999,8 @@ export class ApiHandler {
         }
       } else {
         const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-        const { changeAddress: receivingAddress } =
-          WalletOperations.getNextFreeChangeAddress(wallet);
+        const { receivingAddress: receivingAddress } =
+          WalletOperations.getNextFreeExternalAddress(wallet);
         const { funded } = await Relay.getTestcoins(
           receivingAddress,
           wallet.networkType,

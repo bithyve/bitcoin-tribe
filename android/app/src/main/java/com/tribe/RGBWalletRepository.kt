@@ -31,11 +31,10 @@ object RGBWalletRepository {
                 accountXpubVanilla,
                 accountXpubColored,
                 mnemonic,
-                1u
+                0u
             )
             wallet = Wallet(walletData)
             online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))
-            Log.d(TAG, "initialize:online $mnemonic")
             return "true"
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)

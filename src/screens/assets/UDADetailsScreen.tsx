@@ -288,6 +288,27 @@ const UDADetailsScreen = () => {
               />
             </View>
           )}
+          <Item
+            title={assets.issuedOn}
+            value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
+          />
+          <View style={styles.wrapper}>
+            {uda?.transactions.length > 0 && (
+              <AssetTransaction
+                transaction={uda?.transactions[0]}
+                coin={uda?.name}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                    assetId: assetId,
+                    transactions: uda?.transactions,
+                    assetName: uda?.name,
+                  });
+                }}
+                disabled={uda?.transactions.length === 1}
+                assetFace={uda?.assetSchema.toUpperCase()}
+              />
+            )}
+          </View>
           <View style={styles.wrapper}>
             <IssuerVerified
               id={twitterVerification?.id}
@@ -428,6 +449,7 @@ const UDADetailsScreen = () => {
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
         </ScrollView>
       )}
+
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
