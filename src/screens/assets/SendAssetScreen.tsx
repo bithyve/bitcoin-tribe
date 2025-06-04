@@ -282,36 +282,15 @@ const SendAssetScreen = () => {
     return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
   };
 
-  const decodeInvoice = (_invoice: string) => {
-    const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
-    const assetIdPattern = /(?:^|\s)([a-zA-Z0-9\-$]{20,})(?=\/|$)/;
-    const assetTypePattern = /\/(RGB20Fixed|RGB20|RGB25|RGB|[^/]+)(?=\/|$)/;
-    const expiryPattern = /expiry=(\d+)/;
-    const endpointPattern = /endpoints=([a-zA-Z0-9:\/\.\-_]+)$/;
-    let parts = {
-      utxo: null,
-      assetId: null,
-      assetType: null,
-      expiry: null,
-      endpoints: null,
-    };
-    parts.utxo = _invoice.match(utxoPattern)?.[0] || null;
-    parts.assetId = _invoice.match(assetIdPattern)?.[1] || '';
-    parts.assetType = _invoice.match(assetTypePattern)?.[1] || '';
-    parts.expiry = _invoice.match(expiryPattern)?.[1] || null;
-    parts.endpoints = _invoice.match(endpointPattern)?.[1] || null;
-    return parts;
-  };
-
   const sendAsset = useCallback(async () => {
     try {
-      const { utxo, endpoints } = decodeInvoice(invoice);
+      const decodedInvoice = await ApiHandler.decodeInvoice(invoice)
       setLoading(true);
       const response = await ApiHandler.sendAsset({
         assetId,
-        blindedUTXO: utxo,
+        blindedUTXO: decodedInvoice.recipientId,
         amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
-        consignmentEndpoints: endpoints,
+        consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
       });
