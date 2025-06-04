@@ -139,6 +139,10 @@ const CollectibleMetaDataScreen = () => {
     item => item.verified === true,
   );
 
+  const url = domainVerification?.name?.startsWith('http')
+    ? domainVerification?.name
+    : `https://${domainVerification?.name}`;
+
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
@@ -254,11 +258,15 @@ const CollectibleMetaDataScreen = () => {
                 }
                 verified={domainVerification?.verified}
                 onPress={() => {
-                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                    assetId: assetId,
-                    schema: RealmSchema.Collectible,
-                    savedDomainName: domainVerification?.name || '',
-                  });
+                  if (domainVerification?.verified) {
+                    openLink(url);
+                  } else {
+                    navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                      assetId: assetId,
+                      schema: RealmSchema.Collectible,
+                      savedDomainName: domainVerification?.name || '',
+                    });
+                  }
                 }}
               />
             </View>
