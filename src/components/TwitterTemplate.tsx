@@ -195,7 +195,10 @@ function TwitterTemplate(props: TwitTemplateProps) {
           <InfoItem
             title={assets.issuedSupply + ':'}
             value={
-              asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
+              asset?.assetSchema.toUpperCase() === AssetSchema.UDA
+                ? 'Unique'
+                : asset?.metaData &&
+                  numberWithCommas(asset?.metaData?.issuedSupply)
             }
           />
           {twitterVerification?.type && (
