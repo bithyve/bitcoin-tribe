@@ -395,7 +395,8 @@
     "validationZeroNotAllowed": "不允许输入0！",
     "invoiceInvalidContainErrMsg": "发票包含无效信息。请检查发票。",
     "invoiceFormatErrMsg": "发票格式无效。请重试。",
-    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。"
+    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。",
+    "spendableBalErrorInfo": "您的资产已被锁定，因为接收方尚未接受。取消该交易以解锁资产并恢复可支配余额。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
