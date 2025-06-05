@@ -78,6 +78,10 @@ import UTXOTabs from './tabNavigation/UTXOTabs';
 import BackupAlertBanner from 'src/components/BackupAlertBanner';
 import BackupDoneBanner from 'src/components/BackupDoneBanner';
 import AssetRegistryScreen from 'src/screens/collectiblesCoins/AssetRegistryScreen';
+import RegisterDomain from 'src/screens/assets/RegisterDomain';
+import VerifyDomain from 'src/screens/assets/VerifyDomain';
+import VerifyX from 'src/screens/assets/VerifyX';
+import ImportXPost from 'src/screens/assets/ImportXPost';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -315,6 +319,19 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ASSETREGISTRYSCREEN}
           component={AssetRegistryScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.REGISTERDOMAIN}
+          component={RegisterDomain}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.VERIFYDOMAIN}
+          component={VerifyDomain}
+        />
+        <Stack.Screen name={NavigationRoutes.VERIFYX} component={VerifyX} />
+        <Stack.Screen
+          name={NavigationRoutes.IMPORTXPOST}
+          component={ImportXPost}
         />
       </Stack.Navigator>
     </RealmProvider>

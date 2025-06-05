@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, AppState, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -8,8 +8,12 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import {
+  Asset,
+  Coin,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -29,11 +33,17 @@ import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
 
 const CoinDetailsScreen = () => {
+  const storage = new MMKV();
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const appState = useRef(AppState.currentState);
 
   const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
@@ -62,6 +72,8 @@ const CoinDetailsScreen = () => {
     useState(false);
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -81,15 +93,18 @@ const CoinDetailsScreen = () => {
   }, [showVerifyModal, openTwitterAfterVerifyClose]);
 
   useEffect(() => {
-    if (askReview) {
+    if (askVerify) {
+      setTimeout(() => setShowVerifyModal(true), 1000);
+    }
+  }, [askVerify]);
+
+  useEffect(() => {
+    if (askReview && refresh) {
       setTimeout(() => {
         requestAppReview();
       }, 2000);
     }
-    if (askVerify) {
-      setShowVerifyModal(true);
-    }
-  }, [askReview, askVerify]);
+  }, [askReview, refresh]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -216,9 +231,19 @@ const CoinDetailsScreen = () => {
       <>
         <PostOnTwitterModal
           visible={visiblePostOnTwitter}
+          primaryOnPress={() => {
+            setVisiblePostOnTwitter(false);
+            setCompleteVerification(false);
+            updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
+            setRefresh(prev => !prev);
+            setIsSharingToTwitter(true);
+          }}
           secondaryOnPress={() => {
             setVisiblePostOnTwitter(false);
             setCompleteVerification(false);
+            updateAssetPostStatus(coin, RealmSchema.Coin, assetId, false);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, true);
           }}
           issuerInfo={coin}
         />
@@ -226,9 +251,16 @@ const CoinDetailsScreen = () => {
       <>
         <IssueAssetPostOnTwitterModal
           visible={visibleIssuedPostOnTwitter}
+          primaryOnPress={() => {
+            setVisibleIssuedPostOnTwitter(false);
+            setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
+          }}
           secondaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setHasIssuedAsset(false);
+            setRefresh(prev => !prev);
+            updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           issuerInfo={coin}
         />

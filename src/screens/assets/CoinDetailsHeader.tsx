@@ -76,7 +76,9 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             <View style={styles.balanceContainer}>
-              <View style={styles.totalBalanceWrapper}>
+              <AppTouchable
+                style={styles.totalBalanceWrapper}
+                onPress={onPressSetting}>
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
                     <AssetIcon
@@ -102,7 +104,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     </AppText>
                   </View>
                 </View>
-              </View>
+              </AppTouchable>
               <View style={styles.totalBalanceWrapper2}>
                 <AppTouchable
                   style={styles.onChainTotalBalanceWrapper}

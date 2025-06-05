@@ -170,7 +170,7 @@ object RGBHelper {
             RGBWalletRepository.online!!,
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
             isDonation,
-            feeRate,
+            feeRate.toULong(),
             0u,
             false
         ) }
@@ -211,7 +211,6 @@ object RGBHelper {
 
     private fun issueAssetRgb20(ticker: String, name: String, amounts: List<ULong>, precision: Int): AssetNia? {
         val asset = RGBWalletRepository.wallet?.issueAssetNia(
-            RGBWalletRepository.online!!,
             ticker,
             name,
             precision.toUByte(),
@@ -225,20 +224,17 @@ object RGBHelper {
 
     private fun issueAssetRgb25(name: String, description: String, amounts: List<ULong>, precision: Int, filePath: String): AssetCfa? {
         val asset = RGBWalletRepository.wallet?.issueAssetCfa(
-            RGBWalletRepository.online!!,
             name,
             description,
             precision.toUByte(),
             amounts,
             filePath
         )
-        Log.d(TAG, "issueAssetRgb25: New asset = ${asset?.assetId}")
         return  asset
     }
 
     fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): String? {
         val asset = RGBWalletRepository.wallet?.issueAssetUda(
-            RGBWalletRepository.online!!,
             ticker,
             name,
             details,
@@ -270,13 +266,15 @@ object RGBHelper {
     }
 
     private fun createUTXOs(feeRate: Float): UByte? {
-        Log.d(TAG, "createUTXOs: tribe")
+        RGBWalletRepository.wallet?.getAddress()
+        RGBWalletRepository.wallet?.sync(RGBWalletRepository.online!!)
+        val balance = RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online!!, false)
         return RGBWalletRepository.wallet?.createUtxos(
             RGBWalletRepository.online!!,
             false,
             null,
             null,
-            feeRate,
+            feeRate.toULong(),
             false
         )
     }
@@ -288,7 +286,7 @@ object RGBHelper {
     fun createUtxosBegin(upTo: Boolean, num: Int, size: Int, feeRate: Float, skipSync: Boolean): String? {
         return RGBWalletRepository.wallet?.createUtxosBegin(
             RGBWalletRepository.online!!, upTo,
-            num.toUByte(), size.toUInt(), feeRate, skipSync)
+            num.toUByte(), size.toUInt(), feeRate.toULong(), skipSync)
     }
 
     fun signPsbt(unsignedPsbt: String): String? {
@@ -321,7 +319,7 @@ object RGBHelper {
     }
 
     fun getUnspents(): List<Unspent>? {
-        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
+        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, false)
     }
 
     fun getWalletData(): WalletData? {
@@ -329,7 +327,7 @@ object RGBHelper {
     }
 
     fun getBtcBalance(): BtcBalance? {
-        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,true)
+        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,false)
     }
 
     fun refreshAsset(assetID: String) {
@@ -340,7 +338,7 @@ object RGBHelper {
         val keys = restoreKeys(RGBWalletRepository.rgbNetwork!!, mnemonic)
         return File(
             context.filesDir,
-            AppConstants.backupName.format(keys.accountXpubFingerprint)
+            AppConstants.backupName.format(keys.accountXpubColoredFingerprint)
         )
     }
 

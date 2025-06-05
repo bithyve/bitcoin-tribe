@@ -171,6 +171,7 @@ const LightningSend = () => {
         <SendSuccessPopupContainer
           title={assets.success}
           subTitle={lightning.lightningSendTxnSubtitle}
+          ctaTitle={common.proceed}
           onPress={() => {
             navigation.goBack();
           }}

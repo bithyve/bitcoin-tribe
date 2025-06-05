@@ -21,6 +21,7 @@ import {
   Collectible,
   TransferKind,
   AssetVisibility,
+  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
@@ -41,6 +42,17 @@ import VerifyIssuer from './components/VerifyIssuer';
 import IssuerVerified from './components/IssuerVerified';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
 import { AppContext } from 'src/contexts/AppContext';
+import {
+  updateAssetIssuedPostStatus,
+  updateAssetPostStatus,
+} from 'src/utils/postStatusUtils';
+import IssueAssetPostOnTwitterModal from './components/IssueAssetPostOnTwitterModal';
+import SelectOption from 'src/components/SelectOption';
+import openLink from 'src/utils/OpenLink';
+import IssuerDomainVerified from './components/IssuerDomainVerified';
+import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
+import Relay from 'src/services/relay';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 export const Item = ({ title, value }) => {
   const theme: AppTheme = useTheme();
@@ -83,8 +95,11 @@ const CollectibleMetaDataScreen = () => {
   const hasShownPostModal = useRef(false);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { hasCompleteVerification, setCompleteVerification } =
-    React.useContext(AppContext);
+  const {
+    hasCompleteVerification,
+    setCompleteVerification,
+    setHasIssuedAsset,
+  } = React.useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
@@ -93,12 +108,50 @@ const CollectibleMetaDataScreen = () => {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
+  const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
+    useState(false);
+  const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
+
+  const twitterVerification = collectible?.issuer?.verifiedBy?.find(
+    v =>
+      v.type === IssuerVerificationMethod.TWITTER ||
+      v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const twitterPostVerificationWithLink = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST && v.link,
+  );
+  const twitterPostVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.TWITTER_POST,
+  );
+
+  const domainVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
+
+  const hasIssuanceTransaction = collectible?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  const verified = collectible?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
 
   useEffect(() => {
     if (!collectible.metaData) {
       mutate({ assetId, schema: RealmSchema.Collectible });
     }
   }, []);
+
+  useEffect(() => {
+    const fetchAsset = async () => {
+      const asset = await Relay.getAsset(assetId);
+      setIsAddedInRegistry(asset.status);
+    };
+    fetchAsset();
+  }, [assetId]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -129,12 +182,25 @@ const CollectibleMetaDataScreen = () => {
 
   const showVerifyIssuer = useMemo(() => {
     return (
-      !collectible?.issuer?.verified &&
+      !twitterVerification?.id &&
       collectible.transactions.some(
         transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
       )
     );
-  }, [collectible.transactions, collectible.issuer, refreshToggle]);
+  }, [collectible.transactions, collectible.issuer?.verifiedBy, refreshToggle]);
+
+  const showDomainVerifyIssuer = useMemo(() => {
+    return (
+      !domainVerification?.verified &&
+      collectible?.transactions.some(
+        transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+      )
+    );
+  }, [
+    collectible?.transactions,
+    collectible?.issuer?.verifiedBy,
+    refreshToggle,
+  ]);
 
   return (
     <ScreenContainer style={styles.container}>
@@ -151,8 +217,8 @@ const CollectibleMetaDataScreen = () => {
         }}
         style={styles.headerWrapper}
       />
-      {isLoading ? (
-        <ModalLoading visible={isLoading} />
+      {isLoading || isVerifyingIssuer ? (
+        <ModalLoading visible={isLoading || isVerifyingIssuer} />
       ) : (
         <>
           <ScrollView
@@ -171,13 +237,30 @@ const CollectibleMetaDataScreen = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              {collectible?.issuer && collectible.issuer.verified && (
-                <IssuerVerified
-                  id={collectible.issuer.verifiedBy[0].id}
-                  name={collectible.issuer.verifiedBy[0].name}
-                  username={collectible.issuer.verifiedBy[0].username}
-                />
-              )}
+              <IssuerVerified
+                id={twitterVerification?.id}
+                name={twitterVerification?.name}
+                username={twitterVerification?.username.replace(/@/g, '')}
+                assetId={assetId}
+                schema={RealmSchema.Collectible}
+                onVerificationComplete={() => setRefreshToggle(t => !t)}
+                setIsVerifyingIssuer={setIsVerifyingIssuer}
+              />
+              <IssuerDomainVerified
+                domain={
+                  collectible?.issuer?.verifiedBy?.find(
+                    v => v.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
+                }
+                verified={domainVerification?.verified}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                    assetId: assetId,
+                    schema: RealmSchema.Collectible,
+                    savedDomainName: domainVerification?.name || '',
+                  });
+                }}
+              />
             </View>
             <Item
               title={home.assetName}
@@ -212,29 +295,130 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-
-            {showVerifyIssuer && (
+            {hasIssuanceTransaction && (
               <>
                 <VerifyIssuer
                   assetId={assetId}
                   schema={RealmSchema.Collectible}
                   onVerificationComplete={() => setRefreshToggle(t => !t)}
+                  showVerifyIssuer={showVerifyIssuer}
+                  showDomainVerifyIssuer={showDomainVerifyIssuer}
+                  asset={collectible}
+                  onPressShare={() => {
+                    if (!collectible?.isIssuedPosted) {
+                      setVisibleIssuedPostOnTwitter(true);
+                    } else if (!collectible?.isVerifyPosted && verified) {
+                      setVisiblePostOnTwitter(true);
+                    }
+                  }}
                 />
-                <View style={styles.seperatorView} />
+                {!collectible?.issuer?.verified && (
+                  <View style={styles.seperatorView} />
+                )}
               </>
+            )}
+            <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+              {isAddedInRegistry && (
+                <SelectOption
+                  title={assets.viewInRegistry}
+                  subTitle={''}
+                  onPress={() =>
+                    openLink(
+                      `https://bitcointribe.app/registry?assetId=${assetId}`,
+                    )
+                  }
+                  testID={'view_in_registry'}
+                />
+              )}
+              {hasIssuanceTransaction &&
+                twitterVerification?.id &&
+                !twitterPostVerificationWithLink &&
+                twitterPostVerification &&
+                !twitterPostVerification?.link && (
+                  <SelectOption
+                    title={'Show your X post here'}
+                    subTitle={''}
+                    onPress={() =>
+                      navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                        assetId: assetId,
+                        schema: RealmSchema.Collectible,
+                        asset: collectible,
+                      })
+                    }
+                    testID={'import_x_post'}
+                  />
+                )}
+            </View>
+            {isAddedInRegistry && <View style={styles.seperatorView} />}
+            {twitterPostVerificationWithLink?.link && (
+              <View style={styles.wrapper}>
+                <EmbeddedTweetView
+                  tweetId={twitterPostVerificationWithLink?.link}
+                />
+              </View>
             )}
             <HideAssetView
               title={assets.hideAsset}
               onPress={() => hideAsset()}
-              isVerified={collectible?.issuer?.verified}
-              assetId={assetId}
             />
             <>
               <PostOnTwitterModal
                 visible={visiblePostOnTwitter}
+                primaryOnPress={() => {
+                  setVisiblePostOnTwitter(false);
+                  setCompleteVerification(false);
+                  updateAssetPostStatus(
+                    collectible,
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
+                  setRefresh(prev => !prev);
+                }}
                 secondaryOnPress={() => {
                   setVisiblePostOnTwitter(false);
                   setCompleteVerification(false);
+                  updateAssetPostStatus(
+                    collectible,
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    true,
+                  );
+                }}
+                issuerInfo={collectible}
+              />
+            </>
+            <>
+              <IssueAssetPostOnTwitterModal
+                visible={visibleIssuedPostOnTwitter}
+                primaryOnPress={() => {
+                  setVisibleIssuedPostOnTwitter(false);
+                  setRefresh(prev => !prev);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
+                }}
+                secondaryOnPress={() => {
+                  setVisibleIssuedPostOnTwitter(false);
+                  setHasIssuedAsset(false);
+                  setRefresh(prev => !prev);
+                  updateAssetIssuedPostStatus(
+                    RealmSchema.Collectible,
+                    assetId,
+                    false,
+                  );
                 }}
                 issuerInfo={collectible}
               />
@@ -269,7 +453,7 @@ const getStyles = (theme: AppTheme) =>
     },
     assetNameWrapper: {
       minHeight: hp(50),
-      paddingHorizontal: hp(10),
+      padding: hp(10),
       justifyContent: 'center',
       borderRadius: 10,
       borderWidth: 1,
@@ -311,6 +495,9 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       backgroundColor: theme.colors.borderColor,
       marginVertical: hp(10),
+    },
+    viewRegistryCtaWrapper: {
+      marginTop: hp(10),
     },
   });
 

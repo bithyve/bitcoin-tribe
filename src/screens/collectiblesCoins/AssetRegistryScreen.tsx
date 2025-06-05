@@ -42,7 +42,7 @@ function AssetRegistryScreen() {
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [feeDetails, setFeeDetails] = useState(null);
-  const [addedToRegistry, setAddedToRegistry] = useState(false);
+  const [disabledCTA, setDisabledCTA] = useState(false);
 
   const schema = () => {
     switch (issueType) {
@@ -65,6 +65,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
       case AssetType.Collectible:
         navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
@@ -72,6 +73,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
       case AssetType.UDA:
         navigation.replace(NavigationRoutes.UDADETAILS, {
@@ -79,6 +81,7 @@ function AssetRegistryScreen() {
           askReview: true,
           askVerify,
         });
+        setDisabledCTA(false);
         break;
 
       default:
@@ -130,11 +133,10 @@ function AssetRegistryScreen() {
         payServiceFeeFeeMutation.error?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
-
-      Toast(
-        `Failed to pay service fee. Please refresh your wallet and try again.`,
-        true,
-      );
+      if (errorMessage === 'Insufficient balance') {
+        Toast(assets.payServiceFeeFundError, true);
+        navigation.goBack();
+      }
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);
@@ -171,6 +173,7 @@ function AssetRegistryScreen() {
         }
       }
     } catch (error) {
+      setDisabledCTA(false);
       Toast(`${error}`, true);
       console.log(error);
     }
@@ -178,7 +181,11 @@ function AssetRegistryScreen() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title={common.registry} style={styles.headerWrapper} />
+      <AppHeader
+        title={common.registry}
+        style={styles.headerWrapper}
+        disableBackCTA={disabledCTA}
+      />
       <View style={styles.wrapper}>
         <Text style={styles.subTitleText}>
           {assets.assetRegistrySubTitle} {assets.assetRegistrySubTitle2}{' '}
@@ -209,6 +216,7 @@ function AssetRegistryScreen() {
             title={assets.swipeToPay}
             loadingTitle={assets.payInprocess}
             onSwipeComplete={async () => {
+              setDisabledCTA(true);
               await ApiHandler.refreshWallets({ wallets: [wallet] });
               payServiceFeeFeeMutation.mutate({ feeDetails });
             }}
@@ -217,7 +225,7 @@ function AssetRegistryScreen() {
         </View>
         <View style={styles.skipWrapper}>
           <SkipButton
-            disabled={payServiceFeeFeeMutation.status === 'loading'}
+            disabled={disabledCTA}
             onPress={() => {
               setHasIssuedAsset(true);
               setTimeout(() => routeMap(false), 500);

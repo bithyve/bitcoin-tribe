@@ -103,6 +103,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryOnPress={secondaryOnPress}
             width={windowWidth / 2.3}
             secondaryCTAWidth={windowWidth / 2.3}
+            disabled={disabled}
           />
         </ScrollView>
       </KeyboardAvoidingView>

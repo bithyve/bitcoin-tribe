@@ -42,15 +42,11 @@ const AssetIcon = ({ assetTicker, assetID, size, style, verified }: props) => {
 
   return (
     <View>
-      {iconUrl && verified ? (
-        <Image source={{ uri: iconUrl }} style={styles.imageStyle} />
-      ) : (
-        <Identicon
-          value={assetID}
-          size={size}
-          style={[styles.identiconView, style]}
-        />
-      )}
+      <Identicon
+        value={assetID}
+        size={size}
+        style={[styles.identiconView, style]}
+      />
     </View>
   );
 };

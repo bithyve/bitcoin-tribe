@@ -1,6 +1,6 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
-import { AssetVisibility } from 'src/models/interfaces/RGBWallet';
+import { AssetSchema, AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
 export const CollectibleMediaSchema: ObjectSchema = {
   name: RealmSchema.CollectibleMedia,
@@ -18,7 +18,6 @@ export const CollectibleSchema: ObjectSchema = {
   properties: {
     addedAt: 'int',
     assetId: 'string',
-    assetIface: 'string',
     balance: RealmSchema.Balance,
     details: 'string?',
     issuedSupply: 'int',
@@ -32,6 +31,13 @@ export const CollectibleSchema: ObjectSchema = {
     visibility: {
       type: 'string',
       default: AssetVisibility.DEFAULT,
+      optional: true,
+    },
+    isVerifyPosted: 'bool?',
+    isIssuedPosted: 'bool?',
+    assetSchema: {
+      type: 'string',
+      default: AssetSchema.Collectible,
       optional: true,
     },
   },

@@ -5,8 +5,9 @@ export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
-  accountXpub: string;
-  accountXpubFingerprint: string;
+  accountXpubColoredFingerprint: string;
+  accountXpubColored: string;
+  accountXpubVanilla: string;
   receiveData?: {
     invoice: string;
     recipientId: string;
@@ -47,7 +48,6 @@ export interface Transfer {
 }
 
 export interface MetaData {
-  assetIface: string;
   assetSchema: string;
   issuedSupply: number;
   name: string;
@@ -63,13 +63,15 @@ export interface Issuer {
     name?: string;
     id?: string;
     username?: string;
+    link?: string;
+    verified?: Boolean;
   }[];
+  isDomainVerified: boolean;
 }
 
 export interface Coin {
   addedAt: number;
   assetId: string;
-  assetIface: AssetFace;
   balance: Balance;
   issuedSupply: number;
   name: string;
@@ -80,6 +82,9 @@ export interface Coin {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
 }
 
 export interface Media {
@@ -91,7 +96,6 @@ export interface Media {
 export interface Collectible {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -103,12 +107,14 @@ export interface Collectible {
   transactions: Transfer[];
   issuer: Issuer;
   visibility: AssetVisibility;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
 }
 
 export interface UniqueDigitalAsset {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -127,6 +133,7 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
+  assetSchema: AssetSchema;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -162,6 +169,12 @@ export enum AssetFace {
   RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
 }
 
+export enum AssetSchema {
+  Coin = 'NIA',
+  Collectible = 'CFA',
+  UDA = 'UDA',
+}
+
 export enum AssetVisibility {
   DEFAULT = 'DEFAULT',
   HIDDEN = 'HIDDEN',
@@ -190,6 +203,8 @@ export enum TransferStatus {
 
 export enum IssuerVerificationMethod {
   TWITTER = 'twitter',
+  DOMAIN = 'domain',
+  TWITTER_POST = 'twitter_post',
 }
 
 export interface RgbNodeConnectParams {

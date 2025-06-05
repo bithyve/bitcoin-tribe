@@ -57,17 +57,6 @@ const AssetCard = (props: AssetCardProps) => {
             }}
             style={styles.imageStyle}
           />
-          {asset.assetIface.toUpperCase() === AssetFace.RGB25 && (
-            <View style={styles.tagWrapper}>
-              <AssetChip
-                tagText={formatLargeNumber(balance)}
-                backColor={
-                  tag === 'COIN' ? theme.colors.accent5 : theme.colors.accent4
-                }
-                tagColor={theme.colors.tagText}
-              />
-            </View>
-          )}
         </View>
         <View style={styles.contentWrapper}>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
@@ -118,6 +107,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
       textAlign: 'center',
+      marginRight: hp(2),
     },
     amountText: {
       fontWeight: '300',

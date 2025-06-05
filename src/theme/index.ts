@@ -103,6 +103,8 @@ type CustomColors = {
   backupAlertBackColor: string;
   walletBackgroundColor: string;
   sliderTrackColor: string;
+  hideAssetCTABackColor: string;
+  hideAssetDeviderColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -122,7 +124,7 @@ const CombinedDefaultTheme: AppTheme = {
     cardGradient1: Colors.White,
     cardGradient2: Colors.White,
     cardGradient3: Colors.White,
-    cardGradient4: Colors.GhostWhite,
+    cardGradient4: Colors.Platinum,
     cardGradient5: Colors.GhostWhite,
     headerCardGradientColor: Colors.GhostWhite,
     borderColor: Colors.Platinum,
@@ -139,7 +141,7 @@ const CombinedDefaultTheme: AppTheme = {
     disableCtaBackColor: Colors.ChineseWhite,
     inputBackground: Colors.White,
     transButtonBackColor: Colors.BrightGray,
-    profileBackground: Colors.Black,
+    profileBackground: Colors.GhostWhite,
     accent1: Colors.BrandeisBlue,
     primaryCTAText: Colors.White,
     tagText: Colors.Black,
@@ -214,6 +216,8 @@ const CombinedDefaultTheme: AppTheme = {
     backupAlertBackColor: Colors.VividGamboge,
     walletBackgroundColor: Colors.White,
     sliderTrackColor: Colors.ChineseSilver,
+    hideAssetCTABackColor: Colors.BrandeisBlue1,
+    hideAssetDeviderColor: Colors.DarkSilver,
   },
   fonts: {
     regular: {
@@ -333,6 +337,8 @@ const CombinedDarkTheme: AppTheme = {
     backupAlertBackColor: Colors.VividGamboge,
     walletBackgroundColor: Colors.SmokyBlack,
     sliderTrackColor: Colors.DarkCharcoal,
+    hideAssetCTABackColor: Colors.Golden1,
+    hideAssetDeviderColor: Colors.Arsenic,
   },
   fonts: {
     regular: {
