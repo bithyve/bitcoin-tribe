@@ -32,7 +32,6 @@ function HomeScreen() {
   const latestVersion = useQuery<VersionHistory>(
     RealmSchema.VersionHistory,
   ).slice(-1)[0];
-  console.log('latestVersion', latestVersion);
   const versionNumber = latestVersion?.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
   const {
