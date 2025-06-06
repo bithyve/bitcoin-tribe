@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { verifyIssuerOnTwitter } from './VerifyIssuer';
 import { RealmSchema } from 'src/storage/enum';
@@ -19,6 +19,8 @@ interface VerifyIssuerModalProps {
   onVerify: () => void;
   onDismiss: () => void;
   schema: RealmSchema;
+  onVerificationComplete?: () => void;
+  primaryLoading?: boolean;
 }
 
 const getStyles = (theme: AppTheme) =>
@@ -53,12 +55,15 @@ const VerifyIssuerModal = ({
   onVerify,
   onDismiss,
   schema,
+  onVerificationComplete,
+  primaryLoading,
 }: VerifyIssuerModalProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { assets, common } = translations;
   const { setCompleteVerification } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
   return (
     <ResponsePopupContainer
       visible={isVisible}
@@ -82,15 +87,23 @@ const VerifyIssuerModal = ({
           <Buttons
             primaryTitle={common.verify}
             primaryOnPress={async () => {
-              await verifyIssuerOnTwitter(assetId, schema);
+              setLoading(true);
+              await verifyIssuerOnTwitter(
+                assetId,
+                schema,
+                onVerificationComplete,
+              );
               onVerify();
               setCompleteVerification(true);
+              setLoading(false);
             }}
             secondaryTitle={common.skip}
             secondaryOnPress={onDismiss}
             width={windowWidth / 2.7}
             secondaryCTAWidth={windowWidth / 2.9}
             height={hp(14)}
+            primaryLoading={primaryLoading || loading}
+            disabled={primaryLoading || loading}
           />
           {/* </View> */}
         </View>
