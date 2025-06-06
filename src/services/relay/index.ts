@@ -483,4 +483,21 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static registryAssetSearch = async (
+    query: string,
+  ): Promise<{
+    asset: Asset;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/registry/search`, {
+        query,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }
