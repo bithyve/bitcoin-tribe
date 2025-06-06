@@ -346,7 +346,7 @@ const CollectibleMetaDataScreen = () => {
                     title={'Show your X post here'}
                     subTitle={''}
                     onPress={() =>
-                      navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                      navigation.navigate(NavigationRoutes.IMPORTXPOST, {
                         assetId: assetId,
                         schema: RealmSchema.Collectible,
                         asset: collectible,

@@ -130,6 +130,7 @@ export const verifyIssuerOnTwitter = async (
             id: result.id,
             name: result.name,
             username: result.username,
+            verified: true,
           },
         ];
         await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
