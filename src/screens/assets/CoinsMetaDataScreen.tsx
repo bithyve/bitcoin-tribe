@@ -230,12 +230,6 @@ const CoinsMetaDataScreen = () => {
             <Item
               title={assets.schema}
               value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
-              width={'45%'}
-            />
-            <Item
-              title={assets.iFace}
-              value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
-              width={'45%'}
             />
           </View>
           <View style={styles.rowWrapper}>

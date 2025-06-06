@@ -82,18 +82,24 @@ export default class RGBServices {
 
   static initiate = async (
     mnemonic: string,
-    pubKey: string,
+    accountXpubVanilla: string,
+    accountXpubColored: string,
   ): Promise<string> => {
     try {
-      const data = await RGB.initiate(this.NETWORK, mnemonic, pubKey);
+      const data = await RGB.initiate(
+        this.NETWORK,
+        mnemonic,
+        accountXpubVanilla,
+        accountXpubColored,
+      );
       return JSON.parse(data);
     } catch (error) {
       return `${error}`;
     }
   };
 
-  static getBalance = async (mnemonic: string): Promise<string> => {
-    const balance = await RGB.getBalance(mnemonic, this.NETWORK);
+  static getBalance = async (): Promise<string> => {
+    const balance = await RGB.getBtcBalance();
     return JSON.parse(balance);
   };
 
@@ -402,7 +408,7 @@ export default class RGBServices {
     recipientId?: string;
     expirationTimestamp?: number;
     assetId?: string;
-    assetIface?: string;
+    assetSchema?: string;
     network?: string;
     transportEndpoints?: string;
     error?: string;

@@ -27,7 +27,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
+  AssetType,
   AssetVisibility,
   Coin,
   Collectible,
@@ -179,7 +180,7 @@ const SendAssetScreen = () => {
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(
-    assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : amount || '',
+    assetData.assetSchema.toUpperCase() === AssetType.UDA ? '1' : amount || '',
   );
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
@@ -278,36 +279,15 @@ const SendAssetScreen = () => {
     return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
   };
 
-  const decodeInvoice = (_invoice: string) => {
-    const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
-    const assetIdPattern = /(?:^|\s)([a-zA-Z0-9\-$]{20,})(?=\/|$)/;
-    const assetTypePattern = /\/(RGB20Fixed|RGB20|RGB25|RGB|[^/]+)(?=\/|$)/;
-    const expiryPattern = /expiry=(\d+)/;
-    const endpointPattern = /endpoints=([a-zA-Z0-9:\/\.\-_]+)$/;
-    let parts = {
-      utxo: null,
-      assetId: null,
-      assetType: null,
-      expiry: null,
-      endpoints: null,
-    };
-    parts.utxo = _invoice.match(utxoPattern)?.[0] || null;
-    parts.assetId = _invoice.match(assetIdPattern)?.[1] || '';
-    parts.assetType = _invoice.match(assetTypePattern)?.[1] || '';
-    parts.expiry = _invoice.match(expiryPattern)?.[1] || null;
-    parts.endpoints = _invoice.match(endpointPattern)?.[1] || null;
-    return parts;
-  };
-
   const sendAsset = useCallback(async () => {
     try {
-      const { utxo, endpoints } = decodeInvoice(invoice);
+      const decodedInvoice = await ApiHandler.decodeInvoice(invoice)
       setLoading(true);
       const response = await ApiHandler.sendAsset({
         assetId,
-        blindedUTXO: utxo,
+        blindedUTXO: decodedInvoice.recipientId,
         amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
-        consignmentEndpoints: endpoints,
+        consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
       });
@@ -443,12 +423,12 @@ const SendAssetScreen = () => {
           name={assetData?.name}
           ticker={assetData?.ticker}
           details={
-            assetData?.assetIface.toUpperCase() !== AssetFace.RGB25
+            assetData?.assetSchema.toUpperCase() !== AssetSchema.Collectible
               ? assetData?.ticker
               : assetData?.details
           }
           image={
-            assetData.assetIface.toUpperCase() !== AssetFace.RGB20
+            assetData.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
                   android: `file://${
                     assetData.media?.filePath || assetData?.token.media.filePath
@@ -460,7 +440,7 @@ const SendAssetScreen = () => {
               : null
           }
           tag={
-            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Coin
               ? assets.coin
               : assets.collectible
           }
@@ -510,7 +490,7 @@ const SendAssetScreen = () => {
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-          disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
+            disabled={assetData.assetSchema.toUpperCase() === AssetType.UDA}
           error={amountValidationError}
         />
         <View style={styles.availableBalanceWrapper}>

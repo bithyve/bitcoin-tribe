@@ -19,7 +19,7 @@ import AssetIcon from './AssetIcon';
 import AppText from './AppText';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import AppLogo from 'src/assets/images/websiteLogo.svg';
@@ -215,7 +215,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
         </View>
         <View style={styles.assetIconContainer}>
           <View>
-            {asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
+            {asset?.assetSchema?.toUpperCase() === AssetSchema.Collectible ? (
               <Image
                 source={{
                   uri: Platform.select({
@@ -226,7 +226,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
                 resizeMode="cover"
                 style={styles.imageStyle}
               />
-            ) : asset?.assetIface.toUpperCase() === AssetFace.RGB21 ? (
+            ) : asset?.assetSchema.toUpperCase() === AssetSchema.UDA ? (
               <Image
                 source={{
                   uri: Platform.select({

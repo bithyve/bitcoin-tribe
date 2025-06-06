@@ -6,8 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
-import { AssetFace, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { hp, wp } from 'src/constants/responsive';
+import { AssetSchema, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
@@ -18,7 +18,6 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
-import Identicon from 'src/components/Identicon';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { RealmSchema } from 'src/storage/enum';
@@ -88,7 +87,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         />
         <AppTouchable onPress={onPressSetting}>
           <View style={styles.assetImageWrapper}>
-            {asset.assetIface.toUpperCase() === AssetFace.RGB25 ? (
+            {asset.assetSchema.toUpperCase() === AssetSchema.Collectible ? (
               <Image
                 source={{
                   uri: Platform.select({
