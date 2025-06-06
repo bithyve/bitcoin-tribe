@@ -10,6 +10,7 @@ import com.bithyve.tribe.AppConstants
 import com.bithyve.tribe.RGBHelper
 import com.bithyve.tribe.RGBWalletRepository
 import com.facebook.react.bridge.ReadableArray
+import com.google.gson.JsonArray
 import kotlinx.coroutines.*
 import org.rgbtools.BitcoinNetwork
 
@@ -313,7 +314,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             jsonObject.addProperty("recipientId", invoice.recipientId)
             jsonObject.addProperty("network", invoice.network.name)
             jsonObject.addProperty("amount", invoice.amount?.toFloat() ?: 0)
-            jsonObject.addProperty("transportEndpoints", invoice.transportEndpoints.toString())
+            val jsonArray = JsonArray()
+            invoice.transportEndpoints.forEach { endpoint ->
+                jsonArray.add(endpoint)
+            }
+            jsonObject.add("transportEndpoints", jsonArray)
             jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
             jsonObject.addProperty("expirationTimestamp", invoice.expirationTimestamp)
             promise.resolve(jsonObject.toString())
