@@ -84,7 +84,7 @@ function ImportXPost() {
   const handleVerifyTweet = async () => {
     const id = extractTweetId(tweetUrl.trim());
     if (!id) {
-      Toast('Could not extract tweet ID.');
+      Toast('Could not extract tweet ID.', true);
       return;
     }
     try {

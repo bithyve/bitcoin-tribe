@@ -182,8 +182,11 @@ const SendAssetScreen = () => {
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(
-    assetData.assetSchema.toUpperCase() === AssetType.UDA ? '1' : amount || '',
+    assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
+      ? '1'
+      : amount || '',
   );
+
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -434,12 +437,12 @@ const SendAssetScreen = () => {
           name={assetData?.name}
           ticker={assetData?.ticker}
           details={
-            assetData?.assetSchema.toUpperCase() !== AssetSchema.Collectible
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
               ? assetData?.ticker
               : assetData?.details
           }
           image={
-            assetData.assetSchema.toUpperCase() !== AssetSchema.Coin
+            assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
                   android: `file://${
                     assetData.media?.filePath || assetData?.token.media.filePath

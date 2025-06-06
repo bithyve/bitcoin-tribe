@@ -65,15 +65,19 @@ function RecordCardView(props: Props) {
           </AppText>
         </View>
         <View style={styles.contentWrapper}>
-          <AppText variant="body2" style={styles.labelText}>
+          <AppText
+            variant="body2"
+            style={[styles.labelText, styles.valueTextWrapper]}>
             {assets.value}
           </AppText>
           <AppTouchable
             style={styles.copiableView}
             onPress={() => handleCopyText(value)}>
-            <AppText variant="body2" style={styles.valueText}>
-              {value}
-            </AppText>
+            <View style={styles.valueWrapper}>
+              <AppText variant="body2" style={styles.valueText}>
+                {value}
+              </AppText>
+            </View>
             <View>{isThemeDark ? <IconCopy /> : <IconCopyLight />}</View>
           </AppTouchable>
         </View>
@@ -117,9 +121,14 @@ const getStyles = (theme: AppTheme) =>
     },
     copiableView: {
       flexDirection: 'row',
-      width: '60%',
-      justifyContent: 'center',
-      marginRight: hp(3),
+      width: '70%',
+      justifyContent: 'space-between',
+    },
+    valueTextWrapper: {
+      width: '30%',
+    },
+    valueWrapper: {
+      width: '90%',
     },
   });
 export default RecordCardView;

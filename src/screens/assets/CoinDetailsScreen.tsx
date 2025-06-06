@@ -122,9 +122,12 @@ const CoinDetailsScreen = () => {
   );
 
   useEffect(() => {
+    const selectedAssetName = coin?.name;
     const unsubscribe = navigation.addListener('focus', () => {
-      refreshRgbWallet.mutate();
-      mutate({ assetId, schema: RealmSchema.Coin });
+      if (selectedAssetName !== 'Tribe tUSDt') {
+        refreshRgbWallet.mutate();
+        mutate({ assetId, schema: RealmSchema.Coin });
+      }
       if (appType === AppType.NODE_CONNECT) {
         listPaymentshMutation.mutate();
         getChannelMutate();

@@ -127,6 +127,10 @@ const UDADetailsScreen = () => {
     item => item.verified === true,
   );
 
+  const url = domainVerification?.name?.startsWith('http')
+    ? domainVerification?.name
+    : `https://${domainVerification?.name}`;
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -327,11 +331,15 @@ const UDADetailsScreen = () => {
               }
               verified={domainVerification?.verified}
               onPress={() => {
-                navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                  assetId: assetId,
-                  schema: RealmSchema.UniqueDigitalAsset,
-                  savedDomainName: domainVerification?.name || '',
-                });
+                if (domainVerification?.verified) {
+                  openLink(url);
+                } else {
+                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                    assetId: assetId,
+                    schema: RealmSchema.UniqueDigitalAsset,
+                    savedDomainName: domainVerification?.name || '',
+                  });
+                }
               }}
             />
           </View>
@@ -407,7 +415,6 @@ const UDADetailsScreen = () => {
             {hasIssuanceTransaction &&
               twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
-              twitterPostVerification &&
               !twitterPostVerification?.link && (
                 <SelectOption
                   title={'Show your X post here'}
