@@ -16,6 +16,7 @@ import GradientView from './GradientView';
 import AssetChip from './AssetChip';
 import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import Colors from 'src/theme/Colors';
 
 type AssetCardProps = {
   asset: Asset;
@@ -28,7 +29,7 @@ const AssetCard = (props: AssetCardProps) => {
   const theme: AppTheme = useTheme();
 
   const balance = useMemo(() => {
-    return asset?.balance?.future ?? 0;
+    return formatLargeNumber(asset?.balance?.future) ?? 0;
   }, [asset?.balance?.future]);
 
   const styles = useMemo(() => getStyles(theme), [theme]);
@@ -57,6 +58,11 @@ const AssetCard = (props: AssetCardProps) => {
             }}
             style={styles.imageStyle}
           />
+          <View style={styles.balanceWrapper}>
+            <AppText variant="caption" style={styles.balanceText}>
+              {balance}
+            </AppText>
+          </View>
         </View>
         <View style={styles.contentWrapper}>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
@@ -126,6 +132,18 @@ const getStyles = (theme: AppTheme) =>
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    balanceWrapper: {
+      backgroundColor: theme.colors.accent4,
+      paddingVertical: hp(3),
+      paddingHorizontal: hp(10),
+      borderRadius: 15,
+      alignSelf: 'center',
+      top: -11,
+    },
+    balanceText: {
+      color: Colors.Black,
+      fontWeight: '500',
     },
   });
 export default AssetCard;
