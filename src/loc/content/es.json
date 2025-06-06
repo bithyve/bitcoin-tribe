@@ -395,7 +395,8 @@
     "validationZeroNotAllowed": "¡0 no está permitido!",
     "invoiceInvalidContainErrMsg": "La factura contiene detalles no válidos. Por favor revisa la factura.",
     "invoiceFormatErrMsg": "El formato de la factura no es válido. Inténtalo de nuevo.",
-    "failedInvoiceProcessErrMsg": "No se pudo procesar la factura RGB. Asegúrate de que sea correcta."
+    "failedInvoiceProcessErrMsg": "No se pudo procesar la factura RGB. Asegúrate de que sea correcta.",
+    "spendableBalErrorInfo": "Tu activo está bloqueado porque el receptor aún no lo ha aceptado. Cancela la transacción para desbloquearlo y restaurar tu saldo disponible."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
