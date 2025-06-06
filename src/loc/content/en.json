@@ -395,7 +395,8 @@
     "validationZeroNotAllowed": "0 is not allowed!",
     "invoiceInvalidContainErrMsg": "The invoice contains invalid details. Please check the invoice.",
     "invoiceFormatErrMsg": "The invoice format is invalid. Please try again.",
-    "failedInvoiceProcessErrMsg": "Failed to process the RGB invoice. Please ensure it is correct."
+    "failedInvoiceProcessErrMsg": "Failed to process the RGB invoice. Please ensure it is correct.",
+    "spendableBalErrorInfo": "Your asset is locked because the receiver hasn’t accepted it yet. Cancel the transaction to unlock it and restore your spendable balance."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",

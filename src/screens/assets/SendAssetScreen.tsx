@@ -5,9 +5,10 @@ import React, {
   useState,
   useMemo,
   useEffect,
+  useRef,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Switch, useTheme } from 'react-native-paper';
+import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
@@ -166,6 +167,7 @@ const SendAssetScreen = () => {
     assets,
     wallet: walletTranslation,
   } = translations;
+  const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
@@ -190,6 +192,8 @@ const SendAssetScreen = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDonationTranferInfo, setVisibleDonationTranferInfo] =
     useState(false);
+  const [visibleSpendableErrInfo, setVisibleSpendableErrInfo] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [amountValidationError, setAmountValidationError] = useState('');
@@ -202,7 +206,7 @@ const SendAssetScreen = () => {
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee[TxPriority.LOW].feePerByte,
   );
-  const styles = getStyles(theme, inputHeight);
+  const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {
     return (
       !invoice ||
@@ -284,7 +288,7 @@ const SendAssetScreen = () => {
 
   const sendAsset = useCallback(async () => {
     try {
-      const decodedInvoice = await ApiHandler.decodeInvoice(invoice)
+      const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
       setLoading(true);
       const response = await ApiHandler.sendAsset({
         assetId,
@@ -398,6 +402,13 @@ const SendAssetScreen = () => {
     setCustomFee(text);
   };
 
+  const openTooltip = () => {
+    iconRef.current?.measureInWindow((x, y) => {
+      setTooltipPos({ x, y });
+      setVisibleSpendableErrInfo(true);
+    });
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -495,6 +506,9 @@ const SendAssetScreen = () => {
           rightCTATextColor={theme.colors.accent1}
           disabled={assetData.assetSchema.toUpperCase() === AssetType.UDA}
           error={amountValidationError}
+          errorInfo={Number(assetData?.balance.spendable) === 0}
+          onPressErrorInfo={() => openTooltip()}
+          errInfoIconRef={iconRef}
         />
         <View style={styles.availableBalanceWrapper}>
           <AppText variant="body2" style={styles.labelstyle}>
@@ -694,11 +708,21 @@ const SendAssetScreen = () => {
           primaryOnPress={() => setVisibleDonationTranferInfo(false)}
         />
       </View>
+      <Portal>
+        <Modal
+          visible={visibleSpendableErrInfo}
+          onDismiss={() => setVisibleSpendableErrInfo(false)}
+          contentContainerStyle={styles.tooltipContainer}>
+          <AppText variant="caption" style={styles.tooltipText}>
+            {sendScreen.spendableBalErrorInfo}
+          </AppText>
+        </Modal>
+      </Portal>
     </ScreenContainer>
   );
 };
 
-const getStyles = (theme: AppTheme, inputHeight) =>
+const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -825,6 +849,20 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       alignItems: 'center',
       width: '26%',
       justifyContent: 'space-between',
+    },
+    tooltipContainer: {
+      position: 'absolute',
+      backgroundColor: theme.colors.modalBackColor,
+      padding: 12,
+      borderRadius: 8,
+      width: 270,
+      alignSelf: 'flex-end',
+      right: 15,
+      top: tooltipPos?.y ? tooltipPos.y - 15 : 20,
+    },
+    tooltipText: {
+      color: theme.colors.headingColor,
+      fontSize: 14,
     },
   });
 

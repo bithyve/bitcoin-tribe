@@ -32,7 +32,7 @@ function HomeScreen() {
   const latestVersion = useQuery<VersionHistory>(
     RealmSchema.VersionHistory,
   ).slice(-1)[0];
-  const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
+  const versionNumber = latestVersion?.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
   const {
     key,
@@ -58,7 +58,7 @@ function HomeScreen() {
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
-      if (app.appType === AppType.ON_CHAIN) {
+      if (app?.appType === AppType.ON_CHAIN) {
         checkBackupRequired();
       }
     },
@@ -133,12 +133,12 @@ function HomeScreen() {
       );
     }
     fetchUTXOs();
-    setAppType(app.appType);
+    setAppType(app?.appType);
     refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
     ApiHandler.syncFcmToken();
-  }, [app.appType]);
+  }, [app?.appType]);
 
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));
