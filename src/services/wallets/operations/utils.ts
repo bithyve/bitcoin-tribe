@@ -618,7 +618,7 @@ export default class WalletUtilities {
 
         output.address = WalletUtilities.getAddressByIndex(
           xpub,
-          true,
+          false,
           nextFreeChangeAddressIndex,
           network,
           purpose,
