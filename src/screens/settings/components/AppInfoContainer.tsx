@@ -27,6 +27,7 @@ import NetworkIcon from 'src/assets/images/viewNodeInfo.svg';
 import NetworkIconLight from 'src/assets/images/viewNodeInfo_light.svg';
 import { NetworkType } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 function AppInfoContainer({ navigation, walletId, version }) {
   const { translations } = useContext(LocalizationContext);
@@ -81,18 +82,7 @@ function AppInfoContainer({ navigation, walletId, version }) {
     await Clipboard.setString(text);
     Toast(settings.copyWalletIDMsg);
   };
-  const getNetworkLabel = (network: NetworkType): string => {
-    switch (network) {
-      case NetworkType.REGTEST:
-        return 'Regtest';
-      case NetworkType.TESTNET:
-        return 'Testnet';
-      case NetworkType.MAINNET:
-        return 'Mainnet';
-      default:
-        return 'Unknown';
-    }
-  };
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -101,7 +91,7 @@ function AppInfoContainer({ navigation, walletId, version }) {
       <View style={styles.container}>
         <AppInfoCard
           title={settings.activeNetworkLabel}
-          value={getNetworkLabel(config.NETWORK_TYPE)}
+          value={Capitalize(config.NETWORK_TYPE)}
           icon={isThemeDark ? <NetworkIcon /> : <NetworkIconLight />}
         />
         <AppInfoCard
