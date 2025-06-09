@@ -34,7 +34,9 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
       </style>
       </head>
       <body>
-        <blockquote class="twitter-tweet">
+        <blockquote class="twitter-tweet" data-theme="${
+          theme.dark ? 'dark' : 'light'
+        }">
           <a href="https://twitter.com/twitter/status/${tweetId}"></a>
         </blockquote>
        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
