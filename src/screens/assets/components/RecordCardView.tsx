@@ -78,7 +78,9 @@ function RecordCardView(props: Props) {
                 {value}
               </AppText>
             </View>
-            <View>{isThemeDark ? <IconCopy /> : <IconCopyLight />}</View>
+            <View style={styles.copyIconWrapper}>
+              {isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            </View>
           </AppTouchable>
         </View>
       </View>
@@ -129,6 +131,11 @@ const getStyles = (theme: AppTheme) =>
     },
     valueWrapper: {
       width: '90%',
+      alignItems: 'flex-end',
+    },
+    copyIconWrapper: {
+      width: '10%',
+      alignItems: 'flex-end',
     },
   });
 export default RecordCardView;
