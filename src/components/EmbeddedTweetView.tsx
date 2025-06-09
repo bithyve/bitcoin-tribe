@@ -23,10 +23,13 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
-        body {
+        html, body {
           margin: 0;
           padding: 0;
-          background-color: ${theme.colors.primaryBackground}; 
+          background-color: ${theme.colors.primaryBackground};
+        }
+        .twitter-tweet {
+          background-color: ${theme.colors.primaryBackground} !important;
         }
       </style>
       </head>
