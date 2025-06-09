@@ -54,11 +54,13 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
           </AppText>
         </View>
         <View style={styles.tagWrapper}>
-          <View style={styles.tagWrapper1}>
-            <AppText variant="body2" style={styles.amountText}>
-              {formatLargeNumber(balance)}
-            </AppText>
-          </View>
+          {balance !== 0 ? (
+            <View style={styles.tagWrapper1}>
+              <AppText variant="body2" style={styles.amountText}>
+                {formatLargeNumber(balance)}
+              </AppText>
+            </View>
+          ) : null}
         </View>
         <View style={styles.verticalLineStyle} />
         <View style={styles.identiconWrapper}>
