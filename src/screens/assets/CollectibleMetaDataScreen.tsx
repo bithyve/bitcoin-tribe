@@ -155,7 +155,7 @@ const CollectibleMetaDataScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -309,6 +309,7 @@ const CollectibleMetaDataScreen = () => {
                   assetId={assetId}
                   schema={RealmSchema.Collectible}
                   onVerificationComplete={() => setRefreshToggle(t => !t)}
+                  onRegisterComplete={() => setRefreshToggle(t => !t)}
                   showVerifyIssuer={showVerifyIssuer}
                   showDomainVerifyIssuer={showDomainVerifyIssuer}
                   asset={collectible}

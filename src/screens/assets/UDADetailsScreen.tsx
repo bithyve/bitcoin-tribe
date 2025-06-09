@@ -168,7 +168,7 @@ const UDADetailsScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
@@ -385,6 +385,7 @@ const UDADetailsScreen = () => {
                 assetId={assetId}
                 schema={RealmSchema.UniqueDigitalAsset}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
+                onRegisterComplete={() => setRefreshToggle(t => !t)}
                 showVerifyIssuer={showVerifyIssuer}
                 showDomainVerifyIssuer={showDomainVerifyIssuer}
                 asset={uda}
