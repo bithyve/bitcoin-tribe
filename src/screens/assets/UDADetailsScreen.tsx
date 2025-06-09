@@ -547,7 +547,7 @@ const UDADetailsScreen = () => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
-      width: '91%',
+      width: '90%',
       height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
