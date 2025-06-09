@@ -10,7 +10,7 @@ import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import IconCopy from 'src/assets/images/icon_copy1.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
+import IconCopyLight from 'src/assets/images/icon_copy1_light.svg';
 import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
 import Toast from 'src/components/Toast';
@@ -78,7 +78,9 @@ function RecordCardView(props: Props) {
                 {value}
               </AppText>
             </View>
-            <View>{isThemeDark ? <IconCopy /> : <IconCopyLight />}</View>
+            <View style={styles.copyIconWrapper}>
+              {isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            </View>
           </AppTouchable>
         </View>
       </View>
@@ -129,6 +131,11 @@ const getStyles = (theme: AppTheme) =>
     },
     valueWrapper: {
       width: '90%',
+      alignItems: 'flex-end',
+    },
+    copyIconWrapper: {
+      width: '10%',
+      alignItems: 'flex-end',
     },
   });
 export default RecordCardView;

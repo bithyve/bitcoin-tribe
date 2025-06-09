@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "रंगीन UTXO",
     "utxoInfoSubTitle2": "RGB संपत्तियों से जुड़े हुए UTXO, जो विशिष्ट टोकन या संग्रहणीय वस्तुओं का प्रतिनिधित्व करते हैं।",
     "utxoInfoTitle3": "रंगीन योग्य UTXO",
-    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।"
+    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।",
+    "activeNetworkLabel": "सक्रिय नेटवर्क"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",

@@ -137,7 +137,7 @@ const CoinsMetaDataScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -268,6 +268,7 @@ const CoinsMetaDataScreen = () => {
                 assetId={assetId}
                 schema={RealmSchema.Coin}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
+                onRegisterComplete={() => setRefreshToggle(t => !t)}
                 asset={coin}
                 showVerifyIssuer={showVerifyIssuer}
                 showDomainVerifyIssuer={showDomainVerifyIssuer}
@@ -400,6 +401,7 @@ const getStyles = (theme: AppTheme, width) =>
     scrollingContainer: {
       height: '60%',
       borderRadius: 20,
+      paddingHorizontal: hp(5),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,

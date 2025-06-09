@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "カラーUTXO",
     "utxoInfoSubTitle2": "RGBアセットに関連付けられたUTXOで、特定のトークンやコレクションアイテムを表します。",
     "utxoInfoTitle3": "カラリング可能なUTXO",
-    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。"
+    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。",
+    "activeNetworkLabel": "アクティブネットワーク"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",

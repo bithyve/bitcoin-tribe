@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "彩色UTXO",
     "utxoInfoSubTitle2": "已与RGB资产关联的UTXO，代表特定的代币或收藏品。",
     "utxoInfoTitle3": "可着色UTXO",
-    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。"
+    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。",
+    "activeNetworkLabel": "当前网络"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

@@ -1,4 +1,12 @@
-import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   StackActions,
@@ -54,11 +62,17 @@ import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
-export const Item = ({ title, value }) => {
+type itemProps = {
+  title: string;
+  value: string;
+  style?: StyleProp<ViewStyle>;
+};
+
+export const Item = ({ title, value, style }: itemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <View style={styles.itemWrapper}>
+    <View style={[styles.itemWrapper, style]}>
       <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
@@ -155,7 +169,7 @@ const CollectibleMetaDataScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -309,6 +323,7 @@ const CollectibleMetaDataScreen = () => {
                   assetId={assetId}
                   schema={RealmSchema.Collectible}
                   onVerificationComplete={() => setRefreshToggle(t => !t)}
+                  onRegisterComplete={() => setRefreshToggle(t => !t)}
                   showVerifyIssuer={showVerifyIssuer}
                   showDomainVerifyIssuer={showDomainVerifyIssuer}
                   asset={collectible}
@@ -445,7 +460,7 @@ const getStyles = (theme: AppTheme) =>
       paddingHorizontal: hp(0),
     },
     headerWrapper: {
-      paddingHorizontal: 20,
+      paddingHorizontal: hp(16),
     },
     itemWrapper: {
       marginVertical: hp(10),
@@ -483,6 +498,7 @@ const getStyles = (theme: AppTheme) =>
     },
     scrollingContainer: {
       height: '60%',
+      paddingHorizontal: hp(5),
     },
     imageStyle: {
       width: '100%',
