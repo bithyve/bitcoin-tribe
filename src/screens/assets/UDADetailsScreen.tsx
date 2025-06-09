@@ -547,11 +547,12 @@ const UDADetailsScreen = () => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
-      width: '100%',
+      width: '91%',
       height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),
+      marginHorizontal: hp(16),
     },
     buttonWrapper: {
       marginHorizontal: wp(5),
@@ -559,7 +560,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: wp(5),
       alignItems: 'center',
     },
+    container1: {
+      paddingHorizontal: hp(0),
+    },
     container: {
+      flex: 1,
+      flexDirection: 'column',
       paddingHorizontal: hp(0),
     },
     wrapper: {

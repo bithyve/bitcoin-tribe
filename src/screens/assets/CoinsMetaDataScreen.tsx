@@ -401,6 +401,7 @@ const getStyles = (theme: AppTheme, width) =>
     scrollingContainer: {
       height: '60%',
       borderRadius: 20,
+      paddingHorizontal: hp(5),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,
