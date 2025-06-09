@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "Coloured UTXOs",
     "utxoInfoSubTitle2": "UTXOs already associated with RGB assets, representing specific tokens or collectibles.",
     "utxoInfoTitle3": "Colourable UTXOs",
-    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions."
+    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions.",
+    "activeNetworkLabel": "Active Network"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
