@@ -184,7 +184,7 @@ const CoinDetailsScreen = () => {
         onPressSetting={() =>
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
           })

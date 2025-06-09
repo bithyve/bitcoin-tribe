@@ -35,7 +35,7 @@ type assetDetailsHeaderProps = {
   assetTicker?: string;
   onPressSetting?: () => void;
   onPressSend: () => void;
-  onPressRecieve: () => void;
+  onPressReceive: () => void;
   onPressBuy?: () => void;
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
@@ -50,7 +50,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     assetImage,
     onPressSetting,
     onPressSend,
-    onPressRecieve,
+    onPressReceive,
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
@@ -171,7 +171,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
                 onPressSend={onPressSend}
-                onPressRecieve={onPressRecieve}
+                onPressReceive={onPressReceive}
                 onPressBuy={onPressBuy}
                 sendCtaWidth={wp(150)}
                 receiveCtaWidth={wp(150)}

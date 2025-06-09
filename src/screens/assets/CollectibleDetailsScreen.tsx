@@ -218,7 +218,7 @@ const CollectibleDetailsScreen = () => {
             assetId,
           })
         }
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
           })
