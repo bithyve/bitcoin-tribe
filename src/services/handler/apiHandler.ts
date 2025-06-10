@@ -1184,17 +1184,20 @@ export class ApiHandler {
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
             });
-            const { base64, fileType } = hexToBase64(mediaByte.bytes_hex);
-            const ext = assets.cfa[i].media.mime.split('/')[1];
-            const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
-            await RNFS.writeFile(path, base64, 'base64');
-            cfas.push({
-              ...assets.cfa[i],
-              media: {
-                ...assets.cfa[i].media,
-                filePath: path,
-              },
-            });
+            const conversion = hexToBase64(mediaByte.bytes_hex);
+            if (conversion) {
+              const { base64 } = conversion;
+              const ext = assets.cfa[i].media.mime.split('/')[1];
+              const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
+              await RNFS.writeFile(path, base64, 'base64');
+              cfas.push({
+                ...assets.cfa[i],
+                media: {
+                  ...assets.cfa[i].media,
+                  filePath: path,
+                },
+              });
+            }
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
