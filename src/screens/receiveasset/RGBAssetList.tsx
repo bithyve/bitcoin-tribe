@@ -164,7 +164,7 @@ function RGBAssetList(props: DropdownProps) {
                       </AppText>
                     )}
                     {assetId && (
-                      <AppText variant="body2" style={styles.assetIdText}>
+                      <AppText variant="caption" style={styles.assetIdText}>
                         {assetId}
                       </AppText>
                     )}
