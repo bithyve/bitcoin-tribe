@@ -70,7 +70,7 @@ export const generateRandomNumber = max => {
   return number;
 };
 
-export const stringToArrayBuffer = (byteString: string): Uint8Array => {
+export const stringToArrayBuffer = (byteString: string): Uint8Array | null => {
   if (byteString) {
     const byteArray = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++) {
