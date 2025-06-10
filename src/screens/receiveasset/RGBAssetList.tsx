@@ -233,7 +233,7 @@ const getStyles = (theme: AppTheme) =>
     imageStyle: {
       width: 40,
       height: 40,
-      borderRadius: 5,
+      borderRadius: 40,
     },
     identiconView: {
       height: windowHeight > 670 ? 50 : 30,
