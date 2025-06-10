@@ -108,7 +108,7 @@ function RGBAssetList(props: DropdownProps) {
           </View>
           <View>
             <AppText variant="caption" style={style.labelTextStyle}>
-              Avail. Bal.
+              Total Supply
             </AppText>
           </View>
         </View>
@@ -127,6 +127,7 @@ function RGBAssetList(props: DropdownProps) {
                   android: `file://${filePath}`,
                   ios: filePath,
                 });
+            const ticker = item?.ticker ?? item?.asset?.ticker;
             return (
               <AppTouchable
                 onPress={() => {
@@ -154,6 +155,11 @@ function RGBAssetList(props: DropdownProps) {
                     <AppText variant="body1" style={styles.assetnameText}>
                       {item?.name || item?.asset?.name}
                     </AppText>
+                    {ticker && (
+                      <AppText variant="body2" style={styles.assetnameText}>
+                        {ticker}
+                      </AppText>
+                    )}
                   </View>
                 </View>
 
@@ -177,7 +183,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       zIndex: 999,
-      height: '80%',
+      height: '70%',
       backgroundColor: theme.colors.primaryBackground,
       marginTop: Platform.OS === 'android' ? hp(20) : 0,
     },
