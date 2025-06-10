@@ -68,6 +68,7 @@ type ItemProps = {
   assetId?: string;
   amount?: string;
   verified?: boolean;
+  iconUrl?: string;
 };
 
 const AssetItem = ({
@@ -80,6 +81,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
+  iconUrl
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -106,7 +108,7 @@ const AssetItem = ({
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
             <AssetIcon
-              iconUrl={ticker}
+              iconUrl={iconUrl}
               assetID={assetId}
               size={50}
               verified={verified}
@@ -461,6 +463,7 @@ const SendAssetScreen = () => {
           assetId={assetId}
           amount={assetData?.balance.spendable}
           verified={assetData?.issuer?.verified}
+          iconUrl={assetData.iconUrl}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
