@@ -47,7 +47,7 @@ To run the development app on a connected device or emulator:
 **Android**
 
 ```bash
-yarn androidDevelopmentDebug
+yarn androidDevDebug
 ```
 
 **iOS**
@@ -57,6 +57,12 @@ Extract the latest release of rgb_libFFI.xcframework.zip from [rgb-lib-swift/rel
 ```bash
 yarn ios --scheme=tribe-dev
 ```
+
+#### Development Commands
+
+Run useful scripts from `package.json` while developing:
+
+- `yarn androidDevDebug` – build and start the Android development variant.
 
 ## Verify Authenticity of Android APK
 
