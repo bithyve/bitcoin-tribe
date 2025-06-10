@@ -212,7 +212,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                     </View>
                   )}
 
-                  <AppText variant="pageTitle2" style={styles.totalBalance}>
+                  <AppText variant="heading1" style={styles.totalBalance}>
                     {getBalance(balances)}
                   </AppText>
                   {initialCurrencyMode === CurrencyKind.SATS && (

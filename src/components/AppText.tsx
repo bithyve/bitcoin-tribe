@@ -8,14 +8,9 @@ export enum TextVariants {
   heading2 = 'heading2',
   heading3 = 'heading3',
   pageTitle1 = 'pageTitle1',
-  pageTitle2 = 'pageTitle2',
   subTitle = 'subTitle',
   body1 = 'body1',
   body2 = 'body2',
-  body3 = 'body3',
-  body5 = 'body5',
-  body6 = 'body6',
-  body7 = 'body7',
   secondaryCta = 'secondaryCta',
   smallCTA = 'smallCTA',
   subtitle2 = 'subtitle2',
@@ -52,8 +47,6 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.heading3;
       case TextVariants.pageTitle1:
         return CommonStyles.pageTitle1;
-      case TextVariants.pageTitle2:
-        return CommonStyles.pageTitle2;
       case TextVariants.subTitle:
         return CommonStyles.subTitle;
       case TextVariants.body1:
@@ -62,20 +55,10 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body2;
       case TextVariants.caption:
         return CommonStyles.caption;
-      // Should be removed - body 3, 4, 5, 6 and 7
-      case TextVariants.body3:
-        return CommonStyles.body3;
       case TextVariants.secondaryCta:
         return CommonStyles.secondaryCta;
       case TextVariants.subtitle2:
         return CommonStyles.subtitle2;
-      case TextVariants.body5:
-        return CommonStyles.body5;
-      case TextVariants.body6:
-        return CommonStyles.body6;
-      case TextVariants.body7:
-        return CommonStyles.body7;
-      // end
       case TextVariants.walletBalance:
         return CommonStyles.walletBalance;
       case TextVariants.smallCTA:
