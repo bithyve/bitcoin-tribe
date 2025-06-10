@@ -7,14 +7,21 @@ import { useQuery as realmUseQuery } from '@realm/react';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
-import { AssetSchema, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetSchema,
+  Coin,
+  Collectible,
+} from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import {
+  formatLargeNumber,
+  numberWithCommas,
+} from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
@@ -157,7 +164,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
                   <AppText variant="pageTitle2" style={styles.totalBalance}>
-                    {numberWithCommas(
+                    {formatLargeNumber(
                       asset.balance.future + asset.balance?.offchainOutbound,
                     )}
                   </AppText>
