@@ -49,7 +49,7 @@ function AppInfoCard(props: AppInfoCardProps) {
           <View style={styles.contentWrapper2}>
             {icon}
             <AppText
-              variant="body3"
+              variant="body1"
               style={styles.valueText}
               numberOfLines={1}
               ellipsizeMode="middle">

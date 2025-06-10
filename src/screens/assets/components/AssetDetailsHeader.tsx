@@ -157,7 +157,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 style={styles.onChainTotalBalanceWrapper}
                 onPress={() => {}}>
                 <View style={styles.totalBalanceWrapper1}>
-                  <AppText variant="pageTitle2" style={styles.totalBalance}>
+                  <AppText variant="walletBalance" style={styles.totalBalance}>
                     {numberWithCommas(
                       asset.balance.future + asset.balance?.offchainOutbound,
                     )}
