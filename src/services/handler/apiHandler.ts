@@ -1176,7 +1176,13 @@ export class ApiHandler {
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
             });
-            const { base64, fileType } = hexToBase64(mediaByte.bytes_hex);
+            let base64: string | undefined;
+            try {
+              ({ base64 } = hexToBase64(mediaByte.bytes_hex));
+            } catch (error) {
+              console.error('hexToBase64 failed', error);
+              continue;
+            }
             const ext = assets.cfa[i].media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
             await RNFS.writeFile(path, base64, 'base64');
