@@ -2169,14 +2169,14 @@ export class ApiHandler {
         );
       }
       if (response?.records) {
-        for (const { assetId, issuer } of response.records) {
+        for (const { assetId, issuer, iconUrl } of response.records) {
           for (const { schema } of schemas) {
             const asset = dbManager
               .getCollection(schema)
               .find(a => a.assetId === assetId);
             if (asset) {
               dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-                issuer,
+                issuer, iconUrl
               });
             }
           }
@@ -2333,52 +2333,17 @@ export class ApiHandler {
     }
   };
 
-  static addPrepopulatedTribeCoin = () => {
+  static fetchPresetAssets = async () => {
     try {
-      const newCoin = {
-        assetId: 'rgb:prepopulated-tribe-tusdt',
-        assetIface: 'rgb20',
-        name: 'Tribe tUSDt',
-        ticker: 'tUSDt',
-        issuedSupply: 0,
-        balance: {
-          settled: 0,
-          future: 0,
-          spendable: 0,
-        },
-        isIssuedPosted: null,
-        isVerifyPosted: null,
-        issuer: {
-          name: 'Tribe',
-        },
-        metaData: {
-          assetIface: 'rgb20',
-          assetSchema: 'nia',
-          issuedSupply: 0,
-          name: 'Tribe tUSDt',
-          precision: 0,
-          ticker: 'tUSDt',
-          timestamp: Math.floor(Date.now() / 1000),
-        },
-        precision: 0,
-        timestamp: Math.floor(Date.now() / 1000),
-        addedAt: Math.floor(Date.now() / 1000),
-        transactions: [],
-        visibility: 'DEFAULT',
-      };
-
-      const existingCoin = dbManager.getObjectByPrimaryId(
-        RealmSchema.Coin,
-        'assetId',
-        newCoin.assetId,
-      );
-
-      if (!existingCoin) {
-        dbManager.createObjectBulk(
-          RealmSchema.Coin,
-          [newCoin],
-          Realm.UpdateMode.Never,
-        );
+      const response = await Relay.getPresetAssets();
+      if (response && response.coins) {
+        for (const coin of response.coins) {
+          dbManager.createObjectBulk(
+            RealmSchema.Coin,
+            [coin],
+            Realm.UpdateMode.Modified,
+          );
+        }
       }
     } catch (error: any) {
       return error;

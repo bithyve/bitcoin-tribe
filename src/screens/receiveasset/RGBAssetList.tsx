@@ -108,7 +108,7 @@ function RGBAssetList(props: DropdownProps) {
           </View>
           <View>
             <AppText variant="caption" style={style.labelTextStyle}>
-              Avail. Bal.
+              Total Supply
             </AppText>
           </View>
         </View>
@@ -127,6 +127,9 @@ function RGBAssetList(props: DropdownProps) {
                   android: `file://${filePath}`,
                   ios: filePath,
                 });
+            const assetName = item?.name ?? item?.asset?.name;
+            const ticker = item?.ticker ?? item?.asset?.ticker;
+            const assetId = item?.assetId ?? item?.asset?.assetId;
             return (
               <AppTouchable
                 onPress={() => {
@@ -150,10 +153,21 @@ function RGBAssetList(props: DropdownProps) {
                       />
                     )}
                   </View>
-                  <View>
-                    <AppText variant="body1" style={styles.assetnameText}>
-                      {item?.name || item?.asset?.name}
-                    </AppText>
+                  <View style={styles.assetDetailsWrapper}>
+                    {(assetName || ticker) && (
+                      <AppText variant="body1" style={styles.assetnameText}>
+                        {assetName
+                          ? ticker
+                            ? `${assetName} (${ticker})`
+                            : assetName
+                          : ticker}
+                      </AppText>
+                    )}
+                    {assetId && (
+                      <AppText variant="caption" style={styles.assetIdText}>
+                        {assetId}
+                      </AppText>
+                    )}
                   </View>
                 </View>
 
@@ -177,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       width: '100%',
       zIndex: 999,
-      height: '80%',
+      height: '70%',
       backgroundColor: theme.colors.primaryBackground,
       marginTop: Platform.OS === 'android' ? hp(20) : 0,
     },
@@ -219,7 +233,7 @@ const getStyles = (theme: AppTheme) =>
     imageStyle: {
       width: 40,
       height: 40,
-      borderRadius: 5,
+      borderRadius: 40,
     },
     identiconView: {
       height: windowHeight > 670 ? 50 : 30,
@@ -238,16 +252,22 @@ const getStyles = (theme: AppTheme) =>
     assetWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '75%',
+      width: '74%',
     },
     assetImageWrapper: {
       width: '20%',
     },
+    assetDetailsWrapper: {
+      width: '92%',
+    },
     balanceWrapper: {
-      width: '25%',
+      width: '26%',
     },
     assetnameText: {
       color: theme.colors.headingColor,
+    },
+    assetIdText: {
+      color: theme.colors.secondaryHeadingColor,
     },
     balanceText: {
       color: theme.colors.headingColor,

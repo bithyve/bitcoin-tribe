@@ -1,6 +1,6 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
-import { AssetSchema, AssetVisibility } from 'src/models/interfaces/RGBWallet';
+import { AssetSchema, AssetSource, AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
 export const UniqueDigitalAssetSchema: ObjectSchema = {
   name: RealmSchema.UniqueDigitalAsset,
@@ -34,6 +34,11 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
       default: AssetSchema.UDA,
       optional: true,
     },
+    assetSource: {
+      type: 'string',
+      default: AssetSource.Internal,
+      optional: true,
+    }
   },
 };
 

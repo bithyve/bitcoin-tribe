@@ -1,6 +1,6 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
-import { AssetSchema, AssetVisibility } from 'src/models/interfaces/RGBWallet';
+import { AssetSchema, AssetSource, AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
 export const MetaData = {
   name: RealmSchema.MetaData,
@@ -53,6 +53,7 @@ export const CoinSchema: ObjectSchema = {
     name: 'string',
     precision: 'int',
     ticker: 'string',
+    iconUrl: 'string?',
     timestamp: 'int',
     transactions: `${RealmSchema.AssetTransaction}[]`,
     metaData: `${RealmSchema.MetaData}`,
@@ -69,5 +70,10 @@ export const CoinSchema: ObjectSchema = {
       default: AssetSchema.Coin,
       optional: true,
     },
+    assetSource: {
+      type: 'string',
+      default: AssetSource.Internal,
+      optional: true,
+    }
   },
 };

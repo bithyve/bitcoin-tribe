@@ -15,7 +15,10 @@ import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
 import IconLightning from 'src/assets/images/icon_lightning_new.svg';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import {
+  formatLargeNumber,
+  numberWithCommas,
+} from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
@@ -82,7 +85,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
                     <AssetIcon
-                      assetTicker={asset.ticker}
+                      iconUrl={asset.iconUrl}
                       assetID={asset.assetId}
                       size={50}
                       verified={asset?.issuer?.verified}
@@ -111,7 +114,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   onPress={() => {}}>
                   <View style={styles.totalBalanceWrapper1}>
                     <AppText variant="heading2" style={styles.totalBalance}>
-                      {numberWithCommas(
+                      {formatLargeNumber(
                         asset.balance.future + asset.balance?.offchainOutbound,
                       )}
                     </AppText>

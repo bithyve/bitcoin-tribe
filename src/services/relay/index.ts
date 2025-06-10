@@ -2,7 +2,7 @@ import config from 'src/utils/config';
 import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
-import { Asset } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
@@ -16,6 +16,16 @@ export default class Relay {
         amount,
         network: 'iris',
       });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  };
+
+  public static getPresetAssets = async (): Promise<{ coins: Coin[] }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/app/preset-assets`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -342,6 +352,7 @@ export default class Relay {
           link: string;
         }[];
       };
+      iconUrl?: string
     }[];
     error?: string;
   }> => {
