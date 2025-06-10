@@ -58,14 +58,14 @@ export const hasPin = async () => {
   }
 };
 
-export const remove = async key => {
+export const remove = async () => {
   try {
-    //
+    const reset = await Keychain.resetGenericPassword();
+    return !!reset;
   } catch (err) {
     console.log(err);
     return false;
   }
-  return true;
 };
 
 export const storeBiometricPubKey = async (pubKey: string) => {
