@@ -1,24 +1,25 @@
-export const hexToBase64 = (hexString: string): {base64: string, fileType: string} => {
+export const hexToBase64 = (
+  hexString: string,
+): { base64: string; fileType: string } => {
+  const input = hexString.replace(/[^A-Fa-f0-9]/g, '');
+  if (!input || input.length % 2 !== 0) {
+    throw new Error('Invalid hex string');
+  }
 
-    const input = hexString.replace(/[^A-Fa-f0-9]/g, '');
-    if (input.length % 2) {
-        console.log('Cleaned hex string length is odd.');
-        return;
-    }
-    const binary = [];
-    for (let i = 0; i < input.length / 2; i++) {
-        const h = input.substr(i * 2, 2);
-        binary[i] = parseInt(h, 16);
-    }
-    const byteArray = Uint8Array.from(binary);
-    const base64 = Buffer.from(byteArray).toString('base64');
-    return {
-        base64,
-        fileType: determineFileType(hexString),
-    };
+  const binary = new Uint8Array(input.length / 2);
+  for (let i = 0; i < input.length / 2; i++) {
+    const h = input.substr(i * 2, 2);
+    binary[i] = parseInt(h, 16);
+  }
+
+  const base64 = Buffer.from(binary).toString('base64');
+  return {
+    base64,
+    fileType: determineFileType(hexString),
+  };
 };
 
-function determineFileType(hexString) {
+function determineFileType(hexString: string): string {
     const input = hexString.replace(/[^A-Fa-f0-9]/g, ''); // Clean non-hex chars
     const header = input.slice(0, 16).toUpperCase(); // Get the first 8 bytes
     const magicNumbers = {
