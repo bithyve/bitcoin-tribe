@@ -127,7 +127,9 @@ function RGBAssetList(props: DropdownProps) {
                   android: `file://${filePath}`,
                   ios: filePath,
                 });
+            const assetName = item?.name ?? item?.asset?.name;
             const ticker = item?.ticker ?? item?.asset?.ticker;
+            const assetId = item?.assetId ?? item?.asset?.assetId;
             return (
               <AppTouchable
                 onPress={() => {
@@ -152,12 +154,18 @@ function RGBAssetList(props: DropdownProps) {
                     )}
                   </View>
                   <View>
-                    <AppText variant="body1" style={styles.assetnameText}>
-                      {item?.name || item?.asset?.name}
-                    </AppText>
-                    {ticker && (
-                      <AppText variant="body2" style={styles.assetnameText}>
-                        {ticker}
+                    {(assetName || ticker) && (
+                      <AppText variant="body1" style={styles.assetnameText}>
+                        {assetName
+                          ? ticker
+                            ? `${assetName} (${ticker})`
+                            : assetName
+                          : ticker}
+                      </AppText>
+                    )}
+                    {assetId && (
+                      <AppText variant="body2" style={styles.assetIdText}>
+                        {assetId}
                       </AppText>
                     )}
                   </View>
@@ -244,16 +252,19 @@ const getStyles = (theme: AppTheme) =>
     assetWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '75%',
+      width: '74%',
     },
     assetImageWrapper: {
       width: '20%',
     },
     balanceWrapper: {
-      width: '25%',
+      width: '26%',
     },
     assetnameText: {
       color: theme.colors.headingColor,
+    },
+    assetIdText: {
+      color: theme.colors.secondaryHeadingColor,
     },
     balanceText: {
       color: theme.colors.headingColor,
