@@ -75,6 +75,7 @@ export interface Coin {
   balance: Balance;
   issuedSupply: number;
   name: string;
+  iconUrl?: string;
   precision: number;
   ticker: string;
   timestamp: number;
@@ -85,6 +86,7 @@ export interface Coin {
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface Media {
@@ -110,6 +112,7 @@ export interface Collectible {
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface UniqueDigitalAsset {
@@ -134,6 +137,7 @@ export interface UniqueDigitalAsset {
   issuer: Issuer;
   visibility: AssetVisibility;
   assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -179,6 +183,11 @@ export enum AssetVisibility {
   DEFAULT = 'DEFAULT',
   HIDDEN = 'HIDDEN',
   // ARCHIVED = 'ARCHIVED',
+}
+
+export enum AssetSource {
+  Internal = 'Internal',
+  Preset = 'Preset',
 }
 
 export enum UtxoType {

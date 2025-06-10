@@ -90,7 +90,7 @@ function HomeScreen() {
   }, [coinsResult]);
 
   useEffect(() => {
-    ApiHandler.addPrepopulatedTribeCoin();
+    ApiHandler.fetchPresetAssets();
   }, []);
 
   useEffect(() => {
