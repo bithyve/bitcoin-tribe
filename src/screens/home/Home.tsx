@@ -32,7 +32,7 @@ function HomeScreen() {
   const latestVersion = useQuery<VersionHistory>(
     RealmSchema.VersionHistory,
   ).slice(-1)[0];
-  const versionNumber = latestVersion.version.match(/\((\d+)\)/)?.[1] || 'N/A';
+  const versionNumber = latestVersion?.version.match(/\((\d+)\)/)?.[1] || 'N/A';
   const navigation = useNavigation();
   const {
     key,
@@ -58,7 +58,7 @@ function HomeScreen() {
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
-      if (app.appType === AppType.ON_CHAIN) {
+      if (app?.appType === AppType.ON_CHAIN) {
         checkBackupRequired();
       }
     },
@@ -67,17 +67,31 @@ function HomeScreen() {
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
+  const [refreshing, setRefreshing] = useState(false);
 
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
-  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
 
-  const [refreshing, setRefreshing] = useState(false);
+  const coins = useMemo(() => {
+    if (!coinsResult) return [];
+    const coinsArray = coinsResult.slice();
+    const tribeCoinIndex = coinsArray.findIndex(c => c.name === 'Tribe tUSDt');
+    if (tribeCoinIndex !== -1) {
+      const [tribeCoin] = coinsArray.splice(tribeCoinIndex, 1);
+      return [tribeCoin, ...coinsArray];
+    }
+    return coinsArray;
+  }, [coinsResult]);
+
+  useEffect(() => {
+    ApiHandler.addPrepopulatedTribeCoin();
+  }, []);
 
   useEffect(() => {
     setBackupProcess(isLoading);
@@ -97,7 +111,7 @@ function HomeScreen() {
   }, [navigation]);
 
   useEffect(() => {
-    if (Number(versionNumber) < 93) {
+    if (Number(versionNumber) < 138) {
       Alert.alert(
         'Unsupported Version',
         'This version of Tribe is no longer supported. Please setup a new wallet to continue.',
@@ -119,12 +133,12 @@ function HomeScreen() {
       );
     }
     fetchUTXOs();
-    setAppType(app.appType);
+    setAppType(app?.appType);
     refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
     ApiHandler.syncFcmToken();
-  }, [app.appType]);
+  }, [app?.appType]);
 
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));

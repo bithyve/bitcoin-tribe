@@ -30,7 +30,7 @@ type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
   onPressSetting?: () => void;
   onPressSend: () => void;
-  onPressRecieve: () => void;
+  onPressReceive: () => void;
   onPressBuy?: () => void;
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
@@ -42,7 +42,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     asset,
     onPressSetting,
     onPressSend,
-    onPressRecieve,
+    onPressReceive,
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
@@ -76,7 +76,9 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             <View style={styles.balanceContainer}>
-              <View style={styles.totalBalanceWrapper}>
+              <AppTouchable
+                style={styles.totalBalanceWrapper}
+                onPress={onPressSetting}>
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
                     <AssetIcon
@@ -102,7 +104,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     </AppText>
                   </View>
                 </View>
-              </View>
+              </AppTouchable>
               <View style={styles.totalBalanceWrapper2}>
                 <AppTouchable
                   style={styles.onChainTotalBalanceWrapper}
@@ -142,7 +144,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
                 onPressSend={onPressSend}
-                onPressRecieve={onPressRecieve}
+                onPressReceive={onPressReceive}
                 onPressBuy={onPressBuy}
                 sendCtaWidth={wp(150)}
                 receiveCtaWidth={wp(150)}

@@ -78,7 +78,8 @@ import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
-import { getUserTweetByAssetId } from '../twitter';
+import { fetchAndVerifyTweet } from '../twitter';
+import Toast from 'src/components/Toast';
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
@@ -277,7 +278,8 @@ export class ApiHandler {
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             const isWalletOnline = await RGBServices.initiate(
               rgbWallet.mnemonic,
-              rgbWallet.accountXpub,
+              rgbWallet.accountXpubVanilla,
+              rgbWallet.accountXpubColored,
             );
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -297,8 +299,9 @@ export class ApiHandler {
             mnemonic: rgbNodeConnectParams.mnemonic,
             xpub: '',
             rgbDir: '',
-            accountXpub: '',
-            accountXpubFingerprint: '',
+            accountXpubColored: '',
+            accountXpubColoredFingerprint: '',
+            accountXpubVanilla: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             peerDNS: rgbNodeConnectParams?.peerDNS,
@@ -310,8 +313,9 @@ export class ApiHandler {
           );
 
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpub = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpubFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
@@ -396,8 +400,9 @@ export class ApiHandler {
               mnemonic: rgbNodeInfo.pubkey,
               xpub: rgbNodeInfo.pubkey,
               rgbDir: '',
-              accountXpub: rgbNodeInfo.pubkey,
-              accountXpubFingerprint: rgbNodeInfo.pubkey,
+              accountXpubColored: rgbNodeInfo.pubkey,
+              accountXpubColoredFingerprint: rgbNodeInfo.pubkey,
+              accountXpubVanilla: rgbNodeInfo.pubkey,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
@@ -540,7 +545,8 @@ export class ApiHandler {
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
-      rgbWallet.accountXpub,
+      rgbWallet.accountXpubVanilla,
+      rgbWallet.accountXpubColored,
     );
     return { key, isWalletOnline };
   }
@@ -577,7 +583,8 @@ export class ApiHandler {
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
-        rgbWallet.accountXpub,
+        rgbWallet.accountXpubVanilla,
+        rgbWallet.accountXpubColored,
       );
       return { key, isWalletOnline };
     } catch (error) {
@@ -617,7 +624,8 @@ export class ApiHandler {
     } else {
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
-        rgbWallet.accountXpub,
+        rgbWallet.accountXpubVanilla,
+        rgbWallet.accountXpubColored,
       );
       return { key, isWalletOnline };
     }
@@ -991,8 +999,8 @@ export class ApiHandler {
         }
       } else {
         const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-        const { changeAddress: receivingAddress } =
-          WalletOperations.getNextFreeChangeAddress(wallet);
+        const { receivingAddress: receivingAddress } =
+          WalletOperations.getNextFreeExternalAddress(wallet);
         const { funded } = await Relay.getTestcoins(
           receivingAddress,
           wallet.networkType,
@@ -2051,7 +2059,7 @@ export class ApiHandler {
               ios: backupFile.file,
             }),
             app.id,
-            wallet.accountXpubFingerprint,
+            wallet.accountXpubColoredFingerprint,
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
@@ -2191,24 +2199,60 @@ export class ApiHandler {
     }
   }
 
-  static async searchForAssetTweet(asset, schema) {
+  static validateTweetForAsset = async (
+    tweetId: string,
+    assetId: string,
+    schema: RealmSchema,
+    asset: Asset,
+  ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
-      const accessToken = storage.getString('accessToken');
-      const twitterHandle = asset?.issuer?.verifiedBy?.find(
-        v => v.type === IssuerVerificationMethod.TWITTER_POST,
-      )?.link;
-      if (twitterHandle) return;
-      const matchingTweet = await getUserTweetByAssetId(
-        asset?.issuer?.verifiedBy?.find(
-          v => v.type === IssuerVerificationMethod.TWITTER,
-        )?.id,
-        accessToken,
-        asset.assetId,
-      );
-      if (matchingTweet) {
+      const response = await fetchAndVerifyTweet(tweetId);
+      if (response.status === 429) {
+        const resetAfter = response.headers.get('x-rate-limit-reset');
+        const now = Math.floor(Date.now() / 1000);
+        const waitTime = resetAfter ? Number(resetAfter) - now : null;
+        if (waitTime && waitTime > 0) {
+          Toast(
+            `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
+              Number(resetAfter) * 1000,
+            ).toLocaleTimeString()}).`,
+            true,
+          );
+        }
+
+        return {
+          success: false,
+          reason:
+            'Too many requests to Twitter. Try again after a short break.',
+        };
+      }
+
+      if (!response.ok) {
+        const errorJson = await response.json().catch(() => null);
+        if (errorJson?.title === 'UsageCapExceeded') {
+          return {
+            success: false,
+            reason: 'Twitter API usage cap exceeded. Please try again later.',
+          };
+        }
+        const message =
+          errorJson?.title ||
+          errorJson?.detail ||
+          `HTTP error ${response.status}`;
+        return { success: false, reason: message };
+      }
+
+      const data = await response.json();
+      const tweet = data?.data;
+      console.log('tweet', tweet);
+      if (!tweet) {
+        return { success: false, reason: 'Tweet not found' };
+      }
+
+      if (tweet.text.includes(assetId)) {
         const response = await Relay.verifyIssuer('appID', asset.assetId, {
           type: IssuerVerificationMethod.TWITTER_POST,
-          link: matchingTweet.id,
+          link: tweetId,
           id: asset?.issuer?.verifiedBy?.find(
             v => v.type === IssuerVerificationMethod.TWITTER,
           )?.id,
@@ -2241,14 +2285,14 @@ export class ApiHandler {
             updatedVerifiedBy = [...existingVerifiedBy];
             updatedVerifiedBy[twitterPostIndex] = {
               ...updatedVerifiedBy[twitterPostIndex],
-              link: matchingTweet.id,
+              link: tweetId,
             };
           } else {
             updatedVerifiedBy = [
               ...existingVerifiedBy,
               {
                 type: IssuerVerificationMethod.TWITTER_POST,
-                link: matchingTweet.id,
+                link: tweetId,
                 id: twitterEntry.id,
                 name: twitterEntry.name,
                 username: twitterEntry.username,
@@ -2268,12 +2312,76 @@ export class ApiHandler {
             },
           );
         }
+        return { success: true, tweet };
       } else {
-        console.log('No tweet found with assetID:', asset.assetId);
+        return { success: false, reason: 'Asset ID not found in tweet text' };
       }
-    } catch (error) {
-      console.error('Failed to verify issuer via tweet:', error);
-      throw error;
+    } catch (error: any) {
+      console.error('Twitter API error:', error.message || error);
+      return { success: false, reason: 'Network or fetch error' };
     }
-  }
+  };
+  static searchAssetFromRegistry = async (
+    query: string,
+  ): Promise<{ asset?: Asset }> => {
+    try {
+      const response = await Relay.registryAssetSearch(query);
+      return response;
+    } catch (error: any) {
+      console.error('Twitter API error:', error.message || error);
+      return error;
+    }
+  };
+
+  static addPrepopulatedTribeCoin = () => {
+    try {
+      const newCoin = {
+        assetId: 'rgb:prepopulated-tribe-tusdt',
+        assetIface: 'rgb20',
+        name: 'Tribe tUSDt',
+        ticker: 'tUSDt',
+        issuedSupply: 0,
+        balance: {
+          settled: 0,
+          future: 0,
+          spendable: 0,
+        },
+        isIssuedPosted: null,
+        isVerifyPosted: null,
+        issuer: {
+          name: 'Tribe',
+        },
+        metaData: {
+          assetIface: 'rgb20',
+          assetSchema: 'nia',
+          issuedSupply: 0,
+          name: 'Tribe tUSDt',
+          precision: 0,
+          ticker: 'tUSDt',
+          timestamp: Math.floor(Date.now() / 1000),
+        },
+        precision: 0,
+        timestamp: Math.floor(Date.now() / 1000),
+        addedAt: Math.floor(Date.now() / 1000),
+        transactions: [],
+        visibility: 'DEFAULT',
+      };
+
+      const existingCoin = dbManager.getObjectByPrimaryId(
+        RealmSchema.Coin,
+        'assetId',
+        newCoin.assetId,
+      );
+
+      if (!existingCoin) {
+        dbManager.createObjectBulk(
+          RealmSchema.Coin,
+          [newCoin],
+          Realm.UpdateMode.Never,
+        );
+      }
+    } catch (error: any) {
+      return error;
+    }
+  };
 }

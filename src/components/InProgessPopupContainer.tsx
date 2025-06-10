@@ -96,6 +96,7 @@ const getStyles = (theme: AppTheme) =>
     loaderWrapper: {
       flexDirection: 'row',
       width: '100%',
+      height: hp(90),
       justifyContent: 'space-between',
       marginTop: hp(5),
       alignItems: 'center',
