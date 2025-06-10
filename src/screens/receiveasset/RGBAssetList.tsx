@@ -153,7 +153,7 @@ function RGBAssetList(props: DropdownProps) {
                       />
                     )}
                   </View>
-                  <View>
+                  <View style={styles.assetDetailsWrapper}>
                     {(assetName || ticker) && (
                       <AppText variant="body1" style={styles.assetnameText}>
                         {assetName
@@ -256,6 +256,9 @@ const getStyles = (theme: AppTheme) =>
     },
     assetImageWrapper: {
       width: '20%',
+    },
+    assetDetailsWrapper: {
+      width: '92%',
     },
     balanceWrapper: {
       width: '26%',
