@@ -43,7 +43,7 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
           />
         ) : (
           <AssetIcon
-            assetTicker={asset.ticker}
+            iconUrl={asset.iconUrl}
             assetID={asset.assetId}
             size={30}
             verified={asset?.issuer?.verified}
