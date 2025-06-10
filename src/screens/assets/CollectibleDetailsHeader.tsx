@@ -69,7 +69,7 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
           })
         }
         // onPressBuy={onPressBuy}
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.navigate(NavigationRoutes.RECEIVEASSET, {
             refresh: true,
           })
