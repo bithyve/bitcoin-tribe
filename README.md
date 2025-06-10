@@ -28,6 +28,17 @@ Before getting started, make sure you have a proper [React Native development en
    yarn install
    ```
 
+4. Ensure `android/app/debug.keystore` exists. React Native will create one
+   automatically the first time you build the Android app. If you prefer to
+   generate it manually, run:
+
+   ```bash
+   keytool -genkeypair -v -keystore android/app/debug.keystore \
+     -alias androiddebugkey -storepass android -keypass android \
+     -keyalg RSA -keysize 2048 -validity 10000 \
+     -dname "CN=Android Debug,O=Android,C=US"
+   ```
+
 ## Build and Run
 
 ### Varients
