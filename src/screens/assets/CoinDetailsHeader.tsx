@@ -85,7 +85,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
                     <AssetIcon
-                      assetTicker={asset.ticker}
+                      iconUrl={asset.iconUrl}
                       assetID={asset.assetId}
                       size={50}
                       verified={asset?.issuer?.verified}

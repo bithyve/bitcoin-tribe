@@ -106,7 +106,7 @@ const AssetItem = ({
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
             <AssetIcon
-              assetTicker={ticker}
+              iconUrl={ticker}
               assetID={assetId}
               size={50}
               verified={verified}

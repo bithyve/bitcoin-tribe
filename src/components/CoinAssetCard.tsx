@@ -63,7 +63,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
         <View style={styles.verticalLineStyle} />
         <View style={styles.identiconWrapper}>
           <AssetIcon
-            assetTicker={asset.ticker}
+            iconUrl={asset.iconUrl}
             assetID={asset.assetId}
             size={56}
             verified={asset?.issuer?.verified}
