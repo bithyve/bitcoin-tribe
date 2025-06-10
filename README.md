@@ -23,9 +23,13 @@ Before getting started, make sure you have a proper [React Native development en
    cd bitcoin-tribe
    ```
 3. Install the project dependencies using Yarn:
-   The prepare scripts will automatically install pods and nodify crypto-related packages for react-native
+   The prepare scripts will automatically install pods, nodify crypto-related packages for React Native and
+   configure the Android SDK path. The setup script reads the location from `$ANDROID_HOME` or you can pass
+   a custom path.
    ```shell
-   yarn install
+   ANDROID_HOME=/path/to/sdk yarn install
+   # or run after installation
+   ./setup.sh /path/to/sdk
    ```
 
 ## Build and Run
