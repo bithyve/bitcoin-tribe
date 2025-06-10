@@ -24,13 +24,6 @@ export default StyleSheet.create({
     lineHeight: 60,
     fontFamily: Fonts.LufgaMedium,
   },
-  //page title should be removed
-  pageTitle2: {
-    fontSize: 36,
-    fontWeight: '500',
-    fontFamily: Fonts.LufgaMedium,
-  },
-  //end
   subTitle: {
     fontSize: 14,
     fontFamily: Fonts.LufgaRegular,
@@ -50,28 +43,6 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
   },
-  // Should be removed - body 3, 4, 5, 6 and 7
-  body3: {
-    fontSize: 16,
-    fontFamily: Fonts.LufgaRegular,
-  },
-  body4: {
-    fontSize: 16,
-    fontFamily: Fonts.LufgaLight,
-  },
-  body5: {
-    fontSize: 12,
-    fontFamily: Fonts.LufgaSemiBold,
-  },
-  body6: {
-    fontSize: 18,
-    fontFamily: Fonts.LufgaBold,
-  },
-  body7: {
-    fontSize: 22,
-    fontFamily: Fonts.LufgaBold,
-  },
-  // end
   placeholder: {
     fontSize: 14,
     fontFamily: Fonts.LufgaBold,

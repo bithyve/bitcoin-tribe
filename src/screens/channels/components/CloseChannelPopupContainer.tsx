@@ -30,7 +30,7 @@ function CloseChannelPopupContainer(props: closeChannelPopupProps) {
         <ErrorIllustration />
       </View>
       <View style={styles.contentWrapper}>
-        <AppText variant="pageTitle2" style={styles.titleText}>{title}</AppText>
+        <AppText variant="heading1" style={styles.titleText}>{title}</AppText>
         <AppText variant="body1" style={styles.subTitleText}>{subTitle}</AppText>
       </View>
       <View style={styles.wrapper}>
