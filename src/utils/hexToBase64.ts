@@ -1,14 +1,18 @@
-export const hexToBase64 = (hexString: string): {base64: string, fileType: string} => {
-
-    const input = hexString.replace(/[^A-Fa-f0-9]/g, '');
-    if (input.length % 2) {
-        console.log('Cleaned hex string length is odd.');
-        return;
+export const hexToBase64 = (
+    hexString: string,
+): { base64: string; fileType: string } | null => {
+    const isValidHex = /^[0-9a-fA-F]+$/.test(hexString) && hexString.length % 2 === 0;
+    if (!isValidHex) {
+        return null;
     }
-    const binary = [];
-    for (let i = 0; i < input.length / 2; i++) {
-        const h = input.substr(i * 2, 2);
-        binary[i] = parseInt(h, 16);
+    const binary = [] as number[];
+    for (let i = 0; i < hexString.length / 2; i++) {
+        const h = hexString.substr(i * 2, 2);
+        const parsed = parseInt(h, 16);
+        if (Number.isNaN(parsed)) {
+            return null;
+        }
+        binary[i] = parsed;
     }
     const byteArray = Uint8Array.from(binary);
     const base64 = Buffer.from(byteArray).toString('base64');
