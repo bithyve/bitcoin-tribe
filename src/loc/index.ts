@@ -1,4 +1,5 @@
 import LocalizedContent from 'react-localization';
+import logger from 'src/utils/logger';
 
 const content = new LocalizedContent({
   en: require('./content/en.json'),
@@ -15,7 +16,7 @@ const setAppLanguage = async language => {
       content.setLanguage(language);
     }
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 

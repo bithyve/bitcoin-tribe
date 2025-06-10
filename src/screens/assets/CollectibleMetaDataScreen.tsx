@@ -1,5 +1,6 @@
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import logger from 'src/utils/logger';
 import {
   StackActions,
   useFocusEffect,
@@ -82,7 +83,7 @@ const onShare = async filePath => {
     };
     await Share.open(options);
   } catch (error) {
-    console.log('Error sharing file:', error);
+    logger.error('Error sharing file:', error);
   }
 };
 

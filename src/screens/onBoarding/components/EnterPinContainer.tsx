@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import logger from 'src/utils/logger';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet, Platform } from 'react-native';
 import { AppTheme } from 'src/theme';
@@ -91,7 +92,7 @@ function EnterPinContainer() {
         }, 200);
       } catch (error) {
         //
-        console.log(error);
+        logger.error(error);
       }
     }
   };

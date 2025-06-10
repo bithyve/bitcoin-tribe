@@ -3,6 +3,7 @@ import ElectrumCli from 'electrum-client';
 import reverse from 'buffer-reverse';
 import * as bitcoinJS from 'bitcoinjs-lib';
 import { NodeDetail } from 'src/services/wallets/interfaces';
+import logger from 'src/utils/logger';
 import { NetworkType } from 'src/services/wallets/enums';
 import { ElectrumTransaction, ElectrumUTXO } from './interface';
 import torrific from './torrific';
@@ -61,7 +62,7 @@ export default class ElectrumClient {
 
     try {
       if (!ELECTRUM_CLIENT.activePeer) {
-        console.log(
+        logger.error(
           'Unable to connect to any electrum server. Please switch network and try again!',
         );
         return {
@@ -83,7 +84,7 @@ export default class ElectrumClient {
 
       ELECTRUM_CLIENT.electrumClient.onError = error => {
         if (ELECTRUM_CLIENT.isClientConnected) {
-          console.log(
+          logger.error(
             'Electrum mainClient.onError():',
             error?.message || error,
           );
@@ -94,7 +95,7 @@ export default class ElectrumClient {
 
           ELECTRUM_CLIENT.isClientConnected = false;
           ELECTRUM_CLIENT.activePeer.isConnected = false;
-          console.log('Error: Close the connection');
+          logger.error('Error: Close the connection');
 
           // setTimeout(
           //   ElectrumClient.connect,
@@ -103,7 +104,7 @@ export default class ElectrumClient {
         }
       };
 
-      console.log('Initiate electrum server...');
+      logger.log('Initiate electrum server...');
 
       const ver = await Promise.race([
         new Promise(resolve => {
@@ -119,7 +120,7 @@ export default class ElectrumClient {
       }
 
       if (ver && ver[0]) {
-        console.log('Connection to electrum server is established', {
+        logger.log('Connection to electrum server is established', {
           ver,
           node: ELECTRUM_CLIENT.activePeer.host,
         });
@@ -133,7 +134,7 @@ export default class ElectrumClient {
         ELECTRUM_CLIENT.activePeer.isConnected = false;
       }
 
-      console.log(
+      logger.error(
         'Bad connection:',
         JSON.stringify(ELECTRUM_CLIENT.activePeer),
         error,
@@ -167,7 +168,7 @@ export default class ElectrumClient {
     ) {
       const nextPeer = ElectrumClient.getNextDefaultPeer();
       if (!nextPeer) {
-        console.log(
+        logger.error(
           'Unable to connect to any electrum server. Please switch network and try again!',
         );
         return {
@@ -179,10 +180,10 @@ export default class ElectrumClient {
 
       ELECTRUM_CLIENT.activePeer = nextPeer;
       ELECTRUM_CLIENT.connectionAttempt = 1;
-      console.log(`Attempting a connection with next peer: ${nextPeer?.host}`);
+      logger.log(`Attempting a connection with next peer: ${nextPeer?.host}`);
       return ElectrumClient.connect();
     }
-    console.log(`Reconnection attempt #${ELECTRUM_CLIENT.connectionAttempt}`);
+    logger.log(`Reconnection attempt #${ELECTRUM_CLIENT.connectionAttempt}`);
     await new Promise(resolve => {
       setTimeout(resolve, ELECTRUM_CLIENT_CONFIG.reconnectDelay); // attempts reconnection after 1 second
     });
@@ -380,9 +381,9 @@ export default class ElectrumClient {
 
       for (let index = 0; index < results.length; index += 1) {
         const history = results[index];
-        if (history.error) {
-          console.log('syncHistoryByAddresses:', history.error);
-        }
+          if (history.error) {
+            logger.error('syncHistoryByAddresses:', history.error);
+          }
 
         const address = scripthash2addr[history.param];
         historyByAddress[address] = history.result || [];
@@ -472,7 +473,7 @@ export default class ElectrumClient {
     );
 
     client.onError = ex => {
-      console.log(ex);
+      logger.log(ex);
     }; // mute
     let timeoutId = null;
 
@@ -496,7 +497,7 @@ export default class ElectrumClient {
         throw new Error('failed to connect');
       }
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     } finally {
       if (timeoutId) {
         clearTimeout(timeoutId);

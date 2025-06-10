@@ -8,6 +8,7 @@ import {
   WalletType,
 } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
+import logger from 'src/utils/logger';
 import DeviceInfo from 'react-native-device-info';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
@@ -415,7 +416,7 @@ export class ApiHandler {
         Storage.set(Keys.SETUPAPP, false);
       } catch (error) {
         Storage.set(Keys.SETUPAPP, false);
-        console.log(error);
+        logger.error(error);
         throw error;
       }
     } else {
@@ -660,7 +661,7 @@ export class ApiHandler {
         throw new Error('Failed to create wallet');
       }
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     }
   }
 
@@ -723,10 +724,10 @@ export class ApiHandler {
           const { connected, connectedTo, error } =
             await ApiHandler.connectToNode();
           if (connected) {
-            console.log('Connected to: ', connectedTo);
+            logger.log('Connected to: ', connectedTo);
           }
           if (error) {
-            console.log('Node connection err: ', error);
+            logger.error('Node connection err: ', error);
             return;
           }
         }
@@ -750,7 +751,7 @@ export class ApiHandler {
         };
       }
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     }
   }
 
@@ -871,7 +872,7 @@ export class ApiHandler {
       });
       return true;
     } catch (error) {
-      console.log('error', error);
+      logger.error('error', error);
       return false;
     }
   }
@@ -965,7 +966,7 @@ export class ApiHandler {
         };
       }
     } catch (error) {
-      console.log({ error });
+      logger.error({ error });
       throw new Error(error.message);
     }
   }
@@ -1003,7 +1004,7 @@ export class ApiHandler {
         ApiHandler.refreshWallets({ wallets: [wallet.toJSON()] });
       }
     } catch (error) {
-      console.log({ error });
+      logger.error({ error });
       throw new Error('Failed to get test coins');
     }
   }
@@ -1040,7 +1041,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log({ error });
+      logger.error({ error });
       throw error;
     }
   }
@@ -1072,7 +1073,7 @@ export class ApiHandler {
       }
       ApiHandler.viewUtxos();
     } catch (error) {
-      console.log('errors', error);
+      logger.error('errors', error);
       throw error;
     }
   }
@@ -1097,7 +1098,7 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('errors', error);
+      logger.error('errors', error);
       throw error;
     }
   }
@@ -1111,7 +1112,7 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('errors', error);
+      logger.error('errors', error);
       throw error;
     }
   }
@@ -1125,7 +1126,7 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('errors', error);
+      logger.error('errors', error);
       throw error;
     }
   }
@@ -1150,7 +1151,7 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('payments', error);
+      logger.error('payments', error);
       throw error;
     }
   }
@@ -1272,7 +1273,7 @@ export class ApiHandler {
       }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
-      console.log('error', error);
+      logger.error('error', error);
     }
   }
 
@@ -1495,7 +1496,7 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      console.log('refreshRgbWallet', error);
+      logger.error('refreshRgbWallet', error);
       throw error;
     }
   }
@@ -1528,7 +1529,7 @@ export class ApiHandler {
       );
       return response;
     } catch (error) {
-      console.log('sendAsset', error);
+      logger.error('sendAsset', error);
       throw error;
     }
   }
@@ -1553,7 +1554,7 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      console.log('refreshRgbWallet', error);
+      logger.error('refreshRgbWallet', error);
       throw error;
     }
   }
@@ -1566,7 +1567,7 @@ export class ApiHandler {
       });
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
+      logger.error('Update Profile', error);
       throw error;
     }
   }
@@ -1594,7 +1595,7 @@ export class ApiHandler {
       }
       return false;
     } catch (error) {
-      console.log('check Version', error);
+      logger.error('check Version', error);
       throw error;
     }
   }
@@ -1623,7 +1624,7 @@ export class ApiHandler {
       }
       return false;
     } catch (error) {
-      console.log('fcm update error: ', error);
+      logger.error('fcm update error: ', error);
       throw error;
     }
   }
@@ -1652,7 +1653,7 @@ export class ApiHandler {
 
       return response;
     } catch (error) {
-      console.log('utxos', error);
+      logger.error('utxos', error);
       throw error;
     }
   }
@@ -1665,7 +1666,7 @@ export class ApiHandler {
         const login = JSON.parse(await NativeModules.CloudBackup.login());
         if (login.status) {
           const restore = await RGBServices.restore(app.primaryMnemonic);
-          console.log(restore);
+          logger.log(restore);
           if (restore) {
             await ApiHandler.refreshRgbWallet();
           }
@@ -1675,7 +1676,7 @@ export class ApiHandler {
         if (restore) {
           await ApiHandler.refreshRgbWallet();
         }
-        console.log(restore);
+        logger.log(restore);
       }
     } catch (error) {
       throw error;
@@ -1735,7 +1736,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1752,7 +1753,7 @@ export class ApiHandler {
       });
       return true;
     } catch (error) {
-      console.log('backup', error);
+      logger.error('backup', error);
       throw error;
     }
   }
@@ -1781,7 +1782,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1795,7 +1796,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error('Failed to connect to node');
     }
   }
@@ -1823,7 +1824,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log('error- ', error);
+      logger.error('error- ', error);
       throw new Error('Failed to connect to node');
     }
   }
@@ -1837,7 +1838,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error('Failed to connect to node');
     }
   }
@@ -1851,7 +1852,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error('Failed to connect to node');
     }
   }
@@ -1924,7 +1925,7 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1947,7 +1948,7 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1961,7 +1962,7 @@ export class ApiHandler {
         return snakeCaseToCamelCaseCase(response);
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1975,7 +1976,7 @@ export class ApiHandler {
         throw new Error('Failed to sync node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1991,7 +1992,7 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -1999,7 +2000,7 @@ export class ApiHandler {
   static async unlockNode() {
     try {
       const response = await ApiHandler.api.unlock('tribe@2024');
-      console.log(response);
+      logger.log(response);
       if (response.error) {
         throw new Error(response.error);
       }
@@ -2009,7 +2010,7 @@ export class ApiHandler {
         throw new Error('Failed to unlock node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2028,7 +2029,7 @@ export class ApiHandler {
         throw new Error('Failed to unlock node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2059,7 +2060,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log('backup error', error);
+      logger.error('backup error', error);
     }
   }
 
@@ -2095,7 +2096,7 @@ export class ApiHandler {
         throw new Error('Failed to init node');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2117,7 +2118,7 @@ export class ApiHandler {
         throw new Error('Error - Canceling transfer ');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2132,7 +2133,7 @@ export class ApiHandler {
         throw new Error('Error - Canceling transfer ');
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2175,7 +2176,7 @@ export class ApiHandler {
         }
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2186,7 +2187,7 @@ export class ApiHandler {
       await dbManager.deleteRealm(uint8array);
       Storage.clear();
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw error;
     }
   }
@@ -2269,7 +2270,7 @@ export class ApiHandler {
           );
         }
       } else {
-        console.log('No tweet found with assetID:', asset.assetId);
+        logger.log('No tweet found with assetID:', asset.assetId);
       }
     } catch (error) {
       console.error('Failed to verify issuer via tweet:', error);

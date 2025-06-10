@@ -1,4 +1,5 @@
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+import logger from 'src/utils/logger';
 
 export interface ApiConfig {
   baseUrl: string;
@@ -199,7 +200,7 @@ export class RLNNodeApiServices {
       method: 'GET',
     });
 
-    console.log(JSON.stringify(response));
+    logger.log(JSON.stringify(response));
 
     return response;
   }

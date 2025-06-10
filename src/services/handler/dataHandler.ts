@@ -1,5 +1,7 @@
+import logger from 'src/utils/logger';
+
 export class DataHandler {
   static readOrWriteToRealm() {
-    console.log('Reading or writing to Realm');
+    logger.log('Reading or writing to Realm');
   }
 }

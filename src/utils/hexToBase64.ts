@@ -1,8 +1,10 @@
+import logger from 'src/utils/logger';
+
 export const hexToBase64 = (hexString: string): {base64: string, fileType: string} => {
 
     const input = hexString.replace(/[^A-Fa-f0-9]/g, '');
     if (input.length % 2) {
-        console.log('Cleaned hex string length is odd.');
+        logger.error('Cleaned hex string length is odd.');
         return;
     }
     const binary = [];

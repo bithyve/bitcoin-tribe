@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import logger from 'src/utils/logger';
 import Share from 'react-native-share';
 
 import Toast from 'src/components/Toast';
@@ -43,7 +44,7 @@ const AssetIDContainer = ({ assetId }: AssetIDContainerProps) => {
 
       await Share.open(shareOptions);
     } catch (error) {
-      console.log('Error sharing asset ID:', error);
+      logger.error('Error sharing asset ID:', error);
     }
   };
 

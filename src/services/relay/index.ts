@@ -3,6 +3,7 @@ import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import { Asset } from 'src/models/interfaces/RGBWallet';
+import logger from 'src/utils/logger';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
@@ -18,7 +19,7 @@ export default class Relay {
       });
       return res.data;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error(error);
     }
   };
@@ -99,7 +100,7 @@ export default class Relay {
         publicKey,
       });
     } catch (err) {
-      console.log(err, err.response);
+      logger.error(err, err.response);
       if (err.response) {
         throw new Error(err.response.data.err);
       }
@@ -133,7 +134,7 @@ export default class Relay {
         publicKey,
       });
     } catch (err) {
-      console.log(err, err.response.data);
+      logger.error(err, err.response?.data);
       if (err.response) {
         throw new Error(err.response.data.err);
       }
