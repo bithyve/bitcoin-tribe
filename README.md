@@ -8,7 +8,11 @@ Explore the future of digital assets with Bitcoin Tribe. Manage your Bitcoin and
 
 ## Prerequisites
 
-Before getting started, make sure you have a proper [React Native development environment](https://reactnative.dev/docs/environment-setup) on your machine
+Before getting started, make sure you have a proper [React Native development environment](https://reactnative.dev/docs/environment-setup) on your machine.
+
+- **Node.js ≥18**
+- **Yarn 3.x** is the preferred package manager.
+- Create `.env` and `.env.production` files in the project root with the required keys **before running `yarn install`**.
 
 ## Getting Started
 
