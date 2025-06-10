@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import logger from 'src/utils/logger';
 import { useTheme } from 'react-native-paper';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
@@ -89,7 +90,7 @@ function AppBackupMenu({ navigation }) {
         }, 1000);
       }
     } catch (error) {
-      console.log('error', error);
+      logger.error('error', error);
       setIsLoading(false);
     }
   };

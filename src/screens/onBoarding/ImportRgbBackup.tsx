@@ -76,7 +76,6 @@ const ImportRgbBackup = () => {
       copyTo: 'documentDirectory',
       mode: 'import',
     }).then(res => {
-      console.log(res);
       if (
         res &&
         res.fileCopyUri.substring(res.fileCopyUri.lastIndexOf('.')) ===

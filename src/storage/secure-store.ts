@@ -1,6 +1,7 @@
 import * as Keychain from 'react-native-keychain';
 import NodeRSA from 'node-rsa';
 import config from 'src/utils/config';
+import logger from 'src/utils/logger';
 
 export const store = async (hash: string, enc_key: string) => {
   try {
@@ -37,7 +38,7 @@ export const fetch = async (hash_current: string) => {
       return false;
     }
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     throw err;
   }
 };
@@ -62,7 +63,7 @@ export const remove = async key => {
   try {
     //
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     return false;
   }
   return true;
@@ -89,7 +90,7 @@ export const storeBiometricPubKey = async (pubKey: string) => {
     }
     return false;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return false;
   }
 };
@@ -121,7 +122,7 @@ export const verifyBiometricAuth = async (
       success: false,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return {
       success: false,
     };

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import logger from 'src/utils/logger';
 import {
   View,
   StyleSheet,
@@ -118,7 +119,7 @@ const QRScanner = (props: QRScannerProps) => {
             Toast('Error in scanning Qr code', true);
           }
         })
-        .catch(error => console.log('Cannot detect QR code in image', error));
+        .catch(error => logger.error('Cannot detect QR code in image', error));
     } catch (error) {
       console.error('QRreader failed:', error.message || error);
     }

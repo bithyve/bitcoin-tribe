@@ -1,6 +1,7 @@
 import { RealmSchema } from '../enum';
 import realm from './realm';
 import Realm from 'realm';
+import logger from 'src/utils/logger';
 /**
  * intializes realm
  * @param  {ArrayBuffer|ArrayBufferView|Int8Array} key
@@ -9,7 +10,7 @@ import Realm from 'realm';
 const initializeRealm = async (
   key: ArrayBuffer | ArrayBufferView | Int8Array,
 ): Promise<boolean> => {
-  console.log('[Realm]: Database initialising...');
+  logger.log('[Realm]: Database initialising...');
   return realm.initializeDatabase(key);
 };
 
@@ -34,7 +35,7 @@ const createObject = (
     const hasCreated = realm.create(schema, object, updateMode);
     return hasCreated;
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
@@ -52,7 +53,7 @@ const createObjectBulk = (
     const hasCreated = realm.createBulk(schema, objects, updateMode);
     return hasCreated;
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 

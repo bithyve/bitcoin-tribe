@@ -2,6 +2,7 @@ import Realm from 'realm';
 import { RealmSchema } from '../enum';
 import schema from './schema';
 import { runRealmMigrations } from './schema/migrations';
+import logger from 'src/utils/logger';
 
 export class RealmDatabase {
   private realm: Realm;
@@ -34,7 +35,7 @@ export class RealmDatabase {
       this.realm = await Realm.open(realmConfig);
       return true;
     } catch (err) {
-      console.log('err', err);
+      logger.error('err', err);
       return false;
     }
   };
@@ -104,7 +105,7 @@ export class RealmDatabase {
       });
       return true;
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
       return false;
     }
   };
@@ -126,7 +127,7 @@ export class RealmDatabase {
 
       return true;
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
       return false;
     }
   };
@@ -140,7 +141,7 @@ export class RealmDatabase {
     try {
       return realm.objects(schema);
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     }
   };
 
@@ -153,7 +154,7 @@ export class RealmDatabase {
     try {
       this.writeTransaction(realm, callback);
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     }
   };
 
@@ -168,7 +169,7 @@ export class RealmDatabase {
         realm.delete(object);
       });
     } catch (err) {
-      console.log({ err });
+      logger.error({ err });
     }
   };
 }

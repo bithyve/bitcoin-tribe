@@ -1,4 +1,5 @@
 import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+import logger from 'src/utils/logger';
 import React, {
   useCallback,
   useContext,
@@ -340,7 +341,7 @@ const SendAssetScreen = () => {
       setTimeout(() => {
         Toast(`Failed: ${error}`, true);
       }, 500);
-      console.log(error);
+      logger.error(error);
     }
   }, [invoice, assetAmount, navigation, isDonation]);
 

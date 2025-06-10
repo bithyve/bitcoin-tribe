@@ -1,4 +1,5 @@
 const { tor } = require('../rest/RestClient');
+const logger = require('../utils/logger').default;
 
 /**
  * Wrapper for react-native-tor mimicking Socket class from NET package
@@ -47,9 +48,9 @@ class TorSocket {
   }
 
   connect(port, host, callback) {
-    console.log('connecting TOR socket...', host, port);
+    logger.log('connecting TOR socket...', host, port);
     (async () => {
-      console.log('starting tor...');
+      logger.log('starting tor...');
       try {
         await tor.startIfNotStarted();
       } catch (e) {
@@ -58,12 +59,12 @@ class TorSocket {
         this._passOnEvent('error', 'Could not bootstrap TOR');
         return false;
       }
-      console.log('started tor');
+      logger.log('started tor');
       const iWillConnectISwear = tor.createTcpConnection(
         { target: `${host}:${port}`, connectionTimeout: 15000 },
         (data, err) => {
           if (err) {
-            console.log('TOR socket onData error: ', err);
+            logger.error('TOR socket onData error: ', err);
             // this._passOnEvent('error', err);
             return;
           }
@@ -79,13 +80,13 @@ class TorSocket {
       } catch (e) {}
 
       if (!this._socket) {
-        console.log('connecting TOR socket failed'); // either sleep expired or connect threw an exception
+        logger.error('connecting TOR socket failed'); // either sleep expired or connect threw an exception
         await tor.stopIfRunning();
         this._passOnEvent('error', 'connecting TOR socket failed');
         return false;
       }
 
-      console.log('TOR socket connected:', host, port);
+      logger.log('TOR socket connected:', host, port);
       setTimeout(() => {
         this._passOnEvent('connect', true);
         callback();
@@ -103,9 +104,9 @@ class TorSocket {
   emit(event, data) {}
 
   end() {
-    console.log('trying to close TOR socket');
+    logger.log('trying to close TOR socket');
     if (this._socket && this._socket.close) {
-      console.log('trying to close TOR socket SUCCESS');
+      logger.log('trying to close TOR socket SUCCESS');
       return this._socket.close();
     }
   }
@@ -117,14 +118,14 @@ class TorSocket {
       try {
         return this._socket.write(data);
       } catch (error) {
-        console.log(
+        logger.error(
           'this._socket.write() failed so we are issuing ERROR event',
           error,
         );
         this._passOnEvent('error', error);
       }
     } else {
-      console.log('TOR socket write error, socket not connected');
+      logger.error('TOR socket write error, socket not connected');
       this._passOnEvent('error', 'TOR socket not connected');
     }
   }

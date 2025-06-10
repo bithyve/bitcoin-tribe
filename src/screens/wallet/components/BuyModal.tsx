@@ -22,7 +22,7 @@ function BuyModal() {
         icon={<IconRamp />}
         backColor={theme.colors.inputBackground}
         style={styles.optionStyle}
-        onPress={() => console.log('press')}
+        onPress={() => {}}
       />
     </View>
   );

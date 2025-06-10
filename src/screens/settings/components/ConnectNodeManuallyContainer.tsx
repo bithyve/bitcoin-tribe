@@ -51,9 +51,9 @@ function ConnectNodeManuallyContainer() {
       </KeyboardAvoidView>
       <Buttons
         primaryTitle={common.next}
-        primaryOnPress={() => console.log('primary')}
+        primaryOnPress={() => {}}
         secondaryTitle={common.cancel}
-        secondaryOnPress={() => console.log('secondary')}
+        secondaryOnPress={() => {}}
         width={windowWidth / 2.5}
         secondaryCTAWidth={windowWidth / 2.5}
         style={styles.buttonWrapper}

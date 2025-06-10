@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import logger from 'src/utils/logger';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
@@ -94,7 +95,7 @@ function SettingsScreen({ navigation }) {
         Toast(settings.biometricsNotEnableMsg, true);
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 

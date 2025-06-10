@@ -1,6 +1,7 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Linking } from 'react-native';
+import logger from 'src/utils/logger';
 
 const openSettings = () => {
   Linking.openSettings();
@@ -43,10 +44,10 @@ const pickImage = async (includeBase64 = false, selectionLimit = 1) => {
       },
       response => {
         if (response.didCancel) {
-          console.log('User cancelled image picker');
+          logger.log('User cancelled image picker');
           resolve(null); // Resolve with null if the user cancels
         } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
+          logger.error('ImagePicker Error: ', response.error);
           reject(response.error); // Reject the promise if there's an error
         } else if (response.assets && response.assets.length > 0) {
           const uri = includeBase64

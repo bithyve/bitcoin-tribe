@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo } from 'react';
+import logger from 'src/utils/logger';
 import { useQuery } from '@realm/react';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -40,7 +41,7 @@ const RgbChannels = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
-  console.log('data', data);
+  logger.log('data', data);
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Coin[]>(RealmSchema.Collectible);
   const assetsData: Asset[] = useMemo(() => {

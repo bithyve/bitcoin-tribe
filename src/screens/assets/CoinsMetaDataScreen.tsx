@@ -136,7 +136,6 @@ const CoinsMetaDataScreen = () => {
       twitterPostVerification &&
       !twitterPostVerification?.link
     ) {
-      console.log('call');
       ApiHandler.searchForAssetTweet(coin, RealmSchema.Coin);
     }
   }, []);

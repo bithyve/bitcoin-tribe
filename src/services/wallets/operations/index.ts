@@ -3,6 +3,7 @@ import * as bitcoinJS from 'bitcoinjs-lib';
 
 import ECPairFactory from 'ecpair';
 import coinselect from 'coinselect';
+import logger from 'src/utils/logger';
 import coinselectSplit from 'coinselect/split';
 import config from 'src/utils/config';
 import ElectrumClient from 'src/services/electrum/client';
@@ -639,7 +640,7 @@ export default class WalletOperations {
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
     } catch (err) {
-      console.log('Failed to fetch fee via Fulcrum', { err });
+      logger.error('Failed to fetch fee via Fulcrum', { err });
       throw new Error('Failed to fetch fee via Fulcrum');
     }
   };
@@ -693,7 +694,7 @@ export default class WalletOperations {
       const feeRatesByPriority = { high, medium, low };
       return feeRatesByPriority;
     } catch (err) {
-      console.log('Failed to fetch fee via mempool.space', { err });
+      logger.error('Failed to fetch fee via mempool.space', { err });
       try {
         if (config.NETWORK_TYPE === NetworkType.TESTNET) {
           throw new Error(
@@ -702,7 +703,7 @@ export default class WalletOperations {
         }
         return WalletOperations.estimateFeeRatesViaElectrum();
       } catch (err) {
-        console.log({ err });
+        logger.error({ err });
         return WalletOperations.mockFeeRates();
       }
     }

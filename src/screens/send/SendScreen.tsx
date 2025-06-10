@@ -1,4 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
+import logger from 'src/utils/logger';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
@@ -118,7 +119,7 @@ function SendScreen({ route, navigation }) {
           setIsScanning(true);
           setVisibleModal(false);
           setValidatingInvoiceErrorMsg(errorMsg);
-          console.log('error send', error);
+          logger.error('error send', error);
           return;
         }
       }

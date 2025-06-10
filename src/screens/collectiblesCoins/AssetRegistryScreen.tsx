@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import logger from 'src/utils/logger';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
@@ -175,7 +176,7 @@ function AssetRegistryScreen() {
     } catch (error) {
       setDisabledCTA(false);
       Toast(`${error}`, true);
-      console.log(error);
+      logger.error(error);
     }
   }, [assetId, schema]);
 

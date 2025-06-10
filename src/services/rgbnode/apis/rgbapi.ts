@@ -1882,7 +1882,6 @@ export class RGBApi extends BaseAPI {
     body?: ListAssetsRequest,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<ListAssetsResponse>> {
-    console.log('body', body);
     return RGBApiFp(this.configuration)
       .listassetsPost(body, options)
       .then(request => request(this.axios, this.basePath));

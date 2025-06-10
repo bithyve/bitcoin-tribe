@@ -1,5 +1,6 @@
 import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useState, useEffect, useRef } from 'react';
+import logger from 'src/utils/logger';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -140,7 +141,7 @@ export const verifyIssuerOnTwitter = async (
     }
   } catch (error) {
     Toast(`${error}`, true);
-    console.log(error);
+    logger.error(error);
   }
 };
 
@@ -294,7 +295,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     } catch (error) {
       Toast(`${error}`, true);
       setIsLoading(false);
-      console.log(error);
+      logger.error(error);
     }
   }, [assetId, schema]);
 
@@ -339,7 +340,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     } catch (error) {
       setDisabledCTA(false);
       Toast(`${error}`, true);
-      console.log(error);
+      logger.error(error);
     }
   }, [assetId, schema]);
 
