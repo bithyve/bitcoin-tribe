@@ -557,7 +557,6 @@ export class ApiHandler {
     const newHash = hash512(pin);
     const encryptedKey = encrypt(newHash, key);
     SecureStore.store(newHash, encryptedKey);
-    await SecureStore.remove(hash);
     Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
   }
 
