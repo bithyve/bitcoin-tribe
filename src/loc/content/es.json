@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "UTXO Coloreados",
     "utxoInfoSubTitle2": "UTXO ya asociados con activos RGB, representando tokens específicos o coleccionables.",
     "utxoInfoTitle3": "UTXO Coloreables",
-    "utxoInfoSubTitle3": "UTXO disponibles y listos para asociarse con activos RGB y utilizarse en transacciones RGB."
+    "utxoInfoSubTitle3": "UTXO disponibles y listos para asociarse con activos RGB y utilizarse en transacciones RGB.",
+    "activeNetworkLabel": "Red Activa"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "¡0 no está permitido!",
     "invoiceInvalidContainErrMsg": "La factura contiene detalles no válidos. Por favor revisa la factura.",
     "invoiceFormatErrMsg": "El formato de la factura no es válido. Inténtalo de nuevo.",
-    "failedInvoiceProcessErrMsg": "No se pudo procesar la factura RGB. Asegúrate de que sea correcta."
+    "failedInvoiceProcessErrMsg": "No se pudo procesar la factura RGB. Asegúrate de que sea correcta.",
+    "spendableBalErrorInfo": "Tu activo está bloqueado porque el receptor aún no lo ha aceptado. Cancela la transacción para desbloquearlo y restaurar tu saldo disponible."
   },
   "wallet": {
     "allTransactionsTitle": "Detalles de la transacción",
@@ -629,7 +631,7 @@
     "domainValueCopiedMsg": "Valor del dominio copiado con éxito",
     "verifyDomainSuccessfully": "Tu dominio se ha verificado correctamente.",
     "domainVerified": "Dominio verificado",
-    "domainVerifiedSuccessMsg": "¡Dominio verificado\ncon éxito!",
+    "domainVerifiedSuccessMsg": "¡Dominio\nverificado con éxito!",
     "postTitle": "¡Verificado y Emitido en Bitcoin Tribe!",
     "postIssuedTitle": "¡Emitido en Bitcoin Tribe!",
     "postSubTitle": "Ya está en vivo en Bitcoin Tribe — emitido y verificado de forma transparente a través de X (Twitter), aprovechando el poder de los contratos inteligentes RGB en Bitcoin.",

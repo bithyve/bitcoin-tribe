@@ -74,6 +74,7 @@ const CoinDetailsScreen = () => {
     useState(false);
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -122,9 +123,12 @@ const CoinDetailsScreen = () => {
   );
 
   useEffect(() => {
+    const selectedAssetName = coin?.name;
     const unsubscribe = navigation.addListener('focus', () => {
-      refreshRgbWallet.mutate();
-      mutate({ assetId, schema: RealmSchema.Coin });
+      if (selectedAssetName !== 'Tribe tUSDt') {
+        refreshRgbWallet.mutate();
+        mutate({ assetId, schema: RealmSchema.Coin });
+      }
       if (appType === AppType.NODE_CONNECT) {
         listPaymentshMutation.mutate();
         getChannelMutate();
@@ -184,7 +188,7 @@ const CoinDetailsScreen = () => {
         onPressSetting={() =>
           navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
         }
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
           })
@@ -227,6 +231,12 @@ const CoinDetailsScreen = () => {
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
         }}
         schema={RealmSchema.Coin}
+        onVerificationComplete={() => {
+          setRefreshToggle(t => !t);
+          setShowVerifyModal(false);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
+        }}
+        primaryLoading={refreshToggle}
       />
       <>
         <PostOnTwitterModal

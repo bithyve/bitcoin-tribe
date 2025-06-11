@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "UTXO Colorati",
     "utxoInfoSubTitle2": "UTXO già associati ad asset RGB, rappresentando token specifici o oggetti da collezione.",
     "utxoInfoTitle3": "UTXO Colorabili",
-    "utxoInfoSubTitle3": "UTXO disponibili e pronti per essere associati agli asset RGB per l’uso nelle transazioni RGB."
+    "utxoInfoSubTitle3": "UTXO disponibili e pronti per essere associati agli asset RGB per l’uso nelle transazioni RGB.",
+    "activeNetworkLabel": "Rete Attiva"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "0 non è consentito!",
     "invoiceInvalidContainErrMsg": "La fattura contiene dettagli non validi. Controlla la fattura.",
     "invoiceFormatErrMsg": "Il formato della fattura non è valido. Riprova.",
-    "failedInvoiceProcessErrMsg": "Impossibile elaborare la fattura RGB. Assicurati che sia corretta."
+    "failedInvoiceProcessErrMsg": "Impossibile elaborare la fattura RGB. Assicurati che sia corretta.",
+    "spendableBalErrorInfo": "Il tuo asset è bloccato perché il destinatario non lo ha ancora accettato. Annulla la transazione per sbloccarlo e ripristinare il tuo saldo disponibile."
   },
   "wallet": {
     "allTransactionsTitle": "Dettagli della transazione",

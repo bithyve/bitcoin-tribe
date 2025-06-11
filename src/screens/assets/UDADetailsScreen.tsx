@@ -127,6 +127,10 @@ const UDADetailsScreen = () => {
     item => item.verified === true,
   );
 
+  const url = domainVerification?.name?.startsWith('http')
+    ? domainVerification?.name
+    : `https://${domainVerification?.name}`;
+
   useEffect(() => {
     if (hasIssuedAsset) {
       setTimeout(() => {
@@ -164,7 +168,7 @@ const UDADetailsScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
@@ -288,6 +292,27 @@ const UDADetailsScreen = () => {
               />
             </View>
           )}
+          <Item
+            title={assets.issuedOn}
+            value={moment.unix(uda?.timestamp).format('DD MMM YY  hh:mm A')}
+          />
+          <View style={styles.wrapper}>
+            {uda?.transactions.length > 0 && (
+              <AssetTransaction
+                transaction={uda?.transactions[0]}
+                coin={uda?.name}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                    assetId: assetId,
+                    transactions: uda?.transactions,
+                    assetName: uda?.name,
+                  });
+                }}
+                disabled={uda?.transactions.length === 1}
+                assetFace={uda?.assetSchema.toUpperCase()}
+              />
+            )}
+          </View>
           <View style={styles.wrapper}>
             <IssuerVerified
               id={twitterVerification?.id}
@@ -306,11 +331,15 @@ const UDADetailsScreen = () => {
               }
               verified={domainVerification?.verified}
               onPress={() => {
-                navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                  assetId: assetId,
-                  schema: RealmSchema.UniqueDigitalAsset,
-                  savedDomainName: domainVerification?.name || '',
-                });
+                if (domainVerification?.verified) {
+                  openLink(url);
+                } else {
+                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                    assetId: assetId,
+                    schema: RealmSchema.UniqueDigitalAsset,
+                    savedDomainName: domainVerification?.name || '',
+                  });
+                }
               }}
             />
           </View>
@@ -356,6 +385,7 @@ const UDADetailsScreen = () => {
                 assetId={assetId}
                 schema={RealmSchema.UniqueDigitalAsset}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
+                onRegisterComplete={() => setRefreshToggle(t => !t)}
                 showVerifyIssuer={showVerifyIssuer}
                 showDomainVerifyIssuer={showDomainVerifyIssuer}
                 asset={uda}
@@ -386,13 +416,12 @@ const UDADetailsScreen = () => {
             {hasIssuanceTransaction &&
               twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
-              twitterPostVerification &&
               !twitterPostVerification?.link && (
                 <SelectOption
                   title={'Show your X post here'}
                   subTitle={''}
                   onPress={() =>
-                    navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
                       assetId: assetId,
                       schema: RealmSchema.UniqueDigitalAsset,
                       asset: uda,
@@ -428,6 +457,7 @@ const UDADetailsScreen = () => {
           <HideAssetView title={assets.hideAsset} onPress={() => hideAsset()} />
         </ScrollView>
       )}
+
       <VerifyIssuerModal
         assetId={uda?.assetId}
         isVisible={showVerifyModal}
@@ -442,6 +472,12 @@ const UDADetailsScreen = () => {
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
         }}
         schema={RealmSchema.UniqueDigitalAsset}
+        onVerificationComplete={() => {
+          setRefreshToggle(t => !t);
+          setShowVerifyModal(false);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
+        }}
+        primaryLoading={refreshToggle}
       />
       <>
         <PostOnTwitterModal
@@ -511,11 +547,12 @@ const UDADetailsScreen = () => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     imageStyle: {
-      width: '100%',
+      width: '90%',
       height: hp(280),
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),
+      marginHorizontal: hp(16),
     },
     buttonWrapper: {
       marginHorizontal: wp(5),
@@ -523,7 +560,12 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: wp(5),
       alignItems: 'center',
     },
+    container1: {
+      paddingHorizontal: hp(0),
+    },
     container: {
+      flex: 1,
+      flexDirection: 'column',
       paddingHorizontal: hp(0),
     },
     wrapper: {

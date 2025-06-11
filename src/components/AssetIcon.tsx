@@ -6,47 +6,28 @@ import Identicon from './Identicon';
 import { AppTheme } from 'src/theme';
 
 type props = {
-  assetTicker: string;
+  iconUrl: string;
   assetID: string;
   size: number;
   style?: StyleProp<ViewStyle>;
   verified?: boolean;
 };
 
-const AssetIcon = ({ assetTicker, assetID, size, style, verified }: props) => {
+const AssetIcon = ({ iconUrl, assetID, size, style, verified }: props) => {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme, size), [theme, size]);
 
-  const [iconUrl, setIconUrl] = useState(null);
-  const ticker = assetTicker?.toLowerCase() || '';
-
-  useEffect(() => {
-    const fetchIcon = async () => {
-      try {
-        const url = `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/128/${ticker}.png`;
-        const response = await fetch(url);
-        if (response.ok) {
-          setIconUrl(url);
-        } else {
-          setIconUrl(null);
-        }
-      } catch (error) {
-        setIconUrl(null);
-      }
-    };
-
-    if (ticker) {
-      fetchIcon();
-    }
-  }, [ticker]);
-
   return (
     <View>
-      <Identicon
-        value={assetID}
-        size={size}
-        style={[styles.identiconView, style]}
-      />
+      {iconUrl ? (
+        <Image source={{ uri: iconUrl }} style={styles.imageStyle} />
+      ) : (
+        <Identicon
+          value={assetID}
+          size={size}
+          style={[styles.identiconView, style]}
+        />
+      )}
     </View>
   );
 };
