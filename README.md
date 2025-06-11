@@ -23,18 +23,18 @@ Before getting started, make sure you have a proper [React Native development en
    cd bitcoin-tribe
    ```
 3. Install the project dependencies using Yarn:
-   The prepare scripts will automatically install pods and nodify crypto-related packages for react-native
+   The prepare scripts will automatically install pods and nodeify crypto-related packages for react-native
    ```shell
    yarn install
    ```
 
 ## Build and Run
 
-### Varients
+### Variants
 
 The project has testnet and mainnet variants. The development variant is configured to use testnet and the production variant to use mainnet.
 
-Start metro metro
+Start metro
 
 ```bash
 yarn start
