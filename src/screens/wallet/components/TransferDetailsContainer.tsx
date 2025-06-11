@@ -57,11 +57,10 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       const matchedTransfer = rgbReceiveUtxo?.find(
         item => item.recipientId === transaction?.recipientId,
       );
-      console.log('matchedTransfer', matchedTransfer);
       if (
         matchedTransfer &&
-        matchedTransfer?.linkedAsset !== assetId &&
-        matchedTransfer?.linkedAmount !== transAmount
+        (matchedTransfer?.linkedAsset !== assetId ||
+          matchedTransfer?.linkedAmount !== transAmount)
       ) {
         setMismatchError(true);
       }

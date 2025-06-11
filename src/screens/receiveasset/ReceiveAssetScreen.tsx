@@ -84,7 +84,7 @@ function ReceiveAssetScreen() {
       }
     } else {
       if (colorable.length > 0) {
-        mutate({ assetId, amount, linkedAsset: '', linkedAmount: 0 });
+        mutate({ assetId, amount, linkedAsset: assetId, linkedAmount: amount });
       } else {
         createUtxos();
       }
