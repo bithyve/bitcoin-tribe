@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
@@ -6,7 +6,7 @@ import moment from 'moment';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import { hp } from 'src/constants/responsive';
+import { hp, windowWidth } from 'src/constants/responsive';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Colors from 'src/theme/Colors';
 import TransferLabelContent from './TransferLabelContent';
@@ -16,25 +16,48 @@ import {
   TransferKind,
   Transaction,
   TransferStatus,
+  RGBWallet,
+  receiveUTXOData,
 } from 'src/models/interfaces/RGBWallet';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
 
 type WalletTransactionsProps = {
   assetName: string;
   transAmount: string;
+  assetId: string;
   transaction: Transaction;
   onPress: () => void;
 };
 
 function TransferDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
-  const { assetName, transAmount, transaction, onPress } = props;
+  const { assetName, transAmount, assetId, transaction, onPress } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet, settings, assets } = translations;
   const styles = getStyles(theme);
+  const rgbReceiveUtxo: receiveUTXOData = dbManager.getCollection(
+    RealmSchema.ReceiveUTXOData,
+  );
+  const [mismatchError, setMismatchError] = useState(false);
 
+  useEffect(() => {
+    if (transaction?.kind !== 'receiveBlind') {
+      setMismatchError(false);
+      return;
+    }
+    const matchedTransfer = rgbReceiveUtxo?.find(
+      item => item.recipientId === transaction?.recipientId,
+    );
+    if (matchedTransfer && matchedTransfer?.linkedAsset === assetId) {
+      setMismatchError(false);
+    } else {
+      setMismatchError(true);
+    }
+  }, []);
   const handleCopyText = async (text: string) => {
     await Clipboard.setString(text);
     Toast(assets.copiedTxIDMsg);
@@ -94,12 +117,12 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               />
             </AppTouchable>
           )}
-          {transaction.batchTransferIdx && (
+          {/* {transaction.batchTransferIdx && (
             <TransferLabelContent
               label={assets.batchTxnIdx}
               content={`${transaction.batchTransferIdx}`}
             />
-          )}
+          )} */}
           <TransferLabelContent
             label={wallet.date}
             content={moment

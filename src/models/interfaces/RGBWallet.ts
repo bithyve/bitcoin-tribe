@@ -34,6 +34,14 @@ interface Balance {
   offchainInbound?: number;
 }
 
+export interface receiveUTXOData {
+  invoice: string;
+  recipientId: string;
+  expirationTimestamp: number;
+  batchTransferIdx: string;
+  linkedAsset: string;
+}
+
 export interface Transfer {
   amount: number;
   batchTransferIdx: number;
@@ -86,7 +94,7 @@ export interface Coin {
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
-  assetSource: AssetSource
+  assetSource: AssetSource;
 }
 
 export interface Media {
@@ -112,7 +120,7 @@ export interface Collectible {
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
-  assetSource: AssetSource
+  assetSource: AssetSource;
 }
 
 export interface UniqueDigitalAsset {
@@ -137,7 +145,7 @@ export interface UniqueDigitalAsset {
   issuer: Issuer;
   visibility: AssetVisibility;
   assetSchema: AssetSchema;
-  assetSource: AssetSource
+  assetSource: AssetSource;
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}

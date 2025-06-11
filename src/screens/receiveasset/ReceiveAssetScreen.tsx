@@ -72,7 +72,7 @@ function ReceiveAssetScreen() {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
         if (colorable.length > 0) {
-          mutate({ assetId, amount });
+          mutate({ assetId, amount, linkedAsset: '' });
         } else {
           createUtxos();
         }
@@ -84,7 +84,7 @@ function ReceiveAssetScreen() {
       }
     } else {
       if (colorable.length > 0) {
-        mutate({ assetId, amount });
+        mutate({ assetId, amount, linkedAsset: '' });
       } else {
         createUtxos();
       }
@@ -102,7 +102,7 @@ function ReceiveAssetScreen() {
           return true;
         } else if (message === 'Asset not found') {
           setTimeout(() => {
-            mutate({ assetId: '', amount: 0 });
+            mutate({ assetId: '', amount: 0, linkedAsset: assetId });
           }, 100);
           return true;
         } else {
@@ -136,7 +136,7 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (createUtxoData) {
-      mutate({ assetId, amount });
+      mutate({ assetId, amount, linkedAsset: '' });
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
@@ -160,7 +160,7 @@ function ReceiveAssetScreen() {
       }
     } else {
       if (rgbInvoice === '') {
-        mutate({ assetId, amount });
+        mutate({ assetId, amount, linkedAsset: '' });
       }
     }
   }, [selectedType]);

@@ -1053,7 +1053,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset({ assetId, amount }) {
+  static async receiveAsset({ assetId, amount, linkedAsset }) {
     try {
       assetId = assetId ?? '';
       amount = parseFloat(amount) ?? 0.0;
@@ -1073,10 +1073,26 @@ export class ApiHandler {
           RealmSchema.RgbWallet,
           'mnemonic',
           rgbWallet.mnemonic,
-          {
-            receiveData: response,
-          },
+          { receiveData: response },
         );
+
+        if (linkedAsset) {
+          const {
+            recipientId,
+            batchTransferIdx,
+            expirationTimestamp,
+            invoice,
+          } = response;
+
+          const updateData = {
+            batchTransferIdx: batchTransferIdx || null,
+            expirationTimestamp: expirationTimestamp || null,
+            invoice: invoice || '',
+            recipientId: recipientId || '',
+            linkedAsset: linkedAsset || '',
+          };
+          dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
+        }
       }
       ApiHandler.viewUtxos();
     } catch (error) {
@@ -2176,7 +2192,8 @@ export class ApiHandler {
               .find(a => a.assetId === assetId);
             if (asset) {
               dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-                issuer, iconUrl
+                issuer,
+                iconUrl,
               });
             }
           }

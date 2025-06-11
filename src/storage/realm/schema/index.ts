@@ -23,6 +23,7 @@ import {
   RgbWalletSchema,
   ReceiveDataSchema,
   NodeBtcBalanceSchema,
+  ReceiveUTXOSchema,
 } from './rgbwallet';
 import {
   BalanceSchema,
@@ -82,4 +83,5 @@ export default [
   NodeOnchainTransactionSchema,
   ConfirmationTimeSchema,
   LNPaymentsSchema,
+  ReceiveUTXOSchema,
 ];
