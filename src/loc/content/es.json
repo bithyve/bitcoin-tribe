@@ -710,6 +710,7 @@
     "closeChannel": "Cerrar Canal",
     "selectYourAsset": "Selecciona tu Activo",
     "selectYourAssetErrMsg": "Por favor selecciona tu activo",
+    "selectAsset": "Seleccionar activo",
     "availableBalanceText": "Saldo Disp.: ",
     "closeChannelPopupTitle": "¿Cerrar Canal?",
     "closeChannelPopupSubTitle": "Esta acción detendrá las transacciones y no se puede deshacer.",

@@ -25,6 +25,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import TextField from 'src/components/TextField';
 import IconSearch from 'src/assets/images/icon_search.svg';
+import IconSearchLight from 'src/assets/images/icon_search_light.svg';
 
 type DropdownProps = {
   style;
@@ -35,6 +36,18 @@ type DropdownProps = {
   searchAssetInput?: string;
   onChangeSearchInput?: (text: string) => void;
   isLoading?: boolean;
+};
+
+const EmptyAssetState = () => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  return (
+    <View style={styles.emptyAssetStateContainer}>
+      <AppText variant="body1" style={styles.titleStyle}>
+        No Assets Found!
+      </AppText>
+    </View>
+  );
 };
 
 function RGBAssetList(props: DropdownProps) {
@@ -53,7 +66,6 @@ function RGBAssetList(props: DropdownProps) {
   const { channel } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
   return (
     <View style={[style, styles.container]}>
       <AppTouchable onPress={onDissmiss}>
@@ -66,7 +78,7 @@ function RGBAssetList(props: DropdownProps) {
           ]}>
           <View style={styles.inputWrapper2}>
             <AppText variant="body1" style={styles.titleStyle}>
-              {channel.selectYourAsset}
+              {channel.selectAsset}
             </AppText>
           </View>
           <View style={styles.iconArrowWrapper}>
@@ -87,7 +99,7 @@ function RGBAssetList(props: DropdownProps) {
             ) : isThemeDark ? (
               <IconSearch />
             ) : (
-              <IconSearch />
+              <IconSearchLight />
             )
           }
           onRightTextPress={() => () => {}}
@@ -100,28 +112,34 @@ function RGBAssetList(props: DropdownProps) {
           autoCapitalize="none"
           onSubmitEditing={() => {}}
         />
-        <View style={styles.labelWrapper}>
-          <View>
-            <AppText variant="caption" style={style.labelTextStyle}>
-              Asset Name
-            </AppText>
+        {assets && assets.length > 0 && (
+          <View style={styles.labelWrapper}>
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                Asset Name
+              </AppText>
+            </View>
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                Total Supply
+              </AppText>
+            </View>
           </View>
-          <View>
-            <AppText variant="caption" style={style.labelTextStyle}>
-              Total Supply
-            </AppText>
-          </View>
-        </View>
+        )}
         <FlatList
           data={assets}
+          style={styles.assetListContainer}
           renderItem={({ item }) => {
             const filePath = item?.media?.filePath || item?.asset?.media?.file;
             const isCollectible =
               item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
               item?.asset?.assetSchema?.toUpperCase() ===
-                AssetSchema.Collectible;
+                AssetSchema.Collectible ||
+              item?.name === 'Tribe tUSDt';
 
-            const imageUri = filePath?.startsWith('http')
+            const imageUri = item?.iconUrl
+              ? item?.iconUrl
+              : filePath?.startsWith('http')
               ? filePath
               : Platform.select({
                   android: `file://${filePath}`,
@@ -181,6 +199,7 @@ function RGBAssetList(props: DropdownProps) {
               </AppTouchable>
             );
           }}
+          ListEmptyComponent={<EmptyAssetState />}
         />
       </View>
     </View>
@@ -198,7 +217,7 @@ const getStyles = (theme: AppTheme) =>
     container2: {
       borderRadius: hp(20),
       marginTop: hp(20),
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: theme.colors.assetListBackColor,
       paddingTop: hp(10),
     },
     inputWrapper: {
@@ -276,6 +295,8 @@ const getStyles = (theme: AppTheme) =>
     input: {
       margin: hp(12),
       width: 'auto',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     inputStyle: {
       height: hp(50),
@@ -292,9 +313,19 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginHorizontal: hp(15),
+      marginTop: hp(5),
     },
     labelTextStyle: {
       color: theme.colors.secondaryHeadingColor,
+    },
+    assetListContainer: {
+      marginTop: hp(5),
+      marginBottom: hp(10),
+    },
+    emptyAssetStateContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: hp(20),
     },
   });
 export default RGBAssetList;

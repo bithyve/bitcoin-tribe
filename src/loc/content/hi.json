@@ -710,6 +710,7 @@
     "closeChannel": "चैनल बंद करें",
     "selectYourAsset": "अपनी संपत्ति चुनें",
     "selectYourAssetErrMsg": "कृपया अपनी संपत्ति चुनें",
+    "selectAsset": "एसेट चुनें",
     "availableBalanceText": "उपलब्ध शेष: ",
     "closeChannelPopupTitle": "चैनल बंद करें?",
     "closeChannelPopupSubTitle": "यह क्रिया लेन-देन को रोक देगी और इसे पूर्ववत नहीं किया जा सकता।",

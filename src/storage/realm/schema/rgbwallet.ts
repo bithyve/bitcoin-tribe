@@ -20,7 +20,8 @@ export const ReceiveUTXOSchema: ObjectSchema = {
     expirationTimestamp: 'int',
     invoice: 'string',
     recipientId: 'string',
-    linkedAsset: 'string',
+    linkedAsset: 'string?',
+    linkedAmount: 'string?',
   },
 };
 

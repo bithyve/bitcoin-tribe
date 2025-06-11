@@ -710,6 +710,7 @@
     "closeChannel": "Chiudi Canale",
     "selectYourAsset": "Seleziona il tuo Asset",
     "selectYourAssetErrMsg": "Seleziona il tuo asset",
+    "selectAsset": "Seleziona asset",
     "availableBalanceText": "Saldo Disp.: ",
     "closeChannelPopupTitle": "Chiudere il Canale?",
     "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata.",

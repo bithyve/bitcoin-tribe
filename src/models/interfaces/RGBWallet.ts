@@ -40,6 +40,7 @@ export interface receiveUTXOData {
   expirationTimestamp: number;
   batchTransferIdx: string;
   linkedAsset: string;
+  linkedAmount: string;
 }
 
 export interface Transfer {

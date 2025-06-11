@@ -710,6 +710,7 @@
     "closeChannel": "Close Channel",
     "selectYourAsset": "Select Your Asset",
     "selectYourAssetErrMsg": "Please select your asset",
+    "selectAsset": "Select asset",
     "availableBalanceText": "Avail. Bal: ",
     "closeChannelPopupTitle": "Close Channel?",
     "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone.",

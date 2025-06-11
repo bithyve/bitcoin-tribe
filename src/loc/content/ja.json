@@ -710,6 +710,7 @@
     "closeChannel": "チャネルを閉じる",
     "selectYourAsset": "資産を選択",
     "selectYourAssetErrMsg": "資産を選択してください",
+    "selectAsset": "アセットを選択",
     "availableBalanceText": "利用可能残高: ",
     "closeChannelPopupTitle": "チャネルを閉じますか？",
     "closeChannelPopupSubTitle": "この操作は取引を停止し、元に戻すことはできません。",

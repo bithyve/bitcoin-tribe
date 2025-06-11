@@ -1052,7 +1052,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset({ assetId, amount, linkedAsset }) {
+  static async receiveAsset({ assetId, amount, linkedAsset, linkedAmount }) {
     try {
       assetId = assetId ?? '';
       amount = parseFloat(amount) ?? 0.0;
@@ -1075,7 +1075,7 @@ export class ApiHandler {
           { receiveData: response },
         );
 
-        if (linkedAsset) {
+        if (linkedAsset && linkedAmount !== 0) {
           const {
             recipientId,
             batchTransferIdx,
@@ -1089,6 +1089,7 @@ export class ApiHandler {
             invoice: invoice || '',
             recipientId: recipientId || '',
             linkedAsset: linkedAsset || '',
+            linkedAmount: linkedAmount || 0,
           };
           dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
         }

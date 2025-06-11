@@ -710,6 +710,7 @@
     "closeChannel": "关闭通道",
     "selectYourAsset": "选择您的资产",
     "selectYourAssetErrMsg": "请选择您的资产",
+    "selectAsset": "选择资产",
     "availableBalanceText": "可用余额: ",
     "closeChannelPopupTitle": "关闭通道？",
     "closeChannelPopupSubTitle": "此操作将停止交易且无法撤销。",

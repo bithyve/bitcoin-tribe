@@ -43,31 +43,38 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
     RealmSchema.ReceiveUTXOData,
   );
   const [mismatchError, setMismatchError] = useState(false);
+  const normalizedKind = transaction?.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transaction?.status.toLowerCase().replace(/_/g, '');
+  function normalize(value: string): string {
+    return value.toLowerCase().replace(/_/g, '');
+  }
 
   useEffect(() => {
-    if (transaction?.kind !== 'receiveBlind') {
-      setMismatchError(false);
-      return;
-    }
-    const matchedTransfer = rgbReceiveUtxo?.find(
-      item => item.recipientId === transaction?.recipientId,
-    );
-    if (matchedTransfer && matchedTransfer?.linkedAsset === assetId) {
-      setMismatchError(false);
+    const isReceiveBlind =
+      normalizedKind === normalize(TransferKind.RECEIVE_BLIND);
+    const isSettled = normalizedStatus === normalize(TransferStatus.SETTLED);
+    if (isReceiveBlind && isSettled) {
+      const matchedTransfer = rgbReceiveUtxo?.find(
+        item => item.recipientId === transaction?.recipientId,
+      );
+      console.log('matchedTransfer', matchedTransfer);
+      if (
+        matchedTransfer &&
+        matchedTransfer?.linkedAsset !== assetId &&
+        matchedTransfer?.linkedAmount !== transAmount
+      ) {
+        setMismatchError(true);
+      }
     } else {
-      setMismatchError(true);
+      setMismatchError(false);
     }
   }, []);
+
   const handleCopyText = async (text: string) => {
     await Clipboard.setString(text);
     Toast(assets.copiedTxIDMsg);
   };
 
-  const normalizedKind = transaction.kind.toLowerCase().replace(/_/g, '');
-  const normalizedStatus = transaction.status.toLowerCase().replace(/_/g, '');
-  function normalize(value: string): string {
-    return value.toLowerCase().replace(/_/g, '');
-  }
   const kindLabel =
     normalizedKind === normalize(TransferKind.ISSUANCE) &&
     normalizedStatus === normalize(TransferStatus.SETTLED)
