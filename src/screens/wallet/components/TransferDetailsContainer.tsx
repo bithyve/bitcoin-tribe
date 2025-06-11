@@ -88,6 +88,28 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
 
   return (
     <View style={styles.container}>
+      {mismatchError && (
+        <View>
+          <AppText variant="body1">Value Mismatch Detected</AppText>
+          <View>
+            <AppText variant="body2">
+              There’s a mismatch between what was sent and what you received. It
+              could be:
+            </AppText>
+            <View>
+              <AppText variant="body2">A different asset than expected</AppText>
+              <AppText variant="body2">
+                The same asset but with a different amount
+              </AppText>
+            </View>
+          </View>
+          <AppText variant="body2">
+            This might happen due to decoding errors or incorrect UTXO handling.
+            Please double-check with the sender or contact support if this
+            wasn't expected.
+          </AppText>
+        </View>
+      )}
       <GradientView
         style={styles.statusContainer}
         colors={[
