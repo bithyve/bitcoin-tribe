@@ -70,6 +70,7 @@ const CollectibleDetailsScreen = () => {
   const [openTwitterAfterVerifyClose, setOpenTwitterAfterVerifyClose] =
     useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -218,7 +219,7 @@ const CollectibleDetailsScreen = () => {
             assetId,
           })
         }
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
           })
@@ -260,6 +261,12 @@ const CollectibleDetailsScreen = () => {
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
         }}
         schema={RealmSchema.Collectible}
+        onVerificationComplete={() => {
+          setRefreshToggle(t => !t);
+          setShowVerifyModal(false);
+          setTimeout(() => setVisiblePostOnTwitter(true), 1000);
+        }}
+        primaryLoading={refreshToggle}
       />
       <>
         <PostOnTwitterModal

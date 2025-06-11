@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "カラーUTXO",
     "utxoInfoSubTitle2": "RGBアセットに関連付けられたUTXOで、特定のトークンやコレクションアイテムを表します。",
     "utxoInfoTitle3": "カラリング可能なUTXO",
-    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。"
+    "utxoInfoSubTitle3": "RGBアセットと関連付ける準備ができており、RGBトランザクションで使用可能なUTXO。",
+    "activeNetworkLabel": "アクティブネットワーク"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "0は許可されていません！",
     "invoiceInvalidContainErrMsg": "請求書に無効な詳細が含まれています。請求書を確認してください。",
     "invoiceFormatErrMsg": "請求書の形式が無効です。もう一度お試しください。",
-    "failedInvoiceProcessErrMsg": "RGB請求書の処理に失敗しました。正しいことを確認してください。"
+    "failedInvoiceProcessErrMsg": "RGB請求書の処理に失敗しました。正しいことを確認してください。",
+    "spendableBalErrorInfo": "受信者がまだ受け取っていないため、あなたの資産はロックされています。トランザクションをキャンセルしてロックを解除し、使用可能な残高を回復してください。"
   },
   "wallet": {
     "allTransactionsTitle": "取引の詳細",
@@ -610,7 +612,7 @@
     "sharePostTitle": "X に投稿を共有する",
     "verificationTitle": "認証",
     "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
-    "recordCard": "レコードカード",
+    "recordCard": "DNSレコードの詳細",
     "recordType": "レコードタイプ",
     "domain": "ドメイン",
     "value": "値",
@@ -629,7 +631,7 @@
     "domainValueCopiedMsg": "ドメインの値を正常にコピーしました",
     "verifyDomainSuccessfully": "ドメインが正常に確認されました。",
     "domainVerified": "ドメインが確認されました",
-    "domainVerifiedSuccessMsg": "ドメインが\n正常に確認されました！",
+    "domainVerifiedSuccessMsg": "ドメインが正常に\n確認されました！",
     "postTitle": "Bitcoin Tribeで認証・発行完了！",
     "postIssuedTitle": "Bitcoin Tribe で発行されました！",
     "postSubTitle": "Bitcoin Tribeで公開中 — X（Twitter）を通じて透明に発行・認証され、Bitcoin上のRGBスマートコントラクトの力を活用。",

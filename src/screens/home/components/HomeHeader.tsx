@@ -49,18 +49,20 @@ function HomeHeader() {
 
   useEffect(() => {
     if (app?.walletImage || app?.appName) {
-      setImage(app.walletImage);
-      setWalletName(app.appName);
+      setImage(app?.walletImage);
+      setWalletName(app?.appName);
     }
   }, [app]);
 
   const balances = React.useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (app?.appType === AppType.NODE_CONNECT) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     }
-    return wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed;
+    return (
+      wallet?.specs?.balances?.confirmed + wallet?.specs?.balances?.unconfirmed
+    );
   }, [
-    app.appType,
+    app?.appType,
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
     wallet?.specs.balances,
   ]);

@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "Coloured UTXOs",
     "utxoInfoSubTitle2": "UTXOs already associated with RGB assets, representing specific tokens or collectibles.",
     "utxoInfoTitle3": "Colourable UTXOs",
-    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions."
+    "utxoInfoSubTitle3": "UTXOs that are available and ready to be associated with RGB assets for use in RGB transactions.",
+    "activeNetworkLabel": "Active Network"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "0 is not allowed!",
     "invoiceInvalidContainErrMsg": "The invoice contains invalid details. Please check the invoice.",
     "invoiceFormatErrMsg": "The invoice format is invalid. Please try again.",
-    "failedInvoiceProcessErrMsg": "Failed to process the RGB invoice. Please ensure it is correct."
+    "failedInvoiceProcessErrMsg": "Failed to process the RGB invoice. Please ensure it is correct.",
+    "spendableBalErrorInfo": "Your asset is locked because the receiver hasn’t accepted it yet. Cancel the transaction to unlock it and restore your spendable balance."
   },
   "wallet": {
     "allTransactionsTitle": "Transaction Details",
@@ -610,7 +612,7 @@
     "sharePostTitle": "Share post on X",
     "verificationTitle": "VERIFICATION",
     "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee.",
-    "recordCard": "Record Card",
+    "recordCard": "DNS Record Details",
     "recordType": "Record Type",
     "domain": "Domain",
     "value": "Value",
@@ -629,7 +631,7 @@
     "domainValueCopiedMsg": "Domain Value Copied Successfully",
     "verifyDomainSuccessfully": "Your domain has been successfully verified.",
     "domainVerified": "Domain Verified",
-    "domainVerifiedSuccessMsg": "Domain Verified\n Successfully!",
+    "domainVerifiedSuccessMsg": "Domain successfully \nverified!",
     "postTitle": "Verified & Issued on Bitcoin Tribe!",
     "postIssuedTitle": "Issued on Bitcoin Tribe!",
     "postSubTitle": "is now live on Bitcoin Tribe — transparently issued and verified via X (Twitter), leveraging the power of RGB smart contracts on Bitcoin.",

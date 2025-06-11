@@ -1004,8 +1004,8 @@ export class ApiHandler {
         }
       } else {
         const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet);
-        const { changeAddress: receivingAddress } =
-          WalletOperations.getNextFreeChangeAddress(wallet);
+        const { receivingAddress: receivingAddress } =
+          WalletOperations.getNextFreeExternalAddress(wallet);
         const { funded } = await Relay.getTestcoins(
           receivingAddress,
           wallet.networkType,
@@ -2174,14 +2174,14 @@ export class ApiHandler {
         );
       }
       if (response?.records) {
-        for (const { assetId, issuer } of response.records) {
+        for (const { assetId, issuer, iconUrl } of response.records) {
           for (const { schema } of schemas) {
             const asset = dbManager
               .getCollection(schema)
               .find(a => a.assetId === assetId);
             if (asset) {
               dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-                issuer,
+                issuer, iconUrl
               });
             }
           }
@@ -2225,7 +2225,11 @@ export class ApiHandler {
           );
         }
 
-        return null;
+        return {
+          success: false,
+          reason:
+            'Too many requests to Twitter. Try again after a short break.',
+        };
       }
 
       if (!response.ok) {
@@ -2245,7 +2249,7 @@ export class ApiHandler {
 
       const data = await response.json();
       const tweet = data?.data;
-
+      console.log('tweet', tweet);
       if (!tweet) {
         return { success: false, reason: 'Tweet not found' };
       }
@@ -2320,6 +2324,34 @@ export class ApiHandler {
     } catch (error: any) {
       console.error('Twitter API error:', error.message || error);
       return { success: false, reason: 'Network or fetch error' };
+    }
+  };
+  static searchAssetFromRegistry = async (
+    query: string,
+  ): Promise<{ asset?: Asset }> => {
+    try {
+      const response = await Relay.registryAssetSearch(query);
+      return response;
+    } catch (error: any) {
+      console.error('Twitter API error:', error.message || error);
+      return error;
+    }
+  };
+
+  static fetchPresetAssets = async () => {
+    try {
+      const response = await Relay.getPresetAssets();
+      if (response && response.coins) {
+        for (const coin of response.coins) {
+          dbManager.createObjectBulk(
+            RealmSchema.Coin,
+            [coin],
+            Realm.UpdateMode.Modified,
+          );
+        }
+      }
+    } catch (error: any) {
+      return error;
     }
   };
 }

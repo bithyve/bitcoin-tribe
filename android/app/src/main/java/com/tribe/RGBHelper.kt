@@ -230,7 +230,6 @@ object RGBHelper {
             amounts,
             filePath
         )
-        Log.d(TAG, "issueAssetRgb25: New asset = ${asset?.assetId}")
         return  asset
     }
 
@@ -267,7 +266,9 @@ object RGBHelper {
     }
 
     private fun createUTXOs(feeRate: Float): UByte? {
-        Log.d(TAG, "createUTXOs: tribe")
+        RGBWalletRepository.wallet?.getAddress()
+        RGBWalletRepository.wallet?.sync(RGBWalletRepository.online!!)
+        val balance = RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online!!, false)
         return RGBWalletRepository.wallet?.createUtxos(
             RGBWalletRepository.online!!,
             false,
@@ -318,7 +319,7 @@ object RGBHelper {
     }
 
     fun getUnspents(): List<Unspent>? {
-        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, true)
+        return RGBWalletRepository.wallet?.listUnspents(RGBWalletRepository.online,false, false)
     }
 
     fun getWalletData(): WalletData? {
@@ -326,7 +327,7 @@ object RGBHelper {
     }
 
     fun getBtcBalance(): BtcBalance? {
-        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,true)
+        return RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online,false)
     }
 
     fun refreshAsset(assetID: String) {

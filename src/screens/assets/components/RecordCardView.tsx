@@ -10,7 +10,7 @@ import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import IconCopy from 'src/assets/images/icon_copy1.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
+import IconCopyLight from 'src/assets/images/icon_copy1_light.svg';
 import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
 import Toast from 'src/components/Toast';
@@ -65,16 +65,22 @@ function RecordCardView(props: Props) {
           </AppText>
         </View>
         <View style={styles.contentWrapper}>
-          <AppText variant="body2" style={styles.labelText}>
+          <AppText
+            variant="body2"
+            style={[styles.labelText, styles.valueTextWrapper]}>
             {assets.value}
           </AppText>
           <AppTouchable
             style={styles.copiableView}
             onPress={() => handleCopyText(value)}>
-            <AppText variant="body2" style={styles.valueText}>
-              {value}
-            </AppText>
-            <View>{isThemeDark ? <IconCopy /> : <IconCopyLight />}</View>
+            <View style={styles.valueWrapper}>
+              <AppText variant="body2" style={styles.valueText}>
+                {value}
+              </AppText>
+            </View>
+            <View style={styles.copyIconWrapper}>
+              {isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            </View>
           </AppTouchable>
         </View>
       </View>
@@ -117,9 +123,19 @@ const getStyles = (theme: AppTheme) =>
     },
     copiableView: {
       flexDirection: 'row',
-      width: '60%',
-      justifyContent: 'center',
-      marginRight: hp(3),
+      width: '70%',
+      justifyContent: 'space-between',
+    },
+    valueTextWrapper: {
+      width: '30%',
+    },
+    valueWrapper: {
+      width: '90%',
+      alignItems: 'flex-end',
+    },
+    copyIconWrapper: {
+      width: '10%',
+      alignItems: 'flex-end',
     },
   });
 export default RecordCardView;

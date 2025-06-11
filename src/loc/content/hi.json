@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "रंगीन UTXO",
     "utxoInfoSubTitle2": "RGB संपत्तियों से जुड़े हुए UTXO, जो विशिष्ट टोकन या संग्रहणीय वस्तुओं का प्रतिनिधित्व करते हैं।",
     "utxoInfoTitle3": "रंगीन योग्य UTXO",
-    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।"
+    "utxoInfoSubTitle3": "ऐसे UTXO जो RGB संपत्तियों के साथ संबद्ध होने और RGB लेनदेन में उपयोग के लिए उपलब्ध हैं।",
+    "activeNetworkLabel": "सक्रिय नेटवर्क"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "0 की अनुमति नहीं है!",
     "invoiceInvalidContainErrMsg": "चालान में अमान्य विवरण हैं। कृपया चालान की जाँच करें।",
     "invoiceFormatErrMsg": "चालान का प्रारूप अमान्य है। कृपया पुनः प्रयास करें।",
-    "failedInvoiceProcessErrMsg": "RGB चालान प्रोसेस करने में विफल। कृपया सुनिश्चित करें कि यह सही है।"
+    "failedInvoiceProcessErrMsg": "RGB चालान प्रोसेस करने में विफल। कृपया सुनिश्चित करें कि यह सही है।",
+    "spendableBalErrorInfo": "आपकी संपत्ति लॉक है क्योंकि प्राप्तकर्ता ने इसे अभी तक स्वीकार नहीं किया है। लेन-देन रद्द करें ताकि यह अनलॉक हो जाए और आपकी खर्च करने योग्य शेष राशि बहाल हो सके।"
   },
   "wallet": {
     "allTransactionsTitle": "लेनदेन विवरण",
@@ -610,7 +612,7 @@
     "sharePostTitle": "X पर पोस्ट साझा करें",
     "verificationTitle": "सत्यापन",
     "payServiceFeeFundError": "पर्याप्त धनराशि नहीं है। कृपया सेवा शुल्क का भुगतान करने के लिए अपने वॉलेट में कम से कम 5,000 सैट्स सुनिश्चित करें।",
-    "recordCard": "रिकॉर्ड कार्ड",
+    "recordCard": "DNS रिकॉर्ड विवरण",
     "recordType": "रिकॉर्ड प्रकार",
     "domain": "डोमेन",
     "value": "मान",
@@ -629,7 +631,7 @@
     "domainValueCopiedMsg": "डोमेन मान सफलतापूर्वक कॉपी किया गया",
     "verifyDomainSuccessfully": "आपका डोमेन सफलतापूर्वक सत्यापित हो गया है।",
     "domainVerified": "डोमेन सत्यापित",
-    "domainVerifiedSuccessMsg": "डोमेन सत्यापन\nसफल रहा!",
+    "domainVerifiedSuccessMsg": "डोमेन सफलतापूर्वक\nसत्यापित हो गया है!",
     "postTitle": "Bitcoin Tribe पर सत्यापित और जारी किया गया!",
     "postIssuedTitle": "Bitcoin Tribe पर जारी किया गया!",
     "postSubTitle": "अब Bitcoin Tribe पर लाइव है — X (Twitter) के माध्यम से पारदर्शिता से जारी और सत्यापित, Bitcoin पर RGB स्मार्ट कॉन्ट्रैक्ट की शक्ति का उपयोग करते हुए।",

@@ -322,7 +322,8 @@
     "utxoInfoTitle2": "彩色UTXO",
     "utxoInfoSubTitle2": "已与RGB资产关联的UTXO，代表特定的代币或收藏品。",
     "utxoInfoTitle3": "可着色UTXO",
-    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。"
+    "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。",
+    "activeNetworkLabel": "当前网络"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",
@@ -395,7 +396,8 @@
     "validationZeroNotAllowed": "不允许输入0！",
     "invoiceInvalidContainErrMsg": "发票包含无效信息。请检查发票。",
     "invoiceFormatErrMsg": "发票格式无效。请重试。",
-    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。"
+    "failedInvoiceProcessErrMsg": "处理 RGB 发票失败。请确保发票正确。",
+    "spendableBalErrorInfo": "您的资产已被锁定，因为接收方尚未接受。取消该交易以解锁资产并恢复可支配余额。"
   },
   "wallet": {
     "allTransactionsTitle": "交易详情",
@@ -610,7 +612,7 @@
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
     "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
-    "recordCard": "记录卡",
+    "recordCard": "DNS记录详情",
     "recordType": "记录类型",
     "domain": "域名",
     "value": "值",
@@ -629,7 +631,7 @@
     "domainValueCopiedMsg": "域名值复制成功",
     "verifyDomainSuccessfully": "您的域名已成功验证。",
     "domainVerified": "域名已验证",
-    "domainVerifiedSuccessMsg": "域名验证\n成功！",
+    "domainVerifiedSuccessMsg": "域名已成功\n验证！",
     "postTitle": "已在 Bitcoin Tribe 验证并发行！",
     "postIssuedTitle": "已在 Bitcoin Tribe 上发行！",
     "postSubTitle": "现已上线 Bitcoin Tribe —— 通过 X（Twitter）透明发行并验证，利用 RGB 智能合约在比特币上实现。",

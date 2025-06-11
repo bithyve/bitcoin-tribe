@@ -1,4 +1,4 @@
-# Bitcoin Tribe - My Assets, My People
+# Bitcoin Tribe - Your Digital Assets on RGB/Lightning
 
 [![Playstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/gpbtn.png)](https://play.google.com/store/apps/details?id=com.bithyve.tribe)
 [![Appstore](https://bitcoinkeeper.app/wp-content/uploads/2023/05/applebtn.png)](https://apps.apple.com/us/app/tribe-rgb/id6667112050)
@@ -23,18 +23,18 @@ Before getting started, make sure you have a proper [React Native development en
    cd bitcoin-tribe
    ```
 3. Install the project dependencies using Yarn:
-   The prepare scripts will automatically install pods and nodify crypto-related packages for react-native
+   The prepare scripts will automatically install pods and nodeify crypto-related packages for react-native
    ```shell
    yarn install
    ```
 
 ## Build and Run
 
-### Varients
+### Variants
 
 The project has testnet and mainnet variants. The development variant is configured to use testnet and the production variant to use mainnet.
 
-Start metro metro
+Start metro
 
 ```bash
 yarn start
@@ -47,7 +47,7 @@ To run the development app on a connected device or emulator:
 **Android**
 
 ```bash
-yarn androidDevelopmentDebug
+yarn androidDevDebug
 ```
 
 **iOS**
@@ -57,6 +57,12 @@ Extract the latest release of rgb_libFFI.xcframework.zip from [rgb-lib-swift/rel
 ```bash
 yarn ios --scheme=tribe-dev
 ```
+
+#### Development Commands
+
+Run useful scripts from `package.json` while developing:
+
+- `yarn androidDevDebug` – build and start the Android development variant.
 
 ## Verify Authenticity of Android APK
 

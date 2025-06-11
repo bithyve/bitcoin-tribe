@@ -367,8 +367,14 @@ import CloudKit
   
   @objc func createUTXOs(feeRate: Int, callback: @escaping ((String) -> Void)) {
       print("Creating UTXOs... \(feeRate)")
+    
+    do {
+        _ = try self.rgbManager.rgbWallet?.getAddress()
+      try self.rgbManager.rgbWallet?.sync(online: self.rgbManager.online!)
+    } catch {
+        print("Error getting address: \(error)")
+    }
       
-      // Safely unwrap rgbWallet and online
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
           let data: [String: Any] = [
               "error": "RGB Wallet or Online service is not initialized."

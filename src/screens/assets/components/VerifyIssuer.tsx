@@ -96,6 +96,7 @@ interface VerifyIssuerProps {
   showVerifyIssuer?: boolean;
   showDomainVerifyIssuer?: boolean;
   onPressShare?: () => void;
+  onRegisterComplete?: () => void;
 }
 
 export const verifyIssuerOnTwitter = async (
@@ -130,6 +131,7 @@ export const verifyIssuerOnTwitter = async (
             id: result.id,
             name: result.name,
             username: result.username,
+            verified: true,
           },
         ];
         await dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -158,6 +160,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     showVerifyIssuer,
     showDomainVerifyIssuer,
     onPressShare,
+    onRegisterComplete,
   } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -293,6 +296,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
+        onRegisterComplete?.();
         if (tx) {
           ApiHandler.updateTransaction({
             txid: tx.txid,

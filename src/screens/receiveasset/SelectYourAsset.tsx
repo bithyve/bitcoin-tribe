@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -11,7 +11,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
-import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetFace, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 
@@ -20,7 +20,7 @@ type Props = {
   onPress: () => void;
 };
 
-const SelectAssetIDView = (props: Props) => {
+const SelectYourAsset = (props: Props) => {
   const { selectedAsset, onPress } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
@@ -28,10 +28,18 @@ const SelectAssetIDView = (props: Props) => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, theme.colors.ctaBackColor, selectedAsset);
 
+  const filePath = selectedAsset?.media?.filePath;
+  const remoteFile = selectedAsset?.asset?.media?.file;
+
+  const imageUri = Platform.select({
+    android: filePath ? `file://${filePath}` : remoteFile,
+    ios: filePath || remoteFile,
+  });
+
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} style={styles.container}>
       <GradientView
-        style={[styles.container]}
+        style={[styles.container1]}
         colors={[
           theme.colors.cardGradient1,
           theme.colors.cardGradient2,
@@ -41,24 +49,26 @@ const SelectAssetIDView = (props: Props) => {
           {selectedAsset ? (
             <View style={styles.assetWrapper}>
               <View>
-                {selectedAsset?.assetSchema === AssetSchema.Collectible ? (
-                  <Image
-                    source={{
-                      uri: selectedAsset?.media?.filePath,
-                    }}
-                    style={styles.imageStyle}
-                  />
+                {selectedAsset?.assetSchema?.toUpperCase() ===
+                  AssetSchema.Collectible ||
+                selectedAsset?.asset?.assetSchema ===
+                  AssetSchema.Collectible ? (
+                  <Image source={{ uri: imageUri }} style={styles.imageStyle} />
                 ) : (
                   <AssetIcon
-                    assetTicker={selectedAsset?.ticker}
-                    assetID={selectedAsset?.assetId}
-                    size={windowHeight > 670 ? 50 : 30}
+                    assetTicker={
+                      selectedAsset?.ticker || selectedAsset?.asset?.ticker
+                    }
+                    assetID={
+                      selectedAsset?.assetId || selectedAsset?.asset?.assetId
+                    }
+                    size={windowHeight > 670 ? 40 : 25}
                     verified={selectedAsset?.issuer?.verified}
                   />
                 )}
               </View>
               <AppText variant="body1" style={styles.titleText}>
-                {selectedAsset?.name}
+                {selectedAsset?.name || selectedAsset?.asset?.name}
               </AppText>
             </View>
           ) : (
@@ -73,18 +83,20 @@ const SelectAssetIDView = (props: Props) => {
   );
 };
 
-export default SelectAssetIDView;
+export default SelectYourAsset;
 
 const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
   StyleSheet.create({
     container: {
-      width: '100%',
+      width: '99%',
+      minHeight: hp(60),
+    },
+    container1: {
+      minHeight: hp(60),
+      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
-      minHeight: hp(65),
-      backgroundColor: backColor,
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
@@ -108,5 +120,6 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
     },
     titleText: {
       color: theme.colors.headingColor,
+      marginLeft: hp(3),
     },
   });

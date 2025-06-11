@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AssetIcon from 'src/components/AssetIcon';
 import {
-  AssetFace,
+  AssetSchema,
   Coin,
   Collectible,
   UniqueDigitalAsset,
@@ -19,13 +19,13 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const mediaPath = useMemo(() => {
-    if (asset.assetIface.toUpperCase() === AssetFace.RGB21) {
+    if (asset.assetSchema.toUpperCase() === AssetSchema.UDA) {
       return (asset as UniqueDigitalAsset).token.media.filePath;
-    } else if (asset.assetIface.toUpperCase() === AssetFace.RGB25) {
+    } else if (asset.assetSchema.toUpperCase() === AssetSchema.Collectible) {
       return (asset as Collectible).media.filePath;
     }
     return null;
-  }, [asset.assetIface]);
+  }, [asset.assetSchema]);
 
   return (
     <View style={styles.container}>
@@ -43,7 +43,7 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
           />
         ) : (
           <AssetIcon
-            assetTicker={asset.ticker}
+            iconUrl={asset.iconUrl}
             assetID={asset.assetId}
             size={30}
             verified={asset?.issuer?.verified}

@@ -95,6 +95,7 @@ const CoinsMetaDataScreen = () => {
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
@@ -121,6 +122,10 @@ const CoinsMetaDataScreen = () => {
     item => item.verified === true,
   );
 
+  const url = domainVerification?.name?.startsWith('http')
+    ? domainVerification?.name
+    : `https://${domainVerification?.name}`;
+
   useEffect(() => {
     if (!coin.metaData) {
       mutate({ assetId, schema: RealmSchema.Coin });
@@ -132,7 +137,7 @@ const CoinsMetaDataScreen = () => {
       setIsAddedInRegistry(asset.status);
     };
     fetchAsset();
-  }, [assetId]);
+  }, [assetId, refreshToggle]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -182,8 +187,8 @@ const CoinsMetaDataScreen = () => {
         enableBack={true}
         style={styles.wrapper}
       />
-      {isLoading ? (
-        <ModalLoading visible={isLoading} />
+      {isLoading || isVerifyingIssuer ? (
+        <ModalLoading visible={isLoading || isVerifyingIssuer} />
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
@@ -193,6 +198,10 @@ const CoinsMetaDataScreen = () => {
               id={twitterVerification?.id}
               name={twitterVerification?.name}
               username={twitterVerification?.username.replace(/@/g, '')}
+              assetId={assetId}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              setIsVerifyingIssuer={setIsVerifyingIssuer}
             />
             <IssuerDomainVerified
               domain={
@@ -201,6 +210,17 @@ const CoinsMetaDataScreen = () => {
                 )?.name
               }
               verified={domainVerification?.verified}
+              onPress={() => {
+                if (domainVerification?.verified) {
+                  openLink(url);
+                } else {
+                  navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                    assetId: assetId,
+                    schema: RealmSchema.Coin,
+                    savedDomainName: domainVerification?.name || '',
+                  });
+                }
+              }}
             />
           </View>
           <View style={styles.rowWrapper}>
@@ -218,12 +238,6 @@ const CoinsMetaDataScreen = () => {
             <Item
               title={assets.schema}
               value={coin.metaData && coin.metaData.assetSchema.toUpperCase()}
-              width={'45%'}
-            />
-            <Item
-              title={assets.iFace}
-              value={coin.metaData && coin.metaData.assetIface.toUpperCase()}
-              width={'45%'}
             />
           </View>
           <View style={styles.rowWrapper}>
@@ -254,6 +268,7 @@ const CoinsMetaDataScreen = () => {
                 assetId={assetId}
                 schema={RealmSchema.Coin}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
+                onRegisterComplete={() => setRefreshToggle(t => !t)}
                 asset={coin}
                 showVerifyIssuer={showVerifyIssuer}
                 showDomainVerifyIssuer={showDomainVerifyIssuer}
@@ -284,13 +299,12 @@ const CoinsMetaDataScreen = () => {
             {hasIssuanceTransaction &&
               twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
-              twitterPostVerification &&
               !twitterPostVerification?.link && (
                 <SelectOption
                   title={'Show your X post here'}
                   subTitle={''}
                   onPress={() =>
-                    navigation.replace(NavigationRoutes.IMPORTXPOST, {
+                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
                       assetId: assetId,
                       schema: RealmSchema.Coin,
                       asset: coin,
@@ -387,6 +401,7 @@ const getStyles = (theme: AppTheme, width) =>
     scrollingContainer: {
       height: '60%',
       borderRadius: 20,
+      paddingHorizontal: hp(5),
     },
     labelText: {
       color: theme.colors.secondaryHeadingColor,
