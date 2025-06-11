@@ -7,7 +7,7 @@ import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { Asset, AssetFace, UtxoType } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema, UtxoType } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
@@ -85,8 +85,8 @@ function UnspentUTXOElement({
                     <IconVerified width={20} height={20} />
                   )}
                 </View>
-                {assetMap[allocation.assetId]?.assetIface.toUpperCase() !==
-                  AssetFace.RGB21 && (
+                {assetMap[allocation.assetId]?.assetSchema.toUpperCase() !==
+                  AssetSchema.UDA && (
                   <AppText variant="body2" style={styles.assetAmountText}>
                     {numberWithCommas(allocation.amount)}
                   </AppText>

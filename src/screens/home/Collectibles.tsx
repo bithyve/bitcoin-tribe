@@ -16,7 +16,7 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
   AssetType,
   AssetVisibility,
   Collectible,
@@ -132,11 +132,12 @@ function Collectibles() {
           })
         }
         onPressAsset={(asset: Asset) => {
-          if (asset.assetIface.toUpperCase() === AssetFace.RGB25) {
+          if (asset.assetSchema.toUpperCase() === AssetSchema.Collectible) {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
             });
-          } else {
+          } 
+          else {
             handleNavigation(NavigationRoutes.UDADETAILS, {
               assetId: asset.assetId,
             });

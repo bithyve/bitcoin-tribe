@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import pickImage from 'src/utils/imagePicker';
@@ -10,16 +9,25 @@ import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
-import { CommonActions } from '@react-navigation/native';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet, common } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
-  const [name, setName] = useState(app.appName);
+  const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState(app.walletImage);
   const [loading, setLoading] = useState('');
+  const [initialName, setInitialName] = useState('');
+
+  useEffect(() => {
+    const fetchedName = app?.appName?.trim() || '';
+    setInitialName(fetchedName);
+    setName(fetchedName);
+  }, []);
+
+  const isSaveEnabled =
+    name.trim() !== '' && name.trim() !== initialName.trim();
 
   const handlePickImage = async () => {
     try {
@@ -36,7 +44,7 @@ function EditWalletProfile({ navigation }) {
     if (updated) {
       setLoading('');
       Toast(wallet.profileUpdateMsg);
-      navigation.goBack()
+      navigation.goBack();
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, true);
@@ -57,7 +65,7 @@ function EditWalletProfile({ navigation }) {
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         edit={true}
-        disabled={name === ''}
+        disabled={!isSaveEnabled}
         primaryCTATitle={common.save}
         primaryStatus={loading}
         secondaryCTATitle={common.cancel}

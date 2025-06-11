@@ -177,7 +177,7 @@ function WalletDetails({ navigation, route }) {
             }),
           )
         }
-        onPressRecieve={() =>
+        onPressReceive={() =>
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
           )

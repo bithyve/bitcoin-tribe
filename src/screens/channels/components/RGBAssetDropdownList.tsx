@@ -11,7 +11,7 @@ import AppTouchable from '../../../components/AppTouchable';
 import { Keys } from 'src/storage';
 import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 
@@ -61,7 +61,7 @@ function RGBAssetDropdownList(props: DropdownProps) {
             style={styles.assetContainer}>
             <View style={styles.assetWrapper}>
               <View style={styles.assetImageWrapper}>
-                {item?.assetIface === AssetFace.RGB25 ? (
+                {item?.assetSchema === AssetSchema.Collectible ? (
                   <Image
                     source={{
                       uri: item?.media?.filePath,

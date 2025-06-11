@@ -19,13 +19,13 @@ import AssetIcon from './AssetIcon';
 import AppText from './AppText';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import AppLogo from 'src/assets/images/websiteLogo.svg';
 import IconX from 'src/assets/images/icon_x.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
-import IconDomainVerified from 'src/assets/images/issuer_domain_verified.svg';
+import IconDomainVerified from 'src/assets/images/issuer_verified.svg';
 import Fonts from 'src/constants/Fonts';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
@@ -49,6 +49,7 @@ type PostInfoItemProps = {
 
 type DomainInfoItemProps = {
   domain: string;
+  verified?: boolean;
 };
 
 const InfoItem = (props: InfoItemProps) => {
@@ -78,9 +79,11 @@ const InfoItem = (props: InfoItemProps) => {
 };
 
 const PostInfoItem = (props: PostInfoItemProps) => {
-  const { name, username } = props;
+  const { name, username, id } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   return (
     <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
@@ -91,7 +94,9 @@ const PostInfoItem = (props: PostInfoItemProps) => {
       ]}>
       <View style={styles.verifiedWrapper}>
         <AppText variant="body1" style={styles.title}>
-          Issuer Verified via 𝕏
+          {id
+            ? assets.issuerVerificationTemplateTitle
+            : assets.xHandleTemplateTitle}
         </AppText>
         <View style={styles.iconWrapper}>
           <IconX />
@@ -105,17 +110,17 @@ const PostInfoItem = (props: PostInfoItemProps) => {
           </View>
         </View>
       </View>
-      <View style={styles.verifiedIconWrapper}>
-        <IconVerified />
-      </View>
+      <View style={styles.verifiedIconWrapper}>{id && <IconVerified />}</View>
     </HorizontalGradientView>
   );
 };
 
 const DomainInfoItem = (props: DomainInfoItemProps) => {
-  const { domain } = props;
+  const { domain, verified } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   return (
     <HorizontalGradientView
       style={styles.verifyInfoItemcontainer}
@@ -125,11 +130,15 @@ const DomainInfoItem = (props: DomainInfoItemProps) => {
         Colors.ChineseBlack1,
       ]}>
       <View style={styles.verifiedWrapper}>
-        <AppText>Domain Verified</AppText>
-        <AppText>{domain}</AppText>
+        <AppText variant="body2" style={styles.textName}>
+          {verified ? assets.domainVerified : assets.domainName}
+        </AppText>
+        <AppText variant="body2" style={styles.textUsername}>
+          {domain}
+        </AppText>
       </View>
       <View style={styles.verifiedIconWrapper}>
-        <IconDomainVerified />
+        {verified && <IconDomainVerified />}
       </View>
     </HorizontalGradientView>
   );
@@ -164,10 +173,16 @@ function TwitterTemplate(props: TwitTemplateProps) {
             <AppLogo />
           </View>
           <View style={styles.headingWrapper}>
-            <AppText style={styles.headingText}>{assets.postTitle}</AppText>
+            <AppText style={styles.headingText}>
+              {asset?.issuer?.verified
+                ? assets.postTitle
+                : assets.postIssuedTitle}
+            </AppText>
             <Text style={styles.text}>
               <Text>{asset.name}</Text> - <Text>{asset.ticker} </Text>
-              {assets.postSubTitle}
+              {asset?.issuer?.verified
+                ? assets.postSubTitle
+                : assets.postIssuedSubTitle}
             </Text>
           </View>
           <InfoItem title={assets.assetName + ':'} value={asset.name} />
@@ -180,37 +195,41 @@ function TwitterTemplate(props: TwitTemplateProps) {
           <InfoItem
             title={assets.issuedSupply + ':'}
             value={
-              asset?.metaData && numberWithCommas(asset?.metaData?.issuedSupply)
+              asset?.assetSchema.toUpperCase() === AssetSchema.UDA
+                ? 'Unique'
+                : asset?.metaData &&
+                  numberWithCommas(asset?.metaData?.issuedSupply)
             }
           />
-          {asset?.issuer?.verified && twitterVerification?.type && (
+          {twitterVerification?.type && (
             <PostInfoItem
               name={twitterVerification?.name}
               username={twitterVerification?.username}
+              id={twitterVerification?.id}
             />
           )}
 
-          {asset?.issuer?.verified && domainVerification?.type && (
-            <DomainInfoItem domain={domainVerification?.name} />
+          {domainVerification?.type && (
+            <DomainInfoItem
+              domain={domainVerification?.name}
+              verified={domainVerification?.verified}
+            />
           )}
         </View>
         <View style={styles.assetIconContainer}>
           <View>
-            {asset?.issuer &&
-            asset?.assetIface?.toUpperCase() === AssetFace.RGB25 ? (
+            {asset?.assetSchema?.toUpperCase() === AssetSchema.Collectible ? (
               <Image
                 source={{
                   uri: Platform.select({
-                    android: `file://${
-                      asset?.issuer && asset?.media?.filePath
-                    }`,
-                    ios: asset?.issuer && asset?.media?.filePath,
+                    android: `file://${asset?.media?.filePath}`,
+                    ios: asset?.media?.filePath,
                   }),
                 }}
                 resizeMode="cover"
                 style={styles.imageStyle}
               />
-            ) : asset?.assetIface.toUpperCase() === AssetFace.RGB21 ? (
+            ) : asset?.assetSchema.toUpperCase() === AssetSchema.UDA ? (
               <Image
                 source={{
                   uri: Platform.select({
@@ -270,7 +289,7 @@ const getStyles = (theme: AppTheme) =>
     headingText: {
       fontWeight: '600',
       fontFamily: Fonts.LufgaMedium,
-      fontSize: hp(40),
+      fontSize: hp(38),
       color: Colors.White,
       marginBottom: hp(3),
     },
@@ -325,6 +344,7 @@ const getStyles = (theme: AppTheme) =>
       width: hp(206),
       height: hp(206),
       borderRadius: hp(206),
+      marginTop: hp(30),
     },
     identiconWrapper: {
       zIndex: 999,

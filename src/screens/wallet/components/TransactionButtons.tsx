@@ -21,7 +21,7 @@ import config from 'src/utils/config';
 
 type transButtonProps = {
   onPressSend: () => void;
-  onPressRecieve: () => void;
+  onPressReceive: () => void;
   onPressBuy?: () => void;
   sendCtaWidth?: number;
   receiveCtaWidth?: number;
@@ -30,7 +30,7 @@ type transButtonProps = {
 const TransactionButtons = (props: transButtonProps) => {
   const {
     onPressSend,
-    onPressRecieve,
+    onPressReceive,
     onPressBuy,
     sendCtaWidth = wp(105),
     receiveCtaWidth = wp(105),
@@ -105,7 +105,7 @@ const TransactionButtons = (props: transButtonProps) => {
           buttonColor={theme.colors.recieveCtaBorderColor}
           title={common.receive}
           width={receiveCtaWidth}
-          onPress={onPressRecieve}
+          onPress={onPressReceive}
         />
       </View>
     </View>

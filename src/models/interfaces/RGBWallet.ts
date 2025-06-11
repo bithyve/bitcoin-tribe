@@ -5,8 +5,9 @@ export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
-  accountXpub: string;
-  accountXpubFingerprint: string;
+  accountXpubColoredFingerprint: string;
+  accountXpubColored: string;
+  accountXpubVanilla: string;
   receiveData?: {
     invoice: string;
     recipientId: string;
@@ -47,7 +48,6 @@ export interface Transfer {
 }
 
 export interface MetaData {
-  assetIface: string;
   assetSchema: string;
   issuedSupply: number;
   name: string;
@@ -64,6 +64,7 @@ export interface Issuer {
     id?: string;
     username?: string;
     link?: string;
+    verified?: Boolean;
   }[];
   isDomainVerified: boolean;
 }
@@ -71,10 +72,10 @@ export interface Issuer {
 export interface Coin {
   addedAt: number;
   assetId: string;
-  assetIface: AssetFace;
   balance: Balance;
   issuedSupply: number;
   name: string;
+  iconUrl?: string;
   precision: number;
   ticker: string;
   timestamp: number;
@@ -84,6 +85,8 @@ export interface Coin {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface Media {
@@ -95,7 +98,6 @@ export interface Media {
 export interface Collectible {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -109,12 +111,13 @@ export interface Collectible {
   visibility: AssetVisibility;
   isVerifyPosted: boolean;
   isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface UniqueDigitalAsset {
   addedAt: number;
   assetId: string;
-  assetIface: string;
   balance: Balance;
   details: string;
   issuedSupply: number;
@@ -133,8 +136,8 @@ export interface UniqueDigitalAsset {
   metaData: MetaData;
   issuer: Issuer;
   visibility: AssetVisibility;
-  isVerifyPosted: boolean;
-  isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
+  assetSource: AssetSource
 }
 
 export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
@@ -170,10 +173,21 @@ export enum AssetFace {
   RGB21 = 'RGB21', //  Unique Digital Asset(UDA)
 }
 
+export enum AssetSchema {
+  Coin = 'NIA',
+  Collectible = 'CFA',
+  UDA = 'UDA',
+}
+
 export enum AssetVisibility {
   DEFAULT = 'DEFAULT',
   HIDDEN = 'HIDDEN',
   // ARCHIVED = 'ARCHIVED',
+}
+
+export enum AssetSource {
+  Internal = 'Internal',
+  Preset = 'Preset',
 }
 
 export enum UtxoType {

@@ -17,7 +17,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
   AssetVisibility,
 } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
@@ -52,29 +52,29 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
     return <View style={styles.footer} />;
   };
 
-  const getAssetType = (assetIface: string) => {
-    switch (assetIface.toUpperCase()) {
-      case AssetFace.RGB25:
+  const getAssetType = (assetSchema: string) => {
+    switch (assetSchema.toUpperCase()) {
+      case AssetSchema.Collectible:
         return assets.collectible;
-      case AssetFace.RGB20:
+      case AssetSchema.Coin:
         return assets.coin;
-      case AssetFace.RGB21:
+      case AssetSchema.UDA:
         return assets.collectible;
       default:
         return '';
     }
   };
 
-  const unHideAsset = (assetId, assetIface) => {
+  const unHideAsset = (assetId, assetSchema) => {
     let schemaType;
-    switch (assetIface.toUpperCase()) {
-      case AssetFace.RGB25:
+    switch (assetSchema.toUpperCase()) {
+      case AssetSchema.Collectible:
         schemaType = RealmSchema.Collectible;
         break;
-      case AssetFace.RGB20:
+      case AssetSchema.Coin:
         schemaType = RealmSchema.Coin;
         break;
-      case AssetFace.RGB21:
+      case AssetSchema.UDA:
         schemaType = RealmSchema.UniqueDigitalAsset;
         break;
       default:
@@ -132,7 +132,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                 theme.colors.cardGradient3,
               ]}>
               <View style={styles.assetImageWrapper}>
-                {item?.assetIface.toUpperCase() === AssetFace.RGB20 ? (
+                {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
                   <AssetIcon
                     assetTicker={item.ticker}
                     assetID={item.assetId}
@@ -143,7 +143,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                   <Image
                     source={{
                       uri:
-                        item?.assetIface.toUpperCase() === AssetFace.RGB21
+                        item?.assetSchema.toUpperCase() === AssetSchema.UDA
                           ? Platform.select({
                               android: `file://${item?.token?.media?.filePath}`,
                               ios: item?.token?.media?.filePath,
@@ -163,7 +163,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                 </AppText>
                 <View style={styles.assetDetailsWrapper}>
                   <AppText variant="body2" style={styles.assetTypeText}>
-                    {getAssetType(item.assetIface)}
+                    {getAssetType(item.assetSchema)}
                   </AppText>
                   <View style={styles.verticalLineStyle} />
                   <AppText variant="body2" style={styles.assetBalance}>
@@ -175,7 +175,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
               <View style={styles.hiddenCtaWrapper}>
                 <AppTouchable
                   style={styles.hiddenCta}
-                  onPress={() => unHideAsset(item.assetId, item.assetIface)}>
+                  onPress={() => unHideAsset(item.assetId, item.assetSchema)}>
                   <AppText variant="caption" style={styles.hiddenCtaTitle}>
                     {settings.unHide}
                   </AppText>

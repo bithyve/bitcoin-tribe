@@ -39,7 +39,7 @@ const ViewLogs = () => {
   const readRgbLogs = useCallback(async () => {
     try {
       const walletData = await RGBServices.getWalletData();
-      const logFile = `${walletData.dataDir}/${rgbWallet.accountXpubFingerprint}/log`;
+      const logFile = `${walletData.dataDir}/${rgbWallet.accountXpubColoredFingerprint}/log`;
       setFilePath(logFile);
       const data = await RNFS.readFile(logFile);
       setContent(data);
@@ -48,7 +48,7 @@ const ViewLogs = () => {
     } finally {
       setLoading(false);
     }
-  }, [rgbWallet.accountXpubFingerprint]);
+  }, [rgbWallet.accountXpubColoredFingerprint]);
 
   useEffect(() => {
     readRgbLogs();

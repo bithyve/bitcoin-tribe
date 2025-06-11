@@ -33,7 +33,7 @@ import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
 
 function VerifyDomain() {
   const navigation = useNavigation();
-  const popAction = StackActions.pop(3);
+  const popAction = StackActions.pop(1);
   const theme: AppTheme = useTheme();
   const [appId] = useMMKVString(Keys.APPID);
   const { record, recordType, domain, assetId, schema } = useRoute().params;

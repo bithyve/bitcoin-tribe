@@ -18,6 +18,7 @@ type PrimaryCTAProps = {
   disabled?: boolean;
   secondaryCTAWidth?: number;
   height?: number;
+  secondaryCTADisabled?: boolean;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -31,6 +32,7 @@ function Buttons(props: PrimaryCTAProps) {
     primaryLoading,
     disabled,
     height = hp(20),
+    secondaryCTADisabled,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -42,6 +44,7 @@ function Buttons(props: PrimaryCTAProps) {
           title={secondaryTitle}
           width={secondaryCTAWidth}
           height={height}
+          disabled={secondaryCTADisabled}
         />
       )}
       <PrimaryCTA

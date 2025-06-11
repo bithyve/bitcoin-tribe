@@ -64,8 +64,8 @@ function ReceiveScreen({ route }) {
     if (app.appType === AppType.NODE_CONNECT) {
       getNodeOnchainBtcAddress.mutate();
     } else {
-      const { changeAddress: receivingAddress } =
-        WalletOperations.getNextFreeChangeAddress(wallet);
+      const { receivingAddress } =
+        WalletOperations.getNextFreeExternalAddress(wallet);
       setAddress(receivingAddress);
     }
   }, []);

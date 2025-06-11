@@ -64,6 +64,7 @@ const BackupPhraseModal: React.FC<Props> = ({
           secondaryOnPress={onDismiss}
           width={windowWidth / 2.7}
           secondaryCTAWidth={windowWidth / 2.7}
+          height={hp(14)}
         />
       </View>
     </ResponsePopupContainer>

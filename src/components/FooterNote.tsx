@@ -36,7 +36,6 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      paddingHorizontal: hp(15),
       marginVertical: hp(10),
     },
     detailsWrapper: {

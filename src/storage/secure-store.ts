@@ -60,12 +60,11 @@ export const hasPin = async () => {
 
 export const remove = async key => {
   try {
-    //
+    return await Keychain.resetGenericPassword();
   } catch (err) {
     console.log(err);
     return false;
   }
-  return true;
 };
 
 export const storeBiometricPubKey = async (pubKey: string) => {

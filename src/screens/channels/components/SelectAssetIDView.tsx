@@ -11,7 +11,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 
@@ -41,7 +41,7 @@ const SelectAssetIDView = (props: Props) => {
           {selectedAsset ? (
             <View style={styles.assetWrapper}>
               <View>
-                {selectedAsset?.assetIface === AssetFace.RGB25 ? (
+                {selectedAsset?.assetSchema === AssetSchema.Collectible ? (
                   <Image
                     source={{
                       uri: selectedAsset?.media?.filePath,

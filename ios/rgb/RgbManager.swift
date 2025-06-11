@@ -19,16 +19,16 @@ class RgbManager {
     self.online = nil
   }
   
-  func initialize(bitcoinNetwork: String, pubkey: String, mnemonic: String)-> String{
+  func initialize(bitcoinNetwork: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String)-> String{
     let network = RgbManager.getRgbNetwork(network: bitcoinNetwork)
-    let walletData = WalletData(dataDir: Utility.getRgbDir()?.path ?? "", bitcoinNetwork: network, databaseType: DatabaseType.sqlite,maxAllocationsPerUtxo: 1, pubkey: pubkey, mnemonic: mnemonic,vanillaKeychain: 1)
     do{
+      let walletData = WalletData(dataDir: Utility.getRgbDir()?.path ?? "", bitcoinNetwork: network, databaseType: DatabaseType.sqlite,maxAllocationsPerUtxo: 1, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic,vanillaKeychain: 0)
       self.rgbWallet = try Wallet(walletData: walletData)
       self.online = try rgbWallet?.goOnline(skipConsistencyCheck: true, indexerUrl: Constants.getElectrumUrl(network: bitcoinNetwork))
       self.rgbNetwork = network
       return "true"
     }catch{
-      //
+      print("initialize: error \(error)")
       self.rgbWallet = nil
       return "false"
     }

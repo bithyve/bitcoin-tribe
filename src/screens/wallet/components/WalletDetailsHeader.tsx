@@ -34,7 +34,7 @@ type walletDetailsHeaderProps = {
   rgbWallet?: RGBWallet;
   onPressSetting?: () => void;
   onPressSend: () => void;
-  onPressRecieve: () => void;
+  onPressReceive: () => void;
   onPressBuy?: () => void;
   smallHeaderOpacity?: any;
   largeHeaderHeight?: any;
@@ -60,7 +60,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     rgbWallet,
     onPressSetting,
     onPressSend,
-    onPressRecieve,
+    onPressReceive,
     onPressBuy,
     smallHeaderOpacity,
     largeHeaderHeight,
@@ -230,7 +230,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
           <View style={styles.transCtaWrapper}>
             <TransactionButtons
               onPressSend={onPressSend}
-              onPressRecieve={onPressRecieve}
+              onPressReceive={onPressReceive}
               onPressBuy={onPressBuy}
             />
           </View>

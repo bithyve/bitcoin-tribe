@@ -5,9 +5,10 @@ import React, {
   useState,
   useMemo,
   useEffect,
+  useRef,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Switch, useTheme } from 'react-native-paper';
+import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import idx from 'idx';
@@ -27,7 +28,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import GradientView from 'src/components/GradientView';
 import {
   Asset,
-  AssetFace,
+  AssetSchema,
+  AssetType,
   AssetVisibility,
   Coin,
   Collectible,
@@ -66,6 +68,7 @@ type ItemProps = {
   assetId?: string;
   amount?: string;
   verified?: boolean;
+  iconUrl?: string;
 };
 
 const AssetItem = ({
@@ -78,6 +81,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
+  iconUrl
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -104,7 +108,7 @@ const AssetItem = ({
           <View style={styles.identiconWrapper}>
             {/* <View style={styles.identiconWrapper2}> */}
             <AssetIcon
-              assetTicker={ticker}
+              iconUrl={iconUrl}
               assetID={assetId}
               size={50}
               verified={verified}
@@ -165,6 +169,7 @@ const SendAssetScreen = () => {
     assets,
     wallet: walletTranslation,
   } = translations;
+  const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
@@ -179,13 +184,18 @@ const SendAssetScreen = () => {
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const [assetAmount, setAssetAmount] = useState(
-    assetData.assetIface.toUpperCase() === AssetFace.RGB21 ? '1' : amount || '',
+    assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
+      ? '1'
+      : amount || '',
   );
+
   const [inputHeight, setInputHeight] = useState(100);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleDonationTranferInfo, setVisibleDonationTranferInfo] =
     useState(false);
+  const [visibleSpendableErrInfo, setVisibleSpendableErrInfo] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [validatingInvoiceLoader, setValidatingInvoiceLoader] = useState(false);
   const [customFee, setCustomFee] = useState(0);
   const [amountValidationError, setAmountValidationError] = useState('');
@@ -198,7 +208,7 @@ const SendAssetScreen = () => {
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee[TxPriority.LOW].feePerByte,
   );
-  const styles = getStyles(theme, inputHeight);
+  const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {
     return (
       !invoice ||
@@ -278,36 +288,15 @@ const SendAssetScreen = () => {
     return idx(averageTxFee, _ => _[priority].estimatedBlocks) || 0;
   };
 
-  const decodeInvoice = (_invoice: string) => {
-    const utxoPattern = /(bcrt|tb):utxob:[a-zA-Z0-9\-$!]+/;
-    const assetIdPattern = /(?:^|\s)([a-zA-Z0-9\-$]{20,})(?=\/|$)/;
-    const assetTypePattern = /\/(RGB20Fixed|RGB20|RGB25|RGB|[^/]+)(?=\/|$)/;
-    const expiryPattern = /expiry=(\d+)/;
-    const endpointPattern = /endpoints=([a-zA-Z0-9:\/\.\-_]+)$/;
-    let parts = {
-      utxo: null,
-      assetId: null,
-      assetType: null,
-      expiry: null,
-      endpoints: null,
-    };
-    parts.utxo = _invoice.match(utxoPattern)?.[0] || null;
-    parts.assetId = _invoice.match(assetIdPattern)?.[1] || '';
-    parts.assetType = _invoice.match(assetTypePattern)?.[1] || '';
-    parts.expiry = _invoice.match(expiryPattern)?.[1] || null;
-    parts.endpoints = _invoice.match(endpointPattern)?.[1] || null;
-    return parts;
-  };
-
   const sendAsset = useCallback(async () => {
     try {
-      const { utxo, endpoints } = decodeInvoice(invoice);
+      const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
       setLoading(true);
       const response = await ApiHandler.sendAsset({
         assetId,
-        blindedUTXO: utxo,
+        blindedUTXO: decodedInvoice.recipientId,
         amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
-        consignmentEndpoints: endpoints,
+        consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
       });
@@ -415,6 +404,13 @@ const SendAssetScreen = () => {
     setCustomFee(text);
   };
 
+  const openTooltip = () => {
+    iconRef.current?.measureInWindow((x, y) => {
+      setTooltipPos({ x, y });
+      setVisibleSpendableErrInfo(true);
+    });
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -443,12 +439,12 @@ const SendAssetScreen = () => {
           name={assetData?.name}
           ticker={assetData?.ticker}
           details={
-            assetData?.assetIface.toUpperCase() !== AssetFace.RGB25
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
               ? assetData?.ticker
               : assetData?.details
           }
           image={
-            assetData.assetIface.toUpperCase() !== AssetFace.RGB20
+            assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
                   android: `file://${
                     assetData.media?.filePath || assetData?.token.media.filePath
@@ -460,13 +456,14 @@ const SendAssetScreen = () => {
               : null
           }
           tag={
-            assetData?.assetIface.toUpperCase() === AssetFace.RGB20
+            assetData?.assetSchema.toUpperCase() === AssetSchema.Coin
               ? assets.coin
               : assets.collectible
           }
           assetId={assetId}
           amount={assetData?.balance.spendable}
           verified={assetData?.issuer?.verified}
+          iconUrl={assetData.iconUrl}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -510,8 +507,11 @@ const SendAssetScreen = () => {
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-          disabled={assetData.assetIface.toUpperCase() === AssetFace.RGB21}
+          disabled={assetData.assetSchema.toUpperCase() === AssetType.UDA}
           error={amountValidationError}
+          errorInfo={Number(assetData?.balance.spendable) === 0}
+          onPressErrorInfo={() => openTooltip()}
+          errInfoIconRef={iconRef}
         />
         <View style={styles.availableBalanceWrapper}>
           <AppText variant="body2" style={styles.labelstyle}>
@@ -711,11 +711,21 @@ const SendAssetScreen = () => {
           primaryOnPress={() => setVisibleDonationTranferInfo(false)}
         />
       </View>
+      <Portal>
+        <Modal
+          visible={visibleSpendableErrInfo}
+          onDismiss={() => setVisibleSpendableErrInfo(false)}
+          contentContainerStyle={styles.tooltipContainer}>
+          <AppText variant="caption" style={styles.tooltipText}>
+            {sendScreen.spendableBalErrorInfo}
+          </AppText>
+        </Modal>
+      </Portal>
     </ScreenContainer>
   );
 };
 
-const getStyles = (theme: AppTheme, inputHeight) =>
+const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -842,6 +852,20 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       alignItems: 'center',
       width: '26%',
       justifyContent: 'space-between',
+    },
+    tooltipContainer: {
+      position: 'absolute',
+      backgroundColor: theme.colors.modalBackColor,
+      padding: 12,
+      borderRadius: 8,
+      width: 270,
+      alignSelf: 'flex-end',
+      right: 15,
+      top: tooltipPos?.y ? tooltipPos.y - 15 : 20,
+    },
+    tooltipText: {
+      color: theme.colors.headingColor,
+      fontSize: 14,
     },
   });
 

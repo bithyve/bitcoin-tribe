@@ -7,6 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { TextInput, useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { hp } from 'src/constants/responsive';
 import CommonStyles from 'src/common/styles/CommonStyles';
@@ -14,6 +15,9 @@ import { AppTheme } from 'src/theme';
 import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import Colors from 'src/theme/Colors';
+import InfoIcon from 'src/assets/images/infoIcon.svg';
+import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import { Keys } from 'src/storage';
 
 type TextFieldProps = {
   icon?: React.ReactNode;
@@ -43,6 +47,9 @@ type TextFieldProps = {
   blurOnSubmit?: boolean;
   error?: string;
   onBlur?: () => void;
+  errorInfo?: boolean;
+  onPressErrorInfo?: () => void;
+  errInfoIconRef?: React.RefObject<View>;
 };
 
 const TextField = React.forwardRef((props: TextFieldProps, ref) => {
@@ -74,8 +81,12 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
     blurOnSubmit,
     error,
     onBlur,
+    errorInfo,
+    onPressErrorInfo,
+    errInfoIconRef,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, icon, rightText, rightCTATextColor),
@@ -154,9 +165,23 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
         )}
       </View>
       {error ? (
-        <AppText style={styles.errorText} variant="caption">
-          {error}
-        </AppText>
+        <View style={[styles.errorWrapper, errorInfo && styles.errorInfoStyle]}>
+          <AppText style={styles.errorText} variant="caption">
+            {error}
+          </AppText>
+          {errorInfo && (
+            <AppTouchable
+              onPress={onPressErrorInfo}
+              style={{}}
+              ref={errInfoIconRef}>
+              {isThemeDark ? (
+                <InfoIcon width={30} height={30} />
+              ) : (
+                <InfoIconLight width={30} height={30} />
+              )}
+            </AppTouchable>
+          )}
+        </View>
       ) : null}
     </>
   );
@@ -217,6 +242,13 @@ const getStyles = (theme: AppTheme, icon, rightText, rightCTATextColor) =>
       color: Colors.CandyAppleRed,
       marginTop: 4,
       marginHorizontal: hp(10),
+    },
+    errorWrapper: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    errorInfoStyle: {
+      marginTop: hp(10),
     },
   });
 

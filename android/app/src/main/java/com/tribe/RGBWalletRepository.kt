@@ -20,7 +20,7 @@ object RGBWalletRepository {
 
     }
 
-    fun  initialize(network: String, mnemonic:String, xpub: String): String{
+    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String): String{
         try {
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
@@ -28,13 +28,13 @@ object RGBWalletRepository {
                 rgbNetwork!!,
                 DatabaseType.SQLITE,
                 1u,
-                xpub,
+                accountXpubVanilla,
+                accountXpubColored,
                 mnemonic,
-                1u
+                0u
             )
             wallet = Wallet(walletData)
             online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))
-            Log.d(TAG, "initialize:online $mnemonic")
             return "true"
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)
