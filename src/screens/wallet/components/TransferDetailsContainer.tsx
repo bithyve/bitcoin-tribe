@@ -89,21 +89,29 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   return (
     <View style={styles.container}>
       {mismatchError && (
-        <View>
-          <AppText variant="body1">Value Mismatch Detected</AppText>
+        <View style={styles.mismatchViewWrapper}>
+          <AppText variant="body1" style={styles.headerTextStyle}>
+            Value Mismatch Detected
+          </AppText>
           <View>
-            <AppText variant="body2">
+            <AppText variant="body2" style={styles.subTextStyle}>
               There’s a mismatch between what was sent and what you received. It
               could be:
             </AppText>
             <View>
-              <AppText variant="body2">A different asset than expected</AppText>
-              <AppText variant="body2">
-                The same asset but with a different amount
+              <AppText
+                variant="body2"
+                style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
+                {`\u2022`}&nbsp;&nbsp;A different asset than expected
+              </AppText>
+              <AppText
+                variant="body2"
+                style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
+                {`\u2022`}&nbsp;&nbsp;The same asset but with a different amount
               </AppText>
             </View>
           </View>
-          <AppText variant="body2">
+          <AppText variant="body2" style={styles.subTextStyle}>
             This might happen due to decoding errors or incorrect UTXO handling.
             Please double-check with the sender or contact support if this
             wasn't expected.
@@ -202,6 +210,21 @@ const getStyles = (theme: AppTheme) =>
       flexWrap: 'wrap',
       width: '50%',
       textAlign: 'right',
+    },
+    mismatchViewWrapper: {
+      marginVertical: hp(10),
+      marginBottom: hp(15),
+    },
+    headerTextStyle: {
+      color: theme.colors.headingColor,
+      lineHeight: 25,
+    },
+    subTextStyle: {
+      color: theme.colors.secondaryHeadingColor,
+      marginVertical: hp(5),
+    },
+    bulletPointTextStyle: {
+      marginLeft: hp(5),
     },
   });
 export default TransferDetailsContainer;
