@@ -19,6 +19,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
+import Toast from 'src/components/Toast';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -40,6 +41,8 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
         }/tx/${transaction.txid}`,
       );
+    } else {
+      Toast('Explorer not available!', true);
     }
   };
 
