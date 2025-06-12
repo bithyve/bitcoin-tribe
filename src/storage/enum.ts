@@ -35,4 +35,6 @@ export enum RealmSchema {
   IssuerVerifiedBy = 'IssuerVerifiedBy',
   NodeOnChainTransaction = 'NodeOnChainTransaction',
   LNPayments = 'LNPayments',
+  Community = 'Community',
+  Message = 'Message',
 }
