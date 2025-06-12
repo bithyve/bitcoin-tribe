@@ -209,8 +209,9 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'right',
     },
     mismatchViewWrapper: {
-      marginVertical: hp(10),
+      marginTop: hp(10),
       marginBottom: hp(15),
+      marginHorizontal: hp(6),
     },
     headerTextStyle: {
       color: theme.colors.headingColor,
