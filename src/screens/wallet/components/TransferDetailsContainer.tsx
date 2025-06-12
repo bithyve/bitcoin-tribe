@@ -97,30 +97,27 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       {mismatchError && (
         <View style={styles.mismatchViewWrapper}>
           <AppText variant="body1" style={styles.headerTextStyle}>
-            Value Mismatch Detected
+            {wallet.valueMismatchTitle}
           </AppText>
           <View>
             <AppText variant="body2" style={styles.subTextStyle}>
-              There’s a mismatch between what was sent and what you received. It
-              could be:
+              {wallet.valueMismatchSubTitle}
             </AppText>
             <View>
               <AppText
                 variant="body2"
                 style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
-                {`\u2022`}&nbsp;&nbsp;A different asset than expected
+                {`\u2022`}&nbsp;&nbsp;{wallet.valueMismatchInfo1}
               </AppText>
               <AppText
                 variant="body2"
                 style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
-                {`\u2022`}&nbsp;&nbsp;The same asset but with a different amount
+                {`\u2022`}&nbsp;&nbsp;{wallet.valueMismatchInfo2}
               </AppText>
             </View>
           </View>
           <AppText variant="body2" style={styles.subTextStyle}>
-            This might happen due to decoding errors or incorrect UTXO handling.
-            Please double-check with the sender or contact support if this
-            wasn't expected.
+            {wallet.valueMismatchInfo3}
           </AppText>
         </View>
       )}
@@ -153,12 +150,6 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               />
             </AppTouchable>
           )}
-          {/* {transaction.batchTransferIdx && (
-            <TransferLabelContent
-              label={assets.batchTxnIdx}
-              content={`${transaction.batchTransferIdx}`}
-            />
-          )} */}
           <TransferLabelContent
             label={wallet.date}
             content={moment

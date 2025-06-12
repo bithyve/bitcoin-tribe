@@ -463,7 +463,12 @@
     "utxoValue": "UTXO मूल्य",
     "requestTSatsProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
     "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!",
-    "xpubAndUtxoTitle": "xPUB और UTXOs"
+    "xpubAndUtxoTitle": "xPUB और UTXOs",
+    "valueMismatchTitle": "मूल्य असंगति पाई गई",
+    "valueMismatchSubTitle": "भेजे गए और प्राप्त किए गए में अंतर है। यह हो सकता है:",
+    "valueMismatchInfo1": "वांछित से भिन्न संपत्ति",
+    "valueMismatchInfo2": "संपत्ति वही है लेकिन मात्रा अलग है",
+    "valueMismatchInfo3": "यह डिकोडिंग त्रुटियों या गलत UTXO हैंडलिंग के कारण हो सकता है। कृपया भेजने वाले से जांचें या सहायता से संपर्क करें यदि यह अपेक्षित नहीं था।"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",

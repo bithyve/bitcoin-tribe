@@ -463,7 +463,12 @@
     "utxoValue": "UTXO 値",
     "requestTSatsProcessTitle": "リクエストを処理中",
     "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！",
-    "xpubAndUtxoTitle": "xPUBとUTXO"
+    "xpubAndUtxoTitle": "xPUBとUTXO",
+    "valueMismatchTitle": "値の不一致が検出されました",
+    "valueMismatchSubTitle": "送信された内容と受信された内容に不一致があります。原因としては以下が考えられます：",
+    "valueMismatchInfo1": "予想とは異なるアセット",
+    "valueMismatchInfo2": "同じアセットだが数量が異なる",
+    "valueMismatchInfo3": "これはデコードエラーやUTXOの不適切な処理により発生する可能性があります。送信者に確認するか、予期しない場合はサポートにお問い合わせください。"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",

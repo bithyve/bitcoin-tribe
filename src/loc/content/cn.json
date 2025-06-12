@@ -463,7 +463,12 @@
     "utxoValue": "UTXO 值",
     "requestTSatsProcessTitle": "正在处理您的请求",
     "requestTSatsProcessSubTitle": "您的测试聪请求正在处理中。请稍等片刻，谢谢您的耐心等待！",
-    "xpubAndUtxoTitle": "xPUB 和 UTXOs"
+    "xpubAndUtxoTitle": "xPUB 和 UTXOs",
+    "valueMismatchTitle": "检测到数值不匹配",
+    "valueMismatchSubTitle": "发送和接收的内容不一致，可能是：",
+    "valueMismatchInfo1": "收到的资产与预期不同",
+    "valueMismatchInfo2": "是相同的资产但数量不同",
+    "valueMismatchInfo3": "这可能是由于解码错误或UTXO处理不当造成的。如果非预期，请与发送方核对或联系支持。"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",
