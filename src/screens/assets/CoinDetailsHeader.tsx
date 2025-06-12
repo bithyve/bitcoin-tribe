@@ -20,8 +20,8 @@ import {
   numberWithCommas,
 } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -54,7 +54,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   } = props;
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
-  const { home } = translations;
+  const { home, assets } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
@@ -73,7 +73,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <AppHeader
-          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+          rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
           onSettingsPress={onPressSetting}
         />
         <View style={styles.largeHeaderContainer}>
@@ -109,20 +109,33 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 </View>
               </AppTouchable>
               <View style={styles.totalBalanceWrapper2}>
-                <AppTouchable
-                  style={styles.onChainTotalBalanceWrapper}
-                  onPress={() => {}}>
-                  <View style={styles.totalBalanceWrapper1}>
-                    <AppText variant="heading2" style={styles.totalBalance}>
-                      {formatLargeNumber(
-                        asset.balance.future + asset.balance?.offchainOutbound,
-                      )}
+                <View>
+                  <AppTouchable
+                    style={styles.onChainTotalBalanceWrapper}
+                    onPress={() => {}}>
+                    <View style={styles.totalBalanceWrapper1}>
+                      <AppText variant="heading2" style={styles.totalBalance}>
+                        {formatLargeNumber(
+                          asset.balance.future +
+                            asset.balance?.offchainOutbound,
+                        )}
+                      </AppText>
+                    </View>
+                    <AppText variant="body2" style={styles.totalBalanceLabel}>
+                      {home.totalBalance}
+                    </AppText>
+                  </AppTouchable>
+                  <View style={styles.onChainTotalBalanceWrapper}>
+                    <View style={styles.totalBalanceWrapper1}>
+                      <AppText variant="heading2" style={styles.totalBalance}>
+                        {formatLargeNumber(asset?.balance?.spendable)}
+                      </AppText>
+                    </View>
+                    <AppText variant="body2" style={styles.totalBalanceLabel}>
+                      {assets.spendable}
                     </AppText>
                   </View>
-                  <AppText variant="body2" style={styles.totalBalanceLabel}>
-                    {home.totalBalance}
-                  </AppText>
-                </AppTouchable>
+                </View>
                 {app.appType === AppType.NODE_CONNECT && (
                   <>
                     <View style={styles.balanceWrapper}>
@@ -219,6 +232,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
     totalBalanceWrapper2: {
       width: '50%',
       alignItems: 'center',
+      justifyContent: 'center',
     },
     modeBalanceWrapper: {
       width: '50%',
@@ -252,11 +266,11 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
       textAlign: 'center',
     },
     onChainTotalBalanceWrapper: {
-      flex: 1,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: hp(5),
+      alignSelf: 'center',
     },
     row: {
       flexDirection: 'row',

@@ -555,7 +555,7 @@
     "listYourAssetInRegSubTitle": "¿Quieres almacenar tu activo en nuestro Registro Bitcoin Tribe? Se requiere una pequeña tarifa de servicio. Si no, puedes omitir este paso.",
     "skipForNow": "Omitir por ahora",
     "failToFetchIssueFee": "Error al obtener la tarifa de emisión de activos.",
-    "spendable": "Disponible: ",
+    "spendable": "Disponible",
     "spendableBalanceInfo": "El saldo que se puede usar después de deducir los montos bloqueados debido a transacciones pendientes o \"en espera de contraparte\".",
     "enterAssetName": "Por favor, ingrese el nombre del activ",
     "enterAssetTicker": "Por favor, ingrese el ticker del activo",

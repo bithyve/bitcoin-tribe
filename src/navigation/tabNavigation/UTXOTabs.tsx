@@ -9,8 +9,8 @@ import AppHeader from 'src/components/AppHeader';
 import ColorableUTXO from 'src/screens/collectiblesCoins/components/ColorableUTXO';
 import ColoredUTXO from 'src/screens/collectiblesCoins/components/ColoredUTXO';
 import UTXOInfoModal from 'src/screens/collectiblesCoins/components/UTXOInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { hp, windowHeight } from 'src/constants/responsive';
@@ -46,7 +46,7 @@ export default function UTXOTabs() {
       <AppHeader
         title={wallet.unspentTitle || 'Unspent Outputs'}
         enableBack={true}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUTXOInfo(true)}
       />
       <TabView

@@ -18,6 +18,7 @@ type AppHeaderProps = {
   subTitle?: string;
   style?: StyleProp<ViewStyle>;
   enableBack?: boolean;
+  backIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onSettingsPress?: () => void;
   onBackNavigation?;
@@ -33,6 +34,7 @@ function AppHeader(props: AppHeaderProps) {
     style,
     enableBack = true,
     onBackNavigation,
+    backIcon,
     rightIcon,
     rightText,
     onRightTextPress,
@@ -56,7 +58,7 @@ function AppHeader(props: AppHeaderProps) {
             <AppTouchable
               disabled={disableBackCTA}
               onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
-              {isThemeDark ? <GoBack /> : <GoBackLight />}
+              {backIcon ? backIcon : isThemeDark ? <GoBack /> : <GoBackLight />}
             </AppTouchable>
           </View>
         )}

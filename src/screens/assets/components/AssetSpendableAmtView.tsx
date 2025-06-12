@@ -10,16 +10,14 @@ import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type assetSpendableAmtViewProps = {
-  spendableBalance: number | string;
   style?: StyleProp<ViewStyle>;
 };
 
 const AssetSpendableAmtView = (props: assetSpendableAmtViewProps) => {
-  const { spendableBalance, style } = props;
+  const { style } = props;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const [visible, setVisible] = useState(false);
@@ -30,7 +28,7 @@ const AssetSpendableAmtView = (props: assetSpendableAmtViewProps) => {
     <View>
       <View style={styles.balanceContainer}>
         <AppText variant="body2" style={styles.balanceText}>
-          {assets.spendable} {numberWithCommas(spendableBalance)}
+          {'Understand your asset transactions'}
         </AppText>
         <AppTouchable
           onPress={() => setVisible(true)}
@@ -68,7 +66,6 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       padding: hp(10),
-      marginTop: hp(20),
     },
     balanceText: {
       color: theme.colors.headingColor,
