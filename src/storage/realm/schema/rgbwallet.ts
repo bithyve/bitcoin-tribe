@@ -12,6 +12,19 @@ export const ReceiveDataSchema: ObjectSchema = {
   },
 };
 
+export const ReceiveUTXOSchema: ObjectSchema = {
+  name: RealmSchema.ReceiveUTXOData,
+  primaryKey: 'recipientId',
+  properties: {
+    batchTransferIdx: 'int?',
+    expirationTimestamp: 'int',
+    invoice: 'string',
+    recipientId: 'string',
+    linkedAsset: 'string?',
+    linkedAmount: 'string?',
+  },
+};
+
 export const NodeBtcBalanceSchema: ObjectSchema = {
   name: RealmSchema.NodeBtcBalance,
   embedded: true,

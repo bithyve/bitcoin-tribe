@@ -23,6 +23,7 @@ import { Keys } from 'src/storage';
 function TransferDetails({ route, navigation }) {
   const transaction: Transaction = route.params?.transaction;
   const coin = route.params?.coin;
+  const assetId = route.params?.assetId;
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations;
   const [visible, setVisible] = useState(false);
@@ -59,6 +60,7 @@ function TransferDetails({ route, navigation }) {
       <TransferDetailsContainer
         assetName={coin}
         transAmount={`${transaction.amount}`}
+        assetId={assetId}
         transaction={transaction}
         onPress={() => cancelTransactionMutation()}
       />

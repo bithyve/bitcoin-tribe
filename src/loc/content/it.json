@@ -463,7 +463,12 @@
     "utxoValue": "Valore UTXO",
     "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
     "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!",
-    "xpubAndUtxoTitle": "xPUB e UTXO"
+    "xpubAndUtxoTitle": "xPUB e UTXO",
+    "valueMismatchTitle": "Valore non corrispondente rilevato",
+    "valueMismatchSubTitle": "C'è una discrepanza tra ciò che è stato inviato e ciò che è stato ricevuto. Potrebbe essere:",
+    "valueMismatchInfo1": "Un asset diverso da quello previsto",
+    "valueMismatchInfo2": "Lo stesso asset ma con una quantità diversa",
+    "valueMismatchInfo3": "Questo può accadere a causa di errori di decodifica o gestione errata degli UTXO. Verifica con il mittente o contatta l'assistenza se non era previsto."
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -710,6 +715,7 @@
     "closeChannel": "Chiudi Canale",
     "selectYourAsset": "Seleziona il tuo Asset",
     "selectYourAssetErrMsg": "Seleziona il tuo asset",
+    "selectAsset": "Seleziona asset",
     "availableBalanceText": "Saldo Disp.: ",
     "closeChannelPopupTitle": "Chiudere il Canale?",
     "closeChannelPopupSubTitle": "Questa azione interromperà le transazioni e non può essere annullata.",

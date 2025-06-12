@@ -222,6 +222,7 @@ const CollectibleDetailsScreen = () => {
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
+            chosenAsset: collectible,
           })
         }
         totalAssetLocalAmount={totalAssetLocalAmount}

@@ -191,6 +191,7 @@ const CoinDetailsScreen = () => {
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
+            chosenAsset: coin,
           })
         }
         totalAssetLocalAmount={totalAssetLocalAmount}

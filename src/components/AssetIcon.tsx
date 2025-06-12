@@ -6,7 +6,8 @@ import Identicon from './Identicon';
 import { AppTheme } from 'src/theme';
 
 type props = {
-  iconUrl: string;
+  iconUrl?: string;
+  assetTicker?: string;
   assetID: string;
   size: number;
   style?: StyleProp<ViewStyle>;
