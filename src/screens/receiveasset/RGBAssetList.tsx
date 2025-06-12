@@ -263,14 +263,12 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       padding: hp(10),
       margin: hp(10),
-      alignItems: 'center',
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: 10,
     },
     assetWrapper: {
       flexDirection: 'row',
-      alignItems: 'center',
       width: '74%',
     },
     assetImageWrapper: {
@@ -299,7 +297,7 @@ const getStyles = (theme: AppTheme) =>
       borderWidth: 1,
     },
     inputStyle: {
-      height: hp(50),
+      height: hp(60),
       width: '80%',
     },
     rightCTAStyle: {
