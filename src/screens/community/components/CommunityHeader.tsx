@@ -2,11 +2,9 @@ import React, { useContext } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
-
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import GiftIcon from 'src/assets/images/gift.svg';
 import SearchIcon from 'src/assets/images/search.svg';
 import AddContactIcon from 'src/assets/images/addcontact.svg';
 import IconWrapper from 'src/components/IconWrapper';
@@ -54,7 +52,7 @@ const getStyles = (theme: AppTheme) =>
       marginHorizontal: hp(5),
     },
     contentWrapper: {
-      width: '85%',
+      width: '75%',
     },
     iconWrapper: {
       flexDirection: 'row',

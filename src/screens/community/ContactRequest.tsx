@@ -18,8 +18,6 @@ import { useQuery } from '@realm/react';
 import AppHeader from 'src/components/AppHeader';
 import { useNavigation } from '@react-navigation/native';
 import ModalLoading from 'src/components/ModalLoading';
-import Relay from 'src/services/relay';
-
 
 const getStyles = (theme: AppTheme) => StyleSheet.create({
   bodyWrapper: {
@@ -38,22 +36,12 @@ const ContactRequest = () => {
   const { common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
-  const [qrValue, setQrValue] = useState('');
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
+  const [qrValue, setQrValue] = useState(`tribecontact://${app.contactsKey.publicKey}`);
   const navigation = useNavigation();
 
-  const createContactRequest = async () => {
-    try {
-      const request = await Relay.createContactRequest(app.id, 'test-key', app.publicId);
-      setQrValue(`tribecontact://${request.requestId}`);
-    } catch (error) {
-      console.error('Error creating chat room: ', error);
-      navigation.goBack();
-    }
-  };
-
   useEffect(() => {
-    createContactRequest();
+
   }, []);
 
   return qrValue === '' ? <ModalLoading visible={true} />

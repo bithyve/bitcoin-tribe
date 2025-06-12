@@ -82,6 +82,8 @@ import RegisterDomain from 'src/screens/assets/RegisterDomain';
 import VerifyDomain from 'src/screens/assets/VerifyDomain';
 import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
+import ContactRequest from 'src/screens/community/ContactRequest';
+import Chat from 'src/screens/community/Chat';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -332,6 +334,14 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.IMPORTXPOST}
           component={ImportXPost}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CONTACTREQUEST}
+          component={ContactRequest}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CHAT}
+          component={Chat}
         />
       </Stack.Navigator>
     </RealmProvider>

@@ -7,7 +7,7 @@ import { AppTheme } from 'src/theme';
 import CommunityHeader from './components/CommunityHeader';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -17,71 +17,31 @@ import { RealmSchema } from 'src/storage/enum';
 import AppText from 'src/components/AppText';
 import Identicon from 'src/components/Identicon';
 import moment from 'moment';
-import { Worklet } from 'react-native-bare-kit';
-import DHT from 'hyperdht';
-import b4a from 'b4a';
+import ContactsManager from 'src/services/p2p/ContactsManager';
+import dbManager from 'src/storage/realm/dbManager';
 
 function Community() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
-
+  const route = useRoute();
   const styles = getStyles(theme);
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const realm = useRealm();
-  const [rooms, setRooms] = useState<any[]>([]);
-
+  const cm = ContactsManager.getInstance()
+  const communities = useQuery(RealmSchema.Community);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      fetchRooms();
+      if (route.params?.publicKey) {
+        cm.joinPeers(route.params.publicKey)
+      }
     });
     return unsubscribe;
-  }, [navigation, app.id]);
+  }, [navigation, app.id, route.params?.publicKey]);
 
-  const fetchRooms = async () => {
-    try {
-      const worklet = new Worklet();
-      const { IPC } = worklet;
-      IPC.setEncoding('utf8');
-      const sourceCode = ` const DHT = require('hyperdht');
-  const b4a = require('b4a');
-
-  const keyPair = DHT.keyPair();
-  const dht = new DHT();
-  const server = dht.createServer((socket) => {
-    socket.on('data', (msg) => {
-      const text = b4a.toString(msg, 'utf8');
-      const { IPC } = BareKit;
-      IPC.write(JSON.stringify({ type: 'message', text }));
-    });
-  });
-  await server.listen(keyPair);
-
-  const topic = new Uint8Array(32).fill(0xAA);
-  dht.announce(topic, keyPair);
-
-  const lookup = dht.lookup(topic);
-  lookup.on('data', (res) => {
-    for (const peer of res.peers) {
-      const conn = dht.connect(peer.publicKey);
-      conn.once('open', () => console.log('Connected to peer'));
-      conn.on('data', (msg) => {
-        const text = b4a.toString(msg, 'utf8');
-        const { IPC } = BareKit;
-        IPC.write(JSON.stringify({ type: 'message', text }));
-      });
-    }
-  });`;
-      worklet.start('/p2pWorklet.js', sourceCode);
-      IPC.on('data', handleWorkletMessages);
-      IPC.write(JSON.stringify({ action: 'init' }));
-    } catch (err) {
-      console.error('Error fetching rooms:', err);
-    }
-  };
 
   useEffect(() => {
     listenToRooms();
@@ -89,23 +49,32 @@ function Community() {
 
   const listenToRooms = () => {
     try {
-
+      cm.setOnConnectionListener(handleConnection)
     } catch (error) {
       console.error('Error setting up rooms listener:', error);
     }
   };
 
-  const handleWorkletMessages = (data) => {
+  const handleConnection = (data) => {
     console.log('data', data);
+    try {
+      dbManager.createObject(RealmSchema.Community, {
+        id: data.publicKey,
+        publicKey: data.publicKey,
+        name: 'Satoshi\'s Pallet',
+        createdAt: Date.now(),
+      })
+    } catch (error) {
+      console.error('Error creating community:', error);
+    }
   }
-
 
   return (
     <ScreenContainer>
       <CommunityHeader />
 
       <FlatList
-        data={rooms}
+        data={communities}
         keyExtractor={(item) => item.roomId}
         ListEmptyComponent={<AppText variant="heading3" style={styles.emptyText}>No rooms found</AppText>}
         style={styles.flatList}
@@ -114,16 +83,16 @@ function Community() {
             onPress={() => navigation.navigate(NavigationRoutes.CHAT, { room: item })}>
             <View style={styles.roomItemTop}>
               <Identicon
-                value={item.roomId}
+                value={item.id}
                 style={styles.identiconView}
                 size={45}
               />
               <View style={styles.roomItemContent}>
                 <View style={styles.row}>
-                  <AppText numberOfLines={1} variant="heading3" style={styles.roomName}>{item.roomId}</AppText>
-                  <AppText numberOfLines={1} style={styles.roomTime}>{moment(item.timestamp).format('HH:mm')}</AppText>
+                  <AppText numberOfLines={1} variant="heading3" style={styles.roomName}>{item.name}</AppText>
+                  <AppText numberOfLines={1} style={styles.roomTime}>{moment(item.createdAt).format('HH:mm')}</AppText>
                 </View>
-                <AppText numberOfLines={1} style={styles.roomLastMessage}>{item.lastMessage}</AppText>
+                <AppText numberOfLines={1} style={styles.roomLastMessage}>{item.messages.length > 0 ? item.messages[item.messages.length - 1].message : 'Room created'}</AppText>
 
               </View>
             </View>

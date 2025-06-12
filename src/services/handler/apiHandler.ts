@@ -78,7 +78,8 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import DHT from 'hyperdht';
+import ContactsManager from '../p2p/ContactsManager';
+// import DHT from 'hyperdht';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -215,7 +216,6 @@ export class ApiHandler {
             ? mnemonic
             : bip39.generateMnemonic();
           const primarySeed = bip39.mnemonicToSeedSync(primaryMnemonic);
-          const dhtKeyPair = DHT.keyPair([primarySeed]);
           const appID = crypto
             .createHash('sha256')
             .update(primarySeed)
@@ -256,6 +256,9 @@ export class ApiHandler {
           const imageEncryptionKey = generateEncryptionKey(
             entropy.toString('hex'),
           );
+          const cm = ContactsManager.getInstance()
+          await cm.init(primarySeed.toString('hex'))
+          const keys = await cm.getKeys()
           const newAPP: TribeApp = {
             id: appID,
             publicId,
@@ -270,8 +273,8 @@ export class ApiHandler {
             appType,
             authToken: registerApp?.app?.authToken,
             contactsKey: {
-              dhtPublicKey: dhtKeyPair.publicKey.toString('hex'),
-              dhtPrivateKey: dhtKeyPair.privateKey.toString('hex'),
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
             },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
@@ -547,6 +550,8 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
+    const cm = ContactsManager.getInstance()
+    await cm.init(app.primarySeed)
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
@@ -586,6 +591,8 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+      const cm = ContactsManager.getInstance()
+      await cm.init(app.primarySeed)
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
@@ -619,6 +626,8 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    const cm = ContactsManager.getInstance()
+    await cm.init(app.primarySeed)
     if (app.appType === AppType.NODE_CONNECT) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {

@@ -75,6 +75,18 @@ function SendScreen({ route, navigation }) {
         setVisibleModal(false);
         return;
       }
+
+      if (value.startsWith('tribecontact://')) {
+        setIsScanning(true);
+        setVisibleModal(false);
+        navigateWithDelay(() => {
+          navigation.navigate(NavigationRoutes.COMMUNITY, {
+            publicKey: value.split('://')[1],
+          });
+        });
+        return;
+      }
+
       if (value.startsWith('rgb:')) {
         try {
           const res = await ApiHandler.decodeInvoice(value);

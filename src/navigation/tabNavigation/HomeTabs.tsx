@@ -25,13 +25,13 @@ function HomeTabs() {
           headerShown: false,
         }}
       />
-        {/* <Tab.Screen
+        <Tab.Screen
           name={NavigationRoutes.COMMUNITY}
           component={Community}
           options={{
             headerShown: false,
           }}
-        /> */}
+        />
       <Tab.Screen
         name={NavigationRoutes.SETTINGS}
         component={Settings}
