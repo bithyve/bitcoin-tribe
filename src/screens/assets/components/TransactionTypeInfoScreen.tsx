@@ -20,7 +20,7 @@ import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmatio
 function TransactionTypeInfoScreen() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, assets } = translations;
   const styles = getStyles(theme);
   return (
     <ScreenContainer>
@@ -28,19 +28,18 @@ function TransactionTypeInfoScreen() {
       <ScrollView>
         <View style={styles.spendableInfoView}>
           <AppText variant="body1" style={styles.titleText}>
-            Spendable
+            {assets.spendableTitle}
           </AppText>
           <AppText variant="body2" style={styles.infoText}>
-            Spendable balance is the amount available after subtracting assets
-            locked in pending or ‘waiting counterparty’ transactions.
+            {assets.spendableSubTitle}
           </AppText>
         </View>
         <View style={styles.txnTypesWrapper}>
           <AppText variant="body1" style={styles.titleText}>
-            Transaction Types Info
+            {assets.txnTypeInfoTitle}
           </AppText>
           <AppText variant="body2" style={styles.infoText}>
-            Understand what each transaction type means and how it works.
+            {assets.txnTypeInfoSubTitle}
           </AppText>
         </View>
         <View style={styles.txnInfoContainer}>
@@ -49,11 +48,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Issued
+              {assets.issuedTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              A new asset has been created or assigned to your wallet. It’s now
-              available for use.
+              {assets.issuedSubTitle}
             </AppText>
           </View>
         </View>
@@ -63,11 +61,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Send
+              {assets.sendTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              Asset sent successfully. Awaiting receiver’s confirmation to
-              finalize the transfer.
+              {assets.sendSubTitle}
             </AppText>
           </View>
         </View>
@@ -77,11 +74,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Receive
+              {assets.receiveTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              Asset received and added to your wallet. You can now view and use
-              it from your assets list.
+              {assets.receiveSubTitle}
             </AppText>
           </View>
         </View>
@@ -91,11 +87,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Waiting Confirmation
+              {assets.waitingConfirmationTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              Assets are incoming. Waiting for your confirmation to complete the
-              transfer.
+              {assets.waitingConfirmationSubTitle}
             </AppText>
           </View>
         </View>
@@ -105,11 +100,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Waiting Confirmation
+              {assets.waitingConfirmationTitle1}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              You sent assets. Waiting for the receiver to confirm and finalize
-              the transfer.
+              {assets.waitingConfirmationSubTitle1}
             </AppText>
           </View>
         </View>
@@ -119,11 +113,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Waiting Verification
+              {assets.waitingVerificationTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              Transaction is under verification. Processing will continue once
-              checks are complete.
+              {assets.waitingVerificationSubTitle}
             </AppText>
           </View>
         </View>
@@ -133,10 +126,10 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              Failed
+              {assets.failedTitle}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
-              Transaction was unsuccessful. No funds were moved.
+              {assets.failedSubTitle}
             </AppText>
           </View>
         </View>
@@ -155,6 +148,7 @@ const getStyles = (theme: AppTheme) =>
     titleText: {
       color: theme.colors.headingColor,
       fontWeight: '500',
+      lineHeight: 25,
     },
     infoText: {
       color: theme.colors.secondaryHeadingColor,
