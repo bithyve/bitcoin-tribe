@@ -81,7 +81,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
-  iconUrl
+  iconUrl,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -410,7 +410,11 @@ const SendAssetScreen = () => {
       setVisibleSpendableErrInfo(true);
     });
   };
-
+  console.log(
+    'assetData?.assetSchema.toUpperCase()',
+    assetData?.assetSchema.toUpperCase(),
+  );
+  console.log('AssetSchema.Collectible', AssetSchema.Collectible);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -440,8 +444,8 @@ const SendAssetScreen = () => {
           ticker={assetData?.ticker}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.ticker
-              : assetData?.details
+              ? assetData?.details
+              : assetData?.ticker
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
