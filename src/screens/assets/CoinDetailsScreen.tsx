@@ -138,7 +138,8 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const totalAssetLocalAmount = useMemo(() => {
-    return (channelsData ?? [])
+    const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
+    return safeChannelsData
       .filter(channel => channel.asset_id === assetId)
       .reduce((sum, channel) => sum + (channel.asset_local_amount || 0), 0);
   }, [channelsData, assetId]);
@@ -281,10 +282,10 @@ export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
   spendableBalanceWrapper: {
-    top: -30,
+    top: -20,
   },
   transactionContainer: {
-    top: -25,
+    top: -20,
     height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {

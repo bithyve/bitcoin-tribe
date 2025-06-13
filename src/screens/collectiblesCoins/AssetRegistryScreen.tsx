@@ -98,7 +98,7 @@ function AssetRegistryScreen() {
       const feeData = getAssetIssuanceFeeMutation.data;
       if (feeData.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs?.transactions?.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
@@ -153,7 +153,7 @@ function AssetRegistryScreen() {
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
-        const tx = wallet.specs.transactions.find(
+        const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',

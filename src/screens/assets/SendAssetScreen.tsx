@@ -172,8 +172,9 @@ const SendAssetScreen = () => {
   const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-    JSON.parse(averageTxFeeJSON);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
+    ? JSON.parse(averageTxFeeJSON)
+    : {};
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -206,7 +207,7 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
-    averageTxFee[TxPriority.LOW].feePerByte,
+    averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {

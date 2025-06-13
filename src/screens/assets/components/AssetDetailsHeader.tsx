@@ -83,7 +83,6 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
-
   return (
     <>
       {/* <Animated.View
