@@ -654,7 +654,8 @@
     "importXPostTitle": "Xポストをインポート",
     "importXPostSubTitle": "下にXポストのリンクを貼り付けてください。すぐに取得してアプリ内にシンプルに表示します。",
     "importXPostLabel": "XポストのURLを入力",
-    "importXPostPlaceholder": "ポストURLを入力"
+    "importXPostPlaceholder": "ポストURLを入力",
+    "assetTxnInfoTitle": "資産取引を理解する"
   },
   "community": {
     "fnfTitle": "Community",

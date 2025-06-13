@@ -654,7 +654,8 @@
     "importXPostTitle": "导入 X 帖子",
     "importXPostSubTitle": "在下方粘贴你的 X 帖子链接。我们会快速获取并在应用中清晰显示该帖子——简洁又方便。",
     "importXPostLabel": "输入 X 帖子链接",
-    "importXPostPlaceholder": "输入帖子链接"
+    "importXPostPlaceholder": "输入帖子链接",
+    "assetTxnInfoTitle": "了解您的资产交易"
   },
   "community": {
     "fnfTitle": "Community",

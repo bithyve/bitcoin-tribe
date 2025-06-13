@@ -82,6 +82,7 @@ import RegisterDomain from 'src/screens/assets/RegisterDomain';
 import VerifyDomain from 'src/screens/assets/VerifyDomain';
 import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
+import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -332,6 +333,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.IMPORTXPOST}
           component={ImportXPost}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSACTIONTYPEINFO}
+          component={TransactionTypeInfoScreen}
         />
       </Stack.Navigator>
     </RealmProvider>

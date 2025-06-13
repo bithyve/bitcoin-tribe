@@ -654,7 +654,8 @@
     "importXPostTitle": "X पोस्ट आयात करें",
     "importXPostSubTitle": "नीचे अपने X पोस्ट का लिंक चिपकाएं। हम उसे तुरंत प्राप्त करके ऐप में साफ़ और सरल तरीके से दिखाएंगे।",
     "importXPostLabel": "X पोस्ट URL दर्ज करें",
-    "importXPostPlaceholder": "पोस्ट URL दर्ज करें"
+    "importXPostPlaceholder": "पोस्ट URL दर्ज करें",
+    "assetTxnInfoTitle": "अपने एसेट लेनदेन को समझें"
   },
   "community": {
     "fnfTitle": "Community",

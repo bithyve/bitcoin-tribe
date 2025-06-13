@@ -654,7 +654,8 @@
     "importXPostTitle": "Importar publicación de X",
     "importXPostSubTitle": "Pega el enlace de tu publicación de X abajo. Lo obtendremos rápidamente y lo mostraremos en la app — limpio y fácil.",
     "importXPostLabel": "Ingresa la URL de la publicación de X",
-    "importXPostPlaceholder": "Ingresa la URL de la publicación"
+    "importXPostPlaceholder": "Ingresa la URL de la publicación",
+    "assetTxnInfoTitle": "Entiende tus transacciones de activos"
   },
   "community": {
     "fnfTitle": "Community",

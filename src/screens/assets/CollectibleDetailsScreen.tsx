@@ -27,7 +27,6 @@ import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, windowHeight } from 'src/constants/responsive';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -37,6 +36,7 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import TransactionInfoCard from './components/TransactionInfoCard';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -229,7 +229,7 @@ const CollectibleDetailsScreen = () => {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView style={styles.toolTipCotainer} />
+        <TransactionInfoCard style={styles.toolTipCotainer} />
       </View>
       <TransactionsList
         transactions={transactionsData}

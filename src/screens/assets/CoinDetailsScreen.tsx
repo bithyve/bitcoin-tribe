@@ -26,7 +26,6 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
@@ -37,6 +36,7 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import TransactionInfoCard from './components/TransactionInfoCard';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -197,10 +197,7 @@ const CoinDetailsScreen = () => {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView
-          spendableBalance={coin?.balance?.spendable}
-          style={styles.toolTipCotainer}
-        />
+        <TransactionInfoCard style={styles.toolTipCotainer} />
       </View>
       <TransactionsList
         style={styles.transactionContainer}

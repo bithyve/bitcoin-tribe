@@ -654,7 +654,8 @@
     "importXPostTitle": "Import X Post",
     "importXPostSubTitle": "Paste the link to your X post below. We'll quickly fetch it and display the post inside the app — clean and easy.",
     "importXPostLabel": "Enter X Post URL",
-    "importXPostPlaceholder": "Enter Post URL"
+    "importXPostPlaceholder": "Enter Post URL",
+    "assetTxnInfoTitle": "Understand your asset transactions"
   },
   "community": {
     "fnfTitle": "Community",
