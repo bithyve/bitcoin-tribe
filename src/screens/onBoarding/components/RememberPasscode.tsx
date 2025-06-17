@@ -46,7 +46,12 @@ function RememberPasscode(props: sendSuccessProps) {
         </AppText>
       </View>
       <View style={styles.ctaWrapper}>
-        <PrimaryCTA title={common.continue} onPress={onPress} width={hp(120)} />
+        <PrimaryCTA
+          title={common.continue}
+          onPress={onPress}
+          width={hp(120)}
+          height={hp(14)}
+        />
       </View>
     </View>
   );

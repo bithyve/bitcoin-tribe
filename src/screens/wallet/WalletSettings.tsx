@@ -38,7 +38,7 @@ function WalletSettings() {
   return (
     <ScreenContainer>
       <AppHeader
-        title={strings.walletSettings}
+        title={strings.xpubAndUtxoTitle}
         subTitle={strings.walletSettingSubTitle}
       />
       <View style={styles.container}>

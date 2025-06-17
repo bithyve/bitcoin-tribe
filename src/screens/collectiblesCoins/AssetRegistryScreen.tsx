@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -181,55 +181,64 @@ function AssetRegistryScreen() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <AppHeader title={common.registry} style={styles.headerWrapper} />
-      <View style={styles.wrapper}>
-        <Text style={styles.subTitleText}>
-          {assets.assetRegistrySubTitle} {assets.assetRegistrySubTitle2}{' '}
-          <Text style={styles.subTitleText}>{`${numberWithCommas(
-            feeDetails?.fee,
-          )} sats`}</Text>{' '}
-          {assets.assetRegistrySubTitle3}
-        </Text>
-      </View>
-      <View style={styles.illustrationWrapper}>
-        <AssetRegisterIllustration />
-      </View>
-      <View style={styles.containerFee}>
-        <View style={styles.feeWrapper}>
-          <View style={styles.amtContainer}>
-            <View style={styles.labelWrapper}>
-              <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
-            </View>
-            <View style={styles.valueWrapper}>
-              <AppText style={styles.labelText}>{`${numberWithCommas(
-                feeDetails?.fee,
-              )} sats`}</AppText>
+      <AppHeader
+        title={common.registry}
+        style={styles.headerWrapper}
+        disableBackCTA={disabledCTA}
+      />
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: hp(40) }}>
+        <View style={styles.wrapper}>
+          <Text style={styles.subTitleText}>
+            {assets.assetRegistrySubTitle} {assets.assetRegistrySubTitle2}{' '}
+            <Text style={styles.subTitleText}>{`${numberWithCommas(
+              feeDetails?.fee,
+            )} sats`}</Text>{' '}
+            {assets.assetRegistrySubTitle3}
+          </Text>
+        </View>
+        <View style={styles.illustrationWrapper}>
+          <AssetRegisterIllustration />
+        </View>
+        <View style={styles.containerFee}>
+          <View style={styles.feeWrapper}>
+            <View style={styles.amtContainer}>
+              <View style={styles.labelWrapper}>
+                <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+              </View>
+              <View style={styles.valueWrapper}>
+                <AppText style={styles.labelText}>{`${numberWithCommas(
+                  feeDetails?.fee,
+                )} sats`}</AppText>
+              </View>
             </View>
           </View>
+          {!!feeDetails && (
+            <SwipeToAction
+              title={assets.swipeToPay}
+              loadingTitle={assets.payInprocess}
+              onSwipeComplete={async () => {
+                setDisabledCTA(true);
+                await ApiHandler.refreshWallets({ wallets: [wallet] });
+                payServiceFeeFeeMutation.mutate({ feeDetails });
+              }}
+              backColor={theme.colors.swipeToActionThumbColor}
+            />
+          )}
+          {!!feeDetails && (
+            <View style={styles.skipWrapper}>
+              <SkipButton
+                disabled={disabledCTA}
+                onPress={() => {
+                  setHasIssuedAsset(true);
+                  setTimeout(() => routeMap(false), 500);
+                }}
+                title={assets.skipForNow}
+              />
+            </View>
+          )}
         </View>
-        <View style={styles.primaryCtaStyle}>
-          <SwipeToAction
-            title={assets.swipeToPay}
-            loadingTitle={assets.payInprocess}
-            onSwipeComplete={async () => {
-              setDisabledCTA(true);
-              await ApiHandler.refreshWallets({ wallets: [wallet] });
-              payServiceFeeFeeMutation.mutate({ feeDetails });
-            }}
-            backColor={theme.colors.swipeToActionThumbColor}
-          />
-        </View>
-        <View style={styles.skipWrapper}>
-          <SkipButton
-            disabled={disabledCTA}
-            onPress={() => {
-              setHasIssuedAsset(true);
-              setTimeout(() => routeMap(false), 500);
-            }}
-            title={assets.skipForNow}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }
@@ -248,7 +257,7 @@ const getStyles = (theme: AppTheme) =>
       paddingTop: hp(10),
     },
     feeWrapper: {
-      marginVertical: hp(12),
+      marginVertical: hp(10),
     },
     titleText: {
       color: theme.colors.headingColor,
@@ -266,11 +275,10 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       height: Platform.OS === 'ios' ? '38%' : '33%',
-      paddingTop: Platform.OS === 'ios' ? hp(0) : hp(20),
+      paddingTop: Platform.OS === 'ios' ? hp(25) : hp(20),
     },
     containerFee: {
       paddingHorizontal: hp(25),
-      height: '50%',
       width: '100%',
     },
     labelWrapper: {

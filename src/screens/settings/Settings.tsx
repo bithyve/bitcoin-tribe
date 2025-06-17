@@ -141,7 +141,7 @@ function SettingsScreen({ navigation }) {
   const WalletMgtMenu: SettingMenuProps[] = [
     {
       id: 1,
-      title: walletTranslation.walletSettings,
+      title: walletTranslation.xpubAndUtxoTitle,
       icon: isThemeDark ? <IconWalletSettings /> : <IconWalletSettingsLight />,
       onPress: () => navigation.navigate(NavigationRoutes.WALLETSETTINGS),
     },
@@ -191,16 +191,6 @@ function SettingsScreen({ navigation }) {
       testID: 'dark_mode',
       onPress: () => setDarkTheme(!darkTheme),
     },
-    {
-      id: 4,
-      title: settings.biometricUnlock,
-      icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
-      onValueChange: toggleBiometrics,
-      toggleValue: biometrics,
-      enableSwitch: true,
-      testID: 'biometric_unlock',
-      onPress: toggleBiometrics,
-    },
   ];
   const AppSecurityMenu: SettingMenuProps[] = [
     {
@@ -231,6 +221,16 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
       manualAssetBackupStatus: manualAssetBackupStatus,
       hasCompletedManualBackup: hasCompletedManualBackup,
+    },
+    {
+      id: 4,
+      title: settings.biometricUnlock,
+      icon: isThemeDark ? <IconBiometric /> : <IconBiometricLight />,
+      onValueChange: toggleBiometrics,
+      toggleValue: biometrics,
+      enableSwitch: true,
+      testID: 'biometric_unlock',
+      onPress: toggleBiometrics,
     },
   ];
 
