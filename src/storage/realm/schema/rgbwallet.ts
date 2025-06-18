@@ -16,12 +16,10 @@ export const ReceiveUTXOSchema: ObjectSchema = {
   name: RealmSchema.ReceiveUTXOData,
   primaryKey: 'recipientId',
   properties: {
-    batchTransferIdx: 'int?',
-    expirationTimestamp: 'int',
-    invoice: 'string',
     recipientId: 'string',
     linkedAsset: 'string?',
     linkedAmount: 'string?',
+    receiveData: `${RealmSchema.ReceiveData}?`,
   },
 };
 
@@ -44,6 +42,7 @@ export const RgbWalletSchema: ObjectSchema = {
     accountXpubVanilla: 'string',
     rgbDir: 'string?',
     receiveData: `${RealmSchema.ReceiveData}?`,
+    receiveUTXOs: `${RealmSchema.ReceiveUTXOData}[]`,
     utxos: 'string?[]',
     nodeUrl: 'string?',
     nodeAuthentication: 'string?',
