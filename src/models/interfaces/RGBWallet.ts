@@ -14,6 +14,7 @@ export interface RGBWallet {
     expirationTimestamp: number;
     batchTransferIdx: string;
   };
+  receiveUTXOs?: receiveUTXOData[];
   utxos?: RgbUnspent[];
   nodeUrl?: string;
   nodeAuthentication?: string;
@@ -35,12 +36,15 @@ interface Balance {
 }
 
 export interface receiveUTXOData {
-  invoice: string;
   recipientId: string;
-  expirationTimestamp: number;
-  batchTransferIdx: string;
   linkedAsset: string;
   linkedAmount: string;
+  receiveData?: {
+    invoice: string;
+    recipientId: string;
+    expirationTimestamp: number;
+    batchTransferIdx: string;
+  };
 }
 
 export interface Transfer {
