@@ -194,6 +194,70 @@ export default class Relay {
       throw new Error(err);
     }
   };
+  public static initNodeById = async (nodeId: string): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}/init`);
+      } catch (err) {
+        if (err.response) {
+          throw new Error(
+            err.response.data.err || 'Server responded with an error',
+          );
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+        throw err;
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getNodeById = async (nodeId: string): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}`);
+      } catch (err) {
+        if (err.response) {
+          throw new Error(
+            err.response.data.err || 'Server responded with an error',
+          );
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+        throw err;
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+  public static startNodeById = async (nodeId: string): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}/start`);
+      } catch (err) {
+        if (err.response) {
+          throw new Error(
+            err.response.data.err || 'Server responded with an error',
+          );
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+        throw err;
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 
   public static getAssetIssuanceFee = async (): Promise<{
     address: string;
@@ -352,7 +416,7 @@ export default class Relay {
           link: string;
         }[];
       };
-      iconUrl?: string
+      iconUrl?: string;
     }[];
     error?: string;
   }> => {

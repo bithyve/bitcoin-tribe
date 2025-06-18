@@ -129,29 +129,29 @@ const ViewNodeInfo = () => {
           </View>
           <NodeInfoItem
             title={node.pubKey}
-            value={nodeInfo.pubkey}
+            value={nodeInfo?.pubkey}
             isCopiable={true}
             copyMessage={node.pubKeyCopyMsg}
           />
 
           <NodeInfoItem
             title={node.apiUrl}
-            value={rgbWallet.nodeUrl}
+            value={rgbWallet?.nodeUrl}
             isCopiable={true}
             copyMessage={node.nodeUrlCopyMsg}
           />
 
           <NodeInfoItem
             title={node.onchainPubkey}
-            value={nodeInfo.onchain_pubkey}
+            value={nodeInfo?.onchain_pubkey}
             isCopiable={true}
             copyMessage={node.onChainPubKeyCopyMsg}
           />
 
-          {rgbWallet.peerDNS && (
+          {rgbWallet?.peerDNS && (
             <NodeInfoItem
               title={node.peerDns}
-              value={`${nodeInfo.pubkey}@${rgbWallet.peerDNS}`}
+              value={`${nodeInfo?.pubkey}@${rgbWallet?.peerDNS}`}
               isCopiable={true}
               copyMessage={() => 'Peer URL copied'}
             />
@@ -159,16 +159,16 @@ const ViewNodeInfo = () => {
 
           <NodeInfoItem
             title={node.rgbHtlcMinMsat}
-            value={nodeInfo.rgb_htlc_min_msat}
+            value={nodeInfo?.rgb_htlc_min_msat}
           />
           <NodeInfoItem
             title={node.rgbChannelCapMinSat}
-            value={nodeInfo.rgb_channel_capacity_min_sat}
+            value={nodeInfo?.rgb_channel_capacity_min_sat}
           />
 
           <NodeInfoItem
             title={node.channelCapMisSat}
-            value={nodeInfo.channel_capacity_min_sat}
+            value={nodeInfo?.channel_capacity_min_sat}
           />
 
           {/* <View>

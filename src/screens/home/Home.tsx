@@ -54,6 +54,7 @@ function HomeScreen() {
   const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
     ApiHandler.isBackupRequired,
   );
+  const initNodeMutation = useMutation(ApiHandler.initNode);
 
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
@@ -91,6 +92,9 @@ function HomeScreen() {
 
   useEffect(() => {
     ApiHandler.fetchPresetAssets();
+    if (app.appType === AppType.SUPPORTED_RLN) {
+      initNodeMutation.mutate(app?.id);
+    }
   }, []);
 
   useEffect(() => {

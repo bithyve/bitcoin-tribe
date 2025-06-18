@@ -308,7 +308,7 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(
             rgbWallet,
-            AppType.NODE_CONNECT,
+            AppType.SUPPORTED_RLN,
             authToken,
           );
 
@@ -316,6 +316,10 @@ export class ApiHandler {
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
+          console.log(
+            'apihandler RLN rgbNodeConnectParams',
+            rgbNodeConnectParams,
+          );
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
@@ -327,7 +331,7 @@ export class ApiHandler {
             version: DeviceInfo.getVersion(),
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
-            appType: AppType.NODE_CONNECT,
+            appType: AppType.SUPPORTED_RLN,
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -406,7 +410,11 @@ export class ApiHandler {
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
-            const apiHandler = new ApiHandler(rgbWallet, appType);
+            const apiHandler = new ApiHandler(
+              rgbWallet,
+              appType,
+              registerApp?.app?.authToken,
+            );
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -1168,17 +1176,17 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (assets.nia) {
+      if (assets?.nia) {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
           assets.nia,
           Realm.UpdateMode.Modified,
         );
       }
-      if (assets.cfa) {
+      if (assets?.cfa) {
         const cfas = [];
         if (ApiHandler.appType === AppType.NODE_CONNECT) {
-          for (let i = 0; i < assets.cfa.length; i++) {
+          for (let i = 0; i < assets?.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
@@ -1194,6 +1202,7 @@ export class ApiHandler {
                 filePath: path,
               },
             });
+            console.log('cfas', cfas);
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
@@ -1991,6 +2000,7 @@ export class ApiHandler {
     try {
       const response = await Relay.createSupportedNode();
       if (response.error) {
+        console.log('response.error', response.error);
         throw new Error(response.error);
       } else if (response) {
         return response;
@@ -1998,6 +2008,7 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
+      console.log('error-', error);
       console.log(error);
       throw error;
     }
@@ -2078,11 +2089,10 @@ export class ApiHandler {
     }
   }
 
-  static async initNode() {
+  static async initNode(nodeId) {
     try {
-      const response = await ApiHandler.api.init({
-        password: 'tribe@2024',
-      });
+      const response = await Relay.initNodeById(nodeId);
+      console.log('initNode response', response);
       if (response.mnemonic) {
         const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
           RealmSchema.RgbWallet,
@@ -2102,7 +2112,7 @@ export class ApiHandler {
         throw new Error('Failed to init node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('init error', error);
       throw error;
     }
   }
