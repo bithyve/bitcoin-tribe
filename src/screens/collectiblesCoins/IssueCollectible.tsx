@@ -58,8 +58,8 @@ import Slider from 'src/components/Slider';
 import AddMediaFile from 'src/assets/images/addMediaFile.svg';
 import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
 
@@ -440,7 +440,7 @@ function IssueCollectibleScreen() {
     <ScreenContainer>
       <AppHeader
         title={assets.issueCollectibles}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
       />
       <View>

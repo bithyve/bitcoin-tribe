@@ -27,7 +27,6 @@ import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, windowHeight } from 'src/constants/responsive';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -37,6 +36,7 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import TransactionInfoCard from './components/TransactionInfoCard';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -188,7 +188,8 @@ const CollectibleDetailsScreen = () => {
   //   extrapolate: 'clamp',
   // });
   return (
-    <ScreenContainer>
+    // <ScreenContainer style={styles.container}>
+    <>
       <AssetDetailsHeader
         asset={collectible}
         assetName={collectible.name}
@@ -228,10 +229,7 @@ const CollectibleDetailsScreen = () => {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView
-          spendableBalance={collectible?.balance?.spendable}
-          style={styles.toolTipCotainer}
-        />
+        <TransactionInfoCard style={styles.toolTipCotainer} />
       </View>
       <TransactionsList
         transactions={transactionsData}
@@ -323,24 +321,30 @@ const CollectibleDetailsScreen = () => {
           issuerInfo={collectible}
         />
       </>
-    </ScreenContainer>
+    </>
   );
 };
 const getStyles = () =>
   StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      paddingHorizontal: hp(0),
+    },
     imageStyle: {
       height: hp(40),
       width: hp(40),
       borderRadius: 10,
     },
     spendableBalanceWrapper: {
-      top: -30,
+      paddingHorizontal: hp(14),
     },
     transactionContainer: {
-      top: -25,
+      paddingHorizontal: hp(14),
+      height: Platform.OS === 'ios' ? '40%' : '38%',
     },
     toolTipCotainer: {
-      top: windowHeight > 670 ? 110 : 100,
+      // top: windowHeight > 670 ? 110 : 100,
     },
   });
 export default CollectibleDetailsScreen;

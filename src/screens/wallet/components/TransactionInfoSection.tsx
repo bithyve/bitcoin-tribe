@@ -49,7 +49,7 @@ function TransactionInfoSection(props: transactionInfoSectionProps) {
           &nbsp;{getBalance(amount)}
         </AppText>
         {initialCurrencyMode === CurrencyKind.SATS && (
-          <AppText variant="caption" style={styles.satsText}>
+          <AppText variant="heading2" style={styles.satsText}>
             sats
           </AppText>
         )}
@@ -85,7 +85,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(15),
     },
     satsText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
     textStyle: {},
