@@ -7,7 +7,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -81,7 +85,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
-  iconUrl
+  iconUrl,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -659,8 +663,15 @@ const SendAssetScreen = () => {
                   );
                   navigation.replace(NavigationRoutes.HOME);
                 } else {
+                  navigation.dispatch(
+                    CommonActions.setParams({
+                      params: { askReview: true },
+                      key: navigation.getState().routes[
+                        navigation.getState().index - 1
+                      ]?.key,
+                    }),
+                  );
                   navigation.goBack();
-                  navigation.setParams({ askReview: true });
                 }
               }, 600);
             }}

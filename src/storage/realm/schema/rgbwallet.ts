@@ -12,6 +12,17 @@ export const ReceiveDataSchema: ObjectSchema = {
   },
 };
 
+export const ReceiveUTXOSchema: ObjectSchema = {
+  name: RealmSchema.ReceiveUTXOData,
+  primaryKey: 'recipientId',
+  properties: {
+    recipientId: 'string',
+    linkedAsset: 'string?',
+    linkedAmount: 'string?',
+    receiveData: `${RealmSchema.ReceiveData}?`,
+  },
+};
+
 export const NodeBtcBalanceSchema: ObjectSchema = {
   name: RealmSchema.NodeBtcBalance,
   embedded: true,
@@ -31,6 +42,7 @@ export const RgbWalletSchema: ObjectSchema = {
     accountXpubVanilla: 'string',
     rgbDir: 'string?',
     receiveData: `${RealmSchema.ReceiveData}?`,
+    receiveUTXOs: `${RealmSchema.ReceiveUTXOData}[]`,
     utxos: 'string?[]',
     nodeUrl: 'string?',
     nodeAuthentication: 'string?',
