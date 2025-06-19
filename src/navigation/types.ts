@@ -62,6 +62,7 @@ export type AppStackParams = {
   [NavigationRoutes.VERIFYDOMAIN]: undefined;
   [NavigationRoutes.VERIFYX]: undefined;
   [NavigationRoutes.IMPORTXPOST]: undefined;
+  [NavigationRoutes.TRANSACTIONTYPEINFO]: undefined;
   // Add other routes as needed
 };
 

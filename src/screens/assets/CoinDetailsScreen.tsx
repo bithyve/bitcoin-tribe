@@ -26,7 +26,6 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
@@ -37,6 +36,7 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import TransactionInfoCard from './components/TransactionInfoCard';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -138,7 +138,8 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const totalAssetLocalAmount = useMemo(() => {
-    return (channelsData ?? [])
+    const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
+    return safeChannelsData
       .filter(channel => channel.asset_id === assetId)
       .reduce((sum, channel) => sum + (channel.asset_local_amount || 0), 0);
   }, [channelsData, assetId]);
@@ -191,15 +192,13 @@ const CoinDetailsScreen = () => {
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
+            chosenAsset: coin,
           })
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView
-          spendableBalance={coin?.balance?.spendable}
-          style={styles.toolTipCotainer}
-        />
+        <TransactionInfoCard style={styles.toolTipCotainer} />
       </View>
       <TransactionsList
         style={styles.transactionContainer}
@@ -283,10 +282,10 @@ export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
   spendableBalanceWrapper: {
-    top: -30,
+    top: -20,
   },
   transactionContainer: {
-    top: -25,
+    top: -20,
     height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {

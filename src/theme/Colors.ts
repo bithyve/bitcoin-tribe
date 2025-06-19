@@ -60,5 +60,6 @@ const Colors = {
   DarkJungleGreen: 'rgba(21, 42, 32,1)',
   DarkGunmetal: 'rgba(19, 29, 45,1)',
   ChineseBlack1: 'rgba(18, 18, 18, 0.2)',
+  Cultured: 'rgba(245, 245, 245,1)',
 };
 export default Colors;

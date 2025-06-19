@@ -7,7 +7,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -81,7 +85,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
-  iconUrl
+  iconUrl,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -172,8 +176,9 @@ const SendAssetScreen = () => {
   const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-    JSON.parse(averageTxFeeJSON);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
+    ? JSON.parse(averageTxFeeJSON)
+    : {};
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -206,7 +211,7 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
-    averageTxFee[TxPriority.LOW].feePerByte,
+    averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {
@@ -410,7 +415,11 @@ const SendAssetScreen = () => {
       setVisibleSpendableErrInfo(true);
     });
   };
-
+  console.log(
+    'assetData?.assetSchema.toUpperCase()',
+    assetData?.assetSchema.toUpperCase(),
+  );
+  console.log('AssetSchema.Collectible', AssetSchema.Collectible);
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -440,8 +449,8 @@ const SendAssetScreen = () => {
           ticker={assetData?.ticker}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.ticker
-              : assetData?.details
+              ? assetData?.details
+              : assetData?.ticker
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
@@ -659,8 +668,15 @@ const SendAssetScreen = () => {
                   );
                   navigation.replace(NavigationRoutes.HOME);
                 } else {
+                  navigation.dispatch(
+                    CommonActions.setParams({
+                      params: { askReview: true },
+                      key: navigation.getState().routes[
+                        navigation.getState().index - 1
+                      ]?.key,
+                    }),
+                  );
                   navigation.goBack();
-                  navigation.setParams({ askReview: true });
                 }
               }, 600);
             }}

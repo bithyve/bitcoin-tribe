@@ -115,7 +115,7 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                 {onBoarding.authSubTitle}
               </AppText>
             </View>
-            <View>
+            <View style={styles.toggleWrapper}>
               <CustomYesNoSwitch
                 value={authChangeValue}
                 onValueChange={onChangeAuthentication}
@@ -264,10 +264,11 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
       marginVertical: hp(20),
     },
     authWrapper: {
-      width: '70%',
+      width: '69%',
     },
     toggleWrapper: {
-      width: '30%',
+      width: '31%',
+      justifyContent: 'flex-end',
     },
     authTitleText: {
       color: theme.colors.headingColor,

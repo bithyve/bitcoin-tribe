@@ -100,6 +100,7 @@ function TransactionsList({
               navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
                 transaction: item,
                 coin: coin,
+                assetId: assetId,
               });
             }}
           />

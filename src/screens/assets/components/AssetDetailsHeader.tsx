@@ -1,5 +1,12 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Image, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Platform,
+  ImageBackground,
+  StatusBar,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,16 +30,14 @@ import {
   numberWithCommas,
 } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import AppType from 'src/models/enums/AppType';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import AppTouchable from 'src/components/AppTouchable';
 import useBalance from 'src/hooks/useBalance';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
-import AssetIcon from 'src/components/AssetIcon';
+import AssetBackIcon from 'src/assets/images/assetBackIcon.svg';
+import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -78,7 +83,6 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
-
   return (
     <>
       {/* <Animated.View
@@ -88,43 +92,33 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
       <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
-        <AppHeader
-          rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-          onSettingsPress={onPressSetting}
-        />
-        <AppTouchable onPress={onPressSetting}>
-          <View style={styles.assetImageWrapper}>
-            {asset.assetSchema.toUpperCase() === AssetSchema.Collectible ? (
-              <Image
-                source={{
-                  uri: Platform.select({
-                    android: `file://${assetImage}`,
-                    ios: assetImage,
-                  }),
-                }}
-                resizeMode="cover"
-                style={styles.imageStyle}
-              />
-            ) : (
-              <View style={styles.identiconWrapper}>
-                <View style={styles.identiconWrapper2}>
-                  <AssetIcon
-                    assetTicker={asset?.ticker}
-                    assetID={asset?.assetId}
-                    size={120}
-                    verified={asset?.issuer?.verified}
-                  />
-                </View>
-              </View>
-            )}
-          </View>
+        <ImageBackground
+          style={styles.assetBackImageContainer}
+          imageStyle={styles.assetBackImageRadius}
+          resizeMode="cover"
+          source={{
+            uri: Platform.select({
+              android: `file://${assetImage}`,
+              ios: assetImage,
+            }),
+          }}>
+          <StatusBar
+            translucent
+            backgroundColor="transparent"
+            barStyle="light-content"
+          />
+          <AppHeader
+            backIcon={<AssetBackIcon />}
+            rightIcon={<AssetInfoIcon />}
+            onSettingsPress={onPressSetting}
+          />
           <View style={styles.row}>
-            <AppText variant="body2" style={styles.assetNameText}>
+            <AppText variant="body1" style={styles.assetNameText}>
               {assetName}
             </AppText>
             {asset.issuer?.verified && <IconVerified width={20} height={20} />}
           </View>
-        </AppTouchable>
+        </ImageBackground>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             {app.appType === AppType.NODE_CONNECT ? (
@@ -159,20 +153,28 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 </View>
               </View>
             ) : (
-              <AppTouchable
-                style={styles.onChainTotalBalanceWrapper}
-                onPress={() => {}}>
-                <View style={styles.totalBalanceWrapper1}>
-                  <AppText variant="pageTitle2" style={styles.totalBalance}>
+              <View style={styles.balanceContainer}>
+                <View style={styles.totalBalanceWrapper}>
+                  <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(
-                      asset.balance.future + asset.balance?.offchainOutbound,
+                      asset.balance.future +
+                        asset.balance?.offchainOutbound +
+                        totalAssetLocalAmount,
                     )}
                   </AppText>
+                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                    {home.totalBalance}
+                  </AppText>
                 </View>
-                <AppText variant="body1" style={styles.totalBalanceLabel}>
-                  {home.totalBalance}
-                </AppText>
-              </AppTouchable>
+                <View style={styles.modeBalanceWrapper}>
+                  <AppText variant="heading2" style={styles.totalBalance}>
+                    {formatLargeNumber(asset?.balance?.spendable)}
+                  </AppText>
+                  <AppText variant="body1" style={styles.totalBalanceLabel}>
+                    {assets.spendable}
+                  </AppText>
+                </View>
+              </View>
             )}
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
@@ -208,8 +210,8 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: hp(20),
-      width: '100%',
-      top: -30,
+      width: '92%',
+      marginHorizontal: hp(14),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
@@ -219,6 +221,17 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       // overflow: 'visible',
       position: 'relative',
       backgroundColor: theme.colors.walletBackgroundColor,
+    },
+    assetBackImageContainer: {
+      height: hp(260),
+      paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
+      paddingLeft: hp(14),
+      paddingRight: hp(5),
+      marginBottom: hp(10),
+    },
+    assetBackImageRadius: {
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
     },
     totalBalance: {
       color: theme.colors.headingColor,
@@ -290,21 +303,23 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: 120,
     },
     assetImageWrapper: {
-      // top: -50,
       position: 'relative',
       zIndex: 1,
     },
     assetNameText: {
       textAlign: 'center',
+      color: theme.colors.successPopupTitleColor,
+      fontWeight: '500',
     },
     onChainTotalBalanceWrapper: {
       alignItems: 'center',
     },
     row: {
+      flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
-      top: -50,
+      alignItems: 'flex-end',
       justifyContent: 'center',
+      paddingBottom: hp(10),
     },
   });
 export default AssetDetailsHeader;
