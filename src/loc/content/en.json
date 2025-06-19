@@ -463,7 +463,12 @@
     "utxoValue": "UTXO Value",
     "requestTSatsProcessTitle": "Processing Your Request",
     "requestTSatsProcessSubTitle": "Your test sats request is being processed. Please hold on for a moment. Thank you for your patience!",
-    "xpubAndUtxoTitle": "xPUB and UTXOs"
+    "xpubAndUtxoTitle": "xPUB and UTXOs",
+    "valueMismatchTitle": "Value Mismatch Detected",
+    "valueMismatchSubTitle": "There’s a mismatch between what was sent and what you received. It could be:",
+    "valueMismatchInfo1": "A different asset than expected",
+    "valueMismatchInfo2": "The same asset but with a different amount",
+    "valueMismatchInfo3": "This might happen due to decoding errors or incorrect UTXO handling. Please double-check with the sender or contact support if this wasn't expected."
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -710,6 +715,7 @@
     "closeChannel": "Close Channel",
     "selectYourAsset": "Select Your Asset",
     "selectYourAssetErrMsg": "Please select your asset",
+    "selectAsset": "Select asset",
     "availableBalanceText": "Avail. Bal: ",
     "closeChannelPopupTitle": "Close Channel?",
     "closeChannelPopupSubTitle": "This action will stop transactions and cannot be undone.",
