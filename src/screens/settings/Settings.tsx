@@ -221,6 +221,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
       manualAssetBackupStatus: manualAssetBackupStatus,
       hasCompletedManualBackup: hasCompletedManualBackup,
+      hideMenu: app.appType === AppType.NODE_CONNECT,
     },
     {
       id: 4,

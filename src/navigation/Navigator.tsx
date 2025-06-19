@@ -84,6 +84,7 @@ import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
 import ContactRequest from 'src/screens/community/ContactRequest';
 import Chat from 'src/screens/community/Chat';
+import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -342,6 +343,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.CHAT}
           component={Chat}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.TRANSACTIONTYPEINFO}
+          component={TransactionTypeInfoScreen}
         />
       </Stack.Navigator>
     </RealmProvider>
