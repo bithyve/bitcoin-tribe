@@ -24,6 +24,7 @@ import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import useRgbWallets from 'src/hooks/useRgbWallets';
 
 type WalletTransactionsProps = {
   assetName: string;
