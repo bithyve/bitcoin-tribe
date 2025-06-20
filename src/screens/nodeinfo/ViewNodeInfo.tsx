@@ -38,7 +38,7 @@ const ViewNodeInfo = () => {
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
-
+  console.log('nodeInfo', nodeInfo);
   useEffect(() => {
     mutate();
   }, []);
@@ -58,7 +58,7 @@ const ViewNodeInfo = () => {
       initNodeMutation.reset();
       mutate();
     } else if (initNodeMutation.isError) {
-      Toast(`${initNodeMutation.error}`, true);
+      Toast(`${initNodeMutation?.error}`, true);
     }
   }, [initNodeMutation.isSuccess, initNodeMutation, initNodeMutation.isError]);
 
@@ -87,7 +87,8 @@ const ViewNodeInfo = () => {
         setnodeInfo(data);
       }
     } else if (error) {
-      Toast(error, true);
+      const errMsg = error instanceof Error ? error.message : String(error);
+      Toast(errMsg, true);
     }
   }, [data, error]);
 

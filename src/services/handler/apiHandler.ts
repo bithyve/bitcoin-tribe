@@ -296,7 +296,8 @@ export class ApiHandler {
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
-            mnemonic: rgbNodeConnectParams.mnemonic,
+            mnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
@@ -316,16 +317,13 @@ export class ApiHandler {
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
-          console.log(
-            'apihandler RLN rgbNodeConnectParams',
-            rgbNodeConnectParams,
-          );
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
             appName,
             walletImage,
-            primaryMnemonic: rgbNodeConnectParams.mnemonic,
+            primaryMnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
             version: DeviceInfo.getVersion(),

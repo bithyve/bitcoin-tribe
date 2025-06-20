@@ -54,7 +54,7 @@ function HomeScreen() {
   const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
     ApiHandler.isBackupRequired,
   );
-  const initNodeMutation = useMutation(ApiHandler.initNode);
+  // const initNodeMutation = useMutation(ApiHandler.initNode);
 
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
@@ -69,7 +69,7 @@ function HomeScreen() {
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
-
+  console.log('rgbWallet', rgbWallet);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
@@ -92,9 +92,9 @@ function HomeScreen() {
 
   useEffect(() => {
     ApiHandler.fetchPresetAssets();
-    if (app.appType === AppType.SUPPORTED_RLN) {
-      initNodeMutation.mutate(app?.id);
-    }
+    // if (app.appType === AppType.SUPPORTED_RLN) {
+    //   initNodeMutation.mutate(app?.id);
+    // }
   }, []);
 
   useEffect(() => {
