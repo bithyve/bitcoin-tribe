@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -28,6 +29,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppTouchable from 'src/components/AppTouchable';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from 'src/components/AssetIcon';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -52,6 +54,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     headerRightIcon,
     totalAssetLocalAmount,
   } = props;
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
@@ -81,7 +84,11 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
             <View style={styles.balanceContainer}>
               <AppTouchable
                 style={styles.totalBalanceWrapper}
-                onPress={onPressSetting}>
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.COINMETADATA, {
+                    assetId: asset.assetId,
+                  });
+                }}>
                 <View style={styles.identiconWrapper}>
                   <View style={styles.identiconWrapper2}>
                     <AssetIcon

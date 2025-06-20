@@ -38,12 +38,16 @@ import useBalance from 'src/hooks/useBalance';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetBackIcon from 'src/assets/images/assetBackIcon.svg';
 import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type assetDetailsHeaderProps = {
   assetName: string;
   asset?: Coin | Collectible;
   assetImage?: string;
   assetTicker?: string;
+  assetId?: string;
   onPressSetting?: () => void;
   onPressSend: () => void;
   onPressReceive: () => void;
@@ -58,6 +62,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     assetName,
     asset,
     assetTicker,
+    assetId,
     assetImage,
     onPressSetting,
     onPressSend,
@@ -69,6 +74,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     totalAssetLocalAmount,
   } = props;
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -89,7 +95,12 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
       </Animated.View> */}
-      <View
+      <AppTouchable
+        onPress={() =>
+          navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+            assetId,
+          })
+        }
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <ImageBackground
@@ -187,7 +198,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             </View>
           </View>
         </View>
-      </View>
+      </AppTouchable>
     </>
   );
 }
