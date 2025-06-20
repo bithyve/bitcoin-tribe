@@ -96,14 +96,14 @@ function AssetRegistryScreen() {
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
       const feeData = getAssetIssuanceFeeMutation.data;
-      if (feeData.fee > 0) {
+      if (feeData?.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs?.transactions?.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid?.length > 0) {
           registerAsset();
         } else {
           getAssetIssuanceFeeMutation.reset();
@@ -153,7 +153,7 @@ function AssetRegistryScreen() {
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
-        const tx = wallet.specs.transactions.find(
+        const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',

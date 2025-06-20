@@ -216,7 +216,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                     {getBalance(balances)}
                   </AppText>
                   {initialCurrencyMode === CurrencyKind.SATS && (
-                    <AppText variant="caption" style={styles.satsText}>
+                    <AppText variant="heading2" style={styles.satsText}>
                       sats
                     </AppText>
                   )}
@@ -305,7 +305,7 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     satsText: {
       color: theme.colors.headingColor,
-      // marginTop: hp(10),
+      marginTop: hp(8),
       marginLeft: hp(5),
     },
     transCtaWrapper: {
