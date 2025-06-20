@@ -178,14 +178,20 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     {home.totalBalance}
                   </AppText>
                 </AppTouchable>
-                <View style={styles.modeBalanceWrapper}>
+                <AppTouchable
+                  style={styles.modeBalanceWrapper}
+                  onPress={() => {
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(asset?.balance?.spendable)}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {assets.spendable}
                   </AppText>
-                </View>
+                </AppTouchable>
               </View>
             )}
             <View style={styles.transCtaWrapper}>
