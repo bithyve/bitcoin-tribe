@@ -36,14 +36,24 @@ const styles = StyleSheet.create({
   textTimeReceiver: {
     color: '#808080',
   },
+  textDay: {
+    color: '#808080',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
 })
 
-const MessageItem = ({ message, appId }) => {
+const MessageItem = ({ message, previousMessage, appId }) => {
 
   const isSender = React.useMemo(() => message.senderPublicKey === appId, [message.senderPublicKey, appId])
   const time = React.useMemo(() => moment(message.createdAt).format('hh:mm A'), [message.createdAt])
 
-  return (
+  const isSameDay = React.useMemo(() => {
+    if (!previousMessage) return false;
+    return moment(message.createdAt).isSame(moment(previousMessage.createdAt), 'day');
+  }, [message.createdAt, previousMessage?.createdAt])
+
+  const Message = () => (
     <View style={isSender ? styles.containerSender : styles.containerReceiver}>
       <View style={isSender ? styles.messageContainerSender : styles.messageContainerReceiver}>
         <AppText style={{ color: 'white' }}>{message.message}</AppText>
@@ -51,6 +61,12 @@ const MessageItem = ({ message, appId }) => {
       <AppText variant='body2' style={isSender ? styles.textTimeSender : styles.textTimeReceiver}>{time}</AppText>
     </View>
   )
+
+  return isSameDay ? <Message /> : 
+  <View>
+    <AppText variant='body2' style={styles.textDay}>{moment(message.createdAt).format('MMM DD, YYYY')}</AppText>
+    <Message />
+  </View>
 }
 
 export default MessageItem

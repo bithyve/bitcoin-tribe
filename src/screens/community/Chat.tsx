@@ -89,6 +89,7 @@ const Chat = () => {
       dbManager.updateObjectByPrimaryId(RealmSchema.Community, 'id', room.publicKey, {
         messages: [...(community.messages || []), messageData]
       });
+      flatListRef.current?.scrollToEnd({ animated: true });
     } catch (error) {
       console.error('Error creating chat room: ', error);
     }

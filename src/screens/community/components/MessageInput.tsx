@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import AppTouchable from 'src/components/AppTouchable';
 import IconSend from 'src/assets/images/icon_send.svg';
+import IconPlus from 'src/assets/images/ic_plus.svg';
 
 const styles = StyleSheet.create({
   containerBottom: {
@@ -38,6 +39,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
   },
+  btnPlus: {
+    paddingRight: 5,
+    alignItems: 'center',
+  },
   containerTextInputIcons: {
     position: 'absolute',
     right: 0,
@@ -60,6 +65,13 @@ const MessageInput = ({
 
   return (
     <View style={styles.containerBottom}>
+
+      <AppTouchable style={styles.btnPlus} onPress={() => {
+        console.log('onPressSend');
+      }}>
+        <IconPlus />
+      </AppTouchable>
+
       <TextInput
         value={message}
         onChangeText={(text) => setMessage(text)}
@@ -72,7 +84,7 @@ const MessageInput = ({
         placeholderStyle={styles.placeholderText}
       />
 
-      <AppTouchable style={styles.btnSend} onPress={() => onPressSend()}>
+      <AppTouchable disabled={message.trim() === '' || disabled} style={styles.btnSend} onPress={() => onPressSend()}>
         <IconSend />
       </AppTouchable>
     </View>
