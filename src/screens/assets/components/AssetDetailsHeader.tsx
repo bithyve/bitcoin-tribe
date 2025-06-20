@@ -95,12 +95,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
         <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
       </Animated.View> */}
-      <AppTouchable
-        onPress={() =>
-          navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-            assetId,
-          })
-        }
+      <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
         style={styles.largeHeader}>
         <ImageBackground
@@ -165,7 +160,13 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               </View>
             ) : (
               <View style={styles.balanceContainer}>
-                <View style={styles.totalBalanceWrapper}>
+                <AppTouchable
+                  style={styles.totalBalanceWrapper}
+                  onPress={() => {
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(
                       asset.balance.future +
@@ -176,7 +177,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {home.totalBalance}
                   </AppText>
-                </View>
+                </AppTouchable>
                 <View style={styles.modeBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(asset?.balance?.spendable)}
@@ -198,7 +199,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             </View>
           </View>
         </View>
-      </AppTouchable>
+      </View>
     </>
   );
 }
@@ -223,6 +224,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: hp(20),
       width: '92%',
       marginHorizontal: hp(14),
+      marginTop: hp(10),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),
