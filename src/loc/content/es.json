@@ -673,7 +673,9 @@
     "waitingVerificationTitle": "Esperando verificación",
     "waitingVerificationSubTitle": "La transacción está en verificación. El proceso continuará una vez que se completen las comprobaciones.",
     "failedTitle": "Fallido",
-    "failedSubTitle": "La transacción ha fallado. No se movieron fondos."
+    "failedSubTitle": "La transacción ha fallado. No se movieron fondos.",
+    "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
+    "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público."
   },
   "community": {
     "fnfTitle": "Community",
