@@ -27,7 +27,10 @@ const RGBWalletStatus = () => {
 
   const onPress = () => {
     if (!isWalletOnline) {
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         navigation.navigate(NavigationRoutes.VIEWNODEINFO);
       } else {
         refreshRgbWallet.mutate();

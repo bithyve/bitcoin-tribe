@@ -91,15 +91,12 @@ export class RLNNodeApiServices {
     });
   }
 
-  public async estimateFee(body: {
-    blocks: number;
-  }): Promise<{}> {
+  public async estimateFee(body: { blocks: number }): Promise<{}> {
     return this.request('/estimatefee', {
       method: 'POST',
       body: JSON.stringify(body),
     });
   }
-
 
   public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
     return this.request('/listunspents', {
@@ -199,7 +196,7 @@ export class RLNNodeApiServices {
       method: 'GET',
     });
 
-    console.log(JSON.stringify(response));
+    console.log('response - ', JSON.stringify(response));
 
     return response;
   }
@@ -355,6 +352,12 @@ export class RLNNodeApiServices {
     return this.request('/assetbalance', {
       method: 'POST',
       body: JSON.stringify(body),
+    });
+  }
+
+  public async unlockNode(id: string): Promise<{}> {
+    return this.request(`/unlock/${id}`, {
+      method: 'POST',
     });
   }
 

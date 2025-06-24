@@ -69,7 +69,6 @@ function HomeScreen() {
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { setAppType } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
-  console.log('rgbWallet', rgbWallet);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
@@ -92,9 +91,14 @@ function HomeScreen() {
 
   useEffect(() => {
     ApiHandler.fetchPresetAssets();
-    // if (app.appType === AppType.SUPPORTED_RLN) {
-    //   initNodeMutation.mutate(app?.id);
-    // }
+    const fetchStatus = async () => {
+      if (app.appType === AppType.SUPPORTED_RLN) {
+        const status = await ApiHandler.checkNodeStatus(app?.id);
+        console.log('Node status:', status);
+      }
+    };
+
+    fetchStatus();
   }, []);
 
   useEffect(() => {

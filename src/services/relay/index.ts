@@ -259,6 +259,24 @@ export default class Relay {
     }
   };
 
+  public static checkNodeStatus = async (
+    nodeId: string,
+  ): Promise<string | null> => {
+    try {
+      const node: any = await Relay.getNodeById(nodeId);
+      const status = node?.nodes?.data?.status;
+      if (status === 'PAUSED') {
+        await Relay.startNodeById(nodeId);
+      } else {
+        console.log('Node status:', status);
+      }
+      return status;
+    } catch (err) {
+      console.error('Error fetching node status:', err);
+      return null;
+    }
+  };
+
   public static getAssetIssuanceFee = async (): Promise<{
     address: string;
     fee: number;

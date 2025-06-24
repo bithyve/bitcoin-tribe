@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import LottieView from 'lottie-react-native';
+import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -20,6 +21,8 @@ import Toast from 'src/components/Toast';
 import NodeInfoItem from './components/NodeInfoItem';
 import { hp } from 'src/constants/responsive';
 import { AppContext } from 'src/contexts/AppContext';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -27,20 +30,23 @@ const ViewNodeInfo = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const { mutate, isLoading, isError, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
   const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);
   const initNodeMutation = useMutation(ApiHandler.initNode);
-  const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
+  const unlockNodeMutation = useMutation((nodeId: string, appType: string) =>
+    ApiHandler.unlockNode(nodeId, appType),
+  );
   const [nodeStatus, setSetNodeStatus] = useState('run');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
   console.log('nodeInfo', nodeInfo);
   useEffect(() => {
-    mutate();
+    mutate({ nodeId: app?.id, appType: app?.appType });
   }, []);
 
   useEffect(() => {
@@ -122,7 +128,12 @@ const ViewNodeInfo = () => {
           <View style={styles.unLockWrapper}>
             <SelectOption
               title={node.unlockNode}
-              onPress={() => unlockNodeMutation.mutate()}
+              onPress={() =>
+                unlockNodeMutation.mutate({
+                  nodeId: app?.id,
+                  appType: app?.appType,
+                })
+              }
               enableSwitch={false}
               onValueChange={() => {}}
               toggleValue={nodeStatusLock}

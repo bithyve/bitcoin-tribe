@@ -95,7 +95,10 @@ export class ApiHandler {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       ApiHandler.authToken = authToken;
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -621,6 +624,7 @@ export class ApiHandler {
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     if (app.appType === AppType.NODE_CONNECT) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
+      console.log('nodeInfo', nodeInfo);
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
       } else {
@@ -1868,8 +1872,22 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('viewNodeInfo - error', error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async checkNodeStatus(nodeId) {
+    try {
+      const response = await Relay.checkNodeStatus(nodeId);
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to fetching node status');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to fetching node status');
     }
   }
 
@@ -2029,9 +2047,15 @@ export class ApiHandler {
     }
   }
 
-  static async unlockNode() {
+  static async unlockNode({ nodeId, appType }) {
     try {
-      const response = await ApiHandler.api.unlock('tribe@2024');
+      let response;
+      if (appType === AppType.NODE_CONNECT) {
+        response = await ApiHandler.api.unlock('tribe@2024');
+      } else {
+        response = await ApiHandler.api.unlockNode(nodeId);
+      }
+
       console.log(response);
       if (response.error) {
         throw new Error(response.error);
