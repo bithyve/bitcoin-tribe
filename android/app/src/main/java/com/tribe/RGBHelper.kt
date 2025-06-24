@@ -74,21 +74,24 @@ object RGBHelper {
         }
     }
 
-    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null): String {
-        Log.d(TAG, "startRGBReceiving: assetID=$assetID, amount=$amount")
+    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, blinded: Boolean): String {
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
-        val blindedData = getBlindedUTXO(if (assetID == "") null else assetID,if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        val blindedData = if (blinded) {
+            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        } else {
+            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        }
         val gson = Gson()
         val json = gson.toJson(blindedData)
         return json.toString()
     }
 
-    fun receiveAsset(assetID: String, amount: ULong?): String {
-        return handleMissingFunds{ startRGBReceiving(assetID, amount) }
+    fun receiveAsset(assetID: String, amount: ULong?, blinded: Boolean): String {
+        return handleMissingFunds{ startRGBReceiving(assetID, amount, blinded) }
     }
 
     private fun <T> handleMissingFunds(callback: () -> T): T {
@@ -122,8 +125,17 @@ object RGBHelper {
     }
 
     private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
-        Log.d(TAG, "getBlindedUTXO: assetID"+assetID)
         return RGBWalletRepository.wallet?.blindReceive(
+            assetID,
+            amount,
+            expirationSeconds,
+            listOf(AppConstants.proxyConsignmentEndpoint),
+            0u
+        )
+    }
+
+    private fun getWitnessUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
+        return RGBWalletRepository.wallet?.witnessReceive(
             assetID,
             amount,
             expirationSeconds,

@@ -75,10 +75,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun receiveAsset(assetID: String, amount: Float, promise: Promise){
+    fun receiveAsset(assetID: String, amount: Float, blinded: Boolean, promise: Promise){
         coroutineScope.launch{
             try {
-                promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong()))
+                promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong(), blinded))
             }catch (e: Exception) {
                 val message = e.message
                 val jsonObject = JsonObject()

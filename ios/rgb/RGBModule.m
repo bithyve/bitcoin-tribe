@@ -94,11 +94,12 @@ RCT_EXPORT_METHOD(syncRgbAssets:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 RCT_EXPORT_METHOD(receiveAsset:(NSString*)assetID
                   amount:(float)amount
+                  blinded:(BOOL)blinded
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [
-    helper receiveAssetWithAssetID:assetID amount:amount callback:^(NSString * _Nonnull response) {
+    helper receiveAssetWithAssetID:assetID amount:amount blinded:blinded callback:^(NSString * _Nonnull response) {
       resolve(response);
     }
    ];

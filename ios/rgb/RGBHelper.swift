@@ -416,7 +416,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData(assetID: String, amount: Float) -> String {
+  func genReceiveData(assetID: String, amount: Float, blinded: Bool) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -435,13 +435,25 @@ import CloudKit
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
                   ], skipSync: false
               )
-              let bindData = try wallet.blindReceive(
-                assetId: assetID != "" ? assetID : nil,
-                amount: amount != 0 ? UInt64(amount) : nil,
-                  durationSeconds: Constants.rgbBlindDuration,
-                  transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                  minConfirmations: 0
-              )
+              
+              let assetId = assetID.isEmpty ? nil : assetID
+              let amountValue = amount == 0 ? nil : UInt64(amount)
+              
+              let bindData = try blinded ? 
+                  wallet.blindReceive(
+                      assetId: assetId,
+                      amount: amountValue,
+                      durationSeconds: Constants.rgbBlindDuration,
+                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      minConfirmations: 0
+                  ) :
+                  wallet.witnessReceive(
+                      assetId: assetId,
+                      amount: amountValue,
+                      durationSeconds: Constants.rgbBlindDuration,
+                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      minConfirmations: 0
+                  )
 
               let data: [String: Any] = [
                   "invoice": bindData.invoice,
@@ -454,6 +466,7 @@ import CloudKit
               return json
           }
       } catch let error {
+        print(error)
           let data: [String: Any] = [
               "error": error.localizedDescription
           ]
@@ -571,8 +584,10 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(assetID: String, amount: Float,callback: @escaping ((String) -> Void)){
-    let response = genReceiveData(assetID: assetID, amount: amount)
+  @objc func receiveAsset(assetID: String, amount: Float, blinded: Bool, callback: @escaping ((String) -> Void)){
+    print("blinded")
+    print(blinded)
+    let response = genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
     callback(response)
   }
   
