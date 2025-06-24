@@ -673,7 +673,9 @@
     "waitingVerificationTitle": "सत्यापन की प्रतीक्षा",
     "waitingVerificationSubTitle": "लेनदेन सत्यापन में है। जांच पूरी होने के बाद प्रक्रिया जारी रहेगी।",
     "failedTitle": "असफल",
-    "failedSubTitle": "लेनदेन असफल रहा। कोई फंड स्थानांतरित नहीं किया गया।"
+    "failedSubTitle": "लेनदेन असफल रहा। कोई फंड स्थानांतरित नहीं किया गया।",
+    "platformFeeTitle": "प्लेटफ़ॉर्म शुल्क (रजिस्ट्र्री लिस्टिंग)",
+    "platformFeeSubTitle": "यह लेनदेन आपके एसेट को सार्वजनिक रजिस्ट्र्री में सूचीबद्ध करने के लिए शुरू किया गया था।"
   },
   "community": {
     "fnfTitle": "Community",

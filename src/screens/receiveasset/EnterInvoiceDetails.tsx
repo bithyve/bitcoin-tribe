@@ -138,8 +138,13 @@ const EnterInvoiceDetails = () => {
       ? 'lightning'
       : 'bitcoin',
   );
-  const coins = useQuery<Coin[]>(RealmSchema.Coin);
-  const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
+  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
+    "visibility != 'HIDDEN'",
+  );
+  const collectibles = useQuery<Collectible[]>(
+    RealmSchema.Collectible,
+  ).filtered("visibility != 'HIDDEN'");
+
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined.sort((a, b) => a.timestamp - b.timestamp);

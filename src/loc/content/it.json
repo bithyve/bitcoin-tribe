@@ -673,7 +673,9 @@
     "waitingVerificationTitle": "In attesa di verifica",
     "waitingVerificationSubTitle": "La transazione è in fase di verifica. Il processo continuerà una volta completati i controlli.",
     "failedTitle": "Fallita",
-    "failedSubTitle": "Transazione non riuscita. Nessun fondo è stato trasferito."
+    "failedSubTitle": "Transazione non riuscita. Nessun fondo è stato trasferito.",
+    "platformFeeTitle": "Commissione della piattaforma (Elenco nel registro)",
+    "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico."
   },
   "community": {
     "fnfTitle": "Community",
