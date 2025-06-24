@@ -673,7 +673,9 @@
     "waitingVerificationTitle": "検証待ち",
     "waitingVerificationSubTitle": "取引は検証中です。確認が完了すると処理が続行されます。",
     "failedTitle": "失敗",
-    "failedSubTitle": "取引が失敗しました。資金は移動されていません。"
+    "failedSubTitle": "取引が失敗しました。資金は移動されていません。",
+    "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
+    "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。"
   },
   "community": {
     "fnfTitle": "Community",

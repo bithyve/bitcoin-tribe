@@ -187,7 +187,7 @@ const CoinDetailsScreen = () => {
           })
         }
         onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
+          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
         }
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
@@ -197,9 +197,9 @@ const CoinDetailsScreen = () => {
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
-      <View style={styles.spendableBalanceWrapper}>
+      {/* <View style={styles.spendableBalanceWrapper}>
         <TransactionInfoCard style={styles.toolTipCotainer} />
-      </View>
+      </View> */}
       <TransactionsList
         style={styles.transactionContainer}
         transactions={transactionsData}

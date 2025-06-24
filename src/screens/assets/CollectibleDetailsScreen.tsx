@@ -195,6 +195,7 @@ const CollectibleDetailsScreen = () => {
         assetName={collectible.name}
         assetTicker={collectible.details}
         assetImage={collectible?.media?.filePath}
+        assetId={collectible.assetId}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={
@@ -216,9 +217,7 @@ const CollectibleDetailsScreen = () => {
           })
         }
         onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-            assetId,
-          })
+          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
         }
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
@@ -228,9 +227,9 @@ const CollectibleDetailsScreen = () => {
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
-      <View style={styles.spendableBalanceWrapper}>
+      {/* <View style={styles.spendableBalanceWrapper}>
         <TransactionInfoCard style={styles.toolTipCotainer} />
-      </View>
+      </View> */}
       <TransactionsList
         transactions={transactionsData}
         isLoading={isLoading}
@@ -341,7 +340,8 @@ const getStyles = () =>
     },
     transactionContainer: {
       paddingHorizontal: hp(14),
-      height: Platform.OS === 'ios' ? '40%' : '38%',
+      height: Platform.OS === 'ios' ? '46%' : '42%',
+      marginTop: hp(15),
     },
     toolTipCotainer: {
       // top: windowHeight > 670 ? 110 : 100,
