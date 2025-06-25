@@ -37,9 +37,7 @@ const ViewNodeInfo = () => {
   const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);
   const initNodeMutation = useMutation(ApiHandler.initNode);
-  const unlockNodeMutation = useMutation((nodeId: string, appType: string) =>
-    ApiHandler.unlockNode(nodeId, appType),
-  );
+  const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
   const [nodeStatus, setSetNodeStatus] = useState('run');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
@@ -128,12 +126,7 @@ const ViewNodeInfo = () => {
           <View style={styles.unLockWrapper}>
             <SelectOption
               title={node.unlockNode}
-              onPress={() =>
-                unlockNodeMutation.mutate({
-                  nodeId: app?.id,
-                  appType: app?.appType,
-                })
-              }
+              onPress={() => unlockNodeMutation.mutate()}
               enableSwitch={false}
               onValueChange={() => {}}
               toggleValue={nodeStatusLock}

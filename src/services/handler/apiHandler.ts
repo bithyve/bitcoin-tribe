@@ -2047,16 +2047,9 @@ export class ApiHandler {
     }
   }
 
-  static async unlockNode({ nodeId, appType }) {
+  static async unlockNode() {
     try {
-      let response;
-      if (appType === AppType.NODE_CONNECT) {
-        response = await ApiHandler.api.unlock('tribe@2024');
-      } else {
-        response = await ApiHandler.api.unlockNode(nodeId);
-      }
-
-      console.log(response);
+      const response = await ApiHandler.api.unlock('tribe@2024');
       if (response.error) {
         throw new Error(response.error);
       }
