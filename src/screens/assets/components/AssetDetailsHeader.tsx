@@ -38,12 +38,16 @@ import useBalance from 'src/hooks/useBalance';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetBackIcon from 'src/assets/images/assetBackIcon.svg';
 import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type assetDetailsHeaderProps = {
   assetName: string;
   asset?: Coin | Collectible;
   assetImage?: string;
   assetTicker?: string;
+  assetId?: string;
   onPressSetting?: () => void;
   onPressSend: () => void;
   onPressReceive: () => void;
@@ -58,6 +62,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     assetName,
     asset,
     assetTicker,
+    assetId,
     assetImage,
     onPressSetting,
     onPressSend,
@@ -69,6 +74,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     totalAssetLocalAmount,
   } = props;
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
   const { home, assets } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -154,7 +160,13 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               </View>
             ) : (
               <View style={styles.balanceContainer}>
-                <View style={styles.totalBalanceWrapper}>
+                <AppTouchable
+                  style={styles.totalBalanceWrapper}
+                  onPress={() => {
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(
                       asset.balance.future +
@@ -165,15 +177,21 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {home.totalBalance}
                   </AppText>
-                </View>
-                <View style={styles.modeBalanceWrapper}>
+                </AppTouchable>
+                <AppTouchable
+                  style={styles.modeBalanceWrapper}
+                  onPress={() => {
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(asset?.balance?.spendable)}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {assets.spendable}
                   </AppText>
-                </View>
+                </AppTouchable>
               </View>
             )}
             <View style={styles.transCtaWrapper}>
@@ -212,6 +230,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       borderRadius: hp(20),
       width: '92%',
       marginHorizontal: hp(14),
+      marginTop: hp(10),
     },
     largeHeaderContentWrapper: {
       paddingHorizontal: hp(10),

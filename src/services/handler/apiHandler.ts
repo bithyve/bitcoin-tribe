@@ -55,7 +55,7 @@ import {
   RGBWallet,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
@@ -68,9 +68,6 @@ import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
 import {
   getMessaging,
   getToken,
-  subscribeToTopic,
-  unsubscribeFromTopic,
-  requestPermission,
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
@@ -1638,7 +1635,16 @@ export class ApiHandler {
     try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
-      const authStatus = await requestPermission(messaging);
+      if (Platform.OS === 'android' && Platform.Version >= 33) {
+        const permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+        if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Notification permission denied on Android');
+          return false;
+        }
+      }
+      const authStatus = await messaging.requestPermission();
       const enabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||
         authStatus === AuthorizationStatus.PROVISIONAL;
@@ -1646,7 +1652,6 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }

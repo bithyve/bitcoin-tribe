@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
@@ -12,20 +13,23 @@ import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
 import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
 import RecieveBtcIcon from 'src/assets/images/btcReceiveAssetTxnIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
-import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
 import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmationIconReceive.svg';
+import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
+import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
+import { Keys } from 'src/storage';
 
 function TransactionTypeInfoScreen() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <ScreenContainer>
       <AppHeader title={'Info'} enableBack={true} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.spendableInfoView}>
           <AppText variant="body1" style={styles.titleText}>
             {assets.spendableTitle}
@@ -130,6 +134,19 @@ function TransactionTypeInfoScreen() {
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
               {assets.failedSubTitle}
+            </AppText>
+          </View>
+        </View>
+        <View style={styles.txnInfoContainer}>
+          <View style={styles.txnIconWrapper}>
+            {isThemeDark ? <ServiceFeeIcon /> : <ServiceFeeIconLight />}
+          </View>
+          <View style={styles.txnInfoWrapper}>
+            <AppText variant="body1" style={styles.titleText}>
+              {assets.platformFeeTitle}
+            </AppText>
+            <AppText variant="body2" style={styles.infoText}>
+              {assets.platformFeeSubTitle}
             </AppText>
           </View>
         </View>
