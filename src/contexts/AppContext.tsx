@@ -20,6 +20,8 @@ export const AppContext = React.createContext({
   setCompleteVerification: status => {},
   hasIssuedAsset: null,
   setHasIssuedAsset: status => {},
+  isNodeInitInProgress: null,
+  setNodeInitStatus: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -35,6 +37,7 @@ export function AppProvider({ children }) {
   const [hasCompleteVerification, setCompleteVerification] =
     useState<boolean>(null);
   const [hasIssuedAsset, setHasIssuedAsset] = useState<boolean>(null);
+  const [isNodeInitInProgress, setNodeInitStatus] = useState<boolean>(null);
 
   return (
     <AppContext.Provider
@@ -57,6 +60,8 @@ export function AppProvider({ children }) {
         setCompleteVerification: setCompleteVerification,
         hasIssuedAsset,
         setHasIssuedAsset: setHasIssuedAsset,
+        isNodeInitInProgress,
+        setNodeInitStatus: setNodeInitStatus,
       }}>
       {children}
     </AppContext.Provider>

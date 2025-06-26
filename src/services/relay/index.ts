@@ -163,7 +163,7 @@ export default class Relay {
       res = await RestClient.post(
         `${RELAY}/app/syncfcm`,
         { fcmToken },
-        { authorization: `Bearer ${authToken}` },
+        { Authorization: `Bearer ${authToken}` },
       );
     } catch (err) {
       if (err.response) {

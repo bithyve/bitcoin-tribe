@@ -39,7 +39,7 @@ const RGBWalletStatus = () => {
   };
 
   const msg = useMemo(() => {
-    return appType === AppType.NODE_CONNECT
+    return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? common.rgbNodeOffline
       : common.rgbWalletOffline;
   }, [appType]);

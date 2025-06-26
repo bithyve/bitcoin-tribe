@@ -86,10 +86,7 @@ function SelectWallet() {
       }, 100);
     }
   }, [createNodeMutation.data, createNodeMutation.error]);
-  console.log(
-    'selectWallet createNodeMutation?.data',
-    createNodeMutation?.data,
-  );
+
   return (
     <ScreenContainer>
       <AppHeader

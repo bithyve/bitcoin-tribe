@@ -312,7 +312,6 @@ export class ApiHandler {
             AppType.SUPPORTED_RLN,
             authToken,
           );
-
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
@@ -333,7 +332,7 @@ export class ApiHandler {
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
-            authToken,
+            authToken: rgbNodeConnectParams.authentication,
           };
 
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
@@ -621,7 +620,6 @@ export class ApiHandler {
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     if (app.appType === AppType.NODE_CONNECT) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
-      console.log('nodeInfo', nodeInfo);
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
       } else {
@@ -1637,7 +1635,7 @@ export class ApiHandler {
       const messaging = getMessaging(firebaseApp);
       if (Platform.OS === 'android' && Platform.Version >= 33) {
         const permission = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
         );
         if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
           console.log('Notification permission denied on Android');
@@ -1656,14 +1654,13 @@ export class ApiHandler {
         return true;
       }
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
-
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
         return true;
       }
       return false;
     } catch (error) {
-      console.log('fcm update error: ', error);
+      console.log('fcm update error:', error?.message || error);
       throw error;
     }
   }
