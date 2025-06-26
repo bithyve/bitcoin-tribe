@@ -208,7 +208,7 @@ function AppBackupMenu({ navigation }) {
               <>
                 <View style={styles.contentWrapper}>
                   <AppText variant="caption" style={styles.dotViewStyle}>
-                    {`\u2022`}
+                    {'\u2022'}
                   </AppText>
                   <AppText variant="caption" style={styles.textSubtext}>
                     {settings.assetBackupInfo1}
@@ -216,7 +216,7 @@ function AppBackupMenu({ navigation }) {
                 </View>
                 <View style={styles.contentWrapper}>
                   <AppText variant="caption" style={styles.dotViewStyle}>
-                    {`\u2022`}
+                    {'\u2022'}
                   </AppText>
                   <AppText variant="caption" style={styles.textSubtext}>
                     {settings.assetBackupInfo2}
@@ -224,7 +224,7 @@ function AppBackupMenu({ navigation }) {
                 </View>
                 <View style={styles.contentWrapper}>
                   <AppText variant="caption" style={styles.dotViewStyle}>
-                    {`\u2022`}
+                    {'\u2022'}
                   </AppText>
                   <AppText variant="caption" style={styles.textSubtext}>
                     {settings.assetBackupInfo3}

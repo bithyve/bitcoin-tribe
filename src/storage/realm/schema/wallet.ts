@@ -116,7 +116,7 @@ export const ScriptPubKeySchema = {
     desc: 'string?',
     hex: 'string?',
     type: 'string?',
-  }
+  },
 };
 
 export const InputSchema = {

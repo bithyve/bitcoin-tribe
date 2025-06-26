@@ -14,7 +14,7 @@ function Contexts({ children }: any) {
 
   const [isThemeDark, setIsThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const storedTheme = isThemeDark !== undefined ? isThemeDark : systemTheme;
-  
+
   useEffect(() => {
     if (isThemeDark !== storedTheme) {
       setIsThemeDark(storedTheme);

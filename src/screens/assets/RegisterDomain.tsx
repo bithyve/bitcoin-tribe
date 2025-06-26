@@ -53,7 +53,7 @@ function RegisterDomain() {
 
   const sanitizeDomainInput = (input: string): string => {
     const trimmed = input.trim();
-    if (!trimmed) return '';
+    if (!trimmed) {return '';}
     if (!/^www\./i.test(trimmed)) {
       return `www.${trimmed}`;
     }

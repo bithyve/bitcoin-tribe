@@ -26,7 +26,7 @@ function Socket() {
 
   // proxying call to real socket object:
   this.setNoDelay = (noDelay) => {
-    if (this._socket) this._socket.setNoDelay(noDelay);
+    if (this._socket) {this._socket.setNoDelay(noDelay);}
     this._noDelay = noDelay;
   };
 
@@ -105,6 +105,10 @@ function Socket() {
   this.write = (data) => {
     this._socket.write(data);
   };
+
+  if (this.status === 'disconnected') {
+    this.status = 'connecting';
+  }
 }
 
 module.exports.Socket = Socket;

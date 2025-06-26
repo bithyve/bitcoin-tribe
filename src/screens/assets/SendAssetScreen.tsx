@@ -640,7 +640,7 @@ const SendAssetScreen = () => {
           visible={visible}
           enableCloseIcon={false}
           onDismiss={() => {
-            if (loading || successStatus) return;
+            if (loading || successStatus) {return;}
             setVisible(false);
           }}>
           <SendAssetSuccess

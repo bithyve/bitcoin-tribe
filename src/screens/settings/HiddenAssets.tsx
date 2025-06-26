@@ -32,17 +32,17 @@ function HiddenAssets() {
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
-    collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
+    collection.filtered('visibility == $0', AssetVisibility.HIDDEN),
   );
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
     collection =>
-      collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
+      collection.filtered('visibility == $0', AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     collection =>
-      collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
+      collection.filtered('visibility == $0', AssetVisibility.HIDDEN),
   );
   const assets: Asset[] = useMemo(() => {
     return [...coins, ...collectibles, ...udas].sort(

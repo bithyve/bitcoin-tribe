@@ -61,10 +61,10 @@ const getStyles = (theme: AppTheme) =>
       lineHeight: 20,
     },
     contentWrapper:{
-      marginVertical: hp(20)
+      marginVertical: hp(20),
     },
     wrapper:{
-      marginVertical: hp(20)
-    }
+      marginVertical: hp(20),
+    },
   });
 export default CloseChannelPopupContainer;

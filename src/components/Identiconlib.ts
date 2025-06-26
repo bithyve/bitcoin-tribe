@@ -45,7 +45,7 @@ export module IndenticonLib {
     ctx.beginPath();
     ctx.moveTo((vertices[0] % 5 * scale - offset), (Math.floor(vertices[0] / 5) * scale - offset));
     for (var i = 1; i < vertices.length; i++)
-    ctx.lineTo((vertices[i] % 5 * scale - offset), (Math.floor(vertices[i] / 5) * scale - offset));
+    {ctx.lineTo((vertices[i] % 5 * scale - offset), (Math.floor(vertices[i] / 5) * scale - offset));}
     ctx.closePath();
 
     // offset and rotate coordinate space by patch position (x, y) and

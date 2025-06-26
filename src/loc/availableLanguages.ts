@@ -79,7 +79,7 @@ export default [
     country: 'Russia',
     country_code: 'ru',
   },
-  
+
 {
     language: 'Marathi',
     displayTitle: 'मराठी',

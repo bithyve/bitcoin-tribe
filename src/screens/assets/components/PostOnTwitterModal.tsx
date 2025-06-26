@@ -58,7 +58,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
     const loadImage = async () => {
       if (viewShotRef.current) {
         const uri = await viewShotRef.current.capture({ result: 'tmpfile' });
-        if (uri) setImageUri(uri);
+        if (uri) {setImageUri(uri);}
       }
     };
 
@@ -75,7 +75,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
 
   const showPreview = async () => {
     try {
-      if (!viewShotRef.current) return;
+      if (!viewShotRef.current) {return;}
 
       const uri = await viewShotRef.current.capture({
         result: 'tmpfile',
@@ -91,7 +91,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
 
   const captureAndShare = async () => {
     try {
-      if (!viewShotRef.current) return;
+      if (!viewShotRef.current) {return;}
       let uri = imageUri;
       if (!uri) {
         uri = await viewShotRef.current.capture({

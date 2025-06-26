@@ -2182,7 +2182,7 @@ export class ApiHandler {
       const assetIds = schemas.flatMap(({ schema }) =>
         getUnverifiedAssets(schema).map(asset => asset.assetId),
       );
-      if (assetIds.length === 0) return;
+      if (assetIds.length === 0) {return;}
       const response = await Relay.getAssetsVerificationStatus(assetIds);
       if (!response.status) {
         throw new Error(
@@ -2297,7 +2297,7 @@ export class ApiHandler {
             v => v.type === IssuerVerificationMethod.TWITTER,
           );
 
-          if (!twitterEntry) return;
+          if (!twitterEntry) {return;}
           let updatedVerifiedBy: typeof existingVerifiedBy;
           const twitterPostIndex = existingVerifiedBy.findIndex(
             v => v.type === IssuerVerificationMethod.TWITTER_POST,

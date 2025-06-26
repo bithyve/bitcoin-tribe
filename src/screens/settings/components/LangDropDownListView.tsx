@@ -32,7 +32,7 @@ function LangDropDownListView(props: DropdownProps) {
     langCurrency,
     langCurrencyVariant,
     onDissmiss,
-    flag
+    flag,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);

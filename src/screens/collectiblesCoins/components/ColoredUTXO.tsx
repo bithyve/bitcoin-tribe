@@ -59,7 +59,7 @@ const ColoredUTXO = () => {
     RealmSchema.RgbWallet,
   );
   const unspent: RgbUnspent[] = useMemo(() => {
-    if (!rgbWallet || !rgbWallet.utxos) return [];
+    if (!rgbWallet || !rgbWallet.utxos) {return [];}
     return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
   }, [rgbWallet]);
   const colored = unspent?.filter(

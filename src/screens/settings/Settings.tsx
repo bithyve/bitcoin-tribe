@@ -59,7 +59,6 @@ function SettingsScreen({ navigation }) {
   const [biometrics, setBiometrics] = useState(false);
   const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
-  const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -74,7 +73,7 @@ function SettingsScreen({ navigation }) {
     }
   }, [pinMethod]);
 
-  const enableBiometrics = async () => {
+  const enableBiometrics = useCallback(async () => {
     try {
       const { available } = await RNBiometrics.isSensorAvailable();
       if (available) {
@@ -96,13 +95,13 @@ function SettingsScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [settings.biometricsNotEnableMsg]);
 
   useEffect(() => {
     if (isEnableBiometrics && pinMethod === PinMethod.PIN) {
       enableBiometrics();
     }
-  }, [isEnableBiometrics, pinMethod]);
+  }, [isEnableBiometrics, pinMethod, enableBiometrics]);
 
   useEffect(() => {
     if (login.error) {
@@ -115,7 +114,7 @@ function SettingsScreen({ navigation }) {
         navigation.navigate(NavigationRoutes.CHANGEPIN);
       }, 100);
     }
-  }, [login.error, login.data]);
+  }, [login.error, login.data, navigation, onBoarding.invalidPin]);
 
   const toggleBiometrics = useCallback(() => {
     if (pinMethod === PinMethod.DEFAULT) {

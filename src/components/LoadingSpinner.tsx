@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, ActivityIndicator, StyleSheet } from 'react-native';
-import LottieView from 'lottie-react-native'; 
+import LottieView from 'lottie-react-native';
 import { hp } from 'src/constants/responsive';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';

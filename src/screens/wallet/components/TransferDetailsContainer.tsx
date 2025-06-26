@@ -108,12 +108,12 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               <AppText
                 variant="body2"
                 style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
-                {`\u2022`}&nbsp;&nbsp;{wallet.valueMismatchInfo1}
+                {'\u2022'}&nbsp;&nbsp;{wallet.valueMismatchInfo1}
               </AppText>
               <AppText
                 variant="body2"
                 style={[styles.subTextStyle, styles.bulletPointTextStyle]}>
-                {`\u2022`}&nbsp;&nbsp;{wallet.valueMismatchInfo2}
+                {'\u2022'}&nbsp;&nbsp;{wallet.valueMismatchInfo2}
               </AppText>
             </View>
           </View>

@@ -13,6 +13,6 @@ Sentry.init({
 });
 
 export const SentryWrapper = App => {
-  if (Sentry) return Sentry.wrap(App);
-  else return App;
+  if (Sentry) {return Sentry.wrap(App);}
+  else {return App;}
 };

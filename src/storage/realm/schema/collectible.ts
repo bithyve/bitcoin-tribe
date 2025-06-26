@@ -44,6 +44,6 @@ export const CollectibleSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
   },
 };

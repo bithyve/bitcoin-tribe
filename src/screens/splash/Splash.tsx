@@ -42,7 +42,7 @@ function Splash({ navigation }) {
       }
     };
     init();
-  }, []);
+  }, [mutate, pinMethod]);
 
   const onInit = useCallback(async () => {
     try {
@@ -62,12 +62,12 @@ function Splash({ navigation }) {
     } catch (error) {
       console.error('Error initializing app: ', error);
     }
-  }, [navigation, pinMethod, mutate]);
+  }, [navigation, pinMethod]);
 
   // Handle login success
   const hasNavigated = useRef(false);
   useEffect(() => {
-    if (hasNavigated.current || !animationFinished) return;
+    if (hasNavigated.current || !animationFinished) {return;}
     if (data) {
       if (!data?.key) {
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
@@ -82,7 +82,7 @@ function Splash({ navigation }) {
     } else {
       onInit();
     }
-  }, [data, animationFinished, navigation, setKey]);
+  }, [data, animationFinished, navigation, setKey, onInit, setAppType, setIsWalletOnline]);
 
   return (
     <ScreenContainer style={styles.container}>

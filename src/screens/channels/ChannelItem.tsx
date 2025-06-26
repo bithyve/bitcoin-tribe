@@ -29,7 +29,7 @@ const ChannelItem = (props: Props) => {
   const navigation = useNavigation();
 
   const satsProgress = useMemo(() => {
-    const total = props.capacitySat ;
+    const total = props.capacitySat;
     return (props.localBalanceMsat / 1000) / total;
   }, [props.capacitySat, props.localBalanceMsat]);
 
@@ -64,7 +64,7 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.assetsProgressFill },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>
+              <AppText variant="caption" style={styles.titleText}>
                 {formatNumber(`${props.outbound}`)} assets
               </AppText>
             </View>
@@ -75,7 +75,7 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.assetsProgressRemaining },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>
+              <AppText variant="caption" style={styles.titleText}>
                 {formatNumber(`${props.inbound}`)} assets
               </AppText>
             </View>
@@ -95,7 +95,7 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.satsProgressFill },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>{formatNumber(`${props.localBalanceMsat / 1000}`)}</AppText>
+              <AppText variant="caption" style={styles.titleText}>{formatNumber(`${props.localBalanceMsat / 1000}`)}</AppText>
             </View>
             <View style={styles.contentWrapper}>
               <View
@@ -104,7 +104,7 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.satsProgressRemaining },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>{formatNumber(`${props.capacitySat - props.localBalanceMsat / 1000}`)}</AppText>
+              <AppText variant="caption" style={styles.titleText}>{formatNumber(`${props.capacitySat - props.localBalanceMsat / 1000}`)}</AppText>
             </View>
           </View>
           <ProgressBar

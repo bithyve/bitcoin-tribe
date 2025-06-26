@@ -34,13 +34,13 @@ const EmptyChannelsStateView = (props: emptyStateProps) => {
       <View style={styles.createChannelWrapper}>
         <View>
           <AppText variant="caption" style={styles.bulletText}>
-            {`\u2022`}&nbsp;&nbsp;{channel.createChannelBulletPoint1}
+            {'\u2022'}&nbsp;&nbsp;{channel.createChannelBulletPoint1}
           </AppText>
           <AppText variant="caption" style={styles.bulletText}>
-            {`\u2022`}&nbsp;&nbsp;{channel.createChannelBulletPoint2}
+            {'\u2022'}&nbsp;&nbsp;{channel.createChannelBulletPoint2}
           </AppText>
           <AppText variant="caption" style={styles.bulletText}>
-            {`\u2022`}&nbsp;&nbsp;{channel.createChannelBulletPoint3}
+            {'\u2022'}&nbsp;&nbsp;{channel.createChannelBulletPoint3}
           </AppText>
         </View>
         <View style={styles.ctaWrapper}>

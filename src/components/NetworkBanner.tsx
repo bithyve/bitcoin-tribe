@@ -25,7 +25,7 @@ const NetworkBanner = () => {
     return () => unsubscribe();
   }, []);
 
-  if (isConnected) return null;
+  if (isConnected) {return null;}
 
   return (
     <View style={styles.banner}>

@@ -68,12 +68,12 @@ function Collectibles() {
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
     collection =>
-      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+      collection.filtered('visibility != $0', AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     collection =>
-      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+      collection.filtered('visibility != $0', AssetVisibility.HIDDEN),
   );
 
   const [refreshing, setRefreshing] = useState(false);
@@ -136,7 +136,7 @@ function Collectibles() {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
             });
-          } 
+          }
           else {
             handleNavigation(NavigationRoutes.UDADETAILS, {
               assetId: asset.assetId,

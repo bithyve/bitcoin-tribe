@@ -27,7 +27,7 @@ function TransactionDetails({ route }) {
         transAmount={
           app.appType === AppType.NODE_CONNECT
             ? `${transaction.received}`
-            : transaction.transactionType ===  TransactionType.SENT ?`${transaction.amount - transaction.fee}` : transaction.amount
+            : transaction.transactionType ===  TransactionType.SENT ? `${transaction.amount - transaction.fee}` : transaction.amount
         }
         transaction={transaction}
       />

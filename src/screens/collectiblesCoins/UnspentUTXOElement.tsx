@@ -48,7 +48,7 @@ function UnspentUTXOElement({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const assetMap = React.useMemo(() => {
-    if (!assets) return {};
+    if (!assets) {return {};}
     return assets.reduce((map, asset) => {
       map[asset.assetId] = {
         assetId: asset.assetId,
@@ -67,7 +67,7 @@ function UnspentUTXOElement({
         theme.colors.cardGradient2,
         theme.colors.cardGradient3,
       ]}>
-      <View></View>
+      <View />
       <View>
         {rgbAllocations?.map(allocation => {
           const assetName = allocation.assetId

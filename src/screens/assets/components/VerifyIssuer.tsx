@@ -329,7 +329,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     const shouldShowShareOption =
       (!asset?.isIssuedPosted && hasIssuance) ||
       (asset?.issuer?.verified && !asset?.isVerifyPosted);
-    if (!hasIssuance) return null;
+    if (!hasIssuance) {return null;}
     return (
       <View style={styles.shareOptionWrapper}>
         <ShareOptionView title={assets.sharePostTitle} onPress={onPressShare} />
@@ -387,7 +387,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 visible={showFeeModal}
                 enableCloseIcon={false}
                 onDismiss={() => {
-                  if (disabledCTA) return;
+                  if (disabledCTA) {return;}
                   setShowFeeModal(false);
                   getAssetIssuanceFeeMutation.reset();
                 }}>

@@ -14,7 +14,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -35,7 +35,6 @@ function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -45,8 +44,6 @@ function WalletDetails({ navigation, route }) {
     wallet: walletStrings,
     common,
     sendScreen,
-    home,
-    assets,
   } = translations;
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -67,7 +64,7 @@ function WalletDetails({ navigation, route }) {
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const { mutate, isLoading, isError, isSuccess, error } = useMutation(
+  const { mutate, isLoading, isError, error } = useMutation(
     ApiHandler.receiveTestSats,
     {
       onSuccess: () => {
@@ -109,7 +106,7 @@ function WalletDetails({ navigation, route }) {
   }, [channelsData]);
 
   useEffect(() => {
-    if (autoRefresh && isFocused) {
+    if (autoRefresh && isFocused && wallet) {
       if (app.appType === AppType.NODE_CONNECT) {
         fetchOnChainTransaction();
       }
@@ -117,7 +114,7 @@ function WalletDetails({ navigation, route }) {
         wallets: [wallet],
       });
     }
-  }, [autoRefresh && isFocused]);
+  }, [autoRefresh, isFocused, app.appType, fetchOnChainTransaction, wallet, walletRefreshMutation]);
 
   useEffect(() => {
     if (isError) {
@@ -131,7 +128,7 @@ function WalletDetails({ navigation, route }) {
     } else if (walletRefreshMutation.status === 'error') {
       Toast(walletStrings.failRefreshWallet, true);
     }
-  }, [walletRefreshMutation]);
+  }, [walletRefreshMutation.status, walletStrings.failRefreshWallet]);
 
   useEffect(() => {
     fetchUTXOs();
@@ -140,12 +137,13 @@ function WalletDetails({ navigation, route }) {
       listPaymentshMutation.mutate();
       getChannelMutate();
     }
-  }, []);
+  }, [app.appType, fetchOnChainTransaction, fetchUTXOs, getChannelMutate, listPaymentshMutation]);
+
   useEffect(() => {
     if (app?.appName) {
       setWalletName(app.appName);
     }
-  }, [app]);
+  }, [app?.appName]);
 
   const transactionsData =
     app.appType === AppType.NODE_CONNECT
@@ -164,7 +162,7 @@ function WalletDetails({ navigation, route }) {
       <WalletDetailsHeader
         wallet={wallet}
         rgbWallet={rgbWallet}
-        username={walletName ? walletName : 'Satoshi’s Palette'}
+        username={walletName ? walletName : 'Satoshi\'s Palette'}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         onPressSend={() =>
@@ -242,10 +240,4 @@ function WalletDetails({ navigation, route }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-  });
 export default WalletDetails;

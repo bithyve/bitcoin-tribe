@@ -59,7 +59,7 @@ const ViewUnspentScreen = () => {
   );
 
   const unspent: RgbUnspent[] = useMemo(() => {
-    if (!rgbWallet || !rgbWallet.utxos) return [];
+    if (!rgbWallet || !rgbWallet.utxos) {return [];}
     return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
   }, [rgbWallet]);
 
@@ -89,7 +89,7 @@ const ViewUnspentScreen = () => {
   }, [mutate]);
 
   const redirectToBlockExplorer = (txid: string) => {
-    if (config.NETWORK_TYPE === NetworkType.REGTEST) return;
+    if (config.NETWORK_TYPE === NetworkType.REGTEST) {return;}
     openLink(
       `https://mempool.space${
         config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''

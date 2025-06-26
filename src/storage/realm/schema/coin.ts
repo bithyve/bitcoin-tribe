@@ -74,6 +74,6 @@ export const CoinSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
   },
 };

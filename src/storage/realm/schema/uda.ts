@@ -38,7 +38,7 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
   },
 };
 

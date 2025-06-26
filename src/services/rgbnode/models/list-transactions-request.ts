@@ -1,5 +1,5 @@
 /* tslint:disable */
-/* eslint-disable */
+
 /**
  * RGB Lightning Node
  * This is the OpenAPI specification for the [RGB Lightning Node](https://github.com/RGB-Tools/rgb-lightning-node) APIs.

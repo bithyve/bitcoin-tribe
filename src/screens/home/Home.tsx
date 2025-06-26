@@ -74,12 +74,12 @@ function HomeScreen() {
 
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection
-      .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
+      .filtered('visibility != $0', AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
 
   const coins = useMemo(() => {
-    if (!coinsResult) return [];
+    if (!coinsResult) {return [];}
     const coinsArray = coinsResult.slice();
     const tribeCoinIndex = coinsArray.findIndex(c => c.name === 'Tribe tUSDt');
     if (tribeCoinIndex !== -1) {
