@@ -1,0 +1,42 @@
+import { useEffect, useContext } from 'react';
+import { getApp } from '@react-native-firebase/app';
+import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+import { showMessage } from 'react-native-flash-message';
+import { AppContext } from '../contexts/AppContext';
+import { PushNotificationService } from '../models/enums/Notifications'; // adjust path if needed
+
+export default function NotificationListener() {
+  const { setNodeInitStatus } = useContext(AppContext);
+
+  useEffect(() => {
+    const app = getApp();
+    const messaging = getMessaging(app);
+    const unsubscribe = onMessage(messaging, async remoteMessage => {
+      const { title, body } = remoteMessage.notification ?? {};
+      const { type } = remoteMessage.data ?? {};
+
+      showMessage({
+        message: title ?? 'Notification',
+        description: body ?? '',
+        type: 'info',
+        icon: 'auto',
+        duration: 4000,
+      });
+
+      switch (type?.toLowerCase()) {
+        case PushNotificationService.NODE_INIT_COMPLETE:
+          setNodeInitStatus(false);
+          break;
+        case PushNotificationService.NODE_PAUSED:
+          // handle pause state
+          break;
+        default:
+          break;
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  return null;
+}
