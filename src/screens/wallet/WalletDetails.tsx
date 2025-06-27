@@ -71,7 +71,10 @@ function WalletDetails({ navigation, route }) {
     ApiHandler.receiveTestSats,
     {
       onSuccess: () => {
-        if (app?.appType === AppType.NODE_CONNECT) {
+        if (
+          app?.appType === AppType.NODE_CONNECT ||
+          app?.appType === AppType.SUPPORTED_RLN
+        ) {
           fetchOnChainTransaction();
         }
       },

@@ -56,10 +56,13 @@ const ViewNodeInfo = () => {
   const getStatusColor = status => statusColors[status] || Colors.White;
 
   useEffect(() => {
-    mutate({ nodeId: app?.id, appType: app?.appType });
+    mutate();
     const fetchStatus = async () => {
       if (app.appType === AppType.SUPPORTED_RLN) {
-        const status = await ApiHandler.checkNodeStatus(app?.id);
+        const status = await ApiHandler.checkNodeStatus(
+          app?.id,
+          app?.authToken,
+        );
         const nodeStatus = status && Capitalize(status);
         setStatus(nodeStatus);
       }

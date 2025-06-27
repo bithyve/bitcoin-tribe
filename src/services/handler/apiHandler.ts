@@ -332,7 +332,7 @@ export class ApiHandler {
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
-            authToken: rgbNodeConnectParams.authentication,
+            authToken,
           };
 
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
@@ -618,7 +618,10 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
@@ -1879,9 +1882,9 @@ export class ApiHandler {
     }
   }
 
-  static async checkNodeStatus(nodeId) {
+  static async checkNodeStatus(nodeId, authToken) {
     try {
-      const response = await Relay.checkNodeStatus(nodeId);
+      const response = await Relay.checkNodeStatus(nodeId, authToken);
       if (response) {
         return response;
       } else {
@@ -2051,7 +2054,10 @@ export class ApiHandler {
 
   static async unlockNode() {
     try {
-      const response = await ApiHandler.api.unlock('tribe@2024');
+      const response = await ApiHandler.api.unlock(
+        'tribe@2024',
+        this.authToken,
+      );
       if (response.error) {
         throw new Error(response.error);
       }

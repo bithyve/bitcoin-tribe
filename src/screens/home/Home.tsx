@@ -100,7 +100,10 @@ function HomeScreen() {
   useEffect(() => {
     const fetchStatus = async () => {
       if (app.appType === AppType.SUPPORTED_RLN) {
-        const status = await ApiHandler.checkNodeStatus(app?.id);
+        const status = await ApiHandler.checkNodeStatus(
+          app?.id,
+          app?.authToken,
+        );
         if (status === 'IN_PROGRESS') {
           setNodeInitStatus(true);
         } else {

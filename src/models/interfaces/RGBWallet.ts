@@ -26,6 +26,7 @@ export interface RGBWallet {
   peerDNS?: string;
   nodeOnchainTransactions: NodeOnchainTransaction[];
   lnPayments: LNPayments[];
+  nodeMnemonic?: string;
 }
 interface Balance {
   future: number;

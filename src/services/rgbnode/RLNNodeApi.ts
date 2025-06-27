@@ -196,8 +196,6 @@ export class RLNNodeApiServices {
       method: 'GET',
     });
 
-    console.log('response - ', JSON.stringify(response));
-
     return response;
   }
 
@@ -361,9 +359,16 @@ export class RLNNodeApiServices {
     });
   }
 
-  public async unlock(password: string): Promise<{ invoice: string }> {
+  public async unlock(
+    password: string,
+    authToken: string,
+  ): Promise<{ invoice: string }> {
     return this.request('/unlock', {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         password: password,
         bitcoind_rpc_username: 'user',

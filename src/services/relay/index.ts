@@ -2,10 +2,12 @@ import config from 'src/utils/config';
 import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
@@ -216,13 +218,21 @@ export default class Relay {
     }
   };
 
-  public static getNodeById = async (nodeId: string): Promise<{}> => {
+  public static getNodeById = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<{}> => {
     try {
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}`);
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}`, {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        });
       } catch (err) {
         if (err.response) {
+          console.error('Response status:', err.response.status);
+          console.error('Response body:', err.response.data);
           throw new Error(
             err.response.data.err || 'Server responded with an error',
           );
@@ -237,11 +247,17 @@ export default class Relay {
       throw new Error(err);
     }
   };
-  public static startNodeById = async (nodeId: string): Promise<{}> => {
+  public static startNodeById = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<{}> => {
     try {
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}/start`);
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}/start`, {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        });
       } catch (err) {
         if (err.response) {
           throw new Error(
@@ -261,15 +277,34 @@ export default class Relay {
 
   public static checkNodeStatus = async (
     nodeId: string,
+    authToken: string,
   ): Promise<string | null> => {
     try {
-      const node: any = await Relay.getNodeById(nodeId);
-      const status = node?.nodes?.data?.status;
+      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      const node: any = await Relay.getNodeById(nodeId, authToken);
+      const status = node?.node?.status;
+      const fetchedMnemonic = node?.node?.mnemonic;
+      if (fetchedMnemonic && rgbWallet.nodeMnemonic !== fetchedMnemonic) {
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            nodeMnemonic: fetchedMnemonic,
+          },
+        );
+        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', nodeId, {
+          primaryMnemonic: fetchedMnemonic,
+        });
+      }
       if (status === 'PAUSED') {
-        await Relay.startNodeById(nodeId);
+        await Relay.startNodeById(nodeId, authToken);
       } else {
         console.log('Node status:', status);
       }
+
       return status;
     } catch (err) {
       console.error('Error fetching node status:', err);
