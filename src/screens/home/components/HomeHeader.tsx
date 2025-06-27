@@ -125,6 +125,12 @@ function HomeHeader() {
           </IconWrapper> */}
           <IconWrapper
             onPress={() => {
+              if (isNodeInitInProgress) {
+                Toast(
+                  'Your node is being set up. Initialization in progress..!',
+                );
+                return;
+              }
               handleNavigation(NavigationRoutes.SENDSCREEN, {
                 receiveData: 'send',
                 title: common.send,
