@@ -70,7 +70,6 @@ function HomeScreen() {
       }
     },
   });
-
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const [refreshing, setRefreshing] = useState(false);

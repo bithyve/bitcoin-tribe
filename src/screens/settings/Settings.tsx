@@ -150,14 +150,14 @@ function SettingsScreen({ navigation }) {
       title: settings.viewNodeInfo,
       icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
-      hideMenu: app.appType === AppType.ON_CHAIN,
+      hideMenu: app?.appType === AppType.ON_CHAIN,
     },
     {
       id: 3,
       title: settings.channelManagement,
       icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
-      hideMenu: app.appType === AppType.ON_CHAIN,
+      hideMenu: app?.appType === AppType.ON_CHAIN,
     },
     {
       id: 4,
@@ -221,7 +221,7 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
       manualAssetBackupStatus: manualAssetBackupStatus,
       hasCompletedManualBackup: hasCompletedManualBackup,
-      hideMenu: app.appType === AppType.NODE_CONNECT,
+      hideMenu: app?.appType === AppType.NODE_CONNECT,
     },
     {
       id: 4,
