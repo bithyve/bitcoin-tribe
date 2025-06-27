@@ -19,14 +19,19 @@ import SelectOption from 'src/components/SelectOption';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import NodeInfoItem from './components/NodeInfoItem';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { AppContext } from 'src/contexts/AppContext';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import AppType from 'src/models/enums/AppType';
+import GradientView from 'src/components/GradientView';
+import Colors from 'src/theme/Colors';
+import AppText from 'src/components/AppText';
+import Capitalize from 'src/utils/capitalizeUtils';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
-  const { node } = translations;
+  const { node, channel: channelTranslations } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -42,9 +47,24 @@ const ViewNodeInfo = () => {
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
-  console.log('nodeInfo', nodeInfo);
+  const [status, setStatus] = useState('');
+  const statusColors = {
+    Running: Colors.GOGreen,
+    Starting: Colors.BrandeisBlue,
+    Pause: Colors.ChineseWhite,
+  };
+  const getStatusColor = status => statusColors[status] || Colors.White;
+
   useEffect(() => {
     mutate({ nodeId: app?.id, appType: app?.appType });
+    const fetchStatus = async () => {
+      if (app.appType === AppType.SUPPORTED_RLN) {
+        const status = await ApiHandler.checkNodeStatus(app?.id);
+        const nodeStatus = status && Capitalize(status);
+        setStatus(nodeStatus);
+      }
+    };
+    fetchStatus();
   }, []);
 
   useEffect(() => {
@@ -124,6 +144,22 @@ const ViewNodeInfo = () => {
           showsVerticalScrollIndicator={false}
           style={styles.scrollingWrapper}>
           <View style={styles.unLockWrapper}>
+            <GradientView
+              style={[styles.container]}
+              colors={[
+                theme.colors.cardGradient1,
+                theme.colors.cardGradient2,
+                theme.colors.cardGradient3,
+              ]}>
+              <AppText variant="body1" style={styles.titleText}>
+                {channelTranslations.status}
+              </AppText>
+              <AppText
+                variant="body1"
+                style={{ color: getStatusColor(status) }}>
+                {status}
+              </AppText>
+            </GradientView>
             <SelectOption
               title={node.unlockNode}
               onPress={() => unlockNodeMutation.mutate()}
@@ -219,6 +255,17 @@ const getStyles = (theme: AppTheme) =>
     },
     unLockWrapper: {
       marginVertical: hp(20),
+    },
+    container: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: windowHeight > 670 ? hp(20) : hp(10),
+      borderRadius: 15,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      marginVertical: hp(5),
     },
   });
 export default ViewNodeInfo;

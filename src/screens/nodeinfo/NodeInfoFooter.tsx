@@ -18,6 +18,8 @@ import IconPauseInActiveLight from 'src/assets/images/pause_inactive_light.svg';
 import IconPlayInActiveLight from 'src/assets/images/play_inactive_light.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
+import { hp } from 'src/constants/responsive';
+import AppText from 'src/components/AppText';
 
 type nodeInfoFooterProps = {
   nodeStatus: string;
@@ -32,7 +34,7 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <View style={styles.container}>
-      <AppTouchable onPress={props.onPressRefresh}>
+      <AppTouchable onPress={props.onPressRefresh} style={styles.iconWrapper}>
         {nodeStatus === 'refresh' ? (
           isThemeDark ? (
             <IconRefreshActive />
@@ -44,24 +46,14 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
         ) : (
           <IconRefreshInActiveLight />
         )}
+        <AppText style={styles.labelText}>Refresh</AppText>
       </AppTouchable>
-      <AppTouchable onPress={() => setNodeStatus('stop')}>
-        {nodeStatus === 'stop' ? (
-          isThemeDark ? (
-            <IconPauseActive />
-          ) : (
-            <IconPauseActiveLight />
-          )
-        ) : isThemeDark ? (
-          <IconPauseInActive />
-        ) : (
-          <IconPauseInActiveLight />
-        )}
-      </AppTouchable>
-      <AppTouchable onPress={() => setNodeStatus('run')}>
+      <AppTouchable
+        onPress={() => setNodeStatus('run')}
+        style={styles.iconWrapper}>
         {nodeStatus === 'run' ? (
           isThemeDark ? (
-            <IconPlayActive />
+            <IconPlayActive height={57} width={57} />
           ) : (
             <IconPlayActiveLight />
           )
@@ -70,6 +62,7 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
         ) : (
           <IconPlayInActiveLight />
         )}
+        <AppText style={styles.labelText}>Play</AppText>
       </AppTouchable>
     </View>
   );
@@ -78,10 +71,18 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      height: '10%',
+      height: '15%',
       width: '100%',
-      justifyContent: 'space-evenly',
+      justifyContent: 'center',
       alignItems: 'flex-end',
+    },
+    iconWrapper: {
+      marginHorizontal: hp(10),
+    },
+    labelText: {
+      color: theme.colors.headingColor,
+      textAlign: 'center',
+      marginTop: hp(3),
     },
   });
 export default NodeInfoFooter;
