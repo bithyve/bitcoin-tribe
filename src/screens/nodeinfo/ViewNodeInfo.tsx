@@ -39,6 +39,7 @@ const ViewNodeInfo = () => {
   const { mutate, isLoading, isError, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
+  console.log('data', data);
   const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);
   const initNodeMutation = useMutation(ApiHandler.initNode);
@@ -66,6 +67,13 @@ const ViewNodeInfo = () => {
     };
     fetchStatus();
   }, []);
+
+  useEffect(() => {
+    if (isError) {
+      const errorMsg = data?.message || data?.error || 'Something went wrong';
+      Toast(errorMsg, true);
+    }
+  }, [isError, error]);
 
   useEffect(() => {
     if (syncMutation.isSuccess) {

@@ -38,7 +38,7 @@ function HomeHeader() {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { isNodeInitInProgress, setNodeInitStatus } = useContext(AppContext);
   const { translations } = React.useContext(LocalizationContext);
-  const { home, common, sendScreen } = translations;
+  const { home, common, sendScreen, node } = translations;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -80,7 +80,7 @@ function HomeHeader() {
         <AppTouchable
           onPress={() => {
             if (isNodeInitInProgress) {
-              Toast('Your node is being set up. Initialization in progress..!');
+              Toast(node.connectingNodeToastMsg, true);
               return;
             }
             handleNavigation(NavigationRoutes.WALLETDETAILS, {
@@ -126,9 +126,7 @@ function HomeHeader() {
           <IconWrapper
             onPress={() => {
               if (isNodeInitInProgress) {
-                Toast(
-                  'Your node is being set up. Initialization in progress..!',
-                );
+                Toast(node.connectingNodeToastMsg, true);
                 return;
               }
               handleNavigation(NavigationRoutes.SENDSCREEN, {
