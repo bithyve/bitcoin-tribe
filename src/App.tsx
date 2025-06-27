@@ -5,7 +5,7 @@ import NetworkBanner from './components/NetworkBanner';
 import { SentryWrapper } from './services/sentry';
 import FlashMessage from 'react-native-flash-message';
 import NotificationListener from './components/NotificationListener';
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
       <Navigator />
       <FlashMessage
         position="top"
-        statusBarHeight={StatusBar.currentHeight || 20}
+        statusBarHeight={Platform.OS === 'ios' ? 44 : StatusBar.currentHeight}
       />
     </Contexts>
   );
