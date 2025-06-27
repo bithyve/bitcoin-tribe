@@ -16,7 +16,7 @@ import Colors from 'src/theme/Colors';
 const NodeConnectingSetup = () => {
   const { isNodeInitInProgress } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { common, node } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
@@ -34,7 +34,7 @@ const NodeConnectingSetup = () => {
           ]}>
           <View style={styles.titleWrapper}>
             <AppText variant="body2" style={styles.text}>
-              {'Connecting your setup'}
+              {node.connectingNode}
             </AppText>
           </View>
           <View style={styles.tapViewWrapper}>
@@ -51,9 +51,7 @@ const NodeConnectingSetup = () => {
           onDismiss={() => setVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
-            {
-              'Some features may be temporarily unavailable while we prepare everything for you.'
-            }
+            {node.connectingNodeInfo}
           </AppText>
         </Modal>
       </Portal>

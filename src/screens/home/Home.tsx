@@ -23,10 +23,14 @@ import {
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
+import Toast from 'src/components/Toast';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
+  const { translations } = useContext(LocalizationContext);
+  const { node } = translations;
 
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const latestVersion = useQuery<VersionHistory>(
@@ -41,6 +45,9 @@ function HomeScreen() {
     setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
+    setAppType,
+    isNodeInitInProgress,
+    setNodeInitStatus,
   } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -55,7 +62,6 @@ function HomeScreen() {
     ApiHandler.isBackupRequired,
   );
   // const initNodeMutation = useMutation(ApiHandler.initNode);
-
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
@@ -67,7 +73,6 @@ function HomeScreen() {
 
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
-  const { setAppType, setNodeInitStatus } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
@@ -181,11 +186,15 @@ function HomeScreen() {
         loading={refreshing && !isBackupInProgress && !isBackupDone}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-        onPressAddNew={() =>
+        onPressAddNew={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           handleNavigation(NavigationRoutes.ADDASSET, {
             issueAssetType: AssetType.Coin,
-          })
-        }
+          });
+        }}
         onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
       />
     </ScreenContainer>
