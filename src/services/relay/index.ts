@@ -284,7 +284,7 @@ export default class Relay {
         RealmSchema.RgbWallet,
       );
       const node: any = await Relay.getNodeById(nodeId, authToken);
-      const status = node?.node?.status;
+      const status = node?.node?.status || node?.nodeInfo?.data?.status;
       const fetchedMnemonic = node?.node?.mnemonic;
       if (fetchedMnemonic && rgbWallet.nodeMnemonic !== fetchedMnemonic) {
         dbManager.updateObjectByPrimaryId(
