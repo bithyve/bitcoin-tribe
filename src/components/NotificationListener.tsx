@@ -1,6 +1,10 @@
 import { useEffect, useContext } from 'react';
 import { getApp } from '@react-native-firebase/app';
-import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  onMessage,
+  AuthorizationStatus,
+} from '@react-native-firebase/messaging';
 import { showMessage } from 'react-native-flash-message';
 import { AppContext } from '../contexts/AppContext';
 import { PushNotificationService } from '../models/enums/Notifications'; // adjust path if needed
@@ -11,6 +15,23 @@ export default function NotificationListener() {
   useEffect(() => {
     const app = getApp();
     const messaging = getMessaging(app);
+
+    const requestPermission = async () => {
+      try {
+        const authStatus = await messaging.requestPermission();
+        const enabled =
+          authStatus === AuthorizationStatus.AUTHORIZED ||
+          authStatus === AuthorizationStatus.PROVISIONAL;
+
+        if (!enabled) {
+          console.warn('Notification permission not granted');
+        }
+      } catch (err) {
+        console.warn('Permission request failed:', err);
+      }
+    };
+
+    requestPermission();
     const unsubscribe = onMessage(messaging, async remoteMessage => {
       const { title, body } = remoteMessage.notification ?? {};
       const { type } = remoteMessage.data ?? {};
