@@ -37,5 +37,6 @@ export enum RealmSchema {
   LNPayments = 'LNPayments',
   Community = 'Community',
   Message = 'Message',
+  Contact = 'Contact',
   ReceiveUTXOData = 'ReceiveUTXOData',
 }

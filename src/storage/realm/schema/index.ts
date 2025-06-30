@@ -42,7 +42,7 @@ import {
   NodeOnchainTransactionSchema,
 } from './nodeOnchainTransaction';
 import { LNPaymentsSchema } from './lnPayments';
-import { CommunitySchema, MessageSchema } from './community';
+import { CommunitySchema, MessageSchema, ContactSchema } from './community';
 
 export default [
   TribeAppSchema,
@@ -87,4 +87,5 @@ export default [
   CommunitySchema,
   MessageSchema,
   ReceiveUTXOSchema,
+  ContactSchema,
 ];

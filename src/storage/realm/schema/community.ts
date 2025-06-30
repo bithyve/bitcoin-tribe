@@ -6,23 +6,35 @@ export const MessageSchema: ObjectSchema = {
   primaryKey: 'id',
   properties: {
     id: 'string',
+    block: 'int',
+    unread: 'bool',
     createdAt: {type: 'int', default: Date.now()},
-    message: 'string?',
+    text: 'string?',
     type: 'string?',
-    senderPublicKey: 'string',
-    senderName: 'string',
+    sender: 'string',
   },
 };
 
-export const CommunitySchema: ObjectSchema = {
+export const ContactSchema: ObjectSchema = {
+  name: RealmSchema.Contact,
+  primaryKey: 'contactKey',
+  properties: {
+    contactKey: 'string',
+    appID: 'string',
+    imageUrl: 'string?',
+    name: 'string',
+  },
+};
+
+  export const CommunitySchema: ObjectSchema = {
   name: RealmSchema.Community,
   primaryKey: 'id',
   properties: {
     id: 'string',
     name: 'string?',
     createdAt: {type: 'int', default: Date.now()},
-    publicKey: 'string?',
-    messages: `${RealmSchema.Message}[]`,
+    type: 'string',
+    with: 'string?',
   },
 };
 
