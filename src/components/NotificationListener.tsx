@@ -7,7 +7,7 @@ import {
 } from '@react-native-firebase/messaging';
 import { showMessage } from 'react-native-flash-message';
 import { AppContext } from '../contexts/AppContext';
-import { PushNotificationType } from '../models/enums/Notifications'; // adjust path if needed
+import { PushNotificationType } from '../models/enums/Notifications';
 
 export default function NotificationListener() {
   const { setNodeInitStatus } = useContext(AppContext);
