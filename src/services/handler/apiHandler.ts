@@ -1716,7 +1716,6 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      console.log('token', token);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
