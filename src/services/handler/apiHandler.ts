@@ -1603,25 +1603,44 @@ export class ApiHandler {
       const messaging = getMessaging(firebaseApp);
       const appVersion = currentVersion || DeviceInfo.getVersion();
       const lastTopicVersion = previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
-      if (!lastTopicVersion || lastTopicVersion !== appVersion) {        
+      if (!lastTopicVersion || lastTopicVersion !== appVersion) {
         if (lastTopicVersion) {
-          const previousTopic = `v${lastTopicVersion}`;
-          try {
-            await messaging.unsubscribeFromTopic(previousTopic);
-          } catch (error) {
-            console.log(`Failed to unsubscribe from ${previousTopic}:`, error);
-          }
+          await ApiHandler.unsubscribeFromVersionTopic(messaging, lastTopicVersion);
         }
-        try {
-          await messaging.subscribeToTopic(`v${appVersion}`);
-          console.log(`FCM: Subscribed to topic: v${appVersion}`);
-          Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
-        } catch (error) {
-          throw error;
-        }
+        await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
+        Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
       }
+      await ApiHandler.subscribeToBroadcastChannel(messaging);
     } catch (error) {
-      console.log('FCM topic management error:', error);
+      console.error('FCM topic management error:', error);
+      throw error;
+    }
+  }
+
+  private static async unsubscribeFromVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.unsubscribeFromTopic(topic);
+    } catch (error) {
+      console.warn(`Failed to unsubscribe from ${topic}:`, error);
+    }
+  }
+
+  private static async subscribeToVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.subscribeToTopic(topic);
+    } catch (error) {
+      console.error(`Failed to subscribe to ${topic}:`, error);
+      throw error;
+    }
+  }
+
+  private static async subscribeToBroadcastChannel(messaging: any): Promise<void> {
+    try {
+      await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
+    } catch (error) {
+      console.warn('Failed to subscribe to common broadcast topic:', error);
     }
   }
 
