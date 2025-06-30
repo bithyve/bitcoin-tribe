@@ -39,15 +39,16 @@ const ViewNodeInfo = () => {
   const { mutate, isLoading, isError, error, data } = useMutation(
     ApiHandler.viewNodeInfo,
   );
+  const { mutate: checkStatus, isLoading: nodeStatusIsLoading } = useMutation(
+    () => ApiHandler.checkNodeStatus(app?.id, app?.authToken),
+  );
   const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);
-  const initNodeMutation = useMutation(ApiHandler.initNode);
   const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
-  const [nodeStatus, setSetNodeStatus] = useState('run');
+  const [nodeStatus, setSetNodeStatus] = useState('');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
-  const [status, setStatus] = useState('');
   const statusColors = {
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
@@ -64,7 +65,7 @@ const ViewNodeInfo = () => {
           app?.authToken,
         );
         const nodeStatus = status && Capitalize(status);
-        setStatus(nodeStatus);
+        setSetNodeStatus(nodeStatus);
       }
     };
     fetchStatus();
@@ -85,16 +86,6 @@ const ViewNodeInfo = () => {
       Toast(`${syncMutation.error}`, true);
     }
   }, [syncMutation.isSuccess, syncMutation, syncMutation.isError]);
-
-  useEffect(() => {
-    if (initNodeMutation.isSuccess) {
-      Toast('Node initiated', false);
-      initNodeMutation.reset();
-      mutate();
-    } else if (initNodeMutation.isError) {
-      Toast(`${initNodeMutation?.error}`, true);
-    }
-  }, [initNodeMutation.isSuccess, initNodeMutation, initNodeMutation.isError]);
 
   useEffect(() => {
     if (unlockNodeMutation.isSuccess) {
@@ -134,11 +125,7 @@ const ViewNodeInfo = () => {
         enableBack={true}
       />
       <ModalLoading
-        visible={
-          syncMutation.isLoading ||
-          initNodeMutation.isLoading ||
-          unlockNodeMutation.isLoading
-        }
+        visible={syncMutation.isLoading || unlockNodeMutation.isLoading}
       />
       {isLoading ? (
         <View style={styles.loadingWrapper}>
@@ -166,8 +153,8 @@ const ViewNodeInfo = () => {
               </AppText>
               <AppText
                 variant="body1"
-                style={{ color: getStatusColor(status) }}>
-                {status}
+                style={{ color: getStatusColor(nodeStatus) }}>
+                {nodeStatus}
               </AppText>
             </GradientView>
             <SelectOption
@@ -221,21 +208,12 @@ const ViewNodeInfo = () => {
             title={node.channelCapMisSat}
             value={nodeInfo?.channel_capacity_min_sat}
           />
-
-          {/* <View>
-            <SelectOption
-              title={node.initNode}
-              onPress={() => initNodeMutation.mutate()}
-              enableSwitch={false}
-              showArrow={false}
-            />
-          </View> */}
         </ScrollView>
       )}
       {!isLoading && (
         <NodeInfoFooter
           nodeStatus={nodeStatus}
-          setNodeStatus={text => setSetNodeStatus(text)}
+          onPressNodeRun={() => checkStatus()}
           onPressRefresh={() => syncMutation.mutate()}
         />
       )}

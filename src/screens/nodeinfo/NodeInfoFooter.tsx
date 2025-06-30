@@ -23,12 +23,13 @@ import AppText from 'src/components/AppText';
 
 type nodeInfoFooterProps = {
   nodeStatus: string;
-  setNodeStatus: (text: string) => void;
+  setNodeStatus?: (text: string) => void;
   onPressRefresh: () => void;
+  onPressNodeRun: () => void;
 };
 
 function NodeInfoFooter(props: nodeInfoFooterProps) {
-  const { nodeStatus, setNodeStatus } = props;
+  const { nodeStatus, onPressNodeRun } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -48,10 +49,8 @@ function NodeInfoFooter(props: nodeInfoFooterProps) {
         )}
         <AppText style={styles.labelText}>Refresh</AppText>
       </AppTouchable>
-      <AppTouchable
-        onPress={() => setNodeStatus('run')}
-        style={styles.iconWrapper}>
-        {nodeStatus === 'run' ? (
+      <AppTouchable onPress={onPressNodeRun} style={styles.iconWrapper}>
+        {nodeStatus === 'Paused' ? (
           isThemeDark ? (
             <IconPlayActive height={57} width={57} />
           ) : (
