@@ -72,12 +72,14 @@ function SelectWallet() {
           setVisible(false);
           navigation.navigate(NavigationRoutes.PROFILESETUP, {
             nodeConnectParams: {
-              nodeUrl: createNodeMutation.data.apiUrl,
-              nodeId: createNodeMutation.data.node.nodeId,
-              authentication: createNodeMutation.data.token,
-              peerDNS: createNodeMutation.data.peerDNS,
-              mnemonic: createNodeMutation.data.node.mnemonic,
-              authToken: createNodeMutation.data.authToken,
+              nodeUrl: createNodeMutation?.data?.nodes?.apiUrl,
+              nodeId: createNodeMutation?.data?.nodes?.node?.nodeId,
+              authentication: createNodeMutation?.data?.nodes?.token,
+              peerDNS: createNodeMutation?.data?.nodes?.peerDNS,
+              mnemonic:
+                createNodeMutation?.data?.nodes?.node?.mnemonic ||
+                createNodeMutation?.data?.nodes?.node?.nodeId,
+              authToken: createNodeMutation?.data?.nodes?.authToken,
             },
             nodeInfo: {},
             appType: AppType.SUPPORTED_RLN,

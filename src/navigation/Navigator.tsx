@@ -83,6 +83,7 @@ import VerifyDomain from 'src/screens/assets/VerifyDomain';
 import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
+import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -362,6 +363,7 @@ function Navigator() {
       }}>
       <RGBWalletStatus />
       <BackupAlertBanner />
+      <NodeConnectingSetup />
       <BackupDoneBanner />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen

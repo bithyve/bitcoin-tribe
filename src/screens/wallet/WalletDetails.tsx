@@ -71,7 +71,10 @@ function WalletDetails({ navigation, route }) {
     ApiHandler.receiveTestSats,
     {
       onSuccess: () => {
-        if (app.appType === AppType.NODE_CONNECT) {
+        if (
+          app?.appType === AppType.NODE_CONNECT ||
+          app?.appType === AppType.SUPPORTED_RLN
+        ) {
           fetchOnChainTransaction();
         }
       },
@@ -89,7 +92,7 @@ function WalletDetails({ navigation, route }) {
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (app?.appType === AppType.NODE_CONNECT) {
       fetchOnChainTransaction();
     }
     walletRefreshMutation.mutate({
@@ -110,7 +113,7 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      if (app.appType === AppType.NODE_CONNECT) {
+      if (app?.appType === AppType.NODE_CONNECT) {
         fetchOnChainTransaction();
       }
       walletRefreshMutation.mutate({
@@ -135,7 +138,7 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     fetchUTXOs();
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (app?.appType === AppType.NODE_CONNECT) {
       fetchOnChainTransaction();
       listPaymentshMutation.mutate();
       getChannelMutate();
@@ -148,16 +151,16 @@ function WalletDetails({ navigation, route }) {
   }, [app]);
 
   const transactionsData =
-    app.appType === AppType.NODE_CONNECT
+    app?.appType === AppType.NODE_CONNECT
       ? Object.values({
-          ...rgbWallet.lnPayments,
-          ...rgbWallet.nodeOnchainTransactions,
+          ...rgbWallet?.lnPayments,
+          ...rgbWallet?.nodeOnchainTransactions,
         }).sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime() || 0;
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : wallet?.specs.transactions;
+      : wallet?.specs?.transactions;
 
   return (
     <ScreenContainer>

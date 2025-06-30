@@ -92,7 +92,10 @@ export class ApiHandler {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       ApiHandler.authToken = authToken;
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -293,7 +296,8 @@ export class ApiHandler {
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
-            mnemonic: rgbNodeConnectParams.mnemonic,
+            mnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
@@ -305,10 +309,9 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(
             rgbWallet,
-            AppType.NODE_CONNECT,
+            AppType.SUPPORTED_RLN,
             authToken,
           );
-
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
@@ -318,13 +321,14 @@ export class ApiHandler {
             publicId: rgbNodeConnectParams.nodeId,
             appName,
             walletImage,
-            primaryMnemonic: rgbNodeConnectParams.mnemonic,
+            primaryMnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
             version: DeviceInfo.getVersion(),
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
-            appType: AppType.NODE_CONNECT,
+            appType: AppType.SUPPORTED_RLN,
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -403,7 +407,11 @@ export class ApiHandler {
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
-            const apiHandler = new ApiHandler(rgbWallet, appType);
+            const apiHandler = new ApiHandler(
+              rgbWallet,
+              appType,
+              registerApp?.app?.authToken,
+            );
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -610,7 +618,10 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
@@ -1182,17 +1193,17 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (assets.nia) {
+      if (assets?.nia) {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
           assets.nia,
           Realm.UpdateMode.Modified,
         );
       }
-      if (assets.cfa) {
+      if (assets?.cfa) {
         const cfas = [];
         if (ApiHandler.appType === AppType.NODE_CONNECT) {
-          for (let i = 0; i < assets.cfa.length; i++) {
+          for (let i = 0; i < assets?.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
@@ -1208,6 +1219,7 @@ export class ApiHandler {
                 filePath: path,
               },
             });
+            console.log('cfas', cfas);
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
@@ -1626,7 +1638,7 @@ export class ApiHandler {
       const messaging = getMessaging(firebaseApp);
       if (Platform.OS === 'android' && Platform.Version >= 33) {
         const permission = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
         );
         if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
           console.log('Notification permission denied on Android');
@@ -1645,14 +1657,13 @@ export class ApiHandler {
         return true;
       }
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
-
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
         return true;
       }
       return false;
     } catch (error) {
-      console.log('fcm update error: ', error);
+      console.log('fcm update error:', error?.message || error);
       throw error;
     }
   }
@@ -1866,8 +1877,22 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('viewNodeInfo - error', error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async checkNodeStatus(nodeId, authToken) {
+    try {
+      const response = await Relay.checkNodeStatus(nodeId, authToken);
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to fetching node status');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to fetching node status');
     }
   }
 
@@ -2013,6 +2038,7 @@ export class ApiHandler {
     try {
       const response = await Relay.createSupportedNode();
       if (response.error) {
+        console.log('response.error', response.error);
         throw new Error(response.error);
       } else if (response) {
         return response;
@@ -2020,6 +2046,7 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
+      console.log('error-', error);
       console.log(error);
       throw error;
     }
@@ -2027,8 +2054,10 @@ export class ApiHandler {
 
   static async unlockNode() {
     try {
-      const response = await ApiHandler.api.unlock('tribe@2024');
-      console.log(response);
+      const response = await ApiHandler.api.unlock(
+        'tribe@2024',
+        this.authToken,
+      );
       if (response.error) {
         throw new Error(response.error);
       }
@@ -2096,35 +2125,6 @@ export class ApiHandler {
     try {
       return await RGBServices.isBackupRequired();
     } catch (error) {
-      throw error;
-    }
-  }
-
-  static async initNode() {
-    try {
-      const response = await ApiHandler.api.init({
-        password: 'tribe@2024',
-      });
-      if (response.mnemonic) {
-        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-          RealmSchema.RgbWallet,
-        );
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: response.mnemonic,
-          },
-        );
-        return response;
-      } else if (response.error) {
-        throw new Error(response.error);
-      } else {
-        throw new Error('Failed to init node');
-      }
-    } catch (error) {
-      console.log(error);
       throw error;
     }
   }
