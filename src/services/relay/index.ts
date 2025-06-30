@@ -8,6 +8,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import RGBServices from '../rgb/RGBServices';
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
@@ -254,7 +255,7 @@ export default class Relay {
     }
   };
 
-  public static checkNodeStatus = async (
+  public static saveNodeMnemonic = async (
     nodeId: string,
     authToken: string,
   ): Promise<string | null> => {
@@ -277,13 +278,8 @@ export default class Relay {
         dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', nodeId, {
           primaryMnemonic: fetchedMnemonic,
         });
+        await RGBServices.restoreKeys(fetchedMnemonic);
       }
-      if (status === 'PAUSED') {
-        await Relay.startNodeById(nodeId, authToken);
-      } else {
-        console.log('Node status:', status);
-      }
-
       return status;
     } catch (err) {
       console.error('Error fetching node status:', err);
