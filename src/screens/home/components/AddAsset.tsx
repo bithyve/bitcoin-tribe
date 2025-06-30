@@ -137,7 +137,10 @@ function AddAsset() {
 
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
-      if (app.appType === AppType.NODE_CONNECT) {
+      if (
+        app.appType === AppType.NODE_CONNECT ||
+        app.appType === AppType.SUPPORTED_RLN
+      ) {
         navigateToIssue(false);
         return;
       }
@@ -195,7 +198,10 @@ function AddAsset() {
   }, [payServiceFeeFeeMutation, navigation, issueAssetType]);
 
   const canProceed = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       return (
         rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
           rgbWallet?.nodeBtcBalance?.vanilla?.future >

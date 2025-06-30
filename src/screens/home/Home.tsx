@@ -1,7 +1,17 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { useTheme } from 'react-native-paper';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -25,6 +35,9 @@ import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { PushNotificationType } from 'src/models/enums/Notifications';
+import { getApp } from '@react-native-firebase/app';
+import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -48,6 +61,7 @@ function HomeScreen() {
     setAppType,
     isNodeInitInProgress,
     setNodeInitStatus,
+    setNodeConnected,
   } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -61,6 +75,15 @@ function HomeScreen() {
   const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
     ApiHandler.isBackupRequired,
   );
+  const { mutate: startNode } = useMutation({
+    mutationFn: ({
+      nodeId,
+      authToken,
+    }: {
+      nodeId: string;
+      authToken: string;
+    }) => ApiHandler.startNode(nodeId, authToken),
+  });
   // const initNodeMutation = useMutation(ApiHandler.initNode);
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
@@ -106,8 +129,15 @@ function HomeScreen() {
         );
         if (status === 'IN_PROGRESS') {
           setNodeInitStatus(true);
+        } else if (status === 'PAUSED') {
+          startNode;
         } else {
+          await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
           setNodeInitStatus(false);
+          setNodeConnected(true);
+          setTimeout(() => {
+            setNodeConnected(false);
+          }, 1500);
         }
         console.log('Node status:', status);
       }
@@ -115,6 +145,38 @@ function HomeScreen() {
 
     fetchStatus();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const firebaseApp = getApp();
+      const messaging = getMessaging(firebaseApp);
+
+      const unsubscribe = onMessage(messaging, async remoteMessage => {
+        const { title, body } = remoteMessage.notification ?? {};
+        const { type } = remoteMessage.data ?? {};
+
+        switch (type?.toLowerCase()) {
+          case PushNotificationType.NODE_INIT_COMPLETE:
+            await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+            setNodeInitStatus(false);
+            setNodeConnected(true);
+            setTimeout(() => {
+              setNodeConnected(false);
+            }, 1500);
+            break;
+          case PushNotificationType.NODE_PAUSED:
+            startNode;
+            break;
+          default:
+            break;
+        }
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }, []),
+  );
 
   useEffect(() => {
     setBackupProcess(isLoading);

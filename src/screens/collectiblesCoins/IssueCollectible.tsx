@@ -155,7 +155,8 @@ function IssueCollectibleScreen() {
         addToRegistry: addToRegistry,
         filePath: Platform.select({
           android:
-            appType === AppType.NODE_CONNECT
+            appType === AppType.NODE_CONNECT ||
+            appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -220,7 +221,8 @@ function IssueCollectibleScreen() {
         addToRegistry: addToRegistry,
         mediaFilePath: Platform.select({
           android:
-            appType === AppType.NODE_CONNECT
+            appType === AppType.NODE_CONNECT ||
+            appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -230,7 +232,8 @@ function IssueCollectibleScreen() {
         attachmentsFilePaths: attachments.map(attachment =>
           Platform.select({
             android:
-              appType === AppType.NODE_CONNECT
+              appType === AppType.NODE_CONNECT ||
+              appType === AppType.SUPPORTED_RLN
                 ? attachment.startsWith('file://')
                   ? attachment
                   : `file://${path}`

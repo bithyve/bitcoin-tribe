@@ -22,6 +22,8 @@ export const AppContext = React.createContext({
   setHasIssuedAsset: status => {},
   isNodeInitInProgress: null,
   setNodeInitStatus: status => {},
+  isNodeConnect: null,
+  setNodeConnected: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -38,7 +40,7 @@ export function AppProvider({ children }) {
     useState<boolean>(null);
   const [hasIssuedAsset, setHasIssuedAsset] = useState<boolean>(null);
   const [isNodeInitInProgress, setNodeInitStatus] = useState<boolean>(null);
-
+  const [isNodeConnect, setNodeConnected] = useState<boolean>(null);
   return (
     <AppContext.Provider
       value={{
@@ -62,6 +64,8 @@ export function AppProvider({ children }) {
         setHasIssuedAsset: setHasIssuedAsset,
         isNodeInitInProgress,
         setNodeInitStatus: setNodeInitStatus,
+        isNodeConnect,
+        setNodeConnected: setNodeConnected,
       }}>
       {children}
     </AppContext.Provider>

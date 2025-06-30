@@ -298,7 +298,8 @@ const CollectibleMetaDataScreen = () => {
             <Item
               title={assets.issuedSupply}
               value={
-                app.appType === AppType.NODE_CONNECT
+                app.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
                   ? numberWithCommas(collectible.issuedSupply)
                   : collectible &&
                     collectible.metaData &&

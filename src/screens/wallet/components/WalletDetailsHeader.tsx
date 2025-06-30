@@ -69,7 +69,10 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
 
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const balances = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {
       return (
@@ -106,7 +109,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         style={styles.largeHeader}>
         <AppHeader title={username} />
         <View style={styles.largeHeaderContentWrapper}>
-          {app.appType === AppType.NODE_CONNECT ? (
+          {app.appType === AppType.NODE_CONNECT ||
+          app.appType === AppType.SUPPORTED_RLN ? (
             <View style={styles.balanceContainer}>
               <AppTouchable
                 style={styles.totalBalanceWrapper}
