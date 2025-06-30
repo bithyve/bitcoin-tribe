@@ -50,6 +50,7 @@ export const RgbWalletSchema: ObjectSchema = {
     peerDNS: 'string?',
     nodeOnchainTransactions: `${RealmSchema.NodeOnChainTransaction}[]`,
     lnPayments: `${RealmSchema.LNPayments}[]`,
+    nodeMnemonic: 'string?',
   },
   primaryKey: 'mnemonic',
 };

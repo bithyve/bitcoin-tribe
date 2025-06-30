@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
@@ -28,14 +28,17 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
+import { AppContext } from 'src/contexts/AppContext';
+import Toast from 'src/components/Toast';
 
 function HomeHeader() {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { isNodeInitInProgress, setNodeInitStatus } = useContext(AppContext);
   const { translations } = React.useContext(LocalizationContext);
-  const { home, common, sendScreen } = translations;
+  const { home, common, sendScreen, node } = translations;
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
@@ -76,6 +79,10 @@ function HomeHeader() {
       <View style={styles.container}>
         <AppTouchable
           onPress={() => {
+            if (isNodeInitInProgress) {
+              Toast(node.connectingNodeToastMsg, true);
+              return;
+            }
             handleNavigation(NavigationRoutes.WALLETDETAILS, {
               autoRefresh: true,
             });
@@ -118,6 +125,10 @@ function HomeHeader() {
           </IconWrapper> */}
           <IconWrapper
             onPress={() => {
+              if (isNodeInitInProgress) {
+                Toast(node.connectingNodeToastMsg, true);
+                return;
+              }
               handleNavigation(NavigationRoutes.SENDSCREEN, {
                 receiveData: 'send',
                 title: common.send,

@@ -37,6 +37,7 @@ import {
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
 import TransactionInfoCard from './components/TransactionInfoCard';
+import Toast from 'src/components/Toast';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -47,7 +48,7 @@ const CoinDetailsScreen = () => {
 
   const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { common, settings, assets } = translations;
+  const { common, settings, assets, node } = translations;
 
   const {
     appType,
@@ -55,6 +56,7 @@ const CoinDetailsScreen = () => {
     setCompleteVerification,
     hasIssuedAsset,
     setHasIssuedAsset,
+    isNodeInitInProgress,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -179,22 +181,30 @@ const CoinDetailsScreen = () => {
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-        onPressSend={() =>
+        onPressSend={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
             rgbInvoice: '',
             wallet: wallet,
-          })
-        }
+          });
+        }}
         onPressSetting={() =>
           navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
         }
-        onPressReceive={() =>
+        onPressReceive={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
             chosenAsset: coin,
-          })
-        }
+          });
+        }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       {/* <View style={styles.spendableBalanceWrapper}>

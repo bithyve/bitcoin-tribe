@@ -25,11 +25,15 @@ import {
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
+import Toast from 'src/components/Toast';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
+  const { translations } = useContext(LocalizationContext);
+  const { node } = translations;
 
   const navigation = useNavigation();
   const {
@@ -39,6 +43,7 @@ function Collectibles() {
     setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
+    isNodeInitInProgress,
   } = useContext(AppContext);
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
@@ -126,18 +131,21 @@ function Collectibles() {
         loading={refreshing && !isBackupInProgress && !isBackupDone}
         onRefresh={handleRefresh}
         refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-        onPressAddNew={() =>
+        onPressAddNew={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           handleNavigation(NavigationRoutes.ADDASSET, {
             issueAssetType: AssetType.Collectible,
-          })
-        }
+          });
+        }}
         onPressAsset={(asset: Asset) => {
           if (asset.assetSchema.toUpperCase() === AssetSchema.Collectible) {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
             });
-          } 
-          else {
+          } else {
             handleNavigation(NavigationRoutes.UDADETAILS, {
               assetId: asset.assetId,
             });

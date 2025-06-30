@@ -20,41 +20,6 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>153</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
-	<key>NSAppTransportSecurity</key>
-		<dict>
-        	<key>NSAllowsArbitraryLoads</key>
-        <true/>
-		</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes, Bitcoin addresses and RGB invoices.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture to your wallet.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-                    <string>$(PRODUCT_NAME) needs permission to save photos to your library</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Tribe requires FaceID access to quick and secure access your $(PRODUCT_NAME) app.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use your current location</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>LufgaBold.ttf</string>
-		<string>LufgaMedium.ttf</string>
-		<string>LufgaRegular.ttf</string>
-		<string>LufgaSemiBold.ttf</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -64,6 +29,55 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>153</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>twitter</string>
+		<string>twitterauth</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to use Camera to scan QR codes, Bitcoin addresses and RGB invoices.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Tribe requires FaceID access to quick and secure access your $(PRODUCT_NAME) app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to use your current location</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs permission to save photos to your library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to use Photo Library to add picture to your wallet.</string>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.bithyve.tribe</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Tribe</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>One</string>
+		</dict>
+	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>LufgaBold.ttf</string>
+		<string>LufgaMedium.ttf</string>
+		<string>LufgaRegular.ttf</string>
+		<string>LufgaSemiBold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
@@ -80,22 +94,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>twitter</string>
-    <string>twitterauth</string>
-</array>
-	<key>NSUbiquitousContainers</key>
-	<dict>
-		<key>iCloud.com.bithyve.tribe</key>
-		<dict>
-			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
-			<true/>
-			<key>NSUbiquitousContainerName</key>
-			<string>Tribe</string>
-			<key>NSUbiquitousContainerSupportedFolderLevels</key>
-			<string>One</string>
-		</dict>
-	</dict>
 </dict>
 </plist>

@@ -41,6 +41,8 @@ import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import Toast from 'src/components/Toast';
+import { AppContext } from 'src/contexts/AppContext';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -75,8 +77,9 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   } = props;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { isNodeInitInProgress } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
-  const { home, assets } = translations;
+  const { home, assets, node } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
@@ -163,6 +166,10 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 <AppTouchable
                   style={styles.totalBalanceWrapper}
                   onPress={() => {
+                    if (isNodeInitInProgress) {
+                      Toast(node.connectingNodeToastMsg, true);
+                      return;
+                    }
                     navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
                       assetId,
                     });

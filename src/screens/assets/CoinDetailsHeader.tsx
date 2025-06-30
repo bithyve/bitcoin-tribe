@@ -30,6 +30,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from 'src/components/AssetIcon';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { AppContext } from 'src/contexts/AppContext';
+import Toast from 'src/components/Toast';
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -56,8 +58,9 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   } = props;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { isNodeInitInProgress } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
-  const { home, assets } = translations;
+  const { home, assets, node } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
@@ -85,6 +88,10 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
               <AppTouchable
                 style={styles.totalBalanceWrapper}
                 onPress={() => {
+                  if (isNodeInitInProgress) {
+                    Toast(node.connectingNodeToastMsg, true);
+                    return;
+                  }
                   navigation.navigate(NavigationRoutes.COINMETADATA, {
                     assetId: asset.assetId,
                   });

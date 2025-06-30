@@ -85,6 +85,7 @@ import ImportXPost from 'src/screens/assets/ImportXPost';
 import ContactRequest from 'src/screens/community/ContactRequest';
 import Chat from 'src/screens/community/Chat';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
+import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -372,6 +373,7 @@ function Navigator() {
       }}>
       <RGBWalletStatus />
       <BackupAlertBanner />
+      <NodeConnectingSetup />
       <BackupDoneBanner />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen

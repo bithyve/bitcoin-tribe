@@ -55,7 +55,7 @@ import {
   RGBWallet,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
@@ -68,6 +68,7 @@ import {
   getMessaging,
   getToken,
   subscribeToTopic,
+  unsubscribeFromTopic,
   requestPermission,
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
@@ -78,9 +79,6 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import ContactsManager from '../p2p/ContactsManager';
-// import DHT from 'hyperdht';
-
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
@@ -96,7 +94,10 @@ export class ApiHandler {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       ApiHandler.authToken = authToken;
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -296,6 +297,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
             const apiHandler = new ApiHandler(
               rgbWallet,
               AppType.ON_CHAIN,
@@ -304,7 +306,8 @@ export class ApiHandler {
           }
         } else if (appType === AppType.SUPPORTED_RLN) {
           let rgbWallet: RGBWallet = {
-            mnemonic: rgbNodeConnectParams.mnemonic,
+            mnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
@@ -316,10 +319,9 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(
             rgbWallet,
-            AppType.NODE_CONNECT,
+            AppType.SUPPORTED_RLN,
             authToken,
           );
-
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
@@ -329,13 +331,14 @@ export class ApiHandler {
             publicId: rgbNodeConnectParams.nodeId,
             appName,
             walletImage,
-            primaryMnemonic: rgbNodeConnectParams.mnemonic,
+            primaryMnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
             version: DeviceInfo.getVersion(),
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
-            appType: AppType.NODE_CONNECT,
+            appType: AppType.SUPPORTED_RLN,
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -352,6 +355,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
           }
         } else {
           const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
@@ -414,7 +418,11 @@ export class ApiHandler {
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
-            const apiHandler = new ApiHandler(rgbWallet, appType);
+            const apiHandler = new ApiHandler(
+              rgbWallet,
+              appType,
+              registerApp?.app?.authToken,
+            );
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -423,6 +431,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
           }
         }
         Storage.set(Keys.SETUPAPP, false);
@@ -465,6 +474,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        await ApiHandler.manageFcmVersionTopics();
       }
     } catch (error) {
       throw error;
@@ -516,6 +526,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
       }
@@ -625,8 +636,6 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    const cm = ContactsManager.getInstance()
-    await cm.init(app.primarySeed)
     if (app.appType === AppType.NODE_CONNECT) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
@@ -1199,17 +1208,17 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (assets.nia) {
+      if (assets?.nia) {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
           assets.nia,
           Realm.UpdateMode.Modified,
         );
       }
-      if (assets.cfa) {
+      if (assets?.cfa) {
         const cfas = [];
         if (ApiHandler.appType === AppType.NODE_CONNECT) {
-          for (let i = 0; i < assets.cfa.length; i++) {
+          for (let i = 0; i < assets?.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
@@ -1225,6 +1234,7 @@ export class ApiHandler {
                 filePath: path,
               },
             });
+            console.log('cfas', cfas);
           }
         }
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
@@ -1609,6 +1619,53 @@ export class ApiHandler {
     }
   }
 
+  static async manageFcmVersionTopics(previousVersion?: string, currentVersion?: string): Promise<void> {
+    try {
+      const firebaseApp = getApp();
+      const messaging = getMessaging(firebaseApp);
+      const appVersion = currentVersion || DeviceInfo.getVersion();
+      const lastTopicVersion = previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
+      if (!lastTopicVersion || lastTopicVersion !== appVersion) {
+        if (lastTopicVersion) {
+          await ApiHandler.unsubscribeFromVersionTopic(messaging, lastTopicVersion);
+        }
+        await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
+        Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
+      }
+      await ApiHandler.subscribeToBroadcastChannel(messaging);
+    } catch (error) {
+      console.error('FCM topic management error:', error);
+      throw error;
+    }
+  }
+
+  private static async unsubscribeFromVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.unsubscribeFromTopic(topic);
+    } catch (error) {
+      console.warn(`Failed to unsubscribe from ${topic}:`, error);
+    }
+  }
+
+  private static async subscribeToVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.subscribeToTopic(topic);
+    } catch (error) {
+      console.error(`Failed to subscribe to ${topic}:`, error);
+      throw error;
+    }
+  }
+
+  private static async subscribeToBroadcastChannel(messaging: any): Promise<void> {
+    try {
+      await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
+    } catch (error) {
+      console.warn('Failed to subscribe to common broadcast topic:', error);
+    }
+  }
+
   static async checkVersion() {
     try {
       const githubReleaseNote = await ApiHandler.fetchGithubRelease();
@@ -1619,15 +1676,16 @@ export class ApiHandler {
       const version = dbManager.getObjectByIndex(
         RealmSchema.VersionHistory,
         lastIndex,
-      );
+      ) as VersionHistory;
       const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${version.version} to ${currentVersion}`,
+          title: `Upgraded from ${version?.version || 'unknown'} to ${currentVersion}`,
         });
+        await ApiHandler.manageFcmVersionTopics(version?.version, currentVersion);
         return true;
       }
       return false;
@@ -1641,7 +1699,16 @@ export class ApiHandler {
     try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
-      const authStatus = await requestPermission(messaging);
+      if (Platform.OS === 'android' && Platform.Version >= 33) {
+        const permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Notification permission denied on Android');
+          return false;
+        }
+      }
+      const authStatus = await messaging.requestPermission();
       const enabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||
         authStatus === AuthorizationStatus.PROVISIONAL;
@@ -1649,19 +1716,18 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL);
+      console.log('token', token);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
-
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
         return true;
       }
       return false;
     } catch (error) {
-      console.log('fcm update error: ', error);
+      console.log('fcm update error:', error?.message || error);
       throw error;
     }
   }
@@ -1875,8 +1941,22 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('viewNodeInfo - error', error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async checkNodeStatus(nodeId, authToken) {
+    try {
+      const response = await Relay.checkNodeStatus(nodeId, authToken);
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to fetching node status');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to fetching node status');
     }
   }
 
@@ -2022,6 +2102,7 @@ export class ApiHandler {
     try {
       const response = await Relay.createSupportedNode();
       if (response.error) {
+        console.log('response.error', response.error);
         throw new Error(response.error);
       } else if (response) {
         return response;
@@ -2029,6 +2110,7 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
+      console.log('error-', error);
       console.log(error);
       throw error;
     }
@@ -2036,8 +2118,10 @@ export class ApiHandler {
 
   static async unlockNode() {
     try {
-      const response = await ApiHandler.api.unlock('tribe@2024');
-      console.log(response);
+      const response = await ApiHandler.api.unlock(
+        'tribe@2024',
+        this.authToken,
+      );
       if (response.error) {
         throw new Error(response.error);
       }
@@ -2105,35 +2189,6 @@ export class ApiHandler {
     try {
       return await RGBServices.isBackupRequired();
     } catch (error) {
-      throw error;
-    }
-  }
-
-  static async initNode() {
-    try {
-      const response = await ApiHandler.api.init({
-        password: 'tribe@2024',
-      });
-      if (response.mnemonic) {
-        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-          RealmSchema.RgbWallet,
-        );
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: response.mnemonic,
-          },
-        );
-        return response;
-      } else if (response.error) {
-        throw new Error(response.error);
-      } else {
-        throw new Error('Failed to init node');
-      }
-    } catch (error) {
-      console.log(error);
       throw error;
     }
   }
