@@ -2129,34 +2129,6 @@ export class ApiHandler {
     }
   }
 
-  static async initNode(nodeId) {
-    try {
-      const response = await Relay.initNodeById(nodeId);
-      console.log('initNode response', response);
-      if (response.mnemonic) {
-        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-          RealmSchema.RgbWallet,
-        );
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: response.mnemonic,
-          },
-        );
-        return response;
-      } else if (response.error) {
-        throw new Error(response.error);
-      } else {
-        throw new Error('Failed to init node');
-      }
-    } catch (error) {
-      console.log('init error', error);
-      throw error;
-    }
-  }
-
   static async handleTransferFailure(
     batchTransferIdx: Number,
     noAssetOnly: boolean,
