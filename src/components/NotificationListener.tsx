@@ -7,7 +7,7 @@ import {
 } from '@react-native-firebase/messaging';
 import { showMessage } from 'react-native-flash-message';
 import { AppContext } from '../contexts/AppContext';
-import { PushNotificationService } from '../models/enums/Notifications'; // adjust path if needed
+import { PushNotificationType } from '../models/enums/Notifications'; // adjust path if needed
 
 export default function NotificationListener() {
   const { setNodeInitStatus } = useContext(AppContext);
@@ -45,10 +45,10 @@ export default function NotificationListener() {
       });
 
       switch (type?.toLowerCase()) {
-        case PushNotificationService.NODE_INIT_COMPLETE:
+        case PushNotificationType.NODE_INIT_COMPLETE:
           setNodeInitStatus(false);
           break;
-        case PushNotificationService.NODE_PAUSED:
+        case PushNotificationType.NODE_PAUSED:
           // handle pause state
           break;
         default:
