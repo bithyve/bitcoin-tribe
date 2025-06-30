@@ -1324,6 +1324,10 @@ export class ApiHandler {
   }
 
   static parseAssetResponse(response: any) {
+    if (!response || typeof response !== 'object') return undefined;
+    if (response?.error || response?.code >= 400 || !response?.asset) {
+      return response;
+    }
     return ApiHandler.appType === AppType.SUPPORTED_RLN
       ? response.asset
       : response;
