@@ -50,6 +50,19 @@ class RestClient {
     });
   }
 
+  async put(
+    path: string,
+    body: object,
+    headers?: object,
+  ): Promise<AxiosResponse> {
+    return axios.put(path, body, {
+      headers: {
+        ...RestClient.headers,
+        ...headers,
+      },
+    });
+  }
+
   async get(path: string, headers?: object): Promise<AxiosResponse> {
     return axios.get(path, {
       headers: {

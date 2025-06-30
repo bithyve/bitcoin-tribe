@@ -3,11 +3,9 @@ import { Keyboard, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
-import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import PinMethod from 'src/models/enums/PinMethod';
@@ -20,6 +18,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -29,7 +28,7 @@ function ProfileSetup() {
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
 
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState<Asset | null>(null);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +45,14 @@ function ProfileSetup() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(true);
-      setProfileImage(result);
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 500,
+        maxWidth: 500,
+        selectionLimit: 1,
+      })
+      setProfileImage(result.assets[0]);
     } catch (error) {
       console.error(error);
     }
@@ -84,12 +89,12 @@ function ProfileSetup() {
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}
-        onChangeText={text => setName(text)}
+        onChangeText={text => setName(text.trim())}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
         secondaryOnPress={() => initiateWalletCreation()}
-        addPicTitle={onBoarding.addPicture}
-        profileImage={profileImage}
+        addPicTitle={onBoarding.addPicture} 
+        profileImage={profileImage?.uri}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         // rightText={common.skip}
@@ -100,7 +105,7 @@ function ProfileSetup() {
         primaryCTATitle={common.proceed}
         secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
-        disabled={false}
+        disabled={name.trim() === ''}
       />
       <View>
         <ResponsePopupContainer

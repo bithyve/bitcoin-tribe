@@ -6,6 +6,7 @@ export interface TribeApp {
   publicId: string;
   appName?: string;
   walletImage?: string;
+  imageUrl?: string;
   primaryMnemonic?: string;
   primarySeed?: string;
   imageEncryptionKey: string;

@@ -37,7 +37,7 @@ type ProfileDetailsProps = {
   onRightTextPress?: () => void;
   primaryCtaLoader?: boolean;
 };
-function ProfileDetails(props: ProfileDetailsProps) {
+function  ProfileDetails(props: ProfileDetailsProps) {
   const {
     title,
     subTitle,

@@ -8,6 +8,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import { Asset as ImageAsset } from 'react-native-image-picker';
+
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
@@ -131,18 +133,65 @@ export default class Relay {
     network: string,
     fcmToken = '',
     signature: string,
+    walletImage: ImageAsset | null,
+    contactKey: string,
   ): Promise<{ status: boolean; error?: string; app: TribeApp }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/new`, {
-        name,
-        appID,
-        publicId,
-        appType,
-        network,
-        fcmToken,
-        signature,
-        publicKey,
+      const formData = new FormData();
+      console.log('walletImage', walletImage);
+      if(walletImage){
+        formData.append('file', {
+          uri: walletImage.uri,
+          name: walletImage.fileName,
+          type: walletImage.type,
+        });
+      }
+      formData.append('name', name);
+      formData.append('appID', appID);
+      formData.append('publicId', publicId);
+      formData.append('publicKey', publicKey);
+      formData.append('appType', appType);
+      formData.append('network', network);
+      formData.append('fcmToken', fcmToken);
+      formData.append('signature', signature);
+      formData.append('contactKey', contactKey);
+      res = await RestClient.post(`${RELAY}/app/new`, formData, {
+        'Content-Type': 'multipart/form-data',
+      });
+    } catch (err) {
+      console.log(err, err.response.data);
+      if (err.response) {
+        throw new Error(err.response.data.err);
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+    }
+    return res.data || res.json;
+  };
+
+  public static updateApp = async (
+    appID: string,
+    name: string,
+    walletImage: ImageAsset | null,
+    authToken: string,
+  ): Promise<{ updated: boolean; error?: string; imageUrl: string }> => {
+    let res;
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('appID', appID);
+      if(walletImage){
+        formData.append('file', {
+          uri: walletImage.uri,
+          name: walletImage.fileName,
+          type: walletImage.type,
+        });
+      }
+      res = await RestClient.put(`${RELAY}/app/update`, formData, {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authToken}`,
       });
     } catch (err) {
       console.log(err, err.response.data);

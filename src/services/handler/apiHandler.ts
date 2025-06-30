@@ -27,7 +27,6 @@ import PinMethod from 'src/models/enums/PinMethod';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import * as bip39 from 'bip39';
 import crypto from 'crypto';
-import { MMKV } from 'react-native-mmkv';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
@@ -67,22 +66,18 @@ import moment from 'moment';
 import {
   getMessaging,
   getToken,
-  subscribeToTopic,
-  unsubscribeFromTopic,
-  requestPermission,
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
-import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
+import ContactsManager from '../p2p/ContactsManager';
+import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
 
-const bip32 = BIP32Factory(ecc);
-const storage = new MMKV();
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -168,7 +163,7 @@ export class ApiHandler {
     appName = '',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage = '',
+    walletImage = null,
     mnemonic = null,
     appType,
     rgbNodeConnectParams,
@@ -178,7 +173,7 @@ export class ApiHandler {
     appName: string;
     pinMethod: PinMethod;
     passcode: '';
-    walletImage: '';
+    walletImage: ImageAsset;
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
@@ -241,8 +236,11 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ContactsManager.getInstance();
+          await cm.init(primarySeed.toString('hex'));
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
-            'Tribe-Onchain-Wallet',
+            appName,
             appID,
             publicId,
             publicKey,
@@ -250,6 +248,8 @@ export class ApiHandler {
             'Iris_Regtest',
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -257,14 +257,11 @@ export class ApiHandler {
           const imageEncryptionKey = generateEncryptionKey(
             entropy.toString('hex'),
           );
-          const cm = ContactsManager.getInstance()
-          await cm.init(primarySeed.toString('hex'))
-          const keys = await cm.getKeys()
           const newAPP: TribeApp = {
             id: appID,
             publicId,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -330,7 +327,7 @@ export class ApiHandler {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
             appName,
-            walletImage,
+            walletImage: '',
             primaryMnemonic:
               rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
@@ -376,6 +373,9 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ContactsManager.getInstance();
+          await cm.init(rgbNodeConnectParams.nodeId);
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
@@ -385,6 +385,8 @@ export class ApiHandler {
             'Iris_Regtest',
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -393,7 +395,7 @@ export class ApiHandler {
             id: rgbNodeInfo.pubkey,
             publicId: rgbNodeInfo.pubkey,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic: rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
@@ -405,6 +407,10 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -636,7 +642,7 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (app.appType === AppType.NODE_CONNECT || app.appType === AppType.SUPPORTED_RLN) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
@@ -1608,13 +1614,15 @@ export class ApiHandler {
 
   static async updateProfile(appID, appName, walletImage) {
     try {
+      const response = await Relay.updateApp(appID, appName, walletImage, ApiHandler.authToken);
+      if (response.updated) {
       dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
-        appName: appName,
-        walletImage: walletImage,
-      });
+          appName: appName,
+          walletImage: response.imageUrl,
+        });
+      }
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
       throw error;
     }
   }

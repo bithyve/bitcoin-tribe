@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
-import pickImage from 'src/utils/imagePicker';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import ModalLoading from 'src/components/ModalLoading';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -16,8 +16,8 @@ function EditWalletProfile({ navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
 
   const [name, setName] = useState('');
-  const [profileImage, setProfileImage] = useState(app.walletImage);
-  const [loading, setLoading] = useState('');
+  const [profileImage, setProfileImage] = useState<Asset | null>(null);
+  const [loading, setLoading] = useState(false);
   const [initialName, setInitialName] = useState('');
 
   useEffect(() => {
@@ -27,32 +27,39 @@ function EditWalletProfile({ navigation }) {
   }, []);
 
   const isSaveEnabled =
-    name.trim() !== '' && name.trim() !== initialName.trim();
+    (name.trim() !== '' && name.trim() !== initialName.trim()) || profileImage;
 
   const handlePickImage = async () => {
     try {
-      const result = await pickImage(true);
-      setProfileImage(result);
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 500,
+        maxWidth: 500,
+        selectionLimit: 1,
+      })
+      setProfileImage(result.assets[0]);
     } catch (error) {
       console.error(error);
     }
   };
 
   const updateWalletProfile = async () => {
-    setLoading('loading');
+    setLoading(true);
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
-      setLoading('');
+      setLoading(false);
       Toast(wallet.profileUpdateMsg);
       navigation.goBack();
     } else {
-      setLoading('');
+      setLoading(false);
       Toast(wallet.profileUpdateErrMsg, true);
     }
   };
 
   return (
     <ScreenContainer>
+      <ModalLoading visible={loading} />
       <ProfileDetails
         title={wallet.walletNamePic}
         subTitle={wallet.walletNamePicSubTitle}
@@ -61,13 +68,13 @@ function EditWalletProfile({ navigation }) {
         primaryOnPress={() => updateWalletProfile()}
         secondaryOnPress={() => navigation.goBack()}
         addPicTitle={wallet.editPicture}
-        profileImage={profileImage}
+        profileImage={profileImage?.uri || app.walletImage}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}
         edit={true}
         disabled={!isSaveEnabled}
         primaryCTATitle={common.save}
-        primaryStatus={loading}
+        primaryStatus={loading ? 'loading' : ''}
         secondaryCTATitle={common.cancel}
       />
     </ScreenContainer>
