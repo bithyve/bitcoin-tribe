@@ -8,23 +8,10 @@ import MessageInput from './components/MessageInput'
 import { TribeApp } from 'src/models/interfaces/TribeApp'
 import { useObject, useQuery } from '@realm/react'
 import { RealmSchema } from 'src/storage/enum'
-import ContactsManager from 'src/services/p2p/ContactsManager'
+import ContactsManager from 'src/services/p2p/ChatPeerManager'
 import { v4 as uuidv4 } from 'uuid';
 import dbManager from 'src/storage/realm/dbManager'
-
-interface Community {
-  id: string;
-  name?: string;
-  publicKey?: string;
-  messages?: Array<{
-    id: string;
-    message?: string;
-    createdAt: number;
-    type?: string;
-    senderPublicKey: string;
-    senderName: string;
-  }>;
-}
+import { Community, Contact, Message, MessageType } from 'src/models/interfaces/Community'
 
 const styles = StyleSheet.create({
   container: {
@@ -34,73 +21,65 @@ const styles = StyleSheet.create({
 
 const Chat = () => {
   const route = useRoute();
-  const room = route.params.room;
+  const communityId = route.params.communityId;
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
   const flatListRef = useRef<FlatList>(null)
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const cm = ContactsManager.getInstance()
-  const community = useObject<Community>(RealmSchema.Community, room.publicKey);  
+  const community = useObject<Community>(RealmSchema.Community, communityId); 
+  const messages = useQuery<Message>(RealmSchema.Message).filtered('communityId = $0', communityId).sorted('createdAt', true);
+  const contact = useQuery<Contact>(RealmSchema.Contact).filtered('contactKey = $0', community.with)[0];
 
   useEffect(() => {
-      cm.joinPeers(room.publicKey)
+      cm.joinPeers(community.with)
   }, []);
 
   useEffect(() => {
-    loadMessages();
+    markAsRead();
   }, []);
-
-  const loadMessages = () => {
-    try {
-
-      cm.setOnMessageListener(handleMessage)
-    } catch (error) {
-      console.error('Error setting up rooms listener:', error);
-    }
-  };
-
-  const handleMessage = (data) => { 
-    const payload = JSON.parse(data.data)
-    dbManager.updateObjectByPrimaryId(RealmSchema.Community, 'id', room.publicKey, {
-      messages: [...(community.messages || []), {
-        id: payload.id,
-        message: payload.message,
-        createdAt: new Date().getTime(),
-        type: payload.type,
-        senderPublicKey: payload.senderPublicKey,
-        senderName: payload.senderName,
-      }]
-    })
-  }
 
   const onPressSend = async () => {
     try {
       const messageData = {
         id: uuidv4(),
-        message,
+        text: message,
         createdAt: Date.now(),
-        type: 'TEXT', // TODO: add type
-        senderPublicKey: app.contactsKey.publicKey,
-        senderName: 'Satoshi',
-        publicKey: room.publicKey,
+        type: MessageType.Text,
+        sender: app.contactsKey.publicKey,
+        communityId: communityId,
+        unread: false,
       };
-      cm.sendMessage(room.publicKey, JSON.stringify({...messageData}));
+      cm.sendMessage(community.with, JSON.stringify({...messageData}));
       setMessage('');
-      dbManager.updateObjectByPrimaryId(RealmSchema.Community, 'id', room.publicKey, {
-        messages: [...(community.messages || []), messageData]
-      });
-      flatListRef.current?.scrollToEnd({ animated: true });
+
+      dbManager.createObject(RealmSchema.Message, messageData)
+
+      flatListRef.current?.scrollToIndex({ index: 0, animated: true });
     } catch (error) {
       console.error('Error creating chat room: ', error);
     }
   }
 
+  const markAsRead = async () => {
+    try {
+      const unreadMessages = messages.filter(message => message.unread);
+      unreadMessages.forEach(message => {
+        dbManager.updateObjectByPrimaryId(RealmSchema.Message, 'id', message.id, {
+          unread: false,
+        })
+      })
+    } catch (error) {
+      console.error('Error marking as read:', error);
+    }
+  }
+
   return (
     <ScreenContainer>
-      <AppHeader title={room.name} />
+      <AppHeader title={contact.name} />
 
       <View style={styles.container}>
-        <MessageList messages={community.messages} sending={sending} flatListRef={flatListRef} appId={app.contactsKey.publicKey}/>
+        <MessageList messages={messages} sending={sending} flatListRef={flatListRef} appId={app.contactsKey.publicKey}/>
         <MessageInput onPressSend={onPressSend} message={message} setMessage={setMessage} loading={sending} disabled={sending} />
       </View>
     </ScreenContainer>

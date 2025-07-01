@@ -9,7 +9,6 @@ import SearchIcon from 'src/assets/images/search.svg';
 import SearchIconLight from 'src/assets/images/ic_search_light.svg';
 import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
 import AddContactIcon from 'src/assets/images/addcontact.svg';
-
 import IconWrapper from 'src/components/IconWrapper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';

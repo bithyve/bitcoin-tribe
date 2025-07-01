@@ -20,12 +20,13 @@ const MessageList = ({ messages, sending, flatListRef, appId }) => {
         style={{ flex: 1, paddingBottom: 10 }}
         extraData={[messages, sending]}
         contentContainerStyle={styles.list}
+        inverted={true}
         showsVerticalScrollIndicator={false}
         // ListEmptyComponent={() => (
         //   <Text style={styles.textEmpty}>No messages</Text>
         // )}
         ItemSeparatorComponent={() => <View style={styles.divider} />}
-        renderItem={({ item, index }) => <MessageItem message={item} previousMessage={messages[index - 1]} appId={appId} />}
+        renderItem={({ item, index }) => <MessageItem message={item} previousMessage={messages[index + 1]} appId={appId} />}
       />
   )
 }

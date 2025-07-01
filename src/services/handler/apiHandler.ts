@@ -74,7 +74,7 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import ContactsManager from '../p2p/ContactsManager';
+import ChatPeerManager from '../p2p/ChatPeerManager';
 import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
 
@@ -236,7 +236,7 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ContactsManager.getInstance();
+          const cm = ChatPeerManager.getInstance();
           await cm.init(primarySeed.toString('hex'));
           const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
@@ -373,7 +373,7 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ContactsManager.getInstance();
+          const cm = ChatPeerManager.getInstance();
           await cm.init(rgbNodeConnectParams.nodeId);
           const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
@@ -567,7 +567,7 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const cm = ContactsManager.getInstance()
+    const cm = ChatPeerManager.getInstance()
     await cm.init(app.primarySeed)
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
@@ -607,7 +607,7 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-      const cm = ContactsManager.getInstance()
+      const cm = ChatPeerManager.getInstance()
       await cm.init(app.primarySeed)
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
@@ -655,6 +655,8 @@ export class ApiHandler {
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
       );
+      const cm = ChatPeerManager.getInstance()
+      await cm.init(app.primarySeed)
       return { key, isWalletOnline };
     }
   }

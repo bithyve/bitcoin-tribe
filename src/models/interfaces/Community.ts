@@ -1,4 +1,5 @@
 export enum MessageType {
+  Alert = 'Alert',
   Text = 'Text',
   Image = 'Image',
   RequestSats = 'RequestSats',
@@ -15,6 +16,7 @@ export enum CommunityType {
 
 export interface Message {
   id: string;
+  communityId: string;
   type: MessageType;
   text: string;
   createdAt: number;

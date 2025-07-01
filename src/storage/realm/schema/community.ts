@@ -6,7 +6,8 @@ export const MessageSchema: ObjectSchema = {
   primaryKey: 'id',
   properties: {
     id: 'string',
-    block: 'int',
+    communityId: 'string',
+    block: 'int?',
     unread: 'bool',
     createdAt: {type: 'int', default: Date.now()},
     text: 'string?',

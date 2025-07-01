@@ -656,4 +656,46 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static getWalletProfiles = async (
+    contactKeys: string[],
+  ): Promise<{
+    results: {
+      contactKey: string;
+      appID: string;
+      name: string;
+      imageUrl: string;
+    }[];
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/app/getWalletProfiles`, {
+        contactKeys,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getPeerMessages = async (
+    contactKey: string,
+    from: number,
+  ): Promise<{
+    messages: {
+      message: string;
+      timestamp: number;
+      blockNumber: number;
+    }[];
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/chat/getmessages?publicKey=${contactKey}&from=${from}`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }
