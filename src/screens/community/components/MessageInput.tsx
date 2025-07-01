@@ -6,9 +6,13 @@ import {
 } from 'react-native';
 import AppTouchable from 'src/components/AppTouchable';
 import IconSend from 'src/assets/images/icon_send.svg';
+import IconSendLight from 'src/assets/images/ic_send_light.svg';
 import IconPlus from 'src/assets/images/ic_plus.svg';
+import IconPlusLight from 'src/assets/images/ic_plus_light.svg';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
 
-const styles = StyleSheet.create({
+const getStyles = (theme: AppTheme) => StyleSheet.create({
   containerBottom: {
     flexDirection: 'row',
     paddingHorizontal: 10,
@@ -27,10 +31,11 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 35,
     flex: 1,
-    backgroundColor: '#24262B',
+    backgroundColor: theme.dark ? '#24262B' : '#FFF',
     fontSize: 16,
     fontFamily: 'Lufga-Regular',
-    color: 'white',
+    color: theme.dark ? 'white' : '#24262B',
+    textAlignVertical: 'top',
   },
   btnSend: {
     padding: 5,
@@ -52,6 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   placeholderText: {
+    color: theme.colors.secondaryHeadingColor,
   },
 });
 
@@ -62,6 +68,8 @@ const MessageInput = ({
   disabled,
   onPressSend,
 }) => {
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
 
   return (
     <View style={styles.containerBottom}>
@@ -69,7 +77,7 @@ const MessageInput = ({
       <AppTouchable style={styles.btnPlus} onPress={() => {
         console.log('onPressSend');
       }}>
-        <IconPlus />
+        {theme.dark ? <IconPlus /> : <IconPlusLight />}
       </AppTouchable>
 
       <TextInput
@@ -80,12 +88,11 @@ const MessageInput = ({
         multiline
         editable={!loading && !disabled}
         placeholder='Type a Message...'
-        placeholderTextColor='#787878'
-        placeholderStyle={styles.placeholderText}
+        placeholderTextColor={theme.colors.secondaryHeadingColor}
       />
 
       <AppTouchable disabled={message.trim() === '' || disabled} style={styles.btnSend} onPress={() => onPressSend()}>
-        <IconSend />
+        {theme.dark ? <IconSend /> : <IconSendLight />}
       </AppTouchable>
     </View>
   );
