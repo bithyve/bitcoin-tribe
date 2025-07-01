@@ -92,7 +92,10 @@ function WalletDetails({ navigation, route }) {
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
-    if (app?.appType === AppType.NODE_CONNECT) {
+    if (
+      app?.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       fetchOnChainTransaction();
     }
     walletRefreshMutation.mutate({
@@ -113,7 +116,10 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      if (app?.appType === AppType.NODE_CONNECT) {
+      if (
+        app?.appType === AppType.NODE_CONNECT ||
+        app.appType === AppType.SUPPORTED_RLN
+      ) {
         fetchOnChainTransaction();
       }
       walletRefreshMutation.mutate({
@@ -138,7 +144,10 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     fetchUTXOs();
-    if (app?.appType === AppType.NODE_CONNECT) {
+    if (
+      app?.appType === AppType.NODE_CONNECT ||
+      app?.appType === AppType.SUPPORTED_RLN
+    ) {
       fetchOnChainTransaction();
       listPaymentshMutation.mutate();
       getChannelMutate();
@@ -151,7 +160,8 @@ function WalletDetails({ navigation, route }) {
   }, [app]);
 
   const transactionsData =
-    app?.appType === AppType.NODE_CONNECT
+    app?.appType === AppType.NODE_CONNECT ||
+    app?.appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...rgbWallet?.lnPayments,
           ...rgbWallet?.nodeOnchainTransactions,

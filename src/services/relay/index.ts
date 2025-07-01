@@ -2,12 +2,10 @@ import config from 'src/utils/config';
 import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
-import { Asset, Coin, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
-import dbManager from 'src/storage/realm/dbManager';
-import { RealmSchema } from 'src/storage/enum';
 import { Asset as ImageAsset } from 'react-native-image-picker';
 
 const { HEXA_ID, RELAY } = config;
@@ -303,37 +301,15 @@ export default class Relay {
     }
   };
 
-  public static checkNodeStatus = async (
+  public static saveNodeMnemonic = async (
     nodeId: string,
     authToken: string,
-  ): Promise<string | null> => {
+  ): Promise<{ status: string; mnemonic?: string } | null> => {
     try {
-      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-        RealmSchema.RgbWallet,
-      );
       const node: any = await Relay.getNodeById(nodeId, authToken);
       const status = node?.node?.status || node?.nodeInfo?.data?.status;
       const fetchedMnemonic = node?.node?.mnemonic;
-      if (fetchedMnemonic && rgbWallet.nodeMnemonic !== fetchedMnemonic) {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: fetchedMnemonic,
-          },
-        );
-        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', nodeId, {
-          primaryMnemonic: fetchedMnemonic,
-        });
-      }
-      if (status === 'PAUSED') {
-        await Relay.startNodeById(nodeId, authToken);
-      } else {
-        console.log('Node status:', status);
-      }
-
-      return status;
+      return { status, mnemonic: fetchedMnemonic };
     } catch (err) {
       console.error('Error fetching node status:', err);
       return null;

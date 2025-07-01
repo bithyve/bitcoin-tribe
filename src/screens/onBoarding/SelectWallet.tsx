@@ -1,9 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import {
+  getMessaging,
+  onMessage,
+  AuthorizationStatus,
+} from '@react-native-firebase/messaging';
+import { getApp } from '@react-native-firebase/app';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -39,6 +45,32 @@ import WalletAdvanceUpIcon from 'src/assets/images/walletAdvanceUpIcon.svg';
 import WalletAdvanceUpIconLight from 'src/assets/images/walletAdvanceUpIcon_light.svg';
 import AppText from 'src/components/AppText';
 import LearnMoreTextView from './components/LearnMoreTextView';
+
+export const requestNotificationPermission = async () => {
+  try {
+    const app = getApp();
+    const messaging = getMessaging(app);
+    if (Platform.OS === 'android' && Platform.Version >= 33) {
+      const permission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+      if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Notification permission denied on Android');
+        return false;
+      }
+    }
+    const authStatus = await messaging.requestPermission();
+    const enabled =
+      authStatus === AuthorizationStatus.AUTHORIZED ||
+      authStatus === AuthorizationStatus.PROVISIONAL;
+
+    if (!enabled) {
+      console.warn('Notification permission not granted');
+    }
+  } catch (err) {
+    console.warn('Permission request failed:', err);
+  }
+};
 
 function SelectWallet() {
   const navigation = useNavigation();
@@ -156,7 +188,8 @@ function SelectWallet() {
               <SelectWalletTypeOption
                 title={onBoarding.supported}
                 icon={isThemeDark ? <SupportIcon /> : <SupportIconLight />}
-                onPress={() => {
+                onPress={async () => {
+                  await requestNotificationPermission();
                   SetSupportedMode(!supportedMode);
                 }}
                 borderColor={

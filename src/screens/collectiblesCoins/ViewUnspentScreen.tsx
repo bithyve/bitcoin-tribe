@@ -135,7 +135,8 @@ const ViewUnspentScreen = () => {
             onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
               transID={
-                app?.appType === AppType.NODE_CONNECT
+                app?.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
                   ? `${item.utxo.outpoint}`
                   : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
               }

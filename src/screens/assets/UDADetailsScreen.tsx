@@ -232,7 +232,10 @@ const UDADetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.UniqueDigitalAsset });
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
       }
     });

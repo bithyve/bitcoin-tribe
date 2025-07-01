@@ -26,7 +26,7 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -131,7 +131,10 @@ const CoinDetailsScreen = () => {
         refreshRgbWallet.mutate();
         mutate({ assetId, schema: RealmSchema.Coin });
       }
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
         getChannelMutate();
       }
@@ -151,7 +154,7 @@ const CoinDetailsScreen = () => {
   );
 
   const transactionsData =
-    appType === AppType.NODE_CONNECT
+    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...coin?.transactions,
@@ -211,7 +214,11 @@ const CoinDetailsScreen = () => {
         <TransactionInfoCard style={styles.toolTipCotainer} />
       </View> */}
       <TransactionsList
-        style={styles.transactionContainer}
+        style={
+          appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
+            ? styles.transactionContainer1
+            : styles.transactionContainer
+        }
         transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
@@ -296,6 +303,10 @@ const styles = StyleSheet.create({
   },
   transactionContainer: {
     top: -20,
+    height: windowHeight > 820 ? '52%' : '47%',
+  },
+  transactionContainer1: {
+    marginTop: hp(10),
     height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {

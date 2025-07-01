@@ -149,7 +149,10 @@ const CollectibleDetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.Collectible });
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
       }
     });
@@ -167,7 +170,7 @@ const CollectibleDetailsScreen = () => {
   );
 
   const transactionsData =
-    appType === AppType.NODE_CONNECT
+    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...collectible?.transactions,
