@@ -150,25 +150,26 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     </AppText>
                   </View>
                 </View>
-                {app.appType === AppType.NODE_CONNECT && (
-                  <>
-                    <View style={styles.balanceWrapper}>
-                      {isThemeDark ? <IconBTC /> : <IconBTCLight />}
-                      <AppText variant="heading3" style={styles.balanceText}>
-                        {numberWithCommas(
-                          asset.balance.future +
-                            asset.balance?.offchainOutbound,
-                        )}
-                      </AppText>
-                    </View>
-                    <View style={styles.balanceWrapper}>
-                      <IconLightning />
-                      <AppText variant="heading3" style={styles.balanceText}>
-                        {numberWithCommas(totalAssetLocalAmount)}
-                      </AppText>
-                    </View>
-                  </>
-                )}
+                {app.appType === AppType.NODE_CONNECT ||
+                  (app.appType === AppType.SUPPORTED_RLN && (
+                    <>
+                      <View style={styles.balanceWrapper}>
+                        {isThemeDark ? <IconBTC /> : <IconBTCLight />}
+                        <AppText variant="heading3" style={styles.balanceText}>
+                          {numberWithCommas(
+                            asset.balance.future +
+                              asset.balance?.offchainOutbound,
+                          )}
+                        </AppText>
+                      </View>
+                      <View style={styles.balanceWrapper}>
+                        <IconLightning />
+                        <AppText variant="heading3" style={styles.balanceText}>
+                          {numberWithCommas(totalAssetLocalAmount)}
+                        </AppText>
+                      </View>
+                    </>
+                  ))}
               </View>
             </View>
             <View style={styles.transCtaWrapper}>

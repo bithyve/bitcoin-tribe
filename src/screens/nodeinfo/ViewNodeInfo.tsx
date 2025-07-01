@@ -40,7 +40,7 @@ const ViewNodeInfo = () => {
     ApiHandler.viewNodeInfo,
   );
   const { mutate: checkStatus, isLoading: nodeStatusIsLoading } = useMutation(
-    () => ApiHandler.checkNodeStatus(app?.id, app?.authToken),
+    () => ApiHandler.startNode(app?.id, app?.authToken),
   );
   const { setIsWalletOnline } = useContext(AppContext);
   const syncMutation = useMutation(ApiHandler.syncNode);

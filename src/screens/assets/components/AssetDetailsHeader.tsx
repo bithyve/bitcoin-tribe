@@ -130,7 +130,8 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
         </ImageBackground>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
-            {app.appType === AppType.NODE_CONNECT ? (
+            {app.appType === AppType.NODE_CONNECT ||
+            app.appType === AppType.SUPPORTED_RLN ? (
               <View style={styles.balanceContainer}>
                 <View style={styles.totalBalanceWrapper}>
                   <AppText variant="heading2" style={styles.totalBalance}>

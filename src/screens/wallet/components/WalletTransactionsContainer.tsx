@@ -96,7 +96,8 @@ function WalletTransactionsContainer({
             tranStatus={item.status}
             transDate={item.date}
             transAmount={
-              app.appType === AppType.NODE_CONNECT
+              app.appType === AppType.NODE_CONNECT ||
+              app.appType === AppType.SUPPORTED_RLN
                 ? `${item.received || item?.amtMsat / 1000}`
                 : `${item.amount}`
             }

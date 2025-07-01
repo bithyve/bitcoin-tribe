@@ -58,7 +58,10 @@ function HomeHeader() {
   }, [app]);
 
   const balances = React.useMemo(() => {
-    if (app?.appType === AppType.NODE_CONNECT) {
+    if (
+      app?.appType === AppType.NODE_CONNECT ||
+      app?.appType === AppType.SUPPORTED_RLN
+    ) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     }
     return (

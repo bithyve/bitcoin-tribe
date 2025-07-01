@@ -719,7 +719,10 @@ export class ApiHandler {
 
   static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const balances = await ApiHandler.api.getBtcBalance({
           skip_sync: false,
         });
@@ -945,7 +948,10 @@ export class ApiHandler {
     txPrerequisites: TransactionPrerequisite;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const response = await ApiHandler.api.sendBTCTransaction({
           amount: recipient.amount,
           address: recipient.address,
@@ -1030,7 +1036,10 @@ export class ApiHandler {
 
   static async createUtxos() {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const utxos = await RGBServices.createUtxos(
           5,
           ApiHandler.appType,
@@ -1187,7 +1196,6 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('payments', error);
       throw error;
     }
   }
@@ -1207,7 +1215,10 @@ export class ApiHandler {
       }
       if (assets?.cfa) {
         const cfas = [];
-        if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        if (
+          ApiHandler.appType === AppType.NODE_CONNECT ||
+          ApiHandler.appType === AppType.SUPPORTED_RLN
+        ) {
           for (let i = 0; i < assets?.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
             const mediaByte = await ApiHandler.api.getassetmedia({
@@ -1256,7 +1267,10 @@ export class ApiHandler {
 
       if (assets.uda) {
         const udas = [];
-        if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        if (
+          ApiHandler.appType === AppType.NODE_CONNECT ||
+          ApiHandler.appType === AppType.SUPPORTED_RLN
+        ) {
           // todo
         }
         if (ApiHandler.appType === AppType.ON_CHAIN) {
@@ -1314,6 +1328,16 @@ export class ApiHandler {
     }
   }
 
+  static parseAssetResponse(response: any) {
+    if (!response || typeof response !== 'object') return undefined;
+    if (response?.error || response?.code >= 400 || !response?.asset) {
+      return response;
+    }
+    return ApiHandler.appType === AppType.SUPPORTED_RLN
+      ? response.asset
+      : response;
+  }
+
   static async issueNewCoin({
     name,
     ticker,
@@ -1328,7 +1352,7 @@ export class ApiHandler {
     addToRegistry;
   }) {
     try {
-      const response = await RGBServices.issueAssetNia(
+      const assetResponse = await RGBServices.issueAssetNia(
         ticker,
         name,
         `${supply}`,
@@ -1336,6 +1360,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         const metadata = await RGBServices.getRgbAssetMetaData(
@@ -1391,7 +1416,7 @@ export class ApiHandler {
     addToRegistry: boolean;
   }) {
     try {
-      const response = await RGBServices.issueAssetCfa(
+      const assetResponse = await RGBServices.issueAssetCfa(
         name,
         description,
         `${supply}`,
@@ -1400,6 +1425,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         await ApiHandler.refreshRgbWallet();
@@ -1455,7 +1481,7 @@ export class ApiHandler {
     addToRegistry;
   }) {
     try {
-      const response = await RGBServices.issueAssetUda(
+      const assetResponse = await RGBServices.issueAssetUda(
         name,
         ticker,
         details,
@@ -1464,6 +1490,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
@@ -1521,7 +1548,10 @@ export class ApiHandler {
           transactions: response,
         });
       }
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const balances = await ApiHandler.api.assetbalance({
           asset_id: assetId,
         });
@@ -1903,7 +1933,6 @@ export class ApiHandler {
         const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
           RealmSchema.RgbWallet,
         );
-
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
@@ -1936,9 +1965,62 @@ export class ApiHandler {
     }
   }
 
-  static async checkNodeStatus(nodeId, authToken) {
+  static async saveNodeMnemonic(
+    nodeId: string,
+    authToken: string,
+  ): Promise<string> {
     try {
-      const response = await Relay.checkNodeStatus(nodeId, authToken);
+      const response = await Relay.saveNodeMnemonic(nodeId, authToken);
+      if (response) {
+        const { status, mnemonic } = response;
+
+        if (mnemonic) {
+          const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+            RealmSchema.RgbWallet,
+          );
+          if (rgbWallet?.nodeMnemonic !== mnemonic) {
+            dbManager.updateObjectByPrimaryId(
+              RealmSchema.RgbWallet,
+              'mnemonic',
+              rgbWallet.mnemonic,
+              { nodeMnemonic: mnemonic },
+            );
+            dbManager.updateObjectByPrimaryId(
+              RealmSchema.TribeApp,
+              'id',
+              nodeId,
+              { primaryMnemonic: mnemonic },
+            );
+          }
+        }
+
+        return status;
+      } else {
+        throw new Error('Failed to fetch node status');
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to fetch node status');
+    }
+  }
+
+  public static checkNodeStatus = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<string | null> => {
+    try {
+      const node: any = await Relay.getNodeById(nodeId, authToken);
+      const status = node?.node?.status || node?.nodeInfo?.data?.status;
+      return status;
+    } catch (err) {
+      console.error('Error fetching node status:', err);
+      return null;
+    }
+  };
+
+  static async startNode(nodeId, authToken) {
+    try {
+      const response = await Relay.startNodeById(nodeId, authToken);
       if (response) {
         return response;
       } else {
@@ -2063,13 +2145,15 @@ export class ApiHandler {
   static async getChannels() {
     try {
       const response = await ApiHandler.api.listchannels();
+      console.log('response', response);
       if (response && response.channels) {
         return snakeCaseToCamelCaseCase(response).channels;
       } else {
         return snakeCaseToCamelCaseCase(response);
       }
     } catch (error) {
-      console.log(error);
+      console.log('error - ', error);
+      console.log('error?.message', error?.message);
       throw error;
     }
   }

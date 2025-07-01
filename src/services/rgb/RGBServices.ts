@@ -62,7 +62,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{ created: boolean; error?: string }> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.createutxos({
         fee_rate: 5,
         num: 5,
@@ -114,7 +114,7 @@ export default class RGBServices {
   };
 
   static syncRgbAssets = async (appType: AppType, api: RLNNodeApiServices) => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       await api.refreshtransfers({ skip_sync: false });
       const response = await api.listassets({
         filter_asset_schemas: ['Nia', 'Cfa'],
@@ -144,7 +144,10 @@ export default class RGBServices {
     error?: string;
   }> => {
     try {
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         await api.refreshtransfers({ skip_sync: false });
         const response = await api.rgbinvoice({
           //asset_id,
@@ -173,7 +176,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.assetmetadata({
         asset_id: assetId,
       });
@@ -194,7 +197,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}[]> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.listtransfers({ asset_id: assetId });
       if (response) {
         const data = snakeCaseToCamelCaseCase(response.transfers.reverse());
@@ -216,7 +219,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.issueassetnia({
         ticker,
         name,
@@ -244,7 +247,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const responseDigest = await api.postassetmedia({ filePath });
       if (responseDigest) {
         const response = await api.issueassetcfa({
@@ -282,7 +285,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       // todo
     } else {
       const data = await RGB.issueAssetUda(
@@ -306,7 +309,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.sendasset({
         asset_id: assetId,
         donation: isDonation,
@@ -335,7 +338,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
-    if (appType === AppType.NODE_CONNECT) {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.listUnspents({ skip_sync: false });
       if (response) {
         const data = snakeCaseToCamelCaseCase(response.unspents);
