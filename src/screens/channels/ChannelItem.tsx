@@ -29,8 +29,8 @@ const ChannelItem = (props: Props) => {
   const navigation = useNavigation();
 
   const satsProgress = useMemo(() => {
-    const total = props.capacitySat ;
-    return (props.localBalanceMsat / 1000) / total;
+    const total = props.capacitySat;
+    return props.localBalanceMsat / 1000 / total;
   }, [props.capacitySat, props.localBalanceMsat]);
 
   const assetsProgress = useMemo(() => {
@@ -64,7 +64,7 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.assetsProgressFill },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>
+              <AppText variant="caption" style={styles.titleText}>
                 {formatNumber(`${props.outbound}`)} assets
               </AppText>
             </View>
@@ -75,16 +75,18 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.assetsProgressRemaining },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>
+              <AppText variant="caption" style={styles.titleText}>
                 {formatNumber(`${props.inbound}`)} assets
               </AppText>
             </View>
           </View>
-          <ProgressBar
-            progress={assetsProgress}
-            style={{ backgroundColor: theme.colors.assetsProgressRemaining }}
-            color={theme.colors.assetsProgressFill}
-          />
+          {assetsProgress > 0 && (
+            <ProgressBar
+              progress={isNaN(assetsProgress) ? 0 : assetsProgress}
+              style={{ backgroundColor: theme.colors.assetsProgressRemaining }}
+              color={theme.colors.assetsProgressFill}
+            />
+          )}
         </View>
         <View style={styles.progressbarWrapper}>
           <View style={styles.containerAmts}>
@@ -95,7 +97,9 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.satsProgressFill },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>{formatNumber(`${props.localBalanceMsat / 1000}`)}</AppText>
+              <AppText variant="caption" style={styles.titleText}>
+                {formatNumber(`${props.localBalanceMsat / 1000}`)}
+              </AppText>
             </View>
             <View style={styles.contentWrapper}>
               <View
@@ -104,14 +108,20 @@ const ChannelItem = (props: Props) => {
                   { backgroundColor: theme.colors.satsProgressRemaining },
                 ]}
               />
-              <AppText variant='caption' style={styles.titleText}>{formatNumber(`${props.capacitySat - props.localBalanceMsat / 1000}`)}</AppText>
+              <AppText variant="caption" style={styles.titleText}>
+                {`${formatNumber(
+                  `${props.capacitySat - props.localBalanceMsat / 1000}`,
+                )}`}
+              </AppText>
             </View>
           </View>
-          <ProgressBar
-            progress={satsProgress}
-            style={{ backgroundColor: theme.colors.satsProgressRemaining }}
-            color={theme.colors.satsProgressFill}
-          />
+          {satsProgress > 0 && (
+            <ProgressBar
+              progress={isNaN(satsProgress) ? 0 : satsProgress}
+              style={{ backgroundColor: theme.colors.satsProgressRemaining }}
+              color={theme.colors.satsProgressFill}
+            />
+          )}
         </View>
       </GradientView>
     </AppTouchable>
