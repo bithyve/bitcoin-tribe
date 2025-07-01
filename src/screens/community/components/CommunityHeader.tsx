@@ -6,7 +6,10 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SearchIcon from 'src/assets/images/search.svg';
+import SearchIconLight from 'src/assets/images/ic_search_light.svg';
+import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
 import AddContactIcon from 'src/assets/images/addcontact.svg';
+
 import IconWrapper from 'src/components/IconWrapper';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
@@ -30,14 +33,14 @@ function CommunityHeader() {
           style={styles.icon}
           onPress={() => {
           }}>
-        {<SearchIcon />}
+        {!theme.dark ? <SearchIconLight /> : <SearchIcon />}
       </IconWrapper>
       <IconWrapper
         style={styles.icon}
         onPress={() => {
           navigation.navigate(NavigationRoutes.CONTACTREQUEST);
         }}>
-          {<AddContactIcon />}
+          {!theme.dark ? <AddContactIconLight /> : <AddContactIcon />}
         </IconWrapper>
       </View>
     </View>
