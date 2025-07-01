@@ -258,29 +258,12 @@ export default class Relay {
   public static saveNodeMnemonic = async (
     nodeId: string,
     authToken: string,
-  ): Promise<string | null> => {
+  ): Promise<{ status: string; mnemonic?: string } | null> => {
     try {
-      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-        RealmSchema.RgbWallet,
-      );
       const node: any = await Relay.getNodeById(nodeId, authToken);
       const status = node?.node?.status || node?.nodeInfo?.data?.status;
       const fetchedMnemonic = node?.node?.mnemonic;
-      if (fetchedMnemonic && rgbWallet.nodeMnemonic !== fetchedMnemonic) {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: fetchedMnemonic,
-          },
-        );
-        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', nodeId, {
-          primaryMnemonic: fetchedMnemonic,
-        });
-        await RGBServices.restoreKeys(fetchedMnemonic);
-      }
-      return status;
+      return { status, mnemonic: fetchedMnemonic };
     } catch (err) {
       console.error('Error fetching node status:', err);
       return null;

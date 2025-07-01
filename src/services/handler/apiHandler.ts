@@ -1911,17 +1911,42 @@ export class ApiHandler {
     }
   }
 
-  static async saveNodeMnemonic(nodeId, authToken) {
+  static async saveNodeMnemonic(
+    nodeId: string,
+    authToken: string,
+  ): Promise<string> {
     try {
       const response = await Relay.saveNodeMnemonic(nodeId, authToken);
       if (response) {
-        return response;
+        const { status, mnemonic } = response;
+
+        if (mnemonic) {
+          const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+            RealmSchema.RgbWallet,
+          );
+          if (rgbWallet?.nodeMnemonic !== mnemonic) {
+            dbManager.updateObjectByPrimaryId(
+              RealmSchema.RgbWallet,
+              'mnemonic',
+              rgbWallet.mnemonic,
+              { nodeMnemonic: mnemonic },
+            );
+            dbManager.updateObjectByPrimaryId(
+              RealmSchema.TribeApp,
+              'id',
+              nodeId,
+              { primaryMnemonic: mnemonic },
+            );
+          }
+        }
+
+        return status;
       } else {
-        throw new Error('Failed to fetching node status');
+        throw new Error('Failed to fetch node status');
       }
     } catch (error) {
-      console.log(error);
-      throw new Error('Failed to fetching node status');
+      console.error(error);
+      throw new Error('Failed to fetch node status');
     }
   }
 
