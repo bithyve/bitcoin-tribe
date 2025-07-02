@@ -1215,6 +1215,8 @@ export class ApiHandler {
       }
       if (assets?.cfa) {
         const cfas = [];
+        let hasProcessedCfa = false;
+
         if (
           ApiHandler.appType === AppType.NODE_CONNECT ||
           ApiHandler.appType === AppType.SUPPORTED_RLN
@@ -1225,28 +1227,28 @@ export class ApiHandler {
               digest: collectible.media.digest,
             });
             const { base64, fileType } = hexToBase64(mediaByte.bytes_hex);
-            const ext = assets.cfa[i].media.mime.split('/')[1];
+            const ext = collectible.media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
             await RNFS.writeFile(path, base64, 'base64');
+
             cfas.push({
-              ...assets.cfa[i],
+              ...collectible,
               media: {
-                ...assets.cfa[i].media,
+                ...collectible.media,
                 filePath: path,
               },
             });
-            console.log('cfas', cfas);
           }
+          hasProcessedCfa = true;
         }
+
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-
             if (!(await RNFS.exists(destination))) {
               await RNFS.copyFile(element.media.filePath, destination);
             }
-
             cfas.push({
               ...element,
               media: {
@@ -1255,7 +1257,10 @@ export class ApiHandler {
               },
             });
           }
-        } else {
+          hasProcessedCfa = true;
+        }
+
+        if (!hasProcessedCfa) {
           cfas.push(...assets.cfa);
         }
         dbManager.createObjectBulk(
