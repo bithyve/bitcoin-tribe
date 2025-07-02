@@ -675,7 +675,8 @@
     "failedTitle": "失败",
     "failedSubTitle": "交易失败，未转移任何资金。",
     "platformFeeTitle": "平台费用（注册列表）",
-    "platformFeeSubTitle": "该交易是为将您的资产列入公共注册表而发起的。"
+    "platformFeeSubTitle": "该交易是为将您的资产列入公共注册表而发起的。",
+    "noAssetsFoundMsg": "您的钱包中没有任何资产，或者它们可能已被隐藏。"
   },
   "community": {
     "fnfTitle": "Community",

@@ -675,7 +675,8 @@
     "failedTitle": "Fallido",
     "failedSubTitle": "La transacción ha fallado. No se movieron fondos.",
     "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
-    "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público."
+    "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público.",
+    "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos."
   },
   "community": {
     "fnfTitle": "Community",

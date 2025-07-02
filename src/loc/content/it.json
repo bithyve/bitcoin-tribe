@@ -675,7 +675,8 @@
     "failedTitle": "Fallita",
     "failedSubTitle": "Transazione non riuscita. Nessun fondo è stato trasferito.",
     "platformFeeTitle": "Commissione della piattaforma (Elenco nel registro)",
-    "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico."
+    "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico.",
+    "noAssetsFoundMsg": "Non hai alcun asset nel tuo wallet oppure potrebbero essere nascosti."
   },
   "community": {
     "fnfTitle": "Community",

@@ -249,6 +249,8 @@ const EnterInvoiceDetails = () => {
           onPress={() => {
             if (assetsData.length) {
               setAssetsDropdown(true);
+            } else {
+              Toast(assets.noAssetsFoundMsg, true);
             }
           }}
         />
