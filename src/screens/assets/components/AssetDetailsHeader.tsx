@@ -272,8 +272,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     assetBackImageContainer: {
       height: hp(260),
       paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
-      paddingLeft: hp(14),
-      paddingRight: hp(5),
+      paddingHorizontal: hp(14),
       marginBottom: hp(10),
     },
     assetBackImageRadius: {
