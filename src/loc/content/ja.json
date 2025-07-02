@@ -715,7 +715,9 @@
     "takeTimeMsg": "このステップには数秒かかります。",
     "connectingNode": "セットアップに接続中",
     "connectingNodeInfo": "準備が完了するまで、一部の機能が一時的に使用できない場合があります。",
-    "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！"
+    "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！",
+    "nodeIdtitle": "ノードID",
+    "nodeIdCopyMsg": "ノードIDが正常にコピーされました"
   },
   "channel": {
     "status": "ステータス：",

@@ -715,7 +715,9 @@
     "takeTimeMsg": "This step will take a few seconds.",
     "connectingNode": "Connecting your setup",
     "connectingNodeInfo": "Some features may be temporarily unavailable while we prepare everything for you.",
-    "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!"
+    "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!",
+    "nodeIdtitle": "Node ID",
+    "nodeIdCopyMsg": "Node ID copied successfully"
   },
   "channel": {
     "status": "Status :",
