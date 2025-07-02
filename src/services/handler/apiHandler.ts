@@ -64,7 +64,6 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
-import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
 import {
   getMessaging,
   getToken,
@@ -77,6 +76,7 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
+import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 const ECPair = ECPairFactory(ecc);
 
 const bip32 = BIP32Factory(ecc);
@@ -288,6 +288,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
             const apiHandler = new ApiHandler(
               rgbWallet,
               AppType.ON_CHAIN,
@@ -345,6 +346,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
           }
         } else {
           const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
@@ -420,6 +422,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            await ApiHandler.manageFcmVersionTopics();
           }
         }
         Storage.set(Keys.SETUPAPP, false);
@@ -462,6 +465,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        await ApiHandler.manageFcmVersionTopics();
       }
     } catch (error) {
       throw error;
@@ -513,6 +517,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
       }
@@ -1634,6 +1639,53 @@ export class ApiHandler {
     }
   }
 
+  static async manageFcmVersionTopics(previousVersion?: string, currentVersion?: string): Promise<void> {
+    try {
+      const firebaseApp = getApp();
+      const messaging = getMessaging(firebaseApp);
+      const appVersion = currentVersion || DeviceInfo.getVersion();
+      const lastTopicVersion = previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
+      if (!lastTopicVersion || lastTopicVersion !== appVersion) {
+        if (lastTopicVersion) {
+          await ApiHandler.unsubscribeFromVersionTopic(messaging, lastTopicVersion);
+        }
+        await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
+        Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
+      }
+      await ApiHandler.subscribeToBroadcastChannel(messaging);
+    } catch (error) {
+      console.error('FCM topic management error:', error);
+      throw error;
+    }
+  }
+
+  private static async unsubscribeFromVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.unsubscribeFromTopic(topic);
+    } catch (error) {
+      console.warn(`Failed to unsubscribe from ${topic}:`, error);
+    }
+  }
+
+  private static async subscribeToVersionTopic(messaging: any, version: string): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.subscribeToTopic(topic);
+    } catch (error) {
+      console.error(`Failed to subscribe to ${topic}:`, error);
+      throw error;
+    }
+  }
+
+  private static async subscribeToBroadcastChannel(messaging: any): Promise<void> {
+    try {
+      await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
+    } catch (error) {
+      console.warn('Failed to subscribe to common broadcast topic:', error);
+    }
+  }
+
   static async checkVersion() {
     try {
       const githubReleaseNote = await ApiHandler.fetchGithubRelease();
@@ -1644,15 +1696,16 @@ export class ApiHandler {
       const version = dbManager.getObjectByIndex(
         RealmSchema.VersionHistory,
         lastIndex,
-      );
+      ) as VersionHistory;
       const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${version.version} to ${currentVersion}`,
+          title: `Upgraded from ${version?.version || 'unknown'} to ${currentVersion}`,
         });
+        await ApiHandler.manageFcmVersionTopics(version?.version, currentVersion);
         return true;
       }
       return false;
@@ -1683,6 +1736,7 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
+      console.log('token', token);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
