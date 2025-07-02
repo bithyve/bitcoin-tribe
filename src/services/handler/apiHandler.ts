@@ -1998,18 +1998,19 @@ export class ApiHandler {
             RealmSchema.RgbWallet,
           );
           if (rgbWallet?.nodeMnemonic !== mnemonic) {
-            dbManager.updateObjectByPrimaryId(
+            await dbManager.updateObjectByPrimaryId(
               RealmSchema.RgbWallet,
               'mnemonic',
               rgbWallet.mnemonic,
               { nodeMnemonic: mnemonic },
             );
-            dbManager.updateObjectByPrimaryId(
+            await dbManager.updateObjectByPrimaryId(
               RealmSchema.TribeApp,
               'id',
               nodeId,
               { primaryMnemonic: mnemonic },
             );
+            await ApiHandler.createNewWallet({});
           }
         }
 
