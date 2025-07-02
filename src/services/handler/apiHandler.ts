@@ -1639,15 +1639,22 @@ export class ApiHandler {
     }
   }
 
-  static async manageFcmVersionTopics(previousVersion?: string, currentVersion?: string): Promise<void> {
+  static async manageFcmVersionTopics(
+    previousVersion?: string,
+    currentVersion?: string,
+  ): Promise<void> {
     try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
       const appVersion = currentVersion || DeviceInfo.getVersion();
-      const lastTopicVersion = previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
+      const lastTopicVersion =
+        previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
       if (!lastTopicVersion || lastTopicVersion !== appVersion) {
         if (lastTopicVersion) {
-          await ApiHandler.unsubscribeFromVersionTopic(messaging, lastTopicVersion);
+          await ApiHandler.unsubscribeFromVersionTopic(
+            messaging,
+            lastTopicVersion,
+          );
         }
         await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
         Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
@@ -1659,7 +1666,10 @@ export class ApiHandler {
     }
   }
 
-  private static async unsubscribeFromVersionTopic(messaging: any, version: string): Promise<void> {
+  private static async unsubscribeFromVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
     const topic = `v${version}`;
     try {
       await messaging.unsubscribeFromTopic(topic);
@@ -1668,7 +1678,10 @@ export class ApiHandler {
     }
   }
 
-  private static async subscribeToVersionTopic(messaging: any, version: string): Promise<void> {
+  private static async subscribeToVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
     const topic = `v${version}`;
     try {
       await messaging.subscribeToTopic(topic);
@@ -1678,7 +1691,9 @@ export class ApiHandler {
     }
   }
 
-  private static async subscribeToBroadcastChannel(messaging: any): Promise<void> {
+  private static async subscribeToBroadcastChannel(
+    messaging: any,
+  ): Promise<void> {
     try {
       await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
     } catch (error) {
@@ -1703,9 +1718,14 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${version?.version || 'unknown'} to ${currentVersion}`,
+          title: `Upgraded from ${
+            version?.version || 'unknown'
+          } to ${currentVersion}`,
         });
-        await ApiHandler.manageFcmVersionTopics(version?.version, currentVersion);
+        await ApiHandler.manageFcmVersionTopics(
+          version?.version,
+          currentVersion,
+        );
         return true;
       }
       return false;
@@ -1736,7 +1756,6 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      console.log('token', token);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
@@ -2145,7 +2164,6 @@ export class ApiHandler {
   static async getChannels() {
     try {
       const response = await ApiHandler.api.listchannels();
-      console.log('response', response);
       if (response && response.channels) {
         return snakeCaseToCamelCaseCase(response).channels;
       } else {
@@ -2176,7 +2194,6 @@ export class ApiHandler {
     try {
       const response = await Relay.createSupportedNode();
       if (response.error) {
-        console.log('response.error', response.error);
         throw new Error(response.error);
       } else if (response) {
         return response;
