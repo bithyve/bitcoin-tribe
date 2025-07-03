@@ -124,7 +124,7 @@ const CommunityItem = ({ item }: { item: Community }) => {
           </AppText>
           <View style={styles.roomTimeContainer}>
           <AppText numberOfLines={1} style={unreadMessages > 0 ? styles.roomTimeUnread : styles.roomTime}>
-            {moment(item.createdAt).format('HH:mm A')}
+            {moment(item.createdAt).format('hh:mm A')}
           </AppText>
           {unreadMessages > 0 && (
             <View style={styles.containerUnread}>
