@@ -415,11 +415,7 @@ const SendAssetScreen = () => {
       setVisibleSpendableErrInfo(true);
     });
   };
-  console.log(
-    'assetData?.assetSchema.toUpperCase()',
-    assetData?.assetSchema.toUpperCase(),
-  );
-  console.log('AssetSchema.Collectible', AssetSchema.Collectible);
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />

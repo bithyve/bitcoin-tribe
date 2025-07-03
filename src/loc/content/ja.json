@@ -675,7 +675,8 @@
     "failedTitle": "失敗",
     "failedSubTitle": "取引が失敗しました。資金は移動されていません。",
     "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
-    "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。"
+    "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。",
+    "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。"
   },
   "community": {
     "fnfTitle": "Community",
@@ -715,7 +716,9 @@
     "takeTimeMsg": "このステップには数秒かかります。",
     "connectingNode": "セットアップに接続中",
     "connectingNodeInfo": "準備が完了するまで、一部の機能が一時的に使用できない場合があります。",
-    "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！"
+    "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！",
+    "nodeIdtitle": "ノードID",
+    "nodeIdCopyMsg": "ノードIDが正常にコピーされました"
   },
   "channel": {
     "status": "ステータス：",

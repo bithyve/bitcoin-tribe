@@ -55,7 +55,6 @@ const ViewNodeInfo = () => {
     Pause: Colors.ChineseWhite,
   };
   const getStatusColor = status => statusColors[status] || Colors.White;
-
   useEffect(() => {
     mutate();
     const fetchStatus = async () => {
@@ -166,6 +165,12 @@ const ViewNodeInfo = () => {
             />
           </View>
           <NodeInfoItem
+            title={node.nodeIdtitle}
+            value={app?.id}
+            isCopiable={true}
+            copyMessage={node.nodeIdCopyMsg}
+          />
+          <NodeInfoItem
             title={node.pubKey}
             value={nodeInfo?.pubkey}
             isCopiable={true}
@@ -179,12 +184,14 @@ const ViewNodeInfo = () => {
             copyMessage={node.nodeUrlCopyMsg}
           />
 
-          <NodeInfoItem
-            title={node.onchainPubkey}
-            value={nodeInfo?.onchain_pubkey}
-            isCopiable={true}
-            copyMessage={node.onChainPubKeyCopyMsg}
-          />
+          {app.appType === AppType.NODE_CONNECT && (
+            <NodeInfoItem
+              title={node.onchainPubkey}
+              value={nodeInfo?.onchain_pubkey}
+              isCopiable={true}
+              copyMessage={node.onChainPubKeyCopyMsg}
+            />
+          )}
 
           {rgbWallet?.peerDNS && (
             <NodeInfoItem
