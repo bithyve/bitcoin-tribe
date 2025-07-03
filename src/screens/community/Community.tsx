@@ -55,7 +55,7 @@ function Community() {
           id: uuidv4(),
           communityId: communityId,
           type: MessageType.Alert,
-          text: `${app.contactsKey.publicKey} initiated a chat`,
+          text: `Start of community`,
           createdAt: Date.now(),
           sender: app.contactsKey.publicKey,
           unread: false,
