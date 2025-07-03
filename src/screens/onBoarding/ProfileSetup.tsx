@@ -92,7 +92,7 @@ function ProfileSetup() {
         onChangeText={text => setName(text.trim())}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => initiateWalletCreation()}
+        secondaryOnPress={() => navigation.goBack()}
         addPicTitle={onBoarding.addPicture} 
         profileImage={profileImage?.uri}
         handlePickImage={() => handlePickImage()}
@@ -105,7 +105,7 @@ function ProfileSetup() {
         primaryCTATitle={common.proceed}
         secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
-        disabled={name.trim() === ''}
+        disabled={name.trim().length < 3}
       />
       <View>
         <ResponsePopupContainer
