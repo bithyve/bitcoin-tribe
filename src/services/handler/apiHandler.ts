@@ -1215,6 +1215,8 @@ export class ApiHandler {
       }
       if (assets?.cfa) {
         const cfas = [];
+        let hasProcessedCfa = false;
+
         if (
           ApiHandler.appType === AppType.NODE_CONNECT ||
           ApiHandler.appType === AppType.SUPPORTED_RLN
@@ -1225,28 +1227,28 @@ export class ApiHandler {
               digest: collectible.media.digest,
             });
             const { base64, fileType } = hexToBase64(mediaByte.bytes_hex);
-            const ext = assets.cfa[i].media.mime.split('/')[1];
+            const ext = collectible.media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
             await RNFS.writeFile(path, base64, 'base64');
+
             cfas.push({
-              ...assets.cfa[i],
+              ...collectible,
               media: {
-                ...assets.cfa[i].media,
+                ...collectible.media,
                 filePath: path,
               },
             });
-            console.log('cfas', cfas);
           }
+          hasProcessedCfa = true;
         }
+
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-
             if (!(await RNFS.exists(destination))) {
               await RNFS.copyFile(element.media.filePath, destination);
             }
-
             cfas.push({
               ...element,
               media: {
@@ -1255,7 +1257,10 @@ export class ApiHandler {
               },
             });
           }
-        } else {
+          hasProcessedCfa = true;
+        }
+
+        if (!hasProcessedCfa) {
           cfas.push(...assets.cfa);
         }
         dbManager.createObjectBulk(
@@ -1639,15 +1644,22 @@ export class ApiHandler {
     }
   }
 
-  static async manageFcmVersionTopics(previousVersion?: string, currentVersion?: string): Promise<void> {
+  static async manageFcmVersionTopics(
+    previousVersion?: string,
+    currentVersion?: string,
+  ): Promise<void> {
     try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
       const appVersion = currentVersion || DeviceInfo.getVersion();
-      const lastTopicVersion = previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
+      const lastTopicVersion =
+        previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
       if (!lastTopicVersion || lastTopicVersion !== appVersion) {
         if (lastTopicVersion) {
-          await ApiHandler.unsubscribeFromVersionTopic(messaging, lastTopicVersion);
+          await ApiHandler.unsubscribeFromVersionTopic(
+            messaging,
+            lastTopicVersion,
+          );
         }
         await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
         Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
@@ -1659,7 +1671,10 @@ export class ApiHandler {
     }
   }
 
-  private static async unsubscribeFromVersionTopic(messaging: any, version: string): Promise<void> {
+  private static async unsubscribeFromVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
     const topic = `v${version}`;
     try {
       await messaging.unsubscribeFromTopic(topic);
@@ -1668,7 +1683,10 @@ export class ApiHandler {
     }
   }
 
-  private static async subscribeToVersionTopic(messaging: any, version: string): Promise<void> {
+  private static async subscribeToVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
     const topic = `v${version}`;
     try {
       await messaging.subscribeToTopic(topic);
@@ -1678,7 +1696,9 @@ export class ApiHandler {
     }
   }
 
-  private static async subscribeToBroadcastChannel(messaging: any): Promise<void> {
+  private static async subscribeToBroadcastChannel(
+    messaging: any,
+  ): Promise<void> {
     try {
       await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
     } catch (error) {
@@ -1703,9 +1723,14 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${version?.version || 'unknown'} to ${currentVersion}`,
+          title: `Upgraded from ${
+            version?.version || 'unknown'
+          } to ${currentVersion}`,
         });
-        await ApiHandler.manageFcmVersionTopics(version?.version, currentVersion);
+        await ApiHandler.manageFcmVersionTopics(
+          version?.version,
+          currentVersion,
+        );
         return true;
       }
       return false;
@@ -1736,7 +1761,6 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      console.log('token', token);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
@@ -1979,18 +2003,19 @@ export class ApiHandler {
             RealmSchema.RgbWallet,
           );
           if (rgbWallet?.nodeMnemonic !== mnemonic) {
-            dbManager.updateObjectByPrimaryId(
+            await dbManager.updateObjectByPrimaryId(
               RealmSchema.RgbWallet,
               'mnemonic',
               rgbWallet.mnemonic,
               { nodeMnemonic: mnemonic },
             );
-            dbManager.updateObjectByPrimaryId(
+            await dbManager.updateObjectByPrimaryId(
               RealmSchema.TribeApp,
               'id',
               nodeId,
               { primaryMnemonic: mnemonic },
             );
+            await ApiHandler.createNewWallet({});
           }
         }
 
@@ -2145,7 +2170,6 @@ export class ApiHandler {
   static async getChannels() {
     try {
       const response = await ApiHandler.api.listchannels();
-      console.log('response', response);
       if (response && response.channels) {
         return snakeCaseToCamelCaseCase(response).channels;
       } else {
@@ -2176,7 +2200,6 @@ export class ApiHandler {
     try {
       const response = await Relay.createSupportedNode();
       if (response.error) {
-        console.log('response.error', response.error);
         throw new Error(response.error);
       } else if (response) {
         return response;

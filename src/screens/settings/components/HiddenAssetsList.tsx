@@ -22,8 +22,8 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
-import NoAssetsIllustration from 'src/assets/images/noCoinAssets.svg';
-import NoAssetsIllustrationLight from 'src/assets/images/noCoinAssets_light.svg';
+import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';

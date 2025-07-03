@@ -675,7 +675,8 @@
     "failedTitle": "Fallido",
     "failedSubTitle": "La transacción ha fallado. No se movieron fondos.",
     "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
-    "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público."
+    "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público.",
+    "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos."
   },
   "community": {
     "fnfTitle": "Community",
@@ -715,7 +716,9 @@
     "takeTimeMsg": "Este paso tomará unos segundos.",
     "connectingNode": "Conectando tu configuración",
     "connectingNodeInfo": "Algunas funciones pueden no estar disponibles temporalmente mientras preparamos todo para ti.",
-    "connectingNodeToastMsg": "Tu nodo se está configurando. ¡Inicialización en progreso..!"
+    "connectingNodeToastMsg": "Tu nodo se está configurando. ¡Inicialización en progreso..!",
+    "nodeIdtitle": "ID de Nodo",
+    "nodeIdCopyMsg": "ID del nodo copiado correctamente"
   },
   "channel": {
     "status": "Estado :",

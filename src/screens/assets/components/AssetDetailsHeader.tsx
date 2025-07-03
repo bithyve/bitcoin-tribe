@@ -133,7 +133,17 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             {app.appType === AppType.NODE_CONNECT ||
             app.appType === AppType.SUPPORTED_RLN ? (
               <View style={styles.balanceContainer}>
-                <View style={styles.totalBalanceWrapper}>
+                <AppTouchable
+                  style={styles.totalBalanceWrapper}
+                  onPress={() => {
+                    if (isNodeInitInProgress) {
+                      Toast(node.connectingNodeToastMsg, true);
+                      return;
+                    }
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
                       asset.balance.future +
@@ -144,8 +154,18 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {home.totalBalance}
                   </AppText>
-                </View>
-                <View style={styles.modeBalanceWrapper}>
+                </AppTouchable>
+                <AppTouchable
+                  style={styles.modeBalanceWrapper}
+                  onPress={() => {
+                    if (isNodeInitInProgress) {
+                      Toast(node.connectingNodeToastMsg, true);
+                      return;
+                    }
+                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                      assetId,
+                    });
+                  }}>
                   <View style={styles.balanceWrapper}>
                     {isThemeDark ? <IconBTC /> : <IconBTCLight />}
                     <AppText variant="heading3" style={styles.balanceText}>
@@ -160,7 +180,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                       {numberWithCommas(totalAssetLocalAmount)}
                     </AppText>
                   </View>
-                </View>
+                </AppTouchable>
               </View>
             ) : (
               <View style={styles.balanceContainer}>
@@ -252,8 +272,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     assetBackImageContainer: {
       height: hp(260),
       paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
-      paddingLeft: hp(14),
-      paddingRight: hp(5),
+      paddingHorizontal: hp(14),
       marginBottom: hp(10),
     },
     assetBackImageRadius: {

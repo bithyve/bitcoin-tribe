@@ -675,7 +675,8 @@
     "failedTitle": "Failed",
     "failedSubTitle": "Transaction was unsuccessful. No funds were moved.",
     "platformFeeTitle": "Platform Fee (Registry Listing)",
-    "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry."
+    "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry.",
+    "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden."
   },
   "community": {
     "fnfTitle": "Community",
@@ -715,7 +716,9 @@
     "takeTimeMsg": "This step will take a few seconds.",
     "connectingNode": "Connecting your setup",
     "connectingNodeInfo": "Some features may be temporarily unavailable while we prepare everything for you.",
-    "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!"
+    "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!",
+    "nodeIdtitle": "Node ID",
+    "nodeIdCopyMsg": "Node ID copied successfully"
   },
   "channel": {
     "status": "Status :",
