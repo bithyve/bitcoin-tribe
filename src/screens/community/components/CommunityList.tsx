@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 });
 
 const CommunityList = ({ onRefresh }: { onRefresh: () => void }) => {
-  const communities = useQuery<Community>(RealmSchema.Community);
+  const communities = useQuery<Community>(RealmSchema.Community).sorted('createdAt', true);
   const [refreshing, setRefreshing] = useState(false);
 
   const handleRefresh = () => {
