@@ -19,7 +19,9 @@ import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcReceiveTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcReceiveTxnIcon_light.svg';
 import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningReceiveTxnIcon.svg';
@@ -65,7 +67,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Sent: {
         bitcoin: {
           dark: <SentBtcIcon />,
-          light: <SentBtcIcon />,
+          light: <SentBtcIconLight />,
         },
         lightning: {
           dark: <SentLightningIcon />,
@@ -75,7 +77,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Received: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,

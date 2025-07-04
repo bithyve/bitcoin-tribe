@@ -11,6 +11,9 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, wp } from 'src/constants/responsive';
@@ -39,10 +42,10 @@ import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetBackIcon from 'src/assets/images/assetBackIcon.svg';
 import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
-import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
+import Colors from 'src/theme/Colors';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -120,13 +123,17 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             backIcon={<AssetBackIcon />}
             rightIcon={<AssetInfoIcon />}
             onSettingsPress={onPressSetting}
+            style={styles.headerWrapper}
           />
-          <View style={styles.row}>
+          <LinearGradient
+            colors={['transparent', Colors.imageOverlay]}
+            style={[styles.gradientOverlay, styles.row]}
+            pointerEvents="box-none">
             <AppText variant="body1" style={styles.assetNameText}>
               {assetName}
             </AppText>
             {asset.issuer?.verified && <IconVerified width={20} height={20} />}
-          </View>
+          </LinearGradient>
         </ImageBackground>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
@@ -272,12 +279,14 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     assetBackImageContainer: {
       height: hp(260),
       paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
-      paddingHorizontal: hp(14),
       marginBottom: hp(10),
     },
     assetBackImageRadius: {
       borderBottomLeftRadius: 24,
       borderBottomRightRadius: 24,
+    },
+    headerWrapper: {
+      paddingHorizontal: hp(16),
     },
     totalBalance: {
       color: theme.colors.headingColor,
@@ -356,6 +365,12 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       textAlign: 'center',
       color: theme.colors.successPopupTitleColor,
       fontWeight: '500',
+      width: '100%',
+    },
+    gradientOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
     },
     onChainTotalBalanceWrapper: {
       alignItems: 'center',

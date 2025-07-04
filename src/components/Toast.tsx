@@ -7,6 +7,7 @@ import Colors from 'src/theme/Colors';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
+import WarningInfo from 'src/assets/images/warningInfo.svg';
 
 export default (
   message,
@@ -23,13 +24,11 @@ export default (
           autoPlay
           loop
         />
+      ) : warning ? (
+        <WarningInfo />
       ) : (
         <LottieView
-          source={
-            warning
-              ? require('src/assets/images/jsons/warningToast.json')
-              : require('src/assets/images/jsons/successToast.json')
-          }
+          source={require('src/assets/images/jsons/successToast.json')}
           style={styles.loaderStyle}
           autoPlay
           loop

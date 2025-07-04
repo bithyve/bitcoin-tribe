@@ -210,9 +210,6 @@ const CoinDetailsScreen = () => {
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
-      {/* <View style={styles.spendableBalanceWrapper}>
-        <TransactionInfoCard style={styles.toolTipCotainer} />
-      </View> */}
       <TransactionsList
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
@@ -298,11 +295,7 @@ const CoinDetailsScreen = () => {
 export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
-  spendableBalanceWrapper: {
-    top: -20,
-  },
   transactionContainer: {
-    top: -20,
     height: windowHeight > 820 ? '52%' : '47%',
   },
   transactionContainer1: {

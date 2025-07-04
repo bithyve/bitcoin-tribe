@@ -264,7 +264,7 @@ const getStyles = (theme: AppTheme, insets) =>
       paddingHorizontal: hp(10),
       paddingVertical: hp(20),
       borderColor: theme.colors.borderColor,
-      borderWidth: 1,
+      borderWidth: 1.5,
       width: '100%',
       borderRadius: 15,
       backgroundColor: theme.colors.walletBackgroundColor,

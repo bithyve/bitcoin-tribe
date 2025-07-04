@@ -62,5 +62,6 @@ const Colors = {
   ChineseBlack1: 'rgba(18, 18, 18, 0.2)',
   Cultured: 'rgba(245, 245, 245,1)',
   ElectricViolet: 'rgba(137, 4, 249,1)',
+  imageOverlay: 'rgba(0,0,0,0.6)',
 };
 export default Colors;

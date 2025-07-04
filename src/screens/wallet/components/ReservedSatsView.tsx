@@ -33,7 +33,9 @@ function ReservedSatsView() {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet);
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+    RealmSchema.RgbWallet,
+  );
 
   const unspent: RgbUnspent[] = useMemo(() => {
     if (!rgbWallet || !rgbWallet.utxos) return [];
@@ -41,9 +43,7 @@ function ReservedSatsView() {
   }, [rgbWallet]);
 
   const totalReserveSatsAmount = useMemo(() => {
-    const colorable = unspent.filter(
-      utxo => utxo.utxo.colorable === true,
-    );
+    const colorable = unspent.filter(utxo => utxo.utxo.colorable === true);
     const total = colorable.reduce((sum, utxo) => sum + utxo.utxo.btcAmount, 0);
     return total;
   }, [unspent]);
