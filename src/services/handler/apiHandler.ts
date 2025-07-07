@@ -1996,8 +1996,7 @@ export class ApiHandler {
     try {
       const response = await Relay.saveNodeMnemonic(nodeId, authToken);
       if (response) {
-        const { status, mnemonic } = response;
-
+        const { status, mnemonic, peerUrl } = response;
         if (mnemonic) {
           const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
             RealmSchema.RgbWallet,
@@ -2015,6 +2014,13 @@ export class ApiHandler {
               nodeId,
               { primaryMnemonic: mnemonic },
             );
+            await dbManager.updateObjectByPrimaryId(
+              RealmSchema.RgbWallet,
+              'mnemonic',
+              rgbWallet.mnemonic,
+              { peerDNS: peerUrl },
+            );
+
             await ApiHandler.createNewWallet({});
           }
         }
@@ -2228,7 +2234,6 @@ export class ApiHandler {
         throw new Error('Failed to unlock node');
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

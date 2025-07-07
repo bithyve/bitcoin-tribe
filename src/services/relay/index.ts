@@ -258,12 +258,19 @@ export default class Relay {
   public static saveNodeMnemonic = async (
     nodeId: string,
     authToken: string,
-  ): Promise<{ status: string; mnemonic?: string } | null> => {
+  ): Promise<{
+    status: string;
+    mnemonic?: string;
+    peerUrl?: string;
+  } | null> => {
     try {
       const node: any = await Relay.getNodeById(nodeId, authToken);
       const status = node?.node?.status || node?.nodeInfo?.data?.status;
       const fetchedMnemonic = node?.node?.mnemonic;
-      return { status, mnemonic: fetchedMnemonic };
+      const peerDNS = node?.node?.peerDNS;
+      const peerPort = node?.node?.peerPort;
+      const peerUrl = `${peerDNS}:${peerPort}`;
+      return { status, mnemonic: fetchedMnemonic, peerUrl };
     } catch (err) {
       console.error('Error fetching node status:', err);
       return null;
