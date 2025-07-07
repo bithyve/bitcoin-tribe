@@ -66,10 +66,7 @@ const Chat = () => {
       try {
         const messageData = {
           id: uuidv4(),
-          text:
-            type === MessageType.Image
-              ? message.trim() || 'Image'
-              : message.trim(),
+          text: message.trim(),
           createdAt: Date.now(),
           type: type,
           sender: app.contactsKey.publicKey,
