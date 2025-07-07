@@ -23,6 +23,7 @@ export interface Message {
   sender: string;
   block: number;
   unread: boolean;
+  fileUrl?: string;
 }
 
 export interface Community {

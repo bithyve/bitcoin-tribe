@@ -674,4 +674,28 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static uploadFile = async (
+    file: ImageAsset,
+    authToken: string,
+  ): Promise<{
+    fileUrl: string;
+    error: string;
+  }> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', {
+        uri: file.uri,
+        name: file.fileName,
+        type: file.type,
+      });
+      const res = await RestClient.post(`${RELAY}/chat/uploadfile`, formData, {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authToken}`,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }

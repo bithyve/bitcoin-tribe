@@ -13,6 +13,7 @@ export const MessageSchema: ObjectSchema = {
     text: 'string?',
     type: 'string?',
     sender: 'string',
+    fileUrl: 'string?',
   },
 };
 

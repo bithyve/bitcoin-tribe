@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const MessageList = ({ messages, sending, flatListRef, appId }) => {
+const MessageList = ({ messages, sending, flatListRef, appId, onImagePress }) => {
   return (
       <FlatList
         ref={flatListRef}
@@ -26,9 +26,9 @@ const MessageList = ({ messages, sending, flatListRef, appId }) => {
         //   <Text style={styles.textEmpty}>No messages</Text>
         // )}
         ItemSeparatorComponent={() => <View style={styles.divider} />}
-        renderItem={({ item, index }) => <MessageItem message={item} previousMessage={messages[index + 1]} appId={appId} />}
-      />
-  )
-}
+        renderItem={({ item, index }) => <MessageItem message={item} previousMessage={messages[index + 1]} appId={appId} onImagePress={onImagePress} />}
+    />
+  );
+};
 
 export default MessageList
