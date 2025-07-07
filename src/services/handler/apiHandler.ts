@@ -2213,9 +2213,12 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
-      console.log('error-', error);
-      console.log(error);
-      throw error;
+      let message =
+        error?.response?.data?.error || error?.message || 'Unknown error';
+      if (!message || message === 'Error') {
+        message = 'Failed to create node';
+      }
+      throw new Error(message);
     }
   }
 
