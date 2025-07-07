@@ -134,6 +134,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
               <View style={styles.assetImageWrapper}>
                 {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
                   <AssetIcon
+                    iconUrl={item.iconUrl}
                     assetTicker={item.ticker}
                     assetID={item.assetId}
                     size={30}
