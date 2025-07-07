@@ -2216,7 +2216,8 @@ export class ApiHandler {
       let message =
         error?.response?.data?.error || error?.message || 'Unknown error';
       if (!message || message === 'Error') {
-        message = 'Failed to create node';
+        message =
+          'Unable to create wallet in supported mode. Please try again later.';
       }
       throw new Error(message);
     }
