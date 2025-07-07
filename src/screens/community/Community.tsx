@@ -12,6 +12,7 @@ import Relay from 'src/services/relay';
 import { Community as CommunityType, CommunityType as CommunityTypeEnum } from 'src/models/interfaces/Community';
 import CommunityList from './components/CommunityList';
 import ChatPeerManager from 'src/services/p2p/ChatPeerManager';
+import Toast from 'src/components/Toast';
 
 function Community() {
   const route = useRoute();
@@ -62,6 +63,7 @@ function Community() {
         } 
         cm.sendMessage(publicKey, JSON.stringify(message));
         dbManager.createObject(RealmSchema.Message, message);
+        Toast('New Tribe Contact created', false);
       }
     } catch (error) {
       console.error('Error initializing chat:', error);
