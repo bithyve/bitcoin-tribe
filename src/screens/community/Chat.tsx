@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import ScreenContainer from 'src/components/ScreenContainer'
 import AppHeader from 'src/components/AppHeader'
@@ -77,11 +77,15 @@ const Chat = () => {
   return (
     <ScreenContainer>
       <AppHeader title={contact.name} />
-
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
       <View style={styles.container}>
         <MessageList messages={messages} sending={sending} flatListRef={flatListRef} appId={app.contactsKey.publicKey}/>
         <MessageInput onPressSend={onPressSend} message={message} setMessage={setMessage} loading={sending} disabled={sending} />
       </View>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   )
 }
