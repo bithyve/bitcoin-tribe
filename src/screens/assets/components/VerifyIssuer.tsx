@@ -336,7 +336,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       </View>
     );
   };
-
   return (
     <>
       {isAddedInRegistry ? (

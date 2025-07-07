@@ -32,9 +32,9 @@ const TransactionButtons = (props: transButtonProps) => {
     onPressSend,
     onPressReceive,
     onPressBuy,
-    sendCtaWidth = wp(105),
-    receiveCtaWidth = wp(105),
-    buyCtaWidth = wp(105),
+    sendCtaWidth = wp(102),
+    receiveCtaWidth = wp(102),
+    buyCtaWidth = wp(102),
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
