@@ -3,7 +3,8 @@ import {
   StyleSheet,
   View,
   TextInput,
-} from 'react-native';
+  Keyboard,
+  } from 'react-native';
 import AppTouchable from 'src/components/AppTouchable';
 import IconSend from 'src/assets/images/icon_send.svg';
 import IconSendLight from 'src/assets/images/ic_send_light.svg';
@@ -120,7 +121,10 @@ const MessageInput = ({
     <View>
     <View style={styles.containerBottom}>
 
-      <AppTouchable style={styles.btnPlus} onPress={() => setShowOptions(!showOptions)}>
+      <AppTouchable style={styles.btnPlus} onPress={() => {
+        Keyboard.dismiss();
+        setShowOptions(!showOptions)
+      }}>
         {renderPlusIcon}
       </AppTouchable>
 
@@ -133,6 +137,7 @@ const MessageInput = ({
         editable={!loading && !disabled}
         placeholder='Type a Message...'
         placeholderTextColor={theme.colors.secondaryHeadingColor}
+        onFocus={() => setShowOptions(false)}
       />
 
       <AppTouchable disabled={message.trim() === '' || disabled} style={styles.btnSend} onPress={() => onPressSend()}>
