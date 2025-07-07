@@ -339,7 +339,7 @@
     "lightning": "लाइटनिंग"
   },
   "sendScreen": {
-    "headerSubTitle": "नीचे बिटकॉइन पता या आरजीबी इनवॉइस स्कैन करें",
+    "headerSubTitle": "बिटकॉइन पता, आरजीबी इनवॉइस या कोई भी ट्राइब QR कोड स्कैन करें",
     "btcHeaderSubTitle": "एक बिटकॉइन पता स्कैन करें",
     "optionCardTitle": "विवरण मैन्युअली दर्ज करें",
     "enterInvoiceManually": "चालान मैन्युअली दर्ज करें",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "बिटकॉइन पता दर्ज करें",
     "enterSendAddress": "सेंड पता दर्ज करें",
     "enterSendAdrsSubTitle": "सेंड पता दर्ज करें या पेस्ट करें",
-    "enterSendAddressInvoice": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें",
-    "enterSendAdrsInvoiceSubTitle": "भेजने का पता या आरजीबी इनवॉयस दर्ज करें या पेस्ट करें",
+    "enterSendAddressInvoice": "पता या QR दर्ज करें",
+    "enterSendAdrsInvoiceSubTitle": "बिटकॉइन पता, आरजीबी इनवॉइस या ट्राइब QR कोड पेस्ट करें",
     "enterAddress": "पता दर्ज करें",
     "sendToTitle": "भेजें",
     "sendTitle": "भेजें",

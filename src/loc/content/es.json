@@ -339,7 +339,7 @@
     "lightning": "Relámpago"
   },
   "sendScreen": {
-    "headerSubTitle": "Escanee una dirección Bitcoin o una factura RGB a continuación",
+    "headerSubTitle": "Escanee una dirección Bitcoin, una factura RGB o cualquier código QR de Tribe",
     "btcHeaderSubTitle": "Escanear una dirección de Bitcoin",
     "optionCardTitle": "Ingrese los detalles manualmente",
     "enterInvoiceManually": "Ingrese la factura manualmente",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "Ingrese una dirección de Bitcoin",
     "enterSendAddress": "Introduce la dirección de envío",
     "enterSendAdrsSubTitle": "Ingrese la dirección de envío o pegue",
-    "enterSendAddressInvoice": "Enter Send Addres/Invoice",
-    "enterSendAdrsInvoiceSubTitle": "Enter Send Address/Invoice or Paste",
+    "enterSendAddressInvoice": "Ingrese Dirección o QR",
+    "enterSendAdrsInvoiceSubTitle": "Pegue Dirección Bitcoin, Factura RGB o Código QR Tribe",
     "enterAddress": "Introduce la dirección",
     "sendToTitle": "Enviar a",
     "sendTitle": "Enviar",

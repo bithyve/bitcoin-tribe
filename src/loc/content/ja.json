@@ -339,7 +339,7 @@
     "lightning": "ライトニング"
   },
   "sendScreen": {
-    "headerSubTitle": "以下にビットコインアドレスまたはRGB請求書をスキャン",
+    "headerSubTitle": "ビットコインアドレス、RGB請求書、またはTribe QRコードをスキャン",
     "btcHeaderSubTitle": "ビットコインアドレスをスキャンする",
     "optionCardTitle": "詳細を手動で入力する",
     "enterInvoiceManually": "請求書を手動で入力する",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "ビットコインアドレスを入力",
     "enterSendAddress": "送信アドレスを入力",
     "enterSendAdrsSubTitle": "送信アドレスを入力または貼り付け",
-    "enterSendAddressInvoice": "送信先住所またはRGB請求書を入力してください",
-    "enterSendAdrsInvoiceSubTitle": "送信先住所またはRGB請求書を入力または貼り付けてください",
+    "enterSendAddressInvoice": "住所またはQRコードを入力してください",
+    "enterSendAdrsInvoiceSubTitle": "ビットコインアドレス、RGB請求書、またはTribe QRコードを貼り付けてください",
     "enterAddress": "アドレスを入力",
     "sendToTitle": "送信先",
     "sendTitle": "送信",

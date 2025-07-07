@@ -339,7 +339,7 @@
     "lightning": "闪电网络"
   },
   "sendScreen": {
-    "headerSubTitle": "扫描下方的比特币地址或RGB发票",
+    "headerSubTitle": "扫描比特币地址、RGB发票或任何Tribe二维码",
     "btcHeaderSubTitle": "扫描比特币地址",
     "optionCardTitle": "Enter details manually",
     "enterInvoiceManually": "Enter invoice manually",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "输入比特币地址",
     "enterSendAddress": "输入发送地址",
     "enterSendAdrsSubTitle": "输入发送地址或粘贴",
-    "enterSendAddressInvoice": "输入发送地址或RGB发票",
-    "enterSendAdrsInvoiceSubTitle": "输入或粘贴发送地址或RGB发票",
+    "enterSendAddressInvoice": "输入地址或二维码",
+    "enterSendAdrsInvoiceSubTitle": "粘贴比特币地址、RGB发票或Tribe二维码",
     "enterAddress": "输入地址",
     "sendToTitle": "发送至",
     "sendTitle": "发送",

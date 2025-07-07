@@ -339,7 +339,7 @@
     "lightning": "Fulmine"
   },
   "sendScreen": {
-    "headerSubTitle": "Scansiona un indirizzo Bitcoin o una fattura RGB qui sotto",
+    "headerSubTitle": "Scansiona un indirizzo Bitcoin, una fattura RGB o qualsiasi codice QR Tribe",
     "btcHeaderSubTitle": "Scansiona un indirizzo Bitcoin",
     "optionCardTitle": "Inserisci i dettagli manualmente",
     "enterInvoiceManually": "Inserisci la fattura manualmente",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
     "enterSendAddress": "Inserisci indirizzo di invio",
     "enterSendAdrsSubTitle": "Inserisci indirizzo di invio o incolla",
-    "enterSendAddressInvoice": "Inserisci l'indirizzo di invio o la fattura RGB",
-    "enterSendAdrsInvoiceSubTitle": "Inserisci o incolla l'indirizzo di invio o la fattura RGB",
+    "enterSendAddressInvoice": "Inserisci Indirizzo o QR",
+    "enterSendAdrsInvoiceSubTitle": "Incolla Indirizzo Bitcoin, Fattura RGB o Codice QR Tribe",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
     "sendTitle": "Invia",

@@ -339,7 +339,7 @@
     "lightning": "Lightning"
   },
   "sendScreen": {
-    "headerSubTitle": "Scan a Bitcoin Address or RGB invoice below",
+    "headerSubTitle": "Scan a Bitcoin Address, RGB invoice or any Tribe QR Code",
     "btcHeaderSubTitle": "Scan a Bitcoin Address",
     "optionCardTitle": "Enter details manually",
     "enterInvoiceManually": "Enter invoice manually",
@@ -348,8 +348,8 @@
     "sendBtcOptionCardSubTitle": "Enter a Bitcoin Address",
     "enterSendAddress": "Enter Send Address",
     "enterSendAdrsSubTitle": "Enter Send Address or Paste",
-    "enterSendAddressInvoice": "Enter Send Address or RGB Invoice",
-    "enterSendAdrsInvoiceSubTitle": "Enter or Paste Send Address or RGB Invoice",
+    "enterSendAddressInvoice": "Enter Address or QR",
+    "enterSendAdrsInvoiceSubTitle": "Paste Bitcoin Address, RGB Invoice, or Tribe QR Code",
     "enterAddress": "Enter address",
     "sendToTitle": "Send To",
     "sendTitle": "Send",
