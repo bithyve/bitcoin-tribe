@@ -66,7 +66,7 @@ function EditWalletProfile({ navigation }) {
         onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => updateWalletProfile()}
-        secondaryOnPress={() => navigation.goBack()}
+        // secondaryOnPress={() => navigation.goBack()}
         addPicTitle={wallet.editPicture}
         profileImage={profileImage?.uri || app.walletImage}
         handlePickImage={() => handlePickImage()}
@@ -75,7 +75,7 @@ function EditWalletProfile({ navigation }) {
         disabled={!isSaveEnabled}
         primaryCTATitle={common.save}
         primaryStatus={loading ? 'loading' : ''}
-        secondaryCTATitle={common.cancel}
+        // secondaryCTATitle={common.cancel}
       />
     </ScreenContainer>
   );

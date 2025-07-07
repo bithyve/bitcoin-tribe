@@ -92,7 +92,7 @@ function ProfileSetup() {
         onChangeText={text => setName(text.trim())}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
-        secondaryOnPress={() => navigation.goBack()}
+        // secondaryOnPress={() => navigation.goBack()}
         addPicTitle={onBoarding.addPicture} 
         profileImage={profileImage?.uri}
         handlePickImage={() => handlePickImage()}
@@ -103,7 +103,7 @@ function ProfileSetup() {
         // }}
         primaryStatus={setupNewAppMutation.status}
         primaryCTATitle={common.proceed}
-        secondaryCTATitle={common.skip}
+        // secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
         disabled={name.trim().length < 3}
       />
