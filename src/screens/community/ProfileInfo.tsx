@@ -30,7 +30,7 @@ const getStyles = (theme: AppTheme) => StyleSheet.create({
   },
 })
 
-const ContactRequest = () => {
+const ProfileInfo = () => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -71,5 +71,5 @@ const ContactRequest = () => {
     )
 }
 
-export default ContactRequest
+export default ProfileInfo
 

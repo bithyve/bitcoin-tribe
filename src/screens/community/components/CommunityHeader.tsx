@@ -37,7 +37,7 @@ function CommunityHeader() {
       <IconWrapper
         style={styles.icon}
         onPress={() => {
-          navigation.navigate(NavigationRoutes.CONTACTREQUEST);
+          navigation.navigate(NavigationRoutes.PROFILEINFO);
         }}>
           {!theme.dark ? <AddContactIconLight /> : <AddContactIcon />}
         </IconWrapper>
