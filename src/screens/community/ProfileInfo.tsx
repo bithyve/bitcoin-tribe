@@ -70,7 +70,7 @@ const getStyles = (theme: AppTheme) =>
 const ProfileInfo = () => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
+  const { community, common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
@@ -81,45 +81,38 @@ const ProfileInfo = () => {
   const handleShare = async () => {
     try {
       if (!viewShotRef.current) return;
-      
-      const uri = await viewShotRef.current.capture({
-        format: 'jpg',
-        quality: 1.0,
-        result: 'tmpfile',
-      });
-      
-
+      const uri = await viewShotRef.current.capture();
       await Share.share({
-        message: `Scan this QR code to connect with me on Tribe or open in Tribe app ${qrValue}`,
+        message: `${community.shareQrMessage} ${qrValue.split('/')[2]}`,
         url: `file://${uri}`,
       });
     } catch (error) {
       console.error('Error sharing QR code:', error);
-      Toast('Failed to share QR code', true);
+      Toast(common.failedToShareQrCode, true);
     }
   };
 
   const handleCopy = () => {
     try {
       Clipboard.setString(qrValue);
-      Toast('Copied to clipboard', false);
+      Toast(common.copiedToClipboard, false);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
-      Toast('Failed to copy to clipboard', true);
+      Toast(common.failedToCopyToClipboard, true);
     }
   };
 
   const handleScan = () => {
     try {
       navigation.goBack();
-      navigation.navigate(NavigationRoutes.SENDSCREEN as any, {
+      navigation.navigate(NavigationRoutes.SENDSCREEN, {
         receiveData: 'send',
-        title: 'Scan QR',
-        subTitle: 'Scan the QR code to connect on Tribe',
+        title: common.scanQrTitle,
+        subTitle: common.scanQrSubTitle,
       });
     } catch (error) {
       console.error('Error navigating to scan screen:', error);
-      Toast('Failed to open scanner', true);
+      Toast(common.failedToOpenScanner, true);
     }
   };
 
@@ -127,17 +120,17 @@ const ProfileInfo = () => {
     const menuItems = [
       {
         icon: isThemeDark ? <IconShare /> : <IconShareLight />,
-        text: 'Share',
+        text: common.share,
         onPress: handleShare,
       },
       {
         icon: isThemeDark ? <IconScan /> : <IconScanLight />,
-        text: 'Scan',
+        text: common.scan,
         onPress: handleScan,
       },
       {
         icon: isThemeDark ? <IconCopy /> : <IconCopyLight />,
-        text: 'Copy',
+        text: common.copy,
         onPress: handleCopy,
       },
     ];
@@ -159,8 +152,8 @@ const ProfileInfo = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={'Profile Info'}
-        subTitle={'Scan or share your QR code to connect instantly.'}
+        title={community.profileInfoTitle}
+        subTitle={community.profileInfoSubTitle}
         enableBack={true}
         onBackNavigation={() => navigation.goBack()}
       />
@@ -188,7 +181,7 @@ const ProfileInfo = () => {
         {renderMenu()}
 
         <OptionCard
-          title="Create Group"
+          title={community.createGroup}
           onPress={() => {
           }}
         />

@@ -58,6 +58,14 @@
     "backupInProgressMsg": "स्वचालित RGB बैकअप प्रगति पर है। कृपया ऐप बंद न करें।",
     "backDoneMsg": "स्वचालित RGB बैकअप पूरा हो गया है।",
     "share": "साझा करें",
+    "scan": "स्कैन करें",
+    "copy": "कॉपी करें",
+    "copiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
+    "failedToCopyToClipboard": "क्लिपबोर्ड पर कॉपी करने में विफल",
+    "scanQrTitle": "QR स्कैन करें",
+    "scanQrSubTitle": "Tribe पर कनेक्ट करने के लिए QR कोड स्कैन करें",
+    "failedToOpenScanner": "स्कैनर खोलने में विफल",
+    "failedToShareQrCode": "QR कोड शेयर करने में विफल",
     "registry": "रजिस्ट्री",
     "verify": "सत्यापित करें"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "दोस्तों के साथ बिटकॉइन बेहतर है"
+    "fnfSubTitle": "दोस्तों के साथ बिटकॉइन बेहतर है",
+    "profileInfoTitle": "प्रोफ़ाइल जानकारी",
+    "profileInfoSubTitle": "तुरंत कनेक्ट करने के लिए अपना QR कोड स्कैन या शेयर करें।",
+    "shareQrMessage": "Tribe पर मुझसे कनेक्ट करने या Tribe ऐप में खोलने के लिए इस QR कोड को स्कैन करें",
+    "createGroup": "समूह बनाएं"
   },
   "node": {
     "viewNodeInfoTitle": "नोड जानकारी देखें",

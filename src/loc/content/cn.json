@@ -58,6 +58,14 @@
     "backupInProgressMsg": "正在进行自动 RGB 备份。请勿关闭应用程序。",
     "backDoneMsg": "自动 RGB 备份已完成。",
     "share": "分享",
+    "scan": "扫描",
+    "copy": "复制",
+    "copiedToClipboard": "已复制到剪贴板",
+    "failedToCopyToClipboard": "复制到剪贴板失败",
+    "scanQrTitle": "扫描二维码",
+    "scanQrSubTitle": "扫描二维码以在Tribe上连接",
+    "failedToOpenScanner": "打开扫描器失败",
+    "failedToShareQrCode": "分享二维码失败",
     "registry": "注册表",
     "verify": "验证"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "比特币和朋友在一起更好"
+    "fnfSubTitle": "比特币和朋友在一起更好",
+    "profileInfoTitle": "个人资料信息",
+    "profileInfoSubTitle": "扫描或分享您的二维码以立即连接。",
+    "shareQrMessage": "扫描此二维码以在Tribe上与我连接或在Tribe应用中打开",
+    "createGroup": "创建群组"
   },
   "node": {
     "viewNodeInfoTitle": "查看节点信息",

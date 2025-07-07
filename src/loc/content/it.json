@@ -58,6 +58,14 @@
     "backupInProgressMsg": "Backup automatico RGB in corso. Non chiudere l'app.",
     "backDoneMsg": "Backup automatico RGB completato.",
     "share": "Condividi",
+    "scan": "Scansiona",
+    "copy": "Copia",
+    "copiedToClipboard": "Copiato negli appunti",
+    "failedToCopyToClipboard": "Impossibile copiare negli appunti",
+    "scanQrTitle": "Scansiona QR",
+    "scanQrSubTitle": "Scansiona il codice QR per connetterti su Tribe",
+    "failedToOpenScanner": "Impossibile aprire lo scanner",
+    "failedToShareQrCode": "Impossibile condividere il codice QR",
     "registry": "Registro",
     "verify": "Verifica"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "Bitcoin è migliore con gli amici"
+    "fnfSubTitle": "Bitcoin è migliore con gli amici",
+    "profileInfoTitle": "Informazioni Profilo",
+    "profileInfoSubTitle": "Scansiona o condividi il tuo codice QR per connetterti istantaneamente.",
+    "shareQrMessage": "Scansiona questo codice QR per connetterti con me su Tribe o aprire nell'app Tribe",
+    "createGroup": "Crea Gruppo"
   },
   "node": {
     "viewNodeInfoTitle": "Visualizza informazioni sul nodo",

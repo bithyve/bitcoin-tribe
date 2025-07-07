@@ -58,6 +58,14 @@
     "backupInProgressMsg": "自動RGBバックアップを実行中です。アプリを閉じないでください。",
     "backDoneMsg": "自動RGBバックアップが完了しました。",
     "share": "共有",
+    "scan": "スキャン",
+    "copy": "コピー",
+    "copiedToClipboard": "クリップボードにコピーされました",
+    "failedToCopyToClipboard": "クリップボードへのコピーに失敗しました",
+    "scanQrTitle": "QRスキャン",
+    "scanQrSubTitle": "QRコードをスキャンしてTribeで接続",
+    "failedToOpenScanner": "スキャナーを開けませんでした",
+    "failedToShareQrCode": "QRコードの共有に失敗しました",
     "registry": "レジストリ",
     "verify": "確認する"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "ビットコインは友達と一緒にいるともっと楽しい"
+    "fnfSubTitle": "ビットコインは友達と一緒にいるともっと楽しい",
+    "profileInfoTitle": "プロフィール情報",
+    "profileInfoSubTitle": "QRコードをスキャンまたは共有して、すぐに接続します。",
+    "shareQrMessage": "このQRコードをスキャンしてTribeで私と接続するか、Tribeアプリで開く",
+    "createGroup": "グループを作成"
   },
   "node": {
     "viewNodeInfoTitle": "ノード情報を表示",

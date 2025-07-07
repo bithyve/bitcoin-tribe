@@ -58,6 +58,14 @@
     "backupInProgressMsg": "La copia de seguridad automática de RGB está en curso. Por favor, no cierres la aplicación.",
     "backDoneMsg": "La copia de seguridad automática de RGB se ha completado.",
     "share": "Compartir",
+    "scan": "Escanear",
+    "copy": "Copiar",
+    "copiedToClipboard": "Copiado al portapapeles",
+    "failedToCopyToClipboard": "Error al copiar al portapapeles",
+    "scanQrTitle": "Escanear QR",
+    "scanQrSubTitle": "Escanee el código QR para conectarse en Tribe",
+    "failedToOpenScanner": "Error al abrir el escáner",
+    "failedToShareQrCode": "Error al compartir el código QR",
     "registry": "Registro",
     "verify": "Verificar"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "Bitcoin es mejor con amigas"
+    "fnfSubTitle": "Bitcoin es mejor con amigas",
+    "profileInfoTitle": "Información del Perfil",
+    "profileInfoSubTitle": "Escanee o comparta su código QR para conectarse al instante.",
+    "shareQrMessage": "Escanee este código QR para conectarse conmigo en Tribe o abrir en la aplicación Tribe",
+    "createGroup": "Crear Grupo"
   },
   "node": {
     "viewNodeInfoTitle": "Ver información del nodo",

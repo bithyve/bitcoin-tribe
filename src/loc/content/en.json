@@ -58,6 +58,14 @@
     "backupInProgressMsg": "Automatic RGB backup is in progress. Please do not close the app.",
     "backDoneMsg": "Automatic RGB backup is complete.",
     "share": "Share",
+    "scan": "Scan",
+    "copy": "Copy",
+    "copiedToClipboard": "Copied to clipboard",
+    "failedToCopyToClipboard": "Failed to copy to clipboard",
+    "scanQrTitle": "Scan QR",
+    "scanQrSubTitle": "Scan the QR code to connect on Tribe",
+    "failedToOpenScanner": "Failed to open scanner",
+    "failedToShareQrCode": "Failed to share QR code",
     "registry": "Registry",
     "verify": "Verify"
   },
@@ -680,7 +688,11 @@
   },
   "community": {
     "fnfTitle": "Community",
-    "fnfSubTitle": "Bitcoin is better with friends"
+    "fnfSubTitle": "Bitcoin is better with friends",
+    "profileInfoTitle": "Profile Info",
+    "profileInfoSubTitle": "Scan or share your QR code to connect instantly.",
+    "shareQrMessage": "Scan this QR code to connect with me on Tribe or open in Tribe app",
+    "createGroup": "Create Group"
   },
   "node": {
     "viewNodeInfoTitle": "View Node Info",
