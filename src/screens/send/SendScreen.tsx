@@ -23,6 +23,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
 import useWallets from 'src/hooks/useWallets';
+import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -77,14 +78,25 @@ function SendScreen({ route, navigation }) {
         setVisibleModal(false);
         return;
       }
-
-      if (value.startsWith('tribecontact://')) {
+      if (value.startsWith('tribe://')) {
         setIsScanning(true);
         setVisibleModal(false);
         navigateWithDelay(() => {
-          navigation.navigate(NavigationRoutes.COMMUNITY, {
-            publicKey: value.split('://')[1],
-          });
+          const urlParts = value.split('/');
+          const path = urlParts[2];
+          if (path === deeplinkType.Contact) {
+            const publicKey = urlParts[3];
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              publicKey,
+              type: CommunityType.Peer,
+            });
+          } else if (path === deeplinkType.Group) {
+            const groupKey = urlParts[3];
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              groupKey,
+              type: CommunityType.Group,
+            });
+          }
         });
         return;
       }

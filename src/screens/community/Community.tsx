@@ -24,8 +24,10 @@ function Community() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (route.params?.publicKey) {
+      if (route.params?.publicKey && route.params?.type === CommunityTypeEnum.Peer) {
         initChat(route.params.publicKey);
+      } else if (route.params?.groupKey) {
+        
       }
     });
     return unsubscribe;

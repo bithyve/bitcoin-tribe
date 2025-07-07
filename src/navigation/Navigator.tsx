@@ -360,6 +360,14 @@ function Navigator() {
 
   return (
     <NavigationContainer
+      linking={{
+        prefixes: ['tribe://'],
+        config: {
+          screens: {
+            [NavigationRoutes.LOGINSTACK]: 'login',
+          },
+        },
+      }}
       theme={{
         dark: isThemeDark,
         colors: {

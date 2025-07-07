@@ -42,3 +42,9 @@ export interface Contact {
   imageUrl?: string;
   name: string;
 }
+
+export enum deeplinkType {
+  Contact = 'contact',
+  Group = 'group',
+  Broadcast = 'broadcast',
+}

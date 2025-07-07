@@ -53,7 +53,7 @@ function SendEnterAddress({
       setInvoiceValidationError('');
       return;
     }
-    if(text.startsWith('tribecontact://')) {
+    if(text.startsWith('tribe://')) {
       Keyboard.dismiss();
       setAddress(text);
       setInvoiceValidationError('');
