@@ -22,6 +22,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
+import useWallets from 'src/hooks/useWallets';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -33,8 +34,9 @@ function SendScreen({ route, navigation }) {
   const [validatingInvoiceErrorMsg, setValidatingInvoiceErrorMsg] =
     useState('');
   const [isScanning, setIsScanning] = useState(true);
-  const { receiveData, title, subTitle, wallet } = route.params;
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const wallet = useWallets({}).wallets[0];
+  const { receiveData, title, subTitle } = route.params;
+  const app: TribeApp = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const allAssets: Asset[] = [...coins, ...collectibles];

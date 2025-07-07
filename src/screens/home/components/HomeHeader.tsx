@@ -134,7 +134,6 @@ function HomeHeader() {
                 receiveData: 'send',
                 title: common.send,
                 subTitle: sendScreen.headerSubTitle,
-                wallet,
               });
             }}>
             {isThemeDark ? <IconScanner /> : <IconScannerLight />}
