@@ -2052,7 +2052,7 @@ export class ApiHandler {
   ): Promise<string | null> => {
     try {
       const node: any = await Relay.getNodeById(nodeId, authToken);
-      const status = node?.node?.status || node?.nodeInfo?.data?.status;
+      const status = node?.nodeInfo?.data?.status || node?.node?.status;
       return status;
     } catch (err) {
       console.error('Error fetching node status:', err);

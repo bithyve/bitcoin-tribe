@@ -28,6 +28,7 @@ import GradientView from 'src/components/GradientView';
 import Colors from 'src/theme/Colors';
 import AppText from 'src/components/AppText';
 import Capitalize from 'src/utils/capitalizeUtils';
+import { NodeStatusType } from 'src/models/enums/Notifications';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -53,6 +54,7 @@ const ViewNodeInfo = () => {
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
     Pause: Colors.ChineseWhite,
+    Destroyed: Colors.CandyAppleRed,
   };
 
   const getStatusColor = status => statusColors[status] || Colors.White;
@@ -250,7 +252,7 @@ const ViewNodeInfo = () => {
           )}
         </ScrollView>
       )}
-      {!isLoading && (
+      {!isLoading && nodeStatus.toUpperCase() !== NodeStatusType.DESTROYED && (
         <NodeInfoFooter
           nodeStatus={nodeStatus}
           onPressNodeRun={() => checkStatus()}

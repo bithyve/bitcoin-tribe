@@ -35,7 +35,10 @@ import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { PushNotificationType } from 'src/models/enums/Notifications';
+import {
+  NodeStatusType,
+  PushNotificationType,
+} from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 
@@ -127,17 +130,19 @@ function HomeScreen() {
           app?.id,
           app?.authToken,
         );
-        if (status === 'IN_PROGRESS') {
+        if (status === NodeStatusType.IN_PROGRESS) {
           setNodeInitStatus(true);
-        } else if (status === 'PAUSED') {
+        } else if (status === NodeStatusType.PAUSED) {
           startNode;
         } else {
           await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
           setNodeInitStatus(false);
-          setNodeConnected(true);
-          setTimeout(() => {
-            setNodeConnected(false);
-          }, 1500);
+          if (status === NodeStatusType.RUNNING) {
+            setNodeConnected(true);
+            setTimeout(() => {
+              setNodeConnected(false);
+            }, 1500);
+          }
         }
         console.log('Node status:', status);
       }
