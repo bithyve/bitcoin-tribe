@@ -831,8 +831,19 @@ export class ApiHandler {
       .getObjectByIndex(RealmSchema.Wallet)
       .toJSON();
     const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-      JSON.parse(averageTxFeeJSON);
+    if (!averageTxFeeJSON) {
+      throw new Error(
+        'Transaction fee data not found. Please try again later.',
+      );
+    }
+    let averageTxFeeByNetwork: AverageTxFeesByNetwork;
+    try {
+      averageTxFeeByNetwork = JSON.parse(averageTxFeeJSON);
+    } catch (error) {
+      throw new Error(
+        'Invalid transaction fee data. Please refresh and try again.',
+      );
+    }
     const averageTxFee: AverageTxFees =
       averageTxFeeByNetwork[config.NETWORK_TYPE];
     const { low } = await ApiHandler.sendPhaseOne({
@@ -855,7 +866,7 @@ export class ApiHandler {
     });
     await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
-      const updated = await ApiHandler.updateTransaction({
+      await ApiHandler.updateTransaction({
         txid,
         updateProps: {
           transactionKind: TransactionKind.SERVICE_FEE,
