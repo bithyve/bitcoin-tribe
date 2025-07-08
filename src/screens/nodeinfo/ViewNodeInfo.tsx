@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -48,6 +48,7 @@ const ViewNodeInfo = () => {
   const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
   const [nodeStatus, setSetNodeStatus] = useState('');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
+  const [isNodeStatusLoading, setIsNodeStatusLoading] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
   const statusColors = {
@@ -62,12 +63,21 @@ const ViewNodeInfo = () => {
     mutate();
     const fetchStatus = async () => {
       if (app.appType === AppType.SUPPORTED_RLN) {
-        const status = await ApiHandler.checkNodeStatus(
-          app?.id,
-          app?.authToken,
-        );
-        const nodeStatus = status && Capitalize(status);
-        setSetNodeStatus(nodeStatus);
+        try {
+          setIsNodeStatusLoading(true);
+          const status = await ApiHandler.checkNodeStatus(
+            app?.id,
+            app?.authToken,
+          );
+          const formattedStatus = status && Capitalize(status);
+          setSetNodeStatus(formattedStatus);
+        } catch (error) {
+          console.log('Failed to fetch node status:', error);
+          setSetNodeStatus('');
+          setIsNodeStatusLoading(false);
+        } finally {
+          setIsNodeStatusLoading(false);
+        }
       }
     };
     fetchStatus();
@@ -178,11 +188,15 @@ const ViewNodeInfo = () => {
               <AppText variant="body1" style={styles.titleText}>
                 {channelTranslations.status}
               </AppText>
-              <AppText
-                variant="body1"
-                style={{ color: getStatusColor(nodeStatus) }}>
-                {nodeStatus}
-              </AppText>
+              {isNodeStatusLoading ? (
+                <ActivityIndicator size="small" />
+              ) : (
+                <AppText
+                  variant="body1"
+                  style={{ color: getStatusColor(nodeStatus) }}>
+                  {nodeStatus}
+                </AppText>
+              )}
             </GradientView>
             <SelectOption
               title={node.unlockNode}
