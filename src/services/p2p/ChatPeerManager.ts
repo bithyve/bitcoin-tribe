@@ -15,7 +15,7 @@ import Relay from '../relay';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { CommunityType } from 'src/models/interfaces/Community';
+import { CommunityType, Message } from 'src/models/interfaces/Community';
 import Realm from 'realm';
 
 export default class ChatPeerManager {
@@ -112,7 +112,7 @@ export default class ChatPeerManager {
       if (response.messages.length > 0) {
         const communities = dbManager.getCollection(RealmSchema.Community);
         for (const msg of response.messages) {
-          const message = JSON.parse(msg.message);
+          const message: Message = JSON.parse(msg.message);
           const communityId = [this.app.contactsKey.publicKey, message.sender]
             .sort()
             .join('-');
@@ -140,6 +140,8 @@ export default class ChatPeerManager {
             sender: message.sender,
             block: msg.blockNumber,
             unread: true,
+            fileUrl: message?.fileUrl,
+            request: message?.request,
           });
         }
       }
@@ -178,6 +180,8 @@ export default class ChatPeerManager {
         sender: message.sender,
         block: data.blockNumber,
         unread: true,
+        fileUrl: message?.fileUrl,
+        request: message?.request,
       });
     } catch (error) {
       console.error('Error storing messages:', error);
