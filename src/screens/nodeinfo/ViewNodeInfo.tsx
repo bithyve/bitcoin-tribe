@@ -83,7 +83,21 @@ const ViewNodeInfo = () => {
       Toast('Node synced', false);
       syncMutation.reset();
     } else if (syncMutation.isError) {
-      Toast(`${syncMutation.error}`, true);
+      const error = syncMutation.error;
+      let message = 'Failed to sync the node. Please try again later.';
+
+      if (error?.response?.data?.error) {
+        message = error.response.data.error;
+      } else if (
+        error?.message &&
+        error.message !== 'Error' &&
+        !error.message.includes('Cannot read property')
+      ) {
+        message = error.message;
+      }
+
+      console.log('syncMutation.error', error);
+      Toast(message, true);
     }
   }, [syncMutation.isSuccess, syncMutation, syncMutation.isError]);
 
@@ -93,7 +107,18 @@ const ViewNodeInfo = () => {
       Toast('Node unlocked', false);
       unlockNodeMutation.reset();
     } else if (unlockNodeMutation.isError) {
-      Toast(`${unlockNodeMutation.error}`, true);
+      const error = unlockNodeMutation.error;
+      let message = 'Failed to unlock the node. Please try again later.';
+      if (error?.response?.data?.error) {
+        message = error.response.data.error;
+      } else if (
+        error?.message &&
+        error.message !== 'Error' &&
+        !error.message.includes('Cannot read property')
+      ) {
+        message = error.message;
+      }
+      Toast(message, true);
     }
   }, [
     unlockNodeMutation.isSuccess,
@@ -171,12 +196,14 @@ const ViewNodeInfo = () => {
             isCopiable={true}
             copyMessage={node.nodeIdCopyMsg}
           />
-          <NodeInfoItem
-            title={node.pubKey}
-            value={nodeInfo?.pubkey}
-            isCopiable={true}
-            copyMessage={node.pubKeyCopyMsg}
-          />
+          {nodeInfo?.pubkey && (
+            <NodeInfoItem
+              title={node.pubKey}
+              value={nodeInfo?.pubkey}
+              isCopiable={true}
+              copyMessage={node.pubKeyCopyMsg}
+            />
+          )}
 
           <NodeInfoItem
             title={node.apiUrl}
@@ -194,7 +221,7 @@ const ViewNodeInfo = () => {
             />
           )}
 
-          {rgbWallet?.peerDNS && (
+          {nodeInfo?.pubkey && rgbWallet?.peerDNS && (
             <NodeInfoItem
               title={node.peerDns}
               value={`${nodeInfo?.pubkey}@${rgbWallet?.peerDNS}`}
@@ -203,19 +230,24 @@ const ViewNodeInfo = () => {
             />
           )}
 
-          <NodeInfoItem
-            title={node.rgbHtlcMinMsat}
-            value={nodeInfo?.rgb_htlc_min_msat}
-          />
-          <NodeInfoItem
-            title={node.rgbChannelCapMinSat}
-            value={nodeInfo?.rgb_channel_capacity_min_sat}
-          />
-
-          <NodeInfoItem
-            title={node.channelCapMisSat}
-            value={nodeInfo?.channel_capacity_min_sat}
-          />
+          {nodeInfo?.rgb_htlc_min_msat && (
+            <NodeInfoItem
+              title={node.rgbHtlcMinMsat}
+              value={nodeInfo?.rgb_htlc_min_msat}
+            />
+          )}
+          {nodeInfo?.rgb_channel_capacity_min_sat && (
+            <NodeInfoItem
+              title={node.rgbChannelCapMinSat}
+              value={nodeInfo?.rgb_channel_capacity_min_sat}
+            />
+          )}
+          {nodeInfo?.channel_capacity_min_sat && (
+            <NodeInfoItem
+              title={node.channelCapMisSat}
+              value={nodeInfo?.channel_capacity_min_sat}
+            />
+          )}
         </ScrollView>
       )}
       {!isLoading && (

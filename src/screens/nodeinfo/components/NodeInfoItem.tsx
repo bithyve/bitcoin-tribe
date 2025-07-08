@@ -62,6 +62,7 @@ const NodeInfoItem = ({
         </View>
         {isCopiable && (
           <AppTouchable
+            disabled={!value}
             style={styles.copyIconWrapper}
             onPress={() => handleCopyText(value)}>
             {isThemeDark ? <IconCopy /> : <IconCopyLight />}
