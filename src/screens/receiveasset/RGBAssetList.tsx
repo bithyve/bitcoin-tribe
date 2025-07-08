@@ -110,7 +110,7 @@ function RGBAssetList(props: DropdownProps) {
           error={''}
           keyboardType="default"
           autoCapitalize="none"
-          onSubmitEditing={() => {}}
+          onSubmitEditing={() => Keyboard.dismiss()}
         />
         {assets && assets.length > 0 && (
           <View style={styles.labelWrapper}>

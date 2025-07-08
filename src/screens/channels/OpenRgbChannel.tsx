@@ -228,6 +228,8 @@ const OpenRgbChannel = () => {
           onPress={() => {
             if (assetsData.length) {
               setAssetsDropdown(true);
+            } else {
+              CustomToast(assets.noAssetsFoundMsg, true);
             }
           }}
         />

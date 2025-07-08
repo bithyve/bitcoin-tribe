@@ -54,6 +54,7 @@ const ViewNodeInfo = () => {
     Starting: Colors.BrandeisBlue,
     Pause: Colors.ChineseWhite,
   };
+
   const getStatusColor = status => statusColors[status] || Colors.White;
   useEffect(() => {
     mutate();
@@ -198,7 +199,7 @@ const ViewNodeInfo = () => {
               title={node.peerDns}
               value={`${nodeInfo?.pubkey}@${rgbWallet?.peerDNS}`}
               isCopiable={true}
-              copyMessage={() => 'Peer URL copied'}
+              copyMessage={'Peer URL copied'}
             />
           )}
 
