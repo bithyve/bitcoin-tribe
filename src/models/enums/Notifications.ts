@@ -4,6 +4,7 @@ export enum PushNotificationType {
 }
 export enum NodeStatusType {
   IN_PROGRESS = 'IN_PROGRESS',
+  STARTING = 'STARTING',
   PAUSED = 'PAUSED',
   RUNNING = 'RUNNING',
   DESTROYED = 'DESTROYED',

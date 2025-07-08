@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
@@ -44,6 +45,7 @@ import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
+  const prevStatusRef = useRef<string | null>(null);
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
@@ -87,7 +89,7 @@ function HomeScreen() {
       authToken: string;
     }) => ApiHandler.startNode(nodeId, authToken),
   });
-  // const initNodeMutation = useMutation(ApiHandler.initNode);
+
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
@@ -130,19 +132,23 @@ function HomeScreen() {
           app?.id,
           app?.authToken,
         );
+        const prevStatus = prevStatusRef.current;
         if (status === NodeStatusType.IN_PROGRESS) {
           setNodeInitStatus(true);
         } else if (status === NodeStatusType.PAUSED) {
           startNode;
-        } else {
+        } else if (status === NodeStatusType.RUNNING) {
           await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
           setNodeInitStatus(false);
-          if (status === NodeStatusType.RUNNING) {
+          if (prevStatus === NodeStatusType.IN_PROGRESS) {
             setNodeConnected(true);
             setTimeout(() => {
               setNodeConnected(false);
             }, 1500);
           }
+        } else {
+          await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+          setNodeInitStatus(false);
         }
         console.log('Node status:', status);
       }
@@ -159,7 +165,6 @@ function HomeScreen() {
       const unsubscribe = onMessage(messaging, async remoteMessage => {
         const { title, body } = remoteMessage.notification ?? {};
         const { type } = remoteMessage.data ?? {};
-
         switch (type?.toLowerCase()) {
           case PushNotificationType.NODE_INIT_COMPLETE:
             await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
