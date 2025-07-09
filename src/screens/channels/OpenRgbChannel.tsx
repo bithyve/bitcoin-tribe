@@ -172,6 +172,7 @@ const OpenRgbChannel = () => {
             title={channelTranslation.createChannelTitle}
             subTitle={channelTranslation.createChannelSubTitle}
             illustrationPath={require('src/assets/images/jsons/channelCreation.json')}
+            style={styles.inProgressViewStyle}
           />
         </ResponsePopupContainer>
       </View>
@@ -364,5 +365,8 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
       width: '40%',
       alignItems: 'flex-end',
       paddingRight: hp(10),
+    },
+    inProgressViewStyle: {
+      alignItems: 'flex-start',
     },
   });
