@@ -85,9 +85,11 @@ function WalletDetails({ navigation, route }) {
   );
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate: fetchOnChainTransaction } = useMutation(
-    ApiHandler.getNodeOnchainBtcTransactions,
-  );
+  const {
+    mutate: fetchOnChainTransaction,
+    error: fetchTxnError,
+    isError: fetchTxnIsError,
+  } = useMutation(ApiHandler.getNodeOnchainBtcTransactions);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
@@ -133,6 +135,12 @@ function WalletDetails({ navigation, route }) {
       Toast(error?.message || 'Failed to get test coins', true);
     }
   }, [isError, error]);
+
+  useEffect(() => {
+    if (fetchTxnIsError) {
+      Toast(fetchTxnError?.message, true);
+    }
+  }, [fetchTxnError, fetchTxnIsError]);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {

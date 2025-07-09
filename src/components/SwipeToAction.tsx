@@ -22,6 +22,7 @@ interface Props {
   onSwipeComplete: () => void;
   backColor?: string;
   loaderTextColor?: string;
+  resetCounter?: number;
 }
 
 const SwipeToAction: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const SwipeToAction: React.FC<Props> = ({
   loadingTitle,
   backColor = Colors.Golden,
   loaderTextColor = Colors.Black,
+  resetCounter,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
@@ -45,6 +47,16 @@ const SwipeToAction: React.FC<Props> = ({
     startSwipeIndicator();
     return () => stopSwipeIndicator();
   }, []);
+
+  useEffect(() => {
+    if (resetCounter !== undefined) {
+      translateX.setValue(0);
+      autoSwipe.setValue(0);
+      setSwiped(false);
+      stopSwipeIndicator();
+      startSwipeIndicator();
+    }
+  }, [resetCounter]);
 
   const startSwipeIndicator = () => {
     if (!autoSwipeAnimation.current) {

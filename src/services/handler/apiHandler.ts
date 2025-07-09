@@ -831,8 +831,19 @@ export class ApiHandler {
       .getObjectByIndex(RealmSchema.Wallet)
       .toJSON();
     const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-      JSON.parse(averageTxFeeJSON);
+    if (!averageTxFeeJSON) {
+      throw new Error(
+        'Transaction fee data not found. Please try again later.',
+      );
+    }
+    let averageTxFeeByNetwork: AverageTxFeesByNetwork;
+    try {
+      averageTxFeeByNetwork = JSON.parse(averageTxFeeJSON);
+    } catch (error) {
+      throw new Error(
+        'Invalid transaction fee data. Please refresh and try again.',
+      );
+    }
     const averageTxFee: AverageTxFees =
       averageTxFeeByNetwork[config.NETWORK_TYPE];
     const { low } = await ApiHandler.sendPhaseOne({
@@ -855,7 +866,7 @@ export class ApiHandler {
     });
     await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
-      const updated = await ApiHandler.updateTransaction({
+      await ApiHandler.updateTransaction({
         txid,
         updateProps: {
           transactionKind: TransactionKind.SERVICE_FEE,
@@ -2041,7 +2052,7 @@ export class ApiHandler {
   ): Promise<string | null> => {
     try {
       const node: any = await Relay.getNodeById(nodeId, authToken);
-      const status = node?.node?.status || node?.nodeInfo?.data?.status;
+      const status = node?.nodeInfo?.data?.status || node?.node?.status;
       return status;
     } catch (err) {
       console.error('Error fetching node status:', err);
@@ -2122,6 +2133,9 @@ export class ApiHandler {
             skip_sync: false,
             up_to: false,
           });
+          if (createUtxos?.error) {
+            throw new Error(createUtxos.error);
+          }
           if (createUtxos) {
             await ApiHandler.openChannel({
               peerPubkeyAndOptAddr,
@@ -2145,7 +2159,6 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

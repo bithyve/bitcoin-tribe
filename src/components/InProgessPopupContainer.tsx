@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
@@ -14,17 +14,18 @@ type UseRGBAssetProps = {
   title: string;
   subTitle: string;
   illustrationPath: string;
+  style?: StyleProp<ViewStyle>;
 };
 
 function InProgessPopupContainer(props: UseRGBAssetProps) {
-  const { title, subTitle, illustrationPath } = props;
+  const { title, subTitle, illustrationPath, style } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.detailsWrapper}>
         <AppText variant="heading1" style={styles.titleText}>
           {title}

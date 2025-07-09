@@ -381,7 +381,12 @@ export default class Relay {
       }
       return res.data || res.json;
     } catch (err) {
-      throw new Error(err);
+      const errMsg =
+        err?.response?.data?.err ||
+        err?.code ||
+        err?.message ||
+        'Asset registration failed';
+      throw new Error(errMsg);
     }
   };
 

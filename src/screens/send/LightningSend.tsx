@@ -30,6 +30,7 @@ const getStyles = (theme: AppTheme) =>
     },
     buttonWrapper: {
       marginTop: hp(20),
+      width: '100%',
     },
   });
 
@@ -155,8 +156,8 @@ const LightningSend = () => {
             primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
-            width={windowWidth / 2.7}
-            secondaryCTAWidth={windowWidth / 2.7}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
             height={hp(14)}
             disabled={false}
           />
