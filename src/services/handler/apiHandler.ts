@@ -2133,6 +2133,9 @@ export class ApiHandler {
             skip_sync: false,
             up_to: false,
           });
+          if (createUtxos?.error) {
+            throw new Error(createUtxos.error);
+          }
           if (createUtxos) {
             await ApiHandler.openChannel({
               peerPubkeyAndOptAddr,
@@ -2156,7 +2159,6 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
