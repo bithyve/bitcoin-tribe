@@ -76,7 +76,7 @@
     "confirmPin": "パスコードを確認してください",
     "advanceSettingTitle": "高度な設定",
     "splashText": "ビットコインは友達と一緒だとより良いです",
-    "recoverAppTitle": "既存のアプリを復元する",
+    "recoverAppTitle": "既存のウォレットを復元",
     "recoverAppSubTitle": "既存の12語のリカバリーフレーズを以下に入力してください",
     "errorSettingPin": "PINの設定エラー",
     "newPinCreated": "新しいPINを作成しました",

@@ -76,7 +76,7 @@
     "confirmPin": "Confirm your Passcode",
     "advanceSettingTitle": "Advanced Setting",
     "splashText": "Bitcoin is better with friends",
-    "recoverAppTitle": "Recover an existing app",
+    "recoverAppTitle": "Recover an existing wallet",
     "recoverAppSubTitle": "Enter existing 12-word recovery phrase below",
     "errorSettingPin": "Error setting pin",
     "newPinCreated": "New Passcode created",
