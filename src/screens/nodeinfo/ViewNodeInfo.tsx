@@ -215,14 +215,12 @@ const ViewNodeInfo = () => {
           <NodeInfoItem
             title={node.nodeIdtitle}
             value={app?.id}
-            isCopiable={true}
             copyMessage={node.nodeIdCopyMsg}
           />
           {nodeInfo?.pubkey && (
             <NodeInfoItem
               title={node.pubKey}
               value={nodeInfo?.pubkey}
-              isCopiable={true}
               copyMessage={node.pubKeyCopyMsg}
             />
           )}
@@ -230,7 +228,6 @@ const ViewNodeInfo = () => {
           <NodeInfoItem
             title={node.apiUrl}
             value={rgbWallet?.nodeUrl}
-            isCopiable={true}
             copyMessage={node.nodeUrlCopyMsg}
           />
 
@@ -238,7 +235,6 @@ const ViewNodeInfo = () => {
             <NodeInfoItem
               title={node.onchainPubkey}
               value={nodeInfo?.onchain_pubkey}
-              isCopiable={true}
               copyMessage={node.onChainPubKeyCopyMsg}
             />
           )}

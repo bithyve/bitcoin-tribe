@@ -56,9 +56,7 @@ const NodeInfoItem = ({
         ]}
         style={styles.nodeItemWrapper}>
         <View style={styles.valueWrapper}>
-          <AppText variant="body2" numberOfLines={1} ellipsizeMode="tail">
-            {value}
-          </AppText>
+          <AppText variant="body2">{value}</AppText>
         </View>
         {isCopiable && (
           <AppTouchable
@@ -80,12 +78,14 @@ const getStyles = (theme: AppTheme, isCopiable) =>
     nodeItemWrapper: {
       flexDirection: 'row',
       width: '100%',
-      height: hp(50),
       justifyContent: 'space-between',
       borderWidth: 1,
       borderColor: theme.colors.borderColor,
       borderRadius: 10,
-      //       paddingVertical: hp(8),
+      paddingVertical: hp(10),
+      paddingHorizontal: hp(5),
+      minHeight: hp(50),
+      alignItems: 'center',
     },
     valueWrapper: {
       justifyContent: 'center',
