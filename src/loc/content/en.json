@@ -719,7 +719,10 @@
     "connectingNodeInfo": "Some features may be temporarily unavailable while we prepare everything for you.",
     "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!",
     "nodeIdtitle": "Node ID",
-    "nodeIdCopyMsg": "Node ID copied successfully"
+    "nodeIdCopyMsg": "Node ID copied successfully",
+    "nodeNotFoundTitle": "Node Not Found",
+    "nodeNotFoundSubTitle": "Node not found or may be destroyed. Need help? Contact support.",
+    "telegramSupport": "Telegram Support"
   },
   "channel": {
     "status": "Status :",

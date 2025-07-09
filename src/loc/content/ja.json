@@ -719,7 +719,10 @@
     "connectingNodeInfo": "準備が完了するまで、一部の機能が一時的に使用できない場合があります。",
     "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！",
     "nodeIdtitle": "ノードID",
-    "nodeIdCopyMsg": "ノードIDが正常にコピーされました"
+    "nodeIdCopyMsg": "ノードIDが正常にコピーされました",
+    "nodeNotFoundTitle": "ノードが見つかりません",
+    "nodeNotFoundSubTitle": "ノードが見つからないか、削除された可能性があります。サポートが必要ですか？サポートに連絡してください。",
+    "telegramSupport": "Telegram サポート"
   },
   "channel": {
     "status": "ステータス：",

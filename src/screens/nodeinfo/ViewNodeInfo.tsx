@@ -197,7 +197,7 @@ const ViewNodeInfo = () => {
                 <AppText
                   variant="body1"
                   style={{ color: getStatusColor(nodeStatus) }}>
-                  {nodeStatus || 'Not Found'}
+                  {nodeStatus || 'Node Not Found'}
                 </AppText>
               )}
             </GradientView>
@@ -282,15 +282,14 @@ const ViewNodeInfo = () => {
           <View style={styles.nodenotFoundWrapper}>
             <View style={styles.contentWrapper}>
               <AppText variant="heading2" style={styles.nodenotFoundHeaderText}>
-                Node Not Found
+                {node.nodeNotFoundTitle}
               </AppText>
               <AppText variant="body1" style={styles.nodenotFoundSubText}>
-                Node not found or may be destroyed. Check your setup or connect
-                a new node. Need help? Contact support.
+                {node.nodeNotFoundSubTitle}
               </AppText>
             </View>
             <PrimaryCTA
-              title={'Telegram Support'}
+              title={node.telegramSupport}
               onPress={() => openLink('https://t.me/BitcoinTribeSupport')}
               width={hp(200)}
             />

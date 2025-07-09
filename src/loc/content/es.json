@@ -719,7 +719,10 @@
     "connectingNodeInfo": "Algunas funciones pueden no estar disponibles temporalmente mientras preparamos todo para ti.",
     "connectingNodeToastMsg": "Tu nodo se está configurando. ¡Inicialización en progreso..!",
     "nodeIdtitle": "ID de Nodo",
-    "nodeIdCopyMsg": "ID del nodo copiado correctamente"
+    "nodeIdCopyMsg": "ID del nodo copiado correctamente",
+    "nodeNotFoundTitle": "Nodo no encontrado",
+    "nodeNotFoundSubTitle": "El nodo no se encontró o puede haber sido destruido. ¿Necesitas ayuda? Contacta con el soporte.",
+    "telegramSupport": "Soporte de Telegram"
   },
   "channel": {
     "status": "Estado :",

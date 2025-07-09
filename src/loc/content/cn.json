@@ -719,7 +719,10 @@
     "connectingNodeInfo": "在我们为您准备一切的过程中，一些功能可能会暂时不可用。",
     "connectingNodeToastMsg": "您的节点正在设置中。初始化进行中..！",
     "nodeIdtitle": "节点 ID",
-    "nodeIdCopyMsg": "节点 ID 复制成功"
+    "nodeIdCopyMsg": "节点 ID 复制成功",
+    "nodeNotFoundTitle": "未找到节点",
+    "nodeNotFoundSubTitle": "未找到节点，或可能已被销毁。如需帮助，请联系支持。",
+    "telegramSupport": "Telegram 支持"
   },
   "channel": {
     "status": "状态：",
