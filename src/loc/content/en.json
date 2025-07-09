@@ -707,6 +707,7 @@
     "assetAmount": "Asset Amount",
     "assetAmountNote": "RGB Asset Amount",
     "peerDns": "Peer DNS",
+    "peerUrl": "Peer URL",
     "unlockNode": "Unlock Node",
     "pubKeyCopyMsg": "Pub Key copied successfully",
     "nodeUrlCopyMsg": "Node URL copied successfully",

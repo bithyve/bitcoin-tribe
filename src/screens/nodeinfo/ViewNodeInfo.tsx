@@ -29,6 +29,8 @@ import Colors from 'src/theme/Colors';
 import AppText from 'src/components/AppText';
 import Capitalize from 'src/utils/capitalizeUtils';
 import { NodeStatusType } from 'src/models/enums/Notifications';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import openLink from 'src/utils/OpenLink';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -52,13 +54,14 @@ const ViewNodeInfo = () => {
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
   const statusColors = {
+    In_Progress: Colors.SelectiveYellow,
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
-    Pause: Colors.ChineseWhite,
+    Paused: Colors.ChineseWhite,
     Destroyed: Colors.CandyAppleRed,
   };
 
-  const getStatusColor = status => statusColors[status] || Colors.White;
+  const getStatusColor = status => statusColors[status] || Colors.CandyAppleRed;
   useEffect(() => {
     mutate();
     const fetchStatus = async () => {
@@ -194,17 +197,20 @@ const ViewNodeInfo = () => {
                 <AppText
                   variant="body1"
                   style={{ color: getStatusColor(nodeStatus) }}>
-                  {nodeStatus}
+                  {nodeStatus || 'Not Found'}
                 </AppText>
               )}
             </GradientView>
-            <SelectOption
-              title={node.unlockNode}
-              onPress={() => unlockNodeMutation.mutate()}
-              enableSwitch={false}
-              onValueChange={() => {}}
-              toggleValue={nodeStatusLock}
-            />
+            {nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+              nodeStatus !== undefined && (
+                <SelectOption
+                  title={node.unlockNode}
+                  onPress={() => unlockNodeMutation.mutate()}
+                  enableSwitch={false}
+                  onValueChange={() => {}}
+                  toggleValue={nodeStatusLock}
+                />
+              )}
           </View>
           <NodeInfoItem
             title={node.nodeIdtitle}
@@ -239,7 +245,7 @@ const ViewNodeInfo = () => {
 
           {nodeInfo?.pubkey && rgbWallet?.peerDNS && (
             <NodeInfoItem
-              title={node.peerDns}
+              title={node.peerUrl}
               value={`${nodeInfo?.pubkey}@${rgbWallet?.peerDNS}`}
               isCopiable={true}
               copyMessage={'Peer URL copied'}
@@ -266,13 +272,34 @@ const ViewNodeInfo = () => {
           )}
         </ScrollView>
       )}
-      {!isLoading && nodeStatus.toUpperCase() !== NodeStatusType.DESTROYED && (
-        <NodeInfoFooter
-          nodeStatus={nodeStatus}
-          onPressNodeRun={() => checkStatus()}
-          onPressRefresh={() => syncMutation.mutate()}
-        />
-      )}
+      {!isLoading &&
+        nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+        nodeStatus !== undefined && (
+          <NodeInfoFooter
+            nodeStatus={nodeStatus}
+            onPressNodeRun={() => checkStatus()}
+            onPressRefresh={() => syncMutation.mutate()}
+          />
+        )}
+      {nodeStatus?.toUpperCase() === NodeStatusType.DESTROYED ||
+        (nodeStatus === undefined && (
+          <View style={styles.nodenotFoundWrapper}>
+            <View style={styles.contentWrapper}>
+              <AppText variant="heading2" style={styles.nodenotFoundHeaderText}>
+                Node Not Found
+              </AppText>
+              <AppText variant="body1" style={styles.nodenotFoundSubText}>
+                Node not found or may be destroyed. Check your setup or connect
+                a new node. Need help? Contact support.
+              </AppText>
+            </View>
+            <PrimaryCTA
+              title={'Telegram Support'}
+              onPress={() => openLink('https://t.me/BitcoinTribeSupport')}
+              width={hp(200)}
+            />
+          </View>
+        ))}
     </ScreenContainer>
   );
 };
@@ -310,6 +337,20 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(5),
+    },
+    nodenotFoundWrapper: {
+      backgroundColor: theme.colors.inputBackground,
+      padding: hp(16),
+      borderRadius: hp(16),
+    },
+    nodenotFoundHeaderText: {
+      color: theme.colors.headingColor,
+    },
+    nodenotFoundSubText: {
+      color: theme.colors.headingColor,
+    },
+    contentWrapper: {
+      marginBottom: hp(20),
     },
   });
 export default ViewNodeInfo;

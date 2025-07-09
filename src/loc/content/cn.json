@@ -707,6 +707,7 @@
     "assetAmount": "资产金额",
     "assetAmountNote": "RGB 资产金额",
     "peerDns": "对等 DNS",
+    "peerUrl": "对等节点 URL",
     "unlockNode": "解锁节点",
     "pubKeyCopyMsg": "公钥复制成功",
     "nodeUrlCopyMsg": "节点 URL 复制成功",

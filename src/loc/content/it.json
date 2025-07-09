@@ -707,6 +707,7 @@
     "assetAmount": "Importo dell'Asset",
     "assetAmountNote": "Importo Asset RGB",
     "peerDns": "DNS peer",
+    "peerUrl": "URL del peer",
     "unlockNode": "Sblocca nodo",
     "pubKeyCopyMsg": "Chiave Pub copiata con successo",
     "nodeUrlCopyMsg": "URL del nodo copiato con successo",

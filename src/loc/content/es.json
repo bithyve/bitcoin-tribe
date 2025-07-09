@@ -707,6 +707,7 @@
     "assetAmount": "Cantidad de Activo",
     "assetAmountNote": "Cantidad de Activo RGB",
     "peerDns": "DNS de pares",
+    "peerUrl": "URL del par",
     "unlockNode": "Desbloquear nodo",
     "pubKeyCopyMsg": "Clave pública copiada con éxito",
     "nodeUrlCopyMsg": "URL del nodo copiada con éxito",

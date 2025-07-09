@@ -707,6 +707,7 @@
     "assetAmount": "एसेट राशि",
     "assetAmountNote": "आरजीबी एसेट राशि",
     "peerDns": "पीयर DNS",
+    "peerUrl": "पीयर URL",
     "unlockNode": "नोड अनलॉक करें",
     "pubKeyCopyMsg": "पब की सफलतापूर्वक कॉपी किया गया",
     "nodeUrlCopyMsg": "नोड URL सफलतापूर्वक कॉपी किया गया",

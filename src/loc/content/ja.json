@@ -707,6 +707,7 @@
     "assetAmount": "資産額",
     "assetAmountNote": "RGB資産額",
     "peerDns": "ピア DNS",
+    "peerUrl": "ピア URL",
     "unlockNode": "ノードを解除する",
     "pubKeyCopyMsg": "公開鍵が正常にコピーされました",
     "nodeUrlCopyMsg": "ノード URL が正常にコピーされました",
