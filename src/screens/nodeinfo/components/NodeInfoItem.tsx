@@ -48,25 +48,35 @@ const NodeInfoItem = ({
       <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
-      <GradientView
-        colors={[
-          theme.colors.cardGradient1,
-          theme.colors.cardGradient2,
-          theme.colors.cardGradient3,
-        ]}
-        style={styles.nodeItemWrapper}>
-        <View style={styles.valueWrapper}>
-          <AppText variant="body2">{value}</AppText>
-        </View>
+      <View style={styles.nodeItemWrapper}>
+        <GradientView
+          colors={[
+            theme.colors.cardGradient1,
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient3,
+          ]}
+          style={styles.gradientViewWrapper}>
+          <View style={styles.valueWrapper}>
+            <AppText variant="body2">{value}</AppText>
+          </View>
+        </GradientView>
         {isCopiable && (
-          <AppTouchable
-            disabled={!value}
-            style={styles.copyIconWrapper}
-            onPress={() => handleCopyText(value)}>
-            {isThemeDark ? <IconCopy /> : <IconCopyLight />}
-          </AppTouchable>
+          <GradientView
+            colors={[
+              theme.colors.cardGradient1,
+              theme.colors.cardGradient2,
+              theme.colors.cardGradient3,
+            ]}
+            style={styles.gradientViewWrapper1}>
+            <AppTouchable
+              disabled={!value}
+              style={styles.copyIconWrapper}
+              onPress={() => handleCopyText(value)}>
+              {isThemeDark ? <IconCopy /> : <IconCopyLight />}
+            </AppTouchable>
+          </GradientView>
         )}
-      </GradientView>
+      </View>
     </View>
   );
 };
@@ -79,13 +89,26 @@ const getStyles = (theme: AppTheme, isCopiable) =>
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
+    },
+    gradientViewWrapper: {
       borderWidth: 1,
       borderColor: theme.colors.borderColor,
       borderRadius: 10,
       paddingVertical: hp(10),
       paddingHorizontal: hp(5),
       minHeight: hp(50),
+      justifyContent: 'center',
+      width: isCopiable ? '84%' : '100%',
+    },
+    gradientViewWrapper1: {
+      alignSelf: 'flex-start',
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      borderRadius: 10,
       alignItems: 'center',
+      justifyContent: 'center',
+      width: '15%',
+      minHeight: hp(50),
     },
     valueWrapper: {
       justifyContent: 'center',
