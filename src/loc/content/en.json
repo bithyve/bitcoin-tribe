@@ -67,7 +67,8 @@
     "failedToOpenScanner": "Failed to open scanner",
     "failedToShareQrCode": "Failed to share QR code",
     "registry": "Registry",
-    "verify": "Verify"
+    "verify": "Verify",
+    "tapToCopy": "TAP TO COPY"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -84,7 +85,7 @@
     "confirmPin": "Confirm your Passcode",
     "advanceSettingTitle": "Advanced Setting",
     "splashText": "Bitcoin is better with friends",
-    "recoverAppTitle": "Recover an existing app",
+    "recoverAppTitle": "Recover an existing wallet",
     "recoverAppSubTitle": "Enter existing 12-word recovery phrase below",
     "errorSettingPin": "Error setting pin",
     "newPinCreated": "New Passcode created",
@@ -606,8 +607,8 @@
     "donationTranferInfo7": "Simple and Efficient",
     "donationTranferInfo8": "Transfers are completed immediately.",
     "sendAsDonation": "Send as Gift",
-    "collectMoreCoinTitle": "Collect More Coins!",
-    "collectMoreCoinSubTitle": "Keep adding more coins to\n expand your assets.",
+    "collectMoreCoinTitle": "Add More Coins!",
+    "collectMoreCoinSubTitle": "Start building your collection.\n Add new coins to grow your wallet.",
     "collectMoreCollectibleTitle": "Collect More Collectibles!",
     "collectMoreCollectibleSubTitle": "Keep adding more Collectibles to\n expand your assets.",
     "issuerVerifiedTitle": "Verified on Bitcoin Tribe!",
@@ -719,6 +720,7 @@
     "assetAmount": "Asset Amount",
     "assetAmountNote": "RGB Asset Amount",
     "peerDns": "Peer DNS",
+    "peerUrl": "Peer URL",
     "unlockNode": "Unlock Node",
     "pubKeyCopyMsg": "Pub Key copied successfully",
     "nodeUrlCopyMsg": "Node URL copied successfully",
@@ -730,7 +732,10 @@
     "connectingNodeInfo": "Some features may be temporarily unavailable while we prepare everything for you.",
     "connectingNodeToastMsg": "Your node is being set up. Initialization in progress..!",
     "nodeIdtitle": "Node ID",
-    "nodeIdCopyMsg": "Node ID copied successfully"
+    "nodeIdCopyMsg": "Node ID copied successfully",
+    "nodeNotFoundTitle": "Node Not Found",
+    "nodeNotFoundSubTitle": "Node not found or may be destroyed. Need help? Contact support.",
+    "telegramSupport": "Telegram Support"
   },
   "channel": {
     "status": "Status :",

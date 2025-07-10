@@ -43,6 +43,7 @@ function AssetRegistryScreen() {
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [feeDetails, setFeeDetails] = useState(null);
   const [disabledCTA, setDisabledCTA] = useState(false);
+  const [swipeResetCounter, setSwipeResetCounter] = useState(0);
 
   const schema = () => {
     switch (issueType) {
@@ -136,7 +137,11 @@ function AssetRegistryScreen() {
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
         navigation.goBack();
+      } else {
+        Toast(errorMessage, true);
       }
+      setSwipeResetCounter(prev => prev + 1);
+      setDisabledCTA(false);
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);
@@ -223,6 +228,7 @@ function AssetRegistryScreen() {
                 payServiceFeeFeeMutation.mutate({ feeDetails });
               }}
               backColor={theme.colors.swipeToActionThumbColor}
+              resetCounter={swipeResetCounter}
             />
           )}
           {!!feeDetails && (

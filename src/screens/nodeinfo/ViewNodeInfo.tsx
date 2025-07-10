@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -28,6 +28,9 @@ import GradientView from 'src/components/GradientView';
 import Colors from 'src/theme/Colors';
 import AppText from 'src/components/AppText';
 import Capitalize from 'src/utils/capitalizeUtils';
+import { NodeStatusType } from 'src/models/enums/Notifications';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import openLink from 'src/utils/OpenLink';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -47,25 +50,37 @@ const ViewNodeInfo = () => {
   const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
   const [nodeStatus, setSetNodeStatus] = useState('');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
+  const [isNodeStatusLoading, setIsNodeStatusLoading] = useState(false);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
   const statusColors = {
+    In_Progress: Colors.SelectiveYellow,
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
-    Pause: Colors.ChineseWhite,
+    Paused: Colors.ChineseWhite,
+    Destroyed: Colors.FireOpal,
   };
 
-  const getStatusColor = status => statusColors[status] || Colors.White;
+  const getStatusColor = status => statusColors[status] || Colors.FireOpal;
   useEffect(() => {
     mutate();
     const fetchStatus = async () => {
       if (app.appType === AppType.SUPPORTED_RLN) {
-        const status = await ApiHandler.checkNodeStatus(
-          app?.id,
-          app?.authToken,
-        );
-        const nodeStatus = status && Capitalize(status);
-        setSetNodeStatus(nodeStatus);
+        try {
+          setIsNodeStatusLoading(true);
+          const status = await ApiHandler.checkNodeStatus(
+            app?.id,
+            app?.authToken,
+          );
+          const formattedStatus = status && Capitalize(status);
+          setSetNodeStatus(formattedStatus);
+        } catch (error) {
+          console.log('Failed to fetch node status:', error);
+          setSetNodeStatus('');
+          setIsNodeStatusLoading(false);
+        } finally {
+          setIsNodeStatusLoading(false);
+        }
       }
     };
     fetchStatus();
@@ -83,7 +98,21 @@ const ViewNodeInfo = () => {
       Toast('Node synced', false);
       syncMutation.reset();
     } else if (syncMutation.isError) {
-      Toast(`${syncMutation.error}`, true);
+      const error = syncMutation.error;
+      let message = 'Failed to sync the node. Please try again later.';
+
+      if (error?.response?.data?.error) {
+        message = error.response.data.error;
+      } else if (
+        error?.message &&
+        error.message !== 'Error' &&
+        !error.message.includes('Cannot read property')
+      ) {
+        message = error.message;
+      }
+
+      console.log('syncMutation.error', error);
+      Toast(message, true);
     }
   }, [syncMutation.isSuccess, syncMutation, syncMutation.isError]);
 
@@ -93,7 +122,18 @@ const ViewNodeInfo = () => {
       Toast('Node unlocked', false);
       unlockNodeMutation.reset();
     } else if (unlockNodeMutation.isError) {
-      Toast(`${unlockNodeMutation.error}`, true);
+      const error = unlockNodeMutation.error;
+      let message = 'Failed to unlock the node. Please try again later.';
+      if (error?.response?.data?.error) {
+        message = error.response.data.error;
+      } else if (
+        error?.message &&
+        error.message !== 'Error' &&
+        !error.message.includes('Cannot read property')
+      ) {
+        message = error.message;
+      }
+      Toast(message, true);
     }
   }, [
     unlockNodeMutation.isSuccess,
@@ -151,37 +191,43 @@ const ViewNodeInfo = () => {
               <AppText variant="body1" style={styles.titleText}>
                 {channelTranslations.status}
               </AppText>
-              <AppText
-                variant="body1"
-                style={{ color: getStatusColor(nodeStatus) }}>
-                {nodeStatus}
-              </AppText>
+              {isNodeStatusLoading ? (
+                <ActivityIndicator size="small" />
+              ) : (
+                <AppText
+                  variant="body1"
+                  style={{ color: getStatusColor(nodeStatus) }}>
+                  {nodeStatus || 'Node Not Found'}
+                </AppText>
+              )}
             </GradientView>
-            <SelectOption
-              title={node.unlockNode}
-              onPress={() => unlockNodeMutation.mutate()}
-              enableSwitch={false}
-              onValueChange={() => {}}
-              toggleValue={nodeStatusLock}
-            />
+            {nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+              nodeStatus !== undefined && (
+                <SelectOption
+                  title={node.unlockNode}
+                  onPress={() => unlockNodeMutation.mutate()}
+                  enableSwitch={false}
+                  onValueChange={() => {}}
+                  toggleValue={nodeStatusLock}
+                />
+              )}
           </View>
           <NodeInfoItem
             title={node.nodeIdtitle}
             value={app?.id}
-            isCopiable={true}
             copyMessage={node.nodeIdCopyMsg}
           />
-          <NodeInfoItem
-            title={node.pubKey}
-            value={nodeInfo?.pubkey}
-            isCopiable={true}
-            copyMessage={node.pubKeyCopyMsg}
-          />
+          {nodeInfo?.pubkey && (
+            <NodeInfoItem
+              title={node.pubKey}
+              value={nodeInfo?.pubkey}
+              copyMessage={node.pubKeyCopyMsg}
+            />
+          )}
 
           <NodeInfoItem
             title={node.apiUrl}
             value={rgbWallet?.nodeUrl}
-            isCopiable={true}
             copyMessage={node.nodeUrlCopyMsg}
           />
 
@@ -189,42 +235,66 @@ const ViewNodeInfo = () => {
             <NodeInfoItem
               title={node.onchainPubkey}
               value={nodeInfo?.onchain_pubkey}
-              isCopiable={true}
               copyMessage={node.onChainPubKeyCopyMsg}
             />
           )}
 
-          {rgbWallet?.peerDNS && (
+          {nodeInfo?.pubkey && rgbWallet?.peerDNS && (
             <NodeInfoItem
-              title={node.peerDns}
+              title={node.peerUrl}
               value={`${nodeInfo?.pubkey}@${rgbWallet?.peerDNS}`}
               isCopiable={true}
               copyMessage={'Peer URL copied'}
             />
           )}
 
-          <NodeInfoItem
-            title={node.rgbHtlcMinMsat}
-            value={nodeInfo?.rgb_htlc_min_msat}
-          />
-          <NodeInfoItem
-            title={node.rgbChannelCapMinSat}
-            value={nodeInfo?.rgb_channel_capacity_min_sat}
-          />
-
-          <NodeInfoItem
-            title={node.channelCapMisSat}
-            value={nodeInfo?.channel_capacity_min_sat}
-          />
+          {nodeInfo?.rgb_htlc_min_msat && (
+            <NodeInfoItem
+              title={node.rgbHtlcMinMsat}
+              value={nodeInfo?.rgb_htlc_min_msat}
+            />
+          )}
+          {nodeInfo?.rgb_channel_capacity_min_sat && (
+            <NodeInfoItem
+              title={node.rgbChannelCapMinSat}
+              value={nodeInfo?.rgb_channel_capacity_min_sat}
+            />
+          )}
+          {nodeInfo?.channel_capacity_min_sat && (
+            <NodeInfoItem
+              title={node.channelCapMisSat}
+              value={nodeInfo?.channel_capacity_min_sat}
+            />
+          )}
         </ScrollView>
       )}
-      {!isLoading && (
-        <NodeInfoFooter
-          nodeStatus={nodeStatus}
-          onPressNodeRun={() => checkStatus()}
-          onPressRefresh={() => syncMutation.mutate()}
-        />
-      )}
+      {!isLoading &&
+        nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+        nodeStatus !== undefined && (
+          <NodeInfoFooter
+            nodeStatus={nodeStatus}
+            onPressNodeRun={() => checkStatus()}
+            onPressRefresh={() => syncMutation.mutate()}
+          />
+        )}
+      {nodeStatus?.toUpperCase() === NodeStatusType.DESTROYED ||
+        (nodeStatus === undefined && (
+          <View style={styles.nodenotFoundWrapper}>
+            <View style={styles.contentWrapper}>
+              <AppText variant="heading2" style={styles.nodenotFoundHeaderText}>
+                {node.nodeNotFoundTitle}
+              </AppText>
+              <AppText variant="body1" style={styles.nodenotFoundSubText}>
+                {node.nodeNotFoundSubTitle}
+              </AppText>
+            </View>
+            <PrimaryCTA
+              title={node.telegramSupport}
+              onPress={() => openLink('https://t.me/BitcoinTribeSupport')}
+              width={hp(200)}
+            />
+          </View>
+        ))}
     </ScreenContainer>
   );
 };
@@ -262,6 +332,20 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginVertical: hp(5),
+    },
+    nodenotFoundWrapper: {
+      backgroundColor: theme.colors.inputBackground,
+      padding: hp(16),
+      borderRadius: hp(16),
+    },
+    nodenotFoundHeaderText: {
+      color: theme.colors.headingColor,
+    },
+    nodenotFoundSubText: {
+      color: theme.colors.headingColor,
+    },
+    contentWrapper: {
+      marginBottom: hp(20),
     },
   });
 export default ViewNodeInfo;

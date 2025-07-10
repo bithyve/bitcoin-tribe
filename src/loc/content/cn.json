@@ -67,7 +67,8 @@
     "failedToOpenScanner": "打开扫描器失败",
     "failedToShareQrCode": "分享二维码失败",
     "registry": "注册表",
-    "verify": "验证"
+    "verify": "验证",
+    "tapToCopy": "点击复制"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -84,7 +85,7 @@
     "confirmPin": "确认您的密码",
     "advanceSettingTitle": "高级设置",
     "splashText": "与朋友一起使用比特币更好",
-    "recoverAppTitle": "恢复现有应用",
+    "recoverAppTitle": "恢复现有钱包",
     "recoverAppSubTitle": "在下方输入现有的12词恢复短语",
     "errorSettingPin": "设置密码时出错",
     "newPinCreated": "新密码已创建",
@@ -606,8 +607,8 @@
     "donationTranferInfo7": "简单高效",
     "donationTranferInfo8": "转账立即完成。",
     "sendAsDonation": "作为礼物发送",
-    "collectMoreCoinTitle": "收集更多硬币！",
-    "collectMoreCoinSubTitle": "不断添加更多硬币，\n以扩展您的资产。",
+    "collectMoreCoinTitle": "添加更多币种！",
+    "collectMoreCoinSubTitle": "开始建立您的收藏。\n添加新币以扩展您的钱包。",
     "collectMoreCollectibleTitle": "收集更多藏品！",
     "collectMoreCollectibleSubTitle": "不断添加更多藏品，\n以扩展您的资产。",
     "issuerVerifiedTitle": "已在 Bitcoin Tribe 验证！",
@@ -719,6 +720,7 @@
     "assetAmount": "资产金额",
     "assetAmountNote": "RGB 资产金额",
     "peerDns": "对等 DNS",
+    "peerUrl": "对等节点 URL",
     "unlockNode": "解锁节点",
     "pubKeyCopyMsg": "公钥复制成功",
     "nodeUrlCopyMsg": "节点 URL 复制成功",
@@ -730,7 +732,10 @@
     "connectingNodeInfo": "在我们为您准备一切的过程中，一些功能可能会暂时不可用。",
     "connectingNodeToastMsg": "您的节点正在设置中。初始化进行中..！",
     "nodeIdtitle": "节点 ID",
-    "nodeIdCopyMsg": "节点 ID 复制成功"
+    "nodeIdCopyMsg": "节点 ID 复制成功",
+    "nodeNotFoundTitle": "未找到节点",
+    "nodeNotFoundSubTitle": "未找到节点，或可能已被销毁。如需帮助，请联系支持。",
+    "telegramSupport": "Telegram 支持"
   },
   "channel": {
     "status": "状态：",

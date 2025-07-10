@@ -67,7 +67,8 @@
     "failedToOpenScanner": "Error al abrir el escáner",
     "failedToShareQrCode": "Error al compartir el código QR",
     "registry": "Registro",
-    "verify": "Verificar"
+    "verify": "Verificar",
+    "tapToCopy": "Toca para copiar"
   },
   "onBoarding": {
     "welcome": "Bienvenido",
@@ -84,7 +85,7 @@
     "confirmPin": "Confirma tu contraseña",
     "advanceSettingTitle": "Configuración avanzada",
     "splashText": "Bitcoin es mejor con amigos",
-    "recoverAppTitle": "Recuperar una aplicación existente",
+    "recoverAppTitle": "Recuperar una cartera existente",
     "recoverAppSubTitle": "Ingrese la frase de recuperación existente de 12 palabras a continuación",
     "errorSettingPin": "Error al configurar el pin",
     "newPinCreated": "Nuevo PIN creado",
@@ -606,8 +607,8 @@
     "donationTranferInfo7": "Sencillo y Eficiente",
     "donationTranferInfo8": "Las transferencias se completan de inmediato.",
     "sendAsDonation": "Enviar como regalo",
-    "collectMoreCoinTitle": "¡Recoge más monedas!",
-    "collectMoreCoinSubTitle": "Sigue añadiendo más monedas\n para expandir tus activos.",
+    "collectMoreCoinTitle": "¡Agrega Más Monedas!",
+    "collectMoreCoinSubTitle": "Comienza a construir tu colección.\nAgrega nuevas monedas para hacer crecer tu billetera.",
     "collectMoreCollectibleTitle": "¡Recoge más coleccionables!",
     "collectMoreCollectibleSubTitle": "Sigue añadiendo más coleccionables\n para expandir tus activos.",
     "issuerVerifiedTitle": "¡Verificado en Bitcoin Tribe!",
@@ -719,6 +720,7 @@
     "assetAmount": "Cantidad de Activo",
     "assetAmountNote": "Cantidad de Activo RGB",
     "peerDns": "DNS de pares",
+    "peerUrl": "URL del par",
     "unlockNode": "Desbloquear nodo",
     "pubKeyCopyMsg": "Clave pública copiada con éxito",
     "nodeUrlCopyMsg": "URL del nodo copiada con éxito",
@@ -730,7 +732,10 @@
     "connectingNodeInfo": "Algunas funciones pueden no estar disponibles temporalmente mientras preparamos todo para ti.",
     "connectingNodeToastMsg": "Tu nodo se está configurando. ¡Inicialización en progreso..!",
     "nodeIdtitle": "ID de Nodo",
-    "nodeIdCopyMsg": "ID del nodo copiado correctamente"
+    "nodeIdCopyMsg": "ID del nodo copiado correctamente",
+    "nodeNotFoundTitle": "Nodo no encontrado",
+    "nodeNotFoundSubTitle": "El nodo no se encontró o puede haber sido destruido. ¿Necesitas ayuda? Contacta con el soporte.",
+    "telegramSupport": "Soporte de Telegram"
   },
   "channel": {
     "status": "Estado :",

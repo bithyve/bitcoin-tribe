@@ -250,6 +250,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         'An unexpected error occurred';
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
+      } else {
+        Toast(errorMessage, true);
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);

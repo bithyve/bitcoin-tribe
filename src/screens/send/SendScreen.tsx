@@ -149,7 +149,6 @@ function SendScreen({ route, navigation }) {
         }
       }
       if (value.startsWith('lnbc')) {
-        setIsScanning(true);
         setVisibleModal(false);
         setVisible(false);
         navigateWithDelay(() => {

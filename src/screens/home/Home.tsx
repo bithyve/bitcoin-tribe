@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
@@ -35,13 +36,17 @@ import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { PushNotificationType } from 'src/models/enums/Notifications';
+import {
+  NodeStatusType,
+  PushNotificationType,
+} from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
+  const prevStatusRef = useRef<string | null>(null);
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
@@ -85,7 +90,7 @@ function HomeScreen() {
       authToken: string;
     }) => ApiHandler.startNode(nodeId, authToken),
   });
-  // const initNodeMutation = useMutation(ApiHandler.initNode);
+
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
@@ -128,17 +133,23 @@ function HomeScreen() {
           app?.id,
           app?.authToken,
         );
-        if (status === 'IN_PROGRESS') {
+        const prevStatus = prevStatusRef.current;
+        if (status === NodeStatusType.IN_PROGRESS) {
           setNodeInitStatus(true);
-        } else if (status === 'PAUSED') {
+        } else if (status === NodeStatusType.PAUSED) {
           startNode;
+        } else if (status === NodeStatusType.RUNNING) {
+          await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+          setNodeInitStatus(false);
+          if (prevStatus === NodeStatusType.IN_PROGRESS) {
+            setNodeConnected(true);
+            setTimeout(() => {
+              setNodeConnected(false);
+            }, 1500);
+          }
         } else {
           await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
           setNodeInitStatus(false);
-          setNodeConnected(true);
-          setTimeout(() => {
-            setNodeConnected(false);
-          }, 1500);
         }
         console.log('Node status:', status);
       }
@@ -155,7 +166,6 @@ function HomeScreen() {
       const unsubscribe = onMessage(messaging, async remoteMessage => {
         const { title, body } = remoteMessage.notification ?? {};
         const { type } = remoteMessage.data ?? {};
-
         switch (type?.toLowerCase()) {
           case PushNotificationType.NODE_INIT_COMPLETE:
             await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
