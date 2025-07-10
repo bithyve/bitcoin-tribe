@@ -32,6 +32,9 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(20),
       width: '100%',
     },
+    doneCtaWrapper: {
+      marginTop: hp(20),
+    },
   });
 
 const LightningSend = () => {
@@ -178,6 +181,7 @@ const LightningSend = () => {
           onPress={() => {
             navigation.goBack();
           }}
+          style={styles.doneCtaWrapper}
         />
       </ResponsePopupContainer>
     </ScreenContainer>
