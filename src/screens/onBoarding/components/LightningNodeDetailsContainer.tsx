@@ -1,23 +1,24 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useContext, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import { RadioButton, useTheme } from 'react-native-paper';
+
+import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import CustomYesNoSwitch from 'src/components/CustomYesNoSwitch';
 import TextField from 'src/components/TextField';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 
 type LightningNodeProps = {
   onChangeConnectionURLText: (text: string) => void;
   inputConnectionURLValue: string;
-  onChangeNodeIDText: (text: string) => void;
-  inputNodeIDValue: string;
-  onChangeUserIDText: (text: string) => void;
-  inputUserIDValue: string;
   onChangeUsernameText: (text: string) => void;
   inputUsernameValue: string;
   onChangePasswordText: (text: string) => void;
@@ -30,6 +31,7 @@ type LightningNodeProps = {
   authTypeValue: string;
   primaryOnPress: () => void;
   isLoading: boolean;
+  handlePasteURL: () => void;
 };
 
 function LightningNodeDetailsContainer(props: LightningNodeProps) {
@@ -37,10 +39,6 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
   const {
     onChangeConnectionURLText,
     inputConnectionURLValue,
-    onChangeNodeIDText,
-    inputNodeIDValue,
-    onChangeUserIDText,
-    inputUserIDValue,
     onChangeUsernameText,
     inputUsernameValue,
     onChangePasswordText,
@@ -53,9 +51,11 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
     authTypeValue,
     primaryOnPress,
     isLoading,
+    handlePasteURL,
   } = props;
   const { translations } = useContext(LocalizationContext);
-  const { common, onBoarding } = translations;
+  const { common, onBoarding, sendScreen } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [inputURLHeight, setURLInputHeight] = useState(50);
   const [inputBearerHeight, setBearerInputHeight] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -69,6 +69,9 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
         extraScrollHeight={windowHeight > 670 ? 150 : 100}
         keyboardOpeningTime={0}>
         <ScrollView>
+          <AppText variant="body2" style={styles.labelText1}>
+            {onBoarding.apiUrlLabel}
+          </AppText>
           <TextField
             value={inputConnectionURLValue}
             onChangeText={onChangeConnectionURLText}
@@ -80,31 +83,29 @@ function LightningNodeDetailsContainer(props: LightningNodeProps) {
                 ? styles.inputURLWrapper
                 : styles.inputWrapper1
             }
+            inputStyle={styles.inputStyle}
             style={styles.multilineTextInput}
             disabled={isLoading}
             onContentSizeChange={event => {
               setURLInputHeight(event.nativeEvent.contentSize.height);
             }}
+            rightText={!inputConnectionURLValue && sendScreen.paste}
+            rightIcon={
+              inputConnectionURLValue && isThemeDark ? (
+                <ClearIcon />
+              ) : (
+                <ClearIconLight />
+              )
+            }
+            onRightTextPress={() =>
+              inputConnectionURLValue
+                ? onChangeConnectionURLText('')
+                : handlePasteURL()
+            }
+            rightCTAStyle={styles.rightCTAStyle1}
+            rightCTATextColor={theme.colors.accent1}
             multiline={true}
-            numberOfLines={5}
-          />
-          <TextField
-            value={inputNodeIDValue}
-            onChangeText={onChangeNodeIDText}
-            placeholder={onBoarding.nodeID}
-            keyboardType={'default'}
-            returnKeyType={'done'}
-            style={styles.inputWrapper2}
-            disabled={isLoading}
-          />
-          <TextField
-            value={inputUserIDValue}
-            onChangeText={onChangeUserIDText}
-            placeholder={onBoarding.userID}
-            keyboardType={'default'}
-            returnKeyType={'done'}
-            style={styles.inputWrapper2}
-            disabled={isLoading}
+            numberOfLines={3}
           />
           <View style={styles.authContainer}>
             <View style={styles.authWrapper}>
@@ -290,6 +291,10 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
     labelText: {
       color: theme.colors.headingColor,
     },
+    labelText1: {
+      color: theme.colors.headingColor,
+      marginBottom: hp(3),
+    },
     ctaWrapper: {},
     rightCTAStyle: {
       backgroundColor: theme.colors.ctaBackColor,
@@ -299,6 +304,11 @@ const getStyles = (theme: AppTheme, inputURLHeight, inputBearerHeight) =>
       justifyContent: 'center',
       borderRadius: 10,
       marginHorizontal: hp(5),
+    },
+    rightCTAStyle1: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default LightningNodeDetailsContainer;
