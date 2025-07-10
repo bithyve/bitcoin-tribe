@@ -886,6 +886,7 @@ import CloudKit
     }
     catch{
       callback(false)
-    }}
+    }
+  }
   
 }
