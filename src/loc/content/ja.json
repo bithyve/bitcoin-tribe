@@ -59,7 +59,8 @@
     "backDoneMsg": "自動RGBバックアップが完了しました。",
     "share": "共有",
     "registry": "レジストリ",
-    "verify": "確認する"
+    "verify": "確認する",
+    "tapToCopy": "タップしてコピー"
   },
   "onBoarding": {
     "welcome": "ようこそ",

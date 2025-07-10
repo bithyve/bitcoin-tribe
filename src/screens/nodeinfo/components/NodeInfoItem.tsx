@@ -9,8 +9,6 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import AppTouchable from 'src/components/AppTouchable';
@@ -48,7 +46,10 @@ const NodeInfoItem = ({
       <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
-      <View style={styles.nodeItemWrapper}>
+      <AppTouchable
+        disabled={!isCopiable}
+        onPress={() => handleCopyText(value)}
+        style={styles.nodeItemWrapper}>
         <GradientView
           colors={[
             theme.colors.cardGradient1,
@@ -60,23 +61,12 @@ const NodeInfoItem = ({
             <AppText variant="body2">{value}</AppText>
           </View>
         </GradientView>
-        {isCopiable && (
-          <GradientView
-            colors={[
-              theme.colors.cardGradient1,
-              theme.colors.cardGradient2,
-              theme.colors.cardGradient3,
-            ]}
-            style={styles.gradientViewWrapper1}>
-            <AppTouchable
-              disabled={!value}
-              style={styles.copyIconWrapper}
-              onPress={() => handleCopyText(value)}>
-              {isThemeDark ? <IconCopy /> : <IconCopyLight />}
-            </AppTouchable>
-          </GradientView>
-        )}
-      </View>
+      </AppTouchable>
+      {isCopiable && (
+        <AppText variant="smallCTA" style={styles.tapToCopyText}>
+          {common.tapToCopy}
+        </AppText>
+      )}
     </View>
   );
 };
@@ -98,7 +88,7 @@ const getStyles = (theme: AppTheme, isCopiable) =>
       paddingHorizontal: hp(5),
       minHeight: hp(50),
       justifyContent: 'center',
-      width: isCopiable ? '84%' : '100%',
+      width: '100%',
     },
     gradientViewWrapper1: {
       alignSelf: 'flex-start',
@@ -127,5 +117,11 @@ const getStyles = (theme: AppTheme, isCopiable) =>
       marginTop: hp(20),
       flex: 1,
       textAlign: 'left',
+    },
+    tapToCopyText: {
+      color: theme.colors.accent1,
+      marginTop: hp(5),
+      flex: 1,
+      textAlign: 'right',
     },
   });
