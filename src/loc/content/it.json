@@ -59,7 +59,8 @@
     "backDoneMsg": "Backup automatico RGB completato.",
     "share": "Condividi",
     "registry": "Registro",
-    "verify": "Verifica"
+    "verify": "Verifica",
+    "tapToCopy": "Tocca per copiare"
   },
   "onBoarding": {
     "welcome": "Benvenuto",

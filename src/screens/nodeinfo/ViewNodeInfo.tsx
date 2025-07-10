@@ -58,10 +58,10 @@ const ViewNodeInfo = () => {
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
     Paused: Colors.ChineseWhite,
-    Destroyed: Colors.CandyAppleRed,
+    Destroyed: Colors.FireOpal,
   };
 
-  const getStatusColor = status => statusColors[status] || Colors.CandyAppleRed;
+  const getStatusColor = status => statusColors[status] || Colors.FireOpal;
   useEffect(() => {
     mutate();
     const fetchStatus = async () => {

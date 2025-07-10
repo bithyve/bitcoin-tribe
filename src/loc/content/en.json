@@ -59,7 +59,8 @@
     "backDoneMsg": "Automatic RGB backup is complete.",
     "share": "Share",
     "registry": "Registry",
-    "verify": "Verify"
+    "verify": "Verify",
+    "tapToCopy": "TAP TO COPY"
   },
   "onBoarding": {
     "welcome": "Welcome",

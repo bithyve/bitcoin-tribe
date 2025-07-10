@@ -88,6 +88,7 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
+      alignSelf: 'center',
     },
     loaderStyle: {
       alignSelf: 'center',

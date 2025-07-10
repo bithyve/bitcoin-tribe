@@ -59,7 +59,8 @@
     "backDoneMsg": "La copia de seguridad automática de RGB se ha completado.",
     "share": "Compartir",
     "registry": "Registro",
-    "verify": "Verificar"
+    "verify": "Verificar",
+    "tapToCopy": "Toca para copiar"
   },
   "onBoarding": {
     "welcome": "Bienvenido",

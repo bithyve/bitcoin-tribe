@@ -59,7 +59,8 @@
     "backDoneMsg": "自动 RGB 备份已完成。",
     "share": "分享",
     "registry": "注册表",
-    "verify": "验证"
+    "verify": "验证",
+    "tapToCopy": "点击复制"
   },
   "onBoarding": {
     "welcome": "欢迎",
