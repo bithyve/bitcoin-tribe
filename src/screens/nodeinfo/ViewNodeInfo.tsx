@@ -54,7 +54,7 @@ const ViewNodeInfo = () => {
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const [nodeInfo, setnodeInfo] = useState({});
   const statusColors = {
-    In_Progress: Colors.SelectiveYellow,
+    In_progress: Colors.SelectiveYellow,
     Running: Colors.GOGreen,
     Starting: Colors.BrandeisBlue,
     Paused: Colors.ChineseWhite,
