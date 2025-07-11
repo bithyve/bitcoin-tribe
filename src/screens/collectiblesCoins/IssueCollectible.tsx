@@ -61,7 +61,7 @@ import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 
-const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
+const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueCollectibleScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
@@ -143,6 +143,13 @@ function IssueCollectibleScreen() {
     viewUtxos.mutate();
   }, []);
 
+  const totalSupplyWithPrecision = useMemo(() => {
+    const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
+    const decimals = Number(precision) || 0;
+    const supplyWithPrecision = supply.toFixed(decimals);
+    return `${supplyWithPrecision} ${assetTicker}`;
+  }, [totalSupplyAmt, precision, assetTicker]);
+
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -150,7 +157,7 @@ function IssueCollectibleScreen() {
       const response = await ApiHandler.issueNewCollectible({
         name: assetName.trim(),
         description: description,
-        supply: totalSupplyAmt.replace(/,/g, ''),
+        supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
         addToRegistry: addToRegistry,
         filePath: Platform.select({
@@ -422,7 +429,7 @@ function IssueCollectibleScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -521,6 +528,19 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
+
+            <Slider
+              title={assets.precision}
+              value={precision}
+              onValueChange={value => setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
+            />
+            <AppText variant="caption" style={styles.textInputTitle}>
+              {assets.precisionCaption}
+            </AppText>
+
             <AppText variant="body2" style={styles.textInputTitle}>
               {home.totalSupplyAmount}
             </AppText>
@@ -536,18 +556,9 @@ function IssueCollectibleScreen() {
               error={assetTotSupplyValidationError}
             />
 
-            <Slider
-              title={assets.precision}
-              value={precision}
-              onValueChange={value => setPrecision(value)}
-              minimumValue={0}
-              maximumValue={10}
-              step={1}
-            />
-            <AppText variant="caption" style={styles.textInputTitle}>
-              {assets.precisionCaption}
-            </AppText>
-
+          <AppText variant="body2" style={styles.textInputTitle}>
+            Total Supply: {totalSupplyWithPrecision}
+          </AppText>
             <AppText
               variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>

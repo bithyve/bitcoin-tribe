@@ -1,4 +1,4 @@
-import { ObjectSchema } from 'realm';
+  import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
 import { AssetSchema, AssetSource, AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
@@ -20,7 +20,7 @@ export const CollectibleSchema: ObjectSchema = {
     assetId: 'string',
     balance: RealmSchema.Balance,
     details: 'string?',
-    issuedSupply: 'int',
+    issuedSupply: 'string',
     media: RealmSchema.CollectibleMedia,
     name: 'string',
     precision: 'int',
