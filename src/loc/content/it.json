@@ -723,7 +723,7 @@
     "takeTimeMsg": "Questo passaggio richiederà alcuni secondi.",
     "connectingNode": "Connessione alla configurazione in corso",
     "connectingNodeInfo": "Alcune funzionalità potrebbero non essere temporaneamente disponibili mentre prepariamo tutto per te.",
-    "connectingNodeToastMsg": "Il tuo nodo è in fase di configurazione. Inizializzazione in corso..!",
+    "connectingNodeToastMsg": "Configurazione del nodo in corso. Inizializzazione in corso...",
     "nodeIdtitle": "ID Nodo",
     "nodeIdCopyMsg": "ID del nodo copiato con successo",
     "nodeNotFoundTitle": "Nodo non trovato",

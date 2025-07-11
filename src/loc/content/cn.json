@@ -723,7 +723,7 @@
     "takeTimeMsg": "此步骤将花费几秒钟。",
     "connectingNode": "正在连接您的设置",
     "connectingNodeInfo": "在我们为您准备一切的过程中，一些功能可能会暂时不可用。",
-    "connectingNodeToastMsg": "您的节点正在设置中。初始化进行中..！",
+    "connectingNodeToastMsg": "正在设置您的节点，初始化进行中...",
     "nodeIdtitle": "节点 ID",
     "nodeIdCopyMsg": "节点 ID 复制成功",
     "nodeNotFoundTitle": "未找到节点",

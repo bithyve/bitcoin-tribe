@@ -723,7 +723,7 @@
     "takeTimeMsg": "このステップには数秒かかります。",
     "connectingNode": "セットアップに接続中",
     "connectingNodeInfo": "準備が完了するまで、一部の機能が一時的に使用できない場合があります。",
-    "connectingNodeToastMsg": "ノードをセットアップ中です。初期化が進行中..！",
+    "connectingNodeToastMsg": "ノードを設定しています。初期化中...",
     "nodeIdtitle": "ノードID",
     "nodeIdCopyMsg": "ノードIDが正常にコピーされました",
     "nodeNotFoundTitle": "ノードが見つかりません",
