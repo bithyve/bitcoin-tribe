@@ -98,6 +98,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
                   asset={item}
                   tag={'COLLECTIBLE'}
                   onPress={() => onPressAsset(item)}
+                  precision={item.precision}
                 />
               </View>
             </View>

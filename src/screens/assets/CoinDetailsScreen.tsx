@@ -1,4 +1,4 @@
-import { Animated, AppState, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -8,11 +8,9 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import {
-  Asset,
   Coin,
-  IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -36,19 +34,16 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
-import TransactionInfoCard from './components/TransactionInfoCard';
 import Toast from 'src/components/Toast';
 
 const CoinDetailsScreen = () => {
-  const storage = new MMKV();
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const appState = useRef(AppState.currentState);
 
-  const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { common, settings, assets, node } = translations;
+  const { node } = translations;
 
   const {
     appType,
@@ -165,17 +160,7 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
-  const largeHeaderHeight = scrollY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [350, 0],
-    extrapolate: 'clamp',
-  });
 
-  const smallHeaderOpacity = scrollY.interpolate({
-    inputRange: [100, 150],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
 
   return (
     <ScreenContainer>
@@ -229,6 +214,7 @@ const CoinDetailsScreen = () => {
         wallet={wallet}
         coin={coin.name}
         assetId={assetId}
+        precision={coin.precision}
         scrollY={scrollY}
       />
 

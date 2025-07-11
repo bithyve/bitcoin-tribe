@@ -259,6 +259,7 @@ const CollectibleDetailsScreen = () => {
         assetId={assetId}
         scrollY={scrollY}
         style={styles.transactionContainer}
+        precision={collectible.precision}
       />
       <VerifyIssuerModal
         assetId={collectible.assetId}

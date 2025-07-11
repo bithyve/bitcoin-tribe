@@ -41,11 +41,12 @@ type AssetTransactionProps = {
   coin: string;
   onPress: () => void;
   assetFace?: string;
+  precision: number;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -179,7 +180,9 @@ function AssetTransaction(props: AssetTransactionProps) {
                       transaction.amount.toString().length > 10 ? 11 : 16,
                   },
                 ]}>
-                &nbsp;{numberWithCommas(transaction.amount)}
+                &nbsp;{precision === 0
+                ? numberWithCommas(Number(transaction.amount))
+                : numberWithCommas(Number(transaction.amount) / 10 ** precision)}
               </AppText>
             </View>
           </View>

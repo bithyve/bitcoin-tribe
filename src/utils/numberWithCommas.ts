@@ -13,7 +13,10 @@ export const formatNumber = text => {
   return text ? new Intl.NumberFormat('en-US').format(numberValue) : '';
 };
 
-export const formatLargeNumber = (num = 0) => {
+export const formatLargeNumber = (num: number | string = 0) => {
+  if (typeof num === 'string') {
+    num = Number(num.replace(/,/g, ''));
+  }
   if (num === 0) {
     return '0';
   }

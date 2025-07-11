@@ -222,6 +222,7 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
+  const precision = assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -235,7 +236,7 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
-  const handleAmountInputChange = text => {
+ /* const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || null);
     if (isNaN(numericValue)) {
       setAmountValidationError('');
@@ -258,25 +259,24 @@ const SendAssetScreen = () => {
       setAssetAmount('');
       setAmountValidationError('');
     }
-  };
+  };*/
 
-  /* todo send asset with precision
   const handleAmountInputChange = text => {
     let regex;
-    if (assetData.precision === 0) {
+    if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
-      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${assetData.precision}})?$`);
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
     }    if (text === '' || regex.test(text)) {
       setAssetAmount(text);
       const numericValue = parseFloat(text || '0');
-      if (Number(assetData?.balance.spendable) === 0) {
+      if (Number(assetData?.balance.spendable)/10**precision === 0) {
         Keyboard.dismiss();
         Toast(
           sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
           true,
         );
-      } else if (numericValue <= assetData?.balance.spendable) {
+      } else if (numericValue <= Number(assetData?.balance.spendable)/10**precision ) {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
@@ -284,7 +284,6 @@ const SendAssetScreen = () => {
       }
     }
   };
-  */
 
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
@@ -300,7 +299,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
-        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
+        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, ''))*10**precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
@@ -502,7 +501,7 @@ const SendAssetScreen = () => {
           {sendScreen.enterAmount}
         </AppText>
         <TextField
-          value={formatNumber(assetAmount)}
+          value={assetAmount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
@@ -524,7 +523,11 @@ const SendAssetScreen = () => {
           </AppText>
           <View style={styles.balanceWrapper}>
             <AppText variant="body2" style={styles.availableBalanceText}>
-              {numberWithCommas(assetData?.balance.spendable)}
+              {precision === 0
+                ? numberWithCommas(Number(assetData?.balance.spendable))
+                : numberWithCommas(Number(assetData?.balance.spendable) / 10 ** precision) +
+                  '.' +
+                  '0'.repeat(precision)}
             </AppText>
           </View>
         </View>

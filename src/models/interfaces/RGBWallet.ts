@@ -29,11 +29,11 @@ export interface RGBWallet {
   nodeMnemonic?: string;
 }
 interface Balance {
-  future: number;
-  settled: number;
-  spendable: number;
-  offchainOutbound?: number;
-  offchainInbound?: number;
+  future: string;
+  settled: string;
+  spendable: string;
+  offchainOutbound?: string;
+  offchainInbound?: string;
 }
 
 export interface receiveUTXOData {
@@ -49,7 +49,7 @@ export interface receiveUTXOData {
 }
 
 export interface Transfer {
-  amount: number;
+  amount: string;
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
@@ -63,7 +63,7 @@ export interface Transfer {
 
 export interface MetaData {
   assetSchema: string;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   precision: number;
   ticker: string;
@@ -87,7 +87,7 @@ export interface Coin {
   addedAt: number;
   assetId: string;
   balance: Balance;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   iconUrl?: string;
   precision: number;
@@ -114,7 +114,7 @@ export interface Collectible {
   assetId: string;
   balance: Balance;
   details: string;
-  issuedSupply: number;
+  issuedSupply: string;
   media: Media;
   name: string;
   precision: number;
@@ -134,7 +134,7 @@ export interface UniqueDigitalAsset {
   assetId: string;
   balance: Balance;
   details: string;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   precision: number;
   ticker: string;

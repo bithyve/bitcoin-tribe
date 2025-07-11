@@ -130,8 +130,8 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     <View style={styles.totalBalanceWrapper1}>
                       <AppText variant="heading2" style={styles.totalBalance}>
                         {formatLargeNumber(
-                          asset.balance.future +
-                            asset.balance?.offchainOutbound,
+                          Number(asset.balance.future) / 10 ** asset.precision +
+                            Number(asset.balance?.offchainOutbound) / 10 ** asset.precision,
                         )}
                       </AppText>
                     </View>
@@ -142,7 +142,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   <View style={styles.onChainTotalBalanceWrapper}>
                     <View style={styles.totalBalanceWrapper1}>
                       <AppText variant="heading2" style={styles.totalBalance}>
-                        {formatLargeNumber(asset?.balance?.spendable)}
+                        {formatLargeNumber(Number(asset?.balance?.spendable) / 10 ** asset.precision)}
                       </AppText>
                     </View>
                     <AppText variant="body2" style={styles.totalBalanceLabel}>

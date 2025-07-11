@@ -9,46 +9,43 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transaction } from 'src/models/interfaces/RGBWallet';
+import { Transfer } from 'src/models/interfaces/RGBWallet';
 import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
 import LoadingSpinner from 'src/components/LoadingSpinner';
+import { useNavigation } from '@react-navigation/native';
 
 function TransactionsList({
   transactions,
   isLoading,
   refresh,
   refreshingStatus,
-  navigation,
-  wallet,
   coin,
   assetId = '',
-  scrollY,
   style,
+  precision,
 }: {
-  transactions: Transaction[];
+  transactions: Transfer[];
   isLoading: boolean;
   refresh: () => void;
   refreshingStatus?: boolean;
-  navigation;
-  wallet;
   coin: string;
   assetId: string;
-  scrollY: any;
   style?: StyleProp<ViewStyle>;
+  precision: number;
 }) {
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations, settings } = translations;
+  const { wallet: walletTranslations } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const navigation = useNavigation();
 
   return (
     <View style={[styles.container, style]}>
@@ -62,6 +59,7 @@ function TransactionsList({
               assetId: assetId,
               transactions: transactions,
               assetName: coin,
+              precision: precision,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>
@@ -101,8 +99,10 @@ function TransactionsList({
                 transaction: item,
                 coin: coin,
                 assetId: assetId,
+                precision: precision,
               });
             }}
+            precision={precision}
           />
         )}
         keyExtractor={item => item.txid}

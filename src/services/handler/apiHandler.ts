@@ -1578,6 +1578,9 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response.length > 0) {
+        response.forEach(tx => {
+          tx.amount = tx.amount.toString();
+        });
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
         });
@@ -1649,6 +1652,7 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response) {
+        response.issuedSupply = response.issuedSupply.toString();
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
         });

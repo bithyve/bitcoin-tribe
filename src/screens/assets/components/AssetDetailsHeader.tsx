@@ -86,7 +86,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const combinedBalance =
-    asset.balance.future + asset.balance?.offchainOutbound || 0;
+    Number(asset.balance.future) / 10 ** asset.precision + asset.balance?.offchainOutbound || 0;
   const lengthOfTotalBalance = combinedBalance.toString().length;
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
@@ -153,7 +153,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {numberWithCommas(
-                      asset.balance.future +
+                      Number(asset.balance.future) / 10 ** asset.precision +
                         asset.balance?.offchainOutbound +
                         totalAssetLocalAmount,
                     )}
@@ -177,7 +177,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     {isThemeDark ? <IconBTC /> : <IconBTCLight />}
                     <AppText variant="heading3" style={styles.balanceText}>
                       {numberWithCommas(
-                        asset.balance.future + asset.balance?.offchainOutbound,
+                        Number(asset.balance.future) / 10 ** asset.precision + asset.balance?.offchainOutbound,
                       )}
                     </AppText>
                   </View>
@@ -204,7 +204,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                   }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
                     {formatLargeNumber(
-                      asset.balance.future +
+                      Number(asset.balance.future) / 10 ** asset.precision +
                         asset.balance?.offchainOutbound +
                         totalAssetLocalAmount,
                     )}
@@ -221,7 +221,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                     });
                   }}>
                   <AppText variant="heading2" style={styles.totalBalance}>
-                    {formatLargeNumber(asset?.balance?.spendable)}
+                    {formatLargeNumber(Number(asset?.balance?.spendable) / 10 ** asset.precision)}
                   </AppText>
                   <AppText variant="body1" style={styles.totalBalanceLabel}>
                     {assets.spendable}

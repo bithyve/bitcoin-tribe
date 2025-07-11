@@ -6,7 +6,7 @@ export const MetaData = {
   name: RealmSchema.MetaData,
   properties: {
     assetSchema: 'string',
-    issuedSupply: 'int',
+    issuedSupply: 'string',
     name: 'string',
     precision: 'int?',
     ticker: 'string?',
@@ -17,7 +17,7 @@ export const MetaData = {
 export const AssetTransactionSchema = {
   name: RealmSchema.AssetTransaction,
   properties: {
-    amount: 'int',
+    amount: 'string',
     batchTransferIdx: 'int?',
     createdAt: 'int',
     idx: 'int',
@@ -34,11 +34,11 @@ export const AssetTransactionSchema = {
 export const BalanceSchema: ObjectSchema = {
   name: RealmSchema.Balance,
   properties: {
-    future: 'int?',
-    settled: 'int?',
-    spendable: 'int?',
-    offchainOutbound: 'int?',
-    offchainInbound: 'int?',
+    future: 'string?',
+    settled: 'string?',
+    spendable: 'string?',
+    offchainOutbound: 'string?',
+    offchainInbound: 'string?',
   },
 };
 
@@ -49,7 +49,7 @@ export const CoinSchema: ObjectSchema = {
     assetId: 'string',
     addedAt: 'int',
     balance: `${RealmSchema.Balance}?`,
-    issuedSupply: 'int',
+    issuedSupply: 'string',
     name: 'string',
     precision: 'int',
     ticker: 'string',
