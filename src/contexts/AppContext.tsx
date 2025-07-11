@@ -24,6 +24,8 @@ export const AppContext = React.createContext({
   setNodeInitStatus: status => {},
   isNodeConnect: null,
   setNodeConnected: status => {},
+  isDisclaimerVisible: null,
+  setIsDisclaimerVisible: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -41,6 +43,7 @@ export function AppProvider({ children }) {
   const [hasIssuedAsset, setHasIssuedAsset] = useState<boolean>(null);
   const [isNodeInitInProgress, setNodeInitStatus] = useState<boolean>(null);
   const [isNodeConnect, setNodeConnected] = useState<boolean>(null);
+  const [isDisclaimerVisible, setIsDisclaimerVisible] = useState<boolean>(true);
   return (
     <AppContext.Provider
       value={{
@@ -66,6 +69,8 @@ export function AppProvider({ children }) {
         setNodeInitStatus: setNodeInitStatus,
         isNodeConnect,
         setNodeConnected: setNodeConnected,
+        isDisclaimerVisible,
+        setIsDisclaimerVisible: setIsDisclaimerVisible,
       }}>
       {children}
     </AppContext.Provider>

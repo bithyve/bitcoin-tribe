@@ -38,6 +38,7 @@ import {
 } from 'src/utils/postStatusUtils';
 import TransactionInfoCard from './components/TransactionInfoCard';
 import Toast from 'src/components/Toast';
+import DisclaimerPopup from 'src/components/DisclaimerPopup';
 
 const CoinDetailsScreen = () => {
   const storage = new MMKV();
@@ -57,6 +58,8 @@ const CoinDetailsScreen = () => {
     hasIssuedAsset,
     setHasIssuedAsset,
     isNodeInitInProgress,
+    isDisclaimerVisible,
+    setIsDisclaimerVisible,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -287,6 +290,15 @@ const CoinDetailsScreen = () => {
           }}
           issuerInfo={coin}
         />
+      </>
+      <>
+        {coin?.assetSource === 'Preset' && (
+          <DisclaimerPopup
+            visible={isDisclaimerVisible}
+            primaryOnPress={() => setIsDisclaimerVisible(false)}
+            primaryCtaTitle="Understood"
+          />
+        )}
       </>
     </ScreenContainer>
   );
