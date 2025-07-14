@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import AppType from 'src/models/enums/AppType';
+import { Keys } from 'src/storage';
 
 export const AppContext = React.createContext({
   key: null,
@@ -43,7 +45,10 @@ export function AppProvider({ children }) {
   const [hasIssuedAsset, setHasIssuedAsset] = useState<boolean>(null);
   const [isNodeInitInProgress, setNodeInitStatus] = useState<boolean>(null);
   const [isNodeConnect, setNodeConnected] = useState<boolean>(null);
-  const [isDisclaimerVisible, setIsDisclaimerVisible] = useState<boolean>(true);
+  const [isDisclaimerVisibleMMKV, setIsDisclaimerVisibleMMKV] = useMMKVBoolean(
+    Keys.DISCLAIMER_VISIBILITY,
+  );
+  const isDisclaimerVisible = isDisclaimerVisibleMMKV ?? true;
   return (
     <AppContext.Provider
       value={{
@@ -70,7 +75,7 @@ export function AppProvider({ children }) {
         isNodeConnect,
         setNodeConnected: setNodeConnected,
         isDisclaimerVisible,
-        setIsDisclaimerVisible: setIsDisclaimerVisible,
+        setIsDisclaimerVisible: setIsDisclaimerVisibleMMKV,
       }}>
       {children}
     </AppContext.Provider>
