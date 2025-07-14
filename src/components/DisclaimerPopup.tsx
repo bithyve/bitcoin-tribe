@@ -1,7 +1,8 @@
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import RenderHTML from 'react-native-render-html';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -18,6 +19,7 @@ interface Props {
   primaryOnPress: () => void;
   onDismiss?: () => void;
   primaryCtaTitle: string;
+  disclaimerHtml: string;
 }
 
 const DisclaimerPopup: React.FC<Props> = ({
@@ -25,6 +27,7 @@ const DisclaimerPopup: React.FC<Props> = ({
   primaryOnPress,
   onDismiss,
   primaryCtaTitle,
+  disclaimerHtml,
 }) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -40,93 +43,10 @@ const DisclaimerPopup: React.FC<Props> = ({
       borderColor={theme.colors.modalBackColor}>
       <View style={styles.contentContainer}>
         <View style={styles.wrapper}>
-          <AppText variant="heading2" style={styles.titleText}>
-            {'Disclaimer: tUSDT Is for Hands-On RGB Testing Only'}
-          </AppText>
-          <AppText variant="body2" style={styles.subTitleText}>
-            {
-              'tUSDT is a demo token issued by Bitcoin Tribe to help users experience RGB mainnet in a real-world, hands-on way.'
-            }
-          </AppText>
-          <View style={styles.infoTextWrapper}>
-            <AppText variant="body2" style={styles.infoText}>
-              {'\u2022'}
-            </AppText>
-            <AppText variant="body2" style={styles.infoText}>
-              {
-                'tUSDT is not backed by any real-world asset and holds no monetary value.'
-              }
-            </AppText>
-          </View>
-          <View style={styles.infoTextWrapper}>
-            <AppText variant="body2" style={styles.infoText}>
-              {'\u2022'}
-            </AppText>
-            <AppText variant="body2" style={styles.infoText}>
-              {
-                'It is intended purely as a test token to explore RGB asset transfers and wallet interactions.'
-              }
-            </AppText>
-          </View>
-          <View style={styles.infoTextWrapper}>
-            <AppText variant="body2" style={styles.infoText}>
-              {'\u2022'}
-            </AppText>
-            <AppText variant="body2" style={styles.infoText}>
-              {
-                'Bitcoin Tribe does not hold custody, does not facilitate swaps, and does not guarantee the value or usability of tUSDT beyond this demo.'
-              }
-            </AppText>
-          </View>
-
-          <View>
-            <AppText variant="body2" style={styles.infoTitleText}>
-              {'You may:'}
-            </AppText>
-            <View style={styles.infoTextWrapper}>
-              <AppText variant="body2" style={styles.infoText}>
-                {'\u2022'}
-              </AppText>
-              <AppText variant="body2" style={styles.infoText}>
-                {'Send or receive tUSDT to/from other users.'}
-              </AppText>
-            </View>
-            <View style={styles.infoTextWrapper}>
-              <AppText variant="body2" style={styles.infoText}>
-                {'\u2022'}
-              </AppText>
-              <AppText variant="body2" style={styles.infoText}>
-                {
-                  'Use third-party services (at your own discretion) that recognize tUSDT on RGB.'
-                }
-              </AppText>
-            </View>
-          </View>
-          <View>
-            <AppText variant="body2" style={styles.infoTitleText}>
-              {'You acknowledge that:'}
-            </AppText>
-            <View style={styles.infoTextWrapper}>
-              <AppText variant="body2" style={styles.infoText}>
-                {'\u2022'}
-              </AppText>
-              <AppText variant="body2" style={styles.infoText}>
-                {
-                  'Bitcoin Tribe provides tUSDT as a learning tool, not as a financial product.'
-                }
-              </AppText>
-            </View>
-            <View style={styles.infoTextWrapper}>
-              <AppText variant="body2" style={styles.infoText}>
-                {'\u2022'}
-              </AppText>
-              <AppText variant="body2" style={styles.infoText}>
-                {
-                  'All interactions are at your own risk, and Bitcoin Tribe is not liable for any loss, misuse, or third-party behavior related to tUSDT.'
-                }
-              </AppText>
-            </View>
-          </View>
+          <RenderHTML
+            contentWidth={Dimensions.get('window').width - hp(20)}
+            source={{ html: disclaimerHtml }}
+          />
         </View>
         <View style={styles.checkIconContainer}>
           <View style={styles.checkIconWrapper}>
@@ -190,6 +110,11 @@ const getStyles = (theme: AppTheme) =>
     },
     checkIconWrapper: {
       marginRight: hp(3),
+    },
+    webview: {
+      height: hp(180),
+      width: '100%',
+      backgroundColor: 'transparent',
     },
   });
 export default DisclaimerPopup;

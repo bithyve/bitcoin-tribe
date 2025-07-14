@@ -180,6 +180,12 @@ const CoinDetailsScreen = () => {
     extrapolate: 'clamp',
   });
 
+  const rawHtml = isThemeDark
+    ? coin?.disclaimer?.content?.dark
+    : coin?.disclaimer?.content?.light;
+
+  const disclaimerHtml = JSON.parse(`"${rawHtml}"`);
+
   return (
     <ScreenContainer>
       <CoinDetailsHeader
@@ -292,11 +298,12 @@ const CoinDetailsScreen = () => {
         />
       </>
       <>
-        {coin?.assetSource === 'Preset' && (
+        {coin?.disclaimer?.showDisclaimer && (
           <DisclaimerPopup
             visible={isDisclaimerVisible}
             primaryOnPress={() => setIsDisclaimerVisible(false)}
             primaryCtaTitle="Understood"
+            disclaimerHtml={disclaimerHtml}
           />
         )}
       </>
