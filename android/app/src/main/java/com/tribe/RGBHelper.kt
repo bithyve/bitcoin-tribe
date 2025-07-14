@@ -11,9 +11,11 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonArray
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
 import org.rgbtools.AssetUda
+import org.rgbtools.Assignment
 import org.rgbtools.Balance
 import org.rgbtools.BtcBalance
 import org.rgbtools.Invoice
@@ -127,7 +129,7 @@ object RGBHelper {
     private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.blindReceive(
             assetID,
-            amount,
+            assignment = Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             0u
@@ -137,7 +139,7 @@ object RGBHelper {
     private fun getWitnessUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.witnessReceive(
             assetID,
-            amount,
+            assignment = Assignment.Fungible(amount!!),
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             0u
@@ -150,7 +152,99 @@ object RGBHelper {
 
     fun getAssetTransfers(assetID: String): String {
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf(), false)
-        return Gson().toJson(RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()).toString()
+        val transfers = RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()
+        Log.d(TAG, "getAssetTransfers: ${transfers.toString()}")
+        val gson = Gson()
+        val jsonArray = JsonArray()
+        
+        transfers?.forEach { transfer ->
+            val transferObject = JsonObject()
+            transferObject.addProperty("idx", transfer.idx)
+            transferObject.addProperty("batchTransferIdx", transfer.batchTransferIdx)
+            transferObject.addProperty("createdAt", transfer.createdAt)
+            transferObject.addProperty("updatedAt", transfer.updatedAt)
+            transferObject.addProperty("status", transfer.status.name)
+            transferObject.addProperty("kind", transfer.kind.name)
+            transferObject.addProperty("txid", transfer.txid)
+            transferObject.addProperty("recipientId", transfer.recipientId)
+            transferObject.addProperty("expiration", transfer.expiration)
+            transferObject.addProperty("invoiceString", transfer.invoiceString)
+            transfer.requestedAssignment?.let { assignment ->
+                val assignmentObject = JsonObject()
+                when (assignment) {
+                    is Assignment.Fungible -> {
+                        assignmentObject.addProperty("type", "Fungible")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.NonFungible -> {
+                        assignmentObject.addProperty("type", "NonFungible")
+                    }
+                    is Assignment.InflationRight -> {
+                        assignmentObject.addProperty("type", "InflationRight")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.ReplaceRight -> {
+                        assignmentObject.addProperty("type", "ReplaceRight")
+                    }
+                    is Assignment.Any -> {
+                        assignmentObject.addProperty("type", "Any")
+                    }
+                }
+                transferObject.add("requestedAssignment", assignmentObject)
+            }
+            val assignmentsArray = JsonArray()
+            transfer.assignments.forEach { assignment ->
+                val assignmentObject = JsonObject()
+                when (assignment) {
+                    is Assignment.Fungible -> {
+                        assignmentObject.addProperty("type", "Fungible")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.NonFungible -> {
+                        assignmentObject.addProperty("type", "NonFungible")
+                    }
+                    is Assignment.InflationRight -> {
+                        assignmentObject.addProperty("type", "InflationRight")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.ReplaceRight -> {
+                        assignmentObject.addProperty("type", "ReplaceRight")
+                    }
+                    is Assignment.Any -> {
+                        assignmentObject.addProperty("type", "Any")
+                    }
+                }
+                assignmentsArray.add(assignmentObject)
+            }
+            transferObject.add("assignments", assignmentsArray)
+            
+            transfer.receiveUtxo?.let { utxo ->
+                val utxoObject = com.google.gson.JsonObject()
+                utxoObject.addProperty("txid", utxo.txid)
+                utxoObject.addProperty("vout", utxo.vout.toInt())
+                transferObject.add("receiveUtxo", utxoObject)
+            }
+            
+            transfer.changeUtxo?.let { utxo ->
+                val utxoObject = com.google.gson.JsonObject()
+                utxoObject.addProperty("txid", utxo.txid)
+                utxoObject.addProperty("vout", utxo.vout.toInt())
+                transferObject.add("changeUtxo", utxoObject)
+            }
+            val transportEndpointsArray = com.google.gson.JsonArray()
+            transfer.transportEndpoints.forEach { endpoint ->
+                val endpointObject = com.google.gson.JsonObject()
+                endpointObject.addProperty("endpoint", endpoint.endpoint)
+                endpointObject.addProperty("transportType", endpoint.transportType.name)
+                endpointObject.addProperty("used", endpoint.used)
+                transportEndpointsArray.add(endpointObject)
+            }
+            transferObject.add("transportEndpoints", transportEndpointsArray)
+            
+            jsonArray.add(transferObject)
+        }
+        
+        return jsonArray.toString()
     }
 
     fun getTransactions(): String {
@@ -180,7 +274,7 @@ object RGBHelper {
     ): String {
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
-            mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
+            mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
             0u,
@@ -350,7 +444,7 @@ object RGBHelper {
         val keys = restoreKeys(RGBWalletRepository.rgbNetwork!!, mnemonic)
         return File(
             context.filesDir,
-            AppConstants.backupName.format(keys.accountXpubColoredFingerprint)
+            AppConstants.backupName.format(keys.masterFingerprint)
         )
     }
 

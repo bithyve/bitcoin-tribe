@@ -12,6 +12,7 @@ import com.bithyve.tribe.RGBWalletRepository
 import com.facebook.react.bridge.ReadableArray
 import com.google.gson.JsonArray
 import kotlinx.coroutines.*
+import org.rgbtools.Assignment
 import org.rgbtools.BitcoinNetwork
 
 
@@ -48,9 +49,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun getAddress(promise: Promise) {
         promise.resolve(RGBHelper.getAddress())
     }
+
     @ReactMethod
-    fun initiate(network: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, promise: Promise){
-        promise.resolve(RGBWalletRepository.initialize(network,accountXpubVanilla,accountXpubColored,mnemonic))
+    fun initiate(network: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, promise: Promise){
+        promise.resolve(RGBWalletRepository.initialize(network,accountXpubVanilla,accountXpubColored,mnemonic, masterFingerprint))
     }
 
     @ReactMethod
@@ -80,6 +82,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             try {
                 promise.resolve(RGBHelper.receiveAsset(assetID, amount.toULong(), blinded))
             }catch (e: Exception) {
+                Log.d(TAG, "receiveAsset: "+ e.message)
                 val message = e.message
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", message)
@@ -313,7 +316,28 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             jsonObject.addProperty("assetId", invoice.assetId)
             jsonObject.addProperty("recipientId", invoice.recipientId)
             jsonObject.addProperty("network", invoice.network.name)
-            jsonObject.addProperty("amount", invoice.amount?.toFloat() ?: 0)
+            val assignmentJsonObject = JsonObject()
+            when (val assignment = invoice.assignment) {
+                is Assignment.Fungible -> {
+                    assignmentJsonObject.addProperty("type", "Fungible")
+                    assignmentJsonObject.addProperty("amount", assignment.amount.toString())
+                }
+                is Assignment.NonFungible -> {
+                    assignmentJsonObject.addProperty("type", "NonFungible")
+                }
+                is Assignment.InflationRight -> {
+                    assignmentJsonObject.addProperty("type", "InflationRight")
+                    assignmentJsonObject.addProperty("amount", assignment.amount.toString())
+                }
+                is Assignment.ReplaceRight -> {
+                    assignmentJsonObject.addProperty("type", "ReplaceRight")
+                }
+                is Assignment.Any -> {
+                    assignmentJsonObject.addProperty("type", "Any")
+                }
+            }
+            jsonObject.add("assignment", assignmentJsonObject)
+
             val jsonArray = JsonArray()
             invoice.transportEndpoints.forEach { endpoint ->
                 jsonArray.add(endpoint)
@@ -332,8 +356,16 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun getUnspents(promise: Promise){
-        val rgbUtxo = RGBHelper.getUnspents()
-        promise.resolve(Gson().toJson(rgbUtxo))
+        try {
+            val rgbUtxo = RGBHelper.getUnspents()
+            promise.resolve(Gson().toJson(rgbUtxo))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUnspents: "+e.message)
+            val message = e.message
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", message)
+            promise.resolve(jsonObject.toString())
+        }
     }
 
     @ReactMethod
