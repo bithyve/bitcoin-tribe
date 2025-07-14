@@ -137,7 +137,6 @@ export default class Relay {
     let res;
     try {
       const formData = new FormData();
-      console.log('walletImage', walletImage);
       if(walletImage){
         formData.append('file', {
           uri: walletImage.uri,
