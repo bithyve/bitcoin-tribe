@@ -36,4 +36,6 @@ export enum RealmSchema {
   NodeOnChainTransaction = 'NodeOnChainTransaction',
   LNPayments = 'LNPayments',
   ReceiveUTXOData = 'ReceiveUTXOData',
+  Disclaimer = 'Disclaimer',
+  DisclaimerContent = 'DisclaimerContent',
 }

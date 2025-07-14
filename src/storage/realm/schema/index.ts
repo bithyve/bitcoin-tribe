@@ -30,6 +30,8 @@ import {
   CoinSchema,
   AssetTransactionSchema,
   MetaData,
+  DisclaimerSchema,
+  DisclaimerContentSchema,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
@@ -84,4 +86,6 @@ export default [
   ConfirmationTimeSchema,
   LNPaymentsSchema,
   ReceiveUTXOSchema,
+  DisclaimerSchema,
+  DisclaimerContentSchema,
 ];

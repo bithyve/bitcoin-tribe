@@ -101,6 +101,13 @@ export interface Coin {
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
   assetSource: AssetSource;
+  disclaimer?: {
+    content: {
+      light: string;
+      dark: string;
+    };
+    showDisclaimer?: boolean;
+  };
 }
 
 export interface Media {

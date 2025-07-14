@@ -184,7 +184,7 @@ const CoinDetailsScreen = () => {
     ? coin?.disclaimer?.content?.dark
     : coin?.disclaimer?.content?.light;
 
-  const disclaimerHtml = JSON.parse(`"${rawHtml}"`);
+  const disclaimerHtml = rawHtml;
 
   return (
     <ScreenContainer>

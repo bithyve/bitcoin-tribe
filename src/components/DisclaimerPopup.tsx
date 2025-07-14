@@ -78,30 +78,11 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       textAlign: 'left',
     },
-    subTitleText: {
-      color: theme.colors.headingColor,
-      textAlign: 'left',
-      marginTop: hp(10),
-      marginBottom: hp(5),
-    },
     infoText: {
       color: theme.colors.secondaryHeadingColor,
       marginLeft: hp(5),
-      marginVertical: hp(3),
     },
-    infoTitleText: {
-      marginVertical: hp(3),
-      color: theme.colors.headingColor,
-    },
-    wrapper: {
-      marginTop: hp(5),
-      marginBottom: hp(10),
-    },
-    infoTextWrapper: {
-      flexDirection: 'row',
-      marginHorizontal: hp(5),
-      width: '94%',
-    },
+    wrapper: {},
     checkIconContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -110,11 +91,6 @@ const getStyles = (theme: AppTheme) =>
     },
     checkIconWrapper: {
       marginRight: hp(3),
-    },
-    webview: {
-      height: hp(180),
-      width: '100%',
-      backgroundColor: 'transparent',
     },
   });
 export default DisclaimerPopup;

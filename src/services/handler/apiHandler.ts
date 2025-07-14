@@ -2537,12 +2537,46 @@ export class ApiHandler {
       return error;
     }
   };
-
+  static normalizeCoinForRealm(coin: any): any {
+    return {
+      ...coin,
+      issuedSupply: parseInt(coin.issuedSupply ?? '0', 10),
+      timestamp: parseInt(coin.timestamp ?? '0', 10),
+      disclaimer: coin.disclaimer
+        ? {
+            showDisclaimer: coin.disclaimer.showDisclaimer ?? false,
+            content: {
+              light: coin.disclaimer.content?.light ?? '',
+              dark: coin.disclaimer.content?.dark ?? '',
+            },
+          }
+        : undefined,
+      balance: {
+        future: parseInt(coin.balance?.future ?? '0', 10),
+        settled: parseInt(coin.balance?.settled ?? '0', 10),
+        spendable: parseInt(coin.balance?.spendable ?? '0', 10),
+      },
+      issuer: coin.issuer
+        ? {
+            verified: coin.issuer.verified ?? false,
+          }
+        : undefined,
+      metaData: {
+        ...coin.metaData,
+        issuedSupply: parseInt(coin.metaData?.issuedSupply ?? '0', 10),
+        timestamp: parseInt(coin.metaData?.timestamp ?? '0', 10),
+      },
+      transactions: coin.transactions ?? [],
+      isIssuedPosted: !!coin.isIssuedPosted,
+      isVerifyPosted: !!coin.isVerifyPosted,
+    };
+  }
   static fetchPresetAssets = async () => {
     try {
       const response = await Relay.getPresetAssets();
       if (response && response.coins) {
-        for (const coin of response.coins) {
+        for (const coinData of response.coins) {
+          const coin = ApiHandler.normalizeCoinForRealm(coinData);
           dbManager.createObjectBulk(
             RealmSchema.Coin,
             [coin],
