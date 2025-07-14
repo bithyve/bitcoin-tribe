@@ -417,7 +417,7 @@ const UDADetailsScreen = () => {
               />
             )}
             {hasIssuanceTransaction &&
-              twitterVerification?.id &&
+              // twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
               !twitterPostVerification?.link && (
                 <SelectOption

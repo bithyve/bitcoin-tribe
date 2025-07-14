@@ -297,7 +297,7 @@ const CoinsMetaDataScreen = () => {
               />
             )}
             {hasIssuanceTransaction &&
-              twitterVerification?.id &&
+              // twitterVerification?.id &&
               !twitterPostVerificationWithLink &&
               !twitterPostVerification?.link && (
                 <SelectOption
