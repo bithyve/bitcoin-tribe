@@ -14,20 +14,49 @@ export const MetaData = {
   },
 };
 
+export const AssignmentSchema = {
+  name: RealmSchema.Assignment,
+  properties: {
+    amount: 'string?',
+    type: 'string?',
+  },
+};
+
+export const TransferTransportEndpointSchema = {
+  name: RealmSchema.TransferTransportEndpoint,
+  properties: {
+    endpoint: 'string',
+    transportType: 'string',
+    used: 'bool',
+  },
+};
+
+export const UtxoSchema = {
+  name: RealmSchema.Utxo,
+  properties: {
+    txid: 'string',
+    vout: 'int',
+  },
+};  
+
 export const AssetTransactionSchema = {
   name: RealmSchema.AssetTransaction,
   properties: {
-    amount: 'string',
     batchTransferIdx: 'int?',
     createdAt: 'int',
     idx: 'int',
     kind: 'string',
     status: 'string',
-    //transportEndpoints: 'string[]',
+    transportEndpoints: `${RealmSchema.TransferTransportEndpoint}[]`,
     updatedAt: 'int',
     txid: 'string?',
     recipientId: 'string?',
     expiration: 'int?',
+    requestedAssignment: `${RealmSchema.Assignment}?`,
+    assignments: `${RealmSchema.Assignment}[]`,
+    receiveUtxo: `${RealmSchema.Utxo}?`,
+    changeUtxo: `${RealmSchema.Utxo}?`,
+    invoiceString: 'string?',
   },
 };
 

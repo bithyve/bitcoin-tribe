@@ -84,6 +84,7 @@ export default class RGBServices {
     mnemonic: string,
     accountXpubVanilla: string,
     accountXpubColored: string,
+    masterFingerprint: string,
   ): Promise<string> => {
     try {
       const data = await RGB.initiate(
@@ -91,6 +92,7 @@ export default class RGBServices {
         mnemonic,
         accountXpubVanilla,
         accountXpubColored,
+        masterFingerprint,
       );
       return JSON.parse(data);
     } catch (error) {

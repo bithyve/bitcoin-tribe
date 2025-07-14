@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
@@ -53,6 +52,14 @@ function AssetTransaction(props: AssetTransactionProps) {
     [theme, backColor, assetFace],
   );
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  const amount = useMemo(() => {
+    if(transaction.kind === TransferKind.SEND) {
+      return transaction.requestedAssignment?.amount;
+    } else {
+      return transaction.assignments[0]?.amount;
+    }
+  }, [transaction]);
 
   const getStatusIcon = (kind, status, type) => {
     const icons = {
@@ -177,12 +184,12 @@ function AssetTransaction(props: AssetTransactionProps) {
                   amtTextStyle,
                   {
                     fontSize:
-                      transaction.amount.toString().length > 10 ? 11 : 16,
+                      amount?.toString().length > 10 ? 11 : 16,
                   },
                 ]}>
                 &nbsp;{precision === 0
-                ? numberWithCommas(Number(transaction.amount))
-                : numberWithCommas(Number(transaction.amount) / 10 ** precision)}
+                ? numberWithCommas(Number(amount))
+                : numberWithCommas(Number(amount) / 10 ** precision)}
               </AppText>
             </View>
           </View>

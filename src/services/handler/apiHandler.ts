@@ -286,6 +286,7 @@ export class ApiHandler {
               rgbWallet.mnemonic,
               rgbWallet.accountXpubVanilla,
               rgbWallet.accountXpubColored,
+              rgbWallet.masterFingerprint,
             );
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -308,7 +309,7 @@ export class ApiHandler {
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
-            accountXpubColoredFingerprint: '',
+            masterFingerprint: '',
             accountXpubVanilla: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -321,7 +322,7 @@ export class ApiHandler {
           );
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.masterFingerprint = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
@@ -419,7 +420,7 @@ export class ApiHandler {
               xpub: rgbNodeInfo.pubkey,
               rgbDir: '',
               accountXpubColored: rgbNodeInfo.pubkey,
-              accountXpubColoredFingerprint: rgbNodeInfo.pubkey,
+              masterFingerprint: rgbNodeInfo.pubkey,
               accountXpubVanilla: rgbNodeInfo.pubkey,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -574,6 +575,7 @@ export class ApiHandler {
       rgbWallet.mnemonic,
       rgbWallet.accountXpubVanilla,
       rgbWallet.accountXpubColored,
+      rgbWallet.masterFingerprint,
     );
     return { key, isWalletOnline };
   }
@@ -613,6 +615,7 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
       return { key, isWalletOnline };
     } catch (error) {
@@ -654,6 +657,7 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
       const cm = ChatPeerManager.getInstance()
       await cm.init(app.primarySeed)
@@ -1578,9 +1582,6 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response.length > 0) {
-        response.forEach(tx => {
-          tx.amount = tx.amount.toString();
-        });
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
         });
@@ -2316,7 +2317,7 @@ export class ApiHandler {
               ios: backupFile.file,
             }),
             app.id,
-            wallet.accountXpubColoredFingerprint,
+            wallet.masterFingerprint,
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());

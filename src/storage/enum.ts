@@ -26,6 +26,9 @@ export enum RealmSchema {
   Collectible = 'Collectible',
   CollectibleMedia = 'CollectibleMedia',
   UniqueDigitalAsset = 'UniqueDigitalAsset',
+  Assignment = 'Assignment',
+  TransferTransportEndpoint = 'TransferTransportEndpoint',
+  Utxo = 'Utxo',
   Token = 'Token',
   BackupHistory = 'BackupHistory',
   CloudBackupHistory = 'CloudBackupHistory',
@@ -39,4 +42,5 @@ export enum RealmSchema {
   Message = 'Message',
   Contact = 'Contact',
   ReceiveUTXOData = 'ReceiveUTXOData',
+  Request = 'Request',
 }

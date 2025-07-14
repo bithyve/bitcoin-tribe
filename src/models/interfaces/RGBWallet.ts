@@ -1,11 +1,11 @@
-import { NodeInfoResponse } from 'src/services/rgbnode';
+import { NodeInfoResponse, TransportType } from 'src/services/rgbnode';
 import { LNPayments, NodeOnchainTransaction } from './Transactions';
 
 export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
-  accountXpubColoredFingerprint: string;
+  masterFingerprint: string;
   accountXpubColored: string;
   accountXpubVanilla: string;
   receiveData?: {
@@ -48,8 +48,18 @@ export interface receiveUTXOData {
   };
 }
 
-export interface Transfer {
+export interface TransferTransportEndpoint {
+  endpoint: string;
+  transportType: TransportType;
+  used: boolean;
+}
+
+export interface Assignment {
   amount: string;
+  type: string;
+}
+
+export interface Transfer {
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
@@ -59,6 +69,18 @@ export interface Transfer {
   txid: string | null;
   recipientId: string | null;
   expiration: number | null;
+  requestedAssignment?: Assignment;
+  assignments?: Assignment[];
+  receiveUtxo?: {
+    txid: string;
+    vout: number;
+  };
+  changeUtxo?: {
+    txid: string;
+    vout: number;
+  };
+  invoiceString?: string;
+  transportEndpoints?: TransferTransportEndpoint[];
 }
 
 export interface MetaData {

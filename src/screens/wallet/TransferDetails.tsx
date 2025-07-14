@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import AppHeader from 'src/components/AppHeader';
@@ -37,6 +37,13 @@ function TransferDetails({ route, navigation }) {
     ApiHandler.handleTransferFailure(transaction.batchTransferIdx, false),
   );
 
+  const amount = useMemo(() => {
+    if (transaction.requestedAssignment) {
+      return transaction.requestedAssignment.amount;
+    }
+    return transaction.assignments[0].amount;
+  }, [transaction]);
+
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
@@ -56,7 +63,7 @@ function TransferDetails({ route, navigation }) {
       <AppHeader title={wallet.transferDetails} />
       <TransferDetailsContainer
         assetName={coin}
-        transAmount={`${Number(transaction.amount) / 10 ** precision}`}
+        transAmount={`${Number(amount) / 10 ** precision}`}
         assetId={assetId}
         transaction={transaction}
         onPress={() => cancelTransactionMutation()}
