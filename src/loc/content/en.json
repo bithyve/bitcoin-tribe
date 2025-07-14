@@ -420,7 +420,7 @@
     "showXPubSubTitle": "Show details for xPub",
     "editPicture": "EDIT PICTURE",
     "walletNamePic": "Wallet Name and Picture",
-    "walletNamePicSubTitle": "Enter , Edit Name and Picture",
+    "walletNamePicSubTitle": "Enter or Edit Name and Picture",
     "transactionID": "Transaction ID",
     "transactionFee": "Transaction Fee",
     "receiveTestSats": "Receive Test Sats",

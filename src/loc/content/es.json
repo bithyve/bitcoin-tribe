@@ -420,7 +420,7 @@
     "showXPubSubTitle": "Mostrar detalles de xPub",
     "editPicture": "EDITAR IMAGEN",
     "walletNamePic": "Nombre e imagen de la billetera",
-    "walletNamePicSubTitle": "Ingresar, editar nombre e imagen",
+    "walletNamePicSubTitle": "Ingresar o editar nombre y foto",
     "transactionID": "ID de la transacción",
     "transactionFee": "Tarifa de transacción",
     "receiveTestSats": "Recibir Satoshis de prueba",
