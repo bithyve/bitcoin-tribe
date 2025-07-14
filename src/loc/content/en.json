@@ -678,7 +678,8 @@
     "failedSubTitle": "Transaction was unsuccessful. No funds were moved.",
     "platformFeeTitle": "Platform Fee (Registry Listing)",
     "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry.",
-    "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden."
+    "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden.",
+    "txnInfoTitle": "Info"
   },
   "community": {
     "fnfTitle": "Community",

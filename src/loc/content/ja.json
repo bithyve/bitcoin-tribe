@@ -678,7 +678,8 @@
     "failedSubTitle": "取引が失敗しました。資金は移動されていません。",
     "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
     "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。",
-    "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。"
+    "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。",
+    "txnInfoTitle": "情報"
   },
   "community": {
     "fnfTitle": "Community",
