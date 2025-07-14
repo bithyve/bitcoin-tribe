@@ -9,6 +9,7 @@ import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { Keyboard } from 'react-native';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -39,12 +40,15 @@ function EditWalletProfile({ navigation }) {
   };
 
   const updateWalletProfile = async () => {
+    Keyboard.dismiss();
     setLoading('loading');
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
       setLoading('');
       Toast(wallet.profileUpdateMsg);
-      navigation.goBack();
+      setTimeout(() => {
+        navigation.goBack();
+      }, 200);
     } else {
       setLoading('');
       Toast(wallet.profileUpdateErrMsg, true);
