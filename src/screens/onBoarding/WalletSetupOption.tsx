@@ -38,7 +38,8 @@ function WalletSetupOption({ navigation }) {
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
         onPress={() => {
-          setVisible(true);
+          navigation.navigate(NavigationRoutes.SELECTWALLET);
+          // setVisible(true);
         }}
         style={styles.optionCardStyle}
       />
