@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import OptionCard from 'src/components/OptionCard';
@@ -13,7 +14,6 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import UseRGBAssetPopupContainer from './components/UseRGBAssetPopupContainer';
@@ -39,7 +39,6 @@ function WalletSetupOption({ navigation }) {
         showRightArrow={true}
         onPress={() => {
           navigation.navigate(NavigationRoutes.SELECTWALLET);
-          // setVisible(true);
         }}
         style={styles.optionCardStyle}
       />
