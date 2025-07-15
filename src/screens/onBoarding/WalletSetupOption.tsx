@@ -17,6 +17,7 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import UseRGBAssetPopupContainer from './components/UseRGBAssetPopupContainer';
+import config, { APP_STAGE } from 'src/utils/config';
 
 function WalletSetupOption({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -38,7 +39,11 @@ function WalletSetupOption({ navigation }) {
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
         onPress={() => {
-          navigation.navigate(NavigationRoutes.SELECTWALLET);
+          if (config.ENVIRONMENT === APP_STAGE.DEVELOPMENT) {
+            navigation.navigate(NavigationRoutes.SELECTWALLET);
+          } else {
+            navigation.navigate(NavigationRoutes.PROFILESETUP);
+          }
         }}
         style={styles.optionCardStyle}
       />
