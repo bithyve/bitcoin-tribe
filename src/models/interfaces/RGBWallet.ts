@@ -124,10 +124,8 @@ export interface Coin {
   assetSchema: AssetSchema;
   assetSource: AssetSource;
   disclaimer?: {
-    content: {
-      light: string;
-      dark: string;
-    };
+    contentLight: string;
+    contentDark: string;
     showDisclaimer?: boolean;
   };
 }

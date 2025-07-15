@@ -9,9 +9,7 @@ import {
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import {
-  Coin,
-} from 'src/models/interfaces/RGBWallet';
+import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -163,11 +161,9 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
-
-
   const rawHtml = isThemeDark
-    ? coin?.disclaimer?.content?.dark
-    : coin?.disclaimer?.content?.light;
+    ? coin?.disclaimer?.contentDark
+    : coin?.disclaimer?.contentLight;
 
   const disclaimerHtml = rawHtml;
 

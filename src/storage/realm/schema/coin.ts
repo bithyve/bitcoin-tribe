@@ -75,24 +75,6 @@ export const BalanceSchema: ObjectSchema = {
   },
 };
 
-export const DisclaimerContentSchema: ObjectSchema = {
-  name: RealmSchema.DisclaimerContent,
-  embedded: true,
-  properties: {
-    light: 'string',
-    dark: 'string',
-  },
-};
-
-export const DisclaimerSchema: ObjectSchema = {
-  name: RealmSchema.Disclaimer,
-  embedded: true,
-  properties: {
-    content: RealmSchema.DisclaimerContent,
-    showDisclaimer: 'bool?',
-  },
-};
-
 export const CoinSchema: ObjectSchema = {
   name: RealmSchema.Coin,
   primaryKey: 'assetId',
@@ -101,7 +83,7 @@ export const CoinSchema: ObjectSchema = {
     addedAt: 'int',
     balance: `${RealmSchema.Balance}?`,
     issuedSupply: 'string',
-    disclaimer: `${RealmSchema.Disclaimer}?`,
+    disclaimer: 'string?{}',
     name: 'string',
     precision: 'int',
     ticker: 'string',

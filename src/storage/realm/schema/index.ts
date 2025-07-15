@@ -33,8 +33,6 @@ import {
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,
-  DisclaimerSchema,
-  DisclaimerContentSchema,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
@@ -102,6 +100,4 @@ export default [
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,
-  DisclaimerSchema,
-  DisclaimerContentSchema,
 ];
