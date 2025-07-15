@@ -540,8 +540,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-              setSelectedPriority(TxPriority.LOW);
+              if (averageTxFee && averageTxFee[TxPriority.LOW]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+                setSelectedPriority(TxPriority.LOW);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -553,8 +560,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-              setSelectedPriority(TxPriority.MEDIUM);
+              if (averageTxFee && averageTxFee[TxPriority.MEDIUM]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+                setSelectedPriority(TxPriority.MEDIUM);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -566,8 +580,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-              setSelectedPriority(TxPriority.HIGH);
+              if (averageTxFee && averageTxFee[TxPriority.HIGH]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+                setSelectedPriority(TxPriority.HIGH);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(

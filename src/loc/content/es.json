@@ -428,7 +428,7 @@
     "showXPubSubTitle": "Mostrar detalles de xPub",
     "editPicture": "EDITAR IMAGEN",
     "walletNamePic": "Nombre e imagen de la billetera",
-    "walletNamePicSubTitle": "Ingresar, editar nombre e imagen",
+    "walletNamePicSubTitle": "Ingresar o editar nombre y foto",
     "transactionID": "ID de la transacción",
     "transactionFee": "Tarifa de transacción",
     "receiveTestSats": "Recibir Satoshis de prueba",
@@ -686,7 +686,8 @@
     "failedSubTitle": "La transacción ha fallado. No se movieron fondos.",
     "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
     "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público.",
-    "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos."
+    "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos.",
+    "txnInfoTitle": "Información"
   },
   "community": {
     "fnfTitle": "Community",
@@ -735,7 +736,7 @@
     "takeTimeMsg": "Este paso tomará unos segundos.",
     "connectingNode": "Conectando tu configuración",
     "connectingNodeInfo": "Algunas funciones pueden no estar disponibles temporalmente mientras preparamos todo para ti.",
-    "connectingNodeToastMsg": "Tu nodo se está configurando. ¡Inicialización en progreso..!",
+    "connectingNodeToastMsg": "Configurando tu nodo. Inicialización en progreso...",
     "nodeIdtitle": "ID de Nodo",
     "nodeIdCopyMsg": "ID del nodo copiado correctamente",
     "nodeNotFoundTitle": "Nodo no encontrado",

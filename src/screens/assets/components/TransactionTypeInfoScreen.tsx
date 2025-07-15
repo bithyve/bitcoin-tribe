@@ -28,7 +28,7 @@ function TransactionTypeInfoScreen() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
     <ScreenContainer>
-      <AppHeader title={'Info'} enableBack={true} />
+      <AppHeader title={assets.txnInfoTitle} enableBack={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.spendableInfoView}>
           <AppText variant="body1" style={styles.titleText}>

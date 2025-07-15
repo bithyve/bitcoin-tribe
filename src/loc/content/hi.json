@@ -428,7 +428,7 @@
     "showXPubSubTitle": "xPub के लिए विवरण दिखाएं",
     "editPicture": "चित्र संपादित करें",
     "walletNamePic": "वॉलेट का नाम और चित्र",
-    "walletNamePicSubTitle": "दर्ज करें, नाम और चित्र संपादित करें",
+    "walletNamePicSubTitle": "नाम और तस्वीर दर्ज करें या संपादित करें",
     "transactionID": "लेनदेन आईडी",
     "transactionFee": "लेनदेन शुल्क",
     "receiveTestSats": "टेस्ट सैट्स प्राप्त करें",
@@ -686,7 +686,8 @@
     "failedSubTitle": "लेनदेन असफल रहा। कोई फंड स्थानांतरित नहीं किया गया।",
     "platformFeeTitle": "प्लेटफ़ॉर्म शुल्क (रजिस्ट्र्री लिस्टिंग)",
     "platformFeeSubTitle": "यह लेनदेन आपके एसेट को सार्वजनिक रजिस्ट्र्री में सूचीबद्ध करने के लिए शुरू किया गया था।",
-    "noAssetsFoundMsg": "आपके वॉलेट में कोई संपत्ति नहीं है, या वे छिपी हो सकती हैं।"
+    "noAssetsFoundMsg": "आपके वॉलेट में कोई संपत्ति नहीं है, या वे छिपी हो सकती हैं।",
+    "txnInfoTitle": "जानकारी"
   },
   "community": {
     "fnfTitle": "Community",
@@ -735,7 +736,7 @@
     "takeTimeMsg": "इस चरण में कुछ सेकंड लगेंगे।",
     "connectingNode": "आपकी सेटअप से कनेक्ट हो रहा है",
     "connectingNodeInfo": "जब तक हम सब कुछ आपके लिए तैयार करते हैं, कुछ सुविधाएं अस्थायी रूप से उपलब्ध नहीं हो सकतीं।",
-    "connectingNodeToastMsg": "आपका नोड सेटअप हो रहा है। इनिशियलाइज़ेशन प्रगति पर है..!",
+    "connectingNodeToastMsg": "आपका नोड सेट किया जा रहा है। इनिशियलाइज़ेशन प्रगति पर है...",
     "nodeIdtitle": "नोड ID",
     "nodeIdCopyMsg": "नोड ID सफलतापूर्वक कॉपी किया गया",
     "nodeNotFoundTitle": "नोड नहीं मिला",

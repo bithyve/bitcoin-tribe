@@ -428,7 +428,7 @@
     "showXPubSubTitle": "显示xPub详细信息",
     "editPicture": "编辑照片",
     "walletNamePic": "钱包名称和照片",
-    "walletNamePicSubTitle": "输入或编辑名称和照片",
+    "walletNamePicSubTitle": "输入或编辑名称和图片",
     "transactionID": "交易ID",
     "transactionFee": "交易费用",
     "receiveTestSats": "接收测试Sats",
@@ -686,7 +686,8 @@
     "failedSubTitle": "交易失败，未转移任何资金。",
     "platformFeeTitle": "平台费用（注册列表）",
     "platformFeeSubTitle": "该交易是为将您的资产列入公共注册表而发起的。",
-    "noAssetsFoundMsg": "您的钱包中没有任何资产，或者它们可能已被隐藏。"
+    "noAssetsFoundMsg": "您的钱包中没有任何资产，或者它们可能已被隐藏。",
+    "txnInfoTitle": "信息"
   },
   "community": {
     "fnfTitle": "Community",
@@ -735,7 +736,7 @@
     "takeTimeMsg": "此步骤将花费几秒钟。",
     "connectingNode": "正在连接您的设置",
     "connectingNodeInfo": "在我们为您准备一切的过程中，一些功能可能会暂时不可用。",
-    "connectingNodeToastMsg": "您的节点正在设置中。初始化进行中..！",
+    "connectingNodeToastMsg": "正在设置您的节点，初始化进行中...",
     "nodeIdtitle": "节点 ID",
     "nodeIdCopyMsg": "节点 ID 复制成功",
     "nodeNotFoundTitle": "未找到节点",

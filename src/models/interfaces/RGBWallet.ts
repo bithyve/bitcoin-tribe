@@ -123,6 +123,11 @@ export interface Coin {
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
   assetSource: AssetSource;
+  disclaimer?: {
+    contentLight: string;
+    contentDark: string;
+    showDisclaimer?: boolean;
+  };
 }
 
 export interface Media {

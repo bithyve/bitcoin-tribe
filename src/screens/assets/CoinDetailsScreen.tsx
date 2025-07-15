@@ -9,9 +9,7 @@ import {
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import {
-  Coin,
-} from 'src/models/interfaces/RGBWallet';
+import { Coin } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -35,6 +33,7 @@ import {
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
+import DisclaimerPopup from 'src/components/DisclaimerPopup';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -52,6 +51,8 @@ const CoinDetailsScreen = () => {
     hasIssuedAsset,
     setHasIssuedAsset,
     isNodeInitInProgress,
+    isDisclaimerVisible,
+    setIsDisclaimerVisible,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -160,7 +161,11 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
+  const rawHtml = isThemeDark
+    ? coin?.disclaimer?.contentDark
+    : coin?.disclaimer?.contentLight;
 
+  const disclaimerHtml = rawHtml;
 
   return (
     <ScreenContainer>
@@ -273,6 +278,16 @@ const CoinDetailsScreen = () => {
           }}
           issuerInfo={coin}
         />
+      </>
+      <>
+        {coin?.disclaimer?.showDisclaimer && (
+          <DisclaimerPopup
+            visible={isDisclaimerVisible}
+            primaryOnPress={() => setIsDisclaimerVisible(false)}
+            primaryCtaTitle="Understood"
+            disclaimerHtml={disclaimerHtml}
+          />
+        )}
       </>
     </ScreenContainer>
   );

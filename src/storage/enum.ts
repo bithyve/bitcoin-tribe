@@ -43,4 +43,6 @@ export enum RealmSchema {
   Contact = 'Contact',
   ReceiveUTXOData = 'ReceiveUTXOData',
   Request = 'Request',
+  Disclaimer = 'Disclaimer',
+  DisclaimerContent = 'DisclaimerContent',
 }

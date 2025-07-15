@@ -9,6 +9,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import ModalLoading from 'src/components/ModalLoading';
+import { Keyboard } from 'react-native';
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -37,7 +38,7 @@ function EditWalletProfile({ navigation }) {
         maxHeight: 500,
         maxWidth: 500,
         selectionLimit: 1,
-      })
+      });
       setProfileImage(result.assets[0]);
     } catch (error) {
       console.error(error);
@@ -46,11 +47,14 @@ function EditWalletProfile({ navigation }) {
 
   const updateWalletProfile = async () => {
     setLoading(true);
+    Keyboard.dismiss();
     const updated = await ApiHandler.updateProfile(app.id, name, profileImage);
     if (updated) {
       setLoading(false);
       Toast(wallet.profileUpdateMsg);
-      navigation.goBack();
+      setTimeout(() => {
+        navigation.goBack();
+      }, 200);
     } else {
       setLoading(false);
       Toast(wallet.profileUpdateErrMsg, true);

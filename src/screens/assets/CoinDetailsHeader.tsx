@@ -122,7 +122,17 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   </View>
                 </View>
               </AppTouchable>
-              <View style={styles.totalBalanceWrapper2}>
+              <AppTouchable
+                style={styles.totalBalanceWrapper2}
+                onPress={() => {
+                  if (isNodeInitInProgress) {
+                    Toast(node.connectingNodeToastMsg, true);
+                    return;
+                  }
+                  navigation.navigate(NavigationRoutes.COINMETADATA, {
+                    assetId: asset.assetId,
+                  });
+                }}>
                 <View>
                   <AppTouchable
                     style={styles.onChainTotalBalanceWrapper}
@@ -170,7 +180,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                       </View>
                     </>
                   ))}
-              </View>
+              </AppTouchable>
             </View>
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
