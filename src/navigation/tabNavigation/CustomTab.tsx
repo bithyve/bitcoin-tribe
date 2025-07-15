@@ -54,10 +54,10 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         ) : (
           <CollectiblesInActive />
         );
-        case NavigationRoutes.COMMUNITY:
-          return isFocused ? (
-            isThemeDark ? (
-              <CommunityActive />
+      case NavigationRoutes.COMMUNITY:
+        return isFocused ? (
+          isThemeDark ? (
+            <CommunityActive />
           ) : (
             <CommunityActiveLight />
           )
@@ -143,12 +143,13 @@ const CustomTab = ({ state, descriptors, navigation }) => {
               style={[
                 styles.bottomNavigation,
                 {
+                  marginLeft: hp(2),
                   color: isFocused
                     ? theme.colors.primaryCTAText
                     : theme.colors.disablePrimaryCTAText,
                 },
               ]}>
-              &nbsp;&nbsp;{Capitalize(TabBarTitle(isFocused, label))}
+              {Capitalize(TabBarTitle(isFocused, label))}
             </AppText>
           </TouchableOpacity>
         );
@@ -190,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     bottomNavigation: {
-      fontSize: 13,
+      fontSize: 12,
       fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 13 * 1.4,
       fontWeight: '500',
