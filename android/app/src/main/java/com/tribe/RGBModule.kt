@@ -92,10 +92,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun createUtxos(feeRate: Float, promise: Promise){
+    fun createUtxos(feeRate: Float, num: Int, size: Int, upTo: Boolean, promise: Promise){
         coroutineScope.launch {
             try {
-                val created = RGBHelper.createNewUTXOs(feeRate)
+                val created = RGBHelper.createNewUTXOs(feeRate, num, size, upTo)
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", "")
                 jsonObject.addProperty("created", created)

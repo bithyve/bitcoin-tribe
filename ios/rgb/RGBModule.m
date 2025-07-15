@@ -271,10 +271,13 @@ RCT_EXPORT_METHOD(isValidBlindedUtxo:(NSString*)invoiceData
 }
 
 RCT_EXPORT_METHOD(createUtxos:(NSInteger*)feeRate
+                  num:(NSInteger*)num
+                  size:(NSInteger*)size
+                  upTo:(BOOL*)upTo
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
-  [helper createUTXOsWithFeeRate:(NSInteger)feeRate callback:^(NSString * _Nonnull response) {
+  [helper createUTXOsWithFeeRate:(NSInteger)feeRate num:(NSInteger)num size:(NSInteger)size upTo:(BOOL)upTo callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }

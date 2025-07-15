@@ -2,25 +2,17 @@ package com.bithyve.tribe
 
 import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.FileContent
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonArray
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
-import org.rgbtools.AssetUda
 import org.rgbtools.Assignment
 import org.rgbtools.Balance
 import org.rgbtools.BtcBalance
 import org.rgbtools.Invoice
 import org.rgbtools.InvoiceData
-import org.rgbtools.Utxo
 import org.rgbtools.ReceiveData
 import org.rgbtools.Recipient
 import org.rgbtools.RefreshFilter
@@ -31,8 +23,6 @@ import org.rgbtools.WalletData
 import org.rgbtools.restoreBackup
 import org.rgbtools.restoreKeys
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import kotlin.Exception
 
 object RGBHelper {
@@ -371,15 +361,15 @@ object RGBHelper {
         return status
     }
 
-    private fun createUTXOs(feeRate: Float): UByte? {
+    private fun createUTXOs(feeRate: Float, num: Int, size: Int, upTo: Boolean): UByte? {
         RGBWalletRepository.wallet?.getAddress()
         RGBWalletRepository.wallet?.sync(RGBWalletRepository.online!!)
         val balance = RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online!!, false)
         return RGBWalletRepository.wallet?.createUtxos(
             RGBWalletRepository.online!!,
-            false,
-            null,
-            null,
+            upTo,
+            num.toUByte(),
+            size.toUInt(),
             feeRate.toULong(),
             false
         )
@@ -404,14 +394,13 @@ object RGBHelper {
     }
 
 
-    fun createNewUTXOs(feeRate: Float): Boolean {
+    fun createNewUTXOs(feeRate: Float, num: Int, size: Int, upTo: Boolean): Boolean {
         var attempts = 3
         var newUTXOs: UByte = 0u
         while (newUTXOs == 0u.toUByte() && attempts > 0) {
             Log.d(TAG, "createNewUTXOs: attempts=$attempts")
             try {
-                Log.d(TAG, "Calling create UTXOs... with fee $feeRate")
-                newUTXOs = createUTXOs(feeRate)!!
+                newUTXOs = createUTXOs(feeRate, num, size, upTo)!!
                 Log.d(TAG, "newUTXO: $newUTXOs")
             } catch (_: RgbLibException.InsufficientBitcoins) {
                 throw Exception("Insufficient sats for RGB")
