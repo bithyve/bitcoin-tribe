@@ -690,7 +690,9 @@
     "txnInfoTitle": "信息"
   },
   "community": {
-    "fnfTitle": "Community",
+    "fnfTitle": "社区",
+    "noConnectionTitle": "尚未建立连接",
+    "noConnectionSubTitle": "通过添加好友开始建立您的社区。在 Bitcoin Tribe 上保持联系并共同探索。",
     "fnfSubTitle": "比特币和朋友在一起更好",
     "profileInfoTitle": "个人资料信息",
     "profileInfoSubTitle": "扫描或分享您的二维码以立即连接。",

@@ -690,7 +690,9 @@
     "txnInfoTitle": "情報"
   },
   "community": {
-    "fnfTitle": "Community",
+    "fnfTitle": "コミュニティ",
+    "noConnectionTitle": "まだ接続がありません",
+    "noConnectionSubTitle": "友達を追加してコミュニティ作りを始めましょう。Bitcoin Tribe でつながりを保ち、一緒に探検しましょう。",
     "fnfSubTitle": "ビットコインは友達と一緒にいるともっと楽しい",
     "profileInfoTitle": "プロフィール情報",
     "profileInfoSubTitle": "QRコードをスキャンまたは共有して、すぐに接続します。",
