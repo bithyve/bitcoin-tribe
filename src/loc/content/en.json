@@ -691,6 +691,8 @@
   },
   "community": {
     "fnfTitle": "Community",
+    "noConnectionTitle": "No Connections Yet",
+    "noConnectionSubTitle": "Start building your community by adding friends. Stay connected and explore together on Bitcoin Tribe.",
     "fnfSubTitle": "Bitcoin is better with friends",
     "profileInfoTitle": "Profile Info",
     "profileInfoSubTitle": "Scan or share your QR code to connect instantly.",

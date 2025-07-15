@@ -690,7 +690,9 @@
     "txnInfoTitle": "Información"
   },
   "community": {
-    "fnfTitle": "Community",
+    "fnfTitle": "Comunidad",
+    "noConnectionTitle": "Aún No Hay Conexiones",
+    "noConnectionSubTitle": "Comienza a construir tu comunidad agregando amigos. Mantente conectado y explora junto a otros en Bitcoin Tribe.",
     "fnfSubTitle": "Bitcoin es mejor con amigas",
     "profileInfoTitle": "Información del Perfil",
     "profileInfoSubTitle": "Escanee o comparta su código QR para conectarse al instante.",
