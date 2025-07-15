@@ -25,20 +25,16 @@ function CommunityHeader() {
         <AppText variant="heading1" style={styles.titleStyle}>
           {community.fnfTitle}
         </AppText>
-
       </View>
       <View style={styles.iconWrapper}>
+        <IconWrapper style={styles.icon} onPress={() => {}}>
+          {!theme.dark ? <SearchIconLight /> : <SearchIcon />}
+        </IconWrapper>
         <IconWrapper
           style={styles.icon}
           onPress={() => {
+            navigation.navigate(NavigationRoutes.PROFILEINFO);
           }}>
-        {!theme.dark ? <SearchIconLight /> : <SearchIcon />}
-      </IconWrapper>
-      <IconWrapper
-        style={styles.icon}
-        onPress={() => {
-          navigation.navigate(NavigationRoutes.PROFILEINFO);
-        }}>
           {!theme.dark ? <AddContactIconLight /> : <AddContactIcon />}
         </IconWrapper>
       </View>
