@@ -33,6 +33,8 @@ import {
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,
+  DisclaimerSchema,
+  DisclaimerContentSchema,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
@@ -45,7 +47,12 @@ import {
   NodeOnchainTransactionSchema,
 } from './nodeOnchainTransaction';
 import { LNPaymentsSchema } from './lnPayments';
-import { CommunitySchema, MessageSchema, ContactSchema, RequestSchema } from './community';
+import {
+  CommunitySchema,
+  MessageSchema,
+  ContactSchema,
+  // RequestSchema,
+} from './community';
 
 export default [
   TribeAppSchema,
@@ -91,8 +98,10 @@ export default [
   MessageSchema,
   ReceiveUTXOSchema,
   ContactSchema,
-  RequestSchema,
+  // RequestSchema,
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,
+  DisclaimerSchema,
+  DisclaimerContentSchema,
 ];

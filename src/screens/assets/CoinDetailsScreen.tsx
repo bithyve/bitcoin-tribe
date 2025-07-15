@@ -35,6 +35,7 @@ import {
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
+import DisclaimerPopup from 'src/components/DisclaimerPopup';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -52,6 +53,8 @@ const CoinDetailsScreen = () => {
     hasIssuedAsset,
     setHasIssuedAsset,
     isNodeInitInProgress,
+    isDisclaimerVisible,
+    setIsDisclaimerVisible,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -161,6 +164,12 @@ const CoinDetailsScreen = () => {
       : coin?.transactions;
 
 
+
+  const rawHtml = isThemeDark
+    ? coin?.disclaimer?.content?.dark
+    : coin?.disclaimer?.content?.light;
+
+  const disclaimerHtml = rawHtml;
 
   return (
     <ScreenContainer>
@@ -273,6 +282,16 @@ const CoinDetailsScreen = () => {
           }}
           issuerInfo={coin}
         />
+      </>
+      <>
+        {coin?.disclaimer?.showDisclaimer && (
+          <DisclaimerPopup
+            visible={isDisclaimerVisible}
+            primaryOnPress={() => setIsDisclaimerVisible(false)}
+            primaryCtaTitle="Understood"
+            disclaimerHtml={disclaimerHtml}
+          />
+        )}
       </>
     </ScreenContainer>
   );
