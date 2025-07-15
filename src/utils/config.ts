@@ -29,17 +29,21 @@ class Configuration {
   public GAP_LIMIT: number = 20;
   public HEXA_ID: string =
     'b01623f1065ba45d68b516efe2873f59bfc9b9b2d8b194f94f989d87d711830a';
-  public RELAY_URL: string = 'https://bhrelay.appspot.com';
+  public RELAY_URL: string = 'https://dev-api.bitcointribe.app';
   public RELAY_VERSION: string = 'v1';
   public RELAY: string = `${this.RELAY_URL}/api/${this.RELAY_VERSION}`;
   public SENTRY_DNS: string = config.SENTRY_DNS || '';
   public TWITTER_CLIENT_ID: string = 'ZjA1RnRiSEFfNm1ESGFuY21hM1I6MTpjaQ';
   public TRIBE_FCM_BROADCAST_CHANNEL: string =
     config.TRIBE_FCM_BROADCAST_CHANNEL;
+  public CHAT_PEER_PUB_KEY: string = config.CHAT_PEER_PUB_KEY;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
-    this.NETWORK_TYPE = NetworkType.REGTEST;
+    this.NETWORK_TYPE =
+      this.ENVIRONMENT === APP_STAGE.DEVELOPMENT
+        ? NetworkType.REGTEST
+        : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
   }
 
