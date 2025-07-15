@@ -78,7 +78,6 @@ import ChatPeerManager from '../p2p/ChatPeerManager';
 import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
 
-
 export class ApiHandler {
   private static app: RGBWallet;
   private static appType: AppType;
@@ -568,8 +567,8 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const cm = ChatPeerManager.getInstance()
-    await cm.init(app.primarySeed)
+    const cm = ChatPeerManager.getInstance();
+    await cm.init(app.primarySeed);
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
@@ -609,8 +608,8 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-      const cm = ChatPeerManager.getInstance()
-      await cm.init(app.primarySeed)
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
@@ -645,7 +644,10 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if (app.appType === AppType.NODE_CONNECT || app.appType === AppType.SUPPORTED_RLN) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
@@ -659,8 +661,8 @@ export class ApiHandler {
         rgbWallet.accountXpubColored,
         rgbWallet.masterFingerprint,
       );
-      const cm = ChatPeerManager.getInstance()
-      await cm.init(app.primarySeed)
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
@@ -1667,9 +1669,14 @@ export class ApiHandler {
 
   static async updateProfile(appID, appName, walletImage) {
     try {
-      const response = await Relay.updateApp(appID, appName, walletImage, ApiHandler.authToken);
+      const response = await Relay.updateApp(
+        appID,
+        appName,
+        walletImage,
+        ApiHandler.authToken,
+      );
       if (response.updated) {
-      dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
           appName: appName,
           walletImage: response.imageUrl,
         });
@@ -2562,46 +2569,12 @@ export class ApiHandler {
       return error;
     }
   };
-  static normalizeCoinForRealm(coin: any): any {
-    return {
-      ...coin,
-      issuedSupply: parseInt(coin.issuedSupply ?? '0', 10),
-      timestamp: parseInt(coin.timestamp ?? '0', 10),
-      disclaimer: coin.disclaimer
-        ? {
-            showDisclaimer: coin.disclaimer.showDisclaimer ?? false,
-            content: {
-              light: coin.disclaimer.content?.light ?? '',
-              dark: coin.disclaimer.content?.dark ?? '',
-            },
-          }
-        : undefined,
-      balance: {
-        future: parseInt(coin.balance?.future ?? '0', 10),
-        settled: parseInt(coin.balance?.settled ?? '0', 10),
-        spendable: parseInt(coin.balance?.spendable ?? '0', 10),
-      },
-      issuer: coin.issuer
-        ? {
-            verified: coin.issuer.verified ?? false,
-          }
-        : undefined,
-      metaData: {
-        ...coin.metaData,
-        issuedSupply: parseInt(coin.metaData?.issuedSupply ?? '0', 10),
-        timestamp: parseInt(coin.metaData?.timestamp ?? '0', 10),
-      },
-      transactions: coin.transactions ?? [],
-      isIssuedPosted: !!coin.isIssuedPosted,
-      isVerifyPosted: !!coin.isVerifyPosted,
-    };
-  }
+
   static fetchPresetAssets = async () => {
     try {
       const response = await Relay.getPresetAssets();
       if (response && response.coins) {
-        for (const coinData of response.coins) {
-          const coin = ApiHandler.normalizeCoinForRealm(coinData);
+        for (const coin of response.coins) {
           dbManager.createObjectBulk(
             RealmSchema.Coin,
             [coin],
