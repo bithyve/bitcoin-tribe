@@ -280,7 +280,7 @@ const CoinDetailsScreen = () => {
         />
       </>
       <>
-        {coin?.disclaimer?.showDisclaimer && (
+        {coin?.disclaimer?.showDisclaimer === 'true' && (
           <DisclaimerPopup
             visible={isDisclaimerVisible}
             primaryOnPress={() => setIsDisclaimerVisible(false)}

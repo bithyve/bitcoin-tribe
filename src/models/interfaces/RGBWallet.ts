@@ -126,7 +126,7 @@ export interface Coin {
   disclaimer?: {
     contentLight: string;
     contentDark: string;
-    showDisclaimer?: boolean;
+    showDisclaimer?: string;
   };
 }
 
