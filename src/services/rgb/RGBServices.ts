@@ -61,21 +61,24 @@ export default class RGBServices {
     feePerByte,
     appType: AppType,
     api: RLNNodeApiServices,
+    num: number = 2,
+    size: number = 1500,
+    upTo: boolean = false,
   ): Promise<{ created: boolean; error?: string }> => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.createutxos({
         fee_rate: 5,
-        num: 5,
-        size: 1100,
+        num,
+        size,
         skip_sync: false,
-        up_to: false,
+        up_to: upTo,
       });
       if (response) {
         return { created: true };
       }
       return { created: false };
     } else {
-      const response = await RGB.createUtxos(feePerByte);
+      const response = await RGB.createUtxos(feePerByte, num, size, upTo);
       return JSON.parse(response);
     }
   };

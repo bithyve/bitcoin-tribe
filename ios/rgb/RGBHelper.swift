@@ -432,7 +432,7 @@ import CloudKit
     fatalError("Missing return statement")
   }
   
-  @objc func createUTXOs(feeRate: Int, callback: @escaping ((String) -> Void)) {
+  @objc func createUTXOs(feeRate: Int, num: Int, size: Int, upTo: Bool, callback: @escaping ((String) -> Void)) {
       print("Creating UTXOs... \(feeRate)")
     
     do {
@@ -457,7 +457,7 @@ import CloudKit
               var newUTXOs: UInt8 = 0
                             while newUTXOs == 0 && attempts > 0 {
                   print("Attempting to create UTXOs, attempts left: \(attempts)")
-                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: UInt64(feeRate), skipSync: false)
+                              newUTXOs = try wallet.createUtxos(online: online, upTo: upTo, num: UInt8(num), size: UInt32(size), feeRate: UInt64(feeRate), skipSync: false)
                   print("newUTXOs=\(newUTXOs)")
                   attempts -= 1
               }
