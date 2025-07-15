@@ -8,7 +8,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"tribe";
-  [FIRApp configure];
+  
+  NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+  if ([bundleIdentifier containsString:@"tribe.dev"]) {
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info-dev" ofType:@"plist"];
+    if (plistPath) {
+      FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:plistPath];
+      [FIRApp configureWithOptions:options];
+    } else {
+      [FIRApp configure];
+    }
+  } else {
+    [FIRApp configure];
+  }
+  
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   [[UIApplication sharedApplication] registerForRemoteNotifications];
   // You can add your custom initial props in the dictionary below.
