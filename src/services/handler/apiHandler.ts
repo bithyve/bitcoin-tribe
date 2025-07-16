@@ -1824,20 +1824,23 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      if (!Array.isArray(response)) {
+        throw new Error(
+          `Expected array but got: ${typeof response} — ${JSON.stringify(
+            response,
+          )}`,
+        );
+      }
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-
-      // Serialize the response to a JSON string for storage
       const utxosData = response.map(utxo => JSON.stringify(utxo));
-
-      // Update the RgbWallet object with the UTXOs
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',
         rgbWallet.mnemonic,
         {
-          utxos: utxosData, // Store the array
+          utxos: utxosData,
         },
       );
 

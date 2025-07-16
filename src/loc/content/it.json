@@ -436,7 +436,8 @@
     "accountXPub": "Account xPub",
     "accountXPubSubTitle": "Dettagli xPub per il tuo portafoglio",
     "xPubDetails": "Indirizzo XPub",
-    "buySubtitle": "Clicca sull'opzione qui sotto per acquistare btc",
+    "buyTitle": "Acquista Bitcoin",
+    "buySubtitle": "Acquista BTC facilmente con Ramp.",
     "buyWithRamp": "Acquista con Ramp",
     "buyWithRampSubTitle": "Commissioni basse per acquisti importanti",
     "noUTXOYet": "Nessuna transazione ancora",
@@ -529,7 +530,7 @@
     "sendAssetLoadingTitle": "Invio di asset RGB",
     "sendAssetLoadingSubTitle": "La tua transazione è in fase di elaborazione—attendi un momento! Rilassati e i tuoi asset RGB saranno inviati in modo sicuro.",
     "issueAssetLoadingTitle": "Emissione dell'Asset",
-    "issueAssetLoadingSubTitle": "Il tuo asset è in fase di creazione—attendi un momento! Rilassati, il tuo nuovo asset sarà emesso a breve.",
+    "issueAssetLoadingSubTitle": "Il tuo asset è in fase di emissione—attendi un attimo! Rilassati, il tuo nuovo asset sarà presto disponibile.",
     "totalSupplyAmountErrMsg": "Il valore inserito è troppo grande. Inserisci un numero inferiore a 18.446.744.073.709.551.615.",
     "swipeToSend": "Scorri per inviare",
     "sendingAsset": "Inviando beni...",
@@ -687,7 +688,9 @@
     "platformFeeTitle": "Commissione della piattaforma (Elenco nel registro)",
     "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico.",
     "noAssetsFoundMsg": "Non hai alcun asset nel tuo wallet oppure potrebbero essere nascosti.",
-    "txnInfoTitle": "Informazioni"
+    "txnInfoTitle": "Informazioni",
+    "whyShareAssetTitle": "Perché Condividere il Tuo Asset Emanato?",
+    "whyShareAssetSubTitle": "Condividere aumenta la visibilità — ma non prova la proprietà. Verificati per renderlo ufficiale."
   },
   "community": {
     "fnfTitle": "Comunità",

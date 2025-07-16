@@ -15,6 +15,7 @@ type PrimaryCTAProps = {
   disabled?: boolean;
   textColor?: string;
   height?: number;
+  primaryCTAIcon?: React.ReactNode;
 };
 
 function PrimaryCTA(props: PrimaryCTAProps) {
@@ -28,6 +29,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
     loading,
     disabled = false,
     height = hp(14),
+    primaryCTAIcon,
   } = props;
   const styles = getStyles(theme, width, disabled, textColor, height);
 
@@ -49,6 +51,7 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       maxFontSizeMultiplier={1}
       loading={loading}
       disabled={disabled}>
+      {primaryCTAIcon}
       {title}
     </Button>
   );

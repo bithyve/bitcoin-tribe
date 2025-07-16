@@ -245,8 +245,11 @@ const CoinsMetaDataScreen = () => {
               title={assets.issuedSupply}
               value={
                 coin.metaData && coin.metaData.precision === 0
-                ? numberWithCommas(Number(coin?.metaData?.issuedSupply))
-                : numberWithCommas(Number(coin?.metaData?.issuedSupply) / 10 ** coin?.metaData?.precision)
+                  ? numberWithCommas(Number(coin?.metaData?.issuedSupply))
+                  : numberWithCommas(
+                      Number(coin?.metaData?.issuedSupply) /
+                        10 ** coin?.metaData?.precision,
+                    )
               }
               width={'45%'}
             />

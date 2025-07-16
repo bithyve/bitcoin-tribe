@@ -52,7 +52,7 @@ function ProfileSetup() {
         maxWidth: 500,
         selectionLimit: 1,
         quality: 0.4,
-      })
+      });
       setProfileImage(result.assets[0]);
     } catch (error) {
       console.error(error);
@@ -90,11 +90,11 @@ function ProfileSetup() {
       <ProfileDetails
         title={onBoarding.profileSetupTitle}
         subTitle={onBoarding.profileSetupSubTitle}
-        onChangeText={text => setName(text.trim())}
+        onChangeText={text => setName(text)}
         inputValue={name}
         primaryOnPress={() => initiateWalletCreation()}
         // secondaryOnPress={() => navigation.goBack()}
-        addPicTitle={onBoarding.addPicture} 
+        addPicTitle={onBoarding.addPicture}
         profileImage={profileImage?.uri}
         handlePickImage={() => handlePickImage()}
         inputPlaceholder={onBoarding.enterName}

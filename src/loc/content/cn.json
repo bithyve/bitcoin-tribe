@@ -436,9 +436,10 @@
     "accountXPub": "账户xPub",
     "accountXPubSubTitle": "钱包的xPub详细信息",
     "xPubDetails": "xPub地址",
-    "buySubtitle": "点击下面的选项购买比特币",
-    "buyWithRamp": "通过Ramp购买",
-    "buyWithRampSubTitle": "大额购买低费用",
+    "buyTitle": "购买比特币",
+    "buySubtitle": "使用 Ramp 轻松购买 BTC。",
+    "buyWithRamp": "使用 Ramp 购买",
+    "buyWithRampSubTitle": "大额购买享低手续费",
     "noUTXOYet": "尚无交易",
     "noUTXOYetSubTitle": "开始发送和接收比特币以查看您的活动！",
     "xPubNoteSubTitle": "扫描或复制粘贴xPub地址",
@@ -529,7 +530,7 @@
     "sendAssetLoadingTitle": "正在发送 RGB 资产",
     "sendAssetLoadingSubTitle": "您的交易正在处理中，请稍等！放松一下，您的 RGB 资产将被安全发送。",
     "issueAssetLoadingTitle": "发行资产",
-    "issueAssetLoadingSubTitle": "您的资产正在创建中，请稍等！放松一下，您的新资产很快就会发行。",
+    "issueAssetLoadingSubTitle": "您的资产正在发行中，请稍候！放松一下，您的新资产即将发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 9,007,199,254,740,992 的数字。",
     "swipeToSend": "滑动发送",
     "sendingAsset": "正在发送资产...",
@@ -687,7 +688,9 @@
     "platformFeeTitle": "平台费用（注册列表）",
     "platformFeeSubTitle": "该交易是为将您的资产列入公共注册表而发起的。",
     "noAssetsFoundMsg": "您的钱包中没有任何资产，或者它们可能已被隐藏。",
-    "txnInfoTitle": "信息"
+    "txnInfoTitle": "信息",
+    "whyShareAssetTitle": "为什么要分享你发行的资产？",
+    "whyShareAssetSubTitle": "分享可以提升曝光度——但并不能证明所有权。请验证身份以使其正式化。"
   },
   "community": {
     "fnfTitle": "社区",

@@ -12,9 +12,10 @@ type secondaryCTAProps = {
   width?: number;
   height?: number;
   disabled?: boolean;
+  secondaryCTAIcon?: React.ReactNode;
 };
 function SecondaryCTA(props: secondaryCTAProps) {
-  const { title, onPress, width = 'auto', height } = props;
+  const { title, onPress, width = 'auto', height, secondaryCTAIcon } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, width, height);
 
@@ -41,6 +42,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
         style={styles.ctaContainerStyle}
         onPress={onPress}
         maxFontSizeMultiplier={1}>
+        {secondaryCTAIcon}
         {title}
       </Button>
     </GradientView>
