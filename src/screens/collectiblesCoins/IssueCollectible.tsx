@@ -556,9 +556,16 @@ function IssueCollectibleScreen() {
               error={assetTotSupplyValidationError}
             />
 
-          <AppText variant="body2" style={styles.textInputTitle}>
-            Total Supply: {totalSupplyWithPrecision}
-          </AppText>
+
+            <View style={styles.totalSupplyWrapper}>
+              <AppText variant="body2" style={styles.textInputTitle}>
+                Total Supply:
+              </AppText>
+              <AppText variant="body2" style={styles.textTotalSupply}>
+                {totalSupplyWithPrecision}
+              </AppText>
+            </View>
+
             <AppText
               variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
@@ -854,6 +861,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     selectAttatchmentIconWrapper: {
       marginHorizontal: hp(5),
       marginVertical: hp(12),
+    },
+    totalSupplyWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textTotalSupply: {
+      color: theme.colors.accent1,
+      marginLeft: hp(10),
     },
   });
 export default IssueCollectibleScreen;

@@ -318,9 +318,14 @@ function IssueScreen() {
             error={assetTotSupplyValidationError}
           />
 
-          <AppText variant="body2" style={styles.textInputTitle}>
-            Total Supply: {totalSupplyWithPrecision}
-          </AppText>
+          <View style={styles.totalSupplyWrapper}>
+            <AppText variant="body2" style={styles.textInputTitle}>
+              Total Supply:
+            </AppText>
+            <AppText variant="body2" style={styles.textTotalSupply}>
+              {totalSupplyWithPrecision}
+            </AppText>
+          </View>
         </View>
       </KeyboardAvoidView>
       {colorable.length === 0 && (
@@ -420,6 +425,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       color: theme.colors.secondaryHeadingColor,
       marginTop: hp(5),
       marginBottom: hp(3),
+    },
+    totalSupplyWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textTotalSupply: {
+      color: theme.colors.accent1,
+      marginLeft: hp(10),
     },
   });
 export default IssueScreen;
