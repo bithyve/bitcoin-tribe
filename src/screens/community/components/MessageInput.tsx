@@ -6,8 +6,8 @@ import {
   Keyboard,
   } from 'react-native';
 import AppTouchable from 'src/components/AppTouchable';
-import IconSend from 'src/assets/images/icon_send.svg';
-import IconSendLight from 'src/assets/images/ic_send_light.svg';
+import IconSend from 'src/assets/images/ic_send_msg.svg';
+import IconSendLight from 'src/assets/images/ic_send_msg_light.svg';
 import IconPlus from 'src/assets/images/ic_plus.svg';
 import IconPlusLight from 'src/assets/images/ic_plus_light.svg';
 import IconClose from 'src/assets/images/ic_close.svg';
