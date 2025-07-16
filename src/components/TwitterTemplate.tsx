@@ -197,8 +197,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             value={
               asset?.assetSchema.toUpperCase() === AssetSchema.UDA
                 ? 'Unique'
-                : asset?.metaData &&
-                  numberWithCommas(asset?.metaData?.issuedSupply)
+                : asset && numberWithCommas(asset?.issuedSupply)
             }
           />
           {twitterVerification?.type && (
