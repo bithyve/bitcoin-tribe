@@ -207,7 +207,7 @@ function HomeScreen() {
   }, [navigation]);
 
   useEffect(() => {
-    if (Number(versionNumber) < 161) {
+    if (Number(versionNumber) < 163) {
       Alert.alert(
         'Unsupported Version',
         'This version of Tribe is no longer supported. Please setup a new wallet to continue.',
