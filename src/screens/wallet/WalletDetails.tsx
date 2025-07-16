@@ -223,7 +223,7 @@ function WalletDetails({ navigation, route }) {
         scrollY={scrollY}
       />
       <ModalContainer
-        title={common.buy}
+        title={walletStrings.buyTitle}
         subTitle={walletStrings.buySubtitle}
         visible={visible}
         enableCloseIcon={false}
