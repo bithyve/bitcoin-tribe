@@ -688,7 +688,9 @@
     "platformFeeTitle": "平台费用（注册列表）",
     "platformFeeSubTitle": "该交易是为将您的资产列入公共注册表而发起的。",
     "noAssetsFoundMsg": "您的钱包中没有任何资产，或者它们可能已被隐藏。",
-    "txnInfoTitle": "信息"
+    "txnInfoTitle": "信息",
+    "whyShareAssetTitle": "为什么要分享你发行的资产？",
+    "whyShareAssetSubTitle": "分享可以提升曝光度——但并不能证明所有权。请验证身份以使其正式化。"
   },
   "community": {
     "fnfTitle": "社区",

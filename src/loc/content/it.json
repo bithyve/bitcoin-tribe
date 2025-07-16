@@ -688,7 +688,9 @@
     "platformFeeTitle": "Commissione della piattaforma (Elenco nel registro)",
     "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico.",
     "noAssetsFoundMsg": "Non hai alcun asset nel tuo wallet oppure potrebbero essere nascosti.",
-    "txnInfoTitle": "Informazioni"
+    "txnInfoTitle": "Informazioni",
+    "whyShareAssetTitle": "Perché Condividere il Tuo Asset Emanato?",
+    "whyShareAssetSubTitle": "Condividere aumenta la visibilità — ma non prova la proprietà. Verificati per renderlo ufficiale."
   },
   "community": {
     "fnfTitle": "Comunità",

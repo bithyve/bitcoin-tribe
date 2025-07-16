@@ -688,7 +688,9 @@
     "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
     "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。",
     "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。",
-    "txnInfoTitle": "情報"
+    "txnInfoTitle": "情報",
+    "whyShareAssetTitle": "発行した資産を共有する理由は？",
+    "whyShareAssetSubTitle": "共有すると可視性は高まりますが、所有権の証明にはなりません。正当性を持たせるにはご自身を認証してください。"
   },
   "community": {
     "fnfTitle": "コミュニティ",

@@ -688,7 +688,9 @@
     "platformFeeTitle": "Platform Fee (Registry Listing)",
     "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry.",
     "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden.",
-    "txnInfoTitle": "Info"
+    "txnInfoTitle": "Info",
+    "whyShareAssetTitle": "Why Share Your Issued Asset?",
+    "whyShareAssetSubTitle": "Sharing boosts visibility — but it doesn’t prove ownership. Verify yourself to make it official."
   },
   "community": {
     "fnfTitle": "Community",

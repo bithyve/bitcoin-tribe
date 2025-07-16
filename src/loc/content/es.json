@@ -688,7 +688,9 @@
     "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
     "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público.",
     "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos.",
-    "txnInfoTitle": "Información"
+    "txnInfoTitle": "Información",
+    "whyShareAssetTitle": "¿Por Qué Compartir Tu Activo Emitido?",
+    "whyShareAssetSubTitle": "Compartir aumenta la visibilidad — pero no prueba la propiedad. Verifícate para hacerlo oficial."
   },
   "community": {
     "fnfTitle": "Comunidad",
