@@ -62,7 +62,7 @@ export default class RGBServices {
     appType: AppType,
     api: RLNNodeApiServices,
     num: number = 2,
-    size: number = 1500,
+    size: number = 2000,
     upTo: boolean = false,
   ): Promise<{ created: boolean; error?: string }> => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {

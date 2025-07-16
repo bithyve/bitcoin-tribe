@@ -42,25 +42,30 @@ export default class ChatPeerManager {
   }
 
   async init(seed: string): Promise<boolean> {
-    await this.worklet.start('/app.bundle', bundle, [seed]);
-
-    this.rpc = new RPC(this.IPC, async req => {
-      const data = b4a.toString(req.data);
-      // console.log(`${Platform.OS} Received:`, req.command, data);
-
-      if (req.command === RPC_KEY) {
-      } else if (req.command === ON_MESSAGE) {
-        this.storeMessage(JSON.parse(data));
-        if (this.onMessageCallback) {
-          this.onMessageCallback(JSON.parse(data));
+    try {
+      await this.worklet.start('/app.bundle', bundle, [seed]);
+  
+      this.rpc = new RPC(this.IPC, async req => {
+        const data = b4a.toString(req.data);
+        // console.log(`${Platform.OS} Received:`, req.command, data);
+  
+        if (req.command === RPC_KEY) {
+        } else if (req.command === ON_MESSAGE) {
+          this.storeMessage(JSON.parse(data));
+          if (this.onMessageCallback) {
+            this.onMessageCallback(JSON.parse(data));
+          }
+        } else if (req.command === ON_CONNECTION) {
+          if (this.onConnectionCallback) {
+            this.onConnectionCallback(JSON.parse(data));
+          }
         }
-      } else if (req.command === ON_CONNECTION) {
-        if (this.onConnectionCallback) {
-          this.onConnectionCallback(JSON.parse(data));
-        }
-      }
-    });
-    return true;
+      });
+      return true;
+    } catch (error) {
+      console.error('Error initializing chat peer manager:', error);
+      return false;
+    }
   }
 
   async getKeys() {

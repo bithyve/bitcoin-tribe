@@ -5281,6 +5281,7 @@ public enum RgbLibError: Swift.Error {
     )
     case NoConsignment
     case NoIssuanceAmounts
+    case NoSupportedSchemas
     case NoValidTransportEndpoint
     case Offline
     case OnlineNeeded
@@ -5456,35 +5457,36 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
             )
         case 59: return .NoConsignment
         case 60: return .NoIssuanceAmounts
-        case 61: return .NoValidTransportEndpoint
-        case 62: return .Offline
-        case 63: return .OnlineNeeded
-        case 64: return .OutputBelowDustLimit
-        case 65: return .Proxy(
+        case 61: return .NoSupportedSchemas
+        case 62: return .NoValidTransportEndpoint
+        case 63: return .Offline
+        case 64: return .OnlineNeeded
+        case 65: return .OutputBelowDustLimit
+        case 66: return .Proxy(
             details: try FfiConverterString.read(from: &buf)
             )
-        case 66: return .RecipientIdAlreadyUsed
-        case 67: return .RecipientIdDuplicated
-        case 68: return .TooHighInflationAmounts
-        case 69: return .TooHighIssuanceAmounts
-        case 70: return .UnknownRgbSchema(
+        case 67: return .RecipientIdAlreadyUsed
+        case 68: return .RecipientIdDuplicated
+        case 69: return .TooHighInflationAmounts
+        case 70: return .TooHighIssuanceAmounts
+        case 71: return .UnknownRgbSchema(
             schemaId: try FfiConverterString.read(from: &buf)
             )
-        case 71: return .UnsupportedBackupVersion(
+        case 72: return .UnsupportedBackupVersion(
             version: try FfiConverterString.read(from: &buf)
             )
-        case 72: return .UnsupportedLayer1(
+        case 73: return .UnsupportedLayer1(
             layer1: try FfiConverterString.read(from: &buf)
             )
-        case 73: return .UnsupportedSchema(
+        case 74: return .UnsupportedSchema(
             assetSchema: try FfiConverterTypeAssetSchema.read(from: &buf)
             )
-        case 74: return .UnsupportedTransportType
-        case 75: return .WalletDirAlreadyExists(
+        case 75: return .UnsupportedTransportType
+        case 76: return .WalletDirAlreadyExists(
             path: try FfiConverterString.read(from: &buf)
             )
-        case 76: return .WatchOnly
-        case 77: return .WrongPassword
+        case 77: return .WatchOnly
+        case 78: return .WrongPassword
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -5776,78 +5778,82 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(60))
         
         
-        case .NoValidTransportEndpoint:
+        case .NoSupportedSchemas:
             writeInt(&buf, Int32(61))
         
         
-        case .Offline:
+        case .NoValidTransportEndpoint:
             writeInt(&buf, Int32(62))
         
         
-        case .OnlineNeeded:
+        case .Offline:
             writeInt(&buf, Int32(63))
         
         
-        case .OutputBelowDustLimit:
+        case .OnlineNeeded:
             writeInt(&buf, Int32(64))
         
         
-        case let .Proxy(details):
+        case .OutputBelowDustLimit:
             writeInt(&buf, Int32(65))
+        
+        
+        case let .Proxy(details):
+            writeInt(&buf, Int32(66))
             FfiConverterString.write(details, into: &buf)
             
         
         case .RecipientIdAlreadyUsed:
-            writeInt(&buf, Int32(66))
-        
-        
-        case .RecipientIdDuplicated:
             writeInt(&buf, Int32(67))
         
         
-        case .TooHighInflationAmounts:
+        case .RecipientIdDuplicated:
             writeInt(&buf, Int32(68))
         
         
-        case .TooHighIssuanceAmounts:
+        case .TooHighInflationAmounts:
             writeInt(&buf, Int32(69))
         
         
-        case let .UnknownRgbSchema(schemaId):
+        case .TooHighIssuanceAmounts:
             writeInt(&buf, Int32(70))
+        
+        
+        case let .UnknownRgbSchema(schemaId):
+            writeInt(&buf, Int32(71))
             FfiConverterString.write(schemaId, into: &buf)
             
         
         case let .UnsupportedBackupVersion(version):
-            writeInt(&buf, Int32(71))
+            writeInt(&buf, Int32(72))
             FfiConverterString.write(version, into: &buf)
             
         
         case let .UnsupportedLayer1(layer1):
-            writeInt(&buf, Int32(72))
+            writeInt(&buf, Int32(73))
             FfiConverterString.write(layer1, into: &buf)
             
         
         case let .UnsupportedSchema(assetSchema):
-            writeInt(&buf, Int32(73))
+            writeInt(&buf, Int32(74))
             FfiConverterTypeAssetSchema.write(assetSchema, into: &buf)
             
         
         case .UnsupportedTransportType:
-            writeInt(&buf, Int32(74))
+            writeInt(&buf, Int32(75))
         
         
         case let .WalletDirAlreadyExists(path):
-            writeInt(&buf, Int32(75))
+            writeInt(&buf, Int32(76))
             FfiConverterString.write(path, into: &buf)
             
         
         case .WatchOnly:
-            writeInt(&buf, Int32(76))
+            writeInt(&buf, Int32(77))
         
         
         case .WrongPassword:
-            writeInt(&buf, Int32(77))
+            writeInt(&buf, Int32(78))
         
         }
     }

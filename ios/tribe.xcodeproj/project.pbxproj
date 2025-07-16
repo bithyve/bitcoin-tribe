@@ -769,6 +769,7 @@
 				PRODUCT_NAME = tribe;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -807,6 +808,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "com.bithyve.tribe AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -842,6 +844,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -881,6 +884,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "tribe-dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
