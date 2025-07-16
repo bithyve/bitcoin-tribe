@@ -51,6 +51,7 @@ function ProfileSetup() {
         maxHeight: 500,
         maxWidth: 500,
         selectionLimit: 1,
+        quality: 0.4,
       })
       setProfileImage(result.assets[0]);
     } catch (error) {
