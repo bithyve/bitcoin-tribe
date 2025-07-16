@@ -16,7 +16,10 @@ import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { Collectible } from 'src/models/interfaces/RGBWallet';
+import {
+  Collectible,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -73,6 +76,10 @@ const CollectibleDetailsScreen = () => {
     useState(false);
   const [refresh, setRefresh] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+
+  const domainVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -181,6 +188,12 @@ const CollectibleDetailsScreen = () => {
         })
       : collectible?.transactions;
 
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
+
   // const largeHeaderHeight = scrollY.interpolate({
   //   inputRange: [0, 300],
   //   outputRange: [350, 0],
@@ -271,6 +284,16 @@ const CollectibleDetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: collectible.assetId,
+              schema: RealmSchema.Collectible,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.Collectible}
         onVerificationComplete={() => {

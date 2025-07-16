@@ -254,6 +254,12 @@ const UDADetailsScreen = () => {
     navigation.dispatch(popAction);
   };
 
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader title={uda?.name} style={styles.wrapper} />
@@ -473,6 +479,16 @@ const UDADetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: uda.assetId,
+              schema: RealmSchema.UniqueDigitalAsset,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.UniqueDigitalAsset}
         onVerificationComplete={() => {

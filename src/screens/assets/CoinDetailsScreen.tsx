@@ -9,7 +9,10 @@ import {
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  Coin,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -73,6 +76,10 @@ const CoinDetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+
+  const domainVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -167,6 +174,12 @@ const CoinDetailsScreen = () => {
 
   const disclaimerHtml = rawHtml;
 
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
+
   return (
     <ScreenContainer>
       <CoinDetailsHeader
@@ -233,6 +246,16 @@ const CoinDetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: coin.assetId,
+              schema: RealmSchema.Coin,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.Coin}
         onVerificationComplete={() => {
