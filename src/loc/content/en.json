@@ -479,7 +479,12 @@
     "valueMismatchSubTitle": "There’s a mismatch between what was sent and what you received. It could be:",
     "valueMismatchInfo1": "A different asset than expected",
     "valueMismatchInfo2": "The same asset but with a different amount",
-    "valueMismatchInfo3": "This might happen due to decoding errors or incorrect UTXO handling. Please double-check with the sender or contact support if this wasn't expected."
+    "valueMismatchInfo3": "This might happen due to decoding errors or incorrect UTXO handling. Please double-check with the sender or contact support if this wasn't expected.",
+    "rampTitle": "Get Bitcoin via Ramp",
+    "rampSubTitle": "Ramp allows you to acquire Bitcoin using payment methods available in your country.",
+    "rampInfo": "Ramp offers multiple payment methods to acquire Bitcliin.",
+    "rampAddressLabel": "Address for the transaction",
+    "rampNote": "By proceeding, you understand that ramp will process the payment and transfer for the purchased bitcoin. On continuing you will be redirected to their page."
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
