@@ -158,7 +158,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
   const domainVerification = asset?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
-
+  console.log('asset', asset);
   return (
     <ViewShot
       ref={viewShotRef}
@@ -189,7 +189,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
           <InfoItem
             title={assets.issuedOn + ':'}
             value={moment
-              .unix(asset?.metaData && asset?.metaData?.timestamp)
+              .unix(asset?.metaData?.timestamp || 0)
               .format('DD MMM YYYY  hh:mm A')}
           />
           <InfoItem
