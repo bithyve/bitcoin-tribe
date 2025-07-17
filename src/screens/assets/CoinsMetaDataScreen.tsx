@@ -222,6 +222,7 @@ const CoinsMetaDataScreen = () => {
                   });
                 }
               }}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
           </View>
           <View style={styles.rowWrapper}>

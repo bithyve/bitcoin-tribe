@@ -283,6 +283,7 @@ const CollectibleMetaDataScreen = () => {
                     });
                   }
                 }}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
             </View>
             <Item

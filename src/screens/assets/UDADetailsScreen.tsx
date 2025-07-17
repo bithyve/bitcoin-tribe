@@ -351,6 +351,7 @@ const UDADetailsScreen = () => {
                   });
                 }
               }}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
           </View>
           <Item title={home.assetName} value={uda.name} />
