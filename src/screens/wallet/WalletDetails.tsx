@@ -203,7 +203,7 @@ function WalletDetails({ navigation, route }) {
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
           )
         }
-        onPressBuy={() =>
+        onPressBuy={ config.NETWORK_TYPE === NetworkType.MAINNET ? null : () =>
           config.NETWORK_TYPE === NetworkType.MAINNET
             ? setVisible(true)
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
