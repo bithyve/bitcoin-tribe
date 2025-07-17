@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, Linking, StyleSheet, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -9,8 +9,6 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, wp } from 'src/constants/responsive';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
-import RampLogoIcon from 'src/assets/images/rampLogo.svg';
-import RampLogoIconLight from 'src/assets/images/rampLogo_light.svg';
 import AddressIcon from 'src/assets/images/addressIcon.svg';
 import AddressIconLight from 'src/assets/images/addressIcon_light.svg';
 import Buttons from 'src/components/Buttons';
@@ -55,11 +53,15 @@ function GetBTCWithRamp() {
               theme.colors.cardGradient3,
             ]}>
             <View>
-              {isThemeDark ? (
-                <RampLogoIcon height={35} />
-              ) : (
-                <RampLogoIconLight height={35} />
-              )}
+              <Image
+                source={
+                  isThemeDark
+                    ? require('src/assets/images/rampLogo.png')
+                    : require('src/assets/images/rampLogo_light.png')
+                }
+                style={styles.logoStyle}
+                resizeMode="contain"
+              />
             </View>
             <AppText variant="body2" style={styles.labelText}>
               {walletStrings.rampInfo}
@@ -144,5 +146,9 @@ const getStyles = (theme: AppTheme) =>
     },
     bodyWrapper: {
       height: '72%',
+    },
+    logoStyle: {
+      height: 45,
+      width: 80,
     },
   });
