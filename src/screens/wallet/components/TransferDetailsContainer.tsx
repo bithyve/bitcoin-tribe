@@ -179,7 +179,9 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           {transaction?.transportEndpoints?.length > 0 && (
             <TransferLabelContent
               label={'Consignment Endpoints'}
-              content={transaction.transportEndpoints[0].endpoint}
+              content={transaction.transportEndpoints
+                .map(item => item.endpoint)
+                .join('\n')}
             />
           )}
 
