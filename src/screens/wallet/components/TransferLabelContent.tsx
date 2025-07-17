@@ -32,21 +32,21 @@ function TransferLabelContent(props: labelContentProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
       width: '100%',
       justifyContent: 'space-between',
       flexDirection: 'row',
     },
     labelStyle: {
       color: theme.colors.headingColor,
-      width: '50%',
+      flex: 2,
     },
     textStyle: {
       lineHeight: 20,
       color: theme.colors.secondaryHeadingColor,
       flexWrap: 'wrap',
-      width: '50%',
-      textAlign: 'right',
+      textAlign: 'left',
+      flex: 3,
     },
   });
 export default TransferLabelContent;

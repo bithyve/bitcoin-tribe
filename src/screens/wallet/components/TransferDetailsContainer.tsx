@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import { hp, windowWidth } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Colors from 'src/theme/Colors';
 import TransferLabelContent from './TransferLabelContent';
@@ -14,9 +13,8 @@ import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import {
   TransferKind,
-  Transaction,
+  Transfer,
   TransferStatus,
-  RGBWallet,
   receiveUTXOData,
 } from 'src/models/interfaces/RGBWallet';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -24,13 +22,12 @@ import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
-import useRgbWallets from 'src/hooks/useRgbWallets';
 
 type WalletTransactionsProps = {
   assetName: string;
   transAmount: string;
   assetId: string;
-  transaction: Transaction;
+  transaction: Transfer;
   onPress: () => void;
 };
 
@@ -157,6 +154,41 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               .unix(transaction.updatedAt)
               .format('DD MMM YY  •  hh:mm A')}
           />
+
+          {transaction?.recipientId && (
+            <TransferLabelContent
+              label={'Blinded UTXO'}
+              content={transaction?.recipientId} 
+            />
+          )}
+
+          {transaction?.changeUtxo && (
+            <TransferLabelContent
+              label={'Change UTXO'}
+              content={transaction?.changeUtxo?.txid}
+            />
+          )}
+
+          {transaction?.receiveUtxo && (
+            <TransferLabelContent
+              label={'Receive UTXO'}
+              content={transaction?.receiveUtxo?.txid}
+            />
+          )}
+
+          {transaction?.transportEndpoints?.length > 0 && (
+            <TransferLabelContent
+              label={'Consignment Endpoints'}
+              content={transaction.transportEndpoints[0].endpoint}
+            />
+          )}
+
+          {transaction?.invoiceString && (
+            <TransferLabelContent
+              label={'Invoice'}
+              content={transaction?.invoiceString}
+            />
+          )}
         </View>
       </View>
       {transaction.status.toLowerCase().replace(/_/g, '') ===
