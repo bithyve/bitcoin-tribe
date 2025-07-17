@@ -198,7 +198,7 @@ const CoinsMetaDataScreen = () => {
             <IssuerVerified
               id={twitterVerification?.id}
               name={twitterVerification?.name}
-              username={twitterVerification?.username.replace(/@/g, '')}
+              username={(twitterVerification?.username || '').replace(/@/g, '')}
               assetId={assetId}
               schema={RealmSchema.Coin}
               onVerificationComplete={() => setRefreshToggle(t => !t)}

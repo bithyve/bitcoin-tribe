@@ -2444,13 +2444,16 @@ export class ApiHandler {
     assetId: string,
     schema: RealmSchema,
     asset: Asset,
+    verified: boolean,
   ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
       const response = await fetchAndVerifyTweet(tweetId);
+
       if (response.status === 429) {
         const resetAfter = response.headers.get('x-rate-limit-reset');
         const now = Math.floor(Date.now() / 1000);
         const waitTime = resetAfter ? Number(resetAfter) - now : null;
+
         if (waitTime && waitTime > 0) {
           Toast(
             `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
@@ -2469,98 +2472,115 @@ export class ApiHandler {
 
       if (!response.ok) {
         const errorJson = await response.json().catch(() => null);
-        if (errorJson?.title === 'UsageCapExceeded') {
-          return {
-            success: false,
-            reason: 'Twitter API usage cap exceeded. Please try again later.',
-          };
-        }
         const message =
-          errorJson?.title ||
-          errorJson?.detail ||
-          `HTTP error ${response.status}`;
+          errorJson?.title === 'UsageCapExceeded'
+            ? 'Twitter API usage cap exceeded. Please try again later.'
+            : errorJson?.title ||
+              errorJson?.detail ||
+              `HTTP error ${response.status}`;
         return { success: false, reason: message };
       }
 
       const data = await response.json();
       const tweet = data?.data;
-      console.log('tweet', tweet);
-      if (!tweet) {
-        return { success: false, reason: 'Tweet not found' };
-      }
 
-      if (tweet.text.includes(assetId)) {
-        const response = await Relay.verifyIssuer('appID', asset.assetId, {
-          type: IssuerVerificationMethod.TWITTER_POST,
-          link: tweetId,
-          id: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.id,
-          name: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.name,
-          username: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.username,
-        });
-        if (response.status) {
-          const existingAsset = await dbManager.getObjectByPrimaryId(
-            schema,
-            'assetId',
-            asset.assetId,
-          );
-
-          const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
-          const twitterEntry = asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          );
-
-          if (!twitterEntry) return;
-          let updatedVerifiedBy: typeof existingVerifiedBy;
-          const twitterPostIndex = existingVerifiedBy.findIndex(
-            v => v.type === IssuerVerificationMethod.TWITTER_POST,
-          );
-
-          if (twitterPostIndex !== -1) {
-            updatedVerifiedBy = [...existingVerifiedBy];
-            updatedVerifiedBy[twitterPostIndex] = {
-              ...updatedVerifiedBy[twitterPostIndex],
-              link: tweetId,
-            };
-          } else {
-            updatedVerifiedBy = [
-              ...existingVerifiedBy,
-              {
-                type: IssuerVerificationMethod.TWITTER_POST,
-                link: tweetId,
-                id: twitterEntry.id,
-                name: twitterEntry.name,
-                username: twitterEntry.username,
-              },
-            ];
-          }
-
-          await dbManager.updateObjectByPrimaryId(
-            schema,
-            'assetId',
-            asset.assetId,
-            {
-              issuer: {
-                verified: true,
-                verifiedBy: updatedVerifiedBy,
-              },
-            },
-          );
-        }
-        return { success: true, tweet };
-      } else {
+      if (!tweet) return { success: false, reason: 'Tweet not found' };
+      if (!tweet.text.includes(assetId)) {
         return { success: false, reason: 'Asset ID not found in tweet text' };
       }
+
+      const existingAsset = await dbManager.getObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+      );
+      const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
+      let updatedVerifiedBy = [...existingVerifiedBy];
+
+      const twitterPostIndex = existingVerifiedBy.findIndex(
+        v => v.type === IssuerVerificationMethod.TWITTER_POST,
+      );
+
+      let twitterPostData;
+
+      if (!verified) {
+        twitterPostData = {
+          type: IssuerVerificationMethod.TWITTER_POST,
+          link: tweetId,
+          id: '',
+          name: '',
+          username: '',
+        };
+
+        updatedVerifiedBy.push(twitterPostData);
+
+        await dbManager.updateObjectByPrimaryId(
+          schema,
+          'assetId',
+          asset.assetId,
+          {
+            issuer: {
+              verified: false,
+              verifiedBy: updatedVerifiedBy,
+            },
+          },
+        );
+
+        return { success: true, tweet };
+      }
+
+      const twitterEntry = asset?.issuer?.verifiedBy?.find(
+        v => v.type === IssuerVerificationMethod.TWITTER,
+      );
+
+      if (!twitterEntry) {
+        return { success: false, reason: 'Twitter issuer not found' };
+      }
+
+      twitterPostData = {
+        type: IssuerVerificationMethod.TWITTER_POST,
+        link: tweetId,
+        id: twitterEntry.id,
+        name: twitterEntry.name,
+        username: twitterEntry.username,
+      };
+
+      const relayResponse = await Relay.verifyIssuer(
+        'appID',
+        asset.assetId,
+        twitterPostData,
+      );
+
+      if (relayResponse.status) {
+        if (twitterPostIndex !== -1) {
+          updatedVerifiedBy[twitterPostIndex] = {
+            ...updatedVerifiedBy[twitterPostIndex],
+            link: tweetId,
+          };
+        } else {
+          updatedVerifiedBy.push(twitterPostData);
+        }
+
+        await dbManager.updateObjectByPrimaryId(
+          schema,
+          'assetId',
+          asset.assetId,
+          {
+            issuer: {
+              verified: true,
+              verifiedBy: updatedVerifiedBy,
+            },
+          },
+        );
+      }
+
+      return { success: true, tweet };
     } catch (error: any) {
       console.error('Twitter API error:', error.message || error);
       return { success: false, reason: 'Network or fetch error' };
     }
   };
+
   static searchAssetFromRegistry = async (
     query: string,
   ): Promise<{ asset?: Asset }> => {

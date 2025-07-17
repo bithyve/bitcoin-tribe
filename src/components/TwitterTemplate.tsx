@@ -188,7 +188,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
           <InfoItem
             title={assets.issuedOn + ':'}
             value={moment
-              .unix(asset?.metaData && asset?.metaData?.timestamp)
+              .unix(asset?.metaData?.timestamp ?? moment().unix())
               .format('DD MMM YYYY  hh:mm A')}
           />
           <InfoItem
