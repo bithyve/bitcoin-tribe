@@ -51,10 +51,12 @@ RCT_EXPORT_METHOD(initiate:(NSString*)network
                   mnemonic:(NSString *)mnemonic
                   accountXpubVanilla:(NSString *)accountXpubVanilla
                   accountXpubColored:(NSString *)accountXpubColored
+                  masterFingerprint:(NSString *)masterFingerprint
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
-  [helper initiateWithBtcNetwotk:network mnemonic:mnemonic accountXpubVanilla:accountXpubVanilla accountXpubColored:accountXpubColored callback:^(NSString * _Nonnull response) {
+  [helper initiateWithBtcNetwotk:network mnemonic:mnemonic accountXpubVanilla:accountXpubVanilla accountXpubColored:accountXpubColored masterFingerprint:masterFingerprint
+      callback:^(NSString * _Nonnull response) {
     resolve(response);
   }
    ];
@@ -94,11 +96,12 @@ RCT_EXPORT_METHOD(syncRgbAssets:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 RCT_EXPORT_METHOD(receiveAsset:(NSString*)assetID
                   amount:(float)amount
+                  blinded:(BOOL)blinded
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
   [
-    helper receiveAssetWithAssetID:assetID amount:amount callback:^(NSString * _Nonnull response) {
+    helper receiveAssetWithAssetID:assetID amount:amount blinded:blinded callback:^(NSString * _Nonnull response) {
       resolve(response);
     }
    ];
@@ -268,10 +271,13 @@ RCT_EXPORT_METHOD(isValidBlindedUtxo:(NSString*)invoiceData
 }
 
 RCT_EXPORT_METHOD(createUtxos:(NSInteger*)feeRate
+                  num:(NSInteger*)num
+                  size:(NSInteger*)size
+                  upTo:(BOOL*)upTo
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
   RGBHelper *helper = [[RGBHelper alloc]init];
-  [helper createUTXOsWithFeeRate:(NSInteger)feeRate callback:^(NSString * _Nonnull response) {
+  [helper createUTXOsWithFeeRate:(NSInteger)feeRate num:(NSInteger)num size:(NSInteger)size upTo:(BOOL)upTo callback:^(NSString * _Nonnull response) {
     resolve(response);
   }];
 }

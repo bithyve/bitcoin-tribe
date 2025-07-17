@@ -56,7 +56,7 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
         <View style={styles.tagWrapper}>
           <View style={styles.tagWrapper1}>
             <AppText variant="body2" style={styles.amountText}>
-              {formatLargeNumber(balance)}
+              {formatLargeNumber(Number(balance) / 10 ** asset.precision)}
             </AppText>
           </View>
         </View>

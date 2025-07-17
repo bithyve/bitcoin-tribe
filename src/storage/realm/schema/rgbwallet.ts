@@ -37,7 +37,7 @@ export const RgbWalletSchema: ObjectSchema = {
   properties: {
     mnemonic: 'string',
     xpub: 'string',
-    accountXpubColoredFingerprint: 'string',
+    masterFingerprint: 'string',
     accountXpubColored: 'string',
     accountXpubVanilla: 'string',
     rgbDir: 'string?',

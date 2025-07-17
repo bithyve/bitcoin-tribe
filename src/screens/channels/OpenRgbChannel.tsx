@@ -73,15 +73,19 @@ const OpenRgbChannel = () => {
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
-    'balance.spendable > 0',
-  );
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(
     RealmSchema.Collectible,
-  ).filtered('balance.spendable > 0');
+  );
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
-    return combined.sort((a, b) => a.timestamp - b.timestamp);
+    return combined
+      .filter(asset => 
+        asset && 
+        asset.balance && 
+        Number(asset.balance.spendable) > 0
+      )
+      .sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
   useEffect(() => {

@@ -1,11 +1,11 @@
-import { NodeInfoResponse } from 'src/services/rgbnode';
+import { NodeInfoResponse, TransportType } from 'src/services/rgbnode';
 import { LNPayments, NodeOnchainTransaction } from './Transactions';
 
 export interface RGBWallet {
   mnemonic: string;
   xpub: string;
   rgbDir: string;
-  accountXpubColoredFingerprint: string;
+  masterFingerprint: string;
   accountXpubColored: string;
   accountXpubVanilla: string;
   receiveData?: {
@@ -29,11 +29,11 @@ export interface RGBWallet {
   nodeMnemonic?: string;
 }
 interface Balance {
-  future: number;
-  settled: number;
-  spendable: number;
-  offchainOutbound?: number;
-  offchainInbound?: number;
+  future: string;
+  settled: string;
+  spendable: string;
+  offchainOutbound?: string;
+  offchainInbound?: string;
 }
 
 export interface receiveUTXOData {
@@ -48,8 +48,18 @@ export interface receiveUTXOData {
   };
 }
 
+export interface TransferTransportEndpoint {
+  endpoint: string;
+  transportType: TransportType;
+  used: boolean;
+}
+
+export interface Assignment {
+  amount: string;
+  type: string;
+}
+
 export interface Transfer {
-  amount: number;
   batchTransferIdx: number;
   createdAt: number;
   idx: number;
@@ -59,11 +69,23 @@ export interface Transfer {
   txid: string | null;
   recipientId: string | null;
   expiration: number | null;
+  requestedAssignment?: Assignment;
+  assignments?: Assignment[];
+  receiveUtxo?: {
+    txid: string;
+    vout: number;
+  };
+  changeUtxo?: {
+    txid: string;
+    vout: number;
+  };
+  invoiceString?: string;
+  transportEndpoints?: TransferTransportEndpoint[];
 }
 
 export interface MetaData {
   assetSchema: string;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   precision: number;
   ticker: string;
@@ -87,7 +109,7 @@ export interface Coin {
   addedAt: number;
   assetId: string;
   balance: Balance;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   iconUrl?: string;
   precision: number;
@@ -101,6 +123,11 @@ export interface Coin {
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
   assetSource: AssetSource;
+  disclaimer?: {
+    contentLight: string;
+    contentDark: string;
+    showDisclaimer?: string;
+  };
 }
 
 export interface Media {
@@ -114,7 +141,7 @@ export interface Collectible {
   assetId: string;
   balance: Balance;
   details: string;
-  issuedSupply: number;
+  issuedSupply: string;
   media: Media;
   name: string;
   precision: number;
@@ -134,7 +161,7 @@ export interface UniqueDigitalAsset {
   assetId: string;
   balance: Balance;
   details: string;
-  issuedSupply: number;
+  issuedSupply: string;
   name: string;
   precision: number;
   ticker: string;

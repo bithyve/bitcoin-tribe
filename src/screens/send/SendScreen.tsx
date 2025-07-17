@@ -22,6 +22,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
+import useWallets from 'src/hooks/useWallets';
+import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -33,8 +35,9 @@ function SendScreen({ route, navigation }) {
   const [validatingInvoiceErrorMsg, setValidatingInvoiceErrorMsg] =
     useState('');
   const [isScanning, setIsScanning] = useState(true);
-  const { receiveData, title, subTitle, wallet } = route.params;
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const wallet = useWallets({}).wallets[0];
+  const { receiveData, title, subTitle } = route.params;
+  const app: TribeApp = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const allAssets: Asset[] = [...coins, ...collectibles];
@@ -75,6 +78,29 @@ function SendScreen({ route, navigation }) {
         setVisibleModal(false);
         return;
       }
+      if (value.startsWith('tribe://')) {
+        setIsScanning(true);
+        setVisibleModal(false);
+        navigateWithDelay(() => {
+          const urlParts = value.split('/');
+          const path = urlParts[2];
+          if (path === deeplinkType.Contact) {
+            const publicKey = urlParts[3];
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              publicKey,
+              type: CommunityType.Peer,
+            });
+          } else if (path === deeplinkType.Group) {
+            const groupKey = urlParts[3];
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              groupKey,
+              type: CommunityType.Group,
+            });
+          }
+        });
+        return;
+      }
+
       if (value.startsWith('rgb:')) {
         try {
           const res = await ApiHandler.decodeInvoice(value);

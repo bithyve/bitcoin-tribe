@@ -82,9 +82,12 @@ import RegisterDomain from 'src/screens/assets/RegisterDomain';
 import VerifyDomain from 'src/screens/assets/VerifyDomain';
 import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
+import ProfileInfo from 'src/screens/community/ProfileInfo';
+import Chat from 'src/screens/community/Chat';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
 import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 import NodeConnected from 'src/components/NodeConnected';
+import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -337,8 +340,17 @@ function AppStack() {
           component={ImportXPost}
         />
         <Stack.Screen
+          name={NavigationRoutes.PROFILEINFO}
+          component={ProfileInfo}
+        />
+        <Stack.Screen name={NavigationRoutes.CHAT} component={Chat} />
+        <Stack.Screen
           name={NavigationRoutes.TRANSACTIONTYPEINFO}
           component={TransactionTypeInfoScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.GETBTCWITHRAMP}
+          component={GetBTCWithRamp}
         />
       </Stack.Navigator>
     </RealmProvider>
@@ -351,6 +363,14 @@ function Navigator() {
 
   return (
     <NavigationContainer
+      linking={{
+        prefixes: ['tribe://'],
+        config: {
+          screens: {
+            [NavigationRoutes.LOGINSTACK]: 'login',
+          },
+        },
+      }}
       theme={{
         dark: isThemeDark,
         colors: {

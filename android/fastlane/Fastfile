@@ -23,13 +23,13 @@ platform :android do
     key_alias = ENV["KEY_ALIAS"]
     releaseFilePath = File.join(Dir.pwd, "../app", "debug.keystore")
 
-    bump_version_code()
+    # bump_version_code()
 
     gradle(task: 'clean')
     
     gradle(
       task: 'assemble',
-      build_type: 'developmentRelease',
+      build_type: 'devRelease',
       print_command: false,
       properties: {
         "android.injected.signing.store.file" => releaseFilePath,

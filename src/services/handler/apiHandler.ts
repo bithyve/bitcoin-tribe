@@ -27,7 +27,6 @@ import PinMethod from 'src/models/enums/PinMethod';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import * as bip39 from 'bip39';
 import crypto from 'crypto';
-import { MMKV } from 'react-native-mmkv';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
@@ -70,17 +69,14 @@ import {
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
-import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import { VersionHistory } from 'src/models/interfaces/VersionHistory';
+import ChatPeerManager from '../p2p/ChatPeerManager';
+import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
-
-const bip32 = BIP32Factory(ecc);
-const storage = new MMKV();
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -166,7 +162,7 @@ export class ApiHandler {
     appName = '',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage = '',
+    walletImage = null,
     mnemonic = null,
     appType,
     rgbNodeConnectParams,
@@ -176,7 +172,7 @@ export class ApiHandler {
     appName: string;
     pinMethod: PinMethod;
     passcode: '';
-    walletImage: '';
+    walletImage: ImageAsset;
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
@@ -239,8 +235,11 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ChatPeerManager.getInstance();
+          await cm.init(primarySeed.toString('hex'));
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
-            'Tribe-Onchain-Wallet',
+            appName,
             appID,
             publicId,
             publicKey,
@@ -248,6 +247,8 @@ export class ApiHandler {
             'Iris_Regtest',
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -259,7 +260,7 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -268,6 +269,10 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -280,6 +285,7 @@ export class ApiHandler {
               rgbWallet.mnemonic,
               rgbWallet.accountXpubVanilla,
               rgbWallet.accountXpubColored,
+              rgbWallet.masterFingerprint,
             );
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -302,7 +308,7 @@ export class ApiHandler {
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
-            accountXpubColoredFingerprint: '',
+            masterFingerprint: '',
             accountXpubVanilla: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -315,13 +321,13 @@ export class ApiHandler {
           );
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.masterFingerprint = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
             appName,
-            walletImage,
+            walletImage: '',
             primaryMnemonic:
               rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
@@ -367,6 +373,9 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ChatPeerManager.getInstance();
+          await cm.init(rgbNodeConnectParams.nodeId);
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
@@ -376,6 +385,8 @@ export class ApiHandler {
             'Iris_Regtest',
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -384,7 +395,7 @@ export class ApiHandler {
             id: rgbNodeInfo.pubkey,
             publicId: rgbNodeInfo.pubkey,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic: rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
@@ -396,6 +407,10 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -404,7 +419,7 @@ export class ApiHandler {
               xpub: rgbNodeInfo.pubkey,
               rgbDir: '',
               accountXpubColored: rgbNodeInfo.pubkey,
-              accountXpubColoredFingerprint: rgbNodeInfo.pubkey,
+              masterFingerprint: rgbNodeInfo.pubkey,
               accountXpubVanilla: rgbNodeInfo.pubkey,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -552,11 +567,14 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
+    const cm = ChatPeerManager.getInstance();
+    await cm.init(app.primarySeed);
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpubVanilla,
       rgbWallet.accountXpubColored,
+      rgbWallet.masterFingerprint,
     );
     return { key, isWalletOnline };
   }
@@ -590,10 +608,13 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
       return { key, isWalletOnline };
     } catch (error) {
@@ -638,7 +659,10 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
@@ -1631,6 +1655,7 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response) {
+        response.issuedSupply = response.issuedSupply.toString();
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
         });
@@ -1644,13 +1669,20 @@ export class ApiHandler {
 
   static async updateProfile(appID, appName, walletImage) {
     try {
-      dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
-        appName: appName,
-        walletImage: walletImage,
-      });
+      const response = await Relay.updateApp(
+        appID,
+        appName,
+        walletImage,
+        ApiHandler.authToken,
+      );
+      if (response.updated) {
+        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+          appName: appName,
+          walletImage: response.imageUrl,
+        });
+      }
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
       throw error;
     }
   }
@@ -1792,20 +1824,23 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      if (!Array.isArray(response)) {
+        throw new Error(
+          `Expected array but got: ${typeof response} — ${JSON.stringify(
+            response,
+          )}`,
+        );
+      }
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-
-      // Serialize the response to a JSON string for storage
       const utxosData = response.map(utxo => JSON.stringify(utxo));
-
-      // Update the RgbWallet object with the UTXOs
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',
         rgbWallet.mnemonic,
         {
-          utxos: utxosData, // Store the array
+          utxos: utxosData,
         },
       );
 
@@ -2292,7 +2327,7 @@ export class ApiHandler {
               ios: backupFile.file,
             }),
             app.id,
-            wallet.accountXpubColoredFingerprint,
+            wallet.masterFingerprint,
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());

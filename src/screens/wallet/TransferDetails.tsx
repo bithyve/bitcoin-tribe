@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { Transaction } from 'src/models/interfaces/RGBWallet';
+import { Transfer } from 'src/models/interfaces/RGBWallet';
 import TransferDetailsContainer from './components/TransferDetailsContainer';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -18,17 +16,16 @@ import { hp } from 'src/constants/responsive';
 import CancelIllustration from 'src/assets/images/cancelIllustration.svg';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import { Keys } from 'src/storage';
 
 function TransferDetails({ route, navigation }) {
-  const transaction: Transaction = route.params?.transaction;
+  const transaction: Transfer = route.params?.transaction;
   const coin = route.params?.coin;
   const assetId = route.params?.assetId;
+  const precision = route.params?.precision;
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations;
   const [visible, setVisible] = useState(false);
   const theme: AppTheme = useTheme();
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const {
     mutate: cancelTransactionMutation,
@@ -39,6 +36,13 @@ function TransferDetails({ route, navigation }) {
   } = useMutation(() =>
     ApiHandler.handleTransferFailure(transaction.batchTransferIdx, false),
   );
+
+  const amount = useMemo(() => {
+    if (transaction.requestedAssignment) {
+      return transaction.requestedAssignment.amount;
+    }
+    return transaction.assignments[0].amount;
+  }, [transaction]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -59,7 +63,7 @@ function TransferDetails({ route, navigation }) {
       <AppHeader title={wallet.transferDetails} />
       <TransferDetailsContainer
         assetName={coin}
-        transAmount={`${transaction.amount}`}
+        transAmount={`${Number(amount) / 10 ** precision}`}
         assetId={assetId}
         transaction={transaction}
         onPress={() => cancelTransactionMutation()}

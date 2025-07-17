@@ -1,6 +1,7 @@
 package com.bithyve.tribe
 
 import android.util.Log
+import org.rgbtools.AssetSchema
 import org.rgbtools.BitcoinNetwork
 import org.rgbtools.DatabaseType
 import org.rgbtools.Online
@@ -20,7 +21,7 @@ object RGBWalletRepository {
 
     }
 
-    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String): String{
+    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String): String{
         try {
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
@@ -31,7 +32,9 @@ object RGBWalletRepository {
                 accountXpubVanilla,
                 accountXpubColored,
                 mnemonic,
-                0u
+                masterFingerprint,
+                0u,
+                listOf(AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA)
             )
             wallet = Wallet(walletData)
             online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))

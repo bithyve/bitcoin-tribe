@@ -19,6 +19,8 @@ type PrimaryCTAProps = {
   secondaryCTAWidth?: number;
   height?: number;
   secondaryCTADisabled?: boolean;
+  primaryCTAIcon?: React.ReactNode;
+  secondaryCTAIcon?: React.ReactNode;
 };
 
 function Buttons(props: PrimaryCTAProps) {
@@ -33,6 +35,8 @@ function Buttons(props: PrimaryCTAProps) {
     disabled,
     height = hp(20),
     secondaryCTADisabled,
+    primaryCTAIcon,
+    secondaryCTAIcon,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -45,6 +49,7 @@ function Buttons(props: PrimaryCTAProps) {
           width={secondaryCTAWidth}
           height={height}
           disabled={secondaryCTADisabled}
+          secondaryCTAIcon={secondaryCTAIcon}
         />
       )}
       <PrimaryCTA
@@ -54,6 +59,7 @@ function Buttons(props: PrimaryCTAProps) {
         loading={primaryLoading}
         disabled={disabled}
         height={height}
+        primaryCTAIcon={primaryCTAIcon}
       />
     </View>
   );

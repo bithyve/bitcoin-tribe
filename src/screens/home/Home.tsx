@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Alert, Platform, StyleSheet, View } from 'react-native';
+import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import {
   CommonActions,
   useFocusEffect,
@@ -42,6 +42,7 @@ import {
 } from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -206,7 +207,7 @@ function HomeScreen() {
   }, [navigation]);
 
   useEffect(() => {
-    if (Number(versionNumber) < 138) {
+    if (Number(versionNumber) < 163) {
       Alert.alert(
         'Unsupported Version',
         'This version of Tribe is no longer supported. Please setup a new wallet to continue.',
@@ -248,6 +249,42 @@ function HomeScreen() {
     checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
+  };
+
+  useEffect(() => {
+    Linking.addEventListener('url', handleDeepLink);
+    return () => {
+      Linking.removeAllListeners('url');
+    };
+  }, []);
+
+  const handleDeepLink = (event) => {
+    try {
+      const url = event.url;
+      if (url.startsWith('tribe://')) {
+        const urlParts = url.split('/');
+        const path = urlParts[2];
+        if (path === deeplinkType.Contact) {
+          const publicKey = urlParts[3];
+          if (publicKey) {
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              publicKey,
+              type: CommunityType.Peer,
+            });
+          }
+        } else if (path === deeplinkType.Group) {
+          const groupKey = urlParts[3];
+          if (groupKey) {
+            navigation.navigate(NavigationRoutes.COMMUNITY, {
+              groupKey,
+              type: CommunityType.Group,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Error parsing deep link:', error);
+    }
   };
 
   return (

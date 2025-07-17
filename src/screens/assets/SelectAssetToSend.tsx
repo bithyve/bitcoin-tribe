@@ -23,13 +23,10 @@ function SelectAssetToSend() {
   const { assets } = translations;
 
   const coins = useQuery<Coin[]>(RealmSchema.Coin)
-    .filtered('balance.spendable > 0')
     .filtered('visibility != $0', AssetVisibility.HIDDEN);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible)
-    .filtered('balance.spendable > 0')
     .filtered('visibility != $0', AssetVisibility.HIDDEN);
   const udas = useQuery<UniqueDigitalAsset[]>(RealmSchema.UniqueDigitalAsset)
-    .filtered('balance.spendable > 0')
     .filtered('visibility != $0', AssetVisibility.HIDDEN);
 
   const assetsData: Asset[] = useMemo(() => {
@@ -38,11 +35,17 @@ function SelectAssetToSend() {
       ...collectibles.toJSON(),
       ...udas.toJSON(),
     ];
-    return combined.sort((a, b) => a.timestamp - b.timestamp);
+    return combined
+      .filter(asset => 
+        asset && 
+        asset.balance && 
+        Number(asset.balance.spendable) > 0
+      )
+      .sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles, udas]);
 
   const filteredData = assetID
-    ? assetsData.filter(item => item.assetId === assetID)
+    ? assetsData.filter(item => item?.assetId === assetID)
     : assetsData;
 
   return (

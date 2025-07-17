@@ -25,8 +25,6 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import useRgbWallets from 'src/hooks/useRgbWallets';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
@@ -136,7 +134,6 @@ function HomeHeader() {
                 receiveData: 'send',
                 title: common.send,
                 subTitle: sendScreen.headerSubTitle,
-                wallet,
               });
             }}>
             {isThemeDark ? <IconScanner /> : <IconScannerLight />}

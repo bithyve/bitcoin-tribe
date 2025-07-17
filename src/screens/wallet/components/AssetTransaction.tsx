@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
@@ -41,17 +40,26 @@ type AssetTransactionProps = {
   coin: string;
   onPress: () => void;
   assetFace?: string;
+  precision: number;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
     [theme, backColor, assetFace],
   );
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+
+  const amount = useMemo(() => {
+    if(transaction.kind === TransferKind.SEND) {
+      return transaction.requestedAssignment?.amount;
+    } else {
+      return transaction.assignments[0]?.amount;
+    }
+  }, [transaction]);
 
   const getStatusIcon = (kind, status, type) => {
     const icons = {
@@ -176,10 +184,12 @@ function AssetTransaction(props: AssetTransactionProps) {
                   amtTextStyle,
                   {
                     fontSize:
-                      transaction.amount.toString().length > 10 ? 11 : 16,
+                      amount?.toString().length > 10 ? 11 : 16,
                   },
                 ]}>
-                &nbsp;{numberWithCommas(transaction.amount)}
+                &nbsp;{precision === 0
+                ? numberWithCommas(Number(amount))
+                : numberWithCommas(Number(amount) / 10 ** precision)}
               </AppText>
             </View>
           </View>
