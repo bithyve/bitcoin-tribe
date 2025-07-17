@@ -49,7 +49,7 @@ import {
   CommunitySchema,
   MessageSchema,
   ContactSchema,
-  // RequestSchema,
+  RequestSchema,
 } from './community';
 
 export default [
@@ -96,7 +96,7 @@ export default [
   MessageSchema,
   ReceiveUTXOSchema,
   ContactSchema,
-  // RequestSchema,
+  RequestSchema,
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,

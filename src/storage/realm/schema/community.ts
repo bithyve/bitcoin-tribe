@@ -14,8 +14,27 @@ export const MessageSchema: ObjectSchema = {
     type: 'string?',
     sender: 'string',
     fileUrl: 'string?',
+    request: `${RealmSchema.Request}?`,
   },
 };
+
+export const RequestSchema: ObjectSchema = {
+  name: RealmSchema.Request,
+  embedded: true,
+  properties: {
+    id: 'string',
+    type: 'string',
+    status: 'string',
+    createdBy: 'string',
+    createdAt: {type: 'int', default: Date.now()},
+    updatedAt: {type: 'int', default: Date.now()},
+    notes: 'string?',
+    asset: 'string?{}',
+    amount: 'int?',
+    invoice: 'string?',
+    txid: 'string?',
+  },
+};  
 
 export const ContactSchema: ObjectSchema = {
   name: RealmSchema.Contact,
