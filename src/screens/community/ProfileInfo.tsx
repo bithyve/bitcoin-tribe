@@ -183,6 +183,7 @@ const ProfileInfo = () => {
         <OptionCard
           title={community.createGroup}
           onPress={() => {
+            Toast('Coming Soon', false);
           }}
         />
       </View>
