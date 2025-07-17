@@ -37,6 +37,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { windowHeight } from 'src/constants/responsive';
+import Toast from 'src/components/Toast';
 
 const ColoredUTXO = () => {
   const theme: AppTheme = useTheme();
@@ -61,7 +62,7 @@ const ColoredUTXO = () => {
     if (!rgbWallet || !rgbWallet.utxos) return [];
     return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
   }, [rgbWallet]);
-  const colored = unspent.filter(
+  const colored = unspent?.filter(
     utxo =>
       utxo.utxo.colorable === true &&
       utxo.rgbAllocations?.length > 0 &&
@@ -72,12 +73,15 @@ const ColoredUTXO = () => {
     mutate();
   }, [mutate]);
   const redirectToBlockExplorer = (txid: string) => {
-    if (config.NETWORK_TYPE === NetworkType.REGTEST) return;
-    openLink(
-      `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${txid}`,
-    );
+    if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
+      openLink(
+        `https://mempool.space${
+          config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+        }/tx/${txid}`,
+      );
+    } else {
+      Toast('Explorer not available!', true);
+    }
   };
   const pullDownToRefresh = () => {
     setRefreshing(true);
@@ -95,7 +99,8 @@ const ColoredUTXO = () => {
           onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
           <UnspentUTXOElement
             transID={
-              app?.appType === AppType.NODE_CONNECT
+              app?.appType === AppType.NODE_CONNECT ||
+              app.appType === AppType.SUPPORTED_RLN
                 ? `${item.utxo.outpoint}`
                 : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
             }

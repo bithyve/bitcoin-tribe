@@ -7,7 +7,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -81,7 +85,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
-  iconUrl
+  iconUrl,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -172,8 +176,9 @@ const SendAssetScreen = () => {
   const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-    JSON.parse(averageTxFeeJSON);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
+    ? JSON.parse(averageTxFeeJSON)
+    : {};
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -206,7 +211,7 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
-    averageTxFee[TxPriority.LOW].feePerByte,
+    averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {
@@ -217,6 +222,7 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
+  const precision = assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -230,7 +236,7 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
-  const handleAmountInputChange = text => {
+ /* const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || null);
     if (isNaN(numericValue)) {
       setAmountValidationError('');
@@ -253,25 +259,24 @@ const SendAssetScreen = () => {
       setAssetAmount('');
       setAmountValidationError('');
     }
-  };
+  };*/
 
-  /* todo send asset with precision
   const handleAmountInputChange = text => {
     let regex;
-    if (assetData.precision === 0) {
+    if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
-      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${assetData.precision}})?$`);
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
     }    if (text === '' || regex.test(text)) {
       setAssetAmount(text);
       const numericValue = parseFloat(text || '0');
-      if (Number(assetData?.balance.spendable) === 0) {
+      if (Number(assetData?.balance.spendable)/10**precision === 0) {
         Keyboard.dismiss();
         Toast(
           sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
           true,
         );
-      } else if (numericValue <= assetData?.balance.spendable) {
+      } else if (numericValue <= Number(assetData?.balance.spendable)/10**precision ) {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
@@ -279,7 +284,6 @@ const SendAssetScreen = () => {
       }
     }
   };
-  */
 
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
@@ -295,7 +299,7 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
-        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
+        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, ''))*10**precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
@@ -440,8 +444,8 @@ const SendAssetScreen = () => {
           ticker={assetData?.ticker}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.ticker
-              : assetData?.details
+              ? assetData?.details
+              : assetData?.ticker
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
@@ -497,7 +501,7 @@ const SendAssetScreen = () => {
           {sendScreen.enterAmount}
         </AppText>
         <TextField
-          value={formatNumber(assetAmount)}
+          value={assetAmount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
@@ -519,7 +523,11 @@ const SendAssetScreen = () => {
           </AppText>
           <View style={styles.balanceWrapper}>
             <AppText variant="body2" style={styles.availableBalanceText}>
-              {numberWithCommas(assetData?.balance.spendable)}
+              {precision === 0
+                ? numberWithCommas(Number(assetData?.balance.spendable))
+                : numberWithCommas(Number(assetData?.balance.spendable) / 10 ** precision) +
+                  '.' +
+                  '0'.repeat(precision)}
             </AppText>
           </View>
         </View>
@@ -532,8 +540,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-              setSelectedPriority(TxPriority.LOW);
+              if (averageTxFee && averageTxFee[TxPriority.LOW]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+                setSelectedPriority(TxPriority.LOW);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -545,8 +560,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-              setSelectedPriority(TxPriority.MEDIUM);
+              if (averageTxFee && averageTxFee[TxPriority.MEDIUM]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+                setSelectedPriority(TxPriority.MEDIUM);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -558,8 +580,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-              setSelectedPriority(TxPriority.HIGH);
+              if (averageTxFee && averageTxFee[TxPriority.HIGH]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+                setSelectedPriority(TxPriority.HIGH);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -659,8 +688,15 @@ const SendAssetScreen = () => {
                   );
                   navigation.replace(NavigationRoutes.HOME);
                 } else {
+                  navigation.dispatch(
+                    CommonActions.setParams({
+                      params: { askReview: true },
+                      key: navigation.getState().routes[
+                        navigation.getState().index - 1
+                      ]?.key,
+                    }),
+                  );
                   navigation.goBack();
-                  navigation.setParams({ askReview: true });
                 }
               }, 600);
             }}

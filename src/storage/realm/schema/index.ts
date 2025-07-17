@@ -23,12 +23,16 @@ import {
   RgbWalletSchema,
   ReceiveDataSchema,
   NodeBtcBalanceSchema,
+  ReceiveUTXOSchema,
 } from './rgbwallet';
 import {
   BalanceSchema,
   CoinSchema,
   AssetTransactionSchema,
   MetaData,
+  AssignmentSchema,
+  TransferTransportEndpointSchema,
+  UtxoSchema,
 } from './coin';
 import { CollectibleMediaSchema, CollectibleSchema } from './collectible';
 import { UniqueDigitalAssetSchema, TokenSchema } from './uda';
@@ -41,6 +45,12 @@ import {
   NodeOnchainTransactionSchema,
 } from './nodeOnchainTransaction';
 import { LNPaymentsSchema } from './lnPayments';
+import {
+  CommunitySchema,
+  MessageSchema,
+  ContactSchema,
+  RequestSchema,
+} from './community';
 
 export default [
   TribeAppSchema,
@@ -82,4 +92,12 @@ export default [
   NodeOnchainTransactionSchema,
   ConfirmationTimeSchema,
   LNPaymentsSchema,
+  CommunitySchema,
+  MessageSchema,
+  ReceiveUTXOSchema,
+  ContactSchema,
+  RequestSchema,
+  AssignmentSchema,
+  TransferTransportEndpointSchema,
+  UtxoSchema,
 ];

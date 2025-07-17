@@ -298,11 +298,11 @@ const CollectibleMetaDataScreen = () => {
             <Item
               title={assets.issuedSupply}
               value={
-                app.appType === AppType.NODE_CONNECT
-                  ? numberWithCommas(collectible.issuedSupply)
-                  : collectible &&
-                    collectible.metaData &&
-                    numberWithCommas(collectible.metaData.issuedSupply)
+                app.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
+                  ? numberWithCommas(Number(collectible.issuedSupply) / 10 ** collectible.precision)
+                  : collectible?.metaData &&
+                    numberWithCommas(Number(collectible?.metaData?.issuedSupply) / 10 ** collectible?.precision)
               }
             />
 
@@ -354,7 +354,7 @@ const CollectibleMetaDataScreen = () => {
                 />
               )}
               {hasIssuanceTransaction &&
-                twitterVerification?.id &&
+                // twitterVerification?.id &&
                 !twitterPostVerificationWithLink &&
                 !twitterPostVerification?.link && (
                   <SelectOption

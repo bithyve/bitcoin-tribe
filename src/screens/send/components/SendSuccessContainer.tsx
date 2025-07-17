@@ -128,7 +128,8 @@ function SendSuccessContainer(props: sendSuccessProps) {
           <AppText variant="body1" style={styles.valueText}>
             &nbsp;
             {getBalance(
-              app.appType === AppType.NODE_CONNECT
+              app.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
                 ? total
                 : Number(total) + Number(transFee),
             )}

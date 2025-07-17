@@ -74,6 +74,7 @@ const getStyles = (width, buttonColor, height) =>
       textAlign: 'center',
       textAlignVertical: 'center',
       marginVertical: height,
+      letterSpacing: 0.1,
     },
     roundedCTATitle: {
       fontSize: 16,

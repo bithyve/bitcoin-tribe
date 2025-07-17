@@ -1,4 +1,4 @@
-import { Animated, AppState, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -8,9 +8,8 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean } from 'react-native-mmkv';
 import {
-  Asset,
   Coin,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
@@ -26,8 +25,7 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
-import { windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -37,17 +35,17 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import Toast from 'src/components/Toast';
+import DisclaimerPopup from 'src/components/DisclaimerPopup';
 
 const CoinDetailsScreen = () => {
-  const storage = new MMKV();
   const navigation = useNavigation();
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const appState = useRef(AppState.currentState);
 
-  const { assetId, askReview, askVerify, askAddToRegistry } = useRoute().params;
+  const { assetId, askReview, askVerify } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { common, settings, assets } = translations;
+  const { node } = translations;
 
   const {
     appType,
@@ -55,6 +53,9 @@ const CoinDetailsScreen = () => {
     setCompleteVerification,
     hasIssuedAsset,
     setHasIssuedAsset,
+    isNodeInitInProgress,
+    isDisclaimerVisible,
+    setIsDisclaimerVisible,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -75,6 +76,10 @@ const CoinDetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+
+  const domainVerification = coin?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -129,7 +134,10 @@ const CoinDetailsScreen = () => {
         refreshRgbWallet.mutate();
         mutate({ assetId, schema: RealmSchema.Coin });
       }
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
         getChannelMutate();
       }
@@ -138,7 +146,8 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const totalAssetLocalAmount = useMemo(() => {
-    return (channelsData ?? [])
+    const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
+    return safeChannelsData
       .filter(channel => channel.asset_id === assetId)
       .reduce((sum, channel) => sum + (channel.asset_local_amount || 0), 0);
   }, [channelsData, assetId]);
@@ -148,7 +157,7 @@ const CoinDetailsScreen = () => {
   );
 
   const transactionsData =
-    appType === AppType.NODE_CONNECT
+    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...coin?.transactions,
@@ -159,17 +168,17 @@ const CoinDetailsScreen = () => {
         })
       : coin?.transactions;
 
-  const largeHeaderHeight = scrollY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [350, 0],
-    extrapolate: 'clamp',
-  });
+  const rawHtml = isThemeDark
+    ? coin?.disclaimer?.contentDark
+    : coin?.disclaimer?.contentLight;
 
-  const smallHeaderOpacity = scrollY.interpolate({
-    inputRange: [100, 150],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
+  const disclaimerHtml = rawHtml;
+
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
 
   return (
     <ScreenContainer>
@@ -178,31 +187,38 @@ const CoinDetailsScreen = () => {
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-        onPressSend={() =>
+        onPressSend={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: coin.assetId,
             rgbInvoice: '',
             wallet: wallet,
-          })
-        }
+          });
+        }}
         onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.COINMETADATA, { assetId })
+          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
         }
-        onPressReceive={() =>
+        onPressReceive={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin.assetId,
-          })
-        }
+            chosenAsset: coin,
+          });
+        }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
-      <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView
-          spendableBalance={coin?.balance?.spendable}
-          style={styles.toolTipCotainer}
-        />
-      </View>
       <TransactionsList
-        style={styles.transactionContainer}
+        style={
+          appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
+            ? styles.transactionContainer1
+            : styles.transactionContainer
+        }
         transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
@@ -216,6 +232,7 @@ const CoinDetailsScreen = () => {
         wallet={wallet}
         coin={coin.name}
         assetId={assetId}
+        precision={coin.precision}
         scrollY={scrollY}
       />
 
@@ -229,6 +246,16 @@ const CoinDetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: coin.assetId,
+              schema: RealmSchema.Coin,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.Coin}
         onVerificationComplete={() => {
@@ -275,6 +302,16 @@ const CoinDetailsScreen = () => {
           issuerInfo={coin}
         />
       </>
+      <>
+        {coin?.disclaimer?.showDisclaimer === 'true' && (
+          <DisclaimerPopup
+            visible={isDisclaimerVisible}
+            primaryOnPress={() => setIsDisclaimerVisible(false)}
+            primaryCtaTitle="Understood"
+            disclaimerHtml={disclaimerHtml}
+          />
+        )}
+      </>
     </ScreenContainer>
   );
 };
@@ -282,11 +319,11 @@ const CoinDetailsScreen = () => {
 export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
-  spendableBalanceWrapper: {
-    top: -30,
-  },
   transactionContainer: {
-    top: -25,
+    height: windowHeight > 820 ? '52%' : '47%',
+  },
+  transactionContainer1: {
+    marginTop: hp(10),
     height: windowHeight > 820 ? '52%' : '47%',
   },
   toolTipCotainer: {

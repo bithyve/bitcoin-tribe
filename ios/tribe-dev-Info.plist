@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>146</string>
+	<string>166</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -76,5 +76,14 @@
 			<string>One</string>
 		</dict>
 	</dict>
-</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>tribe</string>
+		</array>
+	</dict>
+	</array>
+	</dict>
 </plist>

@@ -16,7 +16,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowWidth } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -39,7 +39,7 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
 
-const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
+const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
@@ -109,6 +109,13 @@ function IssueScreen() {
     viewUtxos.mutate();
   }, []);
 
+  const totalSupplyWithPrecision = useMemo(() => {
+    const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
+    const decimals = Number(precision) || 0;
+    const supplyWithPrecision = supply.toFixed(decimals);
+    return `${supplyWithPrecision} ${assetTicker}`;
+  }, [totalSupplyAmt, precision, assetTicker]);
+
   const issueCoin = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -116,7 +123,7 @@ function IssueScreen() {
       const response = await ApiHandler.issueNewCoin({
         name: assetName.trim(),
         ticker: assetTicker,
-        supply: totalSupplyAmt.replace(/,/g, ''),
+        supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
         addToRegistry,
       });
@@ -204,7 +211,7 @@ function IssueScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -276,6 +283,25 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetTickerValidationError}
           />
+
+          <Slider
+            title="Precision"
+            value={precision}
+            onValueChange={value => {
+              if(BigInt(totalSupplyAmt) * BigInt(10 ** value) > MAX_ASSET_SUPPLY_VALUE) {
+                Toast(assets.totalSupplyAmountErrMsg, true);
+                return;
+              }
+              setPrecision(value);
+            }}
+            minimumValue={0}
+            maximumValue={10}
+            step={1}
+          />
+          <AppText variant="caption" style={styles.textInputTitle}>
+            {assets.precisionCaption}
+          </AppText>
+
           <AppText variant="body2" style={styles.textInputTitle}>
             {home.totalSupplyAmount}
           </AppText>
@@ -292,17 +318,14 @@ function IssueScreen() {
             error={assetTotSupplyValidationError}
           />
 
-          <Slider
-            title="Precision"
-            value={precision}
-            onValueChange={value => setPrecision(value)}
-            minimumValue={0}
-            maximumValue={10}
-            step={1}
-          />
-          <AppText variant="caption" style={styles.textInputTitle}>
-            {assets.precisionCaption}
-          </AppText>
+          <View style={styles.totalSupplyWrapper}>
+            <AppText variant="body2" style={styles.textInputTitle}>
+              Total Supply:
+            </AppText>
+            <AppText variant="body2" style={styles.textTotalSupply}>
+              {totalSupplyWithPrecision}
+            </AppText>
+          </View>
         </View>
       </KeyboardAvoidView>
       {colorable.length === 0 && (
@@ -402,6 +425,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       color: theme.colors.secondaryHeadingColor,
       marginTop: hp(5),
       marginBottom: hp(3),
+    },
+    totalSupplyWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textTotalSupply: {
+      color: theme.colors.accent1,
+      marginLeft: hp(10),
     },
   });
 export default IssueScreen;

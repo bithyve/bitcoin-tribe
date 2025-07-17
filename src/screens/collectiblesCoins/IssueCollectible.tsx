@@ -58,10 +58,10 @@ import Slider from 'src/components/Slider';
 import AddMediaFile from 'src/assets/images/addMediaFile.svg';
 import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 
-const MAX_ASSET_SUPPLY_VALUE = BigInt('9007199254740992'); // 2^64 - 1 as BigInt
+const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueCollectibleScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
@@ -143,6 +143,13 @@ function IssueCollectibleScreen() {
     viewUtxos.mutate();
   }, []);
 
+  const totalSupplyWithPrecision = useMemo(() => {
+    const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
+    const decimals = Number(precision) || 0;
+    const supplyWithPrecision = supply.toFixed(decimals);
+    return `${supplyWithPrecision} ${assetTicker}`;
+  }, [totalSupplyAmt, precision, assetTicker]);
+
   const issueCollectible = useCallback(async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -150,12 +157,13 @@ function IssueCollectibleScreen() {
       const response = await ApiHandler.issueNewCollectible({
         name: assetName.trim(),
         description: description,
-        supply: totalSupplyAmt.replace(/,/g, ''),
+        supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
         addToRegistry: addToRegistry,
         filePath: Platform.select({
           android:
-            appType === AppType.NODE_CONNECT
+            appType === AppType.NODE_CONNECT ||
+            appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -220,7 +228,8 @@ function IssueCollectibleScreen() {
         addToRegistry: addToRegistry,
         mediaFilePath: Platform.select({
           android:
-            appType === AppType.NODE_CONNECT
+            appType === AppType.NODE_CONNECT ||
+            appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -230,7 +239,8 @@ function IssueCollectibleScreen() {
         attachmentsFilePaths: attachments.map(attachment =>
           Platform.select({
             android:
-              appType === AppType.NODE_CONNECT
+              appType === AppType.NODE_CONNECT ||
+              appType === AppType.SUPPORTED_RLN
                 ? attachment.startsWith('file://')
                   ? attachment
                   : `file://${path}`
@@ -419,7 +429,7 @@ function IssueCollectibleScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -440,7 +450,7 @@ function IssueCollectibleScreen() {
     <ScreenContainer>
       <AppHeader
         title={assets.issueCollectibles}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
       />
       <View>
@@ -518,6 +528,19 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
+
+            <Slider
+              title={assets.precision}
+              value={precision}
+              onValueChange={value => setPrecision(value)}
+              minimumValue={0}
+              maximumValue={10}
+              step={1}
+            />
+            <AppText variant="caption" style={styles.textInputTitle}>
+              {assets.precisionCaption}
+            </AppText>
+
             <AppText variant="body2" style={styles.textInputTitle}>
               {home.totalSupplyAmount}
             </AppText>
@@ -533,17 +556,15 @@ function IssueCollectibleScreen() {
               error={assetTotSupplyValidationError}
             />
 
-            <Slider
-              title={assets.precision}
-              value={precision}
-              onValueChange={value => setPrecision(value)}
-              minimumValue={0}
-              maximumValue={10}
-              step={1}
-            />
-            <AppText variant="caption" style={styles.textInputTitle}>
-              {assets.precisionCaption}
-            </AppText>
+
+            <View style={styles.totalSupplyWrapper}>
+              <AppText variant="body2" style={styles.textInputTitle}>
+                Total Supply:
+              </AppText>
+              <AppText variant="body2" style={styles.textTotalSupply}>
+                {totalSupplyWithPrecision}
+              </AppText>
+            </View>
 
             <AppText
               variant="body2"
@@ -840,6 +861,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     selectAttatchmentIconWrapper: {
       marginHorizontal: hp(5),
       marginVertical: hp(12),
+    },
+    totalSupplyWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textTotalSupply: {
+      color: theme.colors.accent1,
+      marginLeft: hp(10),
     },
   });
 export default IssueCollectibleScreen;

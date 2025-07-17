@@ -27,7 +27,10 @@ const RGBWalletStatus = () => {
 
   const onPress = () => {
     if (!isWalletOnline) {
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         navigation.navigate(NavigationRoutes.VIEWNODEINFO);
       } else {
         refreshRgbWallet.mutate();
@@ -36,7 +39,7 @@ const RGBWalletStatus = () => {
   };
 
   const msg = useMemo(() => {
-    return appType === AppType.NODE_CONNECT
+    return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? common.rgbNodeOffline
       : common.rgbWalletOffline;
   }, [appType]);

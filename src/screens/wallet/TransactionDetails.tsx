@@ -25,9 +25,12 @@ function TransactionDetails({ route }) {
       <AppHeader title={wallet.transactionDetailTitle} />
       <TransactionDetailsContainer
         transAmount={
-          app.appType === AppType.NODE_CONNECT
+          app.appType === AppType.NODE_CONNECT ||
+          app.appType === AppType.SUPPORTED_RLN
             ? `${transaction.received}`
-            : transaction.transactionType ===  TransactionType.SENT ?`${transaction.amount - transaction.fee}` : transaction.amount
+            : transaction.transactionType === TransactionType.SENT
+            ? `${transaction.amount - transaction.fee}`
+            : transaction.amount
         }
         transaction={transaction}
       />

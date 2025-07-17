@@ -6,6 +6,8 @@ import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
+import { Asset as ImageAsset } from 'react-native-image-picker';
+
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
   public static getRegtestSats = async (address: string, amount: number) => {
@@ -129,18 +131,64 @@ export default class Relay {
     network: string,
     fcmToken = '',
     signature: string,
+    walletImage: ImageAsset | null,
+    contactKey: string,
   ): Promise<{ status: boolean; error?: string; app: TribeApp }> => {
     let res;
     try {
-      res = await RestClient.post(`${RELAY}/app/new`, {
-        name,
-        appID,
-        publicId,
-        appType,
-        network,
-        fcmToken,
-        signature,
-        publicKey,
+      const formData = new FormData();
+      if(walletImage){
+        formData.append('file', {
+          uri: walletImage.uri,
+          name: walletImage.fileName,
+          type: walletImage.type,
+        });
+      }
+      formData.append('name', name);
+      formData.append('appID', appID);
+      formData.append('publicId', publicId);
+      formData.append('publicKey', publicKey);
+      formData.append('appType', appType);
+      formData.append('network', network);
+      formData.append('fcmToken', fcmToken);
+      formData.append('signature', signature);
+      formData.append('contactKey', contactKey);
+      res = await RestClient.post(`${RELAY}/app/new`, formData, {
+        'Content-Type': 'multipart/form-data',
+      });
+    } catch (err) {
+      console.log(err, err.response.data);
+      if (err.response) {
+        throw new Error(err.response.data.err);
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+    }
+    return res.data || res.json;
+  };
+
+  public static updateApp = async (
+    appID: string,
+    name: string,
+    walletImage: ImageAsset | null,
+    authToken: string,
+  ): Promise<{ updated: boolean; error?: string; imageUrl: string }> => {
+    let res;
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('appID', appID);
+      if(walletImage){
+        formData.append('file', {
+          uri: walletImage.uri,
+          name: walletImage.fileName,
+          type: walletImage.type,
+        });
+      }
+      res = await RestClient.put(`${RELAY}/app/update`, formData, {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authToken}`,
       });
     } catch (err) {
       console.log(err, err.response.data);
@@ -163,7 +211,7 @@ export default class Relay {
       res = await RestClient.post(
         `${RELAY}/app/syncfcm`,
         { fcmToken },
-        { authorization: `Bearer ${authToken}` },
+        { Authorization: `Bearer ${authToken}` },
       );
     } catch (err) {
       if (err.response) {
@@ -192,6 +240,85 @@ export default class Relay {
       return res.data || res.json;
     } catch (err) {
       throw new Error(err);
+    }
+  };
+
+  public static getNodeById = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}`, {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        });
+      } catch (err) {
+        if (err.response) {
+          console.error('Response status:', err.response.status);
+          console.error('Response body:', err.response.data);
+          throw new Error(
+            err.response.data.err || 'Server responded with an error',
+          );
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+        throw err;
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+  public static startNodeById = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<{}> => {
+    try {
+      let res;
+      try {
+        res = await RestClient.get(`${RELAY}/supported/node/${nodeId}/start`, {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(
+            err.response.data.err || 'Server responded with an error',
+          );
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+        throw err;
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static saveNodeMnemonic = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<{
+    status: string;
+    mnemonic?: string;
+    peerUrl?: string;
+  } | null> => {
+    try {
+      const node: any = await Relay.getNodeById(nodeId, authToken);
+      const status = node?.node?.status || node?.nodeInfo?.data?.status;
+      const fetchedMnemonic = node?.node?.mnemonic;
+      const peerDNS = node?.node?.peerDNS;
+      const peerPort = node?.node?.peerPort;
+      const peerUrl = `${peerDNS}:${peerPort}`;
+      return { status, mnemonic: fetchedMnemonic, peerUrl };
+    } catch (err) {
+      console.error('Error fetching node status:', err);
+      return null;
     }
   };
 
@@ -299,7 +426,12 @@ export default class Relay {
       }
       return res.data || res.json;
     } catch (err) {
-      throw new Error(err);
+      const errMsg =
+        err?.response?.data?.err ||
+        err?.code ||
+        err?.message ||
+        'Asset registration failed';
+      throw new Error(errMsg);
     }
   };
 
@@ -352,7 +484,7 @@ export default class Relay {
           link: string;
         }[];
       };
-      iconUrl?: string
+      iconUrl?: string;
     }[];
     error?: string;
   }> => {
@@ -505,6 +637,72 @@ export default class Relay {
     try {
       const res = await RestClient.post(`${RELAY}/registry/search`, {
         query,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getWalletProfiles = async (
+    contactKeys: string[],
+  ): Promise<{
+    results: {
+      contactKey: string;
+      appID: string;
+      name: string;
+      imageUrl: string;
+    }[];
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/app/getWalletProfiles`, {
+        contactKeys,
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getPeerMessages = async (
+    contactKey: string,
+    from: number,
+  ): Promise<{
+    messages: {
+      message: string;
+      timestamp: number;
+      blockNumber: number;
+    }[];
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/chat/getmessages?publicKey=${contactKey}&from=${from}`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static uploadFile = async (
+    file: ImageAsset,
+    authToken: string,
+  ): Promise<{
+    fileUrl: string;
+    error: string;
+  }> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', {
+        uri: file.uri,
+        name: file.fileName,
+        type: file.type,
+      });
+      const res = await RestClient.post(`${RELAY}/chat/uploadfile`, formData, {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authToken}`,
       });
       return res.data;
     } catch (err) {

@@ -34,8 +34,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
 import UTXOInfoModal from './components/UTXOInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 
 const ViewUnspentScreen = () => {
   const theme: AppTheme = useTheme();
@@ -107,7 +107,7 @@ const ViewUnspentScreen = () => {
       <AppHeader
         title={wallet.unspentTitle || 'Unspent Outputs'}
         enableBack={true}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUTXOInfo(true)}
       />
       <SegmentedButtons
@@ -135,7 +135,8 @@ const ViewUnspentScreen = () => {
             onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
               transID={
-                app?.appType === AppType.NODE_CONNECT
+                app?.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
                   ? `${item.utxo.outpoint}`
                   : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
               }
