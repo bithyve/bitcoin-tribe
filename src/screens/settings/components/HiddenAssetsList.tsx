@@ -168,7 +168,11 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                   </AppText>
                   <View style={styles.verticalLineStyle} />
                   <AppText variant="body2" style={styles.assetBalance}>
-                    {numberWithCommas(item?.balance?.future)}
+                    {item.precision === 0
+                      ? numberWithCommas(item?.balance?.future)
+                      : numberWithCommas(
+                          Number(item?.balance?.future) / 10 ** item.precision,
+                        )}
                   </AppText>
                 </View>
               </View>
