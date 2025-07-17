@@ -12,7 +12,7 @@ object AppConstants {
 
     const val testnetElectrumURL = "ssl://electrum.iriswallet.com:50013"
     const val regtestElectrumURL = "electrum.rgbtools.org:50041"
-    const val mainnetElectrumUrl = "electrum.acinq.co:50002"
+    const val mainnetElectrumUrl = "ssl://electrum.iriswallet.com:50003"
 
     const val proxyConsignmentEndpoint = "rpcs://proxy.iriswallet.com/0.2/json-rpc"
     const val rgbDefaultPrecision: UByte = 0U
