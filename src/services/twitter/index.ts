@@ -59,7 +59,16 @@ export const loginWithTwitter = async (): Promise<{
 
 export const fetchAndVerifyTweet = async tweetId => {
   try {
-    const accessToken = storage.getString('accessToken');
+    let accessToken = storage.getString('accessToken');
+    if (!accessToken) {
+      const result = await authorize(config);
+      if (result?.accessToken) {
+        accessToken = result.accessToken;
+      } else {
+        throw new Error('Authorization failed: No access token');
+      }
+    }
+
     const response = await fetch(`${TWITTER_API_BASE}/tweets/${tweetId}`, {
       method: 'GET',
       headers: {
