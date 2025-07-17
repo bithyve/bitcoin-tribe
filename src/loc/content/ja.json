@@ -558,7 +558,7 @@
     "enterAssetNamePlaceholder": "アセットの名前を入力してください",
     "enterDescNamePlaceholder": "アセットを説明してください",
     "enterTotSupplyPlaceholder": "最大単位数を入力してください",
-    "precisionCaption": "各単位の分割可能性を設定（例: 0 = 全体単位、2 = セント）",
+    "precisionCaption": "各単位の分割可能性を設定",
     "mediaFile": "メディアファイル",
     "assetImageCaption": "アセットを表す画像を追加してください（例: ロゴやアートワーク）",
     "enterAssetTickerPlaceholder": "短いティッカーシンボルを入力してください（例: BTC）",

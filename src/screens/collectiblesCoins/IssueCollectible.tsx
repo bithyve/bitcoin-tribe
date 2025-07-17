@@ -429,7 +429,11 @@ function IssueCollectibleScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (
+        sanitizedText &&
+        BigInt(sanitizedText) * BigInt(10 ** precision) <=
+          MAX_ASSET_SUPPLY_VALUE
+      ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -528,7 +532,6 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
-
             <Slider
               title={assets.precision}
               value={precision}
@@ -555,16 +558,6 @@ function IssueCollectibleScreen() {
               returnKeyType="done"
               error={assetTotSupplyValidationError}
             />
-
-
-            <View style={styles.totalSupplyWrapper}>
-              <AppText variant="body2" style={styles.textInputTitle}>
-                Total Supply:
-              </AppText>
-              <AppText variant="body2" style={styles.textTotalSupply}>
-                {totalSupplyWithPrecision}
-              </AppText>
-            </View>
 
             <AppText
               variant="body2"

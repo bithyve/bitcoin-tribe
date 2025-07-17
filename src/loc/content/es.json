@@ -558,7 +558,7 @@
     "enterAssetNamePlaceholder": "Introduce un nombre para tu activo",
     "enterDescNamePlaceholder": "Describe tu activo",
     "enterTotSupplyPlaceholder": "Introduce el número máximo de unidades",
-    "precisionCaption": "Configura cuán divisible es cada unidad (ej. 0 = unidades enteras, 2 = centavos)",
+    "precisionCaption": "Configura cuán divisible es cada unidad ",
     "mediaFile": "Archivo multimedia",
     "assetImageCaption": "Agrega una imagen para representar tu activo (ej. logotipo o ilustración)",
     "enterAssetTickerPlaceholder": "Introduce un símbolo de cotización corto (ej. BTC)",

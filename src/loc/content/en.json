@@ -558,7 +558,7 @@
     "enterAssetNamePlaceholder": "Enter a name for your asset",
     "enterDescNamePlaceholder": "Describe your asset",
     "enterTotSupplyPlaceholder": "Enter the maximum number of units",
-    "precisionCaption": "Set how divisible each unit is (e.g., 0 = whole units, 2 = cents)",
+    "precisionCaption": "Set how divisible each unit is.",
     "mediaFile": "Media File",
     "assetImageCaption": "Add an image to represent your asset (e.g., logo or artwork)",
     "enterAssetTickerPlaceholder": "Enter a short ticker symbol (e.g., BTC)",
