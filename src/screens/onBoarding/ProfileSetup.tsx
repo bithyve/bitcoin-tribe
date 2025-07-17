@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -19,6 +19,31 @@ import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import WebView from 'react-native-webview';
+import Buttons from 'src/components/Buttons';
+import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
+import Modal from 'react-native-modal';
+
+const getStyles = (theme: AppTheme) => StyleSheet.create({
+  containerStyle: {
+    height: windowHeight - hp(140),
+    width: '100%',
+    backgroundColor: theme.colors.modalBackColor,
+    padding: hp(2),
+    borderRadius: hp(30),
+    marginHorizontal: 0,
+    marginBottom: 5,
+  },
+  webViewStyle: {
+    flex: 1,
+    marginBottom: hp(10),
+    backgroundColor: theme.colors.modalBackColor,
+  },
+  titleStyle: {
+    textAlign: 'center',
+    marginVertical: hp(10),
+  },
+});
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -27,11 +52,20 @@ function ProfileSetup() {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, common } = translations;
   const [name, setName] = useState('');
+  const styles = getStyles(theme);
 
   const [profileImage, setProfileImage] = useState<Asset | null>(null);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowTermsModal(true);
+    }, 1000);
+  }, [])
+  
 
   useEffect(() => {
     if (setupNewAppMutation.isSuccess) {
@@ -121,6 +155,28 @@ function ProfileSetup() {
           />
         </ResponsePopupContainer>
       </View>
+
+      <Modal
+        isVisible={showTermsModal}
+        onDismiss={() => setShowTermsModal(false)}>
+        <View style={styles.containerStyle}>
+
+          <WebView
+            source={{ uri: config.TERMS_AND_CONDITIONS_URL }}
+            style={styles.webViewStyle}
+          />
+
+<Buttons
+            primaryTitle={'I agree'}
+            primaryOnPress={()=> {
+              setShowTermsModal(false);
+            }}
+            width={windowWidth - hp(40)}
+            disabled={false}
+          />
+
+        </View>
+      </Modal>
     </ScreenContainer>
   );
 }
