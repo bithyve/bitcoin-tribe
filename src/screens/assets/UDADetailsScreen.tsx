@@ -331,6 +331,7 @@ const UDADetailsScreen = () => {
               schema={RealmSchema.UniqueDigitalAsset}
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               setIsVerifyingIssuer={setIsVerifyingIssuer}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
             <IssuerDomainVerified
               domain={
