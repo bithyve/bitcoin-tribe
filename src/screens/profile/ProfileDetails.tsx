@@ -37,7 +37,7 @@ type ProfileDetailsProps = {
   onRightTextPress?: () => void;
   primaryCtaLoader?: boolean;
 };
-function ProfileDetails(props: ProfileDetailsProps) {
+function  ProfileDetails(props: ProfileDetailsProps) {
   const {
     title,
     subTitle,
@@ -101,7 +101,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
             secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
             secondaryOnPress={secondaryOnPress}
-            width={windowWidth / 2.3}
+            width={windowWidth / 1.1}
             secondaryCTAWidth={windowWidth / 2.3}
             disabled={disabled}
           />

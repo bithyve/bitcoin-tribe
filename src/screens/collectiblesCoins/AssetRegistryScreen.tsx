@@ -43,6 +43,7 @@ function AssetRegistryScreen() {
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [feeDetails, setFeeDetails] = useState(null);
   const [disabledCTA, setDisabledCTA] = useState(false);
+  const [swipeResetCounter, setSwipeResetCounter] = useState(0);
 
   const schema = () => {
     switch (issueType) {
@@ -96,14 +97,14 @@ function AssetRegistryScreen() {
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
       const feeData = getAssetIssuanceFeeMutation.data;
-      if (feeData.fee > 0) {
+      if (feeData?.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs?.transactions?.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid?.length > 0) {
           registerAsset();
         } else {
           getAssetIssuanceFeeMutation.reset();
@@ -136,7 +137,11 @@ function AssetRegistryScreen() {
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
         navigation.goBack();
+      } else {
+        Toast(errorMessage, true);
       }
+      setSwipeResetCounter(prev => prev + 1);
+      setDisabledCTA(false);
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);
@@ -153,7 +158,7 @@ function AssetRegistryScreen() {
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
-        const tx = wallet.specs.transactions.find(
+        const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
@@ -223,6 +228,7 @@ function AssetRegistryScreen() {
                 payServiceFeeFeeMutation.mutate({ feeDetails });
               }}
               backColor={theme.colors.swipeToActionThumbColor}
+              resetCounter={swipeResetCounter}
             />
           )}
           {!!feeDetails && (

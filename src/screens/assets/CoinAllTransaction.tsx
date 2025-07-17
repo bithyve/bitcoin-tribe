@@ -4,7 +4,6 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,6 +17,7 @@ import { hp } from 'src/constants/responsive';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Transfer } from 'src/models/interfaces/RGBWallet';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
@@ -25,8 +25,8 @@ function CoinAllTransaction() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations, settings } = translations;
-  const { assetId, transactions, assetName } = useRoute().params;
+  const { wallet: walletTranslations } = translations;
+  const { assetId, transactions, assetName, precision } = useRoute().params as { assetId: string, transactions: Transfer[], assetName: string, precision: number };
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
   return (
     <ScreenContainer>
@@ -53,10 +53,12 @@ function CoinAllTransaction() {
           <AssetTransaction
             transaction={item}
             coin={assetName}
+            precision={precision}
             onPress={() => {
               navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
                 transaction: item,
                 coin: assetName,
+                precision: precision,
               });
             }}
           />

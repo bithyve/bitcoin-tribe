@@ -8,7 +8,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"tribe";
-  [FIRApp configure];
+  
+  NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+  if ([bundleIdentifier containsString:@"tribe.dev"]) {
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info-dev" ofType:@"plist"];
+    if (plistPath) {
+      FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:plistPath];
+      [FIRApp configureWithOptions:options];
+    } else {
+      [FIRApp configure];
+    }
+  } else {
+    [FIRApp configure];
+  }
+  
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+  [[UIApplication sharedApplication] registerForRemoteNotifications];
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
@@ -67,6 +82,15 @@ continueUserActivity: (nonnull NSUserActivity *)userActivity
     }
   }
   return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+  completionHandler(UNNotificationPresentationOptionAlert |
+                    UNNotificationPresentationOptionSound |
+                    UNNotificationPresentationOptionBadge);
 }
 
 @end

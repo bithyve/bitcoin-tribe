@@ -75,6 +75,7 @@ const getStyles = (theme: AppTheme) =>
       paddingBottom: Platform.OS === 'android' ? hp(35) : hp(20),
       alignItems: 'center',
       justifyContent: 'center',
+      paddingTop: hp(10),
     },
     contentContainerStyle: {
       paddingBottom: Platform.OS === 'android' ? 120 : 50,

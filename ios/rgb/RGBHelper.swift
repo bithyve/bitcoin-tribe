@@ -27,7 +27,7 @@ import CloudKit
       let data: [String: Any] = [
         "mnemonic": keys.mnemonic,
         "xpub": keys.xpub,
-        "accountXpubColoredFingerprint": keys.accountXpubColoredFingerprint,
+        "masterFingerprint": keys.masterFingerprint,
         "accountXpubColored": keys.accountXpubColored,
         "accountXpubVanilla": keys.accountXpubVanilla,
         "rgbDir": rgbURL.absoluteString,
@@ -46,7 +46,7 @@ import CloudKit
         let data: [String: Any] = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
-          "accountXpubColoredFingerprint": keys.accountXpubColoredFingerprint,
+          "masterFingerprint": keys.masterFingerprint,
           "accountXpubColored": keys.accountXpubColored,
           "accountXpubVanilla": keys.accountXpubVanilla,
           "rgbDir": rgbURL.absoluteString,
@@ -114,7 +114,6 @@ import CloudKit
               var jsonObject = [String: Any]()
               jsonObject["idx"] = transfer.idx
               jsonObject["txid"] = transfer.txid
-              jsonObject["amount"] = transfer.amount
               jsonObject["createdAt"] = transfer.createdAt
               jsonObject["updatedAt"] = transfer.updatedAt
               jsonObject["recipientId"] = transfer.recipientId
@@ -122,15 +121,62 @@ import CloudKit
               jsonObject["kind"] = "\(transfer.kind)"
               jsonObject["expiration"] = transfer.expiration
               jsonObject["batchTransferIdx"] = transfer.batchTransferIdx
-              jsonObject["receiveUtxo"] = [
-                  "txid": transfer.receiveUtxo?.txid,
-                  "vout": transfer.receiveUtxo?.vout
-              ]
-              jsonObject["changeUtxo"] = [
-                  "txid": transfer.changeUtxo?.txid,
-                  "vout": transfer.changeUtxo?.vout
-              ]
-              jsonObject["consignmentEndpoints"] = transfer.transportEndpoints.map { endpoint in
+              jsonObject["invoiceString"] = transfer.invoiceString
+              
+              if let requestedAssignment = transfer.requestedAssignment {
+                  var assignmentObject = [String: Any]()
+                  switch requestedAssignment {
+                  case .fungible(let amount):
+                      assignmentObject["type"] = "Fungible"
+                      assignmentObject["amount"] = String(amount)
+                  case .nonFungible:
+                      assignmentObject["type"] = "NonFungible"
+                  case .inflationRight(let amount):
+                      assignmentObject["type"] = "InflationRight"
+                      assignmentObject["amount"] = String(amount)
+                  case .replaceRight:
+                      assignmentObject["type"] = "ReplaceRight"
+                  case .any:
+                      assignmentObject["type"] = "Any"
+                  }
+                  jsonObject["requestedAssignment"] = assignmentObject
+              }
+              var assignmentsArray = [[String: Any]]()
+              for assignment in transfer.assignments {
+                  var assignmentObject = [String: Any]()
+                  switch assignment {
+                  case .fungible(let amount):
+                      assignmentObject["type"] = "Fungible"
+                      assignmentObject["amount"] = String(amount)
+                  case .nonFungible:
+                      assignmentObject["type"] = "NonFungible"
+                  case .inflationRight(let amount):
+                      assignmentObject["type"] = "InflationRight"
+                      assignmentObject["amount"] = String(amount)
+                  case .replaceRight:
+                      assignmentObject["type"] = "ReplaceRight"
+                  case .any:
+                      assignmentObject["type"] = "Any"
+                  }
+                  assignmentsArray.append(assignmentObject)
+              }
+              jsonObject["assignments"] = assignmentsArray
+              
+              if let receiveUtxo = transfer.receiveUtxo {
+                  jsonObject["receiveUtxo"] = [
+                      "txid": receiveUtxo.txid,
+                      "vout": receiveUtxo.vout
+                  ]
+              }
+              
+              if let changeUtxo = transfer.changeUtxo {
+                  jsonObject["changeUtxo"] = [
+                      "txid": changeUtxo.txid,
+                      "vout": changeUtxo.vout
+                  ]
+              }
+              
+              jsonObject["transportEndpoints"] = transfer.transportEndpoints.map { endpoint in
                   return [
                       "endpoint": endpoint.endpoint,
                       "used": endpoint.used,
@@ -182,7 +228,28 @@ import CloudKit
                   } else {
                       jsonString += "\"assetId\":null,"
                   }
-                  jsonString += "\"amount\":\(allocation.amount),"
+                  var assignmentDict: [String: Any] = [:]
+                  switch allocation.assignment {
+                  case .fungible(let amount):
+                      assignmentDict["type"] = "Fungible"
+                      assignmentDict["amount"] = "\(amount)"
+                  case .nonFungible:
+                      assignmentDict["type"] = "NonFungible"
+                  case .inflationRight(let amount):
+                      assignmentDict["type"] = "InflationRight"
+                      assignmentDict["amount"] = "\(amount)"
+                  case .replaceRight:
+                      assignmentDict["type"] = "ReplaceRight"
+                  case .any:
+                      assignmentDict["type"] = "Any"
+                  }
+                  if let assignmentData = try? JSONSerialization.data(withJSONObject: assignmentDict, options: []),
+                     let assignmentJson = String(data: assignmentData, encoding: .utf8) {
+                      jsonString += "\"assignment\":\(assignmentJson),"
+                  } else {
+                      jsonString += "\"assignment\":{},"
+                  }
+
                   jsonString += "\"settled\":\(allocation.settled)"
                   jsonString += "}"
                   if allocIndex < unspent.rgbAllocations.count - 1 {
@@ -365,7 +432,7 @@ import CloudKit
     fatalError("Missing return statement")
   }
   
-  @objc func createUTXOs(feeRate: Int, callback: @escaping ((String) -> Void)) {
+  @objc func createUTXOs(feeRate: Int, num: Int, size: Int, upTo: Bool, callback: @escaping ((String) -> Void)) {
       print("Creating UTXOs... \(feeRate)")
     
     do {
@@ -390,7 +457,7 @@ import CloudKit
               var newUTXOs: UInt8 = 0
                             while newUTXOs == 0 && attempts > 0 {
                   print("Attempting to create UTXOs, attempts left: \(attempts)")
-                              newUTXOs = try wallet.createUtxos(online: online, upTo: false, num: nil, size: nil, feeRate: UInt64(feeRate), skipSync: false)
+                              newUTXOs = try wallet.createUtxos(online: online, upTo: upTo, num: UInt8(num), size: UInt32(size), feeRate: UInt64(feeRate), skipSync: false)
                   print("newUTXOs=\(newUTXOs)")
                   attempts -= 1
               }
@@ -416,7 +483,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData(assetID: String, amount: Float) -> String {
+  func genReceiveData(assetID: String, amount: Float, blinded: Bool) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -435,13 +502,25 @@ import CloudKit
                       RefreshFilter(status: .waitingCounterparty, incoming: false)
                   ], skipSync: false
               )
-              let bindData = try wallet.blindReceive(
-                assetId: assetID != "" ? assetID : nil,
-                amount: amount != 0 ? UInt64(amount) : nil,
-                  durationSeconds: Constants.rgbBlindDuration,
-                  transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                  minConfirmations: 0
-              )
+              
+              let assetId = assetID.isEmpty ? nil : assetID
+              let amountValue = amount == 0 ? UInt64(0) : UInt64(amount)
+              
+              let bindData = try blinded ? 
+                  wallet.blindReceive(
+                      assetId: assetId,
+                      assignment: .any,
+                      durationSeconds: Constants.rgbBlindDuration,
+                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      minConfirmations: 0
+                  ) :
+                  wallet.witnessReceive(
+                      assetId: assetId,
+                      assignment: .any,
+                      durationSeconds: Constants.rgbBlindDuration,
+                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      minConfirmations: 0
+                  )
 
               let data: [String: Any] = [
                   "invoice": bindData.invoice,
@@ -454,6 +533,7 @@ import CloudKit
               return json
           }
       } catch let error {
+        print(error)
           let data: [String: Any] = [
               "error": error.localizedDescription
           ]
@@ -525,13 +605,29 @@ import CloudKit
   @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
     do{
       let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
+              var assignmentDict: [String: Any] = [:]
+        switch invoice.assignment {
+        case .fungible(let amount):
+            assignmentDict["type"] = "Fungible"
+            assignmentDict["amount"] = String(amount)
+        case .nonFungible:
+            assignmentDict["type"] = "NonFungible"
+        case .inflationRight(let amount):
+            assignmentDict["type"] = "InflationRight"
+            assignmentDict["amount"] = String(amount)
+        case .replaceRight:
+            assignmentDict["type"] = "ReplaceRight"
+        case .any:
+            assignmentDict["type"] = "Any"
+        }
+      
       var data: [String: Any] = [
         "recipientId": invoice.recipientId,
         "expirationTimestamp": invoice.expirationTimestamp ?? 0,
         "assetId": invoice.assetId ?? "",
         "assetSchema": invoice.assetSchema.map { "\($0)" } ?? "",
         "network": String(describing: invoice.network),
-        "amount": invoice.amount ?? 0,
+        "assignment": assignmentDict,
         "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
           return endpoint
         }
@@ -571,8 +667,10 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(assetID: String, amount: Float,callback: @escaping ((String) -> Void)){
-    let response = genReceiveData(assetID: assetID, amount: amount)
+  @objc func receiveAsset(assetID: String, amount: Float, blinded: Bool, callback: @escaping ((String) -> Void)){
+    print("blinded")
+    print(blinded)
+    let response = genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
     callback(response)
   }
   
@@ -602,9 +700,9 @@ import CloudKit
     }
   }
   
-  @objc func initiate(btcNetwotk: String, mnemonic: String,accountXpubVanilla: String, accountXpubColored: String, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func initiate(btcNetwotk: String, mnemonic: String,accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) -> Void{
     self.rgbManager = RgbManager.shared
-    let result =  self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic)
+    let result =  self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
     callback(result)
   }
   
@@ -691,10 +789,11 @@ import CloudKit
     }
   }
   
+  
   @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, callback: @escaping ((String) -> Void)) -> Void{
     do{
       var recipientMap: [String: [Recipient]] = [:]
-      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, amount: UInt64(amount), transportEndpoints: [consignmentEndpoints])
+      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, assignment: .fungible(amount: UInt64(amount)), transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
         return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 0, skipSync: true)
@@ -785,7 +884,7 @@ import CloudKit
     do{
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: password)
 
-      let filePath = Utility.getBackupPath(fileName: keys.accountXpubColoredFingerprint)
+      let filePath = Utility.getBackupPath(fileName: keys.masterFingerprint)
       print("filePath \(String(describing: filePath))")
 
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
@@ -871,6 +970,7 @@ import CloudKit
     }
     catch{
       callback(false)
-    }}
+    }
+  }
   
 }

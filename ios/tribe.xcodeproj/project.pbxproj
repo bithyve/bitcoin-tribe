@@ -13,7 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */; };
 		353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB8482D75503C002131C1 /* GoogleService-Info.plist */; };
-		353FB84B2D7553A8002131C1 /* GoogleService-Info 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */; };
+		353FB84B2D7553A8002131C1 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB84A2D7553A8002131C1 /* GoogleService-Info-dev.plist */; };
 		35E339462C22A3AB007E532A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		35E339472C22A3AB007E532A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		35E3394B2C22A3AB007E532A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -71,7 +71,7 @@
 		232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = LufgaMedium.ttf; path = ../src/assets/fonts/LufgaMedium.ttf; sourceTree = "<group>"; };
 		2BD27AE68E1BC30F6A2C30D2 /* Pods-tribe-tribe-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe-tribe-dev.release.xcconfig"; path = "Target Support Files/Pods-tribe-tribe-dev/Pods-tribe-tribe-dev.release.xcconfig"; sourceTree = "<group>"; };
 		353FB8482D75503C002131C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
+		353FB84A2D7553A8002131C1 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
 		35B1B56D2C69C091007C473A /* tribe-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "tribe-dev.entitlements"; sourceTree = "<group>"; };
 		35B1B56E2C69C098007C473A /* tribe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tribe.entitlements; path = tribe/tribe.entitlements; sourceTree = "<group>"; };
 		35E339592C22A3AB007E532A /* tribe-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tribe-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,7 +213,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				353FB84A2D7553A8002131C1 /* GoogleService-Info 2.plist */,
+				353FB84A2D7553A8002131C1 /* GoogleService-Info-dev.plist */,
 				353FB8482D75503C002131C1 /* GoogleService-Info.plist */,
 				35B1B56D2C69C091007C473A /* tribe-dev.entitlements */,
 				13B07FAE1A68108700A75B9A /* tribe */,
@@ -395,7 +395,7 @@
 				3AC0DD792C4FD1E8003E7D56 /* LufgaSemiBold.ttf in Resources */,
 				35E3394C2C22A3AB007E532A /* Images.xcassets in Resources */,
 				3AC0DD782C4FD1E5003E7D56 /* LufgaRegular.ttf in Resources */,
-				353FB84B2D7553A8002131C1 /* GoogleService-Info 2.plist in Resources */,
+				353FB84B2D7553A8002131C1 /* GoogleService-Info-dev.plist in Resources */,
 				35E3394D2C22A3AB007E532A /* PrivacyInfo.xcprivacy in Resources */,
 				3AC0DD772C4FD1E2003E7D56 /* LufgaMedium.ttf in Resources */,
 			);
@@ -749,7 +749,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 146;
+				CURRENT_PROJECT_VERSION = 166;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -759,7 +759,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -769,6 +769,7 @@
 				PRODUCT_NAME = tribe;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -785,7 +786,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 146;
+				CURRENT_PROJECT_VERSION = 166;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -795,7 +796,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -807,6 +808,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "com.bithyve.tribe AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -822,7 +824,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 146;
+				CURRENT_PROJECT_VERSION = 166;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -832,7 +834,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -842,6 +844,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -857,9 +860,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 146;
+				CURRENT_PROJECT_VERSION = 166;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -867,7 +872,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -877,7 +882,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
 				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "tribe-dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

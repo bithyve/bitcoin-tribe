@@ -14,7 +14,7 @@ const HomeUserAvatar = (props: UserAvatarProps) => {
   const { imageSource } = props;
   return imageSource ? (
     <Image
-      source={{ uri: `data:image/jpeg;base64,${imageSource}` }}
+      source={{ uri: imageSource }}
       style={styles.wrapper}
     />
   ) : (

@@ -7,6 +7,8 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import Toast from 'react-native-root-toast';
+import Clipboard from '@react-native-clipboard/clipboard';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
@@ -21,10 +23,20 @@ import { formatNumber } from 'src/utils/numberWithCommas';
 import SelectAssetIDView from './components/SelectAssetIDView';
 import RGBAssetDropdownList from './components/RGBAssetDropdownList';
 import { Keys } from 'src/storage';
-import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collectible,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import useRgbWallets from 'src/hooks/useRgbWallets';
+import AppType from 'src/models/enums/AppType';
 
 const OpenRgbChannel = () => {
   const navigation = useNavigation();
@@ -43,7 +55,7 @@ const OpenRgbChannel = () => {
   const [assetAmt, setAssetAmt] = useState('');
   const [baseFeeRate, setBaseFeeRate] = useState('1000');
   const [tmpChannelId, setTmpChannelId] = useState('');
-  const [inputHeight, setInputHeight] = useState(100);
+  const [inputHeight, setInputHeight] = useState(50);
   const [inputAssetIDHeight, setInputAssetIDHeight] = useState(100);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
@@ -54,20 +66,26 @@ const OpenRgbChannel = () => {
   const [assetAmountValidationError, setAssetAmountValidationError] =
     useState('');
 
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const openChannelMutation = useMutation(ApiHandler.openChannel);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
-    'balance.spendable > 0',
-  );
+  const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(
     RealmSchema.Collectible,
-  ).filtered('balance.spendable > 0');
+  );
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
-    return combined.sort((a, b) => a.timestamp - b.timestamp);
+    return combined
+      .filter(asset => 
+        asset && 
+        asset.balance && 
+        Number(asset.balance.spendable) > 0
+      )
+      .sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
   useEffect(() => {
@@ -107,6 +125,16 @@ const OpenRgbChannel = () => {
   }, [pubkeyAddress, capacity, pushMsats, assetId, assetAmt]);
 
   const sanitizeInput = text => text.replace(/[^0-9]/g, '');
+
+  const balances = useMemo(() => {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
+      return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
+    } else {
+    }
+  }, [rgbWallet?.nodeBtcBalance?.vanilla?.spendable]);
 
   const handlePubKeyAddressChange = text => {
     if (!text.trim()) {
@@ -150,6 +178,11 @@ const OpenRgbChannel = () => {
     }
   };
 
+  const handlePasteURL = async () => {
+    const clipboardValue = await Clipboard.getString();
+    await setPubkeyAddress(clipboardValue);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -172,6 +205,7 @@ const OpenRgbChannel = () => {
             title={channelTranslation.createChannelTitle}
             subTitle={channelTranslation.createChannelSubTitle}
             illustrationPath={require('src/assets/images/jsons/channelCreation.json')}
+            style={styles.inProgressViewStyle}
           />
         </ResponsePopupContainer>
       </View>
@@ -181,18 +215,34 @@ const OpenRgbChannel = () => {
         enableOnAndroid={true}
         // extraScrollHeight={windowHeight > 670 ? 200 : 150}
         keyboardOpeningTime={0}>
+        <AppText variant="body2" style={styles.labelText}>
+          {node.peerUrlLabel}
+        </AppText>
         <TextField
           value={pubkeyAddress}
           onChangeText={handlePubKeyAddressChange}
           placeholder={node.peerPubAndAddress}
           style={[styles.input, pubkeyAddress && styles.multilinePubKeyInput]}
+          contentStyle={
+            pubkeyAddress ? styles.inputURLWrapper : styles.inputWrapper1
+          }
+          inputStyle={styles.inputStyle1}
           onContentSizeChange={event => {
             setInputHeight(event.nativeEvent.contentSize.height);
           }}
           keyboardType={'default'}
           returnKeyType={'Enter'}
+          rightText={!pubkeyAddress && sendScreen.paste}
+          rightIcon={
+            pubkeyAddress && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
+          onRightTextPress={() =>
+            pubkeyAddress ? setPubkeyAddress('') : handlePasteURL()
+          }
+          rightCTAStyle={styles.rightCTAStyle1}
+          rightCTATextColor={theme.colors.accent1}
           multiline={true}
-          numberOfLines={2}
+          numberOfLines={5}
           error={pubKeyAddressValidationError}
         />
 
@@ -200,18 +250,32 @@ const OpenRgbChannel = () => {
           {node.peerPubAndAddressNote}
         </AppText>
 
+        <AppText variant="body2" style={styles.labelText}>
+          {node.channelCapacityLabel}
+        </AppText>
         <TextField
           value={capacity}
           onChangeText={handleCapacityChange}
           placeholder={node.capacity}
-          style={styles.input}
+          // style={styles.input}
           keyboardType="numeric"
           error={capacityValidationError}
+          rightText={
+            capacity ? channelTranslation.availableBalanceText + balances : ''
+          }
+          style={styles.assetAmtInput}
+          inputStyle={styles.inputStyle}
+          contentStyle={styles.contentStyle}
+          onRightTextPress={() => {}}
+          rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.headingColor}
         />
         <AppText variant="caption" style={styles.textHint}>
           {node.capacityNote}
         </AppText>
-
+        <AppText variant="body2" style={styles.labelText}>
+          {node.initPeerBalncLabel}
+        </AppText>
         <TextField
           value={pushMsats}
           onChangeText={handlePushMSatsChange}
@@ -228,11 +292,16 @@ const OpenRgbChannel = () => {
           onPress={() => {
             if (assetsData.length) {
               setAssetsDropdown(true);
+            } else {
+              CustomToast(assets.noAssetsFoundMsg, true);
             }
           }}
         />
         <AppText variant="caption" style={styles.textHint}>
           {node.assetIDNote}
+        </AppText>
+        <AppText variant="body2" style={styles.labelText}>
+          {node.assetAmountLabel}
         </AppText>
         <TextField
           value={formatNumber(assetAmt)}
@@ -323,20 +392,28 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
     input: {
       marginVertical: hp(5),
     },
+    inputWrapper1: {
+      height: hp(60),
+      marginVertical: hp(5),
+    },
     inputStyle: {
       width: '60%',
       marginVertical: hp(5),
     },
+    inputStyle1: {
+      width: '80%',
+    },
     assetAmtInput: {
       height: hp(60),
+      marginVertical: hp(5),
     },
     contentStyle: {
       marginTop: 0,
       flexWrap: 'wrap',
     },
     multilinePubKeyInput: {
-      borderRadius: hp(20),
-      height: Math.max(100, inputHeight),
+      borderRadius: hp(15),
+      // height: Math.max(60, inputHeight),
     },
     multilineAssetIDInput: {
       borderRadius: hp(20),
@@ -349,7 +426,6 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
     textHint: {
       marginTop: hp(5),
       marginBottom: hp(20),
-      marginHorizontal: wp(20),
       color: theme.colors.secondaryHeadingColor,
     },
     assetsDropdownContainer: {
@@ -362,5 +438,24 @@ const getStyles = (theme: AppTheme, inputHeight, inputAssetIDHeight) =>
       width: '40%',
       alignItems: 'flex-end',
       paddingRight: hp(10),
+    },
+    inProgressViewStyle: {
+      alignItems: 'flex-start',
+    },
+    labelText: {
+      color: theme.colors.headingColor,
+      marginBottom: hp(3),
+    },
+    rightCTAStyle1: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    inputURLWrapper: {
+      borderRadius: 10,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(50, inputHeight),
+      marginTop: 0,
     },
   });

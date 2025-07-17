@@ -1070,6 +1070,27 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
+  - "react-native-bare-kit (0.5.6+7fcacd)":
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-biometrics (3.0.1):
     - React-Core
   - react-native-config (1.5.5):
@@ -1165,13 +1186,15 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-randombytes (3.6.1):
+  - react-native-randombytes (3.6.2):
+    - React-Core
+  - react-native-render-html (6.3.4):
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-slider (4.5.6):
+  - react-native-slider (4.5.7):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1468,7 +1491,7 @@ PODS:
     - React-utils (= 0.74.1)
   - RealmJS (12.14.1):
     - React
-  - RNCClipboard (1.16.2):
+  - RNCClipboard (1.16.3):
     - React-Core
   - RNDeviceInfo (10.0.2):
     - React-Core
@@ -1480,7 +1503,7 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.25.0):
+  - RNGestureHandler (2.21.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1505,7 +1528,7 @@ PODS:
     - React-Core
   - RNLocalize (3.2.0):
     - React-Core
-  - RNQrGenerator (1.4.3):
+  - RNQrGenerator (1.4.4):
     - React
     - ZXingObjC
   - RNReactNativeHapticFeedback (2.3.3):
@@ -1638,7 +1661,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.10.0):
+  - RNSentry (6.17.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1659,7 +1682,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.48.0)
+    - Sentry/HybridSDK (= 8.53.1)
     - Yoga
   - RNShare (11.1.0):
     - DoubleConversion
@@ -1682,9 +1705,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.11.2):
+  - RNSVG (15.12.0):
     - React-Core
-  - Sentry/HybridSDK (8.48.0)
+  - Sentry/HybridSDK (8.53.1)
   - SocketRocket (0.7.0)
   - VisionCamera (4.3.2):
     - VisionCamera/Core (= 4.3.2)
@@ -1736,6 +1759,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-app-auth (from `../node_modules/react-native-app-auth`)
+  - react-native-bare-kit (from `../node_modules/react-native-bare-kit`)
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
@@ -1745,6 +1769,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
+  - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -1883,6 +1908,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-app-auth:
     :path: "../node_modules/react-native-app-auth"
+  react-native-bare-kit:
+    :path: "../node_modules/react-native-bare-kit"
   react-native-biometrics:
     :path: "../node_modules/react-native-biometrics"
   react-native-config:
@@ -1901,6 +1928,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pager-view"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
+  react-native-render-html:
+    :path: "../node_modules/react-native-render-html"
   react-native-rsa-native:
     :path: "../node_modules/react-native-rsa-native"
   react-native-safe-area-context:
@@ -2044,6 +2073,7 @@ SPEC CHECKSUMS:
   React-logger: 6070f362a1657bb53335eb1fc903d3f49fd79842
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
+  react-native-bare-kit: 17f037e9a8328f5728271666157958dbd17a68d3
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-document-picker: 451699da81cba8b40b596b8076019a4deb86f46e
@@ -2052,10 +2082,11 @@ SPEC CHECKSUMS:
   react-native-mmkv: f8155c2efbe795cb0c7586d00ff484b1c9388af0
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: 176db81d66a35119ec1b512a59bc94a47f73a68f
-  react-native-randombytes: 3c8f3e89d12487fd03a2f966c288d495415fc116
+  react-native-randombytes: 4eeddad82d1fd57adda1cd5beffe67d041c9d6de
+  react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-slider: bcfc4f2683c072497b157a3c3f00e514a05feec5
+  react-native-slider: 31d129829e862b0a9c773fa43cbacb5e9d926b8b
   react-native-tcp-socket: 0a0455b843f9dfcad875ea6cfafeb05c0abb0a24
   react-native-view-shot: d1a99d3a2b59689c7b6c0f88a249b2a7125bdd2f
   react-native-webview: ad8dc2d03264427555e6841b214e4f5d2255f6b6
@@ -2083,21 +2114,21 @@ SPEC CHECKSUMS:
   React-utils: 67574b07bff4429fd6c4d43a7fad8254d814ee20
   ReactCommon: 64c64f4ae1f2debe3fab1800e00cb8466a4477b7
   RealmJS: 5b0258b3c04b9f48536b2692965690afe024164c
-  RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
+  RNCClipboard: f6679d470d0da2bce2a37b0af7b9e0bf369ecda5
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
   RNFBApp: fd5bf956d6114cd3172680ab9c2185143faaa385
   RNFBMessaging: 387873ff9c0deb29ec76b1a5c492d06012af58f4
-  RNGestureHandler: 0185e60058b516fe374233587dbb48af62ec5f5a
+  RNGestureHandler: 8d857f8c5e6697585f6a246d1acbf0533c438ab1
   RNKeychain: bbe2f6d5cc008920324acb49ef86ccc03d3b38e4
   RNLocalize: 7c20518f8e5c68cbb980418c60a8c804409c1463
-  RNQrGenerator: afacf12b55dfba0e3aaca963eec23691e8426431
+  RNQrGenerator: 95feb09b4b2ed65f3a4afe795a20beed4b134ab5
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
   RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: ef68e50aea531dd00c592ba4683bbcb89d4d2e1a
-  RNSentry: 69c9824e54be05673de0cadc1441ce0abdfa0eb8
+  RNSentry: 0e1b174126289a42fd20a3c3cd12bd861a031a4a
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
-  RNSVG: 2df577ee9762d1b6deef820173b59b064c2570fe
-  Sentry: 1ca8405451040482877dcd344dfa3ef80b646631
+  RNSVG: ff728783849deecdeb6a270ab35e9cb1db3cbe0f
+  Sentry: 1e4e974d45f09d153af4b30b42acfb1c79e957d3
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: 6ad4b86176f6fea45e90e380d3d530bc5e1abff9
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372

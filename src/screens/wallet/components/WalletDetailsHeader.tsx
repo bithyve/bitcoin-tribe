@@ -69,7 +69,10 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
 
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const balances = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {
       return (
@@ -106,7 +109,8 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
         style={styles.largeHeader}>
         <AppHeader title={username} />
         <View style={styles.largeHeaderContentWrapper}>
-          {app.appType === AppType.NODE_CONNECT ? (
+          {app.appType === AppType.NODE_CONNECT ||
+          app.appType === AppType.SUPPORTED_RLN ? (
             <View style={styles.balanceContainer}>
               <AppTouchable
                 style={styles.totalBalanceWrapper}
@@ -216,7 +220,7 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
                     {getBalance(balances)}
                   </AppText>
                   {initialCurrencyMode === CurrencyKind.SATS && (
-                    <AppText variant="caption" style={styles.satsText}>
+                    <AppText variant="heading2" style={styles.satsText}>
                       sats
                     </AppText>
                   )}
@@ -260,7 +264,7 @@ const getStyles = (theme: AppTheme, insets) =>
       paddingHorizontal: hp(10),
       paddingVertical: hp(20),
       borderColor: theme.colors.borderColor,
-      borderWidth: 1,
+      borderWidth: 1.5,
       width: '100%',
       borderRadius: 15,
       backgroundColor: theme.colors.walletBackgroundColor,
@@ -305,7 +309,7 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     satsText: {
       color: theme.colors.headingColor,
-      // marginTop: hp(10),
+      marginTop: hp(8),
       marginLeft: hp(5),
     },
     transCtaWrapper: {

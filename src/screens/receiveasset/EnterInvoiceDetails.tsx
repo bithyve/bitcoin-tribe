@@ -114,7 +114,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
-  const { invoiceAssetId } = useRoute().params;
+  const { invoiceAssetId, chosenAsset } = useRoute().params;
   const {
     receciveScreen,
     common,
@@ -131,7 +131,7 @@ const EnterInvoiceDetails = () => {
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
-  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedType, setSelectedType] = React.useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
@@ -139,11 +139,11 @@ const EnterInvoiceDetails = () => {
       : 'bitcoin',
   );
   const coins = useQuery<Coin[]>(RealmSchema.Coin).filtered(
-    'balance.spendable > 0',
+    "visibility != 'HIDDEN'",
   );
   const collectibles = useQuery<Collectible[]>(
     RealmSchema.Collectible,
-  ).filtered('balance.spendable > 0');
+  ).filtered("visibility != 'HIDDEN'");
 
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
@@ -249,6 +249,8 @@ const EnterInvoiceDetails = () => {
           onPress={() => {
             if (assetsData.length) {
               setAssetsDropdown(true);
+            } else {
+              Toast(assets.noAssetsFoundMsg, true);
             }
           }}
         />

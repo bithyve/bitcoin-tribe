@@ -16,7 +16,7 @@ const UserAvatar = (props: UserAvatarProps) => {
   return imageSource ? (
     <Avatar.Image
       size={size}
-      source={{ uri: `data:image/jpeg;base64,${imageSource}` }}
+      source={{ uri: imageSource }}
       style={styles.wrapper}
     />
   ) : (

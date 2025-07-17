@@ -56,6 +56,7 @@ const SelectYourAsset = (props: Props) => {
                   <Image source={{ uri: imageUri }} style={styles.imageStyle} />
                 ) : (
                   <AssetIcon
+                    iconUrl={selectedAsset?.iconUrl}
                     assetTicker={
                       selectedAsset?.ticker || selectedAsset?.asset?.ticker
                     }
@@ -73,7 +74,7 @@ const SelectYourAsset = (props: Props) => {
             </View>
           ) : (
             <AppText variant="body1" style={styles.titleText}>
-              {channel.selectYourAsset}
+              {channel.selectAsset}
             </AppText>
           )}
         </View>
@@ -120,6 +121,6 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
     },
     titleText: {
       color: theme.colors.headingColor,
-      marginLeft: hp(3),
+      marginLeft: hp(5),
     },
   });

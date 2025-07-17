@@ -8,7 +8,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Toast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
@@ -29,6 +29,10 @@ const getStyles = (theme: AppTheme) =>
       height: '74%',
     },
     buttonWrapper: {
+      marginTop: hp(20),
+      width: '100%',
+    },
+    doneCtaWrapper: {
       marginTop: hp(20),
     },
   });
@@ -155,7 +159,9 @@ const LightningSend = () => {
             primaryOnPress={() => sendLnPaymentMutation.mutate({ invoice })}
             secondaryTitle={common.cancel}
             secondaryOnPress={() => navigation.goBack()}
-            width={wp(120)}
+            width={windowWidth / 2.3}
+            secondaryCTAWidth={windowWidth / 2.3}
+            height={hp(14)}
             disabled={false}
           />
         </View>
@@ -175,6 +181,7 @@ const LightningSend = () => {
           onPress={() => {
             navigation.goBack();
           }}
+          style={styles.doneCtaWrapper}
         />
       </ResponsePopupContainer>
     </ScreenContainer>

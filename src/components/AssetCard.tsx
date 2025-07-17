@@ -13,8 +13,7 @@ import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
-import AssetChip from './AssetChip';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import Colors from 'src/theme/Colors';
 
@@ -22,15 +21,16 @@ type AssetCardProps = {
   asset: Asset;
   tag?: string;
   onPress?: (event: GestureResponderEvent) => void;
+  precision?: number;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { tag, onPress, asset } = props;
+  const { tag, onPress, asset, precision } = props;
   const theme: AppTheme = useTheme();
 
   const balance = useMemo(() => {
-    return formatLargeNumber(asset?.balance?.future) ?? 0;
-  }, [asset?.balance?.future]);
+    return formatLargeNumber(Number(asset?.balance?.future) / 10 ** precision) ?? 0;
+  }, [asset?.balance?.future, precision]);
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 

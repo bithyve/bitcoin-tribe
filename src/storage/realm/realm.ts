@@ -8,8 +8,7 @@ export class RealmDatabase {
 
   public static file = 'tribe.realm';
 
-  public static schemaVersion = 54;
-
+  public static schemaVersion = 70;
 
   /**
    * initializes/opens realm w/ appropriate configuration
@@ -127,6 +126,7 @@ export class RealmDatabase {
 
       return true;
     } catch (err) {
+      console.log('err', err, schema, JSON.stringify(objects));
       console.log({ err });
       return false;
     }

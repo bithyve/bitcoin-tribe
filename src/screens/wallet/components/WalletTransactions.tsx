@@ -19,12 +19,15 @@ import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcReceiveTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcReceiveTxnIcon_light.svg';
 import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningReceiveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
 import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
+import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
@@ -64,7 +67,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Sent: {
         bitcoin: {
           dark: <SentBtcIcon />,
-          light: <SentBtcIcon />,
+          light: <SentBtcIconLight />,
         },
         lightning: {
           dark: <SentLightningIcon />,
@@ -74,7 +77,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Received: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
@@ -144,7 +147,11 @@ function WalletTransactions(props: WalletTransactionsProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {transId === TransactionKind.SERVICE_FEE ? (
-              <ServiceFeeIcon />
+              isThemeDark ? (
+                <ServiceFeeIcon />
+              ) : (
+                <ServiceFeeIconLight />
+              )
             ) : (
               getStatusIcon(
                 transType,

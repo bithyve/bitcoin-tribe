@@ -2,23 +2,17 @@ package com.bithyve.tribe
 
 import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.FileContent
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonArray
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
-import org.rgbtools.AssetUda
+import org.rgbtools.Assignment
 import org.rgbtools.Balance
 import org.rgbtools.BtcBalance
 import org.rgbtools.Invoice
 import org.rgbtools.InvoiceData
-import org.rgbtools.Utxo
 import org.rgbtools.ReceiveData
 import org.rgbtools.Recipient
 import org.rgbtools.RefreshFilter
@@ -29,8 +23,6 @@ import org.rgbtools.WalletData
 import org.rgbtools.restoreBackup
 import org.rgbtools.restoreKeys
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import kotlin.Exception
 
 object RGBHelper {
@@ -74,21 +66,24 @@ object RGBHelper {
         }
     }
 
-    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null): String {
-        Log.d(TAG, "startRGBReceiving: assetID=$assetID, amount=$amount")
+    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, blinded: Boolean): String {
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
-        val blindedData = getBlindedUTXO(if (assetID == "") null else assetID,if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        val blindedData = if (blinded) {
+            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        } else {
+            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+        }
         val gson = Gson()
         val json = gson.toJson(blindedData)
         return json.toString()
     }
 
-    fun receiveAsset(assetID: String, amount: ULong?): String {
-        return handleMissingFunds{ startRGBReceiving(assetID, amount) }
+    fun receiveAsset(assetID: String, amount: ULong?, blinded: Boolean): String {
+        return handleMissingFunds{ startRGBReceiving(assetID, amount, blinded) }
     }
 
     private fun <T> handleMissingFunds(callback: () -> T): T {
@@ -122,10 +117,19 @@ object RGBHelper {
     }
 
     private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
-        Log.d(TAG, "getBlindedUTXO: assetID"+assetID)
         return RGBWalletRepository.wallet?.blindReceive(
             assetID,
-            amount,
+            assignment = Assignment.Any,
+            expirationSeconds,
+            listOf(AppConstants.proxyConsignmentEndpoint),
+            0u
+        )
+    }
+
+    private fun getWitnessUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
+        return RGBWalletRepository.wallet?.witnessReceive(
+            assetID,
+            assignment = Assignment.Fungible(amount!!),
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             0u
@@ -138,7 +142,99 @@ object RGBHelper {
 
     fun getAssetTransfers(assetID: String): String {
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf(), false)
-        return Gson().toJson(RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()).toString()
+        val transfers = RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()
+        Log.d(TAG, "getAssetTransfers: ${transfers.toString()}")
+        val gson = Gson()
+        val jsonArray = JsonArray()
+        
+        transfers?.forEach { transfer ->
+            val transferObject = JsonObject()
+            transferObject.addProperty("idx", transfer.idx)
+            transferObject.addProperty("batchTransferIdx", transfer.batchTransferIdx)
+            transferObject.addProperty("createdAt", transfer.createdAt)
+            transferObject.addProperty("updatedAt", transfer.updatedAt)
+            transferObject.addProperty("status", transfer.status.name)
+            transferObject.addProperty("kind", transfer.kind.name)
+            transferObject.addProperty("txid", transfer.txid)
+            transferObject.addProperty("recipientId", transfer.recipientId)
+            transferObject.addProperty("expiration", transfer.expiration)
+            transferObject.addProperty("invoiceString", transfer.invoiceString)
+            transfer.requestedAssignment?.let { assignment ->
+                val assignmentObject = JsonObject()
+                when (assignment) {
+                    is Assignment.Fungible -> {
+                        assignmentObject.addProperty("type", "Fungible")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.NonFungible -> {
+                        assignmentObject.addProperty("type", "NonFungible")
+                    }
+                    is Assignment.InflationRight -> {
+                        assignmentObject.addProperty("type", "InflationRight")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.ReplaceRight -> {
+                        assignmentObject.addProperty("type", "ReplaceRight")
+                    }
+                    is Assignment.Any -> {
+                        assignmentObject.addProperty("type", "Any")
+                    }
+                }
+                transferObject.add("requestedAssignment", assignmentObject)
+            }
+            val assignmentsArray = JsonArray()
+            transfer.assignments.forEach { assignment ->
+                val assignmentObject = JsonObject()
+                when (assignment) {
+                    is Assignment.Fungible -> {
+                        assignmentObject.addProperty("type", "Fungible")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.NonFungible -> {
+                        assignmentObject.addProperty("type", "NonFungible")
+                    }
+                    is Assignment.InflationRight -> {
+                        assignmentObject.addProperty("type", "InflationRight")
+                        assignmentObject.addProperty("amount", assignment.amount.toString())
+                    }
+                    is Assignment.ReplaceRight -> {
+                        assignmentObject.addProperty("type", "ReplaceRight")
+                    }
+                    is Assignment.Any -> {
+                        assignmentObject.addProperty("type", "Any")
+                    }
+                }
+                assignmentsArray.add(assignmentObject)
+            }
+            transferObject.add("assignments", assignmentsArray)
+            
+            transfer.receiveUtxo?.let { utxo ->
+                val utxoObject = com.google.gson.JsonObject()
+                utxoObject.addProperty("txid", utxo.txid)
+                utxoObject.addProperty("vout", utxo.vout.toInt())
+                transferObject.add("receiveUtxo", utxoObject)
+            }
+            
+            transfer.changeUtxo?.let { utxo ->
+                val utxoObject = com.google.gson.JsonObject()
+                utxoObject.addProperty("txid", utxo.txid)
+                utxoObject.addProperty("vout", utxo.vout.toInt())
+                transferObject.add("changeUtxo", utxoObject)
+            }
+            val transportEndpointsArray = com.google.gson.JsonArray()
+            transfer.transportEndpoints.forEach { endpoint ->
+                val endpointObject = com.google.gson.JsonObject()
+                endpointObject.addProperty("endpoint", endpoint.endpoint)
+                endpointObject.addProperty("transportType", endpoint.transportType.name)
+                endpointObject.addProperty("used", endpoint.used)
+                transportEndpointsArray.add(endpointObject)
+            }
+            transferObject.add("transportEndpoints", transportEndpointsArray)
+            
+            jsonArray.add(transferObject)
+        }
+        
+        return jsonArray.toString()
     }
 
     fun getTransactions(): String {
@@ -168,7 +264,7 @@ object RGBHelper {
     ): String {
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
-            mapOf(assetID to listOf(Recipient(blindedUTXO,null, amount, consignmentEndpoints))),
+            mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
             0u,
@@ -265,15 +361,15 @@ object RGBHelper {
         return status
     }
 
-    private fun createUTXOs(feeRate: Float): UByte? {
+    private fun createUTXOs(feeRate: Float, num: Int, size: Int, upTo: Boolean): UByte? {
         RGBWalletRepository.wallet?.getAddress()
         RGBWalletRepository.wallet?.sync(RGBWalletRepository.online!!)
         val balance = RGBWalletRepository.wallet?.getBtcBalance(RGBWalletRepository.online!!, false)
         return RGBWalletRepository.wallet?.createUtxos(
             RGBWalletRepository.online!!,
-            false,
-            null,
-            null,
+            upTo,
+            num.toUByte(),
+            size.toUInt(),
             feeRate.toULong(),
             false
         )
@@ -298,14 +394,13 @@ object RGBHelper {
     }
 
 
-    fun createNewUTXOs(feeRate: Float): Boolean {
+    fun createNewUTXOs(feeRate: Float, num: Int, size: Int, upTo: Boolean): Boolean {
         var attempts = 3
         var newUTXOs: UByte = 0u
         while (newUTXOs == 0u.toUByte() && attempts > 0) {
             Log.d(TAG, "createNewUTXOs: attempts=$attempts")
             try {
-                Log.d(TAG, "Calling create UTXOs... with fee $feeRate")
-                newUTXOs = createUTXOs(feeRate)!!
+                newUTXOs = createUTXOs(feeRate, num, size, upTo)!!
                 Log.d(TAG, "newUTXO: $newUTXOs")
             } catch (_: RgbLibException.InsufficientBitcoins) {
                 throw Exception("Insufficient sats for RGB")
@@ -338,7 +433,7 @@ object RGBHelper {
         val keys = restoreKeys(RGBWalletRepository.rgbNetwork!!, mnemonic)
         return File(
             context.filesDir,
-            AppConstants.backupName.format(keys.accountXpubColoredFingerprint)
+            AppConstants.backupName.format(keys.masterFingerprint)
         )
     }
 

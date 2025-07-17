@@ -182,12 +182,10 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       <View style={styles.contentContainer}>
         <View style={styles.contentWrapper}>
           <AppText variant="heading2" style={styles.titleText}>
-            {'Why Share Your Issued Asset?'}
+            {assets.whyShareAssetTitle}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
-            {
-              'Sharing boosts visibility — but it doesn’t prove ownership. Verify yourself to make it official.'
-            }
+            {assets.whyShareAssetSubTitle}
           </AppText>
         </View>
         <TwitterTemplate viewShotRef={viewShotRef} asset={issuerInfo} />
