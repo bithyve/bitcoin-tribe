@@ -124,7 +124,7 @@ android {
         }
         dev {
             applicationId "com.bithyve.tribe.dev"
-            resValue "string", "build_config_package", "com.bithyve.tribe.dev"
+            resValue "string", "build_config_package", "com.bithyve.tribe"
         }
     }
 }
