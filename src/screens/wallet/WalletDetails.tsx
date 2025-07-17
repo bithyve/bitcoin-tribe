@@ -205,8 +205,7 @@ function WalletDetails({ navigation, route }) {
             ? navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
               config.NETWORK_TYPE === NetworkType.REGTEST
-            ? // mutate()
-              navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
+            ? mutate()
             : setVisibleRequestTSats(true)
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
