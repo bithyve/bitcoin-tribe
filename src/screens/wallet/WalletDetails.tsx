@@ -23,8 +23,6 @@ import { NetworkType } from 'src/services/wallets/enums';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
-import ModalContainer from 'src/components/ModalContainer';
-import BuyModal from './components/BuyModal';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
@@ -49,7 +47,6 @@ function WalletDetails({ navigation, route }) {
     assets,
   } = translations;
   const [refreshing, setRefreshing] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
   const [walletName, setWalletName] = useState(null);
 
@@ -203,12 +200,13 @@ function WalletDetails({ navigation, route }) {
             CommonActions.navigate(NavigationRoutes.RECEIVESCREEN),
           )
         }
-        onPressBuy={ config.NETWORK_TYPE === NetworkType.MAINNET ? null : () =>
+        onPressBuy={() =>
           config.NETWORK_TYPE === NetworkType.MAINNET
-            ? setVisible(true)
+            ? navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
               config.NETWORK_TYPE === NetworkType.REGTEST
-            ? mutate()
+            ? // mutate()
+              navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
             : setVisibleRequestTSats(true)
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
@@ -222,14 +220,6 @@ function WalletDetails({ navigation, route }) {
         autoRefresh={walletRefreshMutation.isLoading}
         scrollY={scrollY}
       />
-      <ModalContainer
-        title={walletStrings.buyTitle}
-        subTitle={walletStrings.buySubtitle}
-        visible={visible}
-        enableCloseIcon={false}
-        onDismiss={() => setVisible(false)}>
-        <BuyModal />
-      </ModalContainer>
       <ResponsePopupContainer
         backColor={theme.colors.modalBackColor}
         borderColor={theme.colors.modalBackColor}

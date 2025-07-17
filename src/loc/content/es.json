@@ -479,7 +479,12 @@
     "valueMismatchSubTitle": "Hay una diferencia entre lo que se envió y lo que se recibió. Podría ser:",
     "valueMismatchInfo1": "Un activo diferente al esperado",
     "valueMismatchInfo2": "El mismo activo pero con una cantidad diferente",
-    "valueMismatchInfo3": "Esto puede suceder debido a errores de decodificación o al manejo incorrecto de UTXO. Por favor, verifica con el remitente o contacta con soporte si no lo esperabas."
+    "valueMismatchInfo3": "Esto puede suceder debido a errores de decodificación o al manejo incorrecto de UTXO. Por favor, verifica con el remitente o contacta con soporte si no lo esperabas.",
+    "rampTitle": "Obtén Bitcoin a través de Ramp",
+    "rampSubTitle": "Ramp te permite adquirir Bitcoin usando métodos de pago disponibles en tu país.",
+    "rampInfo": "Ramp ofrece múltiples métodos de pago para adquirir Bitcliin.",
+    "rampAddressLabel": "Dirección para la transacción",
+    "rampNote": "Al continuar, aceptas que Ramp procesará el pago y la transferencia del bitcoin comprado. Al seguir, serás redirigido a su página."
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",

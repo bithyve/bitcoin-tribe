@@ -479,7 +479,12 @@
     "valueMismatchSubTitle": "发送和接收的内容不一致，可能是：",
     "valueMismatchInfo1": "收到的资产与预期不同",
     "valueMismatchInfo2": "是相同的资产但数量不同",
-    "valueMismatchInfo3": "这可能是由于解码错误或UTXO处理不当造成的。如果非预期，请与发送方核对或联系支持。"
+    "valueMismatchInfo3": "这可能是由于解码错误或UTXO处理不当造成的。如果非预期，请与发送方核对或联系支持。",
+    "rampTitle": "通过 Ramp 获取比特币",
+    "rampSubTitle": "Ramp 允许你使用你所在国家支持的支付方式购买比特币。",
+    "rampInfo": "Ramp 提供多种支付方式来购买 Bitcliin。",
+    "rampAddressLabel": "交易地址",
+    "rampNote": "继续操作即表示你同意 Ramp 将处理付款并转账所购比特币。继续后你将被重定向到其页面。"
   },
   "assets": {
     "assetCreateMsg": "资产创建成功",

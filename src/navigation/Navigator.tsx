@@ -87,6 +87,7 @@ import Chat from 'src/screens/community/Chat';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
 import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 import NodeConnected from 'src/components/NodeConnected';
+import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -342,13 +343,14 @@ function AppStack() {
           name={NavigationRoutes.PROFILEINFO}
           component={ProfileInfo}
         />
-        <Stack.Screen
-          name={NavigationRoutes.CHAT}
-          component={Chat}
-        />
+        <Stack.Screen name={NavigationRoutes.CHAT} component={Chat} />
         <Stack.Screen
           name={NavigationRoutes.TRANSACTIONTYPEINFO}
           component={TransactionTypeInfoScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.GETBTCWITHRAMP}
+          component={GetBTCWithRamp}
         />
       </Stack.Navigator>
     </RealmProvider>
