@@ -211,7 +211,11 @@ function IssueScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (
+        sanitizedText &&
+        BigInt(sanitizedText) * BigInt(10 ** precision) <=
+          MAX_ASSET_SUPPLY_VALUE
+      ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -288,7 +292,10 @@ function IssueScreen() {
             title="Precision"
             value={precision}
             onValueChange={value => {
-              if(BigInt(totalSupplyAmt) * BigInt(10 ** value) > MAX_ASSET_SUPPLY_VALUE) {
+              if (
+                BigInt(totalSupplyAmt) * BigInt(10 ** value) >
+                MAX_ASSET_SUPPLY_VALUE
+              ) {
                 Toast(assets.totalSupplyAmountErrMsg, true);
                 return;
               }
@@ -317,15 +324,6 @@ function IssueScreen() {
             onSubmitEditing={Keyboard.dismiss}
             error={assetTotSupplyValidationError}
           />
-
-          <View style={styles.totalSupplyWrapper}>
-            <AppText variant="body2" style={styles.textInputTitle}>
-              Total Supply:
-            </AppText>
-            <AppText variant="body2" style={styles.textTotalSupply}>
-              {totalSupplyWithPrecision}
-            </AppText>
-          </View>
         </View>
       </KeyboardAvoidView>
       {colorable.length === 0 && (

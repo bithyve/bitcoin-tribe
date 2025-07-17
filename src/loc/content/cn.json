@@ -558,7 +558,7 @@
     "enterAssetNamePlaceholder": "输入您的资产名称",
     "enterDescNamePlaceholder": "描述您的资产",
     "enterTotSupplyPlaceholder": "输入最大单位数",
-    "precisionCaption": "设置每个单位的可分割性（例如，0=完整单位，2=分）",
+    "precisionCaption": "设置每个单位的可分割性 ",
     "mediaFile": "媒体文件",
     "assetImageCaption": "添加图像以表示您的资产（例如，徽标或艺术作品）",
     "enterAssetTickerPlaceholder": "输入一个简短的股票代码（例如，BTC）",

@@ -203,6 +203,7 @@ const CoinsMetaDataScreen = () => {
               schema={RealmSchema.Coin}
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               setIsVerifyingIssuer={setIsVerifyingIssuer}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
             <IssuerDomainVerified
               domain={
@@ -222,6 +223,7 @@ const CoinsMetaDataScreen = () => {
                   });
                 }
               }}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
           </View>
           <View style={styles.rowWrapper}>

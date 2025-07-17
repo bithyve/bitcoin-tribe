@@ -9,14 +9,13 @@ import {
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
+
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
@@ -243,7 +242,6 @@ function ReceiveAssetScreen() {
             />
             <ReceiveQrClipBoard
               qrCodeValue={qrValue}
-              icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
               message={assets.invoiceCopiedMsg}
             />
           </View>

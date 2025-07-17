@@ -6,19 +6,18 @@ import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
 import AppTouchable from 'src/components/AppTouchable';
 import CardBox from 'src/components/CardBox';
-import { wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
+import AppText from 'src/components/AppText';
 
 interface ReceiveQrClipBoardProps {
   qrCodeValue: string;
-  icon: React.ReactNode;
   message?: string;
 }
 
 const ReceiveQrClipBoard = ({
   qrCodeValue,
-  icon,
   message,
 }: ReceiveQrClipBoardProps) => {
   const { translations } = React.useContext(LocalizationContext);
@@ -33,22 +32,22 @@ const ReceiveQrClipBoard = ({
   };
 
   return (
-    <CardBox>
-      <View>
+    <View>
+      <CardBox>
         <AppTouchable
           onPress={() => handleCopyText(qrCodeValue)}
           style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <Text
-              style={[styles.menuCardTitle, CommonStyles.body1]}
-              numberOfLines={1}>
+            <Text style={[styles.menuCardTitle, CommonStyles.body1]}>
               {qrCodeValue}
             </Text>
           </View>
-          <View style={styles.iconWrapper}>{icon}</View>
         </AppTouchable>
-      </View>
-    </CardBox>
+      </CardBox>
+      <AppText variant="smallCTA" style={styles.tapToCopyText}>
+        {common.tapToCopy}
+      </AppText>
+    </View>
   );
 };
 
@@ -57,20 +56,18 @@ export default ReceiveQrClipBoard;
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     detailsWrapper: {
-      flexDirection: 'row',
       width: '100%',
     },
     contentWrapper: {
-      width: '90%',
+      width: '100%',
     },
     menuCardTitle: {
       color: theme.colors.headingColor,
-      width: '95%',
+      width: '100%',
     },
-    iconWrapper: {
-      width: wp(28),
-      height: wp(22),
-      alignItems: 'center',
-      justifyContent: 'center',
+    tapToCopyText: {
+      color: theme.colors.accent1,
+      marginBottom: hp(3),
+      textAlign: 'right',
     },
   });

@@ -264,6 +264,7 @@ const CollectibleMetaDataScreen = () => {
                 schema={RealmSchema.Collectible}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
                 setIsVerifyingIssuer={setIsVerifyingIssuer}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
               <IssuerDomainVerified
                 domain={
@@ -283,6 +284,7 @@ const CollectibleMetaDataScreen = () => {
                     });
                   }
                 }}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
             </View>
             <Item
@@ -301,9 +303,15 @@ const CollectibleMetaDataScreen = () => {
               value={
                 app.appType === AppType.NODE_CONNECT ||
                 app.appType === AppType.SUPPORTED_RLN
-                  ? numberWithCommas(Number(collectible.issuedSupply) / 10 ** collectible.precision)
+                  ? numberWithCommas(
+                      Number(collectible.issuedSupply) /
+                        10 ** collectible.precision,
+                    )
                   : collectible?.metaData &&
-                    numberWithCommas(Number(collectible?.metaData?.issuedSupply) / 10 ** collectible?.precision)
+                    numberWithCommas(
+                      Number(collectible?.metaData?.issuedSupply) /
+                        10 ** collectible?.precision,
+                    )
               }
             />
 

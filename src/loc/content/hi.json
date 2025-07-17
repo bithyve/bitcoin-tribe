@@ -558,7 +558,7 @@
     "enterAssetNamePlaceholder": "अपने एसेट का नाम दर्ज करें",
     "enterDescNamePlaceholder": "अपने एसेट का वर्णन करें",
     "enterTotSupplyPlaceholder": "अधिकतम इकाइयों की संख्या दर्ज करें",
-    "precisionCaption": "सेट करें कि प्रत्येक इकाई कितनी विभाज्य है (उदाहरण: 0 = पूर्ण इकाइयाँ, 2 = पैसे)",
+    "precisionCaption": "सेट करें कि प्रत्येक इकाई कितनी विभाज्य है।",
     "mediaFile": "मीडिया फ़ाइल",
     "assetImageCaption": "अपने संपत्ति का प्रतिनिधित्व करने के लिए एक छवि जोड़ें (जैसे, लोगो या कलाकृति)",
     "enterAssetTickerPlaceholder": "एक छोटा टिकर प्रतीक दर्ज करें (जैसे, BTC)",
