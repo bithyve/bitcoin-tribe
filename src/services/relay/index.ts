@@ -372,7 +372,7 @@ export default class Relay {
       try {
         const formData = new FormData();
         formData.append('appID', appID);
-        formData.append('network', 'regtest');
+        formData.append('network', config.NETWORK_TYPE.toString());
         formData.append('asset', JSON.stringify(asset));
         if (asset?.media) {
           formData.append('media', {
