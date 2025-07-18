@@ -32,8 +32,8 @@ const ReceiveQrClipBoard = ({
   };
 
   return (
-    <AppTouchable onPress={() => handleCopyText(qrCodeValue)}>
-      <CardBox>
+    <View>
+      <CardBox onPress={() => handleCopyText(qrCodeValue)}>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
             <Text style={[styles.menuCardTitle, CommonStyles.body1]}>
@@ -42,12 +42,14 @@ const ReceiveQrClipBoard = ({
           </View>
         </View>
       </CardBox>
-      <AppTouchable onPress={() => handleCopyText(qrCodeValue)}>
+      <AppTouchable
+        onPress={() => handleCopyText(qrCodeValue)}
+        style={styles.tapTextWrapper}>
         <AppText variant="smallCTA" style={styles.tapToCopyText}>
           {common.tapToCopy}
         </AppText>
       </AppTouchable>
-    </AppTouchable>
+    </View>
   );
 };
 
@@ -65,9 +67,12 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       width: '100%',
     },
+    tapTextWrapper: {
+      width: 'auto',
+      alignSelf: 'flex-end',
+      marginVertical: hp(5),
+    },
     tapToCopyText: {
       color: theme.colors.accent1,
-      marginBottom: hp(3),
-      textAlign: 'right',
     },
   });
