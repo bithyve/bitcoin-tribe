@@ -557,6 +557,14 @@ function IssueCollectibleScreen() {
               returnKeyType="done"
               error={assetTotSupplyValidationError}
             />
+            <View style={styles.totalSupplyWrapper}>
+              <AppText variant="body2" style={styles.textInputTitle}>
+                Total Supply:
+              </AppText>
+              <AppText variant="body2" style={styles.textTotalSupply}>
+                {totalSupplyWithPrecision}
+              </AppText>
+            </View>
 
             <AppText
               variant="body2"
