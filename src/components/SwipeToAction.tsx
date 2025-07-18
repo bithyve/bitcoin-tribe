@@ -39,8 +39,8 @@ const SwipeToAction: React.FC<Props> = ({
     [theme, backColor, loaderTextColor],
   );
   const [swiped, setSwiped] = useState(false);
-  const translateX = new Animated.Value(0);
-  const autoSwipe = new Animated.Value(0);
+  const translateX = useRef(new Animated.Value(0)).current;
+  const autoSwipe = useRef(new Animated.Value(0)).current;
   const autoSwipeAnimation = useRef(null);
 
   useEffect(() => {
