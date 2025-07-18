@@ -124,7 +124,6 @@ function IssueScreen() {
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
-        addToRegistry,
       });
       if (response?.assetId) {
         setLoading(false);

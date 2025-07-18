@@ -29,6 +29,7 @@ import Fonts from 'src/constants/Fonts';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
 import HorizontalGradientView from './HorizontalGradientView';
+import config from 'src/utils/config';
 
 type TwitTemplateProps = {
   viewShotRef: React.RefObject<ViewShot>;
@@ -260,7 +261,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
           </View>
           <View>
             <View style={styles.qrContainer}>
-              <QRCode value="https://bitcointribe.app/" size={156} />
+              <QRCode value={`${config.REGISTRY_URL}/${asset.assetId}`} size={160} />
             </View>
             <AppText variant="body1" style={styles.scanText}>
               Scan Me!

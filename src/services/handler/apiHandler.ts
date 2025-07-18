@@ -1378,18 +1378,41 @@ export class ApiHandler {
       : response;
   }
 
+  static async addAssetToWallet({ asset }: { asset: Asset }) {
+    try {
+      const coins = dbManager.getCollection(RealmSchema.Coin);
+      if(coins.find(coin => coin.assetId === asset.assetId)) {
+        return;
+      }
+      dbManager.createObject(RealmSchema.Coin, {
+        ...asset,
+        addedAt: Date.now(),
+        issuedSupply: asset.issuedSupply.toString(),
+        balance: {
+          spendable: '0',
+          future: '0',
+          settled: '0',
+          offchainOutbound: '0',
+          offchainInbound: '0',
+        },
+      });
+
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async issueNewCoin({
     name,
     ticker,
     supply,
     precision,
-    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     supply: string;
     precision: number;
-    addToRegistry;
   }) {
     try {
       const assetResponse = await RGBServices.issueAssetNia(
@@ -1408,8 +1431,7 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...metadata, ...response });
+          await Relay.registerAsset(app.id, { ...metadata, ...response }, app.authToken);
           const wallet: Wallet = dbManager
             .getObjectByIndex(RealmSchema.Wallet)
             .toJSON();
@@ -1431,11 +1453,11 @@ export class ApiHandler {
               },
             });
           }
-        }
         await ApiHandler.refreshRgbWallet();
       }
       return response;
     } catch (error) {
+      console.log('error', error);
       throw new Error(`${error}`);
     }
   }
@@ -1446,14 +1468,12 @@ export class ApiHandler {
     supply,
     filePath,
     precision,
-    addToRegistry = true,
   }: {
     name: string;
     description: string;
     supply: string;
     filePath: string;
     precision: number;
-    addToRegistry: boolean;
   }) {
     try {
       const assetResponse = await RGBServices.issueAssetCfa(
@@ -1474,8 +1494,7 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...collectible });
+          await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
           const wallet: Wallet = dbManager
             .getObjectByIndex(RealmSchema.Wallet)
             .toJSON();
@@ -1497,7 +1516,6 @@ export class ApiHandler {
               },
             });
           }
-        }
       }
       return response;
     } catch (error) {
@@ -1511,14 +1529,12 @@ export class ApiHandler {
     details,
     mediaFilePath,
     attachmentsFilePaths,
-    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     details: string;
     mediaFilePath: string;
     attachmentsFilePaths: string[];
-    addToRegistry;
   }) {
     try {
       const assetResponse = await RGBServices.issueAssetUda(
@@ -1539,8 +1555,7 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...collectible });
+          await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
           const wallet: Wallet = dbManager
             .getObjectByIndex(RealmSchema.Wallet)
             .toJSON();
@@ -1562,7 +1577,6 @@ export class ApiHandler {
               },
             });
           }
-        }
       }
       return response;
     } catch (error) {
