@@ -721,6 +721,21 @@ export default class Relay {
     }
   };
 
+  public static lookupAsset = async (
+    assetId: string,
+  ): Promise<{
+    asset: Asset;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/registry/lookup/${assetId}`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   public static getWalletProfiles = async (
     contactKeys: string[],
   ): Promise<{

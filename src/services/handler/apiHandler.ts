@@ -1378,6 +1378,31 @@ export class ApiHandler {
       : response;
   }
 
+  static async addAssetToWallet({ asset }: { asset: Asset }) {
+    try {
+      const coins = dbManager.getCollection(RealmSchema.Coin);
+      if(coins.find(coin => coin.assetId === asset.assetId)) {
+        return;
+      }
+      dbManager.createObject(RealmSchema.Coin, {
+        ...asset,
+        addedAt: Date.now(),
+        issuedSupply: asset.issuedSupply.toString(),
+        balance: {
+          spendable: '0',
+          future: '0',
+          settled: '0',
+          offchainOutbound: '0',
+          offchainInbound: '0',
+        },
+      });
+
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async issueNewCoin({
     name,
     ticker,
