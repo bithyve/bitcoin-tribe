@@ -48,9 +48,11 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
       marginHorizontal: hp(5),
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     contentWrapper: {
-      width: '75%',
+      width: '70%',
     },
     iconWrapper: {
       flexDirection: 'row',
