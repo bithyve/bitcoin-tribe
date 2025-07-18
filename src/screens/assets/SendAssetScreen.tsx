@@ -391,20 +391,17 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    const spendableBalance = assetData?.balance?.spendable;
-    if (spendableBalance) {
-      const spendable = Number(spendableBalance);
-      if (isNaN(spendable)) return;
-      let formatted: string;
-      if (precision === 0) {
-        formatted = spendableBalance;
-      } else {
-        const value = spendable / 10 ** precision;
-        formatted = value.toFixed(precision).replace(/\.?0+$/, '');
-      }
+    const spendable = Number(assetData?.balance?.spendable);
+    if (isNaN(spendable)) return;
 
-      setAssetAmount(formatted);
-    }
+    const formatted =
+      precision === 0
+        ? spendable.toString()
+        : (spendable / 10 ** precision)
+            .toFixed(precision)
+            .replace(/\.?0+$/, '');
+
+    setAssetAmount(formatted);
   };
 
   const handleCustomFeeInput = text => {
