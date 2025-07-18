@@ -196,7 +196,11 @@ function TwitterTemplate(props: TwitTemplateProps) {
             value={
               asset?.assetSchema.toUpperCase() === AssetSchema.UDA
                 ? 'Unique'
-                : numberWithCommas(asset?.precision > 0 ? asset?.issuedSupply/10**asset?.precision : asset?.issuedSupply)
+                : numberWithCommas(
+                    asset?.precision > 0
+                      ? asset?.issuedSupply / 10 ** asset?.precision
+                      : asset?.issuedSupply,
+                  )
             }
           />
           {twitterVerification?.type && (
@@ -290,6 +294,7 @@ const getStyles = (theme: AppTheme) =>
       fontSize: hp(38),
       color: Colors.White,
       marginBottom: hp(3),
+      lineHeight: 38 * 1.4,
     },
     text: {
       color: Colors.White,
