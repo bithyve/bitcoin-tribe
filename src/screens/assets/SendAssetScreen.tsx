@@ -236,7 +236,7 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
- /* const handleAmountInputChange = text => {
+  /* const handleAmountInputChange = text => {
     const numericValue = parseFloat(text.replace(/,/g, '') || null);
     if (isNaN(numericValue)) {
       setAmountValidationError('');
@@ -267,16 +267,20 @@ const SendAssetScreen = () => {
       regex = /^[1-9]\d*$/;
     } else {
       regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
-    }    if (text === '' || regex.test(text)) {
+    }
+    if (text === '' || regex.test(text)) {
       setAssetAmount(text);
       const numericValue = parseFloat(text || '0');
-      if (Number(assetData?.balance.spendable)/10**precision === 0) {
+      if (Number(assetData?.balance.spendable) / 10 ** precision === 0) {
         Keyboard.dismiss();
         Toast(
           sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
           true,
         );
-      } else if (numericValue <= Number(assetData?.balance.spendable)/10**precision ) {
+      } else if (
+        numericValue <=
+        Number(assetData?.balance.spendable) / 10 ** precision
+      ) {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
@@ -299,7 +303,9 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
-        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, ''))*10**precision,
+        amount:
+          parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+          10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate,
         isDonation,
@@ -385,10 +391,17 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    if (assetData?.balance?.spendable) {
-      const spendableAmount = assetData.balance.spendable.toString();
-      setAssetAmount(spendableAmount);
-    }
+    const spendable = Number(assetData?.balance?.spendable);
+    if (isNaN(spendable)) return;
+
+    const formatted =
+      precision === 0
+        ? spendable.toString()
+        : (spendable / 10 ** precision)
+            .toFixed(precision)
+            .replace(/\.?0+$/, '');
+
+    setAssetAmount(formatted);
   };
 
   const handleCustomFeeInput = text => {
@@ -529,7 +542,9 @@ const SendAssetScreen = () => {
             <AppText variant="body2" style={styles.availableBalanceText}>
               {precision === 0
                 ? numberWithCommas(Number(assetData?.balance.spendable))
-                : numberWithCommas(Number(assetData?.balance.spendable) / 10 ** precision) +
+                : numberWithCommas(
+                    Number(assetData?.balance.spendable) / 10 ** precision,
+                  ) +
                   '.' +
                   '0'.repeat(precision)}
             </AppText>

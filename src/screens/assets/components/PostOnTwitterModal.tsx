@@ -198,8 +198,8 @@ const PostOnTwitterModal: React.FC<Props> = ({
           primaryOnPress={captureAndShare}
           secondaryTitle={common.skip}
           secondaryOnPress={secondaryOnPress}
-          width={windowWidth / 2.7}
-          secondaryCTAWidth={windowWidth / 2.7}
+          width={windowWidth / 2.8}
+          secondaryCTAWidth={windowWidth / 2.8}
           height={hp(14)}
         />
       </View>

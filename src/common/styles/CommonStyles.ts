@@ -39,11 +39,13 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
+    lineHeight: 16 * 1.6,
   },
   body2: {
     fontSize: 14,
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
+    lineHeight: 14 * 1.4,
   },
   caption: {
     fontSize: 12,
