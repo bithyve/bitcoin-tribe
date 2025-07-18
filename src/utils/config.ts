@@ -37,7 +37,7 @@ class Configuration {
   public TRIBE_FCM_BROADCAST_CHANNEL: string =
     config.TRIBE_FCM_BROADCAST_CHANNEL;
   public CHAT_PEER_PUB_KEY: string = config.CHAT_PEER_PUB_KEY;
-  public RAMP_BASE_URL: string = 'https://app.ramp.network/';
+  public RAMP_BASE_URL: string = 'https://app.rampnetwork.com/';
   public RAMP_REFERRAL_CODE: string =
     'ku67r7oh5juc27bmb3h5pek8y5heyb5bdtfa66pr';
   public TERMS_AND_CONDITIONS_URL: string =
