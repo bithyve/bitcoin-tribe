@@ -1,15 +1,14 @@
-/**
- * Formats a number with commas as thousand separators.
- *
- * @param {number|string} x - The number to format.
- * @return {string} - The formatted number with commas.
- */
 export const numberWithCommas = (x: number | string): string => {
-  return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0';
+  if (!x) return '0.00';
+
+  const num = typeof x === 'string' ? parseFloat(x) : x;
+  if (isNaN(num)) return '0.00';
+  
+  return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const formatNumber = text => {
-  const numberValue = text.replace(/,/g, ''); // Remove existing commas
+  const numberValue = text.replace(/,/g, '');
   return text ? new Intl.NumberFormat('en-US').format(numberValue) : '';
 };
 
@@ -24,11 +23,11 @@ export const formatLargeNumber = (num: number | string = 0) => {
     return 'Invalid number';
   }
   if (num >= 1e12) {
-    return (num / 1e12).toFixed(1).replace(/\.0$/, '') + 'T';
+    return (num / 1e12).toFixed(2).replace(/\.00$/, '').replace(/\.0$/, '') + 'T';
   } else if (num >= 1e9) {
-    return (num / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+    return (num / 1e9).toFixed(2).replace(/\.00$/, '').replace(/\.0$/, '') + 'B';
   } else if (num >= 1e6) {
-    return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+    return (num / 1e6).toFixed(2).replace(/\.00$/, '').replace(/\.0$/, '') + 'M';
   } else {
     return numberWithCommas(num);
   }
