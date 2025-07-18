@@ -62,6 +62,7 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
+import config from 'src/utils/config';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -418,7 +419,7 @@ const UDADetailsScreen = () => {
                 subTitle={''}
                 onPress={() =>
                   openLink(
-                    `https://bitcointribe.app/registry?assetId=${assetId}`,
+                    `${config.REGISTRY_URL}/${assetId}`,
                   )
                 }
                 testID={'view_in_registry'}

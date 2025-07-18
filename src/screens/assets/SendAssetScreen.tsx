@@ -465,7 +465,11 @@ const SendAssetScreen = () => {
               : assets.collectible
           }
           assetId={assetId}
-          amount={assetData?.balance.spendable}
+          amount={
+            precision === 0
+              ? assetData?.balance.spendable
+              : Number(assetData?.balance.spendable) / 10 ** precision
+          }
           verified={assetData?.issuer?.verified}
           iconUrl={assetData.iconUrl}
         />

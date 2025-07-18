@@ -10,7 +10,6 @@ import {
 import { useTheme } from 'react-native-paper';
 import ViewShot from 'react-native-view-shot';
 import QRCode from 'react-native-qrcode-svg';
-
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -197,7 +196,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             value={
               asset?.assetSchema.toUpperCase() === AssetSchema.UDA
                 ? 'Unique'
-                : asset && numberWithCommas(asset?.issuedSupply)
+                : numberWithCommas(asset?.precision > 0 ? asset?.issuedSupply/10**asset?.precision : asset?.issuedSupply)
             }
           />
           {twitterVerification?.type && (

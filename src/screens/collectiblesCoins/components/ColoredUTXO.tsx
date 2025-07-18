@@ -94,6 +94,7 @@ const ColoredUTXO = () => {
   return (
     <FlatList
       data={colored}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
         <AppTouchable
           onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>

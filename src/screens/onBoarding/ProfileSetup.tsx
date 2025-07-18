@@ -20,30 +20,32 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import WebView from 'react-native-webview';
-import Buttons from 'src/components/Buttons';
 import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
 import Modal from 'react-native-modal';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
-const getStyles = (theme: AppTheme) => StyleSheet.create({
-  containerStyle: {
-    height: windowHeight - hp(140),
-    width: '100%',
-    backgroundColor: theme.colors.modalBackColor,
-    padding: hp(2),
-    borderRadius: hp(30),
-    marginHorizontal: 0,
-    marginBottom: 5,
-  },
-  webViewStyle: {
-    flex: 1,
-    marginBottom: hp(10),
-    backgroundColor: theme.colors.modalBackColor,
-  },
-  titleStyle: {
-    textAlign: 'center',
-    marginVertical: hp(10),
-  },
-});
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    containerStyle: {
+      height: windowHeight - hp(140),
+      width: '100%',
+      backgroundColor: theme.colors.modalBackColor,
+      padding: hp(5),
+      borderRadius: hp(30),
+      marginHorizontal: 0,
+      marginBottom: 5,
+    },
+    webViewStyle: {
+      flex: 1,
+      marginVertical: hp(10),
+      backgroundColor: theme.colors.modalBackColor,
+      borderRadius: hp(30),
+    },
+    titleStyle: {
+      textAlign: 'center',
+      marginVertical: hp(10),
+    },
+  });
 
 function ProfileSetup() {
   const navigation = useNavigation();
@@ -64,8 +66,7 @@ function ProfileSetup() {
     setTimeout(() => {
       setShowTermsModal(true);
     }, 1000);
-  }, [])
-  
+  }, []);
 
   useEffect(() => {
     if (setupNewAppMutation.isSuccess) {
@@ -160,21 +161,20 @@ function ProfileSetup() {
         isVisible={showTermsModal}
         onDismiss={() => setShowTermsModal(false)}>
         <View style={styles.containerStyle}>
-
           <WebView
             source={{ uri: config.TERMS_AND_CONDITIONS_URL }}
             style={styles.webViewStyle}
           />
 
-<Buttons
-            primaryTitle={'I agree'}
-            primaryOnPress={()=> {
+          <PrimaryCTA
+            title={'I agree'}
+            onPress={() => {
               setShowTermsModal(false);
             }}
-            width={windowWidth - hp(40)}
+            width={windowWidth - hp(50)}
             disabled={false}
+            style={{ marginTop: hp(10), alignSelf: 'center' }}
           />
-
         </View>
       </Modal>
     </ScreenContainer>

@@ -112,8 +112,7 @@ function IssueScreen() {
   const totalSupplyWithPrecision = useMemo(() => {
     const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
     const decimals = Number(precision) || 0;
-    const supplyWithPrecision = supply.toFixed(decimals);
-    return `${supplyWithPrecision} ${assetTicker}`;
+    return `${supply} ${assetTicker}`;
   }, [totalSupplyAmt, precision, assetTicker]);
 
   const issueCoin = useCallback(async () => {

@@ -294,7 +294,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            await ApiHandler.manageFcmVersionTopics();
+            // await ApiHandler.manageFcmVersionTopics();
             const apiHandler = new ApiHandler(
               rgbWallet,
               AppType.ON_CHAIN,
@@ -352,7 +352,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            await ApiHandler.manageFcmVersionTopics();
+            // await ApiHandler.manageFcmVersionTopics();
           }
         } else {
           const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
@@ -437,7 +437,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            await ApiHandler.manageFcmVersionTopics();
+            // await ApiHandler.manageFcmVersionTopics();
           }
         }
         Storage.set(Keys.SETUPAPP, false);
@@ -480,7 +480,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
-        await ApiHandler.manageFcmVersionTopics();
+        // await ApiHandler.manageFcmVersionTopics();
       }
     } catch (error) {
       throw error;
@@ -532,7 +532,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
-        await ApiHandler.manageFcmVersionTopics();
+        // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
       }
@@ -1691,7 +1691,7 @@ export class ApiHandler {
     previousVersion?: string,
     currentVersion?: string,
   ): Promise<void> {
-    try {
+    try {      
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
       const appVersion = currentVersion || DeviceInfo.getVersion();

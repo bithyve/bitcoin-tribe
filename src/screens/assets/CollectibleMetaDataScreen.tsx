@@ -61,6 +61,7 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import config from 'src/utils/config';
 
 type itemProps = {
   title: string;
@@ -355,7 +356,7 @@ const CollectibleMetaDataScreen = () => {
                   subTitle={''}
                   onPress={() =>
                     openLink(
-                      `https://bitcointribe.app/registry?assetId=${assetId}`,
+                      `${config.REGISTRY_URL}/${assetId}`,
                     )
                   }
                   testID={'view_in_registry'}
