@@ -391,18 +391,17 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    if (
-      assetData?.balance?.spendable != null &&
-      typeof precision === 'number'
-    ) {
-      const spendableBalance = Number(assetData.balance.spendable);
-
-      const formatted =
-        precision === 0
-          ? Math.floor(spendableBalance).toString()
-          : (spendableBalance / 10 ** precision)
-              .toFixed(precision)
-              .replace(/\.?0+$/, '');
+    const spendableBalance = assetData?.balance?.spendable;
+    if (spendableBalance) {
+      const spendable = Number(spendableBalance);
+      if (isNaN(spendable)) return;
+      let formatted: string;
+      if (precision === 0) {
+        formatted = spendableBalance;
+      } else {
+        const value = spendable / 10 ** precision;
+        formatted = value.toFixed(precision).replace(/\.?0+$/, '');
+      }
 
       setAssetAmount(formatted);
     }
