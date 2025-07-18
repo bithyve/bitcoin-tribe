@@ -158,7 +158,6 @@ function IssueCollectibleScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
-        addToRegistry: addToRegistry,
         filePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
@@ -224,7 +223,6 @@ function IssueCollectibleScreen() {
         name: assetName.trim(),
         details: description,
         ticker: assetTicker,
-        addToRegistry: addToRegistry,
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||

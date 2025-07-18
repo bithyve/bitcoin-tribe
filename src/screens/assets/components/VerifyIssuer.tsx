@@ -289,7 +289,11 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         assetId,
       ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
-      const { status } = await Relay.registerAsset(app.id, asset);
+      const { status } = await Relay.enrollAsset(
+        app.id,
+        asset,
+        app.authToken,
+      );
       if (status) {
         setIsAddedInRegistry(true);
         Toast(assets.registerAssetMsg);
