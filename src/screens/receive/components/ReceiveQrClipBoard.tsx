@@ -32,22 +32,22 @@ const ReceiveQrClipBoard = ({
   };
 
   return (
-    <View>
+    <AppTouchable onPress={() => handleCopyText(qrCodeValue)}>
       <CardBox>
-        <AppTouchable
-          onPress={() => handleCopyText(qrCodeValue)}
-          style={styles.detailsWrapper}>
+        <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
             <Text style={[styles.menuCardTitle, CommonStyles.body1]}>
               {qrCodeValue}
             </Text>
           </View>
-        </AppTouchable>
+        </View>
       </CardBox>
-      <AppText variant="smallCTA" style={styles.tapToCopyText}>
-        {common.tapToCopy}
-      </AppText>
-    </View>
+      <AppTouchable onPress={() => handleCopyText(qrCodeValue)}>
+        <AppText variant="smallCTA" style={styles.tapToCopyText}>
+          {common.tapToCopy}
+        </AppText>
+      </AppTouchable>
+    </AppTouchable>
   );
 };
 
