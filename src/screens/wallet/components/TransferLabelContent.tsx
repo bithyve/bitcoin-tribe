@@ -11,9 +11,10 @@ import AppText from 'src/components/AppText';
 type labelContentProps = {
   label: string;
   content: string;
+  contentUnderline?: boolean;
 };
 function TransferLabelContent(props: labelContentProps) {
-  const { label, content } = props;
+  const { label, content, contentUnderline = false } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -23,7 +24,10 @@ function TransferLabelContent(props: labelContentProps) {
       <AppText variant="body1" style={styles.labelStyle}>
         {label}
       </AppText>
-      <AppText variant="body2" style={styles.textStyle}>
+      <AppText
+        variant="body2"
+        selectable={contentUnderline}
+        style={[styles.textStyle, contentUnderline && { textDecorationLine: 'underline' }]}>
         {content}
       </AppText>
     </View>

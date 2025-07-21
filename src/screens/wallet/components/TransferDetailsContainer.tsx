@@ -22,6 +22,9 @@ import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
+import openLink from 'src/utils/OpenLink';
+import config from 'src/utils/config';
+import { NetworkType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -90,6 +93,18 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
+  const redirectToBlockExplorer = (txid: string) => {
+    if (config.NETWORK_TYPE === NetworkType.REGTEST) {
+      handleCopyText(txid);
+      return;
+    }
+    openLink(
+      `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${txid}`,
+    );
+  };
+
   return (
     <View style={styles.container}>
       {mismatchError && (
@@ -141,10 +156,12 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
             content={numberWithCommas(transAmount)}
           />
           {transaction.txid && (
-            <AppTouchable onPress={() => handleCopyText(transaction.txid)}>
+            <AppTouchable
+              onPress={() => redirectToBlockExplorer(transaction.txid)}>
               <TransferLabelContent
                 label={wallet.transactionID}
                 content={transaction.txid}
+                contentUnderline={true}
               />
             </AppTouchable>
           )}
@@ -158,7 +175,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           {transaction?.recipientId && (
             <TransferLabelContent
               label={'Blinded UTXO'}
-              content={transaction?.recipientId} 
+              content={transaction?.recipientId}
             />
           )}
 
