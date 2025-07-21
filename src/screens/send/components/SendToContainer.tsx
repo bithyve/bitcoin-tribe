@@ -322,7 +322,7 @@ function SendToContainer({
   }, [isSendMax, selectedPriority, sendMaxFee]);
 
   useEffect(() => {
-    if ((isSendMax && selectedPriority) || customFee) {
+    if (isSendMax && selectedPriority) {
       onSendMax();
     }
   }, [selectedPriority, isSendMax, customFee, sendMaxFee]);
