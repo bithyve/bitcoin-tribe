@@ -92,11 +92,12 @@ function SendScreen({ route, navigation }) {
       }
       if (value.startsWith(config.REGISTRY_URL)) {
         setVisible(false);
-        setIsScanning(true);
+        setIsScanning(false);
         const parts = value.split('/').filter(Boolean);
         const assetId = parts[parts.length - 1] || null;
         if (assetId) {
           const res = await Relay.lookupAsset(assetId);
+          setVisibleModal(false);
           if (res.status) {
             setAssetData(res.asset);
             navigateWithDelay(() => {
@@ -105,8 +106,6 @@ function SendScreen({ route, navigation }) {
           } else {
             Toast(res.error, true);
           }
-          setVisibleModal(false);
-          setIsScanning(true);
         }
         return;
       }
@@ -296,6 +295,7 @@ function SendScreen({ route, navigation }) {
         isVisible={addAssetModal}
         onDismiss={() => {
           setAddAssetModal(false);
+          setIsScanning(true);
         }}
         animationIn={'slideInUp'}
         animationOut={'slideOutDown'}>
