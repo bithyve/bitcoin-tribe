@@ -122,7 +122,7 @@ object RGBHelper {
             assignment = Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
-            0u
+            1u
         )
     }
 
@@ -132,7 +132,7 @@ object RGBHelper {
             assignment = Assignment.Fungible(amount!!),
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
-            0u
+            1u
         )
     }
 
@@ -267,7 +267,7 @@ object RGBHelper {
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
-            0u,
+            1u,
             false
         ) }
         val jsonObject = JsonObject()
