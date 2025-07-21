@@ -91,6 +91,7 @@ export const ServiceFee = ({
             loadingTitle={assets.payInprocess}
             onSwipeComplete={onPay}
             backColor={theme.colors.swipeToActionThumbColor}
+            loaderTextColor={theme.colors.primaryCTAText}
           />
         </View>
         <SkipButton
