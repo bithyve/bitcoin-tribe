@@ -12,6 +12,7 @@ import { hp } from 'src/constants/responsive';
 import SwipeIcon from 'src/assets/images/swipeIcon.svg';
 import Colors from 'src/theme/Colors';
 import Fonts from 'src/constants/Fonts';
+import AnimatedDots from './AnimatedDots';
 
 const { width } = Dimensions.get('window');
 const SWIPE_LENGTH = width - hp(50) - 70;
@@ -213,6 +214,7 @@ const SwipeToAction: React.FC<Props> = ({
           <Animated.Text style={styles.textLoading}>
             {loadingTitle}
           </Animated.Text>
+          <AnimatedDots />
         </View>
       )}
     </GestureHandlerRootView>
@@ -274,6 +276,7 @@ const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
       overflow: 'hidden',
     },
     containerLoading: {
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: backColor,

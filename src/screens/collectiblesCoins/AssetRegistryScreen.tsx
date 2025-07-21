@@ -154,11 +154,7 @@ function AssetRegistryScreen() {
         assetId,
       ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
-      const { status } = await Relay.enrollAsset(
-        app.id,
-        asset,
-        app.authToken,
-      );
+      const { status } = await Relay.enrollAsset(app.id, asset, app.authToken);
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
@@ -233,6 +229,7 @@ function AssetRegistryScreen() {
               }}
               backColor={theme.colors.swipeToActionThumbColor}
               resetCounter={swipeResetCounter}
+              loaderTextColor={theme.colors.primaryCTAText}
             />
           )}
           {!!feeDetails && (
