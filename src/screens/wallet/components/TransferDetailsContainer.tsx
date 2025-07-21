@@ -153,7 +153,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           <TransferLabelContent label={assets.assetName} content={assetName} />
           <TransferLabelContent
             label={wallet.amount}
-            content={numberWithCommas(transAmount)}
+            content={transAmount}
           />
           {transaction.txid && (
             <AppTouchable
