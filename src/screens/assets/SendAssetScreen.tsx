@@ -46,7 +46,7 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
-import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -236,31 +236,6 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
-  /* const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || null);
-    if (isNaN(numericValue)) {
-      setAmountValidationError('');
-      setAssetAmount('');
-    } else if (numericValue === 0) {
-      setAssetAmount(text);
-      setAmountValidationError(sendScreen.validationZeroNotAllowed);
-    } else if (Number(assetData?.balance.spendable) === 0) {
-      setAmountValidationError(
-        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
-      );
-    } else if (numericValue <= assetData?.balance.spendable) {
-      setAssetAmount(text);
-      setAmountValidationError('');
-    } else if (numericValue > Number(assetData?.balance.spendable)) {
-      setAmountValidationError(
-        assets.checkSpendableAmt + assetData?.balance.spendable,
-      );
-    } else {
-      setAssetAmount('');
-      setAmountValidationError('');
-    }
-  };*/
-
   const handleAmountInputChange = text => {
     let regex;
     if (precision === 0) {
@@ -269,7 +244,6 @@ const SendAssetScreen = () => {
       regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
     }
     if (text === '' || regex.test(text)) {
-      setAssetAmount(text);
       const numericValue = parseFloat(text || '0');
       if (Number(assetData?.balance.spendable) / 10 ** precision === 0) {
         Keyboard.dismiss();
@@ -284,7 +258,11 @@ const SendAssetScreen = () => {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
-        Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+        Toast(
+          assets.checkSpendableAmt +
+            Number(assetData?.balance.spendable) / 10 ** precision,
+          true,
+        );
       }
     }
   };
@@ -307,13 +285,12 @@ const SendAssetScreen = () => {
           parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
           10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
-        feeRate: selectedFeeRate,
+        feeRate: selectedFeeRate === 1 ? 1.2 : selectedFeeRate,
         isDonation,
       });
+      setLoading(false);
       if (response?.txid) {
-        setLoading(false);
         setSuccessStatus(true);
-        // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
@@ -335,6 +312,7 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
+      setLoading(false);
       setVisible(false);
       setTimeout(() => {
         Toast(`Failed: ${error}`, true);
@@ -542,11 +520,7 @@ const SendAssetScreen = () => {
             <AppText variant="body2" style={styles.availableBalanceText}>
               {precision === 0
                 ? numberWithCommas(Number(assetData?.balance.spendable))
-                : numberWithCommas(
-                    Number(assetData?.balance.spendable) / 10 ** precision,
-                  ) +
-                  '.' +
-                  '0'.repeat(precision)}
+                : Number(assetData?.balance.spendable) / 10 ** precision}
             </AppText>
           </View>
         </View>

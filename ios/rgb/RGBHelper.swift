@@ -512,14 +512,14 @@ import CloudKit
                       assignment: .any,
                       durationSeconds: Constants.rgbBlindDuration,
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                      minConfirmations: 0
+                      minConfirmations: 1
                   ) :
                   wallet.witnessReceive(
                       assetId: assetId,
                       assignment: .any,
                       durationSeconds: Constants.rgbBlindDuration,
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                      minConfirmations: 0
+                      minConfirmations: 1
                   )
 
               let data: [String: Any] = [
@@ -796,7 +796,7 @@ import CloudKit
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, assignment: .fungible(amount: UInt64(amount)), transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 0, skipSync: true)
+        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 1, skipSync: true)
       }
       print(response)
       let data: [String: Any] = [
