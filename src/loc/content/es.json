@@ -538,7 +538,7 @@
     "issueAssetLoadingSubTitle": "Tu activo está siendo emitido—por favor espera. Siéntate, relájate y tu nuevo activo estará disponible en breve.",
     "totalSupplyAmountErrMsg": "El valor ingresado es demasiado grande. Por favor, ingrese un número menor a 9,007,199,254,740,992.",
     "swipeToSend": "Deslizar para enviar",
-    "sendingAsset": "Enviando activos...",
+    "sendingAsset": "Enviando activos",
     "cancelTransferMsg": "¡Transferencia cancelada!",
     "cancelTransaction": "Cancelar transacción",
     "assetName": "Nombre del activo",

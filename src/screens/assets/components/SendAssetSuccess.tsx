@@ -81,6 +81,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
           loadingTitle={assets.sendingAsset}
           onSwipeComplete={onPress}
           backColor={theme.colors.swipeToActionThumbColor}
+          loaderTextColor={theme.colors.primaryCTAText}
         />
       </View>
     </View>

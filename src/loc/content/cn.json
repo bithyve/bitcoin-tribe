@@ -538,7 +538,7 @@
     "issueAssetLoadingSubTitle": "您的资产正在发行中，请稍候！放松一下，您的新资产即将发行。",
     "totalSupplyAmountErrMsg": "您输入的值太大了。请输入小于 9,007,199,254,740,992 的数字。",
     "swipeToSend": "滑动发送",
-    "sendingAsset": "正在发送资产...",
+    "sendingAsset": "正在发送资产",
     "cancelTransferMsg": "取消转账！",
     "cancelTransaction": "取消交易",
     "assetName": "资产名称",
