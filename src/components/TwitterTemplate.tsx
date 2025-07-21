@@ -248,6 +248,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             ) : (
               <View style={styles.identiconWrapper}>
                 <AssetIcon
+                  iconUrl={asset.iconUrl}
                   assetTicker={asset?.ticker && asset?.ticker}
                   assetID={asset?.assetId && asset?.assetId}
                   size={208}
@@ -261,7 +262,10 @@ function TwitterTemplate(props: TwitTemplateProps) {
           </View>
           <View>
             <View style={styles.qrContainer}>
-              <QRCode value={`${config.REGISTRY_URL}/${asset.assetId}`} size={160} />
+              <QRCode
+                value={`${config.REGISTRY_URL}/${asset.assetId}`}
+                size={160}
+              />
             </View>
             <AppText variant="body1" style={styles.scanText}>
               Scan Me!

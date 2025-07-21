@@ -39,7 +39,6 @@ const getStyles = theme =>
       borderRadius: 10,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
-      backgroundColor: 'red',
     },
   });
 

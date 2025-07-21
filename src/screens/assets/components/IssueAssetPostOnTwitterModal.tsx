@@ -117,43 +117,45 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
         console.error('File was not saved properly:', filePath);
         return;
       }
-      const tweetText = `I’ve officially issued "${
+      const tweetText = `I've officially issued "${
         issuerInfo.name || 'this asset'
       }".\nwith Asset ID - ${issuerInfo?.assetId}
 
-        Transparency matters.
-        Trust, but verify — start here 👇`;
-      const registryUrl = `\n\n\n${config.REGISTRY_URL}/${issuerInfo.assetId}`;
-      const twitterAppURL = `twitter://post?message=${encodeURIComponent(
-        tweetText + registryUrl,
-      )}`;
+Transparency matters.
+Trust, but verify — start here 👇`;
+
+      const registryUrl = `${config.REGISTRY_URL}/${issuerInfo.assetId}`;
+      const fullMessage = `${tweetText}\n\n${registryUrl}`;
       const twitterWebURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        tweetText + registryUrl,
+        fullMessage,
       )}`;
 
-      const canOpenTwitterApp = await Linking.canOpenURL(twitterAppURL);
-
-      if (canOpenTwitterApp) {
-        const shareOptions =
-          Platform.OS === 'android'
-            ? {
-                title: 'Share via',
-                message: tweetText,
-                url: `file://${filePath}`,
-                social: Share.Social.TWITTER,
-              }
-            : {
-                title: 'Share via',
-                message: tweetText,
-                url: `file://${filePath}`,
-              };
-        if (Platform.OS === 'android') {
-          await Share.shareSingle(shareOptions);
+      if (Platform.OS === 'android') {
+        const { isInstalled } = await Share.isPackageInstalled(
+          'com.twitter.android',
+        );
+        if (isInstalled) {
+          await Share.shareSingle({
+            title: 'Share via',
+            message: fullMessage,
+            url: `file://${filePath}`,
+            social: Share.Social.TWITTER,
+          });
         } else {
-          await Share.open(shareOptions);
+          await Linking.openURL(twitterWebURL);
         }
       } else {
-        await Linking.openURL(twitterWebURL);
+        const twitterAppUrl = 'twitter://';
+        const canOpen = await Linking.canOpenURL(twitterAppUrl);
+        if (canOpen) {
+          await Share.open({
+            title: 'Share on X',
+            message: fullMessage,
+            url: `file://${filePath}`,
+          });
+        } else {
+          await Linking.openURL(twitterWebURL);
+        }
       }
       primaryOnPress();
       setCompleteVerification(false);
@@ -161,14 +163,12 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
       secondaryOnPress();
       console.error('Error sharing to Twitter:', error);
       let errorMessage = 'Something went wrong while sharing.';
-      if (error?.message) {
-        if (error.message.includes('couldn’t be opened')) {
-          errorMessage = 'The image could not be found. Please try again.';
-        } else if (error.message.includes('User did not share')) {
-          errorMessage = 'Sharing was cancelled.';
-        } else {
-          errorMessage = error.message;
-        }
+      if (error?.message?.includes('couldn’t be opened')) {
+        errorMessage = 'The image could not be found. Please try again.';
+      } else if (error?.message?.includes('User did not share')) {
+        errorMessage = 'Sharing was cancelled.';
+      } else if (error?.message) {
+        errorMessage = error.message;
       }
       Toast(errorMessage, true);
     }
