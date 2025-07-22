@@ -788,7 +788,6 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 170;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tribe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -805,8 +804,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bithyve.tribe;
 				PRODUCT_NAME = tribe;
 				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
-				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "com.bithyve.tribe AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
