@@ -15,7 +15,7 @@ import RecieveBtcIcon from 'src/assets/images/btcReceiveAssetTxnIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
-import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmationIconReceive.svg';
+import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
 import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
 import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { Keys } from 'src/storage';
@@ -23,7 +23,7 @@ import { Keys } from 'src/storage';
 function TransactionTypeInfoScreen() {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
-  const { common, assets } = translations;
+  const { common, assets, settings } = translations;
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
@@ -52,7 +52,7 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              {assets.issuedTitle}
+              {settings.issuance}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
               {assets.issuedSubTitle}
@@ -65,7 +65,7 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              {assets.sendTitle}
+              {settings.send}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
               {assets.sendSubTitle}
@@ -78,7 +78,7 @@ function TransactionTypeInfoScreen() {
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              {assets.receiveTitle}
+              {settings.receiveblind}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
               {assets.receiveSubTitle}
@@ -100,11 +100,11 @@ function TransactionTypeInfoScreen() {
         </View>
         <View style={styles.txnInfoContainer}>
           <View style={styles.txnIconWrapper}>
-            <WaitingConfirmationIconReceive />
+            <WaitingCounterPartyReceiveIcon />
           </View>
           <View style={styles.txnInfoWrapper}>
             <AppText variant="body1" style={styles.titleText}>
-              {assets.waitingConfirmationTitle1}
+              {settings.waitingcounterpartyReceive}
             </AppText>
             <AppText variant="body2" style={styles.infoText}>
               {assets.waitingConfirmationSubTitle1}
