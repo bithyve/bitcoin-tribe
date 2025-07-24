@@ -1,10 +1,10 @@
-export const numberWithCommas = (x: number | string): string => {
+export const numberWithCommas = (x: number | string, precision: number = 2): string => {
   if (!x) return '0.00';
 
   const num = typeof x === 'string' ? parseFloat(x) : x;
   if (isNaN(num)) return '0.00';
   
-  return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return num.toFixed(precision).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const formatNumber = text => {

@@ -109,8 +109,8 @@ function WalletTransactionList({
         ListFooterComponent={FooterComponent}
         renderItem={({ item }) => (
           <WalletTransactions
-            transId={item.txid}
-            tranStatus={item.status}
+          transId={item.transactionKind || item.txid}
+          tranStatus={item.status}
             transDate={item.date}
             transAmount={
               app.appType === AppType.NODE_CONNECT ||

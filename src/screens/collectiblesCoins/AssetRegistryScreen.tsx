@@ -213,7 +213,8 @@ function AssetRegistryScreen() {
               </View>
               <View style={styles.valueWrapper}>
                 <AppText style={styles.labelText}>{`${numberWithCommas(
-                  feeDetails?.fee,
+                  feeDetails?.fee, 
+                  0,
                 )} sats`}</AppText>
               </View>
             </View>

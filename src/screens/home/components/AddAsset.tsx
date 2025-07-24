@@ -78,9 +78,7 @@ export const ServiceFee = ({
             <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
           </View>
           <View style={styles.valueWrapper}>
-            <AppText style={styles.labelText}>{`${numberWithCommas(
-              feeDetails.fee,
-            )} sats`}</AppText>
+            <AppText style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
           </View>
         </View>
       </View>
