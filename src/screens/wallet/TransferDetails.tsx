@@ -38,7 +38,7 @@ function TransferDetails({ route, navigation }) {
   );
 
   const amount = useMemo(() => {
-    if (transaction.requestedAssignment) {
+    if (transaction.requestedAssignment?.amount) {
       return transaction.requestedAssignment.amount;
     }
     return transaction.assignments[0].amount;

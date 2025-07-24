@@ -12,9 +12,10 @@ type labelContentProps = {
   label: string;
   content: string;
   contentUnderline?: boolean;
+  selectable?: boolean;
 };
 function TransferLabelContent(props: labelContentProps) {
-  const { label, content, contentUnderline = false } = props;
+  const { label, content, contentUnderline = false, selectable = false } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -26,7 +27,7 @@ function TransferLabelContent(props: labelContentProps) {
       </AppText>
       <AppText
         variant="body2"
-        selectable={contentUnderline}
+        selectable={selectable}
         style={[styles.textStyle, contentUnderline && { textDecorationLine: 'underline' }]}>
         {content}
       </AppText>

@@ -224,7 +224,6 @@ const SwipeToAction: React.FC<Props> = ({
 const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
   StyleSheet.create({
     container: {
-      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
     },
