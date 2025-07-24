@@ -36,9 +36,12 @@ const ReceiveQrClipBoard = ({
       <CardBox onPress={() => handleCopyText(qrCodeValue)}>
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <Text style={[styles.menuCardTitle, CommonStyles.body1]}>
+            <AppText
+              numberOfLines={2}
+              ellipsizeMode="middle"
+              style={[styles.menuCardTitle, CommonStyles.body1]}>
               {qrCodeValue}
-            </Text>
+            </AppText>
           </View>
         </View>
       </CardBox>
