@@ -198,9 +198,6 @@ const CoinDetailsScreen = () => {
             wallet: wallet,
           });
         }}
-        onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
-        }
         onPressReceive={() => {
           if (isNodeInitInProgress) {
             Toast(node.connectingNodeToastMsg, true);
@@ -320,11 +317,11 @@ export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
   transactionContainer: {
-    height: windowHeight > 820 ? '52%' : '47%',
+    height: windowHeight > 820 ? '55%' : '50%',
   },
   transactionContainer1: {
     marginTop: hp(10),
-    height: windowHeight > 820 ? '52%' : '47%',
+    height: windowHeight > 820 ? '54%' : '49%',
   },
   toolTipCotainer: {
     top: windowHeight > 670 ? 90 : 70,
