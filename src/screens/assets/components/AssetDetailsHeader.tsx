@@ -96,6 +96,12 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
   const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
   const { getBalance, getCurrencyIcon } = useBalance();
   const styles = getStyles(theme, insets, lengthOfTotalBalance);
+
+  const total =
+    Number(asset.balance.future || 0) +
+    Number(asset.balance?.offchainOutbound || 0) +
+    Number(totalAssetLocalAmount || 0);
+
   return (
     <>
       {/* <Animated.View
@@ -124,71 +130,63 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
             backIcon={<AssetBackIcon />}
             style={styles.headerWrapper}
           />
-          <LinearGradient
-            colors={['transparent', Colors.imageOverlay]}
-            style={[styles.gradientOverlay, styles.row]}
-            pointerEvents="box-none">
-            <AppText variant="body1" style={styles.assetNameText}>
-              {assetName}
-            </AppText>
-            {asset.issuer?.verified && <IconVerified width={20} height={20} />}
-          </LinearGradient>
         </ImageBackground>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             {app.appType === AppType.NODE_CONNECT ||
             app.appType === AppType.SUPPORTED_RLN ? (
-              <View style={styles.balanceContainer}>
-                <AppTouchable
-                  style={styles.totalBalanceWrapper}
-                  onPress={() => {
-                    if (isNodeInitInProgress) {
-                      Toast(node.connectingNodeToastMsg, true);
-                      return;
-                    }
-                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-                      assetId,
-                    });
-                  }}>
-                  <AppText variant="heading2" style={styles.totalBalance}>
-                    {numberWithCommas(
-                      Number(asset.balance.future) / 10 ** asset.precision +
-                        asset.balance?.offchainOutbound +
-                        totalAssetLocalAmount,
-                    )}
-                  </AppText>
-                  <AppText variant="body1" style={styles.totalBalanceLabel}>
-                    {home.totalBalance}
-                  </AppText>
-                </AppTouchable>
-                <AppTouchable
-                  style={styles.modeBalanceWrapper}
-                  onPress={() => {
-                    if (isNodeInitInProgress) {
-                      Toast(node.connectingNodeToastMsg, true);
-                      return;
-                    }
-                    navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-                      assetId,
-                    });
-                  }}>
-                  <View style={styles.balanceWrapper}>
-                    {isThemeDark ? <IconBTC /> : <IconBTCLight />}
-                    <AppText variant="heading3" style={styles.balanceText}>
-                      {numberWithCommas(
-                        Number(asset.balance.future) / 10 ** asset.precision +
-                          asset.balance?.offchainOutbound,
+              <AppTouchable
+                style={styles.lightningBalanceContainer}
+                onPress={() => {
+                  if (isNodeInitInProgress) {
+                    Toast(node.connectingNodeToastMsg, true);
+                    return;
+                  }
+                  navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                    assetId,
+                  });
+                }}>
+                <View style={styles.lightningTotalBalanceWrapper}>
+                  <>
+                    <View style={styles.btcBalanceWrapper}>
+                      {isThemeDark ? <IconBTC /> : <IconBTCLight />}
+                      <AppText variant="heading3" style={styles.balanceText}>
+                        {numberWithCommas(
+                          asset.balance.future +
+                            asset.balance?.offchainOutbound,
+                        )}
+                      </AppText>
+                    </View>
+                    <View style={styles.lightningBalanceWrapper}>
+                      <IconLightning />
+                      <AppText variant="heading3" style={styles.balanceText}>
+                        {numberWithCommas(totalAssetLocalAmount)}
+                      </AppText>
+                    </View>
+                  </>
+                </View>
+                <View style={styles.totalBalanceContainer}>
+                  <View style={styles.lightningTotalBalanceContainer}>
+                    <AppText variant="caption" style={styles.totalBalanceLabel}>
+                      Total:&nbsp;
+                    </AppText>
+                    <AppText variant="caption" style={styles.totalBalanceLabel}>
+                      {numberWithCommas(total)}
+                    </AppText>
+                  </View>
+                  <View style={styles.lightningSpendableBalanceContainer}>
+                    <AppText variant="caption" style={styles.totalBalanceLabel}>
+                      Spendable:&nbsp;
+                    </AppText>
+                    <AppText variant="caption" style={styles.totalBalanceLabel}>
+                      {formatLargeNumber(
+                        Number(asset?.balance?.spendable) /
+                          10 ** asset.precision,
                       )}
                     </AppText>
                   </View>
-                  <View style={styles.balanceWrapper}>
-                    <IconLightning />
-                    <AppText variant="heading3" style={styles.balanceText}>
-                      {numberWithCommas(totalAssetLocalAmount)}
-                    </AppText>
-                  </View>
-                </AppTouchable>
-              </View>
+                </View>
+              </AppTouchable>
             ) : (
               <View style={styles.balanceContainer}>
                 <AppTouchable
@@ -231,6 +229,24 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
                 </AppTouchable>
               </View>
             )}
+            <AppTouchable
+              style={styles.assetNameWrapper}
+              onPress={() => {
+                if (isNodeInitInProgress) {
+                  Toast(node.connectingNodeToastMsg, true);
+                  return;
+                }
+                navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                  assetId,
+                });
+              }}>
+              <AppText variant="body1" style={styles.assetNameText}>
+                {assetName}
+              </AppText>
+              {asset.issuer?.verified && (
+                <IconVerified width={20} height={20} />
+              )}
+            </AppTouchable>
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
                 onPressSend={onPressSend}
@@ -279,7 +295,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       backgroundColor: theme.colors.walletBackgroundColor,
     },
     assetBackImageContainer: {
-      height: hp(260),
+      height: hp(235),
       paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
       marginBottom: hp(10),
     },
@@ -383,6 +399,50 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       alignItems: 'flex-end',
       justifyContent: 'center',
       paddingBottom: hp(10),
+    },
+    assetNameWrapper: {
+      marginTop: hp(10),
+    },
+    lightningBalanceContainer: {
+      width: '100%',
+      justifyContent: 'center',
+    },
+    lightningTotalBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    btcBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      borderRightWidth: 1,
+      borderRightColor: theme.colors.borderColor,
+      width: '50%',
+      paddingRight: hp(20),
+    },
+    lightningBalanceWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingLeft: hp(20),
+      width: '50%',
+    },
+    lightningTotalBalanceContainer: {
+      flexDirection: 'row',
+      marginTop: hp(10),
+      borderRightWidth: 1,
+      borderRightColor: theme.colors.borderColor,
+      paddingRight: hp(5),
+    },
+    lightningSpendableBalanceContainer: {
+      flexDirection: 'row',
+      marginTop: hp(10),
+      paddingLeft: hp(5),
+    },
+    totalBalanceContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 export default AssetDetailsHeader;
