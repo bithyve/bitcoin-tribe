@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
@@ -15,10 +14,6 @@ import { BtcToSats } from 'src/constants/Bitcoin';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import LabelledItem from './LabelledItem';
 import TransactionInfoSection from './TransactionInfoSection';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useQuery } from '@realm/react';
-import AppType from 'src/models/enums/AppType';
-import { RealmSchema } from 'src/storage/enum';
 import Toast from 'src/components/Toast';
 
 type WalletTransactionsProps = {
@@ -27,7 +22,6 @@ type WalletTransactionsProps = {
 };
 
 function TransactionDetailsContainer(props: WalletTransactionsProps) {
-  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const { transAmount, transaction } = props;
   const { translations } = useContext(LocalizationContext);
@@ -89,7 +83,8 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
     <View>
       <TransactionInfoSection
         amount={transAmount}
-        txID={transaction.transactionKind || transaction.txid}
+        txID={transaction.txid}
+        transactionKind={transaction.transactionKind}
         date={transaction.date}
         onIDPress={() => redirectToBlockExplorer()}
       />
