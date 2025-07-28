@@ -1,8 +1,12 @@
 export const numberWithCommas = (x: number | string, precision: number = 2): string => {
-  if (!x) return '0.00';
+  if (!x) return '0';
 
   const num = typeof x === 'string' ? parseFloat(x) : x;
-  if (isNaN(num)) return '0.00';
+  if (isNaN(num)) return '0';
+  
+  if (Number.isInteger(num)) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
   
   return num.toFixed(precision).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

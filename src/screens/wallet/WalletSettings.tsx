@@ -3,7 +3,6 @@ import { useMutation, UseMutationResult } from 'react-query';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -42,6 +41,18 @@ function WalletSettings() {
         subTitle={strings.walletSettingSubTitle}
       />
       <View style={styles.container}>
+        <SelectOption
+          title={strings.viewUnspent}
+          // subTitle={strings.viewUnspent}
+          onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
+        />
+
+        <SelectOption
+          title={'View Invoices'}
+          // subTitle={strings.viewUnspent}
+          onPress={() => navigation.navigate(NavigationRoutes.INVOICES)}
+        />
+
         {app.appType === AppType.ON_CHAIN ? (
           <SelectOption
             title={strings.showXPub}
@@ -53,11 +64,6 @@ function WalletSettings() {
             }
           />
         ) : null}
-        <SelectOption
-          title={strings.viewUnspent}
-          // subTitle={strings.viewUnspent}
-          onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
-        />
       </View>
     </ScreenContainer>
   );

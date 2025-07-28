@@ -44,9 +44,8 @@ const ColorableUTXO = () => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
-  const { wallet, assets } = translations || { wallet: {}, assets: {} };
+  const { assets } = translations || { wallet: {}, assets: {} };
   const [refreshing, setRefreshing] = useState(false);
-  const [visibleUTXOInfo, setVisibleUTXOInfo] = useState(false);
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
@@ -64,14 +63,6 @@ const ColorableUTXO = () => {
   }, [rgbWallet]);
   const colorable = unspent?.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
-  );
-  const colorableWithoutAssetId = unspent?.filter(
-    utxo =>
-      utxo.utxo.colorable === true && utxo.rgbAllocations[0]?.assetId === null,
-  );
-  const combinedColorable: Asset[] = useMemo(
-    () => [...colorable, ...colorableWithoutAssetId],
-    [colorable, colorableWithoutAssetId],
   );
 
   const { mutate } = useMutation(ApiHandler.viewUtxos);
@@ -99,7 +90,8 @@ const ColorableUTXO = () => {
   };
   return (
     <FlatList
-      data={combinedColorable}
+      data={colorable.reverse()}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
         <AppTouchable
           onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
@@ -114,7 +106,7 @@ const ColorableUTXO = () => {
             rgbAllocations={item.rgbAllocations || []}
             assets={combined || []}
             mode={UtxoType.Colorable}
-            colorableWithoutAssetId={item.rgbAllocations[0]?.assetId === null}
+            colorableWithoutAssetId={Number(item.utxo.pendingBlinded) > 0}
           />
         </AppTouchable>
       )}
@@ -151,7 +143,7 @@ const ColorableUTXO = () => {
     />
   );
 };
-const getStyles = (theme: AppTheme) =>
+const getStyles = () =>
   StyleSheet.create({
     footer: {
       height: windowHeight > 670 ? 100 : 70,

@@ -88,6 +88,7 @@ import TransactionTypeInfoScreen from 'src/screens/assets/components/Transaction
 import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 import NodeConnected from 'src/components/NodeConnected';
 import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
+import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -351,6 +352,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.GETBTCWITHRAMP}
           component={GetBTCWithRamp}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.INVOICES}
+          component={InvoicesScreen}
         />
       </Stack.Navigator>
     </RealmProvider>

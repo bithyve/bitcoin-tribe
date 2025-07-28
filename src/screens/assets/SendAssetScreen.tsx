@@ -336,6 +336,11 @@ const SendAssetScreen = () => {
 
       const res = await ApiHandler.decodeInvoice(cleanedText);
 
+      if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+        setInvoiceValidationError('Invalid invoice');
+        Toast('This invoice is not valid for the current network', true);
+        return;
+      }
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {

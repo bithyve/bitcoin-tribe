@@ -27,6 +27,12 @@ export interface RGBWallet {
   nodeOnchainTransactions: NodeOnchainTransaction[];
   lnPayments: LNPayments[];
   nodeMnemonic?: string;
+  invoices?: {
+    invoice: string;
+    recipientId: string;
+    expirationTimestamp: number;
+    batchTransferIdx: string;
+  }[];
 }
 interface Balance {
   future: string;
@@ -192,6 +198,7 @@ export interface RgbUtxo {
   btcAmount: number;
   colorable: boolean;
   exists: boolean;
+  pendingBlinded: Number;
   outpoint: {
     txid: string;
     vout: number;

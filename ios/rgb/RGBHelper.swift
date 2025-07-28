@@ -217,6 +217,7 @@ import CloudKit
               jsonString += "},"
               jsonString += "\"btcAmount\":\(utxo.btcAmount),"
               jsonString += "\"colorable\":\(utxo.colorable),"
+              jsonString += "\"pendingBlinded\":\(unspent.pendingBlinded),"
               jsonString += "\"exists\":\(utxo.exists)"
               jsonString += "},"
               jsonString += "\"rgbAllocations\":["
@@ -280,7 +281,8 @@ import CloudKit
 
         let refresh = try wallet.refresh(online: online, assetId: nil, filter: [], skipSync: false)
           let assets = try wallet.listAssets(filterAssetSchemas: [])
-          
+        let failed = try wallet.failTransfers(online: online, batchTransferIdx: nil, noAssetOnly: false, skipSync: false)
+        let deleted = try wallet.deleteTransfers(batchTransferIdx: nil, noAssetOnly: false)
           if let niaAssets = assets.nia {
               try niaAssets.forEach { assetNia in
                 try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [], skipSync: false)
