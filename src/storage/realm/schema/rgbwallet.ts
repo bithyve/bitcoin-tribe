@@ -3,7 +3,6 @@ import { RealmSchema } from '../../enum';
 
 export const ReceiveDataSchema: ObjectSchema = {
   name: RealmSchema.ReceiveData,
-  embedded: true,
   properties: {
     batchTransferIdx: 'int?',
     expirationTimestamp: 'int',
@@ -51,6 +50,7 @@ export const RgbWalletSchema: ObjectSchema = {
     nodeOnchainTransactions: `${RealmSchema.NodeOnChainTransaction}[]`,
     lnPayments: `${RealmSchema.LNPayments}[]`,
     nodeMnemonic: 'string?',
+    invoices: `${RealmSchema.ReceiveData}[]`,
   },
   primaryKey: 'mnemonic',
 };

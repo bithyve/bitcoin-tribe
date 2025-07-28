@@ -1125,11 +1125,12 @@ export class ApiHandler {
       if (response.error) {
         throw new Error(response.error);
       } else {
+        const invoices =  [...rgbWallet?.invoices, response];
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
           rgbWallet.mnemonic,
-          { receiveData: response },
+          { receiveData: response, invoices: invoices },
         );
 
         if (linkedAsset && linkedAmount !== 0) {
