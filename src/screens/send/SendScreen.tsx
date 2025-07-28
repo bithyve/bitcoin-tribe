@@ -136,6 +136,13 @@ function SendScreen({ route, navigation }) {
       if (value.startsWith('rgb:')) {
         try {
           const res = await ApiHandler.decodeInvoice(value);
+          if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+            setVisible(false);
+            setIsScanning(true);
+            setVisibleModal(false);
+            Toast('This invoice is not valid for the current network', true);
+            return;
+          }
           if (res.assetId) {
             const assetData = allAssets.find(
               item => item.assetId === res.assetId,
