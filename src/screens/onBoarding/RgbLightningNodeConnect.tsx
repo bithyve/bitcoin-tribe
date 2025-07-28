@@ -74,6 +74,15 @@ function RgbLightningNodeConnect() {
     }
   }, [checkNodeConnection.data, checkNodeConnection.isError]);
 
+  useEffect(() => {
+    if (!connectionURL) return;
+    const urlParts = connectionURL.split('/').filter(Boolean);
+    const nodeId = urlParts[urlParts.length - 1];
+    if (nodeId) {
+      setNodeID(nodeId);
+    }
+  }, [connectionURL]);
+
   const handlePasteURL = async () => {
     const clipboardValue = await Clipboard.getString();
     await setConnectionURL(clipboardValue);
