@@ -15,8 +15,9 @@ import Relay from '../relay';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { CommunityType, Message } from 'src/models/interfaces/Community';
+import { Community, CommunityType, Message } from 'src/models/interfaces/Community';
 import Realm from 'realm';
+import { ChatKeyManager } from 'src/utils/ChatEnc';
 
 export default class ChatPeerManager {
   static instance: ChatPeerManager;
@@ -112,20 +113,20 @@ export default class ChatPeerManager {
     try {
       const response = await Relay.getPeerMessages(
         this.app.contactsKey.publicKey,
-        lastBlock + 1,
+        lastBlock === 0 ? 0 : lastBlock - 1,
       );
       if (response.messages.length > 0) {
-        const communities = dbManager.getCollection(RealmSchema.Community);
         for (const msg of response.messages) {
           const message: Message = JSON.parse(msg.message);
-          const communityId = [this.app.contactsKey.publicKey, message.sender]
-            .sort()
-            .join('-');
-          if (!communities.find(c => c.id === communityId)) {
+          const communityId = message.communityId;
+          let community = dbManager.getObjectByPrimaryId(RealmSchema.Community, 'id', communityId);
+          if (!community && message.encryptedKeys) {
             const contact = await Relay.getWalletProfiles([message.sender]);
             if (contact.results.length > 0) {
               dbManager.createObject(RealmSchema.Contact, contact.results[0]);
-              dbManager.createObject(RealmSchema.Community, {
+              const sharedSecret = ChatKeyManager.performKeyExchange(this.app.contactsKey, message.sender);
+              const encryptedKeys = ChatKeyManager.decryptKeys(message.encryptedKeys, sharedSecret);
+              community = {
                 id: communityId,
                 communityId: communityId,
                 name: contact.results[0].name,
@@ -133,20 +134,24 @@ export default class ChatPeerManager {
                 createdAt: msg.timestamp,
                 updatedAt: msg.timestamp,
                 with: message.sender,
-              });
+                key: encryptedKeys.aesKey,
+              };  
+              dbManager.createObject(RealmSchema.Community, community);
             }
           }
+          const decryptedMessage = ChatKeyManager.decryptMessage(message, community.key);
+          const messageData = JSON.parse(decryptedMessage);
           dbManager.createObject(RealmSchema.Message, {
-            id: message.id,
-            communityId: communityId,
-            type: message.type,
-            text: message.text,
+            id: messageData.id,
+            communityId: messageData.communityId,
+            type: messageData.type,
+            text: messageData.text,
             createdAt: msg.timestamp,
-            sender: message.sender,
+            sender: messageData.sender,
             block: msg.blockNumber,
             unread: true,
-            fileUrl: message?.fileUrl,
-            request: message?.request,
+            fileUrl: messageData?.fileUrl,
+            request: messageData?.request,
           });
         }
       }
@@ -160,33 +165,38 @@ export default class ChatPeerManager {
       const communities = dbManager.getCollection(RealmSchema.Community);
       const data = JSON.parse(payload.data);
       const message = JSON.parse(data.message);
-      const community = communities.find(c => c.id === message.communityId);
-      if (!community) {
+      let community: Community = communities.find(c => c.id === message.communityId);
+      if (!community && message.encryptedKeys) {
         const contact = await Relay.getWalletProfiles([message.sender]);
         if (contact.results.length > 0) {
+          const sharedSecret = ChatKeyManager.performKeyExchange(this.app.contactsKey, message.sender);
+          const encryptedKeys = ChatKeyManager.decryptKeys(message.encryptedKeys, sharedSecret);
           dbManager.createObject(RealmSchema.Contact, contact.results[0]);
-          dbManager.createObject(RealmSchema.Community, {
+          community = {
             id: message.communityId,
             name: contact.results[0].name,
             type: CommunityType.Peer,
             createdAt: data.timestamp,
             updatedAt: data.timestamp,
             with: message.sender,
-          });
+            key: encryptedKeys.aesKey,
+          };
+          dbManager.createObject(RealmSchema.Community, community);
         }
       }
-
+      const decryptedMessage = ChatKeyManager.decryptMessage(message, community.key);
+      const messageData = JSON.parse(decryptedMessage);
       dbManager.createObject(RealmSchema.Message, {
-        id: message.id,
-        communityId: message.communityId,
-        type: message.type,
-        text: message.text,
+        id: messageData.id,
+        communityId: messageData.communityId,
+        type: messageData.type,
+        text: messageData.text,
         createdAt: data.timestamp,
-        sender: message.sender,
+        sender: messageData.sender,
         block: data.blockNumber,
         unread: true,
-        fileUrl: message?.fileUrl,
-        request: message?.request,
+        fileUrl: messageData?.fileUrl,
+        request: messageData?.request,
       });
     } catch (error) {
       console.error('Error storing messages:', error);
