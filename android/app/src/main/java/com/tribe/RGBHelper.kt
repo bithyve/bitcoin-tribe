@@ -38,6 +38,8 @@ object RGBHelper {
             // val filter = listOf()
             val refresh =
                 RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, listOf(), false)
+            val failed = RGBWalletRepository.wallet?.failTransfers(RGBWalletRepository.online!!, null, false, false)
+            val deleted = RGBWalletRepository.wallet?.deleteTransfers(null, false)
             var assets = RGBWalletRepository.wallet?.listAssets(listOf())
             val rgb25Assets = assets?.cfa
             val rgb20Assets = assets?.nia
