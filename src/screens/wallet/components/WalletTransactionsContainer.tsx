@@ -93,6 +93,7 @@ function WalletTransactionsContainer({
         renderItem={({ item }) => (
           <WalletTransactions
             transId={item.transactionKind || item.txid}
+            transKind={item.transactionKind}
             tranStatus={item.status}
             transDate={item.date}
             transAmount={
