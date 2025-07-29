@@ -106,7 +106,7 @@ const ColorableUTXO = () => {
             rgbAllocations={item.rgbAllocations || []}
             assets={combined || []}
             mode={UtxoType.Colorable}
-            colorableWithoutAssetId={Number(item.utxo.pendingBlinded) > 0}
+            colorableWithoutAssetId={Number(item.pendingBlinded) > 0}
           />
         </AppTouchable>
       )}
