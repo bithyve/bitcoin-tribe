@@ -383,7 +383,6 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       textAlign: 'center',
       color: theme.colors.headingColor,
       fontWeight: '500',
-      width: '100%',
     },
     gradientOverlay: {
       ...StyleSheet.absoluteFillObject,
@@ -401,7 +400,11 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       paddingBottom: hp(10),
     },
     assetNameWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
       marginTop: hp(10),
+      width: '100%',
     },
     lightningBalanceContainer: {
       width: '100%',
