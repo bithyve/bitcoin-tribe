@@ -209,6 +209,7 @@ import CloudKit
           
           for (index, unspent) in unspents.enumerated() {
               jsonString += "{"
+            jsonString += "\"pendingBlinded\":\(unspent.pendingBlinded),"
               let utxo = unspent.utxo
               jsonString += "\"utxo\":{"
               jsonString += "\"outpoint\":{"
@@ -217,7 +218,6 @@ import CloudKit
               jsonString += "},"
               jsonString += "\"btcAmount\":\(utxo.btcAmount),"
               jsonString += "\"colorable\":\(utxo.colorable),"
-              jsonString += "\"pendingBlinded\":\(unspent.pendingBlinded),"
               jsonString += "\"exists\":\(utxo.exists)"
               jsonString += "},"
               jsonString += "\"rgbAllocations\":["
