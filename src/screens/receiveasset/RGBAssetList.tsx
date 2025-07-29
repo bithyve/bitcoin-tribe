@@ -36,6 +36,7 @@ type DropdownProps = {
   searchAssetInput?: string;
   onChangeSearchInput?: (text: string) => void;
   isLoading?: boolean;
+  showSearch?: boolean;
 };
 
 const EmptyAssetState = () => {
@@ -60,6 +61,7 @@ function RGBAssetList(props: DropdownProps) {
     searchAssetInput,
     onChangeSearchInput,
     isLoading,
+    showSearch = true,
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
@@ -87,7 +89,8 @@ function RGBAssetList(props: DropdownProps) {
         </GradientView>
       </AppTouchable>
       <View style={styles.container2}>
-        <TextField
+        {showSearch && (
+          <TextField
           value={searchAssetInput}
           onChangeText={onChangeSearchInput}
           placeholder={'Search from Tribe RGB registry'}
@@ -112,6 +115,7 @@ function RGBAssetList(props: DropdownProps) {
           autoCapitalize="none"
           onSubmitEditing={() => Keyboard.dismiss()}
         />
+        )}
         {assets && assets.length > 0 && (
           <View style={styles.labelWrapper}>
             <View>
@@ -121,7 +125,7 @@ function RGBAssetList(props: DropdownProps) {
             </View>
             <View>
               <AppText variant="caption" style={style.labelTextStyle}>
-                Total Supply
+                Available Balance
               </AppText>
             </View>
           </View>
@@ -131,14 +135,17 @@ function RGBAssetList(props: DropdownProps) {
           style={styles.assetListContainer}
           renderItem={({ item }) => {
             const filePath = item?.media?.filePath || item?.asset?.media?.file;
-            const isCollectible =
+            const showImage =
               item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
               item?.asset?.assetSchema?.toUpperCase() ===
                 AssetSchema.Collectible ||
-              item?.name === 'Tribe tUSDt';
+              item?.asset?.iconUrl ||
+              item?.iconUrl;
 
             const imageUri = item?.iconUrl
               ? item?.iconUrl
+              : item?.asset?.iconUrl
+              ? item?.asset?.iconUrl
               : filePath?.startsWith('http')
               ? filePath
               : Platform.select({
@@ -157,7 +164,7 @@ function RGBAssetList(props: DropdownProps) {
                 style={styles.assetContainer}>
                 <View style={styles.assetWrapper}>
                   <View style={styles.assetImageWrapper}>
-                    {isCollectible ? (
+                    {showImage ? (
                       <Image
                         source={{ uri: imageUri }}
                         style={styles.imageStyle}
@@ -192,7 +199,8 @@ function RGBAssetList(props: DropdownProps) {
                 <View style={styles.balanceWrapper}>
                   <AppText variant="body2" style={styles.balanceText}>
                     {formatLargeNumber(
-                      item?.balance?.spendable || item?.asset?.issuedSupply,
+                      item?.balance?.spendable / 10 ** item?.precision ||
+                        item?.asset?.issuedSupply / 10 ** item?.asset?.precision,
                     )}
                   </AppText>
                 </View>
