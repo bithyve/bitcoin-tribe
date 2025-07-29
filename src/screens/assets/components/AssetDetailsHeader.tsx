@@ -101,7 +101,11 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     Number(asset.balance.future || 0) +
     Number(asset.balance?.offchainOutbound || 0) +
     Number(totalAssetLocalAmount || 0);
-  console.log('assetName', assetName);
+
+  const isVerified = asset?.issuer?.verifiedBy.some(
+    item => item.verified === true,
+  );
+
   return (
     <>
       {/* <Animated.View
@@ -243,9 +247,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               <AppText variant="body1" style={styles.assetNameText}>
                 {assetName}
               </AppText>
-              {asset.issuer?.verified && (
-                <IconVerified width={20} height={20} />
-              )}
+              {isVerified && <IconVerified width={20} height={20} />}
             </AppTouchable>
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
