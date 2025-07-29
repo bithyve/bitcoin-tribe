@@ -101,7 +101,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
     Number(asset.balance.future || 0) +
     Number(asset.balance?.offchainOutbound || 0) +
     Number(totalAssetLocalAmount || 0);
-
+  console.log('assetName', assetName);
   return (
     <>
       {/* <Animated.View
@@ -381,7 +381,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
     },
     assetNameText: {
       textAlign: 'center',
-      color: theme.colors.successPopupTitleColor,
+      color: theme.colors.headingColor,
       fontWeight: '500',
       width: '100%',
     },
