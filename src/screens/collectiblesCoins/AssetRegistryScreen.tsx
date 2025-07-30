@@ -209,7 +209,7 @@ function AssetRegistryScreen() {
           <View style={styles.feeWrapper}>
             <View style={styles.amtContainer}>
               <View style={styles.labelWrapper}>
-                <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+                <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
               </View>
               <View style={styles.valueWrapper}>
                 <AppText style={styles.labelText}>{`${numberWithCommas(

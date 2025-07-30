@@ -198,7 +198,6 @@ export interface RgbUtxo {
   btcAmount: number;
   colorable: boolean;
   exists: boolean;
-  pendingBlinded: Number;
   outpoint: {
     txid: string;
     vout: number;
@@ -207,6 +206,7 @@ export interface RgbUtxo {
 export interface RgbUnspent {
   rgbAllocations: RgbAllocation[];
   utxo: RgbUtxo;
+  pendingBlinded: Number;
 }
 
 export enum AssetType {

@@ -1,6 +1,6 @@
 {
   "name": "tribe",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "scripts": {
     "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
@@ -19,7 +19,8 @@
     "releaseIosDev": "cd ios && ENVFILE=.env bundle exec fastlane dev --env dev",
     "releaseIosProd": "cd ios && ENVFILE=.env.production bundle exec fastlane live --env production",
     "releaseAndroidDev": "cd android && ENVFILE=.env bundle exec fastlane dev --env dev",
-    "releaseAndroidProd": "cd android && ENVFILE=.env.production bundle exec fastlane live --env production"
+    "releaseAndroidProd": "cd android && ENVFILE=.env.production bundle exec fastlane live --env production",
+    "increment-build": "./increment_build_number.sh"
   },
   "dependencies": {
     "@dr.pogodin/react-native-fs": "2.26.0",

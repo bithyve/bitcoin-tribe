@@ -162,7 +162,7 @@ const EnterInvoiceDetails = () => {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
   );
 
   const styles = getStyles(theme, inputHeight, app.appType);

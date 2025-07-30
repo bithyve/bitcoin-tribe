@@ -159,7 +159,7 @@ export class ApiHandler {
   }
 
   static async setupNewApp({
-    appName = '',
+    appName = 'Satoshi’s Palette',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
     walletImage = null,
@@ -244,7 +244,7 @@ export class ApiHandler {
             publicId,
             publicKey,
             AppType.ON_CHAIN,
-            'Iris_Regtest',
+            config.NETWORK_TYPE,
             '',
             signature,
             walletImage,
@@ -393,7 +393,7 @@ export class ApiHandler {
             rgbNodeInfo.pubkey,
             publicKey,
             AppType.NODE_CONNECT,
-            'Iris_Regtest',
+            config.NETWORK_TYPE,
             '',
             signature,
             walletImage,
@@ -501,8 +501,9 @@ export class ApiHandler {
   static async restoreApp(mnemonic: string) {
     try {
       const seed = bip39.mnemonicToSeedSync(mnemonic);
-      const appID = crypto.createHash('sha256').update(seed).digest('hex');
-      const backup = await Relay.getBackup(appID);
+      const publicId = WalletUtilities.getFingerprintFromSeed(seed);
+      const appID = crypto.createHash('sha256').update(publicId).digest('hex');
+      const backup = await Relay.getBackup(publicId.toLowerCase());
       if (backup.node) {
         ApiHandler.setupNewApp({
           appName: '',

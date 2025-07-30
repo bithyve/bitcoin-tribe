@@ -335,7 +335,6 @@ const SendAssetScreen = () => {
       }
 
       const res = await ApiHandler.decodeInvoice(cleanedText);
-
       if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
         setInvoiceValidationError('Invalid invoice');
         Toast('This invoice is not valid for the current network', true);
@@ -347,7 +346,11 @@ const SendAssetScreen = () => {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
           setInvoice(cleanedText);
-          setAssetAmount(res.amount.toString() || '0');
+          setAssetAmount(
+            res?.assignment?.amount.toString() !== '0'
+              ? res?.assignment?.amount.toString()
+              : '',
+          );
           setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
