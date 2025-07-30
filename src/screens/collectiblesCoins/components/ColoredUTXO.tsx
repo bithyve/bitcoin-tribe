@@ -10,6 +10,8 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
+
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import {
   Asset,
@@ -22,7 +24,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
@@ -38,8 +39,10 @@ import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { windowHeight } from 'src/constants/responsive';
 import Toast from 'src/components/Toast';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 const ColoredUTXO = () => {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -74,11 +77,14 @@ const ColoredUTXO = () => {
   }, [mutate]);
   const redirectToBlockExplorer = (txid: string) => {
     if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
-      openLink(
-        `https://mempool.space${
-          config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-        }/tx/${txid}`,
-      );
+      const url = `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${txid}`;
+
+      navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+        url,
+        title: 'Mempool Explorer',
+      });
     } else {
       Toast('Explorer not available!', true);
     }
