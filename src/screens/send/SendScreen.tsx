@@ -162,7 +162,7 @@ function SendScreen({ route, navigation }) {
                   assetId: res.assetId,
                   wallet: wallet,
                   rgbInvoice: value,
-                  amount: res.amount.toString(),
+                  amount: res?.assignment?.amount.toString(),
                 });
               });
             }
