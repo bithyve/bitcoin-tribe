@@ -333,7 +333,9 @@
     "utxoInfoSubTitle2": "UTXO già associati ad asset RGB, rappresentando token specifici o oggetti da collezione.",
     "utxoInfoTitle3": "UTXO Colorabili",
     "utxoInfoSubTitle3": "UTXO disponibili e pronti per essere associati agli asset RGB per l’uso nelle transazioni RGB.",
-    "activeNetworkLabel": "Rete Attiva"
+    "activeNetworkLabel": "Rete Attiva",
+    "bioUnlockTitle": "Imposta un passcode per abilitare l’accesso biometrico",
+    "bioUnlockSubTitle": "Per usare l'autenticazione biometrica in Bitcoin Tribe, devi prima impostare un passcode sul dispositivo. Questo protegge il tuo portafoglio e i tuoi beni."
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
