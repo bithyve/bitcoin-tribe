@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
@@ -37,6 +37,11 @@ export default function WebViewScreen() {
           javaScriptEnabled
           domStorageEnabled
           style={styles.container}
+          renderLoading={() => (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="large" color={theme.colors.accent1} />
+            </View>
+          )}
         />
       ) : null}
     </ScreenContainer>
@@ -47,5 +52,10 @@ const getStyles = (theme: AppTheme) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.primaryBackground,
+    },
+    loaderContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
