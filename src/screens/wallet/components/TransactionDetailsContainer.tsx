@@ -1,12 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LabeledContent from 'src/components/LabeledContent';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { NetworkType, TransactionKind } from 'src/services/wallets/enums';
-import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -15,6 +16,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import LabelledItem from './LabelledItem';
 import TransactionInfoSection from './TransactionInfoSection';
 import Toast from 'src/components/Toast';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -23,6 +25,7 @@ type WalletTransactionsProps = {
 
 function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
   const { transAmount, transaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
@@ -30,11 +33,14 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
 
   const redirectToBlockExplorer = () => {
     if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
-      openLink(
-        `https://mempool.space${
-          config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-        }/tx/${transaction.txid}`,
-      );
+      const url = `https://mempool.space${
+        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+      }/tx/${transaction.txid}`;
+
+      navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+        url,
+        title: 'Mempool Explorer',
+      });
     } else {
       Toast('Explorer not available!', true);
     }

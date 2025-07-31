@@ -64,6 +64,7 @@ export type AppStackParams = {
   [NavigationRoutes.IMPORTXPOST]: undefined;
   [NavigationRoutes.TRANSACTIONTYPEINFO]: undefined;
   [NavigationRoutes.GETBTCWITHRAMP]: undefined;
+  [NavigationRoutes.WEBVIEWSCREEN]: undefined;
   // Add other routes as needed
 };
 
