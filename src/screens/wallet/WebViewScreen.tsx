@@ -1,9 +1,10 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import LottieView from 'lottie-react-native';
 
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
@@ -39,7 +40,12 @@ export default function WebViewScreen() {
           style={styles.container}
           renderLoading={() => (
             <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color={theme.colors.accent1} />
+              <LottieView
+                source={require('src/assets/images/jsons/loader.json')}
+                autoPlay
+                loop
+                style={styles.refreshLoader}
+              />
             </View>
           )}
         />
@@ -57,5 +63,10 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    refreshLoader: {
+      alignSelf: 'center',
+      width: 120,
+      height: 120,
     },
   });
