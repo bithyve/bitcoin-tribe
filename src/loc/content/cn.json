@@ -333,7 +333,9 @@
     "utxoInfoSubTitle2": "已与RGB资产关联的UTXO，代表特定的代币或收藏品。",
     "utxoInfoTitle3": "可着色UTXO",
     "utxoInfoSubTitle3": "可用于RGB资产关联并在RGB交易中使用的UTXO。",
-    "activeNetworkLabel": "当前网络"
+    "activeNetworkLabel": "当前网络",
+    "bioUnlockTitle": "设置密码以启用生物识别登录",
+    "bioUnlockSubTitle": "要在 Bitcoin Tribe 中使用生物识别认证，您需要先设置设备密码。这将确保您的钱包和资产安全。"
   },
   "receciveScreen": {
     "headerSubTitle": "扫描二维码",

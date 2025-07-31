@@ -2500,7 +2500,6 @@ export class ApiHandler {
             'Too many requests to Twitter. Try again after a short break.',
         };
       }
-
       if (!response.ok) {
         const errorJson = await response.json().catch(() => null);
         const message =
