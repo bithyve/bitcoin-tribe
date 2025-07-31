@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
+
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -19,7 +21,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
@@ -36,8 +37,11 @@ import RefreshControlView from 'src/components/RefreshControlView';
 import UTXOInfoModal from './components/UTXOInfoModal';
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import Toast from 'src/components/Toast';
 
 const ViewUnspentScreen = () => {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -89,12 +93,18 @@ const ViewUnspentScreen = () => {
   }, [mutate]);
 
   const redirectToBlockExplorer = (txid: string) => {
-    if (config.NETWORK_TYPE === NetworkType.REGTEST) return;
-    openLink(
-      `https://mempool.space${
+    if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
+      const url = `https://mempool.space${
         config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${txid}`,
-    );
+      }/tx/${txid}`;
+
+      navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+        url,
+        title: 'Mempool Explorer',
+      });
+    } else {
+      Toast('Explorer not available!', true);
+    }
   };
   const pullDownToRefresh = () => {
     setRefreshing(true);

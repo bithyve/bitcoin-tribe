@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+import Clipboard from '@react-native-clipboard/clipboard';
+
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
@@ -17,14 +20,13 @@ import {
   TransferStatus,
   receiveUTXOData,
 } from 'src/models/interfaces/RGBWallet';
-import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
-import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -36,6 +38,7 @@ type WalletTransactionsProps = {
 
 function TransferDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
+  const navigation = useNavigation();
   const { assetName, transAmount, assetId, transaction, onPress } = props;
   const { translations } = useContext(LocalizationContext);
   const { wallet, settings, assets } = translations;
@@ -98,11 +101,14 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       handleCopyText(txid);
       return;
     }
-    openLink(
-      `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${txid}`,
-    );
+    const url = `https://mempool.space${
+      config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+    }/tx/${txid}`;
+
+    navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+      url,
+      title: 'Mempool Explorer',
+    });
   };
 
   return (
