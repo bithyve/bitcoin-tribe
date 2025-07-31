@@ -171,7 +171,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 key={index}
                 name={item.name}
                 details={item.ticker}
-                amount={item.balance.spendable}
+                amount={(Number(item.balance.spendable) / 10 ** item.precision).toString()}
                 tag="COIN"
                 assetId={item.assetId}
                 onPressAsset={() =>
