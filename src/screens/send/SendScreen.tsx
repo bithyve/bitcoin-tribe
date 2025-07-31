@@ -33,6 +33,7 @@ import Buttons from 'src/components/Buttons';
 import AssetIcon from 'src/components/AssetIcon';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -99,6 +100,7 @@ function SendScreen({ route, navigation }) {
           const res = await Relay.lookupAsset(assetId);
           setVisibleModal(false);
           if (res.status) {
+            console.log('res.asset', res.asset);
             setAssetData(res.asset);
             navigateWithDelay(() => {
               setAddAssetModal(true);
@@ -328,7 +330,12 @@ function SendScreen({ route, navigation }) {
 
               <View style={styles.row}>
                 <AppText>{'Schema: '}</AppText>
-                <AppText>{assetData?.assetSchema}</AppText>
+                <AppText>{assetData?.metaData.assetSchema}</AppText>
+              </View>
+
+              <View style={styles.row}>
+                <AppText>{'Issued Supply: '}</AppText>
+                <AppText>{numberWithCommas(Number(assetData?.issuedSupply) / 10 ** assetData?.precision)}</AppText>
               </View>
             </View>
 
@@ -407,7 +414,7 @@ const getStyles = (theme: AppTheme) =>
       marginTop: hp(4),
     },
     addAssetModalIconContainer: {
-      marginVertical: hp(20),
+      marginVertical: hp(25),
       alignItems: 'center',
       justifyContent: 'center',
     },
