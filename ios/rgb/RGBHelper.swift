@@ -17,32 +17,18 @@ import CloudKit
   private static let jsonEncoder = JSONEncoder()
   private static let jsonDecoder = JSONDecoder()
   
-  private let backgroundQueue = DispatchQueue(label: "com.tribe.rgb.background", qos: .userInitiated)
-  
   override init() {
     self.rgbManager = RgbManager.shared
   }
   
   
-  private func executeAsync<T>(_ operation: @escaping () throws -> T, completion: @escaping (Result<T, Error>) -> Void) {
-    backgroundQueue.async {
-      do {
-        let result = try operation()
-        completion(.success(result))
-      } catch {
-        completion(.failure(error))
-      }
-    }
-  }
-  
-  
   @objc func generate_keys(btcNetwotk: String, callback: @escaping ((String) -> Void)){
-    executeAsync {
+    do {
       let network = RgbManager.getRgbNetwork(network: btcNetwotk)
       let keys = generateKeys(bitcoinNetwork: network)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
         let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
-        return [
+        let data = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
           "masterFingerprint": keys.masterFingerprint,
@@ -50,29 +36,27 @@ import CloudKit
           "accountXpubVanilla": keys.accountXpubVanilla,
           "rgbDir": rgbURL.absoluteString,
         ]
-      } else {
-        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document directory not found"])
-      }
-    } completion: { result in
-      switch result {
-      case .success(let data):
         let json = Utility.convertToJSONString(params: data)
         callback(json)
-      case .failure(let error):
-        let errorData = ["error": error.localizedDescription]
+      } else {
+        let errorData = ["error": "Document directory not found"]
         let json = Utility.convertToJSONString(params: errorData)
         callback(json)
       }
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func restore_keys(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)){
-    executeAsync {
+    do {
       let network = RgbManager.getRgbNetwork(network: btcNetwotk)
       let keys = try restoreKeys(bitcoinNetwork: network, mnemonic: mnemonic)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
         let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
-        return [
+        let data = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
           "masterFingerprint": keys.masterFingerprint,
@@ -80,19 +64,17 @@ import CloudKit
           "accountXpubVanilla": keys.accountXpubVanilla,
           "rgbDir": rgbURL.absoluteString,
         ]
-      } else {
-        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document directory not found"])
-      }
-    } completion: { result in
-      switch result {
-      case .success(let data):
         let json = Utility.convertToJSONString(params: data)
         callback(json)
-      case .failure(let error):
-        let errorData = ["error": error.localizedDescription]
+      } else {
+        let errorData = ["error": "Document directory not found"]
         let json = Utility.convertToJSONString(params: errorData)
         callback(json)
       }
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
@@ -228,7 +210,7 @@ import CloudKit
 
   
   @objc func getUnspents(callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "rgbWallet or online is not initialized"])
       }
@@ -282,21 +264,12 @@ import CloudKit
         return unspentDict
       }
       
-      return unspentsArray
-    } completion: { result in
-      switch result {
-      case .success(let unspentsArray):
-        do {
-          let jsonData = try JSONSerialization.data(withJSONObject: unspentsArray, options: [])
-          let jsonString = String(data: jsonData, encoding: .utf8) ?? "[]"
-          callback(jsonString)
-        } catch {
-          callback("[]")
-        }
-      case .failure(let error):
-        print("getUnspents error: \(error)")
-        callback("[]")
-      }
+      let jsonData = try JSONSerialization.data(withJSONObject: unspentsArray, options: [])
+      let jsonString = String(data: jsonData, encoding: .utf8) ?? "[]"
+      callback(jsonString)
+    } catch {
+      print("getUnspents error: \(error)")
+      callback("[]")
     }
   }
 
@@ -475,7 +448,7 @@ import CloudKit
   @objc func createUTXOs(feeRate: Int, num: Int, size: Int, upTo: Bool, callback: @escaping ((String) -> Void)) {
     print("Creating UTXOs... \(feeRate)")
     
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB Wallet or Online service is not initialized."])
       }
@@ -487,7 +460,7 @@ import CloudKit
         print("Error getting address: \(error)")
       }
       
-      return try self.handleMissingFunds {
+      let data = try self.handleMissingFunds {
         var attempts = 3
         var newUTXOs: UInt8 = 0
         
@@ -502,17 +475,14 @@ import CloudKit
           "created": newUTXOs > 0
         ]
       }
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print("createUTXOs error: \(error)")
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print("createUTXOs error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
 
@@ -581,35 +551,31 @@ import CloudKit
   }
   
   @objc func failTransfer(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
       }
       let status = try wallet.failTransfers(online: online, batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly, skipSync: false)
-      return ["status": status]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        let errorData = [
-          "status": false,
-          "error": error.localizedDescription
-        ]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let data = ["status": status]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func getWalletData(callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
       }
       let walletData = wallet.getWalletData()
-      return [
+      let data = [
         "dataDir": walletData.dataDir,
 //        "bitcoinNetwork": walletData.bitcoinNetwork,
 //        "databaseType": walletData.databaseType,
@@ -617,48 +583,40 @@ import CloudKit
         "mnemonic": walletData.mnemonic,
         "pubkey": walletData.accountXpubColored,
         "vanillaKeychain": walletData.vanillaKeychain,
-      ]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        let errorData = [
-          "status": false,
-          "error": error.localizedDescription
-        ]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func deleteTransfers(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
       }
       let status = try wallet.deleteTransfers(batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
-      return ["status": status]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        let errorData = [
-          "status": false,
-          "error": error.localizedDescription
-        ]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let data = ["status": status]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
       var assignmentDict: [String: Any] = [:]
       switch invoice.assignment {
@@ -676,7 +634,7 @@ import CloudKit
         assignmentDict["type"] = "Any"
       }
       
-      return [
+      let data = [
         "recipientId": invoice.recipientId,
         "expirationTimestamp": invoice.expirationTimestamp ?? 0,
         "assetId": invoice.assetId ?? "",
@@ -686,152 +644,79 @@ import CloudKit
         "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
           return endpoint
         }
-      ]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        print(data)
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      ] as [String : Any]
+      
+      print(data)
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
       }
-      return try wallet.getAddress()
-    } completion: { result in
-      switch result {
-      case .success(let address):
-        callback(address)
-      case .failure(_):
-        callback("")
-      }
+      let address = try wallet.getAddress()
+      callback(address)
+    } catch {
+      callback("")
     }
   }
   
   @objc func getBalance(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)) {
-    executeAsync {
-      return "balance"
-    } completion: { result in
-      switch result {
-      case .success(let balance):
-        callback(balance)
-      case .failure(_):
-        callback("")
-      }
-    }
+    callback("balance")
   }
   
   
   @objc func sync(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)) {
-    executeAsync {
-      return ""
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(_):
-        callback("")
-      }
-    }
+    callback("")
   }
   
   @objc func syncRgbAssets(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)) {
-    executeAsync {
-      return ""
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(_):
-        callback("")
-      }
-    }
+    callback("")
   }
   
   
   @objc func receiveAsset(assetID: String, amount: Float, blinded: Bool, callback: @escaping ((String) -> Void)){
-    executeAsync {
-      return self.genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(let error):
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
-    }
+    let response = self.genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
+    callback(response)
   }
   
   @objc func syncRgb(callback: @escaping ((String) -> Void)){
-    executeAsync {
-      return self.getRgbAssets()
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(_):
-        callback("{}")
-      }
-    }
+    let response = self.getRgbAssets()
+    callback(response)
   }
   
   @objc func getRgbAssetMetaData(assetId:String, callback: @escaping ((String) -> Void)){
-    executeAsync {
-      return self.getRgbAssetMetaData(assetId: assetId)
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(_):
-        callback("{}")
-      }
-    }
+    let response = self.getRgbAssetMetaData(assetId: assetId)
+    callback(response)
   }
   
   @objc func getRgbAssetTransactions(assetId: String, callback: @escaping ((String) -> Void)) {
-    executeAsync {
-      return self.getRgbAssetTransfers(assetId: assetId)
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(let error):
-        print(error)
-        callback("[]")
-      }
-    }
+    let response = self.getRgbAssetTransfers(assetId: assetId)
+    callback(response)
   }
   
   @objc func initiate(btcNetwotk: String, mnemonic: String,accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) -> Void{
-    executeAsync {
+    do {
       self.rgbManager = RgbManager.shared
-      return self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(let error):
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
+      callback(response)
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
-    executeAsync {
-      return try self.handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetNia(ticker: ticker, name: name, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)])
         return [
           "assetId": asset?.assetId,
@@ -843,23 +728,19 @@ import CloudKit
           "spendableBalance": asset?.balance.spendable
         ]
       }
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print(error)
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func issueAssetCfa(name: String, description: String, supply: String, precision: NSNumber, filePath: String, callback: @escaping ((String) -> Void)) -> Void{
-    executeAsync {
-      return try self.handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(name: name, details: description, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
         var dataPaths: [[String: Any]] = []
         return [
@@ -873,23 +754,19 @@ import CloudKit
           "dataPaths": dataPaths
         ]
       }
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print(error)
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func issueAssetUda(name: String,ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: [String], callback: @escaping ((String) -> Void)) -> Void{
-    executeAsync {
-      return try self.handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetUda(ticker: ticker, name: name, details: details, precision: 0, mediaFilePath: mediaFilePath, attachmentsFilePaths: attachmentsFilePaths)
         var dataPaths: [[String: Any]] = []
         return [
@@ -904,23 +781,19 @@ import CloudKit
           "dataPaths": dataPaths
         ]
       }
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print(error)
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   
   @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, callback: @escaping ((String) -> Void)) -> Void{
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
       }
@@ -931,18 +804,14 @@ import CloudKit
         return try wallet.send(online: online, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 1, skipSync: true)
       }
       print(response)
-      return ["txid": response.txid]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print(error)
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let data = ["txid": response.txid]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
@@ -1005,77 +874,60 @@ import CloudKit
   }
   
   @objc func backup(path: String, password: String, callback: @escaping ((String) -> Void)) -> Void {
-    executeAsync {
+    do {
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: password)
       let filePath = Utility.getBackupPath(fileName: keys.masterFingerprint)
 
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
       
-      return [
+      let data = [
         "message": "Backup successful",
         "file": filePath?.path ?? "",
         "error": ""
       ]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print("backup error: \(error)")
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print("backup error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func isBackupRequired(callback: @escaping ((Bool) -> Void)) -> Void{
-    executeAsync {
+    do {
       guard let wallet = self.rgbManager.rgbWallet else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
       }
-      return try wallet.backupInfo() ?? false
-    } completion: { result in
-      switch result {
-      case .success(let response):
-        callback(response)
-      case .failure(_):
-        callback(false)
-      }
+      let response = try wallet.backupInfo() ?? false
+      callback(response)
+    } catch {
+      callback(false)
     }
   }
   
   @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void {
-    executeAsync {
+    do {
       NSString(string: backupPath).expandingTildeInPath
       try restoreBackup(backupPath: backupPath, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
-      return ["message": "Restore successful"]
-    } completion: { result in
-      switch result {
-      case .success(let data):
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
-      case .failure(let error):
-        print("restore error: \(error)")
-        let errorData = ["error": error.localizedDescription]
-        let json = Utility.convertToJSONString(params: errorData)
-        callback(json)
-      }
+      let data = ["message": "Restore successful"]
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print("restore error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
   }
   
   @objc func isValidBlindedUtxo(invoiceData: String,callback: @escaping ((Bool) -> Void)) -> Void{
-    executeAsync {
+    do {
       try Invoice(invoiceString: invoiceData)
-      return true
-    } completion: { result in
-      switch result {
-      case .success(_):
-        callback(true)
-      case .failure(_):
-        callback(false)
-      }
+      callback(true)
+    } catch {
+      callback(false)
     }
   }
   

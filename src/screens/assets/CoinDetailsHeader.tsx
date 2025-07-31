@@ -74,6 +74,10 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     Number(asset.balance?.offchainOutbound || 0) +
     Number(totalAssetLocalAmount || 0);
 
+  const isVerified = asset?.issuer?.verifiedBy.some(
+    item => item.verified === true,
+  );
+
   return (
     <>
       {/* <Animated.View
@@ -175,7 +179,15 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 <View style={styles.balanceContainer}>
                   <AppTouchable
                     style={styles.onChainTotalBalanceWrapper}
-                    onPress={() => {}}>
+                    onPress={() => {
+                      if (isNodeInitInProgress) {
+                        Toast(node.connectingNodeToastMsg, true);
+                        return;
+                      }
+                      navigation.navigate(NavigationRoutes.COINMETADATA, {
+                        assetId: asset.assetId,
+                      });
+                    }}>
                     <View style={styles.totalBalanceWrapper1}>
                       <AppText variant="heading2" style={styles.totalBalance}>
                         {formatLargeNumber(
@@ -209,9 +221,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   <AppText variant="body1" style={styles.assetTickerText}>
                     {asset.ticker}
                   </AppText>
-                  {asset.issuer?.verified && (
-                    <IconVerified width={20} height={20} />
-                  )}
+                  {isVerified && <IconVerified width={20} height={20} />}
                 </View>
                 <View style={styles.assetNameWrapper}>
                   <AppText variant="body2" style={styles.assetNameText}>

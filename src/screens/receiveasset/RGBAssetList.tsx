@@ -91,30 +91,30 @@ function RGBAssetList(props: DropdownProps) {
       <View style={styles.container2}>
         {showSearch && (
           <TextField
-          value={searchAssetInput}
-          onChangeText={onChangeSearchInput}
-          placeholder={'Search from Tribe RGB registry'}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          rightIcon={
-            isLoading ? (
-              <ActivityIndicator size="small" />
-            ) : isThemeDark ? (
-              <IconSearch />
-            ) : (
-              <IconSearchLight />
-            )
-          }
-          onRightTextPress={() => () => {}}
-          rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.accent1}
-          blurOnSubmit={false}
-          returnKeyType="done"
-          error={''}
-          keyboardType="default"
-          autoCapitalize="none"
-          onSubmitEditing={() => Keyboard.dismiss()}
-        />
+            value={searchAssetInput}
+            onChangeText={onChangeSearchInput}
+            placeholder={'Search from Tribe RGB registry'}
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+            rightIcon={
+              isLoading ? (
+                <ActivityIndicator size="small" />
+              ) : isThemeDark ? (
+                <IconSearch />
+              ) : (
+                <IconSearchLight />
+              )
+            }
+            onRightTextPress={() => () => {}}
+            rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
+            blurOnSubmit={false}
+            returnKeyType="done"
+            error={''}
+            keyboardType="default"
+            autoCapitalize="none"
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
         )}
         {assets && assets.length > 0 && (
           <View style={styles.labelWrapper}>
@@ -142,16 +142,19 @@ function RGBAssetList(props: DropdownProps) {
               item?.asset?.iconUrl ||
               item?.iconUrl;
 
-            const imageUri = item?.iconUrl
-              ? item?.iconUrl
-              : item?.asset?.iconUrl
-              ? item?.asset?.iconUrl
-              : filePath?.startsWith('http')
-              ? filePath
-              : Platform.select({
+            const imageUri = (() => {
+              if (item?.iconUrl) return item.iconUrl;
+              if (item?.asset?.iconUrl) return item.asset.iconUrl;
+              if (filePath && filePath.startsWith('http')) return filePath;
+              if (filePath) {
+                return Platform.select({
                   android: `file://${filePath}`,
                   ios: filePath,
                 });
+              }
+              return null;
+            })();
+
             const assetName = item?.name ?? item?.asset?.name;
             const ticker = item?.ticker ?? item?.asset?.ticker;
             const assetId = item?.assetId ?? item?.asset?.assetId;
@@ -200,7 +203,8 @@ function RGBAssetList(props: DropdownProps) {
                   <AppText variant="body2" style={styles.balanceText}>
                     {formatLargeNumber(
                       item?.balance?.spendable / 10 ** item?.precision ||
-                        item?.asset?.issuedSupply / 10 ** item?.asset?.precision,
+                        item?.asset?.issuedSupply /
+                          10 ** item?.asset?.precision,
                     )}
                   </AppText>
                 </View>

@@ -222,7 +222,7 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
-  const precision = assetData?.metaData?.precision || 0;
+  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {

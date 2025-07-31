@@ -117,7 +117,7 @@ const PostOnTwitterModal: React.FC<Props> = ({
         console.error('File was not saved properly:', filePath);
         return;
       }
-      const tweetText = `I’ve officially verified my identity as the issuer of "${
+      const tweetText = `I’ve verified my identity as the issuer of "${
         issuerInfo.name || 'this asset'
       }".\nwith Asset ID - ${issuerInfo?.assetId}
       
