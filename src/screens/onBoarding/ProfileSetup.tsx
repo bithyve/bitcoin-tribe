@@ -101,7 +101,6 @@ function ProfileSetup() {
     setKey(key);
     navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
-
   const initiateWalletCreation = () => {
     setIsLoading(true);
     Keyboard.dismiss();

@@ -354,31 +354,24 @@ const CollectibleMetaDataScreen = () => {
                 <SelectOption
                   title={assets.viewInRegistry}
                   subTitle={''}
-                  onPress={() =>
-                    openLink(
-                      `${config.REGISTRY_URL}/${assetId}`,
-                    )
-                  }
+                  onPress={() => openLink(`${config.REGISTRY_URL}/${assetId}`)}
                   testID={'view_in_registry'}
                 />
               )}
-              {hasIssuanceTransaction &&
-                // twitterVerification?.id &&
-                !twitterPostVerificationWithLink &&
-                !twitterPostVerification?.link && (
-                  <SelectOption
-                    title={'Show your X post here'}
-                    subTitle={''}
-                    onPress={() =>
-                      navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                        assetId: assetId,
-                        schema: RealmSchema.Collectible,
-                        asset: collectible,
-                      })
-                    }
-                    testID={'import_x_post'}
-                  />
-                )}
+              {hasIssuanceTransaction && (
+                <SelectOption
+                  title={'Show your X post here'}
+                  subTitle={''}
+                  onPress={() =>
+                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                      assetId: assetId,
+                      schema: RealmSchema.Collectible,
+                      asset: collectible,
+                    })
+                  }
+                  testID={'import_x_post'}
+                />
+              )}
             </View>
             {isAddedInRegistry && <View style={styles.seperatorView} />}
             {twitterPostVerificationWithLink?.link && (
