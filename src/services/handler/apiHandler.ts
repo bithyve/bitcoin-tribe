@@ -2528,82 +2528,47 @@ export class ApiHandler {
       const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
       let updatedVerifiedBy = [...existingVerifiedBy];
 
-      const twitterPostIndex = existingVerifiedBy.findIndex(
+      const twitterPostIndex = updatedVerifiedBy.findIndex(
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       );
 
-      let twitterPostData;
-
-      if (!verified) {
-        twitterPostData = {
-          type: IssuerVerificationMethod.TWITTER_POST,
-          link: tweetId,
-          id: '',
-          name: '',
-          username: '',
-        };
-
-        updatedVerifiedBy.push(twitterPostData);
-
-        await dbManager.updateObjectByPrimaryId(
-          schema,
-          'assetId',
-          asset.assetId,
-          {
-            issuer: {
-              verified: false,
-              verifiedBy: updatedVerifiedBy,
-            },
-          },
-        );
-
-        return { success: true, tweet };
-      }
-
-      const twitterEntry = asset?.issuer?.verifiedBy?.find(
+      const twitterEntry = existingAsset?.issuer?.verifiedBy?.find(
         v => v.type === IssuerVerificationMethod.TWITTER,
       );
 
-      if (!twitterEntry) {
-        return { success: false, reason: 'Twitter issuer not found' };
-      }
-
-      twitterPostData = {
+      const twitterPostData = {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
-        id: twitterEntry.id,
-        name: twitterEntry.name,
-        username: twitterEntry.username,
+        id: twitterEntry?.id ?? '',
+        name: twitterEntry?.name ?? '',
+        username: twitterEntry?.username ?? '',
       };
 
-      const relayResponse = await Relay.verifyIssuer(
-        'appID',
-        asset.assetId,
-        twitterPostData,
-      );
-
-      if (relayResponse.status) {
-        if (twitterPostIndex !== -1) {
-          updatedVerifiedBy[twitterPostIndex] = {
-            ...updatedVerifiedBy[twitterPostIndex],
-            link: tweetId,
-          };
-        } else {
-          updatedVerifiedBy.push(twitterPostData);
-        }
-
-        await dbManager.updateObjectByPrimaryId(
-          schema,
-          'assetId',
-          asset.assetId,
-          {
-            issuer: {
-              verified: true,
-              verifiedBy: updatedVerifiedBy,
-            },
-          },
-        );
+      if (twitterPostIndex !== -1) {
+        updatedVerifiedBy[twitterPostIndex] = twitterPostData;
+      } else {
+        updatedVerifiedBy.push(twitterPostData);
       }
+      let isVerified = false;
+      if (verified && twitterEntry) {
+        const relayResponse = await Relay.verifyIssuer(
+          'appID',
+          asset.assetId,
+          twitterPostData,
+        );
+        isVerified = relayResponse.status;
+      }
+      await dbManager.updateObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+        {
+          issuer: {
+            verified: isVerified,
+            verifiedBy: updatedVerifiedBy,
+          },
+        },
+      );
 
       return { success: true, tweet };
     } catch (error: any) {
