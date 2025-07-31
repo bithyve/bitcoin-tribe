@@ -117,7 +117,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
         console.error('File was not saved properly:', filePath);
         return;
       }
-      const tweetText = `I've officially issued "${
+      const tweetText = `I've issued "${
         issuerInfo.name || 'this asset'
       }".\nwith Asset ID - ${issuerInfo?.assetId}
 

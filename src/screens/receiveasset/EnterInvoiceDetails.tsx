@@ -35,6 +35,7 @@ import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -42,7 +43,8 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: appType !== AppType.ON_CHAIN ? '54%' : '66%',
+      height: appType !== AppType.ON_CHAIN ? '43%' : '57%',
+      marginTop: hp(10),
     },
     footerWrapper: {
       height: '25%',
@@ -93,6 +95,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     },
     chooseInvoiceType: {
       color: theme.colors.headingColor,
+      marginTop: hp(20),
     },
     rightCTAStyle: {
       height: hp(40),
@@ -131,6 +134,7 @@ const EnterInvoiceDetails = () => {
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = React.useState(50);
+  const [invoiceExpiry, setInvoiceExpiry] = useState(12);
   const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedType, setSelectedType] = React.useState(
@@ -162,7 +166,10 @@ const EnterInvoiceDetails = () => {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
   );
 
   const styles = getStyles(theme, inputHeight, app.appType);
@@ -187,8 +194,8 @@ const EnterInvoiceDetails = () => {
   function validateAndNavigateToReceiveAsset() {
     navigation.navigate(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
-      assetId,
-      amount,
+      assetId: assetId ?? '',
+      amount: amount ?? '',
       selectedType,
     });
   }
@@ -200,10 +207,15 @@ const EnterInvoiceDetails = () => {
       setAmount(text);
     }
   };
-
   return (
     <ScreenContainer>
-      <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={home.addAssets}
+        subTitle={
+          'Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.'
+        }
+        enableBack={true}
+      />
       {app.appType !== AppType.ON_CHAIN && (
         <View>
           <View>
@@ -261,6 +273,10 @@ const EnterInvoiceDetails = () => {
           style={styles.input}
           keyboardType="numeric"
         />
+        <InvoiceExpirySlider
+          value={invoiceExpiry}
+          onValueChange={setInvoiceExpiry}
+        />
       </View>
       <View style={styles.footerWrapper}>
         {colorable.length === 0 ? (
@@ -278,20 +294,7 @@ const EnterInvoiceDetails = () => {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-          secondaryTitle={selectedType === 'bitcoin' && common.skip}
-          secondaryOnPress={() =>
-            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-              refresh: true,
-              assetId: '',
-              amount: '',
-              selectedType,
-            })
-          }
-          disabled={assetId === '' || amount === ''}
-          width={
-            selectedType === 'bitcoin' ? windowWidth / 2.3 : windowWidth / 1.1
-          }
-          secondaryCTAWidth={windowWidth / 2.3}
+          width={'100%'}
         />
       </View>
       {assetsDropdown && (

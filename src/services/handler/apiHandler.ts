@@ -301,7 +301,10 @@ export class ApiHandler {
               registerApp?.app?.authToken,
             );
           }
-        } else if (appType === AppType.SUPPORTED_RLN) {
+        } else if (
+          appType === AppType.SUPPORTED_RLN ||
+          appType === AppType.NODE_CONNECT
+        ) {
           let rgbWallet: RGBWallet = {
             mnemonic:
               rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
@@ -316,7 +319,9 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(
             rgbWallet,
-            AppType.SUPPORTED_RLN,
+            appType === AppType.SUPPORTED_RLN
+              ? AppType.SUPPORTED_RLN
+              : AppType.NODE_CONNECT,
             authToken,
           );
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
@@ -335,7 +340,10 @@ export class ApiHandler {
             version: DeviceInfo.getVersion(),
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
-            appType: AppType.SUPPORTED_RLN,
+            appType:
+              appType === AppType.SUPPORTED_RLN
+                ? AppType.SUPPORTED_RLN
+                : AppType.NODE_CONNECT,
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -374,6 +382,9 @@ export class ApiHandler {
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
           const cm = ChatPeerManager.getInstance();
+          if (!rgbNodeConnectParams.nodeId) {
+            throw new Error('Missing nodeId');
+          }
           await cm.init(rgbNodeConnectParams.nodeId);
           const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
@@ -1126,7 +1137,7 @@ export class ApiHandler {
       if (response.error) {
         throw new Error(response.error);
       } else {
-        const invoices =  [...rgbWallet?.invoices, response];
+        const invoices = [...rgbWallet?.invoices, response];
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
@@ -1383,7 +1394,7 @@ export class ApiHandler {
   static async addAssetToWallet({ asset }: { asset: Asset }) {
     try {
       const coins = dbManager.getCollection(RealmSchema.Coin);
-      if(coins.find(coin => coin.assetId === asset.assetId)) {
+      if (coins.find(coin => coin.assetId === asset.assetId)) {
         return;
       }
       dbManager.createObject(RealmSchema.Coin, {
@@ -1398,8 +1409,6 @@ export class ApiHandler {
           offchainInbound: '0',
         },
       });
-
-
     } catch (error) {
       throw error;
     }
@@ -1433,28 +1442,32 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-          await Relay.registerAsset(app.id, { ...metadata, ...response }, app.authToken);
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(
+          app.id,
+          { ...metadata, ...response },
+          app.authToken,
+        );
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
+        }
         await ApiHandler.refreshRgbWallet();
       }
       return response;
@@ -1496,28 +1509,28 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-          await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
+        }
       }
       return response;
     } catch (error) {
@@ -1557,28 +1570,28 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-          await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
+        }
       }
       return response;
     } catch (error) {
@@ -1707,7 +1720,7 @@ export class ApiHandler {
     previousVersion?: string,
     currentVersion?: string,
   ): Promise<void> {
-    try {      
+    try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
       const appVersion = currentVersion || DeviceInfo.getVersion();
@@ -2101,6 +2114,8 @@ export class ApiHandler {
     nodeId: string,
     authToken: string,
   ): Promise<string | null> => {
+    console.log('nodeId', nodeId);
+    console.log('authToken', authToken);
     try {
       const node: any = await Relay.getNodeById(nodeId, authToken);
       const status = node?.nodeInfo?.data?.status || node?.node?.status;
@@ -2513,82 +2528,47 @@ export class ApiHandler {
       const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
       let updatedVerifiedBy = [...existingVerifiedBy];
 
-      const twitterPostIndex = existingVerifiedBy.findIndex(
+      const twitterPostIndex = updatedVerifiedBy.findIndex(
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       );
 
-      let twitterPostData;
-
-      if (!verified) {
-        twitterPostData = {
-          type: IssuerVerificationMethod.TWITTER_POST,
-          link: tweetId,
-          id: '',
-          name: '',
-          username: '',
-        };
-
-        updatedVerifiedBy.push(twitterPostData);
-
-        await dbManager.updateObjectByPrimaryId(
-          schema,
-          'assetId',
-          asset.assetId,
-          {
-            issuer: {
-              verified: false,
-              verifiedBy: updatedVerifiedBy,
-            },
-          },
-        );
-
-        return { success: true, tweet };
-      }
-
-      const twitterEntry = asset?.issuer?.verifiedBy?.find(
+      const twitterEntry = existingAsset?.issuer?.verifiedBy?.find(
         v => v.type === IssuerVerificationMethod.TWITTER,
       );
 
-      if (!twitterEntry) {
-        return { success: false, reason: 'Twitter issuer not found' };
-      }
-
-      twitterPostData = {
+      const twitterPostData = {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
-        id: twitterEntry.id,
-        name: twitterEntry.name,
-        username: twitterEntry.username,
+        id: twitterEntry?.id ?? '',
+        name: twitterEntry?.name ?? '',
+        username: twitterEntry?.username ?? '',
       };
 
-      const relayResponse = await Relay.verifyIssuer(
-        'appID',
-        asset.assetId,
-        twitterPostData,
-      );
-
-      if (relayResponse.status) {
-        if (twitterPostIndex !== -1) {
-          updatedVerifiedBy[twitterPostIndex] = {
-            ...updatedVerifiedBy[twitterPostIndex],
-            link: tweetId,
-          };
-        } else {
-          updatedVerifiedBy.push(twitterPostData);
-        }
-
-        await dbManager.updateObjectByPrimaryId(
-          schema,
-          'assetId',
-          asset.assetId,
-          {
-            issuer: {
-              verified: true,
-              verifiedBy: updatedVerifiedBy,
-            },
-          },
-        );
+      if (twitterPostIndex !== -1) {
+        updatedVerifiedBy[twitterPostIndex] = twitterPostData;
+      } else {
+        updatedVerifiedBy.push(twitterPostData);
       }
+      let isVerified = false;
+      if (verified && twitterEntry) {
+        const relayResponse = await Relay.verifyIssuer(
+          'appID',
+          asset.assetId,
+          twitterPostData,
+        );
+        isVerified = relayResponse.status;
+      }
+      await dbManager.updateObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+        {
+          issuer: {
+            verified: isVerified,
+            verifiedBy: updatedVerifiedBy,
+          },
+        },
+      );
 
       return { success: true, tweet };
     } catch (error: any) {
