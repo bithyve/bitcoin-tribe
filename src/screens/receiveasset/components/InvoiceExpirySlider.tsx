@@ -23,7 +23,9 @@ const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
 
   return (
     <View style={styles.container}>
-      <AppText style={styles.title}>Invoice Expiry</AppText>
+      <AppText variant="caption" style={styles.title}>
+        Invoice Expiry
+      </AppText>
 
       <Slider
         style={styles.slider}
