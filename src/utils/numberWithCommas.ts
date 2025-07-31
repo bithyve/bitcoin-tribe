@@ -24,7 +24,7 @@ export const formatLargeNumber = (num: number | string = 0) => {
     return '0';
   }
   if (typeof num !== 'number' || isNaN(num)) {
-    return 'Invalid number';
+    return '0';
   }
   if (num >= 1e12) {
     return (num / 1e12).toFixed(2).replace(/\.00$/, '').replace(/\.0$/, '') + 'T';
