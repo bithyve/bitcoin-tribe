@@ -144,7 +144,7 @@ export default class Relay {
           type: walletImage.type,
         });
       }
-      formData.append('name', name);
+      formData.append('name', name || 'Satoshi’s Palette');
       formData.append('appID', appID);
       formData.append('publicId', publicId);
       formData.append('publicKey', publicKey);
