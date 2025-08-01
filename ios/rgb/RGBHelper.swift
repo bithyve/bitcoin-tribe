@@ -517,14 +517,14 @@ import CloudKit
               let bindData = try blinded ? 
                   wallet.blindReceive(
                       assetId: assetId,
-                      assignment: .any,
+                      assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
                       durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
                       minConfirmations: 1
-                  ) :
+                  ):
                   wallet.witnessReceive(
                       assetId: assetId,
-                      assignment: .any,
+                      assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
                       durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
                       minConfirmations: 1

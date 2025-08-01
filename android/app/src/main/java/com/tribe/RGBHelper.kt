@@ -121,7 +121,7 @@ object RGBHelper {
     private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.blindReceive(
             assetID,
-            assignment = Assignment.Any,
+            assignment = if (amount != null && amount > 0u) Assignment.Fungible(amount) else Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             1u
@@ -131,7 +131,7 @@ object RGBHelper {
     private fun getWitnessUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.witnessReceive(
             assetID,
-            assignment = Assignment.Fungible(amount!!),
+            assignment = if (amount != null) Assignment.Fungible(amount) else Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
             1u
