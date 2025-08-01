@@ -60,9 +60,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     loaderContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      marginBottom: '75%',
     },
     refreshLoader: {
       alignSelf: 'center',
