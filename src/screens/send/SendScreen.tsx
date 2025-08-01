@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
@@ -91,16 +91,24 @@ function SendScreen({ route, navigation }) {
         setVisibleModal(false);
         return;
       }
-      if (value.startsWith(config.REGISTRY_URL)) {
+      if (
+        value.startsWith(config.REGISTRY_URL) ||
+        (value.includes('rgb:') && value.length < 60)
+      ) {
         setVisible(false);
         setIsScanning(false);
         const parts = value.split('/').filter(Boolean);
         const assetId = parts[parts.length - 1] || null;
         if (assetId) {
+          if (allAssets.find(item => item.assetId === assetId)) {
+            setVisibleModal(false);
+            setIsScanning(true);
+            Toast('Asset already exists in your wallet', true);
+            return;
+          }
           const res = await Relay.lookupAsset(assetId);
           setVisibleModal(false);
           if (res.status) {
-            console.log('res.asset', res.asset);
             setAssetData(res.asset);
             navigateWithDelay(() => {
               setAddAssetModal(true);
@@ -108,8 +116,8 @@ function SendScreen({ route, navigation }) {
           } else {
             Toast(res.error, true);
           }
+          return;
         }
-        return;
       }
 
       if (value.startsWith('tribe://')) {
@@ -323,10 +331,12 @@ function SendScreen({ route, navigation }) {
                 <AppText>{assetData?.name}</AppText>
               </View>
 
-              <View style={styles.row}>
-                <AppText>{'Ticker: '}</AppText>
-                <AppText>{assetData?.ticker}</AppText>
-              </View>
+              {assetData?.ticker&& (
+                <View style={styles.row}>
+                  <AppText>{'Ticker: '}</AppText>
+                  <AppText>{assetData?.ticker}</AppText>
+                </View>
+              )}
 
               <View style={styles.row}>
                 <AppText>{'Schema: '}</AppText>
@@ -335,16 +345,29 @@ function SendScreen({ route, navigation }) {
 
               <View style={styles.row}>
                 <AppText>{'Issued Supply: '}</AppText>
-                <AppText>{numberWithCommas(Number(assetData?.issuedSupply) / 10 ** assetData?.precision)}</AppText>
+                <AppText>
+                  {numberWithCommas(
+                    Number(assetData?.issuedSupply) /
+                      10 ** assetData?.precision,
+                  )}
+                </AppText>
               </View>
             </View>
-
             <View>
-              <AssetIcon
-                style={styles.assetIcon}
-                assetID={assetData?.assetId}
-                size={65}
-              />
+              {(assetData?.iconUrl || assetData?.media?.thumbnail) ? (
+                <Image
+                  source={{
+                    uri: assetData?.iconUrl || assetData?.media?.thumbnail,
+                  }}
+                  style={styles.imageStyle}
+                />
+              ) : (
+                <AssetIcon
+                  assetID={assetData?.assetId}
+                  size={65}
+                  style={styles.assetIcon}
+                />
+              )}
             </View>
           </View>
 
@@ -419,6 +442,12 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     assetIcon: {
+      marginRight: wp(10),
+    },
+    imageStyle: {
+      width: 65,
+      height: 65,
+      borderRadius: 10,
       marginRight: wp(10),
     },
   });
