@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -123,8 +121,6 @@ const EnterInvoiceDetails = () => {
     common,
     assets,
     home,
-    sendScreen,
-    wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -133,11 +129,13 @@ const EnterInvoiceDetails = () => {
   const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
-  const [inputHeight, setInputHeight] = React.useState(50);
-  const [invoiceExpiry, setInvoiceExpiry] = useState(12);
+  const [inputHeight, setInputHeight] = useState(50);
+  const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(
+    Keys.INVOICE_EXPIRY,
+  );
   const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
   const [assetsDropdown, setAssetsDropdown] = useState(false);
-  const [selectedType, setSelectedType] = React.useState(
+  const [selectedType, setSelectedType] = useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
       ? 'lightning'
       : 'bitcoin',
@@ -173,10 +171,12 @@ const EnterInvoiceDetails = () => {
   );
 
   const styles = getStyles(theme, inputHeight, app.appType);
-  const handlePasteAddress = async () => {
-    const clipboardValue = await Clipboard.getString();
-    setAssetId(clipboardValue);
-  };
+
+  useEffect(() => {
+    if (invoiceExpiry === undefined) {
+      setInvoiceExpiry(86400);
+    }
+  }, [invoiceExpiry]);
 
   useEffect(() => {
     const searchAsset = async () => {
@@ -197,6 +197,7 @@ const EnterInvoiceDetails = () => {
       assetId: assetId ?? '',
       amount: amount ?? '',
       selectedType,
+      invoiceExpiry,
     });
   }
 

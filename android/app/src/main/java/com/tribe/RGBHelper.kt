@@ -68,24 +68,24 @@ object RGBHelper {
         }
     }
 
-    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, blinded: Boolean): String {
+    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, expiry: UInt, blinded: Boolean): String {
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
         val blindedData = if (blinded) {
-            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, expiry)
         } else {
-            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, expiry)
         }
         val gson = Gson()
         val json = gson.toJson(blindedData)
         return json.toString()
     }
 
-    fun receiveAsset(assetID: String, amount: ULong?, blinded: Boolean): String {
-        return handleMissingFunds{ startRGBReceiving(assetID, amount, blinded) }
+    fun receiveAsset(assetID: String, amount: ULong?,expiry: UInt, blinded: Boolean): String {
+        return handleMissingFunds{ startRGBReceiving(assetID, amount,expiry, blinded) }
     }
 
     private fun <T> handleMissingFunds(callback: () -> T): T {

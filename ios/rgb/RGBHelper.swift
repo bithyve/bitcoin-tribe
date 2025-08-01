@@ -491,7 +491,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData(assetID: String, amount: Float, blinded: Bool) -> String {
+  func genReceiveData(assetID: String, amount: Float, expiry: Int, blinded: Bool) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -518,14 +518,14 @@ import CloudKit
                   wallet.blindReceive(
                       assetId: assetId,
                       assignment: .any,
-                      durationSeconds: Constants.rgbBlindDuration,
+                      durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
                       minConfirmations: 1
                   ) :
                   wallet.witnessReceive(
                       assetId: assetId,
                       assignment: .any,
-                      durationSeconds: Constants.rgbBlindDuration,
+                      durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
                       minConfirmations: 1
                   )
@@ -574,6 +574,7 @@ import CloudKit
       guard let wallet = self.rgbManager.rgbWallet else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
       }
+      
       let walletData = wallet.getWalletData()
       let data = [
         "dataDir": walletData.dataDir,
@@ -682,8 +683,8 @@ import CloudKit
   }
   
   
-  @objc func receiveAsset(assetID: String, amount: Float, blinded: Bool, callback: @escaping ((String) -> Void)){
-    let response = self.genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
+  @objc func receiveAsset(assetID: String, amount: Float, expiry: Int, blinded: Bool, callback: @escaping ((String) -> Void)){
+    let response = self.genReceiveData(assetID: assetID, amount: amount,expiry:expiry, blinded: blinded)
     callback(response)
   }
   

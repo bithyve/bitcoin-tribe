@@ -1121,7 +1121,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset({ assetId, amount, linkedAsset, linkedAmount }) {
+  static async receiveAsset({ assetId, amount, linkedAsset, linkedAmount, expiry, blinded = true }) {
     try {
       assetId = assetId ?? '';
       amount = parseFloat(amount) ?? 0.0;
@@ -1133,6 +1133,8 @@ export class ApiHandler {
         ApiHandler.api,
         assetId,
         amount,
+        expiry,
+        blinded,
       );
       if (response.error) {
         throw new Error(response.error);
@@ -1174,16 +1176,18 @@ export class ApiHandler {
   static async receiveAssetOnLN({
     assetId,
     amount,
+    expiry,
   }: {
     assetId?: string;
     amount?: number;
+    expiry?: number;
   }) {
     try {
       const response = await ApiHandler.api.lninvoice({
         amt_msat: 3000000,
         asset_id: assetId,
         asset_amount: Number(amount),
-        expiry_sec: 4200,
+        expiry_sec: expiry,
       });
       if (response.invoice) {
         return response;

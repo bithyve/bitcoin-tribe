@@ -141,7 +141,8 @@ export default class RGBServices {
     api: RLNNodeApiServices,
     asset_id?: string,
     amount?: number,
-    blinded = true,
+    expiry?: number,
+    blinded?: boolean,
   ): Promise<{
     batchTransferIdx?: number;
     expirationTimestamp?: number;
@@ -158,7 +159,7 @@ export default class RGBServices {
         const response = await api.rgbinvoice({
           //asset_id,
           min_confirmations: 0,
-          duration_seconds: 86400,
+          duration_seconds: expiry,
         });
         if (response) {
           const data = snakeCaseToCamelCaseCase(response);
@@ -167,7 +168,7 @@ export default class RGBServices {
           return response;
         }
       } else {
-        const data = await RGB.receiveAsset(asset_id, amount, blinded);
+        const data = await RGB.receiveAsset(asset_id, amount, expiry, blinded);
         return JSON.parse(data);
       }
     } catch (error) {
