@@ -774,6 +774,7 @@ const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
     },
     inputStyle: {
       width: '80%',
+      paddingBottom: hp(5),
     },
     invoiceInputStyle: {
       borderRadius: hp(20),
