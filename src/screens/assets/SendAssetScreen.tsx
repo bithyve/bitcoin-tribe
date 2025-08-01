@@ -348,7 +348,7 @@ const SendAssetScreen = () => {
           setInvoice(cleanedText);
           setAssetAmount(
             res?.assignment?.amount.toString() !== '0'
-              ? res?.assignment?.amount.toString()
+              ? Number(res?.assignment?.amount / 10 ** precision).toString()
               : '',
           );
           setInvoiceValidationError('');
