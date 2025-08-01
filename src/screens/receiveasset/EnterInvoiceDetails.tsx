@@ -20,8 +20,6 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
-import Toast from 'src/components/Toast';
-import { formatNumber } from 'src/utils/numberWithCommas';
 import {
   Asset,
   Coin,
@@ -133,7 +131,9 @@ const EnterInvoiceDetails = () => {
   const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(
     Keys.INVOICE_EXPIRY,
   );
-  const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(
+    chosenAsset || null,
+  );
   const [assetsDropdown, setAssetsDropdown] = useState(false);
   const [selectedType, setSelectedType] = useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
@@ -195,19 +195,24 @@ const EnterInvoiceDetails = () => {
     navigation.navigate(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
-      amount: amount ?? '',
+      amount: amount !== '' ? selectedAsset?.precision === 0 ? amount : Number(amount) * 10 ** selectedAsset?.precision : '',
       selectedType,
       invoiceExpiry,
     });
   }
 
   const handleAmountInputChange = text => {
-    const cleanText = text.replace(/,/g, '');
-    const reg = /^\d*$/;
-    if (reg.test(cleanText)) {
+    let regex;
+    if (selectedAsset?.precision === 0) {
+      regex = /^[1-9]\d*$/;
+    } else {
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`);
+    }
+    if (text === '' || regex.test(text)) {
       setAmount(text);
     }
   };
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -260,15 +265,11 @@ const EnterInvoiceDetails = () => {
         <SelectYourAsset
           selectedAsset={selectedAsset}
           onPress={() => {
-            if (assetsData.length) {
-              setAssetsDropdown(true);
-            } else {
-              Toast(assets.noAssetsFoundMsg, true);
-            }
+            setAssetsDropdown(true);
           }}
         />
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
@@ -307,6 +308,7 @@ const EnterInvoiceDetails = () => {
             setSelectedAsset(item || item?.asset);
             setAssetsDropdown(false);
             setAssetId(item?.assetId || item?.asset?.assetId);
+            setAmount('');
           }}
           searchAssetInput={searchAssetInput}
           onChangeSearchInput={(text: string) => {
