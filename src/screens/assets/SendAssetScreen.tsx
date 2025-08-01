@@ -287,7 +287,7 @@ const SendAssetScreen = () => {
           parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
           10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
-        feeRate: selectedFeeRate === 1 ? 1.2 : selectedFeeRate,
+        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
       });
       setLoading(false);
