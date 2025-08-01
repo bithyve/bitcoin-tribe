@@ -188,10 +188,13 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
+  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
   const [assetAmount, setAssetAmount] = useState(
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
-      : amount || '',
+      : amount && amount !== '0'
+      ? (Number(amount) / 10 ** precision).toString()
+      : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -222,7 +225,6 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
-  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {
