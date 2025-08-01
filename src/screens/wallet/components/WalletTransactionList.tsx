@@ -11,7 +11,6 @@ import { useIsFocused } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
-
 import { hp, windowHeight } from 'src/constants/responsive';
 import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
@@ -29,16 +28,13 @@ import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import LoadingSpinner from 'src/components/LoadingSpinner';
+import useWallets from 'src/hooks/useWallets';
 
 function WalletTransactionList({
   transactions,
-  wallet,
-  coin,
   autoRefresh,
 }: {
   transactions: Transaction[];
-  wallet: Wallet;
-  coin?: string;
   autoRefresh?: boolean;
 }) {
   const isFocused = useIsFocused();
@@ -49,7 +45,7 @@ function WalletTransactionList({
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
   const [refreshing, setRefreshing] = useState(false);
-
+  const wallet: Wallet = useWallets({}).wallets[0];
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
@@ -68,9 +64,6 @@ function WalletTransactionList({
     }
   }, [autoRefresh && isFocused]);
 
-  // useEffect(() => {
-  //   pullDownToRefresh(); // auto-refresh the wallet on mount
-  // }, []);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
@@ -101,7 +94,7 @@ function WalletTransactionList({
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => pullDownToRefresh()}
-              colors={[theme.colors.accent1]} // You can customize this part
+              colors={[theme.colors.accent1]}
               progressBackgroundColor={theme.colors.inputBackground}
             />
           )
@@ -110,7 +103,6 @@ function WalletTransactionList({
         renderItem={({ item }) => (
           <WalletTransactions
           transId={item.transactionKind || item.txid}
-          tranStatus={item.status}
             transDate={item.date}
             transAmount={
               app.appType === AppType.NODE_CONNECT ||
@@ -119,8 +111,8 @@ function WalletTransactionList({
                 : `${item.amount}`
             }
             transType={item.transactionType}
+            transKind={item.transactionKind}
             transaction={item}
-            coin={coin}
             networkType={item.txid ? 'bitcoin' : 'lightning'}
           />
         )}

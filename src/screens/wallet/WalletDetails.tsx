@@ -175,7 +175,7 @@ function WalletDetails({ navigation, route }) {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : wallet?.specs?.transactions;
+      : wallet?.specs?.transactions.slice(0, 4);
 
   return (
     <ScreenContainer>
@@ -211,13 +211,10 @@ function WalletDetails({ navigation, route }) {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <WalletTransactionsContainer
-        navigation={navigation}
         refreshing={refreshing}
         transactions={transactionsData}
-        wallet={wallet}
         pullDownToRefresh={() => pullDownToRefresh()}
         autoRefresh={walletRefreshMutation.isLoading}
-        scrollY={scrollY}
       />
       <ResponsePopupContainer
         backColor={theme.colors.modalBackColor}

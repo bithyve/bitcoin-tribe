@@ -36,6 +36,7 @@ function TransactionsList({
   assetId = '',
   style,
   precision,
+  schema,
 }: {
   transactions: Transfer[];
   isLoading: boolean;
@@ -45,6 +46,7 @@ function TransactionsList({
   assetId: string;
   style?: StyleProp<ViewStyle>;
   precision: number;
+  schema: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -71,9 +73,7 @@ function TransactionsList({
           onPress={() => {
             navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
               assetId: assetId,
-              transactions: transactions,
-              assetName: coin,
-              precision: precision,
+              schema: schema,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>

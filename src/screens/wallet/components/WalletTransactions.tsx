@@ -38,7 +38,6 @@ type WalletTransactionsProps = {
   disabled?: boolean;
   transaction: Transaction;
   tranStatus?: string;
-  coin?: string;
   networkType?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
@@ -51,8 +50,6 @@ function WalletTransactions(props: WalletTransactionsProps) {
     transType,
     backColor,
     disabled,
-    tranStatus,
-    coin,
     networkType,
   } = props;
   const theme: AppTheme = useTheme();
@@ -124,14 +121,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        tranStatus
-          ? navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-              transaction: props.transaction,
-              coin: coin,
-            })
-          : navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
-              transaction: props.transaction,
-            })
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {transaction: props.transaction})
       }>
       <GradientView
         style={styles.container}

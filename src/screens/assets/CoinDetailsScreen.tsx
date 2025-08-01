@@ -166,7 +166,7 @@ const CoinDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : coin?.transactions;
+      : coin?.transactions.slice(0, 4);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark
@@ -231,6 +231,7 @@ const CoinDetailsScreen = () => {
         assetId={assetId}
         precision={coin.precision}
         scrollY={scrollY}
+        schema={RealmSchema.Coin}
       />
 
       <VerifyIssuerModal
