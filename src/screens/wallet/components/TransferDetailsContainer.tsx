@@ -107,7 +107,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
 
     navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
       url,
-      title: 'Mempool Explorer',
+      title: 'Transaction Details',
     });
   };
 
