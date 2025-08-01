@@ -296,7 +296,12 @@ const CoinsMetaDataScreen = () => {
               <SelectOption
                 title={assets.viewInRegistry}
                 subTitle={''}
-                onPress={() => openLink(`${config.REGISTRY_URL}/${assetId}`)}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                    url: `${config.REGISTRY_URL}/${assetId}`,
+                    title: 'Registry',
+                  })
+                }
                 testID={'view_in_registry'}
               />
             )}

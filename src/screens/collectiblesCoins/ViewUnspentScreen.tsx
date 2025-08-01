@@ -100,7 +100,7 @@ const ViewUnspentScreen = () => {
 
       navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
         url,
-        title: 'Mempool Explorer',
+        title: 'Transaction Details',
       });
     } else {
       Toast('Explorer not available!', true);

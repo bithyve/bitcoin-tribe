@@ -23,7 +23,7 @@ export default function WebViewScreen() {
   const { wallet } = translations;
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       <AppHeader
         title={title || ''}
         enableBack={true}
@@ -32,23 +32,31 @@ export default function WebViewScreen() {
       />
 
       {url ? (
-        <WebView
-          source={{ uri: url }}
-          startInLoadingState
-          javaScriptEnabled
-          domStorageEnabled
-          style={styles.container}
-          renderLoading={() => (
-            <View style={styles.loaderContainer}>
-              <LottieView
-                source={require('src/assets/images/jsons/loader.json')}
-                autoPlay
-                loop
-                style={styles.refreshLoader}
-              />
-            </View>
-          )}
-        />
+        <>
+          <WebView
+            source={{ uri: url }}
+            startInLoadingState
+            javaScriptEnabled
+            domStorageEnabled
+            style={[
+              styles.container,
+              { backgroundColor: theme.colors.primaryBackground },
+            ]}
+            containerStyle={{
+              backgroundColor: theme.colors.primaryBackground,
+            }}
+            renderLoading={() => (
+              <View style={styles.loaderContainer}>
+                <LottieView
+                  source={require('src/assets/images/jsons/loader.json')}
+                  autoPlay
+                  loop
+                  style={styles.refreshLoader}
+                />
+              </View>
+            )}
+          />
+        </>
       ) : null}
     </ScreenContainer>
   );
@@ -60,9 +68,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     loaderContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      marginBottom: '75%',
     },
     refreshLoader: {
       alignSelf: 'center',
