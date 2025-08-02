@@ -166,7 +166,7 @@ const CoinDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : coin?.transactions;
+      : coin?.transactions.slice(0, 4);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark
@@ -198,9 +198,6 @@ const CoinDetailsScreen = () => {
             wallet: wallet,
           });
         }}
-        onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
-        }
         onPressReceive={() => {
           if (isNodeInitInProgress) {
             Toast(node.connectingNodeToastMsg, true);
@@ -234,6 +231,7 @@ const CoinDetailsScreen = () => {
         assetId={assetId}
         precision={coin.precision}
         scrollY={scrollY}
+        schema={RealmSchema.Coin}
       />
 
       <VerifyIssuerModal
@@ -320,11 +318,11 @@ export default CoinDetailsScreen;
 
 const styles = StyleSheet.create({
   transactionContainer: {
-    height: windowHeight > 820 ? '52%' : '47%',
+    height: windowHeight > 820 ? '55%' : '50%',
   },
   transactionContainer1: {
     marginTop: hp(10),
-    height: windowHeight > 820 ? '52%' : '47%',
+    height: windowHeight > 820 ? '54%' : '49%',
   },
   toolTipCotainer: {
     top: windowHeight > 670 ? 90 : 70,

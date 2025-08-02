@@ -11,9 +11,11 @@ import AppText from 'src/components/AppText';
 type labelContentProps = {
   label: string;
   content: string;
+  contentUnderline?: boolean;
+  selectable?: boolean;
 };
 function TransferLabelContent(props: labelContentProps) {
-  const { label, content } = props;
+  const { label, content, contentUnderline = false, selectable = false } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -23,7 +25,10 @@ function TransferLabelContent(props: labelContentProps) {
       <AppText variant="body1" style={styles.labelStyle}>
         {label}
       </AppText>
-      <AppText variant="body2" style={styles.textStyle}>
+      <AppText
+        variant="body2"
+        selectable={selectable}
+        style={[styles.textStyle, contentUnderline && { textDecorationLine: 'underline' }]}>
         {content}
       </AppText>
     </View>
@@ -32,21 +37,21 @@ function TransferLabelContent(props: labelContentProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     wrapper: {
-      marginVertical: hp(10),
+      marginVertical: hp(5),
       width: '100%',
       justifyContent: 'space-between',
       flexDirection: 'row',
     },
     labelStyle: {
       color: theme.colors.headingColor,
-      width: '50%',
+      flex: 2,
     },
     textStyle: {
       lineHeight: 20,
       color: theme.colors.secondaryHeadingColor,
       flexWrap: 'wrap',
-      width: '50%',
-      textAlign: 'right',
+      textAlign: 'left',
+      flex: 3,
     },
   });
 export default TransferLabelContent;

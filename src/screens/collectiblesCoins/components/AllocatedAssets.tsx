@@ -19,17 +19,17 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
 
   const mediaPath = useMemo(() => {
-    if (asset.assetSchema.toUpperCase() === AssetSchema.UDA) {
+    if (asset?.assetSchema?.toUpperCase() === AssetSchema.UDA) {
       return (asset as UniqueDigitalAsset).token.media.filePath;
-    } else if (asset.assetSchema.toUpperCase() === AssetSchema.Collectible) {
+    } else if (asset?.assetSchema?.toUpperCase() === AssetSchema.Collectible) {
       return (asset as Collectible).media.filePath;
     }
     return null;
-  }, [asset.assetSchema]);
+  }, [asset?.assetSchema]);
 
   return (
     <View style={styles.container}>
-      <View key={asset.assetId}>
+      <View key={asset?.assetId}>
         {mediaPath ? (
           <Image
             source={{
@@ -43,8 +43,8 @@ const AllocatedAssets = ({ asset }: allocatedAssetsProps) => {
           />
         ) : (
           <AssetIcon
-            iconUrl={asset.iconUrl}
-            assetID={asset.assetId}
+            iconUrl={asset?.iconUrl}
+            assetID={asset?.assetId}
             size={30}
             verified={asset?.issuer?.verified}
           />

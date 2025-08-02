@@ -5,7 +5,6 @@ const finalURL = `https://www.bitcointribe.app/${envValue.toLowerCase()}/ramp/`;
 
 export const fetchRampReservation = ({ receiveAddress }) => {
   try {
-    console.log('receiveAddress', receiveAddress);
     const url = `${config.RAMP_BASE_URL}?\
 hostAppName=${'Bitcoin Tribe'}&\
 userAddress=${receiveAddress}&\

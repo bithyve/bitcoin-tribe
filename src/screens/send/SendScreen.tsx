@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
 import { Code } from 'react-native-vision-camera';
@@ -16,7 +16,7 @@ import { PaymentInfoKind } from 'src/services/wallets/enums';
 import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
@@ -24,6 +24,16 @@ import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
 import useWallets from 'src/hooks/useWallets';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
+import Relay from 'src/services/relay';
+import AppText from 'src/components/AppText';
+import Modal from 'react-native-modal';
+import AddToWalletIcon from 'src/assets/images/add-to-wallet.svg';
+import AddToWalletIconLight from 'src/assets/images/add-to-wallet-light.svg';
+import Buttons from 'src/components/Buttons';
+import AssetIcon from 'src/components/AssetIcon';
+import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -41,6 +51,9 @@ function SendScreen({ route, navigation }) {
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const allAssets: Asset[] = [...coins, ...collectibles];
+  const [addAssetModal, setAddAssetModal] = useState(false);
+  const [assetData, setAssetData] = useState<Asset | null>(null);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const navigateWithDelay = (callback: () => void) => {
     setVisible(false);
@@ -78,6 +91,35 @@ function SendScreen({ route, navigation }) {
         setVisibleModal(false);
         return;
       }
+      if (
+        value.startsWith(config.REGISTRY_URL) ||
+        (value.includes('rgb:') && value.length < 60)
+      ) {
+        setVisible(false);
+        setIsScanning(false);
+        const parts = value.split('/').filter(Boolean);
+        const assetId = parts[parts.length - 1] || null;
+        if (assetId) {
+          if (allAssets.find(item => item.assetId === assetId)) {
+            setVisibleModal(false);
+            setIsScanning(true);
+            Toast('Asset already exists in your wallet', true);
+            return;
+          }
+          const res = await Relay.lookupAsset(assetId);
+          setVisibleModal(false);
+          if (res.status) {
+            setAssetData(res.asset);
+            navigateWithDelay(() => {
+              setAddAssetModal(true);
+            });
+          } else {
+            Toast(res.error, true);
+          }
+          return;
+        }
+      }
+
       if (value.startsWith('tribe://')) {
         setIsScanning(true);
         setVisibleModal(false);
@@ -104,6 +146,13 @@ function SendScreen({ route, navigation }) {
       if (value.startsWith('rgb:')) {
         try {
           const res = await ApiHandler.decodeInvoice(value);
+          if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+            setVisible(false);
+            setIsScanning(true);
+            setVisibleModal(false);
+            Toast('This invoice is not valid for the current network', true);
+            return;
+          }
           if (res.assetId) {
             const assetData = allAssets.find(
               item => item.assetId === res.assetId,
@@ -123,7 +172,7 @@ function SendScreen({ route, navigation }) {
                   assetId: res.assetId,
                   wallet: wallet,
                   rgbInvoice: value,
-                  amount: res.amount.toString(),
+                  amount: res?.assignment?.amount.toString(),
                 });
               });
             }
@@ -258,6 +307,89 @@ function SendScreen({ route, navigation }) {
           errorMessage={validatingInvoiceErrorMsg}
         />
       </ModalContainer>
+
+      <Modal
+        isVisible={addAssetModal}
+        onDismiss={() => {
+          setAddAssetModal(false);
+          setIsScanning(true);
+        }}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}>
+        <View style={styles.addAssetModalContent}>
+          <AppText variant="heading2" style={styles.addAssetModalTitle}>
+            Do you want to add this asset to your wallet?
+          </AppText>
+          <AppText variant="body2" style={styles.addAssetModalSubTitle}>
+            Once added, you can view and manage this asset in your wallet.
+          </AppText>
+          <View style={styles.line} />
+          <View style={styles.addAssetModalTitleContainer}>
+            <View>
+              <View style={styles.row}>
+                <AppText>{'Name: '}</AppText>
+                <AppText>{assetData?.name}</AppText>
+              </View>
+
+              {assetData?.ticker&& (
+                <View style={styles.row}>
+                  <AppText>{'Ticker: '}</AppText>
+                  <AppText>{assetData?.ticker}</AppText>
+                </View>
+              )}
+
+              <View style={styles.row}>
+                <AppText>{'Schema: '}</AppText>
+                <AppText>{assetData?.metaData.assetSchema}</AppText>
+              </View>
+
+              <View style={styles.row}>
+                <AppText>{'Issued Supply: '}</AppText>
+                <AppText>
+                  {numberWithCommas(
+                    Number(assetData?.issuedSupply) /
+                      10 ** assetData?.precision,
+                  )}
+                </AppText>
+              </View>
+            </View>
+            <View>
+              {(assetData?.iconUrl || assetData?.media?.thumbnail) ? (
+                <Image
+                  source={{
+                    uri: assetData?.iconUrl || assetData?.media?.thumbnail,
+                  }}
+                  style={styles.imageStyle}
+                />
+              ) : (
+                <AssetIcon
+                  assetID={assetData?.assetId}
+                  size={65}
+                  style={styles.assetIcon}
+                />
+              )}
+            </View>
+          </View>
+
+          <View style={styles.addAssetModalIconContainer}>
+            {isThemeDark ? <AddToWalletIcon /> : <AddToWalletIconLight />}
+          </View>
+
+          <Buttons
+            primaryTitle={'Add To Wallet'}
+            primaryOnPress={() => {
+              ApiHandler.addAssetToWallet({ asset: assetData });
+              setAddAssetModal(false);
+              Toast('Asset added to wallet', false);
+            }}
+            secondaryTitle={'Cancel'}
+            secondaryOnPress={() => setAddAssetModal(false)}
+            height={hp(14)}
+            width={wp(130)}
+            secondaryCTAWidth={wp(130)}
+          />
+        </View>
+      </Modal>
     </ScreenContainer>
   );
 }
@@ -266,6 +398,57 @@ const getStyles = (theme: AppTheme) =>
     scannerWrapper: {
       flex: 1,
       marginTop: hp(20),
+    },
+    addAssetModalContent: {
+      backgroundColor: theme.colors.modalBackColor,
+      padding: wp(20),
+      borderRadius: hp(30),
+      marginHorizontal: 0,
+      marginVertical: hp(10),
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    },
+    addAssetModalTitle: {
+      textAlign: 'left',
+    },
+    addAssetModalSubTitle: {
+      textAlign: 'left',
+      marginTop: hp(10),
+      color: '#787878',
+    },
+    line: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(10),
+    },
+    addAssetModalTitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: hp(4),
+    },
+    addAssetModalIconContainer: {
+      marginVertical: hp(25),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    assetIcon: {
+      marginRight: wp(10),
+    },
+    imageStyle: {
+      width: 65,
+      height: 65,
+      borderRadius: 10,
+      marginRight: wp(10),
     },
   });
 export default SendScreen;

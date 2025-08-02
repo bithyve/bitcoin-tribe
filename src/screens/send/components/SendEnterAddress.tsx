@@ -53,6 +53,12 @@ function SendEnterAddress({
       setInvoiceValidationError('');
       return;
     }
+    if (text.startsWith(config.REGISTRY_URL)) {
+      Keyboard.dismiss();
+      setAddress(text);
+      setInvoiceValidationError('');
+      return;
+    }
     if(text.startsWith('tribe://')) {
       Keyboard.dismiss();
       setAddress(text);

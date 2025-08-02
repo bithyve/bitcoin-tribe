@@ -15,8 +15,6 @@ import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
@@ -32,7 +30,7 @@ import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 
 function ReceiveAssetScreen() {
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const {
     receciveScreen,
     common,
@@ -45,6 +43,7 @@ function ReceiveAssetScreen() {
   const assetId = route.params.assetId || '';
   const amount = route.params.amount || 0;
   const selectedType = route.params.selectedType || 'bitcoin';
+  const invoiceExpiry = route.params.invoiceExpiry || 86400;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -72,7 +71,13 @@ function ReceiveAssetScreen() {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
         if (colorable.length > 0) {
-          mutate({ assetId, amount, linkedAsset: '', linkedAmount: 0 });
+          mutate({
+            assetId,
+            amount,
+            linkedAsset: '',
+            linkedAmount: 0,
+            expiry: invoiceExpiry,
+          });
         } else {
           createUtxos();
         }
@@ -80,11 +85,18 @@ function ReceiveAssetScreen() {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
           assetId,
+          expiry: invoiceExpiry,
         });
       }
     } else {
       if (colorable.length > 0) {
-        mutate({ assetId, amount, linkedAsset: assetId, linkedAmount: amount });
+        mutate({
+          assetId,
+          amount,
+          linkedAsset: assetId,
+          linkedAmount: amount,
+          expiry: invoiceExpiry,
+        });
       } else {
         createUtxos();
       }
@@ -107,6 +119,7 @@ function ReceiveAssetScreen() {
               amount: 0,
               linkedAsset: assetId,
               linkedAmount: amount,
+              expiry: invoiceExpiry,
             });
           }, 100);
           return true;
@@ -141,7 +154,13 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (createUtxoData) {
-      mutate({ assetId, amount, linkedAsset: '', linkedAmount: 0 });
+      mutate({
+        assetId,
+        amount,
+        linkedAsset: '',
+        linkedAmount: 0,
+        expiry: invoiceExpiry,
+      });
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
@@ -161,11 +180,18 @@ function ReceiveAssetScreen() {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
           assetId,
+          expiry: invoiceExpiry,
         });
       }
     } else {
       if (rgbInvoice === '') {
-        mutate({ assetId, amount, linkedAsset: '', linkedAmount: 0 });
+        mutate({
+          assetId,
+          amount,
+          linkedAsset: '',
+          linkedAmount: 0,
+          expiry: invoiceExpiry,
+        });
       }
     }
   }, [selectedType]);
@@ -243,13 +269,14 @@ function ReceiveAssetScreen() {
             />
             <ReceiveQrClipBoard
               qrCodeValue={qrValue}
-              icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
               message={assets.invoiceCopiedMsg}
             />
           </View>
           <FooterNote
             title={common.note}
-            subTitle={receciveScreen.noteSubTitle}
+            subTitle={formatString(receciveScreen.noteSubTitle, {
+              time: invoiceExpiry / 3600,
+            })}
             customStyle={styles.advanceOptionStyle}
           />
         </View>

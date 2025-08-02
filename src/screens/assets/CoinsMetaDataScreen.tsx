@@ -48,6 +48,7 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import config from 'src/utils/config';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
@@ -197,11 +198,12 @@ const CoinsMetaDataScreen = () => {
             <IssuerVerified
               id={twitterVerification?.id}
               name={twitterVerification?.name}
-              username={twitterVerification?.username.replace(/@/g, '')}
+              username={(twitterVerification?.username || '').replace(/@/g, '')}
               assetId={assetId}
               schema={RealmSchema.Coin}
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               setIsVerifyingIssuer={setIsVerifyingIssuer}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
             <IssuerDomainVerified
               domain={
@@ -221,6 +223,7 @@ const CoinsMetaDataScreen = () => {
                   });
                 }
               }}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
           </View>
           <View style={styles.rowWrapper}>
@@ -294,30 +297,28 @@ const CoinsMetaDataScreen = () => {
                 title={assets.viewInRegistry}
                 subTitle={''}
                 onPress={() =>
-                  openLink(
-                    `https://bitcointribe.app/registry?assetId=${assetId}`,
-                  )
+                  navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                    url: `${config.REGISTRY_URL}/${assetId}`,
+                    title: 'Registry',
+                  })
                 }
                 testID={'view_in_registry'}
               />
             )}
-            {hasIssuanceTransaction &&
-              // twitterVerification?.id &&
-              !twitterPostVerificationWithLink &&
-              !twitterPostVerification?.link && (
-                <SelectOption
-                  title={'Show your X post here'}
-                  subTitle={''}
-                  onPress={() =>
-                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                      assetId: assetId,
-                      schema: RealmSchema.Coin,
-                      asset: coin,
-                    })
-                  }
-                  testID={'import_x_post'}
-                />
-              )}
+            {hasIssuanceTransaction && (
+              <SelectOption
+                title={'Show your X post here'}
+                subTitle={''}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                    assetId: assetId,
+                    schema: RealmSchema.Coin,
+                    asset: coin,
+                  })
+                }
+                testID={'import_x_post'}
+              />
+            )}
           </View>
           {isAddedInRegistry && <View style={styles.seperatorView} />}
           {twitterPostVerificationWithLink?.link && (

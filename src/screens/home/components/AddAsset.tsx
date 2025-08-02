@@ -75,12 +75,10 @@ export const ServiceFee = ({
       <View style={styles.wrapper}>
         <View style={styles.amtContainer}>
           <View style={styles.labelWrapper}>
-            <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+            <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
           </View>
           <View style={styles.valueWrapper}>
-            <AppText style={styles.labelText}>{`${numberWithCommas(
-              feeDetails.fee,
-            )} sats`}</AppText>
+            <AppText style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
           </View>
         </View>
       </View>
@@ -91,6 +89,7 @@ export const ServiceFee = ({
             loadingTitle={assets.payInprocess}
             onSwipeComplete={onPay}
             backColor={theme.colors.swipeToActionThumbColor}
+            loaderTextColor={theme.colors.primaryCTAText}
           />
         </View>
         <SkipButton

@@ -16,8 +16,6 @@ object AppConstants {
 
     const val proxyConsignmentEndpoint = "rpcs://proxy.iriswallet.com/0.2/json-rpc"
     const val rgbDefaultPrecision: UByte = 0U
-    const val rgbBlindDuration = 86400U
-
     const val defaultFeeRate = 50.0F
 
     @JvmStatic

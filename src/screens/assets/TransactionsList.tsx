@@ -9,6 +9,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { useMMKVBoolean } from 'react-native-mmkv';
+
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
@@ -20,7 +23,9 @@ import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import RefreshControlView from 'src/components/RefreshControlView';
 import LoadingSpinner from 'src/components/LoadingSpinner';
-import { useNavigation } from '@react-navigation/native';
+import InfoIcon from 'src/assets/images/infoIcon2.svg';
+import InfoIconLight from 'src/assets/images/infoIcon2_light.svg';
+import { Keys } from 'src/storage';
 
 function TransactionsList({
   transactions,
@@ -31,6 +36,7 @@ function TransactionsList({
   assetId = '',
   style,
   precision,
+  schema,
 }: {
   transactions: Transfer[];
   isLoading: boolean;
@@ -40,26 +46,34 @@ function TransactionsList({
   assetId: string;
   style?: StyleProp<ViewStyle>;
   precision: number;
+  schema: string;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
 
   return (
     <View style={[styles.container, style]}>
       <View style={styles.contentWrapper}>
-        <AppText variant="heading3" style={styles.recentTransText}>
-          {walletTranslations.recentTransaction}
-        </AppText>
+        <View style={styles.contentWrapper1}>
+          <AppText variant="heading3" style={styles.recentTransText}>
+            {walletTranslations.recentTransaction}
+          </AppText>
+          <AppTouchable
+            onPress={() =>
+              navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
+            }>
+            {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+          </AppTouchable>
+        </View>
         <AppTouchable
           onPress={() => {
             navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
               assetId: assetId,
-              transactions: transactions,
-              assetName: coin,
-              precision: precision,
+              schema: schema,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>
@@ -128,8 +142,13 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    contentWrapper1: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     recentTransText: {
       color: theme.colors.secondaryHeadingColor,
+      marginRight: hp(5),
     },
     viewAllText: {
       color: theme.colors.accent1,

@@ -38,6 +38,8 @@ object RGBHelper {
             // val filter = listOf()
             val refresh =
                 RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, listOf(), false)
+            val failed = RGBWalletRepository.wallet?.failTransfers(RGBWalletRepository.online!!, null, false, false)
+            val deleted = RGBWalletRepository.wallet?.deleteTransfers(null, false)
             var assets = RGBWalletRepository.wallet?.listAssets(listOf())
             val rgb25Assets = assets?.cfa
             val rgb20Assets = assets?.nia
@@ -66,24 +68,24 @@ object RGBHelper {
         }
     }
 
-    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, blinded: Boolean): String {
+    private fun startRGBReceiving(assetID: String? = null, amount: ULong? = null, expiry: UInt, blinded: Boolean): String {
         val filter = listOf(
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, true),
             RefreshFilter(RefreshTransferStatus.WAITING_COUNTERPARTY, false)
         )
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, null, filter, true)
         val blindedData = if (blinded) {
-            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+            getBlindedUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, expiry)
         } else {
-            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, AppConstants.rgbBlindDuration)
+            getWitnessUTXO(if (assetID == "") null else assetID, if (amount == 0.toULong()) null else amount, expiry)
         }
         val gson = Gson()
         val json = gson.toJson(blindedData)
         return json.toString()
     }
 
-    fun receiveAsset(assetID: String, amount: ULong?, blinded: Boolean): String {
-        return handleMissingFunds{ startRGBReceiving(assetID, amount, blinded) }
+    fun receiveAsset(assetID: String, amount: ULong?,expiry: UInt, blinded: Boolean): String {
+        return handleMissingFunds{ startRGBReceiving(assetID, amount,expiry, blinded) }
     }
 
     private fun <T> handleMissingFunds(callback: () -> T): T {
@@ -119,20 +121,20 @@ object RGBHelper {
     private fun getBlindedUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.blindReceive(
             assetID,
-            assignment = Assignment.Any,
+            assignment = if (amount != null && amount > 0u) Assignment.Fungible(amount) else Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
-            0u
+            1u
         )
     }
 
     private fun getWitnessUTXO(assetID: String? = null, amount: ULong? = null, expirationSeconds: UInt): ReceiveData? {
         return RGBWalletRepository.wallet?.witnessReceive(
             assetID,
-            assignment = Assignment.Fungible(amount!!),
+            assignment = if (amount != null) Assignment.Fungible(amount) else Assignment.Any,
             expirationSeconds,
             listOf(AppConstants.proxyConsignmentEndpoint),
-            0u
+            1u
         )
     }
 
@@ -267,7 +269,7 @@ object RGBHelper {
             mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
-            0u,
+            1u,
             false
         ) }
         val jsonObject = JsonObject()

@@ -186,7 +186,7 @@ const CollectibleDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : collectible?.transactions;
+      : collectible?.transactions.slice(0, 4);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {
@@ -273,6 +273,7 @@ const CollectibleDetailsScreen = () => {
         scrollY={scrollY}
         style={styles.transactionContainer}
         precision={collectible.precision}
+        schema={RealmSchema.Collectible}
       />
       <VerifyIssuerModal
         assetId={collectible.assetId}

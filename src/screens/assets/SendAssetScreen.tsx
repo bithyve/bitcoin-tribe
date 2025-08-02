@@ -46,7 +46,7 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
-import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -188,10 +188,13 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
+  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
   const [assetAmount, setAssetAmount] = useState(
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
-      : amount || '',
+      : amount && amount !== '0'
+      ? (Number(amount) / 10 ** precision).toString()
+      : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -222,7 +225,6 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
-  const precision = assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -236,51 +238,33 @@ const SendAssetScreen = () => {
     }
   }, [createUtxos.data]);
 
- /* const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || null);
-    if (isNaN(numericValue)) {
-      setAmountValidationError('');
-      setAssetAmount('');
-    } else if (numericValue === 0) {
-      setAssetAmount(text);
-      setAmountValidationError(sendScreen.validationZeroNotAllowed);
-    } else if (Number(assetData?.balance.spendable) === 0) {
-      setAmountValidationError(
-        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
-      );
-    } else if (numericValue <= assetData?.balance.spendable) {
-      setAssetAmount(text);
-      setAmountValidationError('');
-    } else if (numericValue > Number(assetData?.balance.spendable)) {
-      setAmountValidationError(
-        assets.checkSpendableAmt + assetData?.balance.spendable,
-      );
-    } else {
-      setAssetAmount('');
-      setAmountValidationError('');
-    }
-  };*/
-
   const handleAmountInputChange = text => {
     let regex;
     if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
       regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
-    }    if (text === '' || regex.test(text)) {
-      setAssetAmount(text);
+    }
+    if (text === '' || regex.test(text)) {
       const numericValue = parseFloat(text || '0');
-      if (Number(assetData?.balance.spendable)/10**precision === 0) {
+      if (Number(assetData?.balance.spendable) / 10 ** precision === 0) {
         Keyboard.dismiss();
         Toast(
           sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
           true,
         );
-      } else if (numericValue <= Number(assetData?.balance.spendable)/10**precision ) {
+      } else if (
+        numericValue <=
+        Number(assetData?.balance.spendable) / 10 ** precision
+      ) {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
-        Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+        Toast(
+          assets.checkSpendableAmt +
+            Number(assetData?.balance.spendable) / 10 ** precision,
+          true,
+        );
       }
     }
   };
@@ -299,15 +283,16 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
-        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, ''))*10**precision,
+        amount:
+          parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+          10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
-        feeRate: selectedFeeRate,
+        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
       });
+      setLoading(false);
       if (response?.txid) {
-        setLoading(false);
         setSuccessStatus(true);
-        // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
@@ -329,6 +314,7 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
+      setLoading(false);
       setVisible(false);
       setTimeout(() => {
         Toast(`Failed: ${error}`, true);
@@ -351,14 +337,22 @@ const SendAssetScreen = () => {
       }
 
       const res = await ApiHandler.decodeInvoice(cleanedText);
-
+      if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+        setInvoiceValidationError('Invalid invoice');
+        Toast('This invoice is not valid for the current network', true);
+        return;
+      }
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
           setInvoice(cleanedText);
-          setAssetAmount(res.amount.toString() || '0');
+          setAssetAmount(
+            res?.assignment?.amount.toString() !== '0'
+              ? Number(res?.assignment?.amount / 10 ** precision).toString()
+              : '',
+          );
           setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
@@ -385,10 +379,17 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    if (assetData?.balance?.spendable) {
-      const spendableAmount = assetData.balance.spendable.toString();
-      setAssetAmount(spendableAmount);
-    }
+    const spendable = Number(assetData?.balance?.spendable);
+    if (isNaN(spendable)) return;
+
+    const formatted =
+      precision === 0
+        ? spendable.toString()
+        : (spendable / 10 ** precision)
+            .toFixed(precision)
+            .replace(/\.?0+$/, '');
+
+    setAssetAmount(formatted);
   };
 
   const handleCustomFeeInput = text => {
@@ -465,7 +466,11 @@ const SendAssetScreen = () => {
               : assets.collectible
           }
           assetId={assetId}
-          amount={assetData?.balance.spendable}
+          amount={
+            precision === 0
+              ? assetData?.balance.spendable
+              : Number(assetData?.balance.spendable) / 10 ** precision
+          }
           verified={assetData?.issuer?.verified}
           iconUrl={assetData.iconUrl}
         />
@@ -525,9 +530,7 @@ const SendAssetScreen = () => {
             <AppText variant="body2" style={styles.availableBalanceText}>
               {precision === 0
                 ? numberWithCommas(Number(assetData?.balance.spendable))
-                : numberWithCommas(Number(assetData?.balance.spendable) / 10 ** precision) +
-                  '.' +
-                  '0'.repeat(precision)}
+                : Number(assetData?.balance.spendable) / 10 ** precision}
             </AppText>
           </View>
         </View>
@@ -771,6 +774,7 @@ const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
     },
     inputStyle: {
       width: '80%',
+      paddingBottom: hp(5),
     },
     invoiceInputStyle: {
       borderRadius: hp(20),
