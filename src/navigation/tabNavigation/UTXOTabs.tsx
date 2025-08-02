@@ -4,7 +4,6 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import AppHeader from 'src/components/AppHeader';
 import ColorableUTXO from 'src/screens/collectiblesCoins/components/ColorableUTXO';
 import ColoredUTXO from 'src/screens/collectiblesCoins/components/ColoredUTXO';
@@ -16,15 +15,18 @@ import { Keys } from 'src/storage';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import UTXOTabBar from './UTXOTabBar';
+import Invoices from 'src/screens/collectiblesCoins/InvoicesScreen';
 
 const renderScene = SceneMap({
   colored: ColoredUTXO,
   colorable: ColorableUTXO,
+  invoices: Invoices,
 });
 
 const routes = [
   { key: 'colored', title: 'Colored' },
   { key: 'colorable', title: 'Colorable' },
+  { key: 'invoices', title: 'Invoices' },
 ];
 
 export default function UTXOTabs() {

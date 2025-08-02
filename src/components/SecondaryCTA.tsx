@@ -41,8 +41,8 @@ function SecondaryCTA(props: secondaryCTAProps) {
         labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
         style={styles.ctaContainerStyle}
         onPress={onPress}
-        maxFontSizeMultiplier={1}>
-        {secondaryCTAIcon}
+        maxFontSizeMultiplier={1}
+        icon={secondaryCTAIcon ? () => secondaryCTAIcon : undefined}>
         {title}
       </Button>
     </GradientView>

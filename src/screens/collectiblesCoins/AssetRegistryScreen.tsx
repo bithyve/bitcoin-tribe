@@ -154,7 +154,7 @@ function AssetRegistryScreen() {
         assetId,
       ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
-      const { status } = await Relay.registerAsset(app.id, asset);
+      const { status } = await Relay.enrollAsset(app.id, asset, app.authToken);
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
@@ -209,11 +209,12 @@ function AssetRegistryScreen() {
           <View style={styles.feeWrapper}>
             <View style={styles.amtContainer}>
               <View style={styles.labelWrapper}>
-                <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+                <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
               </View>
               <View style={styles.valueWrapper}>
                 <AppText style={styles.labelText}>{`${numberWithCommas(
-                  feeDetails?.fee,
+                  feeDetails?.fee, 
+                  0,
                 )} sats`}</AppText>
               </View>
             </View>
@@ -229,6 +230,7 @@ function AssetRegistryScreen() {
               }}
               backColor={theme.colors.swipeToActionThumbColor}
               resetCounter={swipeResetCounter}
+              loaderTextColor={theme.colors.primaryCTAText}
             />
           )}
           {!!feeDetails && (

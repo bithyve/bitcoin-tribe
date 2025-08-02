@@ -42,7 +42,7 @@ import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import { formatNumber } from 'src/utils/numberWithCommas';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
@@ -116,7 +116,7 @@ function IssueCollectibleScreen() {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
   );
 
   useEffect(() => {
@@ -146,8 +146,7 @@ function IssueCollectibleScreen() {
   const totalSupplyWithPrecision = useMemo(() => {
     const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
     const decimals = Number(precision) || 0;
-    const supplyWithPrecision = supply.toFixed(decimals);
-    return `${supplyWithPrecision} ${assetTicker}`;
+    return `${numberWithCommas(supply)} ${assetTicker}`;
   }, [totalSupplyAmt, precision, assetTicker]);
 
   const issueCollectible = useCallback(async () => {
@@ -159,7 +158,6 @@ function IssueCollectibleScreen() {
         description: description,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
-        addToRegistry: addToRegistry,
         filePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
@@ -225,7 +223,6 @@ function IssueCollectibleScreen() {
         name: assetName.trim(),
         details: description,
         ticker: assetTicker,
-        addToRegistry: addToRegistry,
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
@@ -429,7 +426,11 @@ function IssueCollectibleScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (
+        sanitizedText &&
+        BigInt(sanitizedText) * BigInt(10 ** precision) <=
+          MAX_ASSET_SUPPLY_VALUE
+      ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -528,7 +529,6 @@ function IssueCollectibleScreen() {
               error={assetDescValidationError}
             />
 
-
             <Slider
               title={assets.precision}
               value={precision}
@@ -555,8 +555,6 @@ function IssueCollectibleScreen() {
               returnKeyType="done"
               error={assetTotSupplyValidationError}
             />
-
-
             <View style={styles.totalSupplyWrapper}>
               <AppText variant="body2" style={styles.textInputTitle}>
                 Total Supply:

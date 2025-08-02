@@ -123,7 +123,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       padding: 15,
       borderRadius: 10,
-      marginTop: hp(15),
+      marginTop: hp(20),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
     },

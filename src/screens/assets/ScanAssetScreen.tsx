@@ -59,7 +59,7 @@ function ScanAssetScreen({ navigation }) {
             navigation.replace(NavigationRoutes.SENDASSET, {
               assetId: res.assetId,
               rgbInvoice: value,
-              amount: res.amount.toString(),
+              amount: res?.assignment?.amount.toString(),
               isUDA: isUDA,
             });
           }

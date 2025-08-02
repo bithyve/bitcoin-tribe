@@ -21,6 +21,8 @@ type OptionCardProps = {
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
   showRightArrow?: React.ReactNode;
+  showIcon?: boolean;
+  rightIcon?: React.ReactNode;
 };
 
 function OptionCard(props: OptionCardProps) {
@@ -31,6 +33,8 @@ function OptionCard(props: OptionCardProps) {
     style,
     onPress,
     showRightArrow = false,
+    showIcon = true,
+    rightIcon
   } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -59,7 +63,7 @@ function OptionCard(props: OptionCardProps) {
               </AppText>
             )}
           </View>
-          <View style={styles.iconWrapper}>
+{showIcon &&          <View style={styles.iconWrapper}>
             {showRightArrow ? (
               isThemeDark ? (
                 <IconRightArrow />
@@ -71,7 +75,8 @@ function OptionCard(props: OptionCardProps) {
             ) : (
               <IconArrowLight />
             )}
-          </View>
+          </View>}
+          {rightIcon && <View style={styles.iconWrapper}>{rightIcon}</View>}
         </View>
       </GradientView>
     </AppTouchable>

@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
@@ -13,7 +12,6 @@ import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Transaction } from 'src/services/wallets/interfaces';
-import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
@@ -32,6 +30,7 @@ import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
   transId: string;
+  transKind: TransactionKind;
   transDate: string;
   transAmount: string;
   transType: TransactionType;
@@ -39,20 +38,18 @@ type WalletTransactionsProps = {
   disabled?: boolean;
   transaction: Transaction;
   tranStatus?: string;
-  coin?: string;
   networkType?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
   const {
     transId,
+    transKind,
     transDate,
     transAmount,
     transType,
     backColor,
     disabled,
-    tranStatus,
-    coin,
     networkType,
   } = props;
   const theme: AppTheme = useTheme();
@@ -124,14 +121,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        tranStatus
-          ? navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-              transaction: props.transaction,
-              coin: coin,
-            })
-          : navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
-              transaction: props.transaction,
-            })
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {transaction: props.transaction})
       }>
       <GradientView
         style={styles.container}
@@ -167,7 +157,9 @@ function WalletTransactions(props: WalletTransactionsProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {tranStatus ? Capitalize(tranStatus) : transId}
+              {transKind === TransactionKind.SERVICE_FEE
+                ? 'Platform Fee'
+                : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm A')}

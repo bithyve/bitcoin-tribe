@@ -73,6 +73,7 @@ function UnspentUTXOElement({
           const assetName = allocation.assetId
             ? assetMap[allocation.assetId]?.name
             : null;
+          const precision = assetMap[allocation.assetId]?.precision;
           return (
             allocation.assetId && (
               <View key={allocation.assetId} style={styles.allocationWrapper}>
@@ -88,7 +89,11 @@ function UnspentUTXOElement({
                 {assetMap[allocation.assetId]?.assetSchema.toUpperCase() !==
                   AssetSchema.UDA && (
                   <AppText variant="body2" style={styles.assetAmountText}>
-                    {numberWithCommas(allocation.amount)}
+                    {numberWithCommas(
+                      precision === 0
+                        ? allocation.assignment.amount
+                        : allocation.assignment.amount / 10 ** precision,
+                    )}
                   </AppText>
                 )}
               </View>

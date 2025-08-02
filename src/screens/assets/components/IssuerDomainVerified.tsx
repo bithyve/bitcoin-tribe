@@ -39,12 +39,13 @@ interface IssuerDomainVerifiedProps {
   domain: string;
   verified?: boolean;
   onPress?: () => void;
+  hasIssuanceTransaction?: boolean;
 }
 
 const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   props: IssuerDomainVerifiedProps,
 ) => {
-  const { domain, verified, onPress } = props;
+  const { domain, verified, onPress, hasIssuanceTransaction } = props;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
   const theme: AppTheme = useTheme();
@@ -55,7 +56,10 @@ const IssuerDomainVerified: React.FC<IssuerDomainVerifiedProps> = (
   }
 
   return (
-    <AppTouchable style={styles.container} onPress={onPress}>
+    <AppTouchable
+      style={styles.container}
+      onPress={onPress}
+      disabled={!hasIssuanceTransaction && !verified}>
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>

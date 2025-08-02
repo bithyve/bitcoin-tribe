@@ -144,7 +144,7 @@ export default class Relay {
           type: walletImage.type,
         });
       }
-      formData.append('name', name);
+      formData.append('name', name || 'Satoshi’s Palette');
       formData.append('appID', appID);
       formData.append('publicId', publicId);
       formData.append('publicKey', publicKey);
@@ -363,16 +363,17 @@ export default class Relay {
     }
   };
 
-  public static registerAsset = async (
+  public static enrollAsset = async (
     appID: string,
     asset: Asset,
+    authToken: string,
   ): Promise<{ status: boolean }> => {
     try {
       let res;
       try {
         const formData = new FormData();
         formData.append('appID', appID);
-        formData.append('network', 'regtest');
+        formData.append('network', config.NETWORK_TYPE.toString());
         formData.append('asset', JSON.stringify(asset));
         if (asset?.media) {
           formData.append('media', {
@@ -413,8 +414,9 @@ export default class Relay {
             });
           });
         }
-        res = await RestClient.post(`${RELAY}/registry/add`, formData, {
+        res = await RestClient.post(`${RELAY}/registry/enroll`, formData, {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
         });
       } catch (err) {
         if (err.response) {
@@ -426,6 +428,81 @@ export default class Relay {
       }
       return res.data || res.json;
     } catch (err) {
+      const errMsg =
+        err?.response?.data?.err ||
+        err?.code ||
+        err?.message ||
+        'Asset registration failed';
+      throw new Error(errMsg);
+    }
+  };
+
+    public static registerAsset = async (
+    appID: string,
+    asset: Asset,
+    authToken: string,
+  ): Promise<{ status: boolean }> => {
+    try {
+      let res;
+      try {
+        const formData = new FormData();
+        formData.append('appID', appID);
+        formData.append('network', config.NETWORK_TYPE.toString());
+        formData.append('asset', JSON.stringify(asset));
+        if (asset?.media) {
+          formData.append('media', {
+            uri: Platform.select({
+              android: `file://${asset.media.filePath}`,
+              ios: asset.media.filePath,
+            }),
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${asset.media.filePath.split('/').pop()}`,
+            type: asset.media.mime,
+          });
+        } else if (asset?.token?.media) {
+          formData.append('media', {
+            uri: Platform.select({
+              android: `file://${asset.token.media.filePath}`,
+              ios: asset.token.media.filePath,
+            }),
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${asset.token.media.filePath
+              .split('/')
+              .pop()}`,
+            type: asset.token.media.mime,
+          });
+        }
+        if (asset?.token?.attachments) {
+          asset.token.attachments.forEach(attachment => {
+            formData.append('attachments', {
+              uri: Platform.select({
+                android: `file://${attachment.filePath}`,
+                ios: attachment.filePath,
+              }),
+              name: `${Math.random()
+                .toString(36)
+                .substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
+              type: attachment.mime,
+            });
+          });
+        }
+        res = await RestClient.post(`${RELAY}/registry/insert`, formData, {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      console.log('err', err);
       const errMsg =
         err?.response?.data?.err ||
         err?.code ||
@@ -638,6 +715,21 @@ export default class Relay {
       const res = await RestClient.post(`${RELAY}/registry/search`, {
         query,
       });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static lookupAsset = async (
+    assetId: string,
+  ): Promise<{
+    asset: Asset;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/registry/lookup/${assetId}`);
       return res.data;
     } catch (err) {
       throw new Error(err);

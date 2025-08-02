@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 
-// import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from 'src/screens/receive/components/ReceiveQrClipBoard';
 import FooterNote from 'src/components/FooterNote';
@@ -21,10 +18,7 @@ function ShowXPubContainer({ xpub }) {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ShowQRCode value={xpub} title={wallet.xPubDetails} />
-        <ReceiveQrClipBoard
-          qrCodeValue={xpub}
-          icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-        />
+        <ReceiveQrClipBoard qrCodeValue={xpub} />
       </ScrollView>
       <FooterNote
         title={common.note}

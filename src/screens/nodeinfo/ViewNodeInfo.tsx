@@ -65,7 +65,10 @@ const ViewNodeInfo = () => {
   useEffect(() => {
     mutate();
     const fetchStatus = async () => {
-      if (app.appType === AppType.SUPPORTED_RLN) {
+      if (
+        app.appType === AppType.SUPPORTED_RLN ||
+        app.appType === AppType.NODE_CONNECT
+      ) {
         try {
           setIsNodeStatusLoading(true);
           const status = await ApiHandler.checkNodeStatus(
