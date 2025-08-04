@@ -23,7 +23,10 @@ target 'tribe' do
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    # Enable the new architecture
+    :fabric_enabled => true,
+    :hermes_enabled => true
   )
   target 'tribeTests' do
     inherit! :complete
@@ -35,7 +38,10 @@ target 'tribe' do
     use_react_native!(
       :path => config[:reactNativePath],
       # An absolute path to your application root.
-      :app_path => "#{Pod::Config.instance.installation_root}/.."
+      :app_path => "#{Pod::Config.instance.installation_root}/..",
+      # Enable the new architecture
+      :fabric_enabled => true,
+      :hermes_enabled => true
     )
     end
 

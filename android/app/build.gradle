@@ -51,6 +51,8 @@ react {
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
+    autolinkLibrariesWithApp()
+
 }
 
 /**
@@ -69,7 +71,7 @@ def enableProguardInReleaseBuilds = false
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-def jscFlavor = 'org.webkit:android-jsc:+'
+def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
@@ -172,11 +174,8 @@ dependencies {
     exclude group: 'org.apache.httpcomponents'
     exclude module: 'guava-jdk5'
   }
-    if (hermesEnabled.toBoolean()) {
+    // Hermes is enabled/disabled by JS_ENGINE in gradle.properties
+    if (findProperty('JS_ENGINE') == 'hermes') {
         implementation("com.facebook.react:hermes-android")
-    } else {
-        implementation jscFlavor
     }
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

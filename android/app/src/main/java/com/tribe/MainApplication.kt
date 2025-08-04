@@ -9,9 +9,11 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import com.facebook.soloader.SoLoader
 import io.hexawallet.hexa.RGBPackage
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.bithyve.tribe.CloudBackupPackage
+import com.bithyve.tribe.AppConstants
+import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 
 class MainApplication : Application(), ReactApplication {
 
@@ -37,12 +39,8 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-    Fresco.initialize(this);  
-    SoLoader.init(this, false)
+    Fresco.initialize(this);
+    loadReactNative(this)
     AppConstants.initContext(applicationContext);
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
-      load()
-    }
   }
 }

@@ -2,13 +2,14 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
+#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"tribe";
-  
+  self.dependencyProvider = [RCTAppDependencyProvider new];
   NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
   if ([bundleIdentifier containsString:@"tribe.dev"]) {
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info-dev" ofType:@"plist"];
