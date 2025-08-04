@@ -1,7 +1,5 @@
 import { StyleSheet, FlatList, View } from 'react-native';
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import ScreenContainer from 'src/components/ScreenContainer';
-import AppHeader from 'src/components/AppHeader';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -12,7 +10,6 @@ import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import moment from 'moment';
 import AppText from 'src/components/AppText';
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Colors from 'src/theme/Colors';
 import AppTouchable from 'src/components/AppTouchable';
@@ -21,6 +18,11 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import dbManager from 'src/storage/realm/dbManager';
 import ModalLoading from 'src/components/ModalLoading';
+import EmptyStateView from 'src/components/EmptyStateView';
+import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
+import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 const ListItem = ({
   invoice,
@@ -46,25 +48,7 @@ const ListItem = ({
   };
 
   return (
-    <Swipeable
-      ref={ref}
-      overshootRight={false}
-      renderRightActions={() => (
-        <View style={styles.actionContainer}>
-          <AppTouchable style={styles.deleteButton} onPress={handleCancel}>
-            <AppText variant="body2" style={styles.deleteText}>
-              Cancel
-            </AppText>
-          </AppTouchable>
-          <AppTouchable
-            style={styles.deleteButton}
-            onPress={handleCopy}>
-            <AppText variant="body2" style={styles.copyText}>
-              Copy
-            </AppText>
-          </AppTouchable>
-        </View>
-      )}>
+    <AppTouchable onPress={handleCopy}>
       <GradientView
         style={styles.container}
         colors={[
@@ -104,8 +88,13 @@ const ListItem = ({
             )}
           </AppText>
         </View>
+        <AppTouchable onPress={handleCancel}>
+          <AppText variant="body2" style={styles.deleteText}>
+            Cancel Invoice
+          </AppText>
+        </AppTouchable>
       </GradientView>
-    </Swipeable>
+    </AppTouchable>
   );
 };
 
@@ -120,16 +109,21 @@ const InvoicesScreen = () => {
       moment(invoice.expirationTimestamp * 1000).isAfter(moment()),
     );
   }, [rgbWallet.invoices]);
-
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const handleCancel = async (invoice: RgbInvoice) => {
     try {
       setIsLoading(true);
-      const result = await ApiHandler.handleTransferFailure(invoice.batchTransferIdx, false);
+      const result = await ApiHandler.handleTransferFailure(
+        invoice.batchTransferIdx,
+        false,
+      );
       setIsLoading(false);
       if (result.status) {
         Toast('Invoice cancelled', false);
-        const updatedInvoices = invoices.filter(i => i.invoice !== invoice.invoice);
+        const updatedInvoices = invoices.filter(
+          i => i.invoice !== invoice.invoice,
+        );
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
@@ -152,24 +146,36 @@ const InvoicesScreen = () => {
   };
 
   return (
-    <ScreenContainer>
+    <GestureHandlerRootView>
+      {/* <AppHeader title={'Active Invoices'} enableBack={true} /> */}
       <ModalLoading visible={isLoading} />
-      <GestureHandlerRootView>
-        <AppHeader title={'Active Invoices'} enableBack={true} />
-        <FlatList
-          data={invoices.reverse()}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <ListItem invoice={item} onCancel={handleCancel} onCopy={handleCopy} />
-          )}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <AppText style={styles.emptyText}>No active invoices</AppText>
-            </View>
-          }
-        />
-      </GestureHandlerRootView>
-    </ScreenContainer>
+
+      <FlatList
+        data={invoices.reverse()}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <ListItem
+            invoice={item}
+            onCancel={handleCancel}
+            onCopy={handleCopy}
+          />
+        )}
+        ListEmptyComponent={
+          <EmptyStateView
+            style={styles.emptyContainer}
+            title={'No active invoices'}
+            subTitle={'You have no active invoices'}
+            IllustartionImage={
+              isThemeDark ? (
+                <NoTransactionIllustration />
+              ) : (
+                <NoTransactionIllustrationLight />
+              )
+            }
+          />
+        }
+      />
+    </GestureHandlerRootView>
   );
 };
 
@@ -221,8 +227,9 @@ const getStyles = (theme: AppTheme) =>
     deleteText: {
       color: Colors.ImperialRed,
       fontSize: 14,
-      marginVertical: hp(5),
-      textAlign: 'left',
+      marginTop: hp(10),
+      textAlign: 'center',
+      textDecorationLine: 'underline',
     },
     copyText: {
       fontSize: 14,

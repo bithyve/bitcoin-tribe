@@ -98,7 +98,7 @@ function RGBAssetList(props: DropdownProps) {
             inputStyle={styles.inputStyle}
             rightIcon={
               isLoading ? (
-                <ActivityIndicator size="small" />
+                <ActivityIndicator size="small" color={theme.colors.accent1} />
               ) : isThemeDark ? (
                 <IconSearch />
               ) : (

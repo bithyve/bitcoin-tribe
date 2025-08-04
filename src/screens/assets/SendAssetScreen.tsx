@@ -188,10 +188,13 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
+  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
   const [assetAmount, setAssetAmount] = useState(
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
-      : amount || '',
+      : amount && amount !== '0'
+      ? (Number(amount) / 10 ** precision).toString()
+      : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -222,7 +225,6 @@ const SendAssetScreen = () => {
       (selectedPriority === TxPriority.CUSTOM && !customFee)
     );
   }, [invoice, assetAmount, customFee, selectedPriority]);
-  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
 
   useEffect(() => {
     if (createUtxos.data) {
@@ -285,7 +287,7 @@ const SendAssetScreen = () => {
           parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
           10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
-        feeRate: selectedFeeRate === 1 ? 1.2 : selectedFeeRate,
+        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
       });
       setLoading(false);
@@ -348,7 +350,7 @@ const SendAssetScreen = () => {
           setInvoice(cleanedText);
           setAssetAmount(
             res?.assignment?.amount.toString() !== '0'
-              ? res?.assignment?.amount.toString()
+              ? Number(res?.assignment?.amount / 10 ** precision).toString()
               : '',
           );
           setInvoiceValidationError('');
@@ -772,6 +774,7 @@ const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
     },
     inputStyle: {
       width: '80%',
+      paddingBottom: hp(5),
     },
     invoiceInputStyle: {
       borderRadius: hp(20),

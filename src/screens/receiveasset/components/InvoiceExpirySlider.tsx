@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
-
 import Fonts from 'src/constants/Fonts';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 
-const LABELS = ['6 Hr', '12 Hr', '1 Day', '2 Day'];
-const STEPS = [6, 12, 24, 48];
+const LABELS = ['1 Hr', '6 Hrs', '12 Hrs', '1 Day', '2 Days'];
+const STEPS = [3600, 21600, 43200, 86400, 172800];
 
 type Props = {
   value: number;

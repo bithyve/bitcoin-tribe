@@ -47,12 +47,6 @@ function WalletSettings() {
           onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
         />
 
-        <SelectOption
-          title={'View Invoices'}
-          // subTitle={strings.viewUnspent}
-          onPress={() => navigation.navigate(NavigationRoutes.INVOICES)}
-        />
-
         {app.appType === AppType.ON_CHAIN ? (
           <SelectOption
             title={strings.showXPub}

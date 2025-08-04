@@ -1,34 +1,24 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import LottieView from 'lottie-react-native';
-
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
-import { Keys } from 'src/storage';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
 
 export default function WebViewScreen() {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const navigation = useNavigation();
   const route = useRoute<any>();
   const { url, title } = route.params;
-  const { translations } = React.useContext(LocalizationContext);
-  const { wallet } = translations;
 
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
         title={title || ''}
         enableBack={true}
-        rightText={'Close'}
-        onRightTextPress={() => navigation.goBack()}
       />
 
       {url ? (

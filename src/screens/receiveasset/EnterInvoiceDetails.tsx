@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -22,8 +20,6 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
-import Toast from 'src/components/Toast';
-import { formatNumber } from 'src/utils/numberWithCommas';
 import {
   Asset,
   Coin,
@@ -123,8 +119,6 @@ const EnterInvoiceDetails = () => {
     common,
     assets,
     home,
-    sendScreen,
-    wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -133,11 +127,15 @@ const EnterInvoiceDetails = () => {
   const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
-  const [inputHeight, setInputHeight] = React.useState(50);
-  const [invoiceExpiry, setInvoiceExpiry] = useState(12);
-  const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
+  const [inputHeight, setInputHeight] = useState(50);
+  const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(
+    Keys.INVOICE_EXPIRY,
+  );
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(
+    chosenAsset || null,
+  );
   const [assetsDropdown, setAssetsDropdown] = useState(false);
-  const [selectedType, setSelectedType] = React.useState(
+  const [selectedType, setSelectedType] = useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
       ? 'lightning'
       : 'bitcoin',
@@ -173,10 +171,12 @@ const EnterInvoiceDetails = () => {
   );
 
   const styles = getStyles(theme, inputHeight, app.appType);
-  const handlePasteAddress = async () => {
-    const clipboardValue = await Clipboard.getString();
-    setAssetId(clipboardValue);
-  };
+
+  useEffect(() => {
+    if (invoiceExpiry === undefined) {
+      setInvoiceExpiry(86400);
+    }
+  }, [invoiceExpiry]);
 
   useEffect(() => {
     const searchAsset = async () => {
@@ -195,18 +195,24 @@ const EnterInvoiceDetails = () => {
     navigation.navigate(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
-      amount: amount ?? '',
+      amount: amount !== '' ? selectedAsset?.precision === 0 ? amount : Number(amount) * 10 ** selectedAsset?.precision : '',
       selectedType,
+      invoiceExpiry,
     });
   }
 
   const handleAmountInputChange = text => {
-    const cleanText = text.replace(/,/g, '');
-    const reg = /^\d*$/;
-    if (reg.test(cleanText)) {
+    let regex;
+    if (selectedAsset?.precision === 0) {
+      regex = /^[1-9]\d*$/;
+    } else {
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`);
+    }
+    if (text === '' || regex.test(text)) {
       setAmount(text);
     }
   };
+
   return (
     <ScreenContainer>
       <AppHeader
@@ -259,15 +265,11 @@ const EnterInvoiceDetails = () => {
         <SelectYourAsset
           selectedAsset={selectedAsset}
           onPress={() => {
-            if (assetsData.length) {
-              setAssetsDropdown(true);
-            } else {
-              Toast(assets.noAssetsFoundMsg, true);
-            }
+            setAssetsDropdown(true);
           }}
         />
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
@@ -306,6 +308,7 @@ const EnterInvoiceDetails = () => {
             setSelectedAsset(item || item?.asset);
             setAssetsDropdown(false);
             setAssetId(item?.assetId || item?.asset?.assetId);
+            setAmount('');
           }}
           searchAssetInput={searchAssetInput}
           onChangeSearchInput={(text: string) => {
