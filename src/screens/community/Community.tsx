@@ -9,10 +9,15 @@ import dbManager from 'src/storage/realm/dbManager';
 import { MessageType } from 'src/models/interfaces/Community';
 import { v4 as uuidv4 } from 'uuid';
 import Relay from 'src/services/relay';
-import { Community as CommunityType, CommunityType as CommunityTypeEnum } from 'src/models/interfaces/Community';
+import {
+  Community as CommunityType,
+  CommunityType as CommunityTypeEnum,
+} from 'src/models/interfaces/Community';
 import CommunityList from './components/CommunityList';
 import ChatPeerManager from 'src/services/p2p/ChatPeerManager';
 import Toast from 'src/components/Toast';
+import { ChatKeyManager } from 'src/utils/ChatEnc';
+import { hash256 } from 'src/utils/encryption';
 
 function Community() {
   const route = useRoute();
@@ -24,10 +29,12 @@ function Community() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (route.params?.publicKey && route.params?.type === CommunityTypeEnum.Peer) {
+      if (
+        route.params?.publicKey &&
+        route.params?.type === CommunityTypeEnum.Peer
+      ) {
         initChat(route.params.publicKey);
       } else if (route.params?.groupKey) {
-        
       }
     });
     return unsubscribe;
@@ -35,16 +42,17 @@ function Community() {
 
   const initChat = async (publicKey: string) => {
     try {
-      const profiles = await Relay.getWalletProfiles([
-        publicKey,
-      ]);
+      const profiles = await Relay.getWalletProfiles([publicKey]);
       if (profiles.results.length > 0) {
         dbManager.createObject(RealmSchema.Contact, profiles.results[0]);
       }
-      const communityId = [app.contactsKey.publicKey, publicKey]
-        .sort()
-        .join('-');
-      const community = communities.find(c => c.id === communityId);
+      const communityId = hash256([app.contactsKey.publicKey, publicKey].sort().join('-'));
+      const sessionKeys = ChatKeyManager.generateSessionKeys();
+      const encryptedKeys = ChatKeyManager.encryptKeys(
+        sessionKeys.aesKey,
+        ChatKeyManager.performKeyExchange(app.contactsKey, publicKey),
+      );
+      const community = dbManager.getObjectByPrimaryId(RealmSchema.Community, 'id', communityId);
       if (!community) {
         dbManager.createObject(RealmSchema.Community, {
           id: communityId,
@@ -53,6 +61,7 @@ function Community() {
           createdAt: Date.now(),
           type: CommunityTypeEnum.Peer,
           with: publicKey,
+          key: sessionKeys.aesKey,
         });
         const message = {
           id: uuidv4(),
@@ -62,7 +71,8 @@ function Community() {
           createdAt: Date.now(),
           sender: app.contactsKey.publicKey,
           unread: false,
-        } 
+          encryptedKeys: encryptedKeys,
+        };
         cm.sendMessage(publicKey, JSON.stringify(message));
         dbManager.createObject(RealmSchema.Message, message);
         Toast('New Tribe Contact created', false);
@@ -98,7 +108,6 @@ function Community() {
 
     return;
     try {
-
       const profiles = await Relay.getWalletProfiles([
         app.contactsKey.publicKey,
       ]);
@@ -119,7 +128,6 @@ function Community() {
           with: data.publicKey,
         });
       }
-
     } catch (error) {
       console.error('Error creating community:', error);
     }
