@@ -1,3 +1,6 @@
+import { Asset } from './RGBWallet';
+import { EncryptedKeys } from 'src/utils/ChatEnc';
+
 export enum MessageType {
   Alert = 'Alert',
   Text = 'Text',
@@ -24,6 +27,32 @@ export interface Message {
   block: number;
   unread: boolean;
   fileUrl?: string;
+  request?: {
+    type: RequestType;
+    status: RequestStatus;
+    createdBy: string;
+    createdAt: number;
+    updatedAt: number;
+    notes?: string;
+    asset?: Asset;
+    amount?: number;
+    invoice?: string;
+    txid?: string;
+  };
+  encryptedKeys?: EncryptedKeys;
+}
+
+export enum RequestType {
+  SendSats = 'SendSats',
+  RequestSats = 'RequestSats',
+  SendAsset = 'SendAsset',
+  RequestAsset = 'RequestAsset',
+}
+
+export enum RequestStatus {
+  Pending = 'Pending',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
 }
 
 export interface Community {
@@ -33,6 +62,7 @@ export interface Community {
   createdAt: number;
   updatedAt: number;
   with?: string;
+  key?: string;
   // messages: Message[];
   // members: string[];
 }

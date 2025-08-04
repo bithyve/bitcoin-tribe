@@ -8,7 +8,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import MessageList from './components/MessageList';
 import MessageInput from './components/MessageInput';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -22,11 +22,14 @@ import {
   Contact,
   Message,
   MessageType,
+  RequestType,
 } from 'src/models/interfaces/Community';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
 import ImageViewing from 'react-native-image-viewing';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ChatKeyManager } from 'src/utils/ChatEnc';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,6 +38,7 @@ const styles = StyleSheet.create({
 });
 
 const Chat = () => {
+  const navigation = useNavigation();
   const route = useRoute<RouteProp<{ params: { communityId: string } }>>();
   const communityId = route.params.communityId;
   const [message, setMessage] = useState('');
@@ -75,7 +79,8 @@ const Chat = () => {
           fileUrl: fileUrl,
         };
         dbManager.createObject(RealmSchema.Message, messageData);
-        cm.sendMessage(community.with, JSON.stringify({ ...messageData }));
+        const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
+        cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
         flatListRef.current?.scrollToIndex({ index: 0, animated: true });
         setMessage('');
       } catch (error) {
@@ -103,7 +108,7 @@ const Chat = () => {
 
   const markAsRead = async () => {
     try {
-      const unreadMessages = messages.filter(message => message.unread);
+      const unreadMessages = messages.filter(message => message.unread === true);
       unreadMessages.forEach(message => {
         dbManager.updateObjectByPrimaryId(
           RealmSchema.Message,
@@ -124,6 +129,7 @@ const Chat = () => {
       const image = await launchImageLibrary({
         mediaType: 'photo',
         selectionLimit: 1,
+        quality: 0.4,
       });
       if (image.assets?.length > 0) {
         setSending(true);
@@ -144,13 +150,15 @@ const Chat = () => {
   };
 
   const onPressRequest = async () => {
-    try {
-    } catch (error) {}
+    // navigation.navigate(NavigationRoutes.REQUESTORSEND, {
+    //   type: 'Request',
+    // });
   };
 
   const _onPressSend = async () => {
-    try {
-    } catch (error) {}
+    // navigation.navigate(NavigationRoutes.REQUESTORSEND, {
+    //   type: 'Send',
+    // });
   };
 
   return (

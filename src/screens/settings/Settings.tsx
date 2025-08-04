@@ -44,6 +44,7 @@ import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
+import BiometricUnlockModal from './components/BiometricUnlockModal';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -64,6 +65,7 @@ function SettingsScreen({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
+  const [visibleBiometricUnlock, setVisibleBiometricUnlock] = useState(false);
   const login = useMutation(ApiHandler.verifyPin);
 
   useEffect(() => {
@@ -119,10 +121,7 @@ function SettingsScreen({ navigation }) {
 
   const toggleBiometrics = useCallback(() => {
     if (pinMethod === PinMethod.DEFAULT) {
-      setIsEnableBiometrics(true);
-      navigation.navigate(NavigationRoutes.CREATEPIN, {
-        biometricProcess: true,
-      });
+      setVisibleBiometricUnlock(true);
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
     } else if (pinMethod === PinMethod.BIOMETRIC) {
@@ -281,6 +280,19 @@ function SettingsScreen({ navigation }) {
           PersonalizationMenu={PersonalizationMenu}
           AppSecurityMenu={AppSecurityMenu}
           SettingsMenu={SettingsMenu}
+        />
+      </View>
+      <View>
+        <BiometricUnlockModal
+          visible={visibleBiometricUnlock}
+          primaryCtaTitle={'Set Passcode'}
+          primaryOnPress={() => {
+            setVisibleBiometricUnlock(false);
+            setIsEnableBiometrics(true);
+            navigation.navigate(NavigationRoutes.CREATEPIN, {
+              biometricProcess: true,
+            });
+          }}
         />
       </View>
     </ScreenContainer>

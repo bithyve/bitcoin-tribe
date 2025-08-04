@@ -20,7 +20,6 @@ struct Constants{
   static let proxyConsignmentEndpoint = "rpcs://proxy.iriswallet.com/0.2/json-rpc"
   static let satsForRgb = 9000
   static let defaultFeeRate = 58.0
-  static let rgbBlindDuration = UInt32(86400)
   static let backupName = "%@.rgb_backup"
   
   public static func getElectrumUrl(network: String) -> String {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
@@ -12,7 +11,6 @@ import WalletDetails from 'src/screens/wallet/WalletDetails';
 import WalletAllTransactions from 'src/screens/wallet/WalletAllTransactions';
 import TransactionDetails from 'src/screens/wallet/TransactionDetails';
 import LanguageAndCurrency from 'src/screens/settings/LanguageAndCurrency';
-
 import HomeTabs from './tabNavigation/HomeTabs';
 import { NavigationRoutes } from './NavigationRoutes';
 import { AppStackParams } from './types';
@@ -88,6 +86,9 @@ import TransactionTypeInfoScreen from 'src/screens/assets/components/Transaction
 import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 import NodeConnected from 'src/components/NodeConnected';
 import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
+import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
+import WebViewScreen from 'src/screens/wallet/WebViewScreen';
+import RequestOrSend from 'src/screens/community/RequestOrSend';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -351,6 +352,17 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.GETBTCWITHRAMP}
           component={GetBTCWithRamp}
+        />
+        <Stack.Screen name={NavigationRoutes.REQUESTORSEND}
+          component={RequestOrSend}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.INVOICES}
+          component={InvoicesScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.WEBVIEWSCREEN}
+          component={WebViewScreen}
         />
       </Stack.Navigator>
     </RealmProvider>

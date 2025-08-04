@@ -143,7 +143,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
               style={[
                 styles.bottomNavigation,
                 {
-                  marginLeft: hp(2),
+                  marginLeft: hp(4),
                   color: isFocused
                     ? theme.colors.primaryCTAText
                     : theme.colors.disablePrimaryCTAText,
@@ -171,7 +171,7 @@ const getStyles = (theme: AppTheme) =>
       width: '89%',
       marginBottom: Platform.OS === 'ios' ? hp(15) : hp(35),
       marginHorizontal: hp(16),
-      // alignSelf: 'center',
+      alignSelf: 'center',
       // marginHorizontal: windowWidth * 0.1,
     },
     activeTab: {
@@ -182,13 +182,15 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.activeTabColor,
       borderRadius: 100,
       margin: 10,
-      paddingHorizontal: hp(15),
+      paddingHorizontal: hp(12),
+      minWidth: hp(125),
     },
     inActiveTab: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      minWidth: hp(50),
     },
     bottomNavigation: {
       fontSize: 12,

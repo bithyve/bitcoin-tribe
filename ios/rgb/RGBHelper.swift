@@ -14,36 +14,21 @@ import CloudKit
   
   var TAG = "TRIBE-RGB"
   
+  private static let jsonEncoder = JSONEncoder()
+  private static let jsonDecoder = JSONDecoder()
+  
   override init() {
     self.rgbManager = RgbManager.shared
   }
   
   
   @objc func generate_keys(btcNetwotk: String, callback: @escaping ((String) -> Void)){
-    let network = RgbManager.getRgbNetwork(network: btcNetwotk)
-    let keys = generateKeys(bitcoinNetwork: network)
-    if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-      let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
-      let data: [String: Any] = [
-        "mnemonic": keys.mnemonic,
-        "xpub": keys.xpub,
-        "masterFingerprint": keys.masterFingerprint,
-        "accountXpubColored": keys.accountXpubColored,
-        "accountXpubVanilla": keys.accountXpubVanilla,
-        "rgbDir": rgbURL.absoluteString,
-      ]
-      let json = Utility.convertToJSONString(params: data)
-      callback(json)
-    }
-  }
-  
-  @objc func restore_keys(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)){
-    let network = RgbManager.getRgbNetwork(network: btcNetwotk)
-    do{
-      let keys = try restoreKeys(bitcoinNetwork: network, mnemonic: mnemonic)
+    do {
+      let network = RgbManager.getRgbNetwork(network: btcNetwotk)
+      let keys = generateKeys(bitcoinNetwork: network)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
         let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
-        let data: [String: Any] = [
+        let data = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
           "masterFingerprint": keys.masterFingerprint,
@@ -53,13 +38,42 @@ import CloudKit
         ]
         let json = Utility.convertToJSONString(params: data)
         callback(json)
+      } else {
+        let errorData = ["error": "Document directory not found"]
+        let json = Utility.convertToJSONString(params: errorData)
+        callback(json)
       }
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
     }
-    catch{
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
-      let json = Utility.convertToJSONString(params: data)
+  }
+  
+  @objc func restore_keys(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)){
+    do {
+      let network = RgbManager.getRgbNetwork(network: btcNetwotk)
+      let keys = try restoreKeys(bitcoinNetwork: network, mnemonic: mnemonic)
+      if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
+        let data = [
+          "mnemonic": keys.mnemonic,
+          "xpub": keys.xpub,
+          "masterFingerprint": keys.masterFingerprint,
+          "accountXpubColored": keys.accountXpubColored,
+          "accountXpubVanilla": keys.accountXpubVanilla,
+          "rgbDir": rgbURL.absoluteString,
+        ]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      } else {
+        let errorData = ["error": "Document directory not found"]
+        let json = Utility.convertToJSONString(params: errorData)
+        callback(json)
+      }
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
@@ -96,315 +110,314 @@ import CloudKit
   }
   
   func getRgbAssetTransfers(assetId: String) -> String {
-      do {
-          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
-              print("rgbWallet or online is not initialized")
-              return "{}"
-          }
-          
-          let refresh = try wallet.refresh(online: online, assetId: assetId, filter: [
-              RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true),
-              RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
-          ], skipSync: false)
-          
-        let transfers = try wallet.listTransfers(assetId: assetId).reversed()
-          var jsonArray = [[String: Any]]()
-          
-          for transfer in transfers {
-              var jsonObject = [String: Any]()
-              jsonObject["idx"] = transfer.idx
-              jsonObject["txid"] = transfer.txid
-              jsonObject["createdAt"] = transfer.createdAt
-              jsonObject["updatedAt"] = transfer.updatedAt
-              jsonObject["recipientId"] = transfer.recipientId
-              jsonObject["status"] = "\(transfer.status)"
-              jsonObject["kind"] = "\(transfer.kind)"
-              jsonObject["expiration"] = transfer.expiration
-              jsonObject["batchTransferIdx"] = transfer.batchTransferIdx
-              jsonObject["invoiceString"] = transfer.invoiceString
-              
-              if let requestedAssignment = transfer.requestedAssignment {
-                  var assignmentObject = [String: Any]()
-                  switch requestedAssignment {
-                  case .fungible(let amount):
-                      assignmentObject["type"] = "Fungible"
-                      assignmentObject["amount"] = String(amount)
-                  case .nonFungible:
-                      assignmentObject["type"] = "NonFungible"
-                  case .inflationRight(let amount):
-                      assignmentObject["type"] = "InflationRight"
-                      assignmentObject["amount"] = String(amount)
-                  case .replaceRight:
-                      assignmentObject["type"] = "ReplaceRight"
-                  case .any:
-                      assignmentObject["type"] = "Any"
-                  }
-                  jsonObject["requestedAssignment"] = assignmentObject
-              }
-              var assignmentsArray = [[String: Any]]()
-              for assignment in transfer.assignments {
-                  var assignmentObject = [String: Any]()
-                  switch assignment {
-                  case .fungible(let amount):
-                      assignmentObject["type"] = "Fungible"
-                      assignmentObject["amount"] = String(amount)
-                  case .nonFungible:
-                      assignmentObject["type"] = "NonFungible"
-                  case .inflationRight(let amount):
-                      assignmentObject["type"] = "InflationRight"
-                      assignmentObject["amount"] = String(amount)
-                  case .replaceRight:
-                      assignmentObject["type"] = "ReplaceRight"
-                  case .any:
-                      assignmentObject["type"] = "Any"
-                  }
-                  assignmentsArray.append(assignmentObject)
-              }
-              jsonObject["assignments"] = assignmentsArray
-              
-              if let receiveUtxo = transfer.receiveUtxo {
-                  jsonObject["receiveUtxo"] = [
-                      "txid": receiveUtxo.txid,
-                      "vout": receiveUtxo.vout
-                  ]
-              }
-              
-              if let changeUtxo = transfer.changeUtxo {
-                  jsonObject["changeUtxo"] = [
-                      "txid": changeUtxo.txid,
-                      "vout": changeUtxo.vout
-                  ]
-              }
-              
-              jsonObject["transportEndpoints"] = transfer.transportEndpoints.map { endpoint in
-                  return [
-                      "endpoint": endpoint.endpoint,
-                      "used": endpoint.used,
-                      "transportType": "\(endpoint.transportType)"
-                  ]
-              }
-              jsonArray.append(jsonObject)
-          }
-          
-          let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
-          let jsonString = String(data: jsonData, encoding: .utf8)!
-          return jsonString
-      } catch {
-          print(error)
-          return "{}"
+    do {
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "rgbWallet or online is not initialized"])
       }
+      
+      let refresh = try wallet.refresh(online: online, assetId: assetId, filter: [
+        RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: true),
+        RefreshFilter(status: RefreshTransferStatus.waitingCounterparty, incoming: false)
+      ], skipSync: false)
+      
+      let transfers = try wallet.listTransfers(assetId: assetId).reversed()
+      
+      let jsonArray = transfers.map { transfer -> [String: Any] in
+        var jsonObject: [String: Any] = [
+          "idx": transfer.idx,
+          "txid": transfer.txid,
+          "createdAt": transfer.createdAt,
+          "updatedAt": transfer.updatedAt,
+          "recipientId": transfer.recipientId,
+          "status": "\(transfer.status)",
+          "kind": "\(transfer.kind)",
+          "expiration": transfer.expiration,
+          "batchTransferIdx": transfer.batchTransferIdx,
+          "invoiceString": transfer.invoiceString
+        ]
+        
+        if let requestedAssignment = transfer.requestedAssignment {
+          var assignmentObject: [String: Any] = [:]
+          switch requestedAssignment {
+          case .fungible(let amount):
+            assignmentObject["type"] = "Fungible"
+            assignmentObject["amount"] = String(amount)
+          case .nonFungible:
+            assignmentObject["type"] = "NonFungible"
+          case .inflationRight(let amount):
+            assignmentObject["type"] = "InflationRight"
+            assignmentObject["amount"] = String(amount)
+          case .replaceRight:
+            assignmentObject["type"] = "ReplaceRight"
+          case .any:
+            assignmentObject["type"] = "Any"
+          }
+          jsonObject["requestedAssignment"] = assignmentObject
+        }
+        
+        let assignmentsArray = transfer.assignments.map { assignment -> [String: Any] in
+          var assignmentObject: [String: Any] = [:]
+          switch assignment {
+          case .fungible(let amount):
+            assignmentObject["type"] = "Fungible"
+            assignmentObject["amount"] = String(amount)
+          case .nonFungible:
+            assignmentObject["type"] = "NonFungible"
+          case .inflationRight(let amount):
+            assignmentObject["type"] = "InflationRight"
+            assignmentObject["amount"] = String(amount)
+          case .replaceRight:
+            assignmentObject["type"] = "ReplaceRight"
+          case .any:
+            assignmentObject["type"] = "Any"
+          }
+          return assignmentObject
+        }
+        jsonObject["assignments"] = assignmentsArray
+        
+        if let receiveUtxo = transfer.receiveUtxo {
+          jsonObject["receiveUtxo"] = [
+            "txid": receiveUtxo.txid,
+            "vout": receiveUtxo.vout
+          ]
+        }
+        
+        if let changeUtxo = transfer.changeUtxo {
+          jsonObject["changeUtxo"] = [
+            "txid": changeUtxo.txid,
+            "vout": changeUtxo.vout
+          ]
+        }
+        
+        jsonObject["transportEndpoints"] = transfer.transportEndpoints.map { endpoint in
+          return [
+            "endpoint": endpoint.endpoint,
+            "used": endpoint.used,
+            "transportType": "\(endpoint.transportType)"
+          ]
+        }
+        
+        return jsonObject
+      }
+      
+      let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: [])
+      return String(data: jsonData, encoding: .utf8) ?? "{}"
+    } catch {
+      print("getRgbAssetTransfers error: \(error)")
+      return "{}"
+    }
   }
 
   
   @objc func getUnspents(callback: @escaping ((String) -> Void)) {
-      do {
-          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
-              print("rgbWallet or online is not initialized")
-              callback("[]")
-              return
-          }
-          
-        let unspents = try wallet.listUnspents(online: online, settledOnly: false, skipSync: false)
-          var jsonString = "["
-          
-          for (index, unspent) in unspents.enumerated() {
-              jsonString += "{"
-              let utxo = unspent.utxo
-              jsonString += "\"utxo\":{"
-              jsonString += "\"outpoint\":{"
-              jsonString += "\"txid\":\"\(utxo.outpoint.txid)\","
-              jsonString += "\"vout\":\(utxo.outpoint.vout)"
-              jsonString += "},"
-              jsonString += "\"btcAmount\":\(utxo.btcAmount),"
-              jsonString += "\"colorable\":\(utxo.colorable),"
-              jsonString += "\"exists\":\(utxo.exists)"
-              jsonString += "},"
-              jsonString += "\"rgbAllocations\":["
-              
-              for (allocIndex, allocation) in unspent.rgbAllocations.enumerated() {
-                  jsonString += "{"
-                  if let assetId = allocation.assetId {
-                      jsonString += "\"assetId\":\"\(assetId)\","
-                  } else {
-                      jsonString += "\"assetId\":null,"
-                  }
-                  var assignmentDict: [String: Any] = [:]
-                  switch allocation.assignment {
-                  case .fungible(let amount):
-                      assignmentDict["type"] = "Fungible"
-                      assignmentDict["amount"] = "\(amount)"
-                  case .nonFungible:
-                      assignmentDict["type"] = "NonFungible"
-                  case .inflationRight(let amount):
-                      assignmentDict["type"] = "InflationRight"
-                      assignmentDict["amount"] = "\(amount)"
-                  case .replaceRight:
-                      assignmentDict["type"] = "ReplaceRight"
-                  case .any:
-                      assignmentDict["type"] = "Any"
-                  }
-                  if let assignmentData = try? JSONSerialization.data(withJSONObject: assignmentDict, options: []),
-                     let assignmentJson = String(data: assignmentData, encoding: .utf8) {
-                      jsonString += "\"assignment\":\(assignmentJson),"
-                  } else {
-                      jsonString += "\"assignment\":{},"
-                  }
-
-                  jsonString += "\"settled\":\(allocation.settled)"
-                  jsonString += "}"
-                  if allocIndex < unspent.rgbAllocations.count - 1 {
-                      jsonString += ","
-                  }
-              }
-              jsonString += "]"
-              jsonString += "}"
-              if index < unspents.count - 1 {
-                  jsonString += ","
-              }
-          }
-          
-          jsonString += "]"
-          callback(jsonString)
-      } catch {
-          print(error)
-          callback("[]")
+    do {
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "rgbWallet or online is not initialized"])
       }
+      
+      let unspents = try wallet.listUnspents(online: online, settledOnly: false, skipSync: false)
+      
+      let unspentsArray = unspents.map { unspent -> [String: Any] in
+        var unspentDict: [String: Any] = [
+          "pendingBlinded": unspent.pendingBlinded
+        ]
+        
+        let utxo = unspent.utxo
+        let utxoDict: [String: Any] = [
+          "outpoint": [
+            "txid": utxo.outpoint.txid,
+            "vout": utxo.outpoint.vout
+          ],
+          "btcAmount": utxo.btcAmount,
+          "colorable": utxo.colorable,
+          "exists": utxo.exists
+        ]
+        unspentDict["utxo"] = utxoDict
+        
+        let allocationsArray = unspent.rgbAllocations.map { allocation -> [String: Any] in
+          var allocationDict: [String: Any] = [
+            "assetId": allocation.assetId as Any,
+            "settled": allocation.settled
+          ]
+          
+          var assignmentDict: [String: Any] = [:]
+          switch allocation.assignment {
+          case .fungible(let amount):
+            assignmentDict["type"] = "Fungible"
+            assignmentDict["amount"] = "\(amount)"
+          case .nonFungible:
+            assignmentDict["type"] = "NonFungible"
+          case .inflationRight(let amount):
+            assignmentDict["type"] = "InflationRight"
+            assignmentDict["amount"] = "\(amount)"
+          case .replaceRight:
+            assignmentDict["type"] = "ReplaceRight"
+          case .any:
+            assignmentDict["type"] = "Any"
+          }
+          allocationDict["assignment"] = assignmentDict
+          
+          return allocationDict
+        }
+        unspentDict["rgbAllocations"] = allocationsArray
+        
+        return unspentDict
+      }
+      
+      let jsonData = try JSONSerialization.data(withJSONObject: unspentsArray, options: [])
+      let jsonString = String(data: jsonData, encoding: .utf8) ?? "[]"
+      callback(jsonString)
+    } catch {
+      print("getUnspents error: \(error)")
+      callback("[]")
+    }
   }
 
   func getRgbAssets() -> String {
-      do {
-          guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
-              print("rgbWallet or online is not initialized")
-              return "{}"
-          }
-
-        let refresh = try wallet.refresh(online: online, assetId: nil, filter: [], skipSync: false)
-          let assets = try wallet.listAssets(filterAssetSchemas: [])
-          
-          if let niaAssets = assets.nia {
-              try niaAssets.forEach { assetNia in
-                try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [], skipSync: false)
-              }
-          }
-          
-          if let cfaAssets = assets.cfa {
-              try cfaAssets.forEach { assetCfa in
-                try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
-              }
-          }
-        
-        if let udaAssets = assets.cfa {
-          try udaAssets.forEach { assetUda in
-              try wallet.refresh(online: online, assetId: assetUda.assetId, filter: [], skipSync: false)
-            }
-        }
-
-          var jsonArray = [[String: Any]]()
-          var jsonRgb121Array = [[String: Any]]()
-        var udaArray = [[String: Any]]()
-
-          if let niaAssets = assets.nia {
-              for asset in niaAssets {
-                  var jsonObject = [String: Any]()
-                  jsonObject["assetId"] = asset.assetId
-                  jsonObject["ticker"] = asset.ticker
-                  jsonObject["name"] = asset.name
-                  jsonObject["precision"] = asset.precision
-                  jsonObject["balance"] = [
-                      "future": asset.balance.future,
-                      "settled": asset.balance.settled,
-                      "spendable": asset.balance.spendable,
-                  ]
-                  jsonObject["issuedSupply"] = asset.issuedSupply
-                  jsonObject["timestamp"] = asset.timestamp
-                  jsonObject["addedAt"] = asset.addedAt
-                  jsonArray.append(jsonObject)
-              }
-          }
-          
-          if let cfaAssets = assets.cfa {
-              for asset in cfaAssets {
-                  var jsonRgb121Object = [String: Any]()
-                  jsonRgb121Object["assetId"] = asset.assetId
-                  jsonRgb121Object["balance"] = [
-                      "future": asset.balance.future,
-                      "settled": asset.balance.settled,
-                      "spendable": asset.balance.spendable,
-                  ]
-                  jsonRgb121Object["description"] = asset.details
-                  jsonRgb121Object["details"] = asset.details
-                  jsonRgb121Object["name"] = asset.name
-                  jsonRgb121Object["precision"] = asset.precision
-                  jsonRgb121Object["issuedSupply"] = asset.issuedSupply
-                  jsonRgb121Object["timestamp"] = asset.timestamp
-                  jsonRgb121Object["addedAt"] = asset.addedAt
-                  jsonRgb121Object["media"] = [
-                      "filePath": asset.media?.filePath,
-                      "mime": asset.media?.mime,
-                  ]
-                  jsonRgb121Object["dataPaths"] = [[String: Any]]() // Empty dataPaths array
-                  jsonRgb121Array.append(jsonRgb121Object)
-              }
-          }
-        
-        if let udaAssets = assets.uda {
-          for asset in udaAssets {
-                var udaObject = [String: Any]()
-                udaObject["assetId"] = asset.assetId
-                udaObject["balance"] = [
-                    "future": asset.balance.future,
-                    "settled": asset.balance.settled,
-                    "spendable": asset.balance.spendable,
-                ]
-            var media = [
-              "filePath": asset.token?.media?.filePath,
-              "mime": asset.token?.media?.mime,
-              "digest": asset.token?.media?.digest,
-            ]
-            var attachmentsArray = [String: [String: Any]]()
-            if let attachments = asset.token?.attachments {
-                for (key, value) in attachments {
-                    attachmentsArray["\(key)"] = [
-                        "filePath": value.filePath,
-                        "mime": value.mime,
-                        "digest": value.digest
-                    ]
-                }
-            }
-                udaObject["ticker"] = asset.ticker
-                udaObject["details"] = asset.details
-                udaObject["name"] = asset.name
-                udaObject["precision"] = asset.precision
-                udaObject["issuedSupply"] = asset.issuedSupply
-                udaObject["timestamp"] = asset.timestamp
-                udaObject["addedAt"] = asset.addedAt
-                udaObject["token"] = [
-                  "index": asset.token?.index,
-                  "ticker": asset.token?.ticker,
-                  "name": asset.token?.name,
-                  "details": asset.token?.details,
-                  "embeddedMedia": asset.token?.embeddedMedia,
-                  "reserves": asset.token?.reserves,
-                  "attachments": attachmentsArray,
-                  "media": media
-                ]
-                udaArray.append(udaObject)
-            }
-        }
-          
-          let data: [String: Any] = [
-              "nia": jsonArray,
-              "cfa": jsonRgb121Array,
-              "uda": udaArray
-          ]
-          
-          let json = Utility.convertToJSONString(params: data)
-          return json
-          
-      } catch {
-          print("Error: \(error)")
-          return "{}"
+    do {
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "rgbWallet or online is not initialized"])
       }
+
+      let refresh = try wallet.refresh(online: online, assetId: nil, filter: [], skipSync: false)
+      let assets = try wallet.listAssets(filterAssetSchemas: [])
+      let failed = try wallet.failTransfers(online: online, batchTransferIdx: nil, noAssetOnly: false, skipSync: false)
+      let deleted = try wallet.deleteTransfers(batchTransferIdx: nil, noAssetOnly: false)
+      
+      let niaAssets = assets.nia ?? []
+      let cfaAssets = assets.cfa ?? []
+      let udaAssets = assets.uda ?? []
+      
+      let refreshGroup = DispatchGroup()
+      
+      for assetNia in niaAssets {
+        refreshGroup.enter()
+        do {
+          try wallet.refresh(online: online, assetId: assetNia.assetId, filter: [], skipSync: false)
+          refreshGroup.leave()
+        } catch {
+          refreshGroup.leave()
+        }
+      }
+      
+      for assetCfa in cfaAssets {
+        refreshGroup.enter()
+        do {
+          try wallet.refresh(online: online, assetId: assetCfa.assetId, filter: [], skipSync: false)
+          refreshGroup.leave()
+        } catch {
+          refreshGroup.leave()
+        }
+      }
+      
+      for assetUda in udaAssets {
+        refreshGroup.enter()
+        do {
+          try wallet.refresh(online: online, assetId: assetUda.assetId, filter: [], skipSync: false)
+          refreshGroup.leave()
+        } catch {
+          refreshGroup.leave()
+        }
+      }
+      
+      refreshGroup.wait()
+
+      let jsonArray = niaAssets.map { asset -> [String: Any] in
+        return [
+          "assetId": asset.assetId,
+          "ticker": asset.ticker,
+          "name": asset.name,
+          "precision": asset.precision,
+          "balance": [
+            "future": asset.balance.future,
+            "settled": asset.balance.settled,
+            "spendable": asset.balance.spendable,
+          ],
+          "issuedSupply": asset.issuedSupply,
+          "timestamp": asset.timestamp,
+          "addedAt": asset.addedAt
+        ]
+      }
+      
+      let jsonRgb121Array = cfaAssets.map { asset -> [String: Any] in
+        return [
+          "assetId": asset.assetId,
+          "balance": [
+            "future": asset.balance.future,
+            "settled": asset.balance.settled,
+            "spendable": asset.balance.spendable,
+          ],
+          "description": asset.details,
+          "details": asset.details,
+          "name": asset.name,
+          "precision": asset.precision,
+          "issuedSupply": asset.issuedSupply,
+          "timestamp": asset.timestamp,
+          "addedAt": asset.addedAt,
+          "media": [
+            "filePath": asset.media?.filePath,
+            "mime": asset.media?.mime,
+          ],
+          "dataPaths": [[String: Any]]()
+        ]
+      }
+      
+      let udaArray = udaAssets.map { asset -> [String: Any] in
+        var media = [
+          "filePath": asset.token?.media?.filePath,
+          "mime": asset.token?.media?.mime,
+          "digest": asset.token?.media?.digest,
+        ]
+        
+        var attachmentsArray = [String: [String: Any]]()
+        if let attachments = asset.token?.attachments {
+          for (key, value) in attachments {
+            attachmentsArray["\(key)"] = [
+              "filePath": value.filePath,
+              "mime": value.mime,
+              "digest": value.digest
+            ]
+          }
+        }
+        
+        return [
+          "assetId": asset.assetId,
+          "balance": [
+            "future": asset.balance.future,
+            "settled": asset.balance.settled,
+            "spendable": asset.balance.spendable,
+          ],
+          "ticker": asset.ticker,
+          "details": asset.details,
+          "name": asset.name,
+          "precision": asset.precision,
+          "issuedSupply": asset.issuedSupply,
+          "timestamp": asset.timestamp,
+          "addedAt": asset.addedAt,
+          "token": [
+            "index": asset.token?.index,
+            "ticker": asset.token?.ticker,
+            "name": asset.token?.name,
+            "details": asset.token?.details,
+            "embeddedMedia": asset.token?.embeddedMedia,
+            "reserves": asset.token?.reserves,
+            "attachments": attachmentsArray,
+            "media": media
+          ]
+        ]
+      }
+      
+      let data = [
+        "nia": jsonArray,
+        "cfa": jsonRgb121Array,
+        "uda": udaArray
+      ]
+      
+      return Utility.convertToJSONString(params: data)
+    } catch {
+      print("getRgbAssets error: \(error)")
+      return "{}"
+    }
   }
 
   
@@ -433,49 +446,44 @@ import CloudKit
   }
   
   @objc func createUTXOs(feeRate: Int, num: Int, size: Int, upTo: Bool, callback: @escaping ((String) -> Void)) {
-      print("Creating UTXOs... \(feeRate)")
+    print("Creating UTXOs... \(feeRate)")
     
     do {
-        _ = try self.rgbManager.rgbWallet?.getAddress()
-      try self.rgbManager.rgbWallet?.sync(online: self.rgbManager.online!)
-    } catch {
-        print("Error getting address: \(error)")
-    }
-      
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
-          let data: [String: Any] = [
-              "error": "RGB Wallet or Online service is not initialized."
-          ]
-          let json = Utility.convertToJSONString(params: data)
-          callback(json)
-          return
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB Wallet or Online service is not initialized."])
       }
       
       do {
-          return try handleMissingFunds {
-              var attempts = 3
-              var newUTXOs: UInt8 = 0
-                            while newUTXOs == 0 && attempts > 0 {
-                  print("Attempting to create UTXOs, attempts left: \(attempts)")
-                              newUTXOs = try wallet.createUtxos(online: online, upTo: upTo, num: UInt8(num), size: UInt32(size), feeRate: UInt64(feeRate), skipSync: false)
-                  print("newUTXOs=\(newUTXOs)")
-                  attempts -= 1
-              }
-              
-              let data: [String: Any] = [
-                  "created": newUTXOs > 0
-              ]
-              let json = Utility.convertToJSONString(params: data)
-              callback(json)
-          }
-          
-      } catch let error {
-          let data: [String: Any] = [
-              "error": error.localizedDescription
-          ]
-          let json = Utility.convertToJSONString(params: data)
-          callback(json)
+        _ = try wallet.getAddress()
+        try wallet.sync(online: online)
+      } catch {
+        print("Error getting address: \(error)")
       }
+      
+      let data = try self.handleMissingFunds {
+        var attempts = 3
+        var newUTXOs: UInt8 = 0
+        
+        while newUTXOs == 0 && attempts > 0 {
+          print("Attempting to create UTXOs, attempts left: \(attempts)")
+          newUTXOs = try wallet.createUtxos(online: online, upTo: upTo, num: UInt8(num), size: UInt32(size), feeRate: UInt64(feeRate), skipSync: false)
+          print("newUTXOs=\(newUTXOs)")
+          attempts -= 1
+        }
+        
+        return [
+          "created": newUTXOs > 0
+        ]
+      }
+      
+      let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print("createUTXOs error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
+    }
   }
 
   
@@ -483,7 +491,7 @@ import CloudKit
 //    return try! self.rgbManager.rgbWallet!.createUtxos(online: self.rgbManager.online!, upTo: false, num: nil, size: nil, feeRate: Float(Constants.defaultFeeRate))
 //  }
   
-  func genReceiveData(assetID: String, amount: Float, blinded: Bool) -> String {
+  func genReceiveData(assetID: String, amount: Float, expiry: Int, blinded: Bool) -> String {
       do {
           return try handleMissingFunds {
               guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
@@ -509,17 +517,17 @@ import CloudKit
               let bindData = try blinded ? 
                   wallet.blindReceive(
                       assetId: assetId,
-                      assignment: .any,
-                      durationSeconds: Constants.rgbBlindDuration,
+                      assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
+                      durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                      minConfirmations: 0
-                  ) :
+                      minConfirmations: 1
+                  ):
                   wallet.witnessReceive(
                       assetId: assetId,
-                      assignment: .any,
-                      durationSeconds: Constants.rgbBlindDuration,
+                      assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
+                      durationSeconds: UInt32(expiry),
                       transportEndpoints: [Constants.proxyConsignmentEndpoint],
-                      minConfirmations: 0
+                      minConfirmations: 1
                   )
 
               let data: [String: Any] = [
@@ -543,27 +551,32 @@ import CloudKit
   }
   
   @objc func failTransfer(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
-    do{
-      let status = try self.rgbManager.rgbWallet!.failTransfers(online: self.rgbManager.online!, batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly, skipSync: false)
-      let data: [String: Any] = [
-          "status": status
-      ]
+    do {
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
+      }
+      let status = try wallet.failTransfers(online: online, batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly, skipSync: false)
+      let data = ["status": status]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-    } catch{
-      let data: [String: Any] = [
-          "status": false,
-          "error": error.localizedDescription
-      ]
-      let json = Utility.convertToJSONString(params: data)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func getWalletData(callback: @escaping ((String) -> Void)) {
-    do{
-      let walletData = self.rgbManager.rgbWallet!.getWalletData()
-      let data: [String: Any] = [
+    do {
+      guard let wallet = self.rgbManager.rgbWallet else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
+      }
+      
+      let walletData = wallet.getWalletData()
+      let data = [
         "dataDir": walletData.dataDir,
 //        "bitcoinNetwork": walletData.bitcoinNetwork,
 //        "databaseType": walletData.databaseType,
@@ -571,57 +584,58 @@ import CloudKit
         "mnemonic": walletData.mnemonic,
         "pubkey": walletData.accountXpubColored,
         "vanillaKeychain": walletData.vanillaKeychain,
-      ]
+      ] as [String : Any]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-    } catch{
-      let data: [String: Any] = [
-          "status": false,
-          "error": error.localizedDescription
-      ]
-      let json = Utility.convertToJSONString(params: data)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func deleteTransfers(batchTransferIdx: Int32, noAssetOnly: Bool, callback: @escaping ((String) -> Void)) {
-    do{
-      let status = try self.rgbManager.rgbWallet!.deleteTransfers( batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
-      let data: [String: Any] = [
-          "status": status
-      ]
+    do {
+      guard let wallet = self.rgbManager.rgbWallet else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
+      }
+      let status = try wallet.deleteTransfers(batchTransferIdx: batchTransferIdx, noAssetOnly: noAssetOnly)
+      let data = ["status": status]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-    } catch{
-      let data: [String: Any] = [
-          "status": false,
-          "error": error.localizedDescription
-      ]
-      let json = Utility.convertToJSONString(params: data)
+    } catch {
+      let errorData = [
+        "status": false,
+        "error": error.localizedDescription
+      ] as [String : Any]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func decodeInvoice(invoiceString: String, callback: @escaping ((String) -> Void)) {
-    do{
+    do {
       let invoice = try Invoice(invoiceString: invoiceString).invoiceData()
-              var assignmentDict: [String: Any] = [:]
-        switch invoice.assignment {
-        case .fungible(let amount):
-            assignmentDict["type"] = "Fungible"
-            assignmentDict["amount"] = String(amount)
-        case .nonFungible:
-            assignmentDict["type"] = "NonFungible"
-        case .inflationRight(let amount):
-            assignmentDict["type"] = "InflationRight"
-            assignmentDict["amount"] = String(amount)
-        case .replaceRight:
-            assignmentDict["type"] = "ReplaceRight"
-        case .any:
-            assignmentDict["type"] = "Any"
-        }
+      var assignmentDict: [String: Any] = [:]
+      switch invoice.assignment {
+      case .fungible(let amount):
+        assignmentDict["type"] = "Fungible"
+        assignmentDict["amount"] = String(amount)
+      case .nonFungible:
+        assignmentDict["type"] = "NonFungible"
+      case .inflationRight(let amount):
+        assignmentDict["type"] = "InflationRight"
+        assignmentDict["amount"] = String(amount)
+      case .replaceRight:
+        assignmentDict["type"] = "ReplaceRight"
+      case .any:
+        assignmentDict["type"] = "Any"
+      }
       
-      var data: [String: Any] = [
+      let data = [
         "recipientId": invoice.recipientId,
         "expirationTimestamp": invoice.expirationTimestamp ?? 0,
         "assetId": invoice.assetId ?? "",
@@ -631,24 +645,26 @@ import CloudKit
         "transportEndpoints" :  invoice.transportEndpoints.map { endpoint in
           return endpoint
         }
-      ]
+      ] as [String : Any]
+      
       print(data)
       let json = Utility.convertToJSONString(params: data)
       callback(json)
     } catch {
-      let data: [String: Any] = [
-          "error": error.localizedDescription
-      ]
-      let json = Utility.convertToJSONString(params: data)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func getAddress(callback: @escaping ((String) -> Void)) {
-    do{
-      let address = try self.rgbManager.rgbWallet!.getAddress()
+    do {
+      guard let wallet = self.rgbManager.rgbWallet else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
+      }
+      let address = try wallet.getAddress()
       callback(address)
-    } catch{
+    } catch {
       callback("")
     }
   }
@@ -663,54 +679,47 @@ import CloudKit
   }
   
   @objc func syncRgbAssets(btcNetwotk: String, mnemonic: String, callback: @escaping ((String) -> Void)) {
-    
+    callback("")
   }
   
   
-  @objc func receiveAsset(assetID: String, amount: Float, blinded: Bool, callback: @escaping ((String) -> Void)){
-    print("blinded")
-    print(blinded)
-    let response = genReceiveData(assetID: assetID, amount: amount, blinded: blinded)
+  @objc func receiveAsset(assetID: String, amount: Float, expiry: Int, blinded: Bool, callback: @escaping ((String) -> Void)){
+    let response = self.genReceiveData(assetID: assetID, amount: amount,expiry:expiry, blinded: blinded)
     callback(response)
   }
   
   @objc func syncRgb(callback: @escaping ((String) -> Void)){
-    do {
-      let wallet = getRgbWallet()
-      callback(getRgbAssets())
-    }catch{
-      callback("{}")
-    }
+    let response = self.getRgbAssets()
+    callback(response)
   }
   
   @objc func getRgbAssetMetaData(assetId:String, callback: @escaping ((String) -> Void)){
-    do {
-      callback(getRgbAssetMetaData( assetId: assetId))
-    }catch{
-      callback("{}")
-    }
+    let response = self.getRgbAssetMetaData(assetId: assetId)
+    callback(response)
   }
   
-  @objc func getRgbAssetTransactions(assetId:String, callback: @escaping ((String) -> Void)){
-    do {
-      callback(getRgbAssetTransfers(assetId: assetId))
-    }catch{
-      print(error)
-      callback("[]")
-    }
+  @objc func getRgbAssetTransactions(assetId: String, callback: @escaping ((String) -> Void)) {
+    let response = self.getRgbAssetTransfers(assetId: assetId)
+    callback(response)
   }
   
   @objc func initiate(btcNetwotk: String, mnemonic: String,accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) -> Void{
-    self.rgbManager = RgbManager.shared
-    let result =  self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
-    callback(result)
+    do {
+      self.rgbManager = RgbManager.shared
+      let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
+      callback(response)
+    } catch {
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
+      callback(json)
+    }
   }
   
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
-    do{
-      return try handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetNia(ticker: ticker, name: name, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)])
-        let data: [String: Any] = [
+        return [
           "assetId": asset?.assetId,
           "name": asset?.name,
           "ticker": asset?.ticker,
@@ -719,25 +728,23 @@ import CloudKit
           "settledBalance": asset?.balance.settled,
           "spendableBalance": asset?.balance.spendable
         ]
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
       }
-    } catch{
-      print(error)
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
       let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func issueAssetCfa(name: String, description: String, supply: String, precision: NSNumber, filePath: String, callback: @escaping ((String) -> Void)) -> Void{
-    do{
-      return try handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetCfa(name: name, details: description, precision: UInt8(truncating: precision), amounts: [UInt64(UInt64(supply)!)], filePath: filePath)
         var dataPaths: [[String: Any]] = []
-        let data: [String: Any] = [
+        return [
           "assetId": asset?.assetId,
           "name": asset?.name,
           "description": asset?.details,
@@ -747,25 +754,23 @@ import CloudKit
           "spendableBalance": asset?.balance.spendable,
           "dataPaths": dataPaths
         ]
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
       }
-    } catch{
-      print(error)
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
       let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func issueAssetUda(name: String,ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: [String], callback: @escaping ((String) -> Void)) -> Void{
-    do{
-      return try handleMissingFunds {
+    do {
+      let data = try self.handleMissingFunds {
         let asset = try self.rgbManager.rgbWallet?.issueAssetUda(ticker: ticker, name: name, details: details, precision: 0, mediaFilePath: mediaFilePath, attachmentsFilePaths: attachmentsFilePaths)
         var dataPaths: [[String: Any]] = []
-        let data: [String: Any] = [
+        return [
           "assetId": asset?.assetId,
           "name": asset?.name,
           "ticker": asset?.ticker,
@@ -776,40 +781,37 @@ import CloudKit
           "spendableBalance": asset?.balance.spendable,
           "dataPaths": dataPaths
         ]
-        let json = Utility.convertToJSONString(params: data)
-        callback(json)
       }
-    } catch{
-      print(error)
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
       let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print(error)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   
   @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, callback: @escaping ((String) -> Void)) -> Void{
-    do{
+    do {
+      guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
+      }
       var recipientMap: [String: [Recipient]] = [:]
       let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, assignment: .fungible(amount: UInt64(amount)), transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
-      let response = try handleMissingFunds {
-        return try self.rgbManager.rgbWallet?.send(online: self.rgbManager.online!, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 0, skipSync: true)
+      let response = try self.handleMissingFunds {
+        return try wallet.send(online: online, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 1, skipSync: true)
       }
       print(response)
-      let data: [String: Any] = [
-        "txid": response?.txid
-      ]
+      let data = ["txid": response.txid]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-    }catch{
+    } catch {
       print(error)
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
-      let json = Utility.convertToJSONString(params: data)
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
@@ -820,22 +822,16 @@ import CloudKit
       let recordID = CKRecord.ID(recordName: recordID)
       privateDatabase.fetch(withRecordID: recordID) { (fetchedRecord, error) in
           if let fetchedRecord = fetchedRecord {
-              print("Record fetched successfully:")
-              print("Record Type: \(fetchedRecord.recordType)")
-              print("Record ID: \(fetchedRecord.recordID.recordName)")
             if let fileAsset = fetchedRecord["rgb_backup"] as? CKAsset {
                            let fileURL = fileAsset.fileURL
-              print("Record found: \(fileURL?.path)")
               completion("Record found", false, fileURL?.path)
               } else {
                 completion("Record not found in iCloud", true, nil)
               }
           } else {
               if let error = error {
-                  print("Error fetching record from iCloud: \(error.localizedDescription)")
                 completion(error.localizedDescription, true, nil)
               } else {
-                  print("Record not found in iCloud")
                 completion("Record not found in iCloud", true, nil)
               }
           }
@@ -845,14 +841,12 @@ import CloudKit
   func getICloudFolder() -> URL? {
     let fileManager = FileManager.default
       guard let iCloudURL = fileManager.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents") else {
-          print("iCloud is not available.")
           return nil
       }
     return iCloudURL
   }
   
   func uploadToIcloud(url: URL,  completion: @escaping (_ error: String?, _ isError: Bool) -> Void) {
-    print("uploading to iCloud...")
     let fileManager = FileManager.default
     let iCloudFolderURL = getICloudFolder()
     do{
@@ -880,95 +874,60 @@ import CloudKit
     }
   }
   
-  @objc func backup(path: String, password: String,callback: @escaping ((String) -> Void)) -> Void{
-    do{
+  @objc func backup(path: String, password: String, callback: @escaping ((String) -> Void)) -> Void {
+    do {
       let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: password)
-
       let filePath = Utility.getBackupPath(fileName: keys.masterFingerprint)
-      print("filePath \(String(describing: filePath))")
 
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
-            print("backup \(TAG) \(String(describing: response))")
       
-      var data: [String: Any] = [:]
-      data = [
+      let data = [
         "message": "Backup successful",
         "file": filePath?.path ?? "",
         "error": ""
       ]
       let json = Utility.convertToJSONString(params: data)
       callback(json)
-      return
-//      uploadToIcloud(url: filePath!, completion: {
-//        (error, isError) in
-//        if isError {
-//          print("Error: \(error ?? "Unknown error")")
-//          data = [
-//            "message": "Backup successful",
-//            "file": filePath?.path ?? "",
-//            "error": error ?? "Unknown error"
-//          ]
-//          let json = Utility.convertToJSONString(params: data)
-//          callback(json)
-//        } else {
-//          print("Upload successful")
-//          data = [
-//            "message": "Backup successful",
-//            "file": filePath?.path ?? "",
-//            "error": ""
-//          ]
-//          let json = Utility.convertToJSONString(params: data)
-//          callback(json)
-//        }
-//      })
-    }catch let error{
-      print(error)
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
-      let json = Utility.convertToJSONString(params: data)
+    } catch {
+      print("backup error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func isBackupRequired(callback: @escaping ((Bool) -> Void)) -> Void{
-    do{
-      let response = try self.rgbManager.rgbWallet?.backupInfo()
-      callback(response ?? false)
-    }
-    catch{
-      print(false)
+    do {
+      guard let wallet = self.rgbManager.rgbWallet else {
+        throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet not initialized"])
+      }
+      let response = try wallet.backupInfo() ?? false
+      callback(response)
+    } catch {
+      callback(false)
     }
   }
   
-  @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void{
-    do{
-//      if FileManager.default.fileExists(atPath: backupPath) {
-//          print("The file exists at the specified path.")
-//      } else {
-//          print("The file does not exist at the specified path.")
-//      }
+  @objc func restore(mnemonic: String, backupPath: String, callback: @escaping ((String) -> Void)) -> Void {
+    do {
       NSString(string: backupPath).expandingTildeInPath
       try restoreBackup(backupPath: backupPath, password: mnemonic, dataDir: Utility.getRgbDir()?.path ?? "")
-    }
-    catch let error{
-      print("error \(error):")
-      print("error \(error.localizedDescription):")
-      
-      let data: [String: Any] = [
-        "error": error.localizedDescription,
-      ]
+      let data = ["message": "Restore successful"]
       let json = Utility.convertToJSONString(params: data)
+      callback(json)
+    } catch {
+      print("restore error: \(error)")
+      let errorData = ["error": error.localizedDescription]
+      let json = Utility.convertToJSONString(params: errorData)
       callback(json)
     }
   }
   
   @objc func isValidBlindedUtxo(invoiceData: String,callback: @escaping ((Bool) -> Void)) -> Void{
-    do{
+    do {
       try Invoice(invoiceString: invoiceData)
       callback(true)
-    }
-    catch{
+    } catch {
       callback(false)
     }
   }

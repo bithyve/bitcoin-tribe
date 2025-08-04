@@ -1,6 +1,6 @@
 {
   "name": "tribe",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "private": true,
   "scripts": {
     "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
@@ -19,7 +19,8 @@
     "releaseIosDev": "cd ios && ENVFILE=.env bundle exec fastlane dev --env dev",
     "releaseIosProd": "cd ios && ENVFILE=.env.production bundle exec fastlane live --env production",
     "releaseAndroidDev": "cd android && ENVFILE=.env bundle exec fastlane dev --env dev",
-    "releaseAndroidProd": "cd android && ENVFILE=.env.production bundle exec fastlane live --env production"
+    "releaseAndroidProd": "cd android && ENVFILE=.env.production bundle exec fastlane live --env production",
+    "increment-build": "./increment_build_number.sh"
   },
   "dependencies": {
     "@dr.pogodin/react-native-fs": "2.26.0",
@@ -34,9 +35,11 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@realm/react": "0.5.2",
     "@sentry/react-native": "^6.5.0",
+    "@stablelib/base64": "^2.0.1",
     "assert": "^1.1.1",
     "axios": "^1.7.7",
     "b4a": "1.6.7",
+    "bare-rpc": "0.2.5",
     "base-64": "1.0.0",
     "bip21": "2.0.3",
     "bip32": "^4.0.0",
@@ -44,13 +47,13 @@
     "bip39": "3.0.4",
     "bitcoinjs-lib": "6.1.5",
     "bitcoinjs-message": "2.2.0",
-    "bare-rpc": "0.2.5",
     "buffer": "6.0.3",
     "buffer-reverse": "1.0.1",
     "coinselect": "3.1.13",
     "constants-browserify": "^1.0.0",
     "crypto": "1.0.1",
     "crypto-js": "4.2.0",
+    "eciesjs": "^0.4.15",
     "ecpair": "2.0.1",
     "electrum-client": "git+https://github.com/bithyve/rn-electrum-client.git",
     "events": "^3.3.0",

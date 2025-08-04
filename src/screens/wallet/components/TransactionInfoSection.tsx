@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import moment from 'moment';
-
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
@@ -14,21 +13,26 @@ import IconBitcoin from 'src/assets/images/icon_btc3.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc3_light.svg';
 import GradientView from 'src/components/GradientView';
 import AppTouchable from 'src/components/AppTouchable';
+import { TransactionKind } from 'src/services/wallets/enums';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type transactionInfoSectionProps = {
   amount: string;
   txID: string;
+  transactionKind: TransactionKind;
   date: string;
   onIDPress: () => void;
 };
 function TransactionInfoSection(props: transactionInfoSectionProps) {
-  const { amount, txID, date, onIDPress } = props;
+  const { amount, txID, date, onIDPress, transactionKind } = props;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { getBalance, getCurrencyIcon } = useBalance();
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
 
   return (
     <GradientView
@@ -58,6 +62,11 @@ function TransactionInfoSection(props: transactionInfoSectionProps) {
         <AppText variant="body2" style={styles.idTextStyle}>
           {txID}
         </AppText>
+        {transactionKind === TransactionKind.SERVICE_FEE && (
+          <AppText variant="body2" style={styles.serviceFeeText}>
+            {assets.platformFeeTitle}
+          </AppText>
+        )}
       </AppTouchable>
       <View>
         <AppText variant="caption" style={styles.dateTextStyle}>
@@ -97,6 +106,10 @@ const getStyles = (theme: AppTheme) =>
     dateTextStyle: {
       color: theme.colors.secondaryHeadingColor,
       lineHeight: 30,
+    },
+    serviceFeeText: {
+      color: theme.colors.secondaryHeadingColor,
+      textAlign: 'center',
     },
   });
 export default TransactionInfoSection;

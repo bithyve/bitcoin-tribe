@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -22,8 +20,6 @@ import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
-import Toast from 'src/components/Toast';
-import { formatNumber } from 'src/utils/numberWithCommas';
 import {
   Asset,
   Coin,
@@ -35,6 +31,7 @@ import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -42,7 +39,8 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       marginVertical: hp(5),
     },
     bodyWrapper: {
-      height: appType !== AppType.ON_CHAIN ? '54%' : '66%',
+      height: appType !== AppType.ON_CHAIN ? '43%' : '57%',
+      marginTop: hp(10),
     },
     footerWrapper: {
       height: '25%',
@@ -93,6 +91,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     },
     chooseInvoiceType: {
       color: theme.colors.headingColor,
+      marginTop: hp(20),
     },
     rightCTAStyle: {
       height: hp(40),
@@ -120,8 +119,6 @@ const EnterInvoiceDetails = () => {
     common,
     assets,
     home,
-    sendScreen,
-    wallet: walletTranslation,
   } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -130,10 +127,15 @@ const EnterInvoiceDetails = () => {
   const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
-  const [inputHeight, setInputHeight] = React.useState(50);
-  const [selectedAsset, setSelectedAsset] = useState(chosenAsset || null);
+  const [inputHeight, setInputHeight] = useState(50);
+  const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(
+    Keys.INVOICE_EXPIRY,
+  );
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(
+    chosenAsset || null,
+  );
   const [assetsDropdown, setAssetsDropdown] = useState(false);
-  const [selectedType, setSelectedType] = React.useState(
+  const [selectedType, setSelectedType] = useState(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
       ? 'lightning'
       : 'bitcoin',
@@ -162,14 +164,19 @@ const EnterInvoiceDetails = () => {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
   );
 
   const styles = getStyles(theme, inputHeight, app.appType);
-  const handlePasteAddress = async () => {
-    const clipboardValue = await Clipboard.getString();
-    setAssetId(clipboardValue);
-  };
+
+  useEffect(() => {
+    if (invoiceExpiry === undefined) {
+      setInvoiceExpiry(86400);
+    }
+  }, [invoiceExpiry]);
 
   useEffect(() => {
     const searchAsset = async () => {
@@ -187,23 +194,34 @@ const EnterInvoiceDetails = () => {
   function validateAndNavigateToReceiveAsset() {
     navigation.navigate(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
-      assetId,
-      amount,
+      assetId: assetId ?? '',
+      amount: amount !== '' ? selectedAsset?.precision === 0 ? amount : Number(amount) * 10 ** selectedAsset?.precision : '',
       selectedType,
+      invoiceExpiry,
     });
   }
 
   const handleAmountInputChange = text => {
-    const cleanText = text.replace(/,/g, '');
-    const reg = /^\d*$/;
-    if (reg.test(cleanText)) {
+    let regex;
+    if (selectedAsset?.precision === 0) {
+      regex = /^[1-9]\d*$/;
+    } else {
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`);
+    }
+    if (text === '' || regex.test(text)) {
       setAmount(text);
     }
   };
 
   return (
     <ScreenContainer>
-      <AppHeader title={home.addAssets} subTitle={''} enableBack={true} />
+      <AppHeader
+        title={home.addAssets}
+        subTitle={
+          'Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.'
+        }
+        enableBack={true}
+      />
       {app.appType !== AppType.ON_CHAIN && (
         <View>
           <View>
@@ -247,19 +265,19 @@ const EnterInvoiceDetails = () => {
         <SelectYourAsset
           selectedAsset={selectedAsset}
           onPress={() => {
-            if (assetsData.length) {
-              setAssetsDropdown(true);
-            } else {
-              Toast(assets.noAssetsFoundMsg, true);
-            }
+            setAssetsDropdown(true);
           }}
         />
         <TextField
-          value={formatNumber(amount)}
+          value={amount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           style={styles.input}
           keyboardType="numeric"
+        />
+        <InvoiceExpirySlider
+          value={invoiceExpiry}
+          onValueChange={setInvoiceExpiry}
         />
       </View>
       <View style={styles.footerWrapper}>
@@ -278,20 +296,7 @@ const EnterInvoiceDetails = () => {
         <Buttons
           primaryTitle={common.proceed}
           primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-          secondaryTitle={selectedType === 'bitcoin' && common.skip}
-          secondaryOnPress={() =>
-            navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-              refresh: true,
-              assetId: '',
-              amount: '',
-              selectedType,
-            })
-          }
-          disabled={assetId === '' || amount === ''}
-          width={
-            selectedType === 'bitcoin' ? windowWidth / 2.3 : windowWidth / 1.1
-          }
-          secondaryCTAWidth={windowWidth / 2.3}
+          width={'100%'}
         />
       </View>
       {assetsDropdown && (
@@ -303,6 +308,7 @@ const EnterInvoiceDetails = () => {
             setSelectedAsset(item || item?.asset);
             setAssetsDropdown(false);
             setAssetId(item?.assetId || item?.asset?.assetId);
+            setAmount('');
           }}
           searchAssetInput={searchAssetInput}
           onChangeSearchInput={(text: string) => {

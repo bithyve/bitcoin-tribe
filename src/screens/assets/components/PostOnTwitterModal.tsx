@@ -24,6 +24,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import TwitterTemplate from 'src/components/TwitterTemplate';
+import config from 'src/utils/config';
 
 interface Props {
   visible: boolean;
@@ -116,13 +117,13 @@ const PostOnTwitterModal: React.FC<Props> = ({
         console.error('File was not saved properly:', filePath);
         return;
       }
-      const tweetText = `I’ve officially verified my identity as the issuer of "${
+      const tweetText = `I’ve verified my identity as the issuer of "${
         issuerInfo.name || 'this asset'
       }".\nwith Asset ID - ${issuerInfo?.assetId}
       
   Transparency matters.
   Trust, but verify — start here 👇`;
-      const registryUrl = `\n\n\nhttps://bitcointribe.app/registry?assetId=${issuerInfo.assetId}`;
+      const registryUrl = `\n\n\n${config.REGISTRY_URL}/${issuerInfo.assetId}`;
       const twitterAppURL = `twitter://post?message=${encodeURIComponent(
         tweetText + registryUrl,
       )}`;
@@ -197,8 +198,8 @@ const PostOnTwitterModal: React.FC<Props> = ({
           primaryOnPress={captureAndShare}
           secondaryTitle={common.skip}
           secondaryOnPress={secondaryOnPress}
-          width={windowWidth / 2.7}
-          secondaryCTAWidth={windowWidth / 2.7}
+          width={windowWidth / 2.8}
+          secondaryCTAWidth={windowWidth / 2.8}
           height={hp(14)}
         />
       </View>

@@ -28,7 +28,7 @@ import {
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import { formatNumber } from 'src/utils/numberWithCommas';
+import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
@@ -82,7 +82,7 @@ function IssueScreen() {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
+    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
   );
 
   useEffect(() => {
@@ -112,8 +112,7 @@ function IssueScreen() {
   const totalSupplyWithPrecision = useMemo(() => {
     const supply = Number(String(totalSupplyAmt).replace(/,/g, '')) || 0;
     const decimals = Number(precision) || 0;
-    const supplyWithPrecision = supply.toFixed(decimals);
-    return `${supplyWithPrecision} ${assetTicker}`;
+    return `${numberWithCommas(supply)} ${assetTicker}`;
   }, [totalSupplyAmt, precision, assetTicker]);
 
   const issueCoin = useCallback(async () => {
@@ -125,7 +124,6 @@ function IssueScreen() {
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
-        addToRegistry,
       });
       if (response?.assetId) {
         setLoading(false);
@@ -211,7 +209,11 @@ function IssueScreen() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (sanitizedText && BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE) {
+      if (
+        sanitizedText &&
+        BigInt(sanitizedText) * BigInt(10 ** precision) <=
+          MAX_ASSET_SUPPLY_VALUE
+      ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (!sanitizedText) {
@@ -288,7 +290,10 @@ function IssueScreen() {
             title="Precision"
             value={precision}
             onValueChange={value => {
-              if(BigInt(totalSupplyAmt) * BigInt(10 ** value) > MAX_ASSET_SUPPLY_VALUE) {
+              if (
+                BigInt(totalSupplyAmt) * BigInt(10 ** value) >
+                MAX_ASSET_SUPPLY_VALUE
+              ) {
                 Toast(assets.totalSupplyAmountErrMsg, true);
                 return;
               }
@@ -317,7 +322,6 @@ function IssueScreen() {
             onSubmitEditing={Keyboard.dismiss}
             error={assetTotSupplyValidationError}
           />
-
           <View style={styles.totalSupplyWrapper}>
             <AppText variant="body2" style={styles.textInputTitle}>
               Total Supply:

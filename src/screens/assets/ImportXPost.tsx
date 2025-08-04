@@ -38,18 +38,30 @@ function ImportXPost() {
   const [tweetUrlValidationError, setTweetUrlValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
   const styles = getStyles(theme, inputHeight);
+  const verified = asset?.issuer?.verifiedBy?.some(
+    item => item.verified === true,
+  );
   const { mutateAsync, isLoading } = useMutation(
     ({
       tweetId,
       assetId,
       schema,
       asset,
+      verified,
     }: {
       tweetId: string;
       assetId: string;
       schema: RealmSchema;
       asset: Asset;
-    }) => ApiHandler.validateTweetForAsset(tweetId, assetId, schema, asset),
+      verified: boolean;
+    }) =>
+      ApiHandler.validateTweetForAsset(
+        tweetId,
+        assetId,
+        schema,
+        asset,
+        verified,
+      ),
   );
 
   useEffect(() => {

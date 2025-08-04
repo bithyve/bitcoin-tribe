@@ -50,8 +50,8 @@ function PrimaryCTA(props: PrimaryCTAProps) {
       onPress={onPress}
       maxFontSizeMultiplier={1}
       loading={loading}
-      disabled={disabled}>
-      {primaryCTAIcon}
+      disabled={disabled}
+      icon={primaryCTAIcon ? () => primaryCTAIcon : undefined}>
       {title}
     </Button>
   );

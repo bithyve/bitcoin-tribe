@@ -54,7 +54,7 @@ function AssetTransaction(props: AssetTransactionProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const amount = useMemo(() => {
-    if(transaction.kind === TransferKind.SEND) {
+    if(transaction.kind.toUpperCase() === TransferKind.SEND) {
       return transaction.requestedAssignment?.amount;
     } else {
       return transaction.assignments[0]?.amount;

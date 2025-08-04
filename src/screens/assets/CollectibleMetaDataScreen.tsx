@@ -61,6 +61,7 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import config from 'src/utils/config';
 
 type itemProps = {
   title: string;
@@ -263,6 +264,7 @@ const CollectibleMetaDataScreen = () => {
                 schema={RealmSchema.Collectible}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
                 setIsVerifyingIssuer={setIsVerifyingIssuer}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
               <IssuerDomainVerified
                 domain={
@@ -282,6 +284,7 @@ const CollectibleMetaDataScreen = () => {
                     });
                   }
                 }}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
             </View>
             <Item
@@ -300,9 +303,15 @@ const CollectibleMetaDataScreen = () => {
               value={
                 app.appType === AppType.NODE_CONNECT ||
                 app.appType === AppType.SUPPORTED_RLN
-                  ? numberWithCommas(Number(collectible.issuedSupply) / 10 ** collectible.precision)
+                  ? numberWithCommas(
+                      Number(collectible.issuedSupply) /
+                        10 ** collectible.precision,
+                    )
                   : collectible?.metaData &&
-                    numberWithCommas(Number(collectible?.metaData?.issuedSupply) / 10 ** collectible?.precision)
+                    numberWithCommas(
+                      Number(collectible?.metaData?.issuedSupply) /
+                        10 ** collectible?.precision,
+                    )
               }
             />
 
@@ -346,30 +355,28 @@ const CollectibleMetaDataScreen = () => {
                   title={assets.viewInRegistry}
                   subTitle={''}
                   onPress={() =>
-                    openLink(
-                      `https://bitcointribe.app/registry?assetId=${assetId}`,
-                    )
+                    navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                      url: `${config.REGISTRY_URL}/${assetId}`,
+                      title: 'Registry',
+                    })
                   }
                   testID={'view_in_registry'}
                 />
               )}
-              {hasIssuanceTransaction &&
-                // twitterVerification?.id &&
-                !twitterPostVerificationWithLink &&
-                !twitterPostVerification?.link && (
-                  <SelectOption
-                    title={'Show your X post here'}
-                    subTitle={''}
-                    onPress={() =>
-                      navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                        assetId: assetId,
-                        schema: RealmSchema.Collectible,
-                        asset: collectible,
-                      })
-                    }
-                    testID={'import_x_post'}
-                  />
-                )}
+              {hasIssuanceTransaction && (
+                <SelectOption
+                  title={'Show your X post here'}
+                  subTitle={''}
+                  onPress={() =>
+                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                      assetId: assetId,
+                      schema: RealmSchema.Collectible,
+                      asset: collectible,
+                    })
+                  }
+                  testID={'import_x_post'}
+                />
+              )}
             </View>
             {isAddedInRegistry && <View style={styles.seperatorView} />}
             {twitterPostVerificationWithLink?.link && (

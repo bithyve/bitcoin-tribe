@@ -55,9 +55,6 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(25),
       alignSelf: 'center',
     },
-    iconStyle: {
-      marginRight: hp(5),
-    },
     skipWrapper: {
       marginTop: hp(10),
     },
@@ -121,18 +118,10 @@ const VerifyIssuerModal = ({
             primaryLoading={primaryLoading || loading}
             disabled={primaryLoading || loading}
             secondaryCTAIcon={
-              isThemeDark ? (
-                <VerifyDomainIcon style={styles.iconStyle} />
-              ) : (
-                <VerifyDomainIconLight style={styles.iconStyle} />
-              )
+              isThemeDark ? <VerifyDomainIcon /> : <VerifyDomainIconLight />
             }
             primaryCTAIcon={
-              isThemeDark ? (
-                <VerifyXIcon style={styles.iconStyle} />
-              ) : (
-                <VerifyXIconLight style={styles.iconStyle} />
-              )
+              isThemeDark ? <VerifyXIcon /> : <VerifyXIconLight />
             }
           />
           {/* </View> */}

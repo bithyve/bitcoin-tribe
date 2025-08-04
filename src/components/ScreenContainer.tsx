@@ -17,6 +17,7 @@ const ScreenContainer = props => {
       <StatusBar
         barStyle={isThemeDark ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.primaryBackground}
+        translucent={true}
       />
       {props.children}
     </SafeAreaView>

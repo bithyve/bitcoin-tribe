@@ -49,23 +49,30 @@ const createObjectBulk = (
   updateMode = Realm.UpdateMode.All,
 ) => {
   try {
-    if(schema === RealmSchema.Collectible || schema === RealmSchema.UniqueDigitalAsset || schema === RealmSchema.Coin ) {
+    if (
+      schema === RealmSchema.Collectible ||
+      schema === RealmSchema.UniqueDigitalAsset ||
+      schema === RealmSchema.Coin
+    ) {
       objects.forEach(object => {
         object.issuedSupply = object.issuedSupply.toString();
         object.balance.spendable = object.balance.spendable.toString();
         object.balance.future = object.balance.future.toString();
         object.balance.settled = object.balance.settled.toString();
-        object.balance.offchainOutbound = object.balance.offchainOutbound?.toString();
-        object.balance.offchainInbound = object.balance.offchainInbound?.toString();
-        if(object.metaData) {
-          object.metaData.issuedSupply = object.metaData.issuedSupply.toString();
+        object.balance.offchainOutbound =
+          object.balance.offchainOutbound?.toString();
+        object.balance.offchainInbound =
+          object.balance.offchainInbound?.toString();
+        if (object.metaData) {
+          object.metaData.issuedSupply =
+            object.metaData.issuedSupply.toString();
         }
       });
     }
     const hasCreated = realm.createBulk(schema, objects, updateMode);
     return hasCreated;
   } catch (err) {
-    console.log('err',err);
+    console.log('err', err);
   }
 };
 
@@ -119,14 +126,15 @@ const updateObjectById = (
   schema: RealmSchema,
   id: string,
   updateProps: any,
-) => {
+): boolean => {
   try {
     const object = getObjectById(schema, id);
-    for (const [key, value] of Object.entries(updateProps)) {
-      realm.write(() => {
+    if (!object) return false;
+    realm.write(() => {
+      Object.entries(updateProps).forEach(([key, value]) => {
         object[key] = value;
       });
-    }
+    });
     return true;
   } catch (err) {
     console.error({ err });

@@ -76,14 +76,14 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-    flavorDimensions "default"
+    flavorDimensions "env"
     namespace "com.bithyve.tribe"
     defaultConfig {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 166
-        versionName "0.5.0"
+        versionCode 184
+        versionName "0.5.2"
         missingDimensionStrategy 'react-native-camera', 'general'
         manifestPlaceholders = [
             appAuthRedirectScheme: 'tribe'
@@ -119,11 +119,15 @@ android {
     }
     productFlavors {
         production {
+            dimension "env"
             applicationId "com.bithyve.tribe"
+            resValue "string", "app_name", "Tribe"
             resValue "string", "build_config_package", "com.bithyve.tribe"
         }
         dev {
-            applicationId "com.bithyve.tribe.dev"
+            dimension "env"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "Tribe Dev"
             resValue "string", "build_config_package", "com.bithyve.tribe"
         }
     }
@@ -144,7 +148,7 @@ repositories {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation("org.rgbtools:rgb-lib-android:0.3.0-beta.1-SNAPSHOT")
+    implementation("org.rgbtools:rgb-lib-android:0.3.0-beta.2")
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation "com.google.android.gms:play-services-drive:17.0.0"
