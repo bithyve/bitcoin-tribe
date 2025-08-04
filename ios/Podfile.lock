@@ -1070,7 +1070,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+7fcacd)":
+  - "react-native-bare-kit (0.5.6+261abb)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1661,7 +1661,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.17.0):
+  - RNSentry (6.19.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1682,7 +1682,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.53.1)
+    - Sentry/HybridSDK (= 8.53.2)
     - Yoga
   - RNShare (11.1.0):
     - DoubleConversion
@@ -1705,9 +1705,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.12.0):
+  - RNSVG (15.12.1):
     - React-Core
-  - Sentry/HybridSDK (8.53.1)
+  - Sentry/HybridSDK (8.53.2)
   - SocketRocket (0.7.0)
   - VisionCamera (4.3.2):
     - VisionCamera/Core (= 4.3.2)
@@ -2073,7 +2073,7 @@ SPEC CHECKSUMS:
   React-logger: 6070f362a1657bb53335eb1fc903d3f49fd79842
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 17f037e9a8328f5728271666157958dbd17a68d3
+  react-native-bare-kit: 664bb7c16eee582a7fe4225afc29ac96590ca9a4
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-document-picker: 451699da81cba8b40b596b8076019a4deb86f46e
@@ -2125,10 +2125,10 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
   RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: ef68e50aea531dd00c592ba4683bbcb89d4d2e1a
-  RNSentry: 0e1b174126289a42fd20a3c3cd12bd861a031a4a
+  RNSentry: a01eec3274dc41e21fab5475e0b4358e12b430fc
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
-  RNSVG: ff728783849deecdeb6a270ab35e9cb1db3cbe0f
-  Sentry: 1e4e974d45f09d153af4b30b42acfb1c79e957d3
+  RNSVG: d39a9be65c439dfb061955f7615f1f71a51ecede
+  Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: 6ad4b86176f6fea45e90e380d3d530bc5e1abff9
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372

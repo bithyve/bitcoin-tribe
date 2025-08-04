@@ -12,7 +12,7 @@ import {
 } from './rpc-commands.mjs';
 import RPC from 'bare-rpc';
 import b4a from 'b4a';
-import config from 'src/utils/config';
+// import config from '../../utils/config.ts';
 
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
@@ -22,7 +22,7 @@ const { IPC } = BareKit;
 let keyPair;
 const connections = new Map();
 
-const RELAY_PUB_KEY = config.RELAY_PEER_PUB_KEY
+const RELAY_PUB_KEY = '58dac4e5cfe213a0755719abda3ab6d131d02eee0bc3bb2066ded29630885681'
 
 const rpc = new RPC(IPC, (req, error) => {
   try {
