@@ -68,7 +68,8 @@
     "failedToShareQrCode": "Impossibile condividere il codice QR",
     "registry": "Registro",
     "verify": "Verifica",
-    "tapToCopy": "Tocca per copiare"
+    "tapToCopy": "Tocca per copiare",
+    "retry": "Riprova"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -712,7 +713,8 @@
     "domainVerificationInfoTitle2": "Professionale e affidabile",
     "domainVerificationInfoSubTitle2": "Ideale per aziende, brand personali e siti web di progetto.",
     "domainVerificationInfoTitle3": "Badge verificato",
-    "domainVerificationInfoSubTitle3": "Il tuo dominio verrà mostrato pubblicamente come fonte verificata."
+    "domainVerificationInfoSubTitle3": "Il tuo dominio verrà mostrato pubblicamente come fonte verificata.",
+    "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti."
   },
   "community": {
     "fnfTitle": "Comunità",
