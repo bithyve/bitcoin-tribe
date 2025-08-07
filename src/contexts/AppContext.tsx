@@ -28,6 +28,10 @@ export const AppContext = React.createContext({
   setNodeConnected: status => {},
   isDisclaimerVisible: null,
   setIsDisclaimerVisible: status => {},
+  isVerifyXInfoVisible: null,
+  setIsVerifyXInfoVisible: status => {},
+  isVerifyDomainInfoVisible: null,
+  setIsVerifyDomainInfoVisible: status => {},
 });
 
 export function AppProvider({ children }) {
@@ -49,6 +53,12 @@ export function AppProvider({ children }) {
     Keys.DISCLAIMER_VISIBILITY,
   );
   const isDisclaimerVisible = isDisclaimerVisibleMMKV ?? true;
+  const [isVerifyXInfoVisibleMMKV, setIsVerifyXInfoVisibleMMKV] =
+    useMMKVBoolean(Keys.VERIFY_TWITTER_INFO);
+  const isVerifyXInfoVisible = isVerifyXInfoVisibleMMKV ?? true;
+  const [isVerifyDomainInfoVisibleMMKV, setIsVerifyDomainInfoVisibleMMKV] =
+    useMMKVBoolean(Keys.VERIFY_DOMAIN_INFO);
+  const isVerifyDomainInfoVisible = isVerifyDomainInfoVisibleMMKV ?? true;
   return (
     <AppContext.Provider
       value={{
@@ -76,6 +86,10 @@ export function AppProvider({ children }) {
         setNodeConnected: setNodeConnected,
         isDisclaimerVisible,
         setIsDisclaimerVisible: setIsDisclaimerVisibleMMKV,
+        isVerifyXInfoVisible,
+        setIsVerifyXInfoVisible: setIsVerifyXInfoVisibleMMKV,
+        isVerifyDomainInfoVisible,
+        setIsVerifyDomainInfoVisible: setIsVerifyDomainInfoVisibleMMKV,
       }}>
       {children}
     </AppContext.Provider>
