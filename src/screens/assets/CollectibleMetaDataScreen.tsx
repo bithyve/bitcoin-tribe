@@ -33,8 +33,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-// import DownloadIcon from 'src/assets/images/downloadBtn.svg';
-// import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
@@ -64,6 +62,8 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import config from 'src/utils/config';
 import DownloadIcon from 'src/assets/images/downloadIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
+import RegistryIconLight from 'src/assets/images/registryIcon_light.svg';
+import RegistryIcon from 'src/assets/images/registryIcon.svg';
 
 type itemProps = {
   title: string;
@@ -228,8 +228,16 @@ const CollectibleMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        // rightIcon={isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
-        onSettingsPress={() => {}}
+        rightIcon={
+          isAddedInRegistry &&
+          (isThemeDark ? <RegistryIcon /> : <RegistryIconLight />)
+        }
+        onSettingsPress={() => {
+          navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+            url: `${config.REGISTRY_URL}/${assetId}`,
+            title: 'Registry',
+          });
+        }}
         style={styles.headerWrapper}
       />
       {isLoading || isVerifyingIssuer ? (
