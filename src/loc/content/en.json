@@ -68,7 +68,8 @@
     "failedToShareQrCode": "Failed to share QR code",
     "registry": "Registry",
     "verify": "Verify",
-    "tapToCopy": "TAP TO COPY"
+    "tapToCopy": "TAP TO COPY",
+    "retry": "Retry"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -712,7 +713,8 @@
     "domainVerificationInfoTitle2": "Professional & Trusted",
     "domainVerificationInfoSubTitle2": "Ideal for businesses, personal brands, and project websites.",
     "domainVerificationInfoTitle3": "Verified Badge",
-    "domainVerificationInfoSubTitle3": "Your domain will be publicly shown as the verified source."
+    "domainVerificationInfoSubTitle3": "Your domain will be publicly shown as the verified source.",
+    "rateLimitMsg": "Rate limit reached.\n You can retry after 15 minutes."
   },
   "community": {
     "fnfTitle": "Community",

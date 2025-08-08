@@ -68,7 +68,8 @@
     "failedToShareQrCode": "分享二维码失败",
     "registry": "注册表",
     "verify": "验证",
-    "tapToCopy": "点击复制"
+    "tapToCopy": "点击复制",
+    "retry": "重试"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -712,7 +713,8 @@
     "domainVerificationInfoTitle2": "专业且值得信赖",
     "domainVerificationInfoSubTitle2": "非常适合企业、个人品牌和项目网站。",
     "domainVerificationInfoTitle3": "验证徽章",
-    "domainVerificationInfoSubTitle3": "您的域名将作为验证来源公开显示。"
+    "domainVerificationInfoSubTitle3": "您的域名将作为验证来源公开显示。",
+    "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。"
   },
   "community": {
     "fnfTitle": "社区",

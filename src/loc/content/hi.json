@@ -68,7 +68,8 @@
     "failedToShareQrCode": "QR कोड शेयर करने में विफल",
     "registry": "रजिस्ट्री",
     "verify": "सत्यापित करें",
-    "tapToCopy": "कॉपी करने के लिए टैप करें"
+    "tapToCopy": "कॉपी करने के लिए टैप करें",
+    "retry": "पुनः प्रयास करें"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -712,7 +713,8 @@
     "domainVerificationInfoTitle2": "पेशेवर और भरोसेमंद",
     "domainVerificationInfoSubTitle2": "व्यवसाय, ब्रांड और प्रोजेक्ट वेबसाइट्स के लिए उपयुक्त",
     "domainVerificationInfoTitle3": "सत्यापित बैज",
-    "domainVerificationInfoSubTitle3": "आपका डोमेन एक सत्यापित स्रोत के रूप में दिखाया जाएगा।"
+    "domainVerificationInfoSubTitle3": "आपका डोमेन एक सत्यापित स्रोत के रूप में दिखाया जाएगा।",
+    "rateLimitMsg": "रेट सीमा पूरी हो गई है।\nआप 15 मिनट बाद पुनः प्रयास कर सकते हैं।"
   },
   "community": {
     "fnfTitle": "समुदाय",

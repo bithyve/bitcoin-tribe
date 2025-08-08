@@ -68,7 +68,8 @@
     "failedToShareQrCode": "QRコードの共有に失敗しました",
     "registry": "レジストリ",
     "verify": "確認する",
-    "tapToCopy": "タップしてコピー"
+    "tapToCopy": "タップしてコピー",
+    "retry": "再試行"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -712,7 +713,8 @@
     "domainVerificationInfoTitle2": "プロフェッショナルで信頼できる",
     "domainVerificationInfoSubTitle2": "ビジネスや個人ブランド、プロジェクトサイトに最適です。",
     "domainVerificationInfoTitle3": "認証バッジ",
-    "domainVerificationInfoSubTitle3": "あなたのドメインは認証済みのソースとして公開表示されます。"
+    "domainVerificationInfoSubTitle3": "あなたのドメインは認証済みのソースとして公開表示されます。",
+    "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。"
   },
   "community": {
     "fnfTitle": "コミュニティ",

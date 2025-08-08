@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { MMKV, useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useMutation } from 'react-query';
 
@@ -24,9 +24,17 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 
+export const getRateLimitKey = (assetId: string) =>
+  `${Keys.RATE_LIMIT_KEY}_${assetId}`;
+
+export const getRateLimitedTweetUrlKey = (assetId: string) =>
+  `${Keys.RATE_LIMITED_TWEET_URL_KEY}_${assetId}`;
+
 function ImportXPost() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
+  const storage = new MMKV();
+  const RATE_LIMIT_DURATION = 15 * 60 * 1000;
   const { assetId, schema, asset } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
@@ -37,10 +45,13 @@ function ImportXPost() {
   const [inputHeight, setInputHeight] = React.useState(50);
   const [tweetUrlValidationError, setTweetUrlValidationError] = useState('');
   const [isCtaEnabled, setIsCtaEnabled] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [rateLimitRemainingTime, setRateLimitRemainingTime] = useState(0);
   const styles = getStyles(theme, inputHeight);
   const verified = asset?.issuer?.verifiedBy?.some(
     item => item.verified === true,
   );
+
   const { mutateAsync, isLoading } = useMutation(
     ({
       tweetId,
@@ -63,6 +74,48 @@ function ImportXPost() {
         verified,
       ),
   );
+
+  useEffect(() => {
+    const rateLimitKey = getRateLimitKey(assetId);
+    const rateLimitedUrlKey = getRateLimitedTweetUrlKey(assetId);
+
+    const checkCooldown = () => {
+      const saved = storage.getNumber(rateLimitKey);
+      const savedUrl = storage.getString(rateLimitedUrlKey);
+      if (saved) {
+        const now = Date.now();
+        const diff = now - saved;
+        if (diff < RATE_LIMIT_DURATION) {
+          setIsRateLimited(true);
+          setRateLimitRemainingTime(RATE_LIMIT_DURATION - diff);
+          if (savedUrl) {
+            setTweetUrl(savedUrl);
+          }
+        } else {
+          storage.delete(rateLimitKey);
+          storage.delete(rateLimitedUrlKey);
+          setIsRateLimited(false);
+        }
+      }
+    };
+
+    checkCooldown();
+
+    const interval = setInterval(() => {
+      setRateLimitRemainingTime(prev => {
+        if (prev <= 1000) {
+          setIsRateLimited(false);
+          storage.delete(rateLimitKey);
+          storage.delete(rateLimitedUrlKey);
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1000;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [assetId]);
 
   useEffect(() => {
     setIsCtaEnabled(!!tweetUrl && !tweetUrlValidationError);
@@ -99,20 +152,35 @@ function ImportXPost() {
       Toast('Could not extract tweet ID.', true);
       return;
     }
+
+    const rateLimitKey = getRateLimitKey(assetId);
+    const rateLimitedUrlKey = getRateLimitedTweetUrlKey(assetId);
+
     try {
       const result = await mutateAsync({ tweetId: id, assetId, schema, asset });
       if (result?.success) {
         setTweetId(id);
+        storage.delete(rateLimitedUrlKey);
         Toast('X post added successfully.');
         navigateWithDelay(() => navigation.goBack());
       } else {
-        Toast(result?.reason || 'Unknown error.', true);
+        if (result?.reason?.toLowerCase().includes('too many requests')) {
+          const now = Date.now();
+          storage.set(rateLimitKey, now);
+          storage.set(rateLimitedUrlKey, tweetUrl.trim());
+          setIsRateLimited(true);
+          setRateLimitRemainingTime(RATE_LIMIT_DURATION);
+          Toast('Rate limit reached. You can retry after 15 minutes.', true);
+        } else {
+          Toast(result?.reason || 'Unknown error.', true);
+        }
       }
     } catch (error) {
       Toast('Unexpected error occurred.', true);
       console.error('handleVerifyTweet error:', error);
     }
   };
+
   const handleXPostUrlChange = text => {
     const trimmed = text.trim();
     if (!trimmed) {
@@ -132,6 +200,8 @@ function ImportXPost() {
   const handleClearURL = () => {
     setTweetUrl('');
     setTweetUrlValidationError('');
+    const rateLimitedUrlKey = getRateLimitedTweetUrlKey(assetId);
+    storage.delete(rateLimitedUrlKey);
   };
 
   return (
@@ -177,10 +247,17 @@ function ImportXPost() {
         </View>
       </KeyboardAvoidView>
       <View style={styles.ctaWrapper}>
+        {isRateLimited && (
+          <View style={styles.ratelimitMsgWrapper}>
+            <AppText variant="body1" style={styles.ratelimitMsg}>
+              {assets.rateLimitMsg}
+            </AppText>
+          </View>
+        )}
         <Buttons
-          primaryTitle={common.proceed}
+          primaryTitle={isRateLimited ? common.retry : common.proceed}
           primaryOnPress={() => handleVerifyTweet()}
-          disabled={!isCtaEnabled}
+          disabled={!isCtaEnabled || isRateLimited}
           width={'100%'}
         />
       </View>
@@ -217,6 +294,15 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '80%',
     },
     ctaWrapper: {},
+    ratelimitMsgWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: hp(10),
+    },
+    ratelimitMsg: {
+      textAlign: 'center',
+      color: theme.colors.headingColor,
+    },
     rightCTAStyle: {
       height: hp(40),
       width: hp(55),
