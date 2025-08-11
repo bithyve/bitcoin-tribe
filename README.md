@@ -28,6 +28,8 @@ Before getting started, make sure you have a proper [React Native development en
    yarn install
    ```
 
+4. Copy `.env.example` to `.env` and fill in the required values.
+
 ## Build and Run
 
 ### Variants
@@ -137,6 +139,17 @@ Output should show PGP key **389F 4CAD A078 5AC0 E28A 0C18 1BEB DE26 1DC3 CF62**
 using RSA key 389F4CADA0785AC0E28A0C181BEBDE261DC3CF62
 issuer "hexa@bithyve.com"
 Good signature from "Hexa Team (Hexa Bitcoin Wallet) <hexa@bithyve.com>"
+```
+
+## Environment Variables
+
+Create a `.env` file in the project root (use `.env.example` as a template) and set the following variables:
+
+```bash
+STORE_PASSWORD=your_android_keystore_password
+KEY_PASSWORD=your_android_key_password
+KEY_ALIAS=your_android_key_alias
+SENTRY_AUTH_TOKEN=your_sentry_auth_token
 ```
 
 ## License
