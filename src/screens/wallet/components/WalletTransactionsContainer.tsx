@@ -31,10 +31,8 @@ import { useNavigation } from '@react-navigation/native';
 function WalletTransactionsContainer({
   refreshing,
   transactions,
-  wallet,
   pullDownToRefresh,
   autoRefresh,
-  scrollY,
 }) {
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -55,10 +53,7 @@ function WalletTransactionsContainer({
         </AppText>
         <AppTouchable
           onPress={() =>
-            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION, {
-              transactions: transactions,
-              wallet,
-            })
+            navigation.navigate(NavigationRoutes.WALLETALLTRANSACTION)
           }>
           <AppText variant="body1" style={styles.viewAllText}>
             {walletStrings.viewAll}
@@ -93,16 +88,17 @@ function WalletTransactionsContainer({
         renderItem={({ item }) => (
           <WalletTransactions
             transId={item.transactionKind || item.txid}
+            transKind={item.transactionKind}
             tranStatus={item.status}
             transDate={item.date}
             transAmount={
-              app.appType === AppType.NODE_CONNECT
+              app.appType === AppType.NODE_CONNECT ||
+              app.appType === AppType.SUPPORTED_RLN
                 ? `${item.received || item?.amtMsat / 1000}`
                 : `${item.amount}`
             }
             transType={item.transactionType}
             transaction={item}
-            coin={null}
             networkType={item.txid ? 'bitcoin' : 'lightning'}
           />
         )}

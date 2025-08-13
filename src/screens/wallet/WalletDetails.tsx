@@ -23,8 +23,6 @@ import { NetworkType } from 'src/services/wallets/enums';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import WalletDetailsHeader from './components/WalletDetailsHeader';
 import WalletTransactionsContainer from './components/WalletTransactionsContainer';
-import ModalContainer from 'src/components/ModalContainer';
-import BuyModal from './components/BuyModal';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
@@ -49,7 +47,6 @@ function WalletDetails({ navigation, route }) {
     assets,
   } = translations;
   const [refreshing, setRefreshing] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [visibleRequestTSats, setVisibleRequestTSats] = useState(false);
   const [walletName, setWalletName] = useState(null);
 
@@ -71,7 +68,10 @@ function WalletDetails({ navigation, route }) {
     ApiHandler.receiveTestSats,
     {
       onSuccess: () => {
-        if (app.appType === AppType.NODE_CONNECT) {
+        if (
+          app?.appType === AppType.NODE_CONNECT ||
+          app?.appType === AppType.SUPPORTED_RLN
+        ) {
           fetchOnChainTransaction();
         }
       },
@@ -82,14 +82,19 @@ function WalletDetails({ navigation, route }) {
   );
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate: fetchOnChainTransaction } = useMutation(
-    ApiHandler.getNodeOnchainBtcTransactions,
-  );
+  const {
+    mutate: fetchOnChainTransaction,
+    error: fetchTxnError,
+    isError: fetchTxnIsError,
+  } = useMutation(ApiHandler.getNodeOnchainBtcTransactions);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app?.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       fetchOnChainTransaction();
     }
     walletRefreshMutation.mutate({
@@ -110,7 +115,10 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (autoRefresh && isFocused) {
-      if (app.appType === AppType.NODE_CONNECT) {
+      if (
+        app?.appType === AppType.NODE_CONNECT ||
+        app.appType === AppType.SUPPORTED_RLN
+      ) {
         fetchOnChainTransaction();
       }
       walletRefreshMutation.mutate({
@@ -126,6 +134,12 @@ function WalletDetails({ navigation, route }) {
   }, [isError, error]);
 
   useEffect(() => {
+    if (fetchTxnIsError) {
+      Toast(fetchTxnError?.message, true);
+    }
+  }, [fetchTxnError, fetchTxnIsError]);
+
+  useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
     } else if (walletRefreshMutation.status === 'error') {
@@ -135,7 +149,10 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     fetchUTXOs();
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app?.appType === AppType.NODE_CONNECT ||
+      app?.appType === AppType.SUPPORTED_RLN
+    ) {
       fetchOnChainTransaction();
       listPaymentshMutation.mutate();
       getChannelMutate();
@@ -148,16 +165,17 @@ function WalletDetails({ navigation, route }) {
   }, [app]);
 
   const transactionsData =
-    app.appType === AppType.NODE_CONNECT
+    app?.appType === AppType.NODE_CONNECT ||
+    app?.appType === AppType.SUPPORTED_RLN
       ? Object.values({
-          ...rgbWallet.lnPayments,
-          ...rgbWallet.nodeOnchainTransactions,
+          ...rgbWallet?.lnPayments,
+          ...rgbWallet?.nodeOnchainTransactions,
         }).sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime() || 0;
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : wallet?.specs.transactions;
+      : wallet?.specs?.transactions.slice(0, 4);
 
   return (
     <ScreenContainer>
@@ -184,7 +202,7 @@ function WalletDetails({ navigation, route }) {
         }
         onPressBuy={() =>
           config.NETWORK_TYPE === NetworkType.MAINNET
-            ? setVisible(true)
+            ? navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
               config.NETWORK_TYPE === NetworkType.REGTEST
             ? mutate()
@@ -193,22 +211,11 @@ function WalletDetails({ navigation, route }) {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       <WalletTransactionsContainer
-        navigation={navigation}
         refreshing={refreshing}
         transactions={transactionsData}
-        wallet={wallet}
         pullDownToRefresh={() => pullDownToRefresh()}
         autoRefresh={walletRefreshMutation.isLoading}
-        scrollY={scrollY}
       />
-      <ModalContainer
-        title={common.buy}
-        subTitle={walletStrings.buySubtitle}
-        visible={visible}
-        enableCloseIcon={false}
-        onDismiss={() => setVisible(false)}>
-        <BuyModal />
-      </ModalContainer>
       <ResponsePopupContainer
         backColor={theme.colors.modalBackColor}
         borderColor={theme.colors.modalBackColor}

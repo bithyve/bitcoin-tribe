@@ -21,6 +21,8 @@ import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
 import dbManager from 'src/storage/realm/dbManager';
+import DomainVerificationInfoModal from './components/DomainVerificationInfoModal';
+import { AppContext } from 'src/contexts/AppContext';
 
 function RegisterDomain() {
   const navigation = useNavigation();
@@ -29,6 +31,8 @@ function RegisterDomain() {
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
+  const { isVerifyDomainInfoVisible, setIsVerifyDomainInfoVisible } =
+    React.useContext(AppContext);
   const styles = getStyles(theme);
   const [domainName, setDomainName] = useState(savedDomainName || '');
   const [domainValidationError, setDomainNameValidationError] = useState('');
@@ -177,6 +181,12 @@ function RegisterDomain() {
             onSubmitEditing={handleRegisterDomain}
           />
         </View>
+        <>
+          <DomainVerificationInfoModal
+            visible={isVerifyDomainInfoVisible}
+            primaryOnPress={() => setIsVerifyDomainInfoVisible(false)}
+          />
+        </>
       </KeyboardAvoidView>
       <View style={styles.ctaWrapper}>
         <Buttons

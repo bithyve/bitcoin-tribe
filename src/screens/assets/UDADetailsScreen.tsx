@@ -62,6 +62,7 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
+import config from 'src/utils/config';
 
 const UDADetailsScreen = () => {
   const theme: AppTheme = useTheme();
@@ -232,7 +233,10 @@ const UDADetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.UniqueDigitalAsset });
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
       }
     });
@@ -249,6 +253,12 @@ const UDADetailsScreen = () => {
       },
     );
     navigation.dispatch(popAction);
+  };
+
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
   };
 
   return (
@@ -322,6 +332,7 @@ const UDADetailsScreen = () => {
               schema={RealmSchema.UniqueDigitalAsset}
               onVerificationComplete={() => setRefreshToggle(t => !t)}
               setIsVerifyingIssuer={setIsVerifyingIssuer}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
             <IssuerDomainVerified
               domain={
@@ -341,6 +352,7 @@ const UDADetailsScreen = () => {
                   });
                 }
               }}
+              hasIssuanceTransaction={hasIssuanceTransaction}
             />
           </View>
           <Item title={home.assetName} value={uda.name} />
@@ -406,30 +418,28 @@ const UDADetailsScreen = () => {
                 title={assets.viewInRegistry}
                 subTitle={''}
                 onPress={() =>
-                  openLink(
-                    `https://bitcointribe.app/registry?assetId=${assetId}`,
-                  )
+                  navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                    url: `${config.REGISTRY_URL}/${assetId}`,
+                    title: 'Registry',
+                  })
                 }
                 testID={'view_in_registry'}
               />
             )}
-            {hasIssuanceTransaction &&
-              twitterVerification?.id &&
-              !twitterPostVerificationWithLink &&
-              !twitterPostVerification?.link && (
-                <SelectOption
-                  title={'Show your X post here'}
-                  subTitle={''}
-                  onPress={() =>
-                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                      assetId: assetId,
-                      schema: RealmSchema.UniqueDigitalAsset,
-                      asset: uda,
-                    })
-                  }
-                  testID={'import_x_post'}
-                />
-              )}
+            {hasIssuanceTransaction && (
+              <SelectOption
+                title={'Show your X post here'}
+                subTitle={''}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                    assetId: assetId,
+                    schema: RealmSchema.UniqueDigitalAsset,
+                    asset: uda,
+                  })
+                }
+                testID={'import_x_post'}
+              />
+            )}
           </View>
           {isAddedInRegistry && <View style={styles.seperatorView} />}
           <>
@@ -470,6 +480,16 @@ const UDADetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: uda.assetId,
+              schema: RealmSchema.UniqueDigitalAsset,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.UniqueDigitalAsset}
         onVerificationComplete={() => {

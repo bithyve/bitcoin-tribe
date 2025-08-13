@@ -4,7 +4,6 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -18,6 +17,9 @@ import { hp } from 'src/constants/responsive';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { Asset } from 'src/models/interfaces/RGBWallet';
+import { useObject } from '@realm/react';
+import { RealmSchema } from 'src/storage/enum';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
@@ -25,26 +27,28 @@ function CoinAllTransaction() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
-  const { wallet: walletTranslations, settings } = translations;
-  const { assetId, transactions, assetName } = useRoute().params;
+  const { wallet: walletTranslations } = translations;
+  const { assetId, schema } = useRoute().params as { assetId: string, schema: RealmSchema };
+  const asset = useObject<Asset>(schema, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+
   return (
     <ScreenContainer>
-      <AppHeader title={walletTranslations.transferDetails} />
+      <AppHeader title={`${asset?.name} - Transactions`} />
       <FlatList
         style={styles.container}
-        data={transactions}
+        data={asset?.transactions}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView
               refreshing={isLoading}
-              onRefresh={() => mutate({ assetId })}
+              onRefresh={() => mutate({ assetId, schema })}
             />
           ) : (
             <RefreshControl
               refreshing={isLoading}
-              onRefresh={() => mutate({ assetId })}
-              colors={[theme.colors.accent1]} // You can customize this part
+              onRefresh={() => mutate({ assetId, schema })}
+              colors={[theme.colors.accent1]}
               progressBackgroundColor={theme.colors.inputBackground}
             />
           )
@@ -52,11 +56,13 @@ function CoinAllTransaction() {
         renderItem={({ item }) => (
           <AssetTransaction
             transaction={item}
-            coin={assetName}
+            coin={asset?.name}
+            precision={asset?.precision}
             onPress={() => {
               navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
                 transaction: item,
-                coin: assetName,
+                coin: asset?.name,
+                precision: asset?.precision,
               });
             }}
           />

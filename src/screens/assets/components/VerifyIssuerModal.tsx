@@ -1,5 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useContext, useState } from 'react';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { useTheme } from 'react-native-paper';
 
 import { verifyIssuerOnTwitter } from './VerifyIssuer';
 import { RealmSchema } from 'src/storage/enum';
@@ -7,11 +9,16 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { AppContext } from 'src/contexts/AppContext';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
-import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import AssetVerifyIllustration from 'src/assets/images/assetVerifyIllustration.svg';
+import VerifyDomainIcon from 'src/assets/images/icon_domain.svg';
+import VerifyDomainIconLight from 'src/assets/images/icon_domain_light.svg';
+import VerifyXIcon from 'src/assets/images/icon_verifyx.svg';
+import VerifyXIconLight from 'src/assets/images/icon_verifyx_light.svg';
+import { Keys } from 'src/storage';
+import SkipButton from 'src/components/SkipButton';
 
 interface VerifyIssuerModalProps {
   assetId: string;
@@ -21,6 +28,7 @@ interface VerifyIssuerModalProps {
   schema: RealmSchema;
   onVerificationComplete?: () => void;
   primaryLoading?: boolean;
+  onDomainVerify?: () => void;
 }
 
 const getStyles = (theme: AppTheme) =>
@@ -47,6 +55,9 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(25),
       alignSelf: 'center',
     },
+    skipWrapper: {
+      marginTop: hp(10),
+    },
   });
 
 const VerifyIssuerModal = ({
@@ -57,8 +68,10 @@ const VerifyIssuerModal = ({
   schema,
   onVerificationComplete,
   primaryLoading,
+  onDomainVerify,
 }: VerifyIssuerModalProps) => {
   const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { assets, common } = translations;
@@ -85,7 +98,7 @@ const VerifyIssuerModal = ({
           </View>
           {/* <View> */}
           <Buttons
-            primaryTitle={common.verify}
+            primaryTitle={'X'}
             primaryOnPress={async () => {
               setLoading(true);
               await verifyIssuerOnTwitter(
@@ -97,15 +110,24 @@ const VerifyIssuerModal = ({
               setCompleteVerification(true);
               setLoading(false);
             }}
-            secondaryTitle={common.skip}
-            secondaryOnPress={onDismiss}
+            secondaryTitle={'Domain'}
+            secondaryOnPress={onDomainVerify}
             width={windowWidth / 2.7}
             secondaryCTAWidth={windowWidth / 2.9}
             height={hp(14)}
             primaryLoading={primaryLoading || loading}
             disabled={primaryLoading || loading}
+            secondaryCTAIcon={
+              isThemeDark ? <VerifyDomainIcon /> : <VerifyDomainIconLight />
+            }
+            primaryCTAIcon={
+              isThemeDark ? <VerifyXIcon /> : <VerifyXIconLight />
+            }
           />
           {/* </View> */}
+        </View>
+        <View style={styles.skipWrapper}>
+          <SkipButton onPress={onDismiss} title={assets.skipForNow} />
         </View>
       </View>
     </ResponsePopupContainer>

@@ -11,9 +11,9 @@ import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import CollectiblesActive from 'src/assets/images/icon_collectibles_active.svg';
 import CollectiblesActiveLight from 'src/assets/images/icon_collectibles_active_light.svg';
 import CollectiblesInActive from 'src/assets/images/icon_collectibles_inactive.svg';
-// import CommunityActive from 'src/assets/images/icon_community_active.svg';
-// import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
-// import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
+import CommunityActive from 'src/assets/images/icon_community_active.svg';
+import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
+import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
@@ -54,6 +54,16 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         ) : (
           <CollectiblesInActive />
         );
+      case NavigationRoutes.COMMUNITY:
+        return isFocused ? (
+          isThemeDark ? (
+            <CommunityActive />
+          ) : (
+            <CommunityActiveLight />
+          )
+        ) : (
+          <CommunityInActive />
+        );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
           isThemeDark ? (
@@ -74,6 +84,8 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         return isFocused ? `${common.assets}` : '';
       case NavigationRoutes.COLLECTIBLE:
         return isFocused ? `${common.collectibles}` : '';
+      case NavigationRoutes.COMMUNITY:
+        return isFocused ? `${common.community}` : '';
       case NavigationRoutes.SETTINGS:
         return isFocused ? `${common.settings}` : '';
       default:
@@ -131,12 +143,13 @@ const CustomTab = ({ state, descriptors, navigation }) => {
               style={[
                 styles.bottomNavigation,
                 {
+                  marginLeft: hp(4),
                   color: isFocused
                     ? theme.colors.primaryCTAText
                     : theme.colors.disablePrimaryCTAText,
                 },
               ]}>
-              &nbsp;&nbsp;{Capitalize(TabBarTitle(isFocused, label))}
+              {Capitalize(TabBarTitle(isFocused, label))}
             </AppText>
           </TouchableOpacity>
         );
@@ -158,7 +171,7 @@ const getStyles = (theme: AppTheme) =>
       width: '89%',
       marginBottom: Platform.OS === 'ios' ? hp(15) : hp(35),
       marginHorizontal: hp(16),
-      // alignSelf: 'center',
+      alignSelf: 'center',
       // marginHorizontal: windowWidth * 0.1,
     },
     activeTab: {
@@ -169,16 +182,18 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.activeTabColor,
       borderRadius: 100,
       margin: 10,
-      paddingHorizontal: hp(15),
+      paddingHorizontal: hp(12),
+      minWidth: hp(125),
     },
     inActiveTab: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      minWidth: hp(50),
     },
     bottomNavigation: {
-      fontSize: 13,
+      fontSize: 12,
       fontFamily: Fonts.LufgaSemiBold,
       lineHeight: 13 * 1.4,
       fontWeight: '500',

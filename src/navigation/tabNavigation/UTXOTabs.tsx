@@ -4,27 +4,29 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import AppHeader from 'src/components/AppHeader';
 import ColorableUTXO from 'src/screens/collectiblesCoins/components/ColorableUTXO';
 import ColoredUTXO from 'src/screens/collectiblesCoins/components/ColoredUTXO';
 import UTXOInfoModal from 'src/screens/collectiblesCoins/components/UTXOInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import { hp, windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import UTXOTabBar from './UTXOTabBar';
+import Invoices from 'src/screens/collectiblesCoins/InvoicesScreen';
 
 const renderScene = SceneMap({
   colored: ColoredUTXO,
   colorable: ColorableUTXO,
+  invoices: Invoices,
 });
 
 const routes = [
   { key: 'colored', title: 'Colored' },
   { key: 'colorable', title: 'Colorable' },
+  { key: 'invoices', title: 'Invoices' },
 ];
 
 export default function UTXOTabs() {
@@ -46,7 +48,7 @@ export default function UTXOTabs() {
       <AppHeader
         title={wallet.unspentTitle || 'Unspent Outputs'}
         enableBack={true}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUTXOInfo(true)}
       />
       <TabView

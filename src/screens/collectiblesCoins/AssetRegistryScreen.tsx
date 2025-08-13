@@ -43,6 +43,7 @@ function AssetRegistryScreen() {
   const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
   const [feeDetails, setFeeDetails] = useState(null);
   const [disabledCTA, setDisabledCTA] = useState(false);
+  const [swipeResetCounter, setSwipeResetCounter] = useState(0);
 
   const schema = () => {
     switch (issueType) {
@@ -96,14 +97,14 @@ function AssetRegistryScreen() {
   useEffect(() => {
     if (getAssetIssuanceFeeMutation.isSuccess) {
       const feeData = getAssetIssuanceFeeMutation.data;
-      if (feeData.fee > 0) {
+      if (feeData?.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs?.transactions?.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid?.length > 0) {
           registerAsset();
         } else {
           getAssetIssuanceFeeMutation.reset();
@@ -136,7 +137,11 @@ function AssetRegistryScreen() {
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
         navigation.goBack();
+      } else {
+        Toast(errorMessage, true);
       }
+      setSwipeResetCounter(prev => prev + 1);
+      setDisabledCTA(false);
       payServiceFeeFeeMutation.reset();
     }
   }, [payServiceFeeFeeMutation]);
@@ -149,11 +154,11 @@ function AssetRegistryScreen() {
         assetId,
       ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
-      const { status } = await Relay.registerAsset(app.id, asset);
+      const { status } = await Relay.enrollAsset(app.id, asset, app.authToken);
       if (status) {
         const askVerify = true;
         setTimeout(() => routeMap(askVerify), 1000);
-        const tx = wallet.specs.transactions.find(
+        const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
@@ -204,11 +209,12 @@ function AssetRegistryScreen() {
           <View style={styles.feeWrapper}>
             <View style={styles.amtContainer}>
               <View style={styles.labelWrapper}>
-                <AppText style={styles.labelText}>{'Service Fee'}:</AppText>
+                <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
               </View>
               <View style={styles.valueWrapper}>
                 <AppText style={styles.labelText}>{`${numberWithCommas(
-                  feeDetails?.fee,
+                  feeDetails?.fee, 
+                  0,
                 )} sats`}</AppText>
               </View>
             </View>
@@ -223,6 +229,8 @@ function AssetRegistryScreen() {
                 payServiceFeeFeeMutation.mutate({ feeDetails });
               }}
               backColor={theme.colors.swipeToActionThumbColor}
+              resetCounter={swipeResetCounter}
+              loaderTextColor={theme.colors.primaryCTAText}
             />
           )}
           {!!feeDetails && (

@@ -171,7 +171,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 key={index}
                 name={item.name}
                 details={item.ticker}
-                amount={item.balance.spendable}
+                amount={(Number(item.balance.spendable) / 10 ** item.precision).toString()}
                 tag="COIN"
                 assetId={item.assetId}
                 onPressAsset={() =>
@@ -204,10 +204,10 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 index={index}
                 ticker={item.ticker}
                 image={Platform.select({
-                  android: `file://${
+                  android: item?.iconUrl || `file://${
                     item.media?.filePath || item.token.media.filePath
                   }`,
-                  ios: item.media?.filePath || item.token.media.filePath,
+                  ios: item?.iconUrl || item.media?.filePath || item.token.media.filePath,
                 })}
                 verified={item?.issuer?.verified}
               />

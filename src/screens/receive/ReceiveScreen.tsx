@@ -4,8 +4,9 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
-import { Keys } from 'src/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
+import { Keys } from 'src/storage';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import ModalContainer from 'src/components/ModalContainer';
@@ -22,14 +23,10 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
-// import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import ReceiveQrClipBoard from './components/ReceiveQrClipBoard';
-import { useMMKVBoolean } from 'react-native-mmkv';
 import OptionCard from 'src/components/OptionCard';
-import IconCopy from 'src/assets/images/icon_copy.svg';
-import IconCopyLight from 'src/assets/images/icon_copy_light.svg';
 import BackupPhraseModal from 'src/components/BackupPhraseModal';
 
 function ReceiveScreen({ route }) {
@@ -61,7 +58,10 @@ function ReceiveScreen({ route }) {
   );
 
   useEffect(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       getNodeOnchainBtcAddress.mutate();
     } else {
       const { receivingAddress } =
@@ -134,10 +134,7 @@ function ReceiveScreen({ route }) {
               qrTitle={receciveScreen.bitcoinAddress}
             />
           </View>
-          <ReceiveQrClipBoard
-            qrCodeValue={qrValue}
-            icon={isThemeDark ? <IconCopy /> : <IconCopyLight />}
-          />
+          <ReceiveQrClipBoard qrCodeValue={qrValue} />
           <OptionCard
             title={receciveScreen.addAmountTitle}
             // subTitle={receciveScreen.addAmountSubTitle}
@@ -192,7 +189,7 @@ const styles = StyleSheet.create({
   },
   qrWrapper: {
     paddingTop: hp(25),
-    height: windowHeight < 670 ? '65%' : '73%',
+    height: windowHeight < 670 ? '63%' : '71%',
     // justifyContent: 'center',
   },
   footerView: {

@@ -25,6 +25,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import TextField from 'src/components/TextField';
 import IconSearch from 'src/assets/images/icon_search.svg';
+import IconSearchLight from 'src/assets/images/icon_search_light.svg';
 
 type DropdownProps = {
   style;
@@ -35,6 +36,19 @@ type DropdownProps = {
   searchAssetInput?: string;
   onChangeSearchInput?: (text: string) => void;
   isLoading?: boolean;
+  showSearch?: boolean;
+};
+
+const EmptyAssetState = () => {
+  const theme: AppTheme = useTheme();
+  const styles = React.useMemo(() => getStyles(theme), [theme]);
+  return (
+    <View style={styles.emptyAssetStateContainer}>
+      <AppText variant="body1" style={styles.titleStyle}>
+        No Assets Found!
+      </AppText>
+    </View>
+  );
 };
 
 function RGBAssetList(props: DropdownProps) {
@@ -47,13 +61,13 @@ function RGBAssetList(props: DropdownProps) {
     searchAssetInput,
     onChangeSearchInput,
     isLoading,
+    showSearch = true,
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
   const { channel } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
   return (
     <View style={[style, styles.container]}>
       <AppTouchable onPress={onDissmiss}>
@@ -66,7 +80,7 @@ function RGBAssetList(props: DropdownProps) {
           ]}>
           <View style={styles.inputWrapper2}>
             <AppText variant="body1" style={styles.titleStyle}>
-              {channel.selectYourAsset}
+              {channel.selectAsset}
             </AppText>
           </View>
           <View style={styles.iconArrowWrapper}>
@@ -75,58 +89,72 @@ function RGBAssetList(props: DropdownProps) {
         </GradientView>
       </AppTouchable>
       <View style={styles.container2}>
-        <TextField
-          value={searchAssetInput}
-          onChangeText={onChangeSearchInput}
-          placeholder={'Search from Tribe RGB registry'}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          rightIcon={
-            isLoading ? (
-              <ActivityIndicator size="small" />
-            ) : isThemeDark ? (
-              <IconSearch />
-            ) : (
-              <IconSearch />
-            )
-          }
-          onRightTextPress={() => () => {}}
-          rightCTAStyle={styles.rightCTAStyle}
-          rightCTATextColor={theme.colors.accent1}
-          blurOnSubmit={false}
-          returnKeyType="done"
-          error={''}
-          keyboardType="default"
-          autoCapitalize="none"
-          onSubmitEditing={() => {}}
-        />
-        <View style={styles.labelWrapper}>
-          <View>
-            <AppText variant="caption" style={style.labelTextStyle}>
-              Asset Name
-            </AppText>
+        {showSearch && (
+          <TextField
+            value={searchAssetInput}
+            onChangeText={onChangeSearchInput}
+            placeholder={'Search from Tribe RGB registry'}
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+            rightIcon={
+              isLoading ? (
+                <ActivityIndicator size="small" color={theme.colors.accent1} />
+              ) : isThemeDark ? (
+                <IconSearch />
+              ) : (
+                <IconSearchLight />
+              )
+            }
+            onRightTextPress={() => () => {}}
+            rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
+            blurOnSubmit={false}
+            returnKeyType="done"
+            error={''}
+            keyboardType="default"
+            autoCapitalize="none"
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
+        )}
+        {assets && assets.length > 0 && (
+          <View style={styles.labelWrapper}>
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                Asset Name
+              </AppText>
+            </View>
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                Available Balance
+              </AppText>
+            </View>
           </View>
-          <View>
-            <AppText variant="caption" style={style.labelTextStyle}>
-              Total Supply
-            </AppText>
-          </View>
-        </View>
+        )}
         <FlatList
           data={assets}
+          style={styles.assetListContainer}
           renderItem={({ item }) => {
             const filePath = item?.media?.filePath || item?.asset?.media?.file;
-            const isCollectible =
+            const showImage =
               item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
               item?.asset?.assetSchema?.toUpperCase() ===
-                AssetSchema.Collectible;
+                AssetSchema.Collectible ||
+              item?.asset?.iconUrl ||
+              item?.iconUrl;
 
-            const imageUri = filePath?.startsWith('http')
-              ? filePath
-              : Platform.select({
+            const imageUri = (() => {
+              if (item?.iconUrl) return item.iconUrl;
+              if (item?.asset?.iconUrl) return item.asset.iconUrl;
+              if (filePath && filePath.startsWith('http')) return filePath;
+              if (filePath) {
+                return Platform.select({
                   android: `file://${filePath}`,
                   ios: filePath,
                 });
+              }
+              return null;
+            })();
+
             const assetName = item?.name ?? item?.asset?.name;
             const ticker = item?.ticker ?? item?.asset?.ticker;
             const assetId = item?.assetId ?? item?.asset?.assetId;
@@ -139,7 +167,7 @@ function RGBAssetList(props: DropdownProps) {
                 style={styles.assetContainer}>
                 <View style={styles.assetWrapper}>
                   <View style={styles.assetImageWrapper}>
-                    {isCollectible ? (
+                    {showImage ? (
                       <Image
                         source={{ uri: imageUri }}
                         style={styles.imageStyle}
@@ -174,13 +202,16 @@ function RGBAssetList(props: DropdownProps) {
                 <View style={styles.balanceWrapper}>
                   <AppText variant="body2" style={styles.balanceText}>
                     {formatLargeNumber(
-                      item?.balance?.spendable || item?.asset?.issuedSupply,
+                      item?.balance?.spendable / 10 ** item?.precision ||
+                        item?.asset?.issuedSupply /
+                          10 ** item?.asset?.precision,
                     )}
                   </AppText>
                 </View>
               </AppTouchable>
             );
           }}
+          ListEmptyComponent={<EmptyAssetState />}
         />
       </View>
     </View>
@@ -198,7 +229,7 @@ const getStyles = (theme: AppTheme) =>
     container2: {
       borderRadius: hp(20),
       marginTop: hp(20),
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: theme.colors.assetListBackColor,
       paddingTop: hp(10),
     },
     inputWrapper: {
@@ -244,14 +275,12 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       padding: hp(10),
       margin: hp(10),
-      alignItems: 'center',
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: 10,
     },
     assetWrapper: {
       flexDirection: 'row',
-      alignItems: 'center',
       width: '74%',
     },
     assetImageWrapper: {
@@ -276,9 +305,11 @@ const getStyles = (theme: AppTheme) =>
     input: {
       margin: hp(12),
       width: 'auto',
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
     inputStyle: {
-      height: hp(50),
+      height: hp(60),
       width: '80%',
     },
     rightCTAStyle: {
@@ -292,9 +323,19 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginHorizontal: hp(15),
+      marginTop: hp(5),
     },
     labelTextStyle: {
       color: theme.colors.secondaryHeadingColor,
+    },
+    assetListContainer: {
+      marginTop: hp(5),
+      marginBottom: hp(10),
+    },
+    emptyAssetStateContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: hp(20),
     },
   });
 export default RGBAssetList;

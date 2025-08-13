@@ -3,22 +3,25 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import SentBtcIcon from 'src/assets/images/btcSentAssetTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentAssetTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcReceiveAssetTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcReceiveAssetTxnIcon_light.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningReceiveTxnIcon.svg';
 import FailedTxnIcon from 'src/assets/images/failedTxnIcon.svg';
 import WaitingCounterPartySendIcon from 'src/assets/images/waitingCounterPartySendIcon.svg';
 import WaitingCounterPartyReceiveIcon from 'src/assets/images/waitingCounterPartyReceiveIcon.svg';
 import WaitingConfirmationIconSend from 'src/assets/images/waitingConfirmationIconSend.svg';
+import WaitingConfirmationIconSendLight from 'src/assets/images/waitingConfirmationIconSend_light.svg';
 import WaitingConfirmationIconReceive from 'src/assets/images/waitingConfirmationIconReceive.svg';
 import IssuanceIcon from 'src/assets/images/issuanceIcon.svg';
+import IssuanceIconLight from 'src/assets/images/issuanceIcon_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   AssetFace,
@@ -37,11 +40,12 @@ type AssetTransactionProps = {
   coin: string;
   onPress: () => void;
   assetFace?: string;
+  precision: number;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -49,20 +53,36 @@ function AssetTransaction(props: AssetTransactionProps) {
   );
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
+  const amount = useMemo(() => {
+    if(transaction.kind.toUpperCase() === TransferKind.SEND) {
+      return transaction.requestedAssignment?.amount;
+    } else {
+      return transaction.assignments[0]?.amount;
+    }
+  }, [transaction]);
+
   const getStatusIcon = (kind, status, type) => {
     const icons = {
       bitcoin: {
         settled: {
-          send: <SentBtcIcon />,
-          receiveblind: <RecieveBtcIcon />,
-          issuance: <IssuanceIcon />,
+          send: isThemeDark ? <SentBtcIcon /> : <SentBtcIconLight />,
+          receiveblind: isThemeDark ? (
+            <RecieveBtcIcon />
+          ) : (
+            <RecieveBtcIconLight />
+          ),
+          issuance: isThemeDark ? <IssuanceIcon /> : <IssuanceIconLight />,
         },
         waitingcounterparty: {
           send: <WaitingCounterPartySendIcon />,
           receiveblind: <WaitingCounterPartyReceiveIcon />,
         },
         waitingconfirmations: {
-          send: <WaitingConfirmationIconSend />,
+          send: isThemeDark ? (
+            <WaitingConfirmationIconSend />
+          ) : (
+            <WaitingConfirmationIconSendLight />
+          ),
           receiveblind: <WaitingConfirmationIconReceive />,
         },
         failed: {
@@ -75,7 +95,7 @@ function AssetTransaction(props: AssetTransactionProps) {
         settled: {
           send: <SentLightningIcon />,
           receiveblind: <RecieveLightningIcon />,
-          issuance: <IssuanceIcon />,
+          issuance: isThemeDark ? <IssuanceIcon /> : <IssuanceIconLight />,
         },
         failed: {
           send: <FailedTxnIcon />,
@@ -164,10 +184,12 @@ function AssetTransaction(props: AssetTransactionProps) {
                   amtTextStyle,
                   {
                     fontSize:
-                      transaction.amount.toString().length > 10 ? 11 : 16,
+                      amount?.toString().length > 10 ? 11 : 16,
                   },
                 ]}>
-                &nbsp;{numberWithCommas(transaction.amount)}
+                &nbsp;{precision === 0
+                ? numberWithCommas(Number(amount))
+                : numberWithCommas(Number(amount) / 10 ** precision)}
               </AppText>
             </View>
           </View>

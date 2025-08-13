@@ -3,12 +3,22 @@ import { RealmSchema } from '../../enum';
 
 export const ReceiveDataSchema: ObjectSchema = {
   name: RealmSchema.ReceiveData,
-  embedded: true,
   properties: {
     batchTransferIdx: 'int?',
     expirationTimestamp: 'int',
     invoice: 'string',
     recipientId: 'string',
+  },
+};
+
+export const ReceiveUTXOSchema: ObjectSchema = {
+  name: RealmSchema.ReceiveUTXOData,
+  primaryKey: 'recipientId',
+  properties: {
+    recipientId: 'string',
+    linkedAsset: 'string?',
+    linkedAmount: 'string?',
+    receiveData: `${RealmSchema.ReceiveData}?`,
   },
 };
 
@@ -26,11 +36,12 @@ export const RgbWalletSchema: ObjectSchema = {
   properties: {
     mnemonic: 'string',
     xpub: 'string',
-    accountXpubColoredFingerprint: 'string',
+    masterFingerprint: 'string',
     accountXpubColored: 'string',
     accountXpubVanilla: 'string',
     rgbDir: 'string?',
     receiveData: `${RealmSchema.ReceiveData}?`,
+    receiveUTXOs: `${RealmSchema.ReceiveUTXOData}[]`,
     utxos: 'string?[]',
     nodeUrl: 'string?',
     nodeAuthentication: 'string?',
@@ -38,6 +49,8 @@ export const RgbWalletSchema: ObjectSchema = {
     peerDNS: 'string?',
     nodeOnchainTransactions: `${RealmSchema.NodeOnChainTransaction}[]`,
     lnPayments: `${RealmSchema.LNPayments}[]`,
+    nodeMnemonic: 'string?',
+    invoices: `${RealmSchema.ReceiveData}[]`,
   },
   primaryKey: 'mnemonic',
 };

@@ -18,11 +18,11 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
     return <View />;
   }
   const html = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <style>
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <style>
         html, body {
           margin: 0;
           padding: 0;
@@ -32,44 +32,51 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
           background-color: ${theme.colors.primaryBackground} !important;
         }
       </style>
-      </head>
-      <body>
-        <blockquote class="twitter-tweet" data-theme="${
-          theme.dark ? 'dark' : 'light'
-        }">
-          <a href="https://twitter.com/twitter/status/${tweetId}"></a>
-        </blockquote>
-       <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        <script>
-          function checkTweetRendered() {
-            const tweet = document.querySelector('.twitter-tweet');
-            if (!tweet || tweet.offsetHeight < 50) {
-              window.ReactNativeWebView.postMessage("NOT_FOUND");
-            }
-          }
-          function updateHeight() {
+    </head>
+    <body>
+      <blockquote class="twitter-tweet" data-theme="${
+        theme.dark ? 'dark' : 'light'
+      }">
+        <a href="https://twitter.com/twitter/status/${tweetId}"></a>
+      </blockquote>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <script>
+        function waitForTweet() {
+          const observer = new MutationObserver((mutations, obs) => {
             const tweet = document.querySelector('.twitter-tweet');
             if (tweet) {
-              const observer = new ResizeObserver(() => {
+              const iframe = tweet.querySelector('iframe');
+              if (iframe) {
+                const resizeObserver = new ResizeObserver(() => {
+                  const height = document.body.scrollHeight;
+                  window.ReactNativeWebView.postMessage(height);
+                });
+                resizeObserver.observe(tweet);
                 const height = document.body.scrollHeight;
                 window.ReactNativeWebView.postMessage(height);
-              });
-              observer.observe(tweet);
+                obs.disconnect();
+              } else {
+                window.ReactNativeWebView.postMessage("NOT_FOUND");
+                obs.disconnect();
+              }
             }
-          }
+          });
 
-          window.onload = function() {
-            updateHeight();
-            setTimeout(() => {
-            checkTweetRendered();
-              const height = document.body.scrollHeight;
-              window.ReactNativeWebView.postMessage(height);
-            }, 3000);
-          };
-        </script>
-      </body>
-    </html>
-  `;
+          observer.observe(document.body, { childList: true, subtree: true });
+          setTimeout(() => {
+            const tweet = document.querySelector('.twitter-tweet');
+            const iframe = tweet?.querySelector('iframe');
+            if (!iframe) {
+              window.ReactNativeWebView.postMessage("NOT_FOUND");
+            }
+          }, 5000);
+        }
+
+        window.onload = waitForTweet;
+      </script>
+    </body>
+  </html>
+`;
 
   const handleMessage = (event: any) => {
     const data = event.nativeEvent.data;

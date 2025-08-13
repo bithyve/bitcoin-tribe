@@ -13,8 +13,7 @@ import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
-import AssetChip from './AssetChip';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import Colors from 'src/theme/Colors';
 
@@ -22,15 +21,18 @@ type AssetCardProps = {
   asset: Asset;
   tag?: string;
   onPress?: (event: GestureResponderEvent) => void;
+  precision?: number;
 };
 
 const AssetCard = (props: AssetCardProps) => {
-  const { tag, onPress, asset } = props;
+  const { tag, onPress, asset, precision } = props;
   const theme: AppTheme = useTheme();
 
   const balance = useMemo(() => {
-    return formatLargeNumber(asset?.balance?.future) ?? 0;
-  }, [asset?.balance?.future]);
+    return (
+      formatLargeNumber(Number(asset?.balance?.future) / 10 ** precision) ?? 0
+    );
+  }, [asset?.balance?.future, precision]);
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 
@@ -41,6 +43,10 @@ const AssetCard = (props: AssetCardProps) => {
       ios: media,
     });
   }, [asset?.media?.filePath, asset?.token?.media.filePath]);
+
+  const isVerified = asset?.issuer?.verifiedBy.some(
+    item => item.verified === true,
+  );
 
   return (
     <AppTouchable onPress={onPress}>
@@ -68,7 +74,7 @@ const AssetCard = (props: AssetCardProps) => {
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
             {asset.name}
           </AppText>
-          {asset.issuer?.verified && <IconVerified width={20} height={20} />}
+          {isVerified && <IconVerified width={20} height={20} />}
         </View>
       </GradientView>
     </AppTouchable>

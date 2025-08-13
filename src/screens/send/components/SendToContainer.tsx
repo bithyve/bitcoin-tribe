@@ -227,7 +227,10 @@ function SendToContainer({
   };
 
   const balances = useMemo(() => {
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       return rgbWallet?.nodeBtcBalance?.vanilla?.spendable || '';
     } else {
       return (
@@ -279,7 +282,8 @@ function SendToContainer({
   };
 
   const transferFee =
-    app.appType === AppType.NODE_CONNECT
+    app.appType === AppType.NODE_CONNECT ||
+    app.appType === AppType.SUPPORTED_RLN
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
       : isSendMax
       ? sendMaxFee
@@ -318,7 +322,7 @@ function SendToContainer({
   }, [isSendMax, selectedPriority, sendMaxFee]);
 
   useEffect(() => {
-    if ((isSendMax && selectedPriority) || customFee) {
+    if (isSendMax && selectedPriority) {
       onSendMax();
     }
   }, [selectedPriority, isSendMax, customFee, sendMaxFee]);

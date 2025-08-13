@@ -7,7 +7,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -42,7 +46,7 @@ import {
   AverageTxFees,
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
-import { formatNumber, numberWithCommas } from 'src/utils/numberWithCommas';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 import config from 'src/utils/config';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
@@ -81,7 +85,7 @@ const AssetItem = ({
   assetId,
   amount,
   verified,
-  iconUrl
+  iconUrl,
 }: ItemProps) => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -172,8 +176,9 @@ const SendAssetScreen = () => {
   const iconRef = useRef(null);
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-  const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-    JSON.parse(averageTxFeeJSON);
+  const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
+    ? JSON.parse(averageTxFeeJSON)
+    : {};
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
   const createUtxos = useMutation(ApiHandler.createUtxos);
@@ -183,10 +188,13 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
+  const precision = assetData?.precision || assetData?.metaData?.precision || 0;
   const [assetAmount, setAssetAmount] = useState(
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
-      : amount || '',
+      : amount && amount !== '0'
+      ? (Number(amount) / 10 ** precision).toString()
+      : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -206,7 +214,7 @@ const SendAssetScreen = () => {
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
-    averageTxFee[TxPriority.LOW].feePerByte,
+    averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const isButtonDisabled = useMemo(() => {
@@ -231,55 +239,35 @@ const SendAssetScreen = () => {
   }, [createUtxos.data]);
 
   const handleAmountInputChange = text => {
-    const numericValue = parseFloat(text.replace(/,/g, '') || null);
-    if (isNaN(numericValue)) {
-      setAmountValidationError('');
-      setAssetAmount('');
-    } else if (numericValue === 0) {
-      setAssetAmount(text);
-      setAmountValidationError(sendScreen.validationZeroNotAllowed);
-    } else if (Number(assetData?.balance.spendable) === 0) {
-      setAmountValidationError(
-        sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
-      );
-    } else if (numericValue <= assetData?.balance.spendable) {
-      setAssetAmount(text);
-      setAmountValidationError('');
-    } else if (numericValue > Number(assetData?.balance.spendable)) {
-      setAmountValidationError(
-        assets.checkSpendableAmt + assetData?.balance.spendable,
-      );
-    } else {
-      setAssetAmount('');
-      setAmountValidationError('');
-    }
-  };
-
-  /* todo send asset with precision
-  const handleAmountInputChange = text => {
     let regex;
-    if (assetData.precision === 0) {
+    if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
-      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${assetData.precision}})?$`);
-    }    if (text === '' || regex.test(text)) {
-      setAssetAmount(text);
+      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${precision}})?$`);
+    }
+    if (text === '' || regex.test(text)) {
       const numericValue = parseFloat(text || '0');
-      if (Number(assetData?.balance.spendable) === 0) {
+      if (Number(assetData?.balance.spendable) / 10 ** precision === 0) {
         Keyboard.dismiss();
         Toast(
           sendScreen.spendableBalanceMsg + assetData?.balance.spendable,
           true,
         );
-      } else if (numericValue <= assetData?.balance.spendable) {
+      } else if (
+        numericValue <=
+        Number(assetData?.balance.spendable) / 10 ** precision
+      ) {
         setAssetAmount(text);
       } else {
         Keyboard.dismiss();
-        Toast(assets.checkSpendableAmt + assetData?.balance.spendable, true);
+        Toast(
+          assets.checkSpendableAmt +
+            Number(assetData?.balance.spendable) / 10 ** precision,
+          true,
+        );
       }
     }
   };
-  */
 
   const getFeeRateByPriority = (priority: TxPriority) => {
     return idx(averageTxFee, _ => _[priority].feePerByte) || 0;
@@ -295,15 +283,16 @@ const SendAssetScreen = () => {
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
-        amount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')),
+        amount:
+          parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+          10 ** precision,
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
-        feeRate: selectedFeeRate,
+        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
       });
+      setLoading(false);
       if (response?.txid) {
-        setLoading(false);
         setSuccessStatus(true);
-        // Toast(sendScreen.sentSuccessfully, true);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
@@ -325,6 +314,7 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
+      setLoading(false);
       setVisible(false);
       setTimeout(() => {
         Toast(`Failed: ${error}`, true);
@@ -347,14 +337,22 @@ const SendAssetScreen = () => {
       }
 
       const res = await ApiHandler.decodeInvoice(cleanedText);
-
+      if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+        setInvoiceValidationError('Invalid invoice');
+        Toast('This invoice is not valid for the current network', true);
+        return;
+      }
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
           setInvoice(cleanedText);
-          setAssetAmount(res.amount.toString() || '0');
+          setAssetAmount(
+            res?.assignment?.amount.toString() !== '0'
+              ? Number(res?.assignment?.amount / 10 ** precision).toString()
+              : '',
+          );
           setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
@@ -381,10 +379,17 @@ const SendAssetScreen = () => {
   };
 
   const setMaxAmount = () => {
-    if (assetData?.balance?.spendable) {
-      const spendableAmount = assetData.balance.spendable.toString();
-      setAssetAmount(spendableAmount);
-    }
+    const spendable = Number(assetData?.balance?.spendable);
+    if (isNaN(spendable)) return;
+
+    const formatted =
+      precision === 0
+        ? spendable.toString()
+        : (spendable / 10 ** precision)
+            .toFixed(precision)
+            .replace(/\.?0+$/, '');
+
+    setAssetAmount(formatted);
   };
 
   const handleCustomFeeInput = text => {
@@ -440,8 +445,8 @@ const SendAssetScreen = () => {
           ticker={assetData?.ticker}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.ticker
-              : assetData?.details
+              ? assetData?.details
+              : assetData?.ticker
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
@@ -461,7 +466,11 @@ const SendAssetScreen = () => {
               : assets.collectible
           }
           assetId={assetId}
-          amount={assetData?.balance.spendable}
+          amount={
+            precision === 0
+              ? assetData?.balance.spendable
+              : Number(assetData?.balance.spendable) / 10 ** precision
+          }
           verified={assetData?.issuer?.verified}
           iconUrl={assetData.iconUrl}
         />
@@ -497,7 +506,7 @@ const SendAssetScreen = () => {
           {sendScreen.enterAmount}
         </AppText>
         <TextField
-          value={formatNumber(assetAmount)}
+          value={assetAmount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}
           keyboardType="numeric"
@@ -519,7 +528,9 @@ const SendAssetScreen = () => {
           </AppText>
           <View style={styles.balanceWrapper}>
             <AppText variant="body2" style={styles.availableBalanceText}>
-              {numberWithCommas(assetData?.balance.spendable)}
+              {precision === 0
+                ? numberWithCommas(Number(assetData?.balance.spendable))
+                : Number(assetData?.balance.spendable) / 10 ** precision}
             </AppText>
           </View>
         </View>
@@ -532,8 +543,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.LOW}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-              setSelectedPriority(TxPriority.LOW);
+              if (averageTxFee && averageTxFee[TxPriority.LOW]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+                setSelectedPriority(TxPriority.LOW);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -545,8 +563,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.MEDIUM}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-              setSelectedPriority(TxPriority.MEDIUM);
+              if (averageTxFee && averageTxFee[TxPriority.MEDIUM]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
+                setSelectedPriority(TxPriority.MEDIUM);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -558,8 +583,15 @@ const SendAssetScreen = () => {
             priority={TxPriority.HIGH}
             selectedPriority={selectedPriority}
             setSelectedPriority={() => {
-              setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-              setSelectedPriority(TxPriority.HIGH);
+              if (averageTxFee && averageTxFee[TxPriority.HIGH]) {
+                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
+                setSelectedPriority(TxPriority.HIGH);
+              } else {
+                Toast(
+                  'Unable to load transaction fee data. Please try again later.',
+                  true,
+                );
+              }
             }}
             feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
             estimatedBlocksByPriority={getEstimatedBlocksByPriority(
@@ -659,8 +691,15 @@ const SendAssetScreen = () => {
                   );
                   navigation.replace(NavigationRoutes.HOME);
                 } else {
+                  navigation.dispatch(
+                    CommonActions.setParams({
+                      params: { askReview: true },
+                      key: navigation.getState().routes[
+                        navigation.getState().index - 1
+                      ]?.key,
+                    }),
+                  );
                   navigation.goBack();
-                  navigation.setParams({ askReview: true });
                 }
               }, 600);
             }}
@@ -735,6 +774,7 @@ const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
     },
     inputStyle: {
       width: '80%',
+      paddingBottom: hp(5),
     },
     invoiceInputStyle: {
       borderRadius: hp(20),

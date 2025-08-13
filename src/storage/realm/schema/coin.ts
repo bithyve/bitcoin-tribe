@@ -1,12 +1,16 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
-import { AssetSchema, AssetSource, AssetVisibility } from 'src/models/interfaces/RGBWallet';
+import {
+  AssetSchema,
+  AssetSource,
+  AssetVisibility,
+} from 'src/models/interfaces/RGBWallet';
 
 export const MetaData = {
   name: RealmSchema.MetaData,
   properties: {
     assetSchema: 'string',
-    issuedSupply: 'int',
+    issuedSupply: 'string',
     name: 'string',
     precision: 'int?',
     ticker: 'string?',
@@ -14,31 +18,60 @@ export const MetaData = {
   },
 };
 
+export const AssignmentSchema = {
+  name: RealmSchema.Assignment,
+  properties: {
+    amount: 'string?',
+    type: 'string?',
+  },
+};
+
+export const TransferTransportEndpointSchema = {
+  name: RealmSchema.TransferTransportEndpoint,
+  properties: {
+    endpoint: 'string',
+    transportType: 'string',
+    used: 'bool',
+  },
+};
+
+export const UtxoSchema = {
+  name: RealmSchema.Utxo,
+  properties: {
+    txid: 'string',
+    vout: 'int',
+  },
+};
+
 export const AssetTransactionSchema = {
   name: RealmSchema.AssetTransaction,
   properties: {
-    amount: 'int',
     batchTransferIdx: 'int?',
     createdAt: 'int',
     idx: 'int',
     kind: 'string',
     status: 'string',
-    //transportEndpoints: 'string[]',
+    transportEndpoints: `${RealmSchema.TransferTransportEndpoint}[]`,
     updatedAt: 'int',
     txid: 'string?',
     recipientId: 'string?',
     expiration: 'int?',
+    requestedAssignment: `${RealmSchema.Assignment}?`,
+    assignments: `${RealmSchema.Assignment}[]`,
+    receiveUtxo: `${RealmSchema.Utxo}?`,
+    changeUtxo: `${RealmSchema.Utxo}?`,
+    invoiceString: 'string?',
   },
 };
 
 export const BalanceSchema: ObjectSchema = {
   name: RealmSchema.Balance,
   properties: {
-    future: 'int?',
-    settled: 'int?',
-    spendable: 'int?',
-    offchainOutbound: 'int?',
-    offchainInbound: 'int?',
+    future: 'string?',
+    settled: 'string?',
+    spendable: 'string?',
+    offchainOutbound: 'string?',
+    offchainInbound: 'string?',
   },
 };
 
@@ -49,7 +82,8 @@ export const CoinSchema: ObjectSchema = {
     assetId: 'string',
     addedAt: 'int',
     balance: `${RealmSchema.Balance}?`,
-    issuedSupply: 'int',
+    issuedSupply: 'string',
+    disclaimer: 'string?{}',
     name: 'string',
     precision: 'int',
     ticker: 'string',
@@ -74,6 +108,6 @@ export const CoinSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
   },
 };

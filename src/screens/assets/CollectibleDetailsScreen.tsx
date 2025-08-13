@@ -16,7 +16,10 @@ import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { Collectible } from 'src/models/interfaces/RGBWallet';
+import {
+  Collectible,
+  IssuerVerificationMethod,
+} from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import TransactionsList from './TransactionsList';
@@ -27,7 +30,6 @@ import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, windowHeight } from 'src/constants/responsive';
-import AssetSpendableAmtView from './components/AssetSpendableAmtView';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -37,6 +39,8 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
+import TransactionInfoCard from './components/TransactionInfoCard';
+import Toast from 'src/components/Toast';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -45,7 +49,7 @@ const CollectibleDetailsScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const { assetId, askReview, askVerify } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
-  const { common, settings, assets } = translations;
+  const { common, settings, assets, node } = translations;
   const styles = getStyles();
   const {
     appType,
@@ -53,6 +57,7 @@ const CollectibleDetailsScreen = () => {
     setCompleteVerification,
     hasIssuedAsset,
     setHasIssuedAsset,
+    isNodeInitInProgress,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
@@ -71,6 +76,10 @@ const CollectibleDetailsScreen = () => {
     useState(false);
   const [refresh, setRefresh] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+
+  const domainVerification = collectible?.issuer?.verifiedBy?.find(
+    v => v.type === IssuerVerificationMethod.DOMAIN,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -147,7 +156,10 @@ const CollectibleDetailsScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.Collectible });
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         listPaymentshMutation.mutate();
       }
     });
@@ -165,7 +177,7 @@ const CollectibleDetailsScreen = () => {
   );
 
   const transactionsData =
-    appType === AppType.NODE_CONNECT
+    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...collectible?.transactions,
@@ -174,7 +186,13 @@ const CollectibleDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : collectible?.transactions;
+      : collectible?.transactions.slice(0, 4);
+
+  const navigateWithDelay = (callback: () => void) => {
+    setTimeout(() => {
+      callback();
+    }, 1000);
+  };
 
   // const largeHeaderHeight = scrollY.interpolate({
   //   inputRange: [0, 300],
@@ -188,12 +206,14 @@ const CollectibleDetailsScreen = () => {
   //   extrapolate: 'clamp',
   // });
   return (
-    <ScreenContainer>
+    // <ScreenContainer style={styles.container}>
+    <>
       <AssetDetailsHeader
         asset={collectible}
         assetName={collectible.name}
         assetTicker={collectible.details}
         assetImage={collectible?.media?.filePath}
+        assetId={collectible.assetId}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}
         headerRightIcon={
@@ -207,31 +227,35 @@ const CollectibleDetailsScreen = () => {
             style={styles.imageStyle}
           />
         }
-        onPressSend={() =>
+        onPressSend={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: assetId,
             rgbInvoice: '',
             wallet: wallet,
-          })
-        }
+          });
+        }}
         onPressSetting={() =>
-          navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
-            assetId,
-          })
+          navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
         }
-        onPressReceive={() =>
+        onPressReceive={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
-          })
-        }
+            chosenAsset: collectible,
+          });
+        }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
-      <View style={styles.spendableBalanceWrapper}>
-        <AssetSpendableAmtView
-          spendableBalance={collectible?.balance?.spendable}
-          style={styles.toolTipCotainer}
-        />
-      </View>
+      {/* <View style={styles.spendableBalanceWrapper}>
+        <TransactionInfoCard style={styles.toolTipCotainer} />
+      </View> */}
       <TransactionsList
         transactions={transactionsData}
         isLoading={isLoading}
@@ -248,6 +272,8 @@ const CollectibleDetailsScreen = () => {
         assetId={assetId}
         scrollY={scrollY}
         style={styles.transactionContainer}
+        precision={collectible.precision}
+        schema={RealmSchema.Collectible}
       />
       <VerifyIssuerModal
         assetId={collectible.assetId}
@@ -259,6 +285,16 @@ const CollectibleDetailsScreen = () => {
         onDismiss={() => {
           setShowVerifyModal(false);
           setTimeout(() => setVisibleIssuedPostOnTwitter(true), 1000);
+        }}
+        onDomainVerify={() => {
+          setShowVerifyModal(false);
+          navigateWithDelay(() =>
+            navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+              assetId: collectible.assetId,
+              schema: RealmSchema.Collectible,
+              savedDomainName: domainVerification?.name || '',
+            }),
+          );
         }}
         schema={RealmSchema.Collectible}
         onVerificationComplete={() => {
@@ -322,24 +358,31 @@ const CollectibleDetailsScreen = () => {
           issuerInfo={collectible}
         />
       </>
-    </ScreenContainer>
+    </>
   );
 };
 const getStyles = () =>
   StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      paddingHorizontal: hp(0),
+    },
     imageStyle: {
       height: hp(40),
       width: hp(40),
       borderRadius: 10,
     },
     spendableBalanceWrapper: {
-      top: -30,
+      paddingHorizontal: hp(14),
     },
     transactionContainer: {
-      top: -25,
+      paddingHorizontal: hp(14),
+      height: Platform.OS === 'ios' ? '46%' : '42%',
+      marginTop: hp(15),
     },
     toolTipCotainer: {
-      top: windowHeight > 670 ? 110 : 100,
+      // top: windowHeight > 670 ? 110 : 100,
     },
   });
 export default CollectibleDetailsScreen;

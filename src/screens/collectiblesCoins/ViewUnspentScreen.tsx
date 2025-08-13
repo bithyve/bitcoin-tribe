@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
+import { useNavigation } from '@react-navigation/native';
+
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
@@ -19,7 +21,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import openLink from 'src/utils/OpenLink';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import AppTouchable from 'src/components/AppTouchable';
@@ -34,10 +35,13 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import RefreshControlView from 'src/components/RefreshControlView';
 import UTXOInfoModal from './components/UTXOInfoModal';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import Toast from 'src/components/Toast';
 
 const ViewUnspentScreen = () => {
+  const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -89,12 +93,18 @@ const ViewUnspentScreen = () => {
   }, [mutate]);
 
   const redirectToBlockExplorer = (txid: string) => {
-    if (config.NETWORK_TYPE === NetworkType.REGTEST) return;
-    openLink(
-      `https://mempool.space${
+    if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
+      const url = `https://mempool.space${
         config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${txid}`,
-    );
+      }/tx/${txid}`;
+
+      navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+        url,
+        title: 'Transaction Details',
+      });
+    } else {
+      Toast('Explorer not available!', true);
+    }
   };
   const pullDownToRefresh = () => {
     setRefreshing(true);
@@ -107,7 +117,7 @@ const ViewUnspentScreen = () => {
       <AppHeader
         title={wallet.unspentTitle || 'Unspent Outputs'}
         enableBack={true}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUTXOInfo(true)}
       />
       <SegmentedButtons
@@ -135,7 +145,8 @@ const ViewUnspentScreen = () => {
             onPress={() => redirectToBlockExplorer(item.utxo.outpoint.txid)}>
             <UnspentUTXOElement
               transID={
-                app?.appType === AppType.NODE_CONNECT
+                app?.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
                   ? `${item.utxo.outpoint}`
                   : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
               }

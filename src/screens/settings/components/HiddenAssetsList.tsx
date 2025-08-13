@@ -22,8 +22,8 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
-import NoAssetsIllustration from 'src/assets/images/noCoinAssets.svg';
-import NoAssetsIllustrationLight from 'src/assets/images/noCoinAssets_light.svg';
+import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
+import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
 import GradientView from 'src/components/GradientView';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
@@ -134,6 +134,7 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
               <View style={styles.assetImageWrapper}>
                 {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
                   <AssetIcon
+                    iconUrl={item.iconUrl}
                     assetTicker={item.ticker}
                     assetID={item.assetId}
                     size={30}
@@ -167,7 +168,11 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                   </AppText>
                   <View style={styles.verticalLineStyle} />
                   <AppText variant="body2" style={styles.assetBalance}>
-                    {numberWithCommas(item?.balance?.future)}
+                    {item.precision === 0
+                      ? numberWithCommas(item?.balance?.future)
+                      : numberWithCommas(
+                          Number(item?.balance?.future) / 10 ** item.precision,
+                        )}
                   </AppText>
                 </View>
               </View>

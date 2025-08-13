@@ -44,6 +44,7 @@ import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
+import BiometricUnlockModal from './components/BiometricUnlockModal';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -64,6 +65,7 @@ function SettingsScreen({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
+  const [visibleBiometricUnlock, setVisibleBiometricUnlock] = useState(false);
   const login = useMutation(ApiHandler.verifyPin);
 
   useEffect(() => {
@@ -119,10 +121,7 @@ function SettingsScreen({ navigation }) {
 
   const toggleBiometrics = useCallback(() => {
     if (pinMethod === PinMethod.DEFAULT) {
-      setIsEnableBiometrics(true);
-      navigation.navigate(NavigationRoutes.CREATEPIN, {
-        biometricProcess: true,
-      });
+      setVisibleBiometricUnlock(true);
     } else if (pinMethod === PinMethod.PIN) {
       enableBiometrics();
     } else if (pinMethod === PinMethod.BIOMETRIC) {
@@ -150,14 +149,14 @@ function SettingsScreen({ navigation }) {
       title: settings.viewNodeInfo,
       icon: isThemeDark ? <IconViewNodeInfo /> : <IconNodeInfoLight />,
       onPress: () => navigation.navigate(NavigationRoutes.VIEWNODEINFO),
-      hideMenu: app.appType === AppType.ON_CHAIN,
+      hideMenu: app?.appType === AppType.ON_CHAIN,
     },
     {
       id: 3,
       title: settings.channelManagement,
       icon: isThemeDark ? <IconChannelMgt /> : <IconChannelMgtLight />,
       onPress: () => navigation.navigate(NavigationRoutes.RGBCHANNELS),
-      hideMenu: app.appType === AppType.ON_CHAIN,
+      hideMenu: app?.appType === AppType.ON_CHAIN,
     },
     {
       id: 4,
@@ -221,6 +220,9 @@ function SettingsScreen({ navigation }) {
       onPress: () => navigation.navigate(NavigationRoutes.APPBACKUPMENU),
       manualAssetBackupStatus: manualAssetBackupStatus,
       hasCompletedManualBackup: hasCompletedManualBackup,
+      hideMenu:
+        app?.appType === AppType.NODE_CONNECT ||
+        app?.primaryMnemonic === app?.id,
     },
     {
       id: 4,
@@ -278,6 +280,19 @@ function SettingsScreen({ navigation }) {
           PersonalizationMenu={PersonalizationMenu}
           AppSecurityMenu={AppSecurityMenu}
           SettingsMenu={SettingsMenu}
+        />
+      </View>
+      <View>
+        <BiometricUnlockModal
+          visible={visibleBiometricUnlock}
+          primaryCtaTitle={'Set Passcode'}
+          primaryOnPress={() => {
+            setVisibleBiometricUnlock(false);
+            setIsEnableBiometrics(true);
+            navigation.navigate(NavigationRoutes.CREATEPIN, {
+              biometricProcess: true,
+            });
+          }}
         />
       </View>
     </ScreenContainer>

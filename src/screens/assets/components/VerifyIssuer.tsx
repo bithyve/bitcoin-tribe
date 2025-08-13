@@ -208,12 +208,12 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       const feeData = getAssetIssuanceFeeMutation.data;
       if (feeData.fee > 0) {
         setFeeDetails(feeData);
-        const feesPaid = wallet.specs.transactions.filter(
+        const feesPaid = wallet?.specs?.transactions?.filter(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
         );
-        if (feesPaid.length > 0) {
+        if (feesPaid?.length > 0) {
           registerAsset();
         } else {
           setTimeout(() => {
@@ -250,6 +250,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         'An unexpected error occurred';
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
+      } else {
+        Toast(errorMessage, true);
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
@@ -287,11 +289,15 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         assetId,
       ) as unknown as Asset;
       const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
-      const { status } = await Relay.registerAsset(app.id, asset);
+      const { status } = await Relay.enrollAsset(
+        app.id,
+        asset,
+        app.authToken,
+      );
       if (status) {
         setIsAddedInRegistry(true);
         Toast(assets.registerAssetMsg);
-        const tx = wallet.specs.transactions.find(
+        const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
             tx.metadata?.assetId === '',
@@ -336,7 +342,6 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       </View>
     );
   };
-
   return (
     <>
       {isAddedInRegistry ? (

@@ -48,6 +48,7 @@ interface IssuerVerifiedProps {
   schema?: RealmSchema;
   onVerificationComplete?: () => void;
   setIsVerifyingIssuer?: React.Dispatch<React.SetStateAction<boolean>>;
+  hasIssuanceTransaction?: boolean;
 }
 
 const IssuerVerified: React.FC<IssuerVerifiedProps> = (
@@ -61,6 +62,7 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
     schema,
     onVerificationComplete,
     setIsVerifyingIssuer,
+    hasIssuanceTransaction,
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
@@ -82,7 +84,10 @@ const IssuerVerified: React.FC<IssuerVerifiedProps> = (
   }
 
   return (
-    <AppTouchable style={styles.container} onPress={onPress}>
+    <AppTouchable
+      style={styles.container}
+      onPress={onPress}
+      disabled={!hasIssuanceTransaction && !id}>
       <View style={styles.rowWrapper}>
         <View>
           <AppText variant="body2" style={styles.title}>

@@ -53,7 +53,18 @@ function SendEnterAddress({
       setInvoiceValidationError('');
       return;
     }
-
+    if (text.startsWith(config.REGISTRY_URL)) {
+      Keyboard.dismiss();
+      setAddress(text);
+      setInvoiceValidationError('');
+      return;
+    }
+    if(text.startsWith('tribe://')) {
+      Keyboard.dismiss();
+      setAddress(text);
+      setInvoiceValidationError('');
+      return;
+    }
     const network = WalletUtilities.getNetworkByType(config.NETWORK_TYPE);
     const { type: paymentInfoKind, address } = WalletUtilities.addressDiff(
       text,

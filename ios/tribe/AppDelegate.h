@@ -2,7 +2,9 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTLinkingManager.h>
 #import "RNAppAuthAuthorizationFlowManager.h"
-@interface AppDelegate : RCTAppDelegate <RNAppAuthAuthorizationFlowManager>
+#import <UserNotifications/UserNotifications.h>
+
+@interface AppDelegate : RCTAppDelegate <RNAppAuthAuthorizationFlowManager, UNUserNotificationCenterDelegate>
 
 @property(nonatomic, weak) id<RNAppAuthAuthorizationFlowManagerDelegate> authorizationFlowManagerDelegate;
 

@@ -20,8 +20,8 @@ import PrimaryCTA from 'src/components/PrimaryCTA';
 import Colors from 'src/theme/Colors';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import CloseChannelPopupContainer from './components/CloseChannelPopupContainer';
-import InfoIcon from 'src/assets/images/infoIcon.svg';
-import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
+import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
+import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import ChannelInfoModal from './components/ChannelInfoModal';
 
 const getStyles = (theme: AppTheme, backColor) =>
@@ -114,7 +114,7 @@ const ChannelDetails = () => {
     <ScreenContainer>
       <AppHeader
         title={`${node.channelsTitle}`}
-        rightIcon={isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleChannelInfo(true)}
       />
       <ModalLoading visible={closeChannelMutation.isLoading} />

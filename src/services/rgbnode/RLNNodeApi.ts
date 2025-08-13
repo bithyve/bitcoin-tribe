@@ -91,15 +91,12 @@ export class RLNNodeApiServices {
     });
   }
 
-  public async estimateFee(body: {
-    blocks: number;
-  }): Promise<{}> {
+  public async estimateFee(body: { blocks: number }): Promise<{}> {
     return this.request('/estimatefee', {
       method: 'POST',
       body: JSON.stringify(body),
     });
   }
-
 
   public async listUnspents(body: { skip_sync: boolean }): Promise<{}> {
     return this.request('/listunspents', {
@@ -198,8 +195,6 @@ export class RLNNodeApiServices {
     const response = await this.request('/nodeinfo', {
       method: 'GET',
     });
-
-    console.log(JSON.stringify(response));
 
     return response;
   }
@@ -308,7 +303,7 @@ export class RLNNodeApiServices {
 
   public async lninvoice(body: {
     amt_msat: number;
-    expiry_sec: 4200;
+    expiry_sec: number;
     asset_id?: string;
     asset_amount?: number;
   }): Promise<{ invoice: string }> {
@@ -358,9 +353,22 @@ export class RLNNodeApiServices {
     });
   }
 
-  public async unlock(password: string): Promise<{ invoice: string }> {
+  public async unlockNode(id: string): Promise<{}> {
+    return this.request(`/unlock/${id}`, {
+      method: 'POST',
+    });
+  }
+
+  public async unlock(
+    password: string,
+    authToken: string,
+  ): Promise<{ invoice: string }> {
     return this.request('/unlock', {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         password: password,
         bitcoind_rpc_username: 'user',

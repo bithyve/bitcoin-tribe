@@ -2,7 +2,6 @@ import { Image, Platform, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
@@ -11,7 +10,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
-import { Asset, AssetFace, AssetSchema } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 
@@ -52,10 +51,18 @@ const SelectYourAsset = (props: Props) => {
                 {selectedAsset?.assetSchema?.toUpperCase() ===
                   AssetSchema.Collectible ||
                 selectedAsset?.asset?.assetSchema ===
-                  AssetSchema.Collectible ? (
-                  <Image source={{ uri: imageUri }} style={styles.imageStyle} />
+                  AssetSchema.Collectible ||
+                selectedAsset?.iconUrl ||
+                selectedAsset?.asset?.iconUrl ? (
+                  <Image
+                    source={{
+                      uri: selectedAsset?.iconUrl || selectedAsset?.asset?.iconUrl || imageUri,
+                    }}
+                    style={styles.imageStyle}
+                  />
                 ) : (
                   <AssetIcon
+                    iconUrl={selectedAsset?.iconUrl}
                     assetTicker={
                       selectedAsset?.ticker || selectedAsset?.asset?.ticker
                     }
@@ -73,7 +80,7 @@ const SelectYourAsset = (props: Props) => {
             </View>
           ) : (
             <AppText variant="body1" style={styles.titleText}>
-              {channel.selectYourAsset}
+              {channel.selectAsset}
             </AppText>
           )}
         </View>
@@ -120,6 +127,6 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
     },
     titleText: {
       color: theme.colors.headingColor,
-      marginLeft: hp(3),
+      marginLeft: hp(5),
     },
   });

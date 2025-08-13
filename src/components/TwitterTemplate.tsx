@@ -10,7 +10,6 @@ import {
 import { useTheme } from 'react-native-paper';
 import ViewShot from 'react-native-view-shot';
 import QRCode from 'react-native-qrcode-svg';
-
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -30,6 +29,7 @@ import Fonts from 'src/constants/Fonts';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
 import moment from 'moment';
 import HorizontalGradientView from './HorizontalGradientView';
+import config from 'src/utils/config';
 
 type TwitTemplateProps = {
   viewShotRef: React.RefObject<ViewShot>;
@@ -189,7 +189,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
           <InfoItem
             title={assets.issuedOn + ':'}
             value={moment
-              .unix(asset?.metaData && asset?.metaData?.timestamp)
+              .unix(asset?.metaData?.timestamp ?? moment().unix())
               .format('DD MMM YYYY  hh:mm A')}
           />
           <InfoItem
@@ -197,8 +197,11 @@ function TwitterTemplate(props: TwitTemplateProps) {
             value={
               asset?.assetSchema.toUpperCase() === AssetSchema.UDA
                 ? 'Unique'
-                : asset?.metaData &&
-                  numberWithCommas(asset?.metaData?.issuedSupply)
+                : numberWithCommas(
+                    asset?.precision > 0
+                      ? asset?.issuedSupply / 10 ** asset?.precision
+                      : asset?.issuedSupply,
+                  )
             }
           />
           {twitterVerification?.type && (
@@ -245,6 +248,7 @@ function TwitterTemplate(props: TwitTemplateProps) {
             ) : (
               <View style={styles.identiconWrapper}>
                 <AssetIcon
+                  iconUrl={asset.iconUrl}
                   assetTicker={asset?.ticker && asset?.ticker}
                   assetID={asset?.assetId && asset?.assetId}
                   size={208}
@@ -258,7 +262,10 @@ function TwitterTemplate(props: TwitTemplateProps) {
           </View>
           <View>
             <View style={styles.qrContainer}>
-              <QRCode value="https://bitcointribe.app/" size={156} />
+              <QRCode
+                value={`${config.REGISTRY_URL}/${asset.assetId}`}
+                size={160}
+              />
             </View>
             <AppText variant="body1" style={styles.scanText}>
               Scan Me!
@@ -292,6 +299,7 @@ const getStyles = (theme: AppTheme) =>
       fontSize: hp(38),
       color: Colors.White,
       marginBottom: hp(3),
+      lineHeight: 38 * 1.4,
     },
     text: {
       color: Colors.White,

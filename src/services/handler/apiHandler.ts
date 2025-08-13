@@ -27,7 +27,6 @@ import PinMethod from 'src/models/enums/PinMethod';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import * as bip39 from 'bip39';
 import crypto from 'crypto';
-import { MMKV } from 'react-native-mmkv';
 import BIP85 from '../wallets/operations/BIP85';
 import { RealmSchema } from 'src/storage/enum';
 import WalletOperations from '../wallets/operations';
@@ -55,7 +54,7 @@ import {
   RGBWallet,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
@@ -64,26 +63,20 @@ import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import moment from 'moment';
-import { NodeOnchainTransaction } from 'src/models/interfaces/Transactions';
 import {
   getMessaging,
   getToken,
-  subscribeToTopic,
-  unsubscribeFromTopic,
-  requestPermission,
   AuthorizationStatus,
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
-import BIP32Factory from 'bip32';
 import ecc from '../wallets/operations/taproot-utils/noble_ecc';
 import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
+import ChatPeerManager from '../p2p/ChatPeerManager';
+import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
-
-const bip32 = BIP32Factory(ecc);
-const storage = new MMKV();
 
 export class ApiHandler {
   private static app: RGBWallet;
@@ -95,7 +88,10 @@ export class ApiHandler {
       ApiHandler.app = app;
       ApiHandler.appType = appType;
       ApiHandler.authToken = authToken;
-      if (appType === AppType.NODE_CONNECT) {
+      if (
+        appType === AppType.NODE_CONNECT ||
+        appType === AppType.SUPPORTED_RLN
+      ) {
         ApiHandler.api = new RLNNodeApiServices({
           baseUrl: app.nodeUrl,
           apiKey: app.nodeAuthentication,
@@ -163,10 +159,10 @@ export class ApiHandler {
   }
 
   static async setupNewApp({
-    appName = '',
+    appName = 'Satoshi’s Palette',
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
-    walletImage = '',
+    walletImage = null,
     mnemonic = null,
     appType,
     rgbNodeConnectParams,
@@ -176,7 +172,7 @@ export class ApiHandler {
     appName: string;
     pinMethod: PinMethod;
     passcode: '';
-    walletImage: '';
+    walletImage: ImageAsset;
     mnemonic: string;
     appType: AppType;
     rgbNodeConnectParams?: RgbNodeConnectParams;
@@ -239,15 +235,20 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ChatPeerManager.getInstance();
+          await cm.init(primarySeed.toString('hex'));
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
-            'Tribe-Onchain-Wallet',
+            appName,
             appID,
             publicId,
             publicKey,
             AppType.ON_CHAIN,
-            'Iris_Regtest',
+            config.NETWORK_TYPE,
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -259,7 +260,7 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -268,6 +269,10 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -280,6 +285,7 @@ export class ApiHandler {
               rgbWallet.mnemonic,
               rgbWallet.accountXpubVanilla,
               rgbWallet.accountXpubColored,
+              rgbWallet.masterFingerprint,
             );
             Storage.set(Keys.APPID, appID);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -288,19 +294,24 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            // await ApiHandler.manageFcmVersionTopics();
             const apiHandler = new ApiHandler(
               rgbWallet,
               AppType.ON_CHAIN,
               registerApp?.app?.authToken,
             );
           }
-        } else if (appType === AppType.SUPPORTED_RLN) {
+        } else if (
+          appType === AppType.SUPPORTED_RLN ||
+          appType === AppType.NODE_CONNECT
+        ) {
           let rgbWallet: RGBWallet = {
-            mnemonic: rgbNodeConnectParams.mnemonic,
+            mnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             xpub: '',
             rgbDir: '',
             accountXpubColored: '',
-            accountXpubColoredFingerprint: '',
+            masterFingerprint: '',
             accountXpubVanilla: '',
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -308,26 +319,31 @@ export class ApiHandler {
           };
           const apiHandler = new ApiHandler(
             rgbWallet,
-            AppType.NODE_CONNECT,
+            appType === AppType.SUPPORTED_RLN
+              ? AppType.SUPPORTED_RLN
+              : AppType.NODE_CONNECT,
             authToken,
           );
-
           rgbWallet.xpub = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubColored = rgbNodeConnectParams.nodeId;
-          rgbWallet.accountXpubColoredFingerprint = rgbNodeConnectParams.nodeId;
+          rgbWallet.masterFingerprint = rgbNodeConnectParams.nodeId;
           rgbWallet.accountXpubVanilla = rgbNodeConnectParams.nodeId;
           const newAPP: TribeApp = {
             id: rgbNodeConnectParams.nodeId,
             publicId: rgbNodeConnectParams.nodeId,
             appName,
-            walletImage,
-            primaryMnemonic: rgbNodeConnectParams.mnemonic,
+            walletImage: '',
+            primaryMnemonic:
+              rgbNodeConnectParams.mnemonic || rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
             version: DeviceInfo.getVersion(),
             networkType: config.NETWORK_TYPE,
             enableAnalytics: true,
-            appType: AppType.NODE_CONNECT,
+            appType:
+              appType === AppType.SUPPORTED_RLN
+                ? AppType.SUPPORTED_RLN
+                : AppType.NODE_CONNECT,
             nodeInfo: rgbNodeInfo,
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
@@ -344,6 +360,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            // await ApiHandler.manageFcmVersionTopics();
           }
         } else {
           const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
@@ -364,15 +381,23 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
+          const cm = ChatPeerManager.getInstance();
+          if (!rgbNodeConnectParams.nodeId) {
+            throw new Error('Missing nodeId');
+          }
+          await cm.init(rgbNodeConnectParams.nodeId);
+          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
             rgbNodeInfo.pubkey,
             publicKey,
             AppType.NODE_CONNECT,
-            'Iris_Regtest',
+            config.NETWORK_TYPE,
             '',
             signature,
+            walletImage,
+            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -381,7 +406,7 @@ export class ApiHandler {
             id: rgbNodeInfo.pubkey,
             publicId: rgbNodeInfo.pubkey,
             appName,
-            walletImage,
+            walletImage: registerApp?.app?.imageUrl || '',
             primaryMnemonic: rgbNodeConnectParams.nodeId,
             primarySeed: rgbNodeConnectParams.nodeId,
             imageEncryptionKey: '',
@@ -393,6 +418,10 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
+            contactsKey: {
+              publicKey: keys.publicKey,
+              secretKey: keys.secretKey,
+            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -401,12 +430,16 @@ export class ApiHandler {
               xpub: rgbNodeInfo.pubkey,
               rgbDir: '',
               accountXpubColored: rgbNodeInfo.pubkey,
-              accountXpubColoredFingerprint: rgbNodeInfo.pubkey,
+              masterFingerprint: rgbNodeInfo.pubkey,
               accountXpubVanilla: rgbNodeInfo.pubkey,
               nodeUrl: rgbNodeConnectParams.nodeUrl,
               nodeAuthentication: rgbNodeConnectParams.authentication,
             };
-            const apiHandler = new ApiHandler(rgbWallet, appType);
+            const apiHandler = new ApiHandler(
+              rgbWallet,
+              appType,
+              registerApp?.app?.authToken,
+            );
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             Storage.set(Keys.APPID, rgbNodeInfo.pubkey);
             dbManager.createObject(RealmSchema.VersionHistory, {
@@ -415,6 +448,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
+            // await ApiHandler.manageFcmVersionTopics();
           }
         }
         Storage.set(Keys.SETUPAPP, false);
@@ -457,6 +491,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        // await ApiHandler.manageFcmVersionTopics();
       }
     } catch (error) {
       throw error;
@@ -466,8 +501,9 @@ export class ApiHandler {
   static async restoreApp(mnemonic: string) {
     try {
       const seed = bip39.mnemonicToSeedSync(mnemonic);
-      const appID = crypto.createHash('sha256').update(seed).digest('hex');
-      const backup = await Relay.getBackup(appID);
+      const publicId = WalletUtilities.getFingerprintFromSeed(seed);
+      const appID = crypto.createHash('sha256').update(publicId).digest('hex');
+      const backup = await Relay.getBackup(publicId.toLowerCase());
       if (backup.node) {
         ApiHandler.setupNewApp({
           appName: '',
@@ -508,6 +544,7 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
       }
@@ -542,11 +579,14 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
+    const cm = ChatPeerManager.getInstance();
+    await cm.init(app.primarySeed);
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     const isWalletOnline = await RGBServices.initiate(
       rgbWallet.mnemonic,
       rgbWallet.accountXpubVanilla,
       rgbWallet.accountXpubColored,
+      rgbWallet.masterFingerprint,
     );
     return { key, isWalletOnline };
   }
@@ -580,10 +620,13 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       const isWalletOnline = await RGBServices.initiate(
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
       return { key, isWalletOnline };
     } catch (error) {
@@ -613,7 +656,10 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if (app.appType === AppType.NODE_CONNECT) {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
       const nodeInfo = await ApiHandler.api.nodeinfo();
       if (nodeInfo.pubkey) {
         return { key, isWalletOnline: true };
@@ -625,7 +671,10 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         rgbWallet.accountXpubVanilla,
         rgbWallet.accountXpubColored,
+        rgbWallet.masterFingerprint,
       );
+      const cm = ChatPeerManager.getInstance();
+      await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
@@ -706,7 +755,10 @@ export class ApiHandler {
 
   static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const balances = await ApiHandler.api.getBtcBalance({
           skip_sync: false,
         });
@@ -815,8 +867,19 @@ export class ApiHandler {
       .getObjectByIndex(RealmSchema.Wallet)
       .toJSON();
     const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
-    const averageTxFeeByNetwork: AverageTxFeesByNetwork =
-      JSON.parse(averageTxFeeJSON);
+    if (!averageTxFeeJSON) {
+      throw new Error(
+        'Transaction fee data not found. Please try again later.',
+      );
+    }
+    let averageTxFeeByNetwork: AverageTxFeesByNetwork;
+    try {
+      averageTxFeeByNetwork = JSON.parse(averageTxFeeJSON);
+    } catch (error) {
+      throw new Error(
+        'Invalid transaction fee data. Please refresh and try again.',
+      );
+    }
     const averageTxFee: AverageTxFees =
       averageTxFeeByNetwork[config.NETWORK_TYPE];
     const { low } = await ApiHandler.sendPhaseOne({
@@ -839,7 +902,7 @@ export class ApiHandler {
     });
     await ApiHandler.refreshWallets({ wallets: [wallet] });
     if (txid) {
-      const updated = await ApiHandler.updateTransaction({
+      await ApiHandler.updateTransaction({
         txid,
         updateProps: {
           transactionKind: TransactionKind.SERVICE_FEE,
@@ -932,7 +995,10 @@ export class ApiHandler {
     txPrerequisites: TransactionPrerequisite;
   }): Promise<{ txid: string; txPrerequisites: TransactionPrerequisite }> {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const response = await ApiHandler.api.sendBTCTransaction({
           amount: recipient.amount,
           address: recipient.address,
@@ -1017,7 +1083,10 @@ export class ApiHandler {
 
   static async createUtxos() {
     try {
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const utxos = await RGBServices.createUtxos(
           5,
           ApiHandler.appType,
@@ -1052,7 +1121,7 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset({ assetId, amount }) {
+  static async receiveAsset({ assetId, amount, linkedAsset, linkedAmount, expiry, blinded = true }) {
     try {
       assetId = assetId ?? '';
       amount = parseFloat(amount) ?? 0.0;
@@ -1064,18 +1133,38 @@ export class ApiHandler {
         ApiHandler.api,
         assetId,
         amount,
+        expiry,
+        blinded,
       );
       if (response.error) {
         throw new Error(response.error);
       } else {
+        const invoices = [...rgbWallet?.invoices, response];
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
           rgbWallet.mnemonic,
-          {
-            receiveData: response,
-          },
+          { receiveData: response, invoices: invoices },
         );
+
+        if (linkedAsset && linkedAmount !== 0) {
+          const {
+            recipientId,
+            batchTransferIdx,
+            expirationTimestamp,
+            invoice,
+          } = response;
+
+          const updateData = {
+            batchTransferIdx: batchTransferIdx || null,
+            expirationTimestamp: expirationTimestamp || null,
+            invoice: invoice || '',
+            recipientId: recipientId || '',
+            linkedAsset: linkedAsset || '',
+            linkedAmount: linkedAmount || 0,
+          };
+          dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
+        }
       }
       ApiHandler.viewUtxos();
     } catch (error) {
@@ -1087,16 +1176,18 @@ export class ApiHandler {
   static async receiveAssetOnLN({
     assetId,
     amount,
+    expiry,
   }: {
     assetId?: string;
     amount?: number;
+    expiry?: number;
   }) {
     try {
       const response = await ApiHandler.api.lninvoice({
         amt_msat: 3000000,
         asset_id: assetId,
         asset_amount: Number(amount),
-        expiry_sec: 4200,
+        expiry_sec: expiry,
       });
       if (response.invoice) {
         return response;
@@ -1157,7 +1248,6 @@ export class ApiHandler {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.log('payments', error);
       throw error;
     }
   }
@@ -1168,43 +1258,49 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (assets.nia) {
+      if (assets?.nia) {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
           assets.nia,
           Realm.UpdateMode.Modified,
         );
       }
-      if (assets.cfa) {
+      if (assets?.cfa) {
         const cfas = [];
-        if (ApiHandler.appType === AppType.NODE_CONNECT) {
-          for (let i = 0; i < assets.cfa.length; i++) {
+        let hasProcessedCfa = false;
+
+        if (
+          ApiHandler.appType === AppType.NODE_CONNECT ||
+          ApiHandler.appType === AppType.SUPPORTED_RLN
+        ) {
+          for (let i = 0; i < assets?.cfa.length; i++) {
             const collectible: Collectible = assets.cfa[i];
             const mediaByte = await ApiHandler.api.getassetmedia({
               digest: collectible.media.digest,
             });
             const { base64, fileType } = hexToBase64(mediaByte.bytes_hex);
-            const ext = assets.cfa[i].media.mime.split('/')[1];
+            const ext = collectible.media.mime.split('/')[1];
             const path = `${RNFS.DocumentDirectoryPath}/${collectible.media.digest}.${ext}`;
             await RNFS.writeFile(path, base64, 'base64');
+
             cfas.push({
-              ...assets.cfa[i],
+              ...collectible,
               media: {
-                ...assets.cfa[i].media,
+                ...collectible.media,
                 filePath: path,
               },
             });
           }
+          hasProcessedCfa = true;
         }
+
         if (Platform.OS === 'ios' && ApiHandler.appType === AppType.ON_CHAIN) {
           for (const element of assets.cfa) {
             const ext = element.media.mime.split('/')[1];
             const destination = `${element.media.filePath}.${ext}`;
-
             if (!(await RNFS.exists(destination))) {
               await RNFS.copyFile(element.media.filePath, destination);
             }
-
             cfas.push({
               ...element,
               media: {
@@ -1213,7 +1309,10 @@ export class ApiHandler {
               },
             });
           }
-        } else {
+          hasProcessedCfa = true;
+        }
+
+        if (!hasProcessedCfa) {
           cfas.push(...assets.cfa);
         }
         dbManager.createObjectBulk(
@@ -1225,7 +1324,10 @@ export class ApiHandler {
 
       if (assets.uda) {
         const udas = [];
-        if (ApiHandler.appType === AppType.NODE_CONNECT) {
+        if (
+          ApiHandler.appType === AppType.NODE_CONNECT ||
+          ApiHandler.appType === AppType.SUPPORTED_RLN
+        ) {
           // todo
         }
         if (ApiHandler.appType === AppType.ON_CHAIN) {
@@ -1283,21 +1385,52 @@ export class ApiHandler {
     }
   }
 
+  static parseAssetResponse(response: any) {
+    if (!response || typeof response !== 'object') return undefined;
+    if (response?.error || response?.code >= 400 || !response?.asset) {
+      return response;
+    }
+    return ApiHandler.appType === AppType.SUPPORTED_RLN
+      ? response.asset
+      : response;
+  }
+
+  static async addAssetToWallet({ asset }: { asset: Asset }) {
+    try {
+      const coins = dbManager.getCollection(RealmSchema.Coin);
+      if (coins.find(coin => coin.assetId === asset.assetId)) {
+        return;
+      }
+      dbManager.createObject(RealmSchema.Coin, {
+        ...asset,
+        addedAt: Date.now(),
+        issuedSupply: asset.issuedSupply.toString(),
+        balance: {
+          spendable: '0',
+          future: '0',
+          settled: '0',
+          offchainOutbound: '0',
+          offchainInbound: '0',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async issueNewCoin({
     name,
     ticker,
     supply,
     precision,
-    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     supply: string;
     precision: number;
-    addToRegistry;
   }) {
     try {
-      const response = await RGBServices.issueAssetNia(
+      const assetResponse = await RGBServices.issueAssetNia(
         ticker,
         name,
         `${supply}`,
@@ -1305,6 +1438,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         const metadata = await RGBServices.getRgbAssetMetaData(
@@ -1312,34 +1446,37 @@ export class ApiHandler {
           ApiHandler.appType,
           ApiHandler.api,
         );
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...metadata, ...response });
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(
+          app.id,
+          { ...metadata, ...response },
+          app.authToken,
+        );
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
         }
         await ApiHandler.refreshRgbWallet();
       }
       return response;
     } catch (error) {
+      console.log('error', error);
       throw new Error(`${error}`);
     }
   }
@@ -1350,17 +1487,15 @@ export class ApiHandler {
     supply,
     filePath,
     precision,
-    addToRegistry = true,
   }: {
     name: string;
     description: string;
     supply: string;
     filePath: string;
     precision: number;
-    addToRegistry: boolean;
   }) {
     try {
-      const response = await RGBServices.issueAssetCfa(
+      const assetResponse = await RGBServices.issueAssetCfa(
         name,
         description,
         `${supply}`,
@@ -1369,6 +1504,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
         await ApiHandler.refreshRgbWallet();
@@ -1377,29 +1513,27 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...collectible });
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
         }
       }
       return response;
@@ -1414,17 +1548,15 @@ export class ApiHandler {
     details,
     mediaFilePath,
     attachmentsFilePaths,
-    addToRegistry = true,
   }: {
     name: string;
     ticker: string;
     details: string;
     mediaFilePath: string;
     attachmentsFilePaths: string[];
-    addToRegistry;
   }) {
     try {
-      const response = await RGBServices.issueAssetUda(
+      const assetResponse = await RGBServices.issueAssetUda(
         name,
         ticker,
         details,
@@ -1433,6 +1565,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
@@ -1441,29 +1574,27 @@ export class ApiHandler {
           'assetId',
           response?.assetId,
         ) as unknown as Collectible;
-        if (addToRegistry) {
-          await Relay.registerAsset(app.id, { ...collectible });
-          const wallet: Wallet = dbManager
-            .getObjectByIndex(RealmSchema.Wallet)
-            .toJSON();
-          const tx = wallet.specs.transactions.find(
-            tx =>
-              tx.transactionKind === TransactionKind.SERVICE_FEE &&
-              tx.metadata?.assetId === '',
-          );
-          if (tx) {
-            ApiHandler.updateTransaction({
-              txid: tx.txid,
-              updateProps: {
-                metadata: {
-                  assetId: response.assetId,
-                  note: `Issued ${response.name} on ${moment().format(
-                    'DD MMM YY  •  hh:mm A',
-                  )}`,
-                },
+        await Relay.registerAsset(app.id, { ...collectible }, app.authToken);
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
               },
-            });
-          }
+            },
+          });
         }
       }
       return response;
@@ -1490,7 +1621,10 @@ export class ApiHandler {
           transactions: response,
         });
       }
-      if (ApiHandler.appType === AppType.NODE_CONNECT) {
+      if (
+        ApiHandler.appType === AppType.NODE_CONNECT ||
+        ApiHandler.appType === AppType.SUPPORTED_RLN
+      ) {
         const balances = await ApiHandler.api.assetbalance({
           asset_id: assetId,
         });
@@ -1554,6 +1688,7 @@ export class ApiHandler {
         ApiHandler.api,
       );
       if (response) {
+        response.issuedSupply = response.issuedSupply.toString();
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
         });
@@ -1567,14 +1702,83 @@ export class ApiHandler {
 
   static async updateProfile(appID, appName, walletImage) {
     try {
-      dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
-        appName: appName,
-        walletImage: walletImage,
-      });
+      const response = await Relay.updateApp(
+        appID,
+        appName,
+        walletImage,
+        ApiHandler.authToken,
+      );
+      if (response.updated) {
+        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+          appName: appName,
+          walletImage: response.imageUrl,
+        });
+      }
       return true;
     } catch (error) {
-      console.log('Update Profile', error);
       throw error;
+    }
+  }
+
+  static async manageFcmVersionTopics(
+    previousVersion?: string,
+    currentVersion?: string,
+  ): Promise<void> {
+    try {
+      const firebaseApp = getApp();
+      const messaging = getMessaging(firebaseApp);
+      const appVersion = currentVersion || DeviceInfo.getVersion();
+      const lastTopicVersion =
+        previousVersion || Storage.get(Keys.LAST_FCM_VERSION_TOPIC);
+      if (!lastTopicVersion || lastTopicVersion !== appVersion) {
+        if (lastTopicVersion) {
+          await ApiHandler.unsubscribeFromVersionTopic(
+            messaging,
+            lastTopicVersion,
+          );
+        }
+        await ApiHandler.subscribeToVersionTopic(messaging, appVersion);
+        Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
+      }
+      await ApiHandler.subscribeToBroadcastChannel(messaging);
+    } catch (error) {
+      console.error('FCM topic management error:', error);
+      throw error;
+    }
+  }
+
+  private static async unsubscribeFromVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.unsubscribeFromTopic(topic);
+    } catch (error) {
+      console.warn(`Failed to unsubscribe from ${topic}:`, error);
+    }
+  }
+
+  private static async subscribeToVersionTopic(
+    messaging: any,
+    version: string,
+  ): Promise<void> {
+    const topic = `v${version}`;
+    try {
+      await messaging.subscribeToTopic(topic);
+    } catch (error) {
+      console.error(`Failed to subscribe to ${topic}:`, error);
+      throw error;
+    }
+  }
+
+  private static async subscribeToBroadcastChannel(
+    messaging: any,
+  ): Promise<void> {
+    try {
+      await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
+    } catch (error) {
+      console.warn('Failed to subscribe to common broadcast topic:', error);
     }
   }
 
@@ -1588,15 +1792,21 @@ export class ApiHandler {
       const version = dbManager.getObjectByIndex(
         RealmSchema.VersionHistory,
         lastIndex,
-      );
+      ) as VersionHistory;
       const currentVersion = `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`;
       if (version?.version !== currentVersion) {
         dbManager.createObject(RealmSchema.VersionHistory, {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${version.version} to ${currentVersion}`,
+          title: `Upgraded from ${
+            version?.version || 'unknown'
+          } to ${currentVersion}`,
         });
+        await ApiHandler.manageFcmVersionTopics(
+          version?.version,
+          currentVersion,
+        );
         return true;
       }
       return false;
@@ -1610,7 +1820,16 @@ export class ApiHandler {
     try {
       const firebaseApp = getApp();
       const messaging = getMessaging(firebaseApp);
-      const authStatus = await requestPermission(messaging);
+      if (Platform.OS === 'android' && Platform.Version >= 33) {
+        const permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Notification permission denied on Android');
+          return false;
+        }
+      }
+      const authStatus = await messaging.requestPermission();
       const enabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||
         authStatus === AuthorizationStatus.PROVISIONAL;
@@ -1618,19 +1837,17 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      subscribeToTopic(messaging, config.TRIBE_FCM_BROADCAST_CHANNEL);
       if (token === Storage.get(Keys.FCM_TOKEN)) {
         return true;
       }
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
-
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
         return true;
       }
       return false;
     } catch (error) {
-      console.log('fcm update error: ', error);
+      console.log('fcm update error:', error?.message || error);
       throw error;
     }
   }
@@ -1640,20 +1857,23 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      if (!Array.isArray(response)) {
+        throw new Error(
+          `Expected array but got: ${typeof response} — ${JSON.stringify(
+            response,
+          )}`,
+        );
+      }
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-
-      // Serialize the response to a JSON string for storage
       const utxosData = response.map(utxo => JSON.stringify(utxo));
-
-      // Update the RgbWallet object with the UTXOs
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',
         rgbWallet.mnemonic,
         {
-          utxos: utxosData, // Store the array
+          utxos: utxosData,
         },
       );
 
@@ -1816,7 +2036,6 @@ export class ApiHandler {
         const rgbWallet: RGBWallet[] = dbManager.getObjectByIndex(
           RealmSchema.RgbWallet,
         );
-
         dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
@@ -1844,8 +2063,84 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
+      console.log('viewNodeInfo - error', error);
       throw new Error('Failed to connect to node');
+    }
+  }
+
+  static async saveNodeMnemonic(
+    nodeId: string,
+    authToken: string,
+  ): Promise<string> {
+    try {
+      const response = await Relay.saveNodeMnemonic(nodeId, authToken);
+      if (response) {
+        const { status, mnemonic, peerUrl } = response;
+        if (mnemonic) {
+          const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+            RealmSchema.RgbWallet,
+          );
+          if (rgbWallet?.nodeMnemonic !== mnemonic) {
+            await dbManager.updateObjectByPrimaryId(
+              RealmSchema.RgbWallet,
+              'mnemonic',
+              rgbWallet.mnemonic,
+              { nodeMnemonic: mnemonic },
+            );
+            await dbManager.updateObjectByPrimaryId(
+              RealmSchema.TribeApp,
+              'id',
+              nodeId,
+              { primaryMnemonic: mnemonic },
+            );
+            await dbManager.updateObjectByPrimaryId(
+              RealmSchema.RgbWallet,
+              'mnemonic',
+              rgbWallet.mnemonic,
+              { peerDNS: peerUrl },
+            );
+
+            await ApiHandler.createNewWallet({});
+          }
+        }
+
+        return status;
+      } else {
+        throw new Error('Failed to fetch node status');
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to fetch node status');
+    }
+  }
+
+  public static checkNodeStatus = async (
+    nodeId: string,
+    authToken: string,
+  ): Promise<string | null> => {
+    console.log('nodeId', nodeId);
+    console.log('authToken', authToken);
+    try {
+      const node: any = await Relay.getNodeById(nodeId, authToken);
+      const status = node?.nodeInfo?.data?.status || node?.node?.status;
+      return status;
+    } catch (err) {
+      console.error('Error fetching node status:', err);
+      return null;
+    }
+  };
+
+  static async startNode(nodeId, authToken) {
+    try {
+      const response = await Relay.startNodeById(nodeId, authToken);
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Failed to fetching node status');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to fetching node status');
     }
   }
 
@@ -1908,6 +2203,9 @@ export class ApiHandler {
             skip_sync: false,
             up_to: false,
           });
+          if (createUtxos?.error) {
+            throw new Error(createUtxos.error);
+          }
           if (createUtxos) {
             await ApiHandler.openChannel({
               peerPubkeyAndOptAddr,
@@ -1931,7 +2229,6 @@ export class ApiHandler {
         throw new Error('Failed to connect to node');
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -1968,7 +2265,8 @@ export class ApiHandler {
         return snakeCaseToCamelCaseCase(response);
       }
     } catch (error) {
-      console.log(error);
+      console.log('error - ', error);
+      console.log('error?.message', error?.message);
       throw error;
     }
   }
@@ -1998,15 +2296,22 @@ export class ApiHandler {
         throw new Error('Failed to create node');
       }
     } catch (error) {
-      console.log(error);
-      throw error;
+      let message =
+        error?.response?.data?.error || error?.message || 'Unknown error';
+      if (!message || message === 'Error') {
+        message =
+          'Unable to create wallet in supported mode. Please try again later.';
+      }
+      throw new Error(message);
     }
   }
 
   static async unlockNode() {
     try {
-      const response = await ApiHandler.api.unlock('tribe@2024');
-      console.log(response);
+      const response = await ApiHandler.api.unlock(
+        'tribe@2024',
+        this.authToken,
+      );
       if (response.error) {
         throw new Error(response.error);
       }
@@ -2016,7 +2321,6 @@ export class ApiHandler {
         throw new Error('Failed to unlock node');
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -2058,7 +2362,7 @@ export class ApiHandler {
               ios: backupFile.file,
             }),
             app.id,
-            wallet.accountXpubColoredFingerprint,
+            wallet.masterFingerprint,
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
@@ -2074,35 +2378,6 @@ export class ApiHandler {
     try {
       return await RGBServices.isBackupRequired();
     } catch (error) {
-      throw error;
-    }
-  }
-
-  static async initNode() {
-    try {
-      const response = await ApiHandler.api.init({
-        password: 'tribe@2024',
-      });
-      if (response.mnemonic) {
-        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-          RealmSchema.RgbWallet,
-        );
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.RgbWallet,
-          'mnemonic',
-          rgbWallet.mnemonic,
-          {
-            nodeMnemonic: response.mnemonic,
-          },
-        );
-        return response;
-      } else if (response.error) {
-        throw new Error(response.error);
-      } else {
-        throw new Error('Failed to init node');
-      }
-    } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -2204,13 +2479,16 @@ export class ApiHandler {
     assetId: string,
     schema: RealmSchema,
     asset: Asset,
+    verified: boolean,
   ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
       const response = await fetchAndVerifyTweet(tweetId);
+
       if (response.status === 429) {
         const resetAfter = response.headers.get('x-rate-limit-reset');
         const now = Math.floor(Date.now() / 1000);
         const waitTime = resetAfter ? Number(resetAfter) - now : null;
+
         if (waitTime && waitTime > 0) {
           Toast(
             `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
@@ -2226,101 +2504,82 @@ export class ApiHandler {
             'Too many requests to Twitter. Try again after a short break.',
         };
       }
-
       if (!response.ok) {
         const errorJson = await response.json().catch(() => null);
-        if (errorJson?.title === 'UsageCapExceeded') {
-          return {
-            success: false,
-            reason: 'Twitter API usage cap exceeded. Please try again later.',
-          };
-        }
         const message =
-          errorJson?.title ||
-          errorJson?.detail ||
-          `HTTP error ${response.status}`;
+          errorJson?.title === 'UsageCapExceeded'
+            ? 'Twitter API usage cap exceeded. Please try again later.'
+            : errorJson?.title ||
+              errorJson?.detail ||
+              `HTTP error ${response.status}`;
         return { success: false, reason: message };
       }
 
       const data = await response.json();
       const tweet = data?.data;
-      console.log('tweet', tweet);
-      if (!tweet) {
-        return { success: false, reason: 'Tweet not found' };
-      }
 
-      if (tweet.text.includes(assetId)) {
-        const response = await Relay.verifyIssuer('appID', asset.assetId, {
-          type: IssuerVerificationMethod.TWITTER_POST,
-          link: tweetId,
-          id: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.id,
-          name: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.name,
-          username: asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          )?.username,
-        });
-        if (response.status) {
-          const existingAsset = await dbManager.getObjectByPrimaryId(
-            schema,
-            'assetId',
-            asset.assetId,
-          );
-
-          const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
-          const twitterEntry = asset?.issuer?.verifiedBy?.find(
-            v => v.type === IssuerVerificationMethod.TWITTER,
-          );
-
-          if (!twitterEntry) return;
-          let updatedVerifiedBy: typeof existingVerifiedBy;
-          const twitterPostIndex = existingVerifiedBy.findIndex(
-            v => v.type === IssuerVerificationMethod.TWITTER_POST,
-          );
-
-          if (twitterPostIndex !== -1) {
-            updatedVerifiedBy = [...existingVerifiedBy];
-            updatedVerifiedBy[twitterPostIndex] = {
-              ...updatedVerifiedBy[twitterPostIndex],
-              link: tweetId,
-            };
-          } else {
-            updatedVerifiedBy = [
-              ...existingVerifiedBy,
-              {
-                type: IssuerVerificationMethod.TWITTER_POST,
-                link: tweetId,
-                id: twitterEntry.id,
-                name: twitterEntry.name,
-                username: twitterEntry.username,
-              },
-            ];
-          }
-
-          await dbManager.updateObjectByPrimaryId(
-            schema,
-            'assetId',
-            asset.assetId,
-            {
-              issuer: {
-                verified: true,
-                verifiedBy: updatedVerifiedBy,
-              },
-            },
-          );
-        }
-        return { success: true, tweet };
-      } else {
+      if (!tweet) return { success: false, reason: 'Tweet not found' };
+      if (!tweet.text.includes(assetId)) {
         return { success: false, reason: 'Asset ID not found in tweet text' };
       }
+
+      const existingAsset = await dbManager.getObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+      );
+      const existingVerifiedBy = existingAsset?.issuer?.verifiedBy || [];
+      let updatedVerifiedBy = [...existingVerifiedBy];
+
+      const twitterPostIndex = updatedVerifiedBy.findIndex(
+        v => v.type === IssuerVerificationMethod.TWITTER_POST,
+      );
+
+      const twitterEntry = existingAsset?.issuer?.verifiedBy?.find(
+        v => v.type === IssuerVerificationMethod.TWITTER,
+      );
+
+      const twitterPostData = {
+        type: IssuerVerificationMethod.TWITTER_POST,
+        link: tweetId,
+        id: twitterEntry?.id ?? '',
+        name: twitterEntry?.name ?? '',
+        username: twitterEntry?.username ?? '',
+      };
+
+      if (twitterPostIndex !== -1) {
+        updatedVerifiedBy[twitterPostIndex] = twitterPostData;
+      } else {
+        updatedVerifiedBy.push(twitterPostData);
+      }
+      let isVerified = false;
+      if (verified && twitterEntry) {
+        const relayResponse = await Relay.verifyIssuer(
+          'appID',
+          asset.assetId,
+          twitterPostData,
+        );
+        isVerified = relayResponse.status;
+      }
+      await dbManager.updateObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+        {
+          issuer: {
+            verified: isVerified,
+            verifiedBy: updatedVerifiedBy,
+          },
+        },
+      );
+
+      return { success: true, tweet };
     } catch (error: any) {
       console.error('Twitter API error:', error.message || error);
       return { success: false, reason: 'Network or fetch error' };
     }
   };
+
   static searchAssetFromRegistry = async (
     query: string,
   ): Promise<{ asset?: Asset }> => {

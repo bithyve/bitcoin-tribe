@@ -33,8 +33,6 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
-import DownloadIcon from 'src/assets/images/downloadBtn.svg';
-import DownloadIconLight from 'src/assets/images/downloadBtnLight.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
@@ -61,6 +59,11 @@ import IssuerDomainVerified from './components/IssuerDomainVerified';
 import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import config from 'src/utils/config';
+import DownloadIcon from 'src/assets/images/downloadIcon.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import RegistryIconLight from 'src/assets/images/registryIcon_light.svg';
+import RegistryIcon from 'src/assets/images/registryIcon.svg';
 
 type itemProps = {
   title: string;
@@ -225,13 +228,15 @@ const CollectibleMetaDataScreen = () => {
       <AppHeader
         title={assets.coinMetaTitle}
         enableBack={true}
-        rightIcon={isThemeDark ? <DownloadIcon /> : <DownloadIconLight />}
+        rightIcon={
+          isAddedInRegistry &&
+          (isThemeDark ? <RegistryIcon /> : <RegistryIconLight />)
+        }
         onSettingsPress={() => {
-          const filePath = Platform.select({
-            android: `file://${collectible.media?.filePath}`, // Ensure 'file://' prefix
-            ios: `${collectible.media?.filePath}`, // Add file extension
+          navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+            url: `${config.REGISTRY_URL}/${assetId}`,
+            title: 'Registry',
           });
-          onShare(filePath);
         }}
         style={styles.headerWrapper}
       />
@@ -243,6 +248,17 @@ const CollectibleMetaDataScreen = () => {
             style={styles.scrollingContainer}
             showsVerticalScrollIndicator={false}>
             <View style={styles.imageWrapper}>
+              <AppTouchable
+                style={styles.downloadIconWrapper}
+                onPress={() => {
+                  const filePath = Platform.select({
+                    android: `file://${collectible.media?.filePath}`,
+                    ios: `${collectible.media?.filePath}`,
+                  });
+                  onShare(filePath);
+                }}>
+                <DownloadIcon />
+              </AppTouchable>
               <Image
                 source={{
                   uri: Platform.select({
@@ -263,6 +279,7 @@ const CollectibleMetaDataScreen = () => {
                 schema={RealmSchema.Collectible}
                 onVerificationComplete={() => setRefreshToggle(t => !t)}
                 setIsVerifyingIssuer={setIsVerifyingIssuer}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
               <IssuerDomainVerified
                 domain={
@@ -282,6 +299,7 @@ const CollectibleMetaDataScreen = () => {
                     });
                   }
                 }}
+                hasIssuanceTransaction={hasIssuanceTransaction}
               />
             </View>
             <Item
@@ -298,11 +316,17 @@ const CollectibleMetaDataScreen = () => {
             <Item
               title={assets.issuedSupply}
               value={
-                app.appType === AppType.NODE_CONNECT
-                  ? numberWithCommas(collectible.issuedSupply)
-                  : collectible &&
-                    collectible.metaData &&
-                    numberWithCommas(collectible.metaData.issuedSupply)
+                app.appType === AppType.NODE_CONNECT ||
+                app.appType === AppType.SUPPORTED_RLN
+                  ? numberWithCommas(
+                      Number(collectible.issuedSupply) /
+                        10 ** collectible.precision,
+                    )
+                  : collectible?.metaData &&
+                    numberWithCommas(
+                      Number(collectible?.metaData?.issuedSupply) /
+                        10 ** collectible?.precision,
+                    )
               }
             />
 
@@ -346,30 +370,28 @@ const CollectibleMetaDataScreen = () => {
                   title={assets.viewInRegistry}
                   subTitle={''}
                   onPress={() =>
-                    openLink(
-                      `https://bitcointribe.app/registry?assetId=${assetId}`,
-                    )
+                    navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                      url: `${config.REGISTRY_URL}/${assetId}`,
+                      title: 'Registry',
+                    })
                   }
                   testID={'view_in_registry'}
                 />
               )}
-              {hasIssuanceTransaction &&
-                twitterVerification?.id &&
-                !twitterPostVerificationWithLink &&
-                !twitterPostVerification?.link && (
-                  <SelectOption
-                    title={'Show your X post here'}
-                    subTitle={''}
-                    onPress={() =>
-                      navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                        assetId: assetId,
-                        schema: RealmSchema.Collectible,
-                        asset: collectible,
-                      })
-                    }
-                    testID={'import_x_post'}
-                  />
-                )}
+              {hasIssuanceTransaction && (
+                <SelectOption
+                  title={'Show your X post here'}
+                  subTitle={''}
+                  onPress={() =>
+                    navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                      assetId: assetId,
+                      schema: RealmSchema.Collectible,
+                      asset: collectible,
+                    })
+                  }
+                  testID={'import_x_post'}
+                />
+              )}
             </View>
             {isAddedInRegistry && <View style={styles.seperatorView} />}
             {twitterPostVerificationWithLink?.link && (
@@ -509,6 +531,12 @@ const getStyles = (theme: AppTheme) =>
     },
     imageWrapper: {
       paddingHorizontal: hp(16),
+    },
+    downloadIconWrapper: {
+      position: 'absolute',
+      zIndex: 999,
+      right: 30,
+      top: 10,
     },
     wrapper: {
       paddingHorizontal: hp(16),

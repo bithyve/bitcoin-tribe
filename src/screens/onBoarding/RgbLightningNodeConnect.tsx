@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { encode as btoa } from 'base-64';
 import { useMutation } from 'react-query';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -73,6 +74,20 @@ function RgbLightningNodeConnect() {
     }
   }, [checkNodeConnection.data, checkNodeConnection.isError]);
 
+  useEffect(() => {
+    if (!connectionURL) return;
+    const urlParts = connectionURL.split('/').filter(Boolean);
+    const nodeId = urlParts[urlParts.length - 1];
+    if (nodeId) {
+      setNodeID(nodeId);
+    }
+  }, [connectionURL]);
+
+  const handlePasteURL = async () => {
+    const clipboardValue = await Clipboard.getString();
+    await setConnectionURL(clipboardValue);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={onBoarding.nodeDetails} />
@@ -82,10 +97,6 @@ function RgbLightningNodeConnect() {
           setConnectionURL(trimmedText);
         }}
         inputConnectionURLValue={connectionURL}
-        onChangeNodeIDText={text => setNodeID(text)}
-        inputNodeIDValue={nodeID}
-        onChangeUserIDText={text => setUserID(text)}
-        inputUserIDValue={userID}
         onChangeUsernameText={text => setUsername(text)}
         inputUsernameValue={username}
         onChangePasswordText={text => setPassword(text)}
@@ -113,6 +124,7 @@ function RgbLightningNodeConnect() {
           });
         }}
         isLoading={checkNodeConnection.isLoading}
+        handlePasteURL={handlePasteURL}
       />
       {checkNodeConnection.isLoading && (
         <View>

@@ -12,6 +12,7 @@ import { hp } from 'src/constants/responsive';
 import SwipeIcon from 'src/assets/images/swipeIcon.svg';
 import Colors from 'src/theme/Colors';
 import Fonts from 'src/constants/Fonts';
+import AnimatedDots from './AnimatedDots';
 
 const { width } = Dimensions.get('window');
 const SWIPE_LENGTH = width - hp(50) - 70;
@@ -22,6 +23,7 @@ interface Props {
   onSwipeComplete: () => void;
   backColor?: string;
   loaderTextColor?: string;
+  resetCounter?: number;
 }
 
 const SwipeToAction: React.FC<Props> = ({
@@ -30,6 +32,7 @@ const SwipeToAction: React.FC<Props> = ({
   loadingTitle,
   backColor = Colors.Golden,
   loaderTextColor = Colors.Black,
+  resetCounter,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
@@ -37,14 +40,24 @@ const SwipeToAction: React.FC<Props> = ({
     [theme, backColor, loaderTextColor],
   );
   const [swiped, setSwiped] = useState(false);
-  const translateX = new Animated.Value(0);
-  const autoSwipe = new Animated.Value(0);
+  const translateX = useRef(new Animated.Value(0)).current;
+  const autoSwipe = useRef(new Animated.Value(0)).current;
   const autoSwipeAnimation = useRef(null);
 
   useEffect(() => {
     startSwipeIndicator();
     return () => stopSwipeIndicator();
   }, []);
+
+  useEffect(() => {
+    if (resetCounter !== undefined) {
+      translateX.setValue(0);
+      autoSwipe.setValue(0);
+      setSwiped(false);
+      stopSwipeIndicator();
+      startSwipeIndicator();
+    }
+  }, [resetCounter]);
 
   const startSwipeIndicator = () => {
     if (!autoSwipeAnimation.current) {
@@ -201,6 +214,7 @@ const SwipeToAction: React.FC<Props> = ({
           <Animated.Text style={styles.textLoading}>
             {loadingTitle}
           </Animated.Text>
+          <AnimatedDots />
         </View>
       )}
     </GestureHandlerRootView>
@@ -210,7 +224,6 @@ const SwipeToAction: React.FC<Props> = ({
 const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
   StyleSheet.create({
     container: {
-      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -262,6 +275,7 @@ const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
       overflow: 'hidden',
     },
     containerLoading: {
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: backColor,

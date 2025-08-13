@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
-
 import { hp } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
@@ -13,22 +12,25 @@ import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Transaction } from 'src/services/wallets/interfaces';
-import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import useBalance from 'src/hooks/useBalance';
 import { Keys } from 'src/storage';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import SentBtcIcon from 'src/assets/images/btcSentTxnIcon.svg';
+import SentBtcIconLight from 'src/assets/images/btcSentTxnIcon_light.svg';
 import RecieveBtcIcon from 'src/assets/images/btcReceiveTxnIcon.svg';
+import RecieveBtcIconLight from 'src/assets/images/btcReceiveTxnIcon_light.svg';
 import BitcoinPendingIcon from 'src/assets/images/bitcoinPendingTxnIcon.svg';
 import SentLightningIcon from 'src/assets/images/lightningSentTxnIcon.svg';
 import RecieveLightningIcon from 'src/assets/images/lightningReceiveTxnIcon.svg';
 import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg';
 import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
+import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
 
 type WalletTransactionsProps = {
   transId: string;
+  transKind: TransactionKind;
   transDate: string;
   transAmount: string;
   transType: TransactionType;
@@ -36,20 +38,18 @@ type WalletTransactionsProps = {
   disabled?: boolean;
   transaction: Transaction;
   tranStatus?: string;
-  coin?: string;
   networkType?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
   const {
     transId,
+    transKind,
     transDate,
     transAmount,
     transType,
     backColor,
     disabled,
-    tranStatus,
-    coin,
     networkType,
   } = props;
   const theme: AppTheme = useTheme();
@@ -64,7 +64,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Sent: {
         bitcoin: {
           dark: <SentBtcIcon />,
-          light: <SentBtcIcon />,
+          light: <SentBtcIconLight />,
         },
         lightning: {
           dark: <SentLightningIcon />,
@@ -74,7 +74,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       Received: {
         bitcoin: {
           dark: <RecieveBtcIcon />,
-          light: <RecieveBtcIcon />,
+          light: <RecieveBtcIconLight />,
         },
         lightning: {
           dark: <RecieveLightningIcon />,
@@ -121,14 +121,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        tranStatus
-          ? navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-              transaction: props.transaction,
-              coin: coin,
-            })
-          : navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {
-              transaction: props.transaction,
-            })
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {transaction: props.transaction})
       }>
       <GradientView
         style={styles.container}
@@ -144,7 +137,11 @@ function WalletTransactions(props: WalletTransactionsProps) {
         <View style={styles.transDetailsWrapper}>
           <View>
             {transId === TransactionKind.SERVICE_FEE ? (
-              <ServiceFeeIcon />
+              isThemeDark ? (
+                <ServiceFeeIcon />
+              ) : (
+                <ServiceFeeIconLight />
+              )
             ) : (
               getStatusIcon(
                 transType,
@@ -160,7 +157,9 @@ function WalletTransactions(props: WalletTransactionsProps) {
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
-              {tranStatus ? Capitalize(tranStatus) : transId}
+              {transKind === TransactionKind.SERVICE_FEE
+                ? 'Platform Fee'
+                : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
               {moment(transDate).format('DD MMM YY  •  hh:mm A')}
