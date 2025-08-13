@@ -247,16 +247,21 @@ function HomeScreen() {
   }, []);
 
   async function checkClaimStatus() {
-    if (mmkv.getString(Keys.CLAIM_KEY) === 'true') {
+    const localAppId = mmkv.getString(Keys.CLAIM_KEY);
+    if (localAppId === app?.id) {
+      console.log('Claim found in MMKV for app.id:', localAppId);
       setClaimDisabled(true);
       return;
     }
     const keychainData = await getGenericPassword({
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
-    if (keychainData) {
+    if (keychainData && keychainData.password === app?.id) {
+      console.log('Claim found in Keychain for app.id:', keychainData.password);
       setClaimDisabled(true);
-      mmkv.set(Keys.CLAIM_KEY, 'true');
+      mmkv.set(Keys.CLAIM_KEY, app.id);
+    } else {
+      console.log('No claim found for this app.id');
     }
   }
 

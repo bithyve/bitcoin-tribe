@@ -6,7 +6,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import { useObject } from '@realm/react';
+import { useObject, useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
 import { setGenericPassword, getGenericPassword } from 'react-native-keychain';
@@ -42,6 +42,7 @@ import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -88,6 +89,7 @@ const CoinDetailsScreen = () => {
     () => getStyles(theme, claimDisabled),
     [theme, claimDisabled],
   );
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
 
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
@@ -162,17 +164,21 @@ const CoinDetailsScreen = () => {
   }, []);
 
   async function checkClaimStatus() {
-    if (mmkv.getString(Keys.CLAIM_KEY) === 'true') {
+    const localAppId = mmkv.getString(Keys.CLAIM_KEY);
+    if (localAppId === app?.id) {
+      console.log('Claim found in MMKV for app.id:', localAppId);
       setClaimDisabled(true);
       return;
     }
     const keychainData = await getGenericPassword({
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
-    console.log('keychainData', keychainData);
-    if (keychainData) {
+    if (keychainData && keychainData.password === app?.id) {
+      console.log('Claim found in Keychain for app.id:', keychainData.password);
       setClaimDisabled(true);
-      mmkv.set(Keys.CLAIM_KEY, 'true');
+      mmkv.set(Keys.CLAIM_KEY, app.id);
+    } else {
+      console.log('No claim found for this app.id');
     }
   }
 
@@ -212,8 +218,11 @@ const CoinDetailsScreen = () => {
   };
 
   async function onClaimPress() {
-    mmkv.set(Keys.CLAIM_KEY, 'true');
-    await setGenericPassword('claim', 'true', {
+    if (!app?.id) {
+      return;
+    }
+    mmkv.set(Keys.CLAIM_KEY, app.id);
+    await setGenericPassword('appId', app.id, {
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
     setClaimDisabled(true);
