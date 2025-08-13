@@ -48,7 +48,8 @@ function EditWalletProfile({ navigation }) {
         uri: image.path,
         width: image.width,
         height: image.height,
-        mime: image.mime,
+        type: image.mime,
+        fileName: image.filename,
       });
     } catch (error) {
       console.error(error);
@@ -93,7 +94,7 @@ function EditWalletProfile({ navigation }) {
         secondaryCTATitle={common.cancel}
         onSettingsPress={() => setEnableEdit(!enableEdit)}
         enableEdit={enableEdit}
-        deleteProfile={() => updateWalletProfile(false)}
+        deleteProfile={() => updateWalletProfile(true)}
       />
     </ScreenContainer>
   );

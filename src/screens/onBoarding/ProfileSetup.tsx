@@ -90,7 +90,8 @@ function ProfileSetup() {
         uri: image.path,
         width: image.width,
         height: image.height,
-        mime: image.mime,
+        type: image.mime,
+        fileName: image.filename,
       });
     } catch (error) {
       console.error(error);
