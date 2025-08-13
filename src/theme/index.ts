@@ -107,6 +107,10 @@ type CustomColors = {
   hideAssetDeviderColor: string;
   assetListBackColor: string;
   unlockCtaBackColor: string;
+  claimCtaBackColor: string;
+  claimCtaTitleColor: string;
+  claimCtaDisableBackColor: string;
+  claimCtaDisableTitleColor: string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -222,6 +226,10 @@ const CombinedDefaultTheme: AppTheme = {
     hideAssetDeviderColor: Colors.DarkSilver,
     assetListBackColor: Colors.White,
     unlockCtaBackColor: Colors.GOGreen,
+    claimCtaBackColor: Colors.Platinum,
+    claimCtaTitleColor: Colors.Black,
+    claimCtaDisableBackColor: Colors.White,
+    claimCtaDisableTitleColor: Colors.SonicSilver,
   },
   fonts: {
     regular: {
@@ -345,6 +353,10 @@ const CombinedDarkTheme: AppTheme = {
     hideAssetDeviderColor: Colors.Arsenic,
     assetListBackColor: Colors.RaisinBlack,
     unlockCtaBackColor: Colors.UFOGreen1,
+    claimCtaBackColor: Colors.White,
+    claimCtaTitleColor: Colors.Black,
+    claimCtaDisableBackColor: Colors.CharlestonGreen,
+    claimCtaDisableTitleColor: Colors.SonicSilver,
   },
   fonts: {
     regular: {

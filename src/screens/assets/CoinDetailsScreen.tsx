@@ -1,4 +1,4 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -8,7 +8,8 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import { setGenericPassword, getGenericPassword } from 'react-native-keychain';
 import {
   Coin,
   IssuerVerificationMethod,
@@ -37,6 +38,10 @@ import {
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
 import DisclaimerPopup from 'src/components/DisclaimerPopup';
+import AppText from 'src/components/AppText';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
+import AppTouchable from 'src/components/AppTouchable';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -57,6 +62,8 @@ const CoinDetailsScreen = () => {
     isDisclaimerVisible,
     setIsDisclaimerVisible,
   } = useContext(AppContext);
+  const mmkv = new MMKV();
+  const theme: AppTheme = useTheme();
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
@@ -76,6 +83,11 @@ const CoinDetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [claimDisabled, setClaimDisabled] = useState(false);
+  const styles = React.useMemo(
+    () => getStyles(theme, claimDisabled),
+    [theme, claimDisabled],
+  );
 
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
@@ -145,6 +157,25 @@ const CoinDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  useEffect(() => {
+    checkClaimStatus();
+  }, []);
+
+  async function checkClaimStatus() {
+    if (mmkv.getString(Keys.CLAIM_KEY) === 'true') {
+      setClaimDisabled(true);
+      return;
+    }
+    const keychainData = await getGenericPassword({
+      service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
+    });
+    console.log('keychainData', keychainData);
+    if (keychainData) {
+      setClaimDisabled(true);
+      mmkv.set(Keys.CLAIM_KEY, 'true');
+    }
+  }
+
   const totalAssetLocalAmount = useMemo(() => {
     const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
     return safeChannelsData
@@ -180,6 +211,14 @@ const CoinDetailsScreen = () => {
     }, 1000);
   };
 
+  async function onClaimPress() {
+    mmkv.set(Keys.CLAIM_KEY, 'true');
+    await setGenericPassword('claim', 'true', {
+      service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
+    });
+    setClaimDisabled(true);
+  }
+
   return (
     <ScreenContainer>
       <CoinDetailsHeader
@@ -210,6 +249,20 @@ const CoinDetailsScreen = () => {
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
+      <View style={styles.claimToolTipWrapper}>
+        <View style={styles.claimMessageWrapper}>
+          <AppText>🎁 Claim free USDT (1–10) and explore RGB now</AppText>
+        </View>
+        <View style={styles.claimCtaContainer}>
+          <AppTouchable
+            style={styles.claimCtaWrapper}
+            onPress={() => onClaimPress()}>
+            <AppText style={styles.claimCtaTitle}>
+              {claimDisabled ? 'Claimed' : 'Claim Now'}
+            </AppText>
+          </AppTouchable>
+        </View>
+      </View>
       <TransactionsList
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
@@ -316,15 +369,52 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({
-  transactionContainer: {
-    height: windowHeight > 820 ? '55%' : '50%',
-  },
-  transactionContainer1: {
-    marginTop: hp(10),
-    height: windowHeight > 820 ? '54%' : '49%',
-  },
-  toolTipCotainer: {
-    top: windowHeight > 670 ? 90 : 70,
-  },
-});
+const getStyles = (theme: AppTheme, disableStatus) =>
+  StyleSheet.create({
+    transactionContainer: {
+      height: windowHeight > 820 ? '55%' : '50%',
+    },
+    transactionContainer1: {
+      marginTop: hp(10),
+      height: windowHeight > 820 ? '54%' : '49%',
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 90 : 70,
+    },
+    claimToolTipWrapper: {
+      width: '100%',
+      flexDirection: 'row',
+      marginBottom: hp(5),
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      paddingHorizontal: hp(10),
+      paddingVertical: hp(5),
+      borderRadius: 10,
+      backgroundColor: theme.colors.inputBackground,
+    },
+    claimMessageWrapper: {
+      width: '70%',
+    },
+    claimCtaContainer: {
+      width: '30%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    claimCtaWrapper: {
+      minHeight: hp(32),
+      minWidth: hp(93),
+      backgroundColor: disableStatus
+        ? theme.colors.claimCtaDisableBackColor
+        : theme.colors.claimCtaBackColor,
+      borderWidth: 2,
+      borderColor: theme.colors.borderColor,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 15,
+    },
+    claimCtaTitle: {
+      color: disableStatus
+        ? theme.colors.claimCtaDisableTitleColor
+        : theme.colors.claimCtaTitleColor,
+    },
+  });

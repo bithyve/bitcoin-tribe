@@ -15,6 +15,11 @@ import {
 } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
+import { setGenericPassword, getGenericPassword } from 'react-native-keychain';
+import { MMKV } from 'react-native-mmkv';
+import { getApp } from '@react-native-firebase/app';
+import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import CoinAssetsList from './components/CoinAssetsList';
@@ -40,12 +45,12 @@ import {
   NodeStatusType,
   PushNotificationType,
 } from 'src/models/enums/Notifications';
-import { getApp } from '@react-native-firebase/app';
-import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
+import { Keys } from 'src/storage';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
+  const mmkv = new MMKV();
   const prevStatusRef = useRef<string | null>(null);
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
@@ -102,6 +107,7 @@ function HomeScreen() {
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const rgbWallet = useRgbWallets({}).wallets[0];
   const [refreshing, setRefreshing] = useState(false);
+  const [claimDisabled, setClaimDisabled] = useState(false);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
@@ -236,6 +242,24 @@ function HomeScreen() {
     ApiHandler.syncFcmToken();
   }, [app?.appType]);
 
+  useEffect(() => {
+    checkClaimStatus();
+  }, []);
+
+  async function checkClaimStatus() {
+    if (mmkv.getString(Keys.CLAIM_KEY) === 'true') {
+      setClaimDisabled(true);
+      return;
+    }
+    const keychainData = await getGenericPassword({
+      service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
+    });
+    if (keychainData) {
+      setClaimDisabled(true);
+      mmkv.set(Keys.CLAIM_KEY, 'true');
+    }
+  }
+
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));
   };
@@ -258,7 +282,7 @@ function HomeScreen() {
     };
   }, []);
 
-  const handleDeepLink = (event) => {
+  const handleDeepLink = event => {
     try {
       const url = event.url;
       if (url.startsWith('tribe://')) {
