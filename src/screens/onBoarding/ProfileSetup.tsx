@@ -18,7 +18,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import WebView from 'react-native-webview';
 import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
 import Modal from 'react-native-modal';
@@ -56,7 +56,7 @@ function ProfileSetup() {
   const [name, setName] = useState('');
   const styles = getStyles(theme);
 
-  const [profileImage, setProfileImage] = useState<Asset | null>(null);
+  const [profileImage, setProfileImage] = useState(null);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,15 +80,18 @@ function ProfileSetup() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await launchImageLibrary({
-        mediaType: 'photo',
-        includeBase64: false,
-        maxHeight: 500,
-        maxWidth: 500,
-        selectionLimit: 1,
-        quality: 0.4,
+      const image = await ImagePicker.openPicker({
+        width: 500,
+        height: 500,
+        cropping: true,
+        compressImageQuality: 0.4,
       });
-      setProfileImage(result.assets[0]);
+      setProfileImage({
+        uri: image.path,
+        width: image.width,
+        height: image.height,
+        mime: image.mime,
+      });
     } catch (error) {
       console.error(error);
     }
