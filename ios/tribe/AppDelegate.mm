@@ -29,15 +29,35 @@
   self.initialProps = @{};
   if ([[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] intValue] > 95) {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"FirstRun"]) {
-      NSArray *secItemClasses = @[(__bridge id)kSecClassGenericPassword,
-                      (__bridge id)kSecClassInternetPassword,
-                      (__bridge id)kSecClassCertificate,
-                      (__bridge id)kSecClassKey,
-                      (__bridge id)kSecClassIdentity];
+
+      NSArray *secItemClasses = @[
+        (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecClassInternetPassword,
+        (__bridge id)kSecClassCertificate,
+        (__bridge id)kSecClassKey,
+        (__bridge id)kSecClassIdentity
+      ];
+
       for (id secItemClass in secItemClasses) {
-          NSDictionary *spec = @{(__bridge id)kSecClass: secItemClass};
-          SecItemDelete((__bridge CFDictionaryRef)spec);
+        // Skip deleting CLAIM_ACCOUNT in generic passwords
+        if (secItemClass == (__bridge id)kSecClassGenericPassword) {
+          NSDictionary *claimSpec = @{
+            (__bridge id)kSecClass: secItemClass,
+            (__bridge id)kSecAttrService: @"CLAIM_STATUS"
+          };
+
+          CFTypeRef result = NULL;
+          OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)claimSpec, &result);
+          if (status == errSecSuccess) {
+            // Found claim account in keychain → skip deletion
+            continue;
+          }
+        }
+
+        NSDictionary *spec = @{(__bridge id)kSecClass: secItemClass};
+        SecItemDelete((__bridge CFDictionaryRef)spec);
       }
+
       [[NSUserDefaults standardUserDefaults] setValue:@"1strun" forKey:@"FirstRun"];
       [[NSUserDefaults standardUserDefaults] synchronize];
     }
