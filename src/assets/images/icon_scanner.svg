@@ -1,15 +1,7 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.5" y="0.5" width="47" height="47" rx="14.5" stroke="url(#paint0_linear_201_1163)"/>
-<path d="M34.5 24.8057H13.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M32.6299 20.5951V19.0821C32.6299 17.0211 30.9589 15.3501 28.8969 15.3501H27.6919" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M15.3701 20.5951V19.0821C15.3701 17.0211 17.0411 15.3501 19.1031 15.3501H20.3391" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M32.6299 24.8047V28.8787C32.6299 30.9407 30.9589 32.6117 28.8969 32.6117H27.6919" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M15.3701 24.8047V28.8787C15.3701 30.9407 17.0411 32.6117 19.1031 32.6117H20.3391" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<defs>
-<linearGradient id="paint0_linear_201_1163" x1="24" y1="0" x2="24" y2="48" gradientUnits="userSpaceOnUse">
-<stop stop-color="#2F2F2F"/>
-<stop offset="0.5" stop-color="#191919"/>
-<stop offset="1" stop-color="#151515"/>
-</linearGradient>
-</defs>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.5 12.8086H1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.6294 8.59656V7.08356C20.6294 5.02256 18.9584 3.35156 16.8964 3.35156H15.6914" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.36914 8.59656V7.08356C3.36914 5.02256 5.04014 3.35156 7.10214 3.35156H8.33814" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.6294 12.8047V16.8787C20.6294 18.9407 18.9584 20.6117 16.8964 20.6117H15.6914" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.36914 12.8047V16.8787C3.36914 18.9407 5.04014 20.6117 7.10214 20.6117H8.33814" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

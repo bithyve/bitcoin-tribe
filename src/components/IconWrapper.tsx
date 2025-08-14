@@ -29,5 +29,9 @@ const styles = StyleSheet.create({
   container: {
     minHeight: hp(30),
     minWidth: wp(30),
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    marginHorizontal: 2,
   },
 });
