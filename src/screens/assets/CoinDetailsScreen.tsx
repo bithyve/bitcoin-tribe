@@ -1,5 +1,12 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  PermissionsAndroid,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import RNFS from '@dr.pogodin/react-native-fs';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
   useFocusEffect,
@@ -43,6 +50,18 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+
+function getClaimFilePath() {
+  if (Platform.OS === 'android' && RNFS) {
+    const baseDir = RNFS.ExternalDirectoryPath;
+    const dirPath = `${baseDir}/TribeAppData`;
+    return {
+      dirPath,
+      filePath: `${dirPath}/claim.txt`,
+    };
+  }
+  return { dirPath: null, filePath: null };
+}
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -164,9 +183,9 @@ const CoinDetailsScreen = () => {
   }, []);
 
   async function checkClaimStatus() {
+    const { dirPath, filePath } = getClaimFilePath();
     const localAppId = mmkv.getString(Keys.CLAIM_KEY);
     if (localAppId === app?.id) {
-      console.log('Claim found in MMKV for app.id:', localAppId);
       setClaimDisabled(true);
       return;
     }
@@ -174,12 +193,28 @@ const CoinDetailsScreen = () => {
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
     if (keychainData && keychainData.password === app?.id) {
-      console.log('Claim found in Keychain for app.id:', keychainData.password);
-      setClaimDisabled(true);
       mmkv.set(Keys.CLAIM_KEY, app.id);
-    } else {
-      console.log('No claim found for this app.id');
+      setClaimDisabled(true);
+      return;
     }
+
+    if (Platform.OS === 'android') {
+      try {
+        const exists = await RNFS.exists(filePath);
+        if (exists) {
+          const fileAppId = await RNFS.readFile(filePath, 'utf8');
+          if (fileAppId === app?.id) {
+            mmkv.set(Keys.CLAIM_KEY, app.id);
+            setClaimDisabled(true);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error reading from external storage:', err);
+      }
+    }
+
+    console.log('No claim found for this app.id');
   }
 
   const totalAssetLocalAmount = useMemo(() => {
@@ -218,6 +253,8 @@ const CoinDetailsScreen = () => {
   };
 
   async function onClaimPress() {
+    const { dirPath, filePath } = getClaimFilePath();
+    console.log('dirPath', dirPath);
     if (!app?.id) {
       return;
     }
@@ -225,6 +262,30 @@ const CoinDetailsScreen = () => {
     await setGenericPassword('appId', app.id, {
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'We need access to save your claim status.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          await RNFS.mkdir(dirPath);
+          await RNFS.writeFile(filePath, app.id, 'utf8');
+          console.log('App ID saved to external storage at', filePath);
+        } else {
+          console.warn('Storage permission denied');
+        }
+      } catch (err) {
+        console.error('Error writing to external storage:', err);
+      }
+    }
     setClaimDisabled(true);
   }
 

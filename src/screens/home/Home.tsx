@@ -19,6 +19,7 @@ import { setGenericPassword, getGenericPassword } from 'react-native-keychain';
 import { MMKV } from 'react-native-mmkv';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+import RNFS from '@dr.pogodin/react-native-fs';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -47,6 +48,18 @@ import {
 } from 'src/models/enums/Notifications';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import { Keys } from 'src/storage';
+
+function getClaimFilePath() {
+  if (Platform.OS === 'android' && RNFS) {
+    const baseDir = RNFS.ExternalDirectoryPath;
+    const dirPath = `${baseDir}/TribeAppData`;
+    return {
+      dirPath,
+      filePath: `${dirPath}/claim.txt`,
+    };
+  }
+  return { dirPath: null, filePath: null };
+}
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -247,9 +260,10 @@ function HomeScreen() {
   }, []);
 
   async function checkClaimStatus() {
+    console.log('app?.id', app?.id);
+    const { dirPath, filePath } = getClaimFilePath();
     const localAppId = mmkv.getString(Keys.CLAIM_KEY);
     if (localAppId === app?.id) {
-      console.log('Claim found in MMKV for app.id:', localAppId);
       setClaimDisabled(true);
       return;
     }
@@ -257,12 +271,28 @@ function HomeScreen() {
       service: Keys.CLAIM_KEYCHAIN_ACCOUNT,
     });
     if (keychainData && keychainData.password === app?.id) {
-      console.log('Claim found in Keychain for app.id:', keychainData.password);
-      setClaimDisabled(true);
       mmkv.set(Keys.CLAIM_KEY, app.id);
-    } else {
-      console.log('No claim found for this app.id');
+      setClaimDisabled(true);
+      return;
     }
+
+    if (Platform.OS === 'android') {
+      try {
+        const exists = await RNFS.exists(filePath);
+        if (exists) {
+          const fileAppId = await RNFS.readFile(filePath, 'utf8');
+          if (fileAppId === app?.id) {
+            mmkv.set(Keys.CLAIM_KEY, app.id);
+            setClaimDisabled(true);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error reading from external storage:', err);
+      }
+    }
+
+    console.log('No claim found for this app.id');
   }
 
   const handleNavigation = (route, params?) => {
