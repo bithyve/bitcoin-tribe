@@ -1,4 +1,4 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -37,6 +37,10 @@ import {
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
 import DisclaimerPopup from 'src/components/DisclaimerPopup';
+import AppText from 'src/components/AppText';
+import AppTouchable from 'src/components/AppTouchable';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -80,6 +84,8 @@ const CoinDetailsScreen = () => {
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme, isThemeDark);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -210,6 +216,19 @@ const CoinDetailsScreen = () => {
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
+      {coin.campaign.isActive === 'true' && (
+        <View style={styles.campaignContainer}>
+          <AppText style={styles.campaignDescription} variant="body1">{coin.campaign.description}</AppText>
+          <AppTouchable
+            style={styles.btnClaim}
+            onPress={() => {
+              console.log('claim');
+            }}
+          >
+            <AppText style={styles.btnClaimText} variant="body1">{coin.campaign.buttonText}</AppText>
+          </AppTouchable>
+        </View>
+      )}
       <TransactionsList
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
@@ -316,7 +335,7 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({
+const getStyles = (theme: AppTheme, isThemeDark: boolean) => StyleSheet.create({
   transactionContainer: {
     height: windowHeight > 820 ? '55%' : '50%',
   },
@@ -326,5 +345,27 @@ const styles = StyleSheet.create({
   },
   toolTipCotainer: {
     top: windowHeight > 670 ? 90 : 70,
+  },
+  campaignContainer: {
+    padding: hp(15),
+    borderRadius: hp(15),
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
+    marginBottom: hp(10),
+  },
+  campaignDescription: {
+    flex: 1,
+  },
+  btnClaim: {
+    backgroundColor: isThemeDark ? '#fff' : '#091229',
+    padding: hp(5),
+    paddingHorizontal: hp(15),
+    borderRadius: hp(20),
+  },
+  btnClaimText: {
+    color: isThemeDark ? '#000' : '#fff',
+    fontSize: 14,
   },
 });

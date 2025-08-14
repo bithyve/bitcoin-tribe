@@ -43,6 +43,7 @@ import {
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
+import DefaultCoin from './DefaultCoin';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -110,6 +111,7 @@ function HomeScreen() {
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
+  const defaultCoin = coinsResult.find(c => c.isDefault);
 
   const coins = useMemo(() => {
     if (!coinsResult) return [];
@@ -258,7 +260,7 @@ function HomeScreen() {
     };
   }, []);
 
-  const handleDeepLink = (event) => {
+  const handleDeepLink = event => {
     try {
       const url = event.url;
       if (url.startsWith('tribe://')) {
@@ -290,24 +292,28 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader />
+        <HomeHeader showBalance={!defaultCoin} />
       </View>
-      <CoinAssetsList
-        listData={coins}
-        loading={refreshing && !isBackupInProgress && !isBackupDone}
-        onRefresh={handleRefresh}
-        refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-        onPressAddNew={() => {
-          if (isNodeInitInProgress) {
-            Toast(node.connectingNodeToastMsg, true);
-            return;
-          }
-          handleNavigation(NavigationRoutes.ADDASSET, {
-            issueAssetType: AssetType.Coin,
-          });
-        }}
-        onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
-      />
+      {defaultCoin ? (
+        <DefaultCoin asset={defaultCoin} />
+      ) : (
+        <CoinAssetsList
+          listData={coins}
+          loading={refreshing && !isBackupInProgress && !isBackupDone}
+          onRefresh={handleRefresh}
+          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
+          onPressAddNew={() => {
+            if (isNodeInitInProgress) {
+              Toast(node.connectingNodeToastMsg, true);
+              return;
+            }
+            handleNavigation(NavigationRoutes.ADDASSET, {
+              issueAssetType: AssetType.Coin,
+            });
+          }}
+          onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
+        />
+      )}
     </ScreenContainer>
   );
 }
