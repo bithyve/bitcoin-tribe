@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@dr.pogodin/react-native-fs": "2.26.0",
+    "@noble/curves": "1.9.4",
     "@noble/secp256k1": "1.6.3",
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-community/netinfo": "^11.4.1",

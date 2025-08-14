@@ -22,7 +22,7 @@ import {
   Contact,
   Message,
   MessageType,
-  RequestType,
+  RequestStatus,
 } from 'src/models/interfaces/Community';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Relay from 'src/services/relay';
@@ -30,6 +30,9 @@ import ModalLoading from 'src/components/ModalLoading';
 import ImageViewing from 'react-native-image-viewing';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ChatKeyManager } from 'src/utils/ChatEnc';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import WalletUtilities from 'src/services/wallets/operations/utils';
+import Toast from 'src/components/Toast';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,8 +68,15 @@ const Chat = () => {
     markAsRead();
   }, []);
 
+  useEffect(() => {
+    const payload = route.params?.payload;
+    if (payload) {
+      _sendMessage(payload.type, undefined, payload);
+    }
+  }, [route.params?.payload]);
+
   const _sendMessage = useCallback(
-    async (type: MessageType, fileUrl?: string) => {
+    async (type: MessageType, fileUrl?: string, request?: object) => {
       try {
         const messageData = {
           id: uuidv4(),
@@ -77,6 +87,7 @@ const Chat = () => {
           communityId: communityId,
           unread: false,
           fileUrl: fileUrl,
+          request: request,
         };
         dbManager.createObject(RealmSchema.Message, messageData);
         const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
@@ -150,15 +161,77 @@ const Chat = () => {
   };
 
   const onPressRequest = async () => {
-    // navigation.navigate(NavigationRoutes.REQUESTORSEND, {
-    //   type: 'Request',
-    // });
+    navigation.navigate(NavigationRoutes.REQUESTORSEND, {
+      type: 'Request',
+      communityId
+    });
   };
 
   const _onPressSend = async () => {
     // navigation.navigate(NavigationRoutes.REQUESTORSEND, {
     //   type: 'Send',
     // });
+  };
+
+  const onPressReject = (message: Message) => {
+    const messageData = {
+      ...message,
+      request: {
+        ...message.request,
+        status: RequestStatus.Rejected,
+      },
+    };
+    dbManager.updateObjectByPrimaryId(RealmSchema.Message, 'id', message.id, {
+      request: {
+        ...message.request,
+        status: RequestStatus.Rejected,
+      },
+    });
+    const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
+    cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
+  };
+
+  const viewTransaction = (message: Message) => {
+    console.log('message', message);
+    if(message.request?.txid) {
+      navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {txid: message.request?.txid})
+    }
+  }
+
+  const onPressApprove = async (message: Message) => {
+    try {
+    const { address, options } = WalletUtilities.decodePaymentURI(message.request?.invoice);
+    const { txid } = await ApiHandler.sendToAddress({
+      recipient: {
+        address: address,
+        amount: options.amount * 1e8,
+      },
+      skipSync: false,
+    });
+   if(txid) {
+    const messageData = {
+      ...message,
+      request: {
+        ...message.request,
+        status: RequestStatus.Accepted,
+        txid: txid,
+      },
+    };
+    dbManager.updateObjectByPrimaryId(RealmSchema.Message, 'id', message.id, {
+      request: {
+        ...message.request,
+        status: RequestStatus.Accepted,
+        txid: txid,
+      },
+    });
+    const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
+    cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
+   }
+    } catch (error) {
+      Toast(error.message, true);
+      console.error('Error approving request:', error);
+    }
+    console.log('approve', message);
   };
 
   return (
@@ -186,6 +259,9 @@ const Chat = () => {
             flatListRef={flatListRef}
             appId={app.contactsKey.publicKey}
             onImagePress={onImagePress}
+            onPressReject={onPressReject}
+            onPressApprove={onPressApprove}
+            viewTransaction={viewTransaction}
           />
           <MessageInput
             message={message}

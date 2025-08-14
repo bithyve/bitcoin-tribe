@@ -1070,7 +1070,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+261abb)":
+  - "react-native-bare-kit (0.5.6+795038)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1093,9 +1093,9 @@ PODS:
     - Yoga
   - react-native-biometrics (3.0.1):
     - React-Core
-  - react-native-config (1.5.5):
-    - react-native-config/App (= 1.5.5)
-  - react-native-config/App (1.5.5):
+  - react-native-config (1.5.6):
+    - react-native-config/App (= 1.5.6)
+  - react-native-config/App (1.5.6):
     - React-Core
   - react-native-document-picker (9.3.1):
     - DoubleConversion
@@ -1661,7 +1661,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.19.0):
+  - RNSentry (6.20.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2073,9 +2073,9 @@ SPEC CHECKSUMS:
   React-logger: 6070f362a1657bb53335eb1fc903d3f49fd79842
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 664bb7c16eee582a7fe4225afc29ac96590ca9a4
+  react-native-bare-kit: 3084ce60b672da6995bf9ba7791a6b05f6ae9f41
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
-  react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
+  react-native-config: f1dde39f8468ad922fc7e8bd4308c8e6223d5ee8
   react-native-document-picker: 451699da81cba8b40b596b8076019a4deb86f46e
   react-native-image-picker: f1006d8935a3bc0baf8157faaa7857c76a77c8bb
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
@@ -2125,7 +2125,7 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
   RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: ef68e50aea531dd00c592ba4683bbcb89d4d2e1a
-  RNSentry: a01eec3274dc41e21fab5475e0b4358e12b430fc
+  RNSentry: 0ad8d976a1cffd1f65a5c0106a9082290a7d8b8c
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
   RNSVG: d39a9be65c439dfb061955f7615f1f71a51ecede
   Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b

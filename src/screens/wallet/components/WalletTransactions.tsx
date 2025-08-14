@@ -121,7 +121,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
       disabled={disabled}
       style={styles.containerWrapper}
       onPress={() =>
-        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {transaction: props.transaction})
+        navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {txid: props.transaction.txid})
       }>
       <GradientView
         style={styles.container}

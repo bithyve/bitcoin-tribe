@@ -28,6 +28,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ViewShot from 'react-native-view-shot';
 import OptionCard from 'src/components/OptionCard';
 import { deeplinkType } from 'src/models/interfaces/Community';
+import { ChatEncryptionManager } from 'src/services/p2p/ChatEncryptionManager';
 
 const qrSize = (windowWidth * 65) / 100;
 
@@ -74,7 +75,8 @@ const ProfileInfo = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const qrValue = `tribe://${deeplinkType.Contact}/${app?.contactsKey?.publicKey}/`;
+  const pubKey = ChatEncryptionManager.derivePublicKey(app?.contactsKey?.secretKey);  
+  const qrValue = `tribe://${deeplinkType.Contact}/${app?.contactsKey?.publicKey}/${pubKey}`;
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 
