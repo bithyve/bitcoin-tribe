@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
-import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+import { snakeCaseToCamelCase } from 'src/utils/snakeCaseToCamelCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
 
@@ -125,7 +125,7 @@ export default class RGBServices {
         filter_asset_schemas: ['Nia', 'Cfa'],
       });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response);
+        const data = snakeCaseToCamelCase(response);
         return data;
       } else {
         return response;
@@ -162,7 +162,7 @@ export default class RGBServices {
           duration_seconds: expiry,
         });
         if (response) {
-          const data = snakeCaseToCamelCaseCase(response);
+          const data = snakeCaseToCamelCase(response);
           return data;
         } else {
           return response;
@@ -188,7 +188,7 @@ export default class RGBServices {
         asset_id: assetId,
       });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response);
+        const data = snakeCaseToCamelCase(response);
         return data;
       } else {
         return response;
@@ -207,7 +207,7 @@ export default class RGBServices {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.listtransfers({ asset_id: assetId });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response.transfers.reverse());
+        const data = snakeCaseToCamelCase(response.transfers.reverse());
         return data;
       } else {
         return response;
@@ -234,7 +234,7 @@ export default class RGBServices {
         amounts: [Number(supply)],
       });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response);
+        const data = snakeCaseToCamelCase(response);
         return data;
       } else {
         return response;
@@ -265,7 +265,7 @@ export default class RGBServices {
           file_digest: responseDigest.digest,
         });
         if (response) {
-          const data = snakeCaseToCamelCaseCase(response);
+          const data = snakeCaseToCamelCase(response);
           return data.asset ? data.asset : data;
         } else {
           return response;
@@ -348,7 +348,7 @@ export default class RGBServices {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.listUnspents({ skip_sync: false });
       if (response) {
-        const data = snakeCaseToCamelCaseCase(response.unspents);
+        const data = snakeCaseToCamelCase(response.unspents);
         return data;
       } else {
         return response.error;

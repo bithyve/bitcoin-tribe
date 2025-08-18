@@ -1,4 +1,4 @@
-import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+import { snakeCaseToCamelCase } from 'src/utils/snakeCaseToCamelCase';
 
 export interface ApiConfig {
   baseUrl: string;
@@ -50,7 +50,7 @@ export class RLNNodeApiServices {
         Authorization: auth,
       },
     });
-    return snakeCaseToCamelCaseCase(await response.json());
+    return snakeCaseToCamelCase(await response.json());
   }
 
   public async getBtcBalance(body: { skip_sync: boolean }): Promise<{
