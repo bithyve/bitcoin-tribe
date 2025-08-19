@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -16,6 +16,9 @@ import { AssetVisibility, Coin } from 'src/models/interfaces/RGBWallet';
 import { AssetType } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
+import useWallets from 'src/hooks/useWallets';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -48,6 +51,21 @@ const AssetsTabs = () => {
       .filtered(`isDefault == $0`, false || null)
       .sorted('timestamp', true),
   );
+  const [refreshing, setRefreshing] = useState(false);
+  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+  const wallet = useWallets({}).wallets[0];
+
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+  });
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    ApiHandler.fetchPresetAssets();
+    refreshRgbWallet.mutate();
+    refreshWallet.mutate({ wallets: [wallet] });
+    setTimeout(() => setRefreshing(false), 2000);
+  };
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -56,8 +74,8 @@ const AssetsTabs = () => {
           <CoinAssetsList
             listData={coins}
             loading={false}
-            onRefresh={() => {}}
-            refreshingStatus={false}
+            onRefresh={handleRefresh}
+            refreshingStatus={refreshing}
             onPressAddNew={() => {
               navigation.navigate(NavigationRoutes.ADDASSET, {
                 issueAssetType: AssetType.Coin,
