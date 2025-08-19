@@ -71,6 +71,20 @@ class RestClient {
       },
     });
   }
+
+  async delete(
+    path: string,
+    body?: object,
+    headers?: object,
+  ): Promise<AxiosResponse> {
+    return axios.delete(path, {
+      headers: {
+        ...RestClient.headers,
+        ...headers,
+      },
+      data: body,
+    });
+  }
 }
 
 export default new RestClient();

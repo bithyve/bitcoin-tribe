@@ -207,6 +207,29 @@ export default class Relay {
     return res.data || res.json;
   };
 
+  public static removeWalletPicture = async (
+    authToken: string,
+    appID: string,
+  ): Promise<{ success: boolean }> => {
+    let res;
+    try {
+      res = await RestClient.delete(
+        `${RELAY}/app/removeWalletPicture`,
+        { appID },
+        { Authorization: `Bearer ${authToken}` },
+      );
+    } catch (err: any) {
+      if (err.response) {
+        throw new Error(err.response.data.err || 'Request failed');
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+      throw err;
+    }
+    return res.data || res.json;
+  };
+
   public static syncFcmToken = async (
     authToken: string,
     fcmToken: string,

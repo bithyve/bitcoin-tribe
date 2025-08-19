@@ -3,6 +3,7 @@ import { useQuery } from '@realm/react';
 import { Keyboard } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMutation } from 'react-query';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -25,6 +26,19 @@ function EditWalletProfile({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [initialName, setInitialName] = useState('');
   const [enableEdit, setEnableEdit] = useState(false);
+
+  const { mutate: removeWalletPicture, isLoading } = useMutation({
+    mutationFn: ({ appID }: { appID: string }) =>
+      ApiHandler.removeWalletPicture(appID),
+    onSuccess: data => {
+      if (data.success) {
+        Toast('Wallet picture removed!');
+      }
+    },
+    onError: (error: any) => {
+      Toast(error?.message || 'Something went wrong', true);
+    },
+  });
 
   useEffect(() => {
     const fetchedName = app?.appName?.trim() || '';
@@ -73,9 +87,15 @@ function EditWalletProfile({ navigation }) {
     }
   };
 
+  const handleRemove = () => {
+    removeWalletPicture({
+      appID: app?.id,
+    });
+  };
+
   return (
     <ScreenContainer>
-      <ModalLoading visible={loading} />
+      <ModalLoading visible={loading || isLoading} />
       <EditProfileDetails
         title={wallet.walletNamePic}
         subTitle={wallet.walletNamePicSubTitle}
@@ -94,7 +114,7 @@ function EditWalletProfile({ navigation }) {
         secondaryCTATitle={common.cancel}
         onSettingsPress={() => setEnableEdit(!enableEdit)}
         enableEdit={enableEdit}
-        deleteProfile={() => updateWalletProfile(true)}
+        deleteProfile={() => handleRemove()}
       />
     </ScreenContainer>
   );

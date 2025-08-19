@@ -153,7 +153,12 @@ function EditProfileDetails(props: ProfileDetailsProps) {
               title={'Delete photo'}
               subTitle={''}
               icon={<DeleteProfileIcon />}
-              onPress={() => deleteProfile()}
+              onPress={() => {
+                setVisible(false);
+                setTimeout(() => {
+                  deleteProfile();
+                }, 1000);
+              }}
               titleColor={theme.colors.removeProfileTitle}
             />
           </>
