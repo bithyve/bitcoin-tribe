@@ -139,6 +139,7 @@ export interface Coin {
 }
 
 export interface Campaign {
+  _id: string;
   isActive: string;
   name: string;
   description: string;

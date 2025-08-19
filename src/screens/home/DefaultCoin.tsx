@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo, useState } from 'react';
 import { Asset, AssetVisibility, Coin } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
@@ -27,12 +27,15 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import useBalance from 'src/hooks/useBalance';
 import { useQuery } from '@realm/react';
+import GradientBorderAnimated from './GradientBorderAnimated';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
       margin: wp(10),
+      backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContainer: {
       borderColor: theme.colors.borderColor,
@@ -59,13 +62,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     campaignContainer: {
       backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
-      padding: hp(10),
       borderTopLeftRadius: hp(20),
       borderTopRightRadius: hp(20),
-      justifyContent: 'center',
-      alignItems: 'center',
-      top: 10,
-      height: hp(40),
       zIndex: -1000,
     },
     transactionContainer: {
@@ -84,7 +82,17 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
   });
 
-const DefaultCoin = ({ asset }: { asset: Asset }) => {
+const DefaultCoin = ({
+  asset,
+  loading,
+  refreshingStatus,
+  onRefresh,
+}: {
+  asset: Asset;
+  loading: boolean;
+  refreshingStatus: boolean;
+  onRefresh: () => void;
+}) => {
   const theme: AppTheme = useTheme();
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -100,10 +108,11 @@ const DefaultCoin = ({ asset }: { asset: Asset }) => {
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { getBalance, getCurrencyIcon } = useBalance();
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
-    collection
-      .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-  const nonDefaultCoins = coinsResult.filter(coin => coin.assetId !== asset.assetId).length;
+  const nonDefaultCoins = coinsResult.filter(
+    coin => coin.assetId !== asset.assetId,
+  ).length;
   const transactionsData =
     appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
@@ -132,19 +141,43 @@ const DefaultCoin = ({ asset }: { asset: Asset }) => {
   ]);
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControlView
+          refreshing={refreshingStatus}
+          onRefresh={onRefresh}
+        />
+      }>
       {asset.campaign.isActive === 'true' && (
-        <View style={styles.campaignContainer}>
-          <AppText variant="body1">{asset.campaign.name}</AppText>
-        </View>
+        <GradientBorderAnimated
+          height={hp(90)}
+          radius={hp(20)}
+          strokeWidth={1}
+          style={styles.campaignContainer}>
+          <AppText
+            style={{
+              color: theme.colors.headingColor,
+              textAlign: 'center',
+              marginTop: hp(15),
+            }}
+            variant="body1">
+            {asset.campaign.name}
+          </AppText>
+        </GradientBorderAnimated>
       )}
       <AppTouchable
+        activeOpacity={0.9}
         onPress={() =>
           navigation.navigate(NavigationRoutes.COINDETAILS, {
             assetId: asset.assetId,
           })
         }
-        style={styles.largeHeaderContainer}>
+        style={[
+          styles.largeHeaderContainer,
+          { marginTop: asset.campaign.isActive === 'true' ? -hp(50) : 0 },
+        ]}>
         <View style={styles.row}>
           <View style={styles.coinNameContainer}>
             <AppText variant="heading1">{asset.name}</AppText>
@@ -202,7 +235,11 @@ const DefaultCoin = ({ asset }: { asset: Asset }) => {
         </AppTouchable>
         <View style={{ marginHorizontal: wp(5) }} />
 
-        <AppTouchable style={styles.balanceContainer}>
+        <AppTouchable
+          style={styles.balanceContainer}
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.ASSETS);
+          }}>
           <IconOtherAssets />
           <View style={{ marginVertical: hp(15) }} />
 
@@ -222,13 +259,8 @@ const DefaultCoin = ({ asset }: { asset: Asset }) => {
             : styles.transactionContainer
         }
         transactions={transactionsData}
-        isLoading={isLoading}
-        refresh={() => {
-          setRefreshing(true);
-          refreshRgbWallet.mutate();
-          mutate({ assetId: asset.assetId, schema: RealmSchema.Coin });
-          setTimeout(() => setRefreshing(false), 2000);
-        }}
+        isLoading={loading}
+        refresh={onRefresh}
         refreshingStatus={refreshing}
         navigation={navigation}
         wallet={wallet}
@@ -238,7 +270,7 @@ const DefaultCoin = ({ asset }: { asset: Asset }) => {
         scrollY={0}
         schema={RealmSchema.Coin}
       />
-    </ScrollView>
+    </View>
   );
 };
 

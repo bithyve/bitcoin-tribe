@@ -2633,4 +2633,29 @@ export class ApiHandler {
       return error;
     }
   };
+
+  static async claimCampaign(campaignId: string) {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex<TribeApp>(
+        RealmSchema.TribeApp,
+      ) as TribeApp;
+      let invoice = await RGBServices.receiveAsset(
+        ApiHandler.appType,
+        ApiHandler.api,
+        "",
+        0,
+        60 * 60 * 24 * 30,
+        false,
+      );
+      const response = await Relay.claimCampaign(
+        app.authToken,
+        campaignId,
+        invoice.invoice,
+      );
+      return response;
+    } catch (error: any) {
+      console.error('Claim campaign error:', error.message || error);
+      return error;
+    }
+  }
 }

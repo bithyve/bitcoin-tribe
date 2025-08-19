@@ -41,6 +41,7 @@ import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
+import GradientBorderAnimated from '../home/GradientBorderAnimated';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -80,7 +81,6 @@ const CoinDetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
-
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
@@ -186,6 +186,19 @@ const CoinDetailsScreen = () => {
     }, 1000);
   };
 
+  const onClaimCampaign = async () => {
+   try {
+    const result = await ApiHandler.claimCampaign(coin.campaign._id);
+    if (result.claimed) {
+      Toast(result.message, false);
+    } else {
+      Toast(result.error, false);
+    }
+   } catch (error) {
+    console.log('error', error);
+   }
+  };
+
   return (
     <ScreenContainer>
       <CoinDetailsHeader
@@ -217,17 +230,28 @@ const CoinDetailsScreen = () => {
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
       {coin.campaign.isActive === 'true' && (
-        <View style={styles.campaignContainer}>
-          <AppText style={styles.campaignDescription} variant="body1">{coin.campaign.description}</AppText>
-          <AppTouchable
-            style={styles.btnClaim}
-            onPress={() => {
-              console.log('claim');
-            }}
-          >
-            <AppText style={styles.btnClaimText} variant="body1">{coin.campaign.buttonText}</AppText>
-          </AppTouchable>
-        </View>
+        <GradientBorderAnimated
+          style={styles.gradientBorderCard}
+          radius={hp(20)}
+          strokeWidth={1}
+          height={hp(68)}>
+          <View style={styles.campaignContainer}>
+            <View style={styles.campaignDescription}>
+              <AppText numberOfLines={2} variant="body1">
+                {coin.campaign.description}
+              </AppText>
+            </View>
+            <AppTouchable
+              style={styles.btnClaim}
+              onPress={() => {
+                onClaimCampaign();
+              }}>
+              <AppText style={styles.btnClaimText} variant="body1">
+                {coin.campaign.buttonText}
+              </AppText>
+            </AppTouchable>
+          </View>
+        </GradientBorderAnimated>
       )}
       <TransactionsList
         style={
@@ -335,37 +359,44 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const getStyles = (theme: AppTheme, isThemeDark: boolean) => StyleSheet.create({
-  transactionContainer: {
-    height: windowHeight > 820 ? '55%' : '50%',
-  },
-  transactionContainer1: {
-    marginTop: hp(10),
-    height: windowHeight > 820 ? '54%' : '49%',
-  },
-  toolTipCotainer: {
-    top: windowHeight > 670 ? 90 : 70,
-  },
-  campaignContainer: {
-    padding: hp(15),
-    borderRadius: hp(15),
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
-    marginBottom: hp(10),
-  },
-  campaignDescription: {
-    flex: 1,
-  },
-  btnClaim: {
-    backgroundColor: isThemeDark ? '#fff' : '#091229',
-    padding: hp(5),
-    paddingHorizontal: hp(15),
-    borderRadius: hp(20),
-  },
-  btnClaimText: {
-    color: isThemeDark ? '#000' : '#fff',
-    fontSize: 14,
-  },
-});
+const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
+  StyleSheet.create({
+    transactionContainer: {
+      height: windowHeight > 820 ? '55%' : '50%',
+    },
+    transactionContainer1: {
+      marginTop: hp(10),
+      height: windowHeight > 820 ? '54%' : '49%',
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 90 : 70,
+    },
+    campaignContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
+      borderRadius: hp(20),
+      height: hp(64),
+      margin: hp(2),
+    },
+    campaignDescription: {
+      marginRight: hp(10),
+      flex: 1,
+      alignItems: 'center',
+    },
+    btnClaim: {
+      backgroundColor: isThemeDark ? '#fff' : '#091229',
+      padding: hp(5),
+      paddingHorizontal: hp(15),
+      borderRadius: hp(20),
+      marginRight: hp(10),
+    },
+    btnClaimText: {
+      color: isThemeDark ? '#000' : '#fff',
+      fontSize: 14,
+    },
+    gradientBorderCard: {
+      marginBottom: hp(10),
+    },
+  });

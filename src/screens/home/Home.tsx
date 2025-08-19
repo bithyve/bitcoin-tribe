@@ -116,10 +116,10 @@ function HomeScreen() {
   const coins = useMemo(() => {
     if (!coinsResult) return [];
     const coinsArray = coinsResult.slice();
-    const tribeCoinIndex = coinsArray.findIndex(c => c.name === 'Tribe tUSDt');
-    if (tribeCoinIndex !== -1) {
-      const [tribeCoin] = coinsArray.splice(tribeCoinIndex, 1);
-      return [tribeCoin, ...coinsArray];
+    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
+    if (defaultCoinIndex !== -1) {
+      const [defaultCoin] = coinsArray.splice(defaultCoinIndex, 1);
+      return [defaultCoin, ...coinsArray];
     }
     return coinsArray;
   }, [coinsResult]);
@@ -295,7 +295,12 @@ function HomeScreen() {
         <HomeHeader showBalance={!defaultCoin} />
       </View>
       {defaultCoin ? (
-        <DefaultCoin asset={defaultCoin} />
+        <DefaultCoin
+          asset={defaultCoin}
+          loading={refreshing && !isBackupInProgress && !isBackupDone}
+          onRefresh={handleRefresh}
+          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
+        />
       ) : (
         <CoinAssetsList
           listData={coins}

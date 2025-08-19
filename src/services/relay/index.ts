@@ -831,4 +831,23 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static claimCampaign = async (
+    authToken: string,
+    campaignId: string,
+    invoice: string,
+  ): Promise<{ status: boolean }> => {
+    try {
+      const res = await RestClient.post(`${RELAY}/campaign/claim`, {
+        campaignId,
+        invoice,
+      }, {
+        Authorization: `Bearer ${authToken}`,
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  };
 }

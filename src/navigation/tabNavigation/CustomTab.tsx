@@ -1,22 +1,25 @@
 import React, { useContext } from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
 import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
 import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
+import AssetsInActiveDark from 'src/assets/images/icon_assets_inactive_dark.svg';
 import CollectiblesActive from 'src/assets/images/icon_collectibles_active.svg';
 import CollectiblesActiveLight from 'src/assets/images/icon_collectibles_active_light.svg';
 import CollectiblesInActive from 'src/assets/images/icon_collectibles_inactive.svg';
+import CollectiblesInActiveLight from 'src/assets/images/icon_collectibles_inactive_light.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
 import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
+import CommunityInActiveLight from 'src/assets/images/icon_community_inactive_light.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
 import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
+import SettingsInActiveLight from 'src/assets/images/icon_setting_inactive_light.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
 import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
@@ -24,6 +27,7 @@ import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import AppTouchable from 'src/components/AppTouchable';
 
 const CustomTab = ({ state, descriptors, navigation }) => {
   const theme: AppTheme = useTheme();
@@ -34,7 +38,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
 
   const TabBarIcon = (isFocused, label) => {
     switch (label) {
-      case NavigationRoutes.ASSETS:
+      case NavigationRoutes.HOMESCREEN:
         return isFocused ? (
           isThemeDark ? (
             <AssetsActive />
@@ -42,9 +46,13 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             <AssetsActiveLight />
           )
         ) : (
-          <AssetsInActive />
+          isThemeDark ? (
+            <AssetsInActiveDark />
+          ) : (
+            <AssetsInActive />
+          )
         );
-      case NavigationRoutes.COLLECTIBLE:
+      case NavigationRoutes.ASSETS:
         return isFocused ? (
           isThemeDark ? (
             <CollectiblesActive />
@@ -52,7 +60,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             <CollectiblesActiveLight />
           )
         ) : (
-          <CollectiblesInActive />
+          isThemeDark ? (
+            <CollectiblesInActive />
+          ) : (
+            <CollectiblesInActiveLight />
+          )
         );
       case NavigationRoutes.COMMUNITY:
         return isFocused ? (
@@ -62,7 +74,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             <CommunityActiveLight />
           )
         ) : (
-          <CommunityInActive />
+          isThemeDark ? (
+            <CommunityInActive />
+          ) : (
+            <CommunityInActiveLight />
+          )
         );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
@@ -72,7 +88,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
             <SettingsActiveLight />
           )
         ) : (
-          <SettingsInActive />
+          isThemeDark ? (
+            <SettingsInActive />
+          ) : (
+            <SettingsInActiveLight />
+          )
         );
       default:
         return '';
@@ -80,10 +100,10 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   };
   const TabBarTitle = (isFocused, label) => {
     switch (label) {
+      case NavigationRoutes.HOMESCREEN:
+        return isFocused ? `${common.home}` : '';
       case NavigationRoutes.ASSETS:
         return isFocused ? `${common.assets}` : '';
-      case NavigationRoutes.COLLECTIBLE:
-        return isFocused ? `${common.collectibles}` : '';
       case NavigationRoutes.COMMUNITY:
         return isFocused ? `${common.community}` : '';
       case NavigationRoutes.SETTINGS:
@@ -130,7 +150,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         };
 
         return (
-          <TouchableOpacity
+          <AppTouchable
             key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
@@ -151,7 +171,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
               ]}>
               {Capitalize(TabBarTitle(isFocused, label))}
             </AppText>
-          </TouchableOpacity>
+          </AppTouchable>
         );
       })}
     </GradientView>
