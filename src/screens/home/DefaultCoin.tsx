@@ -122,7 +122,7 @@ const DefaultCoin = ({
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : asset?.transactions.slice(0, 4);
+      : asset?.transactions.slice(0, 3);
 
   const btcBalance = useMemo(() => {
     if (
