@@ -151,24 +151,32 @@ const DefaultCoin = ({
         />
       }>
       {asset.campaign.isActive === 'true' && (
-        <GradientBorderAnimated
-          height={hp(90)}
-          radius={hp(20)}
-          strokeWidth={1}
-          style={styles.campaignContainer}>
-          <AppText
-            style={{
-              color: theme.colors.headingColor,
-              textAlign: 'center',
-              marginTop: hp(15),
-            }}
-            variant="body1">
-            {asset.campaign.name}
-          </AppText>
-        </GradientBorderAnimated>
+        <AppTouchable
+          activeOpacity={0.95}
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.COINDETAILS, {
+              assetId: asset.assetId,
+            })
+          }>
+          <GradientBorderAnimated
+            height={hp(90)}
+            radius={hp(20)}
+            strokeWidth={1}
+            style={styles.campaignContainer}>
+            <AppText
+              style={{
+                color: theme.colors.headingColor,
+                textAlign: 'center',
+                marginTop: hp(15),
+              }}
+              variant="body1">
+              {asset.campaign.name}
+            </AppText>
+          </GradientBorderAnimated>
+        </AppTouchable>
       )}
       <AppTouchable
-        activeOpacity={0.9}
+        activeOpacity={0.95}
         onPress={() =>
           navigation.navigate(NavigationRoutes.COINDETAILS, {
             assetId: asset.assetId,

@@ -42,6 +42,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import GradientBorderAnimated from '../home/GradientBorderAnimated';
+import ModalLoading from 'src/components/ModalLoading';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -86,6 +87,7 @@ const CoinDetailsScreen = () => {
   );
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, isThemeDark);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -187,20 +189,24 @@ const CoinDetailsScreen = () => {
   };
 
   const onClaimCampaign = async () => {
-   try {
-    const result = await ApiHandler.claimCampaign(coin.campaign._id);
-    if (result.claimed) {
-      Toast(result.message, false);
-    } else {
-      Toast(result.error, false);
+    setLoading(true);
+    try {
+      const result = await ApiHandler.claimCampaign(coin.campaign._id);
+      if (result.claimed) {
+        Toast(result.message, false);
+      } else {
+        Toast(result.error || result.message, true);
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoading(false);
     }
-   } catch (error) {
-    console.log('error', error);
-   }
   };
 
   return (
     <ScreenContainer>
+      {loading && <ModalLoading visible={loading} />}
       <CoinDetailsHeader
         asset={coin}
         // smallHeaderOpacity={smallHeaderOpacity}
