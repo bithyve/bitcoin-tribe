@@ -1,9 +1,7 @@
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useContext, useMemo, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import React, { useContext, useMemo } from 'react';
 import { Asset, AssetVisibility, Coin } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -94,12 +92,7 @@ const DefaultCoin = ({
   onRefresh: () => void;
 }) => {
   const theme: AppTheme = useTheme();
-  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [refresh, setRefresh] = useState(false);
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
   const { appType } = useContext(AppContext);
@@ -267,9 +260,9 @@ const DefaultCoin = ({
             : styles.transactionContainer
         }
         transactions={transactionsData}
-        isLoading={loading}
+        isLoading={false}
         refresh={onRefresh}
-        refreshingStatus={refreshing}
+        refreshingStatus={false}
         navigation={navigation}
         wallet={wallet}
         coin={asset.name}

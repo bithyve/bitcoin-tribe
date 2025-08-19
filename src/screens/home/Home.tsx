@@ -7,7 +7,15 @@ import React, {
   useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {
   CommonActions,
   useFocusEffect,
@@ -24,7 +32,6 @@ import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import {
   AssetType,
@@ -91,17 +98,8 @@ function HomeScreen() {
       authToken: string;
     }) => ApiHandler.startNode(nodeId, authToken),
   });
-
-  const refreshRgbWallet = useMutation({
-    mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: () => {
-      if (app?.appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
-      }
-    },
-  });
+  const { mutate: listPaymentsMutate } = useMutation(ApiHandler.getAssetTransactions);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const rgbWallet = useRgbWallets({}).wallets[0];
   const [refreshing, setRefreshing] = useState(false);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
@@ -112,7 +110,6 @@ function HomeScreen() {
       .sorted('timestamp', true),
   );
   const defaultCoin = coinsResult.find(c => c.isDefault);
-
   const coins = useMemo(() => {
     if (!coinsResult) return [];
     const coinsArray = coinsResult.slice();
@@ -159,6 +156,21 @@ function HomeScreen() {
 
     fetchStatus();
   }, []);
+
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+    onSuccess: () => {
+      if (app?.appType === AppType.ON_CHAIN) {
+        if (defaultCoin) {
+          listPaymentsMutate({
+            assetId: defaultCoin.assetId,
+            schema: RealmSchema.Coin,
+          });
+        }
+        checkBackupRequired();
+      }
+    },
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -247,6 +259,7 @@ function HomeScreen() {
       return;
     }
     setRefreshing(true);
+    ApiHandler.fetchPresetAssets();
     refreshRgbWallet.mutate();
     checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
@@ -295,12 +308,26 @@ function HomeScreen() {
         <HomeHeader showBalance={!defaultCoin} />
       </View>
       {defaultCoin ? (
-        <DefaultCoin
-          asset={defaultCoin}
-          loading={refreshing && !isBackupInProgress && !isBackupDone}
-          onRefresh={handleRefresh}
-          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: hp(100),
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing && !isBackupInProgress && !isBackupDone}
+              onRefresh={handleRefresh}
+            />
+          }>
+          <DefaultCoin
+            asset={defaultCoin}
+            loading={refreshing && !isBackupInProgress && !isBackupDone}
+            onRefresh={handleRefresh}
+            refreshingStatus={
+              refreshing && !isBackupInProgress && !isBackupDone
+            }
+          />
+        </ScrollView>
       ) : (
         <CoinAssetsList
           listData={coins}
