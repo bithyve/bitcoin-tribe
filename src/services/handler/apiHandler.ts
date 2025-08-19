@@ -1121,7 +1121,14 @@ export class ApiHandler {
     }
   }
 
-  static async receiveAsset({ assetId, amount, linkedAsset, linkedAmount, expiry, blinded = true }) {
+  static async receiveAsset({
+    assetId,
+    amount,
+    linkedAsset,
+    linkedAmount,
+    expiry,
+    blinded = true,
+  }) {
     try {
       assetId = assetId ?? '';
       amount = parseFloat(amount) ?? 0.0;
@@ -1715,6 +1722,24 @@ export class ApiHandler {
         });
       }
       return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async removeWalletPicture(appID: string) {
+    try {
+      const response = await Relay.removeWalletPicture(
+        ApiHandler.authToken,
+        appID,
+      );
+      if (response.success) {
+        dbManager.updateObjectByPrimaryId(RealmSchema.TribeApp, 'id', appID, {
+          walletImage: null,
+        });
+      }
+
+      return response;
     } catch (error) {
       throw error;
     }

@@ -137,7 +137,7 @@ export default class Relay {
     let res;
     try {
       const formData = new FormData();
-      if(walletImage){
+      if (walletImage) {
         formData.append('file', {
           uri: walletImage.uri,
           name: walletImage.fileName,
@@ -179,12 +179,17 @@ export default class Relay {
       const formData = new FormData();
       formData.append('name', name);
       formData.append('appID', appID);
-      if(walletImage){
+      if (walletImage) {
+        const extension = walletImage.type?.split('/')[1] || 'jpg';
+        const fileName = `wallet_${Date.now()}.${extension}`;
         formData.append('file', {
-          uri: walletImage.uri,
-          name: walletImage.fileName,
-          type: walletImage.type,
-        });
+          uri:
+            Platform.OS === 'ios'
+              ? walletImage.uri
+              : walletImage.uri.replace('file://', ''),
+          name: fileName,
+          type: walletImage.type || 'image/jpeg',
+        } as any);
       }
       res = await RestClient.put(`${RELAY}/app/update`, formData, {
         'Content-Type': 'multipart/form-data',
@@ -198,6 +203,29 @@ export default class Relay {
       if (err.code) {
         throw new Error(err.code);
       }
+    }
+    return res.data || res.json;
+  };
+
+  public static removeWalletPicture = async (
+    authToken: string,
+    appID: string,
+  ): Promise<{ success: boolean }> => {
+    let res;
+    try {
+      res = await RestClient.delete(
+        `${RELAY}/app/removeWalletPicture`,
+        { appID },
+        { Authorization: `Bearer ${authToken}` },
+      );
+    } catch (err: any) {
+      if (err.response) {
+        throw new Error(err.response.data.err || 'Request failed');
+      }
+      if (err.code) {
+        throw new Error(err.code);
+      }
+      throw err;
     }
     return res.data || res.json;
   };
@@ -437,7 +465,7 @@ export default class Relay {
     }
   };
 
-    public static registerAsset = async (
+  public static registerAsset = async (
     appID: string,
     asset: Asset,
     authToken: string,
@@ -771,7 +799,9 @@ export default class Relay {
     status: boolean;
   }> => {
     try {
-      const res = await RestClient.get(`${RELAY}/chat/getmessages?publicKey=${contactKey}&from=${from}`);
+      const res = await RestClient.get(
+        `${RELAY}/chat/getmessages?publicKey=${contactKey}&from=${from}`,
+      );
       return res.data;
     } catch (err) {
       throw new Error(err);
