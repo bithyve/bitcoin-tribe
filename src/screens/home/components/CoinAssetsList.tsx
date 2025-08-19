@@ -140,12 +140,12 @@ const getStyles = (theme: AppTheme, index = null) =>
     addNewIconWrapper: {
       position: 'absolute',
       bottom: 90,
-      right: 30,
+      right: 20,
     },
     addNewIconWrapperLight: {
       position: 'absolute',
-      bottom: 40,
-      right: 0,
+      bottom: 90,
+      right: 20,
       shadowColor: Colors.Black,
       shadowOffset: { width: 8, height: 15 },
       shadowOpacity: 0.1,
