@@ -47,6 +47,7 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Asset,
+  Coin,
   Collectible,
   IssuerVerificationMethod,
   NodeInfo,
@@ -2619,17 +2620,32 @@ export class ApiHandler {
 
   static fetchPresetAssets = async () => {
     try {
-      const response = await Relay.getPresetAssets();
-      if (response && response.coins) {
-        for (const coin of response.coins) {
+      const { coins = [] } = await Relay.getPresetAssets() || {};
+      coins.forEach((coin: Coin) => {
+        const exists = dbManager.getObjectByPrimaryId(RealmSchema.Coin, 'assetId', coin.assetId);
+        if (exists) {
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.Coin,
+            'assetId',
+            coin.assetId,
+            {
+              isDefault: coin.isDefault,
+              disclaimer: coin.disclaimer,
+              iconUrl: coin.iconUrl,
+              issuer: coin.issuer,
+              assetSource: coin.assetSource,
+              campaign: coin.campaign,
+            }
+          );
+        } else {
           dbManager.createObjectBulk(
             RealmSchema.Coin,
             [coin],
-            Realm.UpdateMode.Modified,
+            Realm.UpdateMode.Modified
           );
         }
-      }
-    } catch (error: any) {
+      });
+    } catch (error) {
       return error;
     }
   };
