@@ -1,9 +1,6 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTheme } from 'react-native-paper';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { windowHeight } from 'src/constants/responsive';
@@ -41,28 +38,16 @@ const routes = [
 
 const AssetsTabs = () => {
   const layout = useWindowDimensions();
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [index, setIndex] = React.useState(0);
-  const { translations } = React.useContext(LocalizationContext);
-  const { wallet } = translations;
   const navigation = useNavigation();
-  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
+      .filtered(`isDefault == $0`, false || null)
       .sorted('timestamp', true),
   );
-  const coins = useMemo(() => {
-    if (!coinsResult) return [];
-    const coinsArray = coinsResult.slice();
-    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
-    if (defaultCoinIndex !== -1) {
-      const [defaultCoin] = coinsArray.splice(defaultCoinIndex, 1);
-      return [defaultCoin, ...coinsArray];
-    }
-    return coinsArray;
-  }, [coinsResult]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
