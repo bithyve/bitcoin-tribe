@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo } from 'react';
 import { Asset, AssetVisibility, Coin } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
@@ -55,6 +55,19 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       color: theme.colors.headingColor,
       fontSize: 40,
     },
+    totalBalanceDecimal: {
+      color: theme.colors.headingColor,
+      fontSize: 20,
+      alignSelf: 'flex-end',
+      marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
+    },
+    textUnit: {
+      fontSize: 30,
+      color: theme.colors.secondaryHeadingColor,
+      alignSelf: 'flex-end',
+      marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
+      marginTop: hp(10),
+    },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
     },
@@ -79,6 +92,32 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       padding: hp(20),
     },
   });
+
+const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
+  const integerPart = value.toString().split('.')[0];
+  const fractionalPart = value.toString().split('.')[1];
+  const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = getStyles(theme, isThemeDark);
+
+  return (
+    <View style={styles.row}>
+      <AppText variant="heading1" style={styles.totalBalance}>
+        {formatLargeNumber(Number(integerPart))}
+      </AppText>
+      {fractionalPart && (
+        <AppText variant="body1" style={styles.totalBalanceDecimal}>
+          .{fractionalPart}
+        </AppText>
+      )}
+      {unit && (
+        <AppText variant="heading2" style={styles.textUnit}>
+          {` ${unit}`}
+        </AppText>
+      )}
+    </View>
+  );
+};
 
 const DefaultCoin = ({
   asset,
@@ -185,12 +224,10 @@ const DefaultCoin = ({
             <AppText style={styles.totalBalanceLabel} variant="body2">
               Total Balance
             </AppText>
-
-            <AppText variant="heading1" style={styles.totalBalance}>
-              {formatLargeNumber(
-                Number(asset?.balance?.spendable) / 10 ** asset.precision,
-              )}
-            </AppText>
+            <DecimalText
+              value={Number(asset?.balance?.spendable) / 10 ** asset.precision}
+              unit={asset.ticker}
+            />
           </View>
           <AssetIcon
             iconUrl={asset.iconUrl}
@@ -230,9 +267,7 @@ const DefaultCoin = ({
           <AppText style={styles.totalBalanceLabel} variant="body2">
             Bitcoin Balance
           </AppText>
-          <AppText style={styles.totalBalance} variant="heading1">
-            {getBalance(Number(btcBalance))}
-          </AppText>
+          <DecimalText value={Number(btcBalance)} />
         </AppTouchable>
         <View style={{ marginHorizontal: wp(5) }} />
 
