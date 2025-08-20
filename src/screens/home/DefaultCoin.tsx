@@ -53,16 +53,16 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     totalBalance: {
       marginTop: hp(10),
       color: theme.colors.headingColor,
-      fontSize: 40,
+      fontSize: 35,
     },
     totalBalanceDecimal: {
       color: theme.colors.headingColor,
-      fontSize: 20,
+      fontSize: 18,
       alignSelf: 'flex-end',
       marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
     },
     textUnit: {
-      fontSize: 30,
+      fontSize: 25,
       color: theme.colors.secondaryHeadingColor,
       alignSelf: 'flex-end',
       marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
@@ -267,7 +267,7 @@ const DefaultCoin = ({
           <AppText style={styles.totalBalanceLabel} variant="body2">
             Bitcoin Balance
           </AppText>
-          <DecimalText value={Number(btcBalance)} />
+          <DecimalText value={Number(btcBalance)} unit={'sats'} />
         </AppTouchable>
         <View style={{ marginHorizontal: wp(5) }} />
 
