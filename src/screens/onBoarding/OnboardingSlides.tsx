@@ -52,7 +52,7 @@ function OnboardingSlides() {
   ]);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       {/* <View style={styles.skipWrapperView}>
         {currentPosition === 0 && (
           <AppTouchable
@@ -91,6 +91,8 @@ function OnboardingSlides() {
             />
           )}
         />
+      </View>
+      <View style={styles.footerBtnView}>
         <View style={styles.pageIndicatorWrapper}>
           {items.map((item, index) => (
             <View
@@ -103,8 +105,6 @@ function OnboardingSlides() {
             />
           ))}
         </View>
-      </View>
-      <View style={styles.footerBtnView}>
         <PrimaryCTA
           title={common.next}
           onPress={() => {
@@ -117,7 +117,7 @@ function OnboardingSlides() {
               navigation.replace(NavigationRoutes.APPSTACK);
             }
           }}
-          width={hp(120)}
+          width={'100%'}
         />
       </View>
     </ScreenContainer>
@@ -125,6 +125,10 @@ function OnboardingSlides() {
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
+    container: {
+      paddingHorizontal: hp(0),
+      paddingBottom: 0,
+    },
     skipWrapperView: {
       height: '6%',
       width: '100%',
@@ -142,10 +146,13 @@ const getStyles = (theme: AppTheme) =>
       height: '15%',
       width: '100%',
       alignItems: 'center',
-      justifyContent: 'flex-end',
+      backgroundColor: theme.colors.onboardingBackColor,
+      paddingHorizontal: hp(20),
     },
     pageIndicatorWrapper: {
       flexDirection: 'row',
+      backgroundColor: theme.colors.onboardingBackColor,
+      marginBottom: hp(30),
     },
     skipTextWrapper: {
       flexDirection: 'row',
