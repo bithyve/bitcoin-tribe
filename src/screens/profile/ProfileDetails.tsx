@@ -22,7 +22,7 @@ type ProfileDetailsProps = {
   onChangeText: (text: string) => void;
   inputValue: string;
   primaryOnPress: () => void;
-  secondaryOnPress: () => void;
+  secondaryOnPress?: () => void;
   addPicTitle: string;
   profileImage: string;
   handlePickImage: () => void;
