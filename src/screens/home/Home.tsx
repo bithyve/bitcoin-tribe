@@ -51,6 +51,7 @@ import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import DefaultCoin from './DefaultCoin';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -314,10 +315,19 @@ function HomeScreen() {
             paddingBottom: hp(100),
           }}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing && !isBackupInProgress && !isBackupDone}
-              onRefresh={handleRefresh}
-            />
+            Platform.OS === 'ios' ? (
+              <RefreshControlView
+                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
+                onRefresh={handleRefresh}
+              />
+            ) : (
+              <RefreshControl
+                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
+                onRefresh={handleRefresh}
+                colors={[theme.colors.accent1]}
+                progressBackgroundColor={theme.colors.inputBackground}
+              />
+            )
           }>
           <DefaultCoin
             asset={defaultCoin}
