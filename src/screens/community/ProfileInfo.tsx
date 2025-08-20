@@ -182,12 +182,12 @@ const ProfileInfo = () => {
         </ViewShot>
         {renderMenu()}
 
-        <OptionCard
+        {/* <OptionCard
           title={community.createGroup}
           onPress={() => {
             Toast('Coming Soon', false);
           }}
-        />
+        /> */}
       </View>
     </ScreenContainer>
   );
