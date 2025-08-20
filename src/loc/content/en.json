@@ -73,8 +73,8 @@
   },
   "onBoarding": {
     "welcome": "Welcome",
-    "profileSetupTitle": "Enter wallet details",
-    "profileSetupSubTitle": "Add a wallet name and picture",
+    "profileSetupTitle": "Wallet Profile",
+    "profileSetupSubTitle": "Enter your wallet name and add picture ",
     "enterName": "Enter wallet name",
     "walletSetupTitle": "Welcome,",
     "createNew": "Create",

@@ -141,7 +141,7 @@ function ProfileSetup() {
         //   initiateWalletCreation();
         // }}
         primaryStatus={setupNewAppMutation.status}
-        primaryCTATitle={common.proceed}
+        primaryCTATitle={common.save}
         // secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
         disabled={name.trim().length < 3}

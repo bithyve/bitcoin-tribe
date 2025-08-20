@@ -73,8 +73,8 @@
   },
   "onBoarding": {
     "welcome": "Bienvenido",
-    "profileSetupTitle": "Ingrese los detalles de la billetera",
-    "profileSetupSubTitle": "Agregue un nombre y una imagen de la billetera",
+    "profileSetupTitle": "Perfil de la billetera",
+    "profileSetupSubTitle": "Ingrese el nombre de su billetera y agregue una foto",
     "enterName": "Ingrese el nombre de la billetera",
     "walletSetupTitle": "Bienvenido,",
     "createNew": "Crear",

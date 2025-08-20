@@ -73,8 +73,8 @@
   },
   "onBoarding": {
     "welcome": "Benvenuto",
-    "profileSetupTitle": "Inserisci i dettagli del portafoglio",
-    "profileSetupSubTitle": "Aggiungi un nome e un'immagine al portafoglio",
+    "profileSetupTitle": "Profilo del portafoglio",
+    "profileSetupSubTitle": "Inserisci il nome del portafoglio e aggiungi un'immagine",
     "enterName": "Inserisci il nome del portafoglio",
     "walletSetupTitle": "Benvenuto,",
     "createNew": "Crea",

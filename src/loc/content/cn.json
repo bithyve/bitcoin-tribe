@@ -73,8 +73,8 @@
   },
   "onBoarding": {
     "welcome": "欢迎",
-    "profileSetupTitle": "输入钱包详情",
-    "profileSetupSubTitle": "添加钱包名称和图片",
+    "profileSetupTitle": "钱包资料",
+    "profileSetupSubTitle": "输入您的钱包名称并添加图片",
     "enterName": "输入钱包名称",
     "walletSetupTitle": "欢迎，",
     "createNew": "创建",

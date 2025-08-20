@@ -73,8 +73,8 @@
   },
   "onBoarding": {
     "welcome": "स्वागत है",
-    "profileSetupTitle": "वॉलेट विवरण दर्ज करें",
-    "profileSetupSubTitle": "वॉलेट का नाम और चित्र जोड़ें",
+    "profileSetupTitle": "वॉलेट प्रोफ़ाइल",
+    "profileSetupSubTitle": "अपना वॉलेट नाम दर्ज करें और चित्र जोड़ें",
     "enterName": "वॉलेट का नाम दर्ज करें",
     "walletSetupTitle": "स्वागत है,",
     "createNew": "बनाएँ",
