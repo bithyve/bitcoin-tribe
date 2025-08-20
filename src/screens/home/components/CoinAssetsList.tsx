@@ -15,7 +15,7 @@ import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
-import { Asset, AssetFace } from 'src/models/interfaces/RGBWallet';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -72,7 +72,7 @@ function CoinAssetsList(props: AssetsListProps) {
             <RefreshControl
               refreshing={refreshingStatus}
               onRefresh={props.onRefresh}
-              colors={[theme.colors.accent1]} // You can customize this part
+              colors={[theme.colors.accent1]}
               progressBackgroundColor={theme.colors.inputBackground}
             />
           )
@@ -129,22 +129,23 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       position: 'relative',
-      height: Platform.OS === 'android' ? '82%' : '85%',
-      marginHorizontal: wp(10),
-      marginTop: hp(20),
+      marginTop: hp(10),
+      flex: 1,
+      paddingHorizontal: hp(10),
     },
     assetWrapper: {
-      flexWrap: 'wrap',
+      flex: 1,
+      marginVertical: hp(5),
     },
     addNewIconWrapper: {
       position: 'absolute',
       bottom: 90,
-      right: 30,
+      right: 20,
     },
     addNewIconWrapperLight: {
       position: 'absolute',
-      bottom: 40,
-      right: 0,
+      bottom: 90,
+      right: 20,
       shadowColor: Colors.Black,
       shadowOffset: { width: 8, height: 15 },
       shadowOpacity: 0.1,
@@ -152,7 +153,7 @@ const getStyles = (theme: AppTheme, index = null) =>
       elevation: 5,
     },
     footer: {
-      height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
+      height: windowHeight > 670 ? 200 : 100,
     },
     emptyStateWrapper: {
       marginTop: '38%',

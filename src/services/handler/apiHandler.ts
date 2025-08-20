@@ -47,6 +47,7 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Asset,
+  Coin,
   Collectible,
   IssuerVerificationMethod,
   NodeInfo,
@@ -159,7 +160,7 @@ export class ApiHandler {
   }
 
   static async setupNewApp({
-    appName = 'Satoshi’s Palette',
+    appName = "Satoshi's Palette",
     pinMethod = PinMethod.DEFAULT,
     passcode = '',
     walletImage = null,
@@ -2516,7 +2517,7 @@ export class ApiHandler {
 
         if (waitTime && waitTime > 0) {
           Toast(
-            `You’ve reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
+            `You've reached the tweet fetch limit. Try again in ${waitTime}s (around ${new Date(
               Number(resetAfter) * 1000,
             ).toLocaleTimeString()}).`,
             true,
@@ -2619,18 +2620,104 @@ export class ApiHandler {
 
   static fetchPresetAssets = async () => {
     try {
-      const response = await Relay.getPresetAssets();
-      if (response && response.coins) {
-        for (const coin of response.coins) {
+      const { coins = [] } = (await Relay.getPresetAssets()) || {};
+      coins.forEach((coin: Coin) => {
+        const exists = dbManager.getObjectByPrimaryId(
+          RealmSchema.Coin,
+          'assetId',
+          coin.assetId,
+        );
+        if (exists) {
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.Coin,
+            'assetId',
+            coin.assetId,
+            {
+              isDefault: coin.isDefault,
+              disclaimer: coin.disclaimer,
+              iconUrl: coin.iconUrl,
+              issuer: coin.issuer,
+              assetSource: coin.assetSource,
+              campaign: coin.campaign,
+            },
+          );
+        } else {
           dbManager.createObjectBulk(
             RealmSchema.Coin,
             [coin],
             Realm.UpdateMode.Modified,
           );
         }
-      }
-    } catch (error: any) {
+      });
+    } catch (error) {
       return error;
     }
   };
+
+  static async claimCampaign(campaignId: string, mode: 'WITNESS' | 'BLINDED') {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex<TribeApp>(
+        RealmSchema.TribeApp,
+      ) as TribeApp;
+
+      const isEligible = await Relay.isEligibleForCampaign(app.authToken, campaignId);
+      if (!isEligible.status) {
+        return {
+          claimed: false,
+          error: isEligible.message,
+        };
+      }
+      
+      const isBlinded = mode === 'BLINDED';
+      const expiryTime = 60 * 60 * 24 * 2;
+      
+      const invoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+      if (invoice.claimed) return invoice;
+      
+      if (invoice.error === 'Insufficient sats for RGB') {
+        const utxos = await ApiHandler.createUtxos();
+        if (utxos.created) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          const retryInvoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+          if (retryInvoice.claimed) return retryInvoice;
+        }
+        return {
+          claimed: false,
+          error: invoice.error,
+        };
+      }
+      return {
+        claimed: false,
+        error: invoice.error || invoice.message || 'Failed to generate invoice',
+      };
+    } catch (error: any) {
+      console.error('Claim campaign error:', error.message || error);
+      return { claimed: false, error: error.message || error };
+    }
+  }
+
+  private static async tryClaimWithInvoice(
+    app: TribeApp,
+    campaignId: string,
+    isBlinded: boolean,
+    expiryTime: number
+  ) {
+    const invoice = await RGBServices.receiveAsset(
+      ApiHandler.appType,
+      ApiHandler.api,
+      '',
+      0,
+      expiryTime,
+      isBlinded,
+    );    
+    if (invoice.invoice) {
+      const response = await Relay.claimCampaign(
+        app.authToken,
+        campaignId,
+        invoice.invoice,
+      );
+      return response;
+    }
+    return { claimed: false, error: invoice.error };
+  }
 }

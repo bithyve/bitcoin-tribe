@@ -8,7 +8,6 @@ import AppText from './AppText';
 import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
-import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import { Keys } from 'src/storage';
@@ -21,7 +20,7 @@ type CoinAssetCardProps = {
 };
 
 const CoinAssetCard = (props: CoinAssetCardProps) => {
-  const { tag, onPress, asset } = props;
+  const { onPress, asset } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const balance = useMemo(() => {
@@ -39,13 +38,15 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
 
   return (
     <AppTouchable onPress={onPress}>
-      <GradientView
-        style={styles.container}
-        colors={[
-          theme.colors.assetCardGradient1,
-          theme.colors.assetCardGradient2,
-          theme.colors.assetCardGradient3,
-        ]}>
+      <View style={styles.container}>
+        <View style={styles.identiconWrapper}>
+          <AssetIcon
+            iconUrl={asset.iconUrl}
+            assetID={asset.assetId}
+            size={45}
+            verified={asset?.issuer?.verified}
+          />
+        </View>
         <View style={styles.contentWrapper}>
           <View style={styles.row}>
             <AppText variant="heading3" style={styles.titleText}>
@@ -57,23 +58,12 @@ const CoinAssetCard = (props: CoinAssetCardProps) => {
             {asset.name}
           </AppText>
         </View>
-        <View style={styles.tagWrapper}>
-          <View style={styles.tagWrapper1}>
-            <AppText variant="body2" style={styles.amountText}>
-              {formatLargeNumber(Number(balance) / 10 ** asset.precision)}
-            </AppText>
-          </View>
+        <View style={styles.tagWrapper1}>
+          <AppText variant="body2" style={styles.amountText}>
+            {formatLargeNumber(Number(balance) / 10 ** asset.precision)}
+          </AppText>
         </View>
-        <View style={styles.verticalLineStyle} />
-        <View style={styles.identiconWrapper}>
-          <AssetIcon
-            iconUrl={asset.iconUrl}
-            assetID={asset.assetId}
-            size={56}
-            verified={asset?.issuer?.verified}
-          />
-        </View>
-      </GradientView>
+      </View>
     </AppTouchable>
   );
 };
@@ -81,17 +71,13 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       borderRadius: 15,
-      margin: hp(6),
       borderColor: theme.colors.borderColor,
       borderWidth: 2,
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
     },
     contentWrapper: {
-      width: '40%',
-      paddingVertical: hp(10),
-      paddingLeft: hp(16),
+      flex: 1,
     },
     titleText: {
       lineHeight: hp(25),
@@ -106,30 +92,26 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     amountText: {
       fontWeight: '500',
-      color: theme.colors.popupSentCTATitleColor,
+      color: isThemeDark ? theme.colors.accent : theme.colors.accent1,
+      paddingHorizontal: hp(10),
       flexWrap: 'wrap',
-    },
-    tagWrapper: {
-      width: '29%',
-      alignItems: 'flex-end',
-      paddingRight: hp(10),
     },
     tagWrapper1: {
       paddingVertical: hp(3),
       paddingHorizontal: hp(10),
-      backgroundColor: isThemeDark ? theme.colors.accent : theme.colors.accent1,
+      borderColor: isThemeDark ? theme.colors.accent : theme.colors.accent1,
       borderRadius: 15,
+      borderWidth: 1,
+      alignItems: 'flex-end',
+      marginRight: hp(10),
     },
     identiconWrapper: {
-      borderColor: theme.colors.coinsBorderColor,
-      borderWidth: 1,
       padding: 5,
       borderRadius: 110,
       marginVertical: hp(10),
       marginHorizontal: hp(10),
     },
     verticalLineStyle: {
-      height: '100%',
       width: 1.5,
       backgroundColor: theme.colors.assetCardVerticalBorder,
       marginHorizontal: hp(5),

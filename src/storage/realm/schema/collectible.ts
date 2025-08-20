@@ -17,6 +17,7 @@ export const CollectibleSchema: ObjectSchema = {
   primaryKey: 'assetId',
   properties: {
     addedAt: 'int',
+    isDefault: 'bool?',
     assetId: 'string',
     balance: RealmSchema.Balance,
     details: 'string?',
@@ -44,6 +45,7 @@ export const CollectibleSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
+    campaign: 'string?{}',
   },
 };

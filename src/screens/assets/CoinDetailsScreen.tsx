@@ -1,4 +1,4 @@
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import {
@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   Coin,
   IssuerVerificationMethod,
@@ -37,6 +37,12 @@ import {
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
 import DisclaimerPopup from 'src/components/DisclaimerPopup';
+import AppText from 'src/components/AppText';
+import AppTouchable from 'src/components/AppTouchable';
+import { AppTheme } from 'src/theme';
+import { useTheme } from 'react-native-paper';
+import GradientBorderAnimated from '../home/GradientBorderAnimated';
+import ModalLoading from 'src/components/ModalLoading';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -76,10 +82,13 @@ const CoinDetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isSharingToTwitter, setIsSharingToTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
-
   const domainVerification = coin?.issuer?.verifiedBy?.find(
     v => v.type === IssuerVerificationMethod.DOMAIN,
   );
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme, isThemeDark);
+  const [loading, setLoading] = useState(false);
+  const [participatedCampaigns, setParticipatedCampaigns] = useMMKVString(Keys.PARTICIPATED_CAMPAIGNS);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -145,6 +154,11 @@ const CoinDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const isEligibleForCampaign = useMemo(() => {
+    const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+    return !participatedCampaignsArray.includes(coin?.campaign._id);
+  }, [participatedCampaigns, coin?.campaign._id]);
+
   const totalAssetLocalAmount = useMemo(() => {
     const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
     return safeChannelsData
@@ -180,8 +194,34 @@ const CoinDetailsScreen = () => {
     }, 1000);
   };
 
+  const onClaimCampaign = async () => {
+    setLoading(true);
+    try {
+      const result = await ApiHandler.claimCampaign(coin.campaign._id, coin.campaign.mode);
+      if (result.claimed) {
+        Toast(result.message, false);
+        if(coin.campaign.exclusive === 'true') {
+          const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+          participatedCampaignsArray.push(coin.campaign._id);
+          setParticipatedCampaigns(JSON.stringify(participatedCampaignsArray));
+        }
+      } else {
+        if(result.error === 'Insufficient sats for RGB') {
+          Toast('Add some sats in your bitcoin wallet to claim RGB assets', true);
+        } else {
+          Toast(result.error || result.message, true);
+        }
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScreenContainer>
+      {loading && <ModalLoading visible={loading} />}
       <CoinDetailsHeader
         asset={coin}
         // smallHeaderOpacity={smallHeaderOpacity}
@@ -210,6 +250,31 @@ const CoinDetailsScreen = () => {
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
+      {coin.campaign.isActive === 'true' && (
+        <GradientBorderAnimated
+          style={styles.gradientBorderCard}
+          radius={hp(20)}
+          strokeWidth={1}
+          height={hp(68)}
+          disabled={!isEligibleForCampaign}>
+          <View style={styles.campaignContainer}>
+            <View style={styles.campaignDescription}>
+              <AppText numberOfLines={2} variant="body1">
+                {coin.campaign.description}
+              </AppText>
+            </View>
+            <AppTouchable
+              style={styles.btnClaim}
+              onPress={() => {
+                onClaimCampaign();
+              }}>
+              <AppText style={styles.btnClaimText} variant="body1">
+                {coin.campaign.buttonText}
+              </AppText>
+            </AppTouchable>
+          </View>
+        </GradientBorderAnimated>
+      )}
       <TransactionsList
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
@@ -316,15 +381,44 @@ const CoinDetailsScreen = () => {
 
 export default CoinDetailsScreen;
 
-const styles = StyleSheet.create({
-  transactionContainer: {
-    height: windowHeight > 820 ? '55%' : '50%',
-  },
-  transactionContainer1: {
-    marginTop: hp(10),
-    height: windowHeight > 820 ? '54%' : '49%',
-  },
-  toolTipCotainer: {
-    top: windowHeight > 670 ? 90 : 70,
-  },
-});
+const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
+  StyleSheet.create({
+    transactionContainer: {
+      height: windowHeight > 820 ? '55%' : '50%',
+    },
+    transactionContainer1: {
+      marginTop: hp(10),
+      height: windowHeight > 820 ? '54%' : '49%',
+    },
+    toolTipCotainer: {
+      top: windowHeight > 670 ? 90 : 70,
+    },
+    campaignContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
+      borderRadius: hp(20),
+      height: hp(64),
+      margin: hp(2),
+    },
+    campaignDescription: {
+      marginRight: hp(10),
+      flex: 1,
+      alignItems: 'center',
+    },
+    btnClaim: {
+      backgroundColor: isThemeDark ? '#fff' : '#091229',
+      padding: hp(5),
+      paddingHorizontal: hp(15),
+      borderRadius: hp(20),
+      marginRight: hp(10),
+    },
+    btnClaimText: {
+      color: isThemeDark ? '#000' : '#fff',
+      fontSize: 14,
+    },
+    gradientBorderCard: {
+      marginBottom: hp(10),
+    },
+  });

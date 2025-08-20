@@ -155,14 +155,14 @@ const MessageInput = ({
               onPressImage();
             },
           },
-          {
-            icon: theme.dark ? <IconChatSend /> : <IconChatSendLight />,
-            label: 'Send',
-            onPress: () => {
-              setShowOptions(false);
-              _onPressSend();
-            },
-          },
+          // {
+          //   icon: theme.dark ? <IconChatSend /> : <IconChatSendLight />,
+          //   label: 'Send',
+          //   onPress: () => {
+          //     setShowOptions(false);
+          //     _onPressSend();
+          //   },
+          // },
           {
             icon: theme.dark ? <IconRequest /> : <IconRequestLight />,
             label: 'Request',

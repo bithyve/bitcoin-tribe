@@ -166,7 +166,9 @@ function ProfileSetup() {
         onDismiss={() => setShowTermsModal(false)}>
         <View style={styles.containerStyle}>
           <WebView
-            source={{ uri: config.TERMS_AND_CONDITIONS_URL }}
+            source={{
+              uri: config.TERMS_AND_CONDITIONS_URL[theme.dark ? 'dark' : 'light'],
+            }}
             style={styles.webViewStyle}
           />
 
