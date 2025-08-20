@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   Coin,
   IssuerVerificationMethod,
@@ -88,6 +88,7 @@ const CoinDetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, isThemeDark);
   const [loading, setLoading] = useState(false);
+  const [participatedCampaigns, setParticipatedCampaigns] = useMMKVString(Keys.PARTICIPATED_CAMPAIGNS);
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -153,6 +154,11 @@ const CoinDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, assetId]);
 
+  const isEligibleForCampaign = useMemo(() => {
+    const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+    return !participatedCampaignsArray.includes(coin?.campaign._id);
+  }, [participatedCampaigns, coin?.campaign._id]);
+
   const totalAssetLocalAmount = useMemo(() => {
     const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
     return safeChannelsData
@@ -191,11 +197,20 @@ const CoinDetailsScreen = () => {
   const onClaimCampaign = async () => {
     setLoading(true);
     try {
-      const result = await ApiHandler.claimCampaign(coin.campaign._id);
+      const result = await ApiHandler.claimCampaign(coin.campaign._id, coin.campaign.mode);
       if (result.claimed) {
         Toast(result.message, false);
+        if(coin.campaign.exclusive === 'true') {
+          const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+          participatedCampaignsArray.push(coin.campaign._id);
+          setParticipatedCampaigns(JSON.stringify(participatedCampaignsArray));
+        }
       } else {
-        Toast(result.error || result.message, true);
+        if(result.error === 'Insufficient sats for RGB') {
+          Toast('Add some sats in your bitcoin wallet to claim RGB assets', true);
+        } else {
+          Toast(result.error || result.message, true);
+        }
       }
     } catch (error) {
       console.log('error', error);
@@ -240,7 +255,8 @@ const CoinDetailsScreen = () => {
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={1}
-          height={hp(68)}>
+          height={hp(68)}
+          disabled={!isEligibleForCampaign}>
           <View style={styles.campaignContainer}>
             <View style={styles.campaignDescription}>
               <AppText numberOfLines={2} variant="body1">

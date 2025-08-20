@@ -140,11 +140,15 @@ export interface Coin {
 
 export interface Campaign {
   _id: string;
+  assetId: string;
   isActive: string;
   name: string;
   description: string;
   image: string;
   buttonText: string;
+  exclusive: string;
+  mode: 'WITNESS' | 'BLINDED';
+  claimed: string;
 }
 
 export interface Media {

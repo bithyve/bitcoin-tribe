@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, LayoutChangeEvent, StyleProp, ViewStyle } from "react-native";
-import Svg, { Defs, Rect, Stop, LinearGradient } from "react-native-svg";
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  LayoutChangeEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
+import Svg, { Defs, Rect, Stop, LinearGradient } from 'react-native-svg';
 import Animated, {
   useSharedValue,
   useAnimatedProps,
   withTiming,
   withRepeat,
-} from "react-native-reanimated";
+  cancelAnimation,
+} from 'react-native-reanimated';
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
@@ -17,6 +24,7 @@ type Props = {
   height?: number;
   style?: StyleProp<ViewStyle>;
   isAnimated?: boolean;
+  disabled?: boolean;
 };
 
 export default function GradientBorderAnimated({
@@ -26,28 +34,32 @@ export default function GradientBorderAnimated({
   height = 100,
   style,
   isAnimated = true,
+  disabled = false,
 }: Props) {
   const [box, setBox] = useState({ width: 0, height: 0 });
 
   const angle = useSharedValue(0);
 
   useEffect(() => {
-    if (isAnimated) {
+    if (isAnimated && !disabled) {
       angle.value = withRepeat(withTiming(360, { duration: 5000 }), -1, false);
+    } else if (disabled) {
+      cancelAnimation(angle);
+      angle.value = 0;
     }
-  }, []);
+  }, [isAnimated, disabled]);
 
   const animatedProps = useAnimatedProps(() => {
     const centerX = box.width / 2;
     const centerY = box.height / 2;
     const radian = (angle.value * Math.PI) / 180;
-    
+
     const x1 = centerX + Math.cos(radian) * 100;
     const y1 = centerY + Math.sin(radian) * 100;
-    
+
     const x2 = centerX + Math.cos(radian + Math.PI) * 100;
     const y2 = centerY + Math.sin(radian + Math.PI) * 100;
-    
+
     return {
       x1: x1.toString(),
       y1: y1.toString(),
@@ -62,19 +74,20 @@ export default function GradientBorderAnimated({
   };
 
   return (
-    <View onLayout={onLayout} style={[styles.wrapper, { height }, style]}>
+    <View
+      onLayout={onLayout}
+      pointerEvents={disabled ? 'none' : 'auto'}
+      style={[styles.wrapper, { height }, style, disabled && { opacity: 0.5 }]}>
       {box.width > 0 && box.height > 0 && (
         <Svg
           width={box.width}
           height={box.height}
-          style={StyleSheet.absoluteFill}
-        >
+          style={StyleSheet.absoluteFill}>
           <Defs>
             <AnimatedLinearGradient
               id="movingBorder"
               gradientUnits="userSpaceOnUse"
-              animatedProps={animatedProps}
-            >
+              animatedProps={animatedProps}>
               <Stop offset="0%" stopColor="#FFD600" />
               <Stop offset="10%" stopColor="#FF423E" />
               <Stop offset="30%" stopColor="#0166FF" />
@@ -104,8 +117,7 @@ export default function GradientBorderAnimated({
           {
             borderRadius: radius - strokeWidth,
           },
-        ]}
-      >
+        ]}>
         {children}
       </View>
     </View>
@@ -114,8 +126,7 @@ export default function GradientBorderAnimated({
 
 const styles = StyleSheet.create({
   wrapper: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
-  content: {
-  },
+  content: {},
 });
