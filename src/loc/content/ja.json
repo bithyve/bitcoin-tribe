@@ -764,7 +764,7 @@
     "onChainPubKeyCopyMsg": "オンチェイン公開鍵が正常にコピーされました",
     "channelCreatedMsg": "チャンネルが正常に作成されました",
     "channelCloseMsg": "チャンネルが閉じました",
-    "takeTimeMsg": "このステップには数秒かかります。",
+    "takeTimeMsg": "このステップには時間がかかる場合があります。",
     "connectingNode": "セットアップに接続中",
     "connectingNodeInfo": "準備が完了するまで、一部の機能が一時的に使用できない場合があります。",
     "connectingNodeToastMsg": "ノードを設定しています。初期化中...",

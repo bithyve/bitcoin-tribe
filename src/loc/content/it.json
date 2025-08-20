@@ -764,7 +764,7 @@
     "onChainPubKeyCopyMsg": "Chiave Pub OnChain copiata con successo",
     "channelCreatedMsg": "Canale creato con successo",
     "channelCloseMsg": "Canale chiuso",
-    "takeTimeMsg": "Questo passaggio richiederà alcuni secondi.",
+    "takeTimeMsg": "Questo passaggio potrebbe richiedere del tempo.",
     "connectingNode": "Connessione alla configurazione in corso",
     "connectingNodeInfo": "Alcune funzionalità potrebbero non essere temporaneamente disponibili mentre prepariamo tutto per te.",
     "connectingNodeToastMsg": "Configurazione del nodo in corso. Inizializzazione in corso...",

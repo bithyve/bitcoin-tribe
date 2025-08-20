@@ -764,7 +764,7 @@
     "onChainPubKeyCopyMsg": "OnChain Pub Key copied successfully",
     "channelCreatedMsg": "Channel created successfully",
     "channelCloseMsg": "Channel closed.",
-    "takeTimeMsg": "This step will take a few seconds.",
+    "takeTimeMsg": "This step may take some time.",
     "connectingNode": "Connecting your setup",
     "connectingNodeInfo": "Some features may be temporarily unavailable while we prepare everything for you.",
     "connectingNodeToastMsg": "Setting up your node. Initialization in progress...",
