@@ -3,6 +3,10 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import ImagePicker from 'react-native-image-crop-picker';
+import WebView from 'react-native-webview';
+import Modal from 'react-native-modal';
+
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
@@ -18,10 +22,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import ImagePicker from 'react-native-image-crop-picker';
-import WebView from 'react-native-webview';
 import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
-import Modal from 'react-native-modal';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 
 const getStyles = (theme: AppTheme) =>

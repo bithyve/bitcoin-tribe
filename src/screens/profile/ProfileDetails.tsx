@@ -10,7 +10,7 @@ import { useTheme } from 'react-native-paper';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth } from 'src/constants/responsive';
 import AddPicture from 'src/components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -37,7 +37,7 @@ type ProfileDetailsProps = {
   onRightTextPress?: () => void;
   primaryCtaLoader?: boolean;
 };
-function  ProfileDetails(props: ProfileDetailsProps) {
+function ProfileDetails(props: ProfileDetailsProps) {
   const {
     title,
     subTitle,

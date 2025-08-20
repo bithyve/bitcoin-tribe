@@ -11,7 +11,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight, windowWidth } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
