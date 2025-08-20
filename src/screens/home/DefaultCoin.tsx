@@ -32,7 +32,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      margin: wp(10),
+      marginHorizontal: wp(10),
       backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContainer: {
