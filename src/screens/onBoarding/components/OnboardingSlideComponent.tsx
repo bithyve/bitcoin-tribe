@@ -21,7 +21,6 @@ function OnboardingSlideComponent(props: OnboardingSlidesProps) {
   const styles = getStyles(theme);
   return (
     <View style={styles.wrapper}>
-      <View style={styles.illustrationWrapper}>{illustration}</View>
       <View style={styles.contentWrapper1}>
         <AppText variant="heading2" style={styles.titleText}>
           {title}
@@ -35,6 +34,7 @@ function OnboardingSlideComponent(props: OnboardingSlidesProps) {
           {paragraph}
         </AppText>
       </View>
+      <View style={styles.illustrationWrapper}>{illustration}</View>
     </View>
   );
 }
@@ -43,10 +43,9 @@ const getStyles = (theme: AppTheme) =>
     wrapper: {
       width: windowWidth,
       alignItems: 'center',
-      justifyContent: 'center',
-      // paddingBottom: 5,
+      justifyContent: 'flex-start',
+      marginTop: hp(30),
       flex: 1,
-      paddingHorizontal: hp(10),
     },
     contentWrapper1: {
       width: '100%',
@@ -55,9 +54,13 @@ const getStyles = (theme: AppTheme) =>
     },
     illustrationWrapper: {
       alignItems: 'center',
-      justifyContent: 'center',
-      height: '50%',
+      height: '80%',
       width: '100%',
+      marginTop: '15%',
+      paddingTop: '15%',
+      backgroundColor: theme.colors.onboardingBackColor,
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
     },
     contentWrapper2: {
       width: '100%',
@@ -72,7 +75,7 @@ const getStyles = (theme: AppTheme) =>
     },
     subTitleText: {
       textAlign: 'center',
-      color: theme.colors.secondaryHeadingColor,
+      color: theme.colors.headingColor,
       flexWrap: 'wrap',
       width: '80%',
     },
