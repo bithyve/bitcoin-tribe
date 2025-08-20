@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
-import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import IconImageLight from 'src/assets/images/icon_image_light.svg';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -43,11 +42,6 @@ function EditProfilePic(props: addPictureProps) {
             <UserAvatar size={wp(200)} imageSource={imageSource} />
           </View>
         )}
-      </AppTouchable>
-      <AppTouchable onPress={onPress}>
-        <AppText variant="body2" style={styles.editPhotoTitle}>
-          Edit
-        </AppText>
       </AppTouchable>
     </View>
   );

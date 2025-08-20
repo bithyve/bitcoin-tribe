@@ -119,11 +119,8 @@ function EditProfileDetails(props: ProfileDetailsProps) {
           </View>
           <Buttons
             primaryTitle={primaryCTATitle}
-            secondaryTitle={secondaryCTATitle}
             primaryOnPress={primaryOnPress}
-            secondaryOnPress={secondaryOnPress}
-            width={windowWidth / 2.3}
-            secondaryCTAWidth={windowWidth / 2.3}
+            width={'100%'}
             disabled={disabled}
           />
         </ScrollView>
