@@ -88,7 +88,9 @@ const CoinDetailsScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, isThemeDark);
   const [loading, setLoading] = useState(false);
-  const [participatedCampaigns, setParticipatedCampaigns] = useMMKVString(Keys.PARTICIPATED_CAMPAIGNS);
+  const [participatedCampaigns, setParticipatedCampaigns] = useMMKVString(
+    Keys.PARTICIPATED_CAMPAIGNS,
+  );
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -155,9 +157,22 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const isEligibleForCampaign = useMemo(() => {
-    const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+    const participatedCampaignsArray = JSON.parse(
+      participatedCampaigns || '[]',
+    );
     return !participatedCampaignsArray.includes(coin?.campaign._id);
   }, [participatedCampaigns, coin?.campaign._id]);
+
+  const isZeroBalance = useMemo(() => {
+    if (!isEligibleForCampaign) return false;
+    return (
+      wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed === 0
+    );
+  }, [
+    wallet.specs.balances.confirmed,
+    wallet.specs.balances.unconfirmed,
+    isEligibleForCampaign,
+  ]);
 
   const totalAssetLocalAmount = useMemo(() => {
     const safeChannelsData = Array.isArray(channelsData) ? channelsData : [];
@@ -197,17 +212,25 @@ const CoinDetailsScreen = () => {
   const onClaimCampaign = async () => {
     setLoading(true);
     try {
-      const result = await ApiHandler.claimCampaign(coin.campaign._id, coin.campaign.mode);
+      const result = await ApiHandler.claimCampaign(
+        coin.campaign._id,
+        coin.campaign.mode,
+      );
       if (result.claimed) {
         Toast(result.message, false);
-        if(coin.campaign.exclusive === 'true') {
-          const participatedCampaignsArray = JSON.parse(participatedCampaigns || '[]');
+        if (coin.campaign.exclusive === 'true') {
+          const participatedCampaignsArray = JSON.parse(
+            participatedCampaigns || '[]',
+          );
           participatedCampaignsArray.push(coin.campaign._id);
           setParticipatedCampaigns(JSON.stringify(participatedCampaignsArray));
         }
       } else {
-        if(result.error === 'Insufficient sats for RGB') {
-          Toast('Add some sats in your bitcoin wallet to claim RGB assets', true);
+        if (result.error === 'Insufficient sats for RGB') {
+          Toast(
+            'Add some sats in your bitcoin wallet to claim RGB assets',
+            true,
+          );
         } else {
           Toast(result.error || result.message, true);
         }
@@ -255,23 +278,42 @@ const CoinDetailsScreen = () => {
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={1}
-          height={hp(68)}
+          height={hp(80)}
           disabled={!isEligibleForCampaign}>
           <View style={styles.campaignContainer}>
-            <View style={styles.campaignDescription}>
-              <AppText numberOfLines={2} variant="body1">
-                {coin.campaign.description}
-              </AppText>
+            <View style={styles.row}>
+              <View style={styles.campaignDescription}>
+                <AppText
+                  numberOfLines={2}
+                  style={isZeroBalance ? { opacity: 0.5 } : {}}
+                  variant="body1">
+                  {coin.campaign.description}
+                </AppText>
+              </View>
+              <AppTouchable
+                style={
+                  isZeroBalance ? styles.btnClaimDisabled : styles.btnClaim
+                }
+                disabled={isZeroBalance}
+                onPress={() => {
+                  onClaimCampaign();
+                }}>
+                <AppText
+                  style={
+                    isZeroBalance
+                      ? styles.btnClaimTextDisabled
+                      : styles.btnClaimText
+                  }
+                  variant="body1">
+                  {isEligibleForCampaign ? coin.campaign.buttonText : 'Claimed'}
+                </AppText>
+              </AppTouchable>
             </View>
-            <AppTouchable
-              style={styles.btnClaim}
-              onPress={() => {
-                onClaimCampaign();
-              }}>
-              <AppText style={styles.btnClaimText} variant="body1">
-                {coin.campaign.buttonText}
+            {isZeroBalance && (
+              <AppText variant="caption" style={styles.textAddsats}>
+                Please add a small amount of Bitcoin (sats) to your wallet.
               </AppText>
-            </AppTouchable>
+            )}
           </View>
         </GradientBorderAnimated>
       )}
@@ -394,13 +436,22 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       top: windowHeight > 670 ? 90 : 70,
     },
     campaignContainer: {
-      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
       borderRadius: hp(20),
-      height: hp(64),
+      height: hp(75),
       margin: hp(2),
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    textAddsats: {
+      marginTop: hp(5),
+      textAlign: 'center',
+      fontWeight: '500',
     },
     campaignDescription: {
       marginRight: hp(10),
@@ -414,9 +465,21 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(20),
       marginRight: hp(10),
     },
+    btnClaimDisabled: {
+      borderColor: isThemeDark ? '#fff' : '#091229',
+      borderWidth: 1,
+      padding: hp(5),
+      paddingHorizontal: hp(15),
+      borderRadius: hp(20),
+      marginRight: hp(10),
+      opacity: 0.5,
+    },
     btnClaimText: {
       color: isThemeDark ? '#000' : '#fff',
       fontSize: 14,
+    },
+    btnClaimTextDisabled: {
+      color: isThemeDark ? '#fff' : '#091229',
     },
     gradientBorderCard: {
       marginBottom: hp(10),

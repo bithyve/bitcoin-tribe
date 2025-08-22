@@ -2677,7 +2677,7 @@ export class ApiHandler {
       if (invoice.error === 'Insufficient sats for RGB') {
         const utxos = await ApiHandler.createUtxos();
         if (utxos.created) {
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await this.refreshRgbWallet();
           const retryInvoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
           if (retryInvoice.claimed) return retryInvoice;
         }
@@ -2702,7 +2702,7 @@ export class ApiHandler {
     isBlinded: boolean,
     expiryTime: number
   ) {
-    const invoice = await RGBServices.receiveAsset(
+    const receiveData = await RGBServices.receiveAsset(
       ApiHandler.appType,
       ApiHandler.api,
       '',
@@ -2710,14 +2710,24 @@ export class ApiHandler {
       expiryTime,
       isBlinded,
     );    
-    if (invoice.invoice) {
+    if (receiveData.invoice) {
+      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      const invoices = [...rgbWallet?.invoices, receiveData];
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.RgbWallet,
+        'mnemonic',
+        rgbWallet.mnemonic,
+        { receiveData: receiveData, invoices: invoices },
+      );
       const response = await Relay.claimCampaign(
         app.authToken,
         campaignId,
-        invoice.invoice,
+        receiveData.invoice,
       );
       return response;
     }
-    return { claimed: false, error: invoice.error };
+    return { claimed: false, error: receiveData.error };
   }
 }
