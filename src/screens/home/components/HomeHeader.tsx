@@ -31,7 +31,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
 
-function HomeHeader({ showBalance = true }) {
+function HomeHeader({ showBalance = true, showRegistry = false, showScanner = false }) {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -122,6 +122,7 @@ function HomeHeader({ showBalance = true }) {
           </View>
         </AppTouchable>
         <View style={styles.iconWrapper}>
+          {showRegistry && (
           <IconWrapper
             onPress={() => {
               navigation.navigate(NavigationRoutes.WEBVIEWSCREEN,{
@@ -131,6 +132,8 @@ function HomeHeader({ showBalance = true }) {
             }}>
             {isThemeDark ? <IconRegistry /> : <IconRegistryLight />}
           </IconWrapper>
+          )}
+          {showScanner && (
           <IconWrapper
             onPress={() => {
               if (isNodeInitInProgress) {
@@ -145,6 +148,7 @@ function HomeHeader({ showBalance = true }) {
             }}>
             {isThemeDark ? <IconScanner /> : <IconScannerLight />}
           </IconWrapper>
+          )}
         </View>
       </View>
       <View>

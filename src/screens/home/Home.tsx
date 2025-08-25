@@ -306,7 +306,7 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader showBalance={!defaultCoin} />
+        <HomeHeader showBalance={!defaultCoin} showScanner={true}/>
       </View>
       {defaultCoin ? (
         <ScrollView

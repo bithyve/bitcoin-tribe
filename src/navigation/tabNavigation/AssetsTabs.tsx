@@ -96,7 +96,7 @@ const AssetsTabs = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.headerWrapper}>
-        <HomeHeader />
+        <HomeHeader showRegistry={true}/>
       </View>
       <TabView
         renderTabBar={props => <AssetsTabBar {...props} />}
