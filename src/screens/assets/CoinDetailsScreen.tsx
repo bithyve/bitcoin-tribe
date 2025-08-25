@@ -42,7 +42,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import GradientBorderAnimated from '../home/GradientBorderAnimated';
-import ModalLoading from 'src/components/ModalLoading';
+import AnimatedDots from 'src/components/AnimatedDots';
 
 const CoinDetailsScreen = () => {
   const navigation = useNavigation();
@@ -242,9 +242,19 @@ const CoinDetailsScreen = () => {
     }
   };
 
+  const getCampaignButtonText = useMemo(() => {
+    if (loading) {
+      return 'Requesting';
+    }
+    if (isEligibleForCampaign) {
+      return coin.campaign.buttonText;
+    }
+    return 'Claimed';
+  }, [isEligibleForCampaign, loading, coin.campaign.buttonText]);
+
   return (
     <ScreenContainer>
-      {loading && <ModalLoading visible={loading} />}
+      {/* {loading && <ModalLoading visible={loading} />} */}
       <CoinDetailsHeader
         asset={coin}
         // smallHeaderOpacity={smallHeaderOpacity}
@@ -294,7 +304,7 @@ const CoinDetailsScreen = () => {
                 style={
                   isZeroBalance ? styles.btnClaimDisabled : styles.btnClaim
                 }
-                disabled={isZeroBalance}
+                disabled={isZeroBalance || loading}
                 onPress={() => {
                   onClaimCampaign();
                 }}>
@@ -305,8 +315,9 @@ const CoinDetailsScreen = () => {
                       : styles.btnClaimText
                   }
                   variant="body1">
-                  {isEligibleForCampaign ? coin.campaign.buttonText : 'Claimed'}
+                  {getCampaignButtonText}
                 </AppText>
+                {loading && <AnimatedDots />}
               </AppTouchable>
             </View>
             {isZeroBalance && (
@@ -464,6 +475,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingHorizontal: hp(15),
       borderRadius: hp(20),
       marginRight: hp(10),
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     btnClaimDisabled: {
       borderColor: isThemeDark ? '#fff' : '#091229',
@@ -473,6 +486,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(20),
       marginRight: hp(10),
       opacity: 0.5,
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     btnClaimText: {
       color: isThemeDark ? '#000' : '#fff',
