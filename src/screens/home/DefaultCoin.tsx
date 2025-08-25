@@ -49,20 +49,22 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     coinNameContainer: {
       flex: 1,
+      minWidth: 0,
     },
     totalBalance: {
       marginTop: hp(10),
       color: theme.colors.headingColor,
-      fontSize: 35,
+      fontSize: 30,
     },
     totalBalanceDecimal: {
       color: theme.colors.headingColor,
       fontSize: 18,
       alignSelf: 'flex-end',
       marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
+      flexShrink: 1,
     },
     textUnit: {
-      fontSize: 25,
+      fontSize: 16,
       color: theme.colors.secondaryHeadingColor,
       alignSelf: 'flex-end',
       marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
@@ -102,16 +104,28 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
 
   return (
     <View style={styles.row}>
-      <AppText variant="heading1" style={styles.totalBalance}>
+      <AppText 
+        variant="heading1" 
+        style={styles.totalBalance}
+        numberOfLines={1}
+        ellipsizeMode="tail">
         {formatLargeNumber(Number(integerPart))}
       </AppText>
       {fractionalPart && (
-        <AppText variant="body1" style={styles.totalBalanceDecimal}>
+        <AppText 
+          variant="body1" 
+          style={styles.totalBalanceDecimal}
+          numberOfLines={1}
+          ellipsizeMode="tail">
           .{fractionalPart}
         </AppText>
       )}
       {unit && (
-        <AppText variant="heading2" style={styles.textUnit}>
+        <AppText 
+          variant="heading2" 
+          style={styles.textUnit}
+          numberOfLines={1}
+          ellipsizeMode="tail">
           {` ${unit}`}
         </AppText>
       )}
