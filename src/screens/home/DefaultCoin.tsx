@@ -27,12 +27,13 @@ import useBalance from 'src/hooks/useBalance';
 import { useQuery } from '@realm/react';
 import GradientBorderAnimated from './GradientBorderAnimated';
 import RefreshControlView from 'src/components/RefreshControlView';
+import Fonts from 'src/constants/Fonts';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      marginHorizontal: wp(10),
+      marginHorizontal: wp(15),
       backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContainer: {
@@ -217,15 +218,18 @@ const DefaultCoin = ({
           <GradientBorderAnimated
             height={hp(90)}
             radius={hp(20)}
-            strokeWidth={1}
+            strokeWidth={2}
             style={styles.campaignContainer}>
             <AppText
               style={{
                 color: theme.colors.headingColor,
                 textAlign: 'center',
                 marginTop: hp(15),
-              }}
-              variant="body1">
+                fontSize: 16,
+                fontWeight: '400',
+                fontFamily: Fonts.LufgaMedium,
+                lineHeight: 16 * 1.6,
+              }}>
               {asset.campaign.name}
             </AppText>
           </GradientBorderAnimated>

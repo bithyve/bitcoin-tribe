@@ -287,7 +287,7 @@ const CoinDetailsScreen = () => {
         <GradientBorderAnimated
           style={styles.gradientBorderCard}
           radius={hp(20)}
-          strokeWidth={1}
+          strokeWidth={2}
           height={hp(80)}
           disabled={!isEligibleForCampaign}>
           <View style={styles.campaignContainer}>
