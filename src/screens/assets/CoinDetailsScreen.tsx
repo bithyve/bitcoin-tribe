@@ -25,7 +25,7 @@ import InfoIcon from 'src/assets/images/infoIcon.svg';
 import InfoIconLight from 'src/assets/images/infoIcon_light.svg';
 import { Keys } from 'src/storage';
 import CoinDetailsHeader from './CoinDetailsHeader';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -465,7 +465,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       fontWeight: '500',
     },
     campaignDescription: {
-      marginRight: hp(10),
+      marginHorizontal: wp(5),
       flex: 1,
       alignItems: 'center',
     },
