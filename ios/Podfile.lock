@@ -1070,7 +1070,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+271afd)":
+  - "react-native-bare-kit (0.5.6+5e5bff)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1114,9 +1114,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-config (1.5.6):
-    - react-native-config/App (= 1.5.6)
-  - react-native-config/App (1.5.6):
+  - react-native-config (1.5.2):
+    - react-native-config/App (= 1.5.2)
+  - react-native-config/App (1.5.2):
     - React-Core
   - react-native-document-picker (9.3.1):
     - DoubleConversion
@@ -2149,10 +2149,10 @@ SPEC CHECKSUMS:
   React-logger: 6070f362a1657bb53335eb1fc903d3f49fd79842
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: b997d7d852163aa50231846dc443dd4941c8a40c
+  react-native-bare-kit: 020b142a41f16e8043daebbb0d7330ec6ddfc8e5
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 207ec2bf853b9a3b7751e3a29f7f497e69010b44
-  react-native-config: f1dde39f8468ad922fc7e8bd4308c8e6223d5ee8
+  react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
   react-native-document-picker: 451699da81cba8b40b596b8076019a4deb86f46e
   react-native-image-picker: f1006d8935a3bc0baf8157faaa7857c76a77c8bb
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
