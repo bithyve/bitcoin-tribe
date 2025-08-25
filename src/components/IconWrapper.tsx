@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     minWidth: wp(30),
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    padding: 5,
     marginHorizontal: 2,
   },
 });
