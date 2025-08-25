@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo } from 'react';
-import { Asset, AssetVisibility, Coin } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -156,6 +156,12 @@ const DefaultCoin = ({
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
+    const collectibles = useQuery<Collectible>(RealmSchema.Collectible, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const udas = useQuery<UniqueDigitalAsset>(RealmSchema.UniqueDigitalAsset, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
   const nonDefaultCoins = coinsResult.filter(
     coin => coin.assetId !== asset.assetId,
   ).length;
@@ -185,6 +191,10 @@ const DefaultCoin = ({
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
     wallet?.specs.balances,
   ]);
+
+  const totalAssets = useMemo(() => {
+    return nonDefaultCoins + collectibles.length + udas.length;
+  }, [nonDefaultCoins, collectibles, udas]);
 
   return (
     <View
@@ -297,7 +307,7 @@ const DefaultCoin = ({
             Other Assets
           </AppText>
           <AppText style={styles.totalBalance} variant="heading1">
-            {nonDefaultCoins}
+            {totalAssets}
           </AppText>
         </AppTouchable>
       </View>
