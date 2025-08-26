@@ -61,7 +61,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       color: theme.colors.headingColor,
       fontSize: 18,
       alignSelf: 'flex-end',
-      marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
+      marginBottom: Platform.OS === 'ios' ? hp(3) : hp(3),
       flexShrink: 1,
     },
     textUnit: {
