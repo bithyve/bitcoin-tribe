@@ -49,7 +49,7 @@ const CoinDetailsScreen = () => {
   const hasShownPostModal = useRef(false);
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const { assetId, askReview, askVerify } = useRoute().params;
+  const { assetId, askReview, askVerify, isAddedToRegistry } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
 
@@ -411,6 +411,7 @@ const CoinDetailsScreen = () => {
       <>
         <IssueAssetPostOnTwitterModal
           visible={visibleIssuedPostOnTwitter}
+          isAddedToRegistry={isAddedToRegistry}
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
