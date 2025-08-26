@@ -674,8 +674,8 @@ export class ApiHandler {
         rgbWallet.accountXpubColored,
         rgbWallet.masterFingerprint,
       );
-      const cm = ChatPeerManager.getInstance();
-      await cm.init(app.primarySeed);
+      // const cm = ChatPeerManager.getInstance();
+      // await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
