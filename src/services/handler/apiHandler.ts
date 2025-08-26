@@ -2712,6 +2712,16 @@ export class ApiHandler {
       isBlinded,
     );    
     if (receiveData.invoice) {
+      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      const invoices = [...rgbWallet?.invoices, receiveData];
+      dbManager.updateObjectByPrimaryId(
+        RealmSchema.RgbWallet,
+        'mnemonic',
+        rgbWallet.mnemonic,
+        { receiveData: receiveData, invoices: invoices },
+      );
       const response = await Relay.claimCampaign(
         app.authToken,
         campaignId,
