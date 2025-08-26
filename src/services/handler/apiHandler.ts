@@ -2639,6 +2639,7 @@ export class ApiHandler {
               issuer: coin.issuer,
               assetSource: coin.assetSource,
               campaign: coin.campaign,
+              metaData: coin.metaData,
             },
           );
         } else {
