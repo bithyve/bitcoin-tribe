@@ -288,14 +288,21 @@ const CoinDetailsScreen = () => {
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={2}
-          height={hp(80)}
+          height={isZeroBalance? hp(100):hp(84)}
           disabled={!isEligibleForCampaign}>
-          <View style={styles.campaignContainer}>
-            <View style={styles.row}>
+          <View style={[styles.campaignContainer, { height: isZeroBalance? hp(96):hp(80)}]}>
+            <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>
                 <AppText
                   numberOfLines={2}
-                  style={isZeroBalance ? { opacity: 0.5 } : {}}
+                  style={
+                    isZeroBalance
+                      ? {
+                          opacity: 0.5,
+                          marginHorizontal: wp(4),
+                        }
+                      : { marginHorizontal: wp(4), }
+                  }
                   variant="body1">
                   {coin.campaign.description}
                 </AppText>
@@ -451,7 +458,6 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       alignItems: 'center',
       backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
       borderRadius: hp(20),
-      height: hp(75),
       margin: hp(2),
     },
     row: {
@@ -460,14 +466,13 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       alignItems: 'center',
     },
     textAddsats: {
-      marginTop: hp(5),
+      marginTop: hp(10),
       textAlign: 'center',
       fontWeight: '500',
     },
     campaignDescription: {
-      marginHorizontal: wp(5),
       flex: 1,
-      alignItems: 'center',
+      marginHorizontal: hp(5),
     },
     btnClaim: {
       backgroundColor: isThemeDark ? '#fff' : '#091229',
@@ -475,6 +480,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingHorizontal: hp(15),
       borderRadius: hp(20),
       marginRight: hp(10),
+      marginLeft: hp(5),
       flexDirection: 'row',
       alignItems: 'center',
     },
@@ -485,6 +491,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingHorizontal: hp(15),
       borderRadius: hp(20),
       marginRight: hp(10),
+      marginLeft: hp(5),
       opacity: 0.5,
       flexDirection: 'row',
       alignItems: 'center',
