@@ -172,7 +172,7 @@ const getStyles = (theme: AppTheme) =>
     contentWrapper: {
       flexDirection: 'row',
       width: '68%',
-      alignItems: 'center',
+      // alignItems: 'center',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),
@@ -180,6 +180,7 @@ const getStyles = (theme: AppTheme) =>
     usernameText: {
       color: theme.colors.headingColor,
       width: '100%',
+      marginTop: hp(2),
     },
     balanceWrapper: {
       flexDirection: 'row',
