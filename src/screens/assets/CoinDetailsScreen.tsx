@@ -304,7 +304,7 @@ const CoinDetailsScreen = () => {
                       : { marginHorizontal: wp(4), }
                   }
                   variant="body1">
-                  {coin.campaign.description}
+                  {getCampaignButtonText === 'Claimed' ? 'Claim submitted successfully. Distribution may take time.' : coin.campaign.description}
                 </AppText>
               </View>
               <AppTouchable
