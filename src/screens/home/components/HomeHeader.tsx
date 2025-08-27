@@ -30,8 +30,18 @@ import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
+import SearchIcon from 'src/assets/images/search.svg';
+import SearchIconLight from 'src/assets/images/ic_search_light.svg';
+import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
+import AddContactIcon from 'src/assets/images/addcontact.svg';
 
-function HomeHeader({ showBalance = true, showRegistry = false, showScanner = false }) {
+function HomeHeader({
+  showBalance = true,
+  showRegistry = false,
+  showScanner = false,
+  showSearch = false,
+  showAdd = false,
+}) {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -123,31 +133,44 @@ function HomeHeader({ showBalance = true, showRegistry = false, showScanner = fa
         </AppTouchable>
         <View style={styles.iconWrapper}>
           {showRegistry && (
-          <IconWrapper
-            onPress={() => {
-              navigation.navigate(NavigationRoutes.WEBVIEWSCREEN,{
-                url: config.REGISTRY_URL.replace('asset', ''),
-                title: 'Registry',
-              });
-            }}>
-            {isThemeDark ? <IconRegistry /> : <IconRegistryLight />}
-          </IconWrapper>
+            <IconWrapper
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                  url: config.REGISTRY_URL.replace('asset', ''),
+                  title: 'Registry',
+                });
+              }}>
+              {isThemeDark ? <IconRegistry /> : <IconRegistryLight />}
+            </IconWrapper>
           )}
           {showScanner && (
-          <IconWrapper
-            onPress={() => {
-              if (isNodeInitInProgress) {
-                Toast(node.connectingNodeToastMsg, true);
-                return;
-              }
-              handleNavigation(NavigationRoutes.SENDSCREEN, {
-                receiveData: 'send',
-                title: common.send,
-                subTitle: sendScreen.headerSubTitle,
-              });
-            }}>
-            {isThemeDark ? <IconScanner /> : <IconScannerLight />}
-          </IconWrapper>
+            <IconWrapper
+              onPress={() => {
+                if (isNodeInitInProgress) {
+                  Toast(node.connectingNodeToastMsg, true);
+                  return;
+                }
+                handleNavigation(NavigationRoutes.SENDSCREEN, {
+                  receiveData: 'send',
+                  title: common.send,
+                  subTitle: sendScreen.headerSubTitle,
+                });
+              }}>
+              {isThemeDark ? <IconScanner /> : <IconScannerLight />}
+            </IconWrapper>
+          )}
+          {showSearch && (
+            <IconWrapper onPress={() => {}}>
+              {isThemeDark ? <SearchIcon /> : <SearchIconLight />}
+            </IconWrapper>
+          )}
+          {showAdd && (
+            <IconWrapper
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.PROFILEINFO);
+              }}>
+              {isThemeDark ? <AddContactIcon /> : <AddContactIconLight />}
+            </IconWrapper>
           )}
         </View>
       </View>
@@ -172,7 +195,7 @@ const getStyles = (theme: AppTheme) =>
     contentWrapper: {
       flexDirection: 'row',
       width: '68%',
-      // alignItems: 'center',
+      alignItems: 'center',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),

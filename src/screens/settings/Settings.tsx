@@ -45,6 +45,7 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
 import BiometricUnlockModal from './components/BiometricUnlockModal';
+import HomeHeader from '../home/components/HomeHeader';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -253,7 +254,10 @@ function SettingsScreen({ navigation }) {
   ];
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
+      <View style={styles.headerWrapper}>
+        <HomeHeader showBalance={false} showSearch />
+      </View>
       <EnterPasscodeModal
         title={'Change Passcode'}
         subTitle={'Enter your current passcode'}
@@ -301,7 +305,10 @@ function SettingsScreen({ navigation }) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: Platform.OS === 'ios' ? hp(20) : hp(30),
+      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+    },
+    headerWrapper: {
+      marginVertical: hp(16),
     },
   });
 export default SettingsScreen;

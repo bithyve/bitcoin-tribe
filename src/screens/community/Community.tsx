@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import CommunityHeader from './components/CommunityHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -19,6 +18,9 @@ import Toast from 'src/components/Toast';
 import { hash256 } from 'src/utils/encryption';
 import { ChatEncryptionManager } from 'src/services/p2p/ChatEncryptionManager';
 import ModalLoading from 'src/components/ModalLoading';
+import HomeHeader from '../home/components/HomeHeader';
+import { Platform, StyleSheet, View } from 'react-native';
+import { hp } from 'src/constants/responsive';
 
 function Community() {
   const route = useRoute();
@@ -121,12 +123,25 @@ function Community() {
 
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={styles.container}>
       <ModalLoading visible={loading} />
-      <CommunityHeader />
+      <View style={styles.headerWrapper}>
+      <HomeHeader showBalance={false} showAdd />
+
+      </View>
       <CommunityList onRefresh={init} />
     </ScreenContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+  },
+  headerWrapper: {
+    marginVertical: hp(16),
+  },
+})
+
 
 export default Community;
