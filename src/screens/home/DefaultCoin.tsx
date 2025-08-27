@@ -118,7 +118,7 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
           style={styles.totalBalanceDecimal}
           numberOfLines={1}
           ellipsizeMode="tail">
-          .{fractionalPart}
+          .{fractionalPart.substring(0,2)}
         </AppText>
       )}
       {unit && (
