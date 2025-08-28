@@ -163,7 +163,10 @@ const CoinDetailsScreen = () => {
     return !participatedCampaignsArray.includes(coin?.campaign._id);
   }, [participatedCampaigns, coin?.campaign._id]);
 
-  const isZeroBalance = useMemo(() => {
+  const isBalanceRequired = useMemo(() => {
+    if(coin?.campaign.mode === 'WITNESS') {
+      return false;
+    }
     if (!isEligibleForCampaign) return false;
     return (
       wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed === 0
@@ -172,6 +175,7 @@ const CoinDetailsScreen = () => {
     wallet.specs.balances.confirmed,
     wallet.specs.balances.unconfirmed,
     isEligibleForCampaign,
+    coin?.campaign.mode,
   ]);
 
   const totalAssetLocalAmount = useMemo(() => {
@@ -288,15 +292,15 @@ const CoinDetailsScreen = () => {
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={2}
-          height={isZeroBalance? hp(100):hp(84)}
+          height={isBalanceRequired? hp(100):hp(84)}
           disabled={!isEligibleForCampaign}>
-          <View style={[styles.campaignContainer, { height: isZeroBalance? hp(96):hp(80)}]}>
+          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(96):hp(80)}]}>
             <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>
                 <AppText
                   numberOfLines={2}
                   style={
-                    isZeroBalance
+                    isBalanceRequired
                       ? {
                           opacity: 0.5,
                           marginHorizontal: wp(4),
@@ -309,15 +313,15 @@ const CoinDetailsScreen = () => {
               </View>
               <AppTouchable
                 style={
-                  isZeroBalance ? styles.btnClaimDisabled : styles.btnClaim
+                  isBalanceRequired ? styles.btnClaimDisabled : styles.btnClaim
                 }
-                disabled={isZeroBalance || loading}
+                disabled={isBalanceRequired || loading}
                 onPress={() => {
                   onClaimCampaign();
                 }}>
                 <AppText
                   style={
-                    isZeroBalance
+                    isBalanceRequired
                       ? styles.btnClaimTextDisabled
                       : styles.btnClaimText
                   }
@@ -327,7 +331,7 @@ const CoinDetailsScreen = () => {
                 {loading && <AnimatedDots />}
               </AppTouchable>
             </View>
-            {isZeroBalance && (
+            {isBalanceRequired && (
               <AppText variant="caption" style={styles.textAddsats}>
                 Please add a small amount of Bitcoin (sats) to your wallet.
               </AppText>
