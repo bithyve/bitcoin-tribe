@@ -2677,8 +2677,9 @@ export class ApiHandler {
       
       if (invoice.error === 'Insufficient sats for RGB') {
         const utxos = await ApiHandler.createUtxos();
-        if (utxos.created) {
+        if (utxos) {
           await this.refreshRgbWallet();
+          await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)));
           const retryInvoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
           if (retryInvoice.claimed) return retryInvoice;
         }
