@@ -415,6 +415,7 @@ const CoinDetailsScreen = () => {
           primaryOnPress={() => {
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
+            setHasIssuedAsset(false);
             updateAssetIssuedPostStatus(RealmSchema.Coin, assetId, false);
           }}
           secondaryOnPress={() => {
