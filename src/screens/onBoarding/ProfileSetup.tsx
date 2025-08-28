@@ -4,9 +4,6 @@ import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
-import WebView from 'react-native-webview';
-import Modal from 'react-native-modal';
-
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
@@ -22,8 +19,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
-import PrimaryCTA from 'src/components/PrimaryCTA';
+import { hp, windowHeight } from 'src/constants/responsive';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -61,13 +57,7 @@ function ProfileSetup() {
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowTermsModal(true);
-    }, 1000);
-  }, []);
 
   useEffect(() => {
     if (setupNewAppMutation.isSuccess) {
@@ -161,28 +151,6 @@ function ProfileSetup() {
         </ResponsePopupContainer>
       </View>
 
-      <Modal
-        isVisible={showTermsModal}
-        onDismiss={() => setShowTermsModal(false)}>
-        <View style={styles.containerStyle}>
-          <WebView
-            source={{
-              uri: config.TERMS_AND_CONDITIONS_URL[theme.dark ? 'dark' : 'light'],
-            }}
-            style={styles.webViewStyle}
-          />
-
-          <PrimaryCTA
-            title={'I agree'}
-            onPress={() => {
-              setShowTermsModal(false);
-            }}
-            width={windowWidth - hp(50)}
-            disabled={false}
-            style={{ marginTop: hp(10), alignSelf: 'center' }}
-          />
-        </View>
-      </Modal>
     </ScreenContainer>
   );
 }
