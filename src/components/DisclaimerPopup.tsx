@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -49,12 +49,12 @@ const DisclaimerPopup: React.FC<Props> = ({
       backColor={theme.colors.modalBackColor}
       borderColor={theme.colors.modalBackColor}>
       <View style={styles.contentContainer}>
-        <View style={styles.wrapper}>
+        <ScrollView style={styles.wrapper}>
           <RenderHTML
             contentWidth={Dimensions.get('window').width - hp(20)}
             source={{ html: disclaimerHtml }}
           />
-        </View>
+        </ScrollView>
         <View style={styles.checkIconContainer}>
           <AppTouchable
             onPress={() => setIsChecked(!isChecked)}
