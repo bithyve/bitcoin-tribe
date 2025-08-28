@@ -66,7 +66,7 @@ const Chat = () => {
 
   useEffect(() => {
     markAsRead();
-  }, []);
+  }, [messages.length])
 
   useEffect(() => {
     const payload = route.params?.payload;

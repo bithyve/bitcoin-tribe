@@ -164,6 +164,7 @@ export default class ChatPeerManager {
               };
               dbManager.createObject(RealmSchema.Community, communityData);
 
+              const existingMessage = dbManager.getObjectById(RealmSchema.Message, message.id);
               dbManager.createObject(RealmSchema.Message, {
                 id: message.id,
                 communityId: message.communityId,
@@ -172,7 +173,7 @@ export default class ChatPeerManager {
                 createdAt: msg.timestamp,
                 sender: message.sender,
                 block: msg.blockNumber,
-                unread: true,
+                unread: !existingMessage,
                 fileUrl: message?.fileUrl,
                 request: message?.request,
               });
@@ -183,6 +184,7 @@ export default class ChatPeerManager {
               (community as any).key,
             );
             const messageData = JSON.parse(decryptedMessage);
+            const existingMessage = dbManager.getObjectById(RealmSchema.Message, messageData.id);
             dbManager.createObject(RealmSchema.Message, {
               id: messageData.id,
               communityId: messageData.communityId,
@@ -191,7 +193,7 @@ export default class ChatPeerManager {
               createdAt: msg.timestamp,
               sender: messageData.sender,
               block: msg.blockNumber,
-              unread: true,
+              unread: !existingMessage,
               fileUrl: message?.fileUrl,
               request: message?.request,
             });
@@ -233,6 +235,7 @@ export default class ChatPeerManager {
             key: decryptedKeys.aesKey,
           };
           dbManager.createObject(RealmSchema.Community, community);
+          const existingMessage = dbManager.getObjectById(RealmSchema.Message, message.id);
           dbManager.createObject(RealmSchema.Message, {
             id: message.id,
             communityId: message.communityId,
@@ -241,7 +244,7 @@ export default class ChatPeerManager {
             createdAt: data.timestamp,
             sender: message.sender,
             block: data.blockNumber,
-            unread: true,
+            unread: !existingMessage,
             fileUrl: message?.fileUrl,
             request: message?.request,
           });
@@ -252,6 +255,7 @@ export default class ChatPeerManager {
           (community as any).key,
         );
         const messageData = JSON.parse(decryptedMessage);
+        const existingMessage = dbManager.getObjectById(RealmSchema.Message, messageData.id);
         dbManager.createObject(RealmSchema.Message, {
           id: messageData.id,
           communityId: messageData.communityId,
@@ -260,7 +264,7 @@ export default class ChatPeerManager {
           createdAt: data.timestamp,
           sender: messageData.sender,
           block: data.blockNumber,
-          unread: true,
+          unread: !existingMessage,
           fileUrl: messageData?.fileUrl,
           request: messageData?.request,
         });
