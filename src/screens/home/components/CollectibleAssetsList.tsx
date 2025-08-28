@@ -140,8 +140,8 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 80,
-      right: 20,
+      bottom: hp(90),
+      right: wp(20),
     },
     addNewIconWrapperLight: {
       position: 'absolute',
