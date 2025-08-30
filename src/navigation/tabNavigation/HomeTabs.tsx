@@ -2,9 +2,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Community from 'src/screens/community/Community';
 import HomeScreen from 'src/screens/home/Home';
 import Settings from 'src/screens/settings/Settings';
-import Collectibles from 'src/screens/home/Collectibles';
 import { NavigationRoutes } from '../NavigationRoutes';
 import CustomTab from './CustomTab';
+import AssetsTabs from './AssetsTabs';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,15 +12,15 @@ function HomeTabs() {
   return (
     <Tab.Navigator tabBar={props => <CustomTab {...props} />}>
       <Tab.Screen
-        name={NavigationRoutes.ASSETS}
+        name={NavigationRoutes.HOMESCREEN}
         component={HomeScreen}
         options={{
           headerShown: false,
         }}
       />
       <Tab.Screen
-        name={NavigationRoutes.COLLECTIBLE}
-        component={Collectibles}
+        name={NavigationRoutes.ASSETS}
+        component={AssetsTabs}
         options={{
           headerShown: false,
         }}

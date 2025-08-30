@@ -337,6 +337,7 @@ const CollectibleDetailsScreen = () => {
         <IssueAssetPostOnTwitterModal
           visible={visibleIssuedPostOnTwitter}
           primaryOnPress={() => {
+            setHasIssuedAsset(false);
             setVisibleIssuedPostOnTwitter(false);
             setRefresh(prev => !prev);
             updateAssetIssuedPostStatus(

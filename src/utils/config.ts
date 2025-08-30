@@ -40,8 +40,13 @@ class Configuration {
   public RAMP_BASE_URL: string = 'https://app.rampnetwork.com/';
   public RAMP_REFERRAL_CODE: string =
     'ku67r7oh5juc27bmb3h5pek8y5heyb5bdtfa66pr';
-  public TERMS_AND_CONDITIONS_URL: string =
-    'https://bitcointribe.app/terms-and-conditions/';
+  public TERMS_AND_CONDITIONS_URL: {
+    light: string;
+    dark: string;
+  } = {
+    light: 'https://bitcointribe.app/terms/light.html',
+    dark: 'https://bitcointribe.app/terms/dark.html',
+  };
   public REGISTRY_URL: string;
 
   constructor() {

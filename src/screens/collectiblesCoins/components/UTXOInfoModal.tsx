@@ -56,6 +56,11 @@ const UTXOInfoModal: React.FC<Props> = ({
         </View>
         <View style={styles.wrapper1}>
           <AppText variant="heading3" style={styles.titleText}>
+            {settings.utxoInfoTitle}
+          </AppText>
+        </View>
+        <View style={styles.wrapper1}>
+          <AppText variant="heading3" style={styles.titleText}>
             {settings.utxoInfoTitle2}
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
@@ -68,6 +73,14 @@ const UTXOInfoModal: React.FC<Props> = ({
           </AppText>
           <AppText variant="body2" style={styles.subTitleText}>
             {settings.utxoInfoSubTitle3}
+          </AppText>
+        </View>
+        <View style={styles.wrapper1}>
+          <AppText variant="heading3" style={styles.titleText}>
+            {settings.utxoInfoTitle4}
+          </AppText>
+          <AppText variant="body2" style={styles.subTitleText}>
+            {settings.utxoInfoSubTitle4}
           </AppText>
         </View>
         <View style={styles.buttonWrapper}>

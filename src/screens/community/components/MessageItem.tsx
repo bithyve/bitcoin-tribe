@@ -2,10 +2,15 @@ import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
 import AppText from 'src/components/AppText';
 import moment from 'moment';
-import { Message, MessageType } from 'src/models/interfaces/Community';
+import {
+  Message,
+  MessageType,
+  RequestStatus,
+} from 'src/models/interfaces/Community';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AppTouchable from 'src/components/AppTouchable';
+import { numberWithCommas } from 'src/utils/numberWithCommas';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -37,9 +42,12 @@ const getStyles = (theme: AppTheme) =>
     textTimeSender: {
       color: '#808080',
       textAlign: 'right',
+      fontSize: 11,
     },
     textTimeReceiver: {
       color: '#808080',
+      textAlign: 'right',
+      fontSize: 11,
     },
     textDay: {
       color: '#808080',
@@ -70,6 +78,42 @@ const getStyles = (theme: AppTheme) =>
       gap: 10,
       width: 250,
     },
+    requestContainer: {
+      justifyContent: 'center',
+      gap: 10,
+      width: 200,
+    },
+    imgRequestSats: {
+      width: 80,
+      height: 80,
+      borderRadius: 10,
+      alignSelf: 'center',
+      marginBottom: 10,
+    },
+    containerButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    buttonApprove: {
+      backgroundColor: '#4CD964',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 20,
+      flex: 1,
+      marginHorizontal: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonReject: {
+      backgroundColor: '#EC5557',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 20,
+      flex: 1,
+      marginHorizontal: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   });
 
 const MessageItem = ({
@@ -77,11 +121,17 @@ const MessageItem = ({
   previousMessage,
   appId,
   onImagePress,
+  onPressReject,
+  onPressApprove,
+  viewTransaction,
 }: {
   message: Message;
   previousMessage: Message;
   appId: string;
   onImagePress: (image: string) => void;
+  onPressReject: (message: Message) => void;
+  onPressApprove: (message: Message) => void;
+  viewTransaction: (message: Message) => void;
 }) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -130,22 +180,119 @@ const MessageItem = ({
                     <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
                       {message.text}
                     </AppText>
+                    <AppText
+                      variant="body2"
+                      style={
+                        isSender
+                          ? styles.textTimeSender
+                          : styles.textTimeReceiver
+                      }>
+                      {time}
+                    </AppText>
                   </View>
+                );
+              case MessageType.RequestSats:
+                return (
+                  <AppTouchable
+                    style={styles.requestContainer}
+                    onPress={() => viewTransaction(message)}>
+                    <View>
+                      <Image
+                        source={{
+                          uri: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1747033579',
+                        }}
+                        style={styles.imgRequestSats}
+                      />
+                      <AppText
+                        style={{ color: theme.dark ? 'white' : 'black' }}>
+                        {isSender
+                          ? `You requested ${numberWithCommas(
+                              message.request?.amount,
+                            )} sats`
+                          : `Requested ${numberWithCommas(
+                              message.request?.amount,
+                            )} sats`}
+                      </AppText>
+                      <AppText
+                        style={{
+                          color: theme.dark ? 'white' : 'black',
+                          fontSize: 12,
+                        }}>
+                        {message.text}
+                      </AppText>
+                    </View>
+
+                    {!isSender &&
+                      message?.request?.status === RequestStatus.Pending && (
+                        <View style={styles.containerButtons}>
+                          <AppTouchable
+                            style={styles.buttonReject}
+                            onPress={() => {
+                              onPressReject(message);
+                            }}>
+                            <AppText variant="body2" style={{ color: 'white' }}>
+                              Reject
+                            </AppText>
+                          </AppTouchable>
+                          <AppTouchable
+                            style={styles.buttonApprove}
+                            onPress={() => {
+                              onPressApprove(message);
+                            }}>
+                            <AppText variant="body2" style={{ color: 'black' }}>
+                              Approve
+                            </AppText>
+                          </AppTouchable>
+                        </View>
+                      )}
+
+                    {message?.request?.status === RequestStatus.Rejected && (
+                      <View style={styles.buttonReject}>
+                        <AppText variant="body2" style={{ color: 'black' }}>
+                          Rejected
+                        </AppText>
+                      </View>
+                    )}
+
+                    {message?.request?.status === RequestStatus.Accepted && (
+                      <View style={styles.buttonApprove}>
+                        <AppText variant="body2" style={{ color: 'black' }}>
+                          Approved
+                        </AppText>
+                      </View>
+                    )}
+
+                    <AppText
+                      variant="body2"
+                      style={
+                        isSender
+                          ? styles.textTimeSender
+                          : styles.textTimeReceiver
+                      }>
+                      {time}
+                    </AppText>
+                  </AppTouchable>
                 );
               default:
                 return (
-                  <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
-                    {message.text || message.type}
-                  </AppText>
+                  <View>
+                    <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
+                      {message.text || message.type}
+                    </AppText>
+                    <AppText
+                      variant="body2"
+                      style={
+                        isSender
+                          ? styles.textTimeSender
+                          : styles.textTimeReceiver
+                      }>
+                      {time}
+                    </AppText>
+                  </View>
                 );
             }
           })()}
         </View>
-        <AppText
-          variant="body2"
-          style={isSender ? styles.textTimeSender : styles.textTimeReceiver}>
-          {time}
-        </AppText>
       </View>
     );
 

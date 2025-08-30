@@ -170,6 +170,7 @@ function UnspentUTXOElement({
 const getStyles = (theme: AppTheme, colorableWithoutAssetId: boolean) =>
   StyleSheet.create({
     container: {
+      width: '100%',
       padding: 20,
       borderRadius: 15,
       borderColor: colorableWithoutAssetId

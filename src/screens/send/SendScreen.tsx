@@ -127,10 +127,12 @@ function SendScreen({ route, navigation }) {
           const urlParts = value.split('/');
           const path = urlParts[2];
           if (path === deeplinkType.Contact) {
-            const publicKey = urlParts[3];
+            const contactKey = urlParts[3];
+            const publicKey = urlParts[4];
             navigation.navigate(NavigationRoutes.COMMUNITY, {
-              publicKey,
+              contactKey,
               type: CommunityType.Peer,
+              publicKey,
             });
           } else if (path === deeplinkType.Group) {
             const groupKey = urlParts[3];
