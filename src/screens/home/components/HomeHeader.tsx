@@ -4,13 +4,14 @@ import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
-
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconScannerLight from 'src/assets/images/icon_scanner_light.svg';
+import IconRegistry from 'src/assets/images/ic_registry.svg';
+import IconRegistryLight from 'src/assets/images/ic_registry_light.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
 import { AppTheme } from 'src/theme';
@@ -28,8 +29,19 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
+import config from 'src/utils/config';
+import SearchIcon from 'src/assets/images/search.svg';
+import SearchIconLight from 'src/assets/images/ic_search_light.svg';
+import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
+import AddContactIcon from 'src/assets/images/addcontact.svg';
 
-function HomeHeader() {
+function HomeHeader({
+  showBalance = true,
+  showRegistry = false,
+  showScanner = false,
+  showSearch = false,
+  showAdd = false,
+}) {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -98,46 +110,68 @@ function HomeHeader() {
                 style={styles.usernameText}>
                 {walletName ? walletName : 'Satoshi’s Palette'}
               </AppText>
-              <View style={styles.balanceWrapper}>
-                {initialCurrencyMode !== CurrencyKind.SATS &&
-                  getCurrencyIcon(
-                    isThemeDark ? IconBitcoin : IconBitcoinLight,
-                    isThemeDark ? 'dark' : 'light',
-                    15,
-                  )}
-                <AppText variant="body2" style={styles.balanceText}>
-                  &nbsp;{getBalance(balances)}
-                </AppText>
-                {initialCurrencyMode === CurrencyKind.SATS && (
-                  <AppText variant="caption" style={styles.satsText}>
-                    sats
+              {showBalance && (
+                <View style={styles.balanceWrapper}>
+                  {initialCurrencyMode !== CurrencyKind.SATS &&
+                    getCurrencyIcon(
+                      isThemeDark ? IconBitcoin : IconBitcoinLight,
+                      isThemeDark ? 'dark' : 'light',
+                      15,
+                    )}
+                  <AppText variant="body2" style={styles.balanceText}>
+                    &nbsp;{getBalance(balances)}
                   </AppText>
-                )}
-              </View>
+                  {initialCurrencyMode === CurrencyKind.SATS && (
+                    <AppText variant="caption" style={styles.satsText}>
+                      sats
+                    </AppText>
+                  )}
+                </View>
+              )}
             </View>
           </View>
         </AppTouchable>
         <View style={styles.iconWrapper}>
-          {/* <IconWrapper
-            onPress={() => {
-              setVisiblePullDownRefreshInfo(true);
-            }}>
-            {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-          </IconWrapper> */}
-          <IconWrapper
-            onPress={() => {
-              if (isNodeInitInProgress) {
-                Toast(node.connectingNodeToastMsg, true);
-                return;
-              }
-              handleNavigation(NavigationRoutes.SENDSCREEN, {
-                receiveData: 'send',
-                title: common.send,
-                subTitle: sendScreen.headerSubTitle,
-              });
-            }}>
-            {isThemeDark ? <IconScanner /> : <IconScannerLight />}
-          </IconWrapper>
+          {showRegistry && (
+            <IconWrapper
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                  url: config.REGISTRY_URL.replace('asset', ''),
+                  title: 'Registry',
+                });
+              }}>
+              {isThemeDark ? <IconRegistry /> : <IconRegistryLight />}
+            </IconWrapper>
+          )}
+          {showScanner && (
+            <IconWrapper
+              onPress={() => {
+                if (isNodeInitInProgress) {
+                  Toast(node.connectingNodeToastMsg, true);
+                  return;
+                }
+                handleNavigation(NavigationRoutes.SENDSCREEN, {
+                  receiveData: 'send',
+                  title: common.send,
+                  subTitle: sendScreen.headerSubTitle,
+                });
+              }}>
+              {isThemeDark ? <IconScanner /> : <IconScannerLight />}
+            </IconWrapper>
+          )}
+          {showSearch && (
+            <IconWrapper onPress={() => {}}>
+              {isThemeDark ? <SearchIcon /> : <SearchIconLight />}
+            </IconWrapper>
+          )}
+          {showAdd && (
+            <IconWrapper
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.PROFILEINFO);
+              }}>
+              {isThemeDark ? <AddContactIcon /> : <AddContactIconLight />}
+            </IconWrapper>
+          )}
         </View>
       </View>
       <View>
@@ -169,6 +203,7 @@ const getStyles = (theme: AppTheme) =>
     usernameText: {
       color: theme.colors.headingColor,
       width: '100%',
+      marginTop: hp(2),
     },
     balanceWrapper: {
       flexDirection: 'row',
@@ -188,6 +223,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       justifyContent: 'flex-end',
       width: '32%',
+      alignItems: 'flex-end',
     },
   });
 export default HomeHeader;

@@ -66,7 +66,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
             <RefreshControl
               refreshing={refreshingStatus}
               onRefresh={props.onRefresh}
-              colors={[theme.colors.accent1]} // You can customize this part
+              colors={[theme.colors.accent1]}
               progressBackgroundColor={theme.colors.inputBackground}
             />
           )
@@ -131,26 +131,25 @@ function CollectibleAssetsList(props: AssetsListProps) {
 const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
-      position: 'relative',
-      height: Platform.OS === 'android' ? '82%' : '85%',
-      marginHorizontal: wp(10),
-      marginTop: hp(20),
+      flex: 1,
+      backgroundColor: theme.colors.primaryBackground,
+      
     },
     assetWrapper: {
       flexWrap: 'wrap',
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: 90,
-      right: 30,
+      bottom: hp(90),
+      right: wp(20),
     },
     addNewIconWrapperLight: {
       position: 'absolute',
-      bottom: 40,
+      bottom: 30,
       right: 0,
     },
     footer: {
-      height: windowHeight > 670 ? 200 : 100, // Adjust the height as needed
+      height: windowHeight > 670 ? 200 : 100,
     },
     emptyStateWrapper: {
       marginTop: '38%',

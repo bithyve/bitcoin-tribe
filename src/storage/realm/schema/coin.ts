@@ -80,6 +80,7 @@ export const CoinSchema: ObjectSchema = {
   primaryKey: 'assetId',
   properties: {
     assetId: 'string',
+    isDefault: 'bool?',
     addedAt: 'int',
     balance: `${RealmSchema.Balance}?`,
     issuedSupply: 'string',
@@ -109,5 +110,6 @@ export const CoinSchema: ObjectSchema = {
       default: AssetSource.Internal,
       optional: true,
     },
+    campaign: 'string?{}',
   },
 };

@@ -113,6 +113,7 @@ export interface Issuer {
 
 export interface Coin {
   addedAt: number;
+  isDefault: boolean;
   assetId: string;
   balance: Balance;
   issuedSupply: string;
@@ -134,6 +135,20 @@ export interface Coin {
     contentDark: string;
     showDisclaimer?: string;
   };
+  campaign?: Campaign;
+}
+
+export interface Campaign {
+  _id: string;
+  assetId: string;
+  isActive: string;
+  name: string;
+  description: string;
+  image: string;
+  buttonText: string;
+  exclusive: string;
+  mode: 'WITNESS' | 'BLINDED';
+  claimed: string;
 }
 
 export interface Media {
@@ -144,6 +159,7 @@ export interface Media {
 }
 export interface Collectible {
   addedAt: number;
+  isDefault: boolean;
   assetId: string;
   balance: Balance;
   details: string;
@@ -160,6 +176,7 @@ export interface Collectible {
   isIssuedPosted: boolean;
   assetSchema: AssetSchema;
   assetSource: AssetSource;
+  campaign?: Campaign;
 }
 
 export interface UniqueDigitalAsset {

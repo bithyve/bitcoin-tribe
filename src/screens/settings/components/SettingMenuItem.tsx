@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
-
 import { AppTheme } from 'src/theme';
 import SocialLinks from './SocialLinks';
 import openLink from 'src/utils/OpenLink';
@@ -44,6 +43,7 @@ function SettingMenuItem({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.content}
       style={styles.scrollingWrapper}>
       <SettingSectionList
         data={WalletMgtMenu}
@@ -80,5 +80,8 @@ const getStyles = (theme: AppTheme) =>
     contentContainerStyle: {
       paddingBottom: Platform.OS === 'android' ? 120 : 50,
     },
+    content: {
+      paddingBottom: 100
+    }
   });
 export default SettingMenuItem;

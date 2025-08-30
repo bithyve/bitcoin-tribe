@@ -7,7 +7,15 @@ import React, {
   useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {
   CommonActions,
   useFocusEffect,
@@ -24,7 +32,6 @@ import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import useRgbWallets from 'src/hooks/useRgbWallets';
 import { AppContext } from 'src/contexts/AppContext';
 import {
   AssetType,
@@ -43,6 +50,8 @@ import {
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
+import DefaultCoin from './DefaultCoin';
+import RefreshControlView from 'src/components/RefreshControlView';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -90,17 +99,8 @@ function HomeScreen() {
       authToken: string;
     }) => ApiHandler.startNode(nodeId, authToken),
   });
-
-  const refreshRgbWallet = useMutation({
-    mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: () => {
-      if (app?.appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
-      }
-    },
-  });
+  const { mutate: listPaymentsMutate } = useMutation(ApiHandler.getAssetTransactions);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const rgbWallet = useRgbWallets({}).wallets[0];
   const [refreshing, setRefreshing] = useState(false);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
@@ -110,14 +110,14 @@ function HomeScreen() {
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
-
+  const defaultCoin = coinsResult.find(c => c.isDefault);
   const coins = useMemo(() => {
     if (!coinsResult) return [];
     const coinsArray = coinsResult.slice();
-    const tribeCoinIndex = coinsArray.findIndex(c => c.name === 'Tribe tUSDt');
-    if (tribeCoinIndex !== -1) {
-      const [tribeCoin] = coinsArray.splice(tribeCoinIndex, 1);
-      return [tribeCoin, ...coinsArray];
+    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
+    if (defaultCoinIndex !== -1) {
+      const [defaultCoin] = coinsArray.splice(defaultCoinIndex, 1);
+      return [defaultCoin, ...coinsArray];
     }
     return coinsArray;
   }, [coinsResult]);
@@ -157,6 +157,21 @@ function HomeScreen() {
 
     fetchStatus();
   }, []);
+
+  const refreshRgbWallet = useMutation({
+    mutationFn: ApiHandler.refreshRgbWallet,
+    onSuccess: () => {
+      if (app?.appType === AppType.ON_CHAIN) {
+        if (defaultCoin) {
+          listPaymentsMutate({
+            assetId: defaultCoin.assetId,
+            schema: RealmSchema.Coin,
+          });
+        }
+        checkBackupRequired();
+      }
+    },
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -245,6 +260,7 @@ function HomeScreen() {
       return;
     }
     setRefreshing(true);
+    ApiHandler.fetchPresetAssets();
     refreshRgbWallet.mutate();
     checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
@@ -258,7 +274,7 @@ function HomeScreen() {
     };
   }, []);
 
-  const handleDeepLink = (event) => {
+  const handleDeepLink = event => {
     try {
       const url = event.url;
       if (url.startsWith('tribe://')) {
@@ -290,24 +306,56 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader />
+        <HomeHeader showBalance={!defaultCoin} showScanner={true}/>
       </View>
-      <CoinAssetsList
-        listData={coins}
-        loading={refreshing && !isBackupInProgress && !isBackupDone}
-        onRefresh={handleRefresh}
-        refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-        onPressAddNew={() => {
-          if (isNodeInitInProgress) {
-            Toast(node.connectingNodeToastMsg, true);
-            return;
-          }
-          handleNavigation(NavigationRoutes.ADDASSET, {
-            issueAssetType: AssetType.Coin,
-          });
-        }}
-        onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
-      />
+      {defaultCoin ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: hp(100),
+          }}
+          refreshControl={
+            Platform.OS === 'ios' ? (
+              <RefreshControlView
+                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
+                onRefresh={handleRefresh}
+              />
+            ) : (
+              <RefreshControl
+                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
+                onRefresh={handleRefresh}
+                colors={[theme.colors.accent1]}
+                progressBackgroundColor={theme.colors.inputBackground}
+              />
+            )
+          }>
+          <DefaultCoin
+            asset={defaultCoin}
+            loading={refreshing && !isBackupInProgress && !isBackupDone}
+            onRefresh={handleRefresh}
+            refreshingStatus={
+              refreshing && !isBackupInProgress && !isBackupDone
+            }
+          />
+        </ScrollView>
+      ) : (
+        <CoinAssetsList
+          listData={coins}
+          loading={refreshing && !isBackupInProgress && !isBackupDone}
+          onRefresh={handleRefresh}
+          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
+          onPressAddNew={() => {
+            if (isNodeInitInProgress) {
+              Toast(node.connectingNodeToastMsg, true);
+              return;
+            }
+            handleNavigation(NavigationRoutes.ADDASSET, {
+              issueAssetType: AssetType.Coin,
+            });
+          }}
+          onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
+        />
+      )}
     </ScreenContainer>
   );
 }

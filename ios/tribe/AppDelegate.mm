@@ -16,7 +16,7 @@
       FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:plistPath];
       [FIRApp configureWithOptions:options];
     } else {
-      [FIRApp configure];
+      NSLog(@"Error: GoogleService-Info-dev.plist not found for tribe-dev target");
     }
   } else {
     [FIRApp configure];

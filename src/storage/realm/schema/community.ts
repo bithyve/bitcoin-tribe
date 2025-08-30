@@ -20,7 +20,6 @@ export const MessageSchema: ObjectSchema = {
 
 export const RequestSchema: ObjectSchema = {
   name: RealmSchema.Request,
-  embedded: true,
   properties: {
     id: 'string',
     type: 'string',
@@ -30,7 +29,7 @@ export const RequestSchema: ObjectSchema = {
     updatedAt: {type: 'int', default: Date.now()},
     notes: 'string?',
     asset: 'string?{}',
-    amount: 'int?',
+    amount: 'string?',
     invoice: 'string?',
     txid: 'string?',
   },

@@ -2,7 +2,7 @@ import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo, useState } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation, CommonActions } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import {
   Asset,
@@ -27,9 +27,16 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import WalletOperations from 'src/services/wallets/operations';
+import WalletUtilities from 'src/services/wallets/operations/utils';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RequestStatus, RequestType } from 'src/models/interfaces/Community';
+import { v4 as uuidv4 } from 'uuid';
 
 type RequestOrSendRouteParams = {
   type?: string;
+  communityId?: string;
 };
 
 const getStyles = (theme: AppTheme, inputHeight: number, tooltipPos: number) =>
@@ -60,6 +67,7 @@ const getStyles = (theme: AppTheme, inputHeight: number, tooltipPos: number) =>
 const RequestOrSend = () => {
   const route = useRoute<RouteProp<{ params: RequestOrSendRouteParams }>>();
   const type = route.params?.type;
+  const communityId = route.params?.communityId;
   const theme = useTheme() as unknown as AppTheme;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = useMemo(() => getStyles(theme, 100, 0), [theme, isThemeDark]);
@@ -69,6 +77,8 @@ const RequestOrSend = () => {
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const wallet = useQuery<Wallet>(RealmSchema.Wallet)[0]
+  const navigation = useNavigation();
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
 
   
   const coins = useQuery<Coin>(RealmSchema.Coin)
@@ -80,8 +90,6 @@ const RequestOrSend = () => {
   const udas = useQuery<UniqueDigitalAsset>(RealmSchema.UniqueDigitalAsset)
     .filtered('visibility != $0', AssetVisibility.HIDDEN);
 
-    console.log('wallet.specs.balances.confirmed', wallet.specs.balances.unconfirmed);
-
   const assets = useMemo(() => {
     try {
       const coinAssets = coins
@@ -92,14 +100,10 @@ const RequestOrSend = () => {
         .filter(
           collectible => collectible && collectible.assetId,
         ) as unknown as Asset[];
-      const udaAssets = udas
-        .toJSON()
-        .filter(uda => uda && uda.assetId) as unknown as Asset[];
 
       const combined: Asset[] = [
-        ...coinAssets,
-        ...collectibleAssets,
-        ...udaAssets,
+        // ...coinAssets,
+        // ...collectibleAssets,
       ];
       combined.push({
         assetId: 'BTC',
@@ -134,14 +138,16 @@ const RequestOrSend = () => {
         isVerifyPosted: false,
         isIssuedPosted: false,
         assetSource: 'Internal' as any,
+        details: {},
+        media: {},
+        token: {},
       })
       return combined
         .filter(
           asset =>
             asset &&
             asset.assetId &&
-            asset.balance &&
-            Number(asset.balance.spendable) > 0,
+            asset.balance
         )
         .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 ;
@@ -150,6 +156,38 @@ const RequestOrSend = () => {
       return [];
     }
   }, [coins, collectibles, udas]);
+
+  const onPressProceed = () => {
+    if (type === 'Request') {
+      if(selectedAsset?.assetId === 'BTC') {
+        const { receivingAddress } =
+        WalletOperations.getNextFreeExternalAddress(wallet);
+        const paymentURI = WalletUtilities.generatePaymentURI(receivingAddress, {
+          amount: parseInt(amount) / 1e8,
+        }).paymentURI;
+        const payload = {
+          id: uuidv4(),
+          amount: amount,
+          invoice: paymentURI,
+          txid: '',
+          type: RequestType.RequestSats,
+          status: RequestStatus.Pending,
+          createdBy: app.contactsKey.publicKey,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          notes: '',
+        }
+        navigation.navigate(NavigationRoutes.CHAT, {
+          payload,
+          communityId
+        });
+      } else {
+
+      }
+    }
+
+  }
+
 
   return (
     <ScreenContainer style={styles.container}>
@@ -175,10 +213,7 @@ const RequestOrSend = () => {
       <View style={styles.footerWrapper}>
         <Buttons
           primaryTitle={common.proceed}
-          primaryOnPress={() => {
-            console.log('selectedAsset', selectedAsset);
-            console.log('amount', amount);
-          }}
+          primaryOnPress={onPressProceed}
           disabled={amount === ''}
           width={windowWidth / 1.1
           }
