@@ -3,6 +3,7 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import ImagePicker from 'react-native-image-crop-picker';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
@@ -18,11 +19,7 @@ import Toast from 'src/components/Toast';
 import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import WebView from 'react-native-webview';
-import { hp, windowWidth, windowHeight } from 'src/constants/responsive';
-import Modal from 'react-native-modal';
-import PrimaryCTA from 'src/components/PrimaryCTA';
+import { hp, windowHeight } from 'src/constants/responsive';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -56,17 +53,11 @@ function ProfileSetup() {
   const [name, setName] = useState('');
   const styles = getStyles(theme);
 
-  const [profileImage, setProfileImage] = useState<Asset | null>(null);
+  const [profileImage, setProfileImage] = useState(null);
   const { setKey } = useContext(AppContext);
   const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
   const [isLoading, setIsLoading] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowTermsModal(true);
-    }, 1000);
-  }, []);
 
   useEffect(() => {
     if (setupNewAppMutation.isSuccess) {
@@ -80,15 +71,19 @@ function ProfileSetup() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await launchImageLibrary({
-        mediaType: 'photo',
-        includeBase64: false,
-        maxHeight: 500,
-        maxWidth: 500,
-        selectionLimit: 1,
-        quality: 0.4,
+      const image = await ImagePicker.openPicker({
+        width: 500,
+        height: 500,
+        cropping: true,
+        compressImageQuality: 0.4,
       });
-      setProfileImage(result.assets[0]);
+      setProfileImage({
+        uri: image.path,
+        width: image.width,
+        height: image.height,
+        type: image.mime,
+        fileName: image.filename,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -137,7 +132,7 @@ function ProfileSetup() {
         //   initiateWalletCreation();
         // }}
         primaryStatus={setupNewAppMutation.status}
-        primaryCTATitle={common.proceed}
+        primaryCTATitle={common.save}
         // secondaryCTATitle={common.skip}
         primaryCtaLoader={false}
         disabled={name.trim().length < 3}
@@ -156,26 +151,6 @@ function ProfileSetup() {
         </ResponsePopupContainer>
       </View>
 
-      <Modal
-        isVisible={showTermsModal}
-        onDismiss={() => setShowTermsModal(false)}>
-        <View style={styles.containerStyle}>
-          <WebView
-            source={{ uri: config.TERMS_AND_CONDITIONS_URL }}
-            style={styles.webViewStyle}
-          />
-
-          <PrimaryCTA
-            title={'I agree'}
-            onPress={() => {
-              setShowTermsModal(false);
-            }}
-            width={windowWidth - hp(50)}
-            disabled={false}
-            style={{ marginTop: hp(10), alignSelf: 'center' }}
-          />
-        </View>
-      </Modal>
     </ScreenContainer>
   );
 }

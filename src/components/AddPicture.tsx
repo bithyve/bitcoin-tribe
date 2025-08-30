@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
-import AppText from 'src/components/AppText';
 import IconImage from 'src/assets/images/icon_image.svg';
 import IconImageLight from 'src/assets/images/icon_image_light.svg';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
@@ -25,24 +24,25 @@ function AddPicture(props: addPictureProps) {
   const { imageSource, onPress, title, edit = false } = props;
 
   return (
-    <AppTouchable onPress={onPress}>
-      {!imageSource ? (
-        <View style={styles.container}>
-          <View style={styles.iconImageWrapper}>
-            {isThemeDark ? <IconImage /> : <IconImageLight />}
+    <View style={styles.wrapper}>
+      <AppTouchable onPress={onPress}>
+        {!imageSource ? (
+          <View style={styles.container}>
+            <View style={styles.iconImageWrapper}>
+              {isThemeDark ? (
+                <IconImage height={200} width={200} />
+              ) : (
+                <IconImageLight height={200} width={200} />
+              )}
+            </View>
           </View>
-          <View>
-            <AppText variant="heading3" style={styles.addPictureText}>
-              {title}
-            </AppText>
+        ) : (
+          <View style={styles.container}>
+            <UserAvatar size={wp(200)} imageSource={imageSource} />
           </View>
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <UserAvatar size={wp(75)} imageSource={imageSource} />
-        </View>
-      )}
-    </AppTouchable>
+        )}
+      </AppTouchable>
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -52,6 +52,11 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       marginTop: windowHeight > 670 ? hp(30) : hp(20),
       marginBottom: windowHeight > 670 ? hp(40) : hp(20),
+    },
+    wrapper: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '50%',
     },
     iconImageWrapper: {
       height: windowHeight > 670 ? hp(75) : 75,

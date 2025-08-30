@@ -5,7 +5,6 @@ import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -58,13 +57,14 @@ function AssetRegistryScreen() {
     }
   };
 
-  const routeMap = (askVerify: boolean) => {
+  const routeMap = (askVerify: boolean, isAddedToRegistry: boolean = false) => {
     switch (issueType) {
       case AssetType.Coin:
         navigation.replace(NavigationRoutes.COINDETAILS, {
           assetId,
           askReview: true,
           askVerify,
+          isAddedToRegistry,
         });
         setDisabledCTA(false);
         break;
@@ -73,6 +73,7 @@ function AssetRegistryScreen() {
           assetId,
           askReview: true,
           askVerify,
+          isAddedToRegistry,
         });
         setDisabledCTA(false);
         break;
@@ -81,6 +82,7 @@ function AssetRegistryScreen() {
           assetId,
           askReview: true,
           askVerify,
+          isAddedToRegistry,
         });
         setDisabledCTA(false);
         break;
@@ -157,7 +159,7 @@ function AssetRegistryScreen() {
       const { status } = await Relay.enrollAsset(app.id, asset, app.authToken);
       if (status) {
         const askVerify = true;
-        setTimeout(() => routeMap(askVerify), 1000);
+        setTimeout(() => routeMap(askVerify, true), 1000);
         const tx = wallet?.specs?.transactions?.find(
           tx =>
             tx.transactionKind === TransactionKind.SERVICE_FEE &&
@@ -182,7 +184,7 @@ function AssetRegistryScreen() {
       Toast(`${error}`, true);
       console.log(error);
     }
-  }, [assetId, schema]);
+  }, [assetId, schema,]);
 
   return (
     <ScreenContainer style={styles.container}>

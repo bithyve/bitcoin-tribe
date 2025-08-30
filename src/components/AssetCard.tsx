@@ -15,7 +15,7 @@ import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
-import Colors from 'src/theme/Colors';
+import { BlurView } from '@react-native-community/blur';
 
 type AssetCardProps = {
   asset: Asset;
@@ -64,11 +64,15 @@ const AssetCard = (props: AssetCardProps) => {
             }}
             style={styles.imageStyle}
           />
-          <View style={styles.balanceWrapper}>
+          <BlurView
+            blurType="light"
+            blurAmount={1}
+            reducedTransparencyFallbackColor="white"
+            style={styles.balanceWrapper}>
             <AppText variant="caption" style={styles.balanceText}>
               {balance}
             </AppText>
-          </View>
+          </BlurView>
         </View>
         <View style={styles.contentWrapper}>
           <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
@@ -83,10 +87,9 @@ const AssetCard = (props: AssetCardProps) => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      height: hp(205),
       width: wp(160),
       borderRadius: 15,
-      margin: hp(6),
+      margin: hp(5),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
     },
@@ -102,8 +105,6 @@ const getStyles = (theme: AppTheme) =>
       justifyContent: 'center',
     },
     contentWrapper: {
-      paddingHorizontal: 10,
-      paddingVertical: 5,
       height: '30%',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -140,15 +141,17 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
     },
     balanceWrapper: {
-      backgroundColor: theme.colors.accent4,
       paddingVertical: hp(3),
       paddingHorizontal: hp(10),
       borderRadius: 15,
       alignSelf: 'center',
-      top: -11,
+      top: 15,
+      position: 'absolute',
+      left: 15,
+      borderWidth: 0.5,
+      borderColor: 'white',
     },
     balanceText: {
-      color: Colors.Black,
       fontWeight: '500',
     },
   });

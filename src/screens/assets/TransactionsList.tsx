@@ -11,7 +11,6 @@ import {
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';

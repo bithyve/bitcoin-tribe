@@ -1,16 +1,13 @@
 import React, { useState, useMemo, useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
-
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import CollectibleAssetsList from './components/CollectibleAssetsList';
-import HomeHeader from './components/HomeHeader';
 import { AppTheme } from 'src/theme';
-import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -37,7 +34,6 @@ function Collectibles() {
 
   const navigation = useNavigation();
   const {
-    key,
     setBackupProcess,
     setBackupDone,
     setManualAssetBackupStatus,
@@ -123,9 +119,6 @@ function Collectibles() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <HomeHeader />
-      </View>
       <CollectibleAssetsList
         listData={assets}
         loading={refreshing && !isBackupInProgress && !isBackupDone}
@@ -159,11 +152,8 @@ function Collectibles() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 0,
-      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
-    },
-    headerWrapper: {
-      margin: hp(16),
+      paddingTop: 0,
+      backgroundColor: theme.colors.primaryBackground,
     },
   });
 

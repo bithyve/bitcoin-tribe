@@ -63,5 +63,6 @@ const Colors = {
   Cultured: 'rgba(245, 245, 245,1)',
   ElectricViolet: 'rgba(137, 4, 249,1)',
   imageOverlay: 'rgba(0,0,0,0.6)',
+  SpanishGray: 'rgba(153, 153, 153,1)',
 };
 export default Colors;

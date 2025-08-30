@@ -12,7 +12,6 @@ import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import { useTheme } from 'react-native-paper';
-
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Buttons from 'src/components/Buttons';
@@ -31,6 +30,7 @@ interface Props {
   primaryOnPress?: () => void;
   secondaryOnPress: () => void;
   issuerInfo: Issuer;
+  isAddedToRegistry: boolean;
 }
 
 const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
@@ -38,6 +38,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
   primaryOnPress,
   secondaryOnPress,
   issuerInfo,
+  isAddedToRegistry,
 }) => {
   const scaleFactor = PixelRatio.get();
   const cardWidth = 1200 / scaleFactor;
@@ -124,7 +125,7 @@ const IssueAssetPostOnTwitterModal: React.FC<Props> = ({
 Transparency matters.
 Trust, but verify — start here 👇`;
 
-      const registryUrl = `${config.REGISTRY_URL}/${issuerInfo.assetId}`;
+      const registryUrl = isAddedToRegistry ? `${config.REGISTRY_URL}/${issuerInfo.assetId}` : '';
       const fullMessage = `${tweetText}\n\n${registryUrl}`;
       const twitterWebURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
         fullMessage,

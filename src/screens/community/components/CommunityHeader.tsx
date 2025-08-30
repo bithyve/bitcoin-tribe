@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
@@ -27,9 +27,9 @@ function CommunityHeader() {
         </AppText>
       </View>
       <View style={styles.iconWrapper}>
-        <IconWrapper style={styles.icon} onPress={() => {}}>
+        {/* <IconWrapper style={styles.icon} onPress={() => {}}>
           {!theme.dark ? <SearchIconLight /> : <SearchIcon />}
-        </IconWrapper>
+        </IconWrapper> */}
         <IconWrapper
           style={styles.icon}
           onPress={() => {
@@ -45,20 +45,17 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      width: '100%',
-      marginTop: Platform.OS === 'ios' ? hp(10) : hp(30),
-      marginHorizontal: hp(5),
+      marginTop:  hp(5),
       justifyContent: 'center',
       alignItems: 'center',
     },
     contentWrapper: {
-      width: '70%',
+      flex: 1,
     },
     iconWrapper: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       alignItems: 'center',
-      marginRight: hp(10),
     },
     titleStyle: {
       color: theme.colors.headingColor,

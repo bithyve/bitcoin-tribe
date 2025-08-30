@@ -14,7 +14,6 @@ import { AppTheme } from 'src/theme';
 import RightArrowIcon from 'src/assets/images/icon_rightArrowSecondary.svg';
 import TextField from 'src/components/TextField';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys } from 'src/storage';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
@@ -24,11 +23,16 @@ import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
 import { loginWithTwitter } from 'src/services/twitter';
 import { AppContext } from 'src/contexts/AppContext';
 import { saveTwitterHandle } from 'src/utils/socialHandleUtils';
+import TwitterVerificationInfoModal from './components/TwitterVerificationInfoModal';
 
 function VerifyX() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const { setCompleteVerification } = React.useContext(AppContext);
+  const {
+    setCompleteVerification,
+    isVerifyXInfoVisible,
+    setIsVerifyXInfoVisible,
+  } = React.useContext(AppContext);
   const { assetId, schema, savedTwitterHandle } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
@@ -180,6 +184,12 @@ function VerifyX() {
             }}
           />
         </View>
+        <>
+          <TwitterVerificationInfoModal
+            visible={isVerifyXInfoVisible}
+            primaryOnPress={() => setIsVerifyXInfoVisible(false)}
+          />
+        </>
       </KeyboardAvoidView>
       <View style={styles.ctaWrapper}>
         <Buttons

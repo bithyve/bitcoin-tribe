@@ -15,7 +15,6 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import { Keys } from 'src/storage';
 import NodeInfoFooter from './NodeInfoFooter';
 import { AppTheme } from 'src/theme';
-import SelectOption from 'src/components/SelectOption';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import NodeInfoItem from './components/NodeInfoItem';
@@ -31,6 +30,7 @@ import Capitalize from 'src/utils/capitalizeUtils';
 import { NodeStatusType } from 'src/models/enums/Notifications';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import openLink from 'src/utils/OpenLink';
+import NodeAccessButton from './components/NodeAccessButton';
 
 const ViewNodeInfo = () => {
   const { translations } = useContext(LocalizationContext);
@@ -184,27 +184,37 @@ const ViewNodeInfo = () => {
           showsVerticalScrollIndicator={false}
           style={styles.scrollingWrapper}>
           <View style={styles.unLockWrapper}>
-            <GradientView
-              style={[styles.container]}
-              colors={[
-                theme.colors.cardGradient1,
-                theme.colors.cardGradient2,
-                theme.colors.cardGradient3,
-              ]}>
-              <AppText variant="body1" style={styles.titleText}>
-                {channelTranslations.status}
-              </AppText>
-              {isNodeStatusLoading ? (
-                <ActivityIndicator size="small" />
-              ) : (
-                <AppText
-                  variant="body1"
-                  style={{ color: getStatusColor(nodeStatus) }}>
-                  {nodeStatus || 'Node Not Found'}
+            <View style={styles.nodeStatusWrapper}>
+              <GradientView
+                style={[styles.container]}
+                colors={[
+                  theme.colors.cardGradient1,
+                  theme.colors.cardGradient2,
+                  theme.colors.cardGradient3,
+                ]}>
+                <AppText variant="body1" style={styles.titleText}>
+                  {channelTranslations.status}
                 </AppText>
-              )}
-            </GradientView>
-            {nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+                {isNodeStatusLoading ? (
+                  <ActivityIndicator size="small" />
+                ) : (
+                  <AppText
+                    variant="body1"
+                    style={{ color: getStatusColor(nodeStatus) }}>
+                    {nodeStatus || 'Node Not Found'}
+                  </AppText>
+                )}
+              </GradientView>
+              {nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
+                nodeStatus !== undefined && (
+                  <NodeAccessButton
+                    locked={!nodeInfo?.pubkey}
+                    onPress={() => unlockNodeMutation.mutate()}
+                  />
+                )}
+            </View>
+
+            {/* {nodeStatus?.toUpperCase() !== NodeStatusType.DESTROYED &&
               nodeStatus !== undefined && (
                 <SelectOption
                   title={node.unlockNode}
@@ -213,7 +223,7 @@ const ViewNodeInfo = () => {
                   onValueChange={() => {}}
                   toggleValue={nodeStatusLock}
                 />
-              )}
+              )} */}
           </View>
           <NodeInfoItem
             title={node.nodeIdtitle}
@@ -325,12 +335,19 @@ const getStyles = (theme: AppTheme) =>
     unLockWrapper: {
       marginVertical: hp(20),
     },
-    container: {
+    nodeStatusWrapper: {
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: windowHeight > 670 ? hp(20) : hp(10),
+    },
+    container: {
+      width: '68%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: windowHeight > 670 ? hp(20) : hp(10),
+      paddingVertical: windowHeight > 670 ? hp(15) : hp(5),
       borderRadius: 15,
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
