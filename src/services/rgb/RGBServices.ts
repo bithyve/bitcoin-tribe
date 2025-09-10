@@ -88,7 +88,7 @@ export default class RGBServices {
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
-  ): Promise<string> => {
+  ): Promise<boolean> => {
     try {
       const data = await RGB.initiate(
         this.NETWORK,
@@ -99,7 +99,7 @@ export default class RGBServices {
       );
       return JSON.parse(data);
     } catch (error) {
-      return `${error}`;
+      return false;
     }
   };
 

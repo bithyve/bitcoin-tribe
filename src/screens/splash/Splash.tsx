@@ -74,7 +74,7 @@ function Splash({ navigation }) {
       } else {
         setKey(data.key);
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
-        setIsWalletOnline(data.isWalletOnline);
+        // setIsWalletOnline(data.isWalletOnline);
         setAppType(app.appType);
         navigation.replace(NavigationRoutes.APPSTACK);
       }

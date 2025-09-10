@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useMutation } from 'react-query';
@@ -14,6 +14,7 @@ import AppTouchable from './AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 
 const RGBWalletStatus = () => {
   const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext);
@@ -22,21 +23,32 @@ const RGBWalletStatus = () => {
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
   const navigation = useNavigation();
 
   const onPress = () => {
-    if (!isWalletOnline) {
+    if (isWalletOnline === WalletOnlineStatus.Error) {
       if (
         appType === AppType.NODE_CONNECT ||
         appType === AppType.SUPPORTED_RLN
       ) {
         navigation.navigate(NavigationRoutes.VIEWNODEINFO);
       } else {
-        refreshRgbWallet.mutate();
+        setIsWalletOnline(WalletOnlineStatus.InProgress);
+        makeWalletOnline.mutate();
       }
     }
   };
+
+  useEffect(() => {
+    if(appType) {
+      setIsWalletOnline(
+        makeWalletOnline.data
+          ? WalletOnlineStatus.Online
+          : WalletOnlineStatus.Error,
+      );
+    }
+  }, [makeWalletOnline.data]);
 
   const msg = useMemo(() => {
     return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
@@ -44,9 +56,13 @@ const RGBWalletStatus = () => {
       : common.rgbWalletOffline;
   }, [appType]);
 
-  return isWalletOnline === false ? (
+  return isWalletOnline === WalletOnlineStatus.Error ? (
     <AppTouchable style={styles.errorContainer} onPress={onPress}>
       <AppText style={styles.text}>{msg}</AppText>
+    </AppTouchable>
+  ) : isWalletOnline === WalletOnlineStatus.InProgress ? (
+    <AppTouchable style={styles.container} disabled>
+      <AppText style={styles.text}>Making RGB Wallet Online</AppText>
     </AppTouchable>
   ) : null;
 };
@@ -65,6 +81,21 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       left: 0,
       right: 0,
       backgroundColor: Colors.FireOpal,
+      zIndex: 1000, // Ensures the banner is above everything
+      alignItems: 'center',
+    },
+    container: {
+      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
+      top: hasNotch
+        ? 40
+        : Platform.OS === 'ios' && windowHeight > 820
+        ? 50
+        : Platform.OS === 'android'
+        ? 40
+        : 16,
+      left: 0,
+      right: 0,
+      backgroundColor: Colors.SelectiveYellow,
       zIndex: 1000, // Ensures the banner is above everything
       alignItems: 'center',
     },

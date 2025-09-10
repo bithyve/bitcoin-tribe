@@ -32,8 +32,22 @@ export interface RGBWallet {
     recipientId: string;
     expirationTimestamp: number;
     batchTransferIdx: string;
+    type: InvoiceType
   }[];
 }
+
+export enum InvoiceType {
+  Default = 'default',
+  Campaign = 'campaign'
+}
+
+export enum WalletOnlineStatus {
+  Online = 'online',
+  InProgress = 'in-progress',
+  Error = 'error',
+  Null = null
+}
+
 interface Balance {
   future: string;
   settled: string;

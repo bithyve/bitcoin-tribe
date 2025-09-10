@@ -49,6 +49,7 @@ import {
   Asset,
   Coin,
   Collectible,
+  InvoiceType,
   IssuerVerificationMethod,
   NodeInfo,
   RgbNodeConnectParams,
@@ -656,6 +657,7 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
+    return { key, isWalletOnline: false };
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     if (
       app.appType === AppType.NODE_CONNECT ||
@@ -677,6 +679,40 @@ export class ApiHandler {
       // const cm = ChatPeerManager.getInstance();
       // await cm.init(app.primarySeed);
       return { key, isWalletOnline };
+    }
+  }
+
+  static async makeWalletOnline(): Promise<boolean> {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      if (
+        app.appType === AppType.NODE_CONNECT ||
+        app.appType === AppType.SUPPORTED_RLN
+      ) {
+        const nodeInfo = await ApiHandler.api.nodeinfo();
+        if (nodeInfo.pubkey) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        const isWalletOnline = await RGBServices.initiate(
+          rgbWallet.mnemonic,
+          rgbWallet.accountXpubVanilla,
+          rgbWallet.accountXpubColored,
+          rgbWallet.masterFingerprint,
+        );
+        console.log('isWalletOnline', isWalletOnline);
+        // const cm = ChatPeerManager.getInstance();
+        // await cm.init(app.primarySeed);
+        return isWalletOnline === true;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 
