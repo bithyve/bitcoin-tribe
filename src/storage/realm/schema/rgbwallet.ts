@@ -1,5 +1,6 @@
 import { ObjectSchema } from 'realm';
 import { RealmSchema } from '../../enum';
+import { InvoiceType } from 'src/models/interfaces/RGBWallet';
 
 export const ReceiveDataSchema: ObjectSchema = {
   name: RealmSchema.ReceiveData,
@@ -8,6 +9,10 @@ export const ReceiveDataSchema: ObjectSchema = {
     expirationTimestamp: 'int',
     invoice: 'string',
     recipientId: 'string',
+    type: {
+      type: 'string',
+      default: InvoiceType.Default
+    }
   },
 };
 

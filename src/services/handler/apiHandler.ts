@@ -2661,26 +2661,39 @@ export class ApiHandler {
         RealmSchema.TribeApp,
       ) as TribeApp;
 
-      const isEligible = await Relay.isEligibleForCampaign(app.authToken, campaignId);
+      const isEligible = await Relay.isEligibleForCampaign(
+        app.authToken,
+        campaignId,
+      );
       if (!isEligible.status) {
         return {
           claimed: false,
           error: isEligible.message,
         };
       }
-      
       const isBlinded = mode === 'BLINDED';
-      const expiryTime = 60 * 60 * 24 * 2;
-      
-      const invoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+      const expiryTime = 60 * 60 * 24 * 3;
+
+      const invoice = await this.tryClaimWithInvoice(
+        app,
+        campaignId,
+        isBlinded,
+        expiryTime,
+      );
       if (invoice.claimed) return invoice;
-      
       if (invoice.error === 'Insufficient sats for RGB') {
         const utxos = await ApiHandler.createUtxos();
         if (utxos) {
           await this.refreshRgbWallet();
-          await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)));
-          const retryInvoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+          await Promise.resolve(
+            new Promise(resolve => setTimeout(resolve, 1000)),
+          );
+          const retryInvoice = await this.tryClaimWithInvoice(
+            app,
+            campaignId,
+            isBlinded,
+            expiryTime,
+          );
           if (retryInvoice.claimed) return retryInvoice;
         }
         return {
@@ -2702,7 +2715,7 @@ export class ApiHandler {
     app: TribeApp,
     campaignId: string,
     isBlinded: boolean,
-    expiryTime: number
+    expiryTime: number,
   ) {
     const receiveData = await RGBServices.receiveAsset(
       ApiHandler.appType,
@@ -2711,12 +2724,15 @@ export class ApiHandler {
       0,
       expiryTime,
       isBlinded,
-    );    
+    );
     if (receiveData.invoice) {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-      const invoices = [...rgbWallet?.invoices, receiveData];
+      const invoices = [
+        ...rgbWallet?.invoices,
+        { ...receiveData, type: InvoiceType.Campaign },
+      ];
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',
