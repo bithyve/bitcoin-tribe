@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
@@ -305,7 +305,7 @@ function SettingsScreen({ navigation }) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+      paddingTop: 0,
     },
     headerWrapper: {
       marginVertical: hp(16),

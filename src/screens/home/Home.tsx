@@ -388,7 +388,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 0,
-      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+      paddingTop: 0,
     },
     headerWrapper: {
       margin: hp(16),
