@@ -581,16 +581,17 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const cm = ChatPeerManager.getInstance();
-    await cm.init(app.primarySeed);
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    const isWalletOnline = await RGBServices.initiate(
-      rgbWallet.mnemonic,
-      rgbWallet.accountXpubVanilla,
-      rgbWallet.accountXpubColored,
-      rgbWallet.masterFingerprint,
-    );
-    return { key, isWalletOnline };
+    // const cm = ChatPeerManager.getInstance();
+    // await cm.init(app.primarySeed);
+    // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    // const isWalletOnline = await RGBServices.initiate(
+    //   rgbWallet.mnemonic,
+    //   rgbWallet.accountXpubVanilla,
+    //   rgbWallet.accountXpubColored,
+    //   rgbWallet.masterFingerprint,
+    // );
+    return { key, isWalletOnline: false };
   }
 
   static async createPin(pin: string) {
@@ -622,15 +623,7 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-      const cm = ChatPeerManager.getInstance();
-      await cm.init(app.primarySeed);
-      const isWalletOnline = await RGBServices.initiate(
-        rgbWallet.mnemonic,
-        rgbWallet.accountXpubVanilla,
-        rgbWallet.accountXpubColored,
-        rgbWallet.masterFingerprint,
-      );
-      return { key, isWalletOnline };
+      return { key, isWalletOnline: false };
     } catch (error) {
       throw new Error('Invalid PIN');
     }
@@ -657,8 +650,8 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    return { key, isWalletOnline: false };
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    return { key, isWalletOnline: false };
     if (
       app.appType === AppType.NODE_CONNECT ||
       app.appType === AppType.SUPPORTED_RLN
