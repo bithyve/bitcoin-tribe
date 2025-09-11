@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import useRgbWallets from 'src/hooks/useRgbWallets';
-import RGBServices from 'src/services/rgb/RGBServices';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import LoadingSpinner from 'src/components/LoadingSpinner';
@@ -14,6 +13,7 @@ import { AppTheme } from 'src/theme';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import Share from 'react-native-share';
+import Toast from 'src/components/Toast';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -32,18 +32,60 @@ const ViewLogs = () => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [filePath, setFilePath] = useState('');
+  const [loadingProgress, setLoadingProgress] = useState('');
   const theme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   const readRgbLogs = useCallback(async () => {
     try {
-      const walletData = await RGBServices.getWalletData();
-      const logFile = `${walletData.dataDir}/${rgbWallet.masterFingerprint}/log`;
+      const logFile = `${wallets[0].rgbDir}/${rgbWallet.masterFingerprint}/log`;
       setFilePath(logFile);
-      const data = await RNFS.readFile(logFile);
-      setContent(data);
+      const fileExists = await RNFS.exists(logFile);
+      if (!fileExists) {
+        setContent('Log file not found');
+        return;
+      }
+      const fileStats = await RNFS.stat(logFile);
+      const fileSize = fileStats.size;
+
+      const CHUNK_SIZE = 1024 * 1024;
+      const MAX_DISPLAY_SIZE = 100 * 1024; // 100KB
+
+      if (fileSize > MAX_DISPLAY_SIZE) {
+        const startPosition = Math.max(0, fileSize - MAX_DISPLAY_SIZE);
+        const data = await RNFS.read(logFile, MAX_DISPLAY_SIZE, startPosition);
+        setContent(
+          `[Showing last ${Math.round(
+            MAX_DISPLAY_SIZE / 1024,
+          )}KB of ${Math.round(fileSize / 1024 / 1024)}MB file]\n\n${data}`,
+        );
+      } else if (fileSize > CHUNK_SIZE) {
+        let content = '';
+        let position = 0;
+
+        while (position < fileSize) {
+          const remainingBytes = fileSize - position;
+          const currentChunkSize = Math.min(CHUNK_SIZE, remainingBytes);
+
+          const chunk = await RNFS.read(logFile, currentChunkSize, position);
+          content += chunk;
+          position += currentChunkSize;
+          const progressPercent = Math.round((position / fileSize) * 100);
+          setLoadingProgress(`Loading... ${progressPercent}%`);
+
+          if (position % (CHUNK_SIZE * 2) === 0) {
+            setContent(content + `\n[${progressPercent}% loaded...]`);
+          }
+        }
+        setContent(content);
+        setLoadingProgress('');
+      } else {
+        const data = await RNFS.readFile(logFile);
+        setContent(data);
+      }
     } catch (error) {
+      Toast(`${error}`, true);
       console.error('Failed to read RGB logs:', error);
     } finally {
       setLoading(false);
@@ -58,7 +100,7 @@ const ViewLogs = () => {
     try {
       await Share.open({ url: filePath });
     } catch (error) {
-      console.error('Failed to share log file:', error);
+      console.log('Failed to share log file:', error);
     }
   }, [filePath]);
 
@@ -77,6 +119,11 @@ const ViewLogs = () => {
           style={styles.container}
           overScrollMode="never"
           bounces={false}>
+          {loadingProgress ? (
+            <AppText variant="caption" style={styles.text}>
+              {loadingProgress}
+            </AppText>
+          ) : null}
           <AppText selectable variant="caption" style={styles.text}>
             {content}
           </AppText>
