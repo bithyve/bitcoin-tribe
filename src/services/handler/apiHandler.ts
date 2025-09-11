@@ -1757,10 +1757,11 @@ export class ApiHandler {
           appName: appName,
           walletImage: response.imageUrl,
         });
+        return true;
       }
-      return true;
+      return false;
     } catch (error) {
-      throw error;
+      return false;
     }
   }
 

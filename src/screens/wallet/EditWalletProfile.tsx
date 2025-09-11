@@ -4,7 +4,6 @@ import { Keyboard } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
@@ -71,19 +70,24 @@ function EditWalletProfile({ navigation }) {
   };
 
   const updateWalletProfile = async (skipProfileImage = false) => {
-    setLoading(true);
-    Keyboard.dismiss();
-    const imageToSend = skipProfileImage ? null : profileImage;
-    const updated = await ApiHandler.updateProfile(app.id, name, imageToSend);
-    if (updated) {
-      setLoading(false);
-      Toast(wallet.profileUpdateMsg);
-      setTimeout(() => {
-        navigation.goBack();
-      }, 200);
-    } else {
-      setLoading(false);
-      Toast(wallet.profileUpdateErrMsg, true);
+    try {
+      setLoading(true);
+      Keyboard.dismiss();
+      const imageToSend = skipProfileImage ? null : profileImage;
+      const updated = await ApiHandler.updateProfile(app.id, name, imageToSend);
+      if (updated) {
+        setLoading(false);
+        Toast(wallet.profileUpdateMsg);
+        setTimeout(() => {
+          navigation.goBack();
+        }, 200);
+      } else {
+        setLoading(false);
+        Toast(wallet.profileUpdateErrMsg, true);
+      }
+    } catch (error) {
+      setLoading(true);
+      console.log(error)
     }
   };
 
