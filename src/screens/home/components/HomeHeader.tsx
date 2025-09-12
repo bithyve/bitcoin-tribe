@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -191,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
-      marginTop: Platform.OS === 'android' ? hp(5) : 0,
+      marginTop: 0,
     },
     contentWrapper: {
       flexDirection: 'row',
