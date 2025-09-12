@@ -48,26 +48,20 @@ function Splash({ navigation }) {
     try {
       const setupAppStatus = await Storage.get(Keys.SETUPAPP);
       const appId = await Storage.get(Keys.APPID);
-      if (
-        setupAppStatus ||
-        setupAppStatus === undefined ||
-        pinMethod === undefined
-      ) {
+      
+      if (appId && pinMethod !== PinMethod.DEFAULT) {
+        return navigation.replace(NavigationRoutes.LOGIN);
+      } else  {
         return navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
 
-      if (appId && pinMethod !== PinMethod.DEFAULT) {
-        return navigation.replace(NavigationRoutes.LOGIN);
-      }
     } catch (error) {
       console.error('Error initializing app: ', error);
     }
   }, [navigation, pinMethod, mutate]);
 
-  // Handle login success
-  const hasNavigated = useRef(false);
   useEffect(() => {
-    if (hasNavigated.current || !animationFinished) return;
+    if (!animationFinished) return;
     if (data) {
       if (!data?.key) {
         navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
@@ -78,14 +72,13 @@ function Splash({ navigation }) {
         setAppType(app.appType);
         navigation.replace(NavigationRoutes.APPSTACK);
       }
-      hasNavigated.current = true;
+      // hasNavigated.current = true;
     } else {
       onInit();
     }
   }, [data, animationFinished, navigation, setKey]);
 
   return (
-    <ScreenContainer style={styles.container}>
       <ImageBackground
         source={
           isThemeDark
@@ -103,10 +96,10 @@ function Splash({ navigation }) {
           autoPlay
           loop={false}
           style={styles.splashImageStyle}
+          onAnimationFailure={()=> setAnimationFinished(true)}
           onAnimationFinish={() => setAnimationFinished(true)}
         />
       </ImageBackground>
-    </ScreenContainer>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -122,6 +115,10 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      flex: 1,
+      paddingHorizontal: 0,
+      paddingBottom: 0,
+      paddingTop: 0,
     },
     splashImageStyle: {
       width: 400,
