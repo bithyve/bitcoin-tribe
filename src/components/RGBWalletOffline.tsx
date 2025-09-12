@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useMutation } from 'react-query';
@@ -25,8 +25,9 @@ const RGBWalletStatus = () => {
   const styles = getStyles(theme, hasNotch);
   const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
   const navigation = useNavigation();
+  const [retryAttempt, setretryAttempt] = useState(0);
 
-  const onPress = () => {
+  const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
       if (
         appType === AppType.NODE_CONNECT ||
@@ -35,13 +36,29 @@ const RGBWalletStatus = () => {
         navigation.navigate(NavigationRoutes.VIEWNODEINFO);
       } else {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
-        makeWalletOnline.mutate();
+        setTimeout(() => {
+          setretryAttempt(retryAttempt + 1);
+          makeWalletOnline.mutate();
+        }, 1000);
       }
     }
-  };
+  }, [
+    isWalletOnline,
+    appType,
+    navigation,
+    setIsWalletOnline,
+    makeWalletOnline,
+    retryAttempt,
+  ]);
+
+  const getRetryMessage = useMemo(() => {
+    return retryAttempt === 0
+      ? 'Getting RGB Wallet Online'
+      : `Getting RGB Wallet Online (Attempt: ${retryAttempt})`;
+  }, [retryAttempt]);
 
   useEffect(() => {
-    if(appType) {
+    if (appType) {
       setIsWalletOnline(
         makeWalletOnline.data
           ? WalletOnlineStatus.Online
@@ -62,7 +79,7 @@ const RGBWalletStatus = () => {
     </AppTouchable>
   ) : isWalletOnline === WalletOnlineStatus.InProgress ? (
     <AppTouchable style={styles.container} disabled>
-      <AppText style={styles.text}>Making RGB Wallet Online</AppText>
+      <AppText style={styles.text}>{getRetryMessage}</AppText>
     </AppTouchable>
   ) : null;
 };
