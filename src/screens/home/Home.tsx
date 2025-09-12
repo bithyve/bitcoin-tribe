@@ -60,7 +60,7 @@ function HomeScreen() {
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
-  const [walletOnline, setWalletOnline] = useState(false)
+  const [walletOnline, setWalletOnline] = useState(false);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const latestVersion = useQuery<VersionHistory>(
     RealmSchema.VersionHistory,
@@ -134,18 +134,23 @@ function HomeScreen() {
     const initializeWalletOnline = async () => {
       try {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
-        const status = await ApiHandler.makeWalletOnline();
-        console.log(status)
-        setWalletOnline(status);
+        const response = await ApiHandler.makeWalletOnline();
+        setWalletOnline(response.status);
         setIsWalletOnline(
-          status ? WalletOnlineStatus.Online : WalletOnlineStatus.Error,
+          response.status ? WalletOnlineStatus.Online : WalletOnlineStatus.Error,
         );
+        if(response.error) {
+          Toast(response.error, true);
+        }
+        if(response.status) {
+          refreshRgbWallet.mutate();
+        }
       } catch (error) {
         console.error('Failed to make wallet online:', error);
         setIsWalletOnline(WalletOnlineStatus.Error);
       }
     };
-    if(!walletOnline) {
+    if (!walletOnline) {
       initializeWalletOnline();
     }
   }, []);
@@ -240,7 +245,9 @@ function HomeScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      refreshRgbWallet.mutate();
+      if (walletOnline) {
+        refreshRgbWallet.mutate();
+      }
     });
     return unsubscribe;
   }, [navigation]);
@@ -267,12 +274,14 @@ function HomeScreen() {
         { cancelable: false },
       );
     }
-    fetchUTXOs();
     setAppType(app?.appType);
     refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
     ApiHandler.syncFcmToken();
+    if (walletOnline) {
+      fetchUTXOs();
+    }
   }, [app?.appType]);
 
   const handleNavigation = (route, params?) => {
@@ -280,7 +289,7 @@ function HomeScreen() {
   };
 
   const handleRefresh = () => {
-    if (isBackupInProgress || isBackupDone) {
+    if (isBackupInProgress || isBackupDone || !walletOnline) {
       return;
     }
     setRefreshing(true);

@@ -675,7 +675,10 @@ export class ApiHandler {
     }
   }
 
-  static async makeWalletOnline(): Promise<boolean> {
+  static async makeWalletOnline(): Promise<{
+    status: boolean;
+    error: string;
+  }> {
     try {
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
@@ -687,9 +690,15 @@ export class ApiHandler {
       ) {
         const nodeInfo = await ApiHandler.api.nodeinfo();
         if (nodeInfo.pubkey) {
-          return true;
+          return {
+            status: true,
+            error: '',
+          };
         } else {
-          return false;
+          return {
+            status: false,
+            error: 'Node not found',
+          };
         }
       } else {
         const isWalletOnline = await RGBServices.initiate(
@@ -698,14 +707,17 @@ export class ApiHandler {
           rgbWallet.accountXpubColored,
           rgbWallet.masterFingerprint,
         );
-        console.log('isWalletOnline', isWalletOnline);
+        console.log('isWalletOnline', isWalletOnline, typeof isWalletOnline);
         // const cm = ChatPeerManager.getInstance();
         // await cm.init(app.primarySeed);
-        return isWalletOnline === true;
+        return isWalletOnline;
       }
     } catch (error) {
       console.log(error);
-      return false;
+      return {
+        status: false,
+        error: `${error}`,
+      };
     }
   }
 

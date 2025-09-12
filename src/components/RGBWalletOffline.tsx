@@ -15,6 +15,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
+import Toast from './Toast';
 
 const RGBWalletStatus = () => {
   const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext);
@@ -58,14 +59,18 @@ const RGBWalletStatus = () => {
   }, [retryAttempt]);
 
   useEffect(() => {
-    if (appType) {
+    console.log(' makeWalletOnline.data?.status', makeWalletOnline.data)
+    if (appType && makeWalletOnline.data?.status !== undefined) {
       setIsWalletOnline(
-        makeWalletOnline.data
+        makeWalletOnline.data?.status
           ? WalletOnlineStatus.Online
           : WalletOnlineStatus.Error,
       );
+      if(makeWalletOnline.data?.error) {
+        Toast(makeWalletOnline.data?.error, true);
+      }
     }
-  }, [makeWalletOnline.data]);
+  }, [makeWalletOnline.data?.status, appType]);
 
   const msg = useMemo(() => {
     return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN

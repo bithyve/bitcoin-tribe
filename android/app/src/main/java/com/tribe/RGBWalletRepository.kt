@@ -1,6 +1,7 @@
 package com.bithyve.tribe
 
 import android.util.Log
+import com.google.gson.JsonObject
 import org.rgbtools.AssetSchema
 import org.rgbtools.BitcoinNetwork
 import org.rgbtools.DatabaseType
@@ -38,10 +39,15 @@ object RGBWalletRepository {
             )
             wallet = Wallet(walletData)
             online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))
-            return "true"
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("status", true)
+            return jsonObject.toString()
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)
-            return "false"
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("status", false)
+            jsonObject.addProperty("error", e.message)
+            return jsonObject.toString()
         }
     }
 
