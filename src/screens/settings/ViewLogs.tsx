@@ -14,6 +14,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import Share from 'react-native-share';
 import Toast from 'src/components/Toast';
+import RGBServices from 'src/services/rgb/RGBServices';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -39,13 +40,15 @@ const ViewLogs = () => {
 
   const readRgbLogs = useCallback(async () => {
     try {
-      const logFile = `${wallets[0].rgbDir}/${rgbWallet.masterFingerprint}/log`;
-      setFilePath(logFile);
+      const rgbDir = await RGBServices.getRgbDir();
+      const logFile = `${rgbDir.dir.replace('file://', '')
+      }/${rgbWallet.masterFingerprint}/log`;
       const fileExists = await RNFS.exists(logFile);
       if (!fileExists) {
         setContent('Log file not found');
         return;
       }
+      setFilePath(logFile);
       const fileStats = await RNFS.stat(logFile);
       const fileSize = fileStats.size;
 
@@ -98,7 +101,14 @@ const ViewLogs = () => {
 
   const handleShare = useCallback(async () => {
     try {
-      await Share.open({ url: filePath });
+      if (!filePath) return;
+      await Share.open({
+        url: `file://${filePath}`,
+        type: 'text/plain',
+        title: 'RGB Logs',
+        subject: 'RGB Logs',
+        message: 'RGB Logs file',
+      });
     } catch (error) {
       console.log('Failed to share log file:', error);
     }

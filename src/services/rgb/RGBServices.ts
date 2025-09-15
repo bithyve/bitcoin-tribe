@@ -25,6 +25,14 @@ export default class RGBServices {
     return address;
   };
 
+  static getRgbDir = async (): Promise<{
+    dir?: string,
+    error?: string,
+  }> => {
+    const address = await RGB.getRgbDir();
+    return JSON.parse(address);
+  };
+
   static createUtxosBegin = async (
     upTo: boolean,
     num: Number,
