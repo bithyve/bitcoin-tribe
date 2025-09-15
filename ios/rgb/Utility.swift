@@ -32,25 +32,9 @@ struct Utility{
       let documentsDirectory = paths[0]
       return documentsDirectory
   }
-  
-  static func getBdkDir()->URL?{
-    let dir = getDocumentsDirectory().appendingPathComponent(Constants.bdkDirName)
-    do{
-      try FileManager.default.createDirectory(atPath: dir.path, withIntermediateDirectories: true)
-      return dir
-    }catch{
-      return nil
-    }
-  }
-  
-  static func getBdkDbPath()->String{
-    let dbPath = getBdkDir()!.appendingPathComponent("bdk_db")
-    FileManager.default.createFile(atPath:dbPath.path , contents: nil)
-    return dbPath.path
-  }
-  
+    
   static func getRgbDir()->URL?{
-    let dir = getDocumentsDirectory().appendingPathComponent(Constants.rgbDirName)
+    let dir = getDocumentsDirectory().appendingPathComponent(Constants.shared.rgbDirName)
     do{
       try FileManager.default.createDirectory(atPath: dir.path, withIntermediateDirectories: true)
       return dir
@@ -60,7 +44,7 @@ struct Utility{
   }
   
   static func getBackupPath(fileName: String)->URL?{
-    let dir = getDocumentsDirectory().appendingPathComponent(String(format: Constants.backupName, fileName))
+    let dir = getDocumentsDirectory().appendingPathComponent(String(format: Constants.shared.backupName, fileName))
     do{
       if(FileManager.default.fileExists(atPath: dir.path)) {
         try FileManager.default.removeItem(atPath: dir.path)
