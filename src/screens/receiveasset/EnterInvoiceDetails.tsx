@@ -46,6 +46,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     footerWrapper: {
       height: '25%',
       paddingBottom: hp(20),
+      marginTop: 40
     },
     contentStyle: {
       borderRadius: 0,
