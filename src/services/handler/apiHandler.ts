@@ -508,11 +508,11 @@ export class ApiHandler {
       const backup = await Relay.getBackup(publicId.toLowerCase());
       if (backup.node) {
         ApiHandler.setupNewApp({
-          appName: '',
+          appName: backup?.app?.name || '',
           appType: AppType.SUPPORTED_RLN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: backup?.app?.imageUrl || '',
           rgbNodeConnectParams: {
             authentication: backup.token,
             nodeUrl: backup.apiUrl,
@@ -531,11 +531,11 @@ export class ApiHandler {
         });
         const restore = await RGBServices.restore(mnemonic, path);
         await ApiHandler.setupNewApp({
-          appName: '',
+          appName: backup?.app?.name || '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: backup?.app?.imageUrl || '',
           mnemonic: mnemonic,
         });
         dbManager.updateObjectByPrimaryId(

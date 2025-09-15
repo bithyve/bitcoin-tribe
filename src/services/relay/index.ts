@@ -706,6 +706,15 @@ export default class Relay {
     apiUrl?: string;
     peerDNS?: string;
     file?: string;
+    app?: {
+      name: string;
+      appID: string;
+      publicId: string;
+      appType: string;
+      network: string;
+      authToken: string;
+      imageUrl: string;
+    }
   }> => {
     try {
       let res;
