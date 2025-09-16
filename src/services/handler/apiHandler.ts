@@ -49,6 +49,7 @@ import {
   Asset,
   Coin,
   Collectible,
+  InvoiceType,
   IssuerVerificationMethod,
   NodeInfo,
   RgbNodeConnectParams,
@@ -507,11 +508,11 @@ export class ApiHandler {
       const backup = await Relay.getBackup(publicId.toLowerCase());
       if (backup.node) {
         ApiHandler.setupNewApp({
-          appName: '',
+          appName: backup?.app?.name || '',
           appType: AppType.SUPPORTED_RLN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: backup?.app?.imageUrl || '',
           rgbNodeConnectParams: {
             authentication: backup.token,
             nodeUrl: backup.apiUrl,
@@ -530,11 +531,11 @@ export class ApiHandler {
         });
         const restore = await RGBServices.restore(mnemonic, path);
         await ApiHandler.setupNewApp({
-          appName: '',
+          appName: backup?.app?.name || '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: backup?.app?.imageUrl || '',
           mnemonic: mnemonic,
         });
         dbManager.updateObjectByPrimaryId(
@@ -580,16 +581,17 @@ export class ApiHandler {
     const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
       RealmSchema.RgbWallet,
     );
-    const cm = ChatPeerManager.getInstance();
-    await cm.init(app.primarySeed);
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    const isWalletOnline = await RGBServices.initiate(
-      rgbWallet.mnemonic,
-      rgbWallet.accountXpubVanilla,
-      rgbWallet.accountXpubColored,
-      rgbWallet.masterFingerprint,
-    );
-    return { key, isWalletOnline };
+    // const cm = ChatPeerManager.getInstance();
+    // await cm.init(app.primarySeed);
+    // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    // const isWalletOnline = await RGBServices.initiate(
+    //   rgbWallet.mnemonic,
+    //   rgbWallet.accountXpubVanilla,
+    //   rgbWallet.accountXpubColored,
+    //   rgbWallet.masterFingerprint,
+    // );
+    return { key, isWalletOnline: false };
   }
 
   static async createPin(pin: string) {
@@ -621,15 +623,7 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-      const cm = ChatPeerManager.getInstance();
-      await cm.init(app.primarySeed);
-      const isWalletOnline = await RGBServices.initiate(
-        rgbWallet.mnemonic,
-        rgbWallet.accountXpubVanilla,
-        rgbWallet.accountXpubColored,
-        rgbWallet.masterFingerprint,
-      );
-      return { key, isWalletOnline };
+      return { key, isWalletOnline: false };
     } catch (error) {
       throw new Error('Invalid PIN');
     }
@@ -657,6 +651,7 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    return { key, isWalletOnline: false };
     if (
       app.appType === AppType.NODE_CONNECT ||
       app.appType === AppType.SUPPORTED_RLN
@@ -677,6 +672,52 @@ export class ApiHandler {
       // const cm = ChatPeerManager.getInstance();
       // await cm.init(app.primarySeed);
       return { key, isWalletOnline };
+    }
+  }
+
+  static async makeWalletOnline(): Promise<{
+    status: boolean;
+    error: string;
+  }> {
+    try {
+      const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+      const rgbWallet: RGBWallet = await dbManager.getObjectByIndex(
+        RealmSchema.RgbWallet,
+      );
+      if (
+        app.appType === AppType.NODE_CONNECT ||
+        app.appType === AppType.SUPPORTED_RLN
+      ) {
+        const nodeInfo = await ApiHandler.api.nodeinfo();
+        if (nodeInfo.pubkey) {
+          return {
+            status: true,
+            error: '',
+          };
+        } else {
+          return {
+            status: false,
+            error: 'Node not found',
+          };
+        }
+      } else {
+        const isWalletOnline = await RGBServices.initiate(
+          rgbWallet.mnemonic,
+          rgbWallet.accountXpubVanilla,
+          rgbWallet.accountXpubColored,
+          rgbWallet.masterFingerprint,
+        );
+        console.log('isWalletOnline', isWalletOnline, typeof isWalletOnline);
+        // const cm = ChatPeerManager.getInstance();
+        // await cm.init(app.primarySeed);
+        return isWalletOnline;
+      }
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        error: `${error}`,
+      };
     }
   }
 
@@ -1721,10 +1762,11 @@ export class ApiHandler {
           appName: appName,
           walletImage: response.imageUrl,
         });
+        return true;
       }
-      return true;
+      return false;
     } catch (error) {
-      throw error;
+      return false;
     }
   }
 
@@ -2661,26 +2703,39 @@ export class ApiHandler {
         RealmSchema.TribeApp,
       ) as TribeApp;
 
-      const isEligible = await Relay.isEligibleForCampaign(app.authToken, campaignId);
+      const isEligible = await Relay.isEligibleForCampaign(
+        app.authToken,
+        campaignId,
+      );
       if (!isEligible.status) {
         return {
           claimed: false,
           error: isEligible.message,
         };
       }
-      
       const isBlinded = mode === 'BLINDED';
-      const expiryTime = 60 * 60 * 24 * 2;
-      
-      const invoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+      const expiryTime = 60 * 60 * 24 * 3;
+
+      const invoice = await this.tryClaimWithInvoice(
+        app,
+        campaignId,
+        isBlinded,
+        expiryTime,
+      );
       if (invoice.claimed) return invoice;
-      
       if (invoice.error === 'Insufficient sats for RGB') {
         const utxos = await ApiHandler.createUtxos();
         if (utxos) {
           await this.refreshRgbWallet();
-          await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)));
-          const retryInvoice = await this.tryClaimWithInvoice(app, campaignId, isBlinded, expiryTime);
+          await Promise.resolve(
+            new Promise(resolve => setTimeout(resolve, 1000)),
+          );
+          const retryInvoice = await this.tryClaimWithInvoice(
+            app,
+            campaignId,
+            isBlinded,
+            expiryTime,
+          );
           if (retryInvoice.claimed) return retryInvoice;
         }
         return {
@@ -2702,7 +2757,7 @@ export class ApiHandler {
     app: TribeApp,
     campaignId: string,
     isBlinded: boolean,
-    expiryTime: number
+    expiryTime: number,
   ) {
     const receiveData = await RGBServices.receiveAsset(
       ApiHandler.appType,
@@ -2711,12 +2766,15 @@ export class ApiHandler {
       0,
       expiryTime,
       isBlinded,
-    );    
+    );
     if (receiveData.invoice) {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
-      const invoices = [...rgbWallet?.invoices, receiveData];
+      const invoices = [
+        ...rgbWallet?.invoices,
+        { ...receiveData, type: InvoiceType.Campaign },
+      ];
       dbManager.updateObjectByPrimaryId(
         RealmSchema.RgbWallet,
         'mnemonic',

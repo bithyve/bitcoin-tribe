@@ -5,7 +5,11 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
-import { RgbInvoice, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  InvoiceType,
+  RgbInvoice,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
 import moment from 'moment';
@@ -88,11 +92,13 @@ const ListItem = ({
             )}
           </AppText>
         </View>
-        <AppTouchable onPress={handleCancel}>
-          <AppText variant="body2" style={styles.deleteText}>
-            Cancel Invoice
-          </AppText>
-        </AppTouchable>
+        {invoice.type === InvoiceType.Default && (
+          <AppTouchable onPress={handleCancel}>
+            <AppText variant="body2" style={styles.deleteText}>
+              Cancel Invoice
+            </AppText>
+          </AppTouchable>
+        )}
       </GradientView>
     </AppTouchable>
   );

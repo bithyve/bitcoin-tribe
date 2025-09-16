@@ -25,6 +25,14 @@ export default class RGBServices {
     return address;
   };
 
+  static getRgbDir = async (): Promise<{
+    dir?: string,
+    error?: string,
+  }> => {
+    const address = await RGB.getRgbDir();
+    return JSON.parse(address);
+  };
+
   static createUtxosBegin = async (
     upTo: boolean,
     num: Number,
@@ -88,7 +96,10 @@ export default class RGBServices {
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
-  ): Promise<string> => {
+  ): Promise<{
+    status: boolean;
+    error: string;
+  }> => {
     try {
       const data = await RGB.initiate(
         this.NETWORK,
@@ -99,7 +110,10 @@ export default class RGBServices {
       );
       return JSON.parse(data);
     } catch (error) {
-      return `${error}`;
+      return {
+        status: false,
+        error: `${error}`,
+      };
     }
   };
 
