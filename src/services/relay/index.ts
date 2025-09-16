@@ -197,12 +197,7 @@ export default class Relay {
       });
     } catch (err) {
       console.log(err, err.response.data);
-      if (err.response) {
-        throw new Error(err.response.data.err);
-      }
-      if (err.code) {
-        throw new Error(err.code);
-      }
+      throw err;
     }
     return res.data || res.json;
   };
@@ -711,6 +706,15 @@ export default class Relay {
     apiUrl?: string;
     peerDNS?: string;
     file?: string;
+    app?: {
+      name: string;
+      appID: string;
+      publicId: string;
+      appType: string;
+      network: string;
+      authToken: string;
+      imageUrl: string;
+    }
   }> => {
     try {
       let res;

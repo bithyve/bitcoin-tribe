@@ -37,6 +37,7 @@ import {
   AssetType,
   AssetVisibility,
   Coin,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
@@ -59,7 +60,7 @@ function HomeScreen() {
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
-
+  const [walletOnline, setWalletOnline] = useState(false);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const latestVersion = useQuery<VersionHistory>(
     RealmSchema.VersionHistory,
@@ -77,6 +78,7 @@ function HomeScreen() {
     isNodeInitInProgress,
     setNodeInitStatus,
     setNodeConnected,
+    setIsWalletOnline,
   } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -99,7 +101,9 @@ function HomeScreen() {
       authToken: string;
     }) => ApiHandler.startNode(nodeId, authToken),
   });
-  const { mutate: listPaymentsMutate } = useMutation(ApiHandler.getAssetTransactions);
+  const { mutate: listPaymentsMutate } = useMutation(
+    ApiHandler.getAssetTransactions,
+  );
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
   const [refreshing, setRefreshing] = useState(false);
   const refreshWallet = useMutation(ApiHandler.refreshWallets);
@@ -124,6 +128,31 @@ function HomeScreen() {
 
   useEffect(() => {
     ApiHandler.fetchPresetAssets();
+  }, []);
+
+  useEffect(() => {
+    const initializeWalletOnline = async () => {
+      try {
+        setIsWalletOnline(WalletOnlineStatus.InProgress);
+        const response = await ApiHandler.makeWalletOnline();
+        setWalletOnline(response.status);
+        setIsWalletOnline(
+          response.status ? WalletOnlineStatus.Online : WalletOnlineStatus.Error,
+        );
+        if(response.error) {
+          Toast(response.error, true);
+        }
+        if(response.status) {
+          refreshRgbWallet.mutate();
+        }
+      } catch (error) {
+        console.error('Failed to make wallet online:', error);
+        setIsWalletOnline(WalletOnlineStatus.Error);
+      }
+    };
+    if (!walletOnline) {
+      initializeWalletOnline();
+    }
   }, []);
 
   useEffect(() => {
@@ -216,7 +245,9 @@ function HomeScreen() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      refreshRgbWallet.mutate();
+      if (walletOnline) {
+        refreshRgbWallet.mutate();
+      }
     });
     return unsubscribe;
   }, [navigation]);
@@ -243,12 +274,14 @@ function HomeScreen() {
         { cancelable: false },
       );
     }
-    fetchUTXOs();
     setAppType(app?.appType);
     refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
     ApiHandler.syncFcmToken();
+    if (walletOnline) {
+      fetchUTXOs();
+    }
   }, [app?.appType]);
 
   const handleNavigation = (route, params?) => {
@@ -256,7 +289,7 @@ function HomeScreen() {
   };
 
   const handleRefresh = () => {
-    if (isBackupInProgress || isBackupDone) {
+    if (isBackupInProgress || isBackupDone || !walletOnline) {
       return;
     }
     setRefreshing(true);
@@ -306,7 +339,7 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader showBalance={!defaultCoin} showScanner={true}/>
+        <HomeHeader showBalance={!defaultCoin} showScanner={true} />
       </View>
       {defaultCoin ? (
         <ScrollView
@@ -364,7 +397,7 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 0,
-      paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+      paddingTop: 0,
     },
     headerWrapper: {
       margin: hp(16),

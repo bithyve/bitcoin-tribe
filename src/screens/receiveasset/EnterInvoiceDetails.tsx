@@ -32,6 +32,7 @@ import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -44,8 +45,8 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     },
     footerWrapper: {
       height: '25%',
-      justifyContent: 'flex-end',
       paddingBottom: hp(20),
+      marginTop: 40
     },
     contentStyle: {
       borderRadius: 0,
@@ -114,12 +115,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
   const { invoiceAssetId, chosenAsset } = useRoute().params;
-  const {
-    receciveScreen,
-    common,
-    assets,
-    home,
-  } = translations;
+  const { receciveScreen, common, assets, home } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -128,9 +124,7 @@ const EnterInvoiceDetails = () => {
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
   const [inputHeight, setInputHeight] = useState(50);
-  const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(
-    Keys.INVOICE_EXPIRY,
-  );
+  const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(Keys.INVOICE_EXPIRY);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(
     chosenAsset || null,
   );
@@ -195,7 +189,12 @@ const EnterInvoiceDetails = () => {
     navigation.navigate(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
-      amount: amount !== '' ? selectedAsset?.precision === 0 ? amount : Number(amount) * 10 ** selectedAsset?.precision : '',
+      amount:
+        amount !== ''
+          ? selectedAsset?.precision === 0
+            ? amount
+            : Number(amount) * 10 ** selectedAsset?.precision
+          : '',
       selectedType,
       invoiceExpiry,
     });
@@ -206,7 +205,9 @@ const EnterInvoiceDetails = () => {
     if (selectedAsset?.precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
-      regex = new RegExp(`^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`);
+      regex = new RegExp(
+        `^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`,
+      );
     }
     if (text === '' || regex.test(text)) {
       setAmount(text);
@@ -222,103 +223,110 @@ const EnterInvoiceDetails = () => {
         }
         enableBack={true}
       />
-      {app.appType !== AppType.ON_CHAIN && (
-        <View>
+      <KeyboardAwareScrollView
+        overScrollMode="never"
+        bounces={false}
+        keyboardOpeningTime={0}>
+        {app.appType !== AppType.ON_CHAIN && (
           <View>
-            <AppText variant="heading3" style={styles.chooseInvoiceType}>
-              {receciveScreen.chooseInvoiceType}
-            </AppText>
-          </View>
-          <View style={styles.wrapper}>
-            <View style={styles.radioBtnWrapper}>
-              <RadioButton.Android
-                color={theme.colors.accent1}
-                uncheckedColor={theme.colors.headingColor}
-                value={'bitcoin'}
-                status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
-                onPress={() => setSelectedType('bitcoin')}
-              />
-              <View style={styles.typeViewWrapper}>
-                <AppText variant="body2" style={styles.feePriorityText}>
-                  {receciveScreen.onchain}
-                </AppText>
-              </View>
-            </View>
-            <View style={styles.radioBtnWrapper}>
-              <RadioButton.Android
-                color={theme.colors.accent1}
-                uncheckedColor={theme.colors.headingColor}
-                value={'lightning'}
-                status={selectedType === 'lightning' ? 'checked' : 'unchecked'}
-                onPress={() => setSelectedType('lightning')}
-              />
-              <View style={styles.typeViewWrapper}>
-                <AppText variant="body2" style={styles.feePriorityText}>
-                  {receciveScreen.lightning}
-                </AppText>
-              </View>
-            </View>
-          </View>
-        </View>
-      )}
-      <View style={styles.bodyWrapper}>
-        <SelectYourAsset
-          selectedAsset={selectedAsset}
-          onPress={() => {
-            setAssetsDropdown(true);
-          }}
-        />
-        <TextField
-          value={amount}
-          onChangeText={handleAmountInputChange}
-          placeholder={assets.amount}
-          style={styles.input}
-          keyboardType="numeric"
-        />
-        <InvoiceExpirySlider
-          value={invoiceExpiry}
-          onValueChange={setInvoiceExpiry}
-        />
-      </View>
-      <View style={styles.footerWrapper}>
-        {colorable.length === 0 ? (
-          <View style={styles.reservedSatsWrapper}>
-            <View style={styles.checkIconWrapper}>
-              {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
-            </View>
-            <View style={styles.reservedSatsWrapper1}>
-              <AppText variant="body2" style={styles.reservedSatsText}>
-                {assets.reservedSats}
+            <View>
+              <AppText variant="heading3" style={styles.chooseInvoiceType}>
+                {receciveScreen.chooseInvoiceType}
               </AppText>
             </View>
+            <View style={styles.wrapper}>
+              <View style={styles.radioBtnWrapper}>
+                <RadioButton.Android
+                  color={theme.colors.accent1}
+                  uncheckedColor={theme.colors.headingColor}
+                  value={'bitcoin'}
+                  status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
+                  onPress={() => setSelectedType('bitcoin')}
+                />
+                <View style={styles.typeViewWrapper}>
+                  <AppText variant="body2" style={styles.feePriorityText}>
+                    {receciveScreen.onchain}
+                  </AppText>
+                </View>
+              </View>
+              <View style={styles.radioBtnWrapper}>
+                <RadioButton.Android
+                  color={theme.colors.accent1}
+                  uncheckedColor={theme.colors.headingColor}
+                  value={'lightning'}
+                  status={
+                    selectedType === 'lightning' ? 'checked' : 'unchecked'
+                  }
+                  onPress={() => setSelectedType('lightning')}
+                />
+                <View style={styles.typeViewWrapper}>
+                  <AppText variant="body2" style={styles.feePriorityText}>
+                    {receciveScreen.lightning}
+                  </AppText>
+                </View>
+              </View>
+            </View>
           </View>
-        ) : null}
-        <Buttons
-          primaryTitle={common.proceed}
-          primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-          width={'100%'}
-        />
-      </View>
-      {assetsDropdown && (
-        <RGBAssetList
-          style={styles.assetsDropdownContainer}
-          assets={data?.records ? data?.records : assetsData}
-          callback={item => {
-            Keyboard.dismiss();
-            setSelectedAsset(item || item?.asset);
-            setAssetsDropdown(false);
-            setAssetId(item?.assetId || item?.asset?.assetId);
-            setAmount('');
-          }}
-          searchAssetInput={searchAssetInput}
-          onChangeSearchInput={(text: string) => {
-            setSearchAssetInput(text);
-          }}
-          selectedAsset={selectedAsset || selectedAsset?.asset}
-          onDissmiss={() => setAssetsDropdown(false)}
-          isLoading={isLoading}
-        />
-      )}
+        )}
+        <View style={styles.bodyWrapper}>
+          <SelectYourAsset
+            selectedAsset={selectedAsset}
+            onPress={() => {
+              setAssetsDropdown(true);
+            }}
+          />
+          <TextField
+            value={amount}
+            onChangeText={handleAmountInputChange}
+            placeholder={assets.amount}
+            style={styles.input}
+            keyboardType="numeric"
+          />
+          <InvoiceExpirySlider
+            value={invoiceExpiry}
+            onValueChange={setInvoiceExpiry}
+          />
+        </View>
+        <View style={styles.footerWrapper}>
+          {colorable.length === 0 ? (
+            <View style={styles.reservedSatsWrapper}>
+              <View style={styles.checkIconWrapper}>
+                {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
+              </View>
+              <View style={styles.reservedSatsWrapper1}>
+                <AppText variant="body2" style={styles.reservedSatsText}>
+                  {assets.reservedSats}
+                </AppText>
+              </View>
+            </View>
+          ) : null}
+          <Buttons
+            primaryTitle={common.proceed}
+            primaryOnPress={() => validateAndNavigateToReceiveAsset()}
+            width={'100%'}
+          />
+        </View>
+        {assetsDropdown && (
+          <RGBAssetList
+            style={styles.assetsDropdownContainer}
+            assets={data?.records ? data?.records : assetsData}
+            callback={item => {
+              Keyboard.dismiss();
+              setSelectedAsset(item || item?.asset);
+              setAssetsDropdown(false);
+              setAssetId(item?.assetId || item?.asset?.assetId);
+              setAmount('');
+            }}
+            searchAssetInput={searchAssetInput}
+            onChangeSearchInput={(text: string) => {
+              setSearchAssetInput(text);
+            }}
+            selectedAsset={selectedAsset || selectedAsset?.asset}
+            onDissmiss={() => setAssetsDropdown(false)}
+            isLoading={isLoading}
+          />
+        )}
+      </KeyboardAwareScrollView>
     </ScreenContainer>
   );
 };
