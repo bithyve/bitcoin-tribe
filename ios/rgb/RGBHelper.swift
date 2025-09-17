@@ -703,10 +703,11 @@ import CloudKit
     callback(response)
   }
   
-  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) {
+  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) async {
       do {
           self.rgbManager = RgbManager.shared
-          let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        let response = try runWithTimeout(seconds: 30){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        }
           
           if response.status {
 //              if let logPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("log"),
@@ -721,25 +722,22 @@ import CloudKit
               let json = Utility.convertToJSONString(params: data)
               callback(json)
           } else {
-              let errorStrings = ["bincode", "error from bdk"]
+            let errorStrings = ["unreleased lock file", "bincode", "error from bdk", "timeout"]
               let containsAny = errorStrings.contains { response.error.contains($0) }
               
-//              if containsAny {
-//                  if let dbPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("bdk_db"),
-//                     FileManager.default.fileExists(atPath: dbPath.path) {
-//                      try FileManager.default.removeItem(at: dbPath)
-//                      
-//                      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
-//                      
-//                      let data: [String: Any] = [
-//                          "status": retryResponse.status,
-//                          "error": retryResponse.error
-//                      ]
-//                      let json = Utility.convertToJSONString(params: data)
-//                      callback(json)
-//                      return
-//                  }
-//              }
+              if containsAny {
+                deleteRuntimeLockPath(masterFingerprint: masterFingerprint)
+                
+              let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+                
+                let data: [String: Any] = [
+                    "status": retryResponse.status,
+                    "error": retryResponse.error
+                ]
+                let json = Utility.convertToJSONString(params: data)
+                callback(json)
+                return
+              }
               
               let data: [String: Any] = [
                   "status": false,
@@ -748,12 +746,43 @@ import CloudKit
               let json = Utility.convertToJSONString(params: data)
               callback(json)
           }
-      } catch {
+      } catch TimeoutError.timedOut {
+        deleteRuntimeLockPath(masterFingerprint: masterFingerprint)
+      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        
+        let data: [String: Any] = [
+            "status": retryResponse.status,
+            "error": retryResponse.error
+        ]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+    } catch {
           let errorData = ["error": error.localizedDescription]
           let json = Utility.convertToJSONString(params: errorData)
           callback(json)
       }
   }
+  
+  func deleteRuntimeLockPath(masterFingerprint: String) {
+      guard let runtimeLockPath = Utility.getRgbDir()?
+          .appendingPathComponent(masterFingerprint)
+          .appendingPathComponent("rgb_runtime.lock") else {
+          print("Could not construct runtime lock path for fingerprint: \(masterFingerprint)")
+          return
+      }
+      guard FileManager.default.fileExists(atPath: runtimeLockPath.path) else {
+          print("No runtime lock file exists at path.")
+          return
+      }
+      do {
+          print("Deleting runtime lock at: \(runtimeLockPath.path)")
+          try FileManager.default.removeItem(at: runtimeLockPath)
+          print("Runtime lock deleted successfully.")
+      } catch {
+          print("Failed to delete runtime lock: \(error)")
+      }
+  }
+
 
   
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
