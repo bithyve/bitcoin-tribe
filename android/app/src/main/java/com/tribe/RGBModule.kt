@@ -664,6 +664,23 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
         }
     }
 
+    @ReactMethod
+    fun getRgbDir(promise: Promise){
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                val dir = AppConstants.rgbDir.absolutePath
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("dir", dir)
+                promise.resolve(jsonObject.toString())
+            } catch (e: Exception) {
+                Log.e(TAG, "resetData failed: ${e.message}", e)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", e.message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
     fun cleanup() {
         coroutineScope.cancel()
     }

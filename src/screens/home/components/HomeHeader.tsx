@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery } from '@realm/react';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
 import IconScannerLight from 'src/assets/images/icon_scanner_light.svg';
 import IconRegistry from 'src/assets/images/ic_registry.svg';
+import IconInfo from 'src/assets/images/ic_info.svg';
+import IconInfoLight from 'src/assets/images/ic_info_light.svg';
 import IconRegistryLight from 'src/assets/images/ic_registry_light.svg';
 import IconWrapper from 'src/components/IconWrapper';
 import AppTouchable from 'src/components/AppTouchable';
@@ -30,10 +32,9 @@ import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
-import SearchIcon from 'src/assets/images/search.svg';
-import SearchIconLight from 'src/assets/images/ic_search_light.svg';
 import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
 import AddContactIcon from 'src/assets/images/addcontact.svg';
+import openLink from 'src/utils/OpenLink';
 
 function HomeHeader({
   showBalance = true,
@@ -160,8 +161,8 @@ function HomeHeader({
             </IconWrapper>
           )}
           {showSearch && (
-            <IconWrapper onPress={() => {}}>
-              {isThemeDark ? <SearchIcon /> : <SearchIconLight />}
+            <IconWrapper onPress={() => openLink('https://bitcointribe.app/')}>
+              {isThemeDark ? <IconInfo /> : <IconInfoLight />}
             </IconWrapper>
           )}
           {showAdd && (
@@ -190,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
-      marginTop: Platform.OS === 'android' ? hp(5) : 0,
+      marginTop: 0,
     },
     contentWrapper: {
       flexDirection: 'row',

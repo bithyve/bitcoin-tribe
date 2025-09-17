@@ -46,10 +46,6 @@ function SettingMenuItem({
       contentContainerStyle={styles.content}
       style={styles.scrollingWrapper}>
       <SettingSectionList
-        data={WalletMgtMenu}
-        sectionTitle={settings.walletMgtTitle}
-      />
-      <SettingSectionList
         data={PersonalizationMenu}
         sectionTitle={settings.personalizationTitle}
       />
@@ -57,6 +53,11 @@ function SettingMenuItem({
         data={AppSecurityMenu}
         sectionTitle={settings.appSecurityTitle}
       />
+      <SettingSectionList
+        data={WalletMgtMenu}
+        sectionTitle={settings.walletMgtTitle}
+      />
+
       <SettingSectionList
         data={SettingsMenu}
         sectionTitle={settings.AboutSupportTitle}
@@ -81,7 +82,7 @@ const getStyles = (theme: AppTheme) =>
       paddingBottom: Platform.OS === 'android' ? 120 : 50,
     },
     content: {
-      paddingBottom: 100
-    }
+      paddingBottom: 100,
+    },
   });
 export default SettingMenuItem;

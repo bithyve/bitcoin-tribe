@@ -27,7 +27,7 @@ import CloudKit
       let network = RgbManager.getRgbNetwork(network: btcNetwotk)
       let keys = generateKeys(bitcoinNetwork: network)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-        let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
+        let rgbURL = documentDirectory.appendingPathComponent(Constants.shared.rgbDirName)
         let data = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
@@ -55,7 +55,7 @@ import CloudKit
       let network = RgbManager.getRgbNetwork(network: btcNetwotk)
       let keys = try restoreKeys(bitcoinNetwork: network, mnemonic: mnemonic)
       if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-        let rgbURL = documentDirectory.appendingPathComponent(Constants.rgbDirName)
+        let rgbURL = documentDirectory.appendingPathComponent(Constants.shared.rgbDirName)
         let data = [
           "mnemonic": keys.mnemonic,
           "xpub": keys.xpub,
@@ -519,14 +519,14 @@ import CloudKit
                       assetId: assetId,
                       assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
                       durationSeconds: UInt32(expiry),
-                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      transportEndpoints: [Constants.shared.proxyConsignmentEndpoint],
                       minConfirmations: 1
                   ):
                   wallet.witnessReceive(
                       assetId: assetId,
                       assignment: amountValue > 0 ? .fungible(amount: amountValue) : .any,
                       durationSeconds: UInt32(expiry),
-                      transportEndpoints: [Constants.proxyConsignmentEndpoint],
+                      transportEndpoints: [Constants.shared.proxyConsignmentEndpoint],
                       minConfirmations: 1
                   )
 
@@ -703,17 +703,58 @@ import CloudKit
     callback(response)
   }
   
-  @objc func initiate(btcNetwotk: String, mnemonic: String,accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) -> Void{
-    do {
-      self.rgbManager = RgbManager.shared
-      let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwotk, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint)
-      callback(response)
-    } catch {
-      let errorData = ["error": error.localizedDescription]
-      let json = Utility.convertToJSONString(params: errorData)
-      callback(json)
-    }
+  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) {
+      do {
+          self.rgbManager = RgbManager.shared
+          let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+          
+          if response.status {
+//              if let logPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("log"),
+//                 FileManager.default.fileExists(atPath: logPath.path) {
+//                  try FileManager.default.removeItem(at: logPath)
+//              }
+              
+              let data: [String: Any] = [
+                  "status": true,
+                  "error": ""
+              ]
+              let json = Utility.convertToJSONString(params: data)
+              callback(json)
+          } else {
+              let errorStrings = ["bincode", "error from bdk"]
+              let containsAny = errorStrings.contains { response.error.contains($0) }
+              
+//              if containsAny {
+//                  if let dbPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("bdk_db"),
+//                     FileManager.default.fileExists(atPath: dbPath.path) {
+//                      try FileManager.default.removeItem(at: dbPath)
+//                      
+//                      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+//                      
+//                      let data: [String: Any] = [
+//                          "status": retryResponse.status,
+//                          "error": retryResponse.error
+//                      ]
+//                      let json = Utility.convertToJSONString(params: data)
+//                      callback(json)
+//                      return
+//                  }
+//              }
+              
+              let data: [String: Any] = [
+                  "status": false,
+                  "error": response.error
+              ]
+              let json = Utility.convertToJSONString(params: data)
+              callback(json)
+          }
+      } catch {
+          let errorData = ["error": error.localizedDescription]
+          let json = Utility.convertToJSONString(params: errorData)
+          callback(json)
+      }
   }
+
   
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do {
@@ -930,6 +971,16 @@ import CloudKit
     } catch {
       callback(false)
     }
+  }
+  
+  @objc func getRgbDir(callback: @escaping ((String) -> Void)) -> Void{
+    let dir = Utility.getRgbDir()?.absoluteString
+    let data = [
+      "dir": dir,
+      "error": ""
+    ]
+    let json = Utility.convertToJSONString(params: data as [String : Any])
+    callback(json)
   }
   
 }

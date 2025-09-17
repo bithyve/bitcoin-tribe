@@ -19,7 +19,7 @@ import { hash256 } from 'src/utils/encryption';
 import { ChatEncryptionManager } from 'src/services/p2p/ChatEncryptionManager';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { hp } from 'src/constants/responsive';
 
 function Community() {
@@ -136,7 +136,7 @@ function Community() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === 'android' ? hp(20) : 0,
+    paddingTop: 0,
   },
   headerWrapper: {
     marginVertical: hp(16),

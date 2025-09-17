@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppType from 'src/models/enums/AppType';
+import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 
 export const AppContext = React.createContext({
   key: null,
   setKey: key => {},
-  isWalletOnline: null,
+  isWalletOnline: WalletOnlineStatus.Null,
   setIsWalletOnline: status => {},
   appType: null,
   setAppType: apptype => {},
@@ -36,7 +37,7 @@ export const AppContext = React.createContext({
 
 export function AppProvider({ children }) {
   const [key, setKey] = useState<string>(null);
-  const [isWalletOnline, setIsWalletOnline] = useState<boolean>(null);
+  const [isWalletOnline, setIsWalletOnline] = useState<WalletOnlineStatus>(WalletOnlineStatus.Null);
   const [appType, setAppType] = useState<AppType>(null);
   const [isBackupInProgress, setBackupProcess] = useState<boolean>(null);
   const [isBackupDone, setBackupDone] = useState<boolean>(null);

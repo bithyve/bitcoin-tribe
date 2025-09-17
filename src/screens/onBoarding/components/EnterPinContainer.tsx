@@ -52,7 +52,7 @@ function EnterPinContainer() {
     } else if (biometricLogin.data) {
       setLoading(false);
       setKey(biometricLogin.data.key);
-      setIsWalletOnline(biometricLogin.data.isWalletOnline);
+      // setIsWalletOnline(biometricLogin.data.isWalletOnline);
       setTimeout(
         () => {
           navigation.replace(NavigationRoutes.APPSTACK);
@@ -70,7 +70,7 @@ function EnterPinContainer() {
     } else if (login.data) {
       setPrimaryCTALoading(false);
       setKey(login.data.key);
-      setIsWalletOnline(login.data.isWalletOnline);
+      // setIsWalletOnline(login.data.isWalletOnline);
       navigation.replace(NavigationRoutes.APPSTACK);
     }
   }, [login.error, login.data]);

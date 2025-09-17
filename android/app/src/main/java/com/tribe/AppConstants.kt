@@ -18,6 +18,12 @@ object AppConstants {
     const val rgbDefaultPrecision: UByte = 0U
     const val defaultFeeRate = 50.0F
 
+    private val mainnetUrls = listOf(
+        "ssl://electrum.iriswallet.com:50003",
+        "https://blockstream.info/api"
+    )
+    private var callCount = 0
+
     @JvmStatic
     fun initContext(context: Context) {
         appContext = context
@@ -28,9 +34,14 @@ object AppConstants {
         return when (network.uppercase()) {
             "TESTNET" -> testnetElectrumURL
             "REGTEST" -> regtestElectrumURL
-            "MAINNET" -> mainnetElectrumUrl
+            "MAINNET" -> getNextMainnetUrl()
             else -> testnetElectrumURL
         }
     }
 
+    private fun getNextMainnetUrl(): String {
+        val url = mainnetUrls[callCount % mainnetUrls.size]
+        callCount++
+        return url
+    }
 }
