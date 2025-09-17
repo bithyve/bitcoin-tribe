@@ -31,6 +31,7 @@ export const LocalizationContext = createContext({
   setAppLanguage: () => {},
   appLanguage: DEFAULT_LANGUAGE,
   initializeAppLanguage: () => {},
+  formatString: () => {},
 });
 
 export function LocalizationProvider({ children }) {
