@@ -763,7 +763,7 @@ import CloudKit
       }
   }
   
-  func deleteRuntimeLockPath(masterFingerprint: String) {
+  func deleteRuntimeLockFile(masterFingerprint: String) {
       guard let runtimeLockPath = Utility.getRgbDir()?
           .appendingPathComponent(masterFingerprint)
           .appendingPathComponent("rgb_runtime.lock") else {
