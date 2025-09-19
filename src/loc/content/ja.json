@@ -41,6 +41,8 @@
     "noInternet": "ネットワーク接続がありません",
     "rgbWalletOffline": "RGBウォレットはオフラインです。",
     "rgbNodeOffline": "RGBノードがロックされているかオフラインです。",
+    "gettingRGBWalletOnline": "RGBウォレットをオンライン化",
+    "gettingRGBWalletOnlineAttempt": "RGBウォレットをオンライン化（試行: {attempt}）",
     "backupNow": "今すぐバックアップ",
     "request": "リクエスト",
     "ok": "オーケー",

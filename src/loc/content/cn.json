@@ -41,6 +41,8 @@
     "noInternet": "无网络连接",
     "rgbWalletOffline": "RGB钱包离线。",
     "rgbNodeOffline": "RGB 节点已锁定/离线。",
+    "gettingRGBWalletOnline": "获取 RGB 钱包在线",
+    "gettingRGBWalletOnlineAttempt": "获取 RGB 钱包在线（尝试：{attempt}）",
     "backupNow": "立即备份",
     "request": "请求",
     "ok": "确定",

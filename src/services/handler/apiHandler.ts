@@ -707,7 +707,6 @@ export class ApiHandler {
           rgbWallet.accountXpubColored,
           rgbWallet.masterFingerprint,
         );
-        console.log('isWalletOnline', isWalletOnline, typeof isWalletOnline);
         // const cm = ChatPeerManager.getInstance();
         // await cm.init(app.primarySeed);
         return isWalletOnline;
@@ -1823,7 +1822,7 @@ export class ApiHandler {
     try {
       await messaging.unsubscribeFromTopic(topic);
     } catch (error) {
-      console.warn(`Failed to unsubscribe from ${topic}:`, error);
+      console.log(`Failed to unsubscribe from ${topic}:`, error);
     }
   }
 
@@ -1846,7 +1845,7 @@ export class ApiHandler {
     try {
       await messaging.subscribeToTopic(config.TRIBE_FCM_BROADCAST_CHANNEL);
     } catch (error) {
-      console.warn('Failed to subscribe to common broadcast topic:', error);
+      console.log('Failed to subscribe to common broadcast topic:', error);
     }
   }
 
@@ -2058,7 +2057,9 @@ export class ApiHandler {
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
     );
-    Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
+    if(serviceFee) {
+      Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
+    }
     await ApiHandler.getTxRates();
   }
 

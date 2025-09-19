@@ -19,7 +19,7 @@ import Toast from './Toast';
 
 const RGBWalletStatus = () => {
   const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext);
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
@@ -54,12 +54,11 @@ const RGBWalletStatus = () => {
 
   const getRetryMessage = useMemo(() => {
     return retryAttempt === 0
-      ? 'Getting RGB Wallet Online'
-      : `Getting RGB Wallet Online (Attempt: ${retryAttempt})`;
+      ? common.gettingRGBWalletOnline
+      : formatString(common.gettingRGBWalletOnlineAttempt, retryAttempt);
   }, [retryAttempt]);
 
   useEffect(() => {
-    console.log(' makeWalletOnline.data?.status', makeWalletOnline.data)
     if (appType && makeWalletOnline.data?.status !== undefined) {
       setIsWalletOnline(
         makeWalletOnline.data?.status

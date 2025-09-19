@@ -48,3 +48,44 @@ class RgbManager {
   }
   
 }
+
+enum TimeoutError: Error {
+    case timedOut
+}
+
+func runWithTimeout<T>(
+    seconds: Double,
+    task: @escaping () throws -> T
+) throws -> T {
+    let queue = DispatchQueue.global()
+    let workItem = DispatchWorkItem {
+        // no-op
+    }
+    var result: Result<T, Error>!
+    
+    queue.async(execute: workItem)
+    let group = DispatchGroup()
+    group.enter()
+    
+    queue.async {
+        do {
+            let value = try task()
+            result = .success(value)
+        } catch {
+            result = .failure(error)
+        }
+        group.leave()
+    }
+    
+    let waitResult = group.wait(timeout: .now() + seconds)
+    workItem.cancel()
+    
+    switch waitResult {
+    case .success:
+        return try result.get()
+    case .timedOut:
+        throw TimeoutError.timedOut
+    }
+}
+
+

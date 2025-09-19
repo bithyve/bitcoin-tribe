@@ -41,6 +41,8 @@
     "noInternet": "No network connection",
     "rgbWalletOffline": "RGB wallet is offline.",
     "rgbNodeOffline": "RGB node is locked/offline.",
+    "gettingRGBWalletOnline": "Getting RGB Wallet Online",
+    "gettingRGBWalletOnlineAttempt": "Getting RGB Wallet Online (Attempt: {attempt})",
     "backupNow": "Backup Now",
     "request": "Request",
     "ok": "OK",

@@ -1,7 +1,6 @@
 package com.bithyve.tribe
 
 import android.util.Log
-import com.google.gson.JsonObject
 import org.rgbtools.AssetSchema
 import org.rgbtools.BitcoinNetwork
 import org.rgbtools.DatabaseType
@@ -22,7 +21,7 @@ object RGBWalletRepository {
 
     }
 
-    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String): String{
+    fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String): Pair<Boolean, String>{
         try {
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
@@ -39,17 +38,33 @@ object RGBWalletRepository {
             )
             wallet = Wallet(walletData)
             online = wallet!!.goOnline(true, AppConstants.getElectrumUrl(network))
-            val jsonObject = JsonObject()
-            jsonObject.addProperty("status", true)
-            return jsonObject.toString()
+            return Pair(true, "")
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)
-            val jsonObject = JsonObject()
-            jsonObject.addProperty("status", false)
-            jsonObject.addProperty("error", e.message)
-            return jsonObject.toString()
+            return Pair(false, e.message!!)
         }
     }
+
+    fun deleteRuntimeLockFile(masterFingerprint: String) {
+        try {
+            val runtimeLockPath = AppConstants.rgbDir
+                .resolve(masterFingerprint)
+                .resolve("rgb_runtime.lock")
+            if (!runtimeLockPath.exists()) {
+                Log.i("RGB", "No runtime lock file exists at path: ${runtimeLockPath.path}")
+                return
+            }
+            Log.i("RGB", "Deleting runtime lock at: ${runtimeLockPath.path}")
+            if (runtimeLockPath.delete()) {
+                Log.i("RGB", "Runtime lock deleted successfully.")
+            } else {
+                Log.e("RGB", "Failed to delete runtime lock.")
+            }
+        } catch (e: Exception) {
+            Log.e("RGB", "Failed to delete runtime lock: ${e.message}", e)
+        }
+    }
+
 
 //    fun checkWalletInitialized(): Boolean {
 //        return this::wallet.isInitialized && this::online.isInitialized
