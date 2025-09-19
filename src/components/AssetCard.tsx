@@ -84,10 +84,12 @@ const AssetCard = (props: AssetCardProps) => {
     </AppTouchable>
   );
 };
+
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: wp(160),
+      height: hp(210),
       borderRadius: 15,
       margin: hp(5),
       borderColor: theme.colors.borderColor,
