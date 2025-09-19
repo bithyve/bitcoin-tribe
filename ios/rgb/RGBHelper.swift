@@ -726,7 +726,7 @@ import CloudKit
               let containsAny = errorStrings.contains { response.error.contains($0) }
               
               if containsAny {
-                deleteRuntimeLockPath(masterFingerprint: masterFingerprint)
+                deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
                 
               let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
                 
@@ -747,7 +747,7 @@ import CloudKit
               callback(json)
           }
       } catch TimeoutError.timedOut {
-        deleteRuntimeLockPath(masterFingerprint: masterFingerprint)
+        deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
       let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
         
         let data: [String: Any] = [
