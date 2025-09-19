@@ -269,4 +269,13 @@ RCT_EXPORT_METHOD(getRgbDir:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
   });
 }
 
+RCT_EXPORT_METHOD(resetWallet:(NSString*)masterFingerprint resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  EXEC_ASYNC({
+    RGBHelper *helper = [[RGBHelper alloc] init];
+    [helper resetWalletWithMasterFingerprint:masterFingerprint callback:^(NSString * _Nonnull response) {
+      [self resolvePromise:resolve withResult:response];
+    }];
+  });
+}
+
 @end

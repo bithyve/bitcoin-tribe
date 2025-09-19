@@ -828,5 +828,27 @@
     "amount": "Importo",
     "paymentHash": "Hash di Pagamento",
     "lightningSendTxnSubtitle": "La transazione è stata trasmessa con successo"
+  },
+  "resetWalletMessages": {
+    "WalletResetSuccessfully": "Portafoglio reimpostato con successo",
+    "FailedToResetWallet": "Impossibile reimpostare il portafoglio",
+    "ResetYourWallet": "Reimposta Il Tuo Portafoglio",
+    "Aresure": "Sei sicuro di voler reimpostare?",
+    "clearCurrentWalletSetup": "Questa azione cancellerà la configurazione attuale del tuo portafoglio.",
+    "yesReset": "Sì, Reimposta",
+    "confirmReset": "Conferma Reimpostazione",
+    "clearCurrentWalletState": "Questa azione cancellerà lo stato attuale del tuo portafoglio. Il tuo saldo BTC rimarrà lo stesso, verranno rimossi solo gli asset aggiunti.",
+    "pleaseTypeReset": "Digita RESET qui sotto per confermare.",
+    "userMustEnterReset": "L'utente deve inserire RESET",
+    "confirmResetButton": "Conferma Reimpostazione",
+    "rgbWalletCorrupted": "I dati del tuo portafoglio RGB sembrano essere corrotti. Per continuare a utilizzare il tuo portafoglio, potresti dover reimpostarlo.",
+    "clearRgbAssetData": "• La reimpostazione cancellerà i dati degli asset RGB da questo dispositivo.",
+    "btcBalanceNotAffected": "• Il tuo saldo Bitcoin (BTC) non è interessato.",
+    "rgbAssetsNoLongerAccessible": "Se reimposti, qualsiasi asset RGB collegato a questo portafoglio non sarà più accessibile.",
+    "proceedWithReset": "Vuoi procedere con la reimpostazione del tuo portafoglio RGB?",
+    "resetNow": "Reimposta Ora",
+    "resettingYourWallet": "Reimpostazione del tuo portafoglio…",
+    "pleaseWaitReset": "Attendi mentre reimpostiamo il tuo portafoglio e prepariamo tutto per un nuovo inizio.",
+    "fewSecondsStep": "Questo passaggio richiederà alcuni secondi."
   }
 }

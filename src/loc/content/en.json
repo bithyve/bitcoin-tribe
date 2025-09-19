@@ -828,5 +828,27 @@
     "amount": "Amount",
     "paymentHash": "Payment Hash",
     "lightningSendTxnSubtitle": "The transaction has been broadcasted successfully"
+  },
+  "resetWalletMessages": {
+    "WalletResetSuccessfully": "Wallet reset successfully",
+    "FailedToResetWallet": "Failed to reset wallet",
+    "ResetYourWallet": "Reset Your Wallet",
+    "Aresure": "Are you sure you want to reset?",
+    "clearCurrentWalletSetup": "This action will clear your current wallet setup.",
+    "yesReset": "Yes, Reset",
+    "confirmReset": "Confirm Reset",
+    "clearCurrentWalletState": "This action will clear your current wallet state. Your BTC balance will remain the same, only added assets will be removed.",
+    "pleaseTypeReset": "Please type RESET below to confirm.",
+    "userMustEnterReset": "User must enter RESET",
+    "confirmResetButton": "Confirm Reset",
+    "rgbWalletCorrupted": "Your RGB wallet data seems to be corrupted. To continue using your wallet, you may need to reset it.",
+    "clearRgbAssetData": "• Resetting will clear your RGB asset data from this device.",
+    "btcBalanceNotAffected": "• Your Bitcoin (BTC) balance is not affected.",
+    "rgbAssetsNoLongerAccessible": "If you reset, any RGB assets linked to this wallet will no longer be accessible.",
+    "proceedWithReset": "Do you want to proceed with resetting your RGB wallet?",
+    "resetNow": "Reset Now",
+    "resettingYourWallet": "Resetting your wallet…",
+    "pleaseWaitReset": "Please wait while we reset your wallet and set things up for a fresh start.",
+    "fewSecondsStep": "This step will take a few seconds."
   }
 }

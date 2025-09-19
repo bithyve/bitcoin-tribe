@@ -828,5 +828,27 @@
     "amount": "Monto",
     "paymentHash": "Hash de pago",
     "lightningSendTxnSubtitle": "La transacción se ha transmitido con éxito"
+  },
+  "resetWalletMessages": {
+    "WalletResetSuccessfully": "Billetera restablecida con éxito",
+    "FailedToResetWallet": "Error al restablecer la billetera",
+    "ResetYourWallet": "Restablecer Tu Billetera",
+    "Aresure": "¿Estás seguro de que quieres restablecer?",
+    "clearCurrentWalletSetup": "Esta acción borrará la configuración actual de tu billetera.",
+    "yesReset": "Sí, Restablecer",
+    "confirmReset": "Confirmar Restablecimiento",
+    "clearCurrentWalletState": "Esta acción borrará el estado actual de tu billetera. Tu saldo de BTC permanecerá igual, solo se eliminarán los activos añadidos.",
+    "pleaseTypeReset": "Por favor escribe RESTABLECER abajo para confirmar.",
+    "userMustEnterReset": "El usuario debe ingresar RESTABLECER",
+    "confirmResetButton": "Confirmar Restablecimiento",
+    "rgbWalletCorrupted": "Los datos de tu billetera RGB parecen estar corruptos. Para continuar usando tu billetera, es posible que necesites restablecerla.",
+    "clearRgbAssetData": "• El restablecimiento borrará los datos de tus activos RGB de este dispositivo.",
+    "btcBalanceNotAffected": "• Tu saldo de Bitcoin (BTC) no se ve afectado.",
+    "rgbAssetsNoLongerAccessible": "Si restableces, cualquier activo RGB vinculado a esta billetera ya no será accesible.",
+    "proceedWithReset": "¿Quieres proceder con el restablecimiento de tu billetera RGB?",
+    "resetNow": "Restablecer Ahora",
+    "resettingYourWallet": "Restableciendo tu billetera…",
+    "pleaseWaitReset": "Por favor espera mientras restablecemos tu billetera y configuramos todo para un nuevo comienzo.",
+    "fewSecondsStep": "Este paso tomará unos segundos."
   }
 }

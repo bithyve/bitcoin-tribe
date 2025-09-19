@@ -828,5 +828,27 @@
     "amount": "金額",
     "paymentHash": "支払いハッシュ",
     "lightningSendTxnSubtitle": "取引が正常にブロードキャストされました"
+  },
+  "resetWalletMessages": {
+    "WalletResetSuccessfully": "ウォレットが正常にリセットされました",
+    "FailedToResetWallet": "ウォレットのリセットに失敗しました",
+    "ResetYourWallet": "ウォレットをリセット",
+    "Aresure": "本当にリセットしますか？",
+    "clearCurrentWalletSetup": "この操作により、現在のウォレット設定がクリアされます。",
+    "yesReset": "はい、リセット",
+    "confirmReset": "リセットを確認",
+    "clearCurrentWalletState": "この操作により、現在のウォレット状態がクリアされます。BTCバランスは変わりませんが、追加されたアセットのみが削除されます。",
+    "pleaseTypeReset": "確認のために下記にRESETと入力してください。",
+    "userMustEnterReset": "ユーザーはRESETを入力する必要があります",
+    "confirmResetButton": "リセットを確認",
+    "rgbWalletCorrupted": "RGBウォレットのデータが破損している可能性があります。ウォレットを引き続き使用するには、リセットが必要な場合があります。",
+    "clearRgbAssetData": "• リセットにより、このデバイスからRGBアセットデータがクリアされます。",
+    "btcBalanceNotAffected": "• Bitcoin（BTC）バランスは影響を受けません。",
+    "rgbAssetsNoLongerAccessible": "リセットすると、このウォレットにリンクされたRGBアセットにはアクセスできなくなります。",
+    "proceedWithReset": "RGBウォレットのリセットを続行しますか？",
+    "resetNow": "今すぐリセット",
+    "resettingYourWallet": "ウォレットをリセット中…",
+    "pleaseWaitReset": "ウォレットをリセットし、新しいスタートの準備をしている間、お待ちください。",
+    "fewSecondsStep": "このステップには数秒かかります。"
   }
 }

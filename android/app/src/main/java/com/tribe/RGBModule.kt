@@ -748,6 +748,21 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
         }
     }
 
+    @ReactMethod
+    fun resetWallet(masterFingerprint:String, promise: Promise){
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                val response = RGBWalletRepository.resetWallet(masterFingerprint)
+                promise.resolve(response)
+            } catch (e: Exception) {
+                Log.e(TAG, "resetData failed: ${e.message}", e)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", e.message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
     fun cleanup() {
         coroutineScope.cancel()
     }

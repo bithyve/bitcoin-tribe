@@ -828,5 +828,27 @@
     "amount": "राशि",
     "paymentHash": "भुगतान हैश",
     "lightningSendTxnSubtitle": "लेन-देन को सफलतापूर्वक प्रसारित कर दिया गया है"
+  },
+  "resetWalletMessages": {
+    "WalletResetSuccessfully": "वॉलेट सफलतापूर्वक रीसेट हो गया",
+    "FailedToResetWallet": "वॉलेट रीसेट करने में विफल",
+    "ResetYourWallet": "अपना वॉलेट रीसेट करें",
+    "Aresure": "क्या आप वाकई रीसेट करना चाहते हैं?",
+    "clearCurrentWalletSetup": "यह क्रिया आपके वर्तमान वॉलेट सेटअप को साफ़ कर देगी।",
+    "yesReset": "हाँ, रीसेट करें",
+    "confirmReset": "रीसेट की पुष्टि करें",
+    "clearCurrentWalletState": "यह क्रिया आपके वॉलेट की वर्तमान स्थिति को साफ़ कर देगी। आपका BTC बैलेंस समान रहेगा, केवल जोड़ी गई संपत्तियाँ हटा दी जाएंगी।",
+    "pleaseTypeReset": "कृपया पुष्टि के लिए नीचे RESET टाइप करें।",
+    "userMustEnterReset": "उपयोगकर्ता को RESET दर्ज करना होगा",
+    "confirmResetButton": "रीसेट की पुष्टि करें",
+    "rgbWalletCorrupted": "आपका RGB वॉलेट डेटा दूषित लग रहा है। अपना वॉलेट उपयोग जारी रखने के लिए, आपको इसे रीसेट करने की आवश्यकता हो सकती है।",
+    "clearRgbAssetData": "• रीसेट करने से इस डिवाइस से आपका RGB एसेट डेटा साफ़ हो जाएगा।",
+    "btcBalanceNotAffected": "• आपका Bitcoin (BTC) बैलेंस प्रभावित नहीं होता।",
+    "rgbAssetsNoLongerAccessible": "यदि आप रीसेट करते हैं, तो इस वॉलेट से जुड़ी कोई भी RGB संपत्ति अब पहुंच योग्य नहीं होगी।",
+    "proceedWithReset": "क्या आप अपने RGB वॉलेट को रीसेट करने के साथ आगे बढ़ना चाहते हैं?",
+    "resetNow": "अभी रीसेट करें",
+    "resettingYourWallet": "आपका वॉलेट रीसेट हो रहा है…",
+    "pleaseWaitReset": "कृपया प्रतीक्षा करें जबकि हम आपके वॉलेट को रीसेट करते हैं और नई शुरुआत के लिए सब कुछ सेट करते हैं।",
+    "fewSecondsStep": "इस चरण में कुछ सेकंड लगेंगे।"
   }
 }
