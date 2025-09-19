@@ -531,7 +531,7 @@ export default class Relay {
         err?.code ||
         err?.message ||
         'Asset registration failed';
-      throw new Error(errMsg);
+      return { status: false };
     }
   };
 
