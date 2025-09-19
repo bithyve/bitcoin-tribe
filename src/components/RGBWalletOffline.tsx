@@ -27,6 +27,7 @@ const RGBWalletStatus = () => {
   const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
+  const [walletWentOnline, setWalletWentOnline] = useState(false)
 
   const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
@@ -51,6 +52,15 @@ const RGBWalletStatus = () => {
     makeWalletOnline,
     retryAttempt,
   ]);
+
+  useEffect(() => {
+    if (isWalletOnline === WalletOnlineStatus.Online) {
+      setWalletWentOnline(true)
+      setTimeout(() => {
+        setWalletWentOnline(false)
+      }, 1500);
+    }
+  }, [isWalletOnline]);
 
   const getRetryMessage = useMemo(() => {
     return retryAttempt === 0
@@ -85,11 +95,30 @@ const RGBWalletStatus = () => {
     <AppTouchable style={styles.container} disabled>
       <AppText style={styles.text}>{getRetryMessage}</AppText>
     </AppTouchable>
+  ) : walletWentOnline ? (
+    <AppTouchable style={styles.onlineContainer} disabled>
+      <AppText style={styles.text}>{common.walletWentOnline}</AppText>
+    </AppTouchable>
   ) : null;
 };
 
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
+    onlineContainer: {
+      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
+      top: hasNotch
+        ? 40
+        : Platform.OS === 'ios' && windowHeight > 820
+        ? 50
+        : Platform.OS === 'android'
+        ? 40
+        : 16,
+      left: 0,
+      right: 0,
+      backgroundColor: Colors.GOGreen,
+      zIndex: 1000,
+      alignItems: 'center',
+    },
     errorContainer: {
       position: Platform.OS === 'ios' ? 'absolute' : 'relative',
       top: hasNotch
