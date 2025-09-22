@@ -833,7 +833,8 @@
   "resetWalletMessages": {
     "WalletResetSuccessfully": "ウォレットが正常にリセットされました",
     "FailedToResetWallet": "ウォレットのリセットに失敗しました",
-    "ResetYourWallet": "ウォレットをリセット",
+    "ResyncWalletData": "ウォレットデータを再同期",
+    "ResetYourWallet": "RGBウォレットを削除・再作成",
     "Aresure": "本当にリセットしますか？",
     "clearCurrentWalletSetup": "この操作により、現在のウォレット設定がクリアされます。",
     "yesReset": "はい、リセット",
@@ -850,6 +851,8 @@
     "resetNow": "今すぐリセット",
     "resettingYourWallet": "ウォレットをリセット中…",
     "pleaseWaitReset": "ウォレットをリセットし、新しいスタートの準備をしている間、お待ちください。",
-    "fewSecondsStep": "このステップには数秒かかります。"
+    "fewSecondsStep": "このステップには数秒かかります。",
+    "BackupRequired": "バックアップが必要",
+    "YouMustBackup": "アセットへのアクセスを失わないように、リセットする前にウォレットをバックアップする必要があります。"
   }
 }

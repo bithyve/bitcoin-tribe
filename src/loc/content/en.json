@@ -328,7 +328,7 @@
     "backupPhraseSubTitle": "Carefully write down the 12-word Backup Phrase in a private place and ensure its security",
     "backupPhraseTitle1": "Beware",
     "backupPhraseSubTitle1": "Anyone with access to the Backup Phrase can access and withdraw your funds. Losing it means you can’t recover your wallet.",
-    "walletMgtTitle": "Advanced Wallet Management",
+    "walletMgtTitle": "Wallet Management",
     "personalizationTitle": "Personalization",
     "appSecurityTitle": "App Security",
     "AboutSupportTitle": "About & Support",
@@ -833,7 +833,8 @@
   "resetWalletMessages": {
     "WalletResetSuccessfully": "Wallet reset successfully",
     "FailedToResetWallet": "Failed to reset wallet",
-    "ResetYourWallet": "Reset Your Wallet",
+    "ResyncWalletData": "Resync Wallet Data",
+    "ResetYourWallet": "Delete & Recreate RGB Wallet",
     "Aresure": "Are you sure you want to reset?",
     "clearCurrentWalletSetup": "This action will clear your current wallet setup.",
     "yesReset": "Yes, Reset",
@@ -850,6 +851,8 @@
     "resetNow": "Reset Now",
     "resettingYourWallet": "Resetting your wallet…",
     "pleaseWaitReset": "Please wait while we reset your wallet and set things up for a fresh start.",
-    "fewSecondsStep": "This step will take a few seconds."
+    "fewSecondsStep": "This step will take a few seconds.",
+    "BackupRequired": "Backup required",
+    "YouMustBackup": "You must back up your wallet before resetting to avoid losing access to your assets."
   }
 }

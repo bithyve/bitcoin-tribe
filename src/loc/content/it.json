@@ -833,7 +833,8 @@
   "resetWalletMessages": {
     "WalletResetSuccessfully": "Portafoglio reimpostato con successo",
     "FailedToResetWallet": "Impossibile reimpostare il portafoglio",
-    "ResetYourWallet": "Reimposta Il Tuo Portafoglio",
+    "ResyncWalletData": "Risincronizza Dati del Portafoglio",
+    "ResetYourWallet": "Elimina e Ricrea Portafoglio RGB",
     "Aresure": "Sei sicuro di voler reimpostare?",
     "clearCurrentWalletSetup": "Questa azione cancellerà la configurazione attuale del tuo portafoglio.",
     "yesReset": "Sì, Reimposta",
@@ -850,6 +851,8 @@
     "resetNow": "Reimposta Ora",
     "resettingYourWallet": "Reimpostazione del tuo portafoglio…",
     "pleaseWaitReset": "Attendi mentre reimpostiamo il tuo portafoglio e prepariamo tutto per un nuovo inizio.",
-    "fewSecondsStep": "Questo passaggio richiederà alcuni secondi."
+    "fewSecondsStep": "Questo passaggio richiederà alcuni secondi.",
+    "BackupRequired": "Backup richiesto",
+    "YouMustBackup": "Devi eseguire il backup del tuo portafoglio prima di reimpostare per evitare di perdere l'accesso ai tuoi asset."
   }
 }

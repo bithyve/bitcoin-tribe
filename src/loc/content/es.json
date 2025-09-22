@@ -833,7 +833,8 @@
   "resetWalletMessages": {
     "WalletResetSuccessfully": "Billetera restablecida con éxito",
     "FailedToResetWallet": "Error al restablecer la billetera",
-    "ResetYourWallet": "Restablecer Tu Billetera",
+    "ResyncWalletData": "Resincronizar Datos de Billetera",
+    "ResetYourWallet": "Eliminar y Recrear Billetera RGB",
     "Aresure": "¿Estás seguro de que quieres restablecer?",
     "clearCurrentWalletSetup": "Esta acción borrará la configuración actual de tu billetera.",
     "yesReset": "Sí, Restablecer",
@@ -850,6 +851,8 @@
     "resetNow": "Restablecer Ahora",
     "resettingYourWallet": "Restableciendo tu billetera…",
     "pleaseWaitReset": "Por favor espera mientras restablecemos tu billetera y configuramos todo para un nuevo comienzo.",
-    "fewSecondsStep": "Este paso tomará unos segundos."
+    "fewSecondsStep": "Este paso tomará unos segundos.",
+    "BackupRequired": "Respaldo requerido",
+    "YouMustBackup": "Debes respaldar tu billetera antes de restablecer para evitar perder el acceso a tus activos."
   }
 }

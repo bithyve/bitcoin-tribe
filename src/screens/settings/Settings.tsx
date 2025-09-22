@@ -35,6 +35,10 @@ import HiddenAssetIcon from 'src/assets/images/hiddenAsset.svg';
 import HiddenAssetIconLight from 'src/assets/images/hiddenAsset_light.svg';
 import ResetWalletIconLight from 'src/assets/images/ic_reset_wallet_light.svg';
 import ResetWalletIcon from 'src/assets/images/ic_reset_wallet.svg';
+import SyncWalletIcon from 'src/assets/images/ic_sync_wallet.svg';
+import SyncWalletIconLight from 'src/assets/images/ic_sync_wallet_light.svg';
+import BackupRequired from 'src/assets/images/backup_required.svg';
+import BackupRequiredLight from 'src/assets/images/backup_required_light.svg';
 import WalletResetWarning from 'src/assets/images/wallet_reset_warning.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
@@ -78,7 +82,7 @@ function SettingsScreen({ navigation }) {
     onBoarding,
     wallet: walletTranslation,
     common,
-    resetWalletMessages
+    resetWalletMessages,
   } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
@@ -89,7 +93,6 @@ function SettingsScreen({ navigation }) {
   const [biometrics, setBiometrics] = useState(false);
   const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
-  const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
@@ -104,6 +107,8 @@ function SettingsScreen({ navigation }) {
   const [resettingWallet, setResettingWallet] = useState(false);
   const { wallets } = useRgbWallets({});
   const rgbWallet = useMemo(() => wallets[0], [wallets]);
+  const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const [showBackupRequiredModal, setShowBackupRequiredModal] = useState(false);
 
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -244,12 +249,6 @@ function SettingsScreen({ navigation }) {
       icon: isThemeDark ? <HiddenAssetIcon /> : <HiddenAssetIconLight />,
       onPress: () => navigation.navigate(NavigationRoutes.HIDDENASSETS),
     },
-    {
-      id: 5,
-      title: resetWalletMessages.ResetYourWallet,
-      icon: isThemeDark ? <ResetWalletIcon /> : <ResetWalletIconLight />,
-      onPress: () => setShowResetWalletModal(true),
-    },
   ];
   const PersonalizationMenu: SettingMenuProps[] = [
     {
@@ -338,6 +337,29 @@ function SettingsScreen({ navigation }) {
     // },
   ];
 
+  const onPressResetWallet = () => {
+    if (!backup) {
+      setShowBackupRequiredModal(true);
+    } else {
+      setShowResetWalletModal(true);
+    }
+  };
+
+  const AdvancedMenu: SettingMenuProps[] = [
+    {
+      id: 1,
+      title: resetWalletMessages.ResyncWalletData,
+      icon: isThemeDark ? <SyncWalletIcon /> : <SyncWalletIconLight />,
+      onPress: () => {},
+    },
+    {
+      id: 2,
+      title: resetWalletMessages.ResetYourWallet,
+      icon: isThemeDark ? <ResetWalletIcon /> : <ResetWalletIconLight />,
+      onPress: onPressResetWallet,
+    },
+  ];
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
@@ -369,6 +391,7 @@ function SettingsScreen({ navigation }) {
           PersonalizationMenu={PersonalizationMenu}
           AppSecurityMenu={AppSecurityMenu}
           SettingsMenu={SettingsMenu}
+          AdvancedMenu={AdvancedMenu}
         />
       </View>
       <View>
@@ -384,6 +407,43 @@ function SettingsScreen({ navigation }) {
           }}
         />
       </View>
+
+      <ResponsePopupContainer
+        visible={showBackupRequiredModal}
+        onDismiss={() => setShowBackupRequiredModal(false)}
+        backColor={theme.colors.cardGradient1}
+        borderColor={theme.colors.borderColor}>
+        <View style={styles.infoWrapper}>
+          <AppText variant="heading2" style={styles.headerText}>
+            {resetWalletMessages.BackupRequired}
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            {resetWalletMessages.YouMustBackup}
+          </AppText>
+        </View>
+        {isThemeDark ? <BackupRequired /> : <BackupRequiredLight />}
+        <View style={styles.ctaWrapper}>
+          <Buttons
+            primaryTitle={common.backupNow}
+            primaryOnPress={() => {
+              setShowBackupRequiredModal(false);
+              setTimeout(() => {
+                navigation.navigate(NavigationRoutes.APPBACKUPMENU);
+              }, 400);
+            }}
+            secondaryTitle={common.skip}
+            secondaryOnPress={() => {
+              setShowBackupRequiredModal(false);
+              setTimeout(() => {
+                setShowResetWalletModal(true);
+              }, 400);
+            }}
+            width={windowWidth / 2.6}
+            secondaryCTAWidth={windowWidth / 3}
+            height={hp(14)}
+          />
+        </View>
+      </ResponsePopupContainer>
 
       <ResponsePopupContainer
         visible={showResetWalletModal}
@@ -564,7 +624,7 @@ const getStyles = (theme: AppTheme) =>
     },
     ctaWrapper: {
       alignSelf: 'center',
-      marginTop: hp(20),
+      marginTop: hp(30),
     },
     textTypeReset: {
       marginBottom: hp(10),
