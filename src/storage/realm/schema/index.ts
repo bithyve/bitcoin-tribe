@@ -51,6 +51,7 @@ import {
   ContactSchema,
   RequestSchema,
 } from './community';
+import { ElectrumTransactionSchema, VinSchema, VoutSchema } from './electrumTransaction';
 
 export default [
   TribeAppSchema,
@@ -100,4 +101,7 @@ export default [
   AssignmentSchema,
   TransferTransportEndpointSchema,
   UtxoSchema,
+  ElectrumTransactionSchema,
+  VinSchema,
+  VoutSchema,
 ];
