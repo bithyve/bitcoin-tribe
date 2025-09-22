@@ -53,7 +53,7 @@ object RGBWalletRepository {
             val rgbWalletDir = AppConstants.rgbDir
                 .resolve(masterFingerprint)
             Log.i("RGB", "Deleting rgb wallet path at: ${rgbWalletDir.path}")
-            if (rgbWalletDir.delete()) {
+            if (rgbWalletDir.deleteRecursively()) {
                 Log.i("RGB", "rgb wallet path deleted successfully.")
                 jsonObject.addProperty("message", "Rgb wallet path deleted successfully.")
                 jsonObject.addProperty("status", true)

@@ -181,45 +181,44 @@ function SettingsScreen({ navigation }) {
 
   const resetWallet = async () => {
     setResetWalletFinalConfirmation(false);
-    setTimeout(() => {
+    setTimeout(async () => {
       setResettingWallet(true);
-    }, 400);
-
-    try {
-      const response = await RGBServices.resetWallet(
-        rgbWallet.masterFingerprint,
-      );
-      if (response && response.status) {
-        dbManager.clearSchemas([
-          RealmSchema.RgbWallet,
-          RealmSchema.Coin,
-          RealmSchema.Collectible,
-          RealmSchema.UniqueDigitalAsset,
-        ]);
-        const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
-          app.primaryMnemonic,
-        );
-        dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
-        const isWalletOnline = await RGBServices.initiate(
-          rgbWallet.mnemonic,
-          rgbWallet.accountXpubVanilla,
-          rgbWallet.accountXpubColored,
+      try {
+        const response = await RGBServices.resetWallet(
           rgbWallet.masterFingerprint,
         );
-        if (isWalletOnline && isWalletOnline.status) {
-          await ApiHandler.refreshRgbWallet();
-          Toast(resetWalletMessages.WalletResetSuccessfully, false);
+        if (response && response.status) {
+          dbManager.clearSchemas([
+            RealmSchema.RgbWallet,
+            RealmSchema.Coin,
+            RealmSchema.Collectible,
+            RealmSchema.UniqueDigitalAsset,
+          ]);
+          const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
+            app.primaryMnemonic,
+          );
+          dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
+          const isWalletOnline = await RGBServices.initiate(
+            rgbWallet.mnemonic,
+            rgbWallet.accountXpubVanilla,
+            rgbWallet.accountXpubColored,
+            rgbWallet.masterFingerprint,
+          );
+          if (isWalletOnline && isWalletOnline.status) {
+            await ApiHandler.refreshRgbWallet();
+            Toast(resetWalletMessages.WalletResetSuccessfully, false);
+            setResettingWallet(false);
+          }
+        } else {
+          Toast(response.error || resetWalletMessages.FailedToResetWallet, true);
           setResettingWallet(false);
         }
-      } else {
-        Toast(response.error || resetWalletMessages.FailedToResetWallet, true);
+      } catch (error) {
+        console.log(error);
         setResettingWallet(false);
+        Toast(error.message, true);
       }
-    } catch (error) {
-      console.log(error);
-      setResettingWallet(false);
-      Toast(error.message, true);
-    }
+    }, 400);
   };
 
   const WalletMgtMenu: SettingMenuProps[] = [
