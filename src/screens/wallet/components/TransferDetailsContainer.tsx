@@ -120,12 +120,10 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const getTransaction = useCallback(async () => {
     try {
       if (transfer.txid && !transfer.transaction) {
-        console.log('GETTING');
         const result = await ElectrumClient.getTransactionsById([
           transfer.txid,
         ]);
         if (result && result[transfer.txid]) {
-          // Get the Realm object using dbManager
           const realmAsset = dbManager.getObjectByPrimaryId(
             schema,
             'assetId',
@@ -133,18 +131,14 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
           );
 
           if (realmAsset && realmAsset.transactions) {
-            // Convert to JSON to work with the data
             const assetData = realmAsset.toJSON() as unknown as Asset;
             const transactionIndex = assetData.transactions.findIndex(
               item => item.txid === transfer.txid,
             );
 
             if (transactionIndex !== -1) {
-              // Update the transaction data
               assetData.transactions[transactionIndex].transaction =
                 result[transfer.txid];
-
-              // Use dbManager to update the entire transactions array
               const success = dbManager.updateObjectByPrimaryId(
                 schema,
                 'assetId',
