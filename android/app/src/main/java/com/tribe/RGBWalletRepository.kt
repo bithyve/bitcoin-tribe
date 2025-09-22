@@ -24,6 +24,7 @@ object RGBWalletRepository {
 
     fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String): Pair<Boolean, String>{
         try {
+            online = null
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
                 AppConstants.rgbDir.absolutePath,

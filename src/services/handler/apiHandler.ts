@@ -675,7 +675,7 @@ export class ApiHandler {
     }
   }
 
-  static async makeWalletOnline(): Promise<{
+  static async makeWalletOnline(timeout: number = 30): Promise<{
     status: boolean;
     error: string;
   }> {
@@ -706,6 +706,7 @@ export class ApiHandler {
           rgbWallet.accountXpubVanilla,
           rgbWallet.accountXpubColored,
           rgbWallet.masterFingerprint,
+          timeout
         );
         // const cm = ChatPeerManager.getInstance();
         // await cm.init(app.primarySeed);

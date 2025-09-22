@@ -22,6 +22,7 @@ class RgbManager {
   func initialize(bitcoinNetwork: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String, skipConsistencyCheck: Bool)-> (status: Bool, error: String){
     let network = RgbManager.getRgbNetwork(network: bitcoinNetwork)
     do{
+      self.online = nil
       let walletData = WalletData(dataDir: Utility.getRgbDir()?.path ?? "", bitcoinNetwork: network, databaseType: DatabaseType.sqlite,maxAllocationsPerUtxo: 1, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic,masterFingerprint: masterFingerprint, vanillaKeychain: 0, supportedSchemas: [AssetSchema.cfa, AssetSchema.nia, AssetSchema.uda])
       self.rgbWallet = try Wallet(walletData: walletData)
       self.online = try rgbWallet?.goOnline(skipConsistencyCheck: skipConsistencyCheck, indexerUrl: Constants.shared.getElectrumUrl(network: bitcoinNetwork))
@@ -57,13 +58,13 @@ func runWithTimeout<T>(
     seconds: Double,
     task: @escaping () throws -> T
 ) throws -> T {
-    let queue = DispatchQueue.global()
-    let workItem = DispatchWorkItem {
-        // no-op
+    // If timeout is 0, run without timeout
+    if seconds == 0 {
+        return try task()
     }
-    var result: Result<T, Error>!
     
-    queue.async(execute: workItem)
+    let queue = DispatchQueue.global()
+    var result: Result<T, Error>!
     let group = DispatchGroup()
     group.enter()
     
@@ -78,7 +79,6 @@ func runWithTimeout<T>(
     }
     
     let waitResult = group.wait(timeout: .now() + seconds)
-    workItem.cancel()
     
     switch waitResult {
     case .success:
@@ -87,5 +87,3 @@ func runWithTimeout<T>(
         throw TimeoutError.timedOut
     }
 }
-
-

@@ -87,7 +87,7 @@ function SettingsScreen({ navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { manualAssetBackupStatus, hasCompletedManualBackup } =
+  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet } =
     useContext(AppContext);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
@@ -109,6 +109,7 @@ function SettingsScreen({ navigation }) {
   const rgbWallet = useMemo(() => wallets[0], [wallets]);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
   const [showBackupRequiredModal, setShowBackupRequiredModal] = useState(false);
+  const [showFullSyncModal, setShowFullSyncModal] = useState(false);
 
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -349,7 +350,7 @@ function SettingsScreen({ navigation }) {
       id: 1,
       title: resetWalletMessages.ResyncWalletData,
       icon: isThemeDark ? <SyncWalletIcon /> : <SyncWalletIconLight />,
-      onPress: () => {},
+      onPress: () => setShowFullSyncModal(true),
     },
     {
       id: 2,
@@ -436,6 +437,42 @@ function SettingsScreen({ navigation }) {
               setTimeout(() => {
                 setShowResetWalletModal(true);
               }, 400);
+            }}
+            width={windowWidth / 2.6}
+            secondaryCTAWidth={windowWidth / 3}
+            height={hp(14)}
+          />
+        </View>
+      </ResponsePopupContainer>
+
+      <ResponsePopupContainer
+        visible={showFullSyncModal}
+        onDismiss={() => setShowFullSyncModal(false)}
+        backColor={theme.colors.cardGradient1}
+        borderColor={theme.colors.borderColor}>
+        <View style={styles.infoWrapper}>
+          <AppText variant="heading2" style={styles.headerText}>
+            Your wallet will now perform a full resync.
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            This may take a few minutes depending on your data size and network
+            speed.
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            Please do not minimize or close the app until the process is
+            complete.
+          </AppText>
+        </View>
+        <View style={styles.ctaWrapper}>
+          <Buttons
+            primaryTitle={'Start Resync'}
+            primaryOnPress={() => {
+              reSyncWallet(true);
+              setShowFullSyncModal(false);
+            }}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={() => {
+              setShowFullSyncModal(false);
             }}
             width={windowWidth / 2.6}
             secondaryCTAWidth={windowWidth / 3}

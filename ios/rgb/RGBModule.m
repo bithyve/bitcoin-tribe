@@ -61,6 +61,7 @@ RCT_EXPORT_METHOD(initiate:(NSString *)network
         accountXpubVanilla:(NSString *)accountXpubVanilla
         accountXpubColored:(NSString *)accountXpubColored
           masterFingerprint:(NSString *)masterFingerprint
+                  timeout:(nonnull NSNumber *)timeout
                     resolver:(RCTPromiseResolveBlock)resolve
                     rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -71,6 +72,7 @@ RCT_EXPORT_METHOD(initiate:(NSString *)network
                 accountXpubVanilla:accountXpubVanilla
                 accountXpubColored:accountXpubColored
                   masterFingerprint:masterFingerprint
+                           timeout:timeout
                           callback:^(NSString *result) {
                               resolve(result);
                           }

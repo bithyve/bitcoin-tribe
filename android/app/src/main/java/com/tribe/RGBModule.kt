@@ -109,53 +109,14 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
         accountXpubVanilla: String,
         accountXpubColored: String,
         masterFingerprint: String,
+        timeout: Int,
         promise: Promise
     ) {
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val result: Pair<Boolean, String>? = withTimeoutOrNull(30_000) {
-                    RGBWalletRepository.initialize(
-                        network,
-                        accountXpubVanilla,
-                        accountXpubColored,
-                        mnemonic,
-                        masterFingerprint
-                    )
-                }
-                withContext(Dispatchers.Main) {
-                    if (result != null) {
-                        val (status, error) = result
-                        if(status) {
-                            val jsonObject = JsonObject().apply {
-                                addProperty("status", status)
-                                addProperty("error", error)
-                            }
-                            promise.resolve(jsonObject.toString())
-                        } else {
-                            RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
-                            val retryResult: Pair<Boolean, String>? = withTimeoutOrNull(30_000) {
-                                RGBWalletRepository.initialize(
-                                    network,
-                                    accountXpubVanilla,
-                                    accountXpubColored,
-                                    mnemonic,
-                                    masterFingerprint
-                                )
-                            }
-                            if (retryResult != null) {
-                                val (status, error) = retryResult
-                                val jsonObject = JsonObject().apply {
-                                    addProperty("status", status)
-                                    addProperty("error", error)
-                                }
-                                promise.resolve(jsonObject.toString())
-                            }
-
-                        }
-
-                    } else {
-                        RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
-                        val retryResult: Pair<Boolean, String>? = withTimeoutOrNull(30_000) {
+                suspend fun runInit(): Pair<Boolean, String>? {
+                    return if (timeout > 0) {
+                        withTimeoutOrNull(timeout.toLong() * 1000) {
                             RGBWalletRepository.initialize(
                                 network,
                                 accountXpubVanilla,
@@ -164,11 +125,48 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                                 masterFingerprint
                             )
                         }
-                        if (retryResult != null) {
-                            val (status, error) = retryResult
+                    } else {
+                        RGBWalletRepository.initialize(
+                            network,
+                            accountXpubVanilla,
+                            accountXpubColored,
+                            mnemonic,
+                            masterFingerprint
+                        )
+                    }
+                }
+
+                val result = runInit()
+
+                withContext(Dispatchers.Main) {
+                    if (result != null) {
+                        val (status, error) = result
+                        if (status) {
                             val jsonObject = JsonObject().apply {
                                 addProperty("status", status)
                                 addProperty("error", error)
+                            }
+                            promise.resolve(jsonObject.toString())
+                        } else {
+                            RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
+                            val retryResult = runInit()
+                            if (retryResult != null) {
+                                val (retryStatus, retryError) = retryResult
+                                val jsonObject = JsonObject().apply {
+                                    addProperty("status", retryStatus)
+                                    addProperty("error", retryError)
+                                }
+                                promise.resolve(jsonObject.toString())
+                            }
+                        }
+                    } else {
+                        RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
+                        val retryResult = runInit()
+                        if (retryResult != null) {
+                            val (retryStatus, retryError) = retryResult
+                            val jsonObject = JsonObject().apply {
+                                addProperty("status", retryStatus)
+                                addProperty("error", retryError)
                             }
                             promise.resolve(jsonObject.toString())
                         }
@@ -186,6 +184,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             }
         }
     }
+
 
 
     @ReactMethod

@@ -18,7 +18,13 @@ import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import Toast from './Toast';
 
 const RGBWalletStatus = () => {
-  const { isWalletOnline, appType, setIsWalletOnline } = useContext(AppContext);
+  const {
+    isWalletOnline,
+    appType,
+    setIsWalletOnline,
+    reSyncWallet,
+    reSyncingWallet,
+  } = useContext(AppContext);
   const { translations, formatString } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
@@ -27,7 +33,7 @@ const RGBWalletStatus = () => {
   const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
-  const [walletWentOnline, setWalletWentOnline] = useState(false)
+  const [walletWentOnline, setWalletWentOnline] = useState(false);
 
   const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
@@ -40,7 +46,7 @@ const RGBWalletStatus = () => {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
         setTimeout(() => {
           setretryAttempt(retryAttempt + 1);
-          makeWalletOnline.mutate();
+          makeWalletOnline.mutate(30);
         }, 1000);
       }
     }
@@ -54,10 +60,29 @@ const RGBWalletStatus = () => {
   ]);
 
   useEffect(() => {
-    if (isWalletOnline === WalletOnlineStatus.Online) {
-      setWalletWentOnline(true)
+    if (reSyncingWallet) {
+      resyncWallet();
+    }
+  }, [reSyncingWallet]);
+
+  const resyncWallet = async () => {
+    try {
+      reSyncWallet(false);
+      setIsWalletOnline(WalletOnlineStatus.InProgress);
       setTimeout(() => {
-        setWalletWentOnline(false)
+        setretryAttempt(retryAttempt + 1);
+        makeWalletOnline.mutate(0);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (isWalletOnline === WalletOnlineStatus.Online) {
+      setWalletWentOnline(true);
+      setTimeout(() => {
+        setWalletWentOnline(false);
       }, 1500);
     }
   }, [isWalletOnline]);
@@ -75,7 +100,7 @@ const RGBWalletStatus = () => {
           ? WalletOnlineStatus.Online
           : WalletOnlineStatus.Error,
       );
-      if(makeWalletOnline.data?.error) {
+      if (makeWalletOnline.data?.error) {
         Toast(makeWalletOnline.data?.error, true);
       }
     }
