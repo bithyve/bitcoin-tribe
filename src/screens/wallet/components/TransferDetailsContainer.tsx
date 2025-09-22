@@ -147,12 +147,6 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
                   transactions: assetData.transactions,
                 },
               );
-
-              if (success) {
-                console.log('Successfully updated transaction in database');
-              } else {
-                console.error('Failed to update transaction in database');
-              }
             }
           }
         }
