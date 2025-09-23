@@ -853,6 +853,9 @@
     "pleaseWaitReset": "Por favor espera mientras restablecemos tu billetera y configuramos todo para un nuevo comienzo.",
     "fewSecondsStep": "Este paso tomará unos segundos.",
     "BackupRequired": "Respaldo requerido",
-    "YouMustBackup": "Debes respaldar tu billetera antes de restablecer para evitar perder el acceso a tus activos."
+    "YouMustBackup": "Debes respaldar tu billetera antes de restablecer para evitar perder el acceso a tus activos.",
+    "YourWalletWill": "Tu billetera realizará ahora una resincronización completa.",
+    "ThisMayTake": "Esto puede tardar unos minutos según el tamaño de tus datos y la velocidad de la red.",
+    "PleaseDoNot": "No minimices ni cierres la aplicación hasta que el proceso se complete."
   }
 }

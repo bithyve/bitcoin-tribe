@@ -853,6 +853,9 @@
     "pleaseWaitReset": "Please wait while we reset your wallet and set things up for a fresh start.",
     "fewSecondsStep": "This step will take a few seconds.",
     "BackupRequired": "Backup required",
-    "YouMustBackup": "You must back up your wallet before resetting to avoid losing access to your assets."
+    "YouMustBackup": "You must back up your wallet before resetting to avoid losing access to your assets.",
+    "YourWalletWill": "Your wallet will now perform a full resync.",
+    "ThisMayTake": "This may take a few minutes depending on your data size and network speed.",
+    "PleaseDoNot": "Please do not minimize or close the app until the process is complete."
   }
 }

@@ -853,6 +853,9 @@
     "pleaseWaitReset": "请稍等，我们正在重置您的钱包并为全新开始做好准备。",
     "fewSecondsStep": "此步骤需要几秒钟。",
     "BackupRequired": "需要备份",
-    "YouMustBackup": "您必须在重置前备份您的钱包，以避免丢失对资产的访问权限。"
+    "YouMustBackup": "您必须在重置前备份您的钱包，以避免丢失对资产的访问权限。",
+    "YourWalletWill": "您的钱包现在将执行完整的重新同步。",
+    "ThisMayTake": "根据您的数据大小和网络速度，此过程可能需要几分钟。",
+    "PleaseDoNot": "在流程完成之前，请不要最小化或关闭应用。"
   }
 }

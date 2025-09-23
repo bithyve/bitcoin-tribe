@@ -408,15 +408,13 @@ function SettingsScreen({ navigation }) {
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
           <AppText variant="heading2" style={styles.headerText}>
-            Your wallet will now perform a full resync.
+            {resetWalletMessages.YourWalletWill}
           </AppText>
           <AppText variant="body1" style={styles.subTitleText}>
-            This may take a few minutes depending on your data size and network
-            speed.
+            {resetWalletMessages.ThisMayTake}
           </AppText>
           <AppText variant="body1" style={styles.subTitleText}>
-            Please do not minimize or close the app until the process is
-            complete.
+            {resetWalletMessages.PleaseDoNot}
           </AppText>
         </View>
         {isThemeDark ? <WalletSync /> : <WalletSyncLight />}
