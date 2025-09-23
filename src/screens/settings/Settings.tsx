@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
@@ -178,6 +178,7 @@ function SettingsScreen({ navigation }) {
   };
 
   const resetWallet = async () => {
+    Keyboard.dismiss();
     setTimeout(async () => {
       setResettingWallet(true);
       try {
@@ -185,15 +186,15 @@ function SettingsScreen({ navigation }) {
           rgbWallet.masterFingerprint,
         );
         if (response && response.status) {
+          const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
+            app.primaryMnemonic,
+          );
           dbManager.clearSchemas([
             RealmSchema.RgbWallet,
             RealmSchema.Coin,
             RealmSchema.Collectible,
             RealmSchema.UniqueDigitalAsset,
           ]);
-          const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
-            app.primaryMnemonic,
-          );
           dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
           const isWalletOnline = await RGBServices.initiate(
             rgbWallet.mnemonic,
@@ -203,7 +204,7 @@ function SettingsScreen({ navigation }) {
           );
           if (isWalletOnline && isWalletOnline.status) {
             await ApiHandler.refreshRgbWallet();
-            await ApiHandler.fetchPresetAssets()
+            await ApiHandler.fetchPresetAssets();
             Toast(resetWalletMessages.WalletResetSuccessfully, false);
             setResettingWallet(false);
           }
@@ -474,7 +475,7 @@ function SettingsScreen({ navigation }) {
         onDismiss={() => {}}
         backColor={theme.colors.cardGradient1}
         borderColor={theme.colors.borderColor}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.infoWrapper}>
             <AppText variant="heading2" style={styles.headerText}>
               {resetWalletMessages.confirmReset}
