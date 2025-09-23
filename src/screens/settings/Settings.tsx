@@ -207,6 +207,7 @@ function SettingsScreen({ navigation }) {
             await ApiHandler.fetchPresetAssets();
             Toast(resetWalletMessages.WalletResetSuccessfully, false);
             setResettingWallet(false);
+            navigation.navigate(NavigationRoutes.HOMESCREEN);
           }
         } else {
           Toast(
