@@ -79,6 +79,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       lineHeight: 16 * 1.4,
       fontWeight: '500',
       letterSpacing: 0.4,
+      flex: 1,
     },
     disableButton: {
       borderRadius: 18,

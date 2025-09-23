@@ -72,6 +72,7 @@ import RGBServices from 'src/services/rgb/RGBServices';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import dbManager from 'src/storage/realm/dbManager';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
@@ -102,8 +103,6 @@ function SettingsScreen({ navigation }) {
   const [showResetWalletModal, setShowResetWalletModal] = useState(false);
   const [showConfirmResetModal, setShowConfirmResetModal] = useState(false);
   const [resetTextInput, setResetTextInput] = useState('');
-  const [resetWalletFinalConfirmation, setResetWalletFinalConfirmation] =
-    useState(false);
   const [resettingWallet, setResettingWallet] = useState(false);
   const { wallets } = useRgbWallets({});
   const rgbWallet = useMemo(() => wallets[0], [wallets]);
@@ -179,7 +178,6 @@ function SettingsScreen({ navigation }) {
   };
 
   const resetWallet = async () => {
-    setResetWalletFinalConfirmation(false);
     setTimeout(async () => {
       setResettingWallet(true);
       try {
@@ -205,6 +203,7 @@ function SettingsScreen({ navigation }) {
           );
           if (isWalletOnline && isWalletOnline.status) {
             await ApiHandler.refreshRgbWallet();
+            await ApiHandler.fetchPresetAssets()
             Toast(resetWalletMessages.WalletResetSuccessfully, false);
             setResettingWallet(false);
           }
@@ -472,92 +471,63 @@ function SettingsScreen({ navigation }) {
 
       <ResponsePopupContainer
         visible={showConfirmResetModal}
-        onDismiss={() => {
-          setShowConfirmResetModal(false);
-          setResetTextInput('');
-        }}
+        onDismiss={() => {}}
         backColor={theme.colors.cardGradient1}
         borderColor={theme.colors.borderColor}>
-        <View style={styles.infoWrapper}>
-          <AppText variant="heading2" style={styles.headerText}>
-            {resetWalletMessages.confirmReset}
-          </AppText>
-          <AppText variant="body1" style={styles.subTitleText}>
-            {resetWalletMessages.clearCurrentWalletState}
-          </AppText>
-          <AppText style={styles.textTypeReset}>
-            {resetWalletMessages.pleaseTypeReset}
-          </AppText>
-        </View>
+        <KeyboardAwareScrollView>
+          <View style={styles.infoWrapper}>
+            <AppText variant="heading2" style={styles.headerText}>
+              {resetWalletMessages.confirmReset}
+            </AppText>
+            <AppText variant="body1" style={styles.subTitleText}>
+              {resetWalletMessages.rgbWalletCorrupted}
+            </AppText>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            {isThemeDark ? <ResetWallet /> : <ResetWalletLight />}
+          </View>
+          <View style={styles.containerResetTexts}>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.clearRgbAssetData}
+            </AppText>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.btcBalanceNotAffected}
+            </AppText>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.rgbAssetsNoLongerAccessible}
+            </AppText>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.proceedWithReset}
+            </AppText>
+            <AppText style={styles.textTypeReset}>
+              {resetWalletMessages.pleaseTypeReset}
+            </AppText>
+          </View>
 
-        <TextField
-          value={resetTextInput}
-          onChangeText={text => setResetTextInput(text)}
-          placeholder={resetWalletMessages.userMustEnterReset}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-        />
-        <View style={styles.ctaWrapper}>
-          <Buttons
-            primaryTitle={resetWalletMessages.confirmResetButton}
-            disabled={resetTextInput !== 'RESET'}
-            primaryOnPress={() => {
-              setShowConfirmResetModal(false);
-              setResetTextInput('');
-              setTimeout(() => {
-                setResetWalletFinalConfirmation(true);
-              }, 400);
-            }}
-            secondaryTitle={common.cancel}
-            secondaryOnPress={() => setShowConfirmResetModal(false)}
-            width={windowWidth / 2.6}
-            secondaryCTAWidth={windowWidth / 3}
-            height={hp(14)}
+          <TextField
+            value={resetTextInput}
+            onChangeText={text => setResetTextInput(text)}
+            placeholder={resetWalletMessages.userMustEnterReset}
+            style={styles.input}
+            inputStyle={styles.inputStyle}
           />
-        </View>
-      </ResponsePopupContainer>
-
-      <ResponsePopupContainer
-        visible={resetWalletFinalConfirmation}
-        onDismiss={() => setResetWalletFinalConfirmation(false)}
-        backColor={theme.colors.cardGradient1}
-        borderColor={theme.colors.borderColor}>
-        <View style={styles.infoWrapper}>
-          <AppText variant="heading2" style={styles.headerText}>
-            {resetWalletMessages.ResetYourWallet}
-          </AppText>
-          <AppText variant="body1" style={styles.subTitleText}>
-            {resetWalletMessages.rgbWalletCorrupted}
-          </AppText>
-        </View>
-        {isThemeDark ? <ResetWallet /> : <ResetWalletLight />}
-
-        <View style={styles.containerResetTexts}>
-          <AppText style={styles.textResetTexts}>
-            {resetWalletMessages.clearRgbAssetData}
-          </AppText>
-          <AppText style={styles.textResetTexts}>
-            {resetWalletMessages.btcBalanceNotAffected}
-          </AppText>
-          <AppText style={styles.textResetTexts}>
-            {resetWalletMessages.rgbAssetsNoLongerAccessible}
-          </AppText>
-          <AppText style={styles.textResetTexts}>
-            {resetWalletMessages.proceedWithReset}
-          </AppText>
-        </View>
-
-        <View style={styles.ctaWrapper}>
-          <Buttons
-            primaryTitle={resetWalletMessages.resetNow}
-            primaryOnPress={resetWallet}
-            secondaryTitle={common.cancel}
-            secondaryOnPress={() => setResetWalletFinalConfirmation(false)}
-            width={windowWidth / 2.6}
-            secondaryCTAWidth={windowWidth / 3}
-            height={hp(14)}
-          />
-        </View>
+          <View style={styles.ctaWrapper}>
+            <Buttons
+              primaryTitle={resetWalletMessages.confirmResetButton}
+              disabled={resetTextInput !== 'RESET'}
+              primaryOnPress={() => {
+                setShowConfirmResetModal(false);
+                setResetTextInput('');
+                resetWallet();
+              }}
+              secondaryTitle={common.cancel}
+              secondaryOnPress={() => setShowConfirmResetModal(false)}
+              width={windowWidth / 2.6}
+              secondaryCTAWidth={windowWidth / 3}
+              height={hp(14)}
+            />
+          </View>
+        </KeyboardAwareScrollView>
       </ResponsePopupContainer>
 
       <ResponsePopupContainer
@@ -621,12 +591,14 @@ const getStyles = (theme: AppTheme) =>
     },
     textTypeReset: {
       marginBottom: hp(10),
-      marginTop: hp(20),
+      marginTop: hp(10),
       textAlign: 'left',
     },
     input: {},
     inputStyle: {
       marginBottom: hp(10),
+      height: hp(40),
+      textAlignVertical: 'center',
     },
     containerResetTexts: {
       marginTop: hp(10),
