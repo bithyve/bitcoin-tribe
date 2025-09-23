@@ -37,8 +37,6 @@ import ResetWalletIconLight from 'src/assets/images/ic_reset_wallet_light.svg';
 import ResetWalletIcon from 'src/assets/images/ic_reset_wallet.svg';
 import SyncWalletIcon from 'src/assets/images/ic_sync_wallet.svg';
 import SyncWalletIconLight from 'src/assets/images/ic_sync_wallet_light.svg';
-import BackupRequired from 'src/assets/images/backup_required.svg';
-import BackupRequiredLight from 'src/assets/images/backup_required_light.svg';
 import WalletResetWarning from 'src/assets/images/wallet_reset_warning.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
@@ -109,8 +107,6 @@ function SettingsScreen({ navigation }) {
   const [resettingWallet, setResettingWallet] = useState(false);
   const { wallets } = useRgbWallets({});
   const rgbWallet = useMemo(() => wallets[0], [wallets]);
-  const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
-  const [showBackupRequiredModal, setShowBackupRequiredModal] = useState(false);
   const [showFullSyncModal, setShowFullSyncModal] = useState(false);
 
   useEffect(() => {
@@ -213,7 +209,10 @@ function SettingsScreen({ navigation }) {
             setResettingWallet(false);
           }
         } else {
-          Toast(response.error || resetWalletMessages.FailedToResetWallet, true);
+          Toast(
+            response.error || resetWalletMessages.FailedToResetWallet,
+            true,
+          );
           setResettingWallet(false);
         }
       } catch (error) {
@@ -339,14 +338,6 @@ function SettingsScreen({ navigation }) {
     // },
   ];
 
-  const onPressResetWallet = () => {
-    if (!backup) {
-      setShowBackupRequiredModal(true);
-    } else {
-      setShowResetWalletModal(true);
-    }
-  };
-
   const AdvancedMenu: SettingMenuProps[] = [
     {
       id: 1,
@@ -358,7 +349,7 @@ function SettingsScreen({ navigation }) {
       id: 2,
       title: resetWalletMessages.ResetYourWallet,
       icon: isThemeDark ? <ResetWalletIcon /> : <ResetWalletIconLight />,
-      onPress: onPressResetWallet,
+      onPress: () => setShowResetWalletModal(true),
     },
   ];
 
@@ -409,43 +400,6 @@ function SettingsScreen({ navigation }) {
           }}
         />
       </View>
-
-      <ResponsePopupContainer
-        visible={showBackupRequiredModal}
-        onDismiss={() => setShowBackupRequiredModal(false)}
-        backColor={theme.colors.cardGradient1}
-        borderColor={theme.colors.borderColor}>
-        <View style={styles.infoWrapper}>
-          <AppText variant="heading2" style={styles.headerText}>
-            {resetWalletMessages.BackupRequired}
-          </AppText>
-          <AppText variant="body1" style={styles.subTitleText}>
-            {resetWalletMessages.YouMustBackup}
-          </AppText>
-        </View>
-        {isThemeDark ? <BackupRequired /> : <BackupRequiredLight />}
-        <View style={styles.ctaWrapper}>
-          <Buttons
-            primaryTitle={common.backupNow}
-            primaryOnPress={() => {
-              setShowBackupRequiredModal(false);
-              setTimeout(() => {
-                navigation.navigate(NavigationRoutes.APPBACKUPMENU);
-              }, 400);
-            }}
-            secondaryTitle={common.skip}
-            secondaryOnPress={() => {
-              setShowBackupRequiredModal(false);
-              setTimeout(() => {
-                setShowResetWalletModal(true);
-              }, 400);
-            }}
-            width={windowWidth / 2.6}
-            secondaryCTAWidth={windowWidth / 3}
-            height={hp(14)}
-          />
-        </View>
-      </ResponsePopupContainer>
 
       <ResponsePopupContainer
         visible={showFullSyncModal}
