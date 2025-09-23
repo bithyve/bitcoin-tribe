@@ -46,6 +46,8 @@ import ResetWallet from 'src/assets/images/reset_wallet.svg';
 import ResetWalletLight from 'src/assets/images/reset_wallet_light.svg';
 import ResettingWallet from 'src/assets/images/resetting_wallet.svg';
 import ResettingWalletLight from 'src/assets/images/resetting_wallet_light.svg';
+import WalletSync from 'src/assets/images/wallet_sync.svg';
+import WalletSyncLight from 'src/assets/images/wallet_sync_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingMenuItem from './components/SettingMenuItem';
 import { Keys, Storage } from 'src/storage';
@@ -463,6 +465,7 @@ function SettingsScreen({ navigation }) {
             complete.
           </AppText>
         </View>
+        {isThemeDark ? <WalletSync /> : <WalletSyncLight />}
         <View style={styles.ctaWrapper}>
           <Buttons
             primaryTitle={'Start Resync'}
