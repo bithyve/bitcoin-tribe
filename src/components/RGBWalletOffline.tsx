@@ -81,6 +81,7 @@ const RGBWalletStatus = () => {
   useEffect(() => {
     if (isWalletOnline === WalletOnlineStatus.Online) {
       setWalletWentOnline(true);
+      setretryAttempt(0);
       setTimeout(() => {
         setWalletWentOnline(false);
       }, 1500);
@@ -88,9 +89,7 @@ const RGBWalletStatus = () => {
   }, [isWalletOnline]);
 
   const getRetryMessage = useMemo(() => {
-    return retryAttempt === 0
-      ? common.gettingRGBWalletOnline
-      : formatString(common.gettingRGBWalletOnlineAttempt, retryAttempt);
+    return common.gettingRGBWalletOnline;
   }, [retryAttempt]);
 
   useEffect(() => {
