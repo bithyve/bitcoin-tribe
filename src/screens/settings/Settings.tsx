@@ -405,7 +405,7 @@ function SettingsScreen({ navigation }) {
       <ResponsePopupContainer
         visible={showFullSyncModal}
         onDismiss={() => setShowFullSyncModal(false)}
-        backColor={theme.colors.cardGradient1}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
           <AppText variant="heading2" style={styles.headerText}>
@@ -440,7 +440,7 @@ function SettingsScreen({ navigation }) {
       <ResponsePopupContainer
         visible={showResetWalletModal}
         onDismiss={() => setShowResetWalletModal(false)}
-        backColor={theme.colors.cardGradient1}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
           <AppText variant="heading2" style={styles.headerText}>
@@ -472,7 +472,7 @@ function SettingsScreen({ navigation }) {
       <ResponsePopupContainer
         visible={showConfirmResetModal}
         onDismiss={() => {}}
-        backColor={theme.colors.cardGradient1}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.infoWrapper}>
@@ -493,12 +493,12 @@ function SettingsScreen({ navigation }) {
             <AppText style={styles.textResetTexts}>
               {resetWalletMessages.btcBalanceNotAffected}
             </AppText>
-            <AppText style={styles.textResetTexts}>
+            {/* <AppText style={styles.textResetTexts}>
               {resetWalletMessages.rgbAssetsNoLongerAccessible}
             </AppText>
             <AppText style={styles.textResetTexts}>
               {resetWalletMessages.proceedWithReset}
-            </AppText>
+            </AppText> */}
             <AppText style={styles.textTypeReset}>
               {resetWalletMessages.pleaseTypeReset}
             </AppText>
@@ -591,7 +591,7 @@ const getStyles = (theme: AppTheme) =>
     },
     textTypeReset: {
       marginBottom: hp(10),
-      marginTop: hp(10),
+      marginTop: hp(20),
       textAlign: 'left',
     },
     input: {},
