@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "バックアップサポート",
     "supportLearnMoreContent3": "リレーベースのバックアップにより、資産の回復と安全な管理が保証されます。",
     "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。",
-    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。"
+    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。",
+    "termsText": "続行すると、"
   },
   "home": {
     "addAssets": "資産を受け取る",

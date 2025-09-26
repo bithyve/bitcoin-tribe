@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Supporto di backup",
     "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
     "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata.",
-    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono."
+    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono.",
+    "termsText": "Procedendo accetti il "
   },
   "home": {
     "addAssets": "Ricevi asset",
