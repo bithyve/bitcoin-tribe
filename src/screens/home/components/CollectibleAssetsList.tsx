@@ -132,15 +132,16 @@ const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.primaryBackground,
-      
     },
     assetWrapper: {
       flexWrap: 'wrap',
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: hp(90),
+      bottom: Platform.select({
+        ios: hp(50),
+        android: hp(70),
+      }),
       right: wp(20),
     },
     addNewIconWrapperLight: {

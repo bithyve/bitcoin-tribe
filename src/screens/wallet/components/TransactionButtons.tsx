@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import RoundedCTA from 'src/components/RoundedCTA';
-import IconSend from 'src/assets/images/icon_send.svg';
-import IconSendLight from 'src/assets/images/icon_send_light.svg';
+import IconSend from 'src/assets/images/ic_send.svg';
+import IconSendLight from 'src/assets/images/ic_send_light.svg';
 import IconReceive from 'src/assets/images/icon_recieve.svg';
 import IconReceiveLight from 'src/assets/images/icon_recieve_light.svg';
 import IconBuy from 'src/assets/images/buyIcon.svg';

@@ -22,13 +22,6 @@ import useWallets from 'src/hooks/useWallets';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: theme.colors.primaryBackground,
-      paddingHorizontal: hp(16),
-      paddingBottom: hp(16),
-      paddingTop: windowHeight < 675 ? hp(16) : hp(10),
-    },
     headerWrapper: {
       margin: hp(16),
     },

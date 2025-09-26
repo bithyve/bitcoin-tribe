@@ -73,7 +73,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       color: disabled ? theme.colors.disableCTATitle : textColor,
     },
     primaryCTATitle: {
-      fontSize: 16,
+      fontSize: 15,
       fontFamily:
         Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,

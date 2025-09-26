@@ -43,6 +43,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       backgroundColor: isThemeDark ? '#111' : '#fff',
       padding: hp(20),
       marginBottom: hp(10),
+      alignItems: 'center'
     },
     row: {
       flexDirection: 'row',
