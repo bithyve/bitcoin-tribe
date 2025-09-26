@@ -16,6 +16,7 @@ import {
   AssetSchema,
   AssetType,
   AssetVisibility,
+  Coin,
   Collectible,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
@@ -24,6 +25,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { hp } from 'src/constants/responsive';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
@@ -76,11 +78,13 @@ function Collectibles() {
     collection =>
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-
+  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
-    return [...collectibles, ...udas]
+    return [...coins, ...collectibles, ...udas]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
   }, [collectibles, udas]);
@@ -134,7 +138,13 @@ function Collectibles() {
           });
         }}
         onPressAsset={(asset: Asset) => {
-          if (asset.assetSchema.toUpperCase() === AssetSchema.Collectible) {
+          if (asset.assetSchema.toUpperCase() === AssetSchema.Coin) {
+            handleNavigation(NavigationRoutes.COINDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else if (
+            asset.assetSchema.toUpperCase() === AssetSchema.Collectible
+          ) {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
             });
@@ -152,7 +162,7 @@ function Collectibles() {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      paddingTop: 0,
+      paddingTop: -hp(40),
       backgroundColor: theme.colors.primaryBackground,
     },
   });
