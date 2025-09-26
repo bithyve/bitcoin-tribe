@@ -703,10 +703,10 @@ import CloudKit
     callback(response)
   }
   
-  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) async {
+  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, timeout: NSNumber, callback: @escaping ((String) -> Void)) async {
       do {
           self.rgbManager = RgbManager.shared
-        let response = try runWithTimeout(seconds: 30){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        let response = try runWithTimeout(seconds: Double(timeout)){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
         }
           
           if response.status {
@@ -782,9 +782,40 @@ import CloudKit
           print("Failed to delete runtime lock: \(error)")
       }
   }
-
-
   
+  @objc func resetWallet(masterFingerprint: String,callback: @escaping ((String) -> Void)) -> Void {
+      self.rgbManager.online = nil
+      guard let rgbWalletDir = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint) else {
+          print("Could not construct rgb dir path for fingerprint: \(masterFingerprint)")
+          return
+      }
+      var isDir: ObjCBool = false
+      guard FileManager.default.fileExists(atPath: rgbWalletDir.path, isDirectory: &isDir), isDir.boolValue else {
+          print("No rgb dir exists at path or it's not a directory.")
+          return
+      }
+      do {
+          print("Deleting rgb dir at: \(rgbWalletDir.path)")
+          try FileManager.default.removeItem(at: rgbWalletDir)
+          print("rgb dir deleted successfully.")
+        let data = [
+          "message": "Reset successful",
+          "status": true
+        ] as [String : Any]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      } catch {
+        print("Failed to delete rgb dir: \(error)")
+        let data = [
+          "message": error.localizedDescription,
+          "status": false
+        ] as [String : Any]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      }
+  }
+
+
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do {
       let data = try self.handleMissingFunds {

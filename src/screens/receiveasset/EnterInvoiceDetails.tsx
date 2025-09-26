@@ -106,9 +106,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     },
     assetsDropdownContainer: {
       position: 'absolute',
-      top: Platform.OS === 'ios' ? (windowHeight > 670 ? '18%' : '15%') : '10%',
       borderRadius: 20,
-      marginHorizontal: hp(15),
     },
   });
 

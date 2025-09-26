@@ -141,11 +141,9 @@ const getStyles = (theme: AppTheme) =>
       marginVertical: hp(20),
     },
     bottomViewWrapper: {
-      flex: 1,
-      bottom: 10,
     },
     bodyWrapper: {
-      height: '72%',
+      flex: 1
     },
     logoStyle: {
       height: 45,

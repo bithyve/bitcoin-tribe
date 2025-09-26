@@ -61,6 +61,7 @@ RCT_EXPORT_METHOD(initiate:(NSString *)network
         accountXpubVanilla:(NSString *)accountXpubVanilla
         accountXpubColored:(NSString *)accountXpubColored
           masterFingerprint:(NSString *)masterFingerprint
+                  timeout:(nonnull NSNumber *)timeout
                     resolver:(RCTPromiseResolveBlock)resolve
                     rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -71,6 +72,7 @@ RCT_EXPORT_METHOD(initiate:(NSString *)network
                 accountXpubVanilla:accountXpubVanilla
                 accountXpubColored:accountXpubColored
                   masterFingerprint:masterFingerprint
+                           timeout:timeout
                           callback:^(NSString *result) {
                               resolve(result);
                           }
@@ -264,6 +266,15 @@ RCT_EXPORT_METHOD(getRgbDir:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
   EXEC_ASYNC({
     RGBHelper *helper = [[RGBHelper alloc] init];
     [helper getRgbDirWithCallback:^(NSString * _Nonnull response) {
+      [self resolvePromise:resolve withResult:response];
+    }];
+  });
+}
+
+RCT_EXPORT_METHOD(resetWallet:(NSString*)masterFingerprint resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  EXEC_ASYNC({
+    RGBHelper *helper = [[RGBHelper alloc] init];
+    [helper resetWalletWithMasterFingerprint:masterFingerprint callback:^(NSString * _Nonnull response) {
       [self resolvePromise:resolve withResult:response];
     }];
   });

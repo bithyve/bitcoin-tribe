@@ -20,6 +20,11 @@ export default class RGBServices {
     return JSON.parse(keys);
   };
 
+  static resetWallet = async (masterFingerprint: string): Promise<{status: boolean, error?: string}> => {
+    const keys = await RGB.resetWallet(masterFingerprint);
+    return JSON.parse(keys);
+  };
+
   static getAddress = async (): Promise<string> => {
     const address = await RGB.getAddress();
     return address;
@@ -96,6 +101,7 @@ export default class RGBServices {
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
+    timeout: number = 30,
   ): Promise<{
     status: boolean;
     error: string;
@@ -107,6 +113,7 @@ export default class RGBServices {
         accountXpubVanilla,
         accountXpubColored,
         masterFingerprint,
+        timeout
       );
       return JSON.parse(data);
     } catch (error) {

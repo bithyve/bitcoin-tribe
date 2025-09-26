@@ -61,6 +61,7 @@ export const AssetTransactionSchema = {
     receiveUtxo: `${RealmSchema.Utxo}?`,
     changeUtxo: `${RealmSchema.Utxo}?`,
     invoiceString: 'string?',
+    transaction: `${RealmSchema.ElectrumTransaction}?`,
   },
 };
 

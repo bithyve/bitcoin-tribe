@@ -1,6 +1,7 @@
 package com.bithyve.tribe
 
 import android.util.Log
+import com.google.gson.JsonObject
 import org.rgbtools.AssetSchema
 import org.rgbtools.BitcoinNetwork
 import org.rgbtools.DatabaseType
@@ -23,6 +24,7 @@ object RGBWalletRepository {
 
     fun  initialize(network: String, accountXpubVanilla: String, accountXpubColored: String, mnemonic: String, masterFingerprint: String): Pair<Boolean, String>{
         try {
+            online = null
             rgbNetwork = getNetwork(network)
             val walletData =  WalletData(
                 AppConstants.rgbDir.absolutePath,
@@ -42,6 +44,31 @@ object RGBWalletRepository {
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)
             return Pair(false, e.message!!)
+        }
+    }
+
+    fun resetWallet(masterFingerprint: String): String {
+        val jsonObject = JsonObject()
+        try {
+            online = null
+            val rgbWalletDir = AppConstants.rgbDir
+                .resolve(masterFingerprint)
+            Log.i("RGB", "Deleting rgb wallet path at: ${rgbWalletDir.path}")
+            if (rgbWalletDir.deleteRecursively()) {
+                Log.i("RGB", "rgb wallet path deleted successfully.")
+                jsonObject.addProperty("message", "Rgb wallet path deleted successfully.")
+                jsonObject.addProperty("status", true)
+            } else {
+                Log.e("RGB", "Failed to delete rgb wallet path.")
+                jsonObject.addProperty("message", "Failed to delete rgb wallet path.")
+                jsonObject.addProperty("status", false)
+            }
+            return jsonObject.toString()
+        } catch (e: Exception) {
+            Log.d(TAG, "resetWallet: " + e.message)
+            jsonObject.addProperty("message", e.message)
+            jsonObject.addProperty("status", false)
+            return jsonObject.toString()
         }
     }
 

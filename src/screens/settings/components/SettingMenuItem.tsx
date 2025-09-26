@@ -14,6 +14,7 @@ type SettingMenuItemProps = {
   PersonalizationMenu: SettingMenuProps[];
   AppSecurityMenu: SettingMenuProps[];
   SettingsMenu: SettingMenuProps[];
+  AdvancedMenu: SettingMenuProps[];
 };
 
 function SettingMenuItem({
@@ -21,6 +22,7 @@ function SettingMenuItem({
   PersonalizationMenu,
   AppSecurityMenu,
   SettingsMenu,
+  AdvancedMenu,
 }: SettingMenuItemProps) {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -61,6 +63,12 @@ function SettingMenuItem({
       <SettingSectionList
         data={SettingsMenu}
         sectionTitle={settings.AboutSupportTitle}
+      />
+
+      <SettingSectionList
+        data={AdvancedMenu}
+        sectionTitle={'Advanced Options'}
+        isDanger
       />
 
       <FooterComponent />

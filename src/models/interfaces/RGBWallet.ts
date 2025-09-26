@@ -1,5 +1,6 @@
 import { NodeInfoResponse, TransportType } from 'src/services/rgbnode';
 import { LNPayments, NodeOnchainTransaction } from './Transactions';
+import { ElectrumTransaction } from 'src/services/electrum/interface';
 
 export interface RGBWallet {
   mnemonic: string;
@@ -101,6 +102,7 @@ export interface Transfer {
   };
   invoiceString?: string;
   transportEndpoints?: TransferTransportEndpoint[];
+  transaction?: ElectrumTransaction
 }
 
 export interface MetaData {

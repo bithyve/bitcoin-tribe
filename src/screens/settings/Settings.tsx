@@ -1,5 +1,11 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
@@ -27,8 +33,19 @@ import IconChannelMgt from 'src/assets/images/channelMgt.svg';
 import IconChannelMgtLight from 'src/assets/images/channelMgt_light.svg';
 import HiddenAssetIcon from 'src/assets/images/hiddenAsset.svg';
 import HiddenAssetIconLight from 'src/assets/images/hiddenAsset_light.svg';
+import ResetWalletIconLight from 'src/assets/images/ic_reset_wallet_light.svg';
+import ResetWalletIcon from 'src/assets/images/ic_reset_wallet.svg';
+import SyncWalletIcon from 'src/assets/images/ic_sync_wallet.svg';
+import SyncWalletIconLight from 'src/assets/images/ic_sync_wallet_light.svg';
+import WalletResetWarning from 'src/assets/images/wallet_reset_warning.svg';
 import IconViewNodeInfo from 'src/assets/images/viewNodeInfo.svg';
 import IconNodeInfoLight from 'src/assets/images/viewNodeInfo_light.svg';
+import ResetWallet from 'src/assets/images/reset_wallet.svg';
+import ResetWalletLight from 'src/assets/images/reset_wallet_light.svg';
+import ResettingWallet from 'src/assets/images/resetting_wallet.svg';
+import ResettingWalletLight from 'src/assets/images/resetting_wallet_light.svg';
+import WalletSync from 'src/assets/images/wallet_sync.svg';
+import WalletSyncLight from 'src/assets/images/wallet_sync_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import SettingMenuItem from './components/SettingMenuItem';
 import { Keys, Storage } from 'src/storage';
@@ -39,35 +56,57 @@ import { AppContext } from 'src/contexts/AppContext';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { hp } from 'src/constants/responsive';
+import { hp, windowWidth } from 'src/constants/responsive';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
 import BiometricUnlockModal from './components/BiometricUnlockModal';
 import HomeHeader from '../home/components/HomeHeader';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import AppText from 'src/components/AppText';
+import Buttons from 'src/components/Buttons';
+import TextField from 'src/components/TextField';
+import LottieView from 'lottie-react-native';
+import RGBServices from 'src/services/rgb/RGBServices';
+import useRgbWallets from 'src/hooks/useRgbWallets';
+import dbManager from 'src/storage/realm/dbManager';
+import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const RNBiometrics = new ReactNativeBiometrics();
 
 function SettingsScreen({ navigation }) {
   const { translations } = useContext(LocalizationContext);
-  const { settings, onBoarding, wallet: walletTranslation } = translations;
+  const {
+    settings,
+    onBoarding,
+    wallet: walletTranslation,
+    common,
+    resetWalletMessages,
+  } = translations;
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { manualAssetBackupStatus, hasCompletedManualBackup } =
+  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet } =
     useContext(AppContext);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
   const [isEnableBiometrics, setIsEnableBiometrics] = useState(false);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
-  const { key } = useContext(AppContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
   const [visibleBiometricUnlock, setVisibleBiometricUnlock] = useState(false);
   const login = useMutation(ApiHandler.verifyPin);
+  const [showResetWalletModal, setShowResetWalletModal] = useState(false);
+  const [showConfirmResetModal, setShowConfirmResetModal] = useState(false);
+  const [resetTextInput, setResetTextInput] = useState('');
+  const [resettingWallet, setResettingWallet] = useState(false);
+  const { wallets } = useRgbWallets({});
+  const rgbWallet = useMemo(() => wallets[0], [wallets]);
+  const [showFullSyncModal, setShowFullSyncModal] = useState(false);
 
   useEffect(() => {
     if (pinMethod === PinMethod.BIOMETRIC) {
@@ -136,6 +175,53 @@ function SettingsScreen({ navigation }) {
   const handlePasscodeChange = newPasscode => {
     setInvalidPin('');
     setPasscode(newPasscode);
+  };
+
+  const resetWallet = async () => {
+    Keyboard.dismiss();
+    setTimeout(async () => {
+      setResettingWallet(true);
+      try {
+        const response = await RGBServices.resetWallet(
+          rgbWallet.masterFingerprint,
+        );
+        if (response && response.status) {
+          const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
+            app.primaryMnemonic,
+          );
+          dbManager.clearSchemas([
+            RealmSchema.RgbWallet,
+            RealmSchema.Coin,
+            RealmSchema.Collectible,
+            RealmSchema.UniqueDigitalAsset,
+          ]);
+          dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
+          const isWalletOnline = await RGBServices.initiate(
+            rgbWallet.mnemonic,
+            rgbWallet.accountXpubVanilla,
+            rgbWallet.accountXpubColored,
+            rgbWallet.masterFingerprint,
+          );
+          if (isWalletOnline && isWalletOnline.status) {
+            await ApiHandler.refreshRgbWallet();
+            await ApiHandler.fetchPresetAssets();
+            Toast(resetWalletMessages.WalletResetSuccessfully, false);
+            setResettingWallet(false);
+            navigation.navigate(NavigationRoutes.HOMESCREEN);
+          }
+        } else {
+          Toast(
+            response.error || resetWalletMessages.FailedToResetWallet,
+            true,
+          );
+          setResettingWallet(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setResettingWallet(false);
+        Toast(error.message, true);
+      }
+    }, 400);
   };
 
   const WalletMgtMenu: SettingMenuProps[] = [
@@ -253,6 +339,21 @@ function SettingsScreen({ navigation }) {
     // },
   ];
 
+  const AdvancedMenu: SettingMenuProps[] = [
+    {
+      id: 1,
+      title: resetWalletMessages.ResyncWalletData,
+      icon: isThemeDark ? <SyncWalletIcon /> : <SyncWalletIconLight />,
+      onPress: () => setShowFullSyncModal(true),
+    },
+    {
+      id: 2,
+      title: resetWalletMessages.ResetYourWallet,
+      icon: isThemeDark ? <ResetWalletIcon /> : <ResetWalletIconLight />,
+      onPress: () => setShowResetWalletModal(true),
+    },
+  ];
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
@@ -284,6 +385,7 @@ function SettingsScreen({ navigation }) {
           PersonalizationMenu={PersonalizationMenu}
           AppSecurityMenu={AppSecurityMenu}
           SettingsMenu={SettingsMenu}
+          AdvancedMenu={AdvancedMenu}
         />
       </View>
       <View>
@@ -299,6 +401,168 @@ function SettingsScreen({ navigation }) {
           }}
         />
       </View>
+
+      <ResponsePopupContainer
+        visible={showFullSyncModal}
+        onDismiss={() => setShowFullSyncModal(false)}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        borderColor={theme.colors.borderColor}>
+        <View style={styles.infoWrapper}>
+          <AppText variant="heading2" style={styles.headerText}>
+            {resetWalletMessages.YourWalletWill}
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            {resetWalletMessages.ThisMayTake}
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            {resetWalletMessages.PleaseDoNot}
+          </AppText>
+        </View>
+        {isThemeDark ? <WalletSync /> : <WalletSyncLight />}
+        <View style={styles.ctaWrapper}>
+          <Buttons
+            primaryTitle={'Start Resync'}
+            primaryOnPress={() => {
+              reSyncWallet(true);
+              setShowFullSyncModal(false);
+            }}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={() => {
+              setShowFullSyncModal(false);
+            }}
+            width={windowWidth / 2.6}
+            secondaryCTAWidth={windowWidth / 3}
+            height={hp(14)}
+          />
+        </View>
+      </ResponsePopupContainer>
+
+      <ResponsePopupContainer
+        visible={showResetWalletModal}
+        onDismiss={() => setShowResetWalletModal(false)}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        borderColor={theme.colors.borderColor}>
+        <View style={styles.infoWrapper}>
+          <AppText variant="heading2" style={styles.headerText}>
+            {resetWalletMessages.Aresure}
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            {resetWalletMessages.clearCurrentWalletSetup}
+          </AppText>
+        </View>
+        <WalletResetWarning />
+        <View style={styles.ctaWrapper}>
+          <Buttons
+            primaryTitle={resetWalletMessages.yesReset}
+            primaryOnPress={() => {
+              setShowResetWalletModal(false);
+              setTimeout(() => {
+                setShowConfirmResetModal(true);
+              }, 400);
+            }}
+            secondaryTitle={common.cancel}
+            secondaryOnPress={() => setShowResetWalletModal(false)}
+            width={windowWidth / 2.6}
+            secondaryCTAWidth={windowWidth / 3}
+            height={hp(14)}
+          />
+        </View>
+      </ResponsePopupContainer>
+
+      <ResponsePopupContainer
+        visible={showConfirmResetModal}
+        onDismiss={() => {}}
+        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        borderColor={theme.colors.borderColor}>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
+          <View style={styles.infoWrapper}>
+            <AppText variant="heading2" style={styles.headerText}>
+              {resetWalletMessages.confirmReset}
+            </AppText>
+            <AppText variant="body1" style={styles.subTitleText}>
+              {resetWalletMessages.rgbWalletCorrupted}
+            </AppText>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            {isThemeDark ? <ResetWallet /> : <ResetWalletLight />}
+          </View>
+          <View style={styles.containerResetTexts}>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.clearRgbAssetData}
+            </AppText>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.btcBalanceNotAffected}
+            </AppText>
+            {/* <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.rgbAssetsNoLongerAccessible}
+            </AppText>
+            <AppText style={styles.textResetTexts}>
+              {resetWalletMessages.proceedWithReset}
+            </AppText> */}
+            <AppText style={styles.textTypeReset}>
+              {resetWalletMessages.pleaseTypeReset}
+            </AppText>
+          </View>
+
+          <TextField
+            value={resetTextInput}
+            onChangeText={text => setResetTextInput(text)}
+            placeholder={resetWalletMessages.userMustEnterReset}
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+          />
+          <View style={styles.ctaWrapper}>
+            <Buttons
+              primaryTitle={resetWalletMessages.confirmResetButton}
+              disabled={resetTextInput !== 'RESET'}
+              primaryOnPress={() => {
+                setShowConfirmResetModal(false);
+                setResetTextInput('');
+                resetWallet();
+              }}
+              secondaryTitle={common.cancel}
+              secondaryOnPress={() => setShowConfirmResetModal(false)}
+              width={windowWidth / 2.6}
+              secondaryCTAWidth={windowWidth / 3}
+              height={hp(14)}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+      </ResponsePopupContainer>
+
+      <ResponsePopupContainer
+        visible={resettingWallet}
+        onDismiss={() => {}}
+        backColor={theme.colors.cardGradient1}
+        borderColor={theme.colors.borderColor}>
+        <View style={styles.infoWrapper}>
+          <AppText variant="heading2" style={styles.headerText}>
+            {resetWalletMessages.resettingYourWallet}
+          </AppText>
+          <AppText variant="body1" style={styles.subTitleText}>
+            {resetWalletMessages.pleaseWaitReset}
+          </AppText>
+        </View>
+        {isThemeDark ? <ResettingWallet /> : <ResettingWalletLight />}
+
+        <View style={styles.loaderWrapper}>
+          <AppText style={styles.loaderMsgText}>
+            {resetWalletMessages.fewSecondsStep}
+          </AppText>
+          <View style={styles.dotLoaderWrapper}>
+            <LottieView
+              source={
+                isThemeDark
+                  ? require('src/assets/images/jsons/dotsLoader.json')
+                  : require('src/assets/images/jsons/dotsLoader_light.json')
+              }
+              style={styles.dotLoaderStyle}
+              autoPlay
+              loop
+            />
+          </View>
+        </View>
+      </ResponsePopupContainer>
     </ScreenContainer>
   );
 }
@@ -309,6 +573,61 @@ const getStyles = (theme: AppTheme) =>
     },
     headerWrapper: {
       marginVertical: hp(16),
+    },
+    infoWrapper: {
+      marginTop: hp(10),
+    },
+    headerText: {
+      color: theme.colors.headingColor,
+      marginBottom: hp(5),
+    },
+    subTitleText: {
+      color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(10),
+    },
+    ctaWrapper: {
+      alignSelf: 'center',
+      marginTop: hp(30),
+    },
+    textTypeReset: {
+      marginBottom: hp(10),
+      marginTop: hp(20),
+      textAlign: 'left',
+    },
+    input: {},
+    inputStyle: {
+      marginBottom: hp(10),
+      height: hp(40),
+      textAlignVertical: 'center',
+    },
+    containerResetTexts: {
+      marginTop: hp(10),
+    },
+    textResetTexts: {
+      color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(5),
+    },
+    dotLoaderWrapper: {
+      flex: 1,
+    },
+    loaderMsgText: {
+      color: theme.colors.headingColor,
+      flex: 2.5,
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+    },
+    loaderWrapper: {
+      flexDirection: 'row',
+      height: hp(90),
+      justifyContent: 'space-between',
+      marginTop: hp(5),
+      alignItems: 'center',
+    },
+    dotLoaderStyle: {
+      alignSelf: 'center',
+      width: hp(120),
+      height: hp(120),
     },
   });
 export default SettingsScreen;

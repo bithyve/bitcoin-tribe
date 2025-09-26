@@ -131,21 +131,24 @@ function CollectibleAssetsList(props: AssetsListProps) {
 const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: theme.colors.primaryBackground,
-      
     },
     assetWrapper: {
       flexWrap: 'wrap',
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: hp(90),
+      bottom: Platform.select({
+        ios: hp(60),
+        android: hp(90),
+      }),
       right: wp(20),
     },
     addNewIconWrapperLight: {
       position: 'absolute',
-      bottom: 30,
+      bottom: Platform.select({
+        ios: hp(25),
+        android: hp(60),
+      }),      
       right: 0,
     },
     footer: {

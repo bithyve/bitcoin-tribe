@@ -10,6 +10,7 @@ import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 import { AppContext } from 'src/contexts/AppContext';
 import AppTouchable from './AppTouchable';
 import AppText from './AppText';
+import Colors from 'src/theme/Colors';
 
 const BackupAlertBanner = () => {
   const { isBackupInProgress } = useContext(AppContext);
@@ -63,7 +64,7 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : 16,
       left: 0,
       right: 0,
-      backgroundColor: theme.colors.backupAlertBackColor,
+      backgroundColor: Colors.SelectiveYellow,
       zIndex: 1000,
       alignItems: 'center',
       justifyContent: 'space-between',
