@@ -643,7 +643,7 @@
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
     "verificationTitle": "VERIFICA",
-    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
+    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 20.000 sats nel tuo wallet per pagare la tariffa di servizio.",
     "recordCard": "Dettagli del record DNS",
     "recordType": "Tipo di Record",
     "domain": "Dominio",
