@@ -66,6 +66,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       borderRadius: 18,
       // marginVertical: hp(20),
       width: width,
+      marginHorizontal: 4,
     },
     labelStyle: {
       // minWidth: width,
@@ -90,6 +91,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       shadowOpacity: 0,
       shadowRadius: 0,
       elevation: 0,
+      marginHorizontal: 4,
     },
   });
 export default PrimaryCTA;
