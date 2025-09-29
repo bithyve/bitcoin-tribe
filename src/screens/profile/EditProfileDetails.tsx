@@ -1,17 +1,11 @@
 import React, { useContext, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AppHeader from 'src/components/AppHeader';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -87,80 +81,71 @@ function EditProfileDetails(props: ProfileDetailsProps) {
         rightIcon={rightIcon}
         onSettingsPress={onSettingsPress}
       />
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={'padding'}
-        enabled
-        keyboardVerticalOffset={Platform.select({
-          ios: windowHeight > 670 ? 0 : 5,
-          android: 0,
-        })}>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.content}>
-            <EditProfilePic
-              title={addPicTitle}
-              onPress={() => setVisible(true)}
-              imageSource={profileImage}
-              edit={edit}
-            />
-            <TextField
-              value={inputValue}
-              onChangeText={onChangeText}
-              placeholder={inputPlaceholder}
-              keyboardType={'default'}
-              returnKeyType={'done'}
-              onSubmitEditing={primaryOnPress}
-              //autoFocus={true}
-              maxLength={15}
-            />
-          </View>
-          <Buttons
-            primaryTitle={primaryCTATitle}
-            primaryOnPress={primaryOnPress}
-            width={'100%'}
-            disabled={disabled}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollView}
+        keyboardShouldPersistTaps="handled"
+        overScrollMode='never'
+        bounces={false}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.content}>
+          <EditProfilePic
+            title={addPicTitle}
+            onPress={() => setVisible(true)}
+            imageSource={profileImage}
+            edit={edit}
           />
-        </ScrollView>
-        <ModalContainer
-          title={'Edit profile picture'}
-          subTitle={''}
-          visible={visible}
-          enableCloseIcon={false}
-          onDismiss={() => {
-            setVisible(false);
-          }}>
-          <>
-            <SelectProfileMenu
-              title={'Choose photo'}
-              subTitle={''}
-              icon={
-                isThemeDark ? <ChoosePhotoIcon /> : <ChoosePhotoIconLight />
-              }
-              onPress={() => {
-                setVisible(false);
-                setTimeout(() => {
-                  handlePickImage();
-                }, 1000);
-              }}
-            />
-            <SelectProfileMenu
-              title={'Delete photo'}
-              subTitle={''}
-              icon={<DeleteProfileIcon />}
-              onPress={() => {
-                setVisible(false);
-                setTimeout(() => {
-                  deleteProfile();
-                }, 1000);
-              }}
-              titleColor={theme.colors.removeProfileTitle}
-            />
-          </>
-        </ModalContainer>
-      </KeyboardAvoidingView>
+          <TextField
+            value={inputValue}
+            onChangeText={onChangeText}
+            placeholder={inputPlaceholder}
+            keyboardType={'default'}
+            returnKeyType={'done'}
+            // onSubmitEditing={primaryOnPress}
+            //autoFocus={true}
+            maxLength={15}
+          />
+        </View>
+        <Buttons
+          primaryTitle={primaryCTATitle}
+          primaryOnPress={primaryOnPress}
+          width={'100%'}
+          disabled={disabled}
+        />
+      </KeyboardAwareScrollView>
+      <ModalContainer
+        title={'Edit profile picture'}
+        subTitle={''}
+        visible={visible}
+        enableCloseIcon={false}
+        onDismiss={() => {
+          setVisible(false);
+        }}>
+        <>
+          <SelectProfileMenu
+            title={'Choose photo'}
+            subTitle={''}
+            icon={isThemeDark ? <ChoosePhotoIcon /> : <ChoosePhotoIconLight />}
+            onPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                handlePickImage();
+              }, 1000);
+            }}
+          />
+          <SelectProfileMenu
+            title={'Delete photo'}
+            subTitle={''}
+            icon={<DeleteProfileIcon />}
+            onPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                deleteProfile();
+              }, 1000);
+            }}
+            titleColor={theme.colors.removeProfileTitle}
+          />
+        </>
+      </ModalContainer>
     </>
   );
 }
