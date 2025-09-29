@@ -40,9 +40,6 @@ function WalletBackupHistory({ navigation }) {
         title={settings.walletBackupHistory}
         subTitle={settings.walletBackupHistorySubTitle}
         rightIcon={isThemeDark ? <SettingIcon /> : <SettingIconLight />}
-        onBackNavigation={() =>
-          navigation.navigate(NavigationRoutes.APPBACKUPMENU)
-        }
         onSettingsPress={() =>
           navigation.navigate(NavigationRoutes.BACKUPPHRASESETTING)
         }

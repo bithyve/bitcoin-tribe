@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Backup Support",
     "supportLearnMoreContent3": "Relay-based backups ensure asset recovery and secure management.",
     "supportLearnMoreContent4": "Enjoy a user-friendly experience with enhanced security in Supported Mode.",
-    "backupFileNotFound": "We couldn’t find your RGB Asset file. Please upload the file from your phone."
+    "backupFileNotFound": "We couldn’t find your RGB Asset file. Please upload the file from your phone.",
+    "termsText": "By proceeding you agree to the "
   },
   "home": {
     "addAssets": "Receive Asset",
@@ -643,7 +644,7 @@
     "assetRegistrySubTitle3": "applies. Not ready to register? You can skip it and still share your asset on X",
     "sharePostTitle": "Share post on X",
     "verificationTitle": "VERIFICATION",
-    "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 5,000 sats in your wallet to pay the service fee.",
+    "payServiceFeeFundError": "Insufficient funds. Please ensure you have at least 20,000 sats in your wallet to pay the service fee.",
     "recordCard": "DNS Record Details",
     "recordType": "Record Type",
     "domain": "Domain",

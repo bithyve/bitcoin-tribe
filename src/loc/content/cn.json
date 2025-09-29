@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "备份支持",
     "supportLearnMoreContent3": "基于中继的备份确保资产恢复和安全管理。",
     "supportLearnMoreContent4": "在支持模式下，享受增强安全性的用户友好体验。",
-    "backupFileNotFound": "我们找不到您的 RGB 资产文件。请从您的手机上传该文件。"
+    "backupFileNotFound": "我们找不到您的 RGB 资产文件。请从您的手机上传该文件。",
+    "termsText": "继续操作即表示您同意 "
   },
   "home": {
     "addAssets": "接收资产",
@@ -643,7 +644,7 @@
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
     "verificationTitle": "验证",
-    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 5,000 sats 以支付服务费用。",
+    "payServiceFeeFundError": "资金不足。请确保您的钱包中至少有 20,000 sats 以支付服务费用。",
     "recordCard": "DNS记录详情",
     "recordType": "记录类型",
     "domain": "域名",

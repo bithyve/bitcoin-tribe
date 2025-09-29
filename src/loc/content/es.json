@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Soporte de respaldo",
     "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
     "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible.",
-    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono."
+    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono.",
+    "termsText": "Al continuar, usted acepta los "
   },
   "home": {
     "addAssets": "Recibir activo",
@@ -643,7 +644,7 @@
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
     "verificationTitle": "VERIFICACIÓN",
-    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio.",
+    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 20,000 sats en tu billetera para pagar la tarifa de servicio.",
     "recordCard": "Detalles del registro DNS",
     "recordType": "Tipo de Registro",
     "domain": "Dominio",
