@@ -148,6 +148,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                             }
                             promise.resolve(jsonObject.toString())
                         } else {
+                            RGBWalletRepository.writeToLogFile(masterFingerprint, error)
                             RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
                             val retryResult = runInit()
                             if (retryResult != null) {
@@ -173,6 +174,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                     }
                 }
             } catch (e: Exception) {
+                RGBWalletRepository.writeToLogFile(masterFingerprint, e.message!!)
                 Log.e(TAG, "initiate failed: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     val jsonObject = JsonObject().apply {
