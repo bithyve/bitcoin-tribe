@@ -217,7 +217,7 @@ const DefaultCoin = ({
             })
           }>
           <GradientBorderAnimated
-            height={hp(90)}
+            height={hp(95)}
             radius={hp(20)}
             strokeWidth={2}
             style={styles.campaignContainer}>
