@@ -16,6 +16,7 @@ import GradientView from './GradientView';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type AssetCardProps = {
   asset: Asset;
@@ -87,7 +88,7 @@ const AssetCard = (props: AssetCardProps) => {
                 variant="body2"
                 numberOfLines={1}
                 style={styles.nameText}>
-                {asset.name}
+                {formatTUsdt(asset.name)}
               </AppText>
               {isVerified && <IconVerified width={20} height={20} />}
             </View>

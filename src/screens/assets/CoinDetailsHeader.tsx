@@ -32,6 +32,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type assetDetailsHeaderProps = {
   asset?: Coin | Collectible;
@@ -219,13 +220,13 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
               <View style={styles.assetNameContainer}>
                 <View style={styles.tickerWrapper}>
                   <AppText variant="body1" style={styles.assetTickerText}>
-                    {asset.ticker}
+                    {formatTUsdt(asset.ticker)}
                   </AppText>
                   {isVerified && <IconVerified width={20} height={20} />}
                 </View>
                 <View style={styles.assetNameWrapper}>
                   <AppText variant="body2" style={styles.assetNameText}>
-                    {asset.name}
+                    {formatTUsdt(asset.name)}
                   </AppText>
                 </View>
               </View>
